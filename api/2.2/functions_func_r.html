@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -108,6 +108,9 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 <li>RangeRandom()
 : <a class="el" href="class_ogre_1_1_math.html#a2de1fc1467a3b402bf435fd48cff356f">Ogre::Math</a>
 </li>
+<li>RasterParams()
+: <a class="el" href="struct_ogre_1_1_raster_params.html#af15eab4c45ebba958b6860627e6ff847">Ogre::RasterParams</a>
+</li>
 <li>RawSimdUniquePtr()
 : <a class="el" href="class_ogre_1_1_raw_simd_unique_ptr.html#acfde81a2790efeceb7c0b81b4b1ba5c4">Ogre::RawSimdUniquePtr&lt; T, M_CATEGORY &gt;</a>
 </li>
@@ -150,7 +153,6 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 <li>readData()
 : <a class="el" href="class_ogre_1_1_d3_d9_hardware_index_buffer.html#ae611e8a8c5fb6534fb930464f4843755">Ogre::D3D9HardwareIndexBuffer</a>
 , <a class="el" href="class_ogre_1_1_d3_d9_hardware_vertex_buffer.html#a6ccf48513ae941ade35f7ed1f517e54a">Ogre::D3D9HardwareVertexBuffer</a>
-, <a class="el" href="class_ogre_1_1_g_l_e_s2_hardware_uniform_buffer.html#a6d4cf9d48820e55b362e6b12b0f93cd4">Ogre::GLES2HardwareUniformBuffer</a>
 , <a class="el" href="class_ogre_1_1_stream_serialiser.html#a2d9cd8abb22fbd17c795aa62765b4a59">Ogre::StreamSerialiser</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_d3_d11_hardware_buffer.html#af31fa0dc4db159f59e97db8fb34a99b3">Ogre::v1::D3D11HardwareBuffer</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_d3_d11_hardware_index_buffer.html#abc32d802e69dd7d0c4b28051d4474ea7">Ogre::v1::D3D11HardwareIndexBuffer</a>
@@ -173,6 +175,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 , <a class="el" href="class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_uniform_buffer.html#ae5e7caa504d2b4116c3396dde6c87233">Ogre::v1::GLES2DefaultHardwareUniformBuffer</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_vertex_buffer.html#aa3db4509502df7a685766088588277e2">Ogre::v1::GLES2DefaultHardwareVertexBuffer</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_g_l_e_s2_hardware_index_buffer.html#a2b345b7f5a6fbb4b8fed8ab3327c4ebb">Ogre::v1::GLES2HardwareIndexBuffer</a>
+, <a class="el" href="class_ogre_1_1v1_1_1_g_l_e_s2_hardware_uniform_buffer.html#acf8cd935bffe20396eaa8b65f54190cf">Ogre::v1::GLES2HardwareUniformBuffer</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_g_l_e_s2_hardware_vertex_buffer.html#a0081cf8244a6608de7d3a7b077251004">Ogre::v1::GLES2HardwareVertexBuffer</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a19c89711b1b819388d454bedee62efda">Ogre::v1::HardwareBuffer</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#ab60da8e622506487a7d44200a1c704b6">Ogre::v1::HardwarePixelBuffer</a>
@@ -276,6 +279,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 </li>
 <li>refresh()
 : <a class="el" href="class_ogre_1_1_d3_d11_driver_list.html#a97c7174803a2ccac08261594ac196ce2">Ogre::D3D11DriverList</a>
+, <a class="el" href="class_ogre_1_1_metal_device_list.html#ae849211f10db226e5ee6441d0ba61e46">Ogre::MetalDeviceList</a>
 </li>
 <li>refreshAvailableAnimationState()
 : <a class="el" href="class_ogre_1_1v1_1_1_entity.html#a9ba0bc3c6fb9f7950cc19f3bfeb2d1d5">Ogre::v1::Entity</a>
@@ -303,8 +307,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 : <a class="el" href="class_ogre_1_1_hlms_manager.html#ae9c73aa588cd3aa3264d5432d3c5394f">Ogre::HlmsManager</a>
 </li>
 <li>registerProgramFactory()
-: <a class="el" href="class_ogre_1_1_g_l3_plus_gpu_program_manager.html#ac83379301742919d0faf2f31c94c5fff">Ogre::GL3PlusGpuProgramManager</a>
-, <a class="el" href="class_ogre_1_1_g_l_e_s2_gpu_program_manager.html#a1f1226810d4206bdcdc4c8ff6befa568">Ogre::GLES2GpuProgramManager</a>
+: <a class="el" href="class_ogre_1_1_g_l_e_s2_gpu_program_manager.html#a1f1226810d4206bdcdc4c8ff6befa568">Ogre::GLES2GpuProgramManager</a>
 , <a class="el" href="class_ogre_1_1_metal_gpu_program_manager.html#a26d2aa93c5e041457b4ce49d6222f67d">Ogre::MetalGpuProgramManager</a>
 </li>
 <li>registerSceneNodeListener()
@@ -317,6 +320,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 : <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a37015e208e5c0f268b37335540ec661b">Ogre::D3D11RenderSystem</a>
 , <a class="el" href="class_ogre_1_1_d3_d9_render_system.html#a7bbc4c2f2fcfdc3f4e0a6e01250e39b2">Ogre::D3D9RenderSystem</a>
 , <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a51c05e97567d480ee96abfeeaf87fff8">Ogre::GL3PlusRenderSystem</a>
+, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#af260eadeba4a0ef3e330a8c0ea73e606">Ogre::GLES2RenderSystem</a>
 , <a class="el" href="class_ogre_1_1_metal_render_system.html#ac1ce07af379c76b76fe8751218cb9831">Ogre::MetalRenderSystem</a>
 , <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a4a9d942751c46d7ab748a5cfd4af58da">Ogre::NULLRenderSystem</a>
 , <a class="el" href="class_ogre_1_1_render_system.html#aae6874b97f0b5cb00e0bf32e10652540">Ogre::RenderSystem</a>
@@ -331,6 +335,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 , <a class="el" href="class_ogre_1_1_d3_d11_buffer_interface.html#a7e19000cb7a2369f7339476222d4875b">Ogre::D3D11BufferInterface</a>
 , <a class="el" href="class_ogre_1_1_d3_d11_compat_buffer_interface.html#a896a242a4185faac264405fada1cacb9">Ogre::D3D11CompatBufferInterface</a>
 , <a class="el" href="class_ogre_1_1_g_l3_plus_buffer_interface.html#ac209724eebb2f8aed490445834e0005c">Ogre::GL3PlusBufferInterface</a>
+, <a class="el" href="class_ogre_1_1_g_l_e_s2_buffer_interface.html#a1682492f1232381f5a5bf3c1e44df80c">Ogre::GLES2BufferInterface</a>
 , <a class="el" href="class_ogre_1_1_metal_buffer_interface.html#a45535a953631ce1b0da0560f7d3485bc">Ogre::MetalBufferInterface</a>
 , <a class="el" href="class_ogre_1_1_n_u_l_l_buffer_interface.html#a0d50915e40552c106fd42add473a537c">Ogre::NULLBufferInterface</a>
 </li>
@@ -338,6 +343,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 : <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a0708f1a8dafa62e6293bbeb1f0ee2ce2">Ogre::D3D11RenderSystem</a>
 , <a class="el" href="class_ogre_1_1_d3_d9_render_system.html#aad47c7460bff0b9a631b3eb17e296309">Ogre::D3D9RenderSystem</a>
 , <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a54932ceebe90596faa482d46ce22f2cb">Ogre::GL3PlusRenderSystem</a>
+, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a0a642a7b4949a5776c0d9a62df8be622">Ogre::GLES2RenderSystem</a>
 , <a class="el" href="class_ogre_1_1_metal_render_system.html#af114a56fcc4dc9ea0955805f25b71029">Ogre::MetalRenderSystem</a>
 , <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#aed5a59574d64e3e1f95ecd8cab66870c">Ogre::NULLRenderSystem</a>
 , <a class="el" href="class_ogre_1_1_render_system.html#a32e21b240c7b6c75eab05cbc870f9868">Ogre::RenderSystem</a>
@@ -359,6 +365,11 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 : <a class="el" href="class_ogre_1_1_g_l3_plus_context.html#a1adbc39dc51e3c5dd91795544c2fa352">Ogre::GL3PlusContext</a>
 , <a class="el" href="class_ogre_1_1_g_l_e_s2_context.html#a15cc115c6f857dad066218f1225c4283">Ogre::GLES2Context</a>
 , <a class="el" href="class_ogre_1_1_win32_context.html#aa5a289fe65c137eaf0ba5760fa88c5a1">Ogre::Win32Context</a>
+</li>
+<li>releaseIbl()
+: <a class="el" href="class_ogre_1_1_parallax_corrected_cubemap.html#ac6acc580cefe2b91a6626bbbc279d38c">Ogre::ParallaxCorrectedCubemap</a>
+, <a class="el" href="class_ogre_1_1_parallax_corrected_cubemap_auto.html#ace3231248ee98b43628b85ed4099824d">Ogre::ParallaxCorrectedCubemapAuto</a>
+, <a class="el" href="class_ogre_1_1_parallax_corrected_cubemap_base.html#a039657d1c26eee4e9a7c412d5be12ed9">Ogre::ParallaxCorrectedCubemapBase</a>
 </li>
 <li>releasePrograms()
 : <a class="el" href="class_ogre_1_1_r_t_shader_1_1_program_manager.html#a8bc53f45e45d99b5bcf0634079b919a4">Ogre::RTShader::ProgramManager</a>
@@ -478,6 +489,9 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 <li>removeAllPoses()
 : <a class="el" href="class_ogre_1_1v1_1_1_mesh.html#a6592fdc758cb7a783e0eaf3b5673cfe0">Ogre::v1::Mesh</a>
 </li>
+<li>removeAllRenderTextureViews()
+: <a class="el" href="class_ogre_1_1_texture_definition_base.html#a2f6e8c9222c3534edb0c356169d74c9a">Ogre::TextureDefinitionBase</a>
+</li>
 <li>removeAllShaderBasedTechniques()
 : <a class="el" href="class_ogre_1_1_r_t_shader_1_1_shader_generator.html#a9a1b9912a57a43aa66b24f3c9b85a4fb">Ogre::RTShader::ShaderGenerator</a>
 </li>
@@ -546,7 +560,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 </li>
 <li>removeChild()
 : <a class="el" href="class_ogre_1_1_node.html#a8527d3766bb672f8bccc8535666511cb">Ogre::Node</a>
-, <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#aa1a7793c1695922d44802d25439c60eb">Ogre::v1::OldNode</a>
+, <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#aaf9b5ec7605f8eac4eb97c255b2366cc">Ogre::v1::OldNode</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_overlay_container.html#a94086ab3d6f7725ab5bd7f4b167a869e">Ogre::v1::OverlayContainer</a>
 </li>
 <li>removeConstantDefinition()
@@ -619,6 +633,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 <li>removeListener()
 : <a class="el" href="class_ogre_1_1_camera.html#ac3ce1b1ee9db4e52dcaae80d89648168">Ogre::Camera</a>
 , <a class="el" href="class_ogre_1_1_compositor_manager2.html#a70b5b9e5fc8fe873ef2f0a1032881782">Ogre::CompositorManager2</a>
+, <a class="el" href="class_ogre_1_1_compositor_workspace.html#a69dfe3698baa1238a7e09ba6832fb237">Ogre::CompositorWorkspace</a>
 , <a class="el" href="class_ogre_1_1_log.html#a84bf292947fed5a3760a78c391f0484c">Ogre::Log</a>
 , <a class="el" href="class_ogre_1_1_material_manager.html#a8d14d2e8450b0886c6b72c9996200b17">Ogre::MaterialManager</a>
 , <a class="el" href="class_ogre_1_1_material_serializer.html#a110e95db5986af560c8986705132e601">Ogre::MaterialSerializer</a>
@@ -689,6 +704,9 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 </li>
 <li>removeRenderQueueListener()
 : <a class="el" href="class_ogre_1_1_scene_manager.html#a190471ba7a61111d576a1e8ca9862706">Ogre::SceneManager</a>
+</li>
+<li>removeRenderTextureView()
+: <a class="el" href="class_ogre_1_1_texture_definition_base.html#ace38b7982b54be987919edc433bef4e9">Ogre::TextureDefinitionBase</a>
 </li>
 <li>removeRenderWindow()
 : <a class="el" href="class_ogre_1_1_d3_d11_stereo_driver_a_m_d.html#ab2635c990eb9efe650bbf5f0845538e0">Ogre::D3D11StereoDriverAMD</a>
@@ -851,7 +869,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 : <a class="el" href="class_ogre_1_1_rendering_a_p_i_exception.html#aa3f950b457a33a114a74f9b8993a885d">Ogre::RenderingAPIException</a>
 </li>
 <li>renderOneFrame()
-: <a class="el" href="class_ogre_1_1_root.html#aeaad25268c0ad8007ce8961a32242c77">Ogre::Root</a>
+: <a class="el" href="class_ogre_1_1_root.html#a7820badfeef2fb9994ea9de17facb218">Ogre::Root</a>
 </li>
 <li>RenderOperation()
 : <a class="el" href="class_ogre_1_1v1_1_1_render_operation.html#a6ae83747130ab5c4612e4086745d8b4b">Ogre::v1::RenderOperation</a>
@@ -873,6 +891,9 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 </li>
 <li>RenderPassTargetBase()
 : <a class="el" href="struct_ogre_1_1_render_pass_target_base.html#a9db11ff5c2adcf4ed2145bf2c6d98be5">Ogre::RenderPassTargetBase</a>
+</li>
+<li>renderProbes()
+: <a class="el" href="class_ogre_1_1_irradiance_field_raster.html#a9ae4e301cf5b99010ac03b0a9c347534">Ogre::IrradianceFieldRaster</a>
 </li>
 <li>RenderQueue()
 : <a class="el" href="class_ogre_1_1_render_queue.html#abb653f126d0d03d73e28468a89c3c24d">Ogre::RenderQueue</a>
@@ -924,7 +945,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 : <a class="el" href="struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html#a5bbe0b22b07477f9c3c85386ddc92ea4">Ogre::Lod0Stripifier::RemapInfo</a>
 </li>
 <li>reorganiseBuffers()
-: <a class="el" href="class_ogre_1_1v1_1_1_vertex_data.html#a1ee0be15d6efd3d2a9f7baa690e9edea">Ogre::v1::VertexData</a>
+: <a class="el" href="class_ogre_1_1v1_1_1_vertex_data.html#a0b67941189a254e6ede94b5fbc465ea8">Ogre::v1::VertexData</a>
 </li>
 <li>replaceAll()
 : <a class="el" href="class_ogre_1_1_string_util.html#a1fbf53b8f6abbc2ee21af4f1b464a25f">Ogre::StringUtil</a>
@@ -938,7 +959,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 <li>reposition()
 : <a class="el" href="class_ogre_1_1_cocoa_window.html#a8b37e3a2f870a48017c1cdd02ac10d77">Ogre::CocoaWindow</a>
 , <a class="el" href="class_ogre_1_1_d3_d11_render_window_base.html#a30ad5ebed94e14efecc178706807ac33">Ogre::D3D11RenderWindowBase</a>
-, <a class="el" href="class_ogre_1_1_d3_d11_window_hwnd.html#a6cbfbcec5751a0945c6fa50428ba84b1">Ogre::D3D11WindowHwnd</a>
+, <a class="el" href="class_ogre_1_1_d3_d11_window.html#a67e3922f9cdc6d2b8bfaa2e4ccfed206">Ogre::D3D11Window</a>
 , <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#a5f36582f245f29251117b02a77370417">Ogre::D3D9RenderWindow</a>
 , <a class="el" href="class_ogre_1_1_g_l_x_window.html#a6c70062e8c8a0529f41fe7471ae717ea">Ogre::GLXWindow</a>
 , <a class="el" href="class_ogre_1_1_g_t_k_window.html#ab77322d16f360d7d4d389e3e0905f669">Ogre::GTKWindow</a>
@@ -948,17 +969,16 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 , <a class="el" href="class_ogre_1_1_render_window.html#aea44f0476dffa1bedaf8fc3a162b3a81">Ogre::RenderWindow</a>
 , <a class="el" href="class_ogre_1_1_s_d_l_window.html#aaa1d1cda875e6a09e4fa34327b75d449">Ogre::SDLWindow</a>
 , <a class="el" href="class_ogre_1_1_win32_window.html#a72a0ef581575c0e32d6c509796c9298e">Ogre::Win32Window</a>
-, <a class="el" href="class_ogre_1_1_window.html#af4ab2aca59cf9e65c4ef80b96c9654dc">Ogre::Window</a>
+, <a class="el" href="class_ogre_1_1_window.html#a5d39c20103e51bd756ebc97956b3c98d">Ogre::Window</a>
 </li>
 <li>Request()
 : <a class="el" href="class_ogre_1_1_work_queue_1_1_request.html#af4747a039d3166c38a0f0646f87d10f4">Ogre::WorkQueue::Request</a>
 </li>
 <li>requestFullscreenSwitch()
-: <a class="el" href="class_ogre_1_1_d3_d11_window_hwnd.html#a7128a98298f7c78cde5e63dcca8014f5">Ogre::D3D11WindowHwnd</a>
-, <a class="el" href="class_ogre_1_1_g_l_x_window.html#a7f485201f8014dfe7e38805b46274f58">Ogre::GLXWindow</a>
+: <a class="el" href="class_ogre_1_1_g_l_x_window.html#a7f485201f8014dfe7e38805b46274f58">Ogre::GLXWindow</a>
 , <a class="el" href="class_ogre_1_1_n_u_l_l_window.html#a19001949b4f50e558fb70ed6bb7de826">Ogre::NULLWindow</a>
 , <a class="el" href="class_ogre_1_1_win32_window.html#af21d51eaae34cbe6b114338ef81f00a8">Ogre::Win32Window</a>
-, <a class="el" href="class_ogre_1_1_window.html#a05e7a2de1a3851e6f31cf8421ab67c98">Ogre::Window</a>
+, <a class="el" href="class_ogre_1_1_window.html#a2d5423c38fb53d7346a00c0e7e582347">Ogre::Window</a>
 </li>
 <li>RequestHandler()
 : <a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html#a37f35aaa5935b91a180d92e5243fccb7">Ogre::WorkQueue::RequestHandler</a>
@@ -973,12 +993,11 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 , <a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a01e2cfb126305dfc9cb97067d4ae1765">Ogre::GLES2FBOManager</a>
 </li>
 <li>requestResolution()
-: <a class="el" href="class_ogre_1_1_d3_d11_window_hwnd.html#ac2cfc1141243d338c6f1e9d0871300ce">Ogre::D3D11WindowHwnd</a>
-, <a class="el" href="class_ogre_1_1_g_l_x_window.html#a76e78a2c38307a6fa2e693e9c101c9ed">Ogre::GLXWindow</a>
+: <a class="el" href="class_ogre_1_1_g_l_x_window.html#a76e78a2c38307a6fa2e693e9c101c9ed">Ogre::GLXWindow</a>
 , <a class="el" href="class_ogre_1_1_metal_window.html#aa314e0b392dcc1dd9597af0e3219fba4">Ogre::MetalWindow</a>
 , <a class="el" href="class_ogre_1_1_n_u_l_l_window.html#a173fe4c54c01648a3692a93bf91b56d0">Ogre::NULLWindow</a>
 , <a class="el" href="class_ogre_1_1_win32_window.html#ab1819c48819754ea712f5ebee36d60b7">Ogre::Win32Window</a>
-, <a class="el" href="class_ogre_1_1_window.html#a9209e2ed342cb009ad5c81e0a762d915">Ogre::Window</a>
+, <a class="el" href="class_ogre_1_1_window.html#a1284a6c13adf9c244e4dcc2f973d7749">Ogre::Window</a>
 </li>
 <li>requestSlot()
 : <a class="el" href="class_ogre_1_1_const_buffer_pool.html#a4653070322f8898f65105dab1f9ae962">Ogre::ConstBufferPool</a>
@@ -1001,7 +1020,9 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 , <a class="el" href="class_ogre_1_1_g_l3_plus_f_b_o_multi_render_target.html#a685bcfab48d4dfd6946cd55f87e1fcf2">Ogre::GL3PlusFBOMultiRenderTarget</a>
 , <a class="el" href="class_ogre_1_1_g_l3_plus_null_texture_target.html#a9a646aec7889faae81dfa17f56a084e2">Ogre::GL3PlusNullTextureTarget</a>
 , <a class="el" href="class_ogre_1_1_g_l3_plus_render_texture.html#a0dd3d6f8e6a53c1a0ed816def12f6e22">Ogre::GL3PlusRenderTexture</a>
+, <a class="el" href="class_ogre_1_1_g_l_e_s2_depth_texture_target.html#ad8bdc3f48fdb097ea34e522538f3acaa">Ogre::GLES2DepthTextureTarget</a>
 , <a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_multi_render_target.html#a1f1c1efeca3c33b067db87b41076b6a7">Ogre::GLES2FBOMultiRenderTarget</a>
+, <a class="el" href="class_ogre_1_1_g_l_e_s2_null_texture_target.html#a2e66deacd5ea163f8f194ac786cdee33">Ogre::GLES2NullTextureTarget</a>
 , <a class="el" href="class_ogre_1_1_g_l_e_s2_render_texture.html#aa32eb5d8c3c2008cfb3d5768c99bb78b">Ogre::GLES2RenderTexture</a>
 , <a class="el" href="class_ogre_1_1_g_l_x_window.html#af5ecd4f2c4d9914554638638a1473d68">Ogre::GLXWindow</a>
 , <a class="el" href="class_ogre_1_1_g_t_k_window.html#aed6920a31512ba3b67fa431e779aa006">Ogre::GTKWindow</a>
@@ -1036,6 +1057,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 <li>reset()
 : <a class="el" href="class_ogre_1_1_convex_body.html#a153a0fac3f0c9687a969a2565ccd320e">Ogre::ConvexBody</a>
 , <a class="el" href="group___general.html#ga91166fe4ac997f5e98d7118cac7cddb9">Ogre::FrameStats</a>
+, <a class="el" href="class_ogre_1_1_irradiance_field.html#a9f189cebd1f6a7153c8a9ab7755871f0">Ogre::IrradianceField</a>
 , <a class="el" href="class_ogre_1_1_name_generator.html#a287069b27325690628d7cd306029ffc3">Ogre::NameGenerator</a>
 , <a class="el" href="class_ogre_1_1_offline_profiler.html#a99130a64890b7852042d0025a93de185">Ogre::OfflineProfiler</a>
 , <a class="el" href="class_ogre_1_1_polygon.html#a9db9518c3381e7a840610bf181d65b73">Ogre::Polygon</a>
@@ -1072,6 +1094,9 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 <li>resetFrustumExtents()
 : <a class="el" href="class_ogre_1_1_frustum.html#a71dc0073d79445cb488cff2f216d8c02">Ogre::Frustum</a>
 </li>
+<li>resetIblSpecMipmap()
+: <a class="el" href="class_ogre_1_1_hlms_pbs.html#a9b258ad7ac37f1544ee0fc0fab344b5d">Ogre::HlmsPbs</a>
+</li>
 <li>resetIndexDataStartEndIndex()
 : <a class="el" href="class_ogre_1_1v1_1_1_sub_entity.html#a6d360ab14c6165a9491312126fbe3be4">Ogre::v1::SubEntity</a>
 </li>
@@ -1079,7 +1104,8 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 : <a class="el" href="class_ogre_1_1v1_1_1_node_animation_track.html#a2c8cab60e986d090bd2e4aa9fe103829">Ogre::v1::NodeAnimationTrack</a>
 </li>
 <li>resetNumPassesLeft()
-: <a class="el" href="class_ogre_1_1_compositor_pass.html#a6b62d543f66d6caf1606d8f214c3f14d">Ogre::CompositorPass</a>
+: <a class="el" href="class_ogre_1_1_compositor_pass.html#afe6a90034aeaa2ed38e32d9f344e38c3">Ogre::CompositorPass</a>
+, <a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular.html#a0a7a069b89081d76b561d3c67173d276">Ogre::CompositorPassIblSpecular</a>
 </li>
 <li>resetOrientation()
 : <a class="el" href="class_ogre_1_1_node.html#aa528fdf12bc4f9ade3f81aa3ada75e78">Ogre::Node</a>
@@ -1110,13 +1136,14 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 , <a class="el" href="class_ogre_1_1_fast_array.html#ac2544ce7917912b5bdd14feb52eda6ac">Ogre::FastArray&lt; T &gt;</a>
 , <a class="el" href="class_ogre_1_1_g_t_k_window.html#a7f9cdaf9edfd7ce8e9174c6461d64cdb">Ogre::GTKWindow</a>
 , <a class="el" href="class_ogre_1_1_hashed_vector.html#ac47cb9541d822b017804c828a13d961c">Ogre::HashedVector&lt; T &gt;</a>
+, <a class="el" href="class_ogre_1_1_image2.html#a605930f31cc26da8829cbd356e612c6d">Ogre::Image2</a>
 , <a class="el" href="class_ogre_1_1_image.html#a67a00ee3969db8f5255d2485e3599f03">Ogre::Image</a>
 , <a class="el" href="class_ogre_1_1_lw_string.html#a98db281c4793f9761a3467dbd13e38ff">Ogre::LwString</a>
 , <a class="el" href="class_ogre_1_1_na_cl_g_l_context.html#ac82d88c0b0c30bf44dd1c0cbf797bde9">Ogre::NaClGLContext</a>
 , <a class="el" href="class_ogre_1_1_n_u_l_l_render_window.html#a194b87d0c4904f890d2cdfc29d7e775e">Ogre::NULLRenderWindow</a>
 , <a class="el" href="class_ogre_1_1_render_window.html#a1ed032cdc6813b654b060fe5758e4909">Ogre::RenderWindow</a>
 , <a class="el" href="class_ogre_1_1_s_d_l_window.html#ad24a2eb1fd76c0bbb36bd3d5a6945ea2">Ogre::SDLWindow</a>
-, <a class="el" href="class_ogre_1_1_small_vector_impl.html#a3e7a18d63d341d3b421bfcd49becebb8">Ogre::SmallVectorImpl&lt; T &gt;</a>
+, <a class="el" href="class_ogre_1_1_small_vector_impl.html#a67f552cb7d9bf5fa06ba95d24e124949">Ogre::SmallVectorImpl&lt; T &gt;</a>
 , <a class="el" href="class_ogre_1_1_stack_vector.html#a3598a0841f1572315fd28f67551170ea">Ogre::StackVector&lt; T, Capacity &gt;</a>
 </li>
 <li>resizePOD()
@@ -1130,7 +1157,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 : <a class="el" href="class_ogre_1_1_r_t_shader_1_1_program.html#af9ae3761783a43cdb7016b51c5a858bd">Ogre::RTShader::Program</a>
 </li>
 <li>resolveAutoParameterReal()
-: <a class="el" href="class_ogre_1_1_r_t_shader_1_1_program.html#afa95a589bbc662fdadf93c9fa3630508">Ogre::RTShader::Program</a>
+: <a class="el" href="class_ogre_1_1_r_t_shader_1_1_program.html#ae0b281147a7daf59ec04e45523df75d0">Ogre::RTShader::Program</a>
 </li>
 <li>resolveDependencies()
 : <a class="el" href="group___r_t_shader.html#ga2d9c2c117871a07a446b468b0127895a">Ogre::RTShader::DualQuaternionSkinning</a>
@@ -1275,7 +1302,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 <li>rotate()
 : <a class="el" href="class_ogre_1_1_camera.html#a891066e82092d315699f7963268a5c16">Ogre::Camera</a>
 , <a class="el" href="class_ogre_1_1_node.html#a6755a5f452cd93b08d2a3261cf0a3ae3">Ogre::Node</a>
-, <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a0cc76879cc06b3695701d00c4d6d8a71">Ogre::v1::OldNode</a>
+, <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a02670c146674e5f8f98879f90beab7a1">Ogre::v1::OldNode</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_overlay.html#aba20675e7bbc472696d088ad2268803f">Ogre::v1::Overlay</a>
 </li>
 <li>RotationalSpline()

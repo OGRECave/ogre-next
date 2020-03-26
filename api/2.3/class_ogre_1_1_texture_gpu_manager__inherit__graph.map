@@ -1,0 +1,9 @@
+<map id="Ogre::TextureGpuManager" name="Ogre::TextureGpuManager">
+<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_texture_gpu_manager.html" title="Ogre::D3D11TextureGpuManager" alt="" coords="454,5,671,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_l3_plus_texture_gpu_manager.html" title="Ogre::GL3PlusTextureGpuManager" alt="" coords="449,56,676,83"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_texture_gpu_manager.html" title="Ogre::MetalTextureGpuManager" alt="" coords="459,107,667,133"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_texture_gpu_manager.html" title="Ogre::NULLTextureGpuManager" alt="" coords="457,157,668,184"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_vulkan_texture_gpu_manager.html" title="Ogre::VulkanTextureGpuManager" alt="" coords="455,208,671,235"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="38,81,145,108"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu_listener.html" title="Ogre::TextureGpuListener" alt="" coords="5,132,177,159"/>
+</map>

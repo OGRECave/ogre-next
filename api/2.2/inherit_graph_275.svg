@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="struct_ogre_1_1is_pod_like_3_01int_01_4.html" target="_top" xlink:title="Ogre::isPodLike\&lt; int \&gt;">
+<g id="a_node1"><a xlink:href="class_ogre_1_1_instant_radiosity.html" target="_top" xlink:title="Ogre::InstantRadiosity">
 <polygon fill="none" stroke="#000000" points="0,-.5 0,-19.5 115,-19.5 115,-.5 0,-.5"/>
-<text text-anchor="middle" x="57.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Ogre::isPodLike&lt; int &gt;</text>
+<text text-anchor="middle" x="57.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Ogre::InstantRadiosity</text>
 </a>
 </g>
 </g>

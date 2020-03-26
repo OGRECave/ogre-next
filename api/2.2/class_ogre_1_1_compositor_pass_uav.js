@@ -10,6 +10,7 @@ var class_ogre_1_1_compositor_pass_uav =
       [ "ResidentToSysRamSync", "class_ogre_1_1_compositor_pass_uav.html#afe11bd546cf7315f4526488e7078cc7da218a4243be85ec9c989b777119d5ff47", null ],
       [ "MetadataCacheOutOfDate", "class_ogre_1_1_compositor_pass_uav.html#afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604", null ],
       [ "ExceptionThrown", "class_ogre_1_1_compositor_pass_uav.html#afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26", null ],
+      [ "FsaaSettingAlteredByApi", "class_ogre_1_1_compositor_pass_uav.html#afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7", null ],
       [ "ReadyForRendering", "class_ogre_1_1_compositor_pass_uav.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257", null ],
       [ "Deleted", "class_ogre_1_1_compositor_pass_uav.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e", null ]
     ] ],
@@ -43,6 +44,6 @@ var class_ogre_1_1_compositor_pass_uav =
     [ "operator new[]", "class_ogre_1_1_compositor_pass_uav.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "profilingBegin", "class_ogre_1_1_compositor_pass_uav.html#ad9e0b79d8ca75e75cc94e0f00608e692", null ],
     [ "profilingEnd", "class_ogre_1_1_compositor_pass_uav.html#a3d94bb7e758731f7160eb7dedae69ed7", null ],
-    [ "resetNumPassesLeft", "class_ogre_1_1_compositor_pass_uav.html#a6b62d543f66d6caf1606d8f214c3f14d", null ],
+    [ "resetNumPassesLeft", "class_ogre_1_1_compositor_pass_uav.html#afe6a90034aeaa2ed38e32d9f344e38c3", null ],
     [ "shouldStayLoaded", "class_ogre_1_1_compositor_pass_uav.html#a1427f0b635a4186cd6083a9bab879fa2", null ]
 ];

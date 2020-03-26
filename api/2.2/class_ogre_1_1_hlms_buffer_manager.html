@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -110,7 +110,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_hlms_buffer_manager.htm
 Public Types</h2></td></tr>
 <tr class="memitem:ab38ae89227591ab06dac2f033300e7c0"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>, <a class="el" href="struct_ogre_1_1_hlms_1_1_datablock_entry.html">DatablockEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#ab38ae89227591ab06dac2f033300e7c0">HlmsDatablockMap</a></td></tr>
 <tr class="separator:ab38ae89227591ab06dac2f033300e7c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6515668f13ae08887b8104c7133e5c29"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="struct_ogre_1_1_hlms_1_1_library.html">Library</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a6515668f13ae08887b8104c7133e5c29">LibraryVec</a></td></tr>
+<tr class="memitem:a6515668f13ae08887b8104c7133e5c29"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_hlms_1_1_library.html">Library</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a6515668f13ae08887b8104c7133e5c29">LibraryVec</a></td></tr>
 <tr class="separator:a6515668f13ae08887b8104c7133e5c29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e629e7a87a40040e12d2bfb4ff80d58"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a6e629e7a87a40040e12d2bfb4ff80d58">LightGatheringMode</a> { <a class="el" href="class_ogre_1_1_hlms.html#a6e629e7a87a40040e12d2bfb4ff80d58a6461fe4856b648eb0bc6ec35df2e4712">LightGatherForward</a>, 
 <a class="el" href="class_ogre_1_1_hlms.html#a6e629e7a87a40040e12d2bfb4ff80d58a792d2cdce23b4018b9c149540ebb1a93">LightGatherForwardPlus</a>, 
@@ -129,7 +129,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af34ff1ef7360108d8bfce45bac74f97a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2712f2732aaface8c3429cbd2c375578"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a2712f2732aaface8c3429cbd2c375578">_clearShaderCache</a> (void)</td></tr>
 <tr class="separator:a2712f2732aaface8c3429cbd2c375578"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a314fd233b60a9b50046de56ca7dfcbdf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a314fd233b60a9b50046de56ca7dfcbdf">_collectSamplerblocks</a> (<a class="el" href="struct_ogre_1_1set.html">set</a>&lt; const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *&gt;::type &amp;outSamplerblocks, const <a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *datablock) const</td></tr>
+<tr class="memitem:a314fd233b60a9b50046de56ca7dfcbdf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a314fd233b60a9b50046de56ca7dfcbdf">_collectSamplerblocks</a> (set&lt; const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *&gt;::type &amp;outSamplerblocks, const <a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *datablock) const</td></tr>
 <tr class="separator:a314fd233b60a9b50046de56ca7dfcbdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a208e79527ebc2ae3be944b9b3472155f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a208e79527ebc2ae3be944b9b3472155f">_compileShaderFromPreprocessedSource</a> (const RenderableCache &amp;mergedCache, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> source[<a class="el" href="group___general.html#gga7049ce296bb4883feab25251d3865035a0bf893209b217d59e15abaf48092d132">NumShaderTypes</a>])</td></tr>
 <tr class="separator:a208e79527ebc2ae3be944b9b3472155f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -259,7 +259,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2513b676def18667eb5579abfa50820a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a2513b676def18667eb5579abfa50820a">reloadFrom</a> (<a class="el" href="class_ogre_1_1_archive.html">Archive</a> *newDataFolder, <a class="el" href="group___resources.html#gac56fd5a93b0000f2487e2ca968784df3">ArchiveVec</a> *libraryFolders=0)</td></tr>
 <tr class="memdesc:a2513b676def18667eb5579abfa50820a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys all the cached shaders and in the next opportunity will recreate them from the new location.  <a href="#a2513b676def18667eb5579abfa50820a">More...</a><br /></td></tr>
 <tr class="separator:a2513b676def18667eb5579abfa50820a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f184b28b72445e50b59bcca8b16a3a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a4f184b28b72445e50b59bcca8b16a3a6">saveAllTexturesFromDatablocks</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, <a class="el" href="struct_ogre_1_1set.html">set</a>&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener)</td></tr>
+<tr class="memitem:a4f184b28b72445e50b59bcca8b16a3a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a4f184b28b72445e50b59bcca8b16a3a6">saveAllTexturesFromDatablocks</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener)</td></tr>
 <tr class="separator:a4f184b28b72445e50b59bcca8b16a3a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebca7da0789967e8fde70d95fa74ac0c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#aebca7da0789967e8fde70d95fa74ac0c">setAreaLightForwardSettings</a> (<a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> areaLightsApproxLimit, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> areaLightsLtcLimit)</td></tr>
 <tr class="memdesc:aebca7da0789967e8fde70d95fa74ac0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Area lights use regular Forward.  <a href="#aebca7da0789967e8fde70d95fa74ac0c">More...</a><br /></td></tr>
@@ -332,7 +332,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="struct_ogre_1_1_hlms_1_1_library.html">Library</a>&gt;::type <a class="el" href="class_ogre_1_1_hlms.html#a6515668f13ae08887b8104c7133e5c29">Ogre::Hlms::LibraryVec</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_hlms_1_1_library.html">Library</a>&gt;::type <a class="el" href="class_ogre_1_1_hlms.html#a6515668f13ae08887b8104c7133e5c29">Ogre::Hlms::LibraryVec</a></td>
         </tr>
       </table>
   </td>
@@ -500,7 +500,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void Ogre::Hlms::_collectSamplerblocks </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_ogre_1_1set.html">set</a>&lt; const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *&gt;::type &amp;&#160;</td>
+          <td class="paramtype">set&lt; const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *&gt;::type &amp;&#160;</td>
           <td class="paramname"><em>outSamplerblocks</em>, </td>
         </tr>
         <tr>
@@ -2578,7 +2578,7 @@ template&lt;class Alloc &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_ogre_1_1set.html">set</a>&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;&#160;</td>
+          <td class="paramtype">set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;&#160;</td>
           <td class="paramname"><em>savedTextures</em>, </td>
         </tr>
         <tr>

@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -130,10 +130,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4be37baef81876985aa1071ad5acc6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa2943846ba6a2b5824a12857139cf5e"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#afa2943846ba6a2b5824a12857139cf5e">operator new[]</a> (size_t sz)</td></tr>
 <tr class="separator:afa2943846ba6a2b5824a12857139cf5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5da0d07ff858b36212cea1bc5ef6a5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga9d11953f4cfbc8a1e225b910d881dc36">ConcreteNodeListPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_script_parser.html#aa5da0d07ff858b36212cea1bc5ef6a5b">parse</a> (const <a class="el" href="group___general.html#gacd063ace8e2697904ef8c500b1096902">ScriptTokenListPtr</a> &amp;tokens)</td></tr>
-<tr class="separator:aa5da0d07ff858b36212cea1bc5ef6a5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab60359e8c69df194f2a983a705e15ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga9d11953f4cfbc8a1e225b910d881dc36">ConcreteNodeListPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_script_parser.html#aab60359e8c69df194f2a983a705e15ba">parseChunk</a> (const <a class="el" href="group___general.html#gacd063ace8e2697904ef8c500b1096902">ScriptTokenListPtr</a> &amp;tokens)</td></tr>
-<tr class="separator:aab60359e8c69df194f2a983a705e15ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25c4c332a4e4d04e530f1593f9fc1f0d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga9d11953f4cfbc8a1e225b910d881dc36">ConcreteNodeListPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_script_parser.html#a25c4c332a4e4d04e530f1593f9fc1f0d">parse</a> (const <a class="el" href="group___general.html#gacd063ace8e2697904ef8c500b1096902">ScriptTokenListPtr</a> &amp;tokens, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;sourceFile)</td></tr>
+<tr class="separator:a25c4c332a4e4d04e530f1593f9fc1f0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0546dba2e2b41af80b6a8aeb066dc3c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga9d11953f4cfbc8a1e225b910d881dc36">ConcreteNodeListPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_script_parser.html#a0546dba2e2b41af80b6a8aeb066dc3c5">parseChunk</a> (const <a class="el" href="group___general.html#gacd063ace8e2697904ef8c500b1096902">ScriptTokenListPtr</a> &amp;tokens, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;sourceFile)</td></tr>
+<tr class="separator:a0546dba2e2b41af80b6a8aeb066dc3c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7618266f8de9a3d3473b9447ae20ed26"></a>
@@ -573,8 +573,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="aa5da0d07ff858b36212cea1bc5ef6a5b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5da0d07ff858b36212cea1bc5ef6a5b">&#9670;&nbsp;</a></span>parse()</h2>
+<a id="a25c4c332a4e4d04e530f1593f9fc1f0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25c4c332a4e4d04e530f1593f9fc1f0d">&#9670;&nbsp;</a></span>parse()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -583,16 +583,26 @@ template&lt;class Alloc &gt; </div>
           <td class="memname"><a class="el" href="group___general.html#ga9d11953f4cfbc8a1e225b910d881dc36">ConcreteNodeListPtr</a> Ogre::ScriptParser::parse </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="group___general.html#gacd063ace8e2697904ef8c500b1096902">ScriptTokenListPtr</a> &amp;&#160;</td>
-          <td class="paramname"><em>tokens</em></td><td>)</td>
+          <td class="paramname"><em>tokens</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>sourceFile</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aab60359e8c69df194f2a983a705e15ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab60359e8c69df194f2a983a705e15ba">&#9670;&nbsp;</a></span>parseChunk()</h2>
+<a id="a0546dba2e2b41af80b6a8aeb066dc3c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0546dba2e2b41af80b6a8aeb066dc3c5">&#9670;&nbsp;</a></span>parseChunk()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -601,8 +611,18 @@ template&lt;class Alloc &gt; </div>
           <td class="memname"><a class="el" href="group___general.html#ga9d11953f4cfbc8a1e225b910d881dc36">ConcreteNodeListPtr</a> Ogre::ScriptParser::parseChunk </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="group___general.html#gacd063ace8e2697904ef8c500b1096902">ScriptTokenListPtr</a> &amp;&#160;</td>
-          <td class="paramname"><em>tokens</em></td><td>)</td>
+          <td class="paramname"><em>tokens</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>sourceFile</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

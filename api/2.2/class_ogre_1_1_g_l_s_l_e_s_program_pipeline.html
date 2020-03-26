@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -91,7 +91,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_g_l_s_l_e_s_program_pip
 </div><!--header-->
 <div class="contents">
 
-<p>Specialisation of <a class="el" href="class_ogre_1_1_high_level_gpu_program.html" title="Abstract base class representing a high-level program (a vertex or fragment program). ">HighLevelGpuProgram</a> to provide support for OpenGL Shader Language (GLSL ES) for OpenGL ES 2.0.  
+<p>Specialisation of <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html" title="C++ encapsulation of GLSL ES Program Object. ">GLSLESProgramCommon</a> to provide support for separable programs via the Open GL program pipeline.  
  <a href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#details">More...</a></p>
 
 <p><code>#include &lt;OgreGLSLESProgramPipeline.h&gt;</code></p>
@@ -106,29 +106,32 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_g_l_s_l_e_s_program_pip
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2de16880e0dedda46c752c782bf0bec9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#a2de16880e0dedda46c752c782bf0bec9">GLSLESProgramPipeline</a> (<a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *vertexProgram, <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *fragmentProgram)</td></tr>
-<tr class="memdesc:a2de16880e0dedda46c752c782bf0bec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor should only be used by <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one pr...">GLSLESProgramPipelineManager</a>.  <a href="#a2de16880e0dedda46c752c782bf0bec9">More...</a><br /></td></tr>
-<tr class="separator:a2de16880e0dedda46c752c782bf0bec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ee7acaadb03d7b825f02c74bafc0726"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#a7ee7acaadb03d7b825f02c74bafc0726">GLSLESProgramPipeline</a> (<a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *vertexProgram, <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *fragmentProgram)</td></tr>
+<tr class="memdesc:a7ee7acaadb03d7b825f02c74bafc0726"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor should only be used by <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html" title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one pr...">GLSLESProgramPipelineManager</a>.  <a href="#a7ee7acaadb03d7b825f02c74bafc0726">More...</a><br /></td></tr>
+<tr class="separator:a7ee7acaadb03d7b825f02c74bafc0726"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae20aca570ff72e3b8ed3e7c926ad5558"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#ae20aca570ff72e3b8ed3e7c926ad5558">~GLSLESProgramPipeline</a> ()</td></tr>
 <tr class="separator:ae20aca570ff72e3b8ed3e7c926ad5558"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2bbf63617d7c69b0d7bd23c1c64cc64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#aa2bbf63617d7c69b0d7bd23c1c64cc64">activate</a> (void)</td></tr>
 <tr class="memdesc:aa2bbf63617d7c69b0d7bd23c1c64cc64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a program pipeline object active by making sure it is linked and then putting it in use.  <a href="#aa2bbf63617d7c69b0d7bd23c1c64cc64">More...</a><br /></td></tr>
 <tr class="separator:aa2bbf63617d7c69b0d7bd23c1c64cc64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8676a1c75ed9764bd50ee1c766bbcc51"><td class="memItemLeft" align="right" valign="top">virtual GLint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#a8676a1c75ed9764bd50ee1c766bbcc51">getAttributeIndex</a> (<a class="el" href="namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00d">VertexElementSemantic</a> semantic, <a class="el" href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">uint</a> index)</td></tr>
-<tr class="memdesc:a8676a1c75ed9764bd50ee1c766bbcc51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the index of a non-standard attribute bound in the linked code.  <a href="#a8676a1c75ed9764bd50ee1c766bbcc51">More...</a><br /></td></tr>
-<tr class="separator:a8676a1c75ed9764bd50ee1c766bbcc51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaea45e4139b32185f41c041d691fbb72"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#aaea45e4139b32185f41c041d691fbb72">getFragmentProgram</a> (void) const</td></tr>
-<tr class="separator:aaea45e4139b32185f41c041d691fbb72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6afa75261b66229d0ef4b96222cc7edc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#a6afa75261b66229d0ef4b96222cc7edc">extractLayoutQualifiers</a> (void)</td></tr>
+<tr class="memdesc:a6afa75261b66229d0ef4b96222cc7edc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds layout qualifiers in the shader source and sets attribute indices appropriately.  <a href="#a6afa75261b66229d0ef4b96222cc7edc">More...</a><br /></td></tr>
+<tr class="separator:a6afa75261b66229d0ef4b96222cc7edc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af43f5564ff75477577d5fb6aa1cf1644"><td class="memItemLeft" align="right" valign="top">GLint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#af43f5564ff75477577d5fb6aa1cf1644">getAttributeIndex</a> (<a class="el" href="namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00d">VertexElementSemantic</a> semantic, <a class="el" href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">uint</a> index)</td></tr>
+<tr class="memdesc:af43f5564ff75477577d5fb6aa1cf1644"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the index of a non-standard attribute bound in the linked code.  <a href="#af43f5564ff75477577d5fb6aa1cf1644">More...</a><br /></td></tr>
+<tr class="separator:af43f5564ff75477577d5fb6aa1cf1644"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb3176887a2f702476bf09dcfe070f92"><td class="memItemLeft" align="right" valign="top">GLint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#afb3176887a2f702476bf09dcfe070f92">getBaseInstanceLocation</a> () const</td></tr>
+<tr class="separator:afb3176887a2f702476bf09dcfe070f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05f43269e0729b255d4c40db8eb67e63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#a05f43269e0729b255d4c40db8eb67e63">getFragmentShader</a> () const</td></tr>
+<tr class="separator:a05f43269e0729b255d4c40db8eb67e63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a421610c0d6345a8ad90d9532700dc744"><td class="memItemLeft" align="right" valign="top">GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#a421610c0d6345a8ad90d9532700dc744">getGLProgramHandle</a> (void) const</td></tr>
 <tr class="memdesc:a421610c0d6345a8ad90d9532700dc744"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the GL Handle for the program object.  <a href="#a421610c0d6345a8ad90d9532700dc744">More...</a><br /></td></tr>
 <tr class="separator:a421610c0d6345a8ad90d9532700dc744"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4200a0eb801a81d99525b7133aa93ea4"><td class="memItemLeft" align="right" valign="top">GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#a4200a0eb801a81d99525b7133aa93ea4">getGLProgramPipelineHandle</a> () const</td></tr>
 <tr class="memdesc:a4200a0eb801a81d99525b7133aa93ea4"><td class="mdescLeft">&#160;</td><td class="mdescRight">GL Program Pipeline Handle.  <a href="#a4200a0eb801a81d99525b7133aa93ea4">More...</a><br /></td></tr>
 <tr class="separator:a4200a0eb801a81d99525b7133aa93ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80e8ab20e3c03e24955aa8a03057008a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_e_s2_uniform_cache.html">GLES2UniformCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#a80e8ab20e3c03e24955aa8a03057008a">getUniformCache</a> (void)</td></tr>
-<tr class="separator:a80e8ab20e3c03e24955aa8a03057008a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c20d6ebcdab2707c3f1a7759c25ca32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#a0c20d6ebcdab2707c3f1a7759c25ca32">getVertexProgram</a> (void) const</td></tr>
-<tr class="separator:a0c20d6ebcdab2707c3f1a7759c25ca32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6885ea5e907a70f32c26d1621e330861"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#a6885ea5e907a70f32c26d1621e330861">getVertexShader</a> () const</td></tr>
+<tr class="separator:a6885ea5e907a70f32c26d1621e330861"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a073a89b01f4272838b0fd55a0c7695b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#a073a89b01f4272838b0fd55a0c7695b6">isAttributeValid</a> (<a class="el" href="namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00d">VertexElementSemantic</a> semantic, <a class="el" href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">uint</a> index)</td></tr>
 <tr class="memdesc:a073a89b01f4272838b0fd55a0c7695b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is a non-standard attribute bound in the linked code?  <a href="#a073a89b01f4272838b0fd55a0c7695b6">More...</a><br /></td></tr>
 <tr class="separator:a073a89b01f4272838b0fd55a0c7695b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,23 +141,25 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a67993567b5302107ef1730147aa4071b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#a67993567b5302107ef1730147aa4071b">setSkeletalAnimationIncluded</a> (bool included)</td></tr>
 <tr class="memdesc:a67993567b5302107ef1730147aa4071b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether the linked program includes the required instructions to perform skeletal animation.  <a href="#a67993567b5302107ef1730147aa4071b">More...</a><br /></td></tr>
 <tr class="separator:a67993567b5302107ef1730147aa4071b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec8e2b4cc8d39950abeaec2a5187fd51"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#aec8e2b4cc8d39950abeaec2a5187fd51">updatePassIterationUniforms</a> (<a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a> params)</td></tr>
-<tr class="memdesc:aec8e2b4cc8d39950abeaec2a5187fd51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates program pipeline object uniforms using data from pass iteration <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a>.  <a href="#aec8e2b4cc8d39950abeaec2a5187fd51">More...</a><br /></td></tr>
-<tr class="separator:aec8e2b4cc8d39950abeaec2a5187fd51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bccdad5d9eccbbda57fb9797072f1a2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#a9bccdad5d9eccbbda57fb9797072f1a2">updateUniformBlocks</a> (<a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a> params, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> mask, <a class="el" href="group___resources.html#gad08e89fa63e81d061ea9e2f37664976e">GpuProgramType</a> fromProgType)</td></tr>
-<tr class="memdesc:a9bccdad5d9eccbbda57fb9797072f1a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates program object uniform blocks using data from <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a>.  <a href="#a9bccdad5d9eccbbda57fb9797072f1a2">More...</a><br /></td></tr>
-<tr class="separator:a9bccdad5d9eccbbda57fb9797072f1a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea14577f15c1ef4d81921d0455983b43"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#aea14577f15c1ef4d81921d0455983b43">updateUniforms</a> (<a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a> params, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> mask, <a class="el" href="group___resources.html#gad08e89fa63e81d061ea9e2f37664976e">GpuProgramType</a> fromProgType)</td></tr>
-<tr class="memdesc:aea14577f15c1ef4d81921d0455983b43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates program pipeline object uniforms using data from <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a>.  <a href="#aea14577f15c1ef4d81921d0455983b43">More...</a><br /></td></tr>
-<tr class="separator:aea14577f15c1ef4d81921d0455983b43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2ec4110e23c218d21483738ebc15e14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#ab2ec4110e23c218d21483738ebc15e14">updatePassIterationUniforms</a> (<a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a> params)</td></tr>
+<tr class="memdesc:ab2ec4110e23c218d21483738ebc15e14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates program pipeline object uniforms using data from pass iteration <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a>.  <a href="#ab2ec4110e23c218d21483738ebc15e14">More...</a><br /></td></tr>
+<tr class="separator:ab2ec4110e23c218d21483738ebc15e14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac183c5c5b9898aa677e3308a1452506b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#ac183c5c5b9898aa677e3308a1452506b">updateUniformBlocks</a> (<a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a> params, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> mask, <a class="el" href="group___resources.html#gad08e89fa63e81d061ea9e2f37664976e">GpuProgramType</a> fromProgType)</td></tr>
+<tr class="memdesc:ac183c5c5b9898aa677e3308a1452506b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates program object uniform blocks using shared parameter data from <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a>.  <a href="#ac183c5c5b9898aa677e3308a1452506b">More...</a><br /></td></tr>
+<tr class="separator:ac183c5c5b9898aa677e3308a1452506b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37f6e004441c7eb6dc62822cd6bf6395"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html#a37f6e004441c7eb6dc62822cd6bf6395">updateUniforms</a> (<a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a> params, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> mask, <a class="el" href="group___resources.html#gad08e89fa63e81d061ea9e2f37664976e">GpuProgramType</a> fromProgType)</td></tr>
+<tr class="memdesc:a37f6e004441c7eb6dc62822cd6bf6395"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates program pipeline object uniforms using named and indexed parameter data from <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a>.  <a href="#a37f6e004441c7eb6dc62822cd6bf6395">More...</a><br /></td></tr>
+<tr class="separator:a37f6e004441c7eb6dc62822cd6bf6395"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Specialisation of <a class="el" href="class_ogre_1_1_high_level_gpu_program.html" title="Abstract base class representing a high-level program (a vertex or fragment program). ">HighLevelGpuProgram</a> to provide support for OpenGL Shader Language (GLSL ES) for OpenGL ES 2.0. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>GLSL ES has no target assembler or entry point specification like DirectX 9 HLSL. Vertex and Fragment shaders only have one entry point called "main". When a shader is compiled, microcode is generated but can not be accessed by the application. GLSL ES also does not provide assembler low level output after compiling. The GL ES Render system assumes that the Gpu program is a GL Gpu program so <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html" title="Specialisation of HighLevelGpuProgram to provide support for OpenGL Shader Language (GLSL ES) for Ope...">GLSLESProgramPipeline</a> will create a <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html" title="GLSL ES low level compiled shader object - this class is used to get at the linked program object and...">GLSLESGpuProgram</a> that is subclassed from <a class="el" href="class_ogre_1_1_g_l_e_s2_gpu_program.html" title="Generalised low-level GL program, can be applied to multiple types (eg ARB and NV) ...">GLES2GpuProgram</a> for the low level implementation. The GLES2Program class will create a shader and program object and compile the source but will not create a pipeline object. It's up to <a class="el" href="class_ogre_1_1_g_l_e_s2_gpu_program.html" title="Generalised low-level GL program, can be applied to multiple types (eg ARB and NV) ...">GLES2GpuProgram</a> class to request a program pipeline object to link the program object to.</dd></dl>
+<div class="textblock"><p>Specialisation of <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html" title="C++ encapsulation of GLSL ES Program Object. ">GLSLESProgramCommon</a> to provide support for separable programs via the Open GL program pipeline. </p>
+<p>Separable programs consist of shader objects which have been individually linked. This allows for invidual shaders in a program pipeline to be swapped without recompiling the program object, as would be necessary with monolithic programs. This is especially useful in the common case of only entities which change only a few of the shaders in the pipeline while leaving the rest the same.</p>
+<dl class="section remark"><dt>Remarks</dt><dd>GLSL ES has no target assembler or entry point specification like DirectX 9 HLSL. Vertex and Fragment shaders only have one entry point called "main". When a shader is compiled, microcode is generated but can not be accessed by the application.</dd></dl>
+<p>GLSL ES also does not provide assembler low level output after compiling. The GL ES Render system assumes that the Gpu program is a GL Gpu program so <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html" title="Specialisation of GLSLESProgramCommon to provide support for separable programs via the Open GL progr...">GLSLESProgramPipeline</a> will create a <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html" title="Specialisation of HighLevelGpuProgram to encapsulate shader objects obtained from compiled shaders wr...">GLSLESShader</a> for the low level implementation. The GLES2Program class will create a shader and program object and compile the source but will not create a pipeline object. It's up to GLES2GpuProgram class to request a program pipeline object to link the program object to.</p>
 <dl class="section note"><dt>Note</dt><dd>GLSL ES supports multiple modular shader objects that can be attached to one program object to form a single shader. This is supported through the "attach" material script command. All the modules to be attached are listed on the same line as the attach command separated by white space. </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2de16880e0dedda46c752c782bf0bec9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2de16880e0dedda46c752c782bf0bec9">&#9670;&nbsp;</a></span>GLSLESProgramPipeline()</h2>
+<a id="a7ee7acaadb03d7b825f02c74bafc0726"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ee7acaadb03d7b825f02c74bafc0726">&#9670;&nbsp;</a></span>GLSLESProgramPipeline()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,13 +167,13 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">Ogre::GLSLESProgramPipeline::GLSLESProgramPipeline </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *&#160;</td>
           <td class="paramname"><em>vertexProgram</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *&#160;</td>
           <td class="paramname"><em>fragmentProgram</em>&#160;</td>
         </tr>
         <tr>
@@ -239,8 +244,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8676a1c75ed9764bd50ee1c766bbcc51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8676a1c75ed9764bd50ee1c766bbcc51">&#9670;&nbsp;</a></span>getAttributeIndex()</h2>
+<a id="a6afa75261b66229d0ef4b96222cc7edc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6afa75261b66229d0ef4b96222cc7edc">&#9670;&nbsp;</a></span>extractLayoutQualifiers()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -249,7 +254,35 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual GLint Ogre::GLSLESProgramPipeline::getAttributeIndex </td>
+          <td class="memname">virtual void Ogre::GLSLESProgramCommon::extractLayoutQualifiers </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Finds layout qualifiers in the shader source and sets attribute indices appropriately. </p>
+
+</div>
+</div>
+<a id="af43f5564ff75477577d5fb6aa1cf1644"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af43f5564ff75477577d5fb6aa1cf1644">&#9670;&nbsp;</a></span>getAttributeIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GLint Ogre::GLSLESProgramPipeline::getAttributeIndex </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00d">VertexElementSemantic</a>&#160;</td>
           <td class="paramname"><em>semantic</em>, </td>
@@ -279,8 +312,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aaea45e4139b32185f41c041d691fbb72"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaea45e4139b32185f41c041d691fbb72">&#9670;&nbsp;</a></span>getFragmentProgram()</h2>
+<a id="afb3176887a2f702476bf09dcfe070f92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb3176887a2f702476bf09dcfe070f92">&#9670;&nbsp;</a></span>getBaseInstanceLocation()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -289,9 +322,35 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a>* Ogre::GLSLESProgramCommon::getFragmentProgram </td>
+          <td class="memname">GLint Ogre::GLSLESProgramCommon::getBaseInstanceLocation </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_ogre_config_8h.html#a73f03c4000193e826a1489b02ea50309">OGRE_MAX_TEXTURE_COORD_SETS</a>, and <a class="el" href="namespace_ogre.html#a0a62b3f2ede8992ff365bb013a8bc00da6f167783a26ed5d1c146fbeae995af0b">Ogre::VES_COUNT</a>.</p>
+
+</div>
+</div>
+<a id="a05f43269e0729b255d4c40db8eb67e63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05f43269e0729b255d4c40db8eb67e63">&#9670;&nbsp;</a></span>getFragmentShader()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a>* Ogre::GLSLESProgramCommon::getFragmentShader </td>
+          <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -360,8 +419,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a80e8ab20e3c03e24955aa8a03057008a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a80e8ab20e3c03e24955aa8a03057008a">&#9670;&nbsp;</a></span>getUniformCache()</h2>
+<a id="a6885ea5e907a70f32c26d1621e330861"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6885ea5e907a70f32c26d1621e330861">&#9670;&nbsp;</a></span>getVertexShader()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -370,35 +429,8 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_g_l_e_s2_uniform_cache.html">GLES2UniformCache</a>* Ogre::GLSLESProgramCommon::getUniformCache </td>
+          <td class="memname"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a>* Ogre::GLSLESProgramCommon::getVertexShader </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0c20d6ebcdab2707c3f1a7759c25ca32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c20d6ebcdab2707c3f1a7759c25ca32">&#9670;&nbsp;</a></span>getVertexProgram()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a>* Ogre::GLSLESProgramCommon::getVertexProgram </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -508,8 +540,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aec8e2b4cc8d39950abeaec2a5187fd51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec8e2b4cc8d39950abeaec2a5187fd51">&#9670;&nbsp;</a></span>updatePassIterationUniforms()</h2>
+<a id="ab2ec4110e23c218d21483738ebc15e14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2ec4110e23c218d21483738ebc15e14">&#9670;&nbsp;</a></span>updatePassIterationUniforms()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -518,7 +550,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::GLSLESProgramPipeline::updatePassIterationUniforms </td>
+          <td class="memname">void Ogre::GLSLESProgramPipeline::updatePassIterationUniforms </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a>&#160;</td>
           <td class="paramname"><em>params</em></td><td>)</td>
@@ -533,14 +565,14 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Updates program pipeline object uniforms using data from pass iteration <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a>. </p>
-<p>normally called by GLSLESGpuProgram::bindMultiPassParameters() just before multi pass rendering occurs. </p>
+<p>Normally called by GLSLESShader::bindMultiPassParameters() just before multi pass rendering occurs. </p>
 
 <p>Implements <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#a367c5bc5ea59794c74777733710187d9">Ogre::GLSLESProgramCommon</a>.</p>
 
 </div>
 </div>
-<a id="a9bccdad5d9eccbbda57fb9797072f1a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9bccdad5d9eccbbda57fb9797072f1a2">&#9670;&nbsp;</a></span>updateUniformBlocks()</h2>
+<a id="ac183c5c5b9898aa677e3308a1452506b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac183c5c5b9898aa677e3308a1452506b">&#9670;&nbsp;</a></span>updateUniformBlocks()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -549,7 +581,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::GLSLESProgramPipeline::updateUniformBlocks </td>
+          <td class="memname">void Ogre::GLSLESProgramPipeline::updateUniformBlocks </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a>&#160;</td>
           <td class="paramname"><em>params</em>, </td>
@@ -579,15 +611,15 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Updates program object uniform blocks using data from <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a>. </p>
-<p>normally called by GLSLGpuProgram::bindParameters() just before rendering occurs. </p>
+<p>Updates program object uniform blocks using shared parameter data from <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a>. </p>
+<p>Normally called by <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html#ac4eee39924a42ee946f61fb13ed6bda2" title="Execute the param binding functions for this shader. ">GLSLESShader::bindParameters()</a> just before rendering occurs. </p>
 
 <p>Implements <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#a123dcf799b7231a5c21503639d3d576d">Ogre::GLSLESProgramCommon</a>.</p>
 
 </div>
 </div>
-<a id="aea14577f15c1ef4d81921d0455983b43"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea14577f15c1ef4d81921d0455983b43">&#9670;&nbsp;</a></span>updateUniforms()</h2>
+<a id="a37f6e004441c7eb6dc62822cd6bf6395"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37f6e004441c7eb6dc62822cd6bf6395">&#9670;&nbsp;</a></span>updateUniforms()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -596,7 +628,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::GLSLESProgramPipeline::updateUniforms </td>
+          <td class="memname">void Ogre::GLSLESProgramPipeline::updateUniforms </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#aebab7cecf3f3ae81a1fbfa08ab36f2b5">GpuProgramParametersSharedPtr</a>&#160;</td>
           <td class="paramname"><em>params</em>, </td>
@@ -626,8 +658,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Updates program pipeline object uniforms using data from <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a>. </p>
-<p>normally called by GLSLESGpuProgram::bindParameters() just before rendering occurs. </p>
+<p>Updates program pipeline object uniforms using named and indexed parameter data from <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a>. </p>
+<p>normally called by <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html#ac4eee39924a42ee946f61fb13ed6bda2" title="Execute the param binding functions for this shader. ">GLSLESShader::bindParameters()</a> just before rendering occurs. </p>
 
 <p>Implements <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#a0cf80ec9cfc0875f62c29317a5e96d3f">Ogre::GLSLESProgramCommon</a>.</p>
 

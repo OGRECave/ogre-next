@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -98,12 +98,18 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_g_l_e_s2_pixel_util.htm
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:abd33d77104569c657104bda2ee56e38e"><td class="memItemLeft" align="right" valign="top">static GLenum&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_pixel_util.html#abd33d77104569c657104bda2ee56e38e">getClosestGLImageInternalFormat</a> (<a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a> format)</td></tr>
+<tr class="memdesc:abd33d77104569c657104bda2ee56e38e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes the OGRE pixel format and returns the type that must be provided to GL as internal format for image load/store.  <a href="#abd33d77104569c657104bda2ee56e38e">More...</a><br /></td></tr>
+<tr class="separator:abd33d77104569c657104bda2ee56e38e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaed55d26f58ee2fa088d3176cbb43cbb"><td class="memItemLeft" align="right" valign="top">static GLenum&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_pixel_util.html#aaed55d26f58ee2fa088d3176cbb43cbb">getClosestGLInternalFormat</a> (<a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a> mFormat, bool hwGamma)</td></tr>
 <tr class="memdesc:aaed55d26f58ee2fa088d3176cbb43cbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes the OGRE pixel format and returns the type that must be provided to GL as internal format.  <a href="#aaed55d26f58ee2fa088d3176cbb43cbb">More...</a><br /></td></tr>
 <tr class="separator:aaed55d26f58ee2fa088d3176cbb43cbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65af2901533813bc0b1b12f3ae6be120"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_pixel_util.html#a65af2901533813bc0b1b12f3ae6be120">getClosestOGREFormat</a> (GLenum fmt, GLenum dataType)</td></tr>
 <tr class="memdesc:a65af2901533813bc0b1b12f3ae6be120"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get the closest matching OGRE format to an internal GL format.  <a href="#a65af2901533813bc0b1b12f3ae6be120">More...</a><br /></td></tr>
 <tr class="separator:a65af2901533813bc0b1b12f3ae6be120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0084086d1149aaf2d0d22e5a4d5ac4d"><td class="memItemLeft" align="right" valign="top">static GLenum&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_pixel_util.html#ab0084086d1149aaf2d0d22e5a4d5ac4d">getGLImageInternalFormat</a> (<a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a> format)</td></tr>
+<tr class="memdesc:ab0084086d1149aaf2d0d22e5a4d5ac4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes the OGRE pixel format and returns the type that must be provided to GL as internal format for image load/store.  <a href="#ab0084086d1149aaf2d0d22e5a4d5ac4d">More...</a><br /></td></tr>
+<tr class="separator:ab0084086d1149aaf2d0d22e5a4d5ac4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a895ce4669a089b077e599389ac6a2ea8"><td class="memItemLeft" align="right" valign="top">static GLenum&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_pixel_util.html#a895ce4669a089b077e599389ac6a2ea8">getGLInternalFormat</a> (<a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a> mFormat, bool hwGamma)</td></tr>
 <tr class="memdesc:a895ce4669a089b077e599389ac6a2ea8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes the OGRE pixel format and returns the type that must be provided to GL as internal format.  <a href="#a895ce4669a089b077e599389ac6a2ea8">More...</a><br /></td></tr>
 <tr class="separator:a895ce4669a089b077e599389ac6a2ea8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,6 +129,40 @@ Static Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class to do pixel format mapping between GL and OGRE. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="abd33d77104569c657104bda2ee56e38e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd33d77104569c657104bda2ee56e38e">&#9670;&nbsp;</a></span>getClosestGLImageInternalFormat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static GLenum Ogre::GLES2PixelUtil::getClosestGLImageInternalFormat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a>&#160;</td>
+          <td class="paramname"><em>format</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Takes the OGRE pixel format and returns the type that must be provided to GL as internal format for image load/store. </p>
+<p>If no match exists, returns the closest match. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mFormat</td><td>The pixel format </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="aaed55d26f58ee2fa088d3176cbb43cbb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaed55d26f58ee2fa088d3176cbb43cbb">&#9670;&nbsp;</a></span>getClosestGLInternalFormat()</h2>
 
@@ -204,6 +244,40 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Function to get the closest matching OGRE format to an internal GL format. </p>
 <p>To be precise, the format will be chosen that is most efficient to transfer to the card without losing precision. </p><dl class="section remark"><dt>Remarks</dt><dd>It is valid for this function to always return PF_A8R8G8B8. </dd></dl>
+
+</div>
+</div>
+<a id="ab0084086d1149aaf2d0d22e5a4d5ac4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0084086d1149aaf2d0d22e5a4d5ac4d">&#9670;&nbsp;</a></span>getGLImageInternalFormat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static GLenum Ogre::GLES2PixelUtil::getGLImageInternalFormat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a>&#160;</td>
+          <td class="paramname"><em>format</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Takes the OGRE pixel format and returns the type that must be provided to GL as internal format for image load/store. </p>
+<p>GL_NONE if no match exists. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mFormat</td><td>The pixel format </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

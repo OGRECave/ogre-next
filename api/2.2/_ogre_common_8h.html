@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -113,8 +113,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_light_list_info.html">Ogre::LightListInfo</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds all lights in SoA after being culled over all frustums.  <a href="struct_ogre_1_1_light_list_info.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_render_window_description.html">Ogre::RenderWindowDescription</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render window creation parameters.  <a href="struct_ogre_1_1_render_window_description.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_sample_description.html">Ogre::SampleDescription</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opaque struct that holds effective FSAA (MSAA, CSAA, etc.) mode.  <a href="struct_ogre_1_1_sample_description.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_stencil_params.html">Ogre::StencilParams</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -129,14 +129,16 @@ Namespaces</h2></td></tr>
 <tr class="memdesc:namespace_ogre"><td class="mdescLeft">&#160;</td><td class="mdescRight"><hr/>
 <p> This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info, see <a href="http://www.ogre3d.org/">http://www.ogre3d.org/</a> <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespace_ogre_1_1_msaa_patterns"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_msaa_patterns.html">Ogre::MsaaPatterns</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ga20898062bd79359acd1137276d9b0e37"><td class="memItemLeft" align="right" valign="top">typedef map&lt; String, String &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga20898062bd79359acd1137276d9b0e37">Ogre::AliasTextureNamePairList</a></td></tr>
-<tr class="memdesc:ga20898062bd79359acd1137276d9b0e37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias / <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource. ">Texture</a> name pair (first = alias, second = texture name)  <a href="group___general.html#ga20898062bd79359acd1137276d9b0e37">More...</a><br /></td></tr>
-<tr class="separator:ga20898062bd79359acd1137276d9b0e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga426e97fd0ca35b59af1d3309ba4780b0"><td class="memItemLeft" align="right" valign="top">typedef map&lt; String, String &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga426e97fd0ca35b59af1d3309ba4780b0">Ogre::BinaryOptionList</a></td></tr>
-<tr class="separator:ga426e97fd0ca35b59af1d3309ba4780b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6ba37dfc5b90ddf191695822b26b3eff"><td class="memItemLeft" align="right" valign="top">typedef StdMap&lt; String, String &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga6ba37dfc5b90ddf191695822b26b3eff">Ogre::AliasTextureNamePairList</a></td></tr>
+<tr class="memdesc:ga6ba37dfc5b90ddf191695822b26b3eff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias / <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource. ">Texture</a> name pair (first = alias, second = texture name)  <a href="group___general.html#ga6ba37dfc5b90ddf191695822b26b3eff">More...</a><br /></td></tr>
+<tr class="separator:ga6ba37dfc5b90ddf191695822b26b3eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1349994da6582545bdc210cb63d00e36"><td class="memItemLeft" align="right" valign="top">typedef StdMap&lt; String, String &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga1349994da6582545bdc210cb63d00e36">Ogre::BinaryOptionList</a></td></tr>
+<tr class="separator:ga1349994da6582545bdc210cb63d00e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga39213af9254535e83b4beca0859e8a2f"><td class="memItemLeft" align="right" valign="top">typedef TRect&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga39213af9254535e83b4beca0859e8a2f">Ogre::FloatRect</a></td></tr>
 <tr class="memdesc:ga39213af9254535e83b4beca0859e8a2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure used to define a rectangle in a 2-D floating point space.  <a href="group___general.html#ga39213af9254535e83b4beca0859e8a2f">More...</a><br /></td></tr>
 <tr class="separator:ga39213af9254535e83b4beca0859e8a2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,32 +146,27 @@ Typedefs</h2></td></tr>
 <tr class="separator:gae68d52abf76f574fcde6eb0f89eb128f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8795828980c8be4892c41f4f4b7a7337"><td class="memItemLeft" align="right" valign="top">typedef FastArray&lt; LightClosest &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga8795828980c8be4892c41f4f4b7a7337">Ogre::LightClosestArray</a></td></tr>
 <tr class="separator:ga8795828980c8be4892c41f4f4b7a7337"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9f560544b6ad28c260ae56f2cf42fd29"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; LightClosest &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga9f560544b6ad28c260ae56f2cf42fd29">Ogre::LightClosestVec</a></td></tr>
-<tr class="separator:ga9f560544b6ad28c260ae56f2cf42fd29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9870d1f08a71391b8716b43bb2064b2d"><td class="memItemLeft" align="right" valign="top">typedef HashedVector&lt; LightClosest &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga9870d1f08a71391b8716b43bb2064b2d">Ogre::LightList</a></td></tr>
 <tr class="separator:ga9870d1f08a71391b8716b43bb2064b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gadccb207c184efc0a6fb2a00ab6320d19"><td class="memItemLeft" align="right" valign="top">typedef map&lt; String, String &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gadccb207c184efc0a6fb2a00ab6320d19">Ogre::NameValuePairList</a></td></tr>
-<tr class="memdesc:gadccb207c184efc0a6fb2a00ab6320d19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name / value parameter pair (first = name, second = value)  <a href="group___general.html#gadccb207c184efc0a6fb2a00ab6320d19">More...</a><br /></td></tr>
-<tr class="separator:gadccb207c184efc0a6fb2a00ab6320d19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga442a408f658c0cbfbe3e404e91a0fcc5"><td class="memItemLeft" align="right" valign="top">typedef StdMap&lt; String, String &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga442a408f658c0cbfbe3e404e91a0fcc5">Ogre::NameValuePairList</a></td></tr>
+<tr class="memdesc:ga442a408f658c0cbfbe3e404e91a0fcc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name / value parameter pair (first = name, second = value)  <a href="group___general.html#ga442a408f658c0cbfbe3e404e91a0fcc5">More...</a><br /></td></tr>
+<tr class="separator:ga442a408f658c0cbfbe3e404e91a0fcc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3e1c672c1d342ffb4f122f44e342bc90"><td class="memItemLeft" align="right" valign="top">typedef TRect&lt; Real &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga3e1c672c1d342ffb4f122f44e342bc90">Ogre::RealRect</a></td></tr>
 <tr class="memdesc:ga3e1c672c1d342ffb4f122f44e342bc90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure used to define a rectangle in a 2-D floating point space, subject to double / single floating point settings.  <a href="group___general.html#ga3e1c672c1d342ffb4f122f44e342bc90">More...</a><br /></td></tr>
 <tr class="separator:ga3e1c672c1d342ffb4f122f44e342bc90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae714035a753a8f484650598dc4143db8"><td class="memItemLeft" align="right" valign="top">typedef TRect&lt; long &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gae714035a753a8f484650598dc4143db8">Ogre::Rect</a></td></tr>
 <tr class="memdesc:gae714035a753a8f484650598dc4143db8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure used to define a rectangle in a 2-D integer space.  <a href="group___general.html#gae714035a753a8f484650598dc4143db8">More...</a><br /></td></tr>
 <tr class="separator:gae714035a753a8f484650598dc4143db8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7a03bf97326d0d0385b91a74e2c51c5e"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; RenderWindowDescription &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga7a03bf97326d0d0385b91a74e2c51c5e">Ogre::RenderWindowDescriptionList</a></td></tr>
-<tr class="memdesc:ga7a03bf97326d0d0385b91a74e2c51c5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render window creation parameters container.  <a href="group___general.html#ga7a03bf97326d0d0385b91a74e2c51c5e">More...</a><br /></td></tr>
-<tr class="separator:ga7a03bf97326d0d0385b91a74e2c51c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af73bbdc8bed8a3e6fcd56bb8fa188c45"><td class="memItemLeft" align="right" valign="top">typedef _StringBase&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">Ogre::String</a></td></tr>
 <tr class="separator:af73bbdc8bed8a3e6fcd56bb8fa188c45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf3fdba7211d7078a43201a1721532f9e"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaf3fdba7211d7078a43201a1721532f9e">Ogre::TrackVertexColourType</a></td></tr>
 <tr class="memdesc:gaf3fdba7211d7078a43201a1721532f9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">An enumeration describing which material properties should track the vertex colours.  <a href="group___general.html#gaf3fdba7211d7078a43201a1721532f9e">More...</a><br /></td></tr>
 <tr class="separator:gaf3fdba7211d7078a43201a1721532f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf8039ad2eb9856cb1b181eb3d9507885"><td class="memItemLeft" align="right" valign="top">typedef map&lt; String, bool &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaf8039ad2eb9856cb1b181eb3d9507885">Ogre::UnaryOptionList</a></td></tr>
-<tr class="separator:gaf8039ad2eb9856cb1b181eb3d9507885"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gafcca0600d9f7ee630fa6500af203309d"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="_ogre_x11_e_g_l_support_8h.html#a12f0b3ea7a02ede1c5799a956e008406">Window</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gafcca0600d9f7ee630fa6500af203309d">Ogre::WindowList</a></td></tr>
-<tr class="memdesc:gafcca0600d9f7ee630fa6500af203309d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render window container.  <a href="group___general.html#gafcca0600d9f7ee630fa6500af203309d">More...</a><br /></td></tr>
-<tr class="separator:gafcca0600d9f7ee630fa6500af203309d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1fdbb1354b0aef3b66cfb0f34b8d5fde"><td class="memItemLeft" align="right" valign="top">typedef StdMap&lt; String, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga1fdbb1354b0aef3b66cfb0f34b8d5fde">Ogre::UnaryOptionList</a></td></tr>
+<tr class="separator:ga1fdbb1354b0aef3b66cfb0f34b8d5fde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga91a7b2f88b5150f745e3d8c1b60ae499"><td class="memItemLeft" align="right" valign="top">typedef StdVector&lt; <a class="el" href="_ogre_x11_e_g_l_support_8h.html#a12f0b3ea7a02ede1c5799a956e008406">Window</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga91a7b2f88b5150f745e3d8c1b60ae499">Ogre::WindowList</a></td></tr>
+<tr class="memdesc:ga91a7b2f88b5150f745e3d8c1b60ae499"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render window container.  <a href="group___general.html#ga91a7b2f88b5150f745e3d8c1b60ae499">More...</a><br /></td></tr>
+<tr class="separator:ga91a7b2f88b5150f745e3d8c1b60ae499"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -245,6 +242,12 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:ga4921efc65b347efe08a6d4992af069e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flags for the Instance Manager when calculating ideal number of instances per batch.  <a href="group___general.html#ga4921efc65b347efe08a6d4992af069e2">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:ga4921efc65b347efe08a6d4992af069e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54095ce17b1cbaa8972173d9ea950f0f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_msaa_patterns.html#a54095ce17b1cbaa8972173d9ea950f0f">Ogre::MsaaPatterns::MsaaPatterns</a> { <a class="el" href="namespace_ogre_1_1_msaa_patterns.html#a54095ce17b1cbaa8972173d9ea950f0fae9213e03f8cab27c1f90e1981b2ab623">Ogre::MsaaPatterns::Undefined</a>, 
+<a class="el" href="namespace_ogre_1_1_msaa_patterns.html#a54095ce17b1cbaa8972173d9ea950f0fa445f40c611f369b3ad626074ebd7815b">Ogre::MsaaPatterns::Standard</a>, 
+<a class="el" href="namespace_ogre_1_1_msaa_patterns.html#a54095ce17b1cbaa8972173d9ea950f0fa8204db5736f2d9f7d147135189198ff7">Ogre::MsaaPatterns::Center</a>, 
+<a class="el" href="namespace_ogre_1_1_msaa_patterns.html#a54095ce17b1cbaa8972173d9ea950f0fa8a445209440970fa095cef30a61bf250">Ogre::MsaaPatterns::CenterZero</a>
+ }</td></tr>
+<tr class="separator:a54095ce17b1cbaa8972173d9ea950f0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga68866b02aa7f99e3431337511fbb3345"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga68866b02aa7f99e3431337511fbb3345">Ogre::PolygonMode</a> { <a class="el" href="group___general.html#gga68866b02aa7f99e3431337511fbb3345adfb098e30463c0f0689e0e1fbbd5eb0f">Ogre::PM_POINTS</a> = 1, 
 <a class="el" href="group___general.html#gga68866b02aa7f99e3431337511fbb3345ac1f71aad59ecae8cd02f0743dc7efa5d">Ogre::PM_WIREFRAME</a> = 2, 
 <a class="el" href="group___general.html#gga68866b02aa7f99e3431337511fbb3345a7e87bf8ec063f4e7bf022a7396346211">Ogre::PM_SOLID</a> = 3
@@ -368,9 +371,6 @@ Functions</h2></td></tr>
 <tr class="separator:af2b452038adc68d49db1236ddeca3b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b058c1978e206947295d9da4dbd973d"><td class="memItemLeft" align="right" valign="top">const double &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a8b058c1978e206947295d9da4dbd973d">Ogre::min</a> (const double &amp;a, const double &amp;b)</td></tr>
 <tr class="separator:a8b058c1978e206947295d9da4dbd973d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6d67d46d838de3b38264f17fb792cddc"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ga6d67d46d838de3b38264f17fb792cddc"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#ga6d67d46d838de3b38264f17fb792cddc">Ogre::operator&lt;&lt;</a> (std::ostream &amp;o, const TRect&lt; T &gt; &amp;r)</td></tr>
-<tr class="separator:ga6d67d46d838de3b38264f17fb792cddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>

@@ -17,5 +17,6 @@ var _setting_up_ogre =
       [ "Requirements", "_setting_up_ogre_i_o_s.html#Requirements_iOS", null ],
       [ "Downloading Ogre", "_setting_up_ogre_i_o_s.html#DownloadingOgre_iOS", null ],
       [ "Building Ogre", "_setting_up_ogre_i_o_s.html#BuildingOgre_iOS", null ]
-    ] ]
+    ] ],
+    [ "macOS", "_setting_up_ogre_mac_o_s.html", null ]
 ];

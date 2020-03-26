@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -127,15 +127,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac0f7efe952a3e7928af805d9ddf5ed16"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_render_texture.html">GLES2FBORenderTexture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#ac0f7efe952a3e7928af805d9ddf5ed16">createRenderTexture</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, const <a class="el" href="struct_ogre_1_1_g_l_e_s2_surface_desc.html">GLES2SurfaceDesc</a> &amp;target, bool writeGamma, <a class="el" href="namespace_ogre.html#ab6e842a18caf062ed73a5d3badd0dd4c">uint</a> fsaa)</td></tr>
 <tr class="memdesc:ac0f7efe952a3e7928af805d9ddf5ed16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a texture rendertarget object.  <a href="#ac0f7efe952a3e7928af805d9ddf5ed16">More...</a><br /></td></tr>
 <tr class="separator:ac0f7efe952a3e7928af805d9ddf5ed16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ad700c0d085d792eee4b9d72837c60f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a8ad700c0d085d792eee4b9d72837c60f">getBestDepthStencil</a> (GLenum internalFormat, GLenum *depthFormat, GLenum *stencilFormat)</td></tr>
-<tr class="memdesc:a8ad700c0d085d792eee4b9d72837c60f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get best depth and stencil supported for given internalFormat.  <a href="#a8ad700c0d085d792eee4b9d72837c60f">More...</a><br /></td></tr>
-<tr class="separator:a8ad700c0d085d792eee4b9d72837c60f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfbaf8f85c2f75bf25ce026f6d3be225"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#adfbaf8f85c2f75bf25ce026f6d3be225">getBestDepthStencil</a> (<a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a> depthFormat, <a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a> fboFormat, GLenum *outDepthFormat, GLenum *outStencilFormat)</td></tr>
+<tr class="memdesc:adfbaf8f85c2f75bf25ce026f6d3be225"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get best depth and stencil supported for given internalFormat.  <a href="#adfbaf8f85c2f75bf25ce026f6d3be225">More...</a><br /></td></tr>
+<tr class="separator:adfbaf8f85c2f75bf25ce026f6d3be225"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a270434b8c3c065d0abb8c27aa2a91885"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_r_t_t_manager.html#a270434b8c3c065d0abb8c27aa2a91885">getBestDepthStencil</a> (GLenum internalFormat, GLenum *depthFormat, GLenum *stencilFormat)</td></tr>
+<tr class="separator:a270434b8c3c065d0abb8c27aa2a91885"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a16f5734f7f17716c693cae5078a29a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_r_t_t_manager.html#a4a16f5734f7f17716c693cae5078a29a">getSupportedAlternative</a> (<a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a> format)</td></tr>
 <tr class="memdesc:a4a16f5734f7f17716c693cae5078a29a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the closest supported alternative format.  <a href="#a4a16f5734f7f17716c693cae5078a29a">More...</a><br /></td></tr>
 <tr class="separator:a4a16f5734f7f17716c693cae5078a29a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a5fc40a547baeb9fbe66fe4300d43c3"><td class="memItemLeft" align="right" valign="top">GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a2a5fc40a547baeb9fbe66fe4300d43c3">getTemporaryFBO</a> ()</td></tr>
-<tr class="memdesc:a2a5fc40a547baeb9fbe66fe4300d43c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a FBO without depth/stencil for temporary use, like blitting between textures.  <a href="#a2a5fc40a547baeb9fbe66fe4300d43c3">More...</a><br /></td></tr>
-<tr class="separator:a2a5fc40a547baeb9fbe66fe4300d43c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0ddd0c3d5f751a978c4b602d26a502c"><td class="memItemLeft" align="right" valign="top">GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#ae0ddd0c3d5f751a978c4b602d26a502c">getTemporaryFBO</a> (size_t i)</td></tr>
+<tr class="memdesc:ae0ddd0c3d5f751a978c4b602d26a502c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a FBO without depth/stencil for temporary use, like blitting between textures.  <a href="#ae0ddd0c3d5f751a978c4b602d26a502c">More...</a><br /></td></tr>
+<tr class="separator:ae0ddd0c3d5f751a978c4b602d26a502c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7a872f18f376d1056980365d7aa58f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#af7a872f18f376d1056980365d7aa58f9">releaseRenderBuffer</a> (const <a class="el" href="struct_ogre_1_1_g_l_e_s2_surface_desc.html">GLES2SurfaceDesc</a> &amp;surface)</td></tr>
 <tr class="memdesc:af7a872f18f376d1056980365d7aa58f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Release a render buffer.  <a href="#af7a872f18f376d1056980365d7aa58f9">More...</a><br /></td></tr>
 <tr class="separator:af7a872f18f376d1056980365d7aa58f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -356,8 +358,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8ad700c0d085d792eee4b9d72837c60f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ad700c0d085d792eee4b9d72837c60f">&#9670;&nbsp;</a></span>getBestDepthStencil()</h2>
+<a id="adfbaf8f85c2f75bf25ce026f6d3be225"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfbaf8f85c2f75bf25ce026f6d3be225">&#9670;&nbsp;</a></span>getBestDepthStencil() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -366,7 +368,57 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::GLES2FBOManager::getBestDepthStencil </td>
+          <td class="memname">virtual void Ogre::GLES2FBOManager::getBestDepthStencil </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a>&#160;</td>
+          <td class="paramname"><em>depthFormat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a>&#160;</td>
+          <td class="paramname"><em>fboFormat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GLenum *&#160;</td>
+          <td class="paramname"><em>outDepthFormat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GLenum *&#160;</td>
+          <td class="paramname"><em>outStencilFormat</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get best depth and stencil supported for given internalFormat. </p>
+
+</div>
+</div>
+<a id="a270434b8c3c065d0abb8c27aa2a91885"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a270434b8c3c065d0abb8c27aa2a91885">&#9670;&nbsp;</a></span>getBestDepthStencil() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::GLES2RTTManager::getBestDepthStencil </td>
           <td>(</td>
           <td class="paramtype">GLenum&#160;</td>
           <td class="paramname"><em>internalFormat</em>, </td>
@@ -391,14 +443,10 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Get best depth and stencil supported for given internalFormat. </p>
-
-<p>Reimplemented from <a class="el" href="class_ogre_1_1_g_l_e_s2_r_t_t_manager.html#a270434b8c3c065d0abb8c27aa2a91885">Ogre::GLES2RTTManager</a>.</p>
 
 </div>
 </div>
@@ -483,27 +531,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2a5fc40a547baeb9fbe66fe4300d43c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2a5fc40a547baeb9fbe66fe4300d43c3">&#9670;&nbsp;</a></span>getTemporaryFBO()</h2>
+<a id="ae0ddd0c3d5f751a978c4b602d26a502c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0ddd0c3d5f751a978c4b602d26a502c">&#9670;&nbsp;</a></span>getTemporaryFBO()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">GLuint Ogre::GLES2FBOManager::getTemporaryFBO </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Get a FBO without depth/stencil for temporary use, like blitting between textures. </p>

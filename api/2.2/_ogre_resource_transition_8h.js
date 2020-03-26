@@ -1,7 +1,7 @@
 var _ogre_resource_transition_8h =
 [
-    [ "ResourceAccessMap", "_ogre_resource_transition_8h.html#gac4badf56e910b25afaa9657b6b0efdc5", null ],
-    [ "ResourceLayoutMap", "_ogre_resource_transition_8h.html#gabe7c5244c7803426b6eb5715ee3f7bb8", null ],
+    [ "ResourceAccessMap", "_ogre_resource_transition_8h.html#gace5dbb1424f985415498f52a82351139", null ],
+    [ "ResourceLayoutMap", "_ogre_resource_transition_8h.html#ga0ae2deb93b6f34e66b89b5fea65d00a8", null ],
     [ "Layout", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7", [
       [ "Undefined", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7af006a165c772ccf3c8d40a7a1dfaf676", null ],
       [ "Texture", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7a01ccc277359df8c0a2cfdbd943341cf0", null ],

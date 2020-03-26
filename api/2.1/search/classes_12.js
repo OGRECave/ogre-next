@@ -226,7 +226,7 @@ var searchData=
   ['strangedata',['StrangeData',['../struct_strange_data.html',1,'']]],
   ['stream',['Stream',['../class_ogre_1_1_log_1_1_stream.html',1,'Ogre::Log']]],
   ['streamserialiser',['StreamSerialiser',['../class_ogre_1_1_stream_serialiser.html',1,'Ogre']]],
-  ['stridechanger',['StrideChanger',['../struct_ogre_1_1_d3_d11_vao_manager_1_1_stride_changer.html',1,'Ogre::D3D11VaoManager::StrideChanger'],['../struct_ogre_1_1_g_l3_plus_vao_manager_1_1_stride_changer.html',1,'Ogre::GL3PlusVaoManager::StrideChanger'],['../struct_ogre_1_1_metal_vao_manager_1_1_stride_changer.html',1,'Ogre::MetalVaoManager::StrideChanger'],['../struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html',1,'Ogre::NULLVaoManager::StrideChanger']]],
+  ['stridechanger',['StrideChanger',['../struct_ogre_1_1_d3_d11_vao_manager_1_1_stride_changer.html',1,'Ogre::D3D11VaoManager::StrideChanger'],['../struct_ogre_1_1_g_l3_plus_vao_manager_1_1_stride_changer.html',1,'Ogre::GL3PlusVaoManager::StrideChanger'],['../struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_stride_changer.html',1,'Ogre::GLES2VaoManager::StrideChanger'],['../struct_ogre_1_1_metal_vao_manager_1_1_stride_changer.html',1,'Ogre::MetalVaoManager::StrideChanger'],['../struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html',1,'Ogre::NULLVaoManager::StrideChanger']]],
   ['stringconverter',['StringConverter',['../class_ogre_1_1_string_converter.html',1,'Ogre']]],
   ['stringinterface',['StringInterface',['../class_ogre_1_1_string_interface.html',1,'Ogre']]],
   ['stringutil',['StringUtil',['../class_ogre_1_1_string_util.html',1,'Ogre']]],

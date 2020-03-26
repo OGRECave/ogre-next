@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="struct_ogre_1_1unordered__map.html" target="_top" xlink:title="Ogre::unordered_map\l\&lt; String, ushort \&gt;">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1unordered__map.html" target="_top" xlink:title="Ogre::unordered_map\l\&lt; GLenum, GLuint \&gt;">
 <polygon fill="none" stroke="#000000" points="0,-.5 0,-30.5 110,-30.5 110,-.5 0,-.5"/>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Ogre::unordered_map</text>
-<text text-anchor="middle" x="55" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">&lt; String, ushort &gt;</text>
+<text text-anchor="middle" x="55" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">&lt; GLenum, GLuint &gt;</text>
 </a>
 </g>
 </g>

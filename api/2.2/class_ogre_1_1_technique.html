@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -119,11 +119,11 @@ Classes</h2></td></tr>
 Public Types</h2></td></tr>
 <tr class="memitem:a63da4eb10f7272486a9806374b09bab6"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_const_vector_iterator.html">ConstVectorIterator</a>&lt; <a class="el" href="class_ogre_1_1_technique.html#a98091dbc9cb06b40138458537c36e3ed">GPUDeviceNameRuleList</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_technique.html#a63da4eb10f7272486a9806374b09bab6">GPUDeviceNameRuleIterator</a></td></tr>
 <tr class="separator:a63da4eb10f7272486a9806374b09bab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98091dbc9cb06b40138458537c36e3ed"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="struct_ogre_1_1_technique_1_1_g_p_u_device_name_rule.html">GPUDeviceNameRule</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_technique.html#a98091dbc9cb06b40138458537c36e3ed">GPUDeviceNameRuleList</a></td></tr>
+<tr class="memitem:a98091dbc9cb06b40138458537c36e3ed"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_technique_1_1_g_p_u_device_name_rule.html">GPUDeviceNameRule</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_technique.html#a98091dbc9cb06b40138458537c36e3ed">GPUDeviceNameRuleList</a></td></tr>
 <tr class="separator:a98091dbc9cb06b40138458537c36e3ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2497a0043902e9d2af0757d769da655c"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_const_vector_iterator.html">ConstVectorIterator</a>&lt; <a class="el" href="class_ogre_1_1_technique.html#aa110f5f6056965bfb02099099fb46958">GPUVendorRuleList</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_technique.html#a2497a0043902e9d2af0757d769da655c">GPUVendorRuleIterator</a></td></tr>
 <tr class="separator:a2497a0043902e9d2af0757d769da655c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa110f5f6056965bfb02099099fb46958"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="struct_ogre_1_1_technique_1_1_g_p_u_vendor_rule.html">GPUVendorRule</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_technique.html#aa110f5f6056965bfb02099099fb46958">GPUVendorRuleList</a></td></tr>
+<tr class="memitem:aa110f5f6056965bfb02099099fb46958"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_technique_1_1_g_p_u_vendor_rule.html">GPUVendorRule</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_technique.html#aa110f5f6056965bfb02099099fb46958">GPUVendorRuleList</a></td></tr>
 <tr class="separator:aa110f5f6056965bfb02099099fb46958"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ade219e17b5e8d73d079d11f64a2a2d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_technique.html#a1ade219e17b5e8d73d079d11f64a2a2d">IncludeOrExclude</a> { <a class="el" href="class_ogre_1_1_technique.html#a1ade219e17b5e8d73d079d11f64a2a2dabd4cc2de655eff5194cda7ea50d00ee3">INCLUDE</a> = 0, 
 <a class="el" href="class_ogre_1_1_technique.html#a1ade219e17b5e8d73d079d11f64a2a2da043f697946b7a6d01bb858768e6646a3">EXCLUDE</a> = 1
@@ -176,7 +176,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac6a82a8dedd6ecc9228e392aec08bd52"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_technique.html#ac6a82a8dedd6ecc9228e392aec08bd52">addGPUVendorRule</a> (const <a class="el" href="struct_ogre_1_1_technique_1_1_g_p_u_vendor_rule.html">GPUVendorRule</a> &amp;rule)</td></tr>
 <tr class="memdesc:ac6a82a8dedd6ecc9228e392aec08bd52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a rule which manually influences the support for this technique based on a GPU vendor.  <a href="#ac6a82a8dedd6ecc9228e392aec08bd52">More...</a><br /></td></tr>
 <tr class="separator:ac6a82a8dedd6ecc9228e392aec08bd52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abab977f0e76de9d6f04be3d3df0195b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_technique.html#abab977f0e76de9d6f04be3d3df0195b6">applyTextureAliases</a> (const <a class="el" href="group___general.html#ga20898062bd79359acd1137276d9b0e37">AliasTextureNamePairList</a> &amp;aliasList, const bool apply=true) const</td></tr>
+<tr class="memitem:abab977f0e76de9d6f04be3d3df0195b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_technique.html#abab977f0e76de9d6f04be3d3df0195b6">applyTextureAliases</a> (const <a class="el" href="group___general.html#ga6ba37dfc5b90ddf191695822b26b3eff">AliasTextureNamePairList</a> &amp;aliasList, const bool apply=true) const</td></tr>
 <tr class="memdesc:abab977f0e76de9d6f04be3d3df0195b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies texture names to <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource. ">Texture</a> Unit State with matching texture name aliases.  <a href="#abab977f0e76de9d6f04be3d3df0195b6">More...</a><br /></td></tr>
 <tr class="separator:abab977f0e76de9d6f04be3d3df0195b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ac14534e5754cae83f2769b4c1ebbbd"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_technique.html#a9ac14534e5754cae83f2769b4c1ebbbd">calculateSize</a> (void) const</td></tr>
@@ -377,7 +377,7 @@ Public Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="struct_ogre_1_1_technique_1_1_g_p_u_device_name_rule.html">GPUDeviceNameRule</a>&gt;::type <a class="el" href="class_ogre_1_1_technique.html#a98091dbc9cb06b40138458537c36e3ed">Ogre::Technique::GPUDeviceNameRuleList</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_technique_1_1_g_p_u_device_name_rule.html">GPUDeviceNameRule</a>&gt;::type <a class="el" href="class_ogre_1_1_technique.html#a98091dbc9cb06b40138458537c36e3ed">Ogre::Technique::GPUDeviceNameRuleList</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -405,7 +405,7 @@ Public Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="struct_ogre_1_1_technique_1_1_g_p_u_vendor_rule.html">GPUVendorRule</a>&gt;::type <a class="el" href="class_ogre_1_1_technique.html#aa110f5f6056965bfb02099099fb46958">Ogre::Technique::GPUVendorRuleList</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_technique_1_1_g_p_u_vendor_rule.html">GPUVendorRule</a>&gt;::type <a class="el" href="class_ogre_1_1_technique.html#aa110f5f6056965bfb02099099fb46958">Ogre::Technique::GPUVendorRuleList</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -797,7 +797,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">bool Ogre::Technique::applyTextureAliases </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="group___general.html#ga20898062bd79359acd1137276d9b0e37">AliasTextureNamePairList</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="group___general.html#ga6ba37dfc5b90ddf191695822b26b3eff">AliasTextureNamePairList</a> &amp;&#160;</td>
           <td class="paramname"><em>aliasList</em>, </td>
         </tr>
         <tr>

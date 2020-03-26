@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -136,7 +136,7 @@ Public Types</h2></td></tr>
 <tr class="separator:a07e619aa09d3bc6789a6667cb4fc572c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a755ff206ec856db92062df2669a0b6d1"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#a755ff206ec856db92062df2669a0b6d1">LodValueArray</a></td></tr>
 <tr class="separator:a755ff206ec856db92062df2669a0b6d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedc2da9047ca813ce16f657e7f0b3a2a"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_sub_mesh.html">SubMesh</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#aedc2da9047ca813ce16f657e7f0b3a2a">SubMeshVec</a></td></tr>
+<tr class="memitem:aedc2da9047ca813ce16f657e7f0b3a2a"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_sub_mesh.html">SubMesh</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#aedc2da9047ca813ce16f657e7f0b3a2a">SubMeshVec</a></td></tr>
 <tr class="separator:aedc2da9047ca813ce16f657e7f0b3a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -302,9 +302,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abb6cb9b0e87d09a674cdc82e197c2dd4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#abb6cb9b0e87d09a674cdc82e197c2dd4">hasValidShadowMappingVaos</a> (void) const</td></tr>
 <tr class="memdesc:abb6cb9b0e87d09a674cdc82e197c2dd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the mesh is ready for rendering with valid shadow mapping Vaos Otherwise prepareForShadowMapping must be called on this mesh.  <a href="#abb6cb9b0e87d09a674cdc82e197c2dd4">More...</a><br /></td></tr>
 <tr class="separator:abb6cb9b0e87d09a674cdc82e197c2dd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a5f88956c17ef23f649c1875d9980e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#a0a5f88956c17ef23f649c1875d9980e9">importV1</a> (<a class="el" href="class_ogre_1_1v1_1_1_mesh.html">v1::Mesh</a> *mesh, bool halfPos, bool halfTexCoords, bool qTangents)</td></tr>
-<tr class="memdesc:a0a5f88956c17ef23f649c1875d9980e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imports a <a class="el" href="namespace_ogre_1_1v1.html">v1</a> mesh to this mesh, with optional optimization conversions.  <a href="#a0a5f88956c17ef23f649c1875d9980e9">More...</a><br /></td></tr>
-<tr class="separator:a0a5f88956c17ef23f649c1875d9980e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add0faad76685a41c804c485a4d9b42c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4">importV1</a> (<a class="el" href="class_ogre_1_1v1_1_1_mesh.html">v1::Mesh</a> *mesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose=true)</td></tr>
+<tr class="memdesc:add0faad76685a41c804c485a4d9b42c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imports a <a class="el" href="namespace_ogre_1_1v1.html">v1</a> mesh to this mesh, with optional optimization conversions.  <a href="#add0faad76685a41c804c485a4d9b42c4">More...</a><br /></td></tr>
+<tr class="separator:add0faad76685a41c804c485a4d9b42c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60ce96525ac730a0f7b466ed287beef3"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource.html#a60ce96525ac730a0f7b466ed287beef3">isBackgroundLoaded</a> (void) const</td></tr>
 <tr class="memdesc:a60ce96525ac730a0f7b466ed287beef3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g. ">Resource</a> has been earmarked for background loading.  <a href="#a60ce96525ac730a0f7b466ed287beef3">More...</a><br /></td></tr>
 <tr class="separator:a60ce96525ac730a0f7b466ed287beef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -386,7 +386,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ace884b65b722ead9b920b9abf27bf815"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_string_interface.html#ace884b65b722ead9b920b9abf27bf815">setParameter</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;value)</td></tr>
 <tr class="memdesc:ace884b65b722ead9b920b9abf27bf815"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic parameter setting method.  <a href="#ace884b65b722ead9b920b9abf27bf815">More...</a><br /></td></tr>
 <tr class="separator:ace884b65b722ead9b920b9abf27bf815"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae356913ccefbebc4f0119a0599a406fc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_string_interface.html#ae356913ccefbebc4f0119a0599a406fc">setParameterList</a> (const <a class="el" href="group___general.html#gadccb207c184efc0a6fb2a00ab6320d19">NameValuePairList</a> &amp;paramList)</td></tr>
+<tr class="memitem:ae356913ccefbebc4f0119a0599a406fc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_string_interface.html#ae356913ccefbebc4f0119a0599a406fc">setParameterList</a> (const <a class="el" href="group___general.html#ga442a408f658c0cbfbe3e404e91a0fcc5">NameValuePairList</a> &amp;paramList)</td></tr>
 <tr class="memdesc:ae356913ccefbebc4f0119a0599a406fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic multiple parameter setting method.  <a href="#ae356913ccefbebc4f0119a0599a406fc">More...</a><br /></td></tr>
 <tr class="separator:ae356913ccefbebc4f0119a0599a406fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a234be061da55bc8435401b6875770214"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#a234be061da55bc8435401b6875770214">setSkeletonName</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;skelName)</td></tr>
@@ -459,7 +459,7 @@ Friends</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="class_ogre_1_1_sub_mesh.html">SubMesh</a>*&gt;::type <a class="el" href="class_ogre_1_1_mesh.html#aedc2da9047ca813ce16f657e7f0b3a2a">Ogre::Mesh::SubMeshVec</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="class_ogre_1_1_sub_mesh.html">SubMesh</a>*&gt;::type <a class="el" href="class_ogre_1_1_mesh.html#aedc2da9047ca813ce16f657e7f0b3a2a">Ogre::Mesh::SubMeshVec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1073,7 +1073,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Converts this <a class="el" href="class_ogre_1_1_sub_mesh.html" title="Defines a part of a complete mesh. ">SubMesh</a> to an efficient arrangement. </p>
-<p><a class="el" href="class_ogre_1_1_mesh.html#a0a5f88956c17ef23f649c1875d9980e9" title="Imports a v1 mesh to this mesh, with optional optimization conversions. ">Mesh::importV1</a> for an explanation on the parameters. </p><dl class="section see"><dt>See also</dt><dd>dearrangeEfficientToInefficient to perform the opposite operation. </dd></dl>
+<p><a class="el" href="class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4" title="Imports a v1 mesh to this mesh, with optional optimization conversions. ">Mesh::importV1</a> for an explanation on the parameters. </p><dl class="section see"><dt>See also</dt><dd>dearrangeEfficientToInefficient to perform the opposite operation. </dd></dl>
 
 </div>
 </div>
@@ -2140,8 +2140,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a0a5f88956c17ef23f649c1875d9980e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a5f88956c17ef23f649c1875d9980e9">&#9670;&nbsp;</a></span>importV1()</h2>
+<a id="add0faad76685a41c804c485a4d9b42c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add0faad76685a41c804c485a4d9b42c4">&#9670;&nbsp;</a></span>importV1()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2168,7 +2168,13 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>qTangents</em>&#160;</td>
+          <td class="paramname"><em>qTangents</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>halfPose</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2186,6 +2192,7 @@ Friends</h2></td></tr>
     <tr><td class="paramname">halfPos</td><td>True if you want to convert the position data to VET_HALF4 format. Recommended on desktop to reduce memory and bandwidth requirements. Rarely the extra precision is needed. Unfortuntately on mobile, not all ES2 devices support VET_HALF4. </td></tr>
     <tr><td class="paramname">halfTexCoords</td><td>True if you want to convert the position data to VET_HALF2 or VET_HALF4 format. Same recommendations as halfPos. </td></tr>
     <tr><td class="paramname">qTangents</td><td>True if you want to generate tangent and reflection information (modifying the original <a class="el" href="namespace_ogre_1_1v1.html">v1</a> mesh) and convert this data to a QTangent, requiring VET_SHORT4_SNORM (8 bytes vs 28 bytes to store normals, tangents and reflection). Needs much less space, trading for more ALU ops in the vertex shader for decoding the QTangent. Highly recommended on both desktop and mobile if you need tangents (i.e. normal mapping). </td></tr>
+    <tr><td class="paramname">halfPose</td><td>True if you want the pose buffer to have pixel format PF_FLOAT16_RGBA which uses significantly less memory. Otherwise it is created with pixel format PF_FLOAT32_RGBA. Rarely the extra precision is needed. </td></tr>
   </table>
   </dd>
 </dl>
@@ -3052,7 +3059,7 @@ template&lt;class Alloc &gt; </div>
 
 <p>Tells the resource whether it is background loaded or not. </p>
 <dl class="section remark"><dt>Remarks</dt><dd></dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_resource.html#a60ce96525ac730a0f7b466ed287beef3" title="Returns whether this Resource has been earmarked for background loading. ">Resource::isBackgroundLoaded</a> . Note that calling this only defers the normal on-demand loading behaviour of a resource, it does not actually <a class="el" href="struct_ogre_1_1set.html">set</a> up a thread to make sure the resource gets loaded in the background. You should use ResourceBackgroundLoadingQueue to manage the actual loading (which will call this method itself). </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_resource.html#a60ce96525ac730a0f7b466ed287beef3" title="Returns whether this Resource has been earmarked for background loading. ">Resource::isBackgroundLoaded</a> . Note that calling this only defers the normal on-demand loading behaviour of a resource, it does not actually set up a thread to make sure the resource gets loaded in the background. You should use ResourceBackgroundLoadingQueue to manage the actual loading (which will call this method itself). </dd></dl>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_unified_high_level_gpu_program.html#adba65f42995100300f2983555f7214cc">Ogre::UnifiedHighLevelGpuProgram</a>.</p>
 
@@ -3204,7 +3211,7 @@ template&lt;class Alloc &gt; </div>
         <tr>
           <td class="memname">virtual void Ogre::StringInterface::setParameterList </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="group___general.html#gadccb207c184efc0a6fb2a00ab6320d19">NameValuePairList</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="group___general.html#ga442a408f658c0cbfbe3e404e91a0fcc5">NameValuePairList</a> &amp;&#160;</td>
           <td class="paramname"><em>paramList</em></td><td>)</td>
           <td></td>
         </tr>

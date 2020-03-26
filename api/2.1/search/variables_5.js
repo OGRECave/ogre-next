@@ -13,7 +13,7 @@ var searchData=
   ['elementtype',['elementType',['../struct_ogre_1_1_gpu_program_parameters_1_1_auto_constant_definition.html#afd666b79a5ca388640daf451d7da8c07',1,'Ogre::GpuProgramParameters::AutoConstantDefinition::elementType()'],['../struct_ogre_1_1_shader_params_1_1_manual_param.html#ad3c1b40f03373dff27823554d2ffa935',1,'Ogre::ShaderParams::ManualParam::elementType()']]],
   ['emissiveconstant',['EmissiveConstant',['../struct_ogre_1_1_pbs_property.html#af505fde61a3446efa22bd8fc0ee627c8',1,'Ogre::PbsProperty']]],
   ['emissivemap',['EmissiveMap',['../struct_ogre_1_1_pbs_property.html#aa0b9c855539fd6f083759303448e88ed',1,'Ogre::PbsProperty']]],
-  ['enablealphablend',['enableAlphaBlend',['../struct_ogre_1_1_g_l3_plus_hlms_pso.html#a6c239dd27a887c733128edb24fb5f8cb',1,'Ogre::GL3PlusHlmsPso']]],
+  ['enablealphablend',['enableAlphaBlend',['../struct_ogre_1_1_g_l3_plus_hlms_pso.html#a6c239dd27a887c733128edb24fb5f8cb',1,'Ogre::GL3PlusHlmsPso::enableAlphaBlend()'],['../struct_ogre_1_1_g_l_e_s2_hlms_pso.html#a3ed6a0e09db8abbb7d35e50f5b1e5fe3',1,'Ogre::GLES2HlmsPso::enableAlphaBlend()']]],
   ['enabled',['enabled',['../struct_ogre_1_1_stencil_params.html#a8fb09fe7bb68a01e3a7cfaa841572c3c',1,'Ogre::StencilParams']]],
   ['enabledecals',['EnableDecals',['../struct_ogre_1_1_hlms_base_prop.html#a44c68b1348efc7a02e5d4c4678e85dcb',1,'Ogre::HlmsBaseProp']]],
   ['enableprimitiverestart',['enablePrimitiveRestart',['../struct_ogre_1_1_hlms_pso.html#a98b85399cb50916cad81513ddc0c3c0e',1,'Ogre::HlmsPso']]],

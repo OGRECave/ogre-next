@@ -8,6 +8,8 @@ var class_ogre_1_1_compositor_workspace =
     [ "_swapFinalTarget", "class_ogre_1_1_compositor_workspace.html#a111e123f56ed21290581438ef97f276b", null ],
     [ "_update", "class_ogre_1_1_compositor_workspace.html#a4d45330147c75cb6febce00a5435d791", null ],
     [ "_validateFinalTarget", "class_ogre_1_1_compositor_workspace.html#a1e8910b0bfda05b52cb3b4ac51f07e74", null ],
+    [ "addListener", "class_ogre_1_1_compositor_workspace.html#a8ea8f3823022091ed1ae79137ff8e38e", null ],
+    [ "fillUavDependenciesForNextWorkspace", "class_ogre_1_1_compositor_workspace.html#a601e3ee3a1070d260416516933416a63", null ],
     [ "findCamera", "class_ogre_1_1_compositor_workspace.html#a8fbbf31dda329b1787878187411df613", null ],
     [ "findNode", "class_ogre_1_1_compositor_workspace.html#a5517cef92912309be4e23ec36f564d8e", null ],
     [ "findNodeNoThrow", "class_ogre_1_1_compositor_workspace.html#a13b3bf2f9e2857fdada030ea09ece9b5", null ],
@@ -17,6 +19,7 @@ var class_ogre_1_1_compositor_workspace =
     [ "getCompositorManager", "class_ogre_1_1_compositor_workspace.html#a6c1a939633dd59f05c3f38a8701a6fd5", null ],
     [ "getCompositorManager", "class_ogre_1_1_compositor_workspace.html#ae0a8febc63199dcfb885a761b9367c51", null ],
     [ "getDefaultCamera", "class_ogre_1_1_compositor_workspace.html#adc7fe91fd1a1299b26daaf976e699951", null ],
+    [ "getDefinition", "class_ogre_1_1_compositor_workspace.html#a22adb426ddf56d2a392eaf8ed8ffb635", null ],
     [ "getEnabled", "class_ogre_1_1_compositor_workspace.html#af69f3866097f27e53c3f6f265a6d1e6e", null ],
     [ "getExecutionMask", "class_ogre_1_1_compositor_workspace.html#a9313de607fe610e76c99c1b94d2c9767", null ],
     [ "getExternalRenderTargets", "class_ogre_1_1_compositor_workspace.html#ae3478b4a04f3643f58a8f4b12c26c72c", null ],
@@ -26,6 +29,7 @@ var class_ogre_1_1_compositor_workspace =
     [ "getGlobalTexture", "class_ogre_1_1_compositor_workspace.html#a6c86d9b728a530de0b11ea9038ecbfed", null ],
     [ "getId", "class_ogre_1_1_compositor_workspace.html#ab152c8f646a835c2f88585ad4fe0413a", null ],
     [ "getListener", "class_ogre_1_1_compositor_workspace.html#ab5c4b2d2d42914dae8d0c3e5c95fa8cd", null ],
+    [ "getListeners", "class_ogre_1_1_compositor_workspace.html#ac778f4ac7450efaf14dd9baa6fca7be0", null ],
     [ "getNodeSequence", "class_ogre_1_1_compositor_workspace.html#addb7e16949f128657290f874259f807d", null ],
     [ "getResourcesLayout", "class_ogre_1_1_compositor_workspace.html#a75426057deac46124ce32f0ddafcbe38", null ],
     [ "getSceneManager", "class_ogre_1_1_compositor_workspace.html#adcd587a6c95b5fb1bd819c3fdfa93e64", null ],
@@ -47,8 +51,11 @@ var class_ogre_1_1_compositor_workspace =
     [ "operator()", "class_ogre_1_1_compositor_workspace.html#a57e0523432c6e5133ff4fc251111a60e", null ],
     [ "reconnectAllNodes", "class_ogre_1_1_compositor_workspace.html#af0563bf95bca0ae0cb37d6dc457bdbb0", null ],
     [ "recreateAllNodes", "class_ogre_1_1_compositor_workspace.html#a89db6751be3f00947da5b596aecda4c4", null ],
+    [ "removeListener", "class_ogre_1_1_compositor_workspace.html#a69dfe3698baa1238a7e09ba6832fb237", null ],
     [ "resetAllNumPassesLeft", "class_ogre_1_1_compositor_workspace.html#aa68ff5efb511fe9e4a230c7c85c86b16", null ],
     [ "setAmalgamatedProfiling", "class_ogre_1_1_compositor_workspace.html#a22b27dcc2d6aa2dcd9a046f5d9514ca4", null ],
     [ "setEnabled", "class_ogre_1_1_compositor_workspace.html#aff2f90e51c1c76996937466da8a24f42", null ],
-    [ "setListener", "class_ogre_1_1_compositor_workspace.html#aa4cbcc3ff70190a4a26dc6ae55cd8ebb", null ]
+    [ "setListener", "class_ogre_1_1_compositor_workspace.html#aa4cbcc3ff70190a4a26dc6ae55cd8ebb", null ],
+    [ "setViewportModifier", "class_ogre_1_1_compositor_workspace.html#ad0225c0414c62f12774f0cfa167836ff", null ],
+    [ "setViewportModifierMask", "class_ogre_1_1_compositor_workspace.html#a06a1289ec641a4e072975de491e236b5", null ]
 ];

@@ -131,7 +131,6 @@ var class_ogre_1_1_metal_render_system =
     [ "getDisplayMonitorCount", "class_ogre_1_1_metal_render_system.html#a80ffdefabbeab58dfd0500481c24979a", null ],
     [ "getDriverVersion", "class_ogre_1_1_metal_render_system.html#a6e6521ead351b0b7a8b2cc519b5f4dd6", null ],
     [ "getErrorDescription", "class_ogre_1_1_metal_render_system.html#a8b41797711c01a066cd32a0190d32852", null ],
-    [ "getFixedPipelineEnabled", "class_ogre_1_1_metal_render_system.html#a28c75f1ca83ffac6c50c8a2f43a48933", null ],
     [ "getFriendlyName", "class_ogre_1_1_metal_render_system.html#a469c4cf39de9b8a7627e5f7c9875ce4c", null ],
     [ "getGlobalInstanceVertexBuffer", "class_ogre_1_1_metal_render_system.html#a2a859eea18cd0c3cf0c7876bbab862a4", null ],
     [ "getGlobalInstanceVertexBufferVertexDeclaration", "class_ogre_1_1_metal_render_system.html#a38924cc348317c9104797536eb29be13", null ],

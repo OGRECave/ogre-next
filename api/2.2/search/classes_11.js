@@ -7,6 +7,7 @@ var searchData=
   ['radixsort_3c_20activebillboardlist_2c_20ogre_3a_3av1_3a_3abillboard_20_2a_2c_20float_20_3e',['RadixSort&lt; ActiveBillboardList, Ogre::v1::Billboard *, float &gt;',['../class_ogre_1_1_radix_sort.html',1,'Ogre']]],
   ['radixsort_3c_20activeparticlelist_2c_20ogre_3a_3aparticle_20_2a_2c_20float_20_3e',['RadixSort&lt; ActiveParticleList, Ogre::Particle *, float &gt;',['../class_ogre_1_1_radix_sort.html',1,'Ogre']]],
   ['randomvalueprovider',['RandomValueProvider',['../class_ogre_1_1_math_1_1_random_value_provider.html',1,'Ogre::Math']]],
+  ['rasterparams',['RasterParams',['../struct_ogre_1_1_raster_params.html',1,'Ogre']]],
   ['rawsimduniqueptr',['RawSimdUniquePtr',['../class_ogre_1_1_raw_simd_unique_ptr.html',1,'Ogre']]],
   ['rawsimduniqueptr_3c_20arrayplane_2c_20memcategory_5fgeneral_20_3e',['RawSimdUniquePtr&lt; ArrayPlane, MEMCATEGORY_GENERAL &gt;',['../class_ogre_1_1_raw_simd_unique_ptr.html',1,'Ogre']]],
   ['rawsimduniqueptr_3c_20arrayreal_2c_20memcategory_5fanimation_20_3e',['RawSimdUniquePtr&lt; ArrayReal, MEMCATEGORY_ANIMATION &gt;',['../class_ogre_1_1_raw_simd_unique_ptr.html',1,'Ogre']]],

@@ -1,0 +1,5 @@
+<map id="Ogre::RenderPassTargetBase" name="Ogre::RenderPassTargetBase">
+<area shape="rect" id="node2" href="$struct_ogre_1_1_render_pass_colour_target.html" title="Ogre::RenderPassColourTarget" alt="" coords="251,5,457,32"/>
+<area shape="rect" id="node3" href="$struct_ogre_1_1_render_pass_depth_target.html" title="Ogre::RenderPassDepthTarget" alt="" coords="253,56,455,83"/>
+<area shape="rect" id="node4" href="$struct_ogre_1_1_render_pass_stencil_target.html" title="Ogre::RenderPassStencilTarget" alt="" coords="251,107,457,133"/>
+</map>

@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.1.0unstable</span>
+   &#160;<span id="projectnumber">2.1.1</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -89,18 +89,7 @@ $(document).ready(function(){initNavTree('group___downloading_ogre_common.html',
 <div class="contents">
 <p>Most dependencies are conveniently stored in its own repository called "ogredeps" for you to download.</p>
 <p><b>IMPORTANT:</b> Do NOT use the the "Download" feature from Bitbucket. It will not follow subrepositories.</p>
-<p><b>Command line</b>: </p><div class="fragment"><div class="line">mkdir Ogre</div><div class="line">hg clone https://bitbucket.org/sinbad/ogre -r v2-1</div><div class="line">cd Ogre</div><div class="line">hg clone https://bitbucket.org/cabalistic/ogredeps Dependencies</div></div><!-- fragment --><p><b>Graphical</b></p>
-<p>Clone <em><a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a></em>: </p><div class="image">
-<img src="CloneOgre.png" alt="CloneOgre.png"/>
-</div>
-<p>Now clone the <em>ogredeps</em> repository: </p><div class="image">
-<img src="CloneOgreDeps.png" alt="CloneOgreDeps.png"/>
-</div>
-<p>Make sure <a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> is in the 2.1 branch: </p><div class="image">
-<img src="BranchCheckout.png" alt="BranchCheckout.png"/>
-</div>
-<p> <em>Note:</em> If the branch filter doesn't appear, hit Ctrl+S </p>
-</div><!-- contents -->
+<p><b>Command line</b>: </p><div class="fragment"><div class="line">git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps</div><div class="line">git clone --branch v2-1 https://github.com/OGRECave/ogre-next</div></div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

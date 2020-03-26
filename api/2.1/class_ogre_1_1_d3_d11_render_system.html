@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.1.0unstable</span>
+   &#160;<span id="projectnumber">2.1.1</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -479,9 +479,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aab1eb2dd87981c77b475a10a74eb90ba"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aab1eb2dd87981c77b475a10a74eb90ba">getErrorDescription</a> (long errorNumber) const</td></tr>
 <tr class="memdesc:aab1eb2dd87981c77b475a10a74eb90ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a description of an error code.  <a href="#aab1eb2dd87981c77b475a10a74eb90ba">More...</a><br /></td></tr>
 <tr class="separator:aab1eb2dd87981c77b475a10a74eb90ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28c75f1ca83ffac6c50c8a2f43a48933"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a28c75f1ca83ffac6c50c8a2f43a48933">getFixedPipelineEnabled</a> (void) const</td></tr>
-<tr class="memdesc:a28c75f1ca83ffac6c50c8a2f43a48933"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if fixed pipeline rendering is enabled on the system.  <a href="#a28c75f1ca83ffac6c50c8a2f43a48933">More...</a><br /></td></tr>
-<tr class="separator:a28c75f1ca83ffac6c50c8a2f43a48933"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5557d9432d0bf160a7668c2af6205b2a"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a5557d9432d0bf160a7668c2af6205b2a">getFriendlyName</a> (void) const</td></tr>
 <tr class="memdesc:a5557d9432d0bf160a7668c2af6205b2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the friendly name of the render system.  <a href="#a5557d9432d0bf160a7668c2af6205b2a">More...</a><br /></td></tr>
 <tr class="separator:a5557d9432d0bf160a7668c2af6205b2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -500,6 +497,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a133c89c9430091210e01ac44d638a0a3"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a133c89c9430091210e01ac44d638a0a3">getInvertVertexWinding</a> (void) const</td></tr>
 <tr class="memdesc:a133c89c9430091210e01ac44d638a0a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether or not the vertex windings set will be inverted for the current render (e.g.  <a href="#a133c89c9430091210e01ac44d638a0a3">More...</a><br /></td></tr>
 <tr class="separator:a133c89c9430091210e01ac44d638a0a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e5d09ac3af793f775fe831f9b84c3e7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a1e5d09ac3af793f775fe831f9b84c3e7">getMapL8toRGB8</a> (void) const</td></tr>
+<tr class="separator:a1e5d09ac3af793f775fe831f9b84c3e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9f85102202b26e1b02c9391560cdec3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#af9f85102202b26e1b02c9391560cdec3">getMaximumDepthInputValue</a> (void)</td></tr>
 <tr class="memdesc:af9f85102202b26e1b02c9391560cdec3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the maximum (farthest) depth value to be used when rendering using identity transforms.  <a href="#af9f85102202b26e1b02c9391560cdec3">More...</a><br /></td></tr>
 <tr class="separator:af9f85102202b26e1b02c9391560cdec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -643,6 +642,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a697f9a8c12f2d08ccc6185cd7992c238"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19961d7272d4fa781bee7b643b31a774"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a19961d7272d4fa781bee7b643b31a774">setLightingEnabled</a> (bool enabled)</td></tr>
 <tr class="separator:a19961d7272d4fa781bee7b643b31a774"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaeda08c753787686b833b92d967cb2de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aaeda08c753787686b833b92d967cb2de">setMapL8toRGB8</a> (bool bMap)</td></tr>
+<tr class="separator:aaeda08c753787686b833b92d967cb2de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcb37fb68532bbdd75dd1628684e001c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#afcb37fb68532bbdd75dd1628684e001c">setNormaliseNormals</a> (bool normalise)</td></tr>
 <tr class="separator:afcb37fb68532bbdd75dd1628684e001c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c656abdfd9a0c433e315fa10b64fd4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a0c656abdfd9a0c433e315fa10b64fd4d">setShadingType</a> (<a class="el" href="group___general.html#ga7afd4c7d428baaee13f3a0dbcae5f560">ShadeOptions</a> so)</td></tr>
@@ -2636,7 +2637,7 @@ Static Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a72be60d5550b4552b6a06afebf292ffa">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a72be60d5550b4552b6a06afebf292ffa">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a3363e6b3a4bf1299de508fa3f824db35">Ogre::GLES2RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2664,7 +2665,7 @@ Static Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ae9b6f353f9cce613f4d5c0a5bb3b0939">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ae9b6f353f9cce613f4d5c0a5bb3b0939">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#aacde3189dbd7815a942b5b61ec0b46cd">Ogre::GLES2RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2692,7 +2693,7 @@ Static Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a0dc6355f2a759be14ae3410f2a9206e2">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a0dc6355f2a759be14ae3410f2a9206e2">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a50d1b5b4571302c60a827c9a906f8b2c">Ogre::GLES2RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2720,7 +2721,7 @@ Static Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a4d4a0d5aa5824afb9efe7ebb6e9cd81b">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a4d4a0d5aa5824afb9efe7ebb6e9cd81b">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a949f3caeff96f2a02606631c12fea2ed">Ogre::GLES2RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -4196,7 +4197,7 @@ Static Private Member Functions</h2></td></tr>
 
 <p>May override the current VertexArrayObject! </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#add95717187ea8d38280526eb29d27ba7">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#add95717187ea8d38280526eb29d27ba7">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a6ea941c7dbd4ecb98e543e170ec3f622">Ogre::GLES2RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -4429,7 +4430,7 @@ Static Private Member Functions</h2></td></tr>
 
 <p>Are fixed-function lights provided in view space? Affects optimisation. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a2ddd26db12f8cecef346f16c25e04fae">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a2ddd26db12f8cecef346f16c25e04fae">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ae982beab16b67617dfe88fc6fdbede32">Ogre::GLES2RenderSystem</a>.</p>
 
 <p class="reference">References <a class="el" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caa4292ed700edc51d74776f6efaf2a099">Ogre::PF_UNKNOWN</a>, <a class="el" href="namespace_ogre_1_1_resource_access.html#a732c0b8774d76d325e0749d09ce70aadab3b37cb4ba0e7bbaa7243ee407c14af9">Ogre::ResourceAccess::ReadWrite</a>, and <a class="el" href="group___general.html#gga5d04131dcb51ec3cf219465196b6de85a4b75431ccf4b6bde635265300498660e">Ogre::TVC_NONE</a>.</p>
 
@@ -4632,6 +4633,8 @@ Static Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Checks for the presense of an API-specific extension (eg. Vulkan, GL) </p>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a62169442a5c4b920527d8ef09d12f5d8">Ogre::GLES2RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -5578,34 +5581,6 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a28c75f1ca83ffac6c50c8a2f43a48933"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28c75f1ca83ffac6c50c8a2f43a48933">&#9670;&nbsp;</a></span>getFixedPipelineEnabled()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::RenderSystem::getFixedPipelineEnabled </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns true if fixed pipeline rendering is enabled on the system. </p>
-
-</div>
-</div>
 <a id="a5557d9432d0bf160a7668c2af6205b2a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5557d9432d0bf160a7668c2af6205b2a">&#9670;&nbsp;</a></span>getFriendlyName()</h2>
 
@@ -5774,6 +5749,24 @@ Static Private Member Functions</h2></td></tr>
 
 <p>Indicates whether or not the vertex windings set will be inverted for the current render (e.g. </p>
 <p>reflections) </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_render_system.html#a697f9a8c12f2d08ccc6185cd7992c238" title="Sets whether or not vertex windings set should be inverted; this can be important for rendering refle...">RenderSystem::setInvertVertexWinding</a> </dd></dl>
+
+</div>
+</div>
+<a id="a1e5d09ac3af793f775fe831f9b84c3e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e5d09ac3af793f775fe831f9b84c3e7">&#9670;&nbsp;</a></span>getMapL8toRGB8()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::D3D11RenderSystem::getMapL8toRGB8 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -7605,6 +7598,24 @@ Once this init sequence is completed the threads are independent but this startu
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>enabled</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaeda08c753787686b833b92d967cb2de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaeda08c753787686b833b92d967cb2de">&#9670;&nbsp;</a></span>setMapL8toRGB8()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::D3D11RenderSystem::setMapL8toRGB8 </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bMap</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

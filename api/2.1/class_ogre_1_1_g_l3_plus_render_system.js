@@ -140,7 +140,6 @@ var class_ogre_1_1_g_l3_plus_render_system =
     [ "getDisplayMonitorCount", "class_ogre_1_1_g_l3_plus_render_system.html#a1526bb1c290815e1c6541f53782c7ff6", null ],
     [ "getDriverVersion", "class_ogre_1_1_g_l3_plus_render_system.html#a6e6521ead351b0b7a8b2cc519b5f4dd6", null ],
     [ "getErrorDescription", "class_ogre_1_1_g_l3_plus_render_system.html#ad115f45d988d2589007eb4f4ffe301d1", null ],
-    [ "getFixedPipelineEnabled", "class_ogre_1_1_g_l3_plus_render_system.html#a28c75f1ca83ffac6c50c8a2f43a48933", null ],
     [ "getFriendlyName", "class_ogre_1_1_g_l3_plus_render_system.html#a783e98db560143778c1b13c5757448a5", null ],
     [ "getGlobalInstanceVertexBuffer", "class_ogre_1_1_g_l3_plus_render_system.html#a2a859eea18cd0c3cf0c7876bbab862a4", null ],
     [ "getGlobalInstanceVertexBufferVertexDeclaration", "class_ogre_1_1_g_l3_plus_render_system.html#a38924cc348317c9104797536eb29be13", null ],

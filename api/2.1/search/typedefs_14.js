@@ -10,7 +10,6 @@ var searchData=
   ['uint8',['uint8',['../namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb',1,'Ogre']]],
   ['ulong',['ulong',['../namespace_ogre.html#a4304981347643708ee9a7ba8884e5758',1,'Ogre']]],
   ['unaryoptionlist',['UnaryOptionList',['../group___general.html#gaf8039ad2eb9856cb1b181eb3d9507885',1,'Ogre']]],
-  ['uniformcachealloc',['UniformCacheAlloc',['../_ogre_g_l_e_s2_uniform_cache_8h.html#a502f4cffd0472ded99d69e42c2d5f0c7',1,'UniformCacheAlloc():&#160;OgreGLES2UniformCache.h'],['../_ogre_g_l_e_s2_null_uniform_cache_imp_8h.html#a502f4cffd0472ded99d69e42c2d5f0c7',1,'UniformCacheAlloc():&#160;OgreGLES2NullUniformCacheImp.h'],['../_ogre_g_l_e_s2_uniform_cache_imp_8h.html#a502f4cffd0472ded99d69e42c2d5f0c7',1,'UniformCacheAlloc():&#160;OgreGLES2UniformCacheImp.h']]],
   ['uniformparameterconstiterator',['UniformParameterConstIterator',['../group___r_t_shader.html#ga61c1e13c93441a655f82c770929f006c',1,'Ogre::RTShader']]],
   ['uniformparameteriterator',['UniformParameterIterator',['../group___r_t_shader.html#ga63652385aee34f38c33f8aed62b6f948',1,'Ogre::RTShader']]],
   ['uniformparameterlist',['UniformParameterList',['../group___r_t_shader.html#ga76848ed6c023c3fe0a5e9f25f87b78a8',1,'Ogre::RTShader']]],

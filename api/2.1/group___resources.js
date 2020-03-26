@@ -653,11 +653,20 @@ var group___resources =
       [ "sourceBlendAlpha", "struct_ogre_1_1_g_l3_plus_hlms_pso.html#ae28bc951d72671c58dc6e58cad4204e7", null ],
       [ "vertexShader", "struct_ogre_1_1_g_l3_plus_hlms_pso.html#a1c8cb874c4f616f29c316360a32e7de7", null ]
     ] ],
-    [ "GLES2HlmsMacroblock", "struct_ogre_1_1_g_l_e_s2_hlms_macroblock.html", [
-      [ "mCullMode", "struct_ogre_1_1_g_l_e_s2_hlms_macroblock.html#a514cdb688d1889f3dbc27d395b15d0d8", null ],
-      [ "mDepthFunc", "struct_ogre_1_1_g_l_e_s2_hlms_macroblock.html#a1e483146bc2418ba7cb28972c340ec03", null ],
-      [ "mDepthWrite", "struct_ogre_1_1_g_l_e_s2_hlms_macroblock.html#acd76508b9042cba6674371638b4c59c4", null ],
-      [ "mPolygonMode", "struct_ogre_1_1_g_l_e_s2_hlms_macroblock.html#a0ec95c68f692aeae6d45731bb82ef1e4", null ]
+    [ "GLES2HlmsPso", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html", [
+      [ "blendFunc", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#afa7f9b13b57797c5af4cfe77fd5d05f0", null ],
+      [ "blendFuncAlpha", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#a7f0fdf0a018b56b0465e697c3635290f", null ],
+      [ "cullMode", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#a8557e4c043d1aca86e5855741a9cc6f9", null ],
+      [ "depthFunc", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#a5c9c2735032a7437b4f312fcef4c82ab", null ],
+      [ "depthWrite", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#af1be2830622b53f591a4c8593c529bc2", null ],
+      [ "destBlend", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#a33f28d18b92397967378ae527a6f7d56", null ],
+      [ "destBlendAlpha", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#ae238628c2ef103ccac04a69b511cb89e", null ],
+      [ "enableAlphaBlend", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#a3ed6a0e09db8abbb7d35e50f5b1e5fe3", null ],
+      [ "pixelShader", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#ae749e0d55a146943273faf7285b8137a", null ],
+      [ "polygonMode", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#a5f891b369bac8168a6f3fe70a16c97e1", null ],
+      [ "sourceBlend", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#a6f6e8ea87b925a5cc26fe49b2959e873", null ],
+      [ "sourceBlendAlpha", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#a8d2f1d08c3212a4db50002910a84c97f", null ],
+      [ "vertexShader", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#a9bdee4d32c9830b426366a996abeb294", null ]
     ] ],
     [ "GLES2HlmsSamplerblock", "struct_ogre_1_1_g_l_e_s2_hlms_samplerblock.html", [
       [ "mAnisotropy", "struct_ogre_1_1_g_l_e_s2_hlms_samplerblock.html#aeb2763c296c60d144340ec9686d2ec36", null ],
@@ -1193,6 +1202,7 @@ var group___resources =
       [ "FwdPlusDecalsSlotOffset", "struct_ogre_1_1_hlms_base_prop.html#abaa27ddcea8376695a829dc2c65dbba3", null ],
       [ "GL3Plus", "struct_ogre_1_1_hlms_base_prop.html#ab8ce6c72a32f3814ae75c344144d4a9d", null ],
       [ "GlAmdTrinaryMinMax", "struct_ogre_1_1_hlms_base_prop.html#a635853be5e7b80e14b463c00b47cfe9f", null ],
+      [ "GLES", "struct_ogre_1_1_hlms_base_prop.html#aed38fb54c4602a3aeffd98d7c1053a23", null ],
       [ "GlobalClipPlanes", "struct_ogre_1_1_hlms_base_prop.html#adc061a25daa6f9d57b11a21a843b8e39", null ],
       [ "Glsl", "struct_ogre_1_1_hlms_base_prop.html#a797ebbcb6c87a1eaa6e9e87f7b92d3ec", null ],
       [ "Glsles", "struct_ogre_1_1_hlms_base_prop.html#a6eb7197cc54a0a47b73548c58af0948d", null ],

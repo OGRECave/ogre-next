@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.1.0unstable</span>
+   &#160;<span id="projectnumber">2.1.1</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -117,6 +117,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afa6f0b3e2ffa14ffe85bcfc8f798961c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d7bbcfedf0d0219517649da6bc564b4"><td class="memItemLeft" align="right" valign="top">GLsizei&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_frame_buffer_object.html#a7d7bbcfedf0d0219517649da6bc564b4">getFSAA</a> ()</td></tr>
 <tr class="separator:a7d7bbcfedf0d0219517649da6bc564b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c732059d448a13c1ef2348c44f27039"><td class="memItemLeft" align="right" valign="top">GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_frame_buffer_object.html#a0c732059d448a13c1ef2348c44f27039">getGLFBOID</a> () const</td></tr>
+<tr class="memdesc:a0c732059d448a13c1ef2348c44f27039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the GL id for the FBO.  <a href="#a0c732059d448a13c1ef2348c44f27039">More...</a><br /></td></tr>
+<tr class="separator:a0c732059d448a13c1ef2348c44f27039"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a867331ba42e91156e0ec9c825b465201"><td class="memItemLeft" align="right" valign="top">GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_frame_buffer_object.html#a867331ba42e91156e0ec9c825b465201">getGLMultisampleFBOID</a> () const</td></tr>
+<tr class="memdesc:a867331ba42e91156e0ec9c825b465201"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the GL id for the multisample FBO.  <a href="#a867331ba42e91156e0ec9c825b465201">More...</a><br /></td></tr>
+<tr class="separator:a867331ba42e91156e0ec9c825b465201"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba944aa9d091e9214f73318d6e6ee19d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_frame_buffer_object.html#aba944aa9d091e9214f73318d6e6ee19d">getHeight</a> ()</td></tr>
 <tr class="separator:aba944aa9d091e9214f73318d6e6ee19d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56462a1f99de6bb087688bff3f848170"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_manager.html">GLES2FBOManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_frame_buffer_object.html#a56462a1f99de6bb087688bff3f848170">getManager</a> ()</td></tr>
@@ -199,7 +205,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>This function acts very similar to. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_render_texture.html#a482623b1ed080e15766c93c1cf4b193b" title="Override so we can attach the depth buffer to the FBO. ">GLES2FBORenderTexture::attachDepthBuffer</a> The difference between D3D &amp; OGL is that D3D setups the <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer. ">DepthBuffer</a> before rendering, while OGL setups the <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer. ">DepthBuffer</a> per FBO. So the <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer. ">DepthBuffer</a> (RenderBuffer) needs to be attached for OGL. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_render_texture.html#a22144e4b81a673b04bd7a3593709c11e" title="Override so we can attach the depth buffer to the FBO. ">GLES2FBORenderTexture::attachDepthBuffer</a> The difference between D3D &amp; OGL is that D3D setups the <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer. ">DepthBuffer</a> before rendering, while OGL setups the <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer. ">DepthBuffer</a> per FBO. So the <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer. ">DepthBuffer</a> (RenderBuffer) needs to be attached for OGL. </dd></dl>
 
 </div>
 </div>
@@ -301,6 +307,60 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0c732059d448a13c1ef2348c44f27039"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c732059d448a13c1ef2348c44f27039">&#9670;&nbsp;</a></span>getGLFBOID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GLuint Ogre::GLES2FrameBufferObject::getGLFBOID </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the GL id for the FBO. </p>
+
+</div>
+</div>
+<a id="a867331ba42e91156e0ec9c825b465201"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a867331ba42e91156e0ec9c825b465201">&#9670;&nbsp;</a></span>getGLMultisampleFBOID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GLuint Ogre::GLES2FrameBufferObject::getGLMultisampleFBOID </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the GL id for the multisample FBO. </p>
 
 </div>
 </div>

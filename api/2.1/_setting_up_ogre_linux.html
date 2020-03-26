@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.1.0unstable</span>
+   &#160;<span id="projectnumber">2.1.1</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -99,7 +99,7 @@ $(document).ready(function(){initNavTree('_setting_up_ogre_linux.html','');});
 Requirements</h1>
 <ul>
 <li><a href="https://cmake.org/download/">CMake 3.x</a></li>
-<li>Mercurial. We recommend <a href="https://tortoisehg.bitbucket.io/download/index.html">TortoiseHg</a></li>
+<li>Git</li>
 <li>What you do <b>NOT</b> need: Boost. Don't waste your time.</li>
 <li>Clang &gt;3.5 or GCC &gt;4.0</li>
 <li><a href="https://download.qt.io/official_releases/qtcreator/">QtCreator</a> recommended (Optional).</li>
@@ -110,23 +110,12 @@ Requirements</h1>
 </ul>
 <h1>Automatic download &amp; build scripts</h1>
 <p>We easy-to-use scripts that will download and setup all dependencies for you in a self-contained folder Download build_ogre_scripts for the branch you need from:</p>
-<p><a href="https://bitbucket.org/sinbad/ogre/downloads/">https://bitbucket.org/sinbad/ogre/downloads/</a></p>
+<p><a href="https://www.ogre3d.org/download/sdk/sdk-ogre-next">https://www.ogre3d.org/download/sdk/sdk-ogre-next</a></p>
 <h1><a class="anchor" id="DownloadingOgreLinux"></a>
 Downloading Ogre</h1>
 <p>Most dependencies are conveniently stored in its own repository called "ogredeps" for you to download.</p>
 <p><b>IMPORTANT:</b> Do NOT use the the "Download" feature from Bitbucket. It will not follow subrepositories.</p>
-<p><b>Command line</b>: </p><div class="fragment"><div class="line">mkdir Ogre</div><div class="line">hg clone https://bitbucket.org/sinbad/ogre -r v2-1</div><div class="line">cd Ogre</div><div class="line">hg clone https://bitbucket.org/cabalistic/ogredeps Dependencies</div></div><!-- fragment --><p><b>Graphical</b></p>
-<p>Clone <em><a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a></em>: </p><div class="image">
-<img src="CloneOgre.png" alt="CloneOgre.png"/>
-</div>
-<p>Now clone the <em>ogredeps</em> repository: </p><div class="image">
-<img src="CloneOgreDeps.png" alt="CloneOgreDeps.png"/>
-</div>
-<p>Make sure <a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> is in the 2.1 branch: </p><div class="image">
-<img src="BranchCheckout.png" alt="BranchCheckout.png"/>
-</div>
-<p> <em>Note:</em> If the branch filter doesn't appear, hit Ctrl+S</p>
-<h1><a class="anchor" id="BuildingDependenciesLinux"></a>
+<p><b>Command line</b>: </p><div class="fragment"><div class="line">git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps</div><div class="line">git clone --branch v2-1 https://github.com/OGRECave/ogre-next</div></div><!-- fragment --><h1><a class="anchor" id="BuildingDependenciesLinux"></a>
 Building Dependencies</h1>
 <div class="fragment"><div class="line">cd Ogre/Dependencies</div><div class="line">mkdir build</div><div class="line">cd build</div><div class="line">cmake ../</div><div class="line">cd build</div><div class="line">make</div><div class="line">make instal</div></div><!-- fragment --><h1><a class="anchor" id="BuildingOgreLinux"></a>
 Building Ogre</h1>

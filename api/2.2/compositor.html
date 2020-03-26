@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -298,7 +298,6 @@ Passes</h2>
 <h3><a class="anchor" id="CompositorNodesPassesClear"></a>
 clear</h3>
 <p>The syntax for clear passes is the same as 1.x; except that by default now Stencil is also cleared. This follows performance reasons, as GPU architectures where the Z buffer is tied with the stencil buffer, clearing only the Z buffer hinders the driver from discarding the buffer entirely or using fast Z clears.</p>
-<p>Additionally, all passes can define the viewport area they will work on, meaning clearing specific regions is now possible.</p>
 <h3><a class="anchor" id="CompositorNodesPassesGenerateMipmaps"></a>
 generate_mipmaps</h3>
 <p>Generate_mipmaps doesn't have special parameters other than the shared ones that are still relevant (i.e. identifier). They're useful for explicitly populating the lower mip levels after you've done rendering.</p>
@@ -571,7 +570,7 @@ Textures</h2>
 <ul>
 <li>mipmaps &lt;num Mipmaps&gt;</li>
 </ul>
-<p>Default: 0; Indicates how many mipmaps to use. 0 for none. Use -1 to fill all mipmaps until 1x1</p>
+<p>Default: 1; Indicates how many mipmaps to use. 1 for none. Use 0 to fill all mipmaps until 1x1</p>
 <ul>
 <li>automipmaps</li>
 </ul>
@@ -651,6 +650,13 @@ Setting up shadow nodes</h2>
 <li>num_splits &lt;num_splits&gt;</li>
 </ul>
 <p>Only used by PSSM techniques. Specifies the number of splits per light. Can vary per shadow map. The number of splits must be greater than 2. Default is 3.</p>
+<ul>
+<li>num_stable_splits &lt;num_stable_splits&gt;</li>
+</ul>
+<p>PSSM tends to be very unstable to camera rotation changes. Rotate the camera around and the shadow mapping artifacts keep changing.</p>
+<p>setNumStableSplits allows you to fix that problem; by switching to ConcentricShadowCamera for the first N splits you specify; while the rest of the splits will use FocusedShadowCameraSetup.</p>
+<p>We achieve rotation stability by sacrificing overall quality. Using ConcentricShadowCamera on higher splits means sacrificing exponentially a lot more quality (and even performance); thus the recommended values are num_stable_splits = 1 or num_stable_splits = 2</p>
+<p>The default is num_stable_splits = 0 which disables the feature</p>
 <ul>
 <li>pssm_lambda &lt;lambda&gt;</li>
 </ul>

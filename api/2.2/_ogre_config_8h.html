@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -107,6 +107,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a1555343fe7aade0966aa442f2e0c16f5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_config_8h.html#a1555343fe7aade0966aa442f2e0c16f5">OGRE_MAX_MULTIPLE_RENDER_TARGETS</a>&#160;&#160;&#160;8</td></tr>
 <tr class="memdesc:a1555343fe7aade0966aa442f2e0c16f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define max number of multiple render targets (MRTs) to render to at once.  <a href="#a1555343fe7aade0966aa442f2e0c16f5">More...</a><br /></td></tr>
 <tr class="separator:a1555343fe7aade0966aa442f2e0c16f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4a3245bef006f934e9024224c498895"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_config_8h.html#af4a3245bef006f934e9024224c498895">OGRE_MAX_POSES</a>&#160;&#160;&#160;16</td></tr>
+<tr class="memdesc:af4a3245bef006f934e9024224c498895"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define max number of poses per item.  <a href="#af4a3245bef006f934e9024224c498895">More...</a><br /></td></tr>
+<tr class="separator:af4a3245bef006f934e9024224c498895"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d20e242d4a6aab7de105d85608b286a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_config_8h.html#a3d20e242d4a6aab7de105d85608b286a">OGRE_MAX_SIMULTANEOUS_LIGHTS</a>&#160;&#160;&#160;8</td></tr>
 <tr class="memdesc:a3d20e242d4a6aab7de105d85608b286a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define max number of lights allowed per pass.  <a href="#a3d20e242d4a6aab7de105d85608b286a">More...</a><br /></td></tr>
 <tr class="separator:a3d20e242d4a6aab7de105d85608b286a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -248,7 +251,23 @@ Macros</h2></td></tr>
 
 <p>Define max number of multiple render targets (MRTs) to render to at once. </p>
 
-<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_compositor_pass_clear_def.html#a37e0be85fbb9473a93f008f6c55a6f7c">Ogre::CompositorPassClearDef::CompositorPassClearDef()</a>, <a class="el" href="class_ogre_1_1_compositor_pass_def.html#a625c0163d6577b29e5d502da3f13837d">Ogre::CompositorPassDef::CompositorPassDef()</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_frame_buffer_object.html#a4b05dd41047ea1a2026642e2024d3a42">Ogre::GLES2FrameBufferObject::getSurface()</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_frame_buffer_object.html#aacf95094d54a079ce0b4e5839ed2ff1f">Ogre::GL3PlusFrameBufferObject::getSurface()</a>, <a class="el" href="class_ogre_1_1_d3_d11_multi_render_target.html#a2f97739ef8facf65359f20fa823ab9fd">Ogre::D3D11MultiRenderTarget::requiresTextureFlipping()</a>, <a class="el" href="class_ogre_1_1_d3_d9_multi_render_target.html#a061c5f3bae392d8c187391eb70049574">Ogre::D3D9MultiRenderTarget::requiresTextureFlipping()</a>, <a class="el" href="class_ogre_1_1_compositor_pass_clear_def.html#a37f12a58e83e192d9eeca4416fdbd92f">Ogre::CompositorPassClearDef::setBuffersToClear()</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_depth_texture_target.html#a4e0ed370b3e37598b51234b5eb985a4c">Ogre::GL3PlusDepthTextureTarget::setFsaaResolved()</a>, <a class="el" href="class_ogre_1_1_d3_d11_depth_texture_target.html#ad283cbe7985dfb964296361b2008cb53">Ogre::D3D11DepthTextureTarget::setFsaaResolved()</a>, <a class="el" href="class_ogre_1_1_metal_depth_texture_target.html#a5fb784524f24505692db74d8b2bdb3a2">Ogre::MetalDepthTextureTarget::setFsaaResolveDirty()</a>, and <a class="el" href="class_ogre_1_1_multi_render_target.html#acd7f368281eebf09a99369db73a6fc51">Ogre::MultiRenderTarget::unbindSurface()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_compositor_pass_clear_def.html#a37e0be85fbb9473a93f008f6c55a6f7c">Ogre::CompositorPassClearDef::CompositorPassClearDef()</a>, <a class="el" href="class_ogre_1_1_compositor_pass_def.html#a625c0163d6577b29e5d502da3f13837d">Ogre::CompositorPassDef::CompositorPassDef()</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_frame_buffer_object.html#aacf95094d54a079ce0b4e5839ed2ff1f">Ogre::GL3PlusFrameBufferObject::getSurface()</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_frame_buffer_object.html#a4b05dd41047ea1a2026642e2024d3a42">Ogre::GLES2FrameBufferObject::getSurface()</a>, <a class="el" href="struct_ogre_1_1_hlms_pass_pso.html#ac0a8ef4ecbe4fe6014cde50d1e180057">Ogre::HlmsPassPso::operator&lt;()</a>, <a class="el" href="struct_ogre_1_1_hlms_pass_pso.html#afc4dc599d934e99703dc504c9afaee14">Ogre::HlmsPassPso::operator==()</a>, <a class="el" href="class_ogre_1_1_d3_d11_multi_render_target.html#a2f97739ef8facf65359f20fa823ab9fd">Ogre::D3D11MultiRenderTarget::requiresTextureFlipping()</a>, <a class="el" href="class_ogre_1_1_d3_d9_multi_render_target.html#a061c5f3bae392d8c187391eb70049574">Ogre::D3D9MultiRenderTarget::requiresTextureFlipping()</a>, <a class="el" href="class_ogre_1_1_compositor_pass_clear_def.html#a37f12a58e83e192d9eeca4416fdbd92f">Ogre::CompositorPassClearDef::setBuffersToClear()</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_depth_texture_target.html#a20654ef96f9f69b308245701d747d540">Ogre::GLES2DepthTextureTarget::setFsaaResolved()</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_depth_texture_target.html#a4e0ed370b3e37598b51234b5eb985a4c">Ogre::GL3PlusDepthTextureTarget::setFsaaResolved()</a>, <a class="el" href="class_ogre_1_1_d3_d11_depth_texture_target.html#ad283cbe7985dfb964296361b2008cb53">Ogre::D3D11DepthTextureTarget::setFsaaResolved()</a>, <a class="el" href="class_ogre_1_1_metal_depth_texture_target.html#a5fb784524f24505692db74d8b2bdb3a2">Ogre::MetalDepthTextureTarget::setFsaaResolveDirty()</a>, and <a class="el" href="class_ogre_1_1_multi_render_target.html#acd7f368281eebf09a99369db73a6fc51">Ogre::MultiRenderTarget::unbindSurface()</a>.</p>
+
+</div>
+</div>
+<a id="af4a3245bef006f934e9024224c498895"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4a3245bef006f934e9024224c498895">&#9670;&nbsp;</a></span>OGRE_MAX_POSES</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define OGRE_MAX_POSES&#160;&#160;&#160;16</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define max number of poses per item. </p>
 
 </div>
 </div>
@@ -281,6 +300,8 @@ Macros</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Define number of texture coordinate sets allowed per vertex. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_common.html#afb3176887a2f702476bf09dcfe070f92">Ogre::GLSLESProgramCommon::getBaseInstanceLocation()</a>.</p>
 
 </div>
 </div>

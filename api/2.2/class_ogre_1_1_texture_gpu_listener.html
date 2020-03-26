@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_texture_gpu_listener.ht
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_texture_gpu_listener__inherit__graph.svg" width="716" height="547"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_texture_gpu_listener__inherit__graph.svg" width="728" height="598"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -116,6 +116,7 @@ Public Types</h2></td></tr>
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604">MetadataCacheOutOfDate</a>, 
 <br />
 &#160;&#160;<a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26">ExceptionThrown</a>, 
+<a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7">FsaaSettingAlteredByApi</a>, 
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257">ReadyForRendering</a>, 
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e">Deleted</a>
 <br />
@@ -124,6 +125,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a315edc6e949e74ca2565d004269a2ad7"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#a315edc6e949e74ca2565d004269a2ad7">~TextureGpuListener</a> ()</td></tr>
+<tr class="separator:a315edc6e949e74ca2565d004269a2ad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad4e9062c9a92d1e2cc57d4bbe50eb95"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#aad4e9062c9a92d1e2cc57d4bbe50eb95">notifyTextureChanged</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">TextureGpuListener::Reason</a> reason, void *extraData)=0</td></tr>
 <tr class="memdesc:aad4e9062c9a92d1e2cc57d4bbe50eb95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> changed in a way that affects how it is displayed:  <a href="#aad4e9062c9a92d1e2cc57d4bbe50eb95">More...</a><br /></td></tr>
 <tr class="separator:aad4e9062c9a92d1e2cc57d4bbe50eb95"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -168,11 +171,40 @@ Public Member Functions</h2></td></tr>
 <p>The texture may still have pending residency transitions (e.g. it may still be loading the 2x2 fallback)</p>
 <p>Cast <a class="el" href="class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine. ">Exception</a> <em>e = reinterpret_cast&lt;<a class="el" href="class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine. ">Exception</a></em>&gt;( extraData ); to know more info </p>
 </td></tr>
+<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7"></a>FsaaSettingAlteredByApi&#160;</td><td class="fielddoc"><p>Requested FSAA (MSAA / CSAA / EQAA / etc) is not supported by the API, and thus the setting had to be downgraded. </p>
+<p>Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
+</td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded. ">TextureGpu::notifyDataIsReady</a> is called. </p>
 <p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> has finished issueing rendering commands to a <a class="el" href="class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture. ">RenderTexture</a> and is now ready to be presented to the monitor. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e"></a>Deleted&#160;</td><td class="fielddoc"></td></tr>
 </table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a315edc6e949e74ca2565d004269a2ad7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a315edc6e949e74ca2565d004269a2ad7">&#9670;&nbsp;</a></span>~TextureGpuListener()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Ogre::TextureGpuListener::~TextureGpuListener </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -224,7 +256,7 @@ Public Member Functions</h2></td></tr>
 <li><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource. ">Texture</a> is being deleted. It won't be a valid pointer after this call. </li>
 </ol>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#ab2012775609f389c5f205ee089a0c8b8">Ogre::TextureGpuManager</a>, <a class="el" href="class_ogre_1_1_light.html#a074b1b671ccfcd0883155be8ab439b17">Ogre::Light</a>, <a class="el" href="class_ogre_1_1_hlms_compute_job.html#afa56777d0419bdd6c0953b8756188cd9">Ogre::HlmsComputeJob</a>, <a class="el" href="class_ogre_1_1_vct_lighting.html#aa764dce11aae628b1efc414ce3ee74ba">Ogre::VctLighting</a>, <a class="el" href="group___resources.html#ga74f8ac3ae7cac2859ad39a7319182185">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS</a>, <a class="el" href="class_ogre_1_1_decal.html#a090ed9460fa373f8f76fd21c2c744039">Ogre::Decal</a>, <a class="el" href="class_ogre_1_1_async_texture_ticket.html#ae66dea98ae68cf03567d07f651a3352a">Ogre::AsyncTextureTicket</a>, and <a class="el" href="class_ogre_1_1_compositor_pass_uav.html#af0d78fbad8a273629f28f7202968750a">Ogre::CompositorPassUav</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#ab2012775609f389c5f205ee089a0c8b8">Ogre::TextureGpuManager</a>, <a class="el" href="class_ogre_1_1_light.html#a074b1b671ccfcd0883155be8ab439b17">Ogre::Light</a>, <a class="el" href="class_ogre_1_1_hlms_compute_job.html#afa56777d0419bdd6c0953b8756188cd9">Ogre::HlmsComputeJob</a>, <a class="el" href="class_ogre_1_1_vct_lighting.html#aa764dce11aae628b1efc414ce3ee74ba">Ogre::VctLighting</a>, <a class="el" href="group___resources.html#ga74f8ac3ae7cac2859ad39a7319182185">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS</a>, <a class="el" href="class_ogre_1_1_decal.html#a090ed9460fa373f8f76fd21c2c744039">Ogre::Decal</a>, <a class="el" href="class_ogre_1_1_async_texture_ticket.html#ae66dea98ae68cf03567d07f651a3352a">Ogre::AsyncTextureTicket</a>, <a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a3db2bc04b98d831355854e2f9f761225">Ogre::DefaultTextureGpuManagerListener</a>, and <a class="el" href="class_ogre_1_1_compositor_pass_uav.html#af0d78fbad8a273629f28f7202968750a">Ogre::CompositorPassUav</a>.</p>
 
 </div>
 </div>

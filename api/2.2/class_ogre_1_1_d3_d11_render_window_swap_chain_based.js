@@ -56,7 +56,7 @@ var class_ogre_1_1_d3_d11_render_window_swap_chain_based =
     [ "getTriangleCount", "class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#aca21c0cb66c690e35847a1cf30aef357", null ],
     [ "getViewPointToPixelScale", "class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#a5fe9b7de87bc535e7278dac1e6bdc002", null ],
     [ "getViewport", "class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#a79c057e010286b2b6c3a27f296233c5c", null ],
-    [ "getVSyncInterval", "class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#ab4da1e0a9704c5aa3b944acb801fbebd", null ],
+    [ "getVSyncInterval", "class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#a5858872f03fd25045607e577da748923", null ],
     [ "getWidth", "class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#abb4fa5e6970515a4d6cb9a16501557b5", null ],
     [ "isActive", "class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#ad8558b8eb75dfa61abfcd1b8d8f0ee31", null ],
     [ "isClosed", "class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#a7d3b9733299948a95c0202f40f7400ef", null ],

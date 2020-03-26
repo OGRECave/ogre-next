@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -95,12 +95,12 @@ $(document).ready(function(){initNavTree('struct_ogre_1_1_linear_resampler___byt
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a1404776f44fbb79b14ec774ec7ac25af"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_linear_resampler___byte.html#a1404776f44fbb79b14ec774ec7ac25af">scale</a> (const <a class="el" href="class_ogre_1_1_pixel_box.html">PixelBox</a> &amp;src, const <a class="el" href="class_ogre_1_1_pixel_box.html">PixelBox</a> &amp;dst)</td></tr>
-<tr class="separator:a1404776f44fbb79b14ec774ec7ac25af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a421a196b3a71ac9ffc50be486698185e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_linear_resampler___byte.html#a421a196b3a71ac9ffc50be486698185e">scale</a> (const <a class="el" href="struct_ogre_1_1_texture_box.html">TextureBox</a> &amp;src, <a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a> srcFormat, const <a class="el" href="struct_ogre_1_1_texture_box.html">TextureBox</a> &amp;dst, <a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a> dstFormat)</td></tr>
+<tr class="separator:a421a196b3a71ac9ffc50be486698185e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1404776f44fbb79b14ec774ec7ac25af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1404776f44fbb79b14ec774ec7ac25af">&#9670;&nbsp;</a></span>scale()</h2>
+<a id="a421a196b3a71ac9ffc50be486698185e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a421a196b3a71ac9ffc50be486698185e">&#9670;&nbsp;</a></span>scale()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -113,14 +113,26 @@ template&lt;unsigned int channels&gt; </div>
         <tr>
           <td class="memname">static void <a class="el" href="struct_ogre_1_1_linear_resampler___byte.html">Ogre::LinearResampler_Byte</a>&lt; channels &gt;::scale </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_pixel_box.html">PixelBox</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_texture_box.html">TextureBox</a> &amp;&#160;</td>
           <td class="paramname"><em>src</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_pixel_box.html">PixelBox</a> &amp;&#160;</td>
-          <td class="paramname"><em>dst</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a>&#160;</td>
+          <td class="paramname"><em>srcFormat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_texture_box.html">TextureBox</a> &amp;&#160;</td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a>&#160;</td>
+          <td class="paramname"><em>dstFormat</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -135,7 +147,7 @@ template&lt;unsigned int channels&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_box.html#ae46fa4954b4d29f4d051f947fe45c142">Ogre::Box::bottom</a>, <a class="el" href="struct_ogre_1_1_box.html#ae820fd38f7b51e2a907ef601642c898c">Ogre::Box::getDepth()</a>, <a class="el" href="struct_ogre_1_1_box.html#a352d26dea0069f2e7f1414e8caa2328c">Ogre::Box::getHeight()</a>, <a class="el" href="class_ogre_1_1_pixel_box.html#a1c74e261d3283aa84efca68e8bc7c717">Ogre::PixelBox::getRowSkip()</a>, <a class="el" href="class_ogre_1_1_pixel_box.html#ad17fa4952092880a29b4b7a1d92cab49">Ogre::PixelBox::getTopLeftFrontPixelPtr()</a>, <a class="el" href="struct_ogre_1_1_box.html#a5499449ff454ff98aaa697f8854376fc">Ogre::Box::getWidth()</a>, <a class="el" href="struct_ogre_1_1_box.html#a88fa61f841bc444d92075d8b6cb2b43b">Ogre::Box::left</a>, <a class="el" href="namespace_ogre.html#af2b452038adc68d49db1236ddeca3b82">Ogre::min()</a>, <a class="el" href="struct_ogre_1_1_box.html#ac2c94e2d364dfabe7e4406ff8f41ab9e">Ogre::Box::right</a>, <a class="el" href="class_ogre_1_1_pixel_box.html#aacf8f1ebed40c557389d9d1e9dda3b68">Ogre::PixelBox::rowPitch</a>, <a class="el" href="struct_ogre_1_1_linear_resampler.html#a7a82c967cb98c1db45715509f72fc43b">Ogre::LinearResampler::scale()</a>, and <a class="el" href="struct_ogre_1_1_box.html#a7c317f774697dbd65dd77e49a0448d2d">Ogre::Box::top</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_texture_box.html#ad847c9af8c06cb208dfed687440d336e">Ogre::TextureBox::atFromOffsettedOrigin()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#ab9bb9c359093c2e1347436e1ee12a2b8">Ogre::TextureBox::bytesPerRow</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#abc975ae19f79584c2d29246bd90b01a8">Ogre::TextureBox::getDepthOrSlices()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#af4b38a9b14e74fcea122890f06a43a45">Ogre::TextureBox::height</a>, <a class="el" href="namespace_ogre.html#af2b452038adc68d49db1236ddeca3b82">Ogre::min()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler.html#acad0869b5293daea8acb677d8dc8a864">Ogre::LinearResampler::scale()</a>, and <a class="el" href="struct_ogre_1_1_texture_box.html#adbe9c1ccc9b5c57bd04a34ab0c14781a">Ogre::TextureBox::width</a>.</p>
 
 </div>
 </div>

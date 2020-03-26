@@ -22,6 +22,7 @@ var searchData=
   ['usefullscreen',['useFullScreen',['../struct_ogre_1_1_render_window_description.html#a5809e1727a29bbc2737e090ab338c6a7',1,'Ogre::RenderWindowDescription']]],
   ['useglobalinstancingvertexbufferisavailable',['useGlobalInstancingVertexBufferIsAvailable',['../class_ogre_1_1v1_1_1_render_operation.html#ad3cea3ec309e152738732daf042fe7af',1,'Ogre::v1::RenderOperation']]],
   ['useindexes',['useIndexes',['../class_ogre_1_1v1_1_1_render_operation.html#ae0388dc9cba45cc2dd7287e95291239f',1,'Ogre::v1::RenderOperation']]],
+  ['uselightbuffers',['useLightBuffers',['../struct_ogre_1_1_pbs_property.html#abe7aa4691c2404ff13e12cb858e73c53',1,'Ogre::PbsProperty']]],
   ['useparallaxcorrectcubemaps',['UseParallaxCorrectCubemaps',['../struct_ogre_1_1_pbs_property.html#a8c7e50d9f8e435a4f15f1ecfbc5acb53',1,'Ogre::PbsProperty']]],
   ['useplanarreflections',['UsePlanarReflections',['../struct_ogre_1_1_pbs_property.html#a490cd8b3533095bcbb34f1c70f833d0d',1,'Ogre::PbsProperty']]],
   ['useprepass',['UsePrePass',['../struct_ogre_1_1_hlms_base_prop.html#aa112290f96cf14277b193cf6da591b29',1,'Ogre::HlmsBaseProp']]],

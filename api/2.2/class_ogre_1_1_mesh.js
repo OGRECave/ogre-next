@@ -73,7 +73,7 @@ var class_ogre_1_1_mesh =
     [ "hasIndependentShadowMappingVaos", "class_ogre_1_1_mesh.html#ad67474aef6d20e2dcceeaaf0d2f6cc24", null ],
     [ "hasSkeleton", "class_ogre_1_1_mesh.html#abda741ea76979cf0e4d43eced5dece25", null ],
     [ "hasValidShadowMappingVaos", "class_ogre_1_1_mesh.html#abb6cb9b0e87d09a674cdc82e197c2dd4", null ],
-    [ "importV1", "class_ogre_1_1_mesh.html#a0a5f88956c17ef23f649c1875d9980e9", null ],
+    [ "importV1", "class_ogre_1_1_mesh.html#add0faad76685a41c804c485a4d9b42c4", null ],
     [ "isBackgroundLoaded", "class_ogre_1_1_mesh.html#a60ce96525ac730a0f7b466ed287beef3", null ],
     [ "isIndexBufferShadowed", "class_ogre_1_1_mesh.html#af37305346744be4480479e764036116f", null ],
     [ "isLoaded", "class_ogre_1_1_mesh.html#a74138c0203835513613af73cdb08890d", null ],

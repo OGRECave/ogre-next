@@ -63,16 +63,16 @@
 <!-- Node5 -->
 <g id="node6" class="node">
 <title>Node5</title>
-<g id="a_node6"><a xlink:href="class_ogre_1_1_g_l_s_l_e_s_program_factory.html" target="_top" xlink:title="Factory class for GLSL ES programs. ">
-<polygon fill="none" stroke="#000000" points="293.5,-126 293.5,-145 445.5,-145 445.5,-126 293.5,-126"/>
-<text text-anchor="middle" x="369.5" y="-133" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Ogre::GLSLESProgramFactory</text>
+<g id="a_node6"><a xlink:href="class_ogre_1_1_g_l_s_l_e_s_shader_factory.html" target="_top" xlink:title="Factory class for GLSL ES programs. ">
+<polygon fill="none" stroke="#000000" points="296.5,-126 296.5,-145 442.5,-145 442.5,-126 296.5,-126"/>
+<text text-anchor="middle" x="369.5" y="-133" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Ogre::GLSLESShaderFactory</text>
 </a>
 </g>
 </g>
 <!-- Node0&#45;&gt;Node5 -->
 <g id="edge5" class="edge">
 <title>Node0&#45;&gt;Node5</title>
-<path fill="none" stroke="#191970" d="M259.3287,-135.5C270.6414,-135.5 282.229,-135.5 293.4402,-135.5"/>
+<path fill="none" stroke="#191970" d="M259.2778,-135.5C271.5844,-135.5 284.2175,-135.5 296.3384,-135.5"/>
 <polygon fill="#191970" stroke="#191970" points="259.0354,-132.0001 249.0354,-135.5 259.0354,-139.0001 259.0354,-132.0001"/>
 </g>
 <!-- Node6 -->

@@ -8,9 +8,9 @@
  viewBox="0.00 0.00 303.00 39.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 35)">
 <title>Graphical Class Hierarchy</title>
-<!-- Node2131 -->
+<!-- Node2136 -->
 <g id="node1" class="node">
-<title>Node2131</title>
+<title>Node2136</title>
 <polygon fill="none" stroke="#bfbfbf" points="0,-6 0,-25 122,-25 122,-6 0,-6"/>
 <text text-anchor="middle" x="61" y="-13" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">HardwareBufferManager</text>
 </g>
@@ -24,9 +24,9 @@
 </a>
 </g>
 </g>
-<!-- Node2131&#45;&gt;Node0 -->
+<!-- Node2136&#45;&gt;Node0 -->
 <g id="edge1" class="edge">
-<title>Node2131&#45;&gt;Node0</title>
+<title>Node2136&#45;&gt;Node0</title>
 <path fill="none" stroke="#191970" d="M132.3454,-15.5C140.7845,-15.5 149.3849,-15.5 157.7864,-15.5"/>
 <polygon fill="#191970" stroke="#191970" points="132.1559,-12.0001 122.1559,-15.5 132.1558,-19.0001 132.1559,-12.0001"/>
 </g>

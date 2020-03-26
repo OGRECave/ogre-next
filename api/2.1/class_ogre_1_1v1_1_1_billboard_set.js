@@ -2,7 +2,7 @@ var class_ogre_1_1v1_1_1_billboard_set =
 [
     [ "CustomParameterMap", "class_ogre_1_1v1_1_1_billboard_set.html#a91a88d44c3918d174c1d594f9a4c6736", null ],
     [ "MovableObjectArray", "class_ogre_1_1v1_1_1_billboard_set.html#afb58624fb567bb790c55d8a716b472da", null ],
-    [ "BillboardSet", "class_ogre_1_1v1_1_1_billboard_set.html#ad952f28a4f83b2008ee01ed94228d997", null ],
+    [ "BillboardSet", "class_ogre_1_1v1_1_1_billboard_set.html#ae6100e7798f6b0a99b485b0a9ba53da4", null ],
     [ "~BillboardSet", "class_ogre_1_1v1_1_1_billboard_set.html#afaea848b27edccb14e2fb9611a6b175d", null ],
     [ "_getLightList", "class_ogre_1_1v1_1_1_billboard_set.html#a5b0982f88226f7793a9b289d33e4621f", null ],
     [ "_getManager", "class_ogre_1_1v1_1_1_billboard_set.html#a6e0b185e38d9a51feef2cafa341c801e", null ],

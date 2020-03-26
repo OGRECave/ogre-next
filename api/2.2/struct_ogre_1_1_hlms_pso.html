@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -112,6 +112,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a21993177743971b2fc5b88dd9b57cd26"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a21993177743971b2fc5b88dd9b57cd26">lessThanExcludePassData</a> (const <a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> &amp;_r) const</td></tr>
 <tr class="memdesc:a21993177743971b2fc5b88dd9b57cd26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares if this &lt;= _r. See equalExcludePassData.  <a href="#a21993177743971b2fc5b88dd9b57cd26">More...</a><br /></td></tr>
 <tr class="separator:a21993177743971b2fc5b88dd9b57cd26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29b97467711c5b22b3e8d544e93937ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a29b97467711c5b22b3e8d544e93937ee">operator=</a> (const <a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> &amp;_r)</td></tr>
+<tr class="separator:a29b97467711c5b22b3e8d544e93937ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -127,8 +129,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:af6f9290acc05c54c3015bde8795a168e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93a9e99f2c2db6997d8083b740bd6419"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___resources.html#ga0ef99399e9e670e7bb69dc373968a666">OperationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a93a9e99f2c2db6997d8083b740bd6419">operationType</a></td></tr>
 <tr class="separator:a93a9e99f2c2db6997d8083b740bd6419"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dfd210a6919baed2135743ecdd4d3a2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a5dfd210a6919baed2135743ecdd4d3a2">padding</a> [2]</td></tr>
-<tr class="separator:a5dfd210a6919baed2135743ecdd4d3a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01d5b5734bfaa181540788babf7e64dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_hlms_pass_pso.html">HlmsPassPso</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a01d5b5734bfaa181540788babf7e64dd">pass</a></td></tr>
 <tr class="memdesc:a01d5b5734bfaa181540788babf7e64dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fixed to 0xffffffff for now.  <a href="#a01d5b5734bfaa181540788babf7e64dd">More...</a><br /></td></tr>
 <tr class="separator:a01d5b5734bfaa181540788babf7e64dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,7 +150,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Some RenderSystem-specific quirks: In OpenGL, vertex-input data (vertexElements, operationType, enablePrimitiveRestart) is ignored, and controlled via the <a class="el" href="struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i...">VertexArrayObject</a> pointer.</dd></dl>
-<p>In the other APIs, vertex-input data is use, and <a class="el" href="struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i...">VertexArrayObject</a> pointers only control which vertex and index buffers are bound to the device. </p><dl class="section user"><dt></dt><dd>Padding must be explicit! This way, copy/assignment operators will also copy the padded values which is needed for properly testing via memcmp. Use these Clang params to help you find alignment issues: -Xclang -fdump-record-layouts -Wpadded &gt; dmp.txt 2&gt;err.txt </dd></dl>
+<p>In the other APIs, vertex-input data is use, and <a class="el" href="struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i...">VertexArrayObject</a> pointers only control which vertex and index buffers are bound to the device. </p><dl class="section user"><dt></dt><dd>Padding bytes should be zeroed/copied for properly testing via memcmp. </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab280462ceebbe20620eddd7f8371e629"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab280462ceebbe20620eddd7f8371e629">&#9670;&nbsp;</a></span>equalExcludePassData()</h2>
@@ -297,6 +297,34 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a29b97467711c5b22b3e8d544e93937ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29b97467711c5b22b3e8d544e93937ee">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a>&amp; Ogre::HlmsPso::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> &amp;&#160;</td>
+          <td class="paramname"><em>_r</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="struct_ogre_1_1_hlms_pso.html#a88cb0be3ce085ddb1096e643cfb6060f">geometryShader</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a93a9e99f2c2db6997d8083b740bd6419">operationType</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a046e7706148d71b100d97101bb602160">pixelShader</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a516c97b4cd1a313f491e521d1fa29324">tesselationDomainShader</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#ae24090d097a93388e6364a2ecdd539aa">tesselationHullShader</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a78be487acd737a1ba860a793974b7095">vertexElements</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a085c7aea90c4f79c75b6b57aa9aef617">vertexShader</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="aed396bea648967171646224bb74bd123"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aed396bea648967171646224bb74bd123">&#9670;&nbsp;</a></span>blendblock</h2>
@@ -352,7 +380,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a29b97467711c5b22b3e8d544e93937ee">operator=()</a>.</p>
 
 </div>
 </div>
@@ -382,21 +410,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#ab280462ceebbe20620eddd7f8371e629">equalExcludePassData()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a21993177743971b2fc5b88dd9b57cd26">lessThanExcludePassData()</a>.</p>
-
-</div>
-</div>
-<a id="a5dfd210a6919baed2135743ecdd4d3a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5dfd210a6919baed2135743ecdd4d3a2">&#9670;&nbsp;</a></span>padding</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> Ogre::HlmsPso::padding[2]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#ab280462ceebbe20620eddd7f8371e629">equalExcludePassData()</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a21993177743971b2fc5b88dd9b57cd26">lessThanExcludePassData()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a29b97467711c5b22b3e8d544e93937ee">operator=()</a>.</p>
 
 </div>
 </div>
@@ -428,7 +442,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a29b97467711c5b22b3e8d544e93937ee">operator=()</a>.</p>
 
 </div>
 </div>
@@ -472,7 +486,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a29b97467711c5b22b3e8d544e93937ee">operator=()</a>.</p>
 
 </div>
 </div>
@@ -488,7 +502,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a29b97467711c5b22b3e8d544e93937ee">operator=()</a>.</p>
 
 </div>
 </div>
@@ -504,7 +518,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a29b97467711c5b22b3e8d544e93937ee">operator=()</a>.</p>
 
 </div>
 </div>
@@ -520,7 +534,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod()</a>, <a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod()</a>, and <a class="el" href="struct_ogre_1_1_hlms_pso.html#a29b97467711c5b22b3e8d544e93937ee">operator=()</a>.</p>
 
 </div>
 </div>

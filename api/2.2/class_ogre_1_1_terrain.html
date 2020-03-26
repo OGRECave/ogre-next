@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -132,7 +132,7 @@ Public Types</h2></td></tr>
  }<tr class="memdesc:aca4fcebfb7ed4684682347d325477e91"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alignment of the terrain.  <a href="class_ogre_1_1_terrain.html#aca4fcebfb7ed4684682347d325477e91">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:aca4fcebfb7ed4684682347d325477e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f4f256f962849538b8e46eebd6da94c"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="struct_ogre_1_1_terrain_1_1_layer_instance.html">LayerInstance</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a7f4f256f962849538b8e46eebd6da94c">LayerInstanceList</a></td></tr>
+<tr class="memitem:a7f4f256f962849538b8e46eebd6da94c"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_terrain_1_1_layer_instance.html">LayerInstance</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a7f4f256f962849538b8e46eebd6da94c">LayerInstanceList</a></td></tr>
 <tr class="separator:a7f4f256f962849538b8e46eebd6da94c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d0c6e14298e6a196148388ca2ffa9e2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a2d0c6e14298e6a196148388ca2ffa9e2">NeighbourIndex</a> { <br />
 &#160;&#160;<a class="el" href="class_ogre_1_1_terrain.html#a2d0c6e14298e6a196148388ca2ffa9e2a88c6e2c93031bba254272861a1664cc3">NEIGHBOUR_EAST</a> = 0, 
@@ -150,7 +150,7 @@ Public Types</h2></td></tr>
  }<tr class="memdesc:a2d0c6e14298e6a196148388ca2ffa9e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Neighbour index enumeration - indexed anticlockwise from East like angles.  <a href="class_ogre_1_1_terrain.html#a2d0c6e14298e6a196148388ca2ffa9e2">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:a2d0c6e14298e6a196148388ca2ffa9e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2b09fef0fe773201df2e55cc995d312"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#aa2b09fef0fe773201df2e55cc995d312">RealVector</a></td></tr>
+<tr class="memitem:aa2b09fef0fe773201df2e55cc995d312"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#aa2b09fef0fe773201df2e55cc995d312">RealVector</a></td></tr>
 <tr class="separator:aa2b09fef0fe773201df2e55cc995d312"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebf8a7aadb5de3a0669d41acfd58d781"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#aebf8a7aadb5de3a0669d41acfd58d781">Space</a> { <a class="el" href="class_ogre_1_1_terrain.html#aebf8a7aadb5de3a0669d41acfd58d781a0a7049246e4a77e37dcea36fd35c4daf">WORLD_SPACE</a> = 0, 
 <a class="el" href="class_ogre_1_1_terrain.html#aebf8a7aadb5de3a0669d41acfd58d781ae3eabb53019f0d4ecfbff1d9a417d907">LOCAL_SPACE</a> = 1, 
@@ -296,7 +296,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa250d15148f1cbf87777ff36a628da9e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#aa250d15148f1cbf87777ff36a628da9e">getBoundingRadius</a> () const</td></tr>
 <tr class="memdesc:aa250d15148f1cbf87777ff36a628da9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the bounding radius of the entire terrain.  <a href="#aa250d15148f1cbf87777ff36a628da9e">More...</a><br /></td></tr>
 <tr class="separator:aa250d15148f1cbf87777ff36a628da9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63e79bde330711e62f5d1e89691ffc3f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a63e79bde330711e62f5d1e89691ffc3f">getCompositeMap</a> () const</td></tr>
+<tr class="memitem:a63e79bde330711e62f5d1e89691ffc3f"><td class="memItemLeft" align="right" valign="top">const TexturePtr &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a63e79bde330711e62f5d1e89691ffc3f">getCompositeMap</a> () const</td></tr>
 <tr class="memdesc:a63e79bde330711e62f5d1e89691ffc3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get access to the composite map, if enabled (as requested by the material generator)  <a href="#a63e79bde330711e62f5d1e89691ffc3f">More...</a><br /></td></tr>
 <tr class="separator:a63e79bde330711e62f5d1e89691ffc3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afed96292664c90c9e2707b934576fa74"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#a57ef769e80226674c3971ce58b58c91d">MaterialPtr</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#afed96292664c90c9e2707b934576fa74">getCompositeMapMaterial</a> () const</td></tr>
@@ -311,7 +311,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a75f457ff6165e331910f554c224bdcd7"><td class="memItemLeft" align="right" valign="top">const float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a75f457ff6165e331910f554c224bdcd7">getDeltaData</a> (long x, long y) const</td></tr>
 <tr class="memdesc:a75f457ff6165e331910f554c224bdcd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to the delta data for a given point.  <a href="#a75f457ff6165e331910f554c224bdcd7">More...</a><br /></td></tr>
 <tr class="separator:a75f457ff6165e331910f554c224bdcd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e0f304bd4dc2a25742a4ca1a35641d4"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a2e0f304bd4dc2a25742a4ca1a35641d4">getGlobalColourMap</a> () const</td></tr>
+<tr class="memitem:a2e0f304bd4dc2a25742a4ca1a35641d4"><td class="memItemLeft" align="right" valign="top">const TexturePtr &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a2e0f304bd4dc2a25742a4ca1a35641d4">getGlobalColourMap</a> () const</td></tr>
 <tr class="memdesc:a2e0f304bd4dc2a25742a4ca1a35641d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get access to the global colour map, if enabled.  <a href="#a2e0f304bd4dc2a25742a4ca1a35641d4">More...</a><br /></td></tr>
 <tr class="separator:a2e0f304bd4dc2a25742a4ca1a35641d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa55c99add54accbfe6542f53b1a34c12"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#aa55c99add54accbfe6542f53b1a34c12">getGlobalColourMapEnabled</a> () const</td></tr>
@@ -351,7 +351,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a148549dc9a5d14725b5c44256638e8ad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a148549dc9a5d14725b5c44256638e8ad">getLayerBlendMapSize</a> () const</td></tr>
 <tr class="memdesc:a148549dc9a5d14725b5c44256638e8ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the requested size of the blend maps used to blend between layers for this terrain.  <a href="#a148549dc9a5d14725b5c44256638e8ad">More...</a><br /></td></tr>
 <tr class="separator:a148549dc9a5d14725b5c44256638e8ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a605043a30befb62e5fad16df455a2b6e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a605043a30befb62e5fad16df455a2b6e">getLayerBlendTexture</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> index) const</td></tr>
+<tr class="memitem:a605043a30befb62e5fad16df455a2b6e"><td class="memItemLeft" align="right" valign="top">const TexturePtr &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a605043a30befb62e5fad16df455a2b6e">getLayerBlendTexture</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> index) const</td></tr>
 <tr class="memdesc:a605043a30befb62e5fad16df455a2b6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a blend texture with a given index.  <a href="#a605043a30befb62e5fad16df455a2b6e">More...</a><br /></td></tr>
 <tr class="separator:a605043a30befb62e5fad16df455a2b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e4ca16459f48c1b25a327250898aed5"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>, <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a6e4ca16459f48c1b25a327250898aed5">getLayerBlendTextureIndex</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> layerIndex) const</td></tr>
@@ -372,7 +372,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a30d2fed380ea0b55b182cccf77670108"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a30d2fed380ea0b55b182cccf77670108">getLayerWorldSize</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> index) const</td></tr>
 <tr class="memdesc:a30d2fed380ea0b55b182cccf77670108"><td class="mdescLeft">&#160;</td><td class="mdescRight">How large an area in world space the texture in a terrain layer covers before repeating.  <a href="#a30d2fed380ea0b55b182cccf77670108">More...</a><br /></td></tr>
 <tr class="separator:a30d2fed380ea0b55b182cccf77670108"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84afe6275d74e7fbba6d853248d0294f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a84afe6275d74e7fbba6d853248d0294f">getLightmap</a> () const</td></tr>
+<tr class="memitem:a84afe6275d74e7fbba6d853248d0294f"><td class="memItemLeft" align="right" valign="top">const TexturePtr &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a84afe6275d74e7fbba6d853248d0294f">getLightmap</a> () const</td></tr>
 <tr class="memdesc:a84afe6275d74e7fbba6d853248d0294f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get access to the lightmap, if enabled (as requested by the material generator)  <a href="#a84afe6275d74e7fbba6d853248d0294f">More...</a><br /></td></tr>
 <tr class="separator:a84afe6275d74e7fbba6d853248d0294f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0168de61d9cc2f640d081538ad4ded9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#ae0168de61d9cc2f640d081538ad4ded9">getLightmapSize</a> () const</td></tr>
@@ -466,7 +466,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a607e4aebdee75f7d26c279607d819976"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a768bccd8d43b0b1f5ff5eaa513be60f3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#a768bccd8d43b0b1f5ff5eaa513be60f3">getTargetLodLevel</a> () const</td></tr>
 <tr class="separator:a768bccd8d43b0b1f5ff5eaa513be60f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadd272b751be4c855ef9233b7e4cd9ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#aadd272b751be4c855ef9233b7e4cd9ce">getTerrainNormalMap</a> () const</td></tr>
+<tr class="memitem:aadd272b751be4c855ef9233b7e4cd9ce"><td class="memItemLeft" align="right" valign="top">TexturePtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#aadd272b751be4c855ef9233b7e4cd9ce">getTerrainNormalMap</a> () const</td></tr>
 <tr class="memdesc:aadd272b751be4c855ef9233b7e4cd9ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the (global) normal map texture.  <a href="#aadd272b751be4c855ef9233b7e4cd9ce">More...</a><br /></td></tr>
 <tr class="separator:aadd272b751be4c855ef9233b7e4cd9ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac94de7f1d8908a2adc0432b05804a00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain.html#aac94de7f1d8908a2adc0432b05804a00">getTerrainPosition</a> (const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;WSpos, <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> *outTSpos) const</td></tr>
@@ -890,7 +890,7 @@ Friends</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="struct_ogre_1_1_terrain_1_1_layer_instance.html">LayerInstance</a>&gt;::type <a class="el" href="class_ogre_1_1_terrain.html#a7f4f256f962849538b8e46eebd6da94c">Ogre::Terrain::LayerInstanceList</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_terrain_1_1_layer_instance.html">LayerInstance</a>&gt;::type <a class="el" href="class_ogre_1_1_terrain.html#a7f4f256f962849538b8e46eebd6da94c">Ogre::Terrain::LayerInstanceList</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -904,7 +904,7 @@ Friends</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&gt;::type <a class="el" href="class_ogre_1_1_terrain.html#aa2b09fef0fe773201df2e55cc995d312">Ogre::Terrain::RealVector</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&gt;::type <a class="el" href="class_ogre_1_1_terrain.html#aa2b09fef0fe773201df2e55cc995d312">Ogre::Terrain::RealVector</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2600,7 +2600,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a>&amp; Ogre::Terrain::getCompositeMap </td>
+          <td class="memname">const TexturePtr&amp; Ogre::Terrain::getCompositeMap </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -2724,7 +2724,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a>&amp; Ogre::Terrain::getGlobalColourMap </td>
+          <td class="memname">const TexturePtr&amp; Ogre::Terrain::getGlobalColourMap </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -3122,7 +3122,7 @@ Friends</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a>&amp; Ogre::Terrain::getLayerBlendTexture </td>
+          <td class="memname">const TexturePtr&amp; Ogre::Terrain::getLayerBlendTexture </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
@@ -3322,7 +3322,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a>&amp; Ogre::Terrain::getLightmap </td>
+          <td class="memname">const TexturePtr&amp; Ogre::Terrain::getLightmap </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -4309,7 +4309,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a> Ogre::Terrain::getTerrainNormalMap </td>
+          <td class="memname">TexturePtr Ogre::Terrain::getTerrainNormalMap </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -5097,7 +5097,7 @@ Friends</h2></td></tr>
 
 <p>Query whether a derived data update is in progress or not. </p>
 
-<p class="reference">References <a class="el" href="_ogre_terrain_prerequisites_8h.html#a2fbe49b54cb4b3c3e2757cd3ac167068">_OgreTerrainExport</a>, <a class="el" href="_ogre_thread_defines_boost_8h.html#afd886be58b0d9b415076b07abfcc50fc">OGRE_RW_MUTEX</a>, and <a class="el" href="group___general.html#ga6d67d46d838de3b38264f17fb792cddc">Ogre::operator&lt;&lt;()</a>.</p>
+<p class="reference">References <a class="el" href="_ogre_terrain_prerequisites_8h.html#a2fbe49b54cb4b3c3e2757cd3ac167068">_OgreTerrainExport</a>, <a class="el" href="_ogre_thread_defines_boost_8h.html#afd886be58b0d9b415076b07abfcc50fc">OGRE_RW_MUTEX</a>, and <a class="el" href="group___r_t_shader.html#ga853545db65491ef61dd4e75b53a8b895">Ogre::RTShader::operator&lt;&lt;()</a>.</p>
 
 </div>
 </div>
@@ -6814,7 +6814,7 @@ template&lt;class Alloc &gt; </div>
 
 <p>Hook to allow the listener to override the ordering of lights for the entire frustum. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Whilst ordinarily lights are sorted per rendered object (</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#a4fbc0296b902a113376688aff724d02d" title="Gets a list of lights, ordered relative to how close they are to this movable object. ">MovableObject::queryLights</a>), texture shadows adds another issue in that, given there is a finite number of shadow textures, we must choose which lights to render texture shadows from based on the entire frustum. These lights should always be listed first in every objects own <a class="el" href="struct_ogre_1_1list.html">list</a>, followed by any other lights which will not cast texture shadows (either because they have shadow casting off, or there aren't enough shadow textures to service them). </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#a4fbc0296b902a113376688aff724d02d" title="Gets a list of lights, ordered relative to how close they are to this movable object. ">MovableObject::queryLights</a>), texture shadows adds another issue in that, given there is a finite number of shadow textures, we must choose which lights to render texture shadows from based on the entire frustum. These lights should always be listed first in every objects own list, followed by any other lights which will not cast texture shadows (either because they have shadow casting off, or there aren't enough shadow textures to service them). </dd></dl>
 <dl class="section user"><dt></dt><dd>This hook allows you to override the detailed ordering of the lights per frustum. The default ordering is shadow casters first (which you must also respect if you override this method), and ordered by distance from the camera within those 2 groups. Obviously the closest lights with shadow casting enabled will be listed first. Only lights within the range of the frustum will be in the list. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

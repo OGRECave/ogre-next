@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -111,9 +111,9 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_root.html','');});
 Public Types</h2></td></tr>
 <tr class="memitem:a724ee7dcbdb7b8052420df2fecd07c0d"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_const_map_iterator.html">ConstMapIterator</a>&lt; MovableObjectFactoryMap &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a724ee7dcbdb7b8052420df2fecd07c0d">MovableObjectFactoryIterator</a></td></tr>
 <tr class="separator:a724ee7dcbdb7b8052420df2fecd07c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5483dc1f87b9861cae629b5aba6a6071"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_plugin.html">Plugin</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a5483dc1f87b9861cae629b5aba6a6071">PluginInstanceList</a></td></tr>
+<tr class="memitem:a5483dc1f87b9861cae629b5aba6a6071"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_plugin.html">Plugin</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a5483dc1f87b9861cae629b5aba6a6071">PluginInstanceList</a></td></tr>
 <tr class="separator:a5483dc1f87b9861cae629b5aba6a6071"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f51fe7c71b67eb166e0c34891611f65"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_dyn_lib.html">DynLib</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a4f51fe7c71b67eb166e0c34891611f65">PluginLibList</a></td></tr>
+<tr class="memitem:a4f51fe7c71b67eb166e0c34891611f65"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_dyn_lib.html">DynLib</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a4f51fe7c71b67eb166e0c34891611f65">PluginLibList</a></td></tr>
 <tr class="separator:a4f51fe7c71b67eb166e0c34891611f65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -144,12 +144,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a883fd5c2376cec804e00265ad71e1d2e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a883fd5c2376cec804e00265ad71e1d2e">_getCurrentSceneManager</a> (void) const</td></tr>
 <tr class="memdesc:a883fd5c2376cec804e00265ad71e1d2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the scene manager currently being used to render a frame.  <a href="#a883fd5c2376cec804e00265ad71e1d2e">More...</a><br /></td></tr>
 <tr class="separator:a883fd5c2376cec804e00265ad71e1d2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa65fd3d7d2ae9bd93c1f3dd1f1e433d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#aa65fd3d7d2ae9bd93c1f3dd1f1e433d2">_notifyRenderingFrameStarted</a> (void)</td></tr>
+<tr class="separator:aa65fd3d7d2ae9bd93c1f3dd1f1e433d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16b5488539651d697d0a4dd5cdbdd4c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a16b5488539651d697d0a4dd5cdbdd4c3">_popCurrentSceneManager</a> (<a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sm)</td></tr>
 <tr class="memdesc:a16b5488539651d697d0a4dd5cdbdd4c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pops the scene manager currently being used to render.  <a href="#a16b5488539651d697d0a4dd5cdbdd4c3">More...</a><br /></td></tr>
 <tr class="separator:a16b5488539651d697d0a4dd5cdbdd4c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14ab7036973eb56ee4e1ad10304d9b12"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a14ab7036973eb56ee4e1ad10304d9b12">_pushCurrentSceneManager</a> (<a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sm)</td></tr>
 <tr class="memdesc:a14ab7036973eb56ee4e1ad10304d9b12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pushes the scene manager currently being used to render.  <a href="#a14ab7036973eb56ee4e1ad10304d9b12">More...</a><br /></td></tr>
 <tr class="separator:a14ab7036973eb56ee4e1ad10304d9b12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5716ab44216f79865216750e414b1b7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a5716ab44216f79865216750e414b1b7e">_renderingFrameEnded</a> (void)</td></tr>
+<tr class="separator:a5716ab44216f79865216750e414b1b7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9de9a666d0bc69e85810db2b10ab8cba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a9de9a666d0bc69e85810db2b10ab8cba">_setLightProfilesInvHeight</a> (float invHeight)</td></tr>
+<tr class="separator:a9de9a666d0bc69e85810db2b10ab8cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24559fa6a4f1772c7518fcb0911278f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a24559fa6a4f1772c7518fcb0911278f4">_updateAllRenderTargets</a> (void)</td></tr>
 <tr class="memdesc:a24559fa6a4f1772c7518fcb0911278f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method used for updating all <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation. ">RenderTarget</a> objects (windows, renderable textures etc) which are set to auto-update.  <a href="#a24559fa6a4f1772c7518fcb0911278f4">More...</a><br /></td></tr>
 <tr class="separator:a24559fa6a4f1772c7518fcb0911278f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,10 +186,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8c6b31a408768cbd721cc4b0fb1dc753"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a8c6b31a408768cbd721cc4b0fb1dc753">createFileStream</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;groupName=<a class="el" href="class_ogre_1_1_resource_group_manager.html#a813da407fd91dc1afee86103d3a4f5cc">ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME</a>, bool overwrite=false, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;locationPattern=<a class="el" href="group___general.html#gad842a4b416bd2f3245d2b44826a0aedc">BLANKSTRING</a>)</td></tr>
 <tr class="memdesc:a8c6b31a408768cbd721cc4b0fb1dc753"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to assist you in creating writeable file streams.  <a href="#a8c6b31a408768cbd721cc4b0fb1dc753">More...</a><br /></td></tr>
 <tr class="separator:a8c6b31a408768cbd721cc4b0fb1dc753"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1c38392ce62547652f39b9a899fb20a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#ae1c38392ce62547652f39b9a899fb20a">createRenderWindow</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> width, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> height, bool fullScreen, const <a class="el" href="group___general.html#gadccb207c184efc0a6fb2a00ab6320d19">NameValuePairList</a> *miscParams=0)</td></tr>
+<tr class="memitem:ae1c38392ce62547652f39b9a899fb20a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_window.html">Window</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#ae1c38392ce62547652f39b9a899fb20a">createRenderWindow</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> width, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> height, bool fullScreen, const <a class="el" href="group___general.html#ga442a408f658c0cbfbe3e404e91a0fcc5">NameValuePairList</a> *miscParams=0)</td></tr>
 <tr class="memdesc:ae1c38392ce62547652f39b9a899fb20a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new rendering window.  <a href="#ae1c38392ce62547652f39b9a899fb20a">More...</a><br /></td></tr>
 <tr class="separator:ae1c38392ce62547652f39b9a899fb20a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae01c17b0c93cdbcf046e0f09d455dee8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#ae01c17b0c93cdbcf046e0f09d455dee8">createRenderWindows</a> (const <a class="el" href="group___general.html#ga7a03bf97326d0d0385b91a74e2c51c5e">RenderWindowDescriptionList</a> &amp;renderWindowDescriptions, <a class="el" href="group___general.html#gafcca0600d9f7ee630fa6500af203309d">WindowList</a> &amp;createdWindows)</td></tr>
+<tr class="memitem:ae01c17b0c93cdbcf046e0f09d455dee8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#ae01c17b0c93cdbcf046e0f09d455dee8">createRenderWindows</a> (const <a class="el" href="group___render_system.html#ga7a03bf97326d0d0385b91a74e2c51c5e">RenderWindowDescriptionList</a> &amp;renderWindowDescriptions, <a class="el" href="group___general.html#ga91a7b2f88b5150f745e3d8c1b60ae499">WindowList</a> &amp;createdWindows)</td></tr>
 <tr class="memdesc:ae01c17b0c93cdbcf046e0f09d455dee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates multiple rendering windows.  <a href="#ae01c17b0c93cdbcf046e0f09d455dee8">More...</a><br /></td></tr>
 <tr class="separator:ae01c17b0c93cdbcf046e0f09d455dee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a385d2895803f02e61ed676c835873cff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a385d2895803f02e61ed676c835873cff">createSceneManager</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;typeName, size_t numWorkerThreads, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;instanceName=<a class="el" href="group___general.html#gad842a4b416bd2f3245d2b44826a0aedc">BLANKSTRING</a>)</td></tr>
@@ -226,6 +232,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a56808b5253027913a78d254f6421d908"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_root.html#a5483dc1f87b9861cae629b5aba6a6071">PluginInstanceList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a56808b5253027913a78d254f6421d908">getInstalledPlugins</a> () const</td></tr>
 <tr class="memdesc:a56808b5253027913a78d254f6421d908"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a read-only list of the currently installed plugins.  <a href="#a56808b5253027913a78d254f6421d908">More...</a><br /></td></tr>
 <tr class="separator:a56808b5253027913a78d254f6421d908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ae3b7c976695b6ac0e1df4764481d55"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a9ae3b7c976695b6ac0e1df4764481d55">getLightProfilesInvHeight</a> (void) const</td></tr>
+<tr class="separator:a9ae3b7c976695b6ac0e1df4764481d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a207eb0dfac7dfbc58c2c03d6c962afbd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_mesh_manager.html">v1::MeshManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a207eb0dfac7dfbc58c2c03d6c962afbd">getMeshManagerV1</a> (void)</td></tr>
 <tr class="memdesc:a207eb0dfac7dfbc58c2c03d6c962afbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a reference to the current <a class="el" href="class_ogre_1_1_mesh_manager.html" title="Handles the management of mesh resources. ">MeshManager</a>.  <a href="#a207eb0dfac7dfbc58c2c03d6c962afbd">More...</a><br /></td></tr>
 <tr class="separator:a207eb0dfac7dfbc58c2c03d6c962afbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -421,7 +429,7 @@ Friends</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="class_ogre_1_1_plugin.html">Plugin</a>*&gt;::type <a class="el" href="class_ogre_1_1_root.html#a5483dc1f87b9861cae629b5aba6a6071">Ogre::Root::PluginInstanceList</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="class_ogre_1_1_plugin.html">Plugin</a>*&gt;::type <a class="el" href="class_ogre_1_1_root.html#a5483dc1f87b9861cae629b5aba6a6071">Ogre::Root::PluginInstanceList</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -435,7 +443,7 @@ Friends</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="class_ogre_1_1_dyn_lib.html">DynLib</a>*&gt;::type <a class="el" href="class_ogre_1_1_root.html#a4f51fe7c71b67eb166e0c34891611f65">Ogre::Root::PluginLibList</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="class_ogre_1_1_dyn_lib.html">DynLib</a>*&gt;::type <a class="el" href="class_ogre_1_1_root.html#a4f51fe7c71b67eb166e0c34891611f65">Ogre::Root::PluginLibList</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -671,6 +679,24 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="aa65fd3d7d2ae9bd93c1f3dd1f1e433d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa65fd3d7d2ae9bd93c1f3dd1f1e433d2">&#9670;&nbsp;</a></span>_notifyRenderingFrameStarted()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Root::_notifyRenderingFrameStarted </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a16b5488539651d697d0a4dd5cdbdd4c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a16b5488539651d697d0a4dd5cdbdd4c3">&#9670;&nbsp;</a></span>_popCurrentSceneManager()</h2>
 
@@ -710,6 +736,50 @@ Friends</h2></td></tr>
 
 <p>Pushes the scene manager currently being used to render. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>This is only intended for internal use. </dd></dl>
+
+</div>
+</div>
+<a id="a5716ab44216f79865216750e414b1b7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5716ab44216f79865216750e414b1b7e">&#9670;&nbsp;</a></span>_renderingFrameEnded()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Root::_renderingFrameEnded </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9de9a666d0bc69e85810db2b10ab8cba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9de9a666d0bc69e85810db2b10ab8cba">&#9670;&nbsp;</a></span>_setLightProfilesInvHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Root::_setLightProfilesInvHeight </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>invHeight</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1063,7 +1133,7 @@ This should usually be called from the dllStartPlugin() function of an extension
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="group___general.html#gadccb207c184efc0a6fb2a00ab6320d19">NameValuePairList</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="group___general.html#ga442a408f658c0cbfbe3e404e91a0fcc5">NameValuePairList</a> *&#160;</td>
           <td class="paramname"><em>miscParams</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
@@ -1167,13 +1237,13 @@ This should usually be called from the dllStartPlugin() function of an extension
         <tr>
           <td class="memname">bool Ogre::Root::createRenderWindows </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="group___general.html#ga7a03bf97326d0d0385b91a74e2c51c5e">RenderWindowDescriptionList</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="group___render_system.html#ga7a03bf97326d0d0385b91a74e2c51c5e">RenderWindowDescriptionList</a> &amp;&#160;</td>
           <td class="paramname"><em>renderWindowDescriptions</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group___general.html#gafcca0600d9f7ee630fa6500af203309d">WindowList</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="group___general.html#ga91a7b2f88b5150f745e3d8c1b60ae499">WindowList</a> &amp;&#160;</td>
           <td class="paramname"><em>createdWindows</em>&#160;</td>
         </tr>
         <tr>
@@ -1575,6 +1645,32 @@ This should usually be called from the dllStartPlugin() function of an extension
 </div><div class="memdoc">
 
 <p>Gets a read-only list of the currently installed plugins. </p>
+
+</div>
+</div>
+<a id="a9ae3b7c976695b6ac0e1df4764481d55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ae3b7c976695b6ac0e1df4764481d55">&#9670;&nbsp;</a></span>getLightProfilesInvHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Ogre::Root::getLightProfilesInvHeight </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

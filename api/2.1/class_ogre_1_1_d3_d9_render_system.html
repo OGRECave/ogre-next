@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.1.0unstable</span>
+   &#160;<span id="projectnumber">2.1.1</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -533,9 +533,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aaeb93c2e45c81e44b79eb7c2d37bea84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d9_render_system.html#aaeb93c2e45c81e44b79eb7c2d37bea84">getErrorDescription</a> (long errorNumber) const</td></tr>
 <tr class="memdesc:aaeb93c2e45c81e44b79eb7c2d37bea84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a description of an error code.  <a href="#aaeb93c2e45c81e44b79eb7c2d37bea84">More...</a><br /></td></tr>
 <tr class="separator:aaeb93c2e45c81e44b79eb7c2d37bea84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28c75f1ca83ffac6c50c8a2f43a48933"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a28c75f1ca83ffac6c50c8a2f43a48933">getFixedPipelineEnabled</a> (void) const</td></tr>
-<tr class="memdesc:a28c75f1ca83ffac6c50c8a2f43a48933"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if fixed pipeline rendering is enabled on the system.  <a href="#a28c75f1ca83ffac6c50c8a2f43a48933">More...</a><br /></td></tr>
-<tr class="separator:a28c75f1ca83ffac6c50c8a2f43a48933"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a024a0b2a832c0fe5455add0a701c8911"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d9_render_system.html#a024a0b2a832c0fe5455add0a701c8911">getFriendlyName</a> () const</td></tr>
 <tr class="memdesc:a024a0b2a832c0fe5455add0a701c8911"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the friendly name of the render system.  <a href="#a024a0b2a832c0fe5455add0a701c8911">More...</a><br /></td></tr>
 <tr class="separator:a024a0b2a832c0fe5455add0a701c8911"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1094,7 +1091,7 @@ Friends</h2></td></tr>
 <dl class="section user"><dt></dt><dd>Internal Developer Notes: D3D11 keeps UAVs that affect rendering separate from UAVs that affect Compute Shaders. Hence queueBindUAV &amp; _bindTextureUavCS are independent.</dd></dl>
 <p>OpenGL however, does not make this distinction. Hence once we switch back to 3D rendering, we need to restore UAVs set via queueBindUAV. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a1b371bec2ec11dbfb5a8961c51f10175">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aad0387d188c5d8daf7b1f3e5b23f0edd">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#acb53e2c8c1c62995cbd620c5d1b65d23">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a8708df58a9d94012416b92921ea05e9e">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a1b371bec2ec11dbfb5a8961c51f10175">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ad58037151ca5324c5c35d86272eeb7a7">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aad0387d188c5d8daf7b1f3e5b23f0edd">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#acb53e2c8c1c62995cbd620c5d1b65d23">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a8708df58a9d94012416b92921ea05e9e">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -1312,7 +1309,7 @@ Friends</h2></td></tr>
 <p>Creates a <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer. ">DepthBuffer</a> that can be attached to the specified <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation. ">RenderTarget</a>. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>It doesn't attach anything, it just returns a pointer to a new <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer. ">DepthBuffer</a> Caller is responsible for putting this buffer into the right pool, for attaching, and deleting it. Here's where API-specific magic happens. Don't call this directly unless you know what you're doing. </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a06929d068184a9ab5d9c7f17ce4f9b62">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a836e9ac01c8c3eba75fc045271f9f7df">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#abed23dd0b774c87bfde43de2641c5115">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ae825ef75ce33d0f104741208dc4b09db">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a06929d068184a9ab5d9c7f17ce4f9b62">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a836e9ac01c8c3eba75fc045271f9f7df">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a97bb0e3c33ed0900915838a0bd48751e">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#abed23dd0b774c87bfde43de2641c5115">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ae825ef75ce33d0f104741208dc4b09db">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -1610,7 +1607,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aa9f16b55f9c4ec84f634bc87e8467358">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a108ffebb978c11bab8cf6b00af6ddbfd">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#aea8da8d772de71ea26fd93d4ee0bff96">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ab89c0bf0014465a42fc39ab1cfd13503">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aa9f16b55f9c4ec84f634bc87e8467358">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ae06cd7f469f48bd312a86d6103688358">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a108ffebb978c11bab8cf6b00af6ddbfd">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#aea8da8d772de71ea26fd93d4ee0bff96">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ab89c0bf0014465a42fc39ab1cfd13503">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -1890,7 +1887,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ac894b2151cd48878575d8dc9ebc7c6c1">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#abbf3f4044624a7828962886880ce0cfa">Ogre::D3D11RenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ac894b2151cd48878575d8dc9ebc7c6c1">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a1917091f47e1eeca936ce3bd3944c032">Ogre::GLES2RenderSystem</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#abbf3f4044624a7828962886880ce0cfa">Ogre::D3D11RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -1918,7 +1915,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ac9cce37f85d70d9bd167963ea1c42792">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a26a83f5a987b7f089e0425fc81e03541">Ogre::D3D11RenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ac9cce37f85d70d9bd167963ea1c42792">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a4809bac76ebb2ec45918d99f0c746615">Ogre::GLES2RenderSystem</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a26a83f5a987b7f089e0425fc81e03541">Ogre::D3D11RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2002,7 +1999,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a16f33125221abbda8b314aa58029b1ea">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a41d1da84f75c83dfd529f76763562987">Ogre::D3D11RenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a16f33125221abbda8b314aa58029b1ea">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a443874192f57c2e7962c8d9c75707e18">Ogre::GLES2RenderSystem</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a41d1da84f75c83dfd529f76763562987">Ogre::D3D11RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2030,7 +2027,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a8e5ebd047eaa60ceecd3d10d81a8506e">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a6afe09df3d0db5452f9fc181f8fa3d12">Ogre::D3D11RenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a8e5ebd047eaa60ceecd3d10d81a8506e">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#afdbd506a8605945bb94252404c82d272">Ogre::GLES2RenderSystem</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a6afe09df3d0db5452f9fc181f8fa3d12">Ogre::D3D11RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2058,7 +2055,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a98a887db8cb62eae45d39fc76042fe72">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a2d2b900d6ab2f9b2ac31852ca2e59813">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#ad9b255f445aaa9c233ccbd3228739a5e">Ogre::MetalRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a98a887db8cb62eae45d39fc76042fe72">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a83f844c47484e44a95345ba11ebeb56b">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a2d2b900d6ab2f9b2ac31852ca2e59813">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#ad9b255f445aaa9c233ccbd3228739a5e">Ogre::MetalRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2086,7 +2083,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ada4347d4060d47f5c9ef413ce519e9c9">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a3e65cdf108e22b556d602cec600da0ea">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#aaf5f34e5050accc38404916fa5038c83">Ogre::MetalRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ada4347d4060d47f5c9ef413ce519e9c9">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a0374eb2cf2cabd0ba3031850053c9907">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a3e65cdf108e22b556d602cec600da0ea">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#aaf5f34e5050accc38404916fa5038c83">Ogre::MetalRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2114,7 +2111,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a6477119d1b7e584fb0d83b0513e0792b">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a7e50f9245426bfd78b0422fb899dfb26">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#ab50beedca031e22bf6cccff4c739cb03">Ogre::MetalRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a6477119d1b7e584fb0d83b0513e0792b">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a8c8bfb0ebf542580cdaa4a0762e2c9ba">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a7e50f9245426bfd78b0422fb899dfb26">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#ab50beedca031e22bf6cccff4c739cb03">Ogre::MetalRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2142,7 +2139,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aa8f697a4470fe1cc5edc122f06e55ac5">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a8a5c0096505ceb84aea7e7c8945ab6fe">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#a35b551607bba18df63a4280c28da1313">Ogre::MetalRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aa8f697a4470fe1cc5edc122f06e55ac5">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a0dd7f60b97585c27720229886fd6e460">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a8a5c0096505ceb84aea7e7c8945ab6fe">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#a35b551607bba18df63a4280c28da1313">Ogre::MetalRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2552,7 +2549,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a4b7fecbc4909dcb48a0d51b1a949dcf4">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a882bb78ce0370d8880914f8ce757d7ae">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#adcd3cfde062ec79a2b0ebf0542386552">Ogre::MetalRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a4b7fecbc4909dcb48a0d51b1a949dcf4">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ada801335f9d925e606c1c804feecda5f">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a882bb78ce0370d8880914f8ce757d7ae">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#adcd3cfde062ec79a2b0ebf0542386552">Ogre::MetalRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2582,7 +2579,7 @@ Friends</h2></td></tr>
 
 <p>Renders the VAO. Assumes _setVertexArrayObject has already been called. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a6e6ff49a917e3fc363fa50f4b15cc218">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a94ec96fa5fecb9aa5761c4e56abd01f4">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a04a0991d51eb265df267b68e87ce47cc">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#aa4e8780163d36a32ffbb49e49a6b22e0">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a6e6ff49a917e3fc363fa50f4b15cc218">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#aaacd83e72b07a6d16701618c4e0ec40f">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a94ec96fa5fecb9aa5761c4e56abd01f4">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a04a0991d51eb265df267b68e87ce47cc">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#aa4e8780163d36a32ffbb49e49a6b22e0">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2610,7 +2607,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ad54627a3466ee440a260af7eeb9f35e0">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a5bc6482cb17b2519658302a4aa0b2415">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#ad41bdf205cf29d3b9690cb1599965667">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a77d73222b87f2111cac2a4ad8cdf9f0c">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ad54627a3466ee440a260af7eeb9f35e0">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a3cc1a604ca60cb04612f63c77fcad4b1">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a5bc6482cb17b2519658302a4aa0b2415">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#ad41bdf205cf29d3b9690cb1599965667">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a77d73222b87f2111cac2a4ad8cdf9f0c">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2640,7 +2637,7 @@ Friends</h2></td></tr>
 
 <p>Renders a V1 RenderOperation. Assumes _setRenderOperation has already been called. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a33decd7f7fad87aea26a03ca5f79ee91">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a31a06ff4de93e0321d7fde974ebcb0cb">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#af9b6344a97d29b7ace48a7d10db754c9">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#adce4f6a53369245ae25d06b399ee098a">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a33decd7f7fad87aea26a03ca5f79ee91">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a836220fc8f736bfd52b0df5ec48dc104">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a31a06ff4de93e0321d7fde974ebcb0cb">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#af9b6344a97d29b7ace48a7d10db754c9">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#adce4f6a53369245ae25d06b399ee098a">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2668,7 +2665,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ac2288efbcb39cdcdeb77db166741b340">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aae785e8a6856472fb3a15c3e802c31ac">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a70615b54fe38ddbf319010ddf01ef5fc">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a234aa4fe13ed4a229bfc5b019015a0ea">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ac2288efbcb39cdcdeb77db166741b340">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a61a75c3875501d5441b5b11c29998c11">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aae785e8a6856472fb3a15c3e802c31ac">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a70615b54fe38ddbf319010ddf01ef5fc">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a234aa4fe13ed4a229bfc5b019015a0ea">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2696,7 +2693,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ad5b00ff058310513877e51eacb014453">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a259375c74d33b729712b0016cc645223">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a7ef0f1ba216c09ac091df4069c0220c3">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ad5fbaa36e2012bb9b04f370750bd44d4">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ad5b00ff058310513877e51eacb014453">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ab7f0c8c213208017e7f90cee62fe05ec">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a259375c74d33b729712b0016cc645223">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a7ef0f1ba216c09ac091df4069c0220c3">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ad5fbaa36e2012bb9b04f370750bd44d4">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2724,7 +2721,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aa9b9a1e5df43af6079be362015d4454f">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a7406001b2e9f95d21b97b9b58b7a4345">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a5e1434697e4a3165a0b89b0ce5d04f23">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a22e521d709dc736a001cc496f538ffc7">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aa9b9a1e5df43af6079be362015d4454f">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ada69faf8ffdc18f384cbcf1894df0954">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a7406001b2e9f95d21b97b9b58b7a4345">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a5e1434697e4a3165a0b89b0ce5d04f23">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a22e521d709dc736a001cc496f538ffc7">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2752,7 +2749,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a72be60d5550b4552b6a06afebf292ffa">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a72be60d5550b4552b6a06afebf292ffa">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a3363e6b3a4bf1299de508fa3f824db35">Ogre::GLES2RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2780,7 +2777,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ae9b6f353f9cce613f4d5c0a5bb3b0939">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ae9b6f353f9cce613f4d5c0a5bb3b0939">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#aacde3189dbd7815a942b5b61ec0b46cd">Ogre::GLES2RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2808,7 +2805,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a0dc6355f2a759be14ae3410f2a9206e2">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a0dc6355f2a759be14ae3410f2a9206e2">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a50d1b5b4571302c60a827c9a906f8b2c">Ogre::GLES2RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -2836,7 +2833,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a4d4a0d5aa5824afb9efe7ebb6e9cd81b">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a4d4a0d5aa5824afb9efe7ebb6e9cd81b">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a949f3caeff96f2a02606631c12fea2ed">Ogre::GLES2RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -3106,7 +3103,7 @@ Friends</h2></td></tr>
 
 <p>Unlike _setPipelineStateObject, the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API. ">RenderSystem</a> will check if the PSO has changed to avoid redundant state changes (since it's hard to do it at <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;. ">Hlms</a> level) </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a31c3cb28126fba0addd53d99c933b1bc">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a95316a99c72a803d059b4abe8628b4b8">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a4375fc903456c5bc400eaeee8a90f073">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ae312ae1cc3ee3e6b2fb5e98a62a44989">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a31c3cb28126fba0addd53d99c933b1bc">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#aeca01141b960e64b7a04310fa47af2ec">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a95316a99c72a803d059b4abe8628b4b8">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a4375fc903456c5bc400eaeee8a90f073">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ae312ae1cc3ee3e6b2fb5e98a62a44989">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -3371,7 +3368,7 @@ Friends</h2></td></tr>
 <p><a class="el" href="struct_ogre_1_1_hlms_samplerblock.html" title="A sampler block contains settings that go hand in hand with a texture, and thus are common to many te...">HlmsSamplerblock</a>. </p>
 <p>This function MUST be called after _setTexture, not before. Otherwise not all APIs may see the change. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a0003737da1c04d1557290ace54683abf">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a163d5b2b7b636b749776574f7b8ddedb">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a8bfd0612010dba75e0a7f684c476c9cd">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#aa1cae647d9256d9d9761afbb27a38800">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a0003737da1c04d1557290ace54683abf">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ac44a1f12b2e36e1977682faa78b69b85">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a163d5b2b7b636b749776574f7b8ddedb">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a8bfd0612010dba75e0a7f684c476c9cd">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#aa1cae647d9256d9d9761afbb27a38800">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -3409,7 +3406,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ada10d22fbf7bede207d8fff3251e39a7">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#ad774c10fea8cb049741732312f207249">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a71ae8c87df07c435ee60940c09a28b4d">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a4ac6dd1d4f8a80da14ac6e979e56dc84">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ada10d22fbf7bede207d8fff3251e39a7">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#adfe2162647e2ad9473cced814ac2ed62">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#ad774c10fea8cb049741732312f207249">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a71ae8c87df07c435ee60940c09a28b4d">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a4ac6dd1d4f8a80da14ac6e979e56dc84">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -3437,7 +3434,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#afda13404ac281287fce2ee19ce164c27">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aa7b87766cdfc29c27ca01773b9c331c3">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a82d735d45a6c291a232900f3a0471e51">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ad5efc38592c667795bdc31fc779ac7f2">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#afda13404ac281287fce2ee19ce164c27">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a0c50cf0b003f1aabe9271f0038dc0944">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aa7b87766cdfc29c27ca01773b9c331c3">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a82d735d45a6c291a232900f3a0471e51">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ad5efc38592c667795bdc31fc779ac7f2">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -3467,7 +3464,7 @@ Friends</h2></td></tr>
 
 <p><a class="el" href="struct_ogre_1_1_hlms_pso.html" title="Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12. ">HlmsPso</a> </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a7cc3238739b8eef51abf51f35d74838e">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a187547e06466e39079aec7bb8124e930">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a77c25f9fdfe9ea737adefa62fce3af0c">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#addbfdecdbc20e3549581fcd771d100fb">Ogre::NULLRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a7cc3238739b8eef51abf51f35d74838e">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a1aa06841f0f438c3aeaa1a1404d0ced1">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a187547e06466e39079aec7bb8124e930">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a77c25f9fdfe9ea737adefa62fce3af0c">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#addbfdecdbc20e3549581fcd771d100fb">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -3677,7 +3674,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aa1f054d3854b8212c604c1ad4372c17b">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a62b358abe191b667b1b4beec17972ce4">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a9d7b400ec8ceaf1ea00d11d5eb374e3f">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a3e9e2211b92e343d738b0fd0dd123f8d">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aa1f054d3854b8212c604c1ad4372c17b">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a9f6db584e4cc57ee997294d14ef3a69f">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a62b358abe191b667b1b4beec17972ce4">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a9d7b400ec8ceaf1ea00d11d5eb374e3f">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a3e9e2211b92e343d738b0fd0dd123f8d">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -3743,7 +3740,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#af43ae1045d106924efac635c76a4c76d">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#ad024e58c16e259b07ebfcc24253dc1e9">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#aba63645959c45c44751caa4bf5e119d5">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a6257a324e05cbd6ccbd73d388c6269d0">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#af43ae1045d106924efac635c76a4c76d">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#aa4bde328937a69fdff7a01ce13248237">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#ad024e58c16e259b07ebfcc24253dc1e9">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#aba63645959c45c44751caa4bf5e119d5">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a6257a324e05cbd6ccbd73d388c6269d0">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -4070,7 +4067,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aff40af65b422dc1c1c8b46dadc834848">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a1be48561f3a978ba12dfb723d4e92c80">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a5990ba990cb2bf4de84cae8006225d6a">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ae17958cd9f47a8435187b6cf3f880662">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aff40af65b422dc1c1c8b46dadc834848">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a1b13911dfc5a98f833da651ce53b9ce9">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a1be48561f3a978ba12dfb723d4e92c80">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a5990ba990cb2bf4de84cae8006225d6a">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#ae17958cd9f47a8435187b6cf3f880662">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -4374,7 +4371,7 @@ Friends</h2></td></tr>
 
 <p>Binds a regular texture to a Compute Shader. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ae486aed257bb1a8a7d43eb8746d34ab2">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a97383c4e3217a0f3231cbfe68f107e43">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#ad7b1a20a8e4ef478a09516d688caeb9f">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a42ba8c009b3f13374f6598766ec2bf12">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ae486aed257bb1a8a7d43eb8746d34ab2">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a1ea0e40b3674b58aa08358cc84fe770e">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a97383c4e3217a0f3231cbfe68f107e43">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#ad7b1a20a8e4ef478a09516d688caeb9f">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a42ba8c009b3f13374f6598766ec2bf12">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -4675,7 +4672,7 @@ Friends</h2></td></tr>
 <p>Part of the low level rendering interface. </p>
 <p>Tells the RS which VAO will be bound now. (i.e. Vertex Formats, buffers being bound, etc.) You don't need to rebind if the VAO's mRenderQueueId is the same as previous call. </p><dl class="section remark"><dt>Remarks</dt><dd>Assumes _setPipelineStateObject has already been called. </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#af40044b323eca7dd8d3b153034a59459">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aed04f6d374fbc4351474261ae8c33fac">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a4844bedfe10414dbe035fd9e42effc91">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a3fb17c5bd8292b315f3ec7241294d907">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#af40044b323eca7dd8d3b153034a59459">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#acb838d79d3057e45a0163b063bfa1794">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aed04f6d374fbc4351474261ae8c33fac">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a4844bedfe10414dbe035fd9e42effc91">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a3fb17c5bd8292b315f3ec7241294d907">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -4882,7 +4879,7 @@ Friends</h2></td></tr>
 
 <p>May override the current VertexArrayObject! </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#add95717187ea8d38280526eb29d27ba7">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#add95717187ea8d38280526eb29d27ba7">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a6ea941c7dbd4ecb98e543e170ec3f622">Ogre::GLES2RenderSystem</a>.</p>
 
 </div>
 </div>
@@ -5088,7 +5085,7 @@ Friends</h2></td></tr>
 
 <p>Are fixed-function lights provided in view space? Affects optimisation. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a2ddd26db12f8cecef346f16c25e04fae">Ogre::GL3PlusRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a2ddd26db12f8cecef346f16c25e04fae">Ogre::GL3PlusRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ae982beab16b67617dfe88fc6fdbede32">Ogre::GLES2RenderSystem</a>.</p>
 
 <p class="reference">References <a class="el" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caa4292ed700edc51d74776f6efaf2a099">Ogre::PF_UNKNOWN</a>, <a class="el" href="namespace_ogre_1_1_resource_access.html#a732c0b8774d76d325e0749d09ce70aadab3b37cb4ba0e7bbaa7243ee407c14af9">Ogre::ResourceAccess::ReadWrite</a>, and <a class="el" href="group___general.html#gga5d04131dcb51ec3cf219465196b6de85a4b75431ccf4b6bde635265300498660e">Ogre::TVC_NONE</a>.</p>
 
@@ -5156,7 +5153,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#adefe37cc967a8ba8dd45f21b7de5dca5">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a5f01e9e844268a77ba854188dc9cb656">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a4980f59f9ad2421740ef9d6329cd2347">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a4cc15f78a5e727bebc61997c9478b1b1">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#adefe37cc967a8ba8dd45f21b7de5dca5">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a92ea2ca6e8254346f60a608f512d3da2">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a5f01e9e844268a77ba854188dc9cb656">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a4980f59f9ad2421740ef9d6329cd2347">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a4cc15f78a5e727bebc61997c9478b1b1">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -5312,6 +5309,8 @@ Friends</h2></td></tr>
 
 <p>Checks for the presense of an API-specific extension (eg. Vulkan, GL) </p>
 
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a62169442a5c4b920527d8ef09d12f5d8">Ogre::GLES2RenderSystem</a>.</p>
+
 </div>
 </div>
 <a id="a746af1925b9e07bfc96075b192c19333"></a>
@@ -5402,7 +5401,7 @@ Friends</h2></td></tr>
 <p>By default queueBindUAV will keep all other slots intact. </p>
 <p>Calling this function will unset all bound UAVs. Will take effect after flushUAVs or setting a new RT. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a06116341552f0c4ea3c88d341bf01700">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#ab361091a15dc1b48e1542055959b320b">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#ad5e7bbf113ec79324b5888faa9e6488d">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a2acab509d3e1ef307d1d4315a57ba561">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a06116341552f0c4ea3c88d341bf01700">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ad5cb1579bb7c53ac2c1eabb6be5b326a">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#ab361091a15dc1b48e1542055959b320b">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#ad5e7bbf113ec79324b5888faa9e6488d">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a2acab509d3e1ef307d1d4315a57ba561">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -5592,7 +5591,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ae7d980dd3192a026338f408d1518ea6f">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#ab8c247cac7c3dfb658577d1c719a4f1c">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a4a5863cfee40c6d8ee9338956e1b6a60">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#adf8bbf032fe551d8dd7e4d5a67a705e4">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ae7d980dd3192a026338f408d1518ea6f">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a36c09238187a99e601a24b65854474d4">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#ab8c247cac7c3dfb658577d1c719a4f1c">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a4a5863cfee40c6d8ee9338956e1b6a60">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#adf8bbf032fe551d8dd7e4d5a67a705e4">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -5828,7 +5827,7 @@ Friends</h2></td></tr>
 <p>Instructs the viewport to 'discard' the buffers. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_pass_clear_def.html#a90232b01aa7923516eff4f9e54ac2672" title="This value is only supported by a few APIs (D3D11 at the time of writting) which instead of actually ...">CompositorPassClearDef::mDiscardOnly</a> </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aa687651582eafa44124bab9dbec2895f">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a8b117e28a3ab9ffd2a85ecbe782a225d">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a1c5703c5238aa3697e29b144318242b2">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a719f8e88f787ad7df46866167f405b29">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#aa687651582eafa44124bab9dbec2895f">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ac30a8b8d0da808c96b4c55e7efee7037">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a8b117e28a3ab9ffd2a85ecbe782a225d">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a1c5703c5238aa3697e29b144318242b2">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a719f8e88f787ad7df46866167f405b29">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -5884,7 +5883,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a45c15bdb1859d72e7cdab846a1971fc8">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a77145f52d931b96a3fbf147fef635fb1">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a02f52c12c2b5fdf8001aa61ac05053e9">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a91b1dff26bad86bb6cf9626b5f9dd38f">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a45c15bdb1859d72e7cdab846a1971fc8">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a5e5faac2301bbce361f3a1e782d38d2c">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a77145f52d931b96a3fbf147fef635fb1">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a02f52c12c2b5fdf8001aa61ac05053e9">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a91b1dff26bad86bb6cf9626b5f9dd38f">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -5975,7 +5974,7 @@ Friends</h2></td></tr>
 <p>Forces to take effect all the queued UAV binding requests. </p>
 <dl class="section see"><dt>See also</dt><dd>_queueBindUAV. You don't need to call this if you're going to <a class="el" href="struct_ogre_1_1set.html">set</a> the render target next. </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a6e9ead829b989758424993829833a089">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a8f3a51af4d8740ccc177902c92588bb1">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a8075ca8c59b6d03a4875ed5ba5b45bac">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a77e876a1f27f8554443091b9092cae91">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a6e9ead829b989758424993829833a089">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a1e946599e777131a2d9d98445ab7d94d">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a8f3a51af4d8740ccc177902c92588bb1">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a8075ca8c59b6d03a4875ed5ba5b45bac">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a77e876a1f27f8554443091b9092cae91">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -6331,34 +6330,6 @@ Friends</h2></td></tr>
 <p>Returns a description of an error code. </p>
 
 <p>Implements <a class="el" href="class_ogre_1_1_render_system.html#a847238effa8920edf9aee7aa5b8cd7be">Ogre::RenderSystem</a>.</p>
-
-</div>
-</div>
-<a id="a28c75f1ca83ffac6c50c8a2f43a48933"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28c75f1ca83ffac6c50c8a2f43a48933">&#9670;&nbsp;</a></span>getFixedPipelineEnabled()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::RenderSystem::getFixedPipelineEnabled </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns true if fixed pipeline rendering is enabled on the system. </p>
 
 </div>
 </div>
@@ -7142,7 +7113,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a8084b7bd9ef6318255127fc69ba91b84">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aa35f281a0a9c0bf9d83037917b16738a">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a9f2371c85532b397a98dfda46d4f6b6c">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a399e97c47a67b0d953cd13b7c4a00d36">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a8084b7bd9ef6318255127fc69ba91b84">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a98f94e06f758f60de79ddcad3f4d87f6">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#aa35f281a0a9c0bf9d83037917b16738a">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a9f2371c85532b397a98dfda46d4f6b6c">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a399e97c47a67b0d953cd13b7c4a00d36">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -7809,7 +7780,7 @@ Once this init sequence is completed the threads are independent but this startu
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#af4ab77f0189b0c2aacae2e503178432a">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#afec8c1b1761c722e30d862370772f83b">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#aef2232ee38e3ac8b7cd995fd3be7f39c">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a4a2036045926295b9a59cce4b1d29ce4">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#af4ab77f0189b0c2aacae2e503178432a">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#ab6b91843e80088819c47c98f5ca72a7e">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#afec8c1b1761c722e30d862370772f83b">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#aef2232ee38e3ac8b7cd995fd3be7f39c">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a4a2036045926295b9a59cce4b1d29ce4">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -7874,7 +7845,7 @@ Once this init sequence is completed the threads are independent but this startu
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ac2e08c9c69fda4c923bdac2308c9c6de">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#af6b0e9c43be82c64eaaafc4137cee5c5">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a439ce5387a35a35f377fac10ec11322b">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a19e0b6fc1d84b8299d35dc15e75d68ce">Ogre::NULLRenderSystem</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ac2e08c9c69fda4c923bdac2308c9c6de">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#abeab4c753422d1b93cf5fdb2804feb41">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#af6b0e9c43be82c64eaaafc4137cee5c5">Ogre::D3D11RenderSystem</a>, <a class="el" href="class_ogre_1_1_metal_render_system.html#a439ce5387a35a35f377fac10ec11322b">Ogre::MetalRenderSystem</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_render_system.html#a19e0b6fc1d84b8299d35dc15e75d68ce">Ogre::NULLRenderSystem</a>.</p>
 
 </div>
 </div>
@@ -8654,7 +8625,7 @@ Once this init sequence is completed the threads are independent but this startu
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a5ff4d96459f70eb14c888c14b62203a3">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a0446eae7ec8f45fa8e023ead267cf631">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#a1941c6dbb61cf6485103c6615457d227">Ogre::MetalRenderSystem</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a5ff4d96459f70eb14c888c14b62203a3">Ogre::GL3PlusRenderSystem</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#aeb5eeecd68743d6220bdd922e2536e8a">Ogre::GLES2RenderSystem</a>, <a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a0446eae7ec8f45fa8e023ead267cf631">Ogre::D3D11RenderSystem</a>, and <a class="el" href="class_ogre_1_1_metal_render_system.html#a1941c6dbb61cf6485103c6615457d227">Ogre::MetalRenderSystem</a>.</p>
 
 </div>
 </div>

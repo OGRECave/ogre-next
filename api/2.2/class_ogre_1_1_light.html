@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -139,6 +139,7 @@ Public Types</h2></td></tr>
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604">MetadataCacheOutOfDate</a>, 
 <br />
 &#160;&#160;<a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26">ExceptionThrown</a>, 
+<a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7">FsaaSettingAlteredByApi</a>, 
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257">ReadyForRendering</a>, 
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e">Deleted</a>
 <br />
@@ -194,9 +195,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abd5561a07f78291e327351fe83e64a9b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#abd5561a07f78291e327351fe83e64a9b">_restoreManualHardwareResources</a> ()</td></tr>
 <tr class="memdesc:abd5561a07f78291e327351fe83e64a9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the movable object that hardware resources should be restored.  <a href="#abd5561a07f78291e327351fe83e64a9b">More...</a><br /></td></tr>
 <tr class="separator:abd5561a07f78291e327351fe83e64a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66a5e07e85c60958f6a22590b6bed9a5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_light.html#a66a5e07e85c60958f6a22590b6bed9a5">_updateCustomGpuParameter</a> (<a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> paramIndex, const <a class="el" href="class_ogre_1_1_gpu_program_parameters_1_1_auto_constant_entry.html">GpuProgramParameters::AutoConstantEntry</a> &amp;constantEntry, <a class="el" href="class_ogre_1_1_gpu_program_parameters.html">GpuProgramParameters</a> *params) const</td></tr>
-<tr class="memdesc:a66a5e07e85c60958f6a22590b6bed9a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update a custom <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a> constant which is derived from information only this <a class="el" href="class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene. ">Light</a> knows.  <a href="#a66a5e07e85c60958f6a22590b6bed9a5">More...</a><br /></td></tr>
-<tr class="separator:a66a5e07e85c60958f6a22590b6bed9a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c43bfbf959d7b0c0680c79ad3469bfb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_light.html#a2c43bfbf959d7b0c0680c79ad3469bfb">_setLightProfileIdx</a> (<a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> profileIdx)</td></tr>
+<tr class="separator:a2c43bfbf959d7b0c0680c79ad3469bfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af333112ff9478bf29693eb59a9caf172"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_light.html#af333112ff9478bf29693eb59a9caf172">_updateCustomGpuParameter</a> (<a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> paramIndex, const <a class="el" href="class_ogre_1_1_gpu_program_parameters___auto_constant_entry.html">GpuProgramParameters_AutoConstantEntry</a> &amp;constantEntry, <a class="el" href="class_ogre_1_1_gpu_program_parameters.html">GpuProgramParameters</a> *params) const</td></tr>
+<tr class="memdesc:af333112ff9478bf29693eb59a9caf172"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update a custom <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram. ">GpuProgramParameters</a> constant which is derived from information only this <a class="el" href="class_ogre_1_1_light.html" title="Representation of a dynamic light source in the scene. ">Light</a> knows.  <a href="#af333112ff9478bf29693eb59a9caf172">More...</a><br /></td></tr>
+<tr class="separator:af333112ff9478bf29693eb59a9caf172"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a38124467ef557f7f93487407caf069"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_light.html#a5a38124467ef557f7f93487407caf069">_updateRenderQueue</a> (<a class="el" href="class_ogre_1_1_render_queue.html">RenderQueue</a> *queue, <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *camera, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera)</td></tr>
 <tr class="memdesc:a5a38124467ef557f7f93487407caf069"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method by which the movable object must add <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement. ">Renderable</a> subclass instances to the rendering queue.  <a href="#a5a38124467ef557f7f93487407caf069">More...</a><br /></td></tr>
 <tr class="separator:a5a38124467ef557f7f93487407caf069"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -268,6 +271,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a54fc365f16014359d23cecf859da5510"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a54fc365f16014359d23cecf859da5510">getLightMask</a> () const</td></tr>
 <tr class="memdesc:a54fc365f16014359d23cecf859da5510"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a bitwise mask which will filter the lights affecting this object.  <a href="#a54fc365f16014359d23cecf859da5510">More...</a><br /></td></tr>
 <tr class="separator:a54fc365f16014359d23cecf859da5510"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a332b43da87b897dee7c36d6f4fdd3a7b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_light.html#a332b43da87b897dee7c36d6f4fdd3a7b">getLightProfileIdx</a> (void) const</td></tr>
+<tr class="separator:a332b43da87b897dee7c36d6f4fdd3a7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec8de75364ba934510a7c1d0e8cb6471"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_movable_object_1_1_listener.html">Listener</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#aec8de75364ba934510a7c1d0e8cb6471">getListener</a> (void) const</td></tr>
 <tr class="memdesc:aec8de75364ba934510a7c1d0e8cb6471"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current listener for this object.  <a href="#aec8de75364ba934510a7c1d0e8cb6471">More...</a><br /></td></tr>
 <tr class="separator:aec8de75364ba934510a7c1d0e8cb6471"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -553,12 +558,18 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ac4b8f3f72f7bf7a6bc20dd0677e125c1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ac4b8f3f72f7bf7a6bc20dd0677e125c1">cullLights</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> sceneLightMask, <a class="el" href="struct_ogre_1_1_light_list_info.html">LightListInfo</a> &amp;outGlobalLightList, const <a class="el" href="namespace_ogre.html#a4050eee6ae16a1d6c97d826854b1ed32">FrustumVec</a> &amp;frustums, const <a class="el" href="namespace_ogre.html#a4050eee6ae16a1d6c97d826854b1ed32">FrustumVec</a> &amp;cubemapFrustums)</td></tr>
 <tr class="memdesc:ac4b8f3f72f7bf7a6bc20dd0677e125c1"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_scene_manager.html#a97b975559cf03c869e70fdcbe38c07ce">SceneManager::cullLights</a> &amp;  <a href="#ac4b8f3f72f7bf7a6bc20dd0677e125c1">More...</a><br /></td></tr>
 <tr class="separator:ac4b8f3f72f7bf7a6bc20dd0677e125c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a048b8ace0a21cd2ed2c3008941ce3d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a1a048b8ace0a21cd2ed2c3008941ce3d">getDefaultLightMask</a> ()</td></tr>
+<tr class="memdesc:a1a048b8ace0a21cd2ed2c3008941ce3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the default light mask for all future <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene. ">MovableObject</a> instances.  <a href="#a1a048b8ace0a21cd2ed2c3008941ce3d">More...</a><br /></td></tr>
+<tr class="separator:a1a048b8ace0a21cd2ed2c3008941ce3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01f48775e48b672d7796311f3ffe2930"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a01f48775e48b672d7796311f3ffe2930">getDefaultQueryFlags</a> ()</td></tr>
 <tr class="memdesc:a01f48775e48b672d7796311f3ffe2930"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the default query flags for all future <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene. ">MovableObject</a> instances.  <a href="#a01f48775e48b672d7796311f3ffe2930">More...</a><br /></td></tr>
 <tr class="separator:a01f48775e48b672d7796311f3ffe2930"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2eb94fea5944cf0d33702a75cfa14a74"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a2eb94fea5944cf0d33702a75cfa14a74">getDefaultVisibilityFlags</a> ()</td></tr>
 <tr class="memdesc:a2eb94fea5944cf0d33702a75cfa14a74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the default visibility flags for all future <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene. ">MovableObject</a> instances.  <a href="#a2eb94fea5944cf0d33702a75cfa14a74">More...</a><br /></td></tr>
 <tr class="separator:a2eb94fea5944cf0d33702a75cfa14a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a62a4a12787812f012691af0c3493f1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a9a62a4a12787812f012691af0c3493f1">setDefaultLightMask</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> mask)</td></tr>
+<tr class="memdesc:a9a62a4a12787812f012691af0c3493f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the default light mask for all future <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene. ">MovableObject</a> instances.  <a href="#a9a62a4a12787812f012691af0c3493f1">More...</a><br /></td></tr>
+<tr class="separator:a9a62a4a12787812f012691af0c3493f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8db1f22329b2a96f2aed7260d565944"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ad8db1f22329b2a96f2aed7260d565944">setDefaultQueryFlags</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> flags)</td></tr>
 <tr class="memdesc:ad8db1f22329b2a96f2aed7260d565944"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the default query flags for all future <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene. ">MovableObject</a> instances.  <a href="#ad8db1f22329b2a96f2aed7260d565944">More...</a><br /></td></tr>
 <tr class="separator:ad8db1f22329b2a96f2aed7260d565944"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -712,6 +723,9 @@ Static Public Attributes</h2></td></tr>
 <p>This listener will get called from the main thread.</p>
 <p>The texture may still have pending residency transitions (e.g. it may still be loading the 2x2 fallback)</p>
 <p>Cast <a class="el" href="class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine. ">Exception</a> <em>e = reinterpret_cast&lt;<a class="el" href="class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine. ">Exception</a></em>&gt;( extraData ); to know more info </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7"></a>FsaaSettingAlteredByApi&#160;</td><td class="fielddoc"><p>Requested FSAA (MSAA / CSAA / EQAA / etc) is not supported by the API, and thus the setting had to be downgraded. </p>
+<p>Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded. ">TextureGpu::notifyDataIsReady</a> is called. </p>
 <p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> has finished issueing rendering commands to a <a class="el" href="class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture. ">RenderTexture</a> and is now ready to be presented to the monitor. </p>
@@ -1143,8 +1157,34 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a66a5e07e85c60958f6a22590b6bed9a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66a5e07e85c60958f6a22590b6bed9a5">&#9670;&nbsp;</a></span>_updateCustomGpuParameter()</h2>
+<a id="a2c43bfbf959d7b0c0680c79ad3469bfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c43bfbf959d7b0c0680c79ad3469bfb">&#9670;&nbsp;</a></span>_setLightProfileIdx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Light::_setLightProfileIdx </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td>
+          <td class="paramname"><em>profileIdx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af333112ff9478bf29693eb59a9caf172"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af333112ff9478bf29693eb59a9caf172">&#9670;&nbsp;</a></span>_updateCustomGpuParameter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1161,7 +1201,7 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_gpu_program_parameters_1_1_auto_constant_entry.html">GpuProgramParameters::AutoConstantEntry</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_gpu_program_parameters___auto_constant_entry.html">GpuProgramParameters_AutoConstantEntry</a> &amp;&#160;</td>
           <td class="paramname"><em>constantEntry</em>, </td>
         </tr>
         <tr>
@@ -1549,7 +1589,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p><a class="el" href="class_ogre_1_1_scene_manager.html#a97b975559cf03c869e70fdcbe38c07ce">SceneManager::cullLights</a> &amp; </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#a7d491859c987cf03cd2b62121e9bfea0">MovableObject::cullFrustum</a> Produces the global <a class="el" href="struct_ogre_1_1list.html">list</a> of visible lights that is needed in <a class="el" href="class_ogre_1_1_movable_object.html#ac4305df204604a027ca27ef77efff295" title="SceneManager::buildLightList ">buildLightList</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#a7d491859c987cf03cd2b62121e9bfea0">MovableObject::cullFrustum</a> Produces the global list of visible lights that is needed in <a class="el" href="class_ogre_1_1_movable_object.html#ac4305df204604a027ca27ef77efff295" title="SceneManager::buildLightList ">buildLightList</a> </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>We don't pass <a class="el" href="struct_ogre_1_1_object_data.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays) ...">ObjectData</a> by reference on purpose (avoid implicit aliasing) It's declared here because all affected elements are from <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene. ">MovableObject</a> IMPORTANT: It is assumed that all objects in <a class="el" href="struct_ogre_1_1_object_data.html" title="Represents the transform of a single object, arranged in SoA (Structure of Arrays) ...">ObjectData</a> are Lights. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1936,6 +1976,33 @@ Getting details of a light as a 4D vector can be useful for doing general calcul
 
 </div>
 </div>
+<a id="a1a048b8ace0a21cd2ed2c3008941ce3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a048b8ace0a21cd2ed2c3008941ce3d">&#9670;&nbsp;</a></span>getDefaultLightMask()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> Ogre::MovableObject::getDefaultLightMask </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the default light mask for all future <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene. ">MovableObject</a> instances. </p>
+
+</div>
+</div>
 <a id="a01f48775e48b672d7796311f3ffe2930"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a01f48775e48b672d7796311f3ffe2930">&#9670;&nbsp;</a></span>getDefaultQueryFlags()</h2>
 
@@ -2173,6 +2240,32 @@ Getting details of a light as a 4D vector can be useful for doing general calcul
 
 <p>Get a bitwise mask which will filter the lights affecting this object. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>By default, this mask is fully set meaning all lights will affect this object </dd></dl>
+
+</div>
+</div>
+<a id="a332b43da87b897dee7c36d6f4fdd3a7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a332b43da87b897dee7c36d6f4fdd3a7b">&#9670;&nbsp;</a></span>getLightProfileIdx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> Ogre::Light::getLightProfileIdx </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -4139,6 +4232,34 @@ template&lt;class Alloc &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a9a62a4a12787812f012691af0c3493f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a62a4a12787812f012691af0c3493f1">&#9670;&nbsp;</a></span>setDefaultLightMask()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Ogre::MovableObject::setDefaultLightMask </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td>
+          <td class="paramname"><em>mask</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the default light mask for all future <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene. ">MovableObject</a> instances. </p>
 
 </div>
 </div>

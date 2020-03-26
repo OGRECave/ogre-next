@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_compositor_pass_scene_d
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a114c9c278a29353ebe78cc7d7e3fce6f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="struct_ogre_1_1_compositor_pass_def_1_1_uav_dependency.html">UavDependency</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#a114c9c278a29353ebe78cc7d7e3fce6f">UavDependencyVec</a></td></tr>
+<tr class="memitem:a114c9c278a29353ebe78cc7d7e3fce6f"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_compositor_pass_def_1_1_uav_dependency.html">UavDependency</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#a114c9c278a29353ebe78cc7d7e3fce6f">UavDependencyVec</a></td></tr>
 <tr class="separator:a114c9c278a29353ebe78cc7d7e3fce6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -149,8 +149,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a544008d76e21be83ab7b91f96f36b3bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb1defcc230bbc477888fc3ea619e431"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#afb1defcc230bbc477888fc3ea619e431">setLightVisibilityMask</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> visibilityMask)</td></tr>
 <tr class="separator:afb1defcc230bbc477888fc3ea619e431"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9debf9c0200b0d96e8197ad7969d5dbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#a9debf9c0200b0d96e8197ad7969d5dbd">setUseDepthPrePass</a> (const <a class="el" href="namespace_ogre.html#ac1a9ddf210b991270144415dcc00026b">IdStringVec</a> &amp;textureName, <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> depthTextureName, <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> ssrTexture)</td></tr>
+<tr class="memitem:a9debf9c0200b0d96e8197ad7969d5dbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#a9debf9c0200b0d96e8197ad7969d5dbd">setUseDepthPrePass</a> (const <a class="el" href="namespace_ogre.html#af5d7e0eaf474c82bfa2bf21d0c624d20">IdStringVec</a> &amp;textureName, <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> depthTextureName, <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> ssrTexture)</td></tr>
 <tr class="separator:a9debf9c0200b0d96e8197ad7969d5dbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab55367dfa5128605bd51b10286eda67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#aab55367dfa5128605bd51b10286eda67">setUseRefractions</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> depthTextureName, <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> refractionsTexture)</td></tr>
+<tr class="separator:aab55367dfa5128605bd51b10286eda67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a231836aa0435fcccbbf40effd54be489"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#a231836aa0435fcccbbf40effd54be489">setVisibilityMask</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> visibilityMask)</td></tr>
 <tr class="separator:a231836aa0435fcccbbf40effd54be489"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -177,12 +179,14 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a09593de13ef678c0f705ea6dabf41e86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#a09593de13ef678c0f705ea6dabf41e86">mCullCameraName</a></td></tr>
 <tr class="memdesc:a09593de13ef678c0f705ea6dabf41e86"><td class="mdescLeft">&#160;</td><td class="mdescRight">When empty, it implies mCameraName == mCullCameraName.  <a href="#a09593de13ef678c0f705ea6dabf41e86">More...</a><br /></td></tr>
 <tr class="separator:a09593de13ef678c0f705ea6dabf41e86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7982924a0ff96580912a35df0436a40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#ae7982924a0ff96580912a35df0436a40">mDepthTextureNoMsaa</a></td></tr>
+<tr class="separator:ae7982924a0ff96580912a35df0436a40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf1c9d830639cb9fed39ce667d7daf64"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#acf1c9d830639cb9fed39ce667d7daf64">mEnableForwardPlus</a></td></tr>
 <tr class="memdesc:acf1c9d830639cb9fed39ce667d7daf64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable ForwardPlus during the pass (if <a class="el" href="class_ogre_1_1_forward3_d.html" title="Forward3D. ">Forward3D</a> or <a class="el" href="class_ogre_1_1_forward_clustered.html" title="Implementation of Clustered Forward Shading. ">ForwardClustered</a> systems were created).  <a href="#acf1c9d830639cb9fed39ce667d7daf64">More...</a><br /></td></tr>
 <tr class="separator:acf1c9d830639cb9fed39ce667d7daf64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ba939216db7e92e0a0ba4cebe62af5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#a4ba939216db7e92e0a0ba4cebe62af5b">mExecutionMask</a></td></tr>
 <tr class="separator:a4ba939216db7e92e0a0ba4cebe62af5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9377ca6479c21df519128eb6142b169"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#ac1a9ddf210b991270144415dcc00026b">IdStringVec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#aa9377ca6479c21df519128eb6142b169">mExposedTextures</a></td></tr>
+<tr class="memitem:aa9377ca6479c21df519128eb6142b169"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af5d7e0eaf474c82bfa2bf21d0c624d20">IdStringVec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#aa9377ca6479c21df519128eb6142b169">mExposedTextures</a></td></tr>
 <tr class="separator:aa9377ca6479c21df519128eb6142b169"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add419b14095089dbfc7dd505a9a2e94a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#add419b14095089dbfc7dd505a9a2e94a">mFirstRQ</a></td></tr>
 <tr class="memdesc:add419b14095089dbfc7dd505a9a2e94a"><td class="mdescLeft">&#160;</td><td class="mdescRight">First Render Queue ID to render. Inclusive.  <a href="#add419b14095089dbfc7dd505a9a2e94a">More...</a><br /></td></tr>
@@ -193,6 +197,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a125a142085fcc39304d15944c24282bf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#a125a142085fcc39304d15944c24282bf">mFlushCommandBuffersAfterShadowNode</a></td></tr>
 <tr class="memdesc:a125a142085fcc39304d15944c24282bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="class_ogre_1_1_compositor_pass_def.html#ab270a145417bc6b9c95224ffc2b11c2e" title="Whether to flush the command buffer at the end of the pass. ">CompositorPassDef::mFlushCommandBuffers</a>, but executed after the shadow node Note you may end up flushing twice if the shadow node also has flushing of its own.  <a href="#a125a142085fcc39304d15944c24282bf">More...</a><br /></td></tr>
 <tr class="separator:a125a142085fcc39304d15944c24282bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21c75caa6f66a3571ccb437ac3d4755e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#a21c75caa6f66a3571ccb437ac3d4755e">mGenNormalsGBuf</a></td></tr>
+<tr class="memdesc:a21c75caa6f66a3571ccb437ac3d4755e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate Normals for a GBuffer in RTV output 1, This flag is ignored mPrePassMode if mPrePassMode != PrePassNone.  <a href="#a21c75caa6f66a3571ccb437ac3d4755e">More...</a><br /></td></tr>
+<tr class="separator:a21c75caa6f66a3571ccb437ac3d4755e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab32b226a745dfd996d7b94a7197044eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#ab32b226a745dfd996d7b94a7197044eb">mIdentifier</a></td></tr>
 <tr class="memdesc:ab32b226a745dfd996d7b94a7197044eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Custom value in case there's a listener attached (to identify the pass)  <a href="#ab32b226a745dfd996d7b94a7197044eb">More...</a><br /></td></tr>
 <tr class="separator:ab32b226a745dfd996d7b94a7197044eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -235,7 +242,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ac2ec0baf73405179bb379e9916aafd98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2ffdf22f4204a55f24927629ec0ed5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#ab2ffdf22f4204a55f24927629ec0ed5c">mPrePassSsrTexture</a></td></tr>
 <tr class="separator:ab2ffdf22f4204a55f24927629ec0ed5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16928cb44d3328e36bdff5f88f7d567e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#ac1a9ddf210b991270144415dcc00026b">IdStringVec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#a16928cb44d3328e36bdff5f88f7d567e">mPrePassTexture</a></td></tr>
+<tr class="memitem:a16928cb44d3328e36bdff5f88f7d567e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af5d7e0eaf474c82bfa2bf21d0c624d20">IdStringVec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#a16928cb44d3328e36bdff5f88f7d567e">mPrePassTexture</a></td></tr>
 <tr class="memdesc:a16928cb44d3328e36bdff5f88f7d567e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Only used if mPrePassMode == PrePassUse.  <a href="#a16928cb44d3328e36bdff5f88f7d567e">More...</a><br /></td></tr>
 <tr class="separator:a16928cb44d3328e36bdff5f88f7d567e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9def33c89448b89c2d920d96ff55f28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#aa9def33c89448b89c2d920d96ff55f28">mProfilingId</a></td></tr>
@@ -244,6 +251,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a368fcc3ba3874f5ae9f4eaf8eb46652e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e9e560eddce4c5ac862789a1a752909"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#a1e9e560eddce4c5ac862789a1a752909">mReadOnlyStencil</a></td></tr>
 <tr class="separator:a1e9e560eddce4c5ac862789a1a752909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3150079cce806bf33715c78f7dcdb0df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#a3150079cce806bf33715c78f7dcdb0df">mRefractionsTexture</a></td></tr>
+<tr class="separator:a3150079cce806bf33715c78f7dcdb0df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9af519d5f402edb28493125a926a750"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_scene_def.html#af9af519d5f402edb28493125a926a750">mReuseCullData</a></td></tr>
 <tr class="memdesc:af9af519d5f402edb28493125a926a750"><td class="mdescLeft">&#160;</td><td class="mdescRight">When true, the frustum culling is skipped in this pass.  <a href="#af9af519d5f402edb28493125a926a750">More...</a><br /></td></tr>
 <tr class="separator:af9af519d5f402edb28493125a926a750"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -297,7 +306,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="struct_ogre_1_1_compositor_pass_def_1_1_uav_dependency.html">UavDependency</a>&gt;::type <a class="el" href="class_ogre_1_1_compositor_pass_def.html#a114c9c278a29353ebe78cc7d7e3fce6f">Ogre::CompositorPassDef::UavDependencyVec</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_compositor_pass_def_1_1_uav_dependency.html">UavDependency</a>&gt;::type <a class="el" href="class_ogre_1_1_compositor_pass_def.html#a114c9c278a29353ebe78cc7d7e3fce6f">Ogre::CompositorPassDef::UavDependencyVec</a></td>
         </tr>
       </table>
   </td>
@@ -929,7 +938,7 @@ template&lt;class Alloc &gt; </div>
         <tr>
           <td class="memname">void Ogre::CompositorPassSceneDef::setUseDepthPrePass </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#ac1a9ddf210b991270144415dcc00026b">IdStringVec</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af5d7e0eaf474c82bfa2bf21d0c624d20">IdStringVec</a> &amp;&#160;</td>
           <td class="paramname"><em>textureName</em>, </td>
         </tr>
         <tr>
@@ -958,6 +967,42 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p class="reference">References <a class="el" href="group___general.html#gga63b5ab6176b81463bbdd0e260b751d2ea27d8724d3a2eecbe9b2814e0a8070efb">Ogre::PrePassUse</a>.</p>
+
+</div>
+</div>
+<a id="aab55367dfa5128605bd51b10286eda67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab55367dfa5128605bd51b10286eda67">&#9670;&nbsp;</a></span>setUseRefractions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::CompositorPassSceneDef::setUseRefractions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td>
+          <td class="paramname"><em>depthTextureName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td>
+          <td class="paramname"><em>refractionsTexture</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1146,6 +1191,20 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
+<a id="ae7982924a0ff96580912a35df0436a40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7982924a0ff96580912a35df0436a40">&#9670;&nbsp;</a></span>mDepthTextureNoMsaa</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> Ogre::CompositorPassSceneDef::mDepthTextureNoMsaa</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="acf1c9d830639cb9fed39ce667d7daf64"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acf1c9d830639cb9fed39ce667d7daf64">&#9670;&nbsp;</a></span>mEnableForwardPlus</h2>
 
@@ -1195,7 +1254,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#ac1a9ddf210b991270144415dcc00026b">IdStringVec</a> Ogre::CompositorPassDef::mExposedTextures</td>
+          <td class="memname"><a class="el" href="namespace_ogre.html#af5d7e0eaf474c82bfa2bf21d0c624d20">IdStringVec</a> Ogre::CompositorPassDef::mExposedTextures</td>
         </tr>
       </table>
   </td>
@@ -1263,6 +1322,22 @@ template&lt;class Alloc &gt; </div>
 
 <p>Same as <a class="el" href="class_ogre_1_1_compositor_pass_def.html#ab270a145417bc6b9c95224ffc2b11c2e" title="Whether to flush the command buffer at the end of the pass. ">CompositorPassDef::mFlushCommandBuffers</a>, but executed after the shadow node Note you may end up flushing twice if the shadow node also has flushing of its own. </p>
 <p>Does not do anything if mShadowNodeRecalculation is set to SHADOW_NODE_REUSE (whether explicitly or automatically determined) </p>
+
+</div>
+</div>
+<a id="a21c75caa6f66a3571ccb437ac3d4755e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21c75caa6f66a3571ccb437ac3d4755e">&#9670;&nbsp;</a></span>mGenNormalsGBuf</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::CompositorPassSceneDef::mGenNormalsGBuf</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Generate Normals for a GBuffer in RTV output 1, This flag is ignored mPrePassMode if mPrePassMode != PrePassNone. </p>
 
 </div>
 </div>
@@ -1579,7 +1654,7 @@ template&lt;class Alloc &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#ac1a9ddf210b991270144415dcc00026b">IdStringVec</a> Ogre::CompositorPassSceneDef::mPrePassTexture</td>
+          <td class="memname"><a class="el" href="namespace_ogre.html#af5d7e0eaf474c82bfa2bf21d0c624d20">IdStringVec</a> Ogre::CompositorPassSceneDef::mPrePassTexture</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1650,6 +1725,20 @@ template&lt;class Alloc &gt; </div>
 <span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3150079cce806bf33715c78f7dcdb0df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3150079cce806bf33715c78f7dcdb0df">&#9670;&nbsp;</a></span>mRefractionsTexture</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> Ogre::CompositorPassSceneDef::mRefractionsTexture</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>

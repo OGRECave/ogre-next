@@ -29,6 +29,7 @@ var struct_ogre_1_1_hlms_base_prop =
     [ "FwdPlusDecalsSlotOffset", "struct_ogre_1_1_hlms_base_prop.html#abaa27ddcea8376695a829dc2c65dbba3", null ],
     [ "GL3Plus", "struct_ogre_1_1_hlms_base_prop.html#ab8ce6c72a32f3814ae75c344144d4a9d", null ],
     [ "GlAmdTrinaryMinMax", "struct_ogre_1_1_hlms_base_prop.html#a635853be5e7b80e14b463c00b47cfe9f", null ],
+    [ "GLES", "struct_ogre_1_1_hlms_base_prop.html#aed38fb54c4602a3aeffd98d7c1053a23", null ],
     [ "GlobalClipPlanes", "struct_ogre_1_1_hlms_base_prop.html#adc061a25daa6f9d57b11a21a843b8e39", null ],
     [ "Glsl", "struct_ogre_1_1_hlms_base_prop.html#a797ebbcb6c87a1eaa6e9e87f7b92d3ec", null ],
     [ "Glsles", "struct_ogre_1_1_hlms_base_prop.html#a6eb7197cc54a0a47b73548c58af0948d", null ],

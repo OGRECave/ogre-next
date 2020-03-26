@@ -1,10 +1,9 @@
 <map id="Ogre::Window" name="Ogre::Window">
 <area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_window.html" title="Ogre::D3D11Window" alt="" coords="323,13,469,39"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_g_l_x_window.html" title="Ogre::GLXWindow" alt="" coords="331,63,461,90"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_metal_window.html" title="Ogre::MetalWindow" alt="" coords="327,114,465,141"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_n_u_l_l_window.html" title="Ogre::NULLWindow" alt="" coords="327,165,465,191"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_win32_window.html" title="Ogre::Win32Window" alt="" coords="325,215,467,242"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_g_l_x_window.html" title="Ogre::GLXWindow" alt="" coords="331,63,461,90"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_window.html" title="Ogre::MetalWindow" alt="" coords="327,114,465,141"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_n_u_l_l_window.html" title="Ogre::NULLWindow" alt="" coords="327,165,465,191"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_win32_window.html" title="Ogre::Win32Window" alt="" coords="325,215,467,242"/>
 <area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,114,121,141"/>
 <area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_window_swap_chain_based.html" title="Ogre::D3D11WindowSwapChain\lBased" alt="" coords="517,5,731,47"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_window_hwnd.html" title="Ogre::D3D11WindowHwnd" alt="" coords="779,13,959,39"/>
 </map>

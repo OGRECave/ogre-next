@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -84,7 +84,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_log_1_1_stream.html',''
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="class_ogre_1_1_log_1_1_stream-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -97,12 +96,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_log_1_1_stream.html',''
 
 <p><code>#include &lt;OgreLog.h&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_log_1_1_stream_1_1_flush.html">Flush</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple type to indicate a flush of the stream to the log.  <a href="struct_ogre_1_1_log_1_1_stream_1_1_flush.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:abb964da863230b1cf237756dbad019a0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_log_1_1_stream.html#abb964da863230b1cf237756dbad019a0">Stream</a> (<a class="el" href="class_ogre_1_1_log.html">Log</a> *target, <a class="el" href="group___general.html#ga124456c1616299612ac9f46e7d69268d">LogMessageLevel</a> lml, bool maskDebug)</td></tr>
@@ -111,15 +104,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6fc9e8bdfbe99542e713d6dd1cab6445"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6c2f83ae8ef776ed5c7cd4ab29e6c99"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_log_1_1_stream.html#ae6c2f83ae8ef776ed5c7cd4ab29e6c99">~Stream</a> ()</td></tr>
 <tr class="separator:ae6c2f83ae8ef776ed5c7cd4ab29e6c99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab05a9baee615031647a629216165b040"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ab05a9baee615031647a629216165b040"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_log_1_1_stream.html">Stream</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_log_1_1_stream.html#ab05a9baee615031647a629216165b040">operator&lt;&lt;</a> (const T &amp;v)</td></tr>
-<tr class="separator:ab05a9baee615031647a629216165b040"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6c8bfec86eb1b94005d4f2df7aa7d87"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_log_1_1_stream.html">Stream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_log_1_1_stream.html#ad6c8bfec86eb1b94005d4f2df7aa7d87">operator&lt;&lt;</a> (const <a class="el" href="struct_ogre_1_1_log_1_1_stream_1_1_flush.html">Flush</a> &amp;v)</td></tr>
-<tr class="separator:ad6c8bfec86eb1b94005d4f2df7aa7d87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8377d2988edf6a6651f85fd69558b69"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae8377d2988edf6a6651f85fd69558b69"><td class="memTemplItemLeft" align="right" valign="top">_OgrePrivate <a class="el" href="class_ogre_1_1_log_1_1_stream.html">Stream</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_log_1_1_stream.html#ae8377d2988edf6a6651f85fd69558b69">operator&lt;&lt;</a> (const T &amp;v)</td></tr>
+<tr class="separator:ae8377d2988edf6a6651f85fd69558b69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="class_ogre_1_1_log_1_1_stream.html" title="Stream object which targets a log. ">Stream</a> object which targets a log. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>A stream logger object makes it simpler to send various things to a log. You can just use the operator&lt;&lt; implementation to stream anything to the log, which is cached until a <a class="el" href="struct_ogre_1_1_log_1_1_stream_1_1_flush.html" title="Simple type to indicate a flush of the stream to the log. ">Stream::Flush</a> is encountered, or the stream itself is destroyed, at which point the cached contents are sent to the underlying log. You can use <a class="el" href="class_ogre_1_1_log.html#ad8296f1f29dbc5ba46188264fce84c4a" title="Get a stream object targeting this log. ">Log::stream()</a> directly without assigning it to a local variable and as soon as the streaming is finished, the object will be destroyed and the message logged. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>A stream logger object makes it simpler to send various things to a log. You can just use the operator&lt;&lt; implementation to stream anything to the log, which is cached until a Stream::Flush is encountered, or the stream itself is destroyed, at which point the cached contents are sent to the underlying log. You can use <a class="el" href="class_ogre_1_1_log.html#ad8296f1f29dbc5ba46188264fce84c4a" title="Get a stream object targeting this log. ">Log::stream()</a> directly without assigning it to a local variable and as soon as the streaming is finished, the object will be destroyed and the message logged. </dd></dl>
 <dl class="section user"><dt></dt><dd>You can stream control operations to this object too, such as std::setw() and std::setfill() to control formatting. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Each <a class="el" href="class_ogre_1_1_log_1_1_stream.html" title="Stream object which targets a log. ">Stream</a> object is not thread safe, so do not pass it between threads. Multiple threads can hold their own <a class="el" href="class_ogre_1_1_log_1_1_stream.html" title="Stream object which targets a log. ">Stream</a> instances pointing at the same <a class="el" href="class_ogre_1_1_log.html">Log</a> though and that is threadsafe. </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -128,9 +119,6 @@ Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">Ogre::Log::Stream::Stream </td>
@@ -156,11 +144,6 @@ Public Member Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -170,9 +153,6 @@ Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">Ogre::Log::Stream::Stream </td>
@@ -182,11 +162,6 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -196,9 +171,6 @@ Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">Ogre::Log::Stream::~Stream </td>
@@ -207,20 +179,13 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_log.html#a41ad772d673872b2bbbf87f1f7c52eca">Ogre::Log::logMessage()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab05a9baee615031647a629216165b040"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab05a9baee615031647a629216165b040">&#9670;&nbsp;</a></span>operator<<() <span class="overload">[1/2]</span></h2>
+<a id="ae8377d2988edf6a6651f85fd69558b69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8377d2988edf6a6651f85fd69558b69">&#9670;&nbsp;</a></span>operator<<()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -231,7 +196,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_log_1_1_stream.html">Stream</a>&amp; Ogre::Log::Stream::operator&lt;&lt; </td>
+          <td class="memname">_OgrePrivate <a class="el" href="class_ogre_1_1_log_1_1_stream.html">Stream</a>&amp; Ogre::Log::Stream::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>v</em></td><td>)</td>
@@ -244,34 +209,6 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad6c8bfec86eb1b94005d4f2df7aa7d87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6c8bfec86eb1b94005d4f2df7aa7d87">&#9670;&nbsp;</a></span>operator<<() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_log_1_1_stream.html">Stream</a>&amp; Ogre::Log::Stream::operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_log_1_1_stream_1_1_flush.html">Flush</a> &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="group___general.html#gad842a4b416bd2f3245d2b44826a0aedc">Ogre::BLANKSTRING</a>, and <a class="el" href="class_ogre_1_1_log.html#a41ad772d673872b2bbbf87f1f7c52eca">Ogre::Log::logMessage()</a>.</p>
 
 </div>
 </div>

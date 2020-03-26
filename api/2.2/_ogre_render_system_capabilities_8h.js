@@ -75,6 +75,7 @@ var _ogre_render_system_capabilities_8h =
       [ "RSC_STORE_AND_MULTISAMPLE_RESOLVE", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7aec6de082b73a8d76a9e5c7522bf99c86", null ],
       [ "RSC_PERSTAGECONSTANT", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a4a6cb9244a2fd89591cfeb06960336e1", null ],
       [ "RSC_TYPED_UAV_LOADS", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a214a991679d3c352a841dd3e1327ec8f", null ],
+      [ "RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a970fb5179e9ac00273f41a2209b61f3b", null ],
       [ "RSC_GL1_5_NOVBO", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7af6f7e8732a517446f1008d86e653509b", null ],
       [ "RSC_FBO", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a8a0ececdc95122ac3063fc4f27d6402c", null ],
       [ "RSC_FBO_ARB", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a8e78a32ff387c91e40351474ce8652f2", null ],

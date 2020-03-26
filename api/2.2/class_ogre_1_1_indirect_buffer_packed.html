@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -466,7 +466,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="struct_ogre_1_1map.html">map</a>. Do NOT call this function more than once per frame, or if you've called <a class="el" href="struct_ogre_1_1map.html">map</a>( <a class="el" href="class_ogre_1_1_buffer_packed.html#a1f35a4a63b023187026b9abc1c897a71">advanceFrame</a> = true ) </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_buffer_packed.html#a087111d602caab019259df5f5b8ff14f" title="Maps the specified region to a pointer the CPU can access. ">map</a>. Do NOT call this function more than once per frame, or if you've called <a class="el" href="class_ogre_1_1_buffer_packed.html#a087111d602caab019259df5f5b8ff14f" title="Maps the specified region to a pointer the CPU can access. ">map</a>( <a class="el" href="class_ogre_1_1_buffer_packed.html#a1f35a4a63b023187026b9abc1c897a71">advanceFrame</a> = true ) </dd></dl>
 
 </div>
 </div>
@@ -855,7 +855,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_buffer_packed.html#a69984ccd67bf7c801cc33dd20780b581">getNumElements</a> to <a class="el" href="struct_ogre_1_1map.html">map</a> the whole range. Can't be 0. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_buffer_packed.html#a69984ccd67bf7c801cc33dd20780b581">getNumElements</a> to <a class="el" href="class_ogre_1_1_buffer_packed.html#a087111d602caab019259df5f5b8ff14f" title="Maps the specified region to a pointer the CPU can access. ">map</a> the whole range. Can't be 0. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bAdvanceFrame</td><td>When true, the Buffer will be usable after unmapping it (or earlier if persistent mapped). However you won't be able to call <a class="el" href="class_ogre_1_1_buffer_packed.html#a087111d602caab019259df5f5b8ff14f" title="Maps the specified region to a pointer the CPU can access. ">map()</a> again until the next frame. Calling this with false allows to call map multiple times. However ater calling unmap, you must call advanceFrame. THIS IS ONLY FOR VERY ADVANCED USERS. </td></tr>
@@ -1368,7 +1368,7 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Unmaps or flushes the region mapped with. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="struct_ogre_1_1map.html">map</a>. Alternatively, you can flush a smaller region (i.e. you didn't know which regions you were to update when mapping, but now that you're done, you know). The region being flushed is [flushStart; flushStart + flushSize) </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_buffer_packed.html#a087111d602caab019259df5f5b8ff14f" title="Maps the specified region to a pointer the CPU can access. ">map</a>. Alternatively, you can flush a smaller region (i.e. you didn't know which regions you were to update when mapping, but now that you're done, you know). The region being flushed is [flushStart; flushStart + flushSize) </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">unmapOption</td><td>When using persistent mapping, UO_KEEP_PERSISTENT will keep the map alive; but you will have to call map again to use it. This requirement allows <a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> to:<ol type="1">
@@ -1381,7 +1381,7 @@ template&lt;class Alloc &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="struct_ogre_1_1map.html">map</a>. When this value is 0, we flush until the end of the buffer starting from flushStartElem </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_buffer_packed.html#a087111d602caab019259df5f5b8ff14f" title="Maps the specified region to a pointer the CPU can access. ">map</a>. When this value is 0, we flush until the end of the buffer starting from flushStartElem </dd></dl>
 
 </div>
 </div>

@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.1.0unstable</span>
+   &#160;<span id="projectnumber">2.1.1</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -111,22 +111,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9f08fbefe3e2e5d7ed62503a9bf0476b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79a2813facdf6fdb6e03355b984da8b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html#a79a2813facdf6fdb6e03355b984da8b2">~GLSLESProgramPipelineManager</a> (void)</td></tr>
 <tr class="separator:a79a2813facdf6fdb6e03355b984da8b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2c2b27a95604608ac39d32795d55301"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_manager_common.html#ab2c2b27a95604608ac39d32795d55301">extractConstantDefs</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;src, <a class="el" href="struct_ogre_1_1_gpu_named_constants.html">GpuNamedConstants</a> &amp;constantDefs, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename)</td></tr>
-<tr class="memdesc:ab2c2b27a95604608ac39d32795d55301"><td class="mdescLeft">&#160;</td><td class="mdescRight">Populate a list of uniforms based on GLSL ES source.  <a href="#ab2c2b27a95604608ac39d32795d55301">More...</a><br /></td></tr>
-<tr class="separator:ab2c2b27a95604608ac39d32795d55301"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6783af5cf36433081dfd689b1585a796"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_manager_common.html#a6783af5cf36433081dfd689b1585a796">extractUniforms</a> (GLuint programObject, const <a class="el" href="group___materials.html#ga90b266af540c4396c8c18ac2c43fd0f3">GpuConstantDefinitionMap</a> *vertexConstantDefs, const <a class="el" href="group___materials.html#ga90b266af540c4396c8c18ac2c43fd0f3">GpuConstantDefinitionMap</a> *fragmentConstantDefs, <a class="el" href="namespace_ogre.html#a24aca8d208dcf62fbe3bee9e759ac73d">GLUniformReferenceList</a> &amp;<a class="el" href="struct_ogre_1_1list.html">list</a>, <a class="el" href="namespace_ogre.html#af3ae9c0f1fb40527f47aa559fc2d016d">GLUniformBufferList</a> &amp;sharedList)</td></tr>
-<tr class="memdesc:a6783af5cf36433081dfd689b1585a796"><td class="mdescLeft">&#160;</td><td class="mdescRight">Populate a list of uniforms based on a program object.  <a href="#a6783af5cf36433081dfd689b1585a796">More...</a><br /></td></tr>
-<tr class="separator:a6783af5cf36433081dfd689b1585a796"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31a4f92abd057d1ecbca7c6ae3dcf41e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_manager_common.html#a31a4f92abd057d1ecbca7c6ae3dcf41e">extractUniformsFromGLSL</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;src, <a class="el" href="struct_ogre_1_1_gpu_named_constants.html">GpuNamedConstants</a> &amp;constantDefs, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename)</td></tr>
+<tr class="memdesc:a31a4f92abd057d1ecbca7c6ae3dcf41e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Populate a list of uniforms based on GLSL source and store them in <a class="el" href="struct_ogre_1_1_gpu_named_constants.html" title="Struct collecting together the information for named constants. ">GpuNamedConstants</a>.  <a href="#a31a4f92abd057d1ecbca7c6ae3dcf41e">More...</a><br /></td></tr>
+<tr class="separator:a31a4f92abd057d1ecbca7c6ae3dcf41e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add6f7291518aa761a9a5b489fb0021e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_manager_common.html#add6f7291518aa761a9a5b489fb0021e2">extractUniformsFromProgram</a> (GLuint programObject, const <a class="el" href="group___materials.html#ga90b266af540c4396c8c18ac2c43fd0f3">GpuConstantDefinitionMap</a> *vertexConstantDefs, const <a class="el" href="group___materials.html#ga90b266af540c4396c8c18ac2c43fd0f3">GpuConstantDefinitionMap</a> *fragmentConstantDefs, <a class="el" href="namespace_ogre.html#a24aca8d208dcf62fbe3bee9e759ac73d">GLUniformReferenceList</a> &amp;uniformList, <a class="el" href="namespace_ogre.html#af3ae9c0f1fb40527f47aa559fc2d016d">GLUniformBufferList</a> &amp;uniformBufferList)</td></tr>
+<tr class="memdesc:add6f7291518aa761a9a5b489fb0021e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Populate a list of uniforms based on an OpenGL program object.  <a href="#add6f7291518aa761a9a5b489fb0021e2">More...</a><br /></td></tr>
+<tr class="separator:add6f7291518aa761a9a5b489fb0021e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abce662d414ffe746f8a9487f1b4a2a96"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html">GLSLESProgramPipeline</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html#abce662d414ffe746f8a9487f1b4a2a96">getActiveProgramPipeline</a> (void)</td></tr>
-<tr class="memdesc:abce662d414ffe746f8a9487f1b4a2a96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the program object that links the two active program objects together.  <a href="#abce662d414ffe746f8a9487f1b4a2a96">More...</a><br /></td></tr>
+<tr class="memdesc:abce662d414ffe746f8a9487f1b4a2a96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the program pipeline that combines the current program objects.  <a href="#abce662d414ffe746f8a9487f1b4a2a96">More...</a><br /></td></tr>
 <tr class="separator:abce662d414ffe746f8a9487f1b4a2a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bf100ce684eddb08d22ffd4051370df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_manager_common.html#a8bf100ce684eddb08d22ffd4051370df">optimiseShaderSource</a> (<a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *gpuProgram)</td></tr>
-<tr class="separator:a8bf100ce684eddb08d22ffd4051370df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae19fd109e0db056111075ca42367a9be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html#ae19fd109e0db056111075ca42367a9be">setActiveFragmentLinkProgram</a> (<a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *fragmentGpuProgram)</td></tr>
-<tr class="separator:ae19fd109e0db056111075ca42367a9be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8eed1b7ffe696b33e4f8a857bdb1a26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html#af8eed1b7ffe696b33e4f8a857bdb1a26">setActiveVertexLinkProgram</a> (<a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *vertexGpuProgram)</td></tr>
-<tr class="memdesc:af8eed1b7ffe696b33e4f8a857bdb1a26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the active vertex and fragment link programs for the next rendering state.  <a href="#af8eed1b7ffe696b33e4f8a857bdb1a26">More...</a><br /></td></tr>
-<tr class="separator:af8eed1b7ffe696b33e4f8a857bdb1a26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f22f86120af067572059ee321bc9db0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_manager_common.html#a1f22f86120af067572059ee321bc9db0">optimiseShaderSource</a> (<a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *gpuProgram)</td></tr>
+<tr class="separator:a1f22f86120af067572059ee321bc9db0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44cdcc2ca9dbc193635d59f991a5d1e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html#a44cdcc2ca9dbc193635d59f991a5d1e1">setActiveFragmentShader</a> (<a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *fragmentShader)</td></tr>
+<tr class="separator:a44cdcc2ca9dbc193635d59f991a5d1e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7171938b1e1cd35ccdcc08c19f1d9fac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline_manager.html#a7171938b1e1cd35ccdcc08c19f1d9fac">setActiveVertexShader</a> (<a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *vertexShader)</td></tr>
+<tr class="memdesc:a7171938b1e1cd35ccdcc08c19f1d9fac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the active vertex and fragment link programs for the next rendering state.  <a href="#a7171938b1e1cd35ccdcc08c19f1d9fac">More...</a><br /></td></tr>
+<tr class="separator:a7171938b1e1cd35ccdcc08c19f1d9fac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -137,7 +137,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one program pipeline object that represents the active vertex and fragment program objects during a rendering state. </p>
-<p>GLSL vertex and fragment program objects are compiled separately and then attached to a program object and then the program pipeline object is linked. Since <a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> can only handle one vertex program stage and one fragment program stage being active in a pass, the GLSL ES Program Pipeline Manager does the same. The GLSL ES Program Pipeline Manager acts as a state machine and activates a pipeline object based on the active vertex and fragment program. Previously created pipeline objects are stored along with a unique key in a hash_map for quick retrieval the next time the pipeline object is required. </p>
+<p>GLSL vertex and fragment program objects are compiled separately and then attached to a program object and then the program pipeline object is linked. Since <a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> can only handle one vertex program stage and one fragment program stage being active in a pass, the GLSL ES Program Pipeline Manager does the same. The GLSL ES Program Pipeline Manager acts as a state machine and activates a pipeline object based on the active vertex and fragment program. Previously created pipeline objects are stored along with a unique key in a hash map for quick retrieval the next time the pipeline object is required. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9f08fbefe3e2e5d7ed62503a9bf0476b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9f08fbefe3e2e5d7ed62503a9bf0476b">&#9670;&nbsp;</a></span>GLSLESProgramPipelineManager()</h2>
@@ -176,8 +176,8 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab2c2b27a95604608ac39d32795d55301"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2c2b27a95604608ac39d32795d55301">&#9670;&nbsp;</a></span>extractConstantDefs()</h2>
+<a id="a31a4f92abd057d1ecbca7c6ae3dcf41e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31a4f92abd057d1ecbca7c6ae3dcf41e">&#9670;&nbsp;</a></span>extractUniformsFromGLSL()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -186,7 +186,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::GLSLESProgramManagerCommon::extractConstantDefs </td>
+          <td class="memname">void Ogre::GLSLESProgramManagerCommon::extractUniformsFromGLSL </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
           <td class="paramname"><em>src</em>, </td>
@@ -216,10 +216,10 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Populate a list of uniforms based on GLSL ES source. </p>
+<p>Populate a list of uniforms based on GLSL source and store them in <a class="el" href="struct_ogre_1_1_gpu_named_constants.html" title="Struct collecting together the information for named constants. ">GpuNamedConstants</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">src</td><td>Reference to the source code </td></tr>
+    <tr><td class="paramname">src</td><td>Reference to the source code. </td></tr>
     <tr><td class="paramname">constantDefs</td><td>The defs to populate (will not be cleared before adding, clear it yourself before calling this if that's what you want). </td></tr>
     <tr><td class="paramname">filename</td><td>The file name this came from, for logging errors. </td></tr>
   </table>
@@ -228,8 +228,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6783af5cf36433081dfd689b1585a796"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6783af5cf36433081dfd689b1585a796">&#9670;&nbsp;</a></span>extractUniforms()</h2>
+<a id="add6f7291518aa761a9a5b489fb0021e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add6f7291518aa761a9a5b489fb0021e2">&#9670;&nbsp;</a></span>extractUniformsFromProgram()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -238,7 +238,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::GLSLESProgramManagerCommon::extractUniforms </td>
+          <td class="memname">void Ogre::GLSLESProgramManagerCommon::extractUniformsFromProgram </td>
           <td>(</td>
           <td class="paramtype">GLuint&#160;</td>
           <td class="paramname"><em>programObject</em>, </td>
@@ -259,13 +259,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a24aca8d208dcf62fbe3bee9e759ac73d">GLUniformReferenceList</a> &amp;&#160;</td>
-          <td class="paramname"><em>list</em>, </td>
+          <td class="paramname"><em>uniformList</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#af3ae9c0f1fb40527f47aa559fc2d016d">GLUniformBufferList</a> &amp;&#160;</td>
-          <td class="paramname"><em>sharedList</em>&#160;</td>
+          <td class="paramname"><em>uniformBufferList</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -280,12 +280,12 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Populate a list of uniforms based on a program object. </p>
+<p>Populate a list of uniforms based on an OpenGL program object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">programObject</td><td>Handle to the program object to query </td></tr>
-    <tr><td class="paramname">vertexConstantDefs</td><td>Definition of the constants extracted from the vertex program, used to match up physical buffer indexes with program uniforms. May be null if there is no vertex program. </td></tr>
-    <tr><td class="paramname">fragmentConstantDefs</td><td>Definition of the constants extracted from the fragment program, used to match up physical buffer indexes with program uniforms. May be null if there is no fragment program. </td></tr>
+    <tr><td class="paramname">programObject</td><td>Handle to the program object to query. </td></tr>
+    <tr><td class="paramname">vertexConstantDefs</td><td>Definition of the uniforms extracted from the vertex program, used to match up physical buffer indexes with program uniforms. May be null if there is no vertex program. </td></tr>
+    <tr><td class="paramname">fragmentConstantDefs</td><td>Definition of the uniforms extracted from the fragment program, used to match up physical buffer indexes with program uniforms. May be null if there is no fragment program. </td></tr>
     <tr><td class="paramname">list</td><td>The list to populate (will not be cleared before adding, clear it yourself before calling this if that's what you want). </td></tr>
   </table>
   </dd>
@@ -309,8 +309,8 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Get the program object that links the two active program objects together. </p>
-<p>If a program pipeline object was not already created and linked a new one is created and linked. </p>
+<p>Get the program pipeline that combines the current program objects. </p>
+<p>If the program pipeline object was not already created a new one is created. </p>
 
 </div>
 </div>
@@ -366,8 +366,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8bf100ce684eddb08d22ffd4051370df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bf100ce684eddb08d22ffd4051370df">&#9670;&nbsp;</a></span>optimiseShaderSource()</h2>
+<a id="a1f22f86120af067572059ee321bc9db0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f22f86120af067572059ee321bc9db0">&#9670;&nbsp;</a></span>optimiseShaderSource()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -378,7 +378,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::GLSLESProgramManagerCommon::optimiseShaderSource </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *&#160;</td>
           <td class="paramname"><em>gpuProgram</em></td><td>)</td>
           <td></td>
         </tr>
@@ -392,17 +392,17 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae19fd109e0db056111075ca42367a9be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae19fd109e0db056111075ca42367a9be">&#9670;&nbsp;</a></span>setActiveFragmentLinkProgram()</h2>
+<a id="a44cdcc2ca9dbc193635d59f991a5d1e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44cdcc2ca9dbc193635d59f991a5d1e1">&#9670;&nbsp;</a></span>setActiveFragmentShader()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::GLSLESProgramPipelineManager::setActiveFragmentLinkProgram </td>
+          <td class="memname">void Ogre::GLSLESProgramPipelineManager::setActiveFragmentShader </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *&#160;</td>
-          <td class="paramname"><em>fragmentGpuProgram</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *&#160;</td>
+          <td class="paramname"><em>fragmentShader</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -410,24 +410,24 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="af8eed1b7ffe696b33e4f8a857bdb1a26"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8eed1b7ffe696b33e4f8a857bdb1a26">&#9670;&nbsp;</a></span>setActiveVertexLinkProgram()</h2>
+<a id="a7171938b1e1cd35ccdcc08c19f1d9fac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7171938b1e1cd35ccdcc08c19f1d9fac">&#9670;&nbsp;</a></span>setActiveVertexShader()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::GLSLESProgramPipelineManager::setActiveVertexLinkProgram </td>
+          <td class="memname">void Ogre::GLSLESProgramPipelineManager::setActiveVertexShader </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html">GLSLESGpuProgram</a> *&#160;</td>
-          <td class="paramname"><em>vertexGpuProgram</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_g_l_s_l_e_s_shader.html">GLSLESShader</a> *&#160;</td>
+          <td class="paramname"><em>vertexShader</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Set the active vertex and fragment link programs for the next rendering state. </p>
-<p>The active program pipeline object will be cleared. Normally called from the <a class="el" href="class_ogre_1_1_g_l_s_l_e_s_gpu_program.html#a1f27bdccdf5d428b6e796d6fb705e559" title="Execute the binding functions for this program. ">GLSLESGpuProgram::bindProgram</a> and unbindProgram methods </p>
+<p>The active program pipeline object will be cleared. Normally called from the GLSLESShader::bindProgram and unbindProgram methods. </p>
 
 </div>
 </div>

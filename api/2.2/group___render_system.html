@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -146,6 +146,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_window.html">Ogre::RenderWindow</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages the target rendering window.  <a href="class_ogre_1_1_render_window.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_render_window_description.html">Ogre::RenderWindowDescription</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render window creation parameters.  <a href="struct_ogre_1_1_render_window_description.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_rq_bits.html">Ogre::RqBits</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_default_hardware_buffer_manager.html">Ogre::v1::DefaultHardwareBufferManager</a></td></tr>
@@ -253,17 +256,24 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:gac447334468fd281ee1a3548172f5d349"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___render_system.html#gac447334468fd281ee1a3548172f5d349">Ogre::v1::BufferUsageList</a></td></tr>
+<tr class="memitem:gac447334468fd281ee1a3548172f5d349"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___render_system.html#gac447334468fd281ee1a3548172f5d349">Ogre::v1::BufferUsageList</a></td></tr>
 <tr class="memdesc:gac447334468fd281ee1a3548172f5d349"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a list of usage flags.  <a href="group___render_system.html#gac447334468fd281ee1a3548172f5d349">More...</a><br /></td></tr>
 <tr class="separator:gac447334468fd281ee1a3548172f5d349"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9028f924eb43635fc009ad71cdceab02"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1map.html">map</a>&lt; <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>, <a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">TextureGpuVec</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___render_system.html#ga9028f924eb43635fc009ad71cdceab02">Ogre::DepthBufferMap2</a></td></tr>
+<tr class="memitem:ga9028f924eb43635fc009ad71cdceab02"><td class="memItemLeft" align="right" valign="top">typedef map&lt; <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>, <a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">TextureGpuVec</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___render_system.html#ga9028f924eb43635fc009ad71cdceab02">Ogre::DepthBufferMap2</a></td></tr>
 <tr class="separator:ga9028f924eb43635fc009ad71cdceab02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad0bb968d3cdf8cefbdb2b8f545daf392"><td class="memItemLeft" align="right" valign="top">typedef map&lt; <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___render_system.html#gad0bb968d3cdf8cefbdb2b8f545daf392">Ogre::DepthBufferRefMap</a></td></tr>
+<tr class="separator:gad0bb968d3cdf8cefbdb2b8f545daf392"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga38b128c3e3f0b4cf471113da3fab392f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html">HardwareBufferLockGuard</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___render_system.html#ga38b128c3e3f0b4cf471113da3fab392f">Ogre::v1::HardwareIndexBufferLockGuard</a></td></tr>
 <tr class="memdesc:ga38b128c3e3f0b4cf471113da3fab392f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locking helper.  <a href="group___render_system.html#ga38b128c3e3f0b4cf471113da3fab392f">More...</a><br /></td></tr>
 <tr class="separator:ga38b128c3e3f0b4cf471113da3fab392f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa071037bd63c8e1fab0d9d8ce7f47d8c"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html">HardwareBufferLockGuard</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___render_system.html#gaa071037bd63c8e1fab0d9d8ce7f47d8c">Ogre::v1::HardwareVertexBufferLockGuard</a></td></tr>
 <tr class="memdesc:gaa071037bd63c8e1fab0d9d8ce7f47d8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locking helper.  <a href="group___render_system.html#gaa071037bd63c8e1fab0d9d8ce7f47d8c">More...</a><br /></td></tr>
 <tr class="separator:gaa071037bd63c8e1fab0d9d8ce7f47d8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7a03bf97326d0d0385b91a74e2c51c5e"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_render_window_description.html">RenderWindowDescription</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___render_system.html#ga7a03bf97326d0d0385b91a74e2c51c5e">Ogre::RenderWindowDescriptionList</a></td></tr>
+<tr class="memdesc:ga7a03bf97326d0d0385b91a74e2c51c5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render window creation parameters container.  <a href="group___render_system.html#ga7a03bf97326d0d0385b91a74e2c51c5e">More...</a><br /></td></tr>
+<tr class="separator:ga7a03bf97326d0d0385b91a74e2c51c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae71498d7d122cb904ac7af017b6ccfcd"><td class="memItemLeft" align="right" valign="top">typedef set&lt; <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___render_system.html#gae71498d7d122cb904ac7af017b6ccfcd">Ogre::TextureGpuSet</a></td></tr>
+<tr class="separator:gae71498d7d122cb904ac7af017b6ccfcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -355,18 +365,20 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a4a6cb9244a2fd89591cfeb06960336e1">Ogre::RSC_PERSTAGECONSTANT</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_D3D9, 0), 
 <a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a214a991679d3c352a841dd3e1327ec8f">Ogre::RSC_TYPED_UAV_LOADS</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_D3D9, 1), 
+<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a970fb5179e9ac00273f41a2209b61f3b">Ogre::RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_D3D9, 2), 
 <a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7af6f7e8732a517446f1008d86e653509b">Ogre::RSC_GL1_5_NOVBO</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 1), 
-<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a8a0ececdc95122ac3063fc4f27d6402c">Ogre::RSC_FBO</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 2), 
 <br />
-&#160;&#160;<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a8e78a32ff387c91e40351474ce8652f2">Ogre::RSC_FBO_ARB</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 3), 
+&#160;&#160;<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a8a0ececdc95122ac3063fc4f27d6402c">Ogre::RSC_FBO</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 2), 
+<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a8e78a32ff387c91e40351474ce8652f2">Ogre::RSC_FBO_ARB</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 3), 
 <a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a545b10d9882c0ae3ec90ef0d1a5ae4df">Ogre::RSC_FBO_ATI</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 4), 
 <a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a55118ce86589755ce57c9e443f2648dc">Ogre::RSC_PBUFFER</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 5), 
-<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7aee26b76a540923853ae3e72d8cfc9c35">Ogre::RSC_GL1_5_NOHWOCCLUSION</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 6), 
 <br />
-&#160;&#160;<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a10d8a58880a7e9cd28108f45e671dc9d">Ogre::RSC_POINT_EXTENDED_PARAMETERS_ARB</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 7), 
+&#160;&#160;<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7aee26b76a540923853ae3e72d8cfc9c35">Ogre::RSC_GL1_5_NOHWOCCLUSION</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 6), 
+<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a10d8a58880a7e9cd28108f45e671dc9d">Ogre::RSC_POINT_EXTENDED_PARAMETERS_ARB</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 7), 
 <a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7ad9a6d84955c31986ec228e745eda8c71">Ogre::RSC_POINT_EXTENDED_PARAMETERS_EXT</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 8), 
 <a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a6110f385e2cb3e6dff9403379a9eaf23">Ogre::RSC_SEPARATE_SHADER_OBJECTS</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 9), 
-<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a1a32a54a3b00630209a22204bbf8e38a">Ogre::RSC_VAO</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 10)
+<br />
+&#160;&#160;<a class="el" href="group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a1a32a54a3b00630209a22204bbf8e38a">Ogre::RSC_VAO</a> = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 10)
 <br />
  }<tr class="memdesc:ga3d2965b7f378ebdcfe8a4a6cf74c3de7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum describing the different hardware capabilities we want to check for <a class="el" href="_ogre_render_system_capabilities_8h.html#aed8646724df28fe574c22d9ac38d0743">OGRE_CAPS_VALUE(a, b)</a> defines each capability.  <a href="group___render_system.html#ga3d2965b7f378ebdcfe8a4a6cf74c3de7">More...</a><br /></td></tr>
 </td></tr>
@@ -513,7 +525,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a>&gt;::type <a class="el" href="group___render_system.html#gac447334468fd281ee1a3548172f5d349">Ogre::v1::BufferUsageList</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a>&gt;::type <a class="el" href="group___render_system.html#gac447334468fd281ee1a3548172f5d349">Ogre::v1::BufferUsageList</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -529,7 +541,21 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1map.html">map</a>&lt; <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>, <a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">TextureGpuVec</a> &gt;::type <a class="el" href="group___render_system.html#ga9028f924eb43635fc009ad71cdceab02">Ogre::DepthBufferMap2</a></td>
+          <td class="memname">typedef map&lt; <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>, <a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">TextureGpuVec</a> &gt;::type <a class="el" href="group___render_system.html#ga9028f924eb43635fc009ad71cdceab02">Ogre::DepthBufferMap2</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="gad0bb968d3cdf8cefbdb2b8f545daf392"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad0bb968d3cdf8cefbdb2b8f545daf392">&#9670;&nbsp;</a></span>DepthBufferRefMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef map&lt;<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&gt;::type <a class="el" href="group___render_system.html#gad0bb968d3cdf8cefbdb2b8f545daf392">Ogre::DepthBufferRefMap</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -565,6 +591,36 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Locking helper. </p>
+
+</div>
+</div>
+<a id="ga7a03bf97326d0d0385b91a74e2c51c5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7a03bf97326d0d0385b91a74e2c51c5e">&#9670;&nbsp;</a></span>RenderWindowDescriptionList</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_render_window_description.html">RenderWindowDescription</a>&gt;::type <a class="el" href="group___render_system.html#ga7a03bf97326d0d0385b91a74e2c51c5e">Ogre::RenderWindowDescriptionList</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Render window creation parameters container. </p>
+
+</div>
+</div>
+<a id="gae71498d7d122cb904ac7af017b6ccfcd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae71498d7d122cb904ac7af017b6ccfcd">&#9670;&nbsp;</a></span>TextureGpuSet</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef set&lt;<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&gt;::type <a class="el" href="group___render_system.html#gae71498d7d122cb904ac7af017b6ccfcd">Ogre::TextureGpuSet</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -725,6 +781,8 @@ Functions</h2></td></tr>
 <p>Meaning you can only read from UAVs if it's in format PGF_R32_UINT.</p>
 <p>You can workaround this issue by creating the UAV as <a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434aad9174004d6621896215779a0abb14e7" title="When present, you may be creating another TextureGpu that accesses the internal resources of this Tex...">TextureFlags::Reinterpretable</a> and performing bitpacking by hand in the shader.</p>
 <p>See <a href="https://docs.microsoft.com/en-us/windows/desktop/direct3dhlsl/">https://docs.microsoft.com/en-us/windows/desktop/direct3dhlsl/</a> dx-graphics-hlsl-unpacking-packing-dxgi-format </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga3d2965b7f378ebdcfe8a4a6cf74c3de7a970fb5179e9ac00273f41a2209b61f3b"></a>RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER&#160;</td><td class="fielddoc"><p>If capability is not set then only geometry shader can have outputs with SV_RenderTargetArrayIndex and SV_ViewportArrayIndex semantic. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="gga3d2965b7f378ebdcfe8a4a6cf74c3de7af6f7e8732a517446f1008d86e653509b"></a>RSC_GL1_5_NOVBO&#160;</td><td class="fielddoc"><p>Supports OpenGL version 1.5. </p>
 </td></tr>

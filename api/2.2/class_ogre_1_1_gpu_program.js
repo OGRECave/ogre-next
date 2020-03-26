@@ -70,6 +70,7 @@ var class_ogre_1_1_gpu_program =
     [ "isSkeletalAnimationIncluded", "class_ogre_1_1_gpu_program.html#a09aed7a5acfd1841b7d6648e56acd0ce", null ],
     [ "isSupported", "class_ogre_1_1_gpu_program.html#af6e304605bb08740ca7bc21fd94b450e", null ],
     [ "isVertexTextureFetchRequired", "class_ogre_1_1_gpu_program.html#a7f28e93a74c00e9557dfb778e2f8eeef", null ],
+    [ "isVpAndRtArrayIndexFromAnyShaderRequired", "class_ogre_1_1_gpu_program.html#a83ff552868d41fa0daa9180913456c9e", null ],
     [ "load", "class_ogre_1_1_gpu_program.html#a699d1c851f494a8d5d23d23b695ceb47", null ],
     [ "operator delete", "class_ogre_1_1_gpu_program.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_gpu_program.html#a1c727e879a260c37b00ce5505fe8e144", null ],
@@ -105,6 +106,7 @@ var class_ogre_1_1_gpu_program =
     [ "setType", "class_ogre_1_1_gpu_program.html#a9792acbeda4a5806ae1ec5c7d4da60b7", null ],
     [ "setUniformBlockBinding", "class_ogre_1_1_gpu_program.html#ad9eab3c93633af5addd6ddd0e7682579", null ],
     [ "setVertexTextureFetchRequired", "class_ogre_1_1_gpu_program.html#a463bffd1f68fc8ae3c29d64402e9ca8d", null ],
+    [ "setVpAndRtArrayIndexFromAnyShaderRequired", "class_ogre_1_1_gpu_program.html#a633efc296c4dffefe10f7a1e3da26e2d", null ],
     [ "touch", "class_ogre_1_1_gpu_program.html#ae229b1f58092109adef55bfc6f864d79", null ],
     [ "unload", "class_ogre_1_1_gpu_program.html#aa31bef1bfaa87731622e56f11b548e27", null ],
     [ "OGRE_AUTO_MUTEX", "class_ogre_1_1_gpu_program.html#a104d9db8bfcff1f37b29157bbe070f7a", null ]

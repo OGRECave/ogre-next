@@ -39,6 +39,7 @@ var class_ogre_1_1_buffer_packed =
     [ "D3D11BufferInterfaceBase", "class_ogre_1_1_buffer_packed.html#a83bf87828ec4291e865953e420ab8caa", null ],
     [ "D3D11CompatBufferInterface", "class_ogre_1_1_buffer_packed.html#a52b6a6c5683238629666dc7e5517e4e5", null ],
     [ "GL3PlusBufferInterface", "class_ogre_1_1_buffer_packed.html#a920a4b9b97deafbbebc7ca4ffbaa1b9e", null ],
+    [ "GLES2BufferInterface", "class_ogre_1_1_buffer_packed.html#afa1e1dc0d6e75a4109011e27430e4c75", null ],
     [ "MetalBufferInterface", "class_ogre_1_1_buffer_packed.html#a2f01c6f6a61515b8238ff46a66b32be1", null ],
     [ "NULLBufferInterface", "class_ogre_1_1_buffer_packed.html#afc15890790c9d03279386a52c8d028e3", null ]
 ];

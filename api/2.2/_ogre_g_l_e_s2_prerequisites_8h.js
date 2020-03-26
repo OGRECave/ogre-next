@@ -4,7 +4,7 @@ var _ogre_g_l_e_s2_prerequisites_8h =
     [ "DEBUG_", "_ogre_g_l_e_s2_prerequisites_8h.html#a45bbdef2e602a1d12b999a837df8fb89", null ],
     [ "EGL_CHECK_ERROR", "_ogre_g_l_e_s2_prerequisites_8h.html#a970bd7d687d827541d8b0d765d808048", null ],
     [ "ENABLE_GL_CHECK", "_ogre_g_l_e_s2_prerequisites_8h.html#a73ff6a326ebf3637a67218046668ce64", null ],
-    [ "getGLES2SupportRef", "_ogre_g_l_e_s2_prerequisites_8h.html#a81ec74a686f8f36f879969fae5f32ee7", null ],
+    [ "getGLES2RenderSystem", "_ogre_g_l_e_s2_prerequisites_8h.html#a6d967aa99363f7ea34fbb1ff6544028f", null ],
     [ "GL_ANY_SAMPLES_PASSED_EXT", "_ogre_g_l_e_s2_prerequisites_8h.html#a2886278ee7b93b6ebd101c7b55b5c699", null ],
     [ "GL_COMPRESSED_RGB8_ETC2", "_ogre_g_l_e_s2_prerequisites_8h.html#a11dbae33206841b3d524ae88b622fda6", null ],
     [ "GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2", "_ogre_g_l_e_s2_prerequisites_8h.html#a9724e5b6599c0033802ade7ba65de4e4", null ],
@@ -19,6 +19,7 @@ var _ogre_g_l_e_s2_prerequisites_8h =
     [ "GL_FILL", "_ogre_g_l_e_s2_prerequisites_8h.html#a95af009d03993e7ed7df00306cc53573", null ],
     [ "GL_GLEXT_PROTOTYPES", "_ogre_g_l_e_s2_prerequisites_8h.html#a120fb070bddb21f0bd899f50252c4cb5", null ],
     [ "GL_HALF_FLOAT_OES", "_ogre_g_l_e_s2_prerequisites_8h.html#a408917369046371dfc94813183bf4e9a", null ],
+    [ "GL_LINE", "_ogre_g_l_e_s2_prerequisites_8h.html#abbfc2afe81343b8bb6e636fd60aa8e39", null ],
     [ "GL_MAP_FLUSH_EXPLICIT_BIT_EXT", "_ogre_g_l_e_s2_prerequisites_8h.html#afd252cdc7799492f7b59eabf4c96c277", null ],
     [ "GL_MAP_INVALIDATE_RANGE_BIT_EXT", "_ogre_g_l_e_s2_prerequisites_8h.html#a9ed14600b78ac226675ad4967f282d14", null ],
     [ "GL_MAP_READ_BIT_EXT", "_ogre_g_l_e_s2_prerequisites_8h.html#a3d3b7e52f4521f60f2793bfc1273c6f2", null ],
@@ -29,6 +30,7 @@ var _ogre_g_l_e_s2_prerequisites_8h =
     [ "GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT", "_ogre_g_l_e_s2_prerequisites_8h.html#ad1cf646d8224fdedcce963d095f71c1b", null ],
     [ "GL_MIN_EXT", "_ogre_g_l_e_s2_prerequisites_8h.html#a70f62d16502e28c2319711fd032320ea", null ],
     [ "GL_OES_compressed_ETC1_RGB8_texture", "_ogre_g_l_e_s2_prerequisites_8h.html#a7ea57fd0c113d1821f184ac709af73fa", null ],
+    [ "GL_POINT", "_ogre_g_l_e_s2_prerequisites_8h.html#a18f542292378fb0f3093fcaec1878b60", null ],
     [ "GL_PROGRAM_BINARY_LENGTH_OES", "_ogre_g_l_e_s2_prerequisites_8h.html#abba627710fbf97372dc1390faa78119f", null ],
     [ "GL_QUERY_RESULT_AVAILABLE_EXT", "_ogre_g_l_e_s2_prerequisites_8h.html#abf85514071139366c34fbc980f25bc45", null ],
     [ "GL_QUERY_RESULT_EXT", "_ogre_g_l_e_s2_prerequisites_8h.html#ac34f9cbbf620b4c40d12bef77090de51", null ],
@@ -77,6 +79,5 @@ var _ogre_g_l_e_s2_prerequisites_8h =
     [ "OCGE", "_ogre_g_l_e_s2_prerequisites_8h.html#abfd865b3e7fad46b5e4e46ab17e04564", null ],
     [ "OGRE_CHECK_GL_ERROR", "_ogre_g_l_e_s2_prerequisites_8h.html#a68ed09c6ada21ef994461cea24497286", null ],
     [ "OGRE_IF_IOS_VERSION_IS_GREATER_THAN", "_ogre_g_l_e_s2_prerequisites_8h.html#a6c2be7f20d5f91ff9a714fd044ad9ca6", null ],
-    [ "GLES2GpuProgramPtr", "_ogre_g_l_e_s2_prerequisites_8h.html#aed9fa2af0adbb4c182463f59bcd64ede", null ],
     [ "GLES2TexturePtr", "_ogre_g_l_e_s2_prerequisites_8h.html#aa03128706f8570ed424eb6bbe665ca05", null ]
 ];

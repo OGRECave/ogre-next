@@ -200,8 +200,6 @@ var group___render_system =
     ] ],
     [ "RenderQueueListener", "class_ogre_1_1_render_queue_listener.html", [
       [ "~RenderQueueListener", "class_ogre_1_1_render_queue_listener.html#aca4ab8444c09caeeff186213a98beb89", null ],
-      [ "postRenderQueues", "class_ogre_1_1_render_queue_listener.html#a0a6a53d54e3215fc2bf2c877fedd47d6", null ],
-      [ "preRenderQueues", "class_ogre_1_1_render_queue_listener.html#aed637d7bad94336183321b5ee290751c", null ],
       [ "renderQueueEnded", "class_ogre_1_1_render_queue_listener.html#a338dd1abf82317692ce7504978c01a5c", null ],
       [ "renderQueueStarted", "class_ogre_1_1_render_queue_listener.html#a563d698bbebe090f33f5706958f8842e", null ]
     ] ],
@@ -337,7 +335,6 @@ var group___render_system =
       [ "getDisplayMonitorCount", "class_ogre_1_1_render_system.html#aac481d80a88211d8eed2f5f7dc4c6afe", null ],
       [ "getDriverVersion", "class_ogre_1_1_render_system.html#a6e6521ead351b0b7a8b2cc519b5f4dd6", null ],
       [ "getErrorDescription", "class_ogre_1_1_render_system.html#a847238effa8920edf9aee7aa5b8cd7be", null ],
-      [ "getFixedPipelineEnabled", "class_ogre_1_1_render_system.html#a28c75f1ca83ffac6c50c8a2f43a48933", null ],
       [ "getFriendlyName", "class_ogre_1_1_render_system.html#af74b8367b531b280f80f0f52d87e84bc", null ],
       [ "getGlobalInstanceVertexBuffer", "class_ogre_1_1_render_system.html#a2a859eea18cd0c3cf0c7876bbab862a4", null ],
       [ "getGlobalInstanceVertexBufferVertexDeclaration", "class_ogre_1_1_render_system.html#a38924cc348317c9104797536eb29be13", null ],

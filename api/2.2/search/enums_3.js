@@ -1,7 +1,7 @@
 var searchData=
 [
   ['d3d9resourcecreationpolicy',['D3D9ResourceCreationPolicy',['../namespace_ogre.html#ae1989b3ea4f950a490576b517adfa511',1,'Ogre']]],
-  ['debugvisualizationmode',['DebugVisualizationMode',['../class_ogre_1_1_vct_voxelizer.html#a6f53ab149daf60f02bdc7541c12f51dc',1,'Ogre::VctVoxelizer']]],
+  ['debugvisualizationmode',['DebugVisualizationMode',['../class_ogre_1_1_irradiance_field.html#a41156332f76f4565fea6bdf70b204a0e',1,'Ogre::IrradianceField::DebugVisualizationMode()'],['../class_ogre_1_1_vct_voxelizer.html#a6f53ab149daf60f02bdc7541c12f51dc',1,'Ogre::VctVoxelizer::DebugVisualizationMode()']]],
   ['defaultmipmapgen',['DefaultMipmapGen',['../namespace_ogre_1_1_default_mipmap_gen.html#a3eb99f91a07b98f3713bf8c23069e9fb',1,'Ogre::DefaultMipmapGen']]],
   ['dirtyflags',['DirtyFlags',['../class_ogre_1_1_const_buffer_pool.html#a4dc8f3f46667d44648238e9c396fd9a7',1,'Ogre::ConstBufferPool']]],
   ['displaymode',['DisplayMode',['../class_ogre_1_1_profile_session_listener.html#a7d8c034deef087a5969bf5cce55334fd',1,'Ogre::ProfileSessionListener']]],

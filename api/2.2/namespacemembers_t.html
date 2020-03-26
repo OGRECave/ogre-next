@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -198,6 +198,9 @@ $(document).ready(function(){initNavTree('namespacemembers_t.html','');});
 <li>TextureFlags
 : <a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434">Ogre::TextureFlags</a>
 </li>
+<li>TextureGpuSet
+: <a class="el" href="group___render_system.html#gae71498d7d122cb904ac7af017b6ccfcd">Ogre</a>
+</li>
 <li>TextureGpuVec
 : <a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">Ogre</a>
 </li>
@@ -207,9 +210,6 @@ $(document).ready(function(){initNavTree('namespacemembers_t.html','');});
 <li>TexturePoolList
 : <a class="el" href="group___resources.html#ga9ee475f7c3b717768fa083b62409f63f">Ogre</a>
 </li>
-<li>TexturePtr
-: <a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">Ogre</a>
-</li>
 <li>TexturePtrList
 : <a class="el" href="namespace_ogre.html#a9f8ede152a4ce600bfcf6e8a7333b29f">Ogre</a>
 </li>
@@ -218,6 +218,9 @@ $(document).ready(function(){initNavTree('namespacemembers_t.html','');});
 </li>
 <li>TexturesOriginal
 : <a class="el" href="namespace_ogre_1_1_scene_flags.html#af3190017d83d94455e645c506aa1681ba8200b0c8579fa808b6ea54b84d4b3135">Ogre::SceneFlags</a>
+</li>
+<li>TextureSourceType
+: <a class="el" href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5a">Ogre::TextureSourceType</a>
 </li>
 <li>TextureType
 : <a class="el" href="group___resources.html#gae50520af6377ff8184cf79125cb9c4d7">Ogre</a>
@@ -230,9 +233,6 @@ $(document).ready(function(){initNavTree('namespacemembers_t.html','');});
 </li>
 <li>TextureUsage
 : <a class="el" href="group___resources.html#gaf140ec886884a864abc74a7556f8bf67">Ogre</a>
-</li>
-<li>TextureVec
-: <a class="el" href="group___material.html#gafc9cd22b34445bc47b997e8324f665ee">Ogre</a>
 </li>
 <li>TFO_ANISOTROPIC
 : <a class="el" href="group___general.html#gga21a0186392e9c9ce16d29c5568a773c5a27d43242c4bfc932a046213fdacf919e">Ogre</a>
@@ -253,7 +253,7 @@ $(document).ready(function(){initNavTree('namespacemembers_t.html','');});
 : <a class="el" href="namespace_ogre.html#abd64b6e4eaf1f67aaf83a0d2d7f3bde0">Ogre</a>
 </li>
 <li>ThreadHandleVec
-: <a class="el" href="namespace_ogre.html#a345d0933f394f8f7c21ba15ecc48da49">Ogre</a>
+: <a class="el" href="namespace_ogre.html#afce062dc548d2039494b4a77465714b5">Ogre</a>
 </li>
 <li>TID_COLON
 : <a class="el" href="group___general.html#ggafef752c0acb956e22a95c41e667480aba878d2261acfefcb0d7300c8c45b5c02d">Ogre</a>
@@ -375,6 +375,10 @@ $(document).ready(function(){initNavTree('namespacemembers_t.html','');});
 <li>TVC_SPECULAR
 : <a class="el" href="group___general.html#gga5d04131dcb51ec3cf219465196b6de85a451fabea329cb76c0dccb9b811293699">Ogre</a>
 </li>
+<li>Type180
+: <a class="el" href="namespace_ogre_1_1_lamp_cone_type.html#a6dfdc0962f55b3c26763ed1def663976a327b7d5b24879864f0edc01eb0c30364">Ogre::LampConeType</a>
+, <a class="el" href="namespace_ogre_1_1_lamp_horiz_type.html#a532a041cf9ef0743af3536986b358216affd839d6a09954feaa7e24f693e92d8e">Ogre::LampHorizType</a>
+</li>
 <li>Type1D
 : <a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82a9ba113121e25f3fe54e44653b44dcb61">Ogre::TextureTypes</a>
 </li>
@@ -387,8 +391,15 @@ $(document).ready(function(){initNavTree('namespacemembers_t.html','');});
 <li>Type2DArray
 : <a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82a81fa551ed4eb59dba70c3e09876e1be0">Ogre::TextureTypes</a>
 </li>
+<li>Type360
+: <a class="el" href="namespace_ogre_1_1_lamp_horiz_type.html#a532a041cf9ef0743af3536986b358216a999aef8f481c6ce597480c914d4e1959">Ogre::LampHorizType</a>
+</li>
 <li>Type3D
 : <a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82ac83a61cff343dbb3aaa5d61e188e9979">Ogre::TextureTypes</a>
+</li>
+<li>Type90
+: <a class="el" href="namespace_ogre_1_1_lamp_cone_type.html#a6dfdc0962f55b3c26763ed1def663976a8ef5b2c99523003b38b4f9662555a0b1">Ogre::LampConeType</a>
+, <a class="el" href="namespace_ogre_1_1_lamp_horiz_type.html#a532a041cf9ef0743af3536986b358216aa2337ed70be16a3b20bd4d45706114af">Ogre::LampHorizType</a>
 </li>
 <li>TypeCube
 : <a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82a2fa82e951001c07788a4ab7861f5d7ba">Ogre::TextureTypes</a>

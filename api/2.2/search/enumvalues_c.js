@@ -47,6 +47,7 @@ var searchData=
   ['numresourcelayouts',['NumResourceLayouts',['../namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7aca23d90822badf7c7813e47f4900d765',1,'Ogre::ResourceLayout']]],
   ['numshadertypes',['NumShaderTypes',['../group___general.html#gga7049ce296bb4883feab25251d3865035a0bf893209b217d59e15abaf48092d132',1,'Ogre']]],
   ['numshadowfilter',['NumShadowFilter',['../class_ogre_1_1_hlms_pbs.html#a833c2e9e6768f13b9fac2fbd2a16b09fa583e750cd15e8f3df78c3c0154aab479',1,'Ogre::HlmsPbs']]],
+  ['numtexturesourcetypes',['NumTextureSourceTypes',['../namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa7f41ae26cc31fbe71845cb824ab98f41',1,'Ogre::TextureSourceType']]],
   ['numvertexpass',['NumVertexPass',['../group___general.html#gga8509892b3d9e8aab2d1dbd80a5a7b493adac56c48ee225547920e5c29bac4ab33',1,'Ogre']]],
   ['nx',['NX',['../namespace_ogre_1_1_cubemap_side.html#aa05717bddc9101a336507b0a167cde29a4d00c464e1ae8ac9dc6ab2858795e5a2',1,'Ogre::CubemapSide']]],
   ['ny',['NY',['../namespace_ogre_1_1_cubemap_side.html#aa05717bddc9101a336507b0a167cde29a839bbcda5aad8a54379b38887f587eed',1,'Ogre::CubemapSide']]],

@@ -35,6 +35,7 @@ var _ogre_platform_8h =
     [ "OGRE_PLATFORM_APPLE", "_ogre_platform_8h.html#ac1835ebd5d472ca20f5b4b3a2ddee10a", null ],
     [ "OGRE_PLATFORM_APPLE_IOS", "_ogre_platform_8h.html#a4499f0589d3e524e29fc9016a90f38d3", null ],
     [ "OGRE_PLATFORM_EMSCRIPTEN", "_ogre_platform_8h.html#a813680a39abb8fa11722d6918aa73238", null ],
+    [ "OGRE_PLATFORM_FREEBSD", "_ogre_platform_8h.html#afd156284f0635909a814d4a9c745e0ce", null ],
     [ "OGRE_PLATFORM_LINUX", "_ogre_platform_8h.html#ad6ca9e6d3e2b2da8d4ee9e74a8a8f437", null ],
     [ "OGRE_PLATFORM_NACL", "_ogre_platform_8h.html#a1886da46819d5c6333981e2500f29b3c", null ],
     [ "OGRE_PLATFORM_WIN32", "_ogre_platform_8h.html#acbe1943c4784d0e38a71195b186b2648", null ],

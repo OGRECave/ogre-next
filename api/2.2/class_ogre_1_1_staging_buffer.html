@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_staging_buffer.html',''
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_staging_buffer__inherit__graph.svg" width="562" height="190"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_staging_buffer__inherit__graph.svg" width="562" height="240"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -113,7 +113,7 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ae90c8303a85284ef6801919bfc4fdfd0"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="struct_ogre_1_1_staging_buffer_1_1_destination.html">Destination</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#ae90c8303a85284ef6801919bfc4fdfd0">DestinationVec</a></td></tr>
+<tr class="memitem:ae90c8303a85284ef6801919bfc4fdfd0"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_staging_buffer_1_1_destination.html">Destination</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#ae90c8303a85284ef6801919bfc4fdfd0">DestinationVec</a></td></tr>
 <tr class="separator:ae90c8303a85284ef6801919bfc4fdfd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -137,9 +137,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad844466b16d039d78fe762a3e32f92c2"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#ad844466b16d039d78fe762a3e32f92c2">canDownload</a> (size_t length) const</td></tr>
 <tr class="memdesc:ad844466b16d039d78fe762a3e32f92c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if this staging buffer has enough free space to use _asyncDownload.  <a href="#ad844466b16d039d78fe762a3e32f92c2">More...</a><br /></td></tr>
 <tr class="separator:ad844466b16d039d78fe762a3e32f92c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af759c6fc5dda6a21bc6971191490fcbd"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#af759c6fc5dda6a21bc6971191490fcbd">getLastUsedTimestamp</a> (void)</td></tr>
-<tr class="memdesc:af759c6fc5dda6a21bc6971191490fcbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in millisecond when the ref. count became 0.  <a href="#af759c6fc5dda6a21bc6971191490fcbd">More...</a><br /></td></tr>
-<tr class="separator:af759c6fc5dda6a21bc6971191490fcbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bb62ecc6017c1d0b86a80d8b54c6150"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a7e1487b57f16a1479302d1896c6f4445">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a1bb62ecc6017c1d0b86a80d8b54c6150">getLastUsedTimestamp</a> (void) const</td></tr>
+<tr class="memdesc:a1bb62ecc6017c1d0b86a80d8b54c6150"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in millisecond when the ref. count became 0.  <a href="#a1bb62ecc6017c1d0b86a80d8b54c6150">More...</a><br /></td></tr>
+<tr class="separator:a1bb62ecc6017c1d0b86a80d8b54c6150"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06dfed7c83a6aa991b0bceef76743550"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a06dfed7c83a6aa991b0bceef76743550">getLifetimeThreshold</a> (void) const</td></tr>
 <tr class="memdesc:a06dfed7c83a6aa991b0bceef76743550"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in milliseconds in which a <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> should live with a reference count of 0 before being deleted.  <a href="#a06dfed7c83a6aa991b0bceef76743550">More...</a><br /></td></tr>
 <tr class="separator:a06dfed7c83a6aa991b0bceef76743550"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,8 +147,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0512e57da9c9f75e7666133a10883126"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a765f26f80115c9341308fc86330ec9c2"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a765f26f80115c9341308fc86330ec9c2">getMaxSize</a> (void)</td></tr>
 <tr class="separator:a765f26f80115c9341308fc86330ec9c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed6d4c497d2567d4e11075455d9e74ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#aed6d4c497d2567d4e11075455d9e74ca">getReferenceCount</a> (void) const</td></tr>
-<tr class="separator:aed6d4c497d2567d4e11075455d9e74ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a897e0ef920699d059b273eed1fe71d4d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5c8843f6e8086a9239fed14de8b9d859">int16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a897e0ef920699d059b273eed1fe71d4d">getReferenceCount</a> (void) const</td></tr>
+<tr class="separator:a897e0ef920699d059b273eed1fe71d4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53adbd5b91819a0e58c9d2c010eba469"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a53adbd5b91819a0e58c9d2c010eba469">getUnfencedTimeThreshold</a> (void) const</td></tr>
 <tr class="memdesc:a53adbd5b91819a0e58c9d2c010eba469"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in milliseconds in which a <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> should hazards unfenced while with a reference count of 0.  <a href="#a53adbd5b91819a0e58c9d2c010eba469">More...</a><br /></td></tr>
 <tr class="separator:a53adbd5b91819a0e58c9d2c010eba469"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -210,7 +210,7 @@ Public Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="struct_ogre_1_1_staging_buffer_1_1_destination.html">Destination</a>&gt;::type <a class="el" href="class_ogre_1_1_staging_buffer.html#ae90c8303a85284ef6801919bfc4fdfd0">Ogre::StagingBuffer::DestinationVec</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_staging_buffer_1_1_destination.html">Destination</a>&gt;::type <a class="el" href="class_ogre_1_1_staging_buffer.html#ae90c8303a85284ef6801919bfc4fdfd0">Ogre::StagingBuffer::DestinationVec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -339,7 +339,7 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The offset in bytes that will be used by </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_staging_buffer.html#abf6789c54909d4f248cb69a3a8a04f3e" title="Maps the buffer for read acces for the CPU. ">_mapForRead</a> </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_metal_staging_buffer.html#ae41bfebb124f220f7f5a170ac101ce59">Ogre::MetalStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_staging_buffer.html#a93e8873b3d77cea3d98764d264e46a19">Ogre::GL3PlusStagingBuffer</a>, <a class="el" href="class_ogre_1_1_d3_d11_staging_buffer.html#a240f4261cb238ed9b1325856f6f5d772">Ogre::D3D11StagingBuffer</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_staging_buffer.html#abf19c9dc9bf79b6cfc8e627eae6594fd">Ogre::NULLStagingBuffer</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_metal_staging_buffer.html#ae41bfebb124f220f7f5a170ac101ce59">Ogre::MetalStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_staging_buffer.html#a93e8873b3d77cea3d98764d264e46a19">Ogre::GL3PlusStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_staging_buffer.html#a66ebe4f87d071e9611aac7ec39fef7a2">Ogre::GLES2StagingBuffer</a>, <a class="el" href="class_ogre_1_1_d3_d11_staging_buffer.html#a240f4261cb238ed9b1325856f6f5d772">Ogre::D3D11StagingBuffer</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_staging_buffer.html#abf19c9dc9bf79b6cfc8e627eae6594fd">Ogre::NULLStagingBuffer</a>.</p>
 
 </div>
 </div>
@@ -481,8 +481,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="af759c6fc5dda6a21bc6971191490fcbd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af759c6fc5dda6a21bc6971191490fcbd">&#9670;&nbsp;</a></span>getLastUsedTimestamp()</h2>
+<a id="a1bb62ecc6017c1d0b86a80d8b54c6150"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bb62ecc6017c1d0b86a80d8b54c6150">&#9670;&nbsp;</a></span>getLastUsedTimestamp()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -491,11 +491,11 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned long Ogre::StagingBuffer::getLastUsedTimestamp </td>
+          <td class="memname"><a class="el" href="namespace_ogre.html#a7e1487b57f16a1479302d1896c6f4445">uint64</a> Ogre::StagingBuffer::getLastUsedTimestamp </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -589,8 +589,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aed6d4c497d2567d4e11075455d9e74ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed6d4c497d2567d4e11075455d9e74ca">&#9670;&nbsp;</a></span>getReferenceCount()</h2>
+<a id="a897e0ef920699d059b273eed1fe71d4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a897e0ef920699d059b273eed1fe71d4d">&#9670;&nbsp;</a></span>getReferenceCount()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -599,7 +599,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> Ogre::StagingBuffer::getReferenceCount </td>
+          <td class="memname"><a class="el" href="namespace_ogre.html#a5c8843f6e8086a9239fed14de8b9d859">int16</a> Ogre::StagingBuffer::getReferenceCount </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -1228,7 +1228,7 @@ template&lt;class Alloc &gt; </div>
 <p>StagingStallType </p><dl class="section remark"><dt>Remarks</dt><dd>Not all RenderSystems can accurately give this information and will always return STALL_PARTIAL (i.e. GLES2) The chances of getting a STALL_FULL get higher as sizeBytes gets closer to this-&gt;<a class="el" href="class_ogre_1_1_staging_buffer.html#a765f26f80115c9341308fc86330ec9c2">getMaxSize()</a> mUploadOnly must be false. It is the counter side of </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_staging_buffer.html#ad844466b16d039d78fe762a3e32f92c2" title="Checks if this staging buffer has enough free space to use _asyncDownload. ">canDownload</a> </dd></dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a6ee0032ef0fe4c1200eb07f7fb052a1b">Ogre::MetalStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_staging_buffer.html#a80dcc131205f9fbccf8f7f56c2650138">Ogre::GL3PlusStagingBuffer</a>, <a class="el" href="class_ogre_1_1_d3_d11_staging_buffer.html#a73cd3b649225c35a756a88070fd88e86">Ogre::D3D11StagingBuffer</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_staging_buffer.html#a5e20b5e6c8f3b89127854f89a3284fa5">Ogre::NULLStagingBuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a6ee0032ef0fe4c1200eb07f7fb052a1b">Ogre::MetalStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_staging_buffer.html#a80dcc131205f9fbccf8f7f56c2650138">Ogre::GL3PlusStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_staging_buffer.html#a391b9d2ba733ea2400118bf330b9a561">Ogre::GLES2StagingBuffer</a>, <a class="el" href="class_ogre_1_1_d3_d11_staging_buffer.html#a73cd3b649225c35a756a88070fd88e86">Ogre::D3D11StagingBuffer</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_staging_buffer.html#a5e20b5e6c8f3b89127854f89a3284fa5">Ogre::NULLStagingBuffer</a>.</p>
 
 </div>
 </div>

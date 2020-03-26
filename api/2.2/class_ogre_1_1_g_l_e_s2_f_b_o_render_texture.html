@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -110,9 +110,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6bfbf4c4dc48e7ce769dd72aa1c81e43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e051c49ca6d1abf0f6ebea15c2c9ee7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_render_texture.html#a5e051c49ca6d1abf0f6ebea15c2c9ee7">_detachDepthBuffer</a> ()</td></tr>
 <tr class="separator:a5e051c49ca6d1abf0f6ebea15c2c9ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a482623b1ed080e15766c93c1cf4b193b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_render_texture.html#a482623b1ed080e15766c93c1cf4b193b">attachDepthBuffer</a> (<a class="el" href="class_ogre_1_1_depth_buffer.html">DepthBuffer</a> *depthBuffer)</td></tr>
-<tr class="memdesc:a482623b1ed080e15766c93c1cf4b193b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override so we can attach the depth buffer to the FBO.  <a href="#a482623b1ed080e15766c93c1cf4b193b">More...</a><br /></td></tr>
-<tr class="separator:a482623b1ed080e15766c93c1cf4b193b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22144e4b81a673b04bd7a3593709c11e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_render_texture.html#a22144e4b81a673b04bd7a3593709c11e">attachDepthBuffer</a> (<a class="el" href="class_ogre_1_1_depth_buffer.html">DepthBuffer</a> *depthBuffer, bool exactFormatMatch)</td></tr>
+<tr class="memdesc:a22144e4b81a673b04bd7a3593709c11e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override so we can attach the depth buffer to the FBO.  <a href="#a22144e4b81a673b04bd7a3593709c11e">More...</a><br /></td></tr>
+<tr class="separator:a22144e4b81a673b04bd7a3593709c11e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99c3485be4003c72805a0f09d8a89ad7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_render_texture.html#a99c3485be4003c72805a0f09d8a89ad7">detachDepthBuffer</a> ()</td></tr>
 <tr class="separator:a99c3485be4003c72805a0f09d8a89ad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6db9dd68a8e9c9f326b3d1b5833d997d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_f_b_o_render_texture.html#a6db9dd68a8e9c9f326b3d1b5833d997d">getCustomAttribute</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, void *pData)</td></tr>
@@ -196,8 +196,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a482623b1ed080e15766c93c1cf4b193b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a482623b1ed080e15766c93c1cf4b193b">&#9670;&nbsp;</a></span>attachDepthBuffer()</h2>
+<a id="a22144e4b81a673b04bd7a3593709c11e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22144e4b81a673b04bd7a3593709c11e">&#9670;&nbsp;</a></span>attachDepthBuffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -209,8 +209,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">virtual bool Ogre::GLES2FBORenderTexture::attachDepthBuffer </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_depth_buffer.html">DepthBuffer</a> *&#160;</td>
-          <td class="paramname"><em>depthBuffer</em></td><td>)</td>
+          <td class="paramname"><em>depthBuffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>exactFormatMatch</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>

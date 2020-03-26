@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -124,6 +124,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a75c7e6c919c3bf55475a0a04160189fc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace_listener.html#a75c7e6c919c3bf55475a0a04160189fc">passSceneAfterShadowMaps</a> (<a class="el" href="class_ogre_1_1_compositor_pass_scene.html">CompositorPassScene</a> *pass)</td></tr>
 <tr class="memdesc:a75c7e6c919c3bf55475a0a04160189fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after a pass scene has rendered shadow casting (it gets called even if there is no shadow node).  <a href="#a75c7e6c919c3bf55475a0a04160189fc">More...</a><br /></td></tr>
 <tr class="separator:a75c7e6c919c3bf55475a0a04160189fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71ee72b0064a1c20c05b37995e5e139e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace_listener.html#a71ee72b0064a1c20c05b37995e5e139e">workspacePosUpdate</a> (<a class="el" href="class_ogre_1_1_compositor_workspace.html">CompositorWorkspace</a> *workspace)</td></tr>
+<tr class="memdesc:a71ee72b0064a1c20c05b37995e5e139e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after all nodes has been updated.  <a href="#a71ee72b0064a1c20c05b37995e5e139e">More...</a><br /></td></tr>
+<tr class="separator:a71ee72b0064a1c20c05b37995e5e139e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad6aea0f666028295c3efa9dc41eaceb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace_listener.html#aad6aea0f666028295c3efa9dc41eaceb">workspacePreUpdate</a> (<a class="el" href="class_ogre_1_1_compositor_workspace.html">CompositorWorkspace</a> *workspace)</td></tr>
 <tr class="memdesc:aad6aea0f666028295c3efa9dc41eaceb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called before all nodes are going to be updated.  <a href="#aad6aea0f666028295c3efa9dc41eaceb">More...</a><br /></td></tr>
 <tr class="separator:aad6aea0f666028295c3efa9dc41eaceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -336,6 +339,34 @@ Public Member Functions</h2></td></tr>
 <p>Called after a pass scene has rendered shadow casting (it gets called even if there is no shadow node). </p>
 <p>Gets called after passPreExecute and before passSceneAfterFrustumCulling</p>
 <p>Warning: calling pass-&gt;execute can result in recursive calls. </p>
+
+</div>
+</div>
+<a id="a71ee72b0064a1c20c05b37995e5e139e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71ee72b0064a1c20c05b37995e5e139e">&#9670;&nbsp;</a></span>workspacePosUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::CompositorWorkspaceListener::workspacePosUpdate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_compositor_workspace.html">CompositorWorkspace</a> *&#160;</td>
+          <td class="paramname"><em>workspace</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called after all nodes has been updated. </p>
 
 </div>
 </div>

@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -111,7 +111,8 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_hlms_pbs_datablock.html
 Public Types</h2></td></tr>
 <tr class="memitem:adf6c922e4527b98a3a98aa573b382ceb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382ceb">TransparencyModes</a> { <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382ceba58da4571019c3fa5e4f54ba299fb1a9d">None</a>, 
 <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382cebab44e86e71d625be994fd999d1b5200c0">Transparent</a>, 
-<a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382cebaab2d3d5abd16b997476cf4ee7bb6cdfa">Fade</a>
+<a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382cebaab2d3d5abd16b997476cf4ee7bb6cdfa">Fade</a>, 
+<a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382cebae6f957e8a548c22ddc66c7c02ab9a94a">Refractive</a>
  }</td></tr>
 <tr class="separator:adf6c922e4527b98a3a98aa573b382ceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a167f6114c3c5b246a7c4601a6e72cbfd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a167f6114c3c5b246a7c4601a6e72cbfd">Workflows</a> { <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a167f6114c3c5b246a7c4601a6e72cbfda82391fa4ed75db0350e9aff885cecb06">SpecularWorkflow</a>, 
@@ -169,6 +170,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abf5019d0bb1eb6851f05c15f9f8e29c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51ea9fddb7d365f32407d4f2c7854a61"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a51ea9fddb7d365f32407d4f2c7854a61">getReceiveShadows</a> (void) const</td></tr>
 <tr class="separator:a51ea9fddb7d365f32407d4f2c7854a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c932322e7ead23b83564e55deacceae"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a5c932322e7ead23b83564e55deacceae">getRefractionStrength</a> (void) const</td></tr>
+<tr class="separator:a5c932322e7ead23b83564e55deacceae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1afbd8c2920b62bbebe533e05f19189a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a1afbd8c2920b62bbebe533e05f19189a">getRoughness</a> (void) const</td></tr>
 <tr class="separator:a1afbd8c2920b62bbebe533e05f19189a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8c4dfb67899faae51c6117b4b5f40a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#ac8c4dfb67899faae51c6117b4b5f40a1">getSpecular</a> (void) const</td></tr>
@@ -183,6 +186,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a717d5ec3f10be7607d2bcf6ccc200c88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3aa6a38bb51baa9a5eed36e046d6a88d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a3aa6a38bb51baa9a5eed36e046d6a88d">getUseAlphaFromTextures</a> (void) const</td></tr>
 <tr class="separator:a3aa6a38bb51baa9a5eed36e046d6a88d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4796cb71d04dbe82d7cc27528748add7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a4796cb71d04dbe82d7cc27528748add7">getUseDiffuseMapAsGrayscale</a> (void) const</td></tr>
+<tr class="separator:a4796cb71d04dbe82d7cc27528748add7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca5813d4a086e2d599aba8d0817f7cc7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#aca5813d4a086e2d599aba8d0817f7cc7">getUseEmissiveAsLightmap</a> (void) const</td></tr>
 <tr class="separator:aca5813d4a086e2d599aba8d0817f7cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcd0278f17ed622f5fb3fe9f931ade70"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector4.html">Vector4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#abcd0278f17ed622f5fb3fe9f931ade70">getUserValue</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> userValueIdx) const</td></tr>
@@ -203,6 +208,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad8b3c1f10ae5b13c0cb0b35b36f5bf70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#ad8b3c1f10ae5b13c0cb0b35b36f5bf70">importUnity</a> (const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;colour, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> metallic, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> roughness, bool changeBrdf)</td></tr>
 <tr class="memdesc:ad8b3c1f10ae5b13c0cb0b35b36f5bf70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to import values from Unity (metallic workflow).  <a href="#ad8b3c1f10ae5b13c0cb0b35b36f5bf70">More...</a><br /></td></tr>
 <tr class="separator:ad8b3c1f10ae5b13c0cb0b35b36f5bf70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37a1b52a7dc03675ec00c6ec25b7a346"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a37a1b52a7dc03675ec00c6ec25b7a346">notifyTextureChanged</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">TextureGpuListener::Reason</a> reason, void *extraData)</td></tr>
+<tr class="separator:a37a1b52a7dc03675ec00c6ec25b7a346"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add11930a49857ecceb800bd224180641"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#add11930a49857ecceb800bd224180641">setAlphaTestThreshold</a> (float threshold)</td></tr>
 <tr class="separator:add11930a49857ecceb800bd224180641"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad48f1f9b97e5a7264b6c534478b8c49c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#ad48f1f9b97e5a7264b6c534478b8c49c">setBackgroundDiffuse</a> (const <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a> &amp;bgDiffuse)</td></tr>
@@ -247,6 +254,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a391527262b73a36a09a3a708e6a46b6a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a391527262b73a36a09a3a708e6a46b6a">setReceiveShadows</a> (bool receiveShadows)</td></tr>
 <tr class="memdesc:a391527262b73a36a09a3a708e6a46b6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">When false, objects with this material will not receive shadows (independent of whether they case shadows or not)  <a href="#a391527262b73a36a09a3a708e6a46b6a">More...</a><br /></td></tr>
 <tr class="separator:a391527262b73a36a09a3a708e6a46b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a216b57ff082ffcfa2f14ddbc3fe499ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a216b57ff082ffcfa2f14ddbc3fe499ba">setRefractionStrength</a> (float strength)</td></tr>
+<tr class="memdesc:a216b57ff082ffcfa2f14ddbc3fe499ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the strength of the refraction, i.e.  <a href="#a216b57ff082ffcfa2f14ddbc3fe499ba">More...</a><br /></td></tr>
+<tr class="separator:a216b57ff082ffcfa2f14ddbc3fe499ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad80b40dd9799f18a585e53732c4ff30a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#ad80b40dd9799f18a585e53732c4ff30a">setRoughness</a> (float roughness)</td></tr>
 <tr class="memdesc:ad80b40dd9799f18a585e53732c4ff30a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the roughness.  <a href="#ad80b40dd9799f18a585e53732c4ff30a">More...</a><br /></td></tr>
 <tr class="separator:ad80b40dd9799f18a585e53732c4ff30a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -264,6 +274,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa76cc1f6ae4b994a7504430f10e2609c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#aa76cc1f6ae4b994a7504430f10e2609c">setTwoSidedLighting</a> (bool twoSided, bool changeMacroblock=true, <a class="el" href="group___general.html#gac173244ed7d950d0acd726e4f323ecdb">CullingMode</a> oneSidedShadowCast=<a class="el" href="group___general.html#ggac173244ed7d950d0acd726e4f323ecdba0803d6fedd04659fd6dc152d29434e4a">CULL_ANTICLOCKWISE</a>)</td></tr>
 <tr class="memdesc:aa76cc1f6ae4b994a7504430f10e2609c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows support for two sided lighting.  <a href="#aa76cc1f6ae4b994a7504430f10e2609c">More...</a><br /></td></tr>
 <tr class="separator:aa76cc1f6ae4b994a7504430f10e2609c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fa1ee1b4ce88c8ff4e5c1f1df1ae10f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a8fa1ee1b4ce88c8ff4e5c1f1df1ae10f">setUseDiffuseMapAsGrayscale</a> (bool bUseDiffuseMapAsGrayscale)</td></tr>
+<tr class="memdesc:a8fa1ee1b4ce88c8ff4e5c1f1df1ae10f"><td class="mdescLeft">&#160;</td><td class="mdescRight">When set, it treats the diffuse map as a grayscale map; which means it will spread red component to all rgb channels.  <a href="#a8fa1ee1b4ce88c8ff4e5c1f1df1ae10f">More...</a><br /></td></tr>
+<tr class="separator:a8fa1ee1b4ce88c8ff4e5c1f1df1ae10f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ca529cd32fe95efa8aee7f8cd3c2126"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a6ca529cd32fe95efa8aee7f8cd3c2126">setUseEmissiveAsLightmap</a> (bool bUseEmissiveAsLightmap)</td></tr>
 <tr class="memdesc:a6ca529cd32fe95efa8aee7f8cd3c2126"><td class="mdescLeft">&#160;</td><td class="mdescRight">When set, it treats the emissive map as a lightmap; which means it will be multiplied against the diffuse component.  <a href="#a6ca529cd32fe95efa8aee7f8cd3c2126">More...</a><br /></td></tr>
 <tr class="separator:a6ca529cd32fe95efa8aee7f8cd3c2126"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -313,6 +326,10 @@ Friends</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="adf6c922e4527b98a3a98aa573b382cebaab2d3d5abd16b997476cf4ee7bb6cdfa"></a>Fade&#160;</td><td class="fielddoc"><p>Good 'ol regular alpha blending. </p>
 <p>Ideal for just fading out an object until it completely disappears. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adf6c922e4527b98a3a98aa573b382cebae6f957e8a548c22ddc66c7c02ab9a94a"></a>Refractive&#160;</td><td class="fielddoc"><p>Similar to transparent, but also performs refractions. </p>
+<p>The compositor scene pass must be set to render refractive objects in its own pass.</p>
+<p>See Samples/2.0/ApiUsage/Refractions </p>
 </td></tr>
 </table>
 
@@ -399,6 +416,7 @@ Friends</h2></td></tr>
 <p>background_diffuse &lt;r g="" b="" a&gt;=""&gt; Specifies diffuse colour to use as a background when diffuse texture are not present. Does not replace 'diffuse &lt;r g="" b&gt;=""&gt;' Default: background_diffuse 1 1 1 1</p>
 <p>diffuse &lt;r g="" b&gt;=""&gt; Specifies the RGB diffuse colour. "kD" in most books about PBS Default: diffuse 1 1 1 1 Note: Internally the diffuse colour is divided by PI.</p>
 <p>diffuse_map &lt;texture name&gt;=""&gt; Name of the diffuse texture for the base image (optional)</p>
+<p>diffuse_map_grayscale &lt;true, false&gt; When set to true diffuse map would be sampled with .rrra swizzle Default: false</p>
 <p>specular &lt;r g="" b&gt;=""&gt; Specifies the RGB specular colour. "kS" in most books about PBS Default: specular 1 1 1 1</p>
 <p>specular_map &lt;texture name&gt;=""&gt; Name of the specular texture for the base image (optional).</p>
 <p>roughness_map &lt;texture name&gt;=""&gt; Name of the roughness texture for the base image (optional) Note: Only the Red channel will be used, and the texture will be converted to an efficient monochrome representation.</p>
@@ -834,6 +852,32 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a5c932322e7ead23b83564e55deacceae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c932322e7ead23b83564e55deacceae">&#9670;&nbsp;</a></span>getRefractionStrength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Ogre::HlmsPbsDatablock::getRefractionStrength </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1afbd8c2920b62bbebe533e05f19189a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1afbd8c2920b62bbebe533e05f19189a">&#9670;&nbsp;</a></span>getRoughness()</h2>
 
@@ -980,6 +1024,24 @@ Friends</h2></td></tr>
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4796cb71d04dbe82d7cc27528748add7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4796cb71d04dbe82d7cc27528748add7">&#9670;&nbsp;</a></span>getUseDiffuseMapAsGrayscale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::HlmsPbsDatablock::getUseDiffuseMapAsGrayscale </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -1195,6 +1257,48 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a37a1b52a7dc03675ec00c6ec25b7a346"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37a1b52a7dc03675ec00c6ec25b7a346">&#9670;&nbsp;</a></span>notifyTextureChanged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::HlmsPbsDatablock::notifyTextureChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
+          <td class="paramname"><em>texture</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">TextureGpuListener::Reason</a>&#160;</td>
+          <td class="paramname"><em>reason</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>extraData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="add11930a49857ecceb800bd224180641"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#add11930a49857ecceb800bd224180641">&#9670;&nbsp;</a></span>setAlphaTestThreshold()</h2>
 
@@ -1399,7 +1503,7 @@ Friends</h2></td></tr>
 
 <p>Sets the weight of detail map. </p>
 <p>Affects both diffuse and normal at the same time. </p><dl class="section remark"><dt>Remarks</dt><dd>A value of 1 will cause a flushRenderables as we remove the code from the shader. The weight from </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a98709511c3cf45d081d5573a50bb71c9" title="setDetailNormalWeight. This is the same, but for the main normal map. ">setNormalMapWeight</a> is multiplied against this value when it comes to the detail normal <a class="el" href="struct_ogre_1_1map.html">map</a>. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a98709511c3cf45d081d5573a50bb71c9" title="setDetailNormalWeight. This is the same, but for the main normal map. ">setNormalMapWeight</a> is multiplied against this value when it comes to the detail normal map. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">detailMap</td><td>Value in the range [0; 4) </td></tr>
@@ -1642,6 +1746,33 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a216b57ff082ffcfa2f14ddbc3fe499ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a216b57ff082ffcfa2f14ddbc3fe499ba">&#9670;&nbsp;</a></span>setRefractionStrength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsPbsDatablock::setRefractionStrength </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>strength</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the strength of the refraction, i.e. </p>
+<p>how much displacement in screen space.</p>
+<p>This value is not physically based. Only used when <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#aa4db8245afb76983564ced5898621d1a" title="Makes the material transparent, and sets the amount of transparency. ">HlmsPbsDatablock::setTransparency</a> was set to <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382cebae6f957e8a548c22ddc66c7c02ab9a94a" title="Similar to transparent, but also performs refractions. ">HlmsPbsDatablock::Refractive</a> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">strength</td><td>Refraction strength. Useful range is often (0; 1) but any value is valid (even negative), but the bigger the number, the more likely glitches will appear (with large values we have to fallback to regular alpha blending due to the screen space pixel landing outside the screen) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ad80b40dd9799f18a585e53732c4ff30a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad80b40dd9799f18a585e53732c4ff30a">&#9670;&nbsp;</a></span>setRoughness()</h2>
 
@@ -1852,6 +1983,27 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a8fa1ee1b4ce88c8ff4e5c1f1df1ae10f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fa1ee1b4ce88c8ff4e5c1f1df1ae10f">&#9670;&nbsp;</a></span>setUseDiffuseMapAsGrayscale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsPbsDatablock::setUseDiffuseMapAsGrayscale </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bUseDiffuseMapAsGrayscale</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>When set, it treats the diffuse map as a grayscale map; which means it will spread red component to all rgb channels. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>With this option you can use PFG_R8_UNORM for diffuse map in the same way as old PF_L8 format </dd></dl>
 
 </div>
 </div>

@@ -26,6 +26,8 @@ var searchData=
   ['amask',['amask',['../struct_ogre_1_1_pixel_format_description.html#a1ffac3a6184e318a192b6ec16ac9fb7d',1,'Ogre::PixelFormatDescription']]],
   ['ambientfixed',['AmbientFixed',['../struct_ogre_1_1_pbs_property.html#a4866419a67e296cc413219b1825afa86',1,'Ogre::PbsProperty']]],
   ['ambienthemisphere',['AmbientHemisphere',['../struct_ogre_1_1_pbs_property.html#abf2d2d6c9980b59d920b2fa696a81d1b',1,'Ogre::PbsProperty']]],
+  ['ambientsh',['AmbientSh',['../struct_ogre_1_1_pbs_property.html#a89f065107a8a2e2a48ef63892c243492',1,'Ogre::PbsProperty']]],
+  ['ambientshmonochrome',['AmbientShMonochrome',['../struct_ogre_1_1_pbs_property.html#ae10517a315c24a8b2f664c1b137034ae',1,'Ogre::PbsProperty']]],
   ['amplitude',['amplitude',['../struct_ogre_1_1_texture_unit_state_1_1_texture_effect.html#a96a6e183d58fede27a9707bd2ab84754',1,'Ogre::TextureUnitState::TextureEffect']]],
   ['animationmatricesperbuffer',['AnimationMatricesPerBuffer',['../struct_ogre_1_1_unlit_property.html#a07f8b569dfaa1b67235e6506dce6490e',1,'Ogre::UnlitProperty']]],
   ['ap',['ap',['../struct_ogre_1_1_shader_params_1_1_param.html#a770d8a5b4fecc84cca568f5dbb08f9a9',1,'Ogre::ShaderParams::Param']]],

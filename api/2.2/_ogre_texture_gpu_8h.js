@@ -8,12 +8,6 @@ var _ogre_texture_gpu_8h =
       [ "PZ", "_ogre_texture_gpu_8h.html#aa05717bddc9101a336507b0a167cde29a72649b14e9a794c4c6dc462f0f716ad0", null ],
       [ "NZ", "_ogre_texture_gpu_8h.html#aa05717bddc9101a336507b0a167cde29a06c1fca711a92e8edd99bb6b4dede813", null ]
     ] ],
-    [ "MsaaPatterns", "_ogre_texture_gpu_8h.html#a54095ce17b1cbaa8972173d9ea950f0f", [
-      [ "Undefined", "_ogre_texture_gpu_8h.html#a54095ce17b1cbaa8972173d9ea950f0fae9213e03f8cab27c1f90e1981b2ab623", null ],
-      [ "Standard", "_ogre_texture_gpu_8h.html#a54095ce17b1cbaa8972173d9ea950f0fa445f40c611f369b3ad626074ebd7815b", null ],
-      [ "Center", "_ogre_texture_gpu_8h.html#a54095ce17b1cbaa8972173d9ea950f0fa8204db5736f2d9f7d147135189198ff7", null ],
-      [ "CenterZero", "_ogre_texture_gpu_8h.html#a54095ce17b1cbaa8972173d9ea950f0fa8a445209440970fa095cef30a61bf250", null ]
-    ] ],
     [ "TextureFlags", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434", [
       [ "NotTexture", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434a11bc1f37ab6f4ee0fc43da2e45ae5918", null ],
       [ "RenderToTexture", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434a3ff7a5394c299b94950eb7cff468ad1b", null ],
@@ -28,6 +22,14 @@ var _ogre_texture_gpu_8h =
       [ "ManualTexture", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434af3d439b1fb1b1aedfbea2c633da4e2b1", null ],
       [ "AutomaticBatching", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434a2f298fbaec7db976ba6616430b1f52a3", null ],
       [ "PoolOwner", "_ogre_texture_gpu_8h.html#a59b71e36a14465bd82595d6d467e1434aeb8acf9388488f12f4edd8de80b5dcf9", null ]
+    ] ],
+    [ "TextureSourceType", "_ogre_texture_gpu_8h.html#a487889f4cfc926c4eaaf01e2f4e68c5a", [
+      [ "Standard", "_ogre_texture_gpu_8h.html#a487889f4cfc926c4eaaf01e2f4e68c5aae58d19079db522fb8c06bb4dd3ece311", null ],
+      [ "Shadow", "_ogre_texture_gpu_8h.html#a487889f4cfc926c4eaaf01e2f4e68c5aa4aae1ed01eda1f2f2e4cd3289d0f3fe6", null ],
+      [ "Compositor", "_ogre_texture_gpu_8h.html#a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb", null ],
+      [ "PoolOwner", "_ogre_texture_gpu_8h.html#a487889f4cfc926c4eaaf01e2f4e68c5aadbcd72f6cc179e35ed961620e04f4d2a", null ],
+      [ "SharedDepthBuffer", "_ogre_texture_gpu_8h.html#a487889f4cfc926c4eaaf01e2f4e68c5aac20d23827af269fdf5ae3b5daabaafa7", null ],
+      [ "NumTextureSourceTypes", "_ogre_texture_gpu_8h.html#a487889f4cfc926c4eaaf01e2f4e68c5aa7f41ae26cc31fbe71845cb824ab98f41", null ]
     ] ],
     [ "TextureTypes", "_ogre_texture_gpu_8h.html#aa364e348564060700791c9940d5ced82", [
       [ "Unknown", "_ogre_texture_gpu_8h.html#aa364e348564060700791c9940d5ced82a13888ea41a337938a549d0c5657d799d", null ],

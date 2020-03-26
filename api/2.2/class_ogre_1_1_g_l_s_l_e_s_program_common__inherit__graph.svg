@@ -17,7 +17,7 @@
 <!-- Node1 -->
 <g id="node2" class="node">
 <title>Node1</title>
-<g id="a_node2"><a xlink:href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html" target="_top" xlink:title="Specialisation of HighLevelGpuProgram to provide support for OpenGL Shader Language (GLSL ES) for Ope...">
+<g id="a_node2"><a xlink:href="class_ogre_1_1_g_l_s_l_e_s_program_pipeline.html" target="_top" xlink:title="Specialisation of GLSLESProgramCommon to provide support for separable programs via the Open GL progr...">
 <polygon fill="none" stroke="#000000" points="2.5,-.5 2.5,-19.5 155.5,-19.5 155.5,-.5 2.5,-.5"/>
 <text text-anchor="middle" x="79" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Ogre::GLSLESProgramPipeline</text>
 </a>

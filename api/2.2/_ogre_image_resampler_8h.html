@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -113,6 +113,10 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a12235742509b0560860b6c18d826d97a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_image_resampler_8h.html#a12235742509b0560860b6c18d826d97a">ACCUM1</a>(x,  y,  z,  factor)</td></tr>
+<tr class="separator:a12235742509b0560860b6c18d826d97a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc23babb26835ba930f0a47b14cb20ee"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_image_resampler_8h.html#adc23babb26835ba930f0a47b14cb20ee">ACCUM2</a>(x,  y,  z,  factor)</td></tr>
+<tr class="separator:adc23babb26835ba930f0a47b14cb20ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfa4aeaeb25cca0360ae0ba0aef7cf9e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_image_resampler_8h.html#abfa4aeaeb25cca0360ae0ba0aef7cf9e">ACCUM3</a>(x,  y,  z,  factor)</td></tr>
 <tr class="separator:abfa4aeaeb25cca0360ae0ba0aef7cf9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d51fc9045f78003752d2f5c88b34914"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_image_resampler_8h.html#a8d51fc9045f78003752d2f5c88b34914">ACCUM4</a>(x,  y,  z,  factor)</td></tr>
@@ -121,6 +125,90 @@ Macros</h2></td></tr>
 <tr class="separator:aeb34b7ef2dbf4c91dd7c37f88e852c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a12235742509b0560860b6c18d826d97a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12235742509b0560860b6c18d826d97a">&#9670;&nbsp;</a></span>ACCUM1</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ACCUM1</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">y, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">z, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">factor&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">{ <span class="keywordtype">float</span> f = factor; \</div><div class="line">    float *psrc = (<span class="keywordtype">float</span>*)(srcdata + x * srcelemsize + y * src.bytesPerRow + z * src.bytesPerImage); \</div><div class="line">    accum[0] += f * psrc[0]; }</div></div><!-- fragment -->
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97">Ogre::LinearResampler_Float32::scale()</a>.</p>
+
+</div>
+</div>
+<a id="adc23babb26835ba930f0a47b14cb20ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc23babb26835ba930f0a47b14cb20ee">&#9670;&nbsp;</a></span>ACCUM2</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ACCUM2</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">y, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">z, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">factor&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">{ <span class="keywordtype">float</span> f = factor; \</div><div class="line">    float *psrc = (<span class="keywordtype">float</span>*)(srcdata + x * srcelemsize + y * src.bytesPerRow + z * src.bytesPerImage); \</div><div class="line">    accum[0] += f * psrc[0]; accum[1] += f * psrc[1]; }</div></div><!-- fragment -->
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97">Ogre::LinearResampler_Float32::scale()</a>.</p>
+
+</div>
+</div>
 <a id="abfa4aeaeb25cca0360ae0ba0aef7cf9e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abfa4aeaeb25cca0360ae0ba0aef7cf9e">&#9670;&nbsp;</a></span>ACCUM3</h2>
 
@@ -158,8 +246,8 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">{ <span class="keywordtype">float</span> f = factor; \</div><div class="line">    size_t off = (x+y*src.rowPitch+z*src.slicePitch)*srcchannels; \</div><div class="line">    accum[0]+=srcdata[off+0]*f; accum[1]+=srcdata[off+1]*f; \</div><div class="line">    accum[2]+=srcdata[off+2]*f; }</div></div><!-- fragment -->
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a86e44dcdddb74c9ea459b6b1c57a0b21">Ogre::LinearResampler_Float32::scale()</a>.</p>
+<b>Value:</b><div class="fragment"><div class="line">{ <span class="keywordtype">float</span> f = factor; \</div><div class="line">    float *psrc = (<span class="keywordtype">float</span>*)(srcdata + x * srcelemsize + y * src.bytesPerRow + z * src.bytesPerImage); \</div><div class="line">    accum[0] += f * psrc[0]; accum[1] += f * psrc[1]; accum[2] += f * psrc[2]; }</div></div><!-- fragment -->
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97">Ogre::LinearResampler_Float32::scale()</a>.</p>
 
 </div>
 </div>
@@ -200,8 +288,8 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">{ <span class="keywordtype">float</span> f = factor; \</div><div class="line">    size_t off = (x+y*src.rowPitch+z*src.slicePitch)*srcchannels; \</div><div class="line">    accum[0]+=srcdata[off+0]*f; accum[1]+=srcdata[off+1]*f; \</div><div class="line">    accum[2]+=srcdata[off+2]*f; accum[3]+=srcdata[off+3]*f; }</div></div><!-- fragment -->
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a86e44dcdddb74c9ea459b6b1c57a0b21">Ogre::LinearResampler_Float32::scale()</a>.</p>
+<b>Value:</b><div class="fragment"><div class="line">{ <span class="keywordtype">float</span> f = factor; \</div><div class="line">    float *psrc = (<span class="keywordtype">float</span>*)(srcdata + x * srcelemsize + y * src.bytesPerRow + z * src.bytesPerImage); \</div><div class="line">    accum[0] += f*psrc[0]; accum[1] += f*psrc[1]; accum[2] += f*psrc[2]; accum[3] += f*psrc[3]; }</div></div><!-- fragment -->
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97">Ogre::LinearResampler_Float32::scale()</a>.</p>
 
 </div>
 </div>
@@ -242,8 +330,8 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">PixelUtil::unpackColour(&amp;dst, src.format, \</div><div class="line">    srcdata + srcelemsize*((x)+(y)*src.rowPitch+(z)*src.slicePitch))</div></div><!-- fragment -->
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_linear_resampler.html#a7a82c967cb98c1db45715509f72fc43b">Ogre::LinearResampler::scale()</a>.</p>
+<b>Value:</b><div class="fragment"><div class="line">PixelFormatGpuUtils::unpackColour(&amp;dst, srcFormat, \</div><div class="line">    srcdata + srcelemsize*(x)+(y)*src.bytesPerRow+(z)*src.bytesPerImage)</div></div><!-- fragment -->
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_linear_resampler.html#acad0869b5293daea8acb677d8dc8a864">Ogre::LinearResampler::scale()</a>.</p>
 
 </div>
 </div>

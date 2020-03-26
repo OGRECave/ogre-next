@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -122,7 +122,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a4d2162c156be30917f38f15e2327ce65a154441f49638a86fc2da0e1a712fc614"></a>AlwaysKeepSystemRamCopy&#160;</td><td class="fielddoc"><p>Always keep a copy on system RAM, even when resident. </p>
 <p>This makes for fast reading from CPU. Not all resources allow this option (e.g. RTT &amp; UAV textures)</p>
-<p>Warning: This flag has a few drawbacks for Textures. The metadata won't be ready earlier (i.e. it won't be available until the data is available). The metadata cache can't be used. Some calls such as <a class="el" href="class_ogre_1_1_texture_gpu.html#a659f27d51b5597f0beffdf691fa932fe">TextureGpu::copyTo</a> require syncing back from GPU to CPU. This is made async, but if you queue more than one copyTo call, it can stall. </p>
+<p>Warning: This flag has a few drawbacks for Textures. The metadata won't be ready earlier (i.e. it won't be available until the data is available). The metadata cache can't be used. Some calls such as <a class="el" href="class_ogre_1_1_texture_gpu.html#a9bc79af9475a1d7350cd783e85707ee4">TextureGpu::copyTo</a> require syncing back from GPU to CPU. This is made async, but if you queue more than one copyTo call, it can stall. </p>
 </td></tr>
 </table>
 

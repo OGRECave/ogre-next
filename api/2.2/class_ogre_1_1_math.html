@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -186,6 +186,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a0de224c93b57ff8414892d77f9a2d81d"><td class="memTemplItemLeft" align="right" valign="top">static T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#a0de224c93b57ff8414892d77f9a2d81d">Clamp</a> (T val, T minval, T maxval)</td></tr>
 <tr class="memdesc:a0de224c93b57ff8414892d77f9a2d81d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp a value within an inclusive range.  <a href="#a0de224c93b57ff8414892d77f9a2d81d">More...</a><br /></td></tr>
 <tr class="separator:a0de224c93b57ff8414892d77f9a2d81d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4bfd3e13afc2ea06f7342a05a4c1164"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#aa4bfd3e13afc2ea06f7342a05a4c1164">ClosestPow2</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> x)</td></tr>
+<tr class="memdesc:aa4bfd3e13afc2ea06f7342a05a4c1164"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return closest power of two not smaller than given number.  <a href="#aa4bfd3e13afc2ea06f7342a05a4c1164">More...</a><br /></td></tr>
+<tr class="separator:aa4bfd3e13afc2ea06f7342a05a4c1164"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a926ea9552a822969f87939154afd1070"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#a926ea9552a822969f87939154afd1070">Cos</a> (const <a class="el" href="class_ogre_1_1_radian.html">Radian</a> &amp;fValue, bool useTables=false)</td></tr>
 <tr class="memdesc:a926ea9552a822969f87939154afd1070"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cosine function.  <a href="#a926ea9552a822969f87939154afd1070">More...</a><br /></td></tr>
 <tr class="separator:a926ea9552a822969f87939154afd1070"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -241,12 +244,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:abf5be33ecdfafc7414f9dc894652e78f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#abf5be33ecdfafc7414f9dc894652e78f">intersects</a> (const <a class="el" href="class_ogre_1_1_plane.html">Plane</a> &amp;plane, const <a class="el" href="class_ogre_1_1_axis_aligned_box.html">AxisAlignedBox</a> &amp;box)</td></tr>
 <tr class="memdesc:abf5be33ecdfafc7414f9dc894652e78f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_plane.html" title="Defines a plane in 3D space. ">Plane</a> / box intersection test.  <a href="#abf5be33ecdfafc7414f9dc894652e78f">More...</a><br /></td></tr>
 <tr class="separator:abf5be33ecdfafc7414f9dc894652e78f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac052baf452b600c1bfb3f8dc2714726f"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; bool, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#ac052baf452b600c1bfb3f8dc2714726f">intersects</a> (const <a class="el" href="class_ogre_1_1_ray.html">Ray</a> &amp;ray, const <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_plane.html">Plane</a> &gt;::type &amp;planeList, bool normalIsOutside)</td></tr>
-<tr class="memdesc:ac052baf452b600c1bfb3f8dc2714726f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_ray.html" title="Representation of a ray in space, i.e. ">Ray</a> / convex plane list intersection test.  <a href="#ac052baf452b600c1bfb3f8dc2714726f">More...</a><br /></td></tr>
-<tr class="separator:ac052baf452b600c1bfb3f8dc2714726f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae853145d03bef021e4759e3baa8b2bd8"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; bool, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#ae853145d03bef021e4759e3baa8b2bd8">intersects</a> (const <a class="el" href="class_ogre_1_1_ray.html">Ray</a> &amp;ray, const <a class="el" href="struct_ogre_1_1list.html">list</a>&lt; <a class="el" href="class_ogre_1_1_plane.html">Plane</a> &gt;::type &amp;planeList, bool normalIsOutside)</td></tr>
-<tr class="memdesc:ae853145d03bef021e4759e3baa8b2bd8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_ray.html" title="Representation of a ray in space, i.e. ">Ray</a> / convex plane list intersection test.  <a href="#ae853145d03bef021e4759e3baa8b2bd8">More...</a><br /></td></tr>
-<tr class="separator:ae853145d03bef021e4759e3baa8b2bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a1ed3175faac851efd35dc6f214f239"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; bool, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#a3a1ed3175faac851efd35dc6f214f239">intersects</a> (const <a class="el" href="class_ogre_1_1_ray.html">Ray</a> &amp;ray, const <a class="el" href="class_ogre_1_1_std_vector.html">StdVector</a>&lt; <a class="el" href="class_ogre_1_1_plane.html">Plane</a> &gt; &amp;planeList, bool normalIsOutside)</td></tr>
+<tr class="memdesc:a3a1ed3175faac851efd35dc6f214f239"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_ray.html" title="Representation of a ray in space, i.e. ">Ray</a> / convex plane list intersection test.  <a href="#a3a1ed3175faac851efd35dc6f214f239">More...</a><br /></td></tr>
+<tr class="separator:a3a1ed3175faac851efd35dc6f214f239"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad977fe10a75fd085a82d3c89e5916f1d"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; bool, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#ad977fe10a75fd085a82d3c89e5916f1d">intersects</a> (const <a class="el" href="class_ogre_1_1_ray.html">Ray</a> &amp;ray, const <a class="el" href="class_ogre_1_1_std_list.html">StdList</a>&lt; <a class="el" href="class_ogre_1_1_plane.html">Plane</a> &gt; &amp;planeList, bool normalIsOutside)</td></tr>
+<tr class="memdesc:ad977fe10a75fd085a82d3c89e5916f1d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_ray.html" title="Representation of a ray in space, i.e. ">Ray</a> / convex plane list intersection test.  <a href="#ad977fe10a75fd085a82d3c89e5916f1d">More...</a><br /></td></tr>
+<tr class="separator:ad977fe10a75fd085a82d3c89e5916f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b0f94a3e7f4ecc4feeff1418ac6cc14"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#a0b0f94a3e7f4ecc4feeff1418ac6cc14">intersects</a> (const <a class="el" href="class_ogre_1_1_sphere.html">Sphere</a> &amp;sphere, const <a class="el" href="class_ogre_1_1_plane.html">Plane</a> &amp;plane)</td></tr>
 <tr class="memdesc:a0b0f94a3e7f4ecc4feeff1418ac6cc14"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_sphere.html" title="A sphere primitive, mostly used for bounds checking. ">Sphere</a> / plane intersection test.  <a href="#a0b0f94a3e7f4ecc4feeff1418ac6cc14">More...</a><br /></td></tr>
 <tr class="separator:a0b0f94a3e7f4ecc4feeff1418ac6cc14"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -272,6 +275,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a34fe16bca3f1e3083a82412079a5fcdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af54f316b962cc41338d62bbc7308de8f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#af54f316b962cc41338d62bbc7308de8f">makeViewMatrix</a> (const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;position, const <a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a> &amp;orientation, const <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a> *reflectMatrix=0)</td></tr>
 <tr class="separator:af54f316b962cc41338d62bbc7308de8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae614e4d22bc2008436124a596e2d19f9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#ae614e4d22bc2008436124a596e2d19f9">octahedronMappingDecode</a> (<a class="el" href="class_ogre_1_1_vector2.html">Vector2</a> f)</td></tr>
+<tr class="memdesc:ae614e4d22bc2008436124a596e2d19f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes a 2D value in range [0; 1] and returns a unit-length 3D vector.  <a href="#ae614e4d22bc2008436124a596e2d19f9">More...</a><br /></td></tr>
+<tr class="separator:ae614e4d22bc2008436124a596e2d19f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12f1cd41b467cd21dfa192025553ed46"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#a12f1cd41b467cd21dfa192025553ed46">octahedronMappingEncode</a> (<a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> n)</td></tr>
+<tr class="memdesc:a12f1cd41b467cd21dfa192025553ed46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes a directional 3D vector n and returns a 2D value in range [0; 1] Vector 'n' doesn't have to be normalized.  <a href="#a12f1cd41b467cd21dfa192025553ed46">More...</a><br /></td></tr>
+<tr class="separator:a12f1cd41b467cd21dfa192025553ed46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c5d853f3430541b427152b4a1c1229b"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_math.html#a2c5d853f3430541b427152b4a1c1229b">pointInTri2D</a> (const <a class="el" href="class_ogre_1_1_vector2.html">Vector2</a> &amp;p, const <a class="el" href="class_ogre_1_1_vector2.html">Vector2</a> &amp;a, const <a class="el" href="class_ogre_1_1_vector2.html">Vector2</a> &amp;b, const <a class="el" href="class_ogre_1_1_vector2.html">Vector2</a> &amp;c)</td></tr>
 <tr class="memdesc:a2c5d853f3430541b427152b4a1c1229b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a given point is inside a triangle, in a 2-dimensional (Cartesian) space.  <a href="#a2c5d853f3430541b427152b4a1c1229b">More...</a><br /></td></tr>
 <tr class="separator:a2c5d853f3430541b427152b4a1c1229b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1149,6 +1158,34 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="aa4bfd3e13afc2ea06f7342a05a4c1164"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4bfd3e13afc2ea06f7342a05a4c1164">&#9670;&nbsp;</a></span>ClosestPow2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> Ogre::Math::ClosestPow2 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return closest power of two not smaller than given number. </p>
+
+</div>
+</div>
 <a id="a926ea9552a822969f87939154afd1070"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a926ea9552a822969f87939154afd1070">&#9670;&nbsp;</a></span>Cos() <span class="overload">[1/2]</span></h2>
 
@@ -1967,8 +2004,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ac052baf452b600c1bfb3f8dc2714726f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac052baf452b600c1bfb3f8dc2714726f">&#9670;&nbsp;</a></span>intersects() <span class="overload">[9/11]</span></h2>
+<a id="a3a1ed3175faac851efd35dc6f214f239"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a1ed3175faac851efd35dc6f214f239">&#9670;&nbsp;</a></span>intersects() <span class="overload">[9/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1985,7 +2022,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_plane.html">Plane</a> &gt;::type &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_std_vector.html">StdVector</a>&lt; <a class="el" href="class_ogre_1_1_plane.html">Plane</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>planeList</em>, </td>
         </tr>
         <tr>
@@ -2019,8 +2056,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ae853145d03bef021e4759e3baa8b2bd8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae853145d03bef021e4759e3baa8b2bd8">&#9670;&nbsp;</a></span>intersects() <span class="overload">[10/11]</span></h2>
+<a id="ad977fe10a75fd085a82d3c89e5916f1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad977fe10a75fd085a82d3c89e5916f1d">&#9670;&nbsp;</a></span>intersects() <span class="overload">[10/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2037,7 +2074,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="struct_ogre_1_1list.html">list</a>&lt; <a class="el" href="class_ogre_1_1_plane.html">Plane</a> &gt;::type &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_std_list.html">StdList</a>&lt; <a class="el" href="class_ogre_1_1_plane.html">Plane</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>planeList</em>, </td>
         </tr>
         <tr>
@@ -2410,6 +2447,62 @@ template&lt;typename T , typename S &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae614e4d22bc2008436124a596e2d19f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae614e4d22bc2008436124a596e2d19f9">&#9670;&nbsp;</a></span>octahedronMappingDecode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> Ogre::Math::octahedronMappingDecode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_vector2.html">Vector2</a>&#160;</td>
+          <td class="paramname"><em>f</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Takes a 2D value in range [0; 1] and returns a unit-length 3D vector. </p>
+
+</div>
+</div>
+<a id="a12f1cd41b467cd21dfa192025553ed46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12f1cd41b467cd21dfa192025553ed46">&#9670;&nbsp;</a></span>octahedronMappingEncode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="class_ogre_1_1_vector2.html">Vector2</a> Ogre::Math::octahedronMappingEncode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Takes a directional 3D vector n and returns a 2D value in range [0; 1] Vector 'n' doesn't have to be normalized. </p>
 
 </div>
 </div>

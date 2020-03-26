@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -127,12 +127,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3026667d0f447d89bcac3fd8c6007a00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_c_preprocessor.html#a3026667d0f447d89bcac3fd8c6007a00">Define</a> (const char *iMacroName, size_t iMacroNameLen, const char *iMacroValue, size_t iMacroValueLen)</td></tr>
 <tr class="memdesc:a3026667d0f447d89bcac3fd8c6007a00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a macro without parameters.  <a href="#a3026667d0f447d89bcac3fd8c6007a00">More...</a><br /></td></tr>
 <tr class="separator:a3026667d0f447d89bcac3fd8c6007a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70c0a271d5ea9dcf93d13f9c08318458"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_c_preprocessor.html#a70c0a271d5ea9dcf93d13f9c08318458">Define</a> (const char *iMacroName, size_t iMacroNameLen, long iMacroValue)</td></tr>
-<tr class="memdesc:a70c0a271d5ea9dcf93d13f9c08318458"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a numerical macro.  <a href="#a70c0a271d5ea9dcf93d13f9c08318458">More...</a><br /></td></tr>
-<tr class="separator:a70c0a271d5ea9dcf93d13f9c08318458"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3026667d0f447d89bcac3fd8c6007a00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_c_preprocessor.html#a3026667d0f447d89bcac3fd8c6007a00">Define</a> (const char *iMacroName, size_t iMacroNameLen, const char *iMacroValue, size_t iMacroValueLen)</td></tr>
 <tr class="memdesc:a3026667d0f447d89bcac3fd8c6007a00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a macro without parameters.  <a href="#a3026667d0f447d89bcac3fd8c6007a00">More...</a><br /></td></tr>
 <tr class="separator:a3026667d0f447d89bcac3fd8c6007a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70c0a271d5ea9dcf93d13f9c08318458"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_c_preprocessor.html#a70c0a271d5ea9dcf93d13f9c08318458">Define</a> (const char *iMacroName, size_t iMacroNameLen, long iMacroValue)</td></tr>
+<tr class="memdesc:a70c0a271d5ea9dcf93d13f9c08318458"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a numerical macro.  <a href="#a70c0a271d5ea9dcf93d13f9c08318458">More...</a><br /></td></tr>
+<tr class="separator:a70c0a271d5ea9dcf93d13f9c08318458"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70c0a271d5ea9dcf93d13f9c08318458"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_c_preprocessor.html#a70c0a271d5ea9dcf93d13f9c08318458">Define</a> (const char *iMacroName, size_t iMacroNameLen, long iMacroValue)</td></tr>
 <tr class="memdesc:a70c0a271d5ea9dcf93d13f9c08318458"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a numerical macro.  <a href="#a70c0a271d5ea9dcf93d13f9c08318458">More...</a><br /></td></tr>
 <tr class="separator:a70c0a271d5ea9dcf93d13f9c08318458"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,27 +184,9 @@ Line numeration is fully preserved by inserting empty lines where required. This
 <li>
 #ifdef/#ifndef/#else/#endif: Conditional suppression of parts of code. </li>
 <li>
-<p class="startli">#if: Supports numeric expression of any complexity, also supports the defined() pseudo-function. </p><ul>
+#if: Supports numeric expression of any complexity, also supports the defined() pseudo-function. <ul>
 <li>
 </li>
-</ul>
-<p>takes an non-zero-terminated string on input and outputs a non-zero-terminated string buffer.</p>
-<p>This preprocessor was designed specifically for GLSL ES shaders, so if you want to use it for other purposes you might want to check if the feature set it provides is enough for you.</p>
-<p class="endli">Here's a list of supported features: </p><ul>
-<li>
-Fast memory allocation-less operation (mostly). </li>
-<li>
-Line continuation (backslash-newline) is swallowed. </li>
-<li>
-Line numeration is fully preserved by inserting empty lines where required. This is crucial if, say, GLSL ES compiler reports you an error with a line number. </li>
-<li>
-#define: Parametrized and non-parametrized macros. Invoking a macro with less arguments than it takes assignes empty values to missing arguments. </li>
-<li>
-#undef: Forget defined macros </li>
-<li>
-#ifdef/#ifndef/#else/#endif: Conditional suppression of parts of code. </li>
-<li>
-#if: Supports numeric expression of any complexity, also supports the defined() pseudo-function. </li>
 </ul>
 </li>
 </ul>
@@ -426,54 +408,12 @@ Line numeration is fully preserved by inserting empty lines where required. This
   </dd>
 </dl>
 
-</div>
-</div>
-<a id="a70c0a271d5ea9dcf93d13f9c08318458"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a70c0a271d5ea9dcf93d13f9c08318458">&#9670;&nbsp;</a></span>Define() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::CPreprocessor::Define </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>iMacroName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>iMacroNameLen</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>iMacroValue</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Define a numerical macro. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">iMacroName</td><td>The name of the defined macro </td></tr>
-    <tr><td class="paramname">iMacroNameLen</td><td>The length of the name of the defined macro </td></tr>
-    <tr><td class="paramname">iMacroValue</td><td>The value of the defined macro </td></tr>
-  </table>
-  </dd>
-</dl>
+<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_c_preprocessor.html#a70001f3fef03cc20b5142e67702c3b3f">CPreprocessor()</a>.</p>
 
 </div>
 </div>
 <a id="a3026667d0f447d89bcac3fd8c6007a00"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3026667d0f447d89bcac3fd8c6007a00">&#9670;&nbsp;</a></span>Define() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3026667d0f447d89bcac3fd8c6007a00">&#9670;&nbsp;</a></span>Define() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -521,7 +461,49 @@ Line numeration is fully preserved by inserting empty lines where required. This
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_c_preprocessor.html#a70001f3fef03cc20b5142e67702c3b3f">CPreprocessor()</a>.</p>
+</div>
+</div>
+<a id="a70c0a271d5ea9dcf93d13f9c08318458"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70c0a271d5ea9dcf93d13f9c08318458">&#9670;&nbsp;</a></span>Define() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::CPreprocessor::Define </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>iMacroName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>iMacroNameLen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>iMacroValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define a numerical macro. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">iMacroName</td><td>The name of the defined macro </td></tr>
+    <tr><td class="paramname">iMacroNameLen</td><td>The length of the name of the defined macro </td></tr>
+    <tr><td class="paramname">iMacroValue</td><td>The value of the defined macro </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -697,6 +679,8 @@ Line numeration is fully preserved by inserting empty lines where required. This
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the macro has been undefined, false if macro doesn't exist </dd></dl>
 
+<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_c_preprocessor.html#a70001f3fef03cc20b5142e67702c3b3f">CPreprocessor()</a>.</p>
+
 </div>
 </div>
 <a id="a3849848c4223928aea432f66184d541e"></a>
@@ -734,8 +718,6 @@ Line numeration is fully preserved by inserting empty lines where required. This
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the macro has been undefined, false if macro doesn't exist </dd></dl>
-
-<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_c_preprocessor.html#a70001f3fef03cc20b5142e67702c3b3f">CPreprocessor()</a>.</p>
 
 </div>
 </div>

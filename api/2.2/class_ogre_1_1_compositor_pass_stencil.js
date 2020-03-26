@@ -28,5 +28,5 @@ var class_ogre_1_1_compositor_pass_stencil =
     [ "operator new[]", "class_ogre_1_1_compositor_pass_stencil.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "profilingBegin", "class_ogre_1_1_compositor_pass_stencil.html#ad9e0b79d8ca75e75cc94e0f00608e692", null ],
     [ "profilingEnd", "class_ogre_1_1_compositor_pass_stencil.html#a3d94bb7e758731f7160eb7dedae69ed7", null ],
-    [ "resetNumPassesLeft", "class_ogre_1_1_compositor_pass_stencil.html#a6b62d543f66d6caf1606d8f214c3f14d", null ]
+    [ "resetNumPassesLeft", "class_ogre_1_1_compositor_pass_stencil.html#afe6a90034aeaa2ed38e32d9f344e38c3", null ]
 ];

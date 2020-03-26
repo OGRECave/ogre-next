@@ -17,6 +17,7 @@ var class_ogre_1_1_compositor_workspace =
     [ "getCompositorManager", "class_ogre_1_1_compositor_workspace.html#a6c1a939633dd59f05c3f38a8701a6fd5", null ],
     [ "getCompositorManager", "class_ogre_1_1_compositor_workspace.html#ae0a8febc63199dcfb885a761b9367c51", null ],
     [ "getDefaultCamera", "class_ogre_1_1_compositor_workspace.html#adc7fe91fd1a1299b26daaf976e699951", null ],
+    [ "getDefinition", "class_ogre_1_1_compositor_workspace.html#a22adb426ddf56d2a392eaf8ed8ffb635", null ],
     [ "getEnabled", "class_ogre_1_1_compositor_workspace.html#af69f3866097f27e53c3f6f265a6d1e6e", null ],
     [ "getExecutionMask", "class_ogre_1_1_compositor_workspace.html#a9313de607fe610e76c99c1b94d2c9767", null ],
     [ "getExternalRenderTargets", "class_ogre_1_1_compositor_workspace.html#ae3478b4a04f3643f58a8f4b12c26c72c", null ],

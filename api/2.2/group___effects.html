@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -131,6 +131,11 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of <a class="el" href="class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes. ">CompositorPass</a> This implementation will copy one <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer. ">DepthBuffer</a> to another <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer. ">DepthBuffer</a> from two RTs.  <a href="class_ogre_1_1_compositor_pass_depth_copy.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_depth_copy_def.html">Ogre::CompositorPassDepthCopyDef</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular.html">Ogre::CompositorPassIblSpecular</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of <a class="el" href="class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes. ">CompositorPass</a> This implementation will generate IblSpeculars for the specified texture.  <a href="class_ogre_1_1_compositor_pass_ibl_specular.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular_def.html">Ogre::CompositorPassIblSpecularDef</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_mipmap.html">Ogre::CompositorPassMipmap</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of <a class="el" href="class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes. ">CompositorPass</a> This implementation will generate mipmaps for the specified texture.  <a href="class_ogre_1_1_compositor_pass_mipmap.html#details">More...</a><br /></td></tr>
@@ -256,26 +261,26 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ga45abfb45f742c20d043c18135a50aeeb"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga45abfb45f742c20d043c18135a50aeeb">Ogre::ChannelMappings</a></td></tr>
+<tr class="memitem:ga45abfb45f742c20d043c18135a50aeeb"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga45abfb45f742c20d043c18135a50aeeb">Ogre::ChannelMappings</a></td></tr>
 <tr class="separator:ga45abfb45f742c20d043c18135a50aeeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa7e65ad2c6fa1f6c6cf60a581fd3cbf9"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#gaa7e65ad2c6fa1f6c6cf60a581fd3cbf9">Ogre::CompositorChannel</a></td></tr>
 <tr class="memdesc:gaa7e65ad2c6fa1f6c6cf60a581fd3cbf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A channel in the compositor transports textures between nodes.  <a href="group___effects.html#gaa7e65ad2c6fa1f6c6cf60a581fd3cbf9">More...</a><br /></td></tr>
 <tr class="separator:gaa7e65ad2c6fa1f6c6cf60a581fd3cbf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1b4b8ae78da8288aeb191b819c0d72d3"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="group___effects.html#gaa7e65ad2c6fa1f6c6cf60a581fd3cbf9">CompositorChannel</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga1b4b8ae78da8288aeb191b819c0d72d3">Ogre::CompositorChannelVec</a></td></tr>
+<tr class="memitem:ga1b4b8ae78da8288aeb191b819c0d72d3"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="group___effects.html#gaa7e65ad2c6fa1f6c6cf60a581fd3cbf9">CompositorChannel</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga1b4b8ae78da8288aeb191b819c0d72d3">Ogre::CompositorChannelVec</a></td></tr>
 <tr class="separator:ga1b4b8ae78da8288aeb191b819c0d72d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabe54b22d0cf0eb77a49fed877816fe2d"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="struct_ogre_1_1_compositor_named_buffer.html">CompositorNamedBuffer</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#gabe54b22d0cf0eb77a49fed877816fe2d">Ogre::CompositorNamedBufferVec</a></td></tr>
+<tr class="memitem:gabe54b22d0cf0eb77a49fed877816fe2d"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_compositor_named_buffer.html">CompositorNamedBuffer</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#gabe54b22d0cf0eb77a49fed877816fe2d">Ogre::CompositorNamedBufferVec</a></td></tr>
 <tr class="separator:gabe54b22d0cf0eb77a49fed877816fe2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5cc23a9ff066c8ba7a6c1275453ea590"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_compositor_pass_def.html">CompositorPassDef</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga5cc23a9ff066c8ba7a6c1275453ea590">Ogre::CompositorPassDefVec</a></td></tr>
+<tr class="memitem:ga5cc23a9ff066c8ba7a6c1275453ea590"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_compositor_pass_def.html">CompositorPassDef</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga5cc23a9ff066c8ba7a6c1275453ea590">Ogre::CompositorPassDefVec</a></td></tr>
 <tr class="separator:ga5cc23a9ff066c8ba7a6c1275453ea590"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabf012f22eedc61e900f4e5163cbdf310"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_compositor_target_def.html">CompositorTargetDef</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#gabf012f22eedc61e900f4e5163cbdf310">Ogre::CompositorTargetDefVec</a></td></tr>
+<tr class="memitem:gabf012f22eedc61e900f4e5163cbdf310"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_compositor_target_def.html">CompositorTargetDef</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#gabf012f22eedc61e900f4e5163cbdf310">Ogre::CompositorTargetDefVec</a></td></tr>
 <tr class="separator:gabf012f22eedc61e900f4e5163cbdf310"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5b2773dd5ab4626bf794ee82b5f822e8"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="struct_ogre_1_1_compositor_texture.html">CompositorTexture</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga5b2773dd5ab4626bf794ee82b5f822e8">Ogre::CompositorTextureVec</a></td></tr>
+<tr class="memitem:ga5b2773dd5ab4626bf794ee82b5f822e8"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_compositor_texture.html">CompositorTexture</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga5b2773dd5ab4626bf794ee82b5f822e8">Ogre::CompositorTextureVec</a></td></tr>
 <tr class="separator:ga5b2773dd5ab4626bf794ee82b5f822e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gadaac55e85e3ad259f88742040308ea45"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="struct_ogre_1_1_render_target_view_entry.html">RenderTargetViewEntry</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#gadaac55e85e3ad259f88742040308ea45">Ogre::RenderTargetViewEntryVec</a></td></tr>
+<tr class="memitem:gadaac55e85e3ad259f88742040308ea45"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="struct_ogre_1_1_render_target_view_entry.html">RenderTargetViewEntry</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#gadaac55e85e3ad259f88742040308ea45">Ogre::RenderTargetViewEntryVec</a></td></tr>
 <tr class="separator:gadaac55e85e3ad259f88742040308ea45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga732a9a0736fd3a64669170b18d3dc4d1"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">Ogre::TextureGpuVec</a></td></tr>
+<tr class="memitem:ga732a9a0736fd3a64669170b18d3dc4d1"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">Ogre::TextureGpuVec</a></td></tr>
 <tr class="separator:ga732a9a0736fd3a64669170b18d3dc4d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7502fc233f843b0f0c1b0fc2aa26099b"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_uav_buffer_packed.html">UavBufferPacked</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga7502fc233f843b0f0c1b0fc2aa26099b">Ogre::UavBufferPackedVec</a></td></tr>
+<tr class="memitem:ga7502fc233f843b0f0c1b0fc2aa26099b"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_uav_buffer_packed.html">UavBufferPacked</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___effects.html#ga7502fc233f843b0f0c1b0fc2aa26099b">Ogre::UavBufferPackedVec</a></td></tr>
 <tr class="separator:ga7502fc233f843b0f0c1b0fc2aa26099b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -324,6 +329,7 @@ Enumerations</h2></td></tr>
 <a class="el" href="group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa64169071182113bc2f2612ce360d83dc">Ogre::PASS_UAV</a>, 
 <br />
 &#160;&#160;<a class="el" href="group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa43539099735fda358fe3b01e3536933f">Ogre::PASS_MIPMAP</a>, 
+<a class="el" href="group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa0fe924f8a19ffe8a3d7c0445946d7ec5">Ogre::PASS_IBL_SPECULAR</a>, 
 <a class="el" href="group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa973bc7a5a948dd54130595d7539eb7ba">Ogre::PASS_COMPUTE</a>, 
 <a class="el" href="group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa8be4347345faa339a4c663a8c5da1c51">Ogre::PASS_CUSTOM</a>
 <br />
@@ -356,7 +362,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&gt;::type <a class="el" href="group___effects.html#ga45abfb45f742c20d043c18135a50aeeb">Ogre::ChannelMappings</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&gt;::type <a class="el" href="group___effects.html#ga45abfb45f742c20d043c18135a50aeeb">Ogre::ChannelMappings</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -387,7 +393,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="group___effects.html#gaa7e65ad2c6fa1f6c6cf60a581fd3cbf9">CompositorChannel</a>&gt;::type <a class="el" href="group___effects.html#ga1b4b8ae78da8288aeb191b819c0d72d3">Ogre::CompositorChannelVec</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="group___effects.html#gaa7e65ad2c6fa1f6c6cf60a581fd3cbf9">CompositorChannel</a>&gt;::type <a class="el" href="group___effects.html#ga1b4b8ae78da8288aeb191b819c0d72d3">Ogre::CompositorChannelVec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -401,7 +407,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="struct_ogre_1_1_compositor_named_buffer.html">CompositorNamedBuffer</a>&gt;::type <a class="el" href="group___effects.html#gabe54b22d0cf0eb77a49fed877816fe2d">Ogre::CompositorNamedBufferVec</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_compositor_named_buffer.html">CompositorNamedBuffer</a>&gt;::type <a class="el" href="group___effects.html#gabe54b22d0cf0eb77a49fed877816fe2d">Ogre::CompositorNamedBufferVec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -415,7 +421,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="class_ogre_1_1_compositor_pass_def.html">CompositorPassDef</a>*&gt;::type <a class="el" href="group___effects.html#ga5cc23a9ff066c8ba7a6c1275453ea590">Ogre::CompositorPassDefVec</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="class_ogre_1_1_compositor_pass_def.html">CompositorPassDef</a>*&gt;::type <a class="el" href="group___effects.html#ga5cc23a9ff066c8ba7a6c1275453ea590">Ogre::CompositorPassDefVec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -429,7 +435,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="class_ogre_1_1_compositor_target_def.html">CompositorTargetDef</a>&gt;::type <a class="el" href="group___effects.html#gabf012f22eedc61e900f4e5163cbdf310">Ogre::CompositorTargetDefVec</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="class_ogre_1_1_compositor_target_def.html">CompositorTargetDef</a>&gt;::type <a class="el" href="group___effects.html#gabf012f22eedc61e900f4e5163cbdf310">Ogre::CompositorTargetDefVec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -443,7 +449,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="struct_ogre_1_1_compositor_texture.html">CompositorTexture</a>&gt;::type <a class="el" href="group___effects.html#ga5b2773dd5ab4626bf794ee82b5f822e8">Ogre::CompositorTextureVec</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_compositor_texture.html">CompositorTexture</a>&gt;::type <a class="el" href="group___effects.html#ga5b2773dd5ab4626bf794ee82b5f822e8">Ogre::CompositorTextureVec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -457,7 +463,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="struct_ogre_1_1_render_target_view_entry.html">RenderTargetViewEntry</a>&gt;::type <a class="el" href="group___effects.html#gadaac55e85e3ad259f88742040308ea45">Ogre::RenderTargetViewEntryVec</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="struct_ogre_1_1_render_target_view_entry.html">RenderTargetViewEntry</a>&gt;::type <a class="el" href="group___effects.html#gadaac55e85e3ad259f88742040308ea45">Ogre::RenderTargetViewEntryVec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -471,7 +477,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> * &gt;::type <a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">Ogre::TextureGpuVec</a></td>
+          <td class="memname">typedef vector&lt; <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> * &gt;::type <a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">Ogre::TextureGpuVec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -485,7 +491,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_uav_buffer_packed.html">UavBufferPacked</a> * &gt;::type <a class="el" href="group___effects.html#ga7502fc233f843b0f0c1b0fc2aa26099b">Ogre::UavBufferPackedVec</a></td>
+          <td class="memname">typedef vector&lt; <a class="el" href="class_ogre_1_1_uav_buffer_packed.html">UavBufferPacked</a> * &gt;::type <a class="el" href="group___effects.html#ga7502fc233f843b0f0c1b0fc2aa26099b">Ogre::UavBufferPackedVec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -592,6 +598,7 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aaece5ac965f939ab909ec7082fdea92d8"></a>PASS_DEPTHCOPY&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aa64169071182113bc2f2612ce360d83dc"></a>PASS_UAV&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aa43539099735fda358fe3b01e3536933f"></a>PASS_MIPMAP&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aa0fe924f8a19ffe8a3d7c0445946d7ec5"></a>PASS_IBL_SPECULAR&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aa973bc7a5a948dd54130595d7539eb7ba"></a>PASS_COMPUTE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga6f176e5de375550ba7f1c8dccde8345aa8be4347345faa339a4c663a8c5da1c51"></a>PASS_CUSTOM&#160;</td><td class="fielddoc"></td></tr>
 </table>

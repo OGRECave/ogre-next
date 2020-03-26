@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -295,7 +295,7 @@ My scene looks too dark or dull!</h1>
 <li>Check you're using <b>GAMMA CORRECTION</b>. If you're letting <a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> create the <code>RenderWindow</code> through the configuration, this snippet can force it:</li>
 </ol>
 <div class="fragment"><div class="line">mRoot-&gt;getRenderSystem()-&gt;setConfigOption( <span class="stringliteral">&quot;sRGB Gamma Conversion&quot;</span>, <span class="stringliteral">&quot;Yes&quot;</span> );</div><div class="line">mRoot-&gt;initialise(<span class="keyword">true</span>);</div></div><!-- fragment --><p>If you're manually creating the <code>RenderWindow</code>, then you need this snippet:</p>
-<div class="fragment"><div class="line"><a class="code" href="group___general.html#gadccb207c184efc0a6fb2a00ab6320d19">Ogre::NameValuePairList</a> params;</div><div class="line">params.insert( std::make_pair(<span class="stringliteral">&quot;gamma&quot;</span>, <span class="stringliteral">&quot;true&quot;</span>) );</div><div class="line">mRenderWindow = <a class="code" href="class_ogre_1_1_root.html#a6c8959a647a86d6732a8a32f57b6a6ee">Ogre::Root::getSingleton</a>().<a class="code" href="class_ogre_1_1_root.html#ae1c38392ce62547652f39b9a899fb20a">createRenderWindow</a>( windowTitle, width, height, fullscreen, &amp;params );</div></div><!-- fragment --><p>PBS expects gamma correction, otherwise it won't look right.</p>
+<div class="fragment"><div class="line"><a class="code" href="class_ogre_1_1_std_map.html">Ogre::NameValuePairList</a> params;</div><div class="line">params.insert( std::make_pair(<span class="stringliteral">&quot;gamma&quot;</span>, <span class="stringliteral">&quot;true&quot;</span>) );</div><div class="line">mRenderWindow = <a class="code" href="class_ogre_1_1_root.html#a6c8959a647a86d6732a8a32f57b6a6ee">Ogre::Root::getSingleton</a>().<a class="code" href="class_ogre_1_1_root.html#ae1c38392ce62547652f39b9a899fb20a">createRenderWindow</a>( windowTitle, width, height, fullscreen, &amp;params );</div></div><!-- fragment --><p>PBS expects gamma correction, otherwise it won't look right.</p>
 <ol type="1">
 <li>It is a common misconception to switch to a PBS pipeline and expect everything to still work as it was. The material parameters may need serious adjustments. High Fresnel coefficient can take away the diffuse component out of the material, which can result in darker materials, roughness coefficient can also directly affect how dark or bright the material looks.</li>
 </ol>

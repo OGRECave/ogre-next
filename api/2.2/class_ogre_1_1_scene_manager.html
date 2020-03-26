@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -131,7 +131,7 @@ Public Types</h2></td></tr>
 <tr class="separator:a51db39cc4fa15b28086a1793d42fc827"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5348867645ff727d1ca25dd89795376"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_vector_iterator.html">VectorIterator</a>&lt; <a class="el" href="class_ogre_1_1_scene_manager.html#a6d8f5f81e262b6347f5066da27d6fe70">MovableObjectVec</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#af5348867645ff727d1ca25dd89795376">MovableObjectIterator</a></td></tr>
 <tr class="separator:af5348867645ff727d1ca25dd89795376"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d8f5f81e262b6347f5066da27d6fe70"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a6d8f5f81e262b6347f5066da27d6fe70">MovableObjectVec</a></td></tr>
+<tr class="memitem:a6d8f5f81e262b6347f5066da27d6fe70"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a6d8f5f81e262b6347f5066da27d6fe70">MovableObjectVec</a></td></tr>
 <tr class="separator:a6d8f5f81e262b6347f5066da27d6fe70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4c2ff4f6c76f7fe0a8eae76f2a84cbf"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbf">PrefabType</a> { <a class="el" href="class_ogre_1_1_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbfaf0fb654fb98508a564c17d3d5b2feee3">PT_PLANE</a>, 
 <a class="el" href="class_ogre_1_1_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbfa25b0181d24b783ab75da2520305d292a">PT_CUBE</a>, 
@@ -139,7 +139,7 @@ Public Types</h2></td></tr>
  }<tr class="memdesc:ab4c2ff4f6c76f7fe0a8eae76f2a84cbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prefab shapes available without loading a model.  <a href="class_ogre_1_1_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbf">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:ab4c2ff4f6c76f7fe0a8eae76f2a84cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f87c38314b272fff95da3065f3740ee"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_scene_node.html">SceneNode</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a8f87c38314b272fff95da3065f3740ee">SceneNodeList</a></td></tr>
+<tr class="memitem:a8f87c38314b272fff95da3065f3740ee"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_scene_node.html">SceneNode</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a8f87c38314b272fff95da3065f3740ee">SceneNodeList</a></td></tr>
 <tr class="separator:a8f87c38314b272fff95da3065f3740ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a925e073eee8e57dafc08083bc10238"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a6a925e073eee8e57dafc08083bc10238">SkyMethod</a> { <a class="el" href="class_ogre_1_1_scene_manager.html#a6a925e073eee8e57dafc08083bc10238a3f37d0605dbc3f2486d858105b6eae7d">SkyCubemap</a>, 
 <a class="el" href="class_ogre_1_1_scene_manager.html#a6a925e073eee8e57dafc08083bc10238af0ca6a31afce4f654de4e9ee2cc90162">SkyEquirectangular</a>
@@ -270,6 +270,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7de1de8fc1c2168416ed4fcd94639a74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a7de1de8fc1c2168416ed4fcd94639a74">_setPrePassMode</a> (<a class="el" href="group___general.html#ga63b5ab6176b81463bbdd0e260b751d2e">PrePassMode</a> mode, const <a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">TextureGpuVec</a> &amp;prepassTextures, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *prepassDepthTexture, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *ssrTexture)</td></tr>
 <tr class="memdesc:a7de1de8fc1c2168416ed4fcd94639a74"><td class="mdescLeft">&#160;</td><td class="mdescRight">For internal use.  <a href="#a7de1de8fc1c2168416ed4fcd94639a74">More...</a><br /></td></tr>
 <tr class="separator:a7de1de8fc1c2168416ed4fcd94639a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c12be4929f32f819b60801c0d93ab9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a9c12be4929f32f819b60801c0d93ab9a">_setRefractions</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *depthTextureNoMsaa, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *refractionsTexture)</td></tr>
+<tr class="separator:a9c12be4929f32f819b60801c0d93ab9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6753ea2b52715774b7fdd59da232917a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a6753ea2b52715774b7fdd59da232917a">_suppressRenderStateChanges</a> (bool suppress)</td></tr>
 <tr class="memdesc:a6753ea2b52715774b7fdd59da232917a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates to the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e. ">SceneManager</a> whether it should suppress changing the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API. ">RenderSystem</a> states when rendering objects.  <a href="#a6753ea2b52715774b7fdd59da232917a">More...</a><br /></td></tr>
 <tr class="separator:a6753ea2b52715774b7fdd59da232917a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -338,7 +340,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae62cca9c1e6141d806ad1536acdbb812"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_manual_object.html">ManualObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#ae62cca9c1e6141d806ad1536acdbb812">createManualObject</a> (<a class="el" href="group___general.html#ga635aa2486e7e05c17c1fdec1913094a6">SceneMemoryMgrTypes</a> sceneType=<a class="el" href="group___general.html#gga635aa2486e7e05c17c1fdec1913094a6a1ea35787f06b0a63e0dd130cce754204">SCENE_DYNAMIC</a>)</td></tr>
 <tr class="memdesc:ae62cca9c1e6141d806ad1536acdbb812"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="class_ogre_1_1_manual_object.html">ManualObject</a>, an object which you populate with geometry manually through a GL immediate-mode style interface.  <a href="#ae62cca9c1e6141d806ad1536acdbb812">More...</a><br /></td></tr>
 <tr class="separator:ae62cca9c1e6141d806ad1536acdbb812"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaacb4d0155d88f559516027c8d7c2c67"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aaacb4d0155d88f559516027c8d7c2c67">createMovableObject</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;typeName, <a class="el" href="class_ogre_1_1_object_memory_manager.html">ObjectMemoryManager</a> *objectMemMgr, const <a class="el" href="group___general.html#gadccb207c184efc0a6fb2a00ab6320d19">NameValuePairList</a> *params=0)</td></tr>
+<tr class="memitem:aaacb4d0155d88f559516027c8d7c2c67"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aaacb4d0155d88f559516027c8d7c2c67">createMovableObject</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;typeName, <a class="el" href="class_ogre_1_1_object_memory_manager.html">ObjectMemoryManager</a> *objectMemMgr, const <a class="el" href="group___general.html#ga442a408f658c0cbfbe3e404e91a0fcc5">NameValuePairList</a> *params=0)</td></tr>
 <tr class="memdesc:aaacb4d0155d88f559516027c8d7c2c67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a movable object of the type specified without a name.  <a href="#aaacb4d0155d88f559516027c8d7c2c67">More...</a><br /></td></tr>
 <tr class="separator:aaacb4d0155d88f559516027c8d7c2c67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a4ee617b2e251f10cea239e31407e69"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_particle_system.html">ParticleSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a1a4ee617b2e251f10cea239e31407e69">createParticleSystem</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;templateName)</td></tr>
@@ -441,7 +443,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a570a5bfc2b2285cf38974dc82db416c9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a570a5bfc2b2285cf38974dc82db416c9">destroyBillboardChain</a> (<a class="el" href="class_ogre_1_1v1_1_1_billboard_chain.html">v1::BillboardChain</a> *obj)</td></tr>
 <tr class="memdesc:a570a5bfc2b2285cf38974dc82db416c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes &amp; destroys a BillboardChain from the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e. ">SceneManager</a>.  <a href="#a570a5bfc2b2285cf38974dc82db416c9">More...</a><br /></td></tr>
 <tr class="separator:a570a5bfc2b2285cf38974dc82db416c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af46af31e3f0a9a4c88eb755b9af885d4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#af46af31e3f0a9a4c88eb755b9af885d4">destroyBillboardSet</a> (<a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html">v1::BillboardSet</a> *<a class="el" href="struct_ogre_1_1set.html">set</a>)</td></tr>
+<tr class="memitem:af46af31e3f0a9a4c88eb755b9af885d4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#af46af31e3f0a9a4c88eb755b9af885d4">destroyBillboardSet</a> (<a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html">v1::BillboardSet</a> *set)</td></tr>
 <tr class="memdesc:af46af31e3f0a9a4c88eb755b9af885d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes &amp; destroys an BillboardSet from the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e. ">SceneManager</a>.  <a href="#af46af31e3f0a9a4c88eb755b9af885d4">More...</a><br /></td></tr>
 <tr class="separator:af46af31e3f0a9a4c88eb755b9af885d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acac58e45f8b6b6826c81933f02a45046"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#acac58e45f8b6b6826c81933f02a45046">destroyCamera</a> (<a class="el" href="class_ogre_1_1_camera.html">Camera</a> *cam)</td></tr>
@@ -560,12 +562,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a70b4a09ace966c642deea6c42b95ff69"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_compositor_pass.html">CompositorPass</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a70b4a09ace966c642deea6c42b95ff69">getCurrentCompositorPass</a> (void) const</td></tr>
 <tr class="memdesc:a70b4a09ace966c642deea6c42b95ff69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Note: May be null.  <a href="#a70b4a09ace966c642deea6c42b95ff69">More...</a><br /></td></tr>
 <tr class="separator:a70b4a09ace966c642deea6c42b95ff69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a578ab5f9e4b0769af801c4f1115d15f2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a578ab5f9e4b0769af801c4f1115d15f2">getCurrentPassDepthTextureNoMsaa</a> (void) const</td></tr>
+<tr class="separator:a578ab5f9e4b0769af801c4f1115d15f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a412e30559d6d7ac07999fe2141fab2e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a412e30559d6d7ac07999fe2141fab2e2">getCurrentPrePassDepthTexture</a> (void) const</td></tr>
 <tr class="separator:a412e30559d6d7ac07999fe2141fab2e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa622bd9607691def94c1954c5ca90be6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga63b5ab6176b81463bbdd0e260b751d2e">PrePassMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aa622bd9607691def94c1954c5ca90be6">getCurrentPrePassMode</a> (void) const</td></tr>
 <tr class="separator:aa622bd9607691def94c1954c5ca90be6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2576c1ccb6908dc4580c3e2296326b54"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">TextureGpuVec</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a2576c1ccb6908dc4580c3e2296326b54">getCurrentPrePassTextures</a> (void) const</td></tr>
 <tr class="separator:a2576c1ccb6908dc4580c3e2296326b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a510ca285623d4a9aeeb86036c34c57a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a510ca285623d4a9aeeb86036c34c57a3">getCurrentRefractionsTexture</a> (void) const</td></tr>
+<tr class="separator:a510ca285623d4a9aeeb86036c34c57a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb82e7fbe30e6ee417b1dc63da8ae115"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_compositor_shadow_node.html">CompositorShadowNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#adb82e7fbe30e6ee417b1dc63da8ae115">getCurrentShadowNode</a> (void) const</td></tr>
 <tr class="separator:adb82e7fbe30e6ee417b1dc63da8ae115"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8981c0d6a10d4eab478d04e550a7ab3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#af8981c0d6a10d4eab478d04e550a7ab3">getCurrentSsrTexture</a> (void) const</td></tr>
@@ -618,7 +624,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab152c8f646a835c2f88585ad4fe0413a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#afcab9522fbe8edb20b32fbb5d8a48ed5">IdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_id_object.html#ab152c8f646a835c2f88585ad4fe0413a">getId</a> () const</td></tr>
 <tr class="memdesc:ab152c8f646a835c2f88585ad4fe0413a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the unique id of this object.  <a href="#ab152c8f646a835c2f88585ad4fe0413a">More...</a><br /></td></tr>
 <tr class="separator:ab152c8f646a835c2f88585ad4fe0413a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94d3193c52302229da41688946065dc7"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="group___math.html#gae00d718daa48567f6c010aad9d6dd92c">PlaneList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a94d3193c52302229da41688946065dc7">getLightClippingPlanes</a> (const <a class="el" href="class_ogre_1_1_light.html">Light</a> *l)</td></tr>
+<tr class="memitem:a94d3193c52302229da41688946065dc7"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="group___math.html#gaa4714a0d3d8a5ddd765acb42b78499ad">PlaneList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a94d3193c52302229da41688946065dc7">getLightClippingPlanes</a> (const <a class="el" href="class_ogre_1_1_light.html">Light</a> *l)</td></tr>
 <tr class="memdesc:a94d3193c52302229da41688946065dc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a set of clipping planes for a given light.  <a href="#a94d3193c52302229da41688946065dc7">More...</a><br /></td></tr>
 <tr class="separator:a94d3193c52302229da41688946065dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b218f3cb84919377e7174c28407e42a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#a2c52accfdfe1971a9c62bac16d2bbdc8">virtual_l2</a> <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a8b218f3cb84919377e7174c28407e42a">getLightMask</a> (void) const</td></tr>
@@ -689,6 +695,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a31ab1328d25b3374d91a4e77f671478e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2abfe2af49de9dd7139ec0aea244b410"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_scene_manager.html#a6a925e073eee8e57dafc08083bc10238">SkyMethod</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a2abfe2af49de9dd7139ec0aea244b410">getSkyMethod</a> (void) const</td></tr>
 <tr class="separator:a2abfe2af49de9dd7139ec0aea244b410"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb74bc484c595d2cb0a1063aac766a0b"><td class="memItemLeft" align="right" valign="top">const float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aeb74bc484c595d2cb0a1063aac766a0b">getSphericalHarmonics</a> (void) const</td></tr>
+<tr class="separator:aeb74bc484c595d2cb0a1063aac766a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3dd97aab1507157df4eaf0f6b844bb4c"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1v1_1_1_static_geometry.html">v1::StaticGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a3dd97aab1507157df4eaf0f6b844bb4c">getStaticGeometry</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name) const</td></tr>
 <tr class="memdesc:a3dd97aab1507157df4eaf0f6b844bb4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a previously created StaticGeometry instance.  <a href="#a3dd97aab1507157df4eaf0f6b844bb4c">More...</a><br /></td></tr>
 <tr class="separator:a3dd97aab1507157df4eaf0f6b844bb4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -860,6 +868,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab8c1c6962ad94e28ac4a202f1fd16772"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3dc2f4478ab8741bdcf02c9008ef7809"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a3dc2f4478ab8741bdcf02c9008ef7809">setSky</a> (bool bEnabled, <a class="el" href="class_ogre_1_1_scene_manager.html#a6a925e073eee8e57dafc08083bc10238">SkyMethod</a> skyMethod, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;texName, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;resourceGroup)</td></tr>
 <tr class="separator:a3dc2f4478ab8741bdcf02c9008ef7809"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5447c974f3384f0b7550a2f776a25b28"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a5447c974f3384f0b7550a2f776a25b28">setSphericalHarmonics</a> (<a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> ambientSphericalHarmonics[9])</td></tr>
+<tr class="separator:a5447c974f3384f0b7550a2f776a25b28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c5e69ee25b1e34eadd088d7d58ef02d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#a2c52accfdfe1971a9c62bac16d2bbdc8">virtual_l2</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a7c5e69ee25b1e34eadd088d7d58ef02d">setVisibilityMask</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> vmask)</td></tr>
 <tr class="memdesc:a7c5e69ee25b1e34eadd088d7d58ef02d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a mask which is bitwise 'and'ed with objects own visibility masks to determine if the object is visible.  <a href="#a7c5e69ee25b1e34eadd088d7d58ef02d">More...</a><br /></td></tr>
 <tr class="separator:a7c5e69ee25b1e34eadd088d7d58ef02d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -976,7 +986,7 @@ BspSceneManager), and many other options. New <a class="el" href="class_ogre_1_1
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a>*&gt;::type <a class="el" href="class_ogre_1_1_scene_manager.html#a6d8f5f81e262b6347f5066da27d6fe70">Ogre::SceneManager::MovableObjectVec</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a>*&gt;::type <a class="el" href="class_ogre_1_1_scene_manager.html#a6d8f5f81e262b6347f5066da27d6fe70">Ogre::SceneManager::MovableObjectVec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -990,7 +1000,7 @@ BspSceneManager), and many other options. New <a class="el" href="class_ogre_1_1
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="class_ogre_1_1_scene_node.html">SceneNode</a>*&gt;::type <a class="el" href="class_ogre_1_1_scene_manager.html#a8f87c38314b272fff95da3065f3740ee">Ogre::SceneManager::SceneNodeList</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="class_ogre_1_1_scene_node.html">SceneNode</a>*&gt;::type <a class="el" href="class_ogre_1_1_scene_manager.html#a8f87c38314b272fff95da3065f3740ee">Ogre::SceneManager::SceneNodeList</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2484,6 +2494,34 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 
 </div>
 </div>
+<a id="a9c12be4929f32f819b60801c0d93ab9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c12be4929f32f819b60801c0d93ab9a">&#9670;&nbsp;</a></span>_setRefractions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::_setRefractions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
+          <td class="paramname"><em>depthTextureNoMsaa</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
+          <td class="paramname"><em>refractionsTexture</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6753ea2b52715774b7fdd59da232917a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6753ea2b52715774b7fdd59da232917a">&#9670;&nbsp;</a></span>_suppressRenderStateChanges()</h2>
 
@@ -3341,7 +3379,7 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="group___general.html#gadccb207c184efc0a6fb2a00ab6320d19">NameValuePairList</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="group___general.html#ga442a408f658c0cbfbe3e404e91a0fcc5">NameValuePairList</a> *&#160;</td>
           <td class="paramname"><em>params</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
@@ -5635,6 +5673,32 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 
 </div>
 </div>
+<a id="a578ab5f9e4b0769af801c4f1115d15f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a578ab5f9e4b0769af801c4f1115d15f2">&#9670;&nbsp;</a></span>getCurrentPassDepthTextureNoMsaa()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a>* Ogre::SceneManager::getCurrentPassDepthTextureNoMsaa </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a412e30559d6d7ac07999fe2141fab2e2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a412e30559d6d7ac07999fe2141fab2e2">&#9670;&nbsp;</a></span>getCurrentPrePassDepthTexture()</h2>
 
@@ -5698,6 +5762,32 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
       <table class="memname">
         <tr>
           <td class="memname">const <a class="el" href="group___effects.html#ga732a9a0736fd3a64669170b18d3dc4d1">TextureGpuVec</a>&amp; Ogre::SceneManager::getCurrentPrePassTextures </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a510ca285623d4a9aeeb86036c34c57a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a510ca285623d4a9aeeb86036c34c57a3">&#9670;&nbsp;</a></span>getCurrentRefractionsTexture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a>* Ogre::SceneManager::getCurrentRefractionsTexture </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -5971,8 +6061,6 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="group___general.html#gad842a4b416bd2f3245d2b44826a0aedc">Ogre::BLANKSTRING</a>.</p>
 
 </div>
 </div>
@@ -6262,7 +6350,7 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="el" href="group___math.html#gae00d718daa48567f6c010aad9d6dd92c">PlaneList</a>&amp; Ogre::SceneManager::getLightClippingPlanes </td>
+          <td class="memname">virtual const <a class="el" href="group___math.html#gaa4714a0d3d8a5ddd765acb42b78499ad">PlaneList</a>&amp; Ogre::SceneManager::getLightClippingPlanes </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_ogre_1_1_light.html">Light</a> *&#160;</td>
           <td class="paramname"><em>l</em></td><td>)</td>
@@ -7005,6 +7093,34 @@ It is a linear search O(N), retrieves the first node found with that name (it's 
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeb74bc484c595d2cb0a1063aac766a0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb74bc484c595d2cb0a1063aac766a0b">&#9670;&nbsp;</a></span>getSphericalHarmonics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float* Ogre::SceneManager::getSphericalHarmonics </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="group___general.html#gad842a4b416bd2f3245d2b44826a0aedc">Ogre::BLANKSTRING</a>.</p>
 
 </div>
 </div>
@@ -9100,6 +9216,24 @@ Only a single pass is allowed in your material, although multiple techniques may
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5447c974f3384f0b7550a2f776a25b28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5447c974f3384f0b7550a2f776a25b28">&#9670;&nbsp;</a></span>setSphericalHarmonics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::setSphericalHarmonics </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td>
+          <td class="paramname"><em>ambientSphericalHarmonics</em>[9]</td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">

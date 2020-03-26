@@ -14,7 +14,6 @@ var searchData=
   ['glatomiccounterreferencelist',['GLAtomicCounterReferenceList',['../namespace_ogre.html#a8a7a044fdaeb5519dcfa2224541f46fc',1,'Ogre']]],
   ['glcounterbufferiterator',['GLCounterBufferIterator',['../namespace_ogre.html#a4ece5a41ae9fcdcd950e49f46e3ff3be',1,'Ogre']]],
   ['glcounterbufferlist',['GLCounterBufferList',['../namespace_ogre.html#af836a1dc20452e8d0ea1022e060fd422',1,'Ogre']]],
-  ['gles2gpuprogramptr',['GLES2GpuProgramPtr',['../namespace_ogre.html#aed9fa2af0adbb4c182463f59bcd64ede',1,'Ogre']]],
   ['gles2textureptr',['GLES2TexturePtr',['../namespace_ogre.html#aa03128706f8570ed424eb6bbe665ca05',1,'Ogre']]],
   ['glslshaderptr',['GLSLShaderPtr',['../namespace_ogre.html#ac8116c3dc700d050a60f0e580795a33a',1,'Ogre']]],
   ['gluniformbufferiterator',['GLUniformBufferIterator',['../namespace_ogre.html#a1930e01c82d79435264363ad4711ec34',1,'Ogre']]],

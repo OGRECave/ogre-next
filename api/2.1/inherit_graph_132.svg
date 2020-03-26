@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="class_ogre_1_1_fast_array.html" target="_top" xlink:title="Ogre::FastArray\&lt; PerThread\lData * \&gt;">
+<g id="a_node1"><a xlink:href="class_ogre_1_1_fast_array.html" target="_top" xlink:title="Ogre::FastArray\&lt; PbsBaked\lTexture \&gt;">
 <polygon fill="none" stroke="#000000" points="0,-.5 0,-30.5 140,-30.5 140,-.5 0,-.5"/>
-<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Ogre::FastArray&lt; PerThread</text>
-<text text-anchor="middle" x="70" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Data * &gt;</text>
+<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Ogre::FastArray&lt; PbsBaked</text>
+<text text-anchor="middle" x="70" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Texture &gt;</text>
 </a>
 </g>
 </g>

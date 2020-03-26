@@ -12,7 +12,7 @@ var class_ogre_1_1_d3_d11_uav_buffer_packed =
     [ "advanceFrame", "class_ogre_1_1_d3_d11_uav_buffer_packed.html#a1f35a4a63b023187026b9abc1c897a71", null ],
     [ "bindBufferCS", "class_ogre_1_1_d3_d11_uav_buffer_packed.html#a0409f331e3df0a784b3067f6a23fefe0", null ],
     [ "copyTo", "class_ogre_1_1_d3_d11_uav_buffer_packed.html#a162e23ff6f3cb7f90ed129d3906c14e4", null ],
-    [ "createUav", "class_ogre_1_1_d3_d11_uav_buffer_packed.html#a9946856c2236fa1dad9033282518738c", null ],
+    [ "createUav", "class_ogre_1_1_d3_d11_uav_buffer_packed.html#aa713c0890ddabbabae689d23f4485e05", null ],
     [ "destroyAllTexBufferViews", "class_ogre_1_1_d3_d11_uav_buffer_packed.html#ab081334829993c5fcd4302777807cd9d", null ],
     [ "destroyTexBufferView", "class_ogre_1_1_d3_d11_uav_buffer_packed.html#ac591b274d3c5663fefb0ceb382ce4878", null ],
     [ "getAsTexBufferView", "class_ogre_1_1_d3_d11_uav_buffer_packed.html#ae0c76ea54f4932010a93b412b9ae4c8a", null ],

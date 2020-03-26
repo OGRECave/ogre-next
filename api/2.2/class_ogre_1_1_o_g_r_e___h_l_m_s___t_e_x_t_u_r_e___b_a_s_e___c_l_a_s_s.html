@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -121,6 +121,7 @@ Public Types</h2></td></tr>
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604">MetadataCacheOutOfDate</a>, 
 <br />
 &#160;&#160;<a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26">ExceptionThrown</a>, 
+<a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7">FsaaSettingAlteredByApi</a>, 
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257">ReadyForRendering</a>, 
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e">Deleted</a>
 <br />
@@ -185,7 +186,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ga35f878c11cf3f6d43a063ce148c2e8d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga35f878c11cf3f6d43a063ce148c2e8d2">getIndexToDescriptorTexture</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> texType)</td></tr>
 <tr class="memdesc:ga35f878c11cf3f6d43a063ce148c2e8d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function has O( log N ) complexity, but O(1) if the texture was not set.  <a href="group___resources.html#ga35f878c11cf3f6d43a063ce148c2e8d2">More...</a><br /></td></tr>
 <tr class="separator:ga35f878c11cf3f6d43a063ce148c2e8d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e0fa2c7de83700969f3bca07031f34a"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> * &gt;::type &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a5e0fa2c7de83700969f3bca07031f34a">getLinkedRenderables</a> (void) const</td></tr>
+<tr class="memitem:a5e0fa2c7de83700969f3bca07031f34a"><td class="memItemLeft" align="right" valign="top">const vector&lt; <a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> * &gt;::type &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a5e0fa2c7de83700969f3bca07031f34a">getLinkedRenderables</a> (void) const</td></tr>
 <tr class="separator:a5e0fa2c7de83700969f3bca07031f34a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f60d53ba19e024cab76bb07122d6338"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_ogre_1_1_hlms_macroblock.html">HlmsMacroblock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a4f60d53ba19e024cab76bb07122d6338">getMacroblock</a> (bool casterBlock=false) const</td></tr>
 <tr class="separator:a4f60d53ba19e024cab76bb07122d6338"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -227,7 +228,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4be37baef81876985aa1071ad5acc6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa2943846ba6a2b5824a12857139cf5e"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#afa2943846ba6a2b5824a12857139cf5e">operator new[]</a> (size_t sz)</td></tr>
 <tr class="separator:afa2943846ba6a2b5824a12857139cf5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga44c599e0df4f7d91bae4bd3e37184657"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga44c599e0df4f7d91bae4bd3e37184657">saveTextures</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, <a class="el" href="struct_ogre_1_1set.html">set</a>&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener)</td></tr>
+<tr class="memitem:ga44c599e0df4f7d91bae4bd3e37184657"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga44c599e0df4f7d91bae4bd3e37184657">saveTextures</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener)</td></tr>
 <tr class="separator:ga44c599e0df4f7d91bae4bd3e37184657"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62bcf1b8e5f3db233bdca43e6e925a58"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a62bcf1b8e5f3db233bdca43e6e925a58">setAlphaTest</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction, bool shadowCasterOnly=false)</td></tr>
 <tr class="memdesc:a62bcf1b8e5f3db233bdca43e6e925a58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha test to the given compare function.  <a href="#a62bcf1b8e5f3db233bdca43e6e925a58">More...</a><br /></td></tr>
@@ -326,6 +327,9 @@ Public Attributes</h2></td></tr>
 <p>This listener will get called from the main thread.</p>
 <p>The texture may still have pending residency transitions (e.g. it may still be loading the 2x2 fallback)</p>
 <p>Cast <a class="el" href="class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine. ">Exception</a> <em>e = reinterpret_cast&lt;<a class="el" href="class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine. ">Exception</a></em>&gt;( extraData ); to know more info </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7"></a>FsaaSettingAlteredByApi&#160;</td><td class="fielddoc"><p>Requested FSAA (MSAA / CSAA / EQAA / etc) is not supported by the API, and thus the setting had to be downgraded. </p>
+<p>Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded. ">TextureGpu::notifyDataIsReady</a> is called. </p>
 <p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> has finished issueing rendering commands to a <a class="el" href="class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture. ">RenderTexture</a> and is now ready to be presented to the monitor. </p>
@@ -848,7 +852,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="class_ogre_1_1_renderable.html">Renderable</a>*&gt;::type&amp; Ogre::HlmsDatablock::getLinkedRenderables </td>
+          <td class="memname">const vector&lt;<a class="el" href="class_ogre_1_1_renderable.html">Renderable</a>*&gt;::type&amp; Ogre::HlmsDatablock::getLinkedRenderables </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>

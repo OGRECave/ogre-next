@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -139,6 +139,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a43ac3ca52051d95d126b12b621559cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a809d00c601a80d541f98feb6046740f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_texture_box.html#a809d00c601a80d541f98feb6046740f4">isCompressed</a> (void) const</td></tr>
 <tr class="separator:a809d00c601a80d541f98feb6046740f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef8f61c32108755c70f8e3dc405fdc30"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_texture_box.html#aef8f61c32108755c70f8e3dc405fdc30">isSubtextureRegion</a> (void) const</td></tr>
+<tr class="memdesc:aef8f61c32108755c70f8e3dc405fdc30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this <a class="el" href="struct_ogre_1_1_texture_box.html" title="For cubemaps, the face is in sliceStart, (see CubemapSide::CubemapSide) For cubemap arrays...">TextureBox</a> does not represent a contiguous region of a single slice of full texture, and is instead a 2D subregion of a larger texture.  <a href="#aef8f61c32108755c70f8e3dc405fdc30">More...</a><br /></td></tr>
+<tr class="separator:aef8f61c32108755c70f8e3dc405fdc30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a919cdc92f89a0984772fe567f87e442c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_texture_box.html#a919cdc92f89a0984772fe567f87e442c">overlaps</a> (const <a class="el" href="struct_ogre_1_1_texture_box.html">TextureBox</a> &amp;other) const</td></tr>
 <tr class="memdesc:a919cdc92f89a0984772fe567f87e442c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if 'this' and 'other' are in partial or full collision.  <a href="#a919cdc92f89a0984772fe567f87e442c">More...</a><br /></td></tr>
 <tr class="separator:a919cdc92f89a0984772fe567f87e442c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -361,6 +364,8 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_nearest_resampler.html#a6decea79b9672a704cd7554c1d41537f">Ogre::NearestResampler&lt; elemsize &gt;::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler.html#acad0869b5293daea8acb677d8dc8a864">Ogre::LinearResampler::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97">Ogre::LinearResampler_Float32::scale()</a>, and <a class="el" href="struct_ogre_1_1_linear_resampler___byte.html#a421a196b3a71ac9ffc50be486698185e">Ogre::LinearResampler_Byte&lt; channels &gt;::scale()</a>.</p>
+
 </div>
 </div>
 <a id="a7b4127c17633b98c6957f5362438f726"></a>
@@ -387,7 +392,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_texture_box.html#aaf292792396ed63db078a51909579468">at()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#a82a89d85d9c84525aafdafd91bc5eb1b">bytesPerImage</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#ab9bb9c359093c2e1347436e1ee12a2b8">bytesPerRow</a>, <a class="el" href="class_ogre_1_1_pixel_format_gpu_utils.html#aa2830bba4586c4f3a8b83cd437f84ac1">Ogre::PixelFormatGpuUtils::getCompressedBlockHeight()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#abc975ae19f79584c2d29246bd90b01a8">getDepthOrSlices()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#a43ac3ca52051d95d126b12b621559cae">getZOrSlice()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#af4b38a9b14e74fcea122890f06a43a45">height</a>, <a class="el" href="namespace_ogre.html#af2b452038adc68d49db1236ddeca3b82">Ogre::min()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#adbe9c1ccc9b5c57bd04a34ab0c14781a">width</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#a3883c227782cc5e3f8f02a5c8a53d868">x</a>, and <a class="el" href="struct_ogre_1_1_texture_box.html#a5935c959161bf4c97af599ee22b86fc0">y</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_texture_box.html#aaf292792396ed63db078a51909579468">at()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#a82a89d85d9c84525aafdafd91bc5eb1b">bytesPerImage</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#ab9bb9c359093c2e1347436e1ee12a2b8">bytesPerRow</a>, <a class="el" href="class_ogre_1_1_pixel_format_gpu_utils.html#aa2830bba4586c4f3a8b83cd437f84ac1">Ogre::PixelFormatGpuUtils::getCompressedBlockHeight()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#abc975ae19f79584c2d29246bd90b01a8">getDepthOrSlices()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#a43ac3ca52051d95d126b12b621559cae">getZOrSlice()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#af4b38a9b14e74fcea122890f06a43a45">height</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#aef8f61c32108755c70f8e3dc405fdc30">isSubtextureRegion()</a>, <a class="el" href="namespace_ogre.html#af2b452038adc68d49db1236ddeca3b82">Ogre::min()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#adbe9c1ccc9b5c57bd04a34ab0c14781a">width</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#a3883c227782cc5e3f8f02a5c8a53d868">x</a>, and <a class="el" href="struct_ogre_1_1_texture_box.html#a5935c959161bf4c97af599ee22b86fc0">y</a>.</p>
 
 </div>
 </div>
@@ -597,7 +602,7 @@ Public Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="namespace_ogre.html#afd8858313711c803931b69d331be3d7b">Ogre::max()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726">copyFrom()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726">copyFrom()</a>, <a class="el" href="struct_ogre_1_1_nearest_resampler.html#a6decea79b9672a704cd7554c1d41537f">Ogre::NearestResampler&lt; elemsize &gt;::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler.html#acad0869b5293daea8acb677d8dc8a864">Ogre::LinearResampler::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97">Ogre::LinearResampler_Float32::scale()</a>, and <a class="el" href="struct_ogre_1_1_linear_resampler___byte.html#a421a196b3a71ac9ffc50be486698185e">Ogre::LinearResampler_Byte&lt; channels &gt;::scale()</a>.</p>
 
 </div>
 </div>
@@ -797,6 +802,38 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aef8f61c32108755c70f8e3dc405fdc30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef8f61c32108755c70f8e3dc405fdc30">&#9670;&nbsp;</a></span>isSubtextureRegion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::TextureBox::isSubtextureRegion </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if this <a class="el" href="struct_ogre_1_1_texture_box.html" title="For cubemaps, the face is in sliceStart, (see CubemapSide::CubemapSide) For cubemap arrays...">TextureBox</a> does not represent a contiguous region of a single slice of full texture, and is instead a 2D subregion of a larger texture. </p>
+
+<p class="reference">References <a class="el" href="class_ogre_1_1_pixel_format_gpu_utils.html#aa2830bba4586c4f3a8b83cd437f84ac1">Ogre::PixelFormatGpuUtils::getCompressedBlockHeight()</a>, <a class="el" href="class_ogre_1_1_pixel_format_gpu_utils.html#a0a8ca9a557c4f038c3ae0e1fcf086618">Ogre::PixelFormatGpuUtils::getCompressedBlockSize()</a>, and <a class="el" href="class_ogre_1_1_pixel_format_gpu_utils.html#a3f45b56c3e0d3dcd40f6865f65e41188">Ogre::PixelFormatGpuUtils::getCompressedBlockWidth()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726">copyFrom()</a>.</p>
+
+</div>
+</div>
 <a id="a919cdc92f89a0984772fe567f87e442c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a919cdc92f89a0984772fe567f87e442c">&#9670;&nbsp;</a></span>overlaps()</h2>
 
@@ -916,7 +953,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726">copyFrom()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726">copyFrom()</a>, <a class="el" href="struct_ogre_1_1_nearest_resampler.html#a6decea79b9672a704cd7554c1d41537f">Ogre::NearestResampler&lt; elemsize &gt;::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler.html#acad0869b5293daea8acb677d8dc8a864">Ogre::LinearResampler::scale()</a>, and <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97">Ogre::LinearResampler_Float32::scale()</a>.</p>
 
 </div>
 </div>
@@ -949,7 +986,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726">copyFrom()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726">copyFrom()</a>, <a class="el" href="struct_ogre_1_1_nearest_resampler.html#a6decea79b9672a704cd7554c1d41537f">Ogre::NearestResampler&lt; elemsize &gt;::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler.html#acad0869b5293daea8acb677d8dc8a864">Ogre::LinearResampler::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97">Ogre::LinearResampler_Float32::scale()</a>, and <a class="el" href="struct_ogre_1_1_linear_resampler___byte.html#a421a196b3a71ac9ffc50be486698185e">Ogre::LinearResampler_Byte&lt; channels &gt;::scale()</a>.</p>
 
 </div>
 </div>
@@ -984,7 +1021,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a02f10a0bd29f00fe3e15586afcce7b7b">equalSize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a02f10a0bd29f00fe3e15586afcce7b7b">equalSize()</a>, <a class="el" href="struct_ogre_1_1_nearest_resampler.html#a6decea79b9672a704cd7554c1d41537f">Ogre::NearestResampler&lt; elemsize &gt;::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler.html#acad0869b5293daea8acb677d8dc8a864">Ogre::LinearResampler::scale()</a>, and <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97">Ogre::LinearResampler_Float32::scale()</a>.</p>
 
 </div>
 </div>
@@ -1000,7 +1037,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726">copyFrom()</a>, and <a class="el" href="struct_ogre_1_1_texture_box.html#a02f10a0bd29f00fe3e15586afcce7b7b">equalSize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726">copyFrom()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#a02f10a0bd29f00fe3e15586afcce7b7b">equalSize()</a>, <a class="el" href="struct_ogre_1_1_nearest_resampler.html#a6decea79b9672a704cd7554c1d41537f">Ogre::NearestResampler&lt; elemsize &gt;::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler.html#acad0869b5293daea8acb677d8dc8a864">Ogre::LinearResampler::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97">Ogre::LinearResampler_Float32::scale()</a>, and <a class="el" href="struct_ogre_1_1_linear_resampler___byte.html#a421a196b3a71ac9ffc50be486698185e">Ogre::LinearResampler_Byte&lt; channels &gt;::scale()</a>.</p>
 
 </div>
 </div>
@@ -1048,7 +1085,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726">copyFrom()</a>, and <a class="el" href="struct_ogre_1_1_texture_box.html#a02f10a0bd29f00fe3e15586afcce7b7b">equalSize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726">copyFrom()</a>, <a class="el" href="struct_ogre_1_1_texture_box.html#a02f10a0bd29f00fe3e15586afcce7b7b">equalSize()</a>, <a class="el" href="struct_ogre_1_1_nearest_resampler.html#a6decea79b9672a704cd7554c1d41537f">Ogre::NearestResampler&lt; elemsize &gt;::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler.html#acad0869b5293daea8acb677d8dc8a864">Ogre::LinearResampler::scale()</a>, <a class="el" href="struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97">Ogre::LinearResampler_Float32::scale()</a>, and <a class="el" href="struct_ogre_1_1_linear_resampler___byte.html#a421a196b3a71ac9ffc50be486698185e">Ogre::LinearResampler_Byte&lt; channels &gt;::scale()</a>.</p>
 
 </div>
 </div>

@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -144,6 +144,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6b97bf4ca49cb975146865babaebd38c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a216041e0cac9583d98a4023051981296"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_planar_reflections.html#a216041e0cac9583d98a4023051981296">getMaxActiveActors</a> (void) const</td></tr>
 <tr class="separator:a216041e0cac9583d98a4023051981296"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8585442d3a502ca1b714b399708e8c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_planar_reflections.html#ae8585442d3a502ca1b714b399708e8c3">getMaxNumMipmaps</a> () const</td></tr>
+<tr class="separator:ae8585442d3a502ca1b714b399708e8c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d712e2f34635697669b8cf36d7c1395"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_planar_reflections.html#a0d712e2f34635697669b8cf36d7c1395">getTexture</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> actorIdx) const</td></tr>
 <tr class="separator:a0d712e2f34635697669b8cf36d7c1395"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad57f5c1c97d776977f0ac26dae2cb023"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_planar_reflections.html#ad57f5c1c97d776977f0ac26dae2cb023">hasActiveActor</a> (const <a class="el" href="class_ogre_1_1_renderable.html">Renderable</a> *renderable) const</td></tr>
@@ -520,6 +522,31 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ae8585442d3a502ca1b714b399708e8c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8585442d3a502ca1b714b399708e8c3">&#9670;&nbsp;</a></span>getMaxNumMipmaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> Ogre::PlanarReflections::getMaxNumMipmaps </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0d712e2f34635697669b8cf36d7c1395"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d712e2f34635697669b8cf36d7c1395">&#9670;&nbsp;</a></span>getTexture()</h2>
 
@@ -735,7 +762,7 @@ Public Member Functions</h2></td></tr>
 <p>You may have many actors (i.e. 1000 actors), but for performance and memory reasons you may only want 1-5 actors at the same time. Actors are dynamically activated based on distance to camera. </p><dl class="section remark"><dt>Remarks</dt><dd>Note <a class="el" href="class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys...">HlmsPbs</a> hardcodes the max number of actors, so changing this value after having rendered a few frames could cause many shaders to be recompiled. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">maxActiveActors</td><td>New max active actors. Can be lower or higher than its previous value. When this value is less or equal than current value, all the next parameters are ignored. When this value is higher than its previous, value, the new active actors will use these parameters; which don't have to necessarily match previous calls. </td></tr>
+    <tr><td class="paramname">maxActiveActors</td><td>New max active actors. Can be lower or higher than its previous value. When this value is less or equal than current value, all the next parameters are ignored. When this value is higher than its previous, value, the new active actors will use these parameters; which don't have to necessarily match previous calls (not recommended since we assume the number of mipmaps is the same for all actors. This affects surfaces with roughness &gt; 0). </td></tr>
     <tr><td class="paramname">workspaceName</td><td>Workspace to use for rendering. </td></tr>
     <tr><td class="paramname">useAccurateLighting</td><td>When true, overall scene CPU usage may be higher, but lighting information in the reflections will be accurate. Turning it to false is faster. This is a performance optimization that rarely has a noticeable impact on quality. </td></tr>
     <tr><td class="paramname">width</td><td>Width resolution of the RTT assigned to this reflection plane </td></tr>

@@ -13,6 +13,7 @@ var searchData=
   ['real',['REAL',['../class_ogre_1_1_animable_value.html#adccd62bb2b72c602b9c59ca651256d69a3062c18887fcc426f17c19d786edeaef',1,'Ogre::AnimableValue']]],
   ['real_5fdouble',['REAL_DOUBLE',['../class_ogre_1_1_stream_serialiser.html#a6cf4285399b89b088f2f297dda10fc91a2b594a33ac97bd7a0cc2d9047e2b1912',1,'Ogre::StreamSerialiser']]],
   ['real_5ffloat',['REAL_FLOAT',['../class_ogre_1_1_stream_serialiser.html#a6cf4285399b89b088f2f297dda10fc91ae3bcbc915c3187091bf95f1e7426a837',1,'Ogre::StreamSerialiser']]],
+  ['refractive',['Refractive',['../class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382cebae6f957e8a548c22ddc66c7c02ab9a94a',1,'Ogre::HlmsPbsDatablock']]],
   ['reinterpretable',['Reinterpretable',['../namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434aad9174004d6621896215779a0abb14e7',1,'Ogre::TextureFlags']]],
   ['renderdepth',['RenderDepth',['../namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a2b694dbe40f495231b5dacebb0575132',1,'Ogre::ResourceLayout']]],
   ['rendertarget',['RenderTarget',['../namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7ad313a696ff2db321b0d4268d54d0a420',1,'Ogre::ResourceLayout::RenderTarget()'],['../namespace_ogre_1_1_write_barrier.html#a8ab842b42625de9295532fa172bc26e3a8ecb5ad859338f72185660dfbc8e7460',1,'Ogre::WriteBarrier::RenderTarget()'],['../namespace_ogre_1_1_read_barrier.html#a960f15a9832ee3808649ba8217aa793ea04cebd9947df4ccf5452e6a0cb7989a8',1,'Ogre::ReadBarrier::RenderTarget()']]],
@@ -103,5 +104,6 @@ var searchData=
   ['rsc_5fvertex_5fbuffer_5finstance_5fdata',['RSC_VERTEX_BUFFER_INSTANCE_DATA',['../group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7ab3858f00e9fac85c4691f69e718bf841',1,'Ogre']]],
   ['rsc_5fvertex_5fformat_5fubyte4',['RSC_VERTEX_FORMAT_UBYTE4',['../group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a2de4b26152004c45bf22ac3c06c20d46',1,'Ogre']]],
   ['rsc_5fvertex_5fprogram',['RSC_VERTEX_PROGRAM',['../group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a0036e085f9e885a0f9176c520c47b1b8',1,'Ogre']]],
-  ['rsc_5fvertex_5ftexture_5ffetch',['RSC_VERTEX_TEXTURE_FETCH',['../group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a9b3ec17b20494afb3718d54f77f9db2e',1,'Ogre']]]
+  ['rsc_5fvertex_5ftexture_5ffetch',['RSC_VERTEX_TEXTURE_FETCH',['../group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a9b3ec17b20494afb3718d54f77f9db2e',1,'Ogre']]],
+  ['rsc_5fvp_5fand_5frt_5farray_5findex_5ffrom_5fany_5fshader',['RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER',['../group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a970fb5179e9ac00273f41a2209b61f3b',1,'Ogre']]]
 ];

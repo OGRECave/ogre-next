@@ -14,6 +14,7 @@ var searchData=
   ['pixelformatdatatypes',['PixelFormatDataTypes',['../namespace_ogre_1_1_pixel_format_data_types.html#a320bd6a6b273a3abe76add6b64ff8540',1,'Ogre::PixelFormatDataTypes::PixelFormatDataTypes()'],['../namespace_ogre_1_1_pixel_format_data_types.html#a320bd6a6b273a3abe76add6b64ff8540',1,'Ogre::PixelFormatDataTypes::PixelFormatDataTypes()']]],
   ['pixelformatflags',['PixelFormatFlags',['../class_ogre_1_1_pixel_format_gpu_utils.html#a19c5422c171a259ffdc5967d1aead7c0',1,'Ogre::PixelFormatGpuUtils::PixelFormatFlags()'],['../group___image.html#ga7d83be5f58ab829ae3c94ddcf7b68bab',1,'Ogre::PixelFormatFlags()']]],
   ['pixelformatgpu',['PixelFormatGpu',['../group___image.html#ga71f09fe41a1db41186262f1aa5814a18',1,'Ogre']]],
+  ['pixelformatlayout',['PixelFormatLayout',['../class_ogre_1_1_pixel_format_gpu_utils.html#ad8c6704e31e61fa0963e8adfc6573996',1,'Ogre::PixelFormatGpuUtils']]],
   ['polygonmode',['PolygonMode',['../group___general.html#ga68866b02aa7f99e3431337511fbb3345',1,'Ogre']]],
   ['poolid',['PoolId',['../class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7e',1,'Ogre::DepthBuffer::PoolId()'],['../class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7e',1,'Ogre::DepthBuffer::PoolId()']]],
   ['prefabtype',['PrefabType',['../class_ogre_1_1_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbf',1,'Ogre::SceneManager']]],

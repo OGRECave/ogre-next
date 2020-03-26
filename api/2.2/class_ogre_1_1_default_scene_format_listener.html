@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -122,9 +122,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af44a8e42054c4ff5174ee07bdf75c115"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c7bab9449f5610535e2a56a1013418c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_scene_format_listener.html#a5c7bab9449f5610535e2a56a1013418c">exportSceneNode</a> (const <a class="el" href="class_ogre_1_1_scene_node.html">SceneNode</a> *sceneNode)</td></tr>
 <tr class="separator:a5c7bab9449f5610535e2a56a1013418c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c9afa9243cdeec7d57b4da49e816d19"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_json_listener.html#a9c9afa9243cdeec7d57b4da49e816d19">savingChangeTextureName</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;inOutTexName)</td></tr>
-<tr class="memdesc:a9c9afa9243cdeec7d57b4da49e816d19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gives you a chance to completely change the name of the texture when saving a material.  <a href="#a9c9afa9243cdeec7d57b4da49e816d19">More...</a><br /></td></tr>
-<tr class="separator:a9c9afa9243cdeec7d57b4da49e816d19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e0c85f8de336de4cb83b18962a5d852"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_json_listener.html#a2e0c85f8de336de4cb83b18962a5d852">savingChangeTextureName</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;inOutAliasName, <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;inOutTexName)</td></tr>
+<tr class="memdesc:a2e0c85f8de336de4cb83b18962a5d852"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gives you a chance to completely change the name of the texture when saving a material.  <a href="#a2e0c85f8de336de4cb83b18962a5d852">More...</a><br /></td></tr>
+<tr class="separator:a2e0c85f8de336de4cb83b18962a5d852"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c123c76133ae614dd071a031044fbf0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html#a6c123c76133ae614dd071a031044fbf0">savingChangeTextureNameOitd</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;inOutFilename, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
 <tr class="separator:a6c123c76133ae614dd071a031044fbf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addab83d9039190c1769f465f86f85085"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html#addab83d9039190c1769f465f86f85085">savingChangeTextureNameOriginal</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;aliasName, <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;inOutResourceName, <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;inOutFilename)</td></tr>
@@ -340,8 +340,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9c9afa9243cdeec7d57b4da49e816d19"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c9afa9243cdeec7d57b4da49e816d19">&#9670;&nbsp;</a></span>savingChangeTextureName()</h2>
+<a id="a2e0c85f8de336de4cb83b18962a5d852"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e0c85f8de336de4cb83b18962a5d852">&#9670;&nbsp;</a></span>savingChangeTextureName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -353,8 +353,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">virtual void Ogre::HlmsJsonListener::savingChangeTextureName </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>inOutTexName</em></td><td>)</td>
+          <td class="paramname"><em>inOutAliasName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>inOutTexName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>

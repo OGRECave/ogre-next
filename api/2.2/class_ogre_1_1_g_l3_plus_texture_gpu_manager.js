@@ -13,6 +13,7 @@ var class_ogre_1_1_g_l3_plus_texture_gpu_manager =
       [ "ResidentToSysRamSync", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da218a4243be85ec9c989b777119d5ff47", null ],
       [ "MetadataCacheOutOfDate", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604", null ],
       [ "ExceptionThrown", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26", null ],
+      [ "FsaaSettingAlteredByApi", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7", null ],
       [ "ReadyForRendering", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257", null ],
       [ "Deleted", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e", null ]
     ] ],
@@ -59,7 +60,9 @@ var class_ogre_1_1_g_l3_plus_texture_gpu_manager =
     [ "getRenderSystem", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#ac3acc55349bfe208b1ae576ff63ce669", null ],
     [ "getStagingTexture", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a321eb97d80765a36ebff0bf456a859cb", null ],
     [ "getTemporaryFbo", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a0532737ff33e0b1357ea2be6662fb1bb", null ],
+    [ "getVaoManager", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a6774fbb284ced102de63689603ae337c", null ],
     [ "hasPoolId", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a064b32e7db16917d223a729f3ce03a96", null ],
+    [ "hasTextureResource", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#ae7152f97e84cd44d73afc86d77951120", null ],
     [ "importTextureMetadataCache", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a423e53613f85ab74171ac4bb291c2555", null ],
     [ "notifyTextureChanged", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#ab2012775609f389c5f205ee089a0c8b8", null ],
     [ "operator delete", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],

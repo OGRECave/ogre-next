@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="class_ogre_1_1_static_cache.html" target="_top" xlink:title="Template version of cache based on static array. ">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1_skeleton_def_1_1_depth_level_info.html" target="_top" xlink:title="Ogre::SkeletonDef::\lDepthLevelInfo">
 <polygon fill="none" stroke="#000000" points="0,-.5 0,-30.5 104,-30.5 104,-.5 0,-.5"/>
-<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Ogre::StaticCache&lt;</text>
-<text text-anchor="middle" x="52" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000"> cacheSize &gt;</text>
+<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Ogre::SkeletonDef::</text>
+<text text-anchor="middle" x="52" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">DepthLevelInfo</text>
 </a>
 </g>
 </g>

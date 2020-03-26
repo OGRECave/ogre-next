@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -91,9 +91,11 @@ $(document).ready(function(){initNavTree('_ogre_texture_gpu_8h.html','');});
 <div class="title">OgreTextureGpu.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="_ogre_gpu_resource_8h.html">OgreGpuResource.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="_ogre_common_8h.html">OgreCommon.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_ogre_gpu_resource_8h.html">OgreGpuResource.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_ogre_pixel_format_gpu_8h.html">OgrePixelFormatGpu.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_ogre_buffer_packed_8h.html">Vao/OgreBufferPacked.h</a>&quot;</code><br />
+<code>#include &quot;ogrestd/vector.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="_ogre_header_prefix_8h.html">OgreHeaderPrefix.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_ogre_header_suffix_8h.html">OgreHeaderSuffix.h</a>&quot;</code><br />
 </div><table class="memberdecls">
@@ -110,9 +112,9 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespace_ogre_1_1_cubemap_side"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_cubemap_side.html">Ogre::CubemapSide</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespace_ogre_1_1_msaa_patterns"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_msaa_patterns.html">Ogre::MsaaPatterns</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespace_ogre_1_1_texture_flags"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_texture_flags.html">Ogre::TextureFlags</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespace_ogre_1_1_texture_source_type"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_texture_source_type.html">Ogre::TextureSourceType</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespace_ogre_1_1_texture_types"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_texture_types.html">Ogre::TextureTypes</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,12 +133,6 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:aa05717bddc9101a336507b0a167cde29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Please note that due to ancient GPU history reasons, cubemaps are always treated as left handed.  <a href="namespace_ogre_1_1_cubemap_side.html#aa05717bddc9101a336507b0a167cde29">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:aa05717bddc9101a336507b0a167cde29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54095ce17b1cbaa8972173d9ea950f0f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_msaa_patterns.html#a54095ce17b1cbaa8972173d9ea950f0f">Ogre::MsaaPatterns::MsaaPatterns</a> { <a class="el" href="namespace_ogre_1_1_msaa_patterns.html#a54095ce17b1cbaa8972173d9ea950f0fae9213e03f8cab27c1f90e1981b2ab623">Ogre::MsaaPatterns::Undefined</a>, 
-<a class="el" href="namespace_ogre_1_1_msaa_patterns.html#a54095ce17b1cbaa8972173d9ea950f0fa445f40c611f369b3ad626074ebd7815b">Ogre::MsaaPatterns::Standard</a>, 
-<a class="el" href="namespace_ogre_1_1_msaa_patterns.html#a54095ce17b1cbaa8972173d9ea950f0fa8204db5736f2d9f7d147135189198ff7">Ogre::MsaaPatterns::Center</a>, 
-<a class="el" href="namespace_ogre_1_1_msaa_patterns.html#a54095ce17b1cbaa8972173d9ea950f0fa8a445209440970fa095cef30a61bf250">Ogre::MsaaPatterns::CenterZero</a>
- }</td></tr>
-<tr class="separator:a54095ce17b1cbaa8972173d9ea950f0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59b71e36a14465bd82595d6d467e1434"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434">Ogre::TextureFlags::TextureFlags</a> { <br />
 &#160;&#160;<a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a11bc1f37ab6f4ee0fc43da2e45ae5918">Ogre::TextureFlags::NotTexture</a> = 1u &lt;&lt; 0u, 
 <a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a3ff7a5394c299b94950eb7cff468ad1b">Ogre::TextureFlags::RenderToTexture</a> = 1u &lt;&lt; 1u, 
@@ -157,6 +153,17 @@ Enumerations</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:a59b71e36a14465bd82595d6d467e1434"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a487889f4cfc926c4eaaf01e2f4e68c5a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5a">Ogre::TextureSourceType::TextureSourceType</a> { <br />
+&#160;&#160;<a class="el" href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aae58d19079db522fb8c06bb4dd3ece311">Ogre::TextureSourceType::Standard</a>, 
+<a class="el" href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa4aae1ed01eda1f2f2e4cd3289d0f3fe6">Ogre::TextureSourceType::Shadow</a>, 
+<a class="el" href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb">Ogre::TextureSourceType::Compositor</a>, 
+<a class="el" href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aadbcd72f6cc179e35ed961620e04f4d2a">Ogre::TextureSourceType::PoolOwner</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aac20d23827af269fdf5ae3b5daabaafa7">Ogre::TextureSourceType::SharedDepthBuffer</a>, 
+<a class="el" href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa7f41ae26cc31fbe71845cb824ab98f41">Ogre::TextureSourceType::NumTextureSourceTypes</a>
+<br />
+ }</td></tr>
+<tr class="separator:a487889f4cfc926c4eaaf01e2f4e68c5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa364e348564060700791c9940d5ced82"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82">Ogre::TextureTypes::TextureTypes</a> { <br />
 &#160;&#160;<a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82a13888ea41a337938a549d0c5657d799d">Ogre::TextureTypes::Unknown</a>, 
 <a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82a9ba113121e25f3fe54e44653b44dcb61">Ogre::TextureTypes::Type1D</a>, 

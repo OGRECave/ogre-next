@@ -2,6 +2,7 @@ var class_ogre_1_1_null_entity =
 [
     [ "MovableObjectArray", "class_ogre_1_1_null_entity.html#afb58624fb567bb790c55d8a716b472da", null ],
     [ "NullEntity", "class_ogre_1_1_null_entity.html#a0efc0ee1fcd2df9a328265ea5457d8dd", null ],
+    [ "~NullEntity", "class_ogre_1_1_null_entity.html#accf9fba5aba3ab7aea29b726cc3275d2", null ],
     [ "_getLightList", "class_ogre_1_1_null_entity.html#a5b0982f88226f7793a9b289d33e4621f", null ],
     [ "_getManager", "class_ogre_1_1_null_entity.html#a6e0b185e38d9a51feef2cafa341c801e", null ],
     [ "_getObjectData", "class_ogre_1_1_null_entity.html#a7dfaac595029bd2e26d38888208ee760", null ],
@@ -27,6 +28,7 @@ var class_ogre_1_1_null_entity =
     [ "getCachedDistanceToCameraAsReal", "class_ogre_1_1_null_entity.html#a7c633da32362e05bd24871c7a612fdac", null ],
     [ "getCastShadows", "class_ogre_1_1_null_entity.html#a015c3801632c98bca5dbb5aa3da1aa24", null ],
     [ "getCurrentMeshLod", "class_ogre_1_1_null_entity.html#aff35a0dcf855331bdd0fe72fe0f66824", null ],
+    [ "getDefaultLightMask", "class_ogre_1_1_null_entity.html#a1a048b8ace0a21cd2ed2c3008941ce3d", null ],
     [ "getDefaultQueryFlags", "class_ogre_1_1_null_entity.html#a01f48775e48b672d7796311f3ffe2930", null ],
     [ "getDefaultVisibilityFlags", "class_ogre_1_1_null_entity.html#a2eb94fea5944cf0d33702a75cfa14a74", null ],
     [ "getId", "class_ogre_1_1_null_entity.html#ab152c8f646a835c2f88585ad4fe0413a", null ],
@@ -72,6 +74,7 @@ var class_ogre_1_1_null_entity =
     [ "removeQueryFlags", "class_ogre_1_1_null_entity.html#a6fb94e1627676c7d7517e13944bd0580", null ],
     [ "removeVisibilityFlags", "class_ogre_1_1_null_entity.html#a504e2192036f75007c51e157315e1548", null ],
     [ "setCastShadows", "class_ogre_1_1_null_entity.html#acbfc4840224e8b6ed6e27849d3341675", null ],
+    [ "setDefaultLightMask", "class_ogre_1_1_null_entity.html#a9a62a4a12787812f012691af0c3493f1", null ],
     [ "setDefaultQueryFlags", "class_ogre_1_1_null_entity.html#ad8db1f22329b2a96f2aed7260d565944", null ],
     [ "setDefaultVisibilityFlags", "class_ogre_1_1_null_entity.html#ac2904cb122ab8c8d5066abefb29dfa96", null ],
     [ "setLightMask", "class_ogre_1_1_null_entity.html#a5456ecd630d55c91b2fd1b19969d29f5", null ],

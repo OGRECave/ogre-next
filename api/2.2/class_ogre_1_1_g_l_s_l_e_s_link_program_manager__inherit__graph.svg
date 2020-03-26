@@ -17,7 +17,7 @@
 <!-- Node1 -->
 <g id="node2" class="node">
 <title>Node1</title>
-<g id="a_node2"><a xlink:href="class_ogre_1_1_g_l_s_l_e_s_program_manager_common.html" target="_top" xlink:title="Ogre assumes that there are separate vertex and fragment programs to deal with but GLSL ES has one pr...">
+<g id="a_node2"><a xlink:href="class_ogre_1_1_g_l_s_l_e_s_program_manager_common.html" target="_top" xlink:title="Ogre assumes that there are separate programs to deal with but GLSL ES has one program object that re...">
 <polygon fill="none" stroke="#000000" points="0,-56.5 0,-86.5 156,-86.5 156,-56.5 0,-56.5"/>
 <text text-anchor="start" x="8" y="-74.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Ogre::GLSLESProgramManager</text>
 <text text-anchor="middle" x="78" y="-63.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">Common</text>

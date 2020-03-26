@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('_setting_up_ogre_windows.html','');});
 Requirements</h1>
 <ul>
 <li><a href="https://cmake.org/download/">CMake 3.x</a></li>
-<li>Mercurial. We recommend <a href="https://tortoisehg.bitbucket.io/download/index.html">TortoiseHg</a></li>
+<li>Git</li>
 <li>What you do <b>NOT</b> need: Boost. Don't waste your time.</li>
 <li><a class="el" href="class_visual.html">Visual</a> Studio 2008 SP1 - 2017 (2019 not tested). MinGW may work but we strongly recommend <a class="el" href="class_visual.html">Visual</a> Studio.</li>
 <li><a href="https://www.microsoft.com/en-us/download/details.aspx?id=6812">DirectX June 2010 SDK</a>. Optional. Needed if you use older <a class="el" href="class_visual.html">Visual</a> Studio versions and want the D3D11 plugin. Also comes with useful tools.</li>
@@ -108,23 +108,12 @@ Requirements</h1>
 </ul>
 <h1>Automatic download &amp; build scripts</h1>
 <p>We easy-to-use scripts that will download and setup all dependencies for you in a self-contained folder Download build_ogre_scripts for the branch you need from:</p>
-<p><a href="https://bitbucket.org/sinbad/ogre/downloads/">https://bitbucket.org/sinbad/ogre/downloads/</a></p>
+<p><a href="https://www.ogre3d.org/download/sdk/sdk-ogre-next">https://www.ogre3d.org/download/sdk/sdk-ogre-next</a></p>
 <h1><a class="anchor" id="DownloadingOgreWindows"></a>
 Downloading Ogre</h1>
 <p>Most dependencies are conveniently stored in its own repository called "ogredeps" for you to download.</p>
 <p><b>IMPORTANT:</b> Do NOT use the the "Download" feature from Bitbucket. It will not follow subrepositories.</p>
-<p><b>Command line</b>: </p><div class="fragment"><div class="line">mkdir Ogre</div><div class="line">hg clone https://bitbucket.org/sinbad/ogre -r v2-1</div><div class="line">cd Ogre</div><div class="line">hg clone https://bitbucket.org/cabalistic/ogredeps Dependencies</div></div><!-- fragment --><p><b>Graphical</b></p>
-<p>Clone <em><a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a></em>: </p><div class="image">
-<img src="CloneOgre.png" alt="CloneOgre.png"/>
-</div>
-<p>Now clone the <em>ogredeps</em> repository: </p><div class="image">
-<img src="CloneOgreDeps.png" alt="CloneOgreDeps.png"/>
-</div>
-<p>Make sure <a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> is in the 2.1 branch: </p><div class="image">
-<img src="BranchCheckout.png" alt="BranchCheckout.png"/>
-</div>
-<p> <em>Note:</em> If the branch filter doesn't appear, hit Ctrl+S</p>
-<h1><a class="anchor" id="BuildingDependenciesWindows"></a>
+<p><b>Command line</b>: </p><div class="fragment"><div class="line">git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps</div><div class="line">git clone --branch v2-1 https://github.com/OGRECave/ogre-next</div></div><!-- fragment --><h1><a class="anchor" id="BuildingDependenciesWindows"></a>
 Building Dependencies</h1>
 <ol type="1">
 <li>Open CMake GUI.</li>

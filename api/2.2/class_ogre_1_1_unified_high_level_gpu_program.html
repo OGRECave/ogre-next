@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -312,6 +312,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aad90c221fc99b618c726b5c80e076c7d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_unified_high_level_gpu_program.html#aad90c221fc99b618c726b5c80e076c7d">isVertexTextureFetchRequired</a> (void) const</td></tr>
 <tr class="memdesc:aad90c221fc99b618c726b5c80e076c7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this vertex program requires support for vertex texture fetch from the hardware.  <a href="#aad90c221fc99b618c726b5c80e076c7d">More...</a><br /></td></tr>
 <tr class="separator:aad90c221fc99b618c726b5c80e076c7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83ff552868d41fa0daa9180913456c9e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#a83ff552868d41fa0daa9180913456c9e">isVpAndRtArrayIndexFromAnyShaderRequired</a> (void) const</td></tr>
+<tr class="memdesc:a83ff552868d41fa0daa9180913456c9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this program requires support for choosing viewport or render target index in any program or only geometry one.  <a href="#a83ff552868d41fa0daa9180913456c9e">More...</a><br /></td></tr>
+<tr class="separator:a83ff552868d41fa0daa9180913456c9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39d8ef352a44619ef8cdd93e152c9b5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_unified_high_level_gpu_program.html#a39d8ef352a44619ef8cdd93e152c9b5c">load</a> (bool backgroundThread=false)</td></tr>
 <tr class="memdesc:a39d8ef352a44619ef8cdd93e152c9b5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the resource, if it is not already.  <a href="#a39d8ef352a44619ef8cdd93e152c9b5c">More...</a><br /></td></tr>
 <tr class="separator:a39d8ef352a44619ef8cdd93e152c9b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -379,7 +382,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ace884b65b722ead9b920b9abf27bf815"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_string_interface.html#ace884b65b722ead9b920b9abf27bf815">setParameter</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;value)</td></tr>
 <tr class="memdesc:ace884b65b722ead9b920b9abf27bf815"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic parameter setting method.  <a href="#ace884b65b722ead9b920b9abf27bf815">More...</a><br /></td></tr>
 <tr class="separator:ace884b65b722ead9b920b9abf27bf815"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae356913ccefbebc4f0119a0599a406fc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_string_interface.html#ae356913ccefbebc4f0119a0599a406fc">setParameterList</a> (const <a class="el" href="group___general.html#gadccb207c184efc0a6fb2a00ab6320d19">NameValuePairList</a> &amp;paramList)</td></tr>
+<tr class="memitem:ae356913ccefbebc4f0119a0599a406fc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_string_interface.html#ae356913ccefbebc4f0119a0599a406fc">setParameterList</a> (const <a class="el" href="group___general.html#ga442a408f658c0cbfbe3e404e91a0fcc5">NameValuePairList</a> &amp;paramList)</td></tr>
 <tr class="memdesc:ae356913ccefbebc4f0119a0599a406fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic multiple parameter setting method.  <a href="#ae356913ccefbebc4f0119a0599a406fc">More...</a><br /></td></tr>
 <tr class="separator:ae356913ccefbebc4f0119a0599a406fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a848bf4164963cf8c0435c972eb717e0f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#a848bf4164963cf8c0435c972eb717e0f">setPoseAnimationIncluded</a> (<a class="el" href="namespace_ogre.html#af851e71354d841df7138f9877c6f5931">ushort</a> poseCount)</td></tr>
@@ -412,6 +415,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a463bffd1f68fc8ae3c29d64402e9ca8d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#a463bffd1f68fc8ae3c29d64402e9ca8d">setVertexTextureFetchRequired</a> (bool r)</td></tr>
 <tr class="memdesc:a463bffd1f68fc8ae3c29d64402e9ca8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether this vertex program requires support for vertex texture fetch from the hardware.  <a href="#a463bffd1f68fc8ae3c29d64402e9ca8d">More...</a><br /></td></tr>
 <tr class="separator:a463bffd1f68fc8ae3c29d64402e9ca8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a633efc296c4dffefe10f7a1e3da26e2d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#a633efc296c4dffefe10f7a1e3da26e2d">setVpAndRtArrayIndexFromAnyShaderRequired</a> (bool r)</td></tr>
+<tr class="memdesc:a633efc296c4dffefe10f7a1e3da26e2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether this program requires support for choosing viewport or render target index in any program or only geometry one.  <a href="#a633efc296c4dffefe10f7a1e3da26e2d">More...</a><br /></td></tr>
+<tr class="separator:a633efc296c4dffefe10f7a1e3da26e2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a682949c30fe1718d4514b25df77774c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_unified_high_level_gpu_program.html#a682949c30fe1718d4514b25df77774c2">touch</a> (void)</td></tr>
 <tr class="memdesc:a682949c30fe1718d4514b25df77774c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">'Touches' the resource to indicate it has been used.  <a href="#a682949c30fe1718d4514b25df77774c2">More...</a><br /></td></tr>
 <tr class="separator:a682949c30fe1718d4514b25df77774c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2296,6 +2302,34 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a83ff552868d41fa0daa9180913456c9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83ff552868d41fa0daa9180913456c9e">&#9670;&nbsp;</a></span>isVpAndRtArrayIndexFromAnyShaderRequired()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Ogre::GpuProgram::isVpAndRtArrayIndexFromAnyShaderRequired </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns whether this program requires support for choosing viewport or render target index in any program or only geometry one. </p>
+
+</div>
+</div>
 <a id="a39d8ef352a44619ef8cdd93e152c9b5c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a39d8ef352a44619ef8cdd93e152c9b5c">&#9670;&nbsp;</a></span>load()</h2>
 
@@ -2907,7 +2941,7 @@ template&lt;class Alloc &gt; </div>
 
 <p>Tells the resource whether it is background loaded or not. </p>
 <dl class="section remark"><dt>Remarks</dt><dd></dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_resource.html#a60ce96525ac730a0f7b466ed287beef3" title="Returns whether this Resource has been earmarked for background loading. ">Resource::isBackgroundLoaded</a> . Note that calling this only defers the normal on-demand loading behaviour of a resource, it does not actually <a class="el" href="struct_ogre_1_1set.html">set</a> up a thread to make sure the resource gets loaded in the background. You should use ResourceBackgroundLoadingQueue to manage the actual loading (which will call this method itself). </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_resource.html#a60ce96525ac730a0f7b466ed287beef3" title="Returns whether this Resource has been earmarked for background loading. ">Resource::isBackgroundLoaded</a> . Note that calling this only defers the normal on-demand loading behaviour of a resource, it does not actually set up a thread to make sure the resource gets loaded in the background. You should use ResourceBackgroundLoadingQueue to manage the actual loading (which will call this method itself). </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_resource.html#ae0a0007de944eb3c2f933a372a752b35">Ogre::Resource</a>.</p>
 
@@ -3188,7 +3222,7 @@ template&lt;class Alloc &gt; </div>
         <tr>
           <td class="memname">virtual void Ogre::StringInterface::setParameterList </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="group___general.html#gadccb207c184efc0a6fb2a00ab6320d19">NameValuePairList</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="group___general.html#ga442a408f658c0cbfbe3e404e91a0fcc5">NameValuePairList</a> &amp;&#160;</td>
           <td class="paramname"><em>paramList</em></td><td>)</td>
           <td></td>
         </tr>
@@ -3564,6 +3598,34 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Sets whether this vertex program requires support for vertex texture fetch from the hardware. </p>
+
+</div>
+</div>
+<a id="a633efc296c4dffefe10f7a1e3da26e2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a633efc296c4dffefe10f7a1e3da26e2d">&#9670;&nbsp;</a></span>setVpAndRtArrayIndexFromAnyShaderRequired()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::GpuProgram::setVpAndRtArrayIndexFromAnyShaderRequired </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>r</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets whether this program requires support for choosing viewport or render target index in any program or only geometry one. </p>
 
 </div>
 </div>

@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.1.0unstable</span>
+   &#160;<span id="projectnumber">2.1.1</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_staging_buffer.html',''
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_staging_buffer__inherit__graph.svg" width="562" height="190"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_staging_buffer__inherit__graph.svg" width="562" height="240"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -339,7 +339,7 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The offset in bytes that will be used by </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_staging_buffer.html#abf6789c54909d4f248cb69a3a8a04f3e" title="Maps the buffer for read acces for the CPU. ">_mapForRead</a> </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_metal_staging_buffer.html#ae41bfebb124f220f7f5a170ac101ce59">Ogre::MetalStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_staging_buffer.html#a93e8873b3d77cea3d98764d264e46a19">Ogre::GL3PlusStagingBuffer</a>, <a class="el" href="class_ogre_1_1_d3_d11_staging_buffer.html#a240f4261cb238ed9b1325856f6f5d772">Ogre::D3D11StagingBuffer</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_staging_buffer.html#abf19c9dc9bf79b6cfc8e627eae6594fd">Ogre::NULLStagingBuffer</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_metal_staging_buffer.html#ae41bfebb124f220f7f5a170ac101ce59">Ogre::MetalStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_staging_buffer.html#a93e8873b3d77cea3d98764d264e46a19">Ogre::GL3PlusStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_staging_buffer.html#a66ebe4f87d071e9611aac7ec39fef7a2">Ogre::GLES2StagingBuffer</a>, <a class="el" href="class_ogre_1_1_d3_d11_staging_buffer.html#a240f4261cb238ed9b1325856f6f5d772">Ogre::D3D11StagingBuffer</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_staging_buffer.html#abf19c9dc9bf79b6cfc8e627eae6594fd">Ogre::NULLStagingBuffer</a>.</p>
 
 </div>
 </div>
@@ -1228,7 +1228,7 @@ template&lt;class Alloc &gt; </div>
 <p>StagingStallType </p><dl class="section remark"><dt>Remarks</dt><dd>Not all RenderSystems can accurately give this information and will always return STALL_PARTIAL (i.e. GLES2) The chances of getting a STALL_FULL get higher as sizeBytes gets closer to this-&gt;<a class="el" href="class_ogre_1_1_staging_buffer.html#a765f26f80115c9341308fc86330ec9c2">getMaxSize()</a> mUploadOnly must be false. It is the counter side of </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_staging_buffer.html#ad844466b16d039d78fe762a3e32f92c2" title="Checks if this staging buffer has enough free space to use _asyncDownload. ">canDownload</a> </dd></dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a6ee0032ef0fe4c1200eb07f7fb052a1b">Ogre::MetalStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_staging_buffer.html#a80dcc131205f9fbccf8f7f56c2650138">Ogre::GL3PlusStagingBuffer</a>, <a class="el" href="class_ogre_1_1_d3_d11_staging_buffer.html#a73cd3b649225c35a756a88070fd88e86">Ogre::D3D11StagingBuffer</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_staging_buffer.html#a5e20b5e6c8f3b89127854f89a3284fa5">Ogre::NULLStagingBuffer</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a6ee0032ef0fe4c1200eb07f7fb052a1b">Ogre::MetalStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_staging_buffer.html#a80dcc131205f9fbccf8f7f56c2650138">Ogre::GL3PlusStagingBuffer</a>, <a class="el" href="class_ogre_1_1_g_l_e_s2_staging_buffer.html#a391b9d2ba733ea2400118bf330b9a561">Ogre::GLES2StagingBuffer</a>, <a class="el" href="class_ogre_1_1_d3_d11_staging_buffer.html#a73cd3b649225c35a756a88070fd88e86">Ogre::D3D11StagingBuffer</a>, and <a class="el" href="class_ogre_1_1_n_u_l_l_staging_buffer.html#a5e20b5e6c8f3b89127854f89a3284fa5">Ogre::NULLStagingBuffer</a>.</p>
 
 </div>
 </div>

@@ -1,20 +1,18 @@
 var _ogre_common_8h =
 [
-    [ "AliasTextureNamePairList", "_ogre_common_8h.html#ga20898062bd79359acd1137276d9b0e37", null ],
-    [ "BinaryOptionList", "_ogre_common_8h.html#ga426e97fd0ca35b59af1d3309ba4780b0", null ],
+    [ "AliasTextureNamePairList", "_ogre_common_8h.html#ga6ba37dfc5b90ddf191695822b26b3eff", null ],
+    [ "BinaryOptionList", "_ogre_common_8h.html#ga1349994da6582545bdc210cb63d00e36", null ],
     [ "FloatRect", "_ogre_common_8h.html#ga39213af9254535e83b4beca0859e8a2f", null ],
     [ "LightArray", "_ogre_common_8h.html#gae68d52abf76f574fcde6eb0f89eb128f", null ],
     [ "LightClosestArray", "_ogre_common_8h.html#ga8795828980c8be4892c41f4f4b7a7337", null ],
-    [ "LightClosestVec", "_ogre_common_8h.html#ga9f560544b6ad28c260ae56f2cf42fd29", null ],
     [ "LightList", "_ogre_common_8h.html#ga9870d1f08a71391b8716b43bb2064b2d", null ],
-    [ "NameValuePairList", "_ogre_common_8h.html#gadccb207c184efc0a6fb2a00ab6320d19", null ],
+    [ "NameValuePairList", "_ogre_common_8h.html#ga442a408f658c0cbfbe3e404e91a0fcc5", null ],
     [ "RealRect", "_ogre_common_8h.html#ga3e1c672c1d342ffb4f122f44e342bc90", null ],
     [ "Rect", "_ogre_common_8h.html#gae714035a753a8f484650598dc4143db8", null ],
-    [ "RenderWindowDescriptionList", "_ogre_common_8h.html#ga7a03bf97326d0d0385b91a74e2c51c5e", null ],
     [ "String", "_ogre_common_8h.html#af73bbdc8bed8a3e6fcd56bb8fa188c45", null ],
     [ "TrackVertexColourType", "_ogre_common_8h.html#gaf3fdba7211d7078a43201a1721532f9e", null ],
-    [ "UnaryOptionList", "_ogre_common_8h.html#gaf8039ad2eb9856cb1b181eb3d9507885", null ],
-    [ "WindowList", "_ogre_common_8h.html#gafcca0600d9f7ee630fa6500af203309d", null ],
+    [ "UnaryOptionList", "_ogre_common_8h.html#ga1fdbb1354b0aef3b66cfb0f34b8d5fde", null ],
+    [ "WindowList", "_ogre_common_8h.html#ga91a7b2f88b5150f745e3d8c1b60ae499", null ],
     [ "ClipResult", "_ogre_common_8h.html#ga4acd510f26a9a302753cf95b35096527", [
       [ "CLIPPED_NONE", "_ogre_common_8h.html#gga4acd510f26a9a302753cf95b35096527a11f88c21db09eedd4e2b32ee1339c573", null ],
       [ "CLIPPED_SOME", "_ogre_common_8h.html#gga4acd510f26a9a302753cf95b35096527a51a98f8e33c40d47e8e3ec773cc5f907", null ],
@@ -71,6 +69,12 @@ var _ogre_common_8h =
       [ "IM_USEONEWEIGHT", "_ogre_common_8h.html#gga4921efc65b347efe08a6d4992af069e2ac4105c2b84b7dfd08e4bfa35a5ea9848", null ],
       [ "IM_FORCEONEWEIGHT", "_ogre_common_8h.html#gga4921efc65b347efe08a6d4992af069e2a7f599ab5ea537d8bab3af8aef358fe0a", null ],
       [ "IM_USEALL", "_ogre_common_8h.html#gga4921efc65b347efe08a6d4992af069e2a0ef5ea7756d41449148c181eef505d92", null ]
+    ] ],
+    [ "MsaaPatterns", "_ogre_common_8h.html#a54095ce17b1cbaa8972173d9ea950f0f", [
+      [ "Undefined", "_ogre_common_8h.html#a54095ce17b1cbaa8972173d9ea950f0fae9213e03f8cab27c1f90e1981b2ab623", null ],
+      [ "Standard", "_ogre_common_8h.html#a54095ce17b1cbaa8972173d9ea950f0fa445f40c611f369b3ad626074ebd7815b", null ],
+      [ "Center", "_ogre_common_8h.html#a54095ce17b1cbaa8972173d9ea950f0fa8204db5736f2d9f7d147135189198ff7", null ],
+      [ "CenterZero", "_ogre_common_8h.html#a54095ce17b1cbaa8972173d9ea950f0fa8a445209440970fa095cef30a61bf250", null ]
     ] ],
     [ "PolygonMode", "_ogre_common_8h.html#ga68866b02aa7f99e3431337511fbb3345", [
       [ "PM_POINTS", "_ogre_common_8h.html#gga68866b02aa7f99e3431337511fbb3345adfb098e30463c0f0689e0e1fbbd5eb0f", null ],
@@ -154,6 +158,5 @@ var _ogre_common_8h =
     [ "max", "_ogre_common_8h.html#aa820a7676bc33adad08cdb1f214746ad", null ],
     [ "min", "_ogre_common_8h.html#af2b452038adc68d49db1236ddeca3b82", null ],
     [ "min", "_ogre_common_8h.html#a8b058c1978e206947295d9da4dbd973d", null ],
-    [ "operator<<", "_ogre_common_8h.html#ga6d67d46d838de3b38264f17fb792cddc", null ],
     [ "BLANKSTRING", "_ogre_common_8h.html#gad842a4b416bd2f3245d2b44826a0aedc", null ]
 ];

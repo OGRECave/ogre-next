@@ -823,8 +823,6 @@ var group___overlays =
       [ "operator new", "class_ogre_1_1v1_1_1_overlay_system.html#ab78a921e54419be677839cdf15d1f0b8", null ],
       [ "operator new[]", "class_ogre_1_1v1_1_1_overlay_system.html#a4be37baef81876985aa1071ad5acc6dd", null ],
       [ "operator new[]", "class_ogre_1_1v1_1_1_overlay_system.html#afa2943846ba6a2b5824a12857139cf5e", null ],
-      [ "postRenderQueues", "class_ogre_1_1v1_1_1_overlay_system.html#a0a6a53d54e3215fc2bf2c877fedd47d6", null ],
-      [ "preRenderQueues", "class_ogre_1_1v1_1_1_overlay_system.html#aed637d7bad94336183321b5ee290751c", null ],
       [ "renderQueueEnded", "class_ogre_1_1v1_1_1_overlay_system.html#a338dd1abf82317692ce7504978c01a5c", null ],
       [ "renderQueueStarted", "group___overlays.html#ga2b5e6b2c69d6d3835b648c0171dbfcb5", null ]
     ] ],

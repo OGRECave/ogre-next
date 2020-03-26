@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -114,7 +114,7 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a337b92bbdb7651a87c2deaaabfee61bd"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_terrain_material_generator_1_1_profile.html">Profile</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain_material_generator.html#a337b92bbdb7651a87c2deaaabfee61bd">ProfileList</a></td></tr>
+<tr class="memitem:a337b92bbdb7651a87c2deaaabfee61bd"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_terrain_material_generator_1_1_profile.html">Profile</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain_material_generator.html#a337b92bbdb7651a87c2deaaabfee61bd">ProfileList</a></td></tr>
 <tr class="memdesc:a337b92bbdb7651a87c2deaaabfee61bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of profiles - NB should be ordered in descending complexity.  <a href="#a337b92bbdb7651a87c2deaaabfee61bd">More...</a><br /></td></tr>
 <tr class="separator:a337b92bbdb7651a87c2deaaabfee61bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -129,7 +129,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae6cdf5dafc5bbea8e8241b54689798de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain_material_generator.html#ae6cdf5dafc5bbea8e8241b54689798de">_markChanged</a> ()</td></tr>
 <tr class="memdesc:ae6cdf5dafc5bbea8e8241b54689798de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method - indicates that a change has been made that would require material regeneration.  <a href="#ae6cdf5dafc5bbea8e8241b54689798de">More...</a><br /></td></tr>
 <tr class="separator:ae6cdf5dafc5bbea8e8241b54689798de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbe57c1cdc0ff8acb1ab5e837f0aa573"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain_material_generator.html#abbe57c1cdc0ff8acb1ab5e837f0aa573">_renderCompositeMap</a> (size_t size, const <a class="el" href="group___general.html#gae714035a753a8f484650598dc4143db8">Rect</a> &amp;rect, const <a class="el" href="namespace_ogre.html#a57ef769e80226674c3971ce58b58c91d">MaterialPtr</a> &amp;mat, const <a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a> &amp;destCompositeMap)</td></tr>
+<tr class="memitem:abbe57c1cdc0ff8acb1ab5e837f0aa573"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain_material_generator.html#abbe57c1cdc0ff8acb1ab5e837f0aa573">_renderCompositeMap</a> (size_t size, const <a class="el" href="group___general.html#gae714035a753a8f484650598dc4143db8">Rect</a> &amp;rect, const <a class="el" href="namespace_ogre.html#a57ef769e80226674c3971ce58b58c91d">MaterialPtr</a> &amp;mat, const TexturePtr &amp;destCompositeMap)</td></tr>
 <tr class="memdesc:abbe57c1cdc0ff8acb1ab5e837f0aa573"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to render a composite map.  <a href="#abbe57c1cdc0ff8acb1ab5e837f0aa573">More...</a><br /></td></tr>
 <tr class="separator:abbe57c1cdc0ff8acb1ab5e837f0aa573"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f9892827501c4907da1775e3c0c067b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_terrain_material_generator.html#a7f9892827501c4907da1775e3c0c067b">canGenerateUsingDeclaration</a> (const <a class="el" href="struct_ogre_1_1_terrain_layer_declaration.html">TerrainLayerDeclaration</a> &amp;decl)</td></tr>
@@ -230,7 +230,7 @@ Subclasses of this class are responsible for responding to these factors and to 
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt;<a class="el" href="class_ogre_1_1_terrain_material_generator_1_1_profile.html">Profile</a>*&gt;::type <a class="el" href="class_ogre_1_1_terrain_material_generator.html#a337b92bbdb7651a87c2deaaabfee61bd">Ogre::TerrainMaterialGenerator::ProfileList</a></td>
+          <td class="memname">typedef vector&lt;<a class="el" href="class_ogre_1_1_terrain_material_generator_1_1_profile.html">Profile</a>*&gt;::type <a class="el" href="class_ogre_1_1_terrain_material_generator.html#a337b92bbdb7651a87c2deaaabfee61bd">Ogre::TerrainMaterialGenerator::ProfileList</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -365,7 +365,7 @@ Subclasses of this class are responsible for responding to these factors and to 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#aa381890787803da43b614dee8d9c8994">TexturePtr</a> &amp;&#160;</td>
+          <td class="paramtype">const TexturePtr &amp;&#160;</td>
           <td class="paramname"><em>destCompositeMap</em>&#160;</td>
         </tr>
         <tr>

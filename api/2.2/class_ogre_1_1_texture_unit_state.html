@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -132,7 +132,7 @@ Public Types</h2></td></tr>
  }<tr class="memdesc:a35a108a68c71c8267af4af8c1a819030"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum identifying the type of content this texture unit contains.  <a href="class_ogre_1_1_texture_unit_state.html#a35a108a68c71c8267af4af8c1a819030">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:a35a108a68c71c8267af4af8c1a819030"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a169e531cd6f1f0c22e6a1c034706272b"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="struct_ogre_1_1multimap.html">multimap</a>&lt; <a class="el" href="class_ogre_1_1_texture_unit_state.html#a717b14961a636b3a18b8ab3dcef61626">TextureEffectType</a>, <a class="el" href="struct_ogre_1_1_texture_unit_state_1_1_texture_effect.html">TextureEffect</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_unit_state.html#a169e531cd6f1f0c22e6a1c034706272b">EffectMap</a></td></tr>
+<tr class="memitem:a169e531cd6f1f0c22e6a1c034706272b"><td class="memItemLeft" align="right" valign="top">typedef multimap&lt; <a class="el" href="class_ogre_1_1_texture_unit_state.html#a717b14961a636b3a18b8ab3dcef61626">TextureEffectType</a>, <a class="el" href="struct_ogre_1_1_texture_unit_state_1_1_texture_effect.html">TextureEffect</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_unit_state.html#a169e531cd6f1f0c22e6a1c034706272b">EffectMap</a></td></tr>
 <tr class="memdesc:a169e531cd6f1f0c22e6a1c034706272b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource. ">Texture</a> effects in a multimap paired array.  <a href="#a169e531cd6f1f0c22e6a1c034706272b">More...</a><br /></td></tr>
 <tr class="separator:a169e531cd6f1f0c22e6a1c034706272b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72a88b1cf11053da98fa25f98689931e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_unit_state.html#a72a88b1cf11053da98fa25f98689931e">EnvMapType</a> { <a class="el" href="class_ogre_1_1_texture_unit_state.html#a72a88b1cf11053da98fa25f98689931ea50895f1c891eedb007500965ca4c204a">ENV_PLANAR</a>, 
@@ -154,6 +154,7 @@ Public Types</h2></td></tr>
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604">MetadataCacheOutOfDate</a>, 
 <br />
 &#160;&#160;<a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26">ExceptionThrown</a>, 
+<a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7">FsaaSettingAlteredByApi</a>, 
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257">ReadyForRendering</a>, 
 <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e">Deleted</a>
 <br />
@@ -248,7 +249,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8532ad689770975afe46a3ddd49123a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_unit_state.html#a8532ad689770975afe46a3ddd49123a8">addFrameTextureName</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name)</td></tr>
 <tr class="memdesc:a8532ad689770975afe46a3ddd49123a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource. ">Texture</a> name to the end of the frame container.  <a href="#a8532ad689770975afe46a3ddd49123a8">More...</a><br /></td></tr>
 <tr class="separator:a8532ad689770975afe46a3ddd49123a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d18cb7a792b05d9ffd6192d7f9a252f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_unit_state.html#a1d18cb7a792b05d9ffd6192d7f9a252f">applyTextureAliases</a> (const <a class="el" href="group___general.html#ga20898062bd79359acd1137276d9b0e37">AliasTextureNamePairList</a> &amp;aliasList, const bool apply=true)</td></tr>
+<tr class="memitem:a1d18cb7a792b05d9ffd6192d7f9a252f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_unit_state.html#a1d18cb7a792b05d9ffd6192d7f9a252f">applyTextureAliases</a> (const <a class="el" href="group___general.html#ga6ba37dfc5b90ddf191695822b26b3eff">AliasTextureNamePairList</a> &amp;aliasList, const bool apply=true)</td></tr>
 <tr class="memdesc:a1d18cb7a792b05d9ffd6192d7f9a252f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies texture names to <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource. ">Texture</a> Unit State with matching texture name aliases.  <a href="#a1d18cb7a792b05d9ffd6192d7f9a252f">More...</a><br /></td></tr>
 <tr class="separator:a1d18cb7a792b05d9ffd6192d7f9a252f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c9d0e4e1188041093e8b2c95dc07359"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_unit_state.html#a2c9d0e4e1188041093e8b2c95dc07359">calculateSize</a> (void) const</td></tr>
@@ -481,7 +482,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3d983fde354f26d9df244a40ad1a79a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_unit_state.html#a3d983fde354f26d9df244a40ad1a79a1">setTexture</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texPtr)</td></tr>
 <tr class="memdesc:a3d983fde354f26d9df244a40ad1a79a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets this texture layer to use a single texture, given the pointer to the texture to use on this layer.  <a href="#a3d983fde354f26d9df244a40ad1a79a1">More...</a><br /></td></tr>
 <tr class="separator:a3d983fde354f26d9df244a40ad1a79a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70c55b5db14e54e2e7a991f548b6387d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_unit_state.html#a70c55b5db14e54e2e7a991f548b6387d">setTextureCoordSet</a> (unsigned int <a class="el" href="struct_ogre_1_1set.html">set</a>)</td></tr>
+<tr class="memitem:a70c55b5db14e54e2e7a991f548b6387d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_unit_state.html#a70c55b5db14e54e2e7a991f548b6387d">setTextureCoordSet</a> (unsigned int set)</td></tr>
 <tr class="memdesc:a70c55b5db14e54e2e7a991f548b6387d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the index of the set of texture co-ords this layer uses.  <a href="#a70c55b5db14e54e2e7a991f548b6387d">More...</a><br /></td></tr>
 <tr class="separator:a70c55b5db14e54e2e7a991f548b6387d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81d0cd32b5b86fc5307cee704b65cc94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_unit_state.html#a81d0cd32b5b86fc5307cee704b65cc94">setTextureName</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, <a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82">TextureTypes::TextureTypes</a> ttype=<a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82aaccb80fce163e32091af35b9de1c1001">TextureTypes::Type2D</a>)</td></tr>
@@ -538,7 +539,7 @@ Friends</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="struct_ogre_1_1multimap.html">multimap</a>&lt;<a class="el" href="class_ogre_1_1_texture_unit_state.html#a717b14961a636b3a18b8ab3dcef61626">TextureEffectType</a>, <a class="el" href="struct_ogre_1_1_texture_unit_state_1_1_texture_effect.html">TextureEffect</a>&gt;::type <a class="el" href="class_ogre_1_1_texture_unit_state.html#a169e531cd6f1f0c22e6a1c034706272b">Ogre::TextureUnitState::EffectMap</a></td>
+          <td class="memname">typedef multimap&lt;<a class="el" href="class_ogre_1_1_texture_unit_state.html#a717b14961a636b3a18b8ab3dcef61626">TextureEffectType</a>, <a class="el" href="struct_ogre_1_1_texture_unit_state_1_1_texture_effect.html">TextureEffect</a>&gt;::type <a class="el" href="class_ogre_1_1_texture_unit_state.html#a169e531cd6f1f0c22e6a1c034706272b">Ogre::TextureUnitState::EffectMap</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -670,6 +671,9 @@ Friends</h2></td></tr>
 <p>This listener will get called from the main thread.</p>
 <p>The texture may still have pending residency transitions (e.g. it may still be loading the 2x2 fallback)</p>
 <p>Cast <a class="el" href="class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine. ">Exception</a> <em>e = reinterpret_cast&lt;<a class="el" href="class_ogre_1_1_exception.html" title="When thrown, provides information about an error that has occurred inside the engine. ">Exception</a></em>&gt;( extraData ); to know more info </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7"></a>FsaaSettingAlteredByApi&#160;</td><td class="fielddoc"><p>Requested FSAA (MSAA / CSAA / EQAA / etc) is not supported by the API, and thus the setting had to be downgraded. </p>
+<p>Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded. ">TextureGpu::notifyDataIsReady</a> is called. </p>
 <p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html" title=" This source file is part of OGRE (Object-oriented Graphics Rendering Engine) For the latest info...">Ogre</a> has finished issueing rendering commands to a <a class="el" href="class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture. ">RenderTexture</a> and is now ready to be presented to the monitor. </p>
@@ -1169,7 +1173,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">bool Ogre::TextureUnitState::applyTextureAliases </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="group___general.html#ga20898062bd79359acd1137276d9b0e37">AliasTextureNamePairList</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="group___general.html#ga6ba37dfc5b90ddf191695822b26b3eff">AliasTextureNamePairList</a> &amp;&#160;</td>
           <td class="paramname"><em>aliasList</em>, </td>
         </tr>
         <tr>

@@ -27,7 +27,6 @@ var class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base =
     [ "destroyVertexDeclaration", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base.html#a5b732d773d680492f36f23c5d217bade", null ],
     [ "getGLType", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base.html#ae3cab9d26380c35fb5657b097de76489", null ],
     [ "getGLUsage", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base.html#ab13e7d544730340af9b6fd10d6147c3f", null ],
-    [ "getStateCacheManager", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base.html#ae59d5c7286ff73fbd344e2af09524c26", null ],
     [ "operator delete", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base.html#a1c727e879a260c37b00ce5505fe8e144", null ],
     [ "operator delete", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_buffer_manager_base.html#acb46d4b0a597156d9ba5abc39d127792", null ],

@@ -2,7 +2,7 @@
 <area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_h_l_s_l_program_factory.html" title="Factory class for D3D11 HLSL programs. " alt="" coords="385,5,611,32"/>
 <area shape="rect" id="node4" href="$class_ogre_1_1_d3_d9_h_l_s_l_program_factory.html" title="Factory class for D3D9 HLSL programs. " alt="" coords="389,56,607,83"/>
 <area shape="rect" id="node5" href="$class_ogre_1_1_g_l_s_l_e_s_cg_program_factory.html" title="Factory class for GLSL ES programs. " alt="" coords="389,107,607,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_g_l_s_l_e_s_program_factory.html" title="Factory class for GLSL ES programs. " alt="" coords="397,157,599,184"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_g_l_s_l_e_s_shader_factory.html" title="Factory class for GLSL ES programs. " alt="" coords="401,157,595,184"/>
 <area shape="rect" id="node7" href="$class_ogre_1_1_g_l_s_l_shader_factory.html" title="Factory class for GLSL shaders. " alt="" coords="410,208,586,235"/>
 <area shape="rect" id="node8" href="$class_ogre_1_1_metal_program_factory.html" title="Factory class for Metal programs. " alt="" coords="407,259,589,285"/>
 <area shape="rect" id="node9" href="$class_ogre_1_1_unified_high_level_gpu_program_factory.html" title="Factory class for Unified programs. " alt="" coords="407,310,589,351"/>

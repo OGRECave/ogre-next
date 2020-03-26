@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">OGRE
-   &#160;<span id="projectnumber">2.2.0unstable</span>
+   &#160;<span id="projectnumber">2.2.4</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
   </td>
@@ -130,9 +130,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4be37baef81876985aa1071ad5acc6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa2943846ba6a2b5824a12857139cf5e"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#afa2943846ba6a2b5824a12857139cf5e">operator new[]</a> (size_t sz)</td></tr>
 <tr class="separator:afa2943846ba6a2b5824a12857139cf5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae67a6b12bc1f721eba363cc9c33ae8e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#gacd063ace8e2697904ef8c500b1096902">ScriptTokenListPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_script_lexer.html#ae67a6b12bc1f721eba363cc9c33ae8e2">tokenize</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;str, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;source)</td></tr>
-<tr class="memdesc:ae67a6b12bc1f721eba363cc9c33ae8e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tokenizes the given input and returns the list of tokens found.  <a href="#ae67a6b12bc1f721eba363cc9c33ae8e2">More...</a><br /></td></tr>
-<tr class="separator:ae67a6b12bc1f721eba363cc9c33ae8e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa775ffdbd4b7d47e86b788b29acde348"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#gacd063ace8e2697904ef8c500b1096902">ScriptTokenListPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_script_lexer.html#aa775ffdbd4b7d47e86b788b29acde348">tokenize</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;str)</td></tr>
+<tr class="memdesc:aa775ffdbd4b7d47e86b788b29acde348"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tokenizes the given input and returns the list of tokens found.  <a href="#aa775ffdbd4b7d47e86b788b29acde348">More...</a><br /></td></tr>
+<tr class="separator:aa775ffdbd4b7d47e86b788b29acde348"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a67ee59eadedcb4f2ab1f1b5003db2228"></a>
@@ -175,7 +175,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_script_token.html#ae229067d36cb90679ff2cbfc6d0ac59d">Ogre::ScriptToken::lexeme</a>, and <a class="el" href="struct_ogre_1_1_script_token.html#a83500d1c1b1528eca630836658a56f90">Ogre::ScriptToken::line</a>.</p>
+<p class="reference">References <a class="el" href="struct_ogre_1_1_script_token.html#aa19ea4cbc50a09c0657bce9ab053a1b6">Ogre::ScriptToken::lexeme()</a>, and <a class="el" href="struct_ogre_1_1_script_token.html#a83500d1c1b1528eca630836658a56f90">Ogre::ScriptToken::line</a>.</p>
 
 </div>
 </div>
@@ -574,8 +574,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="ae67a6b12bc1f721eba363cc9c33ae8e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae67a6b12bc1f721eba363cc9c33ae8e2">&#9670;&nbsp;</a></span>tokenize()</h2>
+<a id="aa775ffdbd4b7d47e86b788b29acde348"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa775ffdbd4b7d47e86b788b29acde348">&#9670;&nbsp;</a></span>tokenize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -584,18 +584,8 @@ template&lt;class Alloc &gt; </div>
           <td class="memname"><a class="el" href="group___general.html#gacd063ace8e2697904ef8c500b1096902">ScriptTokenListPtr</a> Ogre::ScriptLexer::tokenize </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>str</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>source</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
