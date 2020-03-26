@@ -24,31 +24,32 @@ Make sure you have set the current working directory to ogre's source directory:
 cd ogre
 ```
 
-List all your available build options:
-```bash
-cmake -LA
-```
-
 At the time of writing this guide, a build error will occurr for the SampleMorphAnimations target (unless one is building .frameworks which this guide won't). So remove the following line line or comment it out, in `Samples/2.0/CMakeLists.txt:130` that says:
-```
-add_subdirectory(ApiUsage/MorphAnimations)
-```
+> add_subdirectory(ApiUsage/MorphAnimations)
 
 Then configure the options to compose your flavor of what you want to build by setting ogre and cmake variables. Examples of variables that this guide configures:
-```
-# Opt-out from OpenGL (Metal is already set to be built)
-OGRE_BUILD_RENDERSYSTEM_GL3PLUS
+|  Varible   |  What this guide will use it for   |
+|---  |---  |
+|OGRE_BUILD_RENDERSYSTEM_GL3PLUS     |  Opt-out from OpenGL (Metal is already set to be built by default)   |
+|  OGRE_BUILD_LIBS_AS_FRAMEWORKS   |  Build .dylib/.a files instead of .framework   |
+|  OGRE_PLUGIN_LIB_PREFIX   |  Make sure the RenderSystem.dylib is named libRenderSystem.dylib to conform to *NIX standard   |
+|  CMAKE_INSTALL_PREFIX   |  Directory in which CMake should copy the final SDK files. A `lib/` `/bin` and so on will be automatically created inside here   |
+|  CMAKE_INSTALL_NAME_DIR   |  Directory of where the installed target file is located, i.e. should be `$CMAKE_INSTALL_PREFIX/lib`. This will be imprinted in the target file itself, and can be verfied after install by e.g. `otool -L $CMAKE_INSTALL_PREFIX/lib/OgreMain.dylib`   |
 
-# Build .dylib/.a files instead of .framework
-OGRE_BUILD_LIBS_AS_FRAMEWORKS
 
-# Make sure the RenderSystem.dylib is named libRenderSystem.dylib to conform to *NIX standard
-OGRE_PLUGIN_LIB_PREFIX
+You can list all your available build options and adjust for your needs:
+```bash
+cmake -LA -N
 ```
 
 Configure the above variables
 ```bash
-cmake -D OGRE_BUILD_RENDERSYSTEM_GL3PLUS=OFF -D OGRE_BUILD_LIBS_AS_FRAMEWORKS=NO -D OGRE_PLUGIN_LIB_PREFIX=lib
+cmake  -D OGRE_BUILD_RENDERSYSTEM_GL3PLUS=OFF \
+       -D OGRE_BUILD_LIBS_AS_FRAMEWORKS=NO \
+       -D OGRE_PLUGIN_LIB_PREFIX=lib \
+       -D CMAKE_INSTALL_PREFIX=/put/final/sdk/here \
+       -D CMAKE_INSTALL_NAME_DIR=/put/final/sdk/here/lib
+
 ```
 
 Generate a Makefile
@@ -61,7 +62,7 @@ Now, build ogre:
 make install
 ```
 
-If everything went well, you should have an sdk located in the `sdk/` directory.
+If everything went well, you should have an sdk located in the `/put/final/sdk/here` directory.
 
 # Build offline version of the docs
 From the same working directory run:
