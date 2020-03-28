@@ -474,10 +474,13 @@ namespace Ogre
                     ++texUnit;
                 }
 
-                *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
-                                                                     mLtcMatrixTexture,
-                                                                     mAreaLightMasksSamplerblock );
-                ++texUnit;
+                if( mLtcMatrixTexture )
+                {
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
+                                                                         mLtcMatrixTexture,
+                                                                         mAreaLightMasksSamplerblock );
+                    ++texUnit;
+                }
 
                 for( size_t i=0; i<3u; ++i )
                 {
