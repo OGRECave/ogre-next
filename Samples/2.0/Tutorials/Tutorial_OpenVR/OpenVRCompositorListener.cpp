@@ -40,7 +40,7 @@ namespace Demo
         syncCameraProjection( true );
 
         mRoot->addFrameListener( this );
-        mWorkspace->addListener( this );
+        mWorkspace->setListener( this );
 
         const Ogre::String &renderSystemName = mRenderSystem->getName();
         if( renderSystemName == "OpenGL 3+ Rendering Subsystem" )
@@ -56,7 +56,8 @@ namespace Demo
         if( mCamera )
             mCamera->setVrData( 0 );
 
-        mWorkspace->removeListener( this );
+        if( mWorkspace->getListener() == this )
+            mWorkspace->setListener( 0 );
         mRoot->removeFrameListener( this );
     }
     //-------------------------------------------------------------------------
