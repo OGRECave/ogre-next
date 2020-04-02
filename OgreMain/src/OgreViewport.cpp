@@ -78,7 +78,37 @@ namespace Ogre {
         _updateDimensions();
     }
     //---------------------------------------------------------------------
-    Viewport::Viewport() : Viewport( 0, 0, 0, 0 ) {}
+    Viewport::Viewport() :
+        mGlobalIndex( -1 ),
+        mRelLeft( 0 ),
+        mRelTop( 0 ),
+        mRelWidth( 0 ),
+        mRelHeight( 0 ),
+        mActLeft( 0 ),
+        mActTop( 0 ),
+        mActWidth( 0 ),
+        mActHeight( 0 ),
+        mCurrentTarget( 0 ),
+        mCurrentMip( 0 ),
+        mScissorRelLeft( 0 ),
+        mScissorRelTop( 0 ),
+        mScissorRelWidth( 0 ),
+        mScissorRelHeight( 0 ),
+        mScissorActLeft( 0 ),
+        mScissorActTop( 0 ),
+        mScissorActWidth( 0 ),
+        mScissorActHeight( 0 ),
+        mCoversEntireTarget( true ),
+        mScissorsMatchViewport( true )
+        // Actual dimensions will update later
+        ,
+        mUpdated( false ),
+        mShowOverlays( true ),
+        mVisibilityMask( 0 ),
+        mMaterialSchemeName( MaterialManager::DEFAULT_SCHEME_NAME ),
+        mColourBuffer( CBT_BACK )
+    {
+    }
     //---------------------------------------------------------------------
     Viewport::~Viewport()
     {
