@@ -1,3 +1,4 @@
+#ifdef USE_OPEN_VR
 
 #include "OpenVRCompositorListener.h"
 #include "OgreTextureGpu.h"
@@ -300,3 +301,5 @@ namespace Demo
                mWaitingMode <= mFirstGlitchFreeMode;
     }
 }
+
+#endif

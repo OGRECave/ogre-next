@@ -20,7 +20,9 @@
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
+#ifdef USE_OPEN_VR
 #include "OpenVRCompositorListener.h"
+#endif
 #include "OgreLogManager.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -85,6 +87,7 @@ namespace Demo
         }
     }
 
+#ifdef USE_OPEN_VR
     //-----------------------------------------------------------------------------
     // Purpose: Helper to get a string from a tracked device property and turn it
     //			into a std::string
@@ -106,6 +109,7 @@ namespace Demo
         delete [] pchBuffer;
         return sResult;
     }
+#endif
 
     void Tutorial_OpenVRGraphicsSystem::initOpenVR(void)
     {
@@ -187,6 +191,7 @@ namespace Demo
 #endif
     }
 
+#ifdef USE_OPEN_VR
     void Tutorial_OpenVRGraphicsSystem::initCompositorVR(void)
     {
         if ( !vr::VRCompositor() )
@@ -196,6 +201,7 @@ namespace Demo
                          "Tutorial_OpenVRGraphicsSystem::initCompositorVR" );
         }
     }
+#endif
 
     void Tutorial_OpenVRGraphicsSystem::createHiddenAreaMeshVR(void)
     {
@@ -235,11 +241,13 @@ namespace Demo
             mVrCullCamera = 0;
         }
 
+#ifdef USE_OPEN_VR
         if( mHMD )
         {
             vr::VR_Shutdown();
             mHMD = NULL;
         }
+#endif
 
         GraphicsSystem::deinitialize();
     }

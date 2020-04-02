@@ -22,7 +22,9 @@
 #include "OgreTextureFilters.h"
 #include "OgreHlmsPbs.h"
 
+#ifdef USE_OPEN_VR
 #include "OpenVRCompositorListener.h"
+#endif
 #include "Tutorial_OpenVR.h"
 
 using namespace Demo;
@@ -282,6 +284,7 @@ namespace Demo
         outText += "\n+/- to change transparency. [";
         outText += Ogre::StringConverter::toString( mTransparencyValue ) + "]";
 
+#ifdef USE_OPEN_VR
         Tutorial_OpenVRGraphicsSystem *ovrGraphicsSystem =
                 static_cast<Tutorial_OpenVRGraphicsSystem*>( mGraphicsSystem );
         OpenVRCompositorListener *ovrListener = ovrGraphicsSystem->getOvrCompositorListener();
@@ -301,6 +304,7 @@ namespace Demo
             outText += "\nPress F9 for next waiting mode";
             outText += c_waitingModes[waitingMode];
         }
+#endif
         outText += "\nF10 toggles hidden area mesh optimization";
         if( mHiddenAreaMeshVr )
             outText += mHiddenAreaMeshVr->getVisible() ? "[Optimizing]" : "[Disabled]";
@@ -373,6 +377,7 @@ namespace Demo
             if( mTransparencyValue != 1.0f )
                 setTransparencyToMaterials();
         }
+#ifdef USE_OPEN_VR
         else if( arg.keysym.sym == SDLK_F9 )
         {
             Tutorial_OpenVRGraphicsSystem *ovrGraphicsSystem =
@@ -385,6 +390,7 @@ namespace Demo
                 ovrListener->setWaitingMode( nextMode );
             }
         }
+#endif
         else if( arg.keysym.sym == SDLK_F10 )
         {
             if( mHiddenAreaMeshVr )
