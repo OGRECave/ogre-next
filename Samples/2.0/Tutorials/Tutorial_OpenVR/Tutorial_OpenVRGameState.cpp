@@ -70,7 +70,7 @@ namespace Demo
         /*const float radiuses[3] = {0.55f, 0.7f, 0.85f};
         sceneManager->setRadialDensityMask( true, radiuses );*/
         const float radiuses[3] = {0.25f, 0.7f, 0.85f};
-#ifdef USE_OPENVR_RDM
+#ifdef USE_OPEN_VR_RDM
         sceneManager->setRadialDensityMask( true, radiuses );
 #else
         sceneManager->setRadialDensityMask( false, radiuses );

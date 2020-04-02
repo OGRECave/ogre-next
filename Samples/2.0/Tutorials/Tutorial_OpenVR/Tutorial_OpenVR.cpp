@@ -170,7 +170,7 @@ namespace Demo
 #ifdef USE_OPEN_VR
         mVrCullCamera = mSceneManager->createCamera( "VrCullCamera" );
         // cull camera to compositor definition
-        Ogre::CompositorNodeDef* wsNode = compositorManager->getNodeDefinitionNonConst(wsName);
+        Ogre::CompositorNodeDef* wsNode = compositorManager->getNodeDefinitionNonConst("Tutorial_OpenVRNode");
         Ogre::CompositorTargetDef* target = wsNode->getTargetPass(0);
         Ogre::CompositorPassSceneDef* renderScene = static_cast<Ogre::CompositorPassSceneDef*>(target->getCompositorPassesNonConst().at(0));
         renderScene->mCullCameraName = "VrCullCamera";
