@@ -2,20 +2,22 @@
 #include "Tutorial_OpenVR.h"
 #include "Tutorial_OpenVRGameState.h"
 
-#include "OgreSceneManager.h"
-#include "OgreCamera.h"
-#include "OgreRoot.h"
-#include "OgreWindow.h"
-#include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
-#include "OgreTextureGpuManager.h"
+#include "Compositor/OgreCompositorWorkspace.h"
+#include "OgreCamera.h"
+#include "OgreConfigFile.h"
 #include "OgreHiddenAreaMeshVr.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
+#include "OgreTextureGpuManager.h"
+#include "OgreWindow.h"
 
 //Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
 #include "OpenVRCompositorListener.h"
+#include "NullCompositorListener.h"
 #include "OgreLogManager.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -33,7 +35,6 @@ namespace Demo
 {
     Ogre::CompositorWorkspace* Tutorial_OpenVRGraphicsSystem::setupCompositor()
     {
-#ifdef USE_OPEN_VR
         initOpenVR();
 
         Ogre::ResourceLayoutMap initialLayouts;
@@ -47,12 +48,9 @@ namespace Demo
         Ogre::CompositorChannelVec channels( 2u );
         channels[0] = mRenderWindow->getTexture();
         channels[1] = mVrTexture;
-        return compositorManager->addWorkspace( mSceneManager, channels, mCamera,
-                                                "Tutorial_OpenVRMirrorWindowWorkspace", true );
-#else
-        return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
-                                                "InstancedStereoWorkspace", true );
-#endif
+        return compositorManager->addWorkspace(
+            mSceneManager, channels, mCamera, "Tutorial_OpenVRMirrorWindowWorkspace", true, -1,
+            (Ogre::UavBufferPackedVec *)0, &initialLayouts, &initialUavAccess );
     }
 
     void Tutorial_OpenVRGraphicsSystem::setupResources(void)
@@ -118,6 +116,7 @@ namespace Demo
 
     void Tutorial_OpenVRGraphicsSystem::initOpenVR(void)
     {
+#ifdef USE_OPEN_VR
         // Loading the SteamVR Runtime
         vr::EVRInitError eError = vr::VRInitError_None;
         mHMD = vr::VR_Init( &eError, vr::VRApplication_Scene );
@@ -171,6 +170,32 @@ namespace Demo
         mOvrCompositorListener = new OpenVRCompositorListener( mHMD, vr::VRCompositor(), mVrTexture,
                                                                mRoot, mVrWorkspace,
                                                                mCamera, mVrCullCamera );
+#else
+        Ogre::TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
+        //Radial Density Mask requires the VR texture to be UAV & reinterpretable
+        mVrTexture = textureManager->createOrRetrieveTexture( "OpenVR Both Eyes",
+                                                              Ogre::GpuPageOutStrategy::Discard,
+                                                              Ogre::TextureFlags::RenderToTexture |
+                                                              Ogre::TextureFlags::Uav |
+                                                              Ogre::TextureFlags::Reinterpretable,
+                                                              Ogre::TextureTypes::Type2D );
+        mVrTexture->setResolution( 3704u, 2056u );
+        mVrTexture->setPixelFormat( Ogre::PFG_RGBA8_UNORM_SRGB );
+        //mVrTexture->setMsaa( 4u );
+        mVrTexture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
+
+        mVrCullCamera = mSceneManager->createCamera( "VrCullCamera" );
+
+        Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
+        mVrWorkspace = compositorManager->addWorkspace( mSceneManager, mVrTexture, mCamera,
+                                                        "Tutorial_OpenVRWorkspace", true, 0 );
+
+        mDeviceModelNumber = "Vive"; // Pretend we have a Vive so the HAM works.
+        createHiddenAreaMeshVR();
+
+        mNullCompositorListener =
+            new NullCompositorListener( mVrTexture, mRoot, mVrWorkspace, mCamera, mVrCullCamera );
+#endif
     }
 
     void Tutorial_OpenVRGraphicsSystem::initCompositorVR(void)
@@ -207,6 +232,9 @@ namespace Demo
     {
         delete mOvrCompositorListener;
         mOvrCompositorListener = 0;
+
+        delete mNullCompositorListener;
+        mNullCompositorListener = 0;
 
         if( mVrTexture )
         {

@@ -21,6 +21,7 @@
 
 namespace Demo
 {
+    class NullCompositorListener;
     class OpenVRCompositorListener;
 
     class Tutorial_OpenVRGraphicsSystem : public GraphicsSystem
@@ -36,6 +37,8 @@ namespace Demo
         Ogre::Camera                *mVrCullCamera;
 
         OpenVRCompositorListener    *mOvrCompositorListener;
+        /// Only used if USE_OPEN_VR is defined
+        NullCompositorListener      *mNullCompositorListener;
 
         virtual Ogre::CompositorWorkspace* setupCompositor();
 
@@ -54,7 +57,8 @@ namespace Demo
             mHMD( 0 ),
             mVrTexture( 0 ),
             mVrCullCamera( 0 ),
-            mOvrCompositorListener( 0 )
+            mOvrCompositorListener( 0 ),
+            mNullCompositorListener( 0 )
         {
             memset( mTrackedDevicePose, 0, sizeof (mTrackedDevicePose) );
         }
