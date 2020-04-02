@@ -27,6 +27,8 @@
 
 using namespace Demo;
 
+extern const bool c_useRDM;
+
 namespace Demo
 {
     Tutorial_OpenVRGameState::Tutorial_OpenVRGameState( const Ogre::String &helpDescription ) :
@@ -65,10 +67,13 @@ namespace Demo
             sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )->attachObject( mHiddenAreaMeshVr );
         }
 
-        /*const float radiuses[3] = {0.55f, 0.7f, 0.85f};
-        sceneManager->setRadialDensityMask( true, radiuses );*/
-        const float radiuses[3] = {0.25f, 0.7f, 0.85f};
-        sceneManager->setRadialDensityMask( true, radiuses );
+        if( c_useRDM )
+        {
+            /*const float radiuses[3] = {0.55f, 0.7f, 0.85f};
+            sceneManager->setRadialDensityMask( true, radiuses );*/
+            const float radiuses[3] = { 0.25f, 0.7f, 0.85f };
+            sceneManager->setRadialDensityMask( true, radiuses );
+        }
 
         Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
                                             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
