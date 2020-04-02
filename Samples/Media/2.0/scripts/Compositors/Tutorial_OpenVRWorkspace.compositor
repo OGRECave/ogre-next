@@ -2,7 +2,7 @@ compositor_node Tutorial_OpenVRNode
 {
 	in 0 stereo_output
 
-	texture rtt target_width target_height target_format msaa 4
+	texture rtt target_width target_height target_format
 
 	target rtt
 	{
