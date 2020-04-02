@@ -68,7 +68,11 @@ namespace Demo
         /*const float radiuses[3] = {0.55f, 0.7f, 0.85f};
         sceneManager->setRadialDensityMask( true, radiuses );*/
         const float radiuses[3] = {0.25f, 0.7f, 0.85f};
+#ifdef USE_OPENVR_RDM
         sceneManager->setRadialDensityMask( true, radiuses );
+#else
+        sceneManager->setRadialDensityMask( false, radiuses );
+#endif
 
         Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
                                             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
@@ -281,19 +285,22 @@ namespace Demo
         Tutorial_OpenVRGraphicsSystem *ovrGraphicsSystem =
                 static_cast<Tutorial_OpenVRGraphicsSystem*>( mGraphicsSystem );
         OpenVRCompositorListener *ovrListener = ovrGraphicsSystem->getOvrCompositorListener();
-        const VrWaitingMode::VrWaitingMode waitingMode = ovrListener->getWaitingMode();
-        const char* c_waitingModes[VrWaitingMode::NumVrWaitingModes + 1u] =
+        if (ovrListener)
         {
-            "[AfterSwap]",
-            "[BeforeSceneGraph]",
-            "[AfterSceneGraph]",
-            "[BeforeShadowmaps]",
-            "[BeforeFrustumCulling]",
-            "[AfterFrustumCulling]",
-            "[NumVrWaitingModes"
-        };
-        outText += "\nPress F9 for next waiting mode";
-        outText += c_waitingModes[waitingMode];
+            const VrWaitingMode::VrWaitingMode waitingMode = ovrListener->getWaitingMode();
+            const char* c_waitingModes[VrWaitingMode::NumVrWaitingModes + 1u] =
+            {
+                "[AfterSwap]",
+                "[BeforeSceneGraph]",
+                "[AfterSceneGraph]",
+                "[BeforeShadowmaps]",
+                "[BeforeFrustumCulling]",
+                "[AfterFrustumCulling]",
+                "[NumVrWaitingModes"
+            };
+            outText += "\nPress F9 for next waiting mode";
+            outText += c_waitingModes[waitingMode];
+        }
         outText += "\nF10 toggles hidden area mesh optimization";
         if( mHiddenAreaMeshVr )
             outText += mHiddenAreaMeshVr->getVisible() ? "[Optimizing]" : "[Disabled]";
@@ -371,9 +378,12 @@ namespace Demo
             Tutorial_OpenVRGraphicsSystem *ovrGraphicsSystem =
                     static_cast<Tutorial_OpenVRGraphicsSystem*>( mGraphicsSystem );
             OpenVRCompositorListener *ovrListener = ovrGraphicsSystem->getOvrCompositorListener();
-            const VrWaitingMode::VrWaitingMode nextMode = static_cast<VrWaitingMode::VrWaitingMode>(
-                        (ovrListener->getWaitingMode() + 1u) % VrWaitingMode::NumVrWaitingModes );
-            ovrListener->setWaitingMode( nextMode );
+            if (ovrListener)
+            {
+                const VrWaitingMode::VrWaitingMode nextMode = static_cast<VrWaitingMode::VrWaitingMode>(
+                            (ovrListener->getWaitingMode() + 1u) % VrWaitingMode::NumVrWaitingModes );
+                ovrListener->setWaitingMode( nextMode );
+            }
         }
         else if( arg.keysym.sym == SDLK_F10 )
         {

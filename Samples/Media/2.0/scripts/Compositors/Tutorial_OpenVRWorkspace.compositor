@@ -25,7 +25,10 @@ compositor_node Tutorial_OpenVRNode
 
 			overlays	off
 
-			cull_camera VrCullCamera
+			//we manually add the VrCullCamera
+			//if we compile with Open_VR
+			//cull_camera VrCullCamera
+
 
 			shadows		ShadowMapDebuggingShadowNode
 
@@ -56,6 +59,53 @@ compositor_node Tutorial_OpenVRNode
 	}
 }
 
+compositor_node Tutorial_OpenVRNodeNoRDM
+{
+	in 0 rtt
+
+	target rtt
+	{
+		//Eye render
+		pass render_scene
+		{
+			load
+			{
+				all				clear
+				clear_colour	0.2 0.4 0.6 1
+			}
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+
+			//0x01234567
+			identifier 19088743
+
+			overlays	off
+
+			//we manually add the VrCullCamera
+			//if we compile with Open_VR
+			//cull_camera VrCullCamera
+
+			shadows		ShadowMapDebuggingShadowNode
+
+			instanced_stereo true
+			viewport 0 0.0 0.0 0.5 1.0
+			viewport 1 0.5 0.0 0.5 1.0
+		}
+
+		//Render overlays last on the entire screen
+		pass render_scene
+		{
+			rq_first	254
+			rq_last		255
+
+			overlays	on
+		}
+	}
+}
+
 compositor_node Tutorial_OpenVRMirrorWindowNode
 {
 	in 0 rt_renderwindow
@@ -81,6 +131,11 @@ compositor_node Tutorial_OpenVRMirrorWindowNode
 workspace Tutorial_OpenVRWorkspace
 {
 	connect_output Tutorial_OpenVRNode 0
+}
+
+workspace Tutorial_OpenVRWorkspaceNoRDM
+{
+	connect_output Tutorial_OpenVRNodeNoRDM 0
 }
 
 workspace Tutorial_OpenVRMirrorWindowWorkspace
