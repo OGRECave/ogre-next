@@ -31,6 +31,16 @@ int mainApp( int argc, const char *argv[] )
 
 #define USE_OPEN_VR
 
+extern const bool c_useRDM;
+
+// Set this to false to disable Radial Density Mask (RDM) optimization
+// The value is hardcoded in C++, however you can extend this to be
+// controlled at runtime
+//
+// The main reason we allow this setting to be disabled is because it is
+// causing glitches in NVIDIA GPUs in Linux, see https://github.com/OGRECave/ogre-next/issues/53
+const bool c_useRDM = true;
+
 namespace Demo
 {
     Ogre::CompositorWorkspace* Tutorial_OpenVRGraphicsSystem::setupCompositor()
@@ -116,6 +126,8 @@ namespace Demo
 
     void Tutorial_OpenVRGraphicsSystem::initOpenVR(void)
     {
+        const Ogre::IdString workspaceName =
+            c_useRDM ? "Tutorial_OpenVRWorkspaceRDM" : "Tutorial_OpenVRWorkspaceNoRDM";
 #ifdef USE_OPEN_VR
         // Loading the SteamVR Runtime
         vr::EVRInitError eError = vr::VRInitError_None;
@@ -155,15 +167,15 @@ namespace Demo
                                                               Ogre::TextureTypes::Type2D );
         mVrTexture->setResolution( width << 1u, height );
         mVrTexture->setPixelFormat( Ogre::PFG_RGBA8_UNORM_SRGB );
-        //mVrTexture->setMsaa( 4u );
+        if( !c_useRDM )
+            mVrTexture->setSampleDescription( Ogre::SampleDescription( 4u ) );
         mVrTexture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
         mVrCullCamera = mSceneManager->createCamera( "VrCullCamera" );
 
         Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
         mVrWorkspace = compositorManager->addWorkspace( mSceneManager, mVrTexture, mCamera,
-                                                        "Tutorial_OpenVRWorkspace",
-                                                        true, 0 );
+                                                        workspaceName, true, 0 );
 
         createHiddenAreaMeshVR();
 
@@ -181,14 +193,15 @@ namespace Demo
                                                               Ogre::TextureTypes::Type2D );
         mVrTexture->setResolution( 3704u, 2056u );
         mVrTexture->setPixelFormat( Ogre::PFG_RGBA8_UNORM_SRGB );
-        //mVrTexture->setMsaa( 4u );
+        if( !c_useRDM )
+            mVrTexture->setSampleDescription( Ogre::SampleDescription( 4u ) );
         mVrTexture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
         mVrCullCamera = mSceneManager->createCamera( "VrCullCamera" );
 
         Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
         mVrWorkspace = compositorManager->addWorkspace( mSceneManager, mVrTexture, mCamera,
-                                                        "Tutorial_OpenVRWorkspace", true, 0 );
+                                                        workspaceName, true, 0 );
 
         mDeviceModelNumber = "Vive"; // Pretend we have a Vive so the HAM works.
         createHiddenAreaMeshVR();
