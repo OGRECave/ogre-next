@@ -36,6 +36,13 @@ namespace Demo
 #ifdef USE_OPEN_VR
         initOpenVR();
 
+        Ogre::ResourceLayoutMap initialLayouts;
+        Ogre::ResourceAccessMap initialUavAccess;
+        initialLayouts.insert( mVrWorkspace->getResourcesLayout().begin(),
+                               mVrWorkspace->getResourcesLayout().end() );
+        initialUavAccess.insert( mVrWorkspace->getUavsAccess().begin(),
+                                 mVrWorkspace->getUavsAccess().end() );
+
         Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
         Ogre::CompositorChannelVec channels( 2u );
         channels[0] = mRenderWindow->getTexture();
