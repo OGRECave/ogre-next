@@ -27,7 +27,12 @@
 @else
 	uniform sampler2D inputImage;
 @end
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image2D outputImage;
+
+@property( uav0_texture_type == TextureTypes_Type2DArray )
+	layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image2DArray outputImage;
+@else
+	layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image2D outputImage;
+@end
 
 // 32 = 128 / 4
 layout( local_size_x = 32,

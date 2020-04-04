@@ -27,7 +27,12 @@ SamplerState inputSampler : register(s0);
 @else
 	Texture2D inputImage : register(t0);
 @end
-RWTexture2D<@insertpiece(uav0_pf_type)> outputImage : register(u0);
+
+@property( uav0_texture_type == TextureTypes_Type2DArray )
+	RWTexture2DArray<@insertpiece(uav0_pf_type)> outputImage : register(u0);
+@else
+	RWTexture2D<@insertpiece(uav0_pf_type)> outputImage : register(u0);
+@end
 
 // 32 = 128 / 4
 @pset( threads_per_group_x, 32 )
