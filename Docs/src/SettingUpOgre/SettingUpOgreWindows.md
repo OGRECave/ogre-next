@@ -96,9 +96,9 @@ Most dependencies are conveniently stored in its own repository called "ogredeps
 **Command line**:
 ```sh
 mkdir Ogre
-hg clone https://bitbucket.org/sinbad/ogre -r v2-1
 cd Ogre
-hg clone https://bitbucket.org/cabalistic/ogredeps Dependencies
+hg clone https://bitbucket.org/cabalistic/ogredeps ogredeps
+git clone https://github.com/OGRECave/ogre-next
 ```
 
 **Graphical**

@@ -22,11 +22,10 @@
 # Building Dependencies {#BuildingDependenciesLinux}
 
 ```sh
-cd Ogre/Dependencies
+cd Ogre/ogredeps
 mkdir build
 cd build
 cmake ../
-cd build
 make
 make install```
 
@@ -36,19 +35,20 @@ make install```
 We'll create both a Release & Debug configuration that match the ones used in Windows.
 This eases portability and cross platform development.
 ```sh
-cd Ogre
+cd Ogre/ogre-next
+ln -s ../ogredeps/build/ogredeps Dependencies
 mkdir build
 cd build
 mkdir Debug
 mkdir Release
 # Build Debug
 cd Debug
-cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogredeps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_USE_BOOST=0 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Debug ../../
+cmake -D OGRE_BUILD_SAMPLES2=1 -D OGRE_USE_BOOST=0 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Debug ../../
 make
 make install
 # Build Release
 cd ../Release
-cmake -D OGRE_DEPENDENCIES_DIR=Dependencies/build/ogredeps -D OGRE_BUILD_SAMPLES2=1 -D OGRE_USE_BOOST=0 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Release ../../
+cmake -D OGRE_BUILD_SAMPLES2=1 -D OGRE_USE_BOOST=0 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D CMAKE_BUILD_TYPE=Release ../../
 make
 make install
 ```
