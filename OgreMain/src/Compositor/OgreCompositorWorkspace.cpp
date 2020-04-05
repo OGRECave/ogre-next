@@ -639,6 +639,13 @@ namespace Ogre
             mListeners.erase( itor );
     }
     //-----------------------------------------------------------------------------------
+    void CompositorWorkspace::fillUavDependenciesForNextWorkspace(
+        ResourceLayoutMap &outInitialLayouts, ResourceAccessMap &outInitialUavAccess ) const
+    {
+        outInitialLayouts.insert( mResourcesLayout.begin(), mResourcesLayout.end() );
+        outInitialUavAccess.insert( mUavsAccess.begin(), mUavsAccess.end() );
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorWorkspace::recreateAllNodes(void)
     {
         createAllNodes();
