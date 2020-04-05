@@ -472,6 +472,8 @@ namespace Ogre
         mGenerationJob->setProperty( "irrad_resolution", static_cast<int32>( irradProbeRes ) );
         mGenerationJob->setProperty( "num_irrad_pixels_per_probe",
                                      static_cast<int32>( irradProbeRes * irradProbeRes ) );
+        mGenerationJob->setProperty( "irrad_full_width",
+                                     static_cast<int32>( mIrradianceTex->getWidth() ) );
 
         mGenerationJob->setProperty( "depth_resolution", static_cast<int32>( depthProbeRes ) );
         mGenerationJob->setProperty( "depth_full_width",

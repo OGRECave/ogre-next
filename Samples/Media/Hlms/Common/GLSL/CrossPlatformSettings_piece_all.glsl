@@ -49,6 +49,7 @@
 
 #define ushort uint
 #define ushort3 uint3
+#define ushort4 uint4
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
 #define rshort int
