@@ -7,10 +7,6 @@
 
 RWTexture2D<@insertpiece(uav0_pf_type)> ifdTex			: register(u0);
 
-layout( local_size_x = @value( threads_per_group_x ),
-		local_size_y = @value( threads_per_group_y ),
-		local_size_z = @value( threads_per_group_z ) ) in;
-
 @insertpiece( HeaderCS )
 
 //in uvec3 gl_NumWorkGroups;

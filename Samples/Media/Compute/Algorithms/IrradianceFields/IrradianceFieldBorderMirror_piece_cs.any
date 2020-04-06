@@ -163,13 +163,13 @@ else if( threadId < p.maxThreadId )
 
 	ushort2 iUvStart = getIrradianceFieldBorderBaseXY( probeIdx PARAMS_ARG );
 
-	ushort2 topLeftSrc = ushort2( p.probeBorderedRes - 2u );
+	ushort2 topLeftSrc = ushort2( p.probeBorderedRes - 2u, p.probeBorderedRes - 2u );
 	ushort2 topRightSrc = ushort2( 1u, p.probeBorderedRes - 2u );
 	ushort2 bottomLeftSrc = ushort2( p.probeBorderedRes - 2u, 1u );
-	ushort2 bottomRightSrc = ushort2( 1u );
+	ushort2 bottomRightSrc = ushort2( 1u, 1u );
 
-	ushort2 topLeftDst = ushort2( 0u );
-	ushort2 topRightDst = ushort2( p.probeBorderedRes - 1u );
+	ushort2 topLeftDst = ushort2( 0u, 0u );
+	ushort2 topRightDst = ushort2( p.probeBorderedRes - 1u, p.probeBorderedRes - 1u );
 	ushort2 bottomLeftDst = ushort2( 0u, p.probeBorderedRes - 1u );
 	ushort2 bottomRightDst = ushort2( p.probeBorderedRes - 1u, 0u );
 
