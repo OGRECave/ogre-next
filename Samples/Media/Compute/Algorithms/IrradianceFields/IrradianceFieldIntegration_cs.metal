@@ -20,7 +20,7 @@ kernel void main_metal
 	ushort3 gl_LocalInvocationID	[[thread_position_in_threadgroup]],
 	ushort gl_LocalInvocationIndex	[[thread_index_in_threadgroup]],
 
-	constant IrradianceFieldGenParams &p		[[buffer(0)]],
+	constant IrradianceFieldGenParams &p		[[buffer(CONST_SLOT_START+0)]],
 
 	device const float2 *integrationTapsBuffer	[[buffer(TEX_SLOT_START+0)]],
 

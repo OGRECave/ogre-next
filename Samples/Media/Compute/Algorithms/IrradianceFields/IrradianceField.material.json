@@ -30,6 +30,42 @@
             ]
         },
 
+        "IrradianceField/BorderMirror/Depth" :
+        {
+            "threads_per_group" : [64, 1, 1],
+            "thread_groups" : [1, 1, 1],
+
+            "source" : "IrradianceFieldBorderMirror_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "IrradianceFieldBorderMirror_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "uav_units" : 1,
+
+            "properties" :
+            {
+                "process_depth" : 1,
+                "full_width" : 256
+            }
+        },
+
+        "IrradianceField/BorderMirror/Colour" :
+        {
+            "threads_per_group" : [64, 1, 1],
+            "thread_groups" : [1, 1, 1],
+
+            "source" : "IrradianceFieldBorderMirror_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "IrradianceFieldBorderMirror_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "uav_units" : 1,
+
+            "properties" :
+            {
+                "process_depth" : 0,
+                "full_width" : 256
+            }
+        },
+
         "IrradianceField/Integration/Depth" :
         {
             "threads_per_group" : [64, 1, 1],

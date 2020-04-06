@@ -34,9 +34,9 @@ THE SOFTWARE.
 
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
+#include "OgreCamera.h"
 #include "OgreDepthBuffer.h"
 #include "OgreRoot.h"
-#include "OgreCamera.h"
 
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
@@ -148,6 +148,8 @@ namespace Ogre
         mConvertToIfdJob->setProperty( "depth_resolution", settings.mDepthProbeResolution );
         mConvertToIfdJob->setProperty( "colour_full_width",
                                        static_cast<int32>( mCreator->mIrradianceTex->getWidth() ) );
+        mConvertToIfdJob->setProperty( "depth_full_width",
+                                       static_cast<int32>( mCreator->mDepthVarianceTex->getWidth() ) );
         mConvertToIfdJob->setProperty(
             "depth_to_colour_resolution_ratio",
             static_cast<int32>( settings.mDepthProbeResolution / settings.mIrradianceResolution ) );
@@ -234,7 +236,10 @@ namespace Ogre
 
         bool oldDebugIfdVisibility = false;
         if( mCreator->mDebugIfdProbeVisualizer )
+        {
             oldDebugIfdVisibility = mCreator->mDebugIfdProbeVisualizer->getVisible();
+            mCreator->mDebugIfdProbeVisualizer->setVisible( false );
+        }
 
         Ogre::Vector2 projectionAB = mCamera->getProjectionParamsAB();
         mProjectionABParam->setManualValue( projectionAB );

@@ -31,10 +31,14 @@
 	INLINE ushort2 getUv( ProbeIndex probeIdx, ushort2 localInvocationId )
 	{
 		ushort2 retVal;
-		retVal.x = (probeIdx * @value( probe_resolution )u) % @value( full_width )u;
-		retVal.y = ((probeIdx * @value( probe_resolution )u) / @value( full_width )u) *
-					@value( probe_resolution )u;
+		ushort borderedResolution = @value( probe_resolution )u + 2u;
+		retVal.x = ( probeIdx * borderedResolution ) % @value( full_width )u;
+		retVal.y = ( ( probeIdx * borderedResolution ) / @value( full_width )u ) * borderedResolution;
 		retVal += localInvocationId;
+
+		// Skip top-left border
+		retVal.xy += 1u;
+
 		return retVal;
 	}
 @end

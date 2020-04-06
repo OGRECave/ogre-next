@@ -13,9 +13,13 @@
 		float padding0;
 		float padding1;
 
-		float depthResolution;
+		float depthBorderedRes;
 		float depthFullWidth;
 		float2 depthInvFullResolution;
+
+		float irradBorderedRes;
+		float irradFullWidth;
+		float2 irradInvFullResolution;
 	};
 @end
 

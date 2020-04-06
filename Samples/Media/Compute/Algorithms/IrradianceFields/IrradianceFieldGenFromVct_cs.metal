@@ -19,7 +19,7 @@ kernel void main_metal
 	uint3 gl_GlobalInvocationID		[[thread_position_in_grid]],
 	ushort gl_LocalInvocationIndex	[[thread_index_in_threadgroup]],
 
-	constant IrradianceFieldGenParams &p		[[buffer(0)]],
+	constant IrradianceFieldGenParams &p	[[buffer(CONST_SLOT_START+0)]],
 
 	device const float4 *directionsBuffer	[[buffer(TEX_SLOT_START+0)]],
 

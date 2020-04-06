@@ -92,6 +92,7 @@ inline float3x3 toMat3x3( float3x4 m )
 #define OGRE_ddx( val ) dfdx( val )
 #define OGRE_ddy( val ) dfdy( val )
 #define OGRE_Load2D( tex, iuv, lod ) tex.read( iuv, lod )
+#define OGRE_LoadArray2D( tex, iuv, arrayIdx, lod ) tex.read( iuv, arrayIdx, lod )
 #define OGRE_Load2DMS( tex, iuv, subsample ) tex.read( iuv, subsample )
 
 #define OGRE_Load3D( tex, iuv, lod ) tex.read( ushort3( iuv ), lod )

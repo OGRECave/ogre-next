@@ -1,0 +1,191 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+/**
+	For proper filtering at edges, octahedron mapping needs a special border by repeating
+	the values around the edges of the probe using a specific pattern that provides proper
+	wrap around
+
+	To understand this pattern, just load this CSV in a Spreadsheet app (8x8 probe):
+
+	15;8;7;6;5;4;3;2;1;22
+	22;1;2;3;4;5;6;7;8;15
+	23;28;;;;;;;9;14
+	24;27;;;;;;;10;13
+	25;26;;;;;;;11;12
+	26;25;;;;;;;12;11
+	27;24;;;;;;;13;10
+	28;23;;;;;;;14;9
+	1;22;21;20;19;18;17;16;15;8
+	8;15;16;17;18;19;20;21;22;1
+
+	or just look at this picture: https://twitter.com/val_sagrario/status/1231779400783409152
+
+	In this compute shader, there are three main sections:
+		Section 1:
+			1. Processes all edges (e.g. everything except the corners).
+			2. Each thread processes 2 pixels (1 top & 1 bottom, or 1 left & 1 right).
+			3. We first process top and bottom, then left and right; and move on to next probe
+
+			We need [(probeBorderedRes - 2u) * 4u * numProbes] threads for this.
+			The first (probeBorderedRes - 2u) * 2u threads take care of the top/bottom edges,
+			the second (probeBorderedRes - 2u) * 2u threads take care of left/right edges.
+
+		Section 2:
+			1. Processes all 4 corners. 1 probe per thread
+
+			We process section 2 after all probes from section 1 are done, to maximize coherency
+
+		Section 3:
+			1. Does nothing. Surplus threads when dispatching 2D workgroups and we can't fill it
+*/
+
+// @piece( HeaderCS )
+
+CONST_BUFFER_STRUCT_BEGIN( IfdBorderMirrorParams, 0 )
+{
+	uint probeBorderedRes;
+	uint numPixelsInEdges;
+	uint numTopBottomPixels;
+	uint numGlobalThreadsForEdges;
+
+	uint maxThreadId;
+	uint threadsPerThreadRow;
+	uint2 padding;
+}
+CONST_BUFFER_STRUCT_END( p );
+
+#define ProbeIndex uint
+
+INLINE ushort2 getIrradianceFieldBorderBaseXY( ProbeIndex probeIdx PARAMS_ARG_DECL )
+{
+	ushort2 retVal;
+	// clang-format off
+	retVal.x = ( probeIdx * p.probeBorderedRes ) % @value( full_width )u;
+	retVal.y = ( ( probeIdx * p.probeBorderedRes ) / @value( full_width )u ) * p.probeBorderedRes;
+	// clang-format on
+
+	return retVal;
+}
+
+// @property( process_depth )
+
+#define float_ifd float2
+#define OGRE_imageLoadIFD( a, b ) OGRE_imageLoad2D( a, b ).xy
+#define OGRE_imageWriteIFD( a, b, c ) OGRE_imageWrite2D2( a, b, c )
+#define ifd_swizzle xyzw
+
+// @else
+
+#define float_ifd float4
+#define OGRE_imageLoadIFD( a, b ) OGRE_imageLoad2D( a, b ).xyzw
+#define OGRE_imageWriteIFD( a, b, c ) OGRE_imageWrite2D4( a, b, c )
+
+// @end
+
+/** Process two pixels each belonging to the top and bottom inner parts of the probes
+	i.e. it swaps:
+		ifdTex[p.probeBorderedRes - i - 1][1] = ifdTex[i][1]
+		ifdTex[p.probeBorderedRes - i - 1][p.probeBorderedRes - 1] = ifdTex[i][p.probeBorderedRes - 2u]
+
+		where i is in range [1; p.probeBorderedRes - 1u)
+\param rowThreadId
+	Value in range [0; p.probeBorderedRes - 2u)
+\param isColumn
+	When true, we're processing columns instead of rows, and thus we swap x and y:
+		ifdTex[1][p.probeBorderedRes - i - 1] = ifdTex[i][1]
+		ifdTex[p.probeBorderedRes - 1][p.probeBorderedRes - i - 1] = ifdTex[p.probeBorderedRes - 2u][i]
+\param iUvStart
+	The integer coordinates pointing to the start of the probe
+*/
+INLINE void processPixelInRow( ushort rowThreadId, bool isColumn, ushort2 iUvStart PARAMS_ARG_DECL )
+{
+	rowThreadId += 1u;
+
+	// When isColumn = true:
+	//	top becomes left
+	//	bottom becomes right
+
+	ushort2 topSrcOffset = ushort2( rowThreadId, 1u );
+	ushort2 bottomSrcOffset = ushort2( rowThreadId, p.probeBorderedRes - 2u );
+
+	ushort2 topDstOffset = ushort2( p.probeBorderedRes - rowThreadId - 1u, 0u );
+	ushort2 bottomDstOffset = ushort2( p.probeBorderedRes - rowThreadId - 1u, p.probeBorderedRes - 1u );
+
+	if( isColumn )
+	{
+		topSrcOffset = topSrcOffset.yx;
+		bottomSrcOffset = bottomSrcOffset.yx;
+		topDstOffset = topDstOffset.yx;
+		bottomDstOffset = bottomDstOffset.yx;
+	}
+
+	float_ifd topVal = OGRE_imageLoadIFD( ifdTex, iUvStart + topSrcOffset );
+	float_ifd bottomVal = OGRE_imageLoadIFD( ifdTex, iUvStart + bottomSrcOffset );
+
+	OGRE_imageWriteIFD( ifdTex, iUvStart + topDstOffset, topVal );
+	OGRE_imageWriteIFD( ifdTex, iUvStart + bottomDstOffset, bottomVal );
+}
+// @end
+
+// in uvec3 gl_NumWorkGroups;
+// in uvec3 gl_WorkGroupID;
+// in uvec3 gl_LocalInvocationID;
+// in uvec3 gl_GlobalInvocationID;
+// in uint  gl_LocalInvocationIndex;
+
+// @piece( BodyCS )
+
+uint threadId = gl_GlobalInvocationID.x + gl_GlobalInvocationID.y * p.threadsPerThreadRow;
+
+if( threadId < p.numGlobalThreadsForEdges )
+{
+	// Section 1
+	bool bIsColumn = false;
+	ProbeIndex probeIdx = threadId / p.numPixelsInEdges;
+	uint rowThreadId = threadId % p.numPixelsInEdges;
+
+	if( rowThreadId >= p.numTopBottomPixels )
+	{
+		bIsColumn = true;
+		rowThreadId -= p.numTopBottomPixels;
+	}
+
+	ushort2 irradianceFieldBaseXY = getIrradianceFieldBorderBaseXY( probeIdx PARAMS_ARG );
+
+	processPixelInRow( rowThreadId, bIsColumn, irradianceFieldBaseXY PARAMS_ARG );
+}
+else if( threadId < p.maxThreadId )
+{
+	// Section 2
+	// Deal with all 4 corners
+	ProbeIndex probeIdx = threadId - p.numGlobalThreadsForEdges;
+
+	ushort2 iUvStart = getIrradianceFieldBorderBaseXY( probeIdx PARAMS_ARG );
+
+	ushort2 topLeftSrc = ushort2( p.probeBorderedRes - 2u, p.probeBorderedRes - 2u );
+	ushort2 topRightSrc = ushort2( 1u, p.probeBorderedRes - 2u );
+	ushort2 bottomLeftSrc = ushort2( p.probeBorderedRes - 2u, 1u );
+	ushort2 bottomRightSrc = ushort2( 1u, 1u );
+
+	ushort2 topLeftDst = ushort2( 0u, 0u );
+	ushort2 topRightDst = ushort2( p.probeBorderedRes - 1u, p.probeBorderedRes - 1u );
+	ushort2 bottomLeftDst = ushort2( 0u, p.probeBorderedRes - 1u );
+	ushort2 bottomRightDst = ushort2( p.probeBorderedRes - 1u, 0u );
+
+	float_ifd topLeftVal = OGRE_imageLoadIFD( ifdTex, iUvStart + topLeftSrc );
+	float_ifd topRightVal = OGRE_imageLoadIFD( ifdTex, iUvStart + topRightSrc );
+	float_ifd bottomLeftVal = OGRE_imageLoadIFD( ifdTex, iUvStart + bottomLeftSrc );
+	float_ifd bottomRightVal = OGRE_imageLoadIFD( ifdTex, iUvStart + bottomRightSrc );
+
+	OGRE_imageWriteIFD( ifdTex, iUvStart + topLeftDst, topLeftVal );
+	OGRE_imageWriteIFD( ifdTex, iUvStart + topRightDst, topRightVal );
+	OGRE_imageWriteIFD( ifdTex, iUvStart + bottomLeftDst, bottomLeftVal );
+	OGRE_imageWriteIFD( ifdTex, iUvStart + bottomRightDst, bottomRightVal );
+}
+// else
+// {
+	// Section 3
+// }
+
+// @end

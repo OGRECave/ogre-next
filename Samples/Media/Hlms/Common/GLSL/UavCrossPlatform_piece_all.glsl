@@ -13,6 +13,7 @@
 #define OGRE_imageWrite3D1( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
 #define OGRE_imageWrite3D4( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
 
+#define OGRE_imageWrite2DArray1( outImage, iuvw, value ) imageStore( outImage, int3( iuvw ), value )
 #define OGRE_imageWrite2DArray4( outImage, iuvw, value ) imageStore( outImage, int3( iuvw ), value )
 
 #define __sharedOnlyBarrier memoryBarrierShared();barrier();

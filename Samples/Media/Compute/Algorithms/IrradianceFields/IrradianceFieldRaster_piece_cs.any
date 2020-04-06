@@ -11,9 +11,27 @@
 	INLINE ushort2 getIrradianceFieldColourBaseXY( ProbeIndex probeIdx )
 	{
 		ushort2 retVal;
-		retVal.x = (probeIdx * @value( colour_resolution )u) % @value( colour_full_width )u;
-		retVal.y = ((probeIdx * @value( colour_resolution )u) / @value( colour_full_width )u) *
-					@value( colour_resolution )u;
+		ushort borderedResolution = @value( colour_resolution )u + 2u;
+		retVal.x = (probeIdx * borderedResolution) % @value( colour_full_width )u;
+		retVal.y = ((probeIdx * borderedResolution) / @value( colour_full_width )u) *
+					borderedResolution;
+
+		// Skip top-left border
+		retVal.xy += 1u;
+
+		return retVal;
+	}
+
+	INLINE ushort2 getIrradianceFieldDepthBaseXY( ProbeIndex probeIdx )
+	{
+		ushort2 retVal;
+		ushort borderedResolution = @value( depth_resolution )u + 2u;
+		retVal.x = (probeIdx * borderedResolution) % @value( depth_full_width )u;
+		retVal.y = ((probeIdx * borderedResolution) / @value( depth_full_width )u) *
+					borderedResolution;
+
+		// Skip top-left border
+		retVal.xy += 1u;
 
 		return retVal;
 	}
@@ -38,9 +56,11 @@
 
 @piece( BodyCS )
 	ushort2 irradianceFieldColourBaseXY = getIrradianceFieldColourBaseXY( p_probeIdx );
+	ushort2 irradianceFieldDepthBaseXY = getIrradianceFieldDepthBaseXY( p_probeIdx );
 
 	ushort2 iColourXY = irradianceFieldColourBaseXY + gl_LocalInvocationID.xy;
-	ushort2 iDepthXY = iColourXY * @value( depth_to_colour_resolution_ratio )u;
+	ushort2 iDepthXY = irradianceFieldDepthBaseXY +
+					   gl_LocalInvocationID.xy * @value( depth_to_colour_resolution_ratio )u;
 
 	float2 samplingXY = float2( gl_LocalInvocationID.xy ) / @value( colour_resolution );
 
@@ -69,9 +89,9 @@
 
 	// Do depth
 	//
-	// This is like depth. While depth res >= colour res; typically 12x12 or 16x16;
+	// This is like colour. While depth res >= colour res; typically 12x12 or 16x16;
 	// we (usually, using default params) have 4 times as many depth pixels than colour.
-	// And this pixel shader run one thread per colour pixel; thus each thread handles
+	// And this compute shader run one thread per colour pixel; thus each thread handles
 	// more than one depth pixel
 	float2 depthData;
 	float dist;

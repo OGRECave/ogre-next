@@ -75,7 +75,7 @@ namespace Ogre {
     };
 
     /** @remarks Pure Abstract class, derive this class and register to the Log to listen to log messages */
-    class LogListener
+    class _OgreExport LogListener
     {
     public:
         virtual ~LogListener();
