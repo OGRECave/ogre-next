@@ -102,8 +102,8 @@ namespace Ogre
 
             for( size_t i = 0u; i < numGridCells && i < numRaysPerPixel; ++i )
             {
-                mSubsamples[i].x = ( i % ( gridSize ) ) * invGridSize;
-                mSubsamples[i].y = ( i / ( gridSize ) ) * invGridSize;
+                mSubsamples[i].x = ( ( i % ( gridSize ) ) + 0.5f ) * invGridSize;
+                mSubsamples[i].y = ( ( i / ( gridSize ) ) + 0.5f ) * invGridSize;
             }
         }
     }
@@ -460,7 +460,7 @@ namespace Ogre
         const VctVoxelizer *voxelizer = mVctLighting->getVoxelizer();
         Matrix4 irrProbeToVctTransform;
         irrProbeToVctTransform.makeTransform(
-            ( voxelizer->getVoxelOrigin() - mFieldOrigin ) / voxelizer->getVoxelSize(),
+            ( mFieldOrigin - voxelizer->getVoxelOrigin() ) / voxelizer->getVoxelSize(),
             ( mFieldSize / voxelizer->getVoxelSize() ) / mSettings.getNumProbes3f(),
             Quaternion::IDENTITY );
         mIfGenParams.irrProbeToVctTransform = irrProbeToVctTransform;

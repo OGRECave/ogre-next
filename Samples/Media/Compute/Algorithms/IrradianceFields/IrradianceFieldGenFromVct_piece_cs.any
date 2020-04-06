@@ -190,7 +190,7 @@
 		vPos.x = probeIdx & (p.numProbes.x - 1u);
 		vPos.y = (probeIdx & ((p.numProbes.x * p.numProbes.y) - 1u)) >> findMSB( p.numProbes.x );
 		vPos.z = probeIdx >> findMSB( p.numProbes.x * p.numProbes.y );
-		return vPos + 0.5;
+		return vPos;
 	}
 @end
 
