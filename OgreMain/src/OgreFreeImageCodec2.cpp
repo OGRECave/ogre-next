@@ -213,8 +213,9 @@ namespace Ogre {
         case PFG_RG16_UINT:
         case PFG_RG16_SNORM:
         case PFG_RG16_SINT:
-            // typeless RG16 => RGB16 conversion
-            origFormat = PFG_RG16_UNORM;
+            // typeless RG16 => RGB16 conversion (except for SNORM)
+            if( origFormat != PFG_RG16_SNORM )
+                origFormat = PFG_RG16_UNORM;
             supportedFormat = PFG_RGB16_UNORM;
             imageType = FIT_RGB16;
             break;
@@ -224,12 +225,14 @@ namespace Ogre {
         case PFG_RGBA8_SNORM:
         case PFG_RGBA8_SINT:
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
-            // typeless RGBA => BGRA conversion
-            origFormat = PFG_RGBA8_UNORM;
+            // typeless RGBA => BGRA conversion (except for SNORM)
+            if( origFormat != PFG_RGBA8_SNORM )
+                origFormat = PFG_RGBA8_UNORM;
             supportedFormat = PFG_BGRA8_UNORM;
 #else
-            // typeless RGBA => RGBA conversion
-            origFormat = PFG_RGBA8_UNORM;
+            // typeless RGBA => RGBA conversion (except for SNORM)
+            if( origFormat != PFG_RGBA8_SNORM )
+                origFormat = PFG_RGBA8_UNORM;
             supportedFormat = PFG_RGBA8_UNORM;
 #endif
             imageType = FIT_BITMAP;
@@ -255,12 +258,14 @@ namespace Ogre {
         case PFG_RG8_SNORM:
         case PFG_RG8_SINT:
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
-            // typeless RG => BGR conversion
-            origFormat = PFG_RG8_UNORM;
+            // typeless RG => BGR conversion (except for SNORM)
+            if( origFormat != PFG_RG8_UNORM )
+                origFormat = PFG_RG8_UNORM;
             supportedFormat = PFG_BGR8_UNORM;
 #else
-            // typeless RG => RGB conversion
-            origFormat = PFG_RG8_UNORM;
+            // typeless RG => RGB conversion (except for SNORM)
+            if( origFormat != PFG_RG8_UNORM )
+                origFormat = PFG_RG8_UNORM;
             supportedFormat = PFG_RGB8_UNORM;
 #endif
             imageType = FIT_BITMAP;
