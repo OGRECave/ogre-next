@@ -376,6 +376,15 @@ namespace Demo
         assert( dynamic_cast<Ogre::HlmsPbs*>( hlms ) );
         Ogre::HlmsPbs *pbs = static_cast<Ogre::HlmsPbs*>( hlms );
 
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::CompositorManager2 *compositorManager = root->getCompositorManager2();
+        const Ogre::CompositorShadowNodeDef *shadowNodeDef =
+            compositorManager->getShadowNodeDefinition( "ShadowMapDebuggingShadowNode" );
+
+        const Ogre::ShadowTextureDefinition *shadowTexDef =
+            shadowNodeDef->getShadowTextureDefinition( 0 );
+        ;
+
         TutorialGameState::generateDebugText( timeSinceLast, outText );
         outText += "\nPress F2 to toggle animation. ";
         outText += mAnimateObjects ? "[On]" : "[Off]";
@@ -384,6 +393,17 @@ namespace Demo
         outText += "\nPress F4 to show/hide spotlight maps. ";
         outText += mDebugOverlaySpotlights->getVisible() ? "[On]" : "[Off]";
         outText += "\nPress F5 to switch filter. [" + c_shadowMapFilters[pbs->getShadowFilter()] + "]";
+
+        if( pbs->getShadowFilter() != Ogre::HlmsPbs::ExponentialShadowMaps )
+        {
+            if( shadowTexDef->numStableSplits > 0u )
+            {
+                outText += "\nPress F6 for stable splits. [Stable splits: " +
+                           Ogre::StringConverter::toString( shadowTexDef->numStableSplits ) + "]";
+            }
+            else
+                outText += "\nPress F6 for stable splits. [Stable splits: None]";
+        }
     }
     //-----------------------------------------------------------------------------------
     void ShadowMapDebuggingGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -441,6 +461,27 @@ namespace Demo
                 setupShadowNode( true );
             else
                 setupShadowNode( false );
+        }
+        else if( arg.keysym.sym == SDLK_F6 )
+        {
+            Ogre::Root *root = mGraphicsSystem->getRoot();
+            Ogre::CompositorManager2 *compositorManager = root->getCompositorManager2();
+            Ogre::CompositorShadowNodeDef *shadowNodeDef;
+
+            shadowNodeDef =
+                compositorManager->getShadowNodeDefinitionNonConst( "ShadowMapDebuggingShadowNode" );
+
+            for( size_t i = 0u; i < 3u; ++i )
+            {
+                Ogre::ShadowTextureDefinition *shadowTexDef =
+                    shadowNodeDef->getShadowTextureDefinitionNonConst( i );
+                shadowTexDef->numStableSplits = ( shadowTexDef->numStableSplits + 1u ) % 4u;
+            }
+
+            destroyShadowMapDebugOverlays();
+            mGraphicsSystem->stopCompositor();
+            mGraphicsSystem->restartCompositor();
+            createShadowMapDebugOverlays();
         }
         else
         {
