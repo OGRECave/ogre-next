@@ -161,10 +161,7 @@ namespace Ogre
     const IdString PbsProperty::EmissiveConstant  = IdString( "emissive_constant" );
     const IdString PbsProperty::EmissiveAsLightmap= IdString( "emissive_as_lightmap" );
 
-    const IdString PbsProperty::Pcf3x3            = IdString( "pcf_3x3" );
-    const IdString PbsProperty::Pcf4x4            = IdString( "pcf_4x4" );
-    const IdString PbsProperty::Pcf5x5            = IdString( "pcf_5x5" );
-    const IdString PbsProperty::Pcf6x6            = IdString( "pcf_6x6" );
+    const IdString PbsProperty::Pcf               = IdString( "pcf" );
     const IdString PbsProperty::PcfIterations     = IdString( "pcf_iterations" );
     const IdString PbsProperty::ExponentialShadowMaps= IdString( "exponential_shadow_maps" );
 
@@ -1256,22 +1253,22 @@ namespace Ogre
 
             if( mShadowFilter == PCF_3x3 )
             {
-                setProperty( PbsProperty::Pcf3x3, 1 );
+                setProperty( PbsProperty::Pcf, 3 );
                 setProperty( PbsProperty::PcfIterations, 4 );
             }
             else if( mShadowFilter == PCF_4x4 )
             {
-                setProperty( PbsProperty::Pcf4x4, 1 );
+                setProperty( PbsProperty::Pcf, 4 );
                 setProperty( PbsProperty::PcfIterations, 9 );
             }
             else if( mShadowFilter == PCF_5x5 )
             {
-                setProperty( PbsProperty::Pcf5x5, 1 );
+                setProperty( PbsProperty::Pcf, 5 );
                 setProperty( PbsProperty::PcfIterations, 16 );
             }
             else if( mShadowFilter == PCF_6x6 )
             {
-                setProperty( PbsProperty::Pcf6x6, 1 );
+                setProperty( PbsProperty::Pcf, 6 );
                 setProperty( PbsProperty::PcfIterations, 25 );
             }
             else if( mShadowFilter == ExponentialShadowMaps )

@@ -511,10 +511,7 @@ namespace Ogre
         static const IdString BlendModeIndex2;
         static const IdString BlendModeIndex3;
 
-        static const IdString Pcf3x3;
-        static const IdString Pcf4x4;
-        static const IdString Pcf5x5;
-        static const IdString Pcf6x6;
+        static const IdString Pcf;
         static const IdString PcfIterations;
         static const IdString ExponentialShadowMaps;
 
