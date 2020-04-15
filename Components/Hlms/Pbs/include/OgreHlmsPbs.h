@@ -70,6 +70,12 @@ namespace Ogre
             /// Use RSC_TEXTURE_GATHER to check whether it will be slow or not.
             PCF_4x4,
 
+            /// Better and slower than 4x4, same considerations
+            PCF_5x5,
+
+            /// Better and slower than 5x5, same considerations
+            PCF_6x6,
+
             /// High quality. Produces soft shadows. It's much more expensive but given
             /// its blurry results, you can reduce resolution and/or use less PSSM splits
             /// which gives you very competing performance with great results.
@@ -507,6 +513,8 @@ namespace Ogre
 
         static const IdString Pcf3x3;
         static const IdString Pcf4x4;
+        static const IdString Pcf5x5;
+        static const IdString Pcf6x6;
         static const IdString PcfIterations;
         static const IdString ExponentialShadowMaps;
 

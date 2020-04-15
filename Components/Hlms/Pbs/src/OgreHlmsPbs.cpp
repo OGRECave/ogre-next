@@ -163,6 +163,8 @@ namespace Ogre
 
     const IdString PbsProperty::Pcf3x3            = IdString( "pcf_3x3" );
     const IdString PbsProperty::Pcf4x4            = IdString( "pcf_4x4" );
+    const IdString PbsProperty::Pcf5x5            = IdString( "pcf_5x5" );
+    const IdString PbsProperty::Pcf6x6            = IdString( "pcf_6x6" );
     const IdString PbsProperty::PcfIterations     = IdString( "pcf_iterations" );
     const IdString PbsProperty::ExponentialShadowMaps= IdString( "exponential_shadow_maps" );
 
@@ -1261,6 +1263,16 @@ namespace Ogre
             {
                 setProperty( PbsProperty::Pcf4x4, 1 );
                 setProperty( PbsProperty::PcfIterations, 9 );
+            }
+            else if( mShadowFilter == PCF_5x5 )
+            {
+                setProperty( PbsProperty::Pcf5x5, 1 );
+                setProperty( PbsProperty::PcfIterations, 16 );
+            }
+            else if( mShadowFilter == PCF_6x6 )
+            {
+                setProperty( PbsProperty::Pcf6x6, 1 );
+                setProperty( PbsProperty::PcfIterations, 25 );
             }
             else if( mShadowFilter == ExponentialShadowMaps )
             {
