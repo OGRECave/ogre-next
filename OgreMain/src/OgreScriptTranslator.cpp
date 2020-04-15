@@ -7334,6 +7334,7 @@ namespace Ogre{
         td->splitBlend      = defaultParams.splitBlend;
         td->splitFade       = defaultParams.splitFade;
         td->numSplits       = defaultParams.numSplits;
+        td->numStableSplits = defaultParams.numStableSplits;
     }
     //-------------------------------------------------------------------------
     void CompositorShadowNodeTranslator::translate(ScriptCompiler *compiler, const AbstractNodePtr &node)
@@ -7482,6 +7483,33 @@ namespace Ogre{
                         else
                         {
                             compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                            return;
+                        }
+                    }
+                    break;
+                case ID_NUM_STABLE_SPLITS:
+                    {
+                        if( prop->values.empty() )
+                        {
+                            compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file,
+                                                prop->line );
+                        }
+                        else if( prop->values.size() != 1 )
+                        {
+                            compiler->addError( ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file,
+                                                prop->line );
+                        }
+
+                        uint32 val;
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( getUInt( *it0, &val ) )
+                        {
+                            defaultParams.numStableSplits = val;
+                        }
+                        else
+                        {
+                            compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file,
+                                                prop->line );
                             return;
                         }
                     }

@@ -71,6 +71,7 @@ namespace Ogre
         Real                splitBlend;
         Real                splitFade;
         uint32              numSplits;
+        uint32              numStableSplits;
 
     protected:
         IdString    texName;
@@ -92,6 +93,7 @@ namespace Ogre
             splitBlend( 0.125f ),
             splitFade( 0.313f ),
             numSplits( 3u ),
+            numStableSplits( 0u ),
             texName( texRefName ),
             texNameStr( texRefName ),
             sharesSetupWith( -1 )
