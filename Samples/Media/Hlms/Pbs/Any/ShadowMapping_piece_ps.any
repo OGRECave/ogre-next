@@ -1,4 +1,4 @@
-
+﻿
 //#include "SyntaxHighlightingMisc.h"
 
 @property( hlms_num_shadow_map_lights )
@@ -46,7 +46,7 @@
 	row[1] = 0;
 
 	@foreach( pcf_iterations, n )
-		@property( pcf_3x3 || pcf_4x4 )uv += offsets[@n] * float2( invShadowMapSize.xy );@end
+		@property( pcf >= 3 )uv += offsets[@n] * float2( invShadowMapSize.xy );@end
 
 		// 2x2 PCF
 		//The 0.00196 is a magic number that prevents floating point
@@ -66,19 +66,19 @@
 
 		c = step( fDepth, c );
 
-		@property( !pcf_3x3 && !pcf_4x4 )
+		@property( pcf < 3 )
 			//2x2 PCF: It's slightly faster to calculate this directly.
 			retVal += mix(
 						mix( c.w, c.z, fW.x ),
 						mix( c.x, c.y, fW.x ),
 						fW.y );
-		@end @property( pcf_3x3 || pcf_4x4 )
+		@else
 			row[0] += mix( c.w, c.z, fW.x );
 			row[1] += mix( c.x, c.y, fW.x );
 		@end
 	@end
 
-	@property( (pcf_3x3 || pcf_4x4) )
+	@property( pcf >= 3 )
 		//NxN PCF: It's much faster to leave the final mix out of the loop (when N > 2).
 		retVal = mix( row[0], row[1], fW.y );
 	@end
@@ -184,7 +184,7 @@
 	@property( !exponential_shadow_maps )
 		float retVal = 0.;
 
-		@property( pcf_3x3 || pcf_4x4 )
+		@property( pcf >= 3 )
 			float2 offsets[@value(pcf_iterations)] =
             @property( syntax == glsl || syntax == glsles )
 				float2[@value(pcf_iterations)](
@@ -192,24 +192,76 @@
             @property( syntax != glsl && syntax != glsles )
             {
             @end
-			@property( pcf_3x3 )
+			@property( pcf == 3 )
 				float2( 0., 0. ),	//0, 0
 				float2( 1., 0. ),	//1, 0
 				float2( 0., 1. ),	//1, 1
 				float2(-1., 0. ) 	//0, 1
 			@end
-			@property( pcf_4x4 )
-				float2( 0., 0. ),	//0, 0
-				float2( 1., 0. ),	//1, 0
-				float2( 1., 0. ),	//2, 0
+			@property( pcf == 4 )
+				float2( -1., -1. ),	//-1, -1
+				float2( 1., 0. ),	// 0, -1
+				float2( 1., 0. ),	// 1, -1
 
-				float2(-2., 1. ),	//0, 1
-				float2( 1., 0. ),	//1, 1
-				float2( 1., 0. ),	//2, 1
+				float2(-2., 1. ),	//-1, 0
+				float2( 1., 0. ),	// 0, 0
+				float2( 1., 0. ),	// 1, 0
 
-				float2(-2., 1. ),	//0, 2
-				float2( 1., 0. ),	//1, 2
-				float2( 1., 0. )	//2, 2
+				float2(-2., 1. ),	//-1, 1
+				float2( 1., 0. ),	// 0, 1
+				float2( 1., 0. )	// 1, 1
+			@end
+			@property( pcf == 5 )
+				float2(-1, -1),//-1, -1
+				float2(1, 0),  // 0, -1
+				float2(1, 0),  // 1, -1
+				float2(1, 0),  // 2, -1
+
+				float2(-3, 1),//-1, 0
+				float2(1, 0), // 0, 0
+				float2(1, 0), // 1, 0
+				float2(1, 0), // 2, 0
+
+				float2(-3, 1), //-1, 1
+				float2(1, 0),  // 0, 1
+				float2(1, 0),  // 1, 1
+				float2(1, 0),  // 2, 1
+
+				float2(-3, 1),//-1, 2
+				float2(1, 0), // 0, 2
+				float2(1, 0), // 1, 2
+				float2(1, 0)  // 2, 2
+			@end
+			@property( pcf == 6 )
+				float2(-2, -2),//-2, -2
+				float2(1, 0),  //-1, -2
+				float2(1, 0),  // 0, -2
+				float2(1, 0),  // 1, -2
+				float2(1, 0),  // 2, -2
+
+				float2(-4, 1),//-2, -1
+				float2(1, 0), //-1, -1
+				float2(1, 0), // 0, -1
+				float2(1, 0), // 1, -1
+				float2(1, 0), // 2, -1
+
+				float2(-4, 1),//-2, 0
+				float2(1, 0), //-1, 0
+				float2(1, 0), // 0, 0
+				float2(1, 0), // 1, 0
+				float2(1, 0), // 2, 0
+
+				float2(-4, 1),//-2, 1
+				float2(1, 0), //-1, 1
+				float2(1, 0), // 0, 1
+				float2(1, 0), // 1, 1
+				float2(1, 0), // 2, 1
+
+				float2(-4, 1),//-2, 2
+				float2(1, 0), //-1, 2
+				float2(1, 0), // 0, 2
+				float2(1, 0), // 1, 2
+				float2(1, 0)  // 2, 2
 			@end
             @property( syntax == glsl || syntax == glsles )
             );
@@ -222,14 +274,18 @@
 		@insertpiece( regularTexturePcfGlSampling )
 		@property( syntax != glsl && syntax != glsles || hlms_shadow_uses_depth_texture )
 			@foreach( pcf_iterations, n )
-				@property( pcf_3x3 || pcf_4x4 )uv += offsets[@n] * invShadowMapSize.xy;@end
+				@property( pcf >= 3 )uv += offsets[@n] * invShadowMapSize.xy;@end
 				retVal += OGRE_SAMPLE_SHADOW( shadowMap, shadowSampler, uv, fDepth );@end
 		@end
 
-		@property( pcf_3x3 )
+		@property( pcf == 3 )
 			retVal *= 0.25;
-		@end @property( pcf_4x4 )
+		@end @property( pcf == 4 )
 			retVal *= 0.11111111111111;
+		@end @property( pcf == 5)
+			retVal *= 0.0625;
+		@end @property( pcf == 6 )
+			retVal *= 0.04;
 		@end
 	@end	///! exponential_shadow_maps
 	@property( exponential_shadow_maps )
