@@ -26,6 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include "OgreStableHeaders.h"
+
 #include "OgreShadowCameraSetupConcentric.h"
 
 #include "OgreCamera.h"
