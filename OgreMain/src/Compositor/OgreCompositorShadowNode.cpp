@@ -1041,7 +1041,8 @@ namespace Ogre
                                                          bool useEsm,
                                                          uint32 pointLightCubemapResolution,
                                                          Real pssmLambda, Real splitPadding,
-                                                         Real splitBlend, Real splitFade, 
+                                                         Real splitBlend, Real splitFade,
+                                                         uint32 numStableSplits,
                                                          uint32 visibilityMask )
     {
         typedef map<uint64, uint32>::type ResolutionsToEsmMap;
@@ -1287,6 +1288,7 @@ namespace Ogre
                 shadowTexDef->splitBlend = splitBlend;
                 shadowTexDef->splitFade = splitFade;
                 shadowTexDef->numSplits = numSplits;
+                shadowTexDef->numStableSplits = numStableSplits;
             }
 
             ++itor;
