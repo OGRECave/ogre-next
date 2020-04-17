@@ -174,6 +174,23 @@ namespace Ogre
         shadowCameraPos.z = vMax.z + zPadding;  // Backwards is towards +Z!
         // Go back from light space to world space
         shadowCameraPos = scalarLightSpaceToWorld * shadowCameraPos;
+
+        Quaternion q = light->getParentSceneNode()->_getDerivedOrientationUpdated();
+
+        // Round local x/y position based on a world-space texel; this helps to reduce
+        // jittering caused by the projection moving with the camera
+        Real worldTexelSizeX = ( texCam->getOrthoWindowWidth() ) / viewportRealSize.x;
+        Real worldTexelSizeY = ( texCam->getOrthoWindowHeight() ) / viewportRealSize.y;
+
+        // convert world space camera position into light space
+        Vector3 lightSpacePos = q.Inverse() * shadowCameraPos;
+
+        // snap to nearest texel
+        lightSpacePos.x -= fmod( lightSpacePos.x, worldTexelSizeX );
+        lightSpacePos.y -= fmod( lightSpacePos.y, worldTexelSizeY );
+        // convert back to world space
+        shadowCameraPos = q * lightSpacePos;
+
         texCam->setPosition( shadowCameraPos );
         texCam->setOrthoWindow( aabb.mHalfSize.x * 2.0f, aabb.mHalfSize.y * 2.0f );
 
