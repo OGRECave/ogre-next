@@ -296,6 +296,9 @@ namespace Ogre
         virtual void unregisterThread();
         virtual unsigned int getDisplayMonitorCount() const     { return 1; }
 
+        virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
+                                                             PixelFormatGpu format );
+
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
 
         virtual void beginProfileEvent( const String &eventName );

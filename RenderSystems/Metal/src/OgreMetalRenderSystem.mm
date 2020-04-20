@@ -111,6 +111,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::shutdown(void)
     {
+        if( mActiveDevice )
+            mActiveDevice->endAllEncoders();
+        
         for( size_t i=0; i<mAutoParamsBuffer.size(); ++i )
         {
             if( mAutoParamsBuffer[i]->getMappingState() != MS_UNMAPPED )
@@ -241,6 +244,21 @@ namespace Ogre
         {
             optFSAA->currentValue = optFSAA->possibleValues[0];
         }
+    }
+    //-------------------------------------------------------------------------
+    SampleDescription MetalRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
+                                                                    PixelFormatGpu format )
+    {
+        uint8 samples = sampleDesc.getMaxSamples();
+        if( @available( iOS 9.0, * ) )
+        {
+            if( mActiveDevice )
+            {
+                while( samples > 1 && ![mActiveDevice->mDevice supportsTextureSampleCount:samples] )
+                    --samples;
+            }
+        }
+        return SampleDescription( samples, sampleDesc.getMsaaPattern() );
     }
     //-------------------------------------------------------------------------
     HardwareOcclusionQuery* MetalRenderSystem::createHardwareOcclusionQuery(void)

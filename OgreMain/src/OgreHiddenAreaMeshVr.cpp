@@ -37,6 +37,7 @@ THE SOFTWARE.
 
 #include "OgreConfigFile.h"
 #include "OgreLogManager.h"
+#include "OgreString.h"
 
 namespace Ogre
 {
@@ -51,10 +52,14 @@ namespace Ogre
 
         String bestMatch;
         String deviceConfigName;
+        String deviceNameUpper = deviceName;
+        StringUtil::toUpperCase(deviceNameUpper);
         while( itor.hasMoreElements() )
         {
             deviceConfigName = itor.peekNextKey();
-            if( deviceName.find( deviceConfigName ) != String::npos &&
+            String deviceConfigNameUpper = deviceConfigName;
+            StringUtil::toUpperCase(deviceConfigNameUpper);
+            if( deviceNameUpper.find( deviceConfigNameUpper)  != String::npos &&
                 deviceConfigName.size() > bestMatch.size() )
             {
                 bestMatch = deviceConfigName;
@@ -99,7 +104,7 @@ namespace Ogre
             if( retVal.tessellation == 0u )
             {
                 LogManager::getSingleton().logMessage( "HiddenAreaMeshVr optimization for '" +
-                                                       deviceName + "' explicitly disabled." );
+                                                       bestMatch + "' explicitly disabled." );
             }
         }
 

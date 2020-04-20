@@ -37,9 +37,8 @@ THE SOFTWARE.
     #define __has_builtin(x) 0
 #endif
 
-/** Undefine in <sys/endian.h> defined bswap macros for FreeBSD
- */
 #if OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
+    /// Undefine in <sys/endian.h> defined bswap macros for FreeBSD
     #undef bswap16
     #undef bswap32
     #undef bswap64

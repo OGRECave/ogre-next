@@ -170,6 +170,15 @@ namespace Ogre
 
                 ++itor;
             }
+
+            // Force all non-AutomaticBatching textures to be loaded before calling _renderSingleObject,
+            // since low level materials need these textures to be loaded (streaming is opt-in)
+            const size_t numTUs = mPass->getNumTextureUnitStates();
+            for( size_t i = 0u; i < numTUs; ++i )
+            {
+                TextureUnitState *tu = mPass->getTextureUnitState( i );
+                tu->_getTexturePtr();
+            }
         }
 
         if( mHorizonalTexelOffset != 0 || mVerticalTexelOffset != 0 )
