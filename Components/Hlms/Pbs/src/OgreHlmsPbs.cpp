@@ -1575,7 +1575,7 @@ namespace Ogre
             //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps;
             mapSize += 4u * 4u;
 
-            //float4 aspectRatio_unused3;
+            //float4 aspectRatio_planarReflNumMips_unused2;
             mapSize += 4u * 4u;
 
             //float2 invWindowRes + float2 windowResolution
@@ -1956,9 +1956,21 @@ namespace Ogre
                 const float windowWidth = renderTarget->getWidth();
                 const float windowHeight = renderTarget->getHeight();
 
-                //float4 aspectRatio_unused3
+                //float4 aspectRatio_planarReflNumMips_unused2
                 *passBufferPtr++ = windowWidth / windowHeight;
+#ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
+                if( mPlanarReflections )
+                {
+                    // Assume all planar refl. probes have the same num. of mipmaps
+                    *passBufferPtr++ = mPlanarReflections->getMaxNumMipmaps();
+                }
+                else
+                {
+                    *passBufferPtr++ = 0.0f;
+                }
+#else
                 *passBufferPtr++ = 0.0f;
+#endif
                 *passBufferPtr++ = 0.0f;
                 *passBufferPtr++ = 0.0f;
 
