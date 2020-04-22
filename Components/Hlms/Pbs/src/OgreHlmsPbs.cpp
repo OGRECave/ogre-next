@@ -87,6 +87,7 @@ namespace Ogre
     const IdString PbsProperty::MaterialsPerBuffer= IdString( "materials_per_buffer" );
     const IdString PbsProperty::LowerGpuOverhead  = IdString( "lower_gpu_overhead" );
     const IdString PbsProperty::DebugPssmSplits   = IdString( "debug_pssm_splits" );
+    const IdString PbsProperty::PerceptualRoughness=IdString( "perceptual_roughness" );
     const IdString PbsProperty::HasPlanarReflections=IdString( "has_planar_reflections" );
 
     const IdString PbsProperty::NumTextures     = IdString( "num_textures" );
@@ -296,6 +297,7 @@ namespace Ogre
 #endif
         mSetupWorldMatBuf( true ),
         mDebugPssmSplits( false ),
+        mPerceptualRoughness( true ),
         mAutoSpecIblMaxMipmap( true ),
         mVctFullConeCount( false ),
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
@@ -1345,6 +1347,8 @@ namespace Ogre
 
         if( !casterPass )
         {
+            if( mPerceptualRoughness )
+                setProperty( PbsProperty::PerceptualRoughness, 1 );
             if( mLightProfilesTexture )
                 setProperty( PbsProperty::LightProfilesTexture, 1 );
             if( mLtcMatrixTexture )
@@ -3473,10 +3477,14 @@ namespace Ogre
         outDataFolderPath = "Hlms/Pbs/" + shaderSyntax;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::setDebugPssmSplits( bool bDebug )
+    void HlmsPbs::setDebugPssmSplits( bool bDebug ) { mDebugPssmSplits = bDebug; }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setPerceptualRoughness( bool bPerceptualRoughness )
     {
-        mDebugPssmSplits = bDebug;
+        mPerceptualRoughness = bPerceptualRoughness;
     }
+    //-----------------------------------------------------------------------------------
+    bool HlmsPbs::getPerceptualRoughness( void ) const { return mPerceptualRoughness; }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::setShadowSettings( ShadowFilter filter )
     {
