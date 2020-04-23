@@ -22,15 +22,8 @@ struct PS_INPUT
 @insertpiece( VStoPS_block )
 	float4 gl_Position [[position]];
 
-	@pdiv( full_pso_clip_distances, hlms_pso_clip_distances, 4 )
-	@pmod( partial_pso_clip_distances, hlms_pso_clip_distances, 4 )
-	@foreach( full_pso_clip_distances, n )
-		float4 gl_ClipDistance@n [[clip_distance]];
-	@end
-	@property( partial_pso_clip_distances == 1 )
-		float gl_ClipDistance@value( full_pso_clip_distances ) : [[clip_distance]];
-	@else
-		float@value( partial_pso_clip_distances ) gl_ClipDistance@value( full_pso_clip_distances ) : [[clip_distance]];
+	@property( hlms_pso_clip_distances )
+		float gl_ClipDistance [[clip_distance]] [@value( hlms_pso_clip_distances )];
 	@end
 };
 
