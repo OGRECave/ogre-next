@@ -216,7 +216,8 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
 	@property( ltc_texture_available )
 		#define brdfLUT ltcMatrix
 		float2 envBRDF = OGRE_SampleArray2D( brdfLUT, ltcSampler,
-											 float2( pixelData.NdotV, 1.0 - pixelData.roughness ), 2 ).xy;
+											 float2( pixelData.NdotV,
+													 1.0 - pixelData.perceptualRoughness ), 2 ).xy;
 	@else
 		float2 envBRDF = float2( 1.0f, 0.0f );
 	@end

@@ -22,9 +22,9 @@
 @end
 
 @piece( DoPlanarReflectionsPS )
-    @property( syntax != metal )
-        uint planarReflectionIdx = worldMaterialIdx[inPs.drawId].w;
-    @else
+	@property( syntax != metal )
+		uint planarReflectionIdx = worldMaterialIdx[inPs.drawId].w;
+	@else
 		ushort planarReflectionIdx = inPs.planarReflectionIdx;
 	@end
 
@@ -35,7 +35,8 @@
 	float2 planarReflUVs = projPointInPlane.xy / projPointInPlane.z;
 
 	float3 planarReflectionS = OGRE_SampleLevel( planarReflectionTex, planarReflectionSampler,
-												 planarReflUVs.xy, @insertpiece( envSpecularRoughness ) ).xyz;
+												 planarReflUVs.xy,
+												 pixelData.roughness * passBuf.planarReflNumMips ).xyz;
 
 	//Fade out as our surface gets away from the reflection plane (planarWeight = 0 means fully faded out)
 	float planarWeight = max( 1.0 - abs( distanceToPlanarReflPlane ) * passBuf.invMaxDistanceToPlanarRefl.x, 0.0 );
@@ -54,7 +55,7 @@
 	planarWeight *= saturate( dot( planarReflection.xyz, pixelData.normal.xyz ) * 16.581718739 - 15.581718739 );
 	@property( hlms_use_ssr || vct_num_probes || ((envprobe_map && envprobe_map != target_envprobe_map) || parallax_correct_cubemaps) )
 		pixelData.envColourS = lerp( pixelData.envColourS, planarReflectionS, planarWeight );
-	@end @property( !hlms_use_ssr && !((envprobe_map && envprobe_map != target_envprobe_map) || parallax_correct_cubemaps) )
+	@else
 		pixelData.envColourS += planarReflectionS * planarWeight;
 	@end
 @end

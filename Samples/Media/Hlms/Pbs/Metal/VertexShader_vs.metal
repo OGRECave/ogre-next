@@ -32,8 +32,9 @@ struct PS_INPUT
 {
 @insertpiece( VStoPS_block )
 	float4 gl_Position [[position]];
-	@foreach( hlms_pso_clip_distances, n )
-		float gl_ClipDistance@n [[clip_distance]];
+
+	@property( hlms_pso_clip_distances )
+		float gl_ClipDistance [[clip_distance]] [@value( hlms_pso_clip_distances )];
 	@end
 };
 

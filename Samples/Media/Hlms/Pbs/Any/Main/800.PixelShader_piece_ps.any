@@ -1,4 +1,4 @@
-@piece( envSpecularRoughness ) pixelData.roughness * passBuf.envMapNumMipmaps @end
+@piece( envSpecularRoughness ) pixelData.perceptualRoughness * passBuf.envMapNumMipmaps @end
 
 @piece( DefaultHeaderPS )
 	@property( !fresnel_scalar )
@@ -34,6 +34,7 @@
 			@end
 			float4	diffuse;
 			float3	specular;
+			float	perceptualRoughness;
 			float	roughness;
 			float_fresnel	F0;
 
@@ -294,13 +295,18 @@
 
 @piece( SampleRoughnessMap )
 	/// ROUGHNESS MAP
-	pixelData.roughness = material.kS.w;
+	pixelData.perceptualRoughness = material.kS.w;
 	@property( roughness_map )
-		pixelData.roughness *= SampleRoughness( textureMaps@value( roughness_map_idx ),
-												samplerState@value( roughness_map_sampler ),
-												UV_ROUGHNESS( inPs.uv@value(uv_roughness).xy ),
-												texIndex_roughnessIdx ).x;
-		pixelData.roughness = max( pixelData.roughness, 0.001f );
+		pixelData.perceptualRoughness *=
+			SampleRoughness( textureMaps@value( roughness_map_idx ),
+							 samplerState@value( roughness_map_sampler ),
+							 UV_ROUGHNESS( inPs.uv@value(uv_roughness).xy ),
+							 texIndex_roughnessIdx ).x;
+	@end
+	@property( perceptual_roughness )
+		pixelData.roughness = max( pixelData.perceptualRoughness * pixelData.perceptualRoughness, 0.001f );
+	@else
+		pixelData.roughness = max( pixelData.perceptualRoughness, 0.001f );
 	@end
 @end
 

@@ -131,7 +131,7 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 
 	float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps;
 
-	float4 aspectRatio_unused3;
+	float4 aspectRatio_planarReflNumMips_unused2;
 
 	float2 invWindowRes;
 	float2 windowResolution;
@@ -218,7 +218,8 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 #define rightEyePixelStartX		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps.z
 #define envMapNumMipmaps		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps.w
 
-#define aspectRatio		aspectRatio_unused3.x
+#define aspectRatio			aspectRatio_planarReflNumMips_unused2.x
+#define planarReflNumMips	aspectRatio_planarReflNumMips_unused2.y
 }
 CONST_BUFFER_STRUCT_END( passBuf );
 
