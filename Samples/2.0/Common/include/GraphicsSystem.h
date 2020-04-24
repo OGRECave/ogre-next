@@ -96,6 +96,7 @@ namespace Demo
         void gameEntityRemoved( GameEntity *toRemove );
     public:
         GraphicsSystem( GameState *gameState,
+                        Ogre::String resourcePath = Ogre::String(""),
                         Ogre::ColourValue backgroundColour = Ogre::ColourValue( 0.2f, 0.4f, 0.6f ) );
         virtual ~GraphicsSystem();
 

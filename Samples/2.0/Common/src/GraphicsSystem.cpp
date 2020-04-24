@@ -51,6 +51,7 @@
 namespace Demo
 {
     GraphicsSystem::GraphicsSystem( GameState *gameState,
+                                    Ogre::String resourcePath ,
                                     Ogre::ColourValue backgroundColour ) :
         BaseSystem( gameState ),
         mLogicSystem( 0 ),
@@ -64,6 +65,7 @@ namespace Demo
         mCamera( 0 ),
         mWorkspace( 0 ),
         mPluginsFolder( "./" ),
+        mResourcePath( resourcePath ),
         mOverlaySystem( 0 ),
         mAccumTimeSinceLastLogicFrame( 0 ),
         mCurrentTransformIdx( 0 ),
