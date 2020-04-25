@@ -14,6 +14,8 @@ env:
   CMAKE_DOXYGEN_INPUT_LIST: "Components Docs/src OgreMain PlugIns RenderSystems"
   OGRE_SOURCE_DIR: "./"
   OGRE_BINARY_DIR: "./"
+  OGRE_VERSION: "2.2"
+  DOXYGEN_HTML_OUTPUT_DIR: "./2.2"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -35,9 +37,10 @@ jobs:
         with:
           doxyfile-path: './Doxyfile'
 
-#      - name: Publish # Only on master branch
-#        if: github.ref == 'refs/heads/master'
-#        uses: peaceiris/actions-gh-pages@v3
-#        with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#          publish_dir: ./api
+      - name: Publish # Only on master branch
+        if: github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          keep_files: true
