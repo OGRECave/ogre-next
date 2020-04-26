@@ -258,8 +258,16 @@ namespace Ogre
         mShaderProfile( "unset!" ),
         mShaderSyntax( "unset!" ),
         mShaderFileExt( "unset!" ),
+    #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         mDebugOutput( true ),
+    #else
+        mDebugOutput( false ),
+    #endif
+    #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        mDebugOutputProperties( true ),
+    #else
         mDebugOutputProperties( false ),
+    #endif
         mHighQuality( false ),
         mFastShaderBuildHack( false ),
         mDefaultDatablock( 0 ),
