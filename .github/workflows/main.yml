@@ -8,7 +8,7 @@ on:
   # Run for all pull requests
   pull_request:
     branches: '*'
-    types: [opened, closed]
+    types: [opened]
 
 env:
   CMAKE_DOXYGEN_INPUT_LIST: "Components Docs/src OgreMain PlugIns RenderSystems"
@@ -35,9 +35,9 @@ jobs:
         with:
           doxyfile-path: './Doxyfile'
 
-      - name: Publish # Only on master branch
-        if: github.ref == 'master' || github.event.pull_request.merged
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./api
+#      - name: Publish # Only on master branch
+#        if: github.ref == 'refs/heads/master'
+#        uses: peaceiris/actions-gh-pages@v3
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          publish_dir: ./api
