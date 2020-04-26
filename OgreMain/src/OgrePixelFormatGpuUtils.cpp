@@ -1529,6 +1529,26 @@ namespace Ogre
         }
 
         // The brute force fallback
+        float rangeM = 1.0f;
+        float rangeA = 0.0f;
+
+        const bool bSrcSigned = isSigned( srcFormat );
+        if( bSrcSigned != isSigned( dstFormat ) && isNormalized( srcFormat ) )
+        {
+            if( !bSrcSigned )
+            {
+                // unormToSnorm
+                rangeM = 2.0f;
+                rangeA = -1.0f;
+            }
+            else
+            {
+                // snormToUnorm
+                rangeM = 0.5f;
+                rangeA = 0.5f;
+            }
+        }
+
         float rgba[4];
         for( size_t z=0; z<depthOrSlices; ++z )
         {
@@ -1541,6 +1561,8 @@ namespace Ogre
                 for( size_t x=0; x<width; ++x )
                 {
                     unpackColour( rgba, srcFormat, srcPtr );
+                    for( int i = 0; i < 4; ++i )
+                        rgba[i] = rgba[i] * rangeM + rangeA;
                     packColour( rgba, dstFormat, dstPtr );
                     srcPtr += srcBytesPerPixel;
                     dstPtr += dstBytesPerPixel;
