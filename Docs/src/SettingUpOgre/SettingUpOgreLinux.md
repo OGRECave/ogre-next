@@ -4,7 +4,7 @@
 
 # Requirements {#RequirementsLinux}
     * [CMake 3.x](https://cmake.org/download/)
-    * Mercurial. We recommend [TortoiseHg](https://tortoisehg.bitbucket.io/download/index.html)
+    * Git
     * What you do **NOT** need: Boost. Don't waste your time.
     * Clang >3.5 or GCC >4.0
     * [QtCreator](https://download.qt.io/official_releases/qtcreator/) recommended (Optional).

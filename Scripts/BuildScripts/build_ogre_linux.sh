@@ -4,17 +4,17 @@ OGRE_BRANCH_NAME="{0}"
 
 mkdir Ogre
 cd Ogre
-if test ! -f ogredeps; then
-	mkdir ogredeps
-	echo "--- Cloning Ogredeps ---"
-	hg clone https://bitbucket.org/cabalistic/ogredeps ogredeps
+if test ! -f ogre-next-deps; then
+	mkdir ogre-next-deps
+	echo "--- Cloning ogre-next-deps ---"
+	git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps
 else
-	echo "--- Ogredeps repo detected. Cloning skipped ---"
+	echo "--- ogre-next-deps repo detected. Cloning skipped ---"
 fi
-cd ogredeps
+cd ogre-next-deps
 mkdir build
 cd build
-echo "--- Building Ogredeps ---"
+echo "--- Building ogre-next-deps ---"
 cmake {1} -G Ninja ..
 ninja
 ninja install
@@ -27,7 +27,7 @@ if test ! -f ogre-next; then
 fi
 cd ogre-next
 if test ! -f Dependencies; then
-	ln -s ../ogredeps/build/ogredeps Dependencies
+	ln -s ../ogre-next-deps/build/ogredeps Dependencies
 fi
 mkdir -p build/Debug
 mkdir -p build/Release
