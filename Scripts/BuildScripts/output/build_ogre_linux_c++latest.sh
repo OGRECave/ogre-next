@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OGRE_BRANCH_NAME="master"
+OGRE_BRANCH_NAME="v2.2.1"
 
 mkdir Ogre
 cd Ogre
@@ -22,7 +22,7 @@ ninja install
 cd ../../
 if test ! -f ogre-next; then
 	mkdir ogre-next
-	echo "--- Cloning Ogre master ---"
+	echo "--- Cloning Ogre v2.2.1 ---"
 	git clone --branch ${OGRE_BRANCH_NAME} https://github.com/OGRECave/ogre-next
 fi
 cd ogre-next
