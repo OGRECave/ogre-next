@@ -150,7 +150,7 @@ namespace Ogre
                                         : D3D11Mappings::get( mSampleDescription.getMsaaPattern() );
         }
 
-        sd.Flags        = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+        sd.Flags        = _getSwapChainFlags();
         sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
         sd.BufferCount = _getSwapChainBufferCount();
