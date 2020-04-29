@@ -42,7 +42,7 @@ THE SOFTWARE.
     #define OGRE_COPY_DEBUG_STRING( _Expression ) ((void)0)
     #define OGRE_APPEND_DEBUG_STRING( _Expression ) ((void)0)
 #else
-    #include "assert.h"
+    #include <assert.h>
 #endif
 
 namespace Ogre
