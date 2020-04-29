@@ -245,6 +245,7 @@ namespace Ogre
                             "D3D11WindowSwapChainBased::_createSizeDependedD3DResources" );
         }
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 // to avoid DXGI ERROR: GetFullscreenDesc can only be called for HWND based swapchains.
         if( mSwapChain1 )
         {
             DXGI_SWAP_CHAIN_DESC1 desc;
@@ -257,6 +258,7 @@ namespace Ogre
             mFullscreenMode             = mRequestedFullscreenMode;
         }
         else
+#endif
         {
             DXGI_SWAP_CHAIN_DESC desc;
             mSwapChain->GetDesc( &desc );
