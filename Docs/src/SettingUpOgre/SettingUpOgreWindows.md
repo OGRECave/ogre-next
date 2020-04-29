@@ -4,7 +4,7 @@
 
 # Requirements {#RequirementsWindows}
     * [CMake 3.x](https://cmake.org/download/)
-    * Mercurial. We recommend [TortoiseHg](https://tortoisehg.bitbucket.io/download/index.html)
+    * Git
     * What you do **NOT** need: Boost. Don't waste your time.
     * Visual Studio 2008 SP1 - 2017 (2019 not tested). MinGW may work but we strongly recommend Visual Studio.
     * [DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812). Optional.
@@ -82,7 +82,7 @@ Don't worry, those CMake configs are about the *old threading* model. For more i
 We easy-to-use scripts that will download and setup all dependencies for you in a self-contained folder
 Download build_ogre_scripts for the branch you need from:
 
-https://bitbucket.org/sinbad/ogre/downloads/
+https://www.ogre3d.org/download/sdk/sdk-ogre-next
 
 @}
 
@@ -95,23 +95,9 @@ Most dependencies are conveniently stored in its own repository called "ogredeps
 
 **Command line**:
 ```sh
-mkdir Ogre
-hg clone https://bitbucket.org/sinbad/ogre -r v2-1
-cd Ogre
-hg clone https://bitbucket.org/cabalistic/ogredeps Dependencies
+git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps
+git clone --branch v2-1 https://github.com/OGRECave/ogre-next
 ```
-
-**Graphical**
-
-Clone *Ogre*:
-![](images/CloneOgre.png)
-
-Now clone the *ogredeps* repository:
-![](images/CloneOgreDeps.png)
-
-Make sure Ogre is in the 2.1 branch:
-![](images/BranchCheckout.png)
-*Note:* If the branch filter doesn't appear, hit Ctrl+S
 @}
 
 @}
