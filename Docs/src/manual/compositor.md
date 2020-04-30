@@ -1275,6 +1275,21 @@ Only used by PSSM techniques. Specifies the number of splits per light.
 Can vary per shadow map. The number of splits must be greater than 2.
 Default is 3.
 
+-   num\_stable\_splits \<num\_stable\_splits\>
+
+PSSM tends to be very unstable to camera rotation changes. Rotate the camera around
+and the shadow mapping artifacts keep changing.
+
+setNumStableSplits allows you to fix that problem; by switching to ConcentricShadowCamera
+for the first N splits you specify; while the rest of the splits will use
+FocusedShadowCameraSetup.
+
+We achieve rotation stability by sacrificing overall quality. Using ConcentricShadowCamera
+on higher splits means sacrificing exponentially a lot more quality (and even performance);
+thus the recommended values are num\_stable\_splits = 1 or num\_stable\_splits = 2
+
+The default is num\_stable\_splits = 0 which disables the feature
+
 -   pssm\_lambda \<lambda\>
 
 Only used by PSSM techniques. Value usually between 0 & 1. The default

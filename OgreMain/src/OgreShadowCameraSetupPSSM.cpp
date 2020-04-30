@@ -28,14 +28,16 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreShadowCameraSetupPSSM.h"
+
 #include "OgreCamera.h"
 
 namespace Ogre
 {
     //---------------------------------------------------------------------
     PSSMShadowCameraSetup::PSSMShadowCameraSetup()
-        : mSplitPadding(1.0f), mCurrentIteration(0)
+        : mNumStableSplits(0u), mSplitPadding(1.0f), mCurrentIteration(0)
     {
         calculateSplitPoints(3, 100, 100000);
     }
@@ -141,8 +143,16 @@ namespace Ogre
         _cam->setNearClipDistance(nearDist);
         _cam->setFarClipDistance(farDist);
 
-        FocusedShadowCameraSetup::getShadowCamera( sm, cam,  light, texCam,
-                                                   iteration, viewportRealSize );
+        if( iteration < mNumStableSplits )
+        {
+            mConcentricShadowCamera.getShadowCamera( sm, cam, light, texCam, iteration,
+                                                     viewportRealSize );
+        }
+        else
+        {
+            FocusedShadowCameraSetup::getShadowCamera( sm, cam, light, texCam, iteration,
+                                                       viewportRealSize );
+        }
 
         // restore near/far
         _cam->setNearClipDistance(oldNear);
