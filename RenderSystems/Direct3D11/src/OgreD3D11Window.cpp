@@ -141,6 +141,20 @@ namespace Ogre
         return D3D11Mappings::get(pf);
     }
     //-----------------------------------------------------------------------------------
+    DXGI_SWAP_CHAIN_FLAG D3D11WindowSwapChainBased::_getSwapChainFlags()
+    {
+        unsigned flags = 0;
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+        flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
+        // We use SetMaximumFrameLatency in WinRT mode, and prefer to call it on swapchain rather than on whole device
+        if( IsWindows8Point1OrGreater() )
+            flags |= DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT;
+#endif
+        return DXGI_SWAP_CHAIN_FLAG(flags);
+    }
+    //-----------------------------------------------------------------------------------
     uint8 D3D11WindowSwapChainBased::_getSwapChainBufferCount() const
     {
         return mUseFlipMode ? 2 : mRenderSystem->getVaoManager()->getDynamicBufferMultiplier() - 1u;
@@ -247,6 +261,7 @@ namespace Ogre
                             "D3D11WindowSwapChainBased::_createSizeDependedD3DResources" );
         }
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 // to avoid DXGI ERROR: GetFullscreenDesc can only be called for HWND based swapchains.
         if( mSwapChain1 )
         {
             DXGI_SWAP_CHAIN_DESC1 desc;
@@ -259,6 +274,7 @@ namespace Ogre
             mFullscreenMode             = mRequestedFullscreenMode;
         }
         else
+#endif
         {
             DXGI_SWAP_CHAIN_DESC desc;
             mSwapChain->GetDesc( &desc );
@@ -319,7 +335,7 @@ namespace Ogre
 
         // width and height can be zero to autodetect size, therefore do not rely on them
         HRESULT hr = mSwapChain->ResizeBuffers( _getSwapChainBufferCount(), width, height,
-                                                _getSwapChainFormat(), 0 );
+                                                _getSwapChainFormat(), _getSwapChainFlags() );
         if(hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
         {
             mRenderSystem->handleDeviceLost();

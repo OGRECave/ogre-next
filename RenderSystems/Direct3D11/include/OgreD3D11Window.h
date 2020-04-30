@@ -97,6 +97,7 @@ namespace Ogre
 
     protected:
         DXGI_FORMAT _getSwapChainFormat();
+        DXGI_SWAP_CHAIN_FLAG _getSwapChainFlags();
         uint8 _getSwapChainBufferCount(void) const;
         void _createSwapChain();
         virtual HRESULT _createSwapChainImpl() = 0;

@@ -139,6 +139,7 @@ namespace Ogre
         desc.SwapEffect           = IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 #endif
         desc.AlphaMode            = DXGI_ALPHA_MODE_UNSPECIFIED;
+        desc.Flags                = _getSwapChainFlags();
 
         // Create swap chain
         HRESULT hr = mDevice.GetDXGIFactory()->CreateSwapChainForCoreWindow(mDevice.get(),
@@ -281,6 +282,7 @@ namespace Ogre
         desc.Scaling              = DXGI_SCALING_STRETCH;             // Required for CreateSwapChainForComposition.
         desc.SwapEffect           = IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
         desc.AlphaMode            = DXGI_ALPHA_MODE_UNSPECIFIED;
+        desc.Flags                = _getSwapChainFlags();
 
         // Create swap chain
         HRESULT hr = mDevice.GetDXGIFactory()->CreateSwapChainForComposition(mDevice.get(),
