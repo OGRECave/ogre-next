@@ -184,8 +184,6 @@ namespace Ogre
 
     const IdString HlmsBaseProp::NoReverseDepth = IdString( "hlms_no_reverse_depth" );
 
-    const IdString HlmsBaseProp::NoReverseDepth = IdString( "hlms_no_reverse_depth" );
-
     const IdString HlmsBaseProp::Syntax         = IdString( "syntax" );
     const IdString HlmsBaseProp::Hlsl           = IdString( "hlsl" );
     const IdString HlmsBaseProp::Glsl           = IdString( "glsl" );
