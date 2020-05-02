@@ -210,7 +210,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsTerraDatablock::setDetailMapOffsetScale( uint8 detailMap, const Vector4 &offsetScale )
     {
-        assert( detailMap < 8 );
+        assert( detailMap < 4u );
         bool wasDisabled = mDetailsOffsetScale[detailMap] == Vector4( 0, 0, 1, 1 );
 
         mDetailsOffsetScale[detailMap] = offsetScale;

@@ -218,7 +218,6 @@ namespace Ogre
         @param detailMap
             Value in the range [0; 8)
             Range [0; 4) affects diffuse maps.
-            Range [4; 8) affects normal maps.
         @param offsetScale
             XY = Contains the UV offset.
             ZW = Constains the UV scale.
