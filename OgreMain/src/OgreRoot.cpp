@@ -326,7 +326,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     Root::~Root()
     {
-        *LogManager::getSingleton().stream(LML_TRIVIAL).raw()
+        LogManager::getSingleton().stream(LML_TRIVIAL)
             << "Average FPS: " << mFrameStats->getAvgFps() << "\n"
             << "Average time: \t"<< mFrameStats->getAvgTime() << " ms\n"
             << "Best time: \t"  << mFrameStats->getBestTime() << " ms\n"

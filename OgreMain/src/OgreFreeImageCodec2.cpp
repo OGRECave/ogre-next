@@ -72,13 +72,13 @@ namespace Ogre {
         const char* typeName = FreeImage_GetFormatFromFIF(fif);
         if (typeName)
         {
-            *LogManager::getSingleton().stream().raw()
+            LogManager::getSingleton().stream()
                 << "FreeImage error: '" << message << "' when loading format "
                 << typeName;
         }
         else
         {
-            *LogManager::getSingleton().stream().raw()
+            LogManager::getSingleton().stream()
                 << "FreeImage error: '" << message << "'";
         }
 

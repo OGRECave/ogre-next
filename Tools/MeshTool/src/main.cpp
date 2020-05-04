@@ -330,11 +330,11 @@ void parseOpts(UnaryOptionList& unOpts, BinaryOptionList& binOpts)
 
         if( opts.targetVersion == v1::MESH_VERSION_LATEST && !opts.exportAsV2 )
         {
-            *LogManager::getSingleton().getDefaultLog()->stream().raw() << "Unrecognised target mesh version '" << bi->second << "'";
+            LogManager::getSingleton().getDefaultLog()->stream() << "Unrecognised target mesh version '" << bi->second << "'";
         }
         else if( opts.targetVersionV2 == MESH_VERSION_LATEST && opts.exportAsV2 )
         {
-            *LogManager::getSingleton().getDefaultLog()->stream().raw() << "Unrecognised target mesh version '" <<
+            LogManager::getSingleton().getDefaultLog()->stream() << "Unrecognised target mesh version '" <<
                                                                     bi->second <<
                                                                     "' or version can't be used with -v2 argument";
         }

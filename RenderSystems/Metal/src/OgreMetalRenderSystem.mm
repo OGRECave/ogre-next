@@ -489,7 +489,7 @@ namespace Ogre
             setActiveDevice(&mDevice);
             String selectedDeviceName = deviceItem ? deviceItem->getDescription() :
                 MetalDeviceItem(mDevice.mDevice, 0).getDescription() + " (system default)";
-            *LogManager::getSingleton().stream().raw() << "Metal: Requested \"" << mDeviceName <<
+            LogManager::getSingleton().stream() << "Metal: Requested \"" << mDeviceName <<
                 "\", selected \"" << selectedDeviceName << "\"";
 
             if( miscParams )

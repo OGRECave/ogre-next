@@ -61,7 +61,7 @@ namespace Ogre
 
         mWorkerFunc = OGRE_NEW_T(WorkerFunc(this), MEMCATEGORY_GENERAL);
 
-        *LogManager::getSingleton().stream().raw() <<
+        LogManager::getSingleton().stream() <<
             "DefaultWorkQueue('" << mName << "') initialising on thread " <<
 #if OGRE_THREAD_SUPPORT
             OGRE_THREAD_CURRENT_ID
@@ -112,7 +112,7 @@ namespace Ogre
         if( !mIsRunning )
             return;
 
-        *LogManager::getSingleton().stream().raw() <<
+        LogManager::getSingleton().stream() <<
             "DefaultWorkQueue('" << mName << "') shutting down on thread " <<
 #if OGRE_THREAD_SUPPORT
             OGRE_THREAD_CURRENT_ID
@@ -171,7 +171,7 @@ namespace Ogre
     {
         // default worker thread
 #if OGRE_THREAD_SUPPORT
-        *LogManager::getSingleton().stream().raw() <<
+        LogManager::getSingleton().stream() <<
             "DefaultWorkQueue('" << getName() << "')::WorkerFunc - thread " 
             << OGRE_THREAD_CURRENT_ID << " starting.";
 
@@ -189,7 +189,7 @@ namespace Ogre
             _processNextRequest();
         }
 
-        *LogManager::getSingleton().stream().raw() <<
+        LogManager::getSingleton().stream() <<
             "DefaultWorkQueue('" << getName() << "')::WorkerFunc - thread " 
             << OGRE_THREAD_CURRENT_ID << " stopped.";
 #endif

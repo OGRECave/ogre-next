@@ -184,7 +184,7 @@ namespace Ogre
             catch (const Exception& e)
             {
                 // will already have been logged
-                *LogManager::getSingleton().stream().raw()
+                LogManager::getSingleton().stream()
                     << "High-level program " << mName << " encountered an error "
                     << "during loading and is thus not supported.\n"
                     << e.getFullDescription();

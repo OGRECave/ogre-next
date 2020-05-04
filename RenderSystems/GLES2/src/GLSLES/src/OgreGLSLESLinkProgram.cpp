@@ -124,7 +124,7 @@ namespace Ogre {
                     mVertexShader->getOptimiserEnabled() &&
                     mFragmentShader->getOptimiserEnabled())
                 {
-                    *LogManager::getSingleton().stream().raw() << "Try not optimised shader.";
+                    LogManager::getSingleton().stream() << "Try not optimised shader.";
                     mTriedToLinkAndFailed = false;
                     mVertexShader->setOptimiserEnabled(false);
                     mFragmentShader->setOptimiserEnabled(false);
@@ -151,7 +151,7 @@ namespace Ogre {
             }
             catch (Exception& e)
             {
-                *LogManager::getSingleton().stream().raw() << e.getDescription();
+                LogManager::getSingleton().stream() << e.getDescription();
                 mTriedToLinkAndFailed = true;
                 return;
             }
@@ -169,7 +169,7 @@ namespace Ogre {
             }
             catch (Exception& e)
             {
-                *LogManager::getSingleton().stream().raw() << e.getDescription();
+                LogManager::getSingleton().stream() << e.getDescription();
                 mTriedToLinkAndFailed = true;
                 return;
             }

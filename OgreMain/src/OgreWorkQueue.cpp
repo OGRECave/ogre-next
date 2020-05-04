@@ -217,7 +217,7 @@ namespace Ogre {
             rid = ++mRequestCount;
             req = OGRE_NEW Request(channel, requestType, rData, retryCount, rid);
 
-            *LogManager::getSingleton().stream(LML_TRIVIAL).raw() <<
+            LogManager::getSingleton().stream(LML_TRIVIAL) <<
                 "DefaultWorkQueueBase('" << mName << "') - QUEUED(thread:" <<
 #if OGRE_THREAD_SUPPORT
                 OGRE_THREAD_CURRENT_ID
@@ -260,7 +260,7 @@ namespace Ogre {
 
         Request* req = OGRE_NEW Request(channel, requestType, rData, retryCount, rid);
 
-        *LogManager::getSingleton().stream(LML_TRIVIAL).raw() <<
+        LogManager::getSingleton().stream(LML_TRIVIAL) <<
             "DefaultWorkQueueBase('" << mName << "') - REQUEUED(thread:" <<
 #if OGRE_THREAD_SUPPORT
             OGRE_THREAD_CURRENT_ID
@@ -569,7 +569,7 @@ namespace Ogre {
             if (!r->getAborted())
             {
             // no response, delete request
-            *LogManager::getSingleton().stream().raw() <<
+            LogManager::getSingleton().stream() <<
                 "DefaultWorkQueueBase('" << mName << "') warning: no handler processed request "
                 << r->getID() << ", channel " << r->getChannel()
                 << ", type " << r->getType();
@@ -641,7 +641,7 @@ namespace Ogre {
             << "): ID=" << r->getID() << " channel=" << r->getChannel() 
             << " requestType=" << r->getType();
 
-        *LogManager::getSingleton().stream(LML_TRIVIAL).raw() <<
+        LogManager::getSingleton().stream(LML_TRIVIAL) <<
             "DefaultWorkQueueBase('" << mName << "') - PROCESS_REQUEST_START(" << dbgMsg.str();
 
         RequestHandlerListByChannel::iterator i = handlerListCopy.find(r->getChannel());
@@ -658,7 +658,7 @@ namespace Ogre {
             }
         }
 
-        *LogManager::getSingleton().stream(LML_TRIVIAL).raw() <<
+        LogManager::getSingleton().stream(LML_TRIVIAL) <<
             "DefaultWorkQueueBase('" << mName << "') - PROCESS_REQUEST_END(" << dbgMsg.str()
             << " processed=" << (response!=0);
 
@@ -679,7 +679,7 @@ namespace Ogre {
             << " success=" << r->succeeded() << " messages=[" << r->getMessages() << "] channel=" 
             << r->getRequest()->getChannel() << " requestType=" << r->getRequest()->getType();
 
-        *LogManager::getSingleton().stream(LML_TRIVIAL).raw() <<
+        LogManager::getSingleton().stream(LML_TRIVIAL) <<
             "DefaultWorkQueueBase('" << mName << "') - PROCESS_RESPONSE_START(" << dbgMsg.str();
 
         ResponseHandlerListByChannel::iterator i = mResponseHandlers.find(r->getRequest()->getChannel());
@@ -694,7 +694,7 @@ namespace Ogre {
                 }
             }
         }
-        *LogManager::getSingleton().stream(LML_TRIVIAL).raw() <<
+        LogManager::getSingleton().stream(LML_TRIVIAL) <<
             "DefaultWorkQueueBase('" << mName << "') - PROCESS_RESPONSE_END(" << dbgMsg.str();
 
     }
@@ -740,7 +740,7 @@ namespace Ogre {
                     mIdleThreadRunning = false;
                 }
             }
-            *Ogre::LogManager::getSingleton().stream().raw()
+            Ogre::LogManager::getSingleton().stream()
                 << "Exception caught in top of worker thread!";
 
             return true;

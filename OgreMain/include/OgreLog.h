@@ -218,7 +218,12 @@ namespace Ogre {
             Stream( const Stream &rhs );
             ~Stream();
 
-            StringStream* raw() { return mCache; }
+            template <typename T>
+            _OgrePrivate Stream& operator<< (const T& v)
+            {
+                *mCache << v;
+                return *this;
+            }
         };
 #if OGRE_PLATFORM == OGRE_PLATFORM_NACL
     protected:

@@ -561,7 +561,7 @@ namespace Ogre
     {
         initRenderSystem();
 
-        *LogManager::getSingleton().stream().raw()
+        LogManager::getSingleton().stream()
             << "D3D11: RenderSystem Option: " << name << " = " << value;
 
         bool viewModeChanged = false;
@@ -1617,7 +1617,7 @@ namespace Ogre
         D3D11Driver *d3dDriver = getDirect3DDrivers(true)->findByName( mDriverName );
         mActiveD3DDriver = *d3dDriver; // store copy of selected driver, so that it is not
                                        //lost when drivers would be re-enumerated
-        *LogManager::getSingleton().stream().raw() << "D3D11: Requested \"" << mDriverName <<
+        LogManager::getSingleton().stream() << "D3D11: Requested \"" << mDriverName <<
                                                "\", selected \"" <<
                                                d3dDriver->DriverDescription() << "\"";
 

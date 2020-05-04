@@ -249,7 +249,7 @@ namespace Ogre {
 
             WindowEventUtilities::_addRenderWindow(this);
 
-            *LogManager::getSingleton().stream().raw()
+            LogManager::getSingleton().stream()
                 << "Created Win32Window '"
                 << mName << "' : " << mWidth << "x" << mHeight
                 << ", " << mColourDepth << "bpp";

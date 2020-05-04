@@ -159,7 +159,7 @@ namespace Ogre
         catch (const Exception&)
         {
             // will already have been logged
-            *LogManager::getSingleton().stream().raw()
+            LogManager::getSingleton().stream()
                 << "Gpu program " << mName << " encountered an error "
                 << "during loading and is thus not supported.";
 
@@ -288,7 +288,7 @@ namespace Ogre
             }
             catch(const Exception& e)
             {
-                *LogManager::getSingleton().stream().raw() <<
+                LogManager::getSingleton().stream() <<
                     "Unable to load manual named constants for GpuProgram " << mName <<
                     ": " << e.getDescription();
             }

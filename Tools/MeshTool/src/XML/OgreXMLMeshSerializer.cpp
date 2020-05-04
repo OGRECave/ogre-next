@@ -753,7 +753,7 @@ namespace v1 {
                 const char *claimedCount_ = faces->Attribute("count");
                 if (claimedCount_ && StringConverter::parseInt(claimedCount_)!=actualCount)
                 {
-                    *LogManager::getSingleton().stream().raw()
+                    LogManager::getSingleton().stream()
                         << "WARNING: face count (" << actualCount << ") " <<
                         "is not as claimed (" << claimedCount_ << ")";
                 }
@@ -1020,7 +1020,7 @@ namespace v1 {
             }
             if (claimedVertexCount_ && actualVertexCount!=claimedVertexCount)
             {
-                *LogManager::getSingleton().stream().raw()
+                LogManager::getSingleton().stream()
                     << "WARNING: vertex count (" << actualVertexCount 
                     << ") is not as claimed (" << claimedVertexCount_ << ")";
             }

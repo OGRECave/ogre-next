@@ -407,7 +407,7 @@ namespace v1
                         splitVertex = true;
                         splitBecauseOfParity = true;
 
-                        *LogManager::getSingleton().stream(LML_TRIVIAL).raw()
+                        LogManager::getSingleton().stream(LML_TRIVIAL)
                             << "TSC parity split - Vpar: " << vertex->parity 
                             << " Fpar: " << faceParity
                             << " faceTsU: " << faceTsU

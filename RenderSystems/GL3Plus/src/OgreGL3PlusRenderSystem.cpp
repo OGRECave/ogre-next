@@ -148,7 +148,7 @@ static void APIENTRY GLDebugCallback(GLenum source,
     else
         strcpy(debSev, "unknown");
 
-    *Ogre::LogManager::getSingleton().stream().raw()
+    Ogre::LogManager::getSingleton().stream()
         << debSource << ":" << debType << "(" << debSev << ") " << id << ": " << message;
 }
 #endif

@@ -67,7 +67,7 @@ namespace Ogre
         
         mWorkerFunc = OGRE_NEW_T(WorkerFunc(this), MEMCATEGORY_GENERAL);
 
-        *LogManager::getSingleton().stream().raw() <<
+        LogManager::getSingleton().stream() <<
             "DefaultWorkQueue('" << mName << "') initialising.";
 
 #if OGRE_NO_TBB_SCHEDULER == 0
@@ -121,7 +121,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void DefaultWorkQueue::shutdown()
     {
-        *LogManager::getSingleton().stream().raw() <<
+        LogManager::getSingleton().stream() <<
             "DefaultWorkQueue('" << mName << "') shutting down.";
 
         mShuttingDown = true;

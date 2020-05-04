@@ -453,7 +453,7 @@ namespace Ogre {
         if(!_wglGetExtensionsStringARB)
             return;
         const char *wgl_extensions = _wglGetExtensionsStringARB(mInitialWindow->getHDC());
-        *LogManager::getSingleton().stream().raw()
+        LogManager::getSingleton().stream()
             << "Supported WGL extensions: " << wgl_extensions;
         // Parse them, and add them to the main list
         StringStream ext;
