@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 #include "Ogre.h"
 
+#include <fstream>
+
 #if OGRE_DOUBLE_PRECISION == 1
 #define WITH_FLOAT_SUFFIX(x) x
 #else

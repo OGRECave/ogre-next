@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "OgreKeyFrame.h"
 #include "OgreStringConverter.h"
 
+#include <fstream>
 
 namespace Ogre {
 namespace v1 {

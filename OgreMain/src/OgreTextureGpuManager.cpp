@@ -57,6 +57,8 @@ THE SOFTWARE.
 
 #include "OgreProfiler.h"
 
+#include <fstream>
+
 #if !OGRE_NO_JSON
     #include "rapidjson/document.h"
     #include "rapidjson/error/en.h"

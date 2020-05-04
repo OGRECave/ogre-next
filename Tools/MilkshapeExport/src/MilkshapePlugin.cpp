@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include "OgreVertexIndexData.h"
 #include "OgreResourceGroupManager.h"
 
+#include <fstream>
+
 
 //---------------------------------------------------------------------
 MilkshapePlugin::MilkshapePlugin ()

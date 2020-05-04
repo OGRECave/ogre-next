@@ -53,6 +53,8 @@ THE SOFTWARE.
         #define OGRE_HASH128_FUNC MurmurHash3_x64_128
 #endif
 
+#include <fstream>
+
 namespace Ogre
 {
     const IdString ComputeProperty::ThreadsPerGroupX    = IdString( "threads_per_group_x" );

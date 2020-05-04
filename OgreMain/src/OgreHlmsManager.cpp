@@ -37,6 +37,8 @@ THE SOFTWARE.
     #include "OgreResourceGroupManager.h"
 #endif
 
+#include <fstream>
+
 namespace Ogre
 {
     HlmsManager::HlmsManager() :

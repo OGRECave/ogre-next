@@ -36,6 +36,8 @@ THE SOFTWARE.
 #include "OgreShaderGenerator.h"
 #include "OgreShaderFFPTexturing.h"
 
+#include <fstream>
+
 #define SGX_LIB_TEXTURE_ATLAS "SGXLib_TextureAtlas"
 
 #define SGX_FUNC_ATLAS_SAMPLE_AUTO_ADJUST "SGX_Atlas_Sample_Auto_Adjust"

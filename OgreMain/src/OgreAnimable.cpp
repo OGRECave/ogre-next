@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "OgreAnimable.h"
 #include "OgreAny.h"
 
+#include <ostream>
+
 namespace Ogre {
     //--------------------------------------------------------------------------
     AnimableObject::AnimableDictionaryMap AnimableObject::msAnimableDictionary;

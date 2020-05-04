@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include <iomanip>
 #include <iostream>
 
+#include <fstream>
 #include <sstream>
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
@@ -55,7 +56,8 @@ namespace Ogre
     {
         if (!mSuppressFile)
         {
-            mLog.open(name.c_str());
+            mLog = new std::ofstream;
+            mLog->open(name.c_str());
         }
     }
     //-----------------------------------------------------------------------
@@ -64,7 +66,8 @@ namespace Ogre
         ScopedLock scopedLock( mMutex );
         if (!mSuppressFile)
         {
-            mLog.close();
+            mLog->close();
+            delete mLog;
         }
     }
     //-----------------------------------------------------------------------
@@ -113,15 +116,15 @@ namespace Ogre
                         struct tm *pTime;
                         time_t ctTime; time(&ctTime);
                         pTime = localtime( &ctTime );
-                        mLog << std::setw(2) << std::setfill('0') << pTime->tm_hour
+                        *mLog << std::setw(2) << std::setfill('0') << pTime->tm_hour
                             << ":" << std::setw(2) << std::setfill('0') << pTime->tm_min
                             << ":" << std::setw(2) << std::setfill('0') << pTime->tm_sec
                             << ": ";
                     }
-                    mLog << message << std::endl;
+                    *mLog << message << std::endl;
 
                     // Flush stcmdream to ensure it is written (incase of a crash, we need log to be up to date)
-                    mLog.flush();
+                    mLog->flush();
                 }
             }
         }
@@ -181,7 +184,7 @@ namespace Ogre
     }
     //---------------------------------------------------------------------
     Log::Stream::Stream(const Stream& rhs)
-        : mTarget(rhs.mTarget), mLevel(rhs.mLevel), mMaskDebug(rhs.mMaskDebug)
+        : mTarget(rhs.mTarget), mLevel(rhs.mLevel), mMaskDebug(rhs.mMaskDebug), mCache( new BaseStream() )
     {
         // explicit copy of stream required, gcc doesn't like implicit
         mCache->str(rhs.mCache->str());

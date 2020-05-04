@@ -63,6 +63,8 @@ THE SOFTWARE.
 
 #include "Hash/MurmurHash3.h"
 
+#include <fstream>
+
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
     #define OGRE_HASH128_FUNC MurmurHash3_x86_128
 #else

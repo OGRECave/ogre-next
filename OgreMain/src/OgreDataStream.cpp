@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "OgreString.h"
 #include "OgreException.h"
 
+#include <fstream>
+
 namespace Ogre {
 
     //-----------------------------------------------------------------------

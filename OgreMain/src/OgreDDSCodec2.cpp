@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "OgreImage2.h"
 #include "OgrePixelFormatGpuUtils.h"
 
+#include <fstream>
+
 namespace Ogre {
     // Internal DDS structure definitions
 #define FOURCC(c0, c1, c2, c3) (c0 | (c1 << 8) | (c2 << 16) | (c3 << 24))

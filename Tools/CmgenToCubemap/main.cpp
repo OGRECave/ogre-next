@@ -28,6 +28,8 @@
 
 #include "OgreLogManager.h"
 
+#include <fstream>
+
 const char *faceNames[6] = { "_px", "_nx", "_py", "_ny", "_pz", "_nz" };
 
 Ogre::LogManager *g_logManager = 0;

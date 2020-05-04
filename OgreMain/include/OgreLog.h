@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "Threading/OgreLightweightMutex.h"
 
 #include "ogrestd/vector.h"
-#include <fstream>
+#include <iosfwd>
 
 #include "OgreHeaderPrefix.h"
 
@@ -107,7 +107,7 @@ namespace Ogre {
     class _OgreExport Log : public LogAlloc
     {
     protected:
-        std::ofstream   mLog;
+        std::ofstream   *mLog;
         LoggingLevel    mLogLevel;
         bool            mDebugOut;
         bool            mSuppressFile;

@@ -8,6 +8,8 @@
 #include "OgreRoot.h"
 #include "OgreLogManager.h"
 
+#include <fstream>
+
 namespace Ogre
 {
     OfflineProfiler::OfflineProfiler() :

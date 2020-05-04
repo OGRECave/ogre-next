@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 #include "OgreTextureManager.h"
 
+#include <fstream>
+
 namespace Ogre {
 
     //-----------------------------------------------------------------------

@@ -112,6 +112,7 @@ THE SOFTWARE.
 #  include "OgreASTCCodec.h"
 #endif
 
+#include <fstream>
 #include <sstream>
 
 namespace Ogre {

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <fstream>
 
 struct vertex {
     int pos, tc, normal, colour;

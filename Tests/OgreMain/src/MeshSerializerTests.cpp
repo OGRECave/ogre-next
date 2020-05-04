@@ -48,6 +48,8 @@ THE SOFTWARE.
 
 #include "UnitTestSuite.h"
 
+#include <fstream>
+
 //#define I_HAVE_LOT_OF_FREE_TIME
 
 // To run XML test, you need to symlink all files (except main.cpp) from XMLConverter tool to the Test_Ogre component!

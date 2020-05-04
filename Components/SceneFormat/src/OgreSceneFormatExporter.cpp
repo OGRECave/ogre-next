@@ -60,6 +60,7 @@ THE SOFTWARE.
 #include "math.h"
 
 #include <queue>
+#include <fstream>
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
     inline float isfinite( float x )

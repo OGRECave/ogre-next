@@ -1,4 +1,5 @@
 #include "lwReader.h"
+#include <fstream>
 
 lwObject *lwReader::readObjectFromFile( const char *nfilename)
 {

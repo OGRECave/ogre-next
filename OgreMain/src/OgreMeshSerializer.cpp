@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreLogManager.h"
 
+#include <fstream>
 
 namespace Ogre {
 namespace v1 {

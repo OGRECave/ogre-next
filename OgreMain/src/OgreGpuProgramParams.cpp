@@ -34,6 +34,8 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreRoot.h"
 #include "OgreString.h"
 
+#include <fstream>
+
 namespace Ogre
 {
 

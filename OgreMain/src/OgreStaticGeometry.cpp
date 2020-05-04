@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "OgreLodStrategyManager.h"
 #include "OgreEdgeListBuilder.h"
 
+#include <fstream>
 #include <sstream>
 
 namespace Ogre {

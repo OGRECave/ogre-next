@@ -35,6 +35,8 @@
 
 #include "OgreLogManager.h"
 
+#include <fstream>
+
 #if OGRE_USE_SDL2
     #include <SDL_syswm.h>
 #endif

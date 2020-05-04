@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 #include "OgreDataStream.h"
 
+#include <fstream>
+
 namespace Ogre
 {
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC

@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreLogManager.h"
 
+#include <fstream>
 
 namespace Ogre {
     const unsigned short HEADER_CHUNK_ID = 0x1000;
