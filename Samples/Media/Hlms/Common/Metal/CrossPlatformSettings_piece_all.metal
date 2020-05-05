@@ -72,7 +72,7 @@ inline float3x3 toMat3x3( float3x4 m )
 
 #define outVs_Position outVs.gl_Position
 #define outVs_viewportIndex outVs.gl_ViewportIndex
-#define outVs_clipDistance0 outVs.gl_ClipDistance0
+#define outVs_clipDistance0 outVs.gl_ClipDistance[0]
 
 #define gl_SampleMaskIn0 gl_SampleMask
 //#define interpolateAtSample( interp, subsample ) interpolateAtSample( interp, subsample )

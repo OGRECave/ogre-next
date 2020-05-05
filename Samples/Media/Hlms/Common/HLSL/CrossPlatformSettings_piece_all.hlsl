@@ -49,7 +49,7 @@
 
 #define outVs_Position outVs.gl_Position
 #define outVs_viewportIndex outVs.gl_ViewportIndex
-#define outVs_clipDistance0 outVs.gl_ClipDistance[0]
+#define outVs_clipDistance0 outVs.gl_ClipDistance0.x
 
 #define gl_SampleMaskIn0 gl_SampleMask
 #define interpolateAtSample( interp, subsample ) EvaluateAttributeAtSample( interp, subsample )
