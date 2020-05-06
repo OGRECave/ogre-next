@@ -608,6 +608,18 @@ namespace Ogre {
                     "D3D11HLSLProgram::compileMicrocode");
             }
 
+            UINT64 requiresFlags = shaderReflection->GetRequiresFlags();
+            if( requiresFlags != 0 )
+            {
+                // Ensure that all additional shader requirements are pre-declared in material script.
+                // We need this to know if shader is supported before loading attempt, so that alternate
+                // technique or shader has chance to be selected for shaders unsupported on current GPU.
+                //
+                // 0x2000 == D3D_SHADER_REQUIRES_VIEWPORT_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER_FEEDING_RASTERIZER
+                assert( !( requiresFlags & 0x2000 ) || isVpAndRtArrayIndexFromAnyShaderRequired()
+                    && "add sets_vp_or_rt_array_index = true in shader declaration script" );
+            }
+
             // get the input parameters
             mD3d11ShaderInputParameters.resize(shaderDesc.InputParameters);
             for (UINT i=0; i<shaderDesc.InputParameters; i++)

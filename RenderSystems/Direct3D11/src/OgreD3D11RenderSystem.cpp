@@ -1039,6 +1039,14 @@ namespace Ogre
             rsc->setCapability(RSC_TYPED_UAV_LOADS);
             d3dDeviceVersion113->Release();
         }
+#ifdef NTDDI_WIN10_TH2
+        D3D11_FEATURE_DATA_D3D11_OPTIONS3 fOpt3 = {};
+        hr = mDevice->CheckFeatureSupport( D3D11_FEATURE_D3D11_OPTIONS3, &fOpt3, sizeof( fOpt3 ) );
+        if( SUCCEEDED( hr ) && fOpt3.VPAndRTArrayIndexFromAnyShaderFeedingRasterizer )
+        {
+            rsc->setCapability( RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER );
+        }
+#endif
 #endif
 
         rsc->setCapability(RSC_VBO);

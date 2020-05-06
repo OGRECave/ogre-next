@@ -242,6 +242,9 @@ namespace Ogre
         /// https://docs.microsoft.com/en-us/windows/desktop/direct3dhlsl/
         /// dx-graphics-hlsl-unpacking-packing-dxgi-format
         RSC_TYPED_UAV_LOADS = OGRE_CAPS_VALUE(CAPS_CATEGORY_D3D9, 1),
+        /// If capability is not set then only geometry shader can have 
+        /// outputs with SV_RenderTargetArrayIndex and SV_ViewportArrayIndex semantic.
+        RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER = OGRE_CAPS_VALUE(CAPS_CATEGORY_D3D9, 2),
 
         // ***** GL Specific Caps *****
         /// Supports OpenGL version 1.5

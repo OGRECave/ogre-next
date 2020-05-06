@@ -7,6 +7,7 @@ vertex_program Ogre/VR/HiddenAreaMeshVr_vs_HLSL hlsl
 {
 	source HiddenAreaMeshVr_vs.hlsl
 	entry_point main
+	sets_vp_or_rt_array_index true
 	target vs_5_0 vs_4_0 vs_4_0_level_9_1 vs_4_0_level_9_3
 }
 
