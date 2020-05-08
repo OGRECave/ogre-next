@@ -42,7 +42,6 @@ namespace Ogre
                                               uint32 width, uint32 height, uint32 depthOrSlices,
                                               D3D11Device &device ) :
         StagingTexture( vaoManager, formatFamily ),
-        mStagingTexture( 0 ),
         mWidth( width ),
         mHeight( height ),
         mDepthOrSlices( depthOrSlices ),
@@ -79,7 +78,7 @@ namespace Ogre
 
             ID3D11Texture3D *texture = 0;
             hr = mDevice->CreateTexture3D( &desc, 0, &texture );
-            mStagingTexture = texture;
+            mStagingTexture.Attach( texture );
             mIsArray2DTexture = false;
 
             mSubresourceData.resize( 1u );
@@ -115,7 +114,7 @@ namespace Ogre
 
             ID3D11Texture2D *texture = 0;
             hr = mDevice->CreateTexture2D( &desc, 0, &texture );
-            mStagingTexture = texture;
+            mStagingTexture.Attach( texture );
             mIsArray2DTexture = true;
 
             mSubresourceData.resize( mDepthOrSlices );
@@ -129,7 +128,6 @@ namespace Ogre
 
         if( FAILED(hr) || mDevice.isError() )
         {
-            SAFE_RELEASE( mStagingTexture );
             String errorDescription = mDevice.getErrorDescription( hr );
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Error creating StagingTexture\nError Description:" + errorDescription,
@@ -146,8 +144,6 @@ namespace Ogre
                         "call stopMapRegion. Calling it for you.", LML_CRITICAL );
             stopMapRegion();
         }
-
-        SAFE_RELEASE( mStagingTexture );
     }
     //-----------------------------------------------------------------------------------
     bool D3D11StagingTexture::supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
@@ -579,7 +575,7 @@ namespace Ogre
         for( uint32 i=0; i<numSlices; ++i )
         {
             const UINT subresourceIdx = D3D11CalcSubresource( 0, i, 1u );
-            HRESULT hr = context->Map( mStagingTexture, subresourceIdx,
+            HRESULT hr = context->Map( mStagingTexture.Get(), subresourceIdx,
                                        D3D11_MAP_WRITE, 0, &mSubresourceData[i] );
             mLastSubresourceData[i] = mSubresourceData[i];
 
@@ -608,7 +604,7 @@ namespace Ogre
         for( uint32 i=0; i<numSlices; ++i )
         {
             const UINT subresourceIdx = D3D11CalcSubresource( 0, i, 1u );
-            context->Unmap( mStagingTexture, subresourceIdx );
+            context->Unmap( mStagingTexture.Get(), subresourceIdx );
             memset( &mSubresourceData[i], 0, sizeof( D3D11_MAPPED_SUBRESOURCE ) );
         }
         mFreeBoxes.clear();
@@ -678,7 +674,7 @@ namespace Ogre
                                                                  dstTexture->getNumMipmaps() );
 
             context->CopySubresourceRegion( dstTextureD3d->getFinalTextureName(), dstSubResourceIdx,
-                                            xPos, yPos, zPos, mStagingTexture,
+                                            xPos, yPos, zPos, mStagingTexture.Get(),
                                             srcSubResourceIdx, &srcBoxD3d );
             ++dstSlicePos;
             if( !mIsArray2DTexture )

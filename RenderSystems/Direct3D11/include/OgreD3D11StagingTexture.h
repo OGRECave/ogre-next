@@ -47,7 +47,7 @@ namespace Ogre
         /// Fortunately D3D11 allows us to copy slices of 3D textures into
         /// 2D textures; so we use 3D Staging Textures whenever possible
         /// because they can be mapped like in other APIs.
-        ID3D11Resource *mStagingTexture;
+        ComPtr<ID3D11Resource> mStagingTexture;
         D3D11_MAPPED_SUBRESOURCEVec mSubresourceData;
         D3D11_MAPPED_SUBRESOURCEVec mLastSubresourceData;
         uint32 mWidth;

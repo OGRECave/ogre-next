@@ -61,8 +61,8 @@ namespace Ogre
                                                        public RenderSystem::Listener
     {
     protected:
-        ID3D11RenderTargetView  *mColourRtv[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        ID3D11DepthStencilView  *mDepthStencilRtv;
+        ComPtr<ID3D11RenderTargetView>  mColourRtv[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        ComPtr<ID3D11DepthStencilView>  mDepthStencilRtv;
         bool                    mHasStencilFormat;
         bool                    mHasRenderWindow;
 

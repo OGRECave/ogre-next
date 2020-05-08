@@ -40,7 +40,7 @@ namespace Ogre
     class _OgreD3D11Export D3D11AsyncTextureTicket : public AsyncTextureTicket
     {
     protected:
-        ID3D11Resource  *mStagingTexture;
+        ComPtr<ID3D11Resource> mStagingTexture;
 
         uint32          mDownloadFrame;
         ID3D11Query     *mAccurateFence;

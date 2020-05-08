@@ -52,14 +52,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     D3D11UavBufferPacked::~D3D11UavBufferPacked()
     {
-        for( int i=0; i<16; ++i )
-        {
-            if( mCachedResourceViews[i].mResourceView )
-            {
-                mCachedResourceViews[i].mResourceView->Release();
-                mCachedResourceViews[i].mResourceView = 0;
-            }
-        }
     }
     //-----------------------------------------------------------------------------------
     TexBufferPacked* D3D11UavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
@@ -87,8 +79,7 @@ namespace Ogre
     {
         assert( cacheIdx < 16 );
 
-        if( mCachedResourceViews[cacheIdx].mResourceView )
-            mCachedResourceViews[cacheIdx].mResourceView->Release();
+        mCachedResourceViews[cacheIdx].mResourceView.Reset();
 
         mCachedResourceViews[cacheIdx].mOffset  = mFinalBufferStart + offset;
         mCachedResourceViews[cacheIdx].mSize    = sizeBytes;
@@ -109,10 +100,10 @@ namespace Ogre
         ID3D11Buffer *vboName = bufferInterface->getVboName();
 
         mDevice.get()->CreateUnorderedAccessView( vboName, &srDesc,
-                                                  &mCachedResourceViews[cacheIdx].mResourceView );
+            mCachedResourceViews[cacheIdx].mResourceView.ReleaseAndGetAddressOf() );
         mCurrentCacheCursor = (cacheIdx + 1) % 16;
 
-        return mCachedResourceViews[cacheIdx].mResourceView;
+        return mCachedResourceViews[cacheIdx].mResourceView.Get();
     }
     //-----------------------------------------------------------------------------------
     ID3D11UnorderedAccessView* D3D11UavBufferPacked::_bindBufferCommon( size_t offset, size_t sizeBytes )
@@ -130,7 +121,7 @@ namespace Ogre
             if( mFinalBufferStart + offset == mCachedResourceViews[i].mOffset &&
                 sizeBytes <= mCachedResourceViews[i].mSize )
             {
-                resourceView = mCachedResourceViews[i].mResourceView;
+                resourceView = mCachedResourceViews[i].mResourceView.Get();
                 break;
             }
             else if( !mCachedResourceViews[i].mResourceView )

@@ -65,12 +65,11 @@ namespace Ogre
         //Uncomment this code to get detailed information of resource leaks.
         if( mD3D11Device )
         {
-            ID3D11Debug *d3dDebug = 0;
-            mD3D11Device->QueryInterface( __uuidof(ID3D11Debug), reinterpret_cast<void**>(&d3dDebug) );
+            ComPtr<ID3D11Debug> d3dDebug;
+            mD3D11Device->QueryInterface( d3dDebug.GetAddressOf() );
             if( d3dDebug )
             {
                 d3dDebug->ReportLiveDeviceObjects( D3D11_RLDO_DETAIL );
-                d3dDebug->Release();
             }
         }*/
 

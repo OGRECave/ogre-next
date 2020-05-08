@@ -40,23 +40,16 @@ namespace Ogre
 {
     D3D11RenderPassDescriptor::D3D11RenderPassDescriptor( D3D11Device &device,
                                                           D3D11RenderSystem *renderSystem ) :
-        mDepthStencilRtv( 0 ),
         mHasStencilFormat( false ),
         mHasRenderWindow( false ),
         mSharedFboItor( renderSystem->_getFrameBufferDescMap().end() ),
         mDevice( device ),
         mRenderSystem( renderSystem )
     {
-        memset( mColourRtv, 0, sizeof(mColourRtv) );
     }
     //-----------------------------------------------------------------------------------
     D3D11RenderPassDescriptor::~D3D11RenderPassDescriptor()
     {
-        for( size_t i=0u; i<mNumColourEntries; ++i )
-            SAFE_RELEASE( mColourRtv[i] );
-
-        SAFE_RELEASE( mDepthStencilRtv );
-
         D3D11FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
         if( mSharedFboItor != frameBufferDescMap.end() )
         {
@@ -161,13 +154,13 @@ namespace Ogre
             for( size_t i=mNumColourEntries; i<lastNumColourEntries; ++i )
             {
                 //Detach removed colour entries
-                SAFE_RELEASE( mColourRtv[i] );
+                mColourRtv[i].Reset();
             }
         }
 
         for( size_t i=0; i<mNumColourEntries; ++i )
         {
-            SAFE_RELEASE( mColourRtv[i] );
+            mColourRtv[i].Reset();
 
             if( mColour[i].texture->getResidencyStatus() != GpuResidency::Resident )
             {
@@ -260,7 +253,8 @@ namespace Ogre
                 resourceTex = textureD3d->getFinalTextureName();
             }
 
-            HRESULT hr = mDevice->CreateRenderTargetView( resourceTex, &viewDesc, &mColourRtv[i] );
+            HRESULT hr = mDevice->CreateRenderTargetView( resourceTex, &viewDesc,
+                                                          mColourRtv[i].ReleaseAndGetAddressOf() );
 
             if( FAILED(hr) || mDevice.isError() )
             {
@@ -276,7 +270,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11RenderPassDescriptor::updateDepthRtv(void)
     {
-        SAFE_RELEASE( mDepthStencilRtv );
+        mDepthStencilRtv.Reset();
         mHasStencilFormat = false;
 
         if( !mDepth.texture )
@@ -316,11 +310,11 @@ namespace Ogre
         assert( dynamic_cast<D3D11TextureGpu*>( mDepth.texture ) );
         D3D11TextureGpu *texture = static_cast<D3D11TextureGpu*>( mDepth.texture );
 
-        HRESULT hr = mDevice->CreateDepthStencilView( texture->getFinalTextureName(),
-                                                      &depthStencilDesc, &mDepthStencilRtv );
+        HRESULT hr = mDevice->CreateDepthStencilView( texture->getFinalTextureName(), &depthStencilDesc,
+                                                      mDepthStencilRtv.ReleaseAndGetAddressOf() );
         if( FAILED(hr) )
         {
-            SAFE_RELEASE( mDepthStencilRtv );
+            mDepthStencilRtv.Reset();
             String errorDescription = mDevice.getErrorDescription(hr);
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Unable to create depth stencil view for texture '" +
@@ -433,12 +427,12 @@ namespace Ogre
                         clearColour[1] = mColour[i].clearColour.g;
                         clearColour[2] = mColour[i].clearColour.b;
                         clearColour[3] = mColour[i].clearColour.a;
-                        context->ClearRenderTargetView( mColourRtv[i], clearColour );
+                        context->ClearRenderTargetView( mColourRtv[i].Get(), clearColour );
                     }
                     else if( mColour[i].loadAction == LoadAction::DontCare )
                     {
                         if( context1 )
-                            context1->DiscardView( mColourRtv[i] );
+                            context1->DiscardView( mColourRtv[i].Get() );
                     }
                 }
             }
@@ -454,7 +448,7 @@ namespace Ogre
                  !mHasStencilFormat) )
             {
                 if( context1 )
-                    context1->DiscardView( mDepthStencilRtv );
+                    context1->DiscardView( mDepthStencilRtv.Get() );
             }
 
             if( mDepth.loadAction == LoadAction::Clear ||
@@ -471,20 +465,20 @@ namespace Ogre
                     clearDepthValue = mDepth.clearDepth;
                 else
                     clearDepthValue = 1.0f - mDepth.clearDepth;
-                context->ClearDepthStencilView( mDepthStencilRtv, flags,
+                context->ClearDepthStencilView( mDepthStencilRtv.Get(), flags,
                                                 clearDepthValue, mStencil.clearStencil );
             }
         }
 
         if( !descSetUav )
-            context->OMSetRenderTargets( mNumColourEntries, mColourRtv, mDepthStencilRtv );
+            context->OMSetRenderTargets( mNumColourEntries, mColourRtv[0].GetAddressOf(), mDepthStencilRtv.Get() );
         else
         {
             const UINT numUavs = static_cast<UINT>( descSetUav->mUavs.size() );
             ID3D11UnorderedAccessView **uavList =
                     reinterpret_cast<ID3D11UnorderedAccessView**>( descSetUav->mRsData );
-            context->OMSetRenderTargetsAndUnorderedAccessViews( mNumColourEntries, mColourRtv,
-                                                                mDepthStencilRtv, uavStartingSlot,
+            context->OMSetRenderTargetsAndUnorderedAccessViews( mNumColourEntries, mColourRtv[0].GetAddressOf(),
+                                                                mDepthStencilRtv.Get(), uavStartingSlot,
                                                                 numUavs, uavList, 0 );
         }
     }
@@ -538,7 +532,7 @@ namespace Ogre
                         mColour[i].storeAction == StoreAction::MultisampleResolve )
                     {
                         if( context1 )
-                            context1->DiscardView( mColourRtv[i] );
+                            context1->DiscardView( mColourRtv[i].Get() );
                     }
                 }
             }
@@ -550,7 +544,7 @@ namespace Ogre
             mDepthStencilRtv )
         {
             if( context1 )
-                context1->DiscardView( mDepthStencilRtv );
+                context1->DiscardView( mDepthStencilRtv.Get() );
         }
 
         //Prevent the runtime from thinking we might be sampling from the render target
@@ -570,7 +564,7 @@ namespace Ogre
                 clearValue[1] = mColour[i].clearColour.g;
                 clearValue[2] = mColour[i].clearColour.b;
                 clearValue[3] = mColour[i].clearColour.a;
-                context->ClearRenderTargetView( mColourRtv[i], clearValue );
+                context->ClearRenderTargetView( mColourRtv[i].Get(), clearValue );
             }
         }
 
@@ -589,7 +583,7 @@ namespace Ogre
                 clearDepthValue = mDepth.clearDepth;
             else
                 clearDepthValue = 1.0f - mDepth.clearDepth;
-            context->ClearDepthStencilView( mDepthStencilRtv, flags,
+            context->ClearDepthStencilView( mDepthStencilRtv.Get(), flags,
                                             clearDepthValue, mStencil.clearStencil );
         }
     }
@@ -606,12 +600,12 @@ namespace Ogre
             }
 
             ID3D11RenderTargetView **outRtv = (ID3D11RenderTargetView**)pData;
-            *outRtv = mColourRtv[extraParam];
+            *outRtv = mColourRtv[extraParam].Get();
         }
         else if( name == "ID3D11DepthStencilView" )
         {
             ID3D11DepthStencilView **outDsv = (ID3D11DepthStencilView**)pData;
-            *outDsv = mDepthStencilRtv;
+            *outDsv = mDepthStencilRtv.Get();
         }
         else
         {
@@ -642,8 +636,8 @@ namespace Ogre
         {
             if( eventName == "WindowBeforeResize" )
             {
-                SAFE_RELEASE( mColourRtv[0] );
-                SAFE_RELEASE( mDepthStencilRtv );
+                mColourRtv[0].Reset();
+                mDepthStencilRtv.Reset();
             }
             else
             {

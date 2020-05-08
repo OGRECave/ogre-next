@@ -44,7 +44,7 @@ namespace Ogre
 
         struct CachedResourceView
         {
-            ID3D11UnorderedAccessView   *mResourceView;
+            ComPtr<ID3D11UnorderedAccessView> mResourceView;
             uint32                      mOffset;
             uint32                      mSize;
         };

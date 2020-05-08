@@ -727,7 +727,7 @@ namespace Ogre
     Window* D3D11RenderSystem::_initialise( bool autoCreateWindow, const String& windowTitle )
     {
         Window* autoWindow = NULL;
-        LogManager::getSingleton().logMessage( "D3D11 : Subsystem Initialising" );
+        LogManager::getSingleton().logMessage( "D3D11: Subsystem Initialising" );
 
         if(IsWorkingUnderNsight())
             LogManager::getSingleton().logMessage( "D3D11: Nvidia Nsight found");
@@ -1031,13 +1031,11 @@ namespace Ogre
 
 #ifdef _WIN32_WINNT_WIN10
         //Check if D3D11.3 is installed. If so, typed UAV loads are supported
-        ID3D11Device3 *d3dDeviceVersion113 = 0;
-        HRESULT hr = mDevice->QueryInterface( __uuidof(ID3D11Device3),
-                                              reinterpret_cast<void**>( &d3dDeviceVersion113 ) );
+        ComPtr<ID3D11Device3> d3dDeviceVersion113;
+        HRESULT hr = mDevice->QueryInterface( d3dDeviceVersion113.GetAddressOf() );
         if( SUCCEEDED( hr ) && d3dDeviceVersion113 )
         {
             rsc->setCapability(RSC_TYPED_UAV_LOADS);
-            d3dDeviceVersion113->Release();
         }
 #ifdef NTDDI_WIN10_TH2
         D3D11_FEATURE_DATA_D3D11_OPTIONS3 fOpt3 = {};

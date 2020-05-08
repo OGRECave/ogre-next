@@ -47,7 +47,6 @@ namespace Ogre
                                                       D3D11VaoManager *vaoManager ) :
         AsyncTextureTicket( width, height, depthOrSlices, textureType,
                             pixelFormatFamily ),
-        mStagingTexture( 0 ),
         mDownloadFrame( 0 ),
         mAccurateFence( 0 ),
         mVaoManager( vaoManager ),
@@ -82,7 +81,7 @@ namespace Ogre
 
             ID3D11Texture3D *texture = 0;
             hr = device->CreateTexture3D( &desc, 0, &texture );
-            mStagingTexture = texture;
+            mStagingTexture.Attach( texture );
         }
         else
         {
@@ -108,13 +107,12 @@ namespace Ogre
 
             ID3D11Texture2D *texture = 0;
             hr = device->CreateTexture2D( &desc, 0, &texture );
-            mStagingTexture = texture;
+            mStagingTexture.Attach( texture );
             mIsArray2DTexture = true;
         }
 
         if( FAILED(hr) || device.isError() )
         {
-            SAFE_RELEASE( mStagingTexture );
             String errorDescription = device.getErrorDescription( hr );
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Error creating AsyncTextureTicket\nError Description:" + errorDescription,
@@ -127,7 +125,6 @@ namespace Ogre
         if( mStatus == Mapped )
             unmap();
 
-        SAFE_RELEASE( mStagingTexture );
         SAFE_RELEASE( mAccurateFence );
     }
     //-----------------------------------------------------------------------------------
@@ -211,7 +208,7 @@ namespace Ogre
                                                                  textureSrc->getNumMipmaps() );
             const UINT dstSubResourceIdx = D3D11CalcSubresource( 0, dstSlicePos, 1u );
 
-            context->CopySubresourceRegion( mStagingTexture, dstSubResourceIdx,
+            context->CopySubresourceRegion( mStagingTexture.Get(), dstSubResourceIdx,
                                             0, 0, zPos, srcTextureD3d->getFinalTextureName(),
                                             srcSubResourceIdx, &srcBoxD3d );
             if( textureType == TextureTypes::Type3D )
@@ -253,7 +250,7 @@ namespace Ogre
         const UINT subresourceIdx = D3D11CalcSubresource( 0, slice, 1u );
 
         D3D11_MAPPED_SUBRESOURCE mappedSubresource;
-        context->Map( mStagingTexture, subresourceIdx, D3D11_MAP_READ, 0, &mappedSubresource );
+        context->Map( mStagingTexture.Get(), subresourceIdx, D3D11_MAP_READ, 0, &mappedSubresource );
 
         TextureBox retVal( mWidth, mHeight, getDepth(), getNumSlices(),
                            PixelFormatGpuUtils::getBytesPerPixel( mPixelFormatFamily ),
@@ -269,7 +266,7 @@ namespace Ogre
 
         D3D11Device &device = mVaoManager->getDevice();
         ID3D11DeviceContextN *context = device.GetImmediateContext();
-        context->Unmap( mStagingTexture, subresourceIdx );
+        context->Unmap( mStagingTexture.Get(), subresourceIdx );
     }
     //-----------------------------------------------------------------------------------
     bool D3D11AsyncTextureTicket::canMapMoreThanOneSlice(void) const
