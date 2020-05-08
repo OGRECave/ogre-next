@@ -236,6 +236,11 @@ namespace Ogre
         */
         virtual void shutdown(void);
 
+        /** Some render systems have moments when GPU device is temporarily unavailable,
+            for example when D3D11 device is lost, or when iOS app is in background, etc.
+         */
+        virtual bool validateDevice( bool forceDeviceElection = false ) { return true; }
+
         /** Sets whether or not W-buffers are enabled if they are available for this renderer.
         @param
         enabled If true and the renderer supports them W-buffers will be used.  If false 

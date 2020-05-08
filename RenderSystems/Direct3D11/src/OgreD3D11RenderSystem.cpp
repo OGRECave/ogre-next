@@ -1692,10 +1692,10 @@ namespace Ogre
         LogManager::getSingleton().logMessage("D3D11: Device was restored.");
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::validateDevice(bool forceDeviceElection)
+    bool D3D11RenderSystem::validateDevice(bool forceDeviceElection)
     {
         if(mDevice.isNull())
-            return;
+            return false;
 
         // The D3D Device is no longer valid if the elected adapter changes or if
         // the device has been removed.
@@ -1715,7 +1715,11 @@ namespace Ogre
         if(anotherIsElected || mDevice.IsDeviceLost())
         {
             handleDeviceLost();
+
+            return !mDevice.IsDeviceLost();
         }
+
+        return true;
     }
     //---------------------------------------------------------------------
     VertexElementType D3D11RenderSystem::getColourVertexElementType(void) const

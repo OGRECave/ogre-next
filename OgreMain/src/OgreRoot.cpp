@@ -923,6 +923,10 @@ namespace Ogre {
             OgreProfileGpuBeginDynamicHashed( frameNum.c_str(), &hashValue );
         }
 #endif
+
+        if(!mActiveRenderer->validateDevice())
+            return false;
+
         _syncAddedRemovedFrameListeners();
 
         // Tell all listeners

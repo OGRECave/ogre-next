@@ -232,7 +232,7 @@ namespace Ogre
         void setConfigOption( const String &name, const String &value );
         void reinitialise();
         void shutdown();
-        void validateDevice(bool forceDeviceElection = false);
+        bool validateDevice(bool forceDeviceElection = false);
         void handleDeviceLost();
         void setShadingType( ShadeOptions so );
         void setLightingEnabled( bool enabled );

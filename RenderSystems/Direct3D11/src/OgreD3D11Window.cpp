@@ -377,6 +377,9 @@ namespace Ogre
             UINT syncInterval = mUseFlipMode ? std::max( 1u, mVSyncInterval ) :
                                                          (mVSync ? mVSyncInterval : 0);
             HRESULT hr = mSwapChain->Present( syncInterval, 0 );
+            if(hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
+                return;
+
             if( FAILED(hr) )
             {
                 OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
