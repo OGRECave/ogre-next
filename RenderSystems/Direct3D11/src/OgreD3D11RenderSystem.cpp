@@ -1790,18 +1790,17 @@ namespace Ogre
                                           uint32 hazardousTexIdx )
     {
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
-        ID3D11ShaderResourceView **srvList =
-                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        ComPtr<ID3D11ShaderResourceView> *srvList =
+                reinterpret_cast<ComPtr<ID3D11ShaderResourceView>*>( set->mRsData );
 
-        ID3D11ShaderResourceView *hazardousSrv = 0;
+        ComPtr<ID3D11ShaderResourceView> hazardousSrv;
         if( hazardousTexIdx < set->mTextures.size() )
         {
             //Is the texture currently bound as RTT?
             if( mCurrentRenderPassDescriptor->hasAttachment( set->mTextures[hazardousTexIdx] ) )
             {
                 //Then do not set it!
-                hazardousSrv = srvList[hazardousTexIdx];
-                srvList[hazardousTexIdx] = 0;
+                srvList[hazardousTexIdx].Swap( hazardousSrv );
             }
         }
 
@@ -1815,19 +1814,19 @@ namespace Ogre
             switch( i )
             {
             case VertexShader:
-                context->VSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                context->VSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf() );
                 break;
             case PixelShader:
-                context->PSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                context->PSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf());
                 break;
             case GeometryShader:
-                context->GSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                context->GSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf());
                 break;
             case HullShader:
-                context->HSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                context->HSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf());
                 break;
             case DomainShader:
-                context->DSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                context->DSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf());
                 break;
             }
 
@@ -1838,14 +1837,14 @@ namespace Ogre
 
         //Restore the SRV with the hazardous texture.
         if( hazardousSrv )
-            srvList[hazardousTexIdx] = hazardousSrv;
+            srvList[hazardousTexIdx].Swap( hazardousSrv );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
     {
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
-        ID3D11ShaderResourceView **srvList =
-                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        ComPtr<ID3D11ShaderResourceView> *srvList =
+                reinterpret_cast<ComPtr<ID3D11ShaderResourceView>*>( set->mRsData );
         UINT texIdx = 0;
         for( size_t i=0u; i<NumShaderTypes; ++i )
         {
@@ -1856,19 +1855,19 @@ namespace Ogre
             switch( i )
             {
             case VertexShader:
-                context->VSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                context->VSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf() );
                 break;
             case PixelShader:
-                context->PSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                context->PSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf() );
                 break;
             case GeometryShader:
-                context->GSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                context->GSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf() );
                 break;
             case HullShader:
-                context->HSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                context->HSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf() );
                 break;
             case DomainShader:
-                context->DSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                context->DSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf() );
                 break;
             }
 
@@ -1937,8 +1936,8 @@ namespace Ogre
         uint32 newSrvCount = 0;
 
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
-        ID3D11ShaderResourceView **srvList =
-                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        ComPtr<ID3D11ShaderResourceView> *srvList =
+                reinterpret_cast<ComPtr<ID3D11ShaderResourceView>*>( set->mRsData );
         UINT texIdx = 0;
         for( size_t i=0u; i<NumShaderTypes; ++i )
         {
@@ -1946,7 +1945,7 @@ namespace Ogre
             if( !numTexturesUsed )
                 continue;
 
-            context->CSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+            context->CSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf() );
 
             mMaxComputeShaderSrvCount = std::max( mMaxComputeShaderSrvCount,
                                                   slotStart + texIdx + numTexturesUsed );
@@ -1969,8 +1968,8 @@ namespace Ogre
         uint32 newSrvCount = 0;
 
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
-        ID3D11ShaderResourceView **srvList =
-                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        ComPtr<ID3D11ShaderResourceView> *srvList =
+                reinterpret_cast<ComPtr<ID3D11ShaderResourceView>*>( set->mRsData );
         UINT texIdx = 0;
         for( size_t i=0u; i<NumShaderTypes; ++i )
         {
@@ -1978,7 +1977,7 @@ namespace Ogre
             if( !numTexturesUsed )
                 continue;
 
-            context->CSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+            context->CSSetShaderResources( slotStart + texIdx, numTexturesUsed, srvList[texIdx].GetAddressOf() );
 
             newSrvCount = std::max( newSrvCount, slotStart + texIdx + numTexturesUsed );
             texIdx += numTexturesUsed;
@@ -2444,7 +2443,7 @@ namespace Ogre
     void D3D11RenderSystem::_descriptorSetTextureCreated( DescriptorSetTexture *newSet )
     {
         const size_t numElements = newSet->mTextures.size();
-        ID3D11ShaderResourceView **srvList = new ID3D11ShaderResourceView*[numElements];
+        ComPtr<ID3D11ShaderResourceView> *srvList = new ComPtr<ID3D11ShaderResourceView>[numElements];
         newSet->mRsData = srvList;
 
         size_t texIdx = 0;
@@ -2460,10 +2459,6 @@ namespace Ogre
                     const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( *itor );
                     srvList[texIdx] = texture->createSrv();
                 }
-                else
-                {
-                    srvList[texIdx] = 0;
-                }
 
                 ++texIdx;
                 ++itor;
@@ -2474,13 +2469,8 @@ namespace Ogre
     void D3D11RenderSystem::_descriptorSetTextureDestroyed( DescriptorSetTexture *set )
     {
         const size_t numElements = set->mTextures.size();
-        ID3D11ShaderResourceView **srvList =
-                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
-        for( size_t i=0; i<numElements; ++i )
-        {
-            if( srvList[i] )
-                srvList[i]->Release();
-        }
+        ComPtr<ID3D11ShaderResourceView> *srvList =
+                reinterpret_cast<ComPtr<ID3D11ShaderResourceView>*>( set->mRsData );
 
         delete [] srvList;
         set->mRsData = 0;
@@ -2489,7 +2479,7 @@ namespace Ogre
     void D3D11RenderSystem::_descriptorSetTexture2Created( DescriptorSetTexture2 *newSet )
     {
         const size_t numElements = newSet->mTextures.size();
-        ID3D11ShaderResourceView **srvList = new ID3D11ShaderResourceView*[numElements];
+        ComPtr<ID3D11ShaderResourceView> *srvList = new ComPtr<ID3D11ShaderResourceView>[numElements];
         newSet->mRsData = srvList;
 
         FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = newSet->mTextures.begin();
@@ -2497,7 +2487,7 @@ namespace Ogre
         for( size_t i=0u; i<numElements; ++i )
         {
             if( itor->empty() )
-                srvList[i] = 0;
+                ;
             else if( itor->isTexture() )
             {
                 const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
@@ -2519,10 +2509,8 @@ namespace Ogre
     void D3D11RenderSystem::_descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set )
     {
         const size_t numElements = set->mTextures.size();
-        ID3D11ShaderResourceView **srvList =
-                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
-        for( size_t i=0; i<numElements; ++i )
-            srvList[i]->Release();
+        ComPtr<ID3D11ShaderResourceView> *srvList =
+                reinterpret_cast<ComPtr<ID3D11ShaderResourceView>*>( set->mRsData );
 
         delete [] srvList;
         set->mRsData = 0;

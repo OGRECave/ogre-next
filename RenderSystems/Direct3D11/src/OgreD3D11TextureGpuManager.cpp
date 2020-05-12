@@ -48,8 +48,6 @@ namespace Ogre
         TextureGpuManager( vaoManager, renderSystem ),
         mDevice( device )
     {
-        memset( mBlankTexture, 0, sizeof(mBlankTexture) );
-
         D3D11_TEXTURE1D_DESC desc1;
         D3D11_TEXTURE2D_DESC desc2;
         D3D11_TEXTURE3D_DESC desc3;
@@ -118,25 +116,25 @@ namespace Ogre
             case TextureTypes::Type1D:
             case TextureTypes::Type1DArray:
                 hr = mDevice->CreateTexture1D( &desc1, &dataWhite, &tex1D );
-                mBlankTexture[i] = tex1D;
+                mBlankTexture[i].Attach( tex1D );
                 break;
             case TextureTypes::Type2D:
             case TextureTypes::Type2DArray:
                 hr = mDevice->CreateTexture2D( &desc2, &dataWhite, &tex2D );
-                mBlankTexture[i] = tex2D;
+                mBlankTexture[i].Attach( tex2D );
                 break;
             case TextureTypes::TypeCube:
             case TextureTypes::TypeCubeArray:
                 desc2.ArraySize = 6;
                 desc2.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
                 hr = mDevice->CreateTexture2D( &desc2, dataBlack, &tex2D );
-                mBlankTexture[i] = tex2D;
+                mBlankTexture[i].Attach( tex2D );
                 desc2.MiscFlags = 0;
                 desc2.ArraySize = 1;
                 break;
             case TextureTypes::Type3D:
                 hr = mDevice->CreateTexture3D( &desc3, &dataWhite, &tex3D );
-                mBlankTexture[i] = tex3D;
+                mBlankTexture[i].Attach( tex3D );
                 break;
             }
 
@@ -148,7 +146,7 @@ namespace Ogre
                                 "D3D11TextureGpuManager::D3D11TextureGpuManager" );
             }
 
-            hr = device->CreateShaderResourceView( mBlankTexture[i], 0, &mDefaultSrv[i] );
+            hr = device->CreateShaderResourceView( mBlankTexture[i].Get(), 0, mDefaultSrv[i].GetAddressOf() );
             if( FAILED(hr) || mDevice.isError() )
             {
                 String errorDescription = mDevice.getErrorDescription( hr );
@@ -165,14 +163,6 @@ namespace Ogre
     D3D11TextureGpuManager::~D3D11TextureGpuManager()
     {
         destroyAll();
-
-        for( int i=1; i<=TextureTypes::Type3D; ++i )
-        {
-            SAFE_RELEASE( mDefaultSrv[i] );
-            SAFE_RELEASE( mBlankTexture[i] );
-        }
-        memset( mBlankTexture, 0, sizeof(mBlankTexture) );
-        memset( mDefaultSrv, 0, sizeof(mDefaultSrv) );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* D3D11TextureGpuManager::createTextureGpuWindow( bool fromFlipModeSwapchain,
@@ -201,13 +191,13 @@ namespace Ogre
     ID3D11Resource* D3D11TextureGpuManager::getBlankTextureD3dName(
             TextureTypes::TextureTypes textureType ) const
     {
-        return mBlankTexture[textureType];
+        return mBlankTexture[textureType].Get();
     }
     //-----------------------------------------------------------------------------------
     ID3D11ShaderResourceView* D3D11TextureGpuManager::getBlankTextureSrv(
             TextureTypes::TextureTypes textureType ) const
     {
-        return mDefaultSrv[textureType];
+        return mDefaultSrv[textureType].Get();
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* D3D11TextureGpuManager::createTextureImpl(

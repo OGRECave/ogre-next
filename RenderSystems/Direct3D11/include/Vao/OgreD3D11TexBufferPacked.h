@@ -65,7 +65,7 @@ namespace Ogre
                               PixelFormatGpu pf, bool bIsStructured, D3D11Device &device );
         virtual ~D3D11TexBufferPacked();
 
-        ID3D11ShaderResourceView* createSrv( const DescriptorSetTexture2::BufferSlot &bufferSlot ) const;
+        ComPtr<ID3D11ShaderResourceView> createSrv( const DescriptorSetTexture2::BufferSlot &bufferSlot ) const;
 
         virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
         virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );

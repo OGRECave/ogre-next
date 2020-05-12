@@ -48,8 +48,8 @@ namespace Ogre
     {
     protected:
         /// 4x4 texture for when we have nothing to display.
-        ID3D11Resource              *mBlankTexture[TextureTypes::Type3D + 1u];
-        ID3D11ShaderResourceView    *mDefaultSrv[TextureTypes::Type3D + 1u];
+        ComPtr<ID3D11Resource>              mBlankTexture[TextureTypes::Type3D + 1u];
+        ComPtr<ID3D11ShaderResourceView>    mDefaultSrv[TextureTypes::Type3D + 1u];
 
         D3D11Device &mDevice;
 

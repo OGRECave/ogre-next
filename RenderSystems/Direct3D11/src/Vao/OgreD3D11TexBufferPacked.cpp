@@ -135,7 +135,7 @@ namespace Ogre
         return resourceView;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11ShaderResourceView* D3D11TexBufferPacked::createSrv(
+    ComPtr<ID3D11ShaderResourceView> D3D11TexBufferPacked::createSrv(
             const DescriptorSetTexture2::BufferSlot &bufferSlot ) const
     {
         assert( bufferSlot.offset <= getTotalSizeBytes() );
@@ -162,8 +162,8 @@ namespace Ogre
                                                         mBufferInterface );
         ID3D11Buffer *vboName = bufferInterface->getVboName();
 
-        ID3D11ShaderResourceView *retVal = 0;
-        HRESULT hr = mDevice->CreateShaderResourceView( vboName, &srvDesc, &retVal );
+        ComPtr<ID3D11ShaderResourceView> retVal;
+        HRESULT hr = mDevice->CreateShaderResourceView( vboName, &srvDesc, retVal.GetAddressOf() );
 
         if( FAILED(hr) )
         {

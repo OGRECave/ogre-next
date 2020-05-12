@@ -47,7 +47,6 @@ namespace Ogre
                                       TextureTypes::TextureTypes initialType,
                                       TextureGpuManager *textureManager ) :
         TextureGpu( pageOutStrategy, vaoManager, name, textureFlags, initialType, textureManager ),
-        mDefaultDisplaySrv( 0 ),
         mDisplayTextureName( 0 ),
         mFinalTextureName( 0 ),
         mMsaaFramebufferName( 0 )
@@ -58,9 +57,6 @@ namespace Ogre
     D3D11TextureGpu::~D3D11TextureGpu()
     {
         destroyInternalResourcesImpl();
-
-        //destroyInternalResourcesImpl grabbed the dummy SRV again. Release it.
-        SAFE_RELEASE( mDefaultDisplaySrv );
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::create1DTexture(void)
@@ -322,7 +318,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::destroyInternalResourcesImpl(void)
     {
-        SAFE_RELEASE( mDefaultDisplaySrv );
+        mDefaultDisplaySrv.Reset();
 
         if( !hasAutomaticBatching() )
         {
@@ -350,7 +346,7 @@ namespace Ogre
         assert( mResidencyStatus == GpuResidency::Resident );
         assert( mFinalTextureName || mPixelFormat == PFG_NULL );
 
-        SAFE_RELEASE( mDefaultDisplaySrv );
+        mDefaultDisplaySrv.Reset();
 
         mDisplayTextureName = mFinalTextureName;
         if( isTexture() )
@@ -370,7 +366,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::_setToDisplayDummyTexture(void)
     {
-        SAFE_RELEASE( mDefaultDisplaySrv );
+        mDefaultDisplaySrv.Reset();
 
         if( !mTextureManager )
         {
@@ -386,7 +382,6 @@ namespace Ogre
             if( isTexture() )
             {
                 mDefaultDisplaySrv = textureManagerD3d->getBlankTextureSrv( TextureTypes::Type2DArray );
-                mDefaultDisplaySrv->AddRef();
             }
         }
         else
@@ -395,7 +390,6 @@ namespace Ogre
             if( isTexture() )
             {
                 mDefaultDisplaySrv = textureManagerD3d->getBlankTextureSrv( mTextureType );
-                mDefaultDisplaySrv->AddRef();
             }
         }
     }
@@ -512,10 +506,10 @@ namespace Ogre
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
         D3D11Device &device = textureManagerD3d->getDevice();
-        device.GetImmediateContext()->GenerateMips( mDefaultDisplaySrv );
+        device.GetImmediateContext()->GenerateMips( mDefaultDisplaySrv.Get() );
     }
     //-----------------------------------------------------------------------------------
-    ID3D11ShaderResourceView* D3D11TextureGpu::createSrv(
+    ComPtr<ID3D11ShaderResourceView> D3D11TextureGpu::createSrv(
             const DescriptorSetTexture2::TextureSlot &texSlot ) const
     {
         assert( isTexture() &&
@@ -590,8 +584,8 @@ namespace Ogre
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
         D3D11Device &device = textureManagerD3d->getDevice();
-        ID3D11ShaderResourceView *retVal = 0;
-        HRESULT hr = device->CreateShaderResourceView( mDisplayTextureName, srvDescPtr, &retVal );
+        ComPtr<ID3D11ShaderResourceView> retVal;
+        HRESULT hr = device->CreateShaderResourceView( mDisplayTextureName, srvDescPtr, retVal.GetAddressOf() );
         if( FAILED(hr) || device.isError() )
         {
             String errorDescription = device.getErrorDescription( hr );
@@ -604,16 +598,15 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11ShaderResourceView* D3D11TextureGpu::createSrv(void) const
+    ComPtr<ID3D11ShaderResourceView> D3D11TextureGpu::createSrv(void) const
     {
         assert( isTexture() &&
                 "This texture is marked as 'TextureFlags::NotTexture', which "
                 "means it can't be used for reading as a regular texture." );
-        assert( mDefaultDisplaySrv &&
+        assert( mDefaultDisplaySrv.Get() &&
                 "Either the texture wasn't properly loaded or _setToDisplayDummyTexture "
                 "wasn't called when it should have been" );
 
-        mDefaultDisplaySrv->AddRef();
         return mDefaultDisplaySrv;
     }
     //-----------------------------------------------------------------------------------

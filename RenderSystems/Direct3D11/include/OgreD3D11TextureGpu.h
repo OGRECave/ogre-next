@@ -46,8 +46,7 @@ namespace Ogre
         /// To avoid creating multiple unnecessary copies of the SRV, we keep a cache of that
         /// default SRV with us; and calling createSrv with default params will return
         /// this cache instead.
-        /// mDefaultDisplaySrv will increase its ref count every time createSrv is called.
-        ID3D11ShaderResourceView *mDefaultDisplaySrv;
+        ComPtr<ID3D11ShaderResourceView> mDefaultDisplaySrv;
 
         /// This will not be owned by us if hasAutomaticBatching is true.
         /// It will also not be owned by us if we're not in GpuResidency::Resident
@@ -103,9 +102,9 @@ namespace Ogre
         virtual void _autogenerateMipmaps(void);
 
         //The returned pointer has its ref. count incremented! Caller must decrease it!
-        ID3D11ShaderResourceView* createSrv( const DescriptorSetTexture2::TextureSlot &texSlot ) const;
-        ID3D11ShaderResourceView* createSrv(void) const;
-        ID3D11ShaderResourceView* getDefaultDisplaySrv(void) const  { return mDefaultDisplaySrv; }
+        ComPtr<ID3D11ShaderResourceView> createSrv( const DescriptorSetTexture2::TextureSlot &texSlot ) const;
+        ComPtr<ID3D11ShaderResourceView> createSrv(void) const;
+        ID3D11ShaderResourceView* getDefaultDisplaySrv(void) const  { return mDefaultDisplaySrv.Get(); }
 
         ComPtr<ID3D11UnorderedAccessView> createUav( const DescriptorSetUav::TextureSlot &texSlot ) const;
 
