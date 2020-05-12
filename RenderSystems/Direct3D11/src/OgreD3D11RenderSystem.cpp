@@ -2788,29 +2788,6 @@ namespace Ogre
         mComputeProgramBound = false;
     }
     //---------------------------------------------------------------------
-    // TODO: Move this class to the right place.
-    class D3D11RenderOperationState
-    {
-    public:
-        ID3D11ShaderResourceView * mTextures[OGRE_MAX_TEXTURE_LAYERS];
-        size_t mTexturesCount;
-
-        D3D11RenderOperationState() :
-            mTexturesCount(0)
-        {
-            for (size_t i = 0 ; i < OGRE_MAX_TEXTURE_LAYERS ; i++)
-            {
-                mTextures[i] = 0;
-            }
-        }
-
-
-        ~D3D11RenderOperationState()
-        {
-        }
-    };
-
-    //---------------------------------------------------------------------
     void D3D11RenderSystem::_render(const v1::RenderOperation& op)
     {
 
@@ -2836,108 +2813,6 @@ namespace Ogre
 
         // Call super class
         RenderSystem::_render(op);
-
-        D3D11RenderOperationState stackOpState;
-        D3D11RenderOperationState * opState = &stackOpState;
-
-        if(mSamplerStatesChanged)
-        {
-            // samplers mapping
-            const size_t numberOfSamplers = std::min( mLastTextureUnitState,
-                                                      (size_t)(OGRE_MAX_TEXTURE_LAYERS + 1) );
-            opState->mTexturesCount = numberOfSamplers;
-
-            for (size_t n = 0; n < numberOfSamplers; n++)
-            {
-                ID3D11ShaderResourceView *texture = NULL;
-                opState->mTextures[n]       = texture;
-            }
-            for (size_t n = opState->mTexturesCount; n < OGRE_MAX_TEXTURE_LAYERS; n++)
-            {
-                opState->mTextures[n] = NULL;
-            }
-        }
-
-        if (mSamplerStatesChanged && opState->mTexturesCount > 0 ) //  if the NumTextures is 0, the operation effectively does nothing.
-        {
-            mSamplerStatesChanged = false; // now it's time to set it to false
-            /// Pixel Shader binding
-            {
-                mDevice.GetImmediateContext()->PSSetShaderResources(static_cast<UINT>(0), static_cast<UINT>(opState->mTexturesCount), &opState->mTextures[0]);
-                if (mDevice.isError())
-                {
-                    String errorDescription = mDevice.getErrorDescription();
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                        "D3D11 device cannot set pixel shader resources\nError Description:" + errorDescription,
-                        "D3D11RenderSystem::_render");
-                }
-            }
-
-            /// Vertex Shader binding
-
-            /*if (mBindingType == TextureUnitState::BindingType::BT_VERTEX)*/
-
-            {
-                if (mFeatureLevel >= D3D_FEATURE_LEVEL_10_0)
-                {
-                    mDevice.GetImmediateContext()->VSSetShaderResources(static_cast<UINT>(0), static_cast<UINT>(opState->mTexturesCount), &opState->mTextures[0]);
-                    if (mDevice.isError())
-                    {
-                        String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                            "D3D11 device cannot set pixel shader resources\nError Description:" + errorDescription,
-                            "D3D11RenderSystem::_render");
-                    }
-                }
-            }
-
-            /// Geometry Shader binding
-            {
-                if (mFeatureLevel >= D3D_FEATURE_LEVEL_10_0)
-                {
-                    mDevice.GetImmediateContext()->GSSetShaderResources(static_cast<UINT>(0), static_cast<UINT>(opState->mTexturesCount), &opState->mTextures[0]);
-                    if (mDevice.isError())
-                    {
-                        String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                            "D3D11 device cannot set geometry shader resources\nError Description:" + errorDescription,
-                            "D3D11RenderSystem::_render");
-                    }
-                }
-            }
-
-            /// Hull Shader binding
-            if (mPso->hullShader && mBindingType == TextureUnitState::BT_TESSELLATION_HULL)
-            {
-                if (mFeatureLevel >= D3D_FEATURE_LEVEL_10_0)
-                {
-                    mDevice.GetImmediateContext()->HSSetShaderResources(static_cast<UINT>(0), static_cast<UINT>(opState->mTexturesCount), &opState->mTextures[0]);
-                    if (mDevice.isError())
-                    {
-                        String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                            "D3D11 device cannot set hull shader resources\nError Description:" + errorDescription,
-                            "D3D11RenderSystem::_render");
-                    }
-                }
-            }
-
-            /// Domain Shader binding
-            if (mPso->domainShader && mBindingType == TextureUnitState::BT_TESSELLATION_DOMAIN)
-            {
-                if (mFeatureLevel >= D3D_FEATURE_LEVEL_10_0)
-                {
-                    mDevice.GetImmediateContext()->DSSetShaderResources(static_cast<UINT>(0), static_cast<UINT>(opState->mTexturesCount), &opState->mTextures[0]);
-                    if (mDevice.isError())
-                    {
-                        String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                            "D3D11 device cannot set domain shader resources\nError Description:" + errorDescription,
-                            "D3D11RenderSystem::_render");
-                    }
-                }
-            }
-        }
 
         ComPtr<ID3D11Buffer> pSOTarget;
         // Mustn't bind a emulated vertex, pixel shader (see below), if we are rendering to a stream out buffer
@@ -3803,10 +3678,6 @@ namespace Ogre
         mBoundComputeProgram = NULL;
 
         mBindingType = TextureUnitState::BT_FRAGMENT;
-
-        //sets the modification trackers to true
-        mSamplerStatesChanged = true;
-        mLastTextureUnitState = 0;
 
         mVendorExtension = D3D11VendorExtension::initializeExtension( GPU_VENDOR_COUNT, 0 );
 

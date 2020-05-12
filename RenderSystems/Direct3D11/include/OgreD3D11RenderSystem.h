@@ -126,9 +126,6 @@ namespace Ogre
 
         UINT                        mStencilRef;
 
-        ID3D11ShaderResourceView * mBoundTextures[OGRE_MAX_TEXTURE_LAYERS];
-        size_t mBoundTexturesCount;
-
         // List of class instances per shader stage
         ID3D11ClassInstance* mClassInstances[6][8];
 
@@ -139,9 +136,6 @@ namespace Ogre
         typedef std::map<String, ID3D11ClassInstance*> ClassInstanceMap;
         typedef std::map<String, ID3D11ClassInstance*>::iterator ClassInstanceIterator;
         ClassInstanceMap mInstanceMap;
-
-        size_t     mLastTextureUnitState;
-		bool       mSamplerStatesChanged;
 
         D3D11FrameBufferDescMap mFrameBufferDescMap;
 
