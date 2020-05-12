@@ -227,8 +227,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::_destroySizeDependedD3DResources()
     {
-        mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
-        mTexture->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+        if( mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
+            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+        if( mTexture->getResidencyStatus() != GpuResidency::OnStorage )
+            mTexture->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
         mpBackBuffer.Reset();
         mpBackBufferInterim.Reset();
     }
