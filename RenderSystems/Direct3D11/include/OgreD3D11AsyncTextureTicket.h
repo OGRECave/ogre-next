@@ -43,7 +43,7 @@ namespace Ogre
         ComPtr<ID3D11Resource> mStagingTexture;
 
         uint32          mDownloadFrame;
-        ID3D11Query     *mAccurateFence;
+        ComPtr<ID3D11Query> mAccurateFence;
         D3D11VaoManager *mVaoManager;
         uint32          mMappedSlice;
         bool            mIsArray2DTexture;

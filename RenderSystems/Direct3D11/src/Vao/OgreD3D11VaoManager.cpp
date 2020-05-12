@@ -116,7 +116,7 @@ namespace Ogre
             }
         }
 
-        mFrameSyncVec.resize( mDynamicBufferMultiplier, 0 );
+        mFrameSyncVec.resize( mDynamicBufferMultiplier );
 
         //There's no way to query the API, grrr... but this
         //is the minimum supported by all known GPUs
@@ -205,16 +205,6 @@ namespace Ogre
                     ++itor;
                 }
             }
-        }
-
-        D3D11SyncVec::const_iterator itor = mFrameSyncVec.begin();
-        D3D11SyncVec::const_iterator end  = mFrameSyncVec.end();
-
-        while( itor != end )
-        {
-            if( *itor )
-                (*itor)->Release();
-            ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -1682,12 +1672,7 @@ namespace Ogre
 
         waitForTailFrameToFinish();
 
-        if( mFrameSyncVec[mDynamicBufferCurrentFrame] )
-        {
-            mFrameSyncVec[mDynamicBufferCurrentFrame]->Release();
-            mFrameSyncVec[mDynamicBufferCurrentFrame] = 0;
-        }
-
+        mFrameSyncVec[mDynamicBufferCurrentFrame].Reset();
         mFrameSyncVec[mDynamicBufferCurrentFrame] = createFence();
         mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
     }
@@ -1715,14 +1700,14 @@ namespace Ogre
         return mSplicingHelperBuffer;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11Query* D3D11VaoManager::createFence( D3D11Device &device )
+    ComPtr<ID3D11Query> D3D11VaoManager::createFence( D3D11Device &device )
     {
-        ID3D11Query *retVal = 0;
+        ComPtr<ID3D11Query> retVal;
 
         D3D11_QUERY_DESC queryDesc;
         queryDesc.Query     = D3D11_QUERY_EVENT;
         queryDesc.MiscFlags = 0;
-        HRESULT hr = device.get()->CreateQuery( &queryDesc, &retVal );
+        HRESULT hr = device.get()->CreateQuery( &queryDesc, retVal.GetAddressOf() );
 
         if( FAILED( hr ) )
         {
@@ -1735,12 +1720,12 @@ namespace Ogre
         }
 
         // Insert the fence into D3D's commands
-        device.GetImmediateContext()->End( retVal );
+        device.GetImmediateContext()->End( retVal.Get() );
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11Query* D3D11VaoManager::createFence(void)
+    ComPtr<ID3D11Query> D3D11VaoManager::createFence(void)
     {
         return D3D11VaoManager::createFence( mDevice );
     }
@@ -1749,9 +1734,8 @@ namespace Ogre
     {
         if( mFrameSyncVec[mDynamicBufferCurrentFrame] )
         {
-            waitFor( mFrameSyncVec[mDynamicBufferCurrentFrame] );
-            mFrameSyncVec[mDynamicBufferCurrentFrame]->Release();
-            mFrameSyncVec[mDynamicBufferCurrentFrame] = 0;
+            waitFor( mFrameSyncVec[mDynamicBufferCurrentFrame].Get() );
+            mFrameSyncVec[mDynamicBufferCurrentFrame].Reset();
         }
 
         return mDynamicBufferCurrentFrame;
@@ -1762,10 +1746,9 @@ namespace Ogre
         if( frameCount == mFrameCount )
         {
             //Full stall
-            ID3D11Query *fence = createFence();
-            waitFor( fence );
-            fence->Release();
-            fence = 0;
+            ComPtr<ID3D11Query> fence = createFence();
+            waitFor( fence.Get() );
+            fence.Reset();
 
             //All of the other per-frame fences are not needed anymore.
             D3D11SyncVec::iterator itor = mFrameSyncVec.begin();
@@ -1773,11 +1756,7 @@ namespace Ogre
 
             while( itor != end )
             {
-                if( *itor )
-                {
-                    (*itor)->Release();
-                    *itor = 0;
-                }
+                itor->Reset();
                 ++itor;
             }
 
@@ -1793,19 +1772,14 @@ namespace Ogre
                                 mDynamicBufferMultiplier - frameDiff) % mDynamicBufferMultiplier;
             if( mFrameSyncVec[idx] )
             {
-                waitFor( mFrameSyncVec[idx] );
-                mFrameSyncVec[idx]->Release();
-                mFrameSyncVec[idx] = 0;
+                waitFor( mFrameSyncVec[idx].Get() );
+                mFrameSyncVec[idx].Reset();
 
                 //Delete all the fences until this frame we've just waited.
                 size_t nextIdx = mDynamicBufferCurrentFrame;
                 while( nextIdx != idx )
                 {
-                    if( mFrameSyncVec[nextIdx] )
-                    {
-                        mFrameSyncVec[nextIdx]->Release();
-                        mFrameSyncVec[nextIdx] = 0;
-                    }
+                    mFrameSyncVec[nextIdx].Reset();
                     nextIdx = (nextIdx + 1u) % mDynamicBufferMultiplier;
                 }
             }
@@ -1833,7 +1807,7 @@ namespace Ogre
 
             if( mFrameSyncVec[idx] )
             {
-                HRESULT hr = mDevice.GetImmediateContext()->GetData( mFrameSyncVec[idx], NULL, 0, 0 );
+                HRESULT hr = mDevice.GetImmediateContext()->GetData( mFrameSyncVec[idx].Get(), NULL, 0, 0 );
 
                 if( FAILED( hr ) )
                 {
@@ -1848,18 +1822,13 @@ namespace Ogre
 
                 if( retVal )
                 {
-                    mFrameSyncVec[idx]->Release();
-                    mFrameSyncVec[idx] = 0;
+                    mFrameSyncVec[idx].Reset();
 
                     //Delete all the fences until this frame we've just waited.
                     size_t nextIdx = mDynamicBufferCurrentFrame;
                     while( nextIdx != idx )
                     {
-                        if( mFrameSyncVec[nextIdx] )
-                        {
-                            mFrameSyncVec[nextIdx]->Release();
-                            mFrameSyncVec[nextIdx] = 0;
-                        }
+                        mFrameSyncVec[nextIdx].Reset();
                         nextIdx = (nextIdx + 1u) % mDynamicBufferMultiplier;
                     }
                 }

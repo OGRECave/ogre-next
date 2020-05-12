@@ -48,7 +48,6 @@ namespace Ogre
         AsyncTextureTicket( width, height, depthOrSlices, textureType,
                             pixelFormatFamily ),
         mDownloadFrame( 0 ),
-        mAccurateFence( 0 ),
         mVaoManager( vaoManager ),
         mMappedSlice( 0 ),
         mIsArray2DTexture( false )
@@ -124,8 +123,6 @@ namespace Ogre
     {
         if( mStatus == Mapped )
             unmap();
-
-        SAFE_RELEASE( mAccurateFence );
     }
     //-----------------------------------------------------------------------------------
     void D3D11AsyncTextureTicket::downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
@@ -135,7 +132,7 @@ namespace Ogre
 
         mDownloadFrame = mVaoManager->getFrameCount();
 
-        SAFE_RELEASE( mAccurateFence );
+        mAccurateFence.Reset();
 
         TextureBox srcTextureBox;
         TextureBox fullSrcTextureBox( textureSrc->getEmptyBox( mipLevel ) );
@@ -281,8 +278,8 @@ namespace Ogre
 
         if( mAccurateFence )
         {
-            mAccurateFence = mVaoManager->waitFor( mAccurateFence );
-            SAFE_RELEASE( mAccurateFence );
+            *mAccurateFence.GetAddressOf() = mVaoManager->waitFor( mAccurateFence.Get() );
+            mAccurateFence.Reset();
         }
         else
         {
@@ -311,9 +308,9 @@ namespace Ogre
         else if( mAccurateFence )
         {
             //Ask D3D11 API to return immediately and tells us about the fence
-            if( mVaoManager->queryIsDone( mAccurateFence ) )
+            if( mVaoManager->queryIsDone( mAccurateFence.Get() ) )
             {
-                SAFE_RELEASE( mAccurateFence );
+                mAccurateFence.Reset();
                 if( mStatus != Mapped )
                     mStatus = Ready;
             }
@@ -327,7 +324,7 @@ namespace Ogre
                     //Use is not calling vaoManager->update(). Likely it's stuck in an
                     //infinite loop checking if we're done, but we'll always return false.
                     //If so, switch to accurate tracking.
-                    mAccurateFence = mVaoManager->createFence();
+                    mAccurateFence = mVaoManager->createFence() ;
 
                     D3D11Device &device = mVaoManager->getDevice();
                     ID3D11DeviceContextN *context = device.GetImmediateContext();
