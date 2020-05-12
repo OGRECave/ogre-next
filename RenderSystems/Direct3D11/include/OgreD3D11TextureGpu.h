@@ -67,11 +67,11 @@ namespace Ogre
         ///     2. The texture
         ///     3. An msaa texture (hasMsaaExplicitResolves == true)
         ///     4. The msaa resolved texture (hasMsaaExplicitResolves==false)
-        ID3D11Resource  *mFinalTextureName;
+        ComPtr<ID3D11Resource> mFinalTextureName;
 
 
         /// Only used when hasMsaaExplicitResolves() == false.
-        ID3D11Resource  *mMsaaFramebufferName;
+        ComPtr<ID3D11Resource> mMsaaFramebufferName;
 
         void create1DTexture(void);
         void create2DTexture( bool msaaTextureOnly = false );
@@ -114,8 +114,8 @@ namespace Ogre
         virtual void getCustomAttribute( IdString name, void *pData );
 
         ID3D11Resource* getDisplayTextureName(void) const   { return mDisplayTextureName; }
-        ID3D11Resource* getFinalTextureName(void) const     { return mFinalTextureName; }
-        ID3D11Resource* getMsaaFramebufferName(void) const  { return mMsaaFramebufferName; }
+        ID3D11Resource* getFinalTextureName(void) const     { return mFinalTextureName.Get(); }
+        ID3D11Resource* getMsaaFramebufferName(void) const  { return mMsaaFramebufferName.Get(); }
     };
 
     class _OgreD3D11Export D3D11TextureGpuRenderTarget : public D3D11TextureGpu

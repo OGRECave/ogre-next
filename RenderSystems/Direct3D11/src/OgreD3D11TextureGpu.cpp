@@ -47,9 +47,7 @@ namespace Ogre
                                       TextureTypes::TextureTypes initialType,
                                       TextureGpuManager *textureManager ) :
         TextureGpu( pageOutStrategy, vaoManager, name, textureFlags, initialType, textureManager ),
-        mDisplayTextureName( 0 ),
-        mFinalTextureName( 0 ),
-        mMsaaFramebufferName( 0 )
+        mDisplayTextureName( 0 )
     {
         _setToDisplayDummyTexture();
     }
@@ -99,7 +97,7 @@ namespace Ogre
 
         ID3D11Texture1D *texture = 0;
         HRESULT hr = device->CreateTexture1D( &desc, 0, &texture );
-        mFinalTextureName = texture;
+        mFinalTextureName.Attach( texture );
 
         if( FAILED(hr) || device.isError() )
         {
@@ -171,7 +169,7 @@ namespace Ogre
         if( !msaaTextureOnly )
         {
             hr = device->CreateTexture2D(&desc, 0, &texture);
-            mFinalTextureName = texture;
+            mFinalTextureName.Attach( texture );
         }
 
         if( FAILED(hr) || device.isError() )
@@ -205,7 +203,7 @@ namespace Ogre
 
             texture = 0;
             hr = device->CreateTexture2D( &desc, 0, &texture );
-            mMsaaFramebufferName = texture;
+            mMsaaFramebufferName.Attach( texture );
 
             if( FAILED(hr) || device.isError() )
             {
@@ -266,7 +264,7 @@ namespace Ogre
 
         ID3D11Texture3D *texture = 0;
         HRESULT hr = device->CreateTexture3D( &desc, 0, &texture );
-        mFinalTextureName = texture;
+        mFinalTextureName.Attach( texture );
 
         if( FAILED(hr) || device.isError() )
         {
@@ -320,23 +318,14 @@ namespace Ogre
     {
         mDefaultDisplaySrv.Reset();
 
-        if( !hasAutomaticBatching() )
+        if( hasAutomaticBatching() && mTexturePool )
         {
-            SAFE_RELEASE( mFinalTextureName );
-            SAFE_RELEASE( mMsaaFramebufferName );
+            //This will end up calling _notifyTextureSlotChanged,
+            //setting mTexturePool & mInternalSliceStart to 0
+            mTextureManager->_releaseSlotFromTexture( this );
         }
-        else
-        {
-            if( mTexturePool )
-            {
-                //This will end up calling _notifyTextureSlotChanged,
-                //setting mTexturePool & mInternalSliceStart to 0
-                mTextureManager->_releaseSlotFromTexture( this );
-            }
-
-            mFinalTextureName = 0;
-            mMsaaFramebufferName = 0;
-        }
+        mFinalTextureName.Reset();
+        mMsaaFramebufferName.Reset();
 
         _setToDisplayDummyTexture();
     }
@@ -348,7 +337,7 @@ namespace Ogre
 
         mDefaultDisplaySrv.Reset();
 
-        mDisplayTextureName = mFinalTextureName;
+        mDisplayTextureName = mFinalTextureName.Get();
         if( isTexture() )
         {
             DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::
@@ -361,7 +350,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool D3D11TextureGpu::_isDataReadyImpl(void) const
     {
-        return mDisplayTextureName == mFinalTextureName;
+        return mDisplayTextureName == mFinalTextureName.Get();
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::_setToDisplayDummyTexture(void)
@@ -415,7 +404,7 @@ namespace Ogre
         const TextureTypes::TextureTypes oldType = mTextureType;
         TextureGpu::setTextureType( textureType );
 
-        if( oldType != mTextureType && mDisplayTextureName != mFinalTextureName )
+        if( oldType != mTextureType && mDisplayTextureName != mFinalTextureName.Get() )
             _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
@@ -441,13 +430,13 @@ namespace Ogre
         if( srcBox.equalSize( this->getEmptyBox( srcMipLevel ) ) )
             d3dBoxPtr = 0;
 
-        ID3D11Resource *srcTextureName = this->mFinalTextureName;
-        ID3D11Resource *dstTextureName = dstD3d->mFinalTextureName;
+        ID3D11Resource *srcTextureName = this->mFinalTextureName.Get();
+        ID3D11Resource *dstTextureName = dstD3d->mFinalTextureName.Get();
 
         if( this->isMultisample() && !this->hasMsaaExplicitResolves() )
-            srcTextureName = this->mMsaaFramebufferName;
+            srcTextureName = this->mMsaaFramebufferName.Get();
         if( dstD3d->isMultisample() && !dstD3d->hasMsaaExplicitResolves() )
-            dstTextureName = dstD3d->mMsaaFramebufferName;
+            dstTextureName = dstD3d->mMsaaFramebufferName.Get();
 
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
@@ -472,9 +461,9 @@ namespace Ogre
             if( dstD3d->isMultisample() && !dstD3d->hasMsaaExplicitResolves() && keepResolvedTexSynced )
             {
                 //Must keep the resolved texture up to date.
-                context->ResolveSubresource( dstD3d->mFinalTextureName,
+                context->ResolveSubresource( dstD3d->mFinalTextureName.Get(),
                                              dstResourceIndex,
-                                             dstD3d->mMsaaFramebufferName,
+                                             dstD3d->mMsaaFramebufferName.Get(),
                                              dstResourceIndex,
                                              format );
             }
@@ -665,7 +654,7 @@ namespace Ogre
         D3D11Device &device = textureManagerD3d->getDevice();
 
         ComPtr<ID3D11UnorderedAccessView> retVal;
-        HRESULT hr = device->CreateUnorderedAccessView( mFinalTextureName, &uavDesc, retVal.GetAddressOf() );
+        HRESULT hr = device->CreateUnorderedAccessView( mFinalTextureName.Get(), &uavDesc, retVal.GetAddressOf() );
         if( FAILED(hr) )
         {
             String errorDescription = device.getErrorDescription(hr);
@@ -757,12 +746,12 @@ namespace Ogre
         if( name == msFinalTextureBuffer || name == "ID3D11Resource" )
         {
             ID3D11Resource **pTex = (ID3D11Resource**)pData;
-            *pTex = mFinalTextureName;
+            *pTex = mFinalTextureName.Get();
         }
         else if( name == msMsaaTextureBuffer )
         {
             ID3D11Resource **pTex = (ID3D11Resource**)pData;
-            *pTex = mMsaaFramebufferName;
+            *pTex = mMsaaFramebufferName.Get();
         }
         else
         {
