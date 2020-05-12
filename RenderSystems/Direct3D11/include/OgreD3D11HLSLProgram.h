@@ -369,7 +369,7 @@ namespace Ogre {
         // Get slot for a specific interface
         unsigned int getSubroutineSlot(const String& subroutineSlotName) const;
 
-        ID3D11InputLayout* getLayoutForPso( const VertexElement2VecVec &vertexElements );
+        ComPtr<ID3D11InputLayout> getLayoutForPso( const VertexElement2VecVec &vertexElements );
 
         void CreateVertexShader();
         void CreatePixelShader();

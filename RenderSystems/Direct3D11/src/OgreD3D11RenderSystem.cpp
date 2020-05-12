@@ -2118,7 +2118,7 @@ namespace Ogre
         depthStencilDesc.BackFace.StencilPassOp         = D3D11Mappings::get( stateBack.stencilPassOp );
         depthStencilDesc.BackFace.StencilFailOp         = D3D11Mappings::get( stateBack.stencilFailOp );
 
-        HRESULT hr = mDevice->CreateDepthStencilState( &depthStencilDesc, &pso->depthStencilState );
+        HRESULT hr = mDevice->CreateDepthStencilState( &depthStencilDesc, pso->depthStencilState.GetAddressOf() );
         if( FAILED(hr) )
         {
             delete pso;
@@ -2252,8 +2252,6 @@ namespace Ogre
     void D3D11RenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )
     {
         D3D11HlmsPso *d3dPso = reinterpret_cast<D3D11HlmsPso*>( pso->rsData );
-        d3dPso->depthStencilState->Release();
-        d3dPso->inputLayout->Release();
         delete d3dPso;
         pso->rsData = 0;
     }
@@ -2641,9 +2639,9 @@ namespace Ogre
 
         mPso = d3dPso;
 
-        deviceContext->OMSetDepthStencilState( d3dPso->depthStencilState, mStencilRef );
+        deviceContext->OMSetDepthStencilState( d3dPso->depthStencilState.Get(), mStencilRef );
         deviceContext->IASetPrimitiveTopology( d3dPso->topology );
-        deviceContext->IASetInputLayout( d3dPso->inputLayout );
+        deviceContext->IASetInputLayout( d3dPso->inputLayout.Get() );
 
         if( d3dPso->vertexShader )
         {

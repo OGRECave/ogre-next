@@ -147,7 +147,7 @@ namespace Ogre
         D3D11SyncVec mFrameSyncVec;
 
         VertexBufferPacked  *mDrawId;
-        ID3D11Buffer        *mSplicingHelperBuffer;
+        ComPtr<ID3D11Buffer> mSplicingHelperBuffer;
 
         D3D11RenderSystem   *mD3D11RenderSystem;
 

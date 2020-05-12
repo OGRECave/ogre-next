@@ -1980,7 +1980,7 @@ namespace Ogre {
         return it->second;
     }
     //-----------------------------------------------------------------------------
-    ID3D11InputLayout* D3D11HLSLProgram::getLayoutForPso( const VertexElement2VecVec &vertexElements )
+    ComPtr<ID3D11InputLayout> D3D11HLSLProgram::getLayoutForPso( const VertexElement2VecVec &vertexElements )
     {
         OgreProfileExhaustive( "D3D11HLSLProgram::getLayoutForPso" );
 
@@ -2096,7 +2096,7 @@ namespace Ogre {
 
         ID3D11DeviceN *d3dDevice = mDevice.get();
 
-        ID3D11InputLayout *d3dInputLayout = 0;
+        ComPtr<ID3D11InputLayout> d3dInputLayout;
 
         if( currDesc > 0u )
         {
@@ -2105,7 +2105,7 @@ namespace Ogre {
                              currDesc,
                              &mMicroCode[0],
                     mMicroCode.size(),
-                    &d3dInputLayout );
+                    d3dInputLayout.GetAddressOf() );
 
             if( FAILED(hr) || mDevice.isError() )
             {

@@ -83,7 +83,6 @@ namespace Ogre
         mVaoNames( 1 ),
         mDevice( device ),
         mDrawId( 0 ),
-        mSplicingHelperBuffer( 0 ),
         mD3D11RenderSystem( renderSystem )
     {
         mDefaultPoolSize[VERTEX_BUFFER][BT_IMMUTABLE]   = 64 * 1024 * 1024;
@@ -161,11 +160,7 @@ namespace Ogre
         destroyAllVertexArrayObjects();
         deleteAllBuffers();
 
-        if( mSplicingHelperBuffer )
-        {
-            mSplicingHelperBuffer->Release();
-            mSplicingHelperBuffer = 0;
-        }
+        mSplicingHelperBuffer.Reset();
 
         for( size_t i=0; i<2; ++i )
         {
@@ -1689,7 +1684,7 @@ namespace Ogre
             desc.CPUAccessFlags = 0;
             desc.Usage          = D3D11_USAGE_DEFAULT;
 
-            HRESULT hr = mDevice.get()->CreateBuffer( &desc, 0, &mSplicingHelperBuffer );
+            HRESULT hr = mDevice.get()->CreateBuffer( &desc, 0, mSplicingHelperBuffer.GetAddressOf() );
             if( FAILED( hr ) )
             {
                 OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
@@ -1697,7 +1692,7 @@ namespace Ogre
                                 "D3D11VaoManager::getSplicingHelperBuffer" );
             }
         }
-        return mSplicingHelperBuffer;
+        return mSplicingHelperBuffer.Get();
     }
     //-----------------------------------------------------------------------------------
     ComPtr<ID3D11Query> D3D11VaoManager::createFence( D3D11Device &device )
