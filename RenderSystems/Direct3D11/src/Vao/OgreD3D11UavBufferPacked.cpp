@@ -141,7 +141,7 @@ namespace Ogre
         return resourceView;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11UnorderedAccessView* D3D11UavBufferPacked::createUav(
+    ComPtr<ID3D11UnorderedAccessView> D3D11UavBufferPacked::createUav(
             const DescriptorSetUav::BufferSlot &bufferSlot ) const
     {
         assert( bufferSlot.offset <= getTotalSizeBytes() );
@@ -167,8 +167,8 @@ namespace Ogre
                     mBufferInterface );
         ID3D11Buffer *vboName = bufferInterface->getVboName();
 
-        ID3D11UnorderedAccessView *retVal = 0;
-        HRESULT hr = mDevice->CreateUnorderedAccessView( vboName, &uavDesc, &retVal );
+        ComPtr<ID3D11UnorderedAccessView> retVal;
+        HRESULT hr = mDevice->CreateUnorderedAccessView( vboName, &uavDesc, retVal.GetAddressOf() );
         if( FAILED(hr) )
         {
             String errorDescription = mDevice.getErrorDescription(hr);

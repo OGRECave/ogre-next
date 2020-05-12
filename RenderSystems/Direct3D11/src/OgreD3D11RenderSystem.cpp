@@ -2031,11 +2031,11 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setUavCS( uint32 slotStart, const DescriptorSetUav *set )
     {
-        ID3D11UnorderedAccessView **uavList =
-                reinterpret_cast<ID3D11UnorderedAccessView**>( set->mRsData );
+        ComPtr<ID3D11UnorderedAccessView> *uavList =
+                reinterpret_cast<ComPtr<ID3D11UnorderedAccessView>*>( set->mRsData );
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         context->CSSetUnorderedAccessViews( slotStart, static_cast<UINT>( set->mUavs.size() ),
-                                            uavList, 0 );
+                                            uavList[0].GetAddressOf(), 0 );
 
         mMaxBoundUavCS = std::max<uint32>( mMaxBoundUavCS, slotStart + set->mUavs.size() );
     }
@@ -2531,7 +2531,7 @@ namespace Ogre
     void D3D11RenderSystem::_descriptorSetUavCreated( DescriptorSetUav *newSet )
     {
         const size_t numElements = newSet->mUavs.size();
-        ID3D11UnorderedAccessView **uavList = new ID3D11UnorderedAccessView*[numElements];
+        ComPtr<ID3D11UnorderedAccessView> *uavList = new ComPtr<ID3D11UnorderedAccessView>[numElements];
         newSet->mRsData = uavList;
 
         FastArray<DescriptorSetUav::Slot>::const_iterator itor = newSet->mUavs.begin();
@@ -2539,7 +2539,7 @@ namespace Ogre
         for( size_t i=0u; i<numElements; ++i )
         {
             if( itor->empty() )
-                uavList[i] = 0;
+                ;
             else if( itor->isTexture() )
             {
                 const DescriptorSetUav::TextureSlot &texSlot = itor->getTexture();
@@ -2561,10 +2561,8 @@ namespace Ogre
     void D3D11RenderSystem::_descriptorSetUavDestroyed( DescriptorSetUav *set )
     {
         const size_t numElements = set->mUavs.size();
-        ID3D11UnorderedAccessView **uavList =
-                reinterpret_cast<ID3D11UnorderedAccessView**>( set->mRsData );
-        for( size_t i=0; i<numElements; ++i )
-            uavList[i]->Release();
+        ComPtr<ID3D11UnorderedAccessView> *uavList =
+                reinterpret_cast<ComPtr<ID3D11UnorderedAccessView>*>( set->mRsData );
 
         delete [] uavList;
         set->mRsData = 0;

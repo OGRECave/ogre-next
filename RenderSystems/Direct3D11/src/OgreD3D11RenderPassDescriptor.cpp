@@ -475,11 +475,11 @@ namespace Ogre
         else
         {
             const UINT numUavs = static_cast<UINT>( descSetUav->mUavs.size() );
-            ID3D11UnorderedAccessView **uavList =
-                    reinterpret_cast<ID3D11UnorderedAccessView**>( descSetUav->mRsData );
+            ComPtr<ID3D11UnorderedAccessView> *uavList =
+                    reinterpret_cast<ComPtr<ID3D11UnorderedAccessView>*>( descSetUav->mRsData );
             context->OMSetRenderTargetsAndUnorderedAccessViews( mNumColourEntries, mColourRtv[0].GetAddressOf(),
                                                                 mDepthStencilRtv.Get(), uavStartingSlot,
-                                                                numUavs, uavList, 0 );
+                                                                numUavs, uavList[0].GetAddressOf(), 0 );
         }
     }
     //-----------------------------------------------------------------------------------

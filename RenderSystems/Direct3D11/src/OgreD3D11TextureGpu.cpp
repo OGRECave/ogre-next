@@ -617,7 +617,7 @@ namespace Ogre
         return mDefaultDisplaySrv;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11UnorderedAccessView* D3D11TextureGpu::createUav(
+    ComPtr<ID3D11UnorderedAccessView> D3D11TextureGpu::createUav(
             const DescriptorSetUav::TextureSlot &texSlot ) const
     {
         D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
@@ -671,8 +671,8 @@ namespace Ogre
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
         D3D11Device &device = textureManagerD3d->getDevice();
 
-        ID3D11UnorderedAccessView *retVal = 0;
-        HRESULT hr = device->CreateUnorderedAccessView( mFinalTextureName, &uavDesc, &retVal );
+        ComPtr<ID3D11UnorderedAccessView> retVal;
+        HRESULT hr = device->CreateUnorderedAccessView( mFinalTextureName, &uavDesc, retVal.GetAddressOf() );
         if( FAILED(hr) )
         {
             String errorDescription = device.getErrorDescription(hr);

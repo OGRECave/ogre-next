@@ -107,7 +107,7 @@ namespace Ogre
         ID3D11ShaderResourceView* createSrv(void) const;
         ID3D11ShaderResourceView* getDefaultDisplaySrv(void) const  { return mDefaultDisplaySrv; }
 
-        ID3D11UnorderedAccessView* createUav( const DescriptorSetUav::TextureSlot &texSlot ) const;
+        ComPtr<ID3D11UnorderedAccessView> createUav( const DescriptorSetUav::TextureSlot &texSlot ) const;
 
         virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
