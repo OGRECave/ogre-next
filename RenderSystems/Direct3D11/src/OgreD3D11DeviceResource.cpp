@@ -93,9 +93,10 @@ namespace Ogre
     {
         assert(mResourcesCopy.empty()); // reentrancy is not expected nor supported
         mResourcesCopy = mResources;
-        for(vector<D3D11DeviceResource*>::type::iterator it = mResourcesCopy.begin(), it_end = mResourcesCopy.end(); it != it_end; ++it)
-            if(D3D11DeviceResource* deviceResource = *it)
-                deviceResource->notifyDeviceRestored(device);
+        for(unsigned pass = 0; pass < 2; ++pass)
+            for(vector<D3D11DeviceResource*>::type::iterator it = mResourcesCopy.begin(), it_end = mResourcesCopy.end(); it != it_end; ++it)
+                if(D3D11DeviceResource* deviceResource = *it)
+                    deviceResource->notifyDeviceRestored(device, pass);
         mResourcesCopy.clear();
     }
 

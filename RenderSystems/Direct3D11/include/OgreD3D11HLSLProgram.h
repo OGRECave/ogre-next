@@ -96,7 +96,7 @@ namespace Ogre {
         static CmdEnableBackwardsCompatibility msCmdEnableBackwardsCompatibility;
         
         void notifyDeviceLost(D3D11Device* device);
-        void notifyDeviceRestored(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
 
         /** Internal method for creating an appropriate low-level program from this
         high-level program, must be implemented by subclasses. */

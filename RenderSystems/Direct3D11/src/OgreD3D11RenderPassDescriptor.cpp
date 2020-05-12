@@ -63,6 +63,19 @@ namespace Ogre
             mRenderSystem->removeListener( this );
     }
     //-----------------------------------------------------------------------------------
+    void D3D11RenderPassDescriptor::notifyDeviceLost( D3D11Device *device )
+    {
+        for( size_t i = 0; i < mNumColourEntries; ++i )
+            mColourRtv[i].Reset();
+        mDepthStencilRtv.Reset();
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11RenderPassDescriptor::notifyDeviceRestored( D3D11Device *device, unsigned pass )
+    {
+        if( pass == 1 )
+            entriesModified( RenderPassDescriptor::All );
+    }
+    //-----------------------------------------------------------------------------------
     void D3D11RenderPassDescriptor::checkRenderWindowStatus(void)
     {
         if( (mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific()) ||

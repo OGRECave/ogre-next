@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreD3D11TextureGpu_H_
 
 #include "OgreD3D11Prerequisites.h"
+#include "OgreD3D11DeviceResource.h"
 #include "OgreTextureGpu.h"
 #include "OgreDescriptorSetTexture.h"
 #include "OgreDescriptorSetUav.h"
@@ -38,7 +39,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreD3D11Export D3D11TextureGpu : public TextureGpu
+    class _OgreD3D11Export D3D11TextureGpu : public TextureGpu,
+                                             protected D3D11DeviceResource
     {
     protected:
         /// The general case is that the whole D3D11 texture will be accessed through the SRV.
@@ -79,6 +81,9 @@ namespace Ogre
 
         virtual void createInternalResourcesImpl(void);
         virtual void destroyInternalResourcesImpl(void);
+
+        void notifyDeviceLost(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
 
     public:
         D3D11TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,

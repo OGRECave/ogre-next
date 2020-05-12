@@ -129,7 +129,22 @@ namespace Ogre
     D3D11WindowSwapChainBased::~D3D11WindowSwapChainBased()
     {
     }
-    //---------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowSwapChainBased::notifyDeviceLost(D3D11Device* device)
+    {
+        _destroySizeDependedD3DResources();
+        _destroySwapChain();
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowSwapChainBased::notifyDeviceRestored(D3D11Device* device, unsigned pass)
+    {
+        if(pass == 0)
+        {
+            _createSwapChain();
+            _createSizeDependedD3DResources();
+        }
+    }
+    //-----------------------------------------------------------------------------------
     DXGI_FORMAT D3D11WindowSwapChainBased::_getSwapChainFormat()
     {
         // We prefer to use *_SRGB format for swapchain, so that multisampled swapchain are resolved properly.

@@ -65,9 +65,9 @@ namespace Ogre {
             unloadHighLevelImpl();
     }
     //-----------------------------------------------------------------------
-    void D3D11HLSLProgram::notifyDeviceRestored(D3D11Device* device)
+    void D3D11HLSLProgram::notifyDeviceRestored(D3D11Device* device, unsigned pass)
     {
-        if(mHighLevelLoaded)
+        if(pass == 0 && mHighLevelLoaded)
             loadHighLevelImpl();
     }
     //-----------------------------------------------------------------------

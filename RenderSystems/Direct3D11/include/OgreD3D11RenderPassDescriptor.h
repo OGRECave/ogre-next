@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreD3D11RenderPassDescriptor_H_
 
 #include "OgreD3D11Prerequisites.h"
+#include "OgreD3D11DeviceResource.h"
 #include "OgreRenderPassDescriptor.h"
 #include "OgreRenderSystem.h"
 #include "OgreCommon.h"
@@ -58,7 +59,8 @@ namespace Ogre
         same, as they may have different clear, loadAction or storeAction values.
     */
     class _OgreD3D11Export D3D11RenderPassDescriptor : public RenderPassDescriptor,
-                                                       public RenderSystem::Listener
+                                                       public RenderSystem::Listener,
+                                                       protected D3D11DeviceResource
     {
     protected:
         ComPtr<ID3D11RenderTargetView>  mColourRtv[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
@@ -70,6 +72,9 @@ namespace Ogre
 
         D3D11Device         &mDevice;
         D3D11RenderSystem   *mRenderSystem;
+
+        void notifyDeviceLost( D3D11Device *device );
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass );
 
         void checkRenderWindowStatus(void);
         void calculateSharedKey(void);

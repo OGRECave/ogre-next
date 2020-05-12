@@ -48,7 +48,7 @@ namespace Ogre {
 
         // Called immediately after the Direct3D device has been reset.
         // This is the place to create device depended resources.
-        virtual void notifyDeviceRestored(D3D11Device* device) = 0;
+        virtual void notifyDeviceRestored(D3D11Device* device, unsigned pass) = 0;
 
     protected:
         D3D11DeviceResource();

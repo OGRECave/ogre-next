@@ -30,12 +30,14 @@ THE SOFTWARE.
 #define _OgreD3D11Window_H_
 
 #include "OgreD3D11Prerequisites.h"
+#include "OgreD3D11DeviceResource.h"
 #include "OgreWindow.h"
 #include "OgreCommon.h"
 
 namespace Ogre
 {
-    class _OgreD3D11Export D3D11Window : public Window
+    class _OgreD3D11Export D3D11Window : public Window,
+                                         protected D3D11DeviceResource
     {
     protected:
         D3D11Device     &mDevice;
@@ -106,6 +108,8 @@ namespace Ogre
         void _destroySizeDependedD3DResources();
         void resizeSwapChainBuffers( uint32 width, uint32 height );
         void notifyResolutionChanged(void);
+        void notifyDeviceLost(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
 
     public:
         D3D11WindowSwapChainBased( const String &title, uint32 width, uint32 height,
