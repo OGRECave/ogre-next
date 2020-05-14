@@ -28,6 +28,9 @@ THE SOFTWARE.
 #include "OgreD3D11Device.h"
 #include "OgreException.h"
 
+//#include <dxgi1_3.h> // for DXGIGetDebugInterface1
+//#include <dxgidebug.h> // for IDXGIDebug1
+
 #include "ogrestd/vector.h"
 
 namespace Ogre
@@ -50,8 +53,8 @@ namespace Ogre
         // Clear state
         if (mImmediateContext)
         {
-            mImmediateContext->Flush();
             mImmediateContext->ClearState();
+            mImmediateContext->Flush();
         }
 #if OGRE_D3D11_PROFILING
         mPerf.Reset();
@@ -61,23 +64,28 @@ namespace Ogre
         mImmediateContext.Reset();
         mImmediateContext1.Reset();
 
-        /*
-        //Uncomment this code to get detailed information of resource leaks.
+        ComPtr<ID3D11Debug> d3dDebug;
         if( mD3D11Device )
-        {
-            ComPtr<ID3D11Debug> d3dDebug;
             mD3D11Device->QueryInterface( d3dDebug.GetAddressOf() );
-            if( d3dDebug )
-            {
-                d3dDebug->ReportLiveDeviceObjects( D3D11_RLDO_DETAIL );
-            }
-        }*/
 
         mD3D11Device.Reset();
         mD3D11Device1.Reset();
         mDXGIFactory.Reset();
         mDXGIFactory2.Reset();
         mDriverVersion.QuadPart = 0;
+
+        // It is normal to get live ID3D11Device with ref count 2, all are gone after d3dDebug.Reset()
+        // The commented out code below is available since Win8.1 and will not report current ID3D11Device as live,
+        // but it will notice and report other live devices, for example in our drivers list
+        if( d3dDebug )
+        {
+            d3dDebug->ReportLiveDeviceObjects( D3D11_RLDO_DETAIL | D3D11_RLDO_IGNORE_INTERNAL );
+            d3dDebug.Reset();
+        }
+
+        //ComPtr<IDXGIDebug1> dxgiDebug;
+        //if (SUCCEEDED(DXGIGetDebugInterface1(0, __uuidof(IDXGIDebug1), (void**)dxgiDebug.GetAddressOf())))
+        //    dxgiDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_FLAGS(DXGI_DEBUG_RLO_SUMMARY | DXGI_DEBUG_RLO_IGNORE_INTERNAL));
     }
     //---------------------------------------------------------------------
     void D3D11Device::TransferOwnership( ComPtr<ID3D11Device>& d3d11device )
