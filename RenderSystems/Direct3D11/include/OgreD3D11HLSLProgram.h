@@ -140,7 +140,6 @@ namespace Ogre {
 
         bool mErrorsInCompile;
         MicroCode mMicroCode;
-        ComPtr<ID3D11Buffer> mConstantBuffer;
         
         D3D_SHADER_MACRO* mShaderMacros;
         bool shaderMacroSet;
@@ -314,7 +313,6 @@ namespace Ogre {
         MemberTypeNames mMemberTypeName;
         InterfaceSlots mInterfaceSlots;
 
-        void createConstantBuffer(const UINT ByteWidth);
         void analizeMicrocode();
         void getMicrocodeFromCache(void);
         void compileMicrocode(void);

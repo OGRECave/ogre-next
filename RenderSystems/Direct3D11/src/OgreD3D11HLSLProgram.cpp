@@ -71,26 +71,6 @@ namespace Ogre {
             loadHighLevelImpl();
     }
     //-----------------------------------------------------------------------
-    void D3D11HLSLProgram::createConstantBuffer(const UINT ByteWidth)
-    {
-
-        // Create a constant buffer
-        D3D11_BUFFER_DESC cbDesc;
-        cbDesc.ByteWidth = ByteWidth;
-        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        cbDesc.MiscFlags = 0;
-        HRESULT hr = mDevice->CreateBuffer( &cbDesc, NULL, mConstantBuffer.ReleaseAndGetAddressOf() );
-        if (FAILED(hr) || mDevice.isError())
-        {
-            String errorDescription = mDevice.getErrorDescription(hr);
-			OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                "D3D11 device Cannot create constant buffer.\nError Description:" + errorDescription,
-                "D3D11HLSLProgram::createConstantBuffer");  
-        }
-    }
-    //-----------------------------------------------------------------------
     void D3D11HLSLProgram::fixVariableNameFromCg(const ShaderVarWithPosInBuf& newVar)
     {
         String varForSearch = String(" :  : ") + newVar.name;
@@ -1303,7 +1283,6 @@ namespace Ogre {
         mDomainShader.Reset();
         mHullShader.Reset();
         mComputeShader.Reset();
-        mConstantBuffer.Reset();
     }
 
     //-----------------------------------------------------------------------
@@ -1604,7 +1583,6 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     D3D11HLSLProgram::~D3D11HLSLProgram()
     {
-        //mConstantBuffer.Reset();
         for( size_t i=0; i<NumDefaultBufferTypes; ++i )
             mDefaultBuffers[i] = BufferInfo();
 
