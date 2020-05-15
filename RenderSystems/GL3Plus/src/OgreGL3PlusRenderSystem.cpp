@@ -399,6 +399,9 @@ namespace Ogre {
             rsc->setCapability(RSC_TYPED_UAV_LOADS);
         }
 
+        if( mGLSupport->checkExtension( "GL_ARB_shader_viewport_layer_array" ) )
+            rsc->setCapability( RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER );
+
         rsc->setCapability(RSC_FBO);
         rsc->setCapability(RSC_HWRENDER_TO_TEXTURE);
         // Probe number of draw buffers

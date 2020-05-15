@@ -2078,6 +2078,8 @@ namespace Ogre
         gp->setSkeletalAnimationIncluded( getProperty( HlmsBaseProp::Skeleton ) != 0 );
         gp->setMorphAnimationIncluded( false );
         gp->setPoseAnimationIncluded( getProperty( HlmsBaseProp::Pose ) != 0 );
+        gp->setVpAndRtArrayIndexFromAnyShaderRequired( getProperty( HlmsBaseProp::InstancedStereo ) !=
+                                                       0 );
         gp->setVertexTextureFetchRequired( false );
 
         gp->load();
