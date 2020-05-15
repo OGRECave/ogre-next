@@ -368,35 +368,35 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void createDescriptorSetTextureImpl( RenderSystem *renderSystem, DescriptorSetTexture *desc )
     {
-        renderSystem->_descriptorSetTextureCreated( desc );
+        if( renderSystem ) renderSystem->_descriptorSetTextureCreated( desc );
     }
     void destroyDescriptorSetTextureImpl( RenderSystem *renderSystem, DescriptorSetTexture *desc )
     {
-        renderSystem->_descriptorSetTextureDestroyed( desc );
+        if( renderSystem ) renderSystem->_descriptorSetTextureDestroyed( desc );
     }
     void createDescriptorSetTexture2Impl( RenderSystem *renderSystem, DescriptorSetTexture2 *desc )
     {
-        renderSystem->_descriptorSetTexture2Created( desc );
+        if( renderSystem ) renderSystem->_descriptorSetTexture2Created( desc );
     }
     void destroyDescriptorSetTexture2Impl( RenderSystem *renderSystem, DescriptorSetTexture2 *desc )
     {
-        renderSystem->_descriptorSetTexture2Destroyed( desc );
+        if( renderSystem ) renderSystem->_descriptorSetTexture2Destroyed( desc );
     }
     void createDescriptorSetSamplerImpl( RenderSystem *renderSystem, DescriptorSetSampler *desc )
     {
-        renderSystem->_descriptorSetSamplerCreated( desc );
+        if( renderSystem ) renderSystem->_descriptorSetSamplerCreated( desc );
     }
     void destroyDescriptorSetSamplerImpl( RenderSystem *renderSystem, DescriptorSetSampler *desc )
     {
-        renderSystem->_descriptorSetSamplerDestroyed( desc );
+        if( renderSystem ) renderSystem->_descriptorSetSamplerDestroyed( desc );
     }
     void createDescriptorSetUavImpl( RenderSystem *renderSystem, DescriptorSetUav *desc )
     {
-        renderSystem->_descriptorSetUavCreated( desc );
+        if( renderSystem ) renderSystem->_descriptorSetUavCreated( desc );
     }
     void destroyDescriptorSetUavImpl( RenderSystem *renderSystem, DescriptorSetUav *desc )
     {
-        renderSystem->_descriptorSetUavDestroyed( desc );
+        if( renderSystem ) renderSystem->_descriptorSetUavDestroyed( desc );
     }
     template <typename T>
     const T* HlmsManager::getDescriptorSet( typename set<T>::type &container, const T &baseParams,

@@ -1666,6 +1666,8 @@ namespace Ogre
         while(scnIt.hasMoreElements())
             scnIt.getNext()->_releaseManualHardwareResources();
 
+        Root::getSingleton().getHlmsManager()->_changeRenderSystem((RenderSystem*)0);
+
         notifyDeviceLost(&mDevice);
 
         // Release all automatic temporary buffers and free unused
@@ -1678,6 +1680,8 @@ namespace Ogre
 
         // recreate device depended resources
         notifyDeviceRestored(&mDevice);
+
+        Root::getSingleton().getHlmsManager()->_changeRenderSystem(this);
 
         v1::MeshManager::getSingleton().reloadAll(Resource::LF_PRESERVE_STATE);
 
