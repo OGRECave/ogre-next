@@ -48,6 +48,17 @@ namespace Ogre
         TextureGpuManager( vaoManager, renderSystem ),
         mDevice( device )
     {
+        _createD3DResources();
+    }
+    //-----------------------------------------------------------------------------------
+    D3D11TextureGpuManager::~D3D11TextureGpuManager()
+    {
+        _destroyD3DResources();
+        destroyAll();
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11TextureGpuManager::_createD3DResources()
+    {
         D3D11_TEXTURE1D_DESC desc1;
         D3D11_TEXTURE2D_DESC desc2;
         D3D11_TEXTURE3D_DESC desc3;
@@ -146,7 +157,7 @@ namespace Ogre
                                 "D3D11TextureGpuManager::D3D11TextureGpuManager" );
             }
 
-            hr = device->CreateShaderResourceView( mBlankTexture[i].Get(), 0, mDefaultSrv[i].GetAddressOf() );
+            hr = mDevice->CreateShaderResourceView( mBlankTexture[i].Get(), 0, mDefaultSrv[i].GetAddressOf() );
             if( FAILED(hr) || mDevice.isError() )
             {
                 String errorDescription = mDevice.getErrorDescription( hr );
@@ -160,9 +171,17 @@ namespace Ogre
         mDefaultSrv[TextureTypes::Unknown]      = mDefaultSrv[TextureTypes::Type2D];
     }
     //-----------------------------------------------------------------------------------
-    D3D11TextureGpuManager::~D3D11TextureGpuManager()
+    void D3D11TextureGpuManager::_destroyD3DResources()
     {
-        destroyAll();
+        mMutex.lock();
+        destroyAllStagingBuffers();
+        mMutex.unlock();
+
+        for( int i=0; i<=TextureTypes::Type3D; ++i )
+        {
+            mBlankTexture[i].Reset();
+            mDefaultSrv[i].Reset();
+        }
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* D3D11TextureGpuManager::createTextureGpuWindow( bool fromFlipModeSwapchain,

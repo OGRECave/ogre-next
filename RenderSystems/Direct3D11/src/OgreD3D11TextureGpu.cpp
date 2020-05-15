@@ -59,6 +59,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::notifyDeviceLost(D3D11Device* device)
     {
+        destroyInternalResourcesImpl();
     }
     //---------------------------------------------------------------------
     void D3D11TextureGpu::notifyDeviceRestored(D3D11Device* device, unsigned pass)
