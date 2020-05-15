@@ -79,7 +79,7 @@ namespace Ogre
         // but it will notice and report other live devices, for example in our drivers list
         if( d3dDebug )
         {
-            d3dDebug->ReportLiveDeviceObjects( D3D11_RLDO_DETAIL | D3D11_RLDO_IGNORE_INTERNAL );
+            d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY | D3D11_RLDO_DETAIL | D3D11_RLDO_IGNORE_INTERNAL );
             d3dDebug.Reset();
         }
 
