@@ -393,6 +393,14 @@ namespace Ogre
         rsc->setCapability(RSC_TEXTURE_CUBE_MAP_ARRAY);
 #endif
         rsc->setCapability( RSC_TYPED_UAV_LOADS );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        if( [mActiveDevice->mDevice supportsFeatureSet:MTLFeatureSet_iOS_GPUFamily5_v1] )
+            rsc->setCapability(RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER);
+#else
+        rsc->setCapability(RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER);
+#endif
+
         //rsc->setCapability(RSC_ATOMIC_COUNTERS);
 
         rsc->addShaderProfile( "metal" );
