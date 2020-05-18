@@ -72,7 +72,7 @@ namespace Ogre
         }
 
         D3D11_MAPPED_SUBRESOURCE mappedSubres;
-        mDevice.GetImmediateContext()->Map( mVboName, 0, mapFlag, 0, &mappedSubres );
+        mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, mapFlag, 0, &mappedSubres );
         mMappedPtr = reinterpret_cast<uint8*>( mappedSubres.pData ) +
                 elementStart * mBuffer->mBytesPerElement;
 
@@ -93,7 +93,7 @@ namespace Ogre
         assert( flushStartElem + flushSizeElem <= mBuffer->mLastMappingCount &&
                 "Flush region out of bounds!" );
 
-        mDevice.GetImmediateContext()->Unmap( mVboName, 0 );
+        mDevice.GetImmediateContext()->Unmap( mVboName.Get(), 0 );
         mMappedPtr = 0;
     }
     //-----------------------------------------------------------------------------------

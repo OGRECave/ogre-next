@@ -64,7 +64,7 @@ namespace Ogre
 
         typedef vector<MappedRange>::type MappedRangeVec;
 
-        ID3D11Buffer    *mVboName;
+        ComPtr<ID3D11Buffer> mVboName;
         size_t          mVboSize;
         void            *mMappedPtr;
 
@@ -79,7 +79,7 @@ namespace Ogre
         D3D11DynamicBuffer( ID3D11Buffer *vboName, size_t vboSize, D3D11Device &device );
         ~D3D11DynamicBuffer();
 
-        ID3D11Buffer* getVboName(void) const        { return mVboName; }
+        ID3D11Buffer* getVboName(void) const        { return mVboName.Get(); }
 
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
         void* RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );

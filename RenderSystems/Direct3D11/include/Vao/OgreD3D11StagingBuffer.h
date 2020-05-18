@@ -50,7 +50,7 @@ namespace Ogre
     protected:
         /// mVboName is not deleted by us (the VaoManager does) as we may have
         /// only been assigned a chunk of the buffer, not the whole thing.
-        ID3D11Buffer    *mVboName;
+        ComPtr<ID3D11Buffer> mVboName;
         void            *mMappedPtr;
 
         D3D11Device     &mDevice;
@@ -88,7 +88,7 @@ namespace Ogre
 
         virtual size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength );
 
-        ID3D11Buffer* getBufferName(void) const     { return mVboName; }
+        ID3D11Buffer* getBufferName(void) const     { return mVboName.Get(); }
     };
 }
 

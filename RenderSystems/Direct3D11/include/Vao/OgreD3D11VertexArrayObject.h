@@ -37,10 +37,10 @@ namespace Ogre
 {
     struct _OgreD3D11Export D3D11VertexArrayObjectShared
     {
-        ID3D11Buffer    *mVertexBuffers[16];
+        ComPtr<ID3D11Buffer> mVertexBuffers[16];
         UINT            mStrides[16];
         UINT            mOffsets[16];
-        ID3D11Buffer    *mIndexBuffer;
+        ComPtr<ID3D11Buffer> mIndexBuffer;
         DXGI_FORMAT     mIndexFormat;
 
         D3D11VertexArrayObjectShared( const VertexBufferPackedVec &vertexBuffers,

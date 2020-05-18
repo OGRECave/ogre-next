@@ -42,7 +42,7 @@ namespace Ogre
     {
     protected:
         size_t          mVboPoolIdx;
-        ID3D11Buffer    *mVboName;
+        ComPtr<ID3D11Buffer> mVboName;
         void            *mMappedPtr;
 
         void splicedCopy( size_t dstOffsetBytes, size_t srcOffsetBytes, size_t sizeBytes,
@@ -54,7 +54,7 @@ namespace Ogre
         ~D3D11BufferInterfaceBase();
 
         size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
-        ID3D11Buffer* getVboName(void) const        { return mVboName; }
+        ID3D11Buffer* getVboName(void) const        { return mVboName.Get(); }
 
         virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
                              size_t srcOffsetBytes, size_t sizeBytes );

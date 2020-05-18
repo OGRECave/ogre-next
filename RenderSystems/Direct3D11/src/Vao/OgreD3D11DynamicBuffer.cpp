@@ -72,7 +72,7 @@ namespace Ogre
         if( mMappedRanges.size() == mFreeRanges.size() )
         {
             D3D11_MAPPED_SUBRESOURCE mappedSubres;
-            mDevice.GetImmediateContext()->Map( mVboName, 0, D3D11_MAP_WRITE_NO_OVERWRITE,
+            mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE,
                                                 0, &mappedSubres );
             mMappedPtr = mappedSubres.pData;
         }
@@ -92,7 +92,7 @@ namespace Ogre
 
         if( mMappedRanges.size() == mFreeRanges.size() )
         {
-            mDevice.GetImmediateContext()->Unmap( mVboName, 0 );
+            mDevice.GetImmediateContext()->Unmap( mVboName.Get(), 0 );
             mMappedPtr = 0;
         }
     }

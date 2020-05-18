@@ -121,22 +121,22 @@ namespace Ogre
                 srcBox.left     = static_cast<UINT>( srcOffsetBytes );
                 srcBox.right    = static_cast<UINT>( srcOffsetBytes +
                                                      alignToPreviousMult( sizeBytes, alignment ) );
-                context->CopySubresourceRegion( dstBufferD3d->mVboName, 0,
+                context->CopySubresourceRegion( dstBufferD3d->mVboName.Get(), 0,
                                                 static_cast<UINT>( dstOffsetBytes ), 0, 0,
-                                                this->mVboName, 0, &srcBox );
+                                                this->mVboName.Get(), 0, &srcBox );
             }
 
             //Now deal with the last few bytes (which is up to 'alignment - 1u' bytes)
             splicedCopy( dstOffsetBytes, srcOffsetBytes, sizeBytes, alignment,
-                         dstBufferD3d->mVboName, this->mVboName, context );
+                         dstBufferD3d->mVboName.Get(), this->mVboName.Get(), context );
         }
         else
         {
             srcBox.left     = static_cast<UINT>( srcOffsetBytes );
             srcBox.right    = static_cast<UINT>( srcOffsetBytes + sizeBytes );
-            context->CopySubresourceRegion( dstBufferD3d->mVboName, 0,
+            context->CopySubresourceRegion( dstBufferD3d->mVboName.Get(), 0,
                                             static_cast<UINT>( dstOffsetBytes ), 0, 0,
-                                            this->mVboName, 0, &srcBox );
+                                            this->mVboName.Get(), 0, &srcBox );
         }
     }
     //-----------------------------------------------------------------------------------

@@ -80,7 +80,7 @@ namespace Ogre
     protected:
         struct Vbo
         {
-            ID3D11Buffer        *vboName;
+            ComPtr<ID3D11Buffer> vboName;
             size_t              sizeBytes;
             D3D11DynamicBuffer  *dynamicBuffer; //Null for non BT_DYNAMIC_* BOs.
 
@@ -95,7 +95,7 @@ namespace Ogre
 
             struct VertexBinding
             {
-                ID3D11Buffer        *vertexBufferVbo;
+                ComPtr<ID3D11Buffer> vertexBufferVbo;
                 VertexElement2Vec   vertexElements;
                 uint32              stride;
                 size_t              offset;
@@ -120,7 +120,7 @@ namespace Ogre
             /// purposes in the RenderQueue (using the Vao's ID).
             OperationType operationType;
             VertexBindingVec    vertexBuffers;
-            ID3D11Buffer        *indexBufferVbo;
+            ComPtr<ID3D11Buffer> indexBufferVbo;
             IndexBufferPacked::IndexType indexType;
             uint32              refCount;
         };

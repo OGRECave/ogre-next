@@ -3037,10 +3037,10 @@ namespace Ogre
         ID3D11DeviceContextN *deviceContext = mDevice.GetImmediateContext();
 
         deviceContext->IASetVertexBuffers( 0, vao->mVertexBuffers.size() + 1, //+1 due to DrawId
-                                           sharedData->mVertexBuffers,
+                                           sharedData->mVertexBuffers[0].GetAddressOf(),
                                            sharedData->mStrides,
                                            sharedData->mOffsets );
-        deviceContext->IASetIndexBuffer( sharedData->mIndexBuffer, sharedData->mIndexFormat, 0 );
+        deviceContext->IASetIndexBuffer( sharedData->mIndexBuffer.Get(), sharedData->mIndexFormat, 0 );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_render( const CbDrawCallIndexed *cmd )
