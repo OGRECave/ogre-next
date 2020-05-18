@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _Ogre_D3D11TexBufferPacked_H_
 
 #include "OgreD3D11Prerequisites.h"
+#include "OgreD3D11DeviceResource.h"
 #include "Vao/OgreTexBufferPacked.h"
 #include "OgreDescriptorSetTexture.h"
 
@@ -37,7 +38,8 @@ namespace Ogre
 {
     class D3D11BufferInterface;
 
-    class _OgreD3D11Export D3D11TexBufferPacked : public TexBufferPacked
+    class _OgreD3D11Export D3D11TexBufferPacked : public TexBufferPacked,
+                                                  protected D3D11DeviceResource
     {
         DXGI_FORMAT mInternalFormat;
         D3D11Device &mDevice;
@@ -56,6 +58,9 @@ namespace Ogre
 
         ID3D11ShaderResourceView* createResourceView( int cacheIdx, uint32 offset, uint32 sizeBytes );
         ID3D11ShaderResourceView* bindBufferCommon( size_t offset, size_t sizeBytes );
+
+        void notifyDeviceLost(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
 
     public:
         D3D11TexBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,

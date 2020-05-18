@@ -54,6 +54,20 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    void D3D11UavBufferPacked::notifyDeviceLost(D3D11Device* device)
+    {
+        for(unsigned cacheIdx = 0; cacheIdx < 16; ++cacheIdx)
+        {
+            mCachedResourceViews[cacheIdx].mResourceView.Reset();
+            mCachedResourceViews[cacheIdx].mOffset = 0;
+            mCachedResourceViews[cacheIdx].mSize = 0;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11UavBufferPacked::notifyDeviceRestored(D3D11Device* device, unsigned pass)
+    {
+    }
+    //-----------------------------------------------------------------------------------
     TexBufferPacked* D3D11UavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
     {
         assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );

@@ -59,6 +59,20 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    void D3D11TexBufferPacked::notifyDeviceLost(D3D11Device* device)
+    {
+        for(unsigned cacheIdx = 0; cacheIdx < 16; ++cacheIdx)
+        {
+            mCachedResourceViews[cacheIdx].mResourceView.Reset();
+            mCachedResourceViews[cacheIdx].mOffset = 0;
+            mCachedResourceViews[cacheIdx].mSize = 0;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11TexBufferPacked::notifyDeviceRestored(D3D11Device* device, unsigned pass)
+    {
+    }
+    //-----------------------------------------------------------------------------------
     bool D3D11TexBufferPacked::isD3D11Structured(void) const
     {
         return mInternalFormat == DXGI_FORMAT_UNKNOWN;
