@@ -275,7 +275,7 @@ namespace Ogre
             HlmsManager *hlmsManager = mRoot->getHlmsManager();
             OGRE_ASSERT_HIGH( dynamic_cast<HlmsPbs *>( hlmsManager->getHlms( HLMS_PBS ) ) );
             HlmsPbs *hlmsPbs = static_cast<HlmsPbs *>( hlmsManager->getHlms( HLMS_PBS ) );
-            hlmsPbs->_notifyIblSpecMipmap( mRenderTarget->getNumMipmaps() );
+            hlmsPbs->_notifyIblSpecMipmap( mBindTexture->getNumMipmaps() );
 
 //            CubemapProbeVec::const_iterator itor = mProbes.begin();
 //            CubemapProbeVec::const_iterator end  = mProbes.end();

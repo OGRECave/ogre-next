@@ -306,6 +306,10 @@ namespace Demo
                     mSpheres.push_back( item );
                 }
             }
+
+            // At startup resetIblSpecMipmap() was called but no scene was yet set
+            // and thus no cubemap, thus num mipmap was set to 1 (which is wrong).
+            hlmsPbs->resetIblSpecMipmap( 0u );
         }
 
         Ogre::SceneNode *rootNode = sceneManager->getRootSceneNode();
