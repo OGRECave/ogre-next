@@ -130,14 +130,9 @@ namespace Ogre
 
         typedef vector<Vbo>::type VboVec;
         typedef vector<Vao>::type VaoVec;
-        typedef map<VertexElement2Vec, Vbo>::type VboMap;
         typedef vector<GLsync>::type GLSyncVec;
 
         VboVec  mVbos[MAX_VBO_FLAG];
-        /// MultiSource VBOs request a block from mVbo (i.e. they call allocateVbo) and thus do not
-        /// own the vboName. For the rest, the way they manage free blocks is almost the same as
-        /// with regular mVbos.
-        VboMap  mMultiSourceVbos[MAX_VBO_FLAG];
         size_t  mDefaultPoolSize[MAX_VBO_FLAG];
 
         VaoVec  mVaos;

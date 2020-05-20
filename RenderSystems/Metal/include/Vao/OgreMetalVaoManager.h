@@ -129,7 +129,6 @@ namespace Ogre
 
         typedef vector<Vbo>::type VboVec;
         typedef vector<Vao>::type VaoVec;
-        typedef map<VertexElement2Vec, Vbo>::type VboMap;
         typedef vector<dispatch_semaphore_t>::type DispatchSemaphoreVec;
         typedef vector<uint8>::type DispatchSemaphoreAlreadyWaitedVec;
 

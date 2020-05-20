@@ -122,7 +122,6 @@ namespace Ogre
 
         typedef vector<Vbo>::type VboVec;
         typedef vector<Vao>::type VaoVec;
-        typedef map<VertexElement2Vec, Vbo>::type VboMap;
 
         VboVec  mVbos[MAX_VBO_FLAG];
 

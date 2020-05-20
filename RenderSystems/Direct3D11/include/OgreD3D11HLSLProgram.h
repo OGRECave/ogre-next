@@ -89,25 +89,6 @@ namespace Ogre {
 
     protected:
 
-        struct InputLayoutVaoBind
-        {
-            uint32              vaoName;
-            ID3D11InputLayout   *inputLayout;
-
-            InputLayoutVaoBind() {}
-
-            InputLayoutVaoBind( uint32 _vaoName, ID3D11InputLayout *_inputLayout ) :
-                vaoName( _vaoName ),
-                inputLayout( _inputLayout )
-            {
-            }
-
-            bool operator < ( const InputLayoutVaoBind &_r ) const
-            {
-                return this->vaoName < _r.vaoName;
-            }
-        };
-
         static CmdEntryPoint msCmdEntryPoint;
         static CmdTarget msCmdTarget;
         static CmdPreprocessorDefines msCmdPreprocessorDefines;

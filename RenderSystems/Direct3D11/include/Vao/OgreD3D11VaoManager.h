@@ -127,14 +127,9 @@ namespace Ogre
 
         typedef vector<Vbo>::type VboVec;
         typedef vector<Vao>::type VaoVec;
-        typedef map<VertexElement2Vec, Vbo>::type VboMap;
         typedef vector<ComPtr<ID3D11Query> >::type D3D11SyncVec;
 
         VboVec  mVbos[NumInternalBufferTypes][BT_DYNAMIC_DEFAULT+1];
-        /// MultiSource VBOs request a block from mVbo (i.e. they call allocateVbo) and thus do not
-        /// own the vboName. For the rest, the way they manage free blocks is almost the same as
-        /// with regular mVbos.
-        VboMap  mMultiSourceVbos;
         size_t  mDefaultPoolSize[NumInternalBufferTypes][BT_DYNAMIC_DEFAULT+1];
 
         BufferPackedVec mDelayedBuffers[NumInternalBufferTypes];
