@@ -276,6 +276,9 @@ namespace Ogre
                          D3D11RenderSystem *renderSystem, const NameValuePairList *params );
         virtual ~D3D11VaoManager();
 
+        void _createD3DResources();
+        void _destroyD3DResources();
+
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log ) const;
 

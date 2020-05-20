@@ -1669,6 +1669,7 @@ namespace Ogre
         Root::getSingleton().getHlmsManager()->_changeRenderSystem((RenderSystem*)0);
 
         static_cast<D3D11TextureGpuManager*>(mTextureGpuManager)->_destroyD3DResources();
+        static_cast<D3D11VaoManager*>(mVaoManager)->_destroyD3DResources();
 
         notifyDeviceLost(&mDevice);
 
@@ -1680,6 +1681,7 @@ namespace Ogre
         // recreate device
         createDevice( mLastWindowTitlePassedToExtensions );
 
+        static_cast<D3D11VaoManager*>(mVaoManager)->_createD3DResources();
         static_cast<D3D11TextureGpuManager*>(mTextureGpuManager)->_createD3DResources();
 
         // recreate device depended resources

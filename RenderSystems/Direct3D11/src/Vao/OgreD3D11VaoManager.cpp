@@ -181,6 +181,19 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void D3D11VaoManager::_createD3DResources()
+    {
+
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11VaoManager::_destroyD3DResources()
+    {
+        for( D3D11SyncVec::iterator it = mFrameSyncVec.begin(), it_end = mFrameSyncVec.end(); it != it_end; ++it )
+            it->Reset();
+
+        _destroyAllDelayedBuffers();
+    }
+    //-----------------------------------------------------------------------------------
     void D3D11VaoManager::getMemoryStats( const Block &block, uint32 vboIdx0, uint32 vboIdx1,
                                           size_t poolCapacity, LwString &text,
                                           MemoryStatsEntryVec &outStats,
