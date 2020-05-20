@@ -109,6 +109,15 @@ namespace v1 {
         SAFE_DELETE(mpTempStagingBuffer); // should never be nonzero unless destroyed while locked
         SAFE_DELETE(mShadowBuffer);
     }
+    //-----------------------------------------------------------------------------------
+    void D3D11HardwareBuffer::notifyDeviceLost( D3D11Device *device )
+    {
+        mlpD3DBuffer.Reset();
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11HardwareBuffer::notifyDeviceRestored( D3D11Device *device, unsigned pass )
+    {
+    }
     //---------------------------------------------------------------------
     void* D3D11HardwareBuffer::lockImpl(size_t offset, 
         size_t length, LockOptions options)

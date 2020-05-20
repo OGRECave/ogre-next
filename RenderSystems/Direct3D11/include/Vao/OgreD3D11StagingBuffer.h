@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _Ogre_D3D11StagingBuffer_H_
 
 #include "OgreD3D11Prerequisites.h"
+#include "OgreD3D11DeviceResource.h"
 
 #include "Vao/OgreStagingBuffer.h"
 
@@ -45,7 +46,8 @@ namespace Ogre
         In other words, a staging buffer is an intermediate buffer to transfer data between
         CPU & GPU
     */
-    class _OgreD3D11Export D3D11StagingBuffer : public StagingBuffer
+    class _OgreD3D11Export D3D11StagingBuffer : public StagingBuffer,
+                                                protected D3D11DeviceResource
     {
     protected:
         /// mVboName is not deleted by us (the VaoManager does) as we may have
@@ -78,6 +80,9 @@ namespace Ogre
         virtual void unmapImpl( const Destination *destinations, size_t numDestinations );
 
         virtual const void* _mapForReadImpl( size_t offset, size_t sizeBytes );
+
+        void notifyDeviceLost( D3D11Device *device );
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass );
 
     public:
         D3D11StagingBuffer( size_t sizeBytes, VaoManager *vaoManager, bool uploadOnly,

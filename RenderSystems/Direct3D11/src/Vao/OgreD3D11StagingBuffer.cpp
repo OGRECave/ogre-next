@@ -49,6 +49,15 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    void D3D11StagingBuffer::notifyDeviceLost( D3D11Device *device )
+    {
+        mVboName.Reset();
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11StagingBuffer::notifyDeviceRestored( D3D11Device *device, unsigned pass )
+    {
+    }
+    //-----------------------------------------------------------------------------------
     void* D3D11StagingBuffer::mapImpl( size_t sizeBytes )
     {
         assert( mUploadOnly );

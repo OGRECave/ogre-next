@@ -46,6 +46,15 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    void D3D11DynamicBuffer::notifyDeviceLost( D3D11Device *device )
+    {
+        mVboName.Reset();
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11DynamicBuffer::notifyDeviceRestored( D3D11Device *device, unsigned pass )
+    {
+    }
+    //-----------------------------------------------------------------------------------
     size_t D3D11DynamicBuffer::addMappedRange(size_t start, size_t count )
     {
         size_t ticket;
