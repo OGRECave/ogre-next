@@ -57,6 +57,38 @@ compositor_node CubemapRendererNode
 	}
 }
 
+// MSAA Cubemaps do not exist. Therefore we have to manually define the RTV (RenderTextureView)
+// To render to a temporary MSAA surface and tell Ogre to resolve the MSAA contents into a cubemap
+compositor_node CubemapRendererNodeMsaa
+{
+	in 0 cubemap
+
+	texture tmpMsaa		target_width target_height target_format msaa 4 explicit_resolve
+	texture tmpCubemap	target_width target_height target_format cubemap mipmaps 0
+
+	rtv mixedCubemapRtv
+	{
+		// Specify we want to render to tmpMsaa at slot[0] but we want to resolve to tmpCubemap
+		colour	0 tmpMsaa resolve tmpCubemap
+	}
+
+	target mixedCubemapRtv +X : cubemap_target { }
+	target mixedCubemapRtv -X : cubemap_target { }
+	target mixedCubemapRtv +Y : cubemap_target { }
+	target mixedCubemapRtv -Y : cubemap_target { }
+	target mixedCubemapRtv +Z : cubemap_target { }
+	target mixedCubemapRtv -Z : cubemap_target { }
+
+	target tmpCubemap
+	{
+		pass ibl_specular
+		{
+			input tmpCubemap
+			output cubemap
+		}
+	}
+}
+
 compositor_node Tutorial_DynamicCubemapRenderingNode
 {
 	in 0 rt_renderwindow

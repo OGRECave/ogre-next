@@ -120,9 +120,16 @@ namespace Demo
             mCubeCamera->setPosition( 0, 1.0, 0 );
         }
 
+        // Note: You don't necessarily have to tie RenderWindow's use of MSAA with cubemap's MSAA
+        // You could always use MSAA for the cubemap, or never use MSAA for the cubemap.
+        // That's up to you. This sample is tying them together in order to showcase them. That's all.
+        const IdString cubemapRendererNode = renderWindow->getSampleDescription().isMultisample()
+                                                 ? "CubemapRendererNodeMsaa"
+                                                 : "CubemapRendererNode";
+
         {
             CompositorNodeDef *nodeDef =
-                compositorManager->getNodeDefinitionNonConst( "CubemapRendererNode" );
+                compositorManager->getNodeDefinitionNonConst( cubemapRendererNode );
             const CompositorPassDefVec &passes =
                 nodeDef->getTargetPass( nodeDef->getNumTargetPasses() - 1u )->getCompositorPasses();
 
@@ -145,7 +152,7 @@ namespace Demo
                                                                                     workspaceName );
             //"CubemapRendererNode" has been defined in scripts.
             //Very handy (as it 99% the same for everything)
-            workspaceDef->connectExternal( 0, "CubemapRendererNode", 0 );
+            workspaceDef->connectExternal( 0, cubemapRendererNode, 0 );
         }
 
         ResourceLayoutMap initialCubemapLayouts;

@@ -7697,15 +7697,28 @@ namespace Ogre{
         while( itor != end )
         {
             AtomAbstractNode *atom = (AtomAbstractNode*)(*itor).get();
+
+            AbstractNodePtr nextAtom;
+
+            {
+                // advance to next to get actual desired value
+                AbstractNodeList::const_iterator it = itor;
+                ++it;
+                if( it != end )
+                    nextAtom = *it;
+            }
+
             switch( atom->id )
             {
             case ID_RESOLVE:
+                if( !nextAtom || !getIdString( nextAtom, &attachment.resolveTextureName ) )
+                    compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
                 break;
             case ID_MIP:
             case ID_MIPMAP:
             {
                 uint32 mip = 0;
-                if( getUInt( *itor, &mip ) )
+                if( nextAtom && getUInt( nextAtom, &mip ) )
                 {
                     attachment.mipLevel = static_cast<uint8>( mip );
                     if( !resolveMipSet )
@@ -7721,7 +7734,7 @@ namespace Ogre{
             case ID_RESOLVE_MIPMAP:
             {
                 uint32 mip = 0;
-                if( getUInt( *itor, &mip ) )
+                if( nextAtom && getUInt( nextAtom, &mip ) )
                 {
                     attachment.resolveMipLevel = static_cast<uint8>( mip );
                     resolveMipSet = true;
@@ -7735,7 +7748,7 @@ namespace Ogre{
             case ID_SLICE:
             {
                 uint32 slice = 0;
-                if( getUInt( *itor, &slice ) )
+                if( nextAtom && getUInt( nextAtom, &slice ) )
                 {
                     attachment.slice = static_cast<uint8>( slice );
                     if( !resolveSliceSet )
@@ -7750,7 +7763,7 @@ namespace Ogre{
             case ID_RESOLVE_SLICE:
             {
                 uint32 slice = 0;
-                if( getUInt( *itor, &slice ) )
+                if( nextAtom && getUInt( nextAtom, &slice ) )
                 {
                     attachment.resolveSlice = static_cast<uint8>( slice );
                     resolveSliceSet = true;
@@ -7762,10 +7775,8 @@ namespace Ogre{
             }
             case ID_ALL_LAYERS:
             {
-                if( !getBoolean( *itor, &attachment.colourAllLayers ) )
-                {
+                if( !nextAtom || !getBoolean( nextAtom, &attachment.colourAllLayers ) )
                     compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
-                }
             }
                 break;
             }
