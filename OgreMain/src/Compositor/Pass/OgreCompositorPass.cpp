@@ -390,9 +390,14 @@ namespace Ogre
         }
         else
         {
-            //This is colour target asking to override the RTV.
-            renderPassTargetAttachment->slice       = mDefinition->getRtIndex();
-            renderPassTargetAttachment->resolveSlice= mDefinition->getRtIndex();
+            // This is colour target asking to override the RTV.
+            // It's common when doing MSAA that only the resolveSlice can be > 0 so we check for that
+            if( renderPassTargetAttachment->texture &&
+                mDefinition->getRtIndex() < renderPassTargetAttachment->texture->getNumSlices() )
+            {
+                renderPassTargetAttachment->slice = (uint16)mDefinition->getRtIndex();
+            }
+            renderPassTargetAttachment->resolveSlice= (uint16)mDefinition->getRtIndex();
         }
 
         if( renderPassTargetAttachment->storeAction == StoreAction::StoreOrResolve )
