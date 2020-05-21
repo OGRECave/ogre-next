@@ -77,9 +77,7 @@ compositor_node CubemapRendererNodeMsaa
 	target mixedCubemapRtv +Y : cubemap_target { }
 	target mixedCubemapRtv -Y : cubemap_target { }
 	target mixedCubemapRtv +Z : cubemap_target { }
-	target mixedCubemapRtv -Z : cubemap_target { }
-
-	target tmpCubemap
+	target mixedCubemapRtv -Z : cubemap_target
 	{
 		pass ibl_specular
 		{
