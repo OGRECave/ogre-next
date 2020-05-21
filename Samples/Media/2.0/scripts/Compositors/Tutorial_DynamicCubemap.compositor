@@ -63,6 +63,9 @@ compositor_node CubemapRendererNodeMsaa
 {
 	in 0 cubemap
 
+	// Note: IF you wish to preserve the MSAA contents of all 6 faces, then use
+	//	'texture tmpMsaa target_width target_height 6 target_format 2d_array msaa 4 explicit_resolve'
+	// instead
 	texture tmpMsaa		target_width target_height target_format msaa 4 explicit_resolve
 	texture tmpCubemap	target_width target_height target_format cubemap mipmaps 0
 
