@@ -37,6 +37,7 @@
 #include <iterator>
 #include <string>
 #include <stdexcept>
+#include <ostream>
 
 // Workaround for VC7/7.1/8.0/9.0 (2003 - 2008):
 //      when build with /MD or /MDd, VC have both std::basic_string<unsigned short> and
