@@ -80,6 +80,7 @@ namespace Ogre
         mReceiveShadows( true ),
         mCubemapIdxInDescSet( std::numeric_limits<uint8>::max() ),
         mUseEmissiveAsLightmap( false ),
+        mUseDiffuseMapAsGrayscale( false ),
         mTransparencyMode( None ),
         mkDr( 0.318309886f ), mkDg( 0.318309886f ), mkDb( 0.318309886f ), //Max Diffuse = 1 / PI
         _padding0( 1 ),
@@ -192,6 +193,8 @@ namespace Ogre
 
         if( Hlms::findParamInVec( params, "diffuse_map", paramVal ) )
             setTexture( PBSM_DIFFUSE, paramVal );
+        if( Hlms::findParamInVec( params, "diffuse_map_grayscale", paramVal ) )
+            mUseDiffuseMapAsGrayscale = StringConverter::parseBool( paramVal );
         if( Hlms::findParamInVec( params, "normal_map", paramVal ) )
             setTexture( PBSM_NORMAL, paramVal );
         if( Hlms::findParamInVec( params, "specular_map", paramVal ) )

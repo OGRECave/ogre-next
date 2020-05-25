@@ -220,6 +220,7 @@ namespace Ogre
         bool    mReceiveShadows;
         uint8   mCubemapIdxInDescSet;
         bool    mUseEmissiveAsLightmap;
+        bool    mUseDiffuseMapAsGrayscale;
         TransparencyModes mTransparencyMode;
 
         float	mBgDiffuse[4];
@@ -280,6 +281,10 @@ namespace Ogre
 
             * diffuse_map <texture name>
                 Name of the diffuse texture for the base image (optional)
+
+            * diffuse_map_grayscale <true, false>
+                When set to true diffuse map would be sampled with .rrra swizzle
+                Default: false
 
             * specular <r g b>
                 Specifies the RGB specular colour. "kS" in most books about PBS
@@ -634,6 +639,14 @@ namespace Ogre
         void setUseEmissiveAsLightmap( bool bUseEmissiveAsLightmap );
         bool getUseEmissiveAsLightmap(void) const;
 
+        /** When set, it treats the diffuse map as a grayscale map; which means it will
+            spread red component to all rgb channels.
+        @remarks
+            With this option you can use PFG_R8_UNORM for diffuse map in the same way as old PF_L8 format
+        */
+        void setUseDiffuseMapAsGrayscale( bool bUseDiffuseMapAsGrayscale )  { if( mUseDiffuseMapAsGrayscale != bUseDiffuseMapAsGrayscale ){ mUseDiffuseMapAsGrayscale = bUseDiffuseMapAsGrayscale; flushRenderables(); } }
+        bool getUseDiffuseMapAsGrayscale( void ) const                      { return mUseDiffuseMapAsGrayscale; }
+        
         /** Manually set a probe to affect this particular material.
         @remarks
             PCC (Parallax Corrected Cubemaps) have two main forms of operation: Auto and manual.

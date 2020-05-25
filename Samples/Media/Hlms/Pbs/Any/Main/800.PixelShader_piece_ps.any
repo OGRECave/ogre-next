@@ -60,7 +60,7 @@
 		@property( detail_map@n )#define SampleDetailCol@n( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )@end
 	@end
 	@property( diffuse_map )
-		#define SampleDiffuse( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+		#define SampleDiffuse( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) @property( diffuse_map_grayscale ).rrra@end
 	@end
 	@property( specular_map )
 		#define SampleSpecular( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )

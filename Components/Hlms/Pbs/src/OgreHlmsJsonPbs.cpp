@@ -196,6 +196,15 @@ namespace Ogre
                 aliasName = itor->value[1].GetString();
             }
 
+            if( textureType == PBSM_DIFFUSE )
+            {
+                itor = json.FindMember("grayscale");
+                if( itor != json.MemberEnd() && itor->value.IsBool() )
+                {
+                    datablock->setUseDiffuseMapAsGrayscale( itor->value.GetBool() );
+                }
+            }
+
             uint32 textureFlags = TextureFlags::AutomaticBatching;
 
             if( datablock->suggestUsingSRGB( textureType ) )
@@ -691,6 +700,11 @@ namespace Ogre
                         outString += ",\n\t\t\t\t\"texture\" : \"";
                         outString += finalTexName;
                         outString += '"';
+                    }
+                    
+                    if(textureType == PBSM_DIFFUSE && datablock->getUseDiffuseMapAsGrayscale())
+                    {
+                        outString += ",\n\t\t\t\t\"grayscale\" : true";
                     }
                 }
             }
