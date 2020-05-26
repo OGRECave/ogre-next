@@ -149,6 +149,16 @@ namespace Ogre {
         mMesh->removeListener(this);
     }
     //-----------------------------------------------------------------------
+    void Item::_releaseManualHardwareResources()
+    {
+        _deinitialise();
+    }
+    //-----------------------------------------------------------------------
+    void Item::_restoreManualHardwareResources()
+    {
+        _initialise();
+    }
+    //-----------------------------------------------------------------------
     const MeshPtr& Item::getMesh(void) const
     {
         return mMesh;

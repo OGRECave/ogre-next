@@ -195,11 +195,7 @@ namespace Ogre
 
         /// @copydoc RenderSystem::fireDeviceEvent
         void fireDeviceEvent( D3D11Device* device, const String & name,
-                              D3D11Window *sendingWindow );
-#if !TODO_OGRE_2_2
-        void fireDeviceEvent( D3D11Device* device, const String & name,
-                              D3D11RenderWindowBase *sendingWindow = NULL ) {}
-#endif
+                              D3D11Window *sendingWindow = NULL );
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture ) {}
 

@@ -93,7 +93,6 @@ namespace Ogre
     // Predefine classes
     class D3D11AsyncTextureTicket;
     class D3D11RenderSystem;
-    class D3D11RenderWindowBase;
     class D3D11CompatBufferInterface;
     class D3D11Driver;
     class D3D11DriverList;

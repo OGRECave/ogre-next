@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreViewport.h"
 #include "OgreLogManager.h"
 #include "OgreMeshManager.h"
+#include "OgreMeshManager2.h"
 #include "OgreSceneManagerEnumerator.h"
 #include "OgreD3D11HardwareBufferManager.h"
 #include "OgreD3D11HardwareIndexBuffer.h"
@@ -1690,6 +1691,7 @@ namespace Ogre
         Root::getSingleton().getHlmsManager()->_changeRenderSystem(this);
 
         v1::MeshManager::getSingleton().reloadAll(Resource::LF_PRESERVE_STATE);
+        MeshManager::getSingleton().reloadAll(Resource::LF_PRESERVE_STATE);
 
         scnIt = SceneManagerEnumerator::getSingleton().getSceneManagerIterator();
         while(scnIt.hasMoreElements())

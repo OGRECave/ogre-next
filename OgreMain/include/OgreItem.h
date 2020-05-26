@@ -122,6 +122,11 @@ namespace Ogre {
         */
         ~Item();
 
+        /** @copydoc MovableObject::_releaseManualHardwareResources */
+        void _releaseManualHardwareResources();
+        /** @copydoc MovableObject::_restoreManualHardwareResources */
+        void _restoreManualHardwareResources();
+
         /** Gets the Mesh that this Item is based on.
         */
         const MeshPtr& getMesh(void) const;
