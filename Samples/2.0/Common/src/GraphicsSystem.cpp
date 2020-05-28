@@ -784,7 +784,18 @@ namespace Demo
         Ogre::Hlms *hlms = mRoot->getHlmsManager()->getHlms( Ogre::HLMS_PBS );
         OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbs*>( hlms ) );
         Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlms );
-        hlmsPbs->loadLtcMatrix();
+        try
+        {
+            hlmsPbs->loadLtcMatrix();
+        }
+        catch( Ogre::FileNotFoundException &e )
+        {
+            Ogre::LogManager::getSingleton().logMessage( e.getFullDescription(), Ogre::LML_CRITICAL );
+            Ogre::LogManager::getSingleton().logMessage(
+                "WARNING: LTC matrix textures could not be loaded. Accurate specular IBL reflections "
+                "and LTC area lights won't be available or may not function properly!",
+                Ogre::LML_CRITICAL );
+        }
     }
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::chooseSceneManager(void)

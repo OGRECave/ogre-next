@@ -69,6 +69,10 @@ int mainApp( int argc, const char *argv[] )
     GameState gameState;
     MyGraphicsSystem graphicsSystem( &gameState );
 
+    // MyGraphicsSystem::setupResources overrode the folder setup process to minimize errors.
+    // But this also means you'll see "WARNING: LTC matrix textures could not be loaded.
+    // Accurate specular IBL reflections and LTC area lights won't be available or may not
+    // function properly!" message in the Log
     graphicsSystem.initialize( "Tutorial 01: Initialization" );
 
     if( graphicsSystem.getQuit() )
