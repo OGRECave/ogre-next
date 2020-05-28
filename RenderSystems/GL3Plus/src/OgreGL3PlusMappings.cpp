@@ -182,6 +182,11 @@ namespace Ogre
         case PFG_V208:                          return GL_NONE;
         case PFG_V408:                          return GL_NONE;
 
+        case PFG_RGB8_UNORM:                    return GL_NONE;
+        case PFG_RGB8_UNORM_SRGB:               return GL_NONE;
+        case PFG_BGR8_UNORM:                    return GL_NONE;
+        case PFG_BGR8_UNORM_SRGB:               return GL_NONE;
+
         case PFG_PVRTC_RGB2:                    return GL_NONE;
         case PFG_PVRTC_RGB2_SRGB:               return GL_NONE;
         case PFG_PVRTC_RGBA2:                   return GL_NONE;
