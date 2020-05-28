@@ -186,6 +186,7 @@ namespace Ogre
         case PFG_RGB8_UNORM_SRGB:               return GL_NONE;
         case PFG_BGR8_UNORM:                    return GL_NONE;
         case PFG_BGR8_UNORM_SRGB:               return GL_NONE;
+        case PFG_RGB16_UNORM:                   return GL_NONE;
 
         case PFG_PVRTC_RGB2:                    return GL_NONE;
         case PFG_PVRTC_RGB2_SRGB:               return GL_NONE;
@@ -430,10 +431,11 @@ namespace Ogre
         case PFG_RGB8_UNORM_SRGB:
         case PFG_BGR8_UNORM:
         case PFG_BGR8_UNORM_SRGB:
+        case PFG_RGB16_UNORM:
             format = GL_NONE;
             OGRE_EXCEPT(
                 Exception::ERR_INVALIDPARAMS,
-                "24-bit RGB/BGR formats are not meant for GPU use. They can only be used by the CPU."
+                "24/48-bit RGB/BGR formats are not meant for GPU use. They can only be used by the CPU."
                 "PixelFormat: " +
                     String( PixelFormatGpuUtils::toString( pixelFormat ) ),
                 "GL3PlusMappings::getFormatAndType" );
