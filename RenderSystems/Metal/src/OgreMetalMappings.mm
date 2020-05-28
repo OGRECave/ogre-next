@@ -477,7 +477,10 @@ namespace Ogre
         case PFG_ASTC_RGBA_UNORM_12X10_sRGB:    return MTLPixelFormatASTC_12x10_sRGB;
         case PFG_ASTC_RGBA_UNORM_12X12_sRGB:    return MTLPixelFormatASTC_12x12_sRGB;
 #endif
-
+        case PFG_RGB8_UNORM:
+        case PFG_RGB8_UNORM_SRGB:
+        case PFG_BGR8_UNORM:
+        case PFG_BGR8_UNORM_SRGB:
         case PFG_AYUV:
         case PFG_Y410:
         case PFG_Y416:
