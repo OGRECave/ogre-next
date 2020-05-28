@@ -67,7 +67,7 @@ namespace Ogre
         const String& group, bool isManual, ManualResourceLoader* loader)
         :Resource (creator, name, handle, group, isManual, loader),
         mType(FT_TRUETYPE), mCharacterSpacer(5), mTtfSize(0), mTtfResolution(0), mTtfMaxBearingY(0),
-        mHlmsDatablock(0), mAntialiasColour(false)
+        mHlmsDatablock(0), mTextureLoadingInProgress(false), mAntialiasColour(false)
     {
 
         if (createParamDictionary("Font"))
@@ -255,6 +255,7 @@ namespace Ogre
 
         if( mTexture )
         {
+            mTexture->removeListener( this );
             textureManager->destroyTexture( mTexture );
             mTexture = 0;
         }
@@ -276,6 +277,7 @@ namespace Ogre
         mTexture->setPixelFormat( PFG_RG8_UNORM );
         mTexture->setTextureType( TextureTypes::Type2D );
         mTexture->setNumMipmaps( 1u );
+        mTexture->addListener( this );
 
         loadTextureFromFont( textureManager );
     }
@@ -367,7 +369,8 @@ namespace Ogre
         }
         finalWidth = roundUpSize;
 
-        mTexture->setResolution( finalWidth, finalHeight );
+        if( mTexture->getResidencyStatus() == GpuResidency::OnStorage )
+            mTexture->setResolution( finalWidth, finalHeight );
 
         Real textureAspect = (Real)finalWidth / (Real)finalHeight;
 
@@ -472,8 +475,13 @@ namespace Ogre
             ++itor;
         }
 
-        mTexture->_transitionTo( GpuResidency::Resident, imageData );
-        mTexture->_setNextResidencyStatus( GpuResidency::Resident );
+        if( mTexture->getResidencyStatus() == GpuResidency::OnStorage )
+        {
+            mTextureLoadingInProgress = true;  // avoid recursion
+            mTexture->_transitionTo( GpuResidency::Resident, imageData );
+            mTexture->_setNextResidencyStatus( GpuResidency::Resident );
+            mTextureLoadingInProgress = false;
+        }
 
         StagingTexture *stagingTexture = textureManager->getStagingTexture( finalWidth, finalHeight,
                                                                             1u, 1u,
@@ -493,6 +501,16 @@ namespace Ogre
         mTexture->notifyDataIsReady();
 
         FT_Done_FreeType(ftLibrary);
+    }
+    //---------------------------------------------------------------------
+    void Font::notifyTextureChanged(TextureGpu* texture, TextureGpuListener::Reason reason, void* extraData)
+    {
+        if( reason == TextureGpuListener::GainedResidency && !mTextureLoadingInProgress )
+        {
+            RenderSystem* renderSystem = Root::getSingleton().getRenderSystem();
+            TextureGpuManager* textureManager = renderSystem->getTextureGpuManager();
+            loadTextureFromFont(textureManager);
+        }
     }
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------

@@ -29,6 +29,7 @@ THE SOFTWARE
 
 #include "OgreOverlayPrerequisites.h"
 #include "OgreResource.h"
+#include "OgreTextureGpuListener.h"
 #include "OgreCommon.h"
 #include "OgreSharedPtr.h"
 
@@ -63,7 +64,7 @@ namespace Ogre
     both a resource in it's own right, but it also provides the manual load
     implementation for the Texture it creates.
     */
-    class _OgreOverlayExport Font : public Resource
+    class _OgreOverlayExport Font : public Resource, public TextureGpuListener
     {
     protected:
         /// Command object for Font - see ParamCommand 
@@ -163,6 +164,7 @@ namespace Ogre
 
         /// Texture pointer
         TextureGpu *mTexture;
+        bool mTextureLoadingInProgress;
 
         /// For TRUE_TYPE font only
         bool mAntialiasColour;
@@ -404,6 +406,9 @@ namespace Ogre
         {
             return mAntialiasColour;
         }
+
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData );
     };
     /** @} */
     /** @} */
