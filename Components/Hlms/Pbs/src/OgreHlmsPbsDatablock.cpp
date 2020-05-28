@@ -923,6 +923,20 @@ namespace Ogre
         return mUseEmissiveAsLightmap;
     }
     //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::setUseDiffuseMapAsGrayscale( bool bUseDiffuseMapAsGrayscale )
+    {
+        if( mUseDiffuseMapAsGrayscale != bUseDiffuseMapAsGrayscale )
+        {
+            mUseDiffuseMapAsGrayscale = bUseDiffuseMapAsGrayscale;
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    bool HlmsPbsDatablock::getUseDiffuseMapAsGrayscale( void ) const
+    {
+        return mUseDiffuseMapAsGrayscale;
+    }
+    //-----------------------------------------------------------------------------------
     bool HlmsPbsDatablock::getReceiveShadows(void) const
     {
         return mReceiveShadows;

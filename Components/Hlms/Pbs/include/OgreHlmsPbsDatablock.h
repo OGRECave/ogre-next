@@ -644,9 +644,9 @@ namespace Ogre
         @remarks
             With this option you can use PFG_R8_UNORM for diffuse map in the same way as old PF_L8 format
         */
-        void setUseDiffuseMapAsGrayscale( bool bUseDiffuseMapAsGrayscale )  { if( mUseDiffuseMapAsGrayscale != bUseDiffuseMapAsGrayscale ){ mUseDiffuseMapAsGrayscale = bUseDiffuseMapAsGrayscale; flushRenderables(); } }
-        bool getUseDiffuseMapAsGrayscale( void ) const                      { return mUseDiffuseMapAsGrayscale; }
-        
+        void setUseDiffuseMapAsGrayscale( bool bUseDiffuseMapAsGrayscale );
+        bool getUseDiffuseMapAsGrayscale( void ) const;
+
         /** Manually set a probe to affect this particular material.
         @remarks
             PCC (Parallax Corrected Cubemaps) have two main forms of operation: Auto and manual.
