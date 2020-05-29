@@ -220,6 +220,24 @@ namespace Ogre
                     it->vboName.Reset();
             }
         }
+
+        for( size_t i=0; i<NumInternalBufferTypes; ++i )
+        {
+            for( size_t j=0; j<BT_DYNAMIC_DEFAULT+1; ++j )
+            {
+                //Free pointers and collect the buffer names from all VBOs to use one API call
+                VboVec::iterator itor = mVbos[i][j].begin();
+                VboVec::iterator end  = mVbos[i][j].end();
+
+                while( itor != end )
+                {
+                    itor->vboName.Reset();
+                    delete itor->dynamicBuffer;
+                    itor->dynamicBuffer = 0;
+                    ++itor;
+                }
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void D3D11VaoManager::getMemoryStats( const Block &block, uint32 vboIdx0, uint32 vboIdx1,
@@ -516,6 +534,9 @@ namespace Ogre
     void D3D11VaoManager::deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
                                          BufferType bufferType, InternalBufferType internalType )
     {
+        if( vboIdx == 0xFFFFFFFF )
+            return;
+
         if (bufferType >= BT_DYNAMIC_DEFAULT)
         {
             bufferType = BT_DYNAMIC_DEFAULT; //Persitent mapping not supported in D3D11.

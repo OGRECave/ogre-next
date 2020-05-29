@@ -45,6 +45,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11BufferInterfaceBase::notifyDeviceLost( D3D11Device *device )
     {
+        mVboPoolIdx = 0xFFFFFFFF;
         mVboName.Reset();
     }
     //-----------------------------------------------------------------------------------
