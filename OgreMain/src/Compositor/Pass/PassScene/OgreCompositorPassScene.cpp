@@ -181,6 +181,15 @@ namespace Ogre
 
         notifyPassEarlyPreExecuteListeners();
 
+        SceneManager *sceneManager = mCamera->getSceneManager();
+
+        // Our LOD camera must have set a valid viewport. If usedLodCamera gets overriden by
+        // our input argument, then it's caller's responsibility to have set a valid viewport
+        Viewport *viewport = sceneManager->getCurrentViewport0();
+        viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
+        setViewportSizeToViewport( 0u, viewport );
+        mLodCamera->_notifyViewport( viewport );
+
         Camera const *usedLodCamera = mLodCamera;
         if( lodCamera && mDefinition->mLodCameraName == IdString() )
             usedLodCamera = lodCamera;
@@ -190,8 +199,6 @@ namespace Ogre
         String oldViewportMatScheme = mViewport->getMaterialScheme();
         mViewport->setMaterialScheme(mDefinition->mMaterialScheme);
 #endif
-
-        SceneManager *sceneManager = mCamera->getSceneManager();
 
         const Quaternion oldCameraOrientation( mCamera->getOrientation() );
 
@@ -215,9 +222,6 @@ namespace Ogre
             sceneManager->_setCurrentShadowNode( shadowNode, mDefinition->mShadowNodeRecalculation ==
                                                                                     SHADOW_NODE_REUSE );
         }
-
-        Viewport *viewport = sceneManager->getCurrentViewport0();
-        viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
 
         //Fire the listener in case it wants to change anything
         notifyPassPreExecuteListeners();

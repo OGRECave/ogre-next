@@ -135,6 +135,16 @@ namespace Ogre
         /// in case derived class wants to make some changes.
         virtual void postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc ) {}
 
+        /// Does the same as setRenderPassDescToCurrent, but only setting a single Viewport.
+        /// (setRenderPassDescToCurrent does much more)
+        ///
+        /// Needed due to catch-22 problem:
+        ///     1. Some algorithms (like LOD) need a Viewport set
+        ///     2. We can't call setRenderPassDescToCurrent until that algorithm has run
+        ///     3. The algorithm thus can't run if setRenderPassDescToCurrent isn't set
+        ///
+        /// See https://forums.ogre3d.org/viewtopic.php?p=548046#p548046
+        void setViewportSizeToViewport( size_t vpIdx, Viewport *outVp );
         void setRenderPassDescToCurrent(void);
 
         void populateTextureDependenciesFromExposedTextures(void);
