@@ -69,7 +69,16 @@ namespace Ogre {
     /** @} */
     /** @} */
 
-    class _OgreExport AbsolutePixelCountLodStrategy : public PixelCountLodStrategyBase, public Singleton<AbsolutePixelCountLodStrategy>
+    /**
+    @brief The AbsolutePixelCountLodStrategy class
+        LOD strategy that works like ScreenRatioPixelCountLodStrategy,
+        but in range [-width * height;0] instead of [-1.0;0.0]
+
+        Because this strategy heavily depends on target resolution, it is strongly recommended
+        that you use ScreenRatioPixelCountLodStrategy instead.
+    */
+    class _OgreExport AbsolutePixelCountLodStrategy : public PixelCountLodStrategyBase,
+                                                      public Singleton<AbsolutePixelCountLodStrategy>
     {
     public:
         /** Default constructor. */
@@ -117,7 +126,19 @@ namespace Ogre {
     /** @} */
     /** @} */
 
-    class _OgreExport ScreenRatioPixelCountLodStrategy : public PixelCountLodStrategyBase, public Singleton<ScreenRatioPixelCountLodStrategy>
+    /**
+    @brief The ScreenRatioPixelCountLodStrategy class
+        Implement a strategy which calculates LOD ratios based on coverage in screen ratios in
+        the range [-1.0; 0.0] where -1.0 means the object is covering the whole screen and 0
+        covering almost nothing in the screen (very tiny).
+
+        Note however that:
+            1. Values beyond -1.0 are possible (it just means the object is bigger than the screen)
+            2. It's an approximation
+    */
+    class _OgreExport ScreenRatioPixelCountLodStrategy
+        : public PixelCountLodStrategyBase,
+          public Singleton<ScreenRatioPixelCountLodStrategy>
     {
     public:
         /** Default constructor. */
