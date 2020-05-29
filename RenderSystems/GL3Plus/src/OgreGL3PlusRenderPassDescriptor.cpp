@@ -620,6 +620,8 @@ namespace Ogre
 
         bool unbindReadDrawFramebuffers = false;
 
+        GLenum invalidateTarget = GL_DRAW_FRAMEBUFFER;
+
         if( entriesToFlush & RenderPassDescriptor::Colour && !mHasRenderWindow )
         {
             for( size_t i=0; i<mNumColourEntries; ++i )
@@ -640,6 +642,8 @@ namespace Ogre
                                 mColour[i].resolveTexture->getTextureType();
                         const bool hasLayers = resolveTextureType != TextureTypes::Type1D &&
                                                resolveTextureType != TextureTypes::Type2D;
+
+                        invalidateTarget = GL_READ_FRAMEBUFFER;
 
                         // Blit from multisample buffer to final buffer, triggers resolve
                         OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, mFboName ) );
@@ -703,7 +707,7 @@ namespace Ogre
 
         if( numAttachments > 0 && hasArbInvalidateSubdata )
         {
-            OCGE( glInvalidateFramebuffer( GL_FRAMEBUFFER, numAttachments, attachments ) );
+            OCGE( glInvalidateFramebuffer( invalidateTarget, numAttachments, attachments ) );
         }
 
         if( unbindReadDrawFramebuffers )
