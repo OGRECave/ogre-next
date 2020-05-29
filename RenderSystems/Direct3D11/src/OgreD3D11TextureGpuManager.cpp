@@ -174,6 +174,7 @@ namespace Ogre
     void D3D11TextureGpuManager::_destroyD3DResources()
     {
         mMutex.lock();
+        mScheduledTasks.clear();
         destroyAllStagingBuffers();
         mMutex.unlock();
 

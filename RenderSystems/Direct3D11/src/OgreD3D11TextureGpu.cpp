@@ -59,7 +59,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::notifyDeviceLost(D3D11Device* device)
     {
-        destroyInternalResourcesImpl();
+        mPendingResidencyChanges = 0; // we already cleared D3D11TextureGpuManager::mScheduledTasks
+        if(getResidencyStatus() == GpuResidency::Resident)
+            _transitionTo(GpuResidency::OnStorage, (uint8*)0);
+
+        mDisplayTextureName = 0;
+        mDefaultDisplaySrv.Reset();
     }
     //---------------------------------------------------------------------
     void D3D11TextureGpu::notifyDeviceRestored(D3D11Device* device, unsigned pass)
@@ -70,7 +75,6 @@ namespace Ogre
 
             if( !isRenderWindowSpecific() && getNextResidencyStatus() == GpuResidency::Resident )
             {
-                scheduleTransitionTo(GpuResidency::OnStorage);
                 scheduleTransitionTo(GpuResidency::Resident);
             }
         }
