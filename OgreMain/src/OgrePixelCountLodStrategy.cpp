@@ -232,7 +232,7 @@ namespace Ogre {
     }
     //-----------------------------------------------------------------------
     void ScreenRatioPixelCountLodStrategy::lodUpdateImpl( const size_t numNodes, ObjectData objData,
-                                                       const Camera *camera, Real bias ) const
+                                                          const Camera *camera, Real bias ) const
     {
         ArrayVector3 cameraPos;
         cameraPos.setAll( camera->_getCachedDerivedPosition() );
@@ -269,12 +269,17 @@ namespace Ogre {
             // screen_cvg = -------------------------------------------------------
             //                        4 * distance² * viewport_width
             //
+            // Since projMatrix[0][0] = projMatrix[1][1] * viewport_width / viewport_height, thus:
+            //
+            //               PI * projMatrix[0][0] * projMatrix[1][1] * radius_ws²
+            // screen_cvg = -------------------------------------------------------
+            //                                 4 * distance²
+            //
             // From this formula, only distance and radius varies per object.
             // constTerm is negative so we can store Lod values in ascending
             // order and use lower_bound (which wouldn't be the same as using upper_bound)
-            const ArrayReal constTerm( Mathlib::SetAll( -Math::PI * projMat[1][1] * projMat[1][1] *
-                                                        camera->getLodBias() * bias /
-                                                        ( camera->getAspectRatio() * 4.0f ) ) );
+            const ArrayReal constTerm( Mathlib::SetAll( -Math::PI * projMat[0][0] * projMat[1][1] *
+                                                        camera->getLodBias() * bias / 4.0f ) );
 
             for( size_t i=0; i<numNodes; i += ARRAY_PACKED_REALS )
             {
