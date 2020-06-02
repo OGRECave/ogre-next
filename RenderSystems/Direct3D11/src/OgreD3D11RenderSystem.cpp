@@ -1470,28 +1470,13 @@ namespace Ogre
         if( desc->mInformationOnly && desc->hasSameAttachments( mCurrentRenderPassDescriptor ) )
             return;
 
-        const int oldWidth = mCurrentRenderViewport[0].getActualWidth();
-        const int oldHeight = mCurrentRenderViewport[0].getActualHeight();
-        const int oldX = mCurrentRenderViewport[0].getActualLeft();
-        const int oldY = mCurrentRenderViewport[0].getActualTop();
-
         D3D11RenderPassDescriptor *currPassDesc =
                 static_cast<D3D11RenderPassDescriptor*>( mCurrentRenderPassDescriptor );
 
         RenderSystem::beginRenderPassDescriptor( desc, anyTarget, mipLevel, viewportSizes, scissors,
                                                  numViewports, overlaysEnabled, warnIfRtvWasFlushed );
 
-        int x, y, w, h;
-
-        // Calculate the new "lower-left" corner of the viewport to compare with the old one
-        w = mCurrentRenderViewport[0].getActualWidth();
-        h = mCurrentRenderViewport[0].getActualHeight();
-        x = mCurrentRenderViewport[0].getActualLeft();
-        y = mCurrentRenderViewport[0].getActualTop();
-
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
-
-        const bool vpChanged = oldX != x || oldY != y || oldWidth != w || oldHeight != h;
 
         D3D11RenderPassDescriptor *newPassDesc =
                 static_cast<D3D11RenderPassDescriptor*>( desc );
@@ -1526,20 +1511,17 @@ namespace Ogre
             entriesToFlush = RenderPassDescriptor::All;
         }
 
-        if( vpChanged || numViewports > 1u )
+        D3D11_VIEWPORT d3dVp[16];
+        for( size_t i=0; i<numViewports; ++i )
         {
-            D3D11_VIEWPORT d3dVp[16];
-            for( size_t i=0; i<numViewports; ++i )
-            {
-                d3dVp[i].TopLeftX= static_cast<FLOAT>( mCurrentRenderViewport[i].getActualLeft() );
-                d3dVp[i].TopLeftY= static_cast<FLOAT>( mCurrentRenderViewport[i].getActualTop() );
-                d3dVp[i].Width   = static_cast<FLOAT>( mCurrentRenderViewport[i].getActualWidth() );
-                d3dVp[i].Height  = static_cast<FLOAT>( mCurrentRenderViewport[i].getActualHeight() );
-                d3dVp[i].MinDepth= 0.0f;
-                d3dVp[i].MaxDepth= 1.0f;
-            }
-            context->RSSetViewports( numViewports, d3dVp );
+            d3dVp[i].TopLeftX= static_cast<FLOAT>( mCurrentRenderViewport[i].getActualLeft() );
+            d3dVp[i].TopLeftY= static_cast<FLOAT>( mCurrentRenderViewport[i].getActualTop() );
+            d3dVp[i].Width   = static_cast<FLOAT>( mCurrentRenderViewport[i].getActualWidth() );
+            d3dVp[i].Height  = static_cast<FLOAT>( mCurrentRenderViewport[i].getActualHeight() );
+            d3dVp[i].MinDepth= 0.0f;
+            d3dVp[i].MaxDepth= 1.0f;
         }
+        context->RSSetViewports( numViewports, d3dVp );
 
         D3D11_RECT scRc[16];
         for( size_t i=0; i<numViewports; ++i )
