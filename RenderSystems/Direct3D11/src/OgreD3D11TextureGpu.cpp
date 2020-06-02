@@ -60,8 +60,13 @@ namespace Ogre
     void D3D11TextureGpu::notifyDeviceLost(D3D11Device* device)
     {
         mPendingResidencyChanges = 0; // we already cleared D3D11TextureGpuManager::mScheduledTasks
+        mTexturePool = 0;             // texture pool is already destroyed
+        mInternalSliceStart = 0;
         if(getResidencyStatus() == GpuResidency::Resident)
+        {
             _transitionTo(GpuResidency::OnStorage, (uint8*)0);
+            mNextResidencyStatus = GpuResidency::Resident;
+        }
 
         mDisplayTextureName = 0;
         mDefaultDisplaySrv.Reset();
@@ -73,8 +78,9 @@ namespace Ogre
         {
             _setToDisplayDummyTexture();
 
-            if( !isRenderWindowSpecific() && getNextResidencyStatus() == GpuResidency::Resident )
+            if( !isRenderWindowSpecific() && getNextResidencyStatus() == GpuResidency::Resident)
             {
+                mNextResidencyStatus = mResidencyStatus;
                 scheduleTransitionTo(GpuResidency::Resident);
             }
         }

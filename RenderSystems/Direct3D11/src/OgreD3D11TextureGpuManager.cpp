@@ -53,7 +53,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     D3D11TextureGpuManager::~D3D11TextureGpuManager()
     {
-        _destroyD3DResources();
+        // Do not call _destroyD3DResources() as it does only partial destruction for device
+        // lost scenario, and here it will only cause crash in subsequent destroyAll()
+
         destroyAll();
     }
     //-----------------------------------------------------------------------------------
@@ -176,6 +178,7 @@ namespace Ogre
         mMutex.lock();
         mScheduledTasks.clear();
         destroyAllStagingBuffers();
+        destroyAllPools();
         mMutex.unlock();
 
         for( int i=0; i<=TextureTypes::Type3D; ++i )
