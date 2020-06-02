@@ -183,13 +183,6 @@ namespace Ogre
 
         SceneManager *sceneManager = mCamera->getSceneManager();
 
-        // Our LOD camera must have set a valid viewport. If usedLodCamera gets overriden by
-        // our input argument, then it's caller's responsibility to have set a valid viewport
-        Viewport *viewport = sceneManager->getCurrentViewport0();
-        viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
-        setViewportSizeToViewport( 0u, viewport );
-        mLodCamera->_notifyViewport( viewport );
-
         Camera const *usedLodCamera = mLodCamera;
         if( lodCamera && mDefinition->mLodCameraName == IdString() )
             usedLodCamera = lodCamera;
@@ -209,10 +202,25 @@ namespace Ogre
             mCamera->setOrientation( oldCameraOrientation * CubemapRotations[sliceIdx] );
         }
 
+        Viewport *viewport = sceneManager->getCurrentViewport0();
+        viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
+
         if( mDefinition->mUpdateLodLists )
         {
-            sceneManager->updateAllLods( usedLodCamera, mDefinition->mLodBias,
+            // LODs may require up to date viewports. But we can't write to the viewport's dimensions
+            // without messing up beginRenderPassDescriptor internal state, so we use a local copy.
+            //
+            // Our LOD camera must have set a valid viewport. If usedLodCamera != mLodCamera due to
+            // our input argument, then it's caller's responsibility to have set a valid viewport
+            Viewport localVp = *viewport;
+            setViewportSizeToViewport( 0u, &localVp );
+            mLodCamera->_notifyViewport( &localVp );
+
+            sceneManager->updateAllLods( usedLodCamera, mDefinition->mLodBias,  //
                                          mDefinition->mFirstRQ, mDefinition->mLastRQ );
+
+            // Restore viewport
+            mLodCamera->_notifyViewport( viewport );
         }
 
         //Passes belonging to a ShadowNode should not override their parent.
