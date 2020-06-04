@@ -271,13 +271,8 @@ namespace Ogre
         CompositorNodeDef       *mParentNodeDef;
 
     public:
-        CompositorTargetDef( String renderTargetName, uint32 rtIndex,
-                             CompositorNodeDef *parentNodeDef ) :
-                mRenderTargetName( renderTargetName ),
-                mRenderTargetNameStr( renderTargetName ),
-                mRtIndex( rtIndex ),
-                mShadowMapSupportedLightTypes( 0 ),
-                mParentNodeDef( parentNodeDef ) {}
+		CompositorTargetDef( const String &renderTargetName, uint32 rtIndex,
+							 CompositorNodeDef *parentNodeDef );
         ~CompositorTargetDef();
 
         IdString getRenderTargetName() const            { return mRenderTargetName; }

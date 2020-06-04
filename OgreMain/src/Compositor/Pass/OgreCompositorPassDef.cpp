@@ -63,6 +63,16 @@ namespace Ogre
         "CUSTOM"
     };
 
+    CompositorTargetDef::CompositorTargetDef( const String &renderTargetName, uint32 rtIndex,
+                                              CompositorNodeDef *parentNodeDef ) :
+        mRenderTargetName( renderTargetName.empty() ? IdString() : renderTargetName ),
+        mRenderTargetNameStr( renderTargetName ),
+        mRtIndex( rtIndex ),
+        mShadowMapSupportedLightTypes( 0 ),
+        mParentNodeDef( parentNodeDef )
+    {
+    }
+    //-----------------------------------------------------------------------------------
     CompositorTargetDef::~CompositorTargetDef()
     {
         CompositorPassDefVec::const_iterator itor = mCompositorPasses.begin();
