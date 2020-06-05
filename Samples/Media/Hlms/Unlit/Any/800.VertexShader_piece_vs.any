@@ -55,7 +55,7 @@
 											 (worldMaterialIdx[finalDrawId].x << 4u) +
 											 @value( out_uv@n_tex_unit )u );
 				outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) =
-						mul( float4( uv@value( out_uv@n_source_uv ).xy, 0, 1 ), textureMatrix ).xy;
+						mul( float4( inVs_uv@value( out_uv@n_source_uv ).xy, 0, 1 ), textureMatrix ).xy;
 			@else
 				outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) =
 						inVs_uv@value( out_uv@n_source_uv ).xy;
