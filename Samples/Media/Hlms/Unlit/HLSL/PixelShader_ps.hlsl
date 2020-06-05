@@ -2,11 +2,11 @@
 
 // START UNIFORM DECLARATION
 @property( has_planar_reflections )
-	@insertpiece( PassDecl )
+	@insertpiece( PassStructDecl )
 @end
 @property( !hlms_shadowcaster )
-@insertpiece( MaterialDecl )
-@insertpiece( InstanceDecl )
+@insertpiece( MaterialStructDecl )
+@insertpiece( InstanceStructDecl )
 @end
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION
@@ -85,7 +85,7 @@ SamplerState samplerState@n : register(s@counter(samplerStateBind));@end
 @insertpiece( DeclShadowCasterMacros )
 
 @property( hlms_shadowcaster_point )
-	@insertpiece( PassDecl )
+	@insertpiece( PassStructDecl )
 @end
 
 @insertpiece( DeclOutputType )

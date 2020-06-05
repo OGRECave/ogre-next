@@ -16,11 +16,11 @@ layout(location = FRAG_COLOR, index = 0) out float outColour;
 
 // START UNIFORM DECLARATION
 @property( has_planar_reflections )
-	@insertpiece( PassDecl )
+	@insertpiece( PassStructDecl )
 @end
 @property( !hlms_shadowcaster )
-@insertpiece( MaterialDecl )
-@insertpiece( InstanceDecl )
+@insertpiece( MaterialStructDecl )
+@insertpiece( InstanceStructDecl )
 @end
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION
@@ -44,7 +44,7 @@ void main()
 	@insertpiece( custom_ps_preExecution )
 @property( diffuse_map || alpha_test || diffuse )
 	uint materialId	= worldMaterialIdx[inPs.drawId].x;
-	material = materialArray.m[materialId];
+	material = materialArray[materialId];
 @end
 	@insertpiece( custom_ps_posMaterialLoad )
 
@@ -85,7 +85,7 @@ void main()
 @insertpiece( DeclShadowCasterMacros )
 
 @property( hlms_shadowcaster_point )
-	@insertpiece( PassDecl )
+	@insertpiece( PassStructDecl )
 @end
 
 void main()

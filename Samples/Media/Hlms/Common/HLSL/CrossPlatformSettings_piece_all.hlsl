@@ -37,6 +37,7 @@
 #define inVs_blendWeights input.blendWeights
 #define inVs_blendIndices input.blendIndices
 #define inVs_qtangent input.qtangent
+#define inVs_colour input.colour
 @property( !hlms_instanced_stereo )
 	#define inVs_drawId input.drawId
 @else

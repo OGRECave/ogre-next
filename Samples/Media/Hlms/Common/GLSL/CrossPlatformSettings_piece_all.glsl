@@ -79,6 +79,7 @@
 #define inVs_blendWeights blendWeights
 #define inVs_blendIndices blendIndices
 #define inVs_qtangent qtangent
+#define inVs_colour colour
 
 @property( !hlms_instanced_stereo )
 	#define inVs_drawId drawId
