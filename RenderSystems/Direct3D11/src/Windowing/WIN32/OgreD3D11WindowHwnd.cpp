@@ -373,7 +373,7 @@ namespace Ogre
             else
             {
                 RECT rc;
-                SetRect( &rc, mLeft, mTop, mRequestedWidth, mRequestedHeight );
+                SetRect( &rc, mLeft, mTop, mLeft+mRequestedWidth, mTop+mRequestedHeight );
                 if( !outerSize )
                 {
                     //User requested "client resolution", we need to grow the rect
