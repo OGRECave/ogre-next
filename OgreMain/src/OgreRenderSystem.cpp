@@ -67,9 +67,6 @@ namespace Ogre {
         , mDebugShaders(false)
 #endif
         , mWBuffer(false)
-        , mBatchCount(0)
-        , mFaceCount(0)
-        , mVertexCount(0)
         , mInvertVertexWinding(false)
         , mDisabledTexUnitsFrom(0)
         , mCurrentPassIterationCount(0)
@@ -679,25 +676,33 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::_beginGeometryCount(void)
+    void RenderSystem::_resetMetrics()
     {
-        mBatchCount = mFaceCount = mVertexCount = 0;
-
+        const bool oldValue = mMetrics.mIsRecordingMetrics;
+        mMetrics = Metrics();
+        mMetrics.mIsRecordingMetrics = oldValue;
     }
     //-----------------------------------------------------------------------
-    unsigned int RenderSystem::_getFaceCount(void) const
+    void RenderSystem::_addMetrics( const Metrics &newMetrics )
     {
-        return static_cast< unsigned int >( mFaceCount );
+        if( mMetrics.mIsRecordingMetrics )
+        {
+            mMetrics.mBatchCount += newMetrics.mBatchCount;
+            mMetrics.mFaceCount += newMetrics.mFaceCount;
+            mMetrics.mVertexCount += newMetrics.mVertexCount;
+            mMetrics.mDrawCount += newMetrics.mDrawCount;
+            mMetrics.mInstanceCount += newMetrics.mInstanceCount;
+        }
     }
     //-----------------------------------------------------------------------
-    unsigned int RenderSystem::_getBatchCount(void) const
+    void RenderSystem::setMetricsRecordingEnabled( bool bEnable )
     {
-        return static_cast< unsigned int >( mBatchCount );
+        mMetrics.mIsRecordingMetrics = bEnable;
     }
     //-----------------------------------------------------------------------
-    unsigned int RenderSystem::_getVertexCount(void) const
+    const RenderSystem::Metrics& RenderSystem::getMetrics() const
     {
-        return static_cast< unsigned int >( mVertexCount );
+        return mMetrics;
     }
     //-----------------------------------------------------------------------
     void RenderSystem::convertColourValue(const ColourValue& colour, uint32* pDest)
@@ -915,11 +920,11 @@ namespace Ogre {
         switch(op.operationType)
         {
         case OT_TRIANGLE_LIST:
-            mFaceCount += (val / 3);
+            mMetrics.mFaceCount += (val / 3u);
             break;
         case OT_TRIANGLE_STRIP:
         case OT_TRIANGLE_FAN:
-            mFaceCount += (val - 2);
+            mMetrics.mFaceCount += (val - 2u);
             break;
         case OT_POINT_LIST:
         case OT_LINE_LIST:
@@ -959,8 +964,8 @@ namespace Ogre {
             break;
         }
 
-        mVertexCount += op.vertexData->vertexCount * trueInstanceNum;
-        mBatchCount += mCurrentPassIterationCount;
+        mMetrics.mVertexCount += op.vertexData->vertexCount * trueInstanceNum;
+        mMetrics.mBatchCount += mCurrentPassIterationCount;
 
         // sort out clip planes
         // have to do it here in case of matrix issues
@@ -1222,5 +1227,14 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
     RenderSystem::Listener::~Listener() {}
+    RenderSystem::Metrics::Metrics() :
+        mIsRecordingMetrics( false ),
+        mBatchCount( 0 ),
+        mFaceCount( 0 ),
+        mVertexCount( 0 ),
+        mDrawCount( 0 ),
+        mInstanceCount( 0 )
+    {
+    }
 }
 

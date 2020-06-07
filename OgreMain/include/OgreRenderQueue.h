@@ -180,13 +180,11 @@ namespace Ogre {
 
         /// Renders in a compatible way with GL 3.3 and D3D11. Can only render V2 objects
         /// (i.e. Items, VertexArrayObject)
-        unsigned char* renderGL3( bool casterPass, bool dualParaboloid,
-                        HlmsCache passCache[],
-                        const RenderQueueGroup &renderQueueGroup,
-                        IndirectBufferPacked *indirectBuffer,
-                        unsigned char *indirectDraw, unsigned char *startIndirectDraw );
-        void renderGL3V1( bool casterPass, bool dualParaboloid,
-                          HlmsCache passCache[],
+        unsigned char *renderGL3( RenderSystem *rs, bool casterPass, bool dualParaboloid,
+                                  HlmsCache passCache[], const RenderQueueGroup &renderQueueGroup,
+                                  IndirectBufferPacked *indirectBuffer, unsigned char *indirectDraw,
+                                  unsigned char *startIndirectDraw );
+        void renderGL3V1( RenderSystem *rs, bool casterPass, bool dualParaboloid, HlmsCache passCache[],
                           const RenderQueueGroup &renderQueueGroup );
 
     public:

@@ -1444,7 +1444,7 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
         }
     } // end lock on scene graph mutex
 
-    mDestRenderSystem->_beginGeometryCount();
+    mDestRenderSystem->_resetMetrics();
 
     // Set initial camera state
     mDestRenderSystem->_setProjectionMatrix( Matrix4::IDENTITY );
@@ -1469,10 +1469,10 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
     mDestRenderSystem->setInvertVertexWinding(false);
 
     // Notify camera of vis faces
-    camera->_notifyRenderedFaces(mDestRenderSystem->_getFaceCount());
+    camera->_notifyRenderedFaces( mDestRenderSystem->getMetrics().mFaceCount );
 
     // Notify camera of vis batches
-    camera->_notifyRenderedBatches(mDestRenderSystem->_getBatchCount());
+    camera->_notifyRenderedBatches( mDestRenderSystem->getMetrics().mBatchCount );
 
     Root::getSingleton()._popCurrentSceneManager(this);
 }

@@ -110,6 +110,17 @@ namespace Ogre
     class _OgreExport RenderSystem : public RenderSysAlloc
     {
     public:
+        struct _OgreExport Metrics
+        {
+            bool mIsRecordingMetrics;
+            size_t mBatchCount;
+            size_t mFaceCount;
+            size_t mVertexCount;
+            size_t mDrawCount;
+            size_t mInstanceCount;
+            Metrics();
+        };
+
         /** Default Constructor.
         */
         RenderSystem();
@@ -925,14 +936,12 @@ namespace Ogre
         /// at Hlms level)
         virtual void _setComputePso( const HlmsComputePso *pso ) = 0;
 
-        /** The RenderSystem will keep a count of tris rendered, this resets the count. */
-        virtual void _beginGeometryCount(void);
-        /** Reports the number of tris rendered since the last _beginGeometryCount call. */
-        virtual unsigned int _getFaceCount(void) const;
-        /** Reports the number of batches rendered since the last _beginGeometryCount call. */
-        virtual unsigned int _getBatchCount(void) const;
-        /** Reports the number of vertices passed to the renderer since the last _beginGeometryCount call. */
-        virtual unsigned int _getVertexCount(void) const;
+        void _resetMetrics();
+        void _addMetrics( const Metrics &newMetrics );
+
+        void setMetricsRecordingEnabled( bool bEnable );
+
+        const Metrics& getMetrics() const;
 
         /** Generates a packed data version of the passed in ColourValue suitable for
         use as with this RenderSystem.
@@ -1411,9 +1420,7 @@ namespace Ogre
         bool mDebugShaders;
         bool mWBuffer;
 
-        size_t mBatchCount;
-        size_t mFaceCount;
-        size_t mVertexCount;
+        Metrics mMetrics;
 
         /// Saved manual colour blends
         ColourValue mManualBlendColours[OGRE_MAX_TEXTURE_LAYERS][2];

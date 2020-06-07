@@ -441,11 +441,11 @@ namespace Ogre
                                                                     v1::CbStartV1LegacyRendering();
                     mLastVaoName = 0;
                 }
-                renderGL3V1( casterPass, dualParaboloid, mPassCache, mRenderQueues[i] );
+                renderGL3V1( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i] );
             }
             else if( numNeededDraws > 0 /*&& mRenderQueues[i].mMode == FAST*/ )
             {
-                indirectDraw = renderGL3( casterPass, dualParaboloid, mPassCache, mRenderQueues[i],
+                indirectDraw = renderGL3( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i],
                                           indirectBuffer, indirectDraw, startIndirectDraw );
             }
         }
@@ -543,7 +543,8 @@ namespace Ogre
         mLastTextureHash    = lastTextureHash;
     }
     //-----------------------------------------------------------------------
-    unsigned char* RenderQueue::renderGL3( bool casterPass, bool dualParaboloid, HlmsCache passCache[],
+    unsigned char *RenderQueue::renderGL3( RenderSystem *rs, bool casterPass, bool dualParaboloid,
+                                           HlmsCache passCache[],
                                            const RenderQueueGroup &renderQueueGroup,
                                            IndirectBufferPacked *indirectBuffer,
                                            unsigned char *indirectDraw,
@@ -566,7 +567,9 @@ namespace Ogre
         uint32 instanceCount = instancesPerDraw;
 
         CbDrawCall *drawCmd = 0;
-        CbSharedDraw    *drawCountPtr = 0;
+        CbSharedDraw *drawCountPtr = 0;
+
+        RenderSystem::Metrics stats;
 
         const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
 
@@ -634,6 +637,7 @@ namespace Ogre
                 }
 
                 lastVao = 0;
+                stats.mDrawCount += 1u;
             }
 
             if( lastVao != vao )
@@ -672,6 +676,7 @@ namespace Ogre
                 }
 
                 lastVao = vao;
+                stats.mInstanceCount += instancesPerDraw;
             }
             else
             {
@@ -679,10 +684,19 @@ namespace Ogre
                 //an external variable, as the region can be write-combined
                 instanceCount += instancesPerDraw;
                 drawCountPtr->instanceCount = instanceCount;
+                stats.mInstanceCount += instancesPerDraw;
             }
+
+            const Ogre::OperationType type = vao->getOperationType();
+            if( type == OT_TRIANGLE_STRIP || type == OT_TRIANGLE_LIST )
+                stats.mFaceCount += ( vao->mPrimCount / 3u ) * instancesPerDraw;
+
+            stats.mVertexCount += vao->mPrimCount * instancesPerDraw;
 
             ++itor;
         }
+
+        rs->_addMetrics( stats );
 
         mLastVaoName        = lastVaoName;
         mLastVertexData     = 0;
@@ -692,9 +706,8 @@ namespace Ogre
         return indirectDraw;
     }
     //-----------------------------------------------------------------------
-    void RenderQueue::renderGL3V1( bool casterPass, bool dualParaboloid,
-                                   HlmsCache passCache[],
-                                   const RenderQueueGroup &renderQueueGroup )
+    void RenderQueue::renderGL3V1( RenderSystem *rs, bool casterPass, bool dualParaboloid,
+                                   HlmsCache passCache[], const RenderQueueGroup &renderQueueGroup )
     {
         v1::RenderOperation lastRenderOp;
         HlmsCache const *lastHlmsCache = &c_dummyCache;
@@ -709,6 +722,8 @@ namespace Ogre
         uint32 instanceCount = instancesPerDraw;
 
         v1::CbDrawCall *drawCmd = 0;
+
+        RenderSystem::Metrics stats;
 
         const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
 
@@ -798,6 +813,9 @@ namespace Ogre
 
                     drawCmd = drawCall;
                 }
+
+                stats.mDrawCount += 1u;
+                stats.mInstanceCount += instancesPerDraw;
             }
             else
             {
@@ -805,10 +823,21 @@ namespace Ogre
                 //an external variable, as the region can be write-combined
                 instanceCount += instancesPerDraw;
                 drawCmd->instanceCount = instanceCount;
+                stats.mInstanceCount += instancesPerDraw;
             }
+
+            if( renderOp.operationType == OT_TRIANGLE_STRIP ||
+                renderOp.operationType == OT_TRIANGLE_LIST )
+            {
+                stats.mFaceCount += ( renderOp.vertexData->vertexCount / 3u ) * instancesPerDraw;
+            }
+
+            stats.mVertexCount += renderOp.vertexData->vertexCount * instancesPerDraw;
 
             ++itor;
         }
+
+        rs->_addMetrics( stats );
 
         mLastVaoName        = 0;
         mLastVertexData     = 0;

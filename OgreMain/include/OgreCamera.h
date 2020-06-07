@@ -146,10 +146,10 @@ namespace Ogre {
         Vector3 mYawFixedAxis;
 
         /// Stored number of visible faces in the last render
-        unsigned int mVisFacesLastRender;
+        size_t mVisFacesLastRender;
 
         /// Stored number of visible batches in the last render
-        unsigned int mVisBatchesLastRender;
+        size_t mVisBatchesLastRender;
 
         VrData *mVrData;
 
@@ -390,19 +390,19 @@ namespace Ogre {
 
         /** Internal method to notify camera of the visible faces in the last render.
         */
-        void _notifyRenderedFaces(unsigned int numfaces);
+        void _notifyRenderedFaces( size_t numfaces );
 
         /** Internal method to notify camera of the visible batches in the last render.
-        */
-        void _notifyRenderedBatches(unsigned int numbatches);
+         */
+        void _notifyRenderedBatches( size_t numbatches );
 
         /** Internal method to retrieve the number of visible faces in the last render.
         */
-        unsigned int _getNumRenderedFaces(void) const;
+        size_t _getNumRenderedFaces( void ) const;
 
         /** Internal method to retrieve the number of visible batches in the last render.
-        */
-        unsigned int _getNumRenderedBatches(void) const;
+         */
+        size_t _getNumRenderedBatches( void ) const;
 
         /** Gets the derived orientation of the camera, including any
             rotation inherited from a node attachment and reflection matrix. */
