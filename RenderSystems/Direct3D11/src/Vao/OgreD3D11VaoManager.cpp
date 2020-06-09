@@ -131,20 +131,7 @@ namespace Ogre
         mSupportsPersistentMapping  = false;
         mSupportsIndirectBuffers    = _supportsIndirectBuffers;
 
-        //4096u is a sensible default because most Hlms implementations need 16 bytes per
-        //instance in a const buffer. HlmsBufferManager::mapNextConstBuffer purposedly clamps
-        //its const buffers to 64kb, so that 64kb / 16 = 4096 and thus it can never exceed
-        //4096 instances.
-        //However due to instanced stereo, we need twice that
-        const uint32 maxNumInstances = 4096u * 2u;
-        VertexElement2Vec vertexElements;
-        vertexElements.push_back( VertexElement2( VET_UINT1, VES_COUNT ) );
-        uint32 *drawIdPtr = static_cast<uint32*>( OGRE_MALLOC_SIMD( maxNumInstances * sizeof(uint32),
-                                                                    MEMCATEGORY_GEOMETRY ) );
-        for( uint32 i=0; i<maxNumInstances; ++i )
-            drawIdPtr[i] = i;
-        mDrawId = createVertexBuffer( vertexElements, maxNumInstances, BT_IMMUTABLE, drawIdPtr, true );
-        createDelayedImmutableBuffers(); //Ensure mDrawId gets allocated before we continue
+        _createD3DResources();
     }
     //-----------------------------------------------------------------------------------
     D3D11VaoManager::~D3D11VaoManager()
@@ -183,11 +170,27 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11VaoManager::_createD3DResources()
     {
-
+        //4096u is a sensible default because most Hlms implementations need 16 bytes per
+        //instance in a const buffer. HlmsBufferManager::mapNextConstBuffer purposedly clamps
+        //its const buffers to 64kb, so that 64kb / 16 = 4096 and thus it can never exceed
+        //4096 instances.
+        //However due to instanced stereo, we need twice that
+        const uint32 maxNumInstances = 4096u * 2u;
+        VertexElement2Vec vertexElements;
+        vertexElements.push_back( VertexElement2( VET_UINT1, VES_COUNT ) );
+        uint32 *drawIdPtr = static_cast<uint32*>( OGRE_MALLOC_SIMD( maxNumInstances * sizeof(uint32),
+                                                                    MEMCATEGORY_GEOMETRY ) );
+        for( uint32 i=0; i<maxNumInstances; ++i )
+            drawIdPtr[i] = i;
+        mDrawId = createVertexBuffer( vertexElements, maxNumInstances, BT_IMMUTABLE, drawIdPtr, true );
+        createDelayedImmutableBuffers(); //Ensure mDrawId gets allocated before we continue
     }
     //-----------------------------------------------------------------------------------
     void D3D11VaoManager::_destroyD3DResources()
     {
+        destroyVertexBuffer(mDrawId);
+        mDrawId = 0;
+
         for( D3D11SyncVec::iterator it = mFrameSyncVec.begin(), it_end = mFrameSyncVec.end(); it != it_end; ++it )
             it->Reset();
 
