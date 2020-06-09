@@ -115,7 +115,7 @@ namespace Ogre {
         bool mInitialised;
 
         /** Builds a list of SubItems based on the SubMeshes contained in the Mesh. */
-        void buildSubItems(void);
+        void buildSubItems( vector<String>::type* materialsList = 0 );
 
     public:
         /** Default destructor.

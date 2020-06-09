@@ -116,10 +116,29 @@ namespace v1 {
         mObjectData.mQueryFlags[mObjectData.mIndex] = SceneManager::QUERY_ENTITY_DEFAULT_MASK;
     }
     //-----------------------------------------------------------------------
+    void Entity::_releaseManualHardwareResources()
+    {
+        // do not call _deinitialise() here to preserve material names
+    }
+    //-----------------------------------------------------------------------
+    void Entity::_restoreManualHardwareResources()
+    {
+        _initialise(true);
+    }
+    //-----------------------------------------------------------------------
     void Entity::_initialise(bool forceReinitialise)
     {
+        vector<String>::type prevMaterialsList;
         if (forceReinitialise)
+        {
+            if (mMesh->getNumSubMeshes() == mSubEntityList.size())
+            {
+                SubEntityList::iterator seend = mSubEntityList.end();
+                for(SubEntityList::iterator i = mSubEntityList.begin(); i != seend; ++i)
+                    prevMaterialsList.push_back(i->getDatablockOrMaterialName());
+            }
             _deinitialise();
+        }
 
         if (mInitialised)
             return;
@@ -149,7 +168,7 @@ namespace v1 {
         mLodMesh = mMesh->_getLodValueArray();
 
         // Build main subentity list
-        buildSubEntityList(mMesh, &mSubEntityList);
+        buildSubEntityList(mMesh, &mSubEntityList, prevMaterialsList.empty() ? 0 : &prevMaterialsList);
 
         {
             //Without filling the renderables list, the RenderQueue won't
@@ -1344,7 +1363,7 @@ namespace v1 {
         return mLodEntityList.size();
     }
     //-----------------------------------------------------------------------
-    void Entity::buildSubEntityList(MeshPtr& mesh, SubEntityList* sublist)
+    void Entity::buildSubEntityList(MeshPtr& mesh, SubEntityList* sublist, vector<String>::type* materialList)
     {
         // Create SubEntities
         unsigned short i, numSubMeshes;
@@ -1356,6 +1375,8 @@ namespace v1 {
         {
             subMesh = mesh->getSubMesh(i);
             sublist->push_back( SubEntity( this, subMesh ) );
+            if (materialList)
+                sublist->back().setDatablockOrMaterialName((*materialList)[i], mesh->getGroup());
         }
     }
     //-----------------------------------------------------------------------

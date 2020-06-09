@@ -64,8 +64,17 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void Item::_initialise(bool forceReinitialise)
     {
+        vector<String>::type prevMaterialsList;
         if( forceReinitialise )
+        {
+            if (mMesh->getNumSubMeshes() == mSubItems.size())
+            {
+                SubItemVec::iterator seend = mSubItems.end();
+                for(SubItemVec::iterator i = mSubItems.begin(); i != seend; ++i)
+                    prevMaterialsList.push_back(i->getDatablockOrMaterialName());
+            }
             _deinitialise();
+        }
 
         if (mInitialised)
             return;
@@ -95,7 +104,7 @@ namespace Ogre {
         mLodMesh = mMesh->_getLodValueArray();
 
         // Build main subItem list
-        buildSubItems();
+        buildSubItems( prevMaterialsList.empty() ? 0 : &prevMaterialsList );
 
         {
             //Without filling the renderables list, the RenderQueue won't
@@ -151,12 +160,12 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void Item::_releaseManualHardwareResources()
     {
-        _deinitialise();
+        // do not call _deinitialise() here to preserve material names
     }
     //-----------------------------------------------------------------------
     void Item::_restoreManualHardwareResources()
     {
-        _initialise();
+        _initialise(true);
     }
     //-----------------------------------------------------------------------
     const MeshPtr& Item::getMesh(void) const
@@ -266,7 +275,7 @@ namespace Ogre {
         return ItemFactory::FACTORY_TYPE_NAME;
     }
     //-----------------------------------------------------------------------
-    void Item::buildSubItems(void)
+    void Item::buildSubItems( vector<String>::type* materialsList )
     {
         // Create SubEntities
         size_t numSubMeshes = mMesh->getNumSubMeshes();
@@ -277,7 +286,8 @@ namespace Ogre {
             mSubItems.push_back( SubItem( this, subMesh ) );
 
             //Try first Hlms materials, then the low level ones.
-            mSubItems.back().setDatablockOrMaterialName( subMesh->mMaterialName, mMesh->getGroup() );
+            mSubItems.back().setDatablockOrMaterialName(
+                materialsList ? (*materialsList)[i] : subMesh->mMaterialName, mMesh->getGroup() );
         }
     }
     //-----------------------------------------------------------------------

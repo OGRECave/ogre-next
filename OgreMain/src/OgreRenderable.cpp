@@ -75,6 +75,18 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    const String& Renderable::getDatablockOrMaterialName() const
+    {
+        if( HlmsDatablock *datablock = getDatablock() )
+            if( const String *nameStr = datablock->getNameStr() )  // could be null if leaked
+                return *nameStr;
+
+        if( MaterialPtr mat = getMaterial() )
+            return mat->getName();
+
+        return BLANKSTRING;
+    }
+    //-----------------------------------------------------------------------------------
     void Renderable::setDatablockOrMaterialName( String materialName, String resourceGroup )
     {
         //Try first Hlms materials, then the low level ones.

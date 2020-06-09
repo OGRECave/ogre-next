@@ -379,6 +379,8 @@ namespace Ogre {
         uint32 getHlmsCasterHash(void) const    { return mHlmsCasterHash; }
         HlmsDatablock* getDatablock(void) const { return mHlmsDatablock; }
 
+        const String& getDatablockOrMaterialName() const;
+
         /** First tries to see if an HLMS datablock exist with the given name,
             if not, tries to search among low level materials.
         */

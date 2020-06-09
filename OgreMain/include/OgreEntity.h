@@ -251,7 +251,7 @@ namespace v1 {
         size_t mMeshStateCount;
 
         /** Builds a list of SubEntities based on the SubMeshes contained in the Mesh. */
-        void buildSubEntityList(MeshPtr& mesh, SubEntityList* sublist);
+        void buildSubEntityList(MeshPtr& mesh, SubEntityList* sublist, vector<String>::type* materialsList = 0);
 
         /// Internal implementation of attaching a 'child' object to this entity and assign the parent node to the child entity.
         void attachObjectImpl(MovableObject *pMovable, TagPoint *pAttachingPoint);
@@ -283,6 +283,11 @@ namespace v1 {
         /** Default destructor.
         */
         ~Entity();
+
+        /** @copydoc MovableObject::_releaseManualHardwareResources */
+        void _releaseManualHardwareResources();
+        /** @copydoc MovableObject::_restoreManualHardwareResources */
+        void _restoreManualHardwareResources();
 
         /** Gets the Mesh that this Entity is based on.
         */
