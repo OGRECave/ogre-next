@@ -1720,6 +1720,9 @@ namespace Ogre
             LUID newLUID = newDriver->getAdapterIdentifier().AdapterLuid;
             LUID prevLUID = mActiveD3DDriver.getAdapterIdentifier().AdapterLuid;
             anotherIsElected = (newLUID.LowPart != prevLUID.LowPart) || (newLUID.HighPart != prevLUID.HighPart);
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+            anotherIsElected = true; // simulate switching device
+#endif
         }
 
         if(anotherIsElected || mDevice.IsDeviceLost())
