@@ -254,7 +254,7 @@ compositor_node_shadow ShadowMapDebuggingEsmShadowNodeCompute : ShadowMapDebuggi
 	target atlas {}
 
 	//Add a compute-based gauss filter
-	target atlas
+	target
 	{
 		pass compute
 		{

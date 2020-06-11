@@ -314,15 +314,36 @@ namespace Ogre
                                                                     ResourceAccessMap &uavsAccess,
                                                                     ResourceLayoutMap &resourcesLayout )
     {
-        if( mShadowNode && mUpdateShadowNode )
-        {
-            mShadowNode->_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess,
-                                                               resourcesLayout );
-        }
-
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
+
+        if( mShadowNode )
+        {
+            if( mUpdateShadowNode )
+            {
+                mShadowNode->_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess,
+                                                                   resourcesLayout );
+            }
+
+            //Check <anything> -> Texture (Shadow maps)
+            const TextureGpuVec &contiguousShadowMapTex = mShadowNode->getContiguousShadowMapTex();
+            TextureGpuVec::const_iterator itShadowMap = contiguousShadowMapTex.begin();
+            TextureGpuVec::const_iterator enShadowMap = contiguousShadowMapTex.end();
+
+            while( itShadowMap != enShadowMap )
+            {
+                TextureGpu *texture = *itShadowMap;
+                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
+                if( ( currentLayout->second != ResourceLayout::Texture && explicitApi ) ||
+                    currentLayout->second == ResourceLayout::Uav )
+                {
+                    addResourceTransition( currentLayout, ResourceLayout::Texture,
+                                           ReadBarrier::Texture );
+                }
+                ++itShadowMap;
+            }
+        }
 
         //Check <anything> -> Texture (GBuffers)
         {
