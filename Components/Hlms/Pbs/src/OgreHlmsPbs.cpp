@@ -3499,14 +3499,6 @@ namespace Ogre
     void HlmsPbs::setShadowSettings( ShadowFilter filter )
     {
         mShadowFilter = filter;
-
-        if( mShadowFilter == ExponentialShadowMaps && mHlmsManager->getShadowMappingUseBackFaces() )
-        {
-            LogManager::getSingleton().logMessage(
-                        "QUALITY WARNING: It is highly recommended that you call "
-                        "mHlmsManager->setShadowMappingUseBackFaces( false ) when using Exponential "
-                        "Shadow Maps (HlmsPbs::setShadowSettings)" );
-        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::setEsmK( uint16 K )

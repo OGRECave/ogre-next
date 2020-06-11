@@ -113,7 +113,6 @@ namespace Ogre
         InputLayoutsVec     mInputLayouts;
 
         RenderSystem        *mRenderSystem;
-        bool                mShadowMappingUseBackFaces;
 
         public: typedef std::map<IdString, HlmsDatablock*> HlmsDatablockMap;
     protected:
@@ -320,20 +319,6 @@ namespace Ogre
 
         void registerComputeHlms( HlmsCompute *provider );
         void unregisterComputeHlms(void);
-
-        /** Sets whether or not shadow casters should be rendered into shadow
-            textures using their back faces rather than their front faces.
-        @remarks
-            Rendering back faces rather than front faces into a shadow texture
-            can help minimise depth comparison issues, if you're using depth
-            shadowmapping. You will probably still need some biasing but you
-            won't need as much. For solid objects the result is the same anyway,
-            if you have objects with holes you may want to turn this option off.
-            The default is to enable this option.
-        */
-        void setShadowMappingUseBackFaces( bool useBackFaces );
-
-        bool getShadowMappingUseBackFaces(void)             { return mShadowMappingUseBackFaces; }
 
         void _changeRenderSystem( RenderSystem *newRs );
 

@@ -1061,14 +1061,6 @@ namespace Ogre
     void HlmsUnlit::setShadowSettings( bool useExponentialShadowMaps )
     {
         mUsingExponentialShadowMaps = useExponentialShadowMaps;
-
-        if( mUsingExponentialShadowMaps && mHlmsManager->getShadowMappingUseBackFaces() )
-        {
-            LogManager::getSingleton().logMessage(
-                        "QUALITY WARNING: It is highly recommended that you call "
-                        "mHlmsManager->setShadowMappingUseBackFaces( false ) when using Exponential "
-                        "Shadow Maps (HlmsUnlit::setShadowSettings)" );
-        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::setEsmK( uint16 K )

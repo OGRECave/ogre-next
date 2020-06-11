@@ -3186,20 +3186,6 @@ namespace Ogre
         return mListener == &c_defaultListener ? 0 : mListener;
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::_notifyShadowMappingBackFaceSetting(void)
-    {
-        HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
-        HlmsDatablockMap::const_iterator end  = mDatablocks.end();
-
-        while( itor != end )
-        {
-            HlmsDatablock *datablock = itor->second.datablock;
-            datablock->setMacroblock( datablock->getMacroblock( false ), false );
-
-            ++itor;
-        }
-    }
-    //-----------------------------------------------------------------------------------
     void Hlms::_clearShaderCache(void)
     {
         clearShaderCache();
