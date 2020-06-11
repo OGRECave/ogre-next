@@ -222,6 +222,9 @@ namespace Ogre
         /// return a valid pointer.
         const Light* getLightAssociatedWith( uint32 shadowMapIdx ) const;
 
+        /// Returns 0 if shadowMapIdx is out of bounds
+        size_t getLightIdxAssociatedWith( const size_t shadowMapIdx ) const;
+
         /** Outputs the min & max depth range for the given camera. 0 & 100000 if camera not found
         @remarks
             Performs linear search O(N), except the overload that provides a shadowMapIdx
@@ -279,6 +282,8 @@ namespace Ogre
 
         const TextureGpuVec& getContiguousShadowMapTex(void) const  { return mContiguousShadowMapTex; }
         uint32 getIndexToContiguousShadowMapTex( size_t shadowMapIdx ) const;
+
+        float getNormalOffsetBias( const size_t shadowMapIdx ) const;
 
         /** Marks a shadow map as statically updated, and ties the given light to always use
             that shadow map.

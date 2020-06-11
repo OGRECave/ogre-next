@@ -44,7 +44,7 @@ namespace Ogre
     HlmsManager::HlmsManager() :
         mComputeHlms( 0 ),
         mRenderSystem( 0 ),
-        mShadowMappingUseBackFaces( true ),
+        mShadowMappingUseBackFaces( false ),
         mDefaultHlmsType( HLMS_PBS )
   #if !OGRE_NO_JSON
     ,   mJsonListener( 0 )

@@ -57,7 +57,8 @@ namespace Ogre {
         mUseRenderingDistance(true),
         mLodCamera(0),
         mUseMinPixelSize(false),
-        mPixelDisplayRatio(0)
+        mPixelDisplayRatio(0),
+        mConstantBiasScale(1.0f)
     {
 
         // Reasonable defaults to camera params

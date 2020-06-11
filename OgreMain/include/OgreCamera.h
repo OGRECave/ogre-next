@@ -195,6 +195,8 @@ namespace Ogre {
         /// @see Camera::getPixelDisplayRatio
         Real mPixelDisplayRatio;
 
+        float mConstantBiasScale;
+
         /// Each frame it is set to all false. After rendering each RQ, it is set to true
         vector<bool>::type  mRenderedRqs;
 
@@ -720,6 +722,9 @@ namespace Ogre {
             This parameter is used in min display size calculations.
         */
         Real getPixelDisplayRatio() const { return mPixelDisplayRatio; }
+
+        void _setConstantBiasScale( const float bias ) { mConstantBiasScale = bias; }
+        float _getConstantBiasScale( void ) const { return mConstantBiasScale; }
 
         /** Called at the beginning of each frame to know which RenderQueue IDs have been rendered
         @param numRqs

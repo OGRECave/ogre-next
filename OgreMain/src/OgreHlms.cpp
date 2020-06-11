@@ -2627,6 +2627,12 @@ namespace Ogre
                         setProperty( propName.c_str(),
                                      shadowNode->getIndexToContiguousShadowMapTex( shadowMapTexIdx ) );
 
+                        propName.resize( basePropSize );
+                        propName.a( "_light_idx" );
+                        setProperty( propName.c_str(),
+                                     static_cast<int32>(
+                                         shadowNode->getLightIdxAssociatedWith( shadowMapTexIdx ) ) );
+
                         if( shadowTexDef->uvOffset != Vector2::ZERO ||
                             shadowTexDef->uvLength != Vector2::UNIT_SCALE )
                         {
@@ -2702,6 +2708,12 @@ namespace Ogre
                             propName.resize( basePropSize );
                             propName.a( "_uv_length_y_fract" );
                             setProperty( propName.c_str(), (int32)(fractPart * 100000.0f) );
+                        }
+                        else if( light->getType() == Light::LT_SPOTLIGHT )
+                        {
+                            propName.resize( basePropSize );
+                            propName.a( "_is_spot" );
+                            setProperty( propName.c_str(), 1 );
                         }
 
                         ++shadowMapTexIdx;

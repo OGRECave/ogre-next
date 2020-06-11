@@ -566,6 +566,8 @@ namespace Ogre
                     texCamera->setAutoAspectRatio( false );
                 }
 
+                texCamera->_setConstantBiasScale( itor->constantBiasScale );
+
                 if( itor->shadowMapTechnique == SHADOWMAP_PSSM )
                 {
                     assert( dynamic_cast<PSSMShadowCameraSetup*>
@@ -828,6 +830,14 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    size_t CompositorShadowNode::getLightIdxAssociatedWith( const size_t shadowMapIdx ) const
+    {
+        size_t retVal = 0;
+        if( shadowMapIdx < mDefinition->mShadowMapTexDefinitions.size() )
+            retVal = mDefinition->mShadowMapTexDefinitions[shadowMapIdx].light;
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorShadowNode::getMinMaxDepthRange( const Frustum *shadowMapCamera,
                                                     Real &outMin, Real &outMax ) const
     {
@@ -948,6 +958,11 @@ namespace Ogre
     uint32 CompositorShadowNode::getIndexToContiguousShadowMapTex( size_t shadowMapIdx ) const
     {
         return mShadowMapCameras[shadowMapIdx].idxToContiguousTex;
+    }
+    //-----------------------------------------------------------------------------------
+    float CompositorShadowNode::getNormalOffsetBias( const size_t shadowMapIdx ) const
+    {
+        return mDefinition->mShadowMapTexDefinitions[shadowMapIdx].normalOffsetBias;
     }
     //-----------------------------------------------------------------------------------
     void CompositorShadowNode::setLightFixedToShadowMap( size_t shadowMapIdx, Light *light )
