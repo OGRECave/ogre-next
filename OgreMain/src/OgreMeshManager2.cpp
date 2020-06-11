@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreMeshManager2.h"
+#include "OgreMeshManager.h"
 
 #include "OgreMesh2.h"
 #include "OgreSubMesh2.h"
@@ -145,6 +146,50 @@ namespace Ogre
                          "MeshManager::createManual" );
         }
         return create(name, groupName, true, loader);
+    }
+    //-------------------------------------------------------------------------
+    MeshPtr MeshManager::createByImportingV1( const String &name, const String &groupName,
+                                              v1::Mesh *mesh, bool halfPos, bool halfTexCoords,
+                                              bool qTangents, bool halfPose )
+    {
+        // Create manual mesh which calls back self to load
+        MeshPtr pMesh = createManual(name, groupName, this);
+        // store parameters
+        V1MeshImportParams params;
+        params.name = mesh->getName();
+        params.groupName = mesh->getGroup();
+        params.halfPos = halfPos;
+        params.halfTexCoords = halfTexCoords;
+        params.qTangents = qTangents;
+        params.halfPose = halfPose;
+        mV1MeshImportParams[pMesh.getPointer()] = params;
+
+        return pMesh;
+    }
+    //-------------------------------------------------------------------------
+    void MeshManager::loadResource(Resource* res)
+    {
+        Mesh* mesh = static_cast<Mesh*>(res);
+
+        // Find build parameters
+        V1MeshImportParamsMap::iterator it = mV1MeshImportParams.find(res);
+        if (it == mV1MeshImportParams.end())
+        {
+            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
+                "Cannot find build parameters for " + res->getName(),
+                "MeshManager::loadResource");
+        }
+        V1MeshImportParams& params = it->second;
+
+        Ogre::v1::MeshPtr meshV1 =
+            Ogre::v1::MeshManager::getSingleton().getByName( params.name, params.groupName );
+
+        bool unloadV1 = (meshV1->isReloadable() && meshV1->getLoadingState() == Resource::LOADSTATE_UNLOADED);
+
+        mesh->importV1(meshV1.get(), params.halfPos, params.halfTexCoords, params.qTangents, params.halfPose);
+
+        if(unloadV1)
+            meshV1->unload();
     }
     //-------------------------------------------------------------------------
     /*void MeshManager::setListener(MeshSerializerListener *listener)

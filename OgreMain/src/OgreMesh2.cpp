@@ -505,7 +505,7 @@ namespace Ogre {
 
         mesh->load();
 
-        if( mLoadingState.get() != LOADSTATE_UNLOADED )
+        if( mLoadingState.get() != LOADSTATE_UNLOADED && mLoadingState.get() != LOADSTATE_LOADING )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                          "To import a v1 mesh, the v2 mesh must be in unloaded state!",

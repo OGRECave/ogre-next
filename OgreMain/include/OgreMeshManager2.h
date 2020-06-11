@@ -51,7 +51,8 @@ namespace Ogre
             the creation of resources (in this case mesh data),
             working within a fixed memory budget.
     */
-    class _OgreExport MeshManager: public ResourceManager, public Singleton<MeshManager>
+    class _OgreExport MeshManager: public ResourceManager, public Singleton<MeshManager>, 
+        public ManualResourceLoader
     {
     protected:
         /// @copydoc ResourceManager::createImpl
@@ -175,6 +176,45 @@ namespace Ogre
         MeshPtr createManual( const String& name, const String& groupName, 
             ManualResourceLoader* loader = 0);
 
+        /** Imports a v1 mesh to new mesh, with optional optimization conversions.
+        @remarks
+            The vertex stream will be converted to a single interleaved buffer; i.e.
+            if the original mesh had 3 vertex buffers:
+                [1] = POSITION, POSITION, POSITION, POSITION, ...
+                [2] = NORMALS, NORMALS, NORMALS, NORMALS, ...
+                [3] = UV, UV, UV, UV, ...
+            then the v2 mesh will have only 1 vertex buffer:
+                [1] = POSITION NORMALS UV, POS NORM UV, POS NORM UV, POS NORM UV, ...
+            Resulting mesh is reloadable as long as original mesh exists and is reloadable.
+        @param name The name to give the new mesh
+        @param groupName The name of the resource group to assign the mesh to 
+        @param mesh
+            The source v1 mesh to convert from. You can unload but should not delete
+            this pointer if you want to be able to reload the converted mesh.
+        @param halfPos
+            True if you want to convert the position data to VET_HALF4 format.
+            Recommended on desktop to reduce memory and bandwidth requirements.
+            Rarely the extra precision is needed.
+            Unfortuntately on mobile, not all ES2 devices support VET_HALF4.
+        @param halfTexCoords
+            True if you want to convert the position data to VET_HALF2 or VET_HALF4 format.
+            Same recommendations as halfPos.
+        @param qTangents
+            True if you want to generate tangent and reflection information (modifying
+            the original v1 mesh) and convert this data to a QTangent, requiring
+            VET_SHORT4_SNORM (8 bytes vs 28 bytes to store normals, tangents and
+            reflection). Needs much less space, trading for more ALU ops in the
+            vertex shader for decoding the QTangent.
+            Highly recommended on both desktop and mobile if you need tangents (i.e.
+            normal mapping).
+        @param halfPose
+            True if you want the pose buffer to have pixel format PF_FLOAT16_RGBA
+            which uses significantly less memory. Otherwise it is created with pixel
+            format PF_FLOAT32_RGBA. Rarely the extra precision is needed.
+        */
+        MeshPtr createByImportingV1( const String& name, const String& groupName, 
+            v1::Mesh* mesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose = true);
+
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -224,6 +264,20 @@ namespace Ogre
         /** Gets the listener used to control mesh loading through the serializer.
         */
         //MeshSerializerListener *getListener();
+
+        /** @see ManualResourceLoader::loadResource */
+        void loadResource(Resource* res);
+
+    protected:
+        /** Saved parameters used to (re)build a manual mesh built by this class */
+        struct V1MeshImportParams
+        {
+            String name, groupName;
+            bool halfPos, halfTexCoords, qTangents, halfPose;
+        };
+        /** Map from resource pointer to parameter set */
+        typedef map<Resource*, V1MeshImportParams>::type V1MeshImportParamsMap;
+        V1MeshImportParamsMap mV1MeshImportParams;
     };
 
     /** @} */
