@@ -487,6 +487,8 @@ namespace Ogre {
             return PFG_BC7_UNORM_SRGB;
         case 10: // DXGI_FORMAT_R16G16B16A16_FLOAT
             return PFG_RGBA16_FLOAT;
+        case 2:  // DXGI_FORMAT_R32G32B32A32_FLOAT
+            return PFG_RGBA32_FLOAT;
         default:
             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                          "Unsupported DirectX format found in DDS file",
