@@ -705,9 +705,9 @@ namespace Ogre {
         else
         {
             // derive from magic number
-            // read the first 32 bytes or file size, if less
-            size_t magicLen = std::min(stream->size(), (size_t)32);
-            char magicBuf[32];
+            // read the first 128 bytes or file size, if less
+            size_t magicLen = std::min(stream->size(), (size_t)128);
+            char magicBuf[128];
             stream->read(magicBuf, magicLen);
             // return to start
             stream->seek(0);
