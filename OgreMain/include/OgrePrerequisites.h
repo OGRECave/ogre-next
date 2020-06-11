@@ -67,7 +67,7 @@ namespace Ogre {
     #define OGRE_VERSION_MAJOR 2
     #define OGRE_VERSION_MINOR 2
     #define OGRE_VERSION_PATCH 2
-    #define OGRE_VERSION_SUFFIX "unstable"
+    #define OGRE_VERSION_SUFFIX ""
     #define OGRE_VERSION_NAME "Cerberus"
 
     #define OGRE_VERSION    ((OGRE_VERSION_MAJOR << 16) | (OGRE_VERSION_MINOR << 8) | OGRE_VERSION_PATCH)
