@@ -94,7 +94,7 @@ namespace Ogre
             arrayIdx( _arrayIdx ),
             light( _light ),
             split( _split ),
-            constantBiasScale( 1.0f ),
+            constantBiasScale( 0.1f ),
             normalOffsetBias( 0.00004f ),
             shadowMapTechnique( t ),
             pssmLambda( 0.95f ),

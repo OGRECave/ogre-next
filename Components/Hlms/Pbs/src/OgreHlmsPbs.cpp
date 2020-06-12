@@ -289,7 +289,7 @@ namespace Ogre
         mDecalsDiffuseMergedEmissive( false ),
         mDecalsSamplerblock( 0 ),
         mLastBoundPool( 0 ),
-        mConstantBiasScale( 1.0f ),
+        mConstantBiasScale( 0.1f ),
         mHasSeparateSamplers( 0 ),
         mLastDescTexture( 0 ),
         mLastDescSampler( 0 ),

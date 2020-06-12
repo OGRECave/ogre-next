@@ -1304,7 +1304,7 @@ This value lets you multiply it 'mShadowConstantBias * constantBiasScale' per ca
 
 Large values can cause peter-panning.
 
-Default is 1.0
+Default is 0.1 for backwards compatibility with older materials created by Ogre 2.2.2 and earlier
 
 -   pssm\_lambda \<lambda\>
 
