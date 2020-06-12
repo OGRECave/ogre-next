@@ -41,9 +41,9 @@ namespace Demo
             v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
                 "char_reference.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                 Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
-            v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                "char_reference.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-            v2Mesh->importV1(v1Mesh.get(), halfPosition, halfUVs, useQtangents);
+            v2Mesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                "char_reference.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                v1Mesh.get(), halfPosition, halfUVs, useQtangents);
             v1Mesh->unload();
         }
 
@@ -59,9 +59,9 @@ namespace Demo
             v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
                         parts[i], Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                         Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC );
-            v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                        parts[i], Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-            v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents );
+            v2Mesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                        parts[i], Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                        v1Mesh.get(), halfPosition, halfUVs, useQtangents );
             v1Mesh->unload();
         }
 

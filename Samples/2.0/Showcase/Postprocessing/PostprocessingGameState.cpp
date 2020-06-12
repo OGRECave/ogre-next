@@ -54,14 +54,15 @@ namespace Demo
                     Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         //Create a v2 mesh to import to, with a different name (arbitrary).
-        v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                    meshName, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-
-        v2Mesh->importV1( v1Mesh.get(), true, true, true );
+        v2Mesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                    meshName, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                    v1Mesh.get(), true, true, true );
 
         //Free memory
         v1Mesh->unload();
-        Ogre::v1::MeshManager::getSingleton().remove( meshName );
+
+        // Do not destroy mesh, it could be used to recover from lost device.
+        //Ogre::v1::MeshManager::getSingleton().remove( meshName );
     }
     //-----------------------------------------------------------------------------------
     void PostprocessingGameState::createCustomTextures(void)

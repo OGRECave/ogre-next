@@ -40,16 +40,15 @@ namespace Demo
                     "athene.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                     Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC );
 
-        //Create a v2 mesh to import to, with a different name (arbitrary).
-        v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                    "athene.mesh Imported", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-
         bool halfPosition   = true;
         bool halfUVs        = true;
         bool useQtangents   = true;
 
+        //Create a v2 mesh to import to, with a different name (arbitrary).
         //Import the v1 mesh to v2
-        v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents );
+        v2Mesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                    "athene.mesh Imported", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                    v1Mesh.get(), halfPosition, halfUVs, useQtangents );
 
         //We don't need the v1 mesh. Free CPU memory, get it out of the GPU.
         //Leave it loaded if you want to use athene with v1 Entity.
@@ -78,10 +77,9 @@ namespace Demo
                     "Barrel.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                     Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC );
         //Create a v2 mesh to import to, with a different name.
-        v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                    "Barrel Imported", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-
-        v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents );
+        v2Mesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                    "Barrel Imported", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                    v1Mesh.get(), halfPosition, halfUVs, useQtangents );
         v1Mesh->unload();
 
         //Save the v2 mesh to disk (optional)

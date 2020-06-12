@@ -286,12 +286,10 @@ namespace Demo
                                             Ogre::v1::HardwareBuffer::HBU_STATIC,
                                             Ogre::v1::HardwareBuffer::HBU_STATIC );
 
-        Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createManual(
-                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-
-        planeMesh->importV1( planeMeshV1.get(), true, true, true );
+        Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                    planeMeshV1.get(), true, true, true );
         planeMeshV1->unload();
-        Ogre::v1::MeshManager::getSingleton().remove( planeMeshV1 );
 
         createCleanupScene();
         mCameraController = new CameraController( mGraphicsSystem, false );

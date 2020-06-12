@@ -402,7 +402,8 @@ namespace Ogre {
         const LodValueArray* _getLodValueArray(void) const                      { return &mLodValues; }
 
         /** Imports a v1 mesh to this mesh, with optional optimization conversions.
-            This mesh must be in unloaded state.
+            This mesh must be in unloaded state. Resulting mesh would be non-reloadable, use
+            MeshManager::createByImportingV1 to create mesh that will survive device lost event.
         @remarks
             The vertex stream will be converted to a single interleaved buffer; i.e.
             if the original mesh had 3 vertex buffers:

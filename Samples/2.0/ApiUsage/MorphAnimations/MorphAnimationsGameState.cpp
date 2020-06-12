@@ -41,10 +41,9 @@ namespace Demo
                                             Ogre::v1::HardwareBuffer::HBU_STATIC,
                                             Ogre::v1::HardwareBuffer::HBU_STATIC );
  
-        Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createManual(
-                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-
-        planeMesh->importV1( planeMeshV1.get(), true, true, true );
+        Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                    planeMeshV1.get(), true, true, true );
         
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
@@ -83,9 +82,9 @@ namespace Demo
             v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
                 "Smiley.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                 Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
-            v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                "Smiley.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-            v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents, halfPose);
+            v2Mesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                "Smiley.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                v1Mesh.get(), halfPosition, halfUVs, useQtangents, halfPose);
             v1Mesh->unload();
         }
 
@@ -110,9 +109,9 @@ namespace Demo
             v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
                 "Spring.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                 Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
-            v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                "Spring.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-            v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents, halfPose );
+            v2Mesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                "Spring.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                v1Mesh.get(), halfPosition, halfUVs, useQtangents, halfPose );
             v1Mesh->unload();
         }
 
@@ -133,9 +132,9 @@ namespace Demo
             v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
                 "Blob.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                 Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
-            v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                "Blob.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-            v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents, halfPose);
+            v2Mesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                "Blob.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                v1Mesh.get(), halfPosition, halfUVs, useQtangents, halfPose);
             v1Mesh->unload();
         }
 
