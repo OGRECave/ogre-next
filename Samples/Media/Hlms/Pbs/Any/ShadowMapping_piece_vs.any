@@ -53,13 +53,16 @@
 
 	@property( !exponential_shadow_maps )
 	@piece( DoShadowReceiveVS )
-		float3 normalOffsetBias;
+		float3 normalOffsetBias = float3( 0, 0, 0 );
 		@foreach( hlms_num_shadow_map_lights, n )
 			@property( !hlms_shadowmap@n_is_point_light )
-				normalOffsetBias = getNormalOffsetBias( worldNorm, outVs.normal, shadowMap@nLightDir,
-														passBuf.shadowRcv[@n].invShadowMapSize.z, passBuf.shadowRcv[@n].shadowDepthRange.y,
-														passBuf.shadowRcv[@n].normalOffsetBias
-														hlms_shadowmap@n_uv_param );
+				@property( !skip_normal_offset_bias_vs )
+					normalOffsetBias = getNormalOffsetBias( worldNorm, outVs.normal, shadowMap@nLightDir,
+															passBuf.shadowRcv[@n].invShadowMapSize.z,
+															passBuf.shadowRcv[@n].shadowDepthRange.y,
+															passBuf.shadowRcv[@n].normalOffsetBias
+															hlms_shadowmap@n_uv_param );
+				@end
 				outVs.posL@n = mul( float4(worldPos.xyz + normalOffsetBias, 1.0f), passBuf.shadowRcv[@n].texViewProj );@end @end
 
 		@foreach( hlms_num_shadow_map_lights, n )

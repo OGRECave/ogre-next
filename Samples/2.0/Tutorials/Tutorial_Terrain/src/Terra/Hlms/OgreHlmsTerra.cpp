@@ -255,6 +255,12 @@ namespace Ogre
         assert( dynamic_cast<TerrainCell*>(renderable) &&
                 "This Hlms can only be used on a Terra object!" );
 
+        // Disable normal offset bias because the world normals are not available in the
+        // vertex shader. We could fetch the normals, but tessellation is constantly changing in
+        // Terra, and besides we don't care because Terra doesn't cast shadow maps, thus it
+        // has no self occlussion artifacts.
+        setProperty( "skip_normal_offset_bias_vs", 1 );
+
         TerrainCell *terrainCell = static_cast<TerrainCell*>(renderable);
         setProperty( TerraProperty::UseSkirts, terrainCell->getUseSkirts() );
 
