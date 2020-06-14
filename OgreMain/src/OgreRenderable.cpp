@@ -57,11 +57,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     Renderable::~Renderable()
     {
-        if( mHlmsDatablock )
-        {
-            mHlmsDatablock->_unlinkRenderable( this );
-            mHlmsDatablock = 0;
-        }
     }
     //-----------------------------------------------------------------------------------
     void Renderable::_updateCustomGpuParameter(

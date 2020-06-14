@@ -187,10 +187,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsDatablock::~HlmsDatablock()
     {
-        assert( mLinkedRenderables.empty() &&
-                "This Datablock is still being used by some Renderables."
-                " Change their Datablocks before destroying this." );
-
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
         if( hlmsManager )
         {
