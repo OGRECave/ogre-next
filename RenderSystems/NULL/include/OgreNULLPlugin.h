@@ -35,7 +35,7 @@ namespace Ogre
 {
 
     /** Plugin instance for NULL Manager */
-    class NULLPlugin : public Plugin
+    class _OgreNULLExport NULLPlugin : public Plugin
     {
     public:
         NULLPlugin();
