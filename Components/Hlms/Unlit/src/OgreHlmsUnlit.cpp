@@ -50,6 +50,7 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "OgreRenderQueue.h"
 #include "Compositor/OgreCompositorShadowNode.h"
+#include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreTexBufferPacked.h"
@@ -79,6 +80,7 @@ namespace Ogre
         mHasSeparateSamplers( 0 ),
         mLastDescTexture( 0 ),
         mLastDescSampler( 0 ),
+        mUsingInstancedStereo( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
         mTexUnitSlotStart( 2u ),
@@ -89,6 +91,9 @@ namespace Ogre
 
         //Always use this strategy, even on mobile
         mOptimizationStrategy = LowerCpuOverhead;
+
+        // Always an identity matrix
+        mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
     }
     HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders,
                           HlmsTypes type, const String &typeName ) :
@@ -99,6 +104,7 @@ namespace Ogre
         mLastBoundPool( 0 ),
         mLastDescTexture( 0 ),
         mLastDescSampler( 0 ),
+        mUsingInstancedStereo( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
         mTexUnitSlotStart( 2u ),
@@ -109,6 +115,9 @@ namespace Ogre
 
         //Always use this strategy, even on mobile
         mOptimizationStrategy = LowerCpuOverhead;
+
+        // Always an identity matrix
+        mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
     }
     //-----------------------------------------------------------------------------------
     HlmsUnlit::~HlmsUnlit()
@@ -563,6 +572,19 @@ namespace Ogre
             }
         }
 
+        const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
+        CompositorPassSceneDef const *passSceneDef = 0;
+
+        if( pass && pass->getType() == PASS_SCENE )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef *>( pass->getDefinition() ) );
+            passSceneDef = static_cast<const CompositorPassSceneDef *>( pass->getDefinition() );
+
+            if( passSceneDef->mInstancedStereo )
+                setProperty( HlmsBaseProp::InstancedStereo, 1 );
+        }
+        const bool isInstancedStereo = passSceneDef && passSceneDef->mInstancedStereo;
+
         RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
         setProperty( HlmsBaseProp::ShadowUsesDepthTexture,
                      (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
@@ -601,6 +623,7 @@ namespace Ogre
         retVal.setProperties = mSetProperties;
         retVal.pso.pass = passCache.passPso;
 
+        mUsingInstancedStereo = isInstancedStereo;
         Matrix4 viewMatrix = cameras.renderingCamera->getViewMatrix(true);
 
         Matrix4 projectionMatrix = cameras.renderingCamera->getProjectionMatrixWithRSDepth();
@@ -621,8 +644,32 @@ namespace Ogre
             identityProjMat[1][3]   = -identityProjMat[1][3];
         }
 
-        mPreparedPass.viewProjMatrix[0] = projectionMatrix * viewMatrix;
-        mPreparedPass.viewProjMatrix[1] = identityProjMat;
+        if( !isInstancedStereo )
+        {
+            mPreparedPass.viewProjMatrix[0] = projectionMatrix * viewMatrix;
+            mPreparedPass.viewProjMatrix[1] = identityProjMat;
+        }
+        else
+        {
+            mPreparedPass.viewProjMatrix[1] = identityProjMat;
+            mPreparedPass.viewProjMatrix[3] = identityProjMat;
+
+            Matrix4 vrViewMat[2];
+            for( size_t eyeIdx = 0u; eyeIdx < 2u; ++eyeIdx )
+            {
+                vrViewMat[eyeIdx] = cameras.renderingCamera->getVrViewMatrix( eyeIdx );
+                Matrix4 vrProjMat = cameras.renderingCamera->getVrProjectionMatrix( eyeIdx );
+                if( renderPassDesc->requiresTextureFlipping() )
+                {
+                    vrProjMat[1][0] = -vrProjMat[1][0];
+                    vrProjMat[1][1] = -vrProjMat[1][1];
+                    vrProjMat[1][2] = -vrProjMat[1][2];
+                    vrProjMat[1][3] = -vrProjMat[1][3];
+                }
+                Matrix4 vrViewProjMatrix = vrProjMat * vrViewMat[eyeIdx];
+                mPreparedPass.viewProjMatrix[eyeIdx * 2u] = vrViewProjMatrix;
+            }
+        }
 
         bool isShadowCastingPointLight =  casterPass && getProperty( HlmsBaseProp::ShadowCasterPoint ) != 0;
 
@@ -631,10 +678,20 @@ namespace Ogre
         //mat4 viewProj[2] + vec4 invWindowSize;
         size_t mapSize = (16 + 16 + 4) * 4;
 
+        if( isInstancedStereo )
+        {
+            // mat4 viewProj[2] becomes => mat4 viewProj[4]
+            mapSize += ( 16 + 16 ) * 4;
+        }
+
         const bool isCameraReflected = cameras.renderingCamera->isReflected();
         //mat4 invViewProj
-        if( isCameraReflected || (casterPass && (mUsingExponentialShadowMaps || isShadowCastingPointLight)) )
-            mapSize += 16 * 4;
+        if( ( isCameraReflected ||
+              ( casterPass && ( mUsingExponentialShadowMaps || isShadowCastingPointLight ) ) ) &&
+            !isInstancedStereo )
+        {
+            mapSize += 16u * 4u;
+        }
 
         if( casterPass )
         {
@@ -683,6 +740,17 @@ namespace Ogre
         for( size_t i=0; i<16; ++i )
             *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[1][0][i];
 
+        if( isInstancedStereo )
+        {
+            // mat4 viewProj[2]; (right eye)
+            for( size_t i = 0u; i < 16u; ++i )
+                *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[2][0][i];
+
+            // mat4 viewProj[1] (identityProj, right eye);
+            for( size_t i = 0u; i < 16u; ++i )
+                *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[3][0][i];
+        }
+
         //vec4 clipPlane0
         if( isCameraReflected )
         {
@@ -693,7 +761,9 @@ namespace Ogre
             *passBufferPtr++ = (float)reflPlane.d;
         }
 
-        if( isCameraReflected || (casterPass && (mUsingExponentialShadowMaps || isShadowCastingPointLight)) )
+        if( ( isCameraReflected ||
+              ( casterPass && ( mUsingExponentialShadowMaps || isShadowCastingPointLight ) ) ) &&
+            !isInstancedStereo )
         {
             //We don't care about the inverse of the identity proj because that's not
             //really compatible with shadows anyway.
@@ -894,7 +964,8 @@ namespace Ogre
         currentMappedConstBuffer += 4;
 
         //mat4 worldViewProj
-        Matrix4 tmp = mPreparedPass.viewProjMatrix[ useIdentityProjection ] * worldMat;
+        Matrix4 tmp =
+            mPreparedPass.viewProjMatrix[mUsingInstancedStereo ? 4u : useIdentityProjection] * worldMat;
 #if !OGRE_DOUBLE_PRECISION
         memcpy( currentMappedTexBuffer, &tmp, sizeof( Matrix4 ) );
         currentMappedTexBuffer += 16;

@@ -22,7 +22,6 @@
 #define NO_INTERPOLATION_PREFIX nointerpolation
 #define NO_INTERPOLATION_SUFFIX
 
-#define finalDrawId input.drawId
 #define PARAMS_ARG_DECL
 #define PARAMS_ARG
 
@@ -44,6 +43,8 @@
 	#define inVs_drawId (input.drawId >> 1u)
 	#define inVs_stereoDrawId input.drawId
 @end
+
+#define finalDrawId input.drawId
 
 @foreach( hlms_uv_count, n )
 	#define inVs_uv@n input.uv@n@end

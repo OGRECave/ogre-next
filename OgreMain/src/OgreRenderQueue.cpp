@@ -766,8 +766,7 @@ namespace Ogre
                     lastRenderOp.useGlobalInstancingVertexBufferIsAvailable !=
                         renderOp.useGlobalInstancingVertexBufferIsAvailable;
 
-            if( drawCmd != mCommandBuffer->getLastCommand() || differentRenderOp ||
-                renderOp.numberOfInstances != 1 )
+            if( drawCmd != mCommandBuffer->getLastCommand() || differentRenderOp )
             {
                 //Different mesh, vertex buffers or layout. If instanced, entities
                 //likely use their own low level materials. Make a new draw call.
@@ -805,7 +804,7 @@ namespace Ogre
                     /*drawCall->useGlobalInstancingVertexBufferIsAvailable =
                             renderOp.useGlobalInstancingVertexBufferIsAvailable;*/
                     drawCall->primCount         = renderOp.vertexData->vertexCount;
-                    drawCall->instanceCount     = renderOp.numberOfInstances;
+                    drawCall->instanceCount     = instancesPerDraw;
                     drawCall->firstVertexIndex  = renderOp.vertexData->vertexStart;
                     drawCall->baseInstance      = baseInstance << baseInstanceShift;
 

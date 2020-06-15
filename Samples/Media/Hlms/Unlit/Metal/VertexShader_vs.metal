@@ -43,12 +43,6 @@ vertex PS_INPUT main_metal
 	// END UNIFORM DECLARATION
 )
 {
-	@property( iOS )
-		ushort drawId = baseInstance + instanceId;
-	@else
-		ushort drawId = input.drawId;
-	@end
-
 	PS_INPUT outVs;
 	@insertpiece( custom_vs_preExecution )
 	@insertpiece( DefaultBodyVS )

@@ -60,7 +60,13 @@ namespace Ogre
 
         struct PassData
         {
-            Matrix4 viewProjMatrix[2];
+            // [0] = Normal viewProj matrix (left eye)
+            // [1] = Identity view & identity proj matrix, still flips by Y in GL (left eye)
+            // [2] = Normal viewProj matrix (right eye)
+            // [3] = Identity proj matrix, still flips by Y in GL (right eye)
+            // [4] = Identity matrix. Used only by C++ to 'passthrough' the world matrix to shader
+            //       while rendering with instanced stereo.
+            Matrix4 viewProjMatrix[5];
         };
 
         PassData                mPreparedPass;
@@ -72,6 +78,8 @@ namespace Ogre
         bool mHasSeparateSamplers;
         DescriptorSetTexture const *mLastDescTexture;
         DescriptorSetSampler const *mLastDescSampler;
+
+        bool mUsingInstancedStereo;
 
         bool    mUsingExponentialShadowMaps;
         uint16  mEsmK; /// K parameter for ESM.
