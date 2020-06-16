@@ -1025,14 +1025,13 @@ namespace Ogre
         //Copy index buffer
         if( renderOp.useIndexes )
         {
-            const void *indexData = renderOp.indexData->indexBuffer->lock(
+            v1::HardwareBufferLockGuard indexLock( renderOp.indexData->indexBuffer,
                         renderOp.indexData->indexStart,
                         renderOp.indexData->indexCount,
                         v1::HardwareBuffer::HBL_READ_ONLY );
-            memcpy( meshData.indexData, indexData,
+            memcpy( meshData.indexData, indexLock.pData,
                     renderOp.indexData->indexCount *
                     renderOp.indexData->indexBuffer->getIndexSize() );
-            renderOp.indexData->indexBuffer->unlock();
         }
 
         mMeshDataMapV1[renderOp] = meshData;

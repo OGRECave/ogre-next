@@ -487,6 +487,7 @@ namespace v1
                 }
 
                 HardwareVertexBufferSharedPtr tickets[3];
+                HardwareBufferLockGuard ticketsLocks[3];
                 uint8 const * srcData[3];
                 size_t srcOffset[3];
                 size_t srcBytesPerVertex[3];
@@ -515,8 +516,8 @@ namespace v1
                         if( !sameBuffer )
                         {
                             tickets[i] = geom.vertexData->vertexBufferBinding->getBuffer( bufferIdx[i] );
-                            srcData[i] = reinterpret_cast<uint8 const *>(
-                                            tickets[i]->lock( HardwareBuffer::HBL_READ_ONLY ) );
+                            ticketsLocks[i].lock( tickets[i], HardwareBuffer::HBL_READ_ONLY );
+                            srcData[i] = reinterpret_cast<uint8 const *>( ticketsLocks[i].pData );
                             srcBytesPerVertex[i] = tickets[i]->getVertexSize();
                         }
 
@@ -580,8 +581,7 @@ namespace v1
 
                 for( size_t i=0; i<3; ++i )
                 {
-                    if( !tickets[i].isNull() )
-                        tickets[i]->unlock();
+                    ticketsLocks[i].unlock();
                 }
 
                 HardwareBufferManagerBase *hwManager = HardwareBufferManager::getSingletonPtr();
@@ -590,10 +590,9 @@ namespace v1
                     HardwareVertexBufferSharedPtr vertexBuf = hwManager->createVertexBuffer(
                                 bytesPerVertex, newVertexCount, tickets[0]->getUsage() );
 
-                    memcpy( vertexBuf->lock( HardwareBuffer::HBL_NO_OVERWRITE ),
+                    memcpy( HardwareBufferLockGuard( vertexBuf, HardwareBuffer::HBL_NO_OVERWRITE ).pData,
                             finalVertexData,
                             vertexBuf->getSizeInBytes() );
-                    vertexBuf->unlock();
 
                     OGRE_FREE_SIMD( finalVertexData, MEMCATEGORY_GEOMETRY );
                     finalVertexData = 0;
@@ -617,30 +616,27 @@ namespace v1
 
                 const FastArray<uint32> &vertexConvLut = vertexConversionLuts[sharedVaoIdx];
 
-                const void *indexData = geom.indexData->indexBuffer->lock(
-                            HardwareBuffer::HBL_READ_ONLY );
-                void *shadowIndexDataPtr = shadowIndexData->indexBuffer->lock(
-                            HardwareBuffer::HBL_NO_OVERWRITE );
+                HardwareBufferLockGuard indexLock( geom.indexData->indexBuffer,
+                                                       HardwareBuffer::HBL_READ_ONLY );
+                HardwareBufferLockGuard shadowIndexLock( shadowIndexData->indexBuffer,
+                                                         HardwareBuffer::HBL_NO_OVERWRITE );
 
                 if( geom.indexData->indexBuffer->getType() == HardwareIndexBuffer::IT_16BIT )
                 {
-                    uint16 const *srcIndexData = reinterpret_cast<const uint16*>( indexData );
-                    uint16 *dstIndexData = reinterpret_cast<uint16*>( shadowIndexDataPtr );
+                    uint16 const *srcIndexData = reinterpret_cast<const uint16*>( indexLock.pData );
+                    uint16 *dstIndexData = reinterpret_cast<uint16*>( shadowIndexLock.pData );
 
                     for( size_t i=0; i<geom.indexData->indexBuffer->getNumIndexes(); ++i )
                         *dstIndexData++ = static_cast<uint16>( vertexConvLut[*srcIndexData++] );
                 }
                 else
                 {
-                    uint32 const *srcIndexData = reinterpret_cast<const uint32*>( indexData );
-                    uint32 *dstIndexData = reinterpret_cast<uint32*>( shadowIndexDataPtr );
+                    uint32 const *srcIndexData = reinterpret_cast<const uint32*>( indexLock.pData );
+                    uint32 *dstIndexData = reinterpret_cast<uint32*>( shadowIndexLock.pData );
 
                     for( size_t i=0; i<geom.indexData->indexBuffer->getNumIndexes(); ++i )
                         *dstIndexData++ = vertexConvLut[*srcIndexData++];
                 }
-
-                shadowIndexData->indexBuffer->unlock();
-                geom.indexData->indexBuffer->unlock();
             }
 
             Geometry finalGeom;

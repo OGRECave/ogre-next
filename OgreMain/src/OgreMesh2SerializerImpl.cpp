@@ -1823,10 +1823,8 @@ namespace Ogre {
         bool includeNormals = kf->getVertexBuffer()->getVertexSize() > (sizeof(float) * 3);
         writeBools(&includeNormals, 1);
         // float x,y,z          // repeat by number of vertices in original geometry
-        float* pSrc = static_cast<float*>(
-            kf->getVertexBuffer()->lock(HardwareBuffer::HBL_READ_ONLY));
-        writeFloats(pSrc, vertexCount * (includeNormals ? 6 : 3));
-        kf->getVertexBuffer()->unlock();
+        HardwareBufferLockGuard vbufLock(kf->getVertexBuffer(), HardwareBuffer::HBL_READ_ONLY);
+        writeFloats(static_cast<float*>(vbufLock.pData), vertexCount * (includeNormals ? 6 : 3));
     }
     //---------------------------------------------------------------------
     void MeshSerializerImpl::writePoseKeyframe(const VertexPoseKeyFrame* kf)
@@ -2116,10 +2114,8 @@ namespace Ogre {
                 vertexSize, vertexCount,
                 HardwareBuffer::HBU_STATIC, true);
         // float x,y,z          // repeat by number of vertices in original geometry
-        float* pDst = static_cast<float*>(
-            vbuf->lock(HardwareBuffer::HBL_DISCARD));
-        readFloats(stream, pDst, vertexCount * (includesNormals ? 6 : 3));
-        vbuf->unlock();
+        HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_DISCARD);
+        readFloats(stream, static_cast<float*>(vbufLock.pData), vertexCount * (includesNormals ? 6 : 3));
         kf->setVertexBuffer(vbuf);
 
     }

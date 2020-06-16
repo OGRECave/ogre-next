@@ -63,7 +63,8 @@ namespace v1 {
     bool HardwareUniformBuffer::writeParams(GpuProgramParametersSharedPtr params)
     {
         // Lock buffer
-        void* mappedData = this->lock(HardwareBuffer::HBL_DISCARD);
+        HardwareBufferLockGuard thisLock(this, HardwareBuffer::HBL_DISCARD);
+        void* mappedData = thisLock.pData;
         if (!mappedData)
         {
             OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
@@ -100,16 +101,14 @@ namespace v1 {
             memcpy( &(((char *)(mappedData))[it->startOffset]), srcData , it->size);
         }
 
-        // Unlock buffer
-        this->unlock();
-
         return true;
     }
 
     bool HardwareUniformBuffer::writeSharedParams(GpuSharedParametersPtr sharedParams)
     {
         // Lock buffer
-        void* mappedData = this->lock(HardwareBuffer::HBL_DISCARD);
+        HardwareBufferLockGuard thisLock(this, HardwareBuffer::HBL_DISCARD);
+        void* mappedData = thisLock.pData;
         if (!mappedData)
         {
             OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
@@ -145,9 +144,6 @@ namespace v1 {
 
             memcpy( &(((char *)(mappedData))[it->startOffset]), srcData , it->size);
         }
-
-        // Unlock buffer
-        this->unlock();
 
         return true;
     }

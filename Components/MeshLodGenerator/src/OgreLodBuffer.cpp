@@ -41,13 +41,12 @@ namespace Ogre
         {
             const v1::HardwareIndexBufferSharedPtr& hwIndexBuffer = data->indexBuffer;
             indexSize = hwIndexBuffer->getIndexSize();
-            unsigned char* pBuffer = (unsigned char*) hwIndexBuffer->lock(v1::HardwareBuffer::HBL_READ_ONLY);
+            v1::HardwareBufferLockGuard indexLock(hwIndexBuffer, v1::HardwareBuffer::HBL_READ_ONLY);
             size_t offset = data->indexStart * indexSize;
             indexBuffer = Ogre::SharedPtr<unsigned char>(new unsigned char[indexCount * indexSize]);
             indexStart = 0;
             indexBufferSize = 0;
-            memcpy(indexBuffer.get(), pBuffer + offset, indexCount * indexSize);
-            hwIndexBuffer->unlock();
+            memcpy(indexBuffer.get(), (char*)indexLock.pData + offset, indexCount * indexSize);
         }
     }
 
@@ -66,12 +65,14 @@ namespace Ogre
             vertexBuffer = Ogre::SharedPtr<Vector3>(new Vector3[vertexCount]);
 
             // Lock the buffer for reading.
-            unsigned char* vStart = static_cast<unsigned char*>(vbuf->lock(v1::HardwareBuffer::HBL_READ_ONLY));
+            v1::HardwareBufferLockGuard vbufLock(vbuf, v1::HardwareBuffer::HBL_READ_ONLY);
+            unsigned char* vStart = static_cast<unsigned char*>(vbufLock.pData);
             unsigned char* vertex = vStart;
             size_t vSize = vbuf->getVertexSize();
 
             const v1::VertexElement* elemNormal = 0;
             v1::HardwareVertexBufferSharedPtr vNormalBuf;
+            v1::HardwareBufferLockGuard vNormalBufLock;
             unsigned char* vNormal = NULL;
             Vector3* pNormalOut = NULL;
             size_t vNormalSize = 0;
@@ -90,7 +91,8 @@ namespace Ogre
                 else
                 {
                     vNormalBuf = data->vertexBufferBinding->getBuffer(elemNormal->getSource());
-                    vNormal = static_cast<unsigned char*>(vNormalBuf->lock(v1::HardwareBuffer::HBL_READ_ONLY));
+                    vNormalBufLock.lock(vNormalBuf, v1::HardwareBuffer::HBL_READ_ONLY);
+                    vNormal = static_cast<unsigned char*>(vNormalBufLock.pData);
                 }
                 vNormalSize = vNormalBuf->getVertexSize();
             }
@@ -115,11 +117,6 @@ namespace Ogre
                     pNormalOut++;
                     vNormal += vNormalSize;
                 }
-            }
-            vbuf->unlock();
-            if(elemNormal && elemNormal->getSource() != elemPos->getSource())
-            {
-                vNormalBuf->unlock();
             }
         }
     }

@@ -609,12 +609,12 @@ namespace Ogre {
         IndexBufferPacked::IndexType indexType = static_cast<IndexBufferPacked::IndexType>(
                                                         indexData->indexBuffer->getType() );
 
-        const uint8 *srcIndexDataPtr = reinterpret_cast<uint8*>(
-                    indexData->indexBuffer->lock( v1::HardwareBuffer::HBL_READ_ONLY ) );
-
-        memcpy( indexDataPtr, srcIndexDataPtr + indexData->indexStart * indexSize,
+        v1::HardwareBufferLockGuard srcIndexLock( indexData->indexBuffer,
+                                                  v1::HardwareBuffer::HBL_READ_ONLY );
+        memcpy( indexDataPtr,
+                reinterpret_cast<uint8 *>( srcIndexLock.pData ) + indexData->indexStart * indexSize,
                 indexSize * indexData->indexCount );
-        indexData->indexBuffer->unlock();
+        srcIndexLock.unlock();
 
         IndexBufferPacked *indexBuffer = vaoManager->createIndexBuffer( indexType, indexData->indexCount,
                                                                         mParent->mIndexBufferDefaultType,
@@ -1067,14 +1067,17 @@ namespace Ogre {
         }
 
         //Prepare for the transfer between buffers.
+        FastArray<v1::HardwareBufferLockGuard> srcLocks;
         FastArray<char*> srcPtrs;
         FastArray<size_t> vertexBuffSizes;
+        srcLocks.resize( vertexData->vertexBufferBinding->getBufferCount() );
         srcPtrs.reserve( vertexData->vertexBufferBinding->getBufferCount() );
         for( size_t i=0; i<vertexData->vertexBufferBinding->getBufferCount(); ++i )
         {
             const v1::HardwareVertexBufferSharedPtr &vBuffer = vertexData->vertexBufferBinding->
                                                                                 getBuffer( i );
-            srcPtrs.push_back( static_cast<char*>( vBuffer->lock( v1::HardwareBuffer::HBL_READ_ONLY ) ) );
+            srcLocks[i].lock( vBuffer, v1::HardwareBuffer::HBL_READ_ONLY );
+            srcPtrs.push_back( static_cast<char*>( srcLocks[i].pData ) );
             vertexBuffSizes.push_back( vBuffer->getVertexSize() );
         }
 
@@ -1100,7 +1103,7 @@ namespace Ogre {
 
         //Cleanup
         for( size_t i=0; i<vertexData->vertexBufferBinding->getBufferCount(); ++i )
-            vertexData->vertexBufferBinding->getBuffer( i )->unlock();
+            srcLocks[i].unlock();
 
         if( outVertexElements )
             outVertexElements->swap( vertexElements );

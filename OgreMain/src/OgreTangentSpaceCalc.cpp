@@ -136,7 +136,8 @@ namespace v1
                 newBuf->copyData(*(srcbuf.get()), 0, 0, srcbuf->getNumVertices() * srcbuf->getVertexSize(), true);
 
                 // Split vertices, read / write from new buffer
-                char* pBase = static_cast<char*>(newBuf->lock(HardwareBuffer::HBL_NORMAL));
+                HardwareBufferLockGuard newBufLock(newBuf, HardwareBuffer::HBL_NORMAL);
+                char* pBase = static_cast<char*>(newBufLock.pData);
                 for (VertexSplits::iterator spliti = vertexSplits.begin(); 
                     spliti != vertexSplits.end(); ++spliti)
                 {
@@ -144,8 +145,6 @@ namespace v1
                     char* pDstBase = pBase + spliti->second * newBuf->getVertexSize();
                     memcpy(pDstBase, pSrcBase, newBuf->getVertexSize());
                 }
-                newBuf->unlock();
-
             }
 
             // Update vertex data
@@ -173,8 +172,10 @@ namespace v1
                             HardwareIndexBuffer::IT_32BIT, indexCount,
                             srcbuf->getUsage(), srcbuf->hasShadowBuffer());
 
-                        uint16* pSrcBase = static_cast<uint16*>(srcbuf->lock(HardwareBuffer::HBL_NORMAL));
-                        uint32* pBase = static_cast<uint32*>(newBuf->lock(HardwareBuffer::HBL_NORMAL));
+                        HardwareBufferLockGuard srcBufLock(srcbuf, HardwareBuffer::HBL_NORMAL);
+                        HardwareBufferLockGuard newBufLock(newBuf, HardwareBuffer::HBL_NORMAL);
+                        uint16* pSrcBase = static_cast<uint16*>(srcBufLock.pData);
+                        uint32* pBase = static_cast<uint32*>(newBufLock.pData);
 
                         size_t j = 0;
                         while (j < indexCount)
@@ -182,9 +183,6 @@ namespace v1
                             *pBase++ = *pSrcBase++;
                             ++j;
                         }
-
-                        srcbuf->unlock();
-                        newBuf->unlock();
 
                         // assign new index buffer.
                         idata->indexBuffer = newBuf;
@@ -203,17 +201,15 @@ namespace v1
             IndexData* idata = mIDataList[i];
             // Now do index data
             // no new buffer required, same size but some triangles remapped
+            HardwareBufferLockGuard indexLock(idata->indexBuffer, HardwareBuffer::HBL_NORMAL);
             if (idata->indexBuffer->getType() == HardwareIndexBuffer::IT_32BIT)
             {
-                uint32* p32 = static_cast<uint32*>(idata->indexBuffer->lock(HardwareBuffer::HBL_NORMAL));
-                remapIndexes(p32, i, res);
+                remapIndexes(static_cast<uint32*>(indexLock.pData), i, res);
             }
             else
             {
-                uint16* p16 = static_cast<uint16*>(idata->indexBuffer->lock(HardwareBuffer::HBL_NORMAL));
-                remapIndexes(p16, i, res);
+                remapIndexes(static_cast<uint16*>(indexLock.pData), i, res);
             }
-            idata->indexBuffer->unlock();
         }
 
     }
@@ -264,24 +260,12 @@ namespace v1
             OperationType opType = mOpTypes[i];
 
             // Read data from buffers
-            uint16 *p16 = 0;
-            uint32 *p32 = 0;
-
             HardwareIndexBufferSharedPtr ibuf = i_in->indexBuffer;
-            if (ibuf->getType() == HardwareIndexBuffer::IT_32BIT)
-            {
-                p32 = static_cast<uint32*>(
-                    ibuf->lock(HardwareBuffer::HBL_READ_ONLY));
-                // offset by index start
-                p32 += i_in->indexStart;
-            }
-            else
-            {
-                p16 = static_cast<uint16*>(
-                    ibuf->lock(HardwareBuffer::HBL_READ_ONLY));
-                // offset by index start
-                p16 += i_in->indexStart;
-            }
+            bool idx32bit = ibuf->getType() == HardwareIndexBuffer::IT_32BIT;
+            HardwareBufferLockGuard ibufLock(ibuf, HardwareBuffer::HBL_READ_ONLY);
+            uint16 *p16 = static_cast<uint16*>(ibufLock.pData) + i_in->indexStart;
+            uint32 *p32 = static_cast<uint32*>(ibufLock.pData) + i_in->indexStart;
+
             // current triangle
             size_t vertInd[3] = { 0, 0, 0 };
             // loop through all faces to calculate the tangents and normals
@@ -293,9 +277,9 @@ namespace v1
                 // Read 1 or 3 indexes depending on type
                 if (f == 0 || opType == OT_TRIANGLE_LIST)
                 {
-                    vertInd[0] = p32? *p32++ : *p16++;
-                    vertInd[1] = p32? *p32++ : *p16++;
-                    vertInd[2] = p32? *p32++ : *p16++;
+                    vertInd[0] = idx32bit ? *p32++ : *p16++;
+                    vertInd[1] = idx32bit ? *p32++ : *p16++;
+                    vertInd[2] = idx32bit ? *p32++ : *p16++;
                 }
                 else if (opType == OT_TRIANGLE_FAN)
                 {
@@ -303,7 +287,7 @@ namespace v1
                     // Element 2 becomes element 1
                     vertInd[1] = vertInd[2];
                     // read new into element 2
-                    vertInd[2] = p32? *p32++ : *p16++;
+                    vertInd[2] = idx32bit ? *p32++ : *p16++;
                 }
                 else if (opType == OT_TRIANGLE_STRIP)
                 {
@@ -317,7 +301,7 @@ namespace v1
                     }
                     vertInd[0] = vertInd[1];
                     vertInd[1] = vertInd[2];            
-                    vertInd[2] = p32? *p32++ : *p16++;
+                    vertInd[2] = idx32bit ? *p32++ : *p16++;
                 }
 
                 // deal with strip inversion of winding
@@ -348,9 +332,6 @@ namespace v1
                 addFaceTangentSpaceToVertices(i, f, localVertInd, faceTsU, faceTsV, faceNorm, result);
 
             }
-
-
-            ibuf->unlock();
         }
 
     }
@@ -571,12 +552,13 @@ namespace v1
         }
 
         HardwareVertexBufferSharedPtr uvBuf, posBuf, normBuf;
+        HardwareBufferLockGuard uvBufLock, posBufLock, normBufLock;
         unsigned char *pUvBase, *pPosBase, *pNormBase;
         size_t uvInc, posInc, normInc;
 
         uvBuf = bind->getBuffer(uvElem->getSource());
-        pUvBase = static_cast<unsigned char*>(
-            uvBuf->lock(HardwareBuffer::HBL_READ_ONLY));
+        uvBufLock.lock(uvBuf, HardwareBuffer::HBL_READ_ONLY);
+        pUvBase = static_cast<unsigned char*>(uvBufLock.pData);
         uvInc = uvBuf->getVertexSize();
         // offset for vertex start
         pUvBase += mVData->vertexStart * uvInc;
@@ -592,8 +574,8 @@ namespace v1
         {
             // A different buffer
             posBuf = bind->getBuffer(posElem->getSource());
-            pPosBase = static_cast<unsigned char*>(
-                posBuf->lock(HardwareBuffer::HBL_READ_ONLY));
+            posBufLock.lock(posBuf, HardwareBuffer::HBL_READ_ONLY);
+            pPosBase = static_cast<unsigned char*>(posBufLock.pData);
             posInc = posBuf->getVertexSize();
             // offset for vertex start
             pPosBase += mVData->vertexStart * posInc;
@@ -622,8 +604,8 @@ namespace v1
         {
             // A different buffer
             normBuf = bind->getBuffer(normElem->getSource());
-            pNormBase = static_cast<unsigned char*>(
-                normBuf->lock(HardwareBuffer::HBL_READ_ONLY));
+            normBufLock.lock(normBuf, HardwareBuffer::HBL_READ_ONLY);
+            pNormBase = static_cast<unsigned char*>(normBufLock.pData);
             normInc = normBuf->getVertexSize();
             // offset for vertex start
             pNormBase += mVData->vertexStart * normInc;
@@ -656,18 +638,6 @@ namespace v1
 
 
         }
-
-        // unlock buffers
-        uvBuf->unlock();
-        if (!posBuf.isNull())
-        {
-            posBuf->unlock();
-        }
-        if (!normBuf.isNull())
-        {
-            normBuf->unlock();
-        }
-
     }
     //---------------------------------------------------------------------
     void TangentSpaceCalc::insertTangents(Result& res,
@@ -696,6 +666,7 @@ namespace v1
         }
 
         HardwareVertexBufferSharedPtr targetBuffer, origBuffer;
+        HardwareBufferLockGuard targetBufferLock, origBufferLock;
         unsigned char* pSrc = NULL;
 
         if (needsToBeCreated)
@@ -731,8 +702,8 @@ namespace v1
                 targetSemantic,
                 index));
             // Set up the source pointer
-            pSrc = static_cast<unsigned char*>(
-                origBuffer->lock(HardwareBuffer::HBL_READ_ONLY));
+            origBufferLock.lock(origBuffer, HardwareBuffer::HBL_READ_ONLY);
+            pSrc = static_cast<unsigned char*>(origBufferLock.pData);
             // Rebind the new buffer
             vBind->setBinding(prevTexCoordElem->getSource(), targetBuffer);
         }
@@ -744,9 +715,8 @@ namespace v1
             targetBuffer = origBuffer;
         }
 
-
-        unsigned char* pDest = static_cast<unsigned char*>(
-            targetBuffer->lock(HardwareBuffer::HBL_DISCARD));
+        targetBufferLock.lock(targetBuffer, HardwareBuffer::HBL_DISCARD);
+        unsigned char* pDest = static_cast<unsigned char*>(targetBufferLock.pData);
         size_t origVertSize = origBuffer->getVertexSize();
         size_t newVertSize = targetBuffer->getVertexSize();
         for (size_t v = 0; v < origBuffer->getNumVertices(); ++v)
@@ -770,12 +740,6 @@ namespace v1
             // Next target vertex
             pDest += newVertSize;
 
-        }
-        targetBuffer->unlock();
-
-        if (needsToBeCreated)
-        {
-            origBuffer->unlock();
         }
     }
 }

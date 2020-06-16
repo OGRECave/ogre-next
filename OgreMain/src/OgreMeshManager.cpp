@@ -297,8 +297,8 @@ namespace v1
         //bool firstTri = true;
         HardwareIndexBufferSharedPtr ibuf = sm->indexData[VpNormal]->indexBuffer;
         // Lock the whole buffer
-        unsigned short* pIndexes = static_cast<unsigned short*>(
-            ibuf->lock(HardwareBuffer::HBL_DISCARD) );
+        HardwareBufferLockGuard ibufLock(ibuf, HardwareBuffer::HBL_DISCARD);
+        unsigned short* pIndexes = static_cast<unsigned short*>(ibufLock.pData);
 
         while (iterations--)
         {
@@ -346,9 +346,6 @@ namespace v1
             vInc = -vInc;
 
         }
-        // Unlock
-        ibuf->unlock();
-
     }
 
     //-----------------------------------------------------------------------
@@ -517,8 +514,8 @@ namespace v1
 
         // Generate vertex data
         // Lock the whole buffer
-        float* pReal = static_cast<float*>(
-            vbuf->lock(HardwareBuffer::HBL_DISCARD) );
+        HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_DISCARD);
+        float* pReal = static_cast<float*>(vbufLock.pData);
         Real xSpace = params.width / params.xsegments;
         Real ySpace = params.height / params.ysegments;
         Real halfWidth = params.width / 2;
@@ -583,7 +580,7 @@ namespace v1
         } // y
 
         // Unlock
-        vbuf->unlock();
+        vbufLock.unlock();
         // Generate face list
         pSub->useSharedVertices = false;
         tesselate2DMesh(pSub, params.xsegments + 1, params.ysegments + 1, false, 
@@ -663,8 +660,8 @@ namespace v1
         xform = xlate * rot;
 
         // Generate vertex data
-        float* pFloat = static_cast<float*>(
-            vbuf->lock(HardwareBuffer::HBL_DISCARD)); 
+        HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_DISCARD);
+        float* pFloat = static_cast<float*>(vbufLock.pData);
         Real xSpace = params.width / params.xsegments;
         Real ySpace = params.height / params.ysegments;
         Real halfWidth = params.width / 2;
@@ -739,7 +736,7 @@ namespace v1
 
             } // x
         } // y
-        vbuf->unlock();
+        vbufLock.unlock();
 
         // Generate face list
         pSub->useSharedVertices = false;
@@ -847,8 +844,8 @@ namespace v1
         camPos = sphereRadius - CAM_DIST;
 
         // Lock the whole buffer
-        float* pFloat = static_cast<float*>(
-            vbuf->lock(HardwareBuffer::HBL_DISCARD) );
+        HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_DISCARD);
+        float* pFloat = static_cast<float*>(vbufLock.pData);
         Real xSpace = params.width / params.xsegments;
         Real ySpace = params.height / params.ysegments;
         Real halfWidth = params.width / 2;
@@ -925,7 +922,7 @@ namespace v1
         } // y
 
         // Unlock
-        vbuf->unlock();
+        vbufLock.unlock();
         // Generate face list
         pSub->useSharedVertices = false;
         tesselate2DMesh(pSub, params.xsegments + 1, params.ySegmentsToKeep + 1, false, 
@@ -995,8 +992,11 @@ namespace v1
     template< typename TIndexType >
     IndicesMap getUsedIndices(IndexData* idxData)
     {
-        TIndexType *data = (TIndexType*)idxData->indexBuffer->lock(idxData->indexStart * sizeof(TIndexType),
-            idxData->indexCount * sizeof(TIndexType), HardwareBuffer::HBL_READ_ONLY);
+        HardwareBufferLockGuard indexLock(
+            idxData->indexBuffer, idxData->indexStart * sizeof( TIndexType ),
+            idxData->indexCount * sizeof( TIndexType ), HardwareBuffer::HBL_READ_ONLY );
+
+        TIndexType *data = (TIndexType*)indexLock.pData;
 
         IndicesMap indicesMap;
         for (size_t i = 0; i < idxData->indexCount; i++)
@@ -1009,22 +1009,21 @@ namespace v1
             }
         }
 
-        idxData->indexBuffer->unlock();
         return indicesMap;
     }
     //-----------------------------------------------------------------------
     template< typename TIndexType >
     void copyIndexBuffer(IndexData* idxData, IndicesMap& indicesMap)
     {
-        TIndexType *data = (TIndexType*)idxData->indexBuffer->lock(idxData->indexStart * sizeof(TIndexType),
-            idxData->indexCount * sizeof(TIndexType), HardwareBuffer::HBL_NORMAL);
+        HardwareBufferLockGuard indexLock(
+            idxData->indexBuffer, idxData->indexStart * sizeof( TIndexType ),
+            idxData->indexCount * sizeof( TIndexType ), HardwareBuffer::HBL_NORMAL );
+        TIndexType *data = (TIndexType*)indexLock.pData;
 
         for (uint32 i = 0; i < idxData->indexCount; i++)
         {
             data[i] = (TIndexType)indicesMap[data[i]];
         }
-
-        idxData->indexBuffer->unlock();
     }
     //-----------------------------------------------------------------------
     void MeshManager::unshareVertices( Mesh *mesh )
@@ -1059,18 +1058,15 @@ namespace v1
                 HardwareVertexBufferSharedPtr newVertexBuffer = mesh->getHardwareBufferManager()->createVertexBuffer
                     (vertexSize, newVertexData->vertexCount, sharedVertexBuffer->getUsage(), sharedVertexBuffer->hasShadowBuffer());
 
-                uint8 *oldLock = (uint8*)sharedVertexBuffer->lock(0, sharedVertexData->vertexCount * vertexSize, HardwareBuffer::HBL_READ_ONLY);
-                uint8 *newLock = (uint8*)newVertexBuffer->lock(0, newVertexData->vertexCount * vertexSize, HardwareBuffer::HBL_NORMAL);
+                HardwareBufferLockGuard oldLock(sharedVertexBuffer, 0, sharedVertexData->vertexCount * vertexSize, HardwareBuffer::HBL_READ_ONLY);
+                HardwareBufferLockGuard newLock(newVertexBuffer, 0, newVertexData->vertexCount * vertexSize, HardwareBuffer::HBL_NORMAL);
 
                 IndicesMap::iterator indIt = indicesMap.begin();
                 IndicesMap::iterator endIndIt = indicesMap.end();
                 for (; indIt != endIndIt; ++indIt)
                 {
-                    memcpy(newLock + vertexSize * indIt->second, oldLock + vertexSize * indIt->first, vertexSize);
+                    memcpy((uint8*)newLock.pData + vertexSize * indIt->second, (uint8*)oldLock.pData + vertexSize * indIt->first, vertexSize);
                 }
-
-                sharedVertexBuffer->unlock();
-                newVertexBuffer->unlock();
 
                 newVertexData->vertexBufferBinding->setBinding(bufIdx, newVertexBuffer);
             }

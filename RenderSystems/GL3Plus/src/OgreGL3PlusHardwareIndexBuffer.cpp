@@ -168,9 +168,8 @@ namespace v1 {
         if(mUseShadowBuffer)
         {
             // get data from the shadow buffer
-            void* srcData = mShadowBuffer->lock(offset, length, HBL_READ_ONLY);
-            memcpy(pDest, srcData, length);
-            mShadowBuffer->unlock();
+            HardwareBufferLockGuard shadowLock(mShadowBuffer, offset, length, HBL_READ_ONLY);
+            memcpy(pDest, shadowLock.pData, length);
         }
         else
         {
@@ -188,10 +187,9 @@ namespace v1 {
         // Update the shadow buffer
         if (mUseShadowBuffer)
         {
-            void* destData = mShadowBuffer->lock(offset, length,
-                                                 discardWholeBuffer ? HBL_DISCARD : HBL_NORMAL);
-            memcpy(destData, pSource, length);
-            mShadowBuffer->unlock();
+            HardwareBufferLockGuard shadowLock( mShadowBuffer, offset, length,
+                                                discardWholeBuffer ? HBL_DISCARD : HBL_NORMAL );
+            memcpy(shadowLock.pData, pSource, length);
         }
 
         if (offset == 0 && length == mSizeInBytes)
@@ -245,24 +243,22 @@ namespace v1 {
     {
         if (mUseShadowBuffer && mShadowUpdated && !mSuppressHardwareUpdate)
         {
-            const void *srcData = mShadowBuffer->lock(mLockStart, mLockSize,
-                                                      HBL_READ_ONLY);
+            HardwareBufferLockGuard shadowLock(mShadowBuffer, mLockStart, mLockSize, HBL_READ_ONLY);
 
             OGRE_CHECK_GL_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId));
 
             // Update whole buffer if possible, otherwise normal
             if (mLockStart == 0 && mLockSize == mSizeInBytes)
             {
-                OGRE_CHECK_GL_ERROR(glBufferData(GL_ELEMENT_ARRAY_BUFFER, mSizeInBytes, srcData,
+                OGRE_CHECK_GL_ERROR(glBufferData(GL_ELEMENT_ARRAY_BUFFER, mSizeInBytes, shadowLock.pData,
                                                  GL3PlusHardwareBufferManager::getGLUsage(mUsage)));
             }
             else
             {
                 OGRE_CHECK_GL_ERROR(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER,
-                                                    mLockStart, mLockSize, srcData));
+                                                    mLockStart, mLockSize, shadowLock.pData));
             }
 
-            mShadowBuffer->unlock();
             mShadowUpdated = false;
         }
     }

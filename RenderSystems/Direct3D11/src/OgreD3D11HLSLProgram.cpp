@@ -2135,7 +2135,7 @@ namespace Ogre {
             BufferInfo *it = &mDefaultBuffers[i];
             if (!it->mUniformBuffer.isNull())
             {
-                void* pMappedData = it->mUniformBuffer->lock(v1::HardwareBuffer::HBL_DISCARD);
+                v1::HardwareBufferLockGuard uniformLock(it->mUniformBuffer, v1::HardwareBuffer::HBL_DISCARD);
 
                 // Only iterate through parsed variables (getting size of list)
                 void* src = 0;
@@ -2161,11 +2161,9 @@ namespace Ogre {
                             src = (void *)&(*(params->getIntConstantList().begin() + def.physicalIndex));
                         }
 
-                        memcpy( &(((char *)(pMappedData))[iter->startOffset]), src , iter->size);
+                        memcpy( &(((char *)(uniformLock.pData))[iter->startOffset]), src , iter->size);
                     }
                 }
-
-                it->mUniformBuffer->unlock();
 
                 // Add buffer to list
                 buffers[numBuffers] = static_cast<v1::D3D11HardwareUniformBuffer*>(

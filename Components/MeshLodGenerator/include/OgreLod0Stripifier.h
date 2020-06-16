@@ -119,17 +119,15 @@ namespace Ogre
             for(ushort lod = mesh->getNumLodLevels() - 1; lod != 0; --lod) // intentionally skip lod0, visit in reverse order to improve vertex locality for high lods
             {
                 v1::IndexData *lodIndexData = submesh->mLodFaceList[VpNormal][lod - 1];
-                void* ptr = lodIndexData->indexBuffer->lock(
+                v1::HardwareBufferLockGuard indexLock(lodIndexData->indexBuffer,
                                 lodIndexData->indexStart * lodIndexData->indexBuffer->getIndexSize(),
                                 lodIndexData->indexCount * lodIndexData->indexBuffer->getIndexSize(),
                                 v1::HardwareBuffer::HBL_READ_ONLY);
 
                 if(lodIndexData->indexBuffer->getType() == v1::HardwareIndexBuffer::IT_32BIT)
-                    remapInfo.markUsedIndices((uint32*)ptr, lodIndexData->indexCount);
+                    remapInfo.markUsedIndices((uint32*)indexLock.pData, lodIndexData->indexCount);
                 else
-                    remapInfo.markUsedIndices((uint16*)ptr, lodIndexData->indexCount);
-
-                lodIndexData->indexBuffer->unlock();
+                    remapInfo.markUsedIndices((uint16*)indexLock.pData, lodIndexData->indexCount);
             }
 
             if(stableVertexOrder)
@@ -151,39 +149,39 @@ namespace Ogre
             pHWBufferManager->createIndexBuffer(
                 newIndexType, indexCount, indexData->indexBuffer->getUsage(), indexData->indexBuffer->hasShadowBuffer());
 
-        void* pSrc = indexData->indexBuffer->lock(
+        v1::HardwareBufferLockGuard srcLock(indexData->indexBuffer,
                          indexData->indexStart * indexData->indexBuffer->getIndexSize(),
                          indexData->indexCount * indexData->indexBuffer->getIndexSize(),
                          v1::HardwareBuffer::HBL_READ_ONLY);
-        void* pDst = newIndexBuffer->lock(v1::HardwareBuffer::HBL_DISCARD);
+        v1::HardwareBufferLockGuard dstLock(newIndexBuffer, v1::HardwareBuffer::HBL_DISCARD);
 
         if(indexType == v1::HardwareIndexBuffer::IT_32BIT && newIndexType == v1::HardwareIndexBuffer::IT_32BIT)
         {
-            uint32 *pSrc32 = (uint32*)pSrc, *pDst32 = (uint32*)pDst;
+            uint32 *pSrc32 = (uint32*)srcLock.pData, *pDst32 = (uint32*)dstLock.pData;
             for(size_t i = 0; i < indexCount; ++i)
                 pDst32[i] = remapInfo.indexMap[pSrc32[i]];
         }
         else if(indexType == v1::HardwareIndexBuffer::IT_32BIT && newIndexType == v1::HardwareIndexBuffer::IT_16BIT)
         {
-            uint32 *pSrc32 = (uint32*)pSrc; uint16 *pDst16 = (uint16*)pDst;
+            uint32 *pSrc32 = (uint32*)srcLock.pData; uint16 *pDst16 = (uint16*)dstLock.pData;
             for(size_t i = 0; i < indexCount; ++i)
                 pDst16[i] = (uint16)remapInfo.indexMap[pSrc32[i]];
         }
         else if(indexType == v1::HardwareIndexBuffer::IT_16BIT && newIndexType == v1::HardwareIndexBuffer::IT_32BIT)
         {
-            uint16 *pSrc16 = (uint16*)pSrc; uint32 *pDst32 = (uint32*)pDst;
+            uint16 *pSrc16 = (uint16*)srcLock.pData; uint32 *pDst32 = (uint32*)dstLock.pData;
             for(size_t i = 0; i < indexCount; ++i)
                 pDst32[i] = remapInfo.indexMap[pSrc16[i]];
         }
         else // indexType == v1::HardwareIndexBuffer::IT_16BIT && newIndexType == v1::HardwareIndexBuffer::IT_16BIT
         {
-            uint16 *pSrc16 = (uint16*)pSrc, *pDst16 = (uint16*)pDst;
+            uint16 *pSrc16 = (uint16*)srcLock.pData, *pDst16 = (uint16*)dstLock.pData;
             for(size_t i = 0; i < indexCount; ++i)
                 pDst16[i] = (uint16)remapInfo.indexMap[pSrc16[i]];
         }
 
-        indexData->indexBuffer->unlock();
-        newIndexBuffer->unlock();
+        srcLock.unlock();
+        dstLock.unlock();
 
         indexData->indexBuffer = newIndexBuffer;
         indexData->indexStart = 0;
@@ -232,18 +230,16 @@ namespace Ogre
             pHWBufferManager->createVertexBuffer(
                 vertexSize, remapInfo.usedCount, srcbuf->getUsage(), srcbuf->hasShadowBuffer());
 
-        char* pSrc = (char*)srcbuf->lock(srcStart * vertexSize, srcCount * vertexSize, v1::HardwareBuffer::HBL_READ_ONLY);
-        char* pDst = (char*)dstbuf->lock(v1::HardwareBuffer::HBL_DISCARD);
+        v1::HardwareBufferLockGuard srcLock(srcbuf, srcStart * vertexSize, srcCount * vertexSize, v1::HardwareBuffer::HBL_READ_ONLY);
+        v1::HardwareBufferLockGuard dstLock(dstbuf, v1::HardwareBuffer::HBL_DISCARD);
 
         for(size_t oldIdx = 0, oldIdxEnd = remapInfo.indexMap.size(); oldIdx < oldIdxEnd; ++oldIdx)
         {
             unsigned newIdx = remapInfo.indexMap[oldIdx];
             if(newIdx != RemapInfo::UnusedIdx)
-                memcpy(pDst + newIdx * vertexSize, pSrc + oldIdx * vertexSize, vertexSize);
+                memcpy((char*)dstLock.pData + newIdx * vertexSize, (char*)srcLock.pData + oldIdx * vertexSize, vertexSize);
         }
 
-        srcbuf->unlock();
-        dstbuf->unlock();
         return dstbuf;
     }
 

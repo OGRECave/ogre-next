@@ -168,7 +168,8 @@ void recalcBounds(const v1::VertexData* vdata, AxisAlignedBox& aabb, Real& radiu
 
     const v1::HardwareVertexBufferSharedPtr buf = vdata->vertexBufferBinding->getBuffer(
                 posElem->getSource());
-    void* pBase = buf->lock(v1::HardwareBuffer::HBL_READ_ONLY);
+    v1::HardwareBufferLockGuard bufLock(buf, v1::HardwareBuffer::HBL_READ_ONLY);
+    void* pBase = bufLock.pData;
 
     for (size_t v = 0; v < vdata->vertexCount; ++v)
     {
@@ -181,8 +182,6 @@ void recalcBounds(const v1::VertexData* vdata, AxisAlignedBox& aabb, Real& radiu
 
         pBase = static_cast<void*>(static_cast<char*>(pBase) + buf->getVertexSize());
     }
-
-    buf->unlock();
 }
 
 void recalcBounds( const VertexArrayObject *vao, AxisAlignedBox& aabb, Real& radius )

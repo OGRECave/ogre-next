@@ -606,9 +606,9 @@ namespace v1 {
                     HardwareVertexBufferSharedPtr v1VertexBuf = hwManager->createVertexBuffer(
                                 VaoManager::calculateVertexSize( (*itVertexBuffer)->getVertexElements() ),
                                 (*itVertexBuffer)->getNumElements(), parent->mVertexBufferUsage );
-                    void *dstData = v1VertexBuf->lock( HardwareBuffer::HBL_NO_OVERWRITE );
-                    memcpy( dstData, srcData, (*itVertexBuffer)->getTotalSizeBytes() );
-                    v1VertexBuf->unlock();
+                    HardwareBufferLockGuard dstLock( v1VertexBuf, HardwareBuffer::HBL_NO_OVERWRITE );
+                    memcpy( dstLock.pData, srcData, (*itVertexBuffer)->getTotalSizeBytes() );
+                    dstLock.unlock();
                     asyncTicket->unmap();
 
                     vertexData[i]->vertexBufferBinding->setBinding(
@@ -634,9 +634,9 @@ namespace v1 {
 
                     AsyncTicketPtr asyncTicket = indexBuffer->readRequest( 0, indexBuffer->getNumElements() );
                     const void *srcData = asyncTicket->map();
-                    void *dstData = indexData[i]->indexBuffer->lock( HardwareBuffer::HBL_NO_OVERWRITE );
-                    memcpy( dstData, srcData, indexBuffer->getTotalSizeBytes() );
-                    indexData[i]->indexBuffer->unlock();
+                    HardwareBufferLockGuard dstLock( indexData[i]->indexBuffer, HardwareBuffer::HBL_NO_OVERWRITE );
+                    memcpy( dstLock.pData, srcData, indexBuffer->getTotalSizeBytes() );
+                    dstLock.unlock();
                     asyncTicket->unmap();
                 }
 
@@ -680,9 +680,9 @@ namespace v1 {
         vertexData[vaoPassIdx]->vertexBufferBinding->unsetAllBindings();
         vertexData[vaoPassIdx]->vertexBufferBinding->setBinding( 0, vbuf );
 
-        void *dstBuffer = vbuf->lock( HardwareBuffer::HBL_DISCARD );
-        memcpy( dstBuffer, data, vbuf->getSizeInBytes() );
-        vbuf->unlock();
+        HardwareBufferLockGuard vbufLock( vbuf, HardwareBuffer::HBL_DISCARD );
+        memcpy( vbufLock.pData, data, vbuf->getSizeInBytes() );
+        vbufLock.unlock();
 
         OGRE_FREE_SIMD( data, MEMCATEGORY_GEOMETRY );
     }
@@ -729,13 +729,13 @@ namespace v1 {
                 const HardwareVertexBufferSharedPtr &vertexBuffer = vertexData[i]->
                                                                 vertexBufferBinding->getBuffer( j );
 
-                const char *data = reinterpret_cast<const char*>( vertexBuffer->lock( HardwareBuffer::
-                                                                                      HBL_READ_ONLY ) );
+                HardwareBufferLockGuard vertexLock( vertexBuffer, HardwareBuffer::HBL_READ_ONLY );
+                const char *data = reinterpret_cast<const char*>( vertexLock.pData );
 
                 char *newData = Ogre::SubMesh::_dearrangeEfficient( data, vertexData[i]->vertexCount,
                                                                     vertexElements[j],
                                                                     &newDeclaration[j] );
-                vertexBuffer->unlock();
+                vertexLock.unlock();
 
                 HardwareBufferManagerBase *hwManager = vertexData[i]->_getHardwareBufferManager();
                 HardwareVertexBufferSharedPtr vbuf = hwManager->createVertexBuffer(
@@ -743,9 +743,9 @@ namespace v1 {
                                                 vertexData[i]->vertexCount,
                                                 vertexBuffer->getUsage(),
                                                 vertexBuffer->hasShadowBuffer() );
-                void *dstBuffer = vbuf->lock( HardwareBuffer::HBL_DISCARD );
-                memcpy( dstBuffer, newData, vbuf->getSizeInBytes() );
-                vbuf->unlock();
+                HardwareBufferLockGuard vbufLock( vbuf, HardwareBuffer::HBL_DISCARD );
+                memcpy( vbufLock.pData, newData, vbuf->getSizeInBytes() );
+                vbufLock.unlock();
                 vertexData[i]->vertexBufferBinding->setBinding( j, vbuf );
             }
 

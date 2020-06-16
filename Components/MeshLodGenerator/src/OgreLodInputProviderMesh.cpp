@@ -131,7 +131,8 @@ namespace Ogre
                     elemPos->getSource() );
 
         // Lock the buffer for reading.
-        unsigned char* vStart = static_cast<unsigned char*>(vbuf->lock(v1::HardwareBuffer::HBL_READ_ONLY));
+        v1::HardwareBufferLockGuard vbufLock(vbuf, v1::HardwareBuffer::HBL_READ_ONLY);
+        unsigned char* vStart = static_cast<unsigned char*>(vbufLock.pData);
         unsigned char* vertex = vStart;
         size_t vSize = vbuf->getVertexSize();
         unsigned char* vEnd = vertex + vertexData->vertexCount * vSize;
@@ -140,6 +141,7 @@ namespace Ogre
         lookup.clear();
 
         v1::HardwareVertexBufferSharedPtr vNormalBuf;
+        v1::HardwareBufferLockGuard vNormalBufLock;
         unsigned char* vNormal = NULL;
         size_t vNormSize = 0;
         const v1::VertexElement* elemNormal = vertexData->vertexDeclaration->
@@ -157,8 +159,8 @@ namespace Ogre
             else
             {
                 vNormalBuf = vertexData->vertexBufferBinding->getBuffer(elemNormal->getSource());
-                vNormal = static_cast<unsigned char*>(
-                              vNormalBuf->lock(v1::HardwareBuffer::HBL_READ_ONLY) );
+                vNormalBufLock.lock(vNormalBuf, v1::HardwareBuffer::HBL_READ_ONLY);
+                vNormal = static_cast<unsigned char*>(vNormalBufLock.pData);
             }
             vNormSize = vNormalBuf->getVertexSize();
         }
@@ -220,11 +222,6 @@ namespace Ogre
                 vNormal += vNormSize;
             }
         }
-        vbuf->unlock();
-        if(data->mUseVertexNormals && elemNormal->getSource() != elemPos->getSource())
-        {
-            vNormalBuf->unlock();
-        }
     }
     void LodInputProviderMesh::addIndexData( LodData* data, v1::IndexData* indexData,
             bool useSharedVertexLookup, unsigned short submeshID )
@@ -241,7 +238,8 @@ namespace Ogre
         VertexLookupList& lookup = useSharedVertexLookup ? mSharedVertexLookup : mVertexLookup;
 
         // Lock the buffer for reading.
-        char* iStart = static_cast<char*>(ibuf->lock(v1::HardwareBuffer::HBL_READ_ONLY));
+        v1::HardwareBufferLockGuard ibufLock(ibuf, v1::HardwareBuffer::HBL_READ_ONLY);
+        char* iStart = static_cast<char*>(ibufLock.pData);
         char* iEnd = iStart + ibuf->getSizeInBytes();
         if (isize == sizeof(unsigned short))
         {
@@ -253,7 +251,6 @@ namespace Ogre
             OgreAssert(isize == sizeof(unsigned int), "");
             addIndexDataImpl<unsigned int>(data, (unsigned int*) iStart, (unsigned int*) iEnd, lookup, submeshID);
         }
-        ibuf->unlock();
     }
 
 }

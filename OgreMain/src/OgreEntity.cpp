@@ -1198,8 +1198,8 @@ namespace v1 {
             {
                 HardwareVertexBufferSharedPtr buf = 
                     destData->vertexBufferBinding->getBuffer(normElem->getSource());
-                char* pBase = static_cast<char*>(buf->lock(HardwareBuffer::HBL_NORMAL));
-                pBase += destData->vertexStart * buf->getVertexSize();
+                HardwareBufferLockGuard vertexLock(buf, HardwareBuffer::HBL_NORMAL);
+                char* pBase = static_cast<char*>(vertexLock.pData) + destData->vertexStart * buf->getVertexSize();
                 
                 for (size_t v = 0; v < destData->vertexCount; ++v)
                 {
@@ -1211,7 +1211,6 @@ namespace v1 {
                     
                     pBase += buf->getVertexSize();
                 }
-                buf->unlock();
             }
         }
     }
@@ -1229,10 +1228,10 @@ namespace v1 {
                 srcData->vertexBufferBinding->getBuffer(srcNormElem->getSource());
             HardwareVertexBufferSharedPtr dstbuf = 
                 destData->vertexBufferBinding->getBuffer(destNormElem->getSource());
-            char* pSrcBase = static_cast<char*>(srcbuf->lock(HardwareBuffer::HBL_READ_ONLY));
-            char* pDstBase = static_cast<char*>(dstbuf->lock(HardwareBuffer::HBL_NORMAL));
-            pSrcBase += srcData->vertexStart * srcbuf->getVertexSize();
-            pDstBase += destData->vertexStart * dstbuf->getVertexSize();
+            HardwareBufferLockGuard srcLock(srcbuf, HardwareBuffer::HBL_READ_ONLY);
+            HardwareBufferLockGuard dstLock(dstbuf, HardwareBuffer::HBL_NORMAL);
+            char* pSrcBase = static_cast<char*>(srcLock.pData) + srcData->vertexStart * srcbuf->getVertexSize();
+            char* pDstBase = static_cast<char*>(dstLock.pData) + destData->vertexStart * dstbuf->getVertexSize();
             
             // The goal here is to detect the length of the vertices, and to apply
             // the base mesh vertex normal at one minus that length; this deals with 
@@ -1265,8 +1264,6 @@ namespace v1 {
                 pDstBase += dstbuf->getVertexSize();
                 pSrcBase += dstbuf->getVertexSize();
             }
-            srcbuf->unlock();
-            dstbuf->unlock();
         }
     }
     //-----------------------------------------------------------------------

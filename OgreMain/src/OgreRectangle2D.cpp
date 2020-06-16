@@ -85,7 +85,8 @@ namespace v1
         // Bind buffer
         bind->setBinding( 0, vbuf );
 
-        float *pVerts = static_cast<float*>( vbuf->lock(HardwareBuffer::HBL_DISCARD) );
+        HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_DISCARD);
+        float *pVerts = static_cast<float*>(vbufLock.pData);
         if( mQuad )
         {
             //1st Top-left
@@ -147,7 +148,7 @@ namespace v1
             *pVerts++ =  0.0f;
         }
 
-        vbuf->unlock();
+        vbufLock.unlock();
 
         //Add the normals.
         decl->addElement( 1, 0, VET_FLOAT3, VES_NORMAL );
@@ -158,7 +159,8 @@ namespace v1
 
         bind->setBinding( 1, vbuf );
 
-        float *pNorm = static_cast<float*>( vbuf->lock(HardwareBuffer::HBL_DISCARD) );
+        vbufLock.lock(vbuf, HardwareBuffer::HBL_DISCARD);
+        float *pNorm = static_cast<float*>(vbufLock.pData);
         *pNorm++ = 0.0f;
         *pNorm++ = 0.0f;
         *pNorm++ = 1.0f;
@@ -177,8 +179,6 @@ namespace v1
             *pNorm++ = 0.0f;
             *pNorm++ = 1.0f;
         }
-
-        vbuf->unlock();
     }
     //-----------------------------------------------------------------------------------
     Rectangle2D::~Rectangle2D()
@@ -196,7 +196,8 @@ namespace v1
                                     const Ogre::Vector3 &topRight, const Ogre::Vector3 &bottomRight)
     {
         HardwareVertexBufferSharedPtr vbuf = mRenderOp.vertexData->vertexBufferBinding->getBuffer( 1 );
-        float* pFloat = static_cast<float*>( vbuf->lock(HardwareBuffer::HBL_DISCARD) );
+        HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_DISCARD);
+        float* pFloat = static_cast<float*>(vbufLock.pData);
 
         *pFloat++ = topLeft.x;
         *pFloat++ = topLeft.y;
@@ -226,8 +227,6 @@ namespace v1
             *pFloat++ = topRight.y;
             *pFloat++ = topRight.z;
         }
-
-        vbuf->unlock();
     }
     //-----------------------------------------------------------------------------------
     void Rectangle2D::getWorldTransforms( Matrix4* xform ) const

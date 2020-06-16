@@ -248,9 +248,8 @@ namespace v1 {
                 VES_POSITION);
         HardwareVertexBufferSharedPtr vbuf =
             vertexData->vertexBufferBinding->getBuffer(posElem->getSource());
-        unsigned char* vertex =
-            static_cast<unsigned char*>(
-                vbuf->lock(HardwareBuffer::HBL_READ_ONLY));
+        HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_READ_ONLY);
+        unsigned char* vertex = static_cast<unsigned char*>(vbufLock.pData);
         float* pFloat;
 
         Vector3 min = Vector3::ZERO, max = Vector3::UNIT_SCALE;
@@ -279,7 +278,6 @@ namespace v1 {
             }
 
         }
-        vbuf->unlock();
         return AxisAlignedBox(min, max);
     }
     //--------------------------------------------------------------------------
@@ -396,24 +394,19 @@ namespace v1 {
         bool use32bitIndexes =
             id->indexBuffer->getType() == HardwareIndexBuffer::IT_32BIT;
         IndexRemap indexRemap;
+        HardwareBufferLockGuard indexLock(id->indexBuffer,
+                                          id->indexStart * id->indexBuffer->getIndexSize(), 
+                                          id->indexCount * id->indexBuffer->getIndexSize(), 
+                                          HardwareBuffer::HBL_READ_ONLY);
         if (use32bitIndexes)
         {
-            uint32 *p32 = static_cast<uint32*>(id->indexBuffer->lock(
-                id->indexStart * id->indexBuffer->getIndexSize(), 
-                id->indexCount * id->indexBuffer->getIndexSize(), 
-                HardwareBuffer::HBL_READ_ONLY));
-            buildIndexRemap(p32, id->indexCount, indexRemap);
-            id->indexBuffer->unlock();
+            buildIndexRemap(static_cast<uint32*>(indexLock.pData), id->indexCount, indexRemap);
         }
         else
         {
-            uint16 *p16 = static_cast<uint16*>(id->indexBuffer->lock(
-                id->indexStart * id->indexBuffer->getIndexSize(), 
-                id->indexCount * id->indexBuffer->getIndexSize(), 
-                HardwareBuffer::HBL_READ_ONLY));
-            buildIndexRemap(p16, id->indexCount, indexRemap);
-            id->indexBuffer->unlock();
+            buildIndexRemap(static_cast<uint16*>(indexLock.pData), id->indexCount, indexRemap);
         }
+        indexLock.unlock();
         if (indexRemap.size() == vd->vertexCount)
         {
             // ha, complete usage after all
@@ -452,10 +445,8 @@ namespace v1 {
             // to the new ones. By nature of the map the remap is in order of
             // indexes in the old buffer, but note that we're not guaranteed to
             // address every vertex (which is kinda why we're here)
-            uchar* pSrcBase = static_cast<uchar*>(
-                oldBuf->lock(HardwareBuffer::HBL_READ_ONLY));
-            uchar* pDstBase = static_cast<uchar*>(
-                newBuf->lock(HardwareBuffer::HBL_DISCARD));
+            HardwareBufferLockGuard oldBufLock(oldBuf, HardwareBuffer::HBL_READ_ONLY);
+            HardwareBufferLockGuard newBufLock(newBuf, HardwareBuffer::HBL_DISCARD);
             size_t vertexSize = oldBuf->getVertexSize();
             // Buffers should be the same size
             assert (vertexSize == newBuf->getVertexSize());
@@ -466,14 +457,10 @@ namespace v1 {
                 assert (r->first < oldBuf->getNumVertices());
                 assert (r->second < newBuf->getNumVertices());
 
-                uchar* pSrc = pSrcBase + r->first * vertexSize;
-                uchar* pDst = pDstBase + r->second * vertexSize;
+                uchar* pSrc = static_cast<uchar*>(oldBufLock.pData) + r->first * vertexSize;
+                uchar* pDst = static_cast<uchar*>(newBufLock.pData) + r->second * vertexSize;
                 memcpy(pDst, pSrc, vertexSize);
             }
-            // unlock
-            oldBuf->unlock();
-            newBuf->unlock();
-
         }
 
         // Now create a new index buffer
@@ -482,32 +469,25 @@ namespace v1 {
                 id->indexBuffer->getType(), id->indexCount,
                 HardwareBuffer::HBU_STATIC);
 
+        HardwareBufferLockGuard srcIndexLock(id->indexBuffer,
+                                             id->indexStart * id->indexBuffer->getIndexSize(), 
+                                             id->indexCount * id->indexBuffer->getIndexSize(), 
+                                             HardwareBuffer::HBL_READ_ONLY);
+        HardwareBufferLockGuard dstIndexLock(ibuf, HardwareBuffer::HBL_DISCARD);
         if (use32bitIndexes)
         {
-            uint32 *pSrc32, *pDst32;
-            pSrc32 = static_cast<uint32*>(id->indexBuffer->lock(
-                id->indexStart * id->indexBuffer->getIndexSize(), 
-                id->indexCount * id->indexBuffer->getIndexSize(), 
-                HardwareBuffer::HBL_READ_ONLY));
-            pDst32 = static_cast<uint32*>(ibuf->lock(
-                HardwareBuffer::HBL_DISCARD));
+            uint32 *pSrc32 = static_cast<uint32*>(srcIndexLock.pData);
+            uint32 *pDst32 = static_cast<uint32*>(dstIndexLock.pData);
             remapIndexes(pSrc32, pDst32, indexRemap, id->indexCount);
-            id->indexBuffer->unlock();
-            ibuf->unlock();
         }
         else
         {
-            uint16 *pSrc16, *pDst16;
-            pSrc16 = static_cast<uint16*>(id->indexBuffer->lock(
-                id->indexStart * id->indexBuffer->getIndexSize(), 
-                id->indexCount * id->indexBuffer->getIndexSize(), 
-                HardwareBuffer::HBL_READ_ONLY));
-            pDst16 = static_cast<uint16*>(ibuf->lock(
-                HardwareBuffer::HBL_DISCARD));
+            uint16 *pSrc16 = static_cast<uint16*>(srcIndexLock.pData);
+            uint16 *pDst16 = static_cast<uint16*>(dstIndexLock.pData);
             remapIndexes(pSrc16, pDst16, indexRemap, id->indexCount);
-            id->indexBuffer->unlock();
-            ibuf->unlock();
         }
+        srcIndexLock.unlock();
+        dstIndexLock.unlock();
 
         targetGeomLink->indexData = OGRE_NEW IndexData();
         targetGeomLink->indexData->indexStart = 0;
@@ -1245,23 +1225,16 @@ namespace v1 {
         mIndexData->indexBuffer = HardwareBufferManager::getSingleton()
             .createIndexBuffer(mIndexType, mIndexData->indexCount,
                 HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-        uint32* p32Dest = 0;
-        uint16* p16Dest = 0;
-        if (mIndexType == HardwareIndexBuffer::IT_32BIT)
-        {
-            p32Dest = static_cast<uint32*>(
-                mIndexData->indexBuffer->lock(HardwareBuffer::HBL_DISCARD));
-        }
-        else
-        {
-            p16Dest = static_cast<uint16*>(
-                mIndexData->indexBuffer->lock(HardwareBuffer::HBL_DISCARD));
-        }
+        HardwareBufferLockGuard dstIndexLock(mIndexData->indexBuffer, HardwareBuffer::HBL_DISCARD);
+        uint32* p32Dest = static_cast<uint32*>(dstIndexLock.pData);
+        uint16* p16Dest = static_cast<uint16*>(dstIndexLock.pData);
         // create all vertex buffers, and lock
         ushort b;
 
-        vector<uchar*>::type destBufferLocks;
+        vector<HardwareBufferLockGuard>::type dstBufferLocks;
+        vector<uchar*>::type dstBufferPtrs;
         vector<VertexDeclaration::VertexElementList>::type bufferElements;
+        dstBufferLocks.resize(binds->getBufferCount()); // avoid reallocations
         for (b = 0; b < binds->getBufferCount(); ++b)
         {
             size_t vertexCount = mVertexData->vertexCount;
@@ -1271,9 +1244,8 @@ namespace v1 {
                     vertexCount,
                     HardwareBuffer::HBU_STATIC_WRITE_ONLY);
             binds->setBinding(b, vbuf);
-            uchar* pLock = static_cast<uchar*>(
-                vbuf->lock(HardwareBuffer::HBL_DISCARD));
-            destBufferLocks.push_back(pLock);
+            dstBufferLocks[b].lock(vbuf, HardwareBuffer::HBL_DISCARD);
+            dstBufferPtrs.push_back(static_cast<uchar*>(dstBufferLocks[b].pData));
             // Pre-cache vertex elements per buffer
             bufferElements.push_back(dcl->findElementsBySource(b));
         }
@@ -1289,32 +1261,24 @@ namespace v1 {
             QueuedGeometry* geom = *gi;
             // Copy indexes across with offset
             IndexData* srcIdxData = geom->geometry->indexData;
+            HardwareBufferLockGuard srcIdxLock(srcIdxData->indexBuffer,
+                                               srcIdxData->indexStart * srcIdxData->indexBuffer->getIndexSize(), 
+                                               srcIdxData->indexCount * srcIdxData->indexBuffer->getIndexSize(),
+                                               HardwareBuffer::HBL_READ_ONLY);
             if (mIndexType == HardwareIndexBuffer::IT_32BIT)
             {
-                // Lock source indexes
-                uint32* pSrc = static_cast<uint32*>(
-                    srcIdxData->indexBuffer->lock(
-                        srcIdxData->indexStart * srcIdxData->indexBuffer->getIndexSize(), 
-                        srcIdxData->indexCount * srcIdxData->indexBuffer->getIndexSize(),
-                        HardwareBuffer::HBL_READ_ONLY));
-
+                uint32* pSrc = static_cast<uint32*>(srcIdxLock.pData);
                 copyIndexes(pSrc, p32Dest, srcIdxData->indexCount, indexOffset);
                 p32Dest += srcIdxData->indexCount;
-                srcIdxData->indexBuffer->unlock();
             }
             else
             {
                 // Lock source indexes
-                uint16* pSrc = static_cast<uint16*>(
-                    srcIdxData->indexBuffer->lock(
-                    srcIdxData->indexStart * srcIdxData->indexBuffer->getIndexSize(), 
-                    srcIdxData->indexCount * srcIdxData->indexBuffer->getIndexSize(),
-                    HardwareBuffer::HBL_READ_ONLY));
-
+                uint16* pSrc = static_cast<uint16*>(srcIdxLock.pData);
                 copyIndexes(pSrc, p16Dest, srcIdxData->indexCount, indexOffset);
                 p16Dest += srcIdxData->indexCount;
-                srcIdxData->indexBuffer->unlock();
             }
+            srcIdxLock.unlock();
 
             // Now deal with vertex buffers
             // we can rely on buffer counts / formats being the same
@@ -1323,12 +1287,11 @@ namespace v1 {
             for (b = 0; b < binds->getBufferCount(); ++b)
             {
                 // lock source
-                HardwareVertexBufferSharedPtr srcBuf =
-                    srcBinds->getBuffer(b);
-                uchar* pSrcBase = static_cast<uchar*>(
-                    srcBuf->lock(HardwareBuffer::HBL_READ_ONLY));
+                HardwareVertexBufferSharedPtr srcBuf = srcBinds->getBuffer(b);
+                HardwareBufferLockGuard srcBufLock(srcBuf, HardwareBuffer::HBL_READ_ONLY);
+                uchar* pSrcBase = static_cast<uchar*>(srcBufLock.pData);
                 // Get buffer lock pointer, we'll update this later
-                uchar* pDstBase = destBufferLocks[b];
+                uchar* pDstBase = dstBufferPtrs[b];
                 size_t bufInc = srcBuf->getVertexSize();
 
                 // Iterate over vertices
@@ -1394,18 +1357,10 @@ namespace v1 {
                 }
 
                 // Update pointer
-                destBufferLocks[b] = pDstBase;
-                srcBuf->unlock();
+                dstBufferPtrs[b] = pDstBase;
             }
 
             indexOffset += geom->geometry->vertexData->vertexCount;
-        }
-
-        // Unlock everything
-        mIndexData->indexBuffer->unlock();
-        for (b = 0; b < binds->getBufferCount(); ++b)
-        {
-            binds->getBuffer(b)->unlock();
         }
 
         // If we're dealing with stencil shadows, copy the position data from
