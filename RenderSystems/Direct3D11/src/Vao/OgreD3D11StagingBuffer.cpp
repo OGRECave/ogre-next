@@ -73,8 +73,14 @@ namespace Ogre
         mMappingCount = sizeBytes;
 
         D3D11_MAPPED_SUBRESOURCE mappedSubres;
-        mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, mapFlag,
-                                            0, &mappedSubres );
+        HRESULT hr = mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, mapFlag, 0, &mappedSubres );
+        if (FAILED(hr) || mDevice.isError())
+        {
+            String msg = mDevice.getErrorDescription(hr);
+            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
+                "Error calling Map: " + msg, 
+                "D3D11StagingBuffer::mapImpl");
+        }
         mMappedPtr = reinterpret_cast<uint8*>( mappedSubres.pData ) + mMappingStart;
 
         return mMappedPtr;
@@ -178,11 +184,17 @@ namespace Ogre
     {
         assert( !mUploadOnly );
 
+        D3D11_MAPPED_SUBRESOURCE mappedSubres;
+        HRESULT hr = mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, D3D11_MAP_READ, 0, &mappedSubres );
+        if (FAILED(hr) || mDevice.isError())
+        {
+            String msg = mDevice.getErrorDescription(hr);
+            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
+                "Error calling Map: " + msg, 
+                "D3D11StagingBuffer::_mapForReadImpl");
+        }
         mMappingStart = offset;
         mMappingCount = sizeBytes;
-
-        D3D11_MAPPED_SUBRESOURCE mappedSubres;
-        mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, D3D11_MAP_READ, 0, &mappedSubres );
         mMappedPtr = reinterpret_cast<uint8*>( mappedSubres.pData ) + mMappingStart;
 
         //Put the mapped region back to our records as "available" for subsequent _asyncDownload

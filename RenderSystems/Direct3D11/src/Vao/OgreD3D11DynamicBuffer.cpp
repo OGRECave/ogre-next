@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11StagingBuffer.h"
 
 #include "OgreD3D11Device.h"
+#include "OgreException.h"
 
 namespace Ogre
 {
@@ -81,8 +82,15 @@ namespace Ogre
         if( mMappedRanges.size() == mFreeRanges.size() )
         {
             D3D11_MAPPED_SUBRESOURCE mappedSubres;
-            mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE,
-                                                0, &mappedSubres );
+            HRESULT hr = mDevice.GetImmediateContext()->Map(
+                mVboName.Get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedSubres );
+            if (FAILED(hr) || mDevice.isError())
+            {
+                String msg = mDevice.getErrorDescription(hr);
+                OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
+                    "Error calling Map: " + msg, 
+                    "D3D11DynamicBuffer::map");
+            }
             mMappedPtr = mappedSubres.pData;
         }
 
