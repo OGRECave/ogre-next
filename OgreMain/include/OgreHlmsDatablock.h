@@ -77,6 +77,7 @@ namespace Ogre
     struct _OgreExport HlmsMacroblock : public BasicBlock
     {
         bool                mScissorTestEnabled;
+        bool                mDepthClamp;
         bool                mDepthCheck;
         bool                mDepthWrite;
         CompareFunction     mDepthFunc;
@@ -125,6 +126,7 @@ namespace Ogre
             //Don't include the ID in the comparision
             return  mAllowGlobalDefaults    != _r.mAllowGlobalDefaults ||
                     mScissorTestEnabled     != _r.mScissorTestEnabled ||
+                    mDepthClamp             != _r.mDepthClamp ||
                     mDepthCheck             != _r.mDepthCheck ||
                     mDepthWrite             != _r.mDepthWrite ||
                     mDepthFunc              != _r.mDepthFunc ||

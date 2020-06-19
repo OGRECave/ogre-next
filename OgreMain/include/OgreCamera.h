@@ -190,6 +190,8 @@ namespace Ogre {
         /// Camera to use for LOD calculation
         const Camera* mLodCamera;
         
+        bool mNeedsDepthClamp;
+
         /// Whether or not the minimum display size of objects should take effect for this camera
         bool mUseMinPixelSize;
         /// @see Camera::getPixelDisplayRatio
@@ -710,6 +712,9 @@ namespace Ogre {
         @see Camera::setUseMinDisplaySize
         */
         bool getUseMinPixelSize() const { return mUseMinPixelSize; }
+
+        void _setNeedsDepthClamp( bool bNeedsDepthClamp );
+        bool getNeedsDepthClamp( void ) const { return mNeedsDepthClamp; }
 
         /** Returns an estimated ratio between a pixel and the display area it represents.
             For orthographic cameras this function returns the amount of meters covered by

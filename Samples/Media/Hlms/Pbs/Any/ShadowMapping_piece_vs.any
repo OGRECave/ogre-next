@@ -58,7 +58,7 @@
 			@property( !hlms_shadowmap@n_is_point_light )
 				@property( !skip_normal_offset_bias_vs )
 					normalOffsetBias = getNormalOffsetBias( worldNorm, outVs.normal, shadowMap@nLightDir,
-															passBuf.shadowRcv[@n].invShadowMapSize.z,
+															passBuf.shadowRcv[@n].invShadowMapSize.x,
 															passBuf.shadowRcv[@n].shadowDepthRange.y,
 															passBuf.shadowRcv[@n].normalOffsetBias
 															hlms_shadowmap@n_uv_param );

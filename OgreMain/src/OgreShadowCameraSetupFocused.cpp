@@ -290,6 +290,13 @@ namespace Ogre
 
         vMin.z = Ogre::min( vMin.z, vMinCamFrustumLS.z );
 
+        const RenderSystemCapabilities *caps = Root::getSingleton().getRenderSystem()->getCapabilities();
+        if( caps->hasCapability( RSC_DEPTH_CLAMP ) )
+        {
+            // We can only do shadow pancaking (increasing precision) if depth clamp is supported
+            vMax.z = Ogre::max( vMax.z, vMaxCamFrustumLS.z );
+        }
+
         //Some padding
         vMax += 1.5f;
         vMin -= 1.5f;

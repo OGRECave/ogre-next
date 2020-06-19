@@ -566,8 +566,6 @@ namespace Ogre
                     texCamera->setAutoAspectRatio( false );
                 }
 
-                texCamera->_setConstantBiasScale( itor->constantBiasScale );
-
                 if( itor->shadowMapTechnique == SHADOWMAP_PSSM )
                 {
                     assert( dynamic_cast<PSSMShadowCameraSetup*>
@@ -595,6 +593,23 @@ namespace Ogre
 
                 itShadowCamera->minDistance = itShadowCamera->shadowCameraSetup->getMinDistance();
                 itShadowCamera->maxDistance = itShadowCamera->shadowCameraSetup->getMaxDistance();
+
+                float fAutoConstantBiasScale = 1.0f;
+                if( itor->autoConstantBiasScale != 0.0f )
+                {
+                    if( texCamera->getProjectionType() == PT_ORTHOGRAPHIC )
+                    {
+                        const Real orthoSize = std::max( texCamera->getOrthoWindowWidth(),
+                                                         texCamera->getOrthoWindowHeight() );
+                        float autoFactor = orthoSize / light->getShadowFarDistance();
+                        fAutoConstantBiasScale = 1.0f + autoFactor * itor->autoConstantBiasScale;
+                    }
+                }
+                texCamera->_setConstantBiasScale( itor->constantBiasScale * fAutoConstantBiasScale );
+
+                const RenderSystemCapabilities *caps = mRenderSystem->getCapabilities();
+                texCamera->_setNeedsDepthClamp( light->getType() == Light::LT_DIRECTIONAL &&
+                                                caps->hasCapability( RSC_DEPTH_CLAMP ) );
             }
             //Else... this shadow map shouldn't be rendered and when used, return a blank one.
             //The Nth closest lights don't cast shadows
@@ -962,7 +977,25 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     float CompositorShadowNode::getNormalOffsetBias( const size_t shadowMapIdx ) const
     {
-        return mDefinition->mShadowMapTexDefinitions[shadowMapIdx].normalOffsetBias;
+        const ShadowTextureDefinition &shadowMapDef =
+            mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
+
+        float fAutoConstantBiasScale = 1.0f;
+        if( shadowMapDef.autoNormalOffsetBiasScale != 0.0f )
+        {
+            Light const *light = mShadowMapCastingLights[shadowMapDef.light].light;
+            OGRE_ASSERT_HIGH( light && "Can't call this function if isShadowMapIdxActive is false!" );
+
+            const Camera *texCamera = mShadowMapCameras[shadowMapIdx].camera;
+            if( texCamera->getProjectionType() == PT_ORTHOGRAPHIC )
+            {
+                const Real orthoSize =
+                    std::max( texCamera->getOrthoWindowWidth(), texCamera->getOrthoWindowHeight() );
+                float autoFactor = orthoSize / light->getShadowFarDistance();
+                fAutoConstantBiasScale = 1.0f + autoFactor * shadowMapDef.autoNormalOffsetBiasScale;
+            }
+        }
+        return shadowMapDef.normalOffsetBias;
     }
     //-----------------------------------------------------------------------------------
     void CompositorShadowNode::setLightFixedToShadowMap( size_t shadowMapIdx, Light *light )

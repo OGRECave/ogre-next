@@ -2031,6 +2031,11 @@ namespace Ogre
             //Without culling there's nothing to invert, we don't need to hold a strong reference.
             pso.pass.strongMacroblockBits &= ~HlmsPassPso::InvertVertexWinding;
         }
+        if( pso.macroblock->mDepthClamp )
+        {
+            //Macroblock already enabled depth clamp, we don't need to hold a strong reference.
+            pso.pass.strongMacroblockBits &= ~HlmsPassPso::ForceDepthClamp;
+        }
 
         if( pso.pass.hasStrongMacroblock() )
         {
@@ -2048,6 +2053,9 @@ namespace Ogre
                 prepassMacroblock.mCullMode = prepassMacroblock.mCullMode == CULL_CLOCKWISE ?
                             CULL_ANTICLOCKWISE : CULL_CLOCKWISE;
             }
+            //Force depth clamp. Probably a directional shadow caster pass
+            if( pso.pass.strongMacroblockBits & HlmsPassPso::ForceDepthClamp )
+                prepassMacroblock.mDepthClamp = true;
 
             pso.macroblock = mHlmsManager->getMacroblock( prepassMacroblock );
         }
@@ -3074,6 +3082,9 @@ namespace Ogre
 
         if( sceneManager->getCurrentPrePassMode() == PrePassUse )
             passPso.strongMacroblockBits |= HlmsPassPso::ForceDisableDepthWrites;
+
+        if( sceneManager->getCamerasInProgress().renderingCamera->getNeedsDepthClamp() )
+            passPso.strongMacroblockBits |= HlmsPassPso::ForceDepthClamp;
 
         const bool invertVertexWinding = mRenderSystem->getInvertVertexWinding();
 

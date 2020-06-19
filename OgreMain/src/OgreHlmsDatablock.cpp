@@ -54,6 +54,7 @@ namespace Ogre
     HlmsMacroblock::HlmsMacroblock() :
         BasicBlock( BLOCK_MACRO ),
         mScissorTestEnabled( false ),
+        mDepthClamp( false ),
         mDepthCheck( true ),
         mDepthWrite( true ),
         mDepthFunc( CMPF_LESS_EQUAL ),
