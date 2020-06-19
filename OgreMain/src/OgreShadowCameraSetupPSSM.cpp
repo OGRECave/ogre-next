@@ -147,6 +147,8 @@ namespace Ogre
         {
             mConcentricShadowCamera.getShadowCamera( sm, cam, light, texCam, iteration,
                                                      viewportRealSize );
+            mMinDistance = mConcentricShadowCamera.getMinDistance();
+            mMaxDistance = mConcentricShadowCamera.getMaxDistance();
         }
         else
         {
