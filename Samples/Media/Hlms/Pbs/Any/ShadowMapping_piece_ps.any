@@ -439,7 +439,7 @@
 		* getShadowPoint( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
 						  pixelData.geomNormal,
 						  passBuf.shadowRcv[@value(CurrentShadowMap)].normalOffsetBias,
-						  inPs.pos.xyz, light0Buf.lights[@value(CurrentPointLight)].position.xyz,
+						  inPs.pos.xyz, light0Buf.lights[@counter(CurrentPointLight)].position.xyz,
 						  passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize,
 						  passBuf.shadowRcv[@value(CurrentShadowMap)].shadowDepthRange.xy
 						  hlms_shadowmap@counter(CurrentShadowMap)_uv_param PASSBUF_ARG )
