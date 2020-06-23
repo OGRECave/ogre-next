@@ -80,6 +80,7 @@ namespace Demo
         v2Mesh = Ogre::MeshManager::getSingleton().createByImportingV1(
                     "Barrel Imported", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
                     v1Mesh.get(), halfPosition, halfUVs, useQtangents );
+        v2Mesh->load();
         v1Mesh->unload();
 
         //Save the v2 mesh to disk (optional)
