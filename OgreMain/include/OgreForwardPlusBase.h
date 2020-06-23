@@ -123,6 +123,10 @@ namespace Ogre
 
         FastArray<LightCount>   mLightCountInCell;
 
+        // Used to save and restore visibility of shadow casting lights. Lives here
+        // to reuse memory, otherwise on stack it keeps constantly reallocating memory
+        FastArray<bool>   mShadowCastingLightVisibility;
+
         VaoManager      *mVaoManager;
         SceneManager    *mSceneManager;
 
