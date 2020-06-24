@@ -91,6 +91,19 @@ namespace Ogre
         mShadowMapCameras.reserve( definition->mShadowMapTexDefinitions.size() );
         mLocalTextures.reserve( mLocalTextures.size() + definition->mShadowMapTexDefinitions.size() );
 
+        // Set all textures to shadow tex source
+        {
+            CompositorChannelVec::iterator tempIt = mLocalTextures.begin();
+            CompositorChannelVec::iterator tempEn = mLocalTextures.end();
+            while( tempIt != tempEn )
+            {
+                TextureGpu *refTex = *tempIt;
+                if( refTex )
+                    refTex->_setSourceType( TextureSourceType::Shadow );
+                ++tempIt;
+            }
+        }
+
         SceneManager *sceneManager = workspace->getSceneManager();
         SceneNode *pseudoRootNode = 0;
 

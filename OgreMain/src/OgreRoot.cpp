@@ -1545,8 +1545,14 @@ namespace Ogre {
         // This belongs here, as all render targets must be updated before events are
         // triggered, otherwise targets could be mismatched.  This could produce artifacts,
         // for instance, with shadows.
-        for (SceneManagerEnumerator::SceneManagerIterator it = getSceneManagerIterator(); it.hasMoreElements(); it.moveNext())
+        for( SceneManagerEnumerator::SceneManagerIterator it = getSceneManagerIterator();
+             it.hasMoreElements(); it.moveNext() )
+        {
             it.peekNextValue()->_handleLodEvents();
+        }
+
+        // Release all the depth buffers which are no longer in use
+        mActiveRenderer->_cleanupDepthBuffers();
 
         return ret;
     }

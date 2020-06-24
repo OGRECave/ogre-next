@@ -1584,7 +1584,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* D3D11RenderSystem::createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
-                                                         PixelFormatGpu depthBufferFormat )
+                                                         PixelFormatGpu depthBufferFormat, uint16 poolId )
     {
         if( depthBufferFormat == PFG_UNKNOWN )
         {
@@ -1595,7 +1595,7 @@ namespace Ogre
         }
 
         return RenderSystem::createDepthBufferFor( colourTexture, preferDepthTexture,
-                                                   depthBufferFormat );
+                                                   depthBufferFormat, poolId );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_notifyWindowDestroyed( Window *window )

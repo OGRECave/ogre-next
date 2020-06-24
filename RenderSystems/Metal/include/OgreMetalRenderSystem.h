@@ -215,8 +215,9 @@ namespace Ogre
         inline void endRenderPassDescriptor( bool isInterruptingRender );
         virtual void endRenderPassDescriptor(void);
     protected:
-        virtual TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
-                                                  PixelFormatGpu depthBufferFormat );
+        virtual TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                                  PixelFormatGpu depthBufferFormat, uint16 poolId );
+
     public:
         virtual void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m,
                                                  const Frustum* frustum = 0);

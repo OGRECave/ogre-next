@@ -279,6 +279,7 @@ namespace Ogre
         newPool.usedMemory = 0;
         newPool.usedSlots.reserve( numSlices );
 
+        newPool.masterTexture->_setSourceType( TextureSourceType::PoolOwner );
         newPool.masterTexture->setResolution( width, height, numSlices );
         newPool.masterTexture->setPixelFormat( pixelFormat );
         newPool.masterTexture->setNumMipmaps( numMipmaps );
@@ -347,6 +348,7 @@ namespace Ogre
 
         TextureGpu *retVal = createTextureImpl( pageOutStrategy, idName, textureFlags, initialType );
         retVal->setTexturePoolId( poolId );
+        retVal->_setSourceType( TextureSourceType::Standard );
 
         mEntriesMutex.lock();
         mEntries[idName] = ResourceEntry( name, aliasName, resourceGroup, retVal, filters );
@@ -1884,6 +1886,7 @@ namespace Ogre
                                                        TextureFlags::PoolOwner,
                                                        TextureTypes::Type2DArray );
             const uint16 numSlices = mTextureGpuManagerListener->getNumSlicesFor( texture, this );
+            newPool.masterTexture->_setSourceType( TextureSourceType::PoolOwner );
 
             newPool.manuallyReserved = false;
             newPool.usedMemory = 0;

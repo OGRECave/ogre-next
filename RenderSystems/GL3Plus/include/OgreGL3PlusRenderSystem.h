@@ -261,7 +261,7 @@ namespace Ogre {
         virtual void endRenderPassDescriptor(void);
 
         TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
-                                          PixelFormatGpu depthBufferFormat );
+                                          PixelFormatGpu depthBufferFormat, uint16 poolId );
 
         /** See
             RenderSystem

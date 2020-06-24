@@ -797,6 +797,8 @@ namespace Ogre
             uint16 depthBufferPoolId, bool preferDepthTexture, PixelFormatGpu desiredDepthBufferFormat )
     {
         assert( isRenderToTexture() );
+        OGRE_ASSERT_MEDIUM( mSourceType != TextureSourceType::SharedDepthBuffer &&
+                            "Cannot call _setDepthBufferDefaults on a shared depth buffer!" );
         mDepthBufferPoolId          = depthBufferPoolId;
         mPreferDepthTexture         = preferDepthTexture;
         mDesiredDepthBufferFormat   = desiredDepthBufferFormat;
