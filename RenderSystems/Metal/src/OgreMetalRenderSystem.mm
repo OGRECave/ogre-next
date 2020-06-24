@@ -1172,15 +1172,16 @@ namespace Ogre
         endRenderPassDescriptor( false );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* MetalRenderSystem::createDepthBufferFor( TextureGpu *colourTexture,
+    TextureGpu *MetalRenderSystem::createDepthBufferFor( TextureGpu *colourTexture,
                                                          bool preferDepthTexture,
-                                                         PixelFormatGpu depthBufferFormat )
+                                                         PixelFormatGpu depthBufferFormat,
+                                                         uint16 poolId )
     {
         if( depthBufferFormat == PFG_UNKNOWN )
             depthBufferFormat = DepthBuffer::DefaultDepthBufferFormat;
 
         return RenderSystem::createDepthBufferFor( colourTexture, preferDepthTexture,
-                                                   depthBufferFormat );
+                                                   depthBufferFormat, poolId );
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,

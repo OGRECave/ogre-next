@@ -157,6 +157,21 @@ namespace Ogre
             PoolOwner           = 1u << 13u
         };
     }
+
+    namespace TextureSourceType
+    {
+        enum TextureSourceType
+        {
+            Standard,           /// Regular texture
+            Shadow,             /// Created by compositor, for shadow mapping
+            Compositor,         /// Created by compositor
+            PoolOwner,          /// TextureFlags::PoolOwner is set
+            SharedDepthBuffer,  /// Created automatically, may be shared and reused by multiple colour
+                                /// targets
+            NumTextureSourceTypes
+        };
+    }
+
     /**
     @remarks
         Internal layout of data in memory:
@@ -207,6 +222,14 @@ namespace Ogre
         /// Used when AutomaticBatching is set. It indicates in which slice
         /// our actual data is, inside a texture array which we do not own.
         uint16      mInternalSliceStart;
+
+        /// This setting is for where the texture is created, e.g. its a compositor texture, a shadow
+        /// texture or standard texture loaded for a mesh etc...
+        ///
+        /// This value is merely for statistical tracking purposes
+        ///
+        /// @see    TextureSourceType::TextureSourceType
+        uint8 mSourceType;
 
         /// This setting can only be altered if mResidencyStatus == OnStorage).
         TextureTypes::TextureTypes  mTextureType;
@@ -304,6 +327,10 @@ namespace Ogre
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
         TextureTypes::TextureTypes getTextureType(void) const;
         TextureTypes::TextureTypes getInternalTextureType(void) const;
+
+        void _setSourceType( uint8 type );
+        /// @copydoc TextureGpu::mSourceType
+        uint8 getSourceType( void ) const;
 
         /** Sets the pixel format.
         @remarks

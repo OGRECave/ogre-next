@@ -831,8 +831,24 @@ namespace Ogre
             mNumPassesLeft = mDefinition->mNumInitialPasses;
 
             //Reset texture pointers and setup RenderPassDescriptor again
-            mRenderPassDesc->mDepth.texture = 0;
-            mRenderPassDesc->mStencil.texture = 0;
+			RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            if( mRenderPassDesc->mDepth.texture )
+            {
+                renderSystem->_dereferenceSharedDepthBuffer( mRenderPassDesc->mDepth.texture );
+                mRenderPassDesc->mDepth.texture = 0;
+
+                if( mRenderPassDesc->mStencil.texture &&
+                    mRenderPassDesc->mStencil.texture == mRenderPassDesc->mDepth.texture )
+                {
+                    renderSystem->_dereferenceSharedDepthBuffer( mRenderPassDesc->mStencil.texture );
+                    mRenderPassDesc->mStencil.texture = 0;
+                }
+            }
+            if( mRenderPassDesc->mStencil.texture )
+            {
+                renderSystem->_dereferenceSharedDepthBuffer( mRenderPassDesc->mStencil.texture );
+                mRenderPassDesc->mStencil.texture = 0;
+            }
 
             for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
             {

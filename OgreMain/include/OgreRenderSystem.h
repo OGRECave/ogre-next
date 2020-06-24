@@ -55,6 +55,8 @@ namespace Ogre
 
     typedef vector<TextureGpu*>::type TextureGpuVec;
     typedef map< uint16, TextureGpuVec >::type DepthBufferMap2;
+    typedef map<TextureGpu *, uint16>::type DepthBufferRefMap;
+    typedef set<TextureGpu *>::type TextureGpuSet;
 
     /// Enum describing the ways to generate texture coordinates
     enum TexCoordCalcMethod
@@ -755,9 +757,17 @@ namespace Ogre
 
     protected:
         virtual TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
-                                                  PixelFormatGpu depthBufferFormat );
+                                                  PixelFormatGpu depthBufferFormat, uint16 poolId );
 
+        /// Detroys a depth buffer associated in the pool. If no texture is found the it skips.
+        void destroySharedDepthBuffer( TextureGpu *depthTexture );
+        void referenceSharedDepthBuffer( TextureGpu *depthBuffer );
     public:
+        void _cleanupDepthBuffers( void );
+        /// Releases the reference count on a shared depth buffer.
+        /// Does nothing if input is not a shared depth buffer.
+        void _dereferenceSharedDepthBuffer( TextureGpu *depthBuffer );
+
         virtual TextureGpu* getDepthBufferFor( TextureGpu *colourTexture, uint16 poolId,
                                                bool preferDepthTexture,
                                                PixelFormatGpu depthBufferFormat );
@@ -1394,6 +1404,8 @@ namespace Ogre
         void destroyAllRenderPassDescriptors(void);
 
         DepthBufferMap2 mDepthBufferPool2;
+        DepthBufferRefMap mSharedDepthBufferRefs;
+        TextureGpuSet mSharedDepthBufferZeroRefCandidates;
 
         typedef set<RenderPassDescriptor*>::type RenderPassDescriptorSet;
         RenderPassDescriptorSet mRenderPassDescs;

@@ -58,6 +58,7 @@ namespace Ogre
         mDepthOrSlices( 0 ),
         mNumMipmaps( 1 ),
         mInternalSliceStart( 0 ),
+        mSourceType( TextureSourceType::Standard ),
         mTextureType( initialType ),
         mPixelFormat( PFG_UNKNOWN ),
         mTextureFlags( textureFlags ),
@@ -260,6 +261,10 @@ namespace Ogre
     {
         return mInternalSliceStart;
     }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::_setSourceType( uint8 type ) { mSourceType = type; }
+    //-----------------------------------------------------------------------------------
+    uint8 TextureGpu::getSourceType( void ) const { return mSourceType; }
     //-----------------------------------------------------------------------------------
     void TextureGpu::setSampleDescription( SampleDescription desc )
     {
