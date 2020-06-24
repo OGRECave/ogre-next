@@ -56,8 +56,10 @@ namespace Ogre {
         mCullFrustum(0),
         mUseRenderingDistance(true),
         mLodCamera(0),
+        mNeedsDepthClamp(false),
         mUseMinPixelSize(false),
-        mPixelDisplayRatio(0)
+        mPixelDisplayRatio(0),
+        mConstantBiasScale(1.0f)
     {
 
         // Reasonable defaults to camera params
@@ -1128,6 +1130,11 @@ namespace Ogre {
         //this->setLodCamera(cam->getLodCamera());
         //this->setCullingFrustum(cam->getCullingFrustum());
 
+    }
+    //-----------------------------------------------------------------------
+    void Camera::_setNeedsDepthClamp( bool bNeedsDepthClamp )
+    {
+        mNeedsDepthClamp = bNeedsDepthClamp;
     }
     //-----------------------------------------------------------------------
     void Camera::_resetRenderedRqs( size_t numRqs )

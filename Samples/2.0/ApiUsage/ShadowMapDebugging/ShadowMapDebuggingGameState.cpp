@@ -449,11 +449,6 @@ namespace Demo
             }
 #endif
 
-            if( nextFilter == Ogre::HlmsPbs::ExponentialShadowMaps )
-                pbs->getHlmsManager()->setShadowMappingUseBackFaces( false );
-            else
-                pbs->getHlmsManager()->setShadowMappingUseBackFaces( true );
-
             pbs->setShadowSettings( nextFilter );
 
             if( nextFilter == Ogre::HlmsPbs::ExponentialShadowMaps )

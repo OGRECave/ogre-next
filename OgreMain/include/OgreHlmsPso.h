@@ -141,6 +141,7 @@ namespace Ogre
             ForceDisableDepthWrites     = 1u << 0u,
             InvertVertexWinding         = 1u << 1u,
             NoDepthBuffer               = 1u << 2u,
+            ForceDepthClamp             = 1u << 3u,
         };
     };
 

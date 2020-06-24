@@ -310,6 +310,10 @@ namespace Ogre
         if( itor != macroblocksJson.MemberEnd() && itor->value.IsBool() )
             macroblock.mScissorTestEnabled = itor->value.GetBool();
 
+        itor = macroblocksJson.FindMember("depth_clamp");
+        if( itor != macroblocksJson.MemberEnd() && itor->value.IsBool() )
+            macroblock.mDepthClamp = itor->value.GetBool();
+
         itor = macroblocksJson.FindMember("depth_check");
         if( itor != macroblocksJson.MemberEnd() && itor->value.IsBool() )
             macroblock.mDepthCheck = itor->value.GetBool();
@@ -845,6 +849,9 @@ namespace Ogre
 
         outString += "\t\t\t\"scissor_test\" : ";
         outString += macroblock->mScissorTestEnabled ? "true" : "false";
+
+        outString += ",\n\t\t\t\"depth_clamp\" : ";
+        outString += macroblock->mDepthClamp ? "true" : "false";
 
         outString += ",\n\t\t\t\"depth_check\" : ";
         outString += macroblock->mDepthCheck ? "true" : "false";

@@ -1002,6 +1002,8 @@ namespace Ogre
         ID_SHADOW_NODE,
             ID_NUM_SPLITS,
             ID_NUM_STABLE_SPLITS,
+            ID_NORMAL_OFFSET_BIAS,
+            ID_CONSTANT_BIAS_SCALE,
             ID_PSSM_SPLIT_PADDING,
             ID_PSSM_SPLIT_BLEND,
             ID_PSSM_SPLIT_FADE,

@@ -23,6 +23,7 @@
         "unique_name" :
         {
             "scissor_test" : false,
+            "depth_clamp" : false,
             "depth_check" : true,
             "depth_write" : true,
             "depth_function" : "less_equal",

@@ -190,10 +190,14 @@ namespace Ogre {
         /// Camera to use for LOD calculation
         const Camera* mLodCamera;
         
+        bool mNeedsDepthClamp;
+
         /// Whether or not the minimum display size of objects should take effect for this camera
         bool mUseMinPixelSize;
         /// @see Camera::getPixelDisplayRatio
         Real mPixelDisplayRatio;
+
+        float mConstantBiasScale;
 
         /// Each frame it is set to all false. After rendering each RQ, it is set to true
         vector<bool>::type  mRenderedRqs;
@@ -709,6 +713,9 @@ namespace Ogre {
         */
         bool getUseMinPixelSize() const { return mUseMinPixelSize; }
 
+        void _setNeedsDepthClamp( bool bNeedsDepthClamp );
+        bool getNeedsDepthClamp( void ) const { return mNeedsDepthClamp; }
+
         /** Returns an estimated ratio between a pixel and the display area it represents.
             For orthographic cameras this function returns the amount of meters covered by
             a single pixel along the vertical axis. For perspective cameras the value
@@ -720,6 +727,9 @@ namespace Ogre {
             This parameter is used in min display size calculations.
         */
         Real getPixelDisplayRatio() const { return mPixelDisplayRatio; }
+
+        void _setConstantBiasScale( const float bias ) { mConstantBiasScale = bias; }
+        float _getConstantBiasScale( void ) const { return mConstantBiasScale; }
 
         /** Called at the beginning of each frame to know which RenderQueue IDs have been rendered
         @param numRqs

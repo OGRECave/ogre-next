@@ -399,6 +399,12 @@ namespace Ogre {
             rsc->setCapability(RSC_TYPED_UAV_LOADS);
         }
 
+        if( mHasGL43 || mGLSupport->checkExtension( "GL_ARB_depth_clamp" ) ||
+            mGLSupport->checkExtension( "GL_NV_depth_clamp" ) )
+        {
+            rsc->setCapability( RSC_DEPTH_CLAMP );
+        }
+
         if( mGLSupport->checkExtension( "GL_ARB_shader_viewport_layer_array" ) )
             rsc->setCapability( RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER );
 
@@ -2054,6 +2060,14 @@ namespace Ogre {
 
         _setDepthBias( macroblock->mDepthBiasConstant, macroblock->mDepthBiasSlopeScale );
 
+        if( macroblock->mDepthClamp )
+        {
+            OCGE( glEnable( GL_DEPTH_CLAMP ) );
+        }
+        else
+        {
+            OCGE( glDisable( GL_DEPTH_CLAMP ) );
+        }
 
         //Cull mode
         if( pso->cullMode == 0 )

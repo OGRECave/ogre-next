@@ -2,11 +2,68 @@
 //#include "SyntaxHighlightingMisc.h"
 
 @property( !hlms_shadowcaster )
+	@piece( DeclShadowMapMacros )
+		@foreach( hlms_num_shadow_map_lights, n )
+			@property( hlms_shadowmap@n_is_directional_light )
+				#define shadowMap@nLightDir light0Buf.lights[@value(hlms_shadowmap@n_light_idx)].position.xyz
+			@end
+			@property( hlms_shadowmap@n_is_point_light )
+				#define shadowMap@nLightDir normalize(light0Buf.lights[@value(hlms_shadowmap@n_light_idx)].position.xyz - outVs.pos)
+			@end
+			@property( hlms_shadowmap@n_is_spot )
+				#define shadowMap@nLightDir light0Buf.lights[@value(hlms_shadowmap@n_light_idx)].spotDirection.xyz
+			@end
+		@end
+		@foreach( hlms_num_shadow_map_lights, n )
+			#define hlms_shadowmap@n_uv_min float2( @value( hlms_shadowmap@n_uv_min_x_int ).@value( hlms_shadowmap@n_uv_min_x_fract ), @value( hlms_shadowmap@n_uv_min_y_int ).@value( hlms_shadowmap@n_uv_min_y_fract ) )
+			#define hlms_shadowmap@n_uv_max float2( @value( hlms_shadowmap@n_uv_max_x_int ).@value( hlms_shadowmap@n_uv_max_x_fract ), @value( hlms_shadowmap@n_uv_max_y_int ).@value( hlms_shadowmap@n_uv_max_y_fract ) )
+			@property( hlms_shadowmap@n_uvs_fulltex )
+				@property( hlms_shadowmap@n_is_point_light )
+					#define hlms_shadowmap@n_uv_length float2( @value( hlms_shadowmap@n_uv_length_x_int ).@value( hlms_shadowmap@n_uv_length_x_fract ), @value( hlms_shadowmap@n_uv_length_y_int ).@value( hlms_shadowmap@n_uv_length_y_fract ) )
+					#define hlms_shadowmap@n_uv_param , hlms_shadowmap@n_uv_min, hlms_shadowmap@n_uv_max, hlms_shadowmap@n_uv_length
+				@else
+					#define hlms_shadowmap@n_uv_param , hlms_shadowmap@n_uv_min, hlms_shadowmap@n_uv_max
+				@end
+			@else
+				#define hlms_shadowmap@n_uv_param
+			@end
+		@end
+
+	@foreach( 2, m )
+		// Perform normal offset bias. See https://github.com/OGRECave/ogre-next/issues/100
+		INLINE float3 getNormalOffsetBias( float3 worldNormal, float3 viewSpaceNormal, float3 lightDir,
+										   float shadowMapTexSize, float depthRange,
+										   float normalOffsetBias
+		@property( @m == 0 )
+										   )
+		@else
+										   , float2 minUV, float2 maxUV )
+		@end
+		{
+			float tmpNdotL = saturate( dot( lightDir.xyz, viewSpaceNormal.xyz ) );
+
+			@property( @m == 1 )
+				shadowMapTexSize /= maxUV.x - minUV.x;
+			@end
+
+			return ( ( 1.0f - tmpNdotL ) * normalOffsetBias * worldNormal.xyz * shadowMapTexSize );
+		}
+	@end
+	@end
+
 	@property( !exponential_shadow_maps )
 	@piece( DoShadowReceiveVS )
+		float3 normalOffsetBias = float3( 0, 0, 0 );
 		@foreach( hlms_num_shadow_map_lights, n )
 			@property( !hlms_shadowmap@n_is_point_light )
-				outVs.posL@n = mul( float4(worldPos.xyz, 1.0f), passBuf.shadowRcv[@n].texViewProj );@end @end
+				@property( !skip_normal_offset_bias_vs )
+					normalOffsetBias = getNormalOffsetBias( worldNorm, outVs.normal, shadowMap@nLightDir,
+															passBuf.shadowRcv[@n].invShadowMapSize.x,
+															passBuf.shadowRcv[@n].shadowDepthRange.y,
+															passBuf.shadowRcv[@n].normalOffsetBias
+															hlms_shadowmap@n_uv_param );
+				@end
+				outVs.posL@n = mul( float4(worldPos.xyz + normalOffsetBias, 1.0f), passBuf.shadowRcv[@n].texViewProj );@end @end
 
 		@foreach( hlms_num_shadow_map_lights, n )
 			@property( !hlms_shadowmap@n_is_point_light )

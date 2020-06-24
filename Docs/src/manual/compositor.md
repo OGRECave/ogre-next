@@ -1290,6 +1290,22 @@ thus the recommended values are num\_stable\_splits = 1 or num\_stable\_splits =
 
 The default is num\_stable\_splits = 0 which disables the feature
 
+-	normal\_offset\_bias <value>
+
+Normal-offset bias is per cascade / shadow map to fight shadow acne and self shadowing artifacts
+Very large values can cause misalignments between the objects and their shadows (if they're touching)
+
+Default is 0.00004
+
+-	constant\_bias\_scale <value>
+
+Constant bias is per material (tweak HlmsDatablock::mShadowConstantBias).
+This value lets you multiply it 'mShadowConstantBias * constantBiasScale' per cascade / shadow map
+
+Large values can cause peter-panning.
+
+Default is 0.1 for backwards compatibility with older materials created by Ogre 2.2.2 and earlier
+
 -   pssm\_lambda \<lambda\>
 
 Only used by PSSM techniques. Value usually between 0 & 1. The default

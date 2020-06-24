@@ -23,6 +23,8 @@
 			@insertpiece( DeclQuat_yAxis )
 		@end
 	@end
+
+    @insertpiece( DeclShadowMapMacros )
 @end
 
 @property( !hlms_skeleton )
@@ -48,8 +50,8 @@
 	worldPos.y = dot( worldMat[1], inputPos );
 	worldPos.z = dot( worldMat[2], inputPos );
 	worldPos.xyz *= inVs_blendWeights[0];
-	@property( hlms_normal || hlms_qtangent )
-		float3 worldNorm;
+    @property( hlms_normal || hlms_qtangent )
+        float3 worldNorm;
 		worldNorm.x = dot( worldMat[0].xyz, inputNormal );
 		worldNorm.y = dot( worldMat[1].xyz, inputNormal );
 		worldNorm.z = dot( worldMat[2].xyz, inputNormal );
@@ -227,6 +229,15 @@
 	//This newline is required else the Hlms parser will put '#define a #define b' in the same line
 	@property( !hlms_pose_normals )#define inputNormal normal@end
 
+	@property( hlms_qtangent )
+		//Decode qTangent to TBN with reflection
+		float3 normal		= xAxis( normalize( inVs_qtangent ) );
+		@property( normal_map )
+			float3 tangent	= yAxis( inVs_qtangent );
+			outVs.biNormalReflection = sign( inVs_qtangent.w ); //We ensure in C++ qtangent.w is never 0
+		@end
+	@end
+
 	@property( !hlms_skeleton && !hlms_pose )
 		ogre_float4x3 worldMat = UNPACK_MAT4x3( worldMatBuf, inVs_drawId @property( !hlms_shadowcaster )<< 1u@end );
 		@property( hlms_normal || hlms_qtangent )
@@ -234,14 +245,9 @@
 		@end
 
 		float4 worldPos = float4( mul(inVs_vertex, worldMat).xyz, 1.0f );
-	@end
-
-	@property( hlms_qtangent )
-		//Decode qTangent to TBN with reflection
-		float3 normal		= xAxis( normalize( inVs_qtangent ) );
-		@property( normal_map )
-			float3 tangent	= yAxis( inVs_qtangent );
-			outVs.biNormalReflection = sign( inVs_qtangent.w ); //We ensure in C++ qtangent.w is never 0
+		@property( hlms_num_shadow_map_lights )
+			// We need worldNorm for normal offset bias
+			float3 worldNorm = mul( inputNormal, toFloat3x3( worldMat ) ).xyz;
 		@end
 	@end
 

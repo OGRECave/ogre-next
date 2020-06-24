@@ -1,4 +1,4 @@
-﻿
+
 //#include "SyntaxHighlightingMisc.h"
 
 @property( hlms_num_shadow_map_lights )
@@ -12,10 +12,10 @@
 		@property( hlms_shadowmap@n_is_point_light )
 			#define hlms_shadowmap@n_uv_length float2( @value( hlms_shadowmap@n_uv_length_x_int ).@value( hlms_shadowmap@n_uv_length_x_fract ), @value( hlms_shadowmap@n_uv_length_y_int ).@value( hlms_shadowmap@n_uv_length_y_fract ) )
 			#define hlms_shadowmap@n_uv_param , hlms_shadowmap@n_uv_min, hlms_shadowmap@n_uv_max, hlms_shadowmap@n_uv_length
-		@end @property( !hlms_shadowmap@n_is_point_light )
+		@else
 			#define hlms_shadowmap@n_uv_param , hlms_shadowmap@n_uv_min, hlms_shadowmap@n_uv_max
 		@end
-	@end @property( !hlms_shadowmap@n_uvs_fulltex )
+	@else
 		#define hlms_shadowmap@n_uv_param
 	@end
 @end
@@ -131,6 +131,25 @@
 /// Declare getShadow twice (two overloads). The second one manually
 /// performs clamp to border to deal with UV atlases.
 @piece( DeclShadowSamplingFuncs )
+	@foreach( 2, m )
+		// Perform normal offset bias. See https://github.com/OGRECave/ogre-next/issues/100
+		INLINE float3 getNormalOffsetBias( float3 geomNormal, float3 lightDir, float normalOffsetBias,
+										   float shadowMapTexSize, float depthRange
+		@property( @m == 0 )
+										   )
+		@else
+										   , float2 minUV, float2 maxUV )
+		@end
+		{
+			float tmpNdotL = saturate( dot( lightDir.xyz, geomNormal.xyz ) );
+
+			@property( @m == 1 )
+				shadowMapTexSize /= maxUV.x - minUV.x;
+			@end
+
+			return ( ( 1.0f - tmpNdotL ) * normalOffsetBias * geomNormal.xyz * shadowMapTexSize );
+		}
+	@end
 @foreach( 4, m )
 	@property( @m == 0 )
 		INLINE float getShadow( @insertpiece( TEXTURE2DSHADOW ) shadowMap, @insertpiece( SamplerShadow )
@@ -140,10 +159,12 @@
 								float4 psPosLN, float4 invShadowMapSize, float2 minUV, float2 maxUV )
 	@end @property( @m == 2 )
 		INLINE float getShadowPoint( @insertpiece( TEXTURE2DSHADOW ) shadowMap, @insertpiece( SamplerShadow )
-									 float3 posVS, float3 lightPos, float4 invShadowMapSize, float2 invDepthRange
+									 float3 geomNormal, float normalOffsetBias,
+									 float3 posVS, float3 lightPos,float4 invShadowMapSize, float2 invDepthRange
 									 PASSBUF_ARG_DECL )
 	@end @property( @m == 3 )
 		INLINE float getShadowPoint( @insertpiece( TEXTURE2DSHADOW ) shadowMap, @insertpiece( SamplerShadow )
+									 float3 geomNormal, float normalOffsetBias,
 									 float3 posVS, float3 lightPos, float4 invShadowMapSize, float2 invDepthRange,
 									 float2 minUV, float2 maxUV, float2 lengthUV
 									 PASSBUF_ARG_DECL )
@@ -164,6 +185,13 @@
 	@else
 		//Point lights
 		float3 cubemapDir = posVS.xyz - lightPos.xyz;
+		cubemapDir += getNormalOffsetBias( geomNormal, cubemapDir, normalOffsetBias,
+				@property( @m == 2 )
+										   invShadowMapSize.x, invDepthRange.y );
+				@else
+										   invShadowMapSize.x, invDepthRange.y, minUV, maxUV );
+				@end
+
 		float fDepth = length( cubemapDir );
 		cubemapDir *= 1.0 / fDepth;
 		cubemapDir = mul( cubemapDir.xyz, passBuf.invViewMatCubemap );
@@ -186,12 +214,12 @@
 
 		@property( pcf >= 3 )
 			float2 offsets[@value(pcf_iterations)] =
-            @property( syntax == glsl || syntax == glsles )
+			@property( syntax == glsl || syntax == glsles )
 				float2[@value(pcf_iterations)](
-            @end
-            @property( syntax != glsl && syntax != glsles )
-            {
-            @end
+			@end
+			@property( syntax != glsl && syntax != glsles )
+			{
+			@end
 			@property( pcf == 3 )
 				float2( 0., 0. ),	//0, 0
 				float2( 1., 0. ),	//1, 0
@@ -263,12 +291,12 @@
 				float2(1, 0), // 1, 2
 				float2(1, 0)  // 2, 2
 			@end
-            @property( syntax == glsl || syntax == glsles )
-            );
-            @end
-            @property( syntax != glsl && syntax != glsles )
+			@property( syntax == glsl || syntax == glsles )
+			);
+			@end
+			@property( syntax != glsl && syntax != glsles )
 			};
-            @end
+			@end
 		@end
 
 		@insertpiece( regularTexturePcfGlSampling )
@@ -389,7 +417,7 @@
 								   inPs.posL0,
 								   passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 								   hlms_shadowmap@counter(CurrentShadowMap)_uv_param );
-	@end @property( !receive_shadows )
+	@else
 		float fShadow = 1.0;
 	@end
 @end
@@ -397,6 +425,7 @@
 
 @property( receive_shadows )
 	@piece( DarkenWithShadowFirstLight )* fShadow@end
+
 	@piece( DarkenWithShadow )
 		* getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
 					 inPs.posL@value(CurrentShadowMap),
@@ -408,6 +437,8 @@
 	@pset( CurrentPointLight, hlms_lights_directional_non_caster )
 	@piece( DarkenWithShadowPoint )
 		* getShadowPoint( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
+						  pixelData.geomNormal,
+						  passBuf.shadowRcv[@value(CurrentShadowMap)].normalOffsetBias,
 						  inPs.pos.xyz, light0Buf.lights[@counter(CurrentPointLight)].position.xyz,
 						  passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize,
 						  passBuf.shadowRcv[@value(CurrentShadowMap)].shadowDepthRange.xy

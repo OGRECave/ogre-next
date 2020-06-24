@@ -799,9 +799,6 @@ namespace Ogre
         static int32 getProperty( const HlmsPropertyVec &properties,
                                   IdString key, int32 defaultVal=0 );
 
-        /// Internal use. @see HlmsManager::setShadowMappingUseBackFaces
-        void _notifyShadowMappingBackFaceSetting(void);
-
         void _clearShaderCache(void);
 
         virtual void _changeRenderSystem( RenderSystem *newRs );

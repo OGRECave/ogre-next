@@ -44,7 +44,6 @@ namespace Ogre
     HlmsManager::HlmsManager() :
         mComputeHlms( 0 ),
         mRenderSystem( 0 ),
-        mShadowMappingUseBackFaces( true ),
         mDefaultHlmsType( HLMS_PBS )
   #if !OGRE_NO_JSON
     ,   mJsonListener( 0 )
@@ -660,20 +659,6 @@ namespace Ogre
         {
             mComputeHlms->_notifyManager( 0 );
             mComputeHlms = 0;
-        }
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsManager::setShadowMappingUseBackFaces( bool useBackFaces )
-    {
-        if( mShadowMappingUseBackFaces != useBackFaces )
-        {
-            mShadowMappingUseBackFaces = useBackFaces;
-
-            for( int i=0; i<HLMS_MAX; ++i )
-            {
-                if( mRegisteredHlms[i] )
-                    mRegisteredHlms[i]->_notifyShadowMappingBackFaceSetting();
-            }
         }
     }
     //-----------------------------------------------------------------------------------

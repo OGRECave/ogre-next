@@ -289,6 +289,7 @@ namespace Ogre
         mDecalsDiffuseMergedEmissive( false ),
         mDecalsSamplerblock( 0 ),
         mLastBoundPool( 0 ),
+        mConstantBiasScale( 0.1f ),
         mHasSeparateSamplers( 0 ),
         mLastDescTexture( 0 ),
         mLastDescSampler( 0 ),
@@ -1491,6 +1492,7 @@ namespace Ogre
         retVal.setProperties = mSetProperties;
 
         CamerasInProgress cameras = sceneManager->getCamerasInProgress();
+        mConstantBiasScale = cameras.renderingCamera->_getConstantBiasScale();
         Matrix4 viewMatrix = cameras.renderingCamera->getVrViewMatrix( 0 );
 
         Matrix4 projectionMatrix = cameras.renderingCamera->getProjectionMatrixWithRSDepth();
@@ -1578,7 +1580,8 @@ namespace Ogre
 
             //mat4 view + mat4 shadowRcv[numShadowMapLights].texViewProj +
             //              vec2 shadowRcv[numShadowMapLights].shadowDepthRange +
-            //              vec2 padding +
+            //              float normalOffsetBias +
+            //              float padding +
             //              vec4 shadowRcv[numShadowMapLights].invShadowMapSize +
             //mat3 invViewMatCubemap (upgraded to three vec4)
             mapSize += ( 16 + (16 + 2 + 2 + 4) * numShadowMapLights + 4 * 3 ) * 4;
@@ -1899,7 +1902,7 @@ namespace Ogre
                     *passBufferPtr++ = fNear;
                 }
                 *passBufferPtr++ = 1.0f / depthRange;
-                *passBufferPtr++ = 0.0f;
+                *passBufferPtr++ = shadowNode->getNormalOffsetBias( (size_t)shadowMapTexIdx );
                 *passBufferPtr++ = 0.0f; //Padding
 
 
@@ -3210,8 +3213,8 @@ namespace Ogre
             currentMappedTexBuffer = mStartMappedTexBuffer + currentConstOffset;
         }
 
-        *reinterpret_cast<float * RESTRICT_ALIAS>( currentMappedConstBuffer+1 ) = datablock->
-                                                                                    mShadowConstantBias;
+        *reinterpret_cast<float * RESTRICT_ALIAS>( currentMappedConstBuffer + 1 ) =
+            datablock->mShadowConstantBias * mConstantBiasScale;
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
         *( currentMappedConstBuffer+2u ) = queuedRenderable.movableObject->getLightMask();
 #endif
@@ -3496,14 +3499,6 @@ namespace Ogre
     void HlmsPbs::setShadowSettings( ShadowFilter filter )
     {
         mShadowFilter = filter;
-
-        if( mShadowFilter == ExponentialShadowMaps && mHlmsManager->getShadowMappingUseBackFaces() )
-        {
-            LogManager::getSingleton().logMessage(
-                        "QUALITY WARNING: It is highly recommended that you call "
-                        "mHlmsManager->setShadowMappingUseBackFaces( false ) when using Exponential "
-                        "Shadow Maps (HlmsPbs::setShadowSettings)" );
-        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::setEsmK( uint16 K )

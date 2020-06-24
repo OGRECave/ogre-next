@@ -4,17 +4,17 @@
 @property( hlms_shadowcaster )
 	@piece( DoShadowCasterVS )
 		@property( hlms_no_reverse_depth || hlms_shadowcaster_point )
-			float shadowConstantBias = uintBitsToFloat( worldMaterialIdx[inVs_drawId].y );
+			float shadowConstantBias = uintBitsToFloat( worldMaterialIdx[inVs_drawId].y ) * passBuf.depthRange.y;
 		@else
-			float shadowConstantBias = -uintBitsToFloat( worldMaterialIdx[inVs_drawId].y );
+			float shadowConstantBias = -uintBitsToFloat( worldMaterialIdx[inVs_drawId].y ) * passBuf.depthRange.y;
 		@end
 
 		@property( !hlms_shadow_uses_depth_texture && !hlms_shadowcaster_point && !exponential_shadow_maps )
 			//Linear depth
 			@property( hlms_shadowcaster_directional || !hlms_no_reverse_depth )
-				outVs.depth	= outVs_Position.z + shadowConstantBias * passBuf.depthRange.y * passBuf.depthRange.y;
+				outVs.depth	= outVs_Position.z + shadowConstantBias;
 			@else
-				outVs.depth	= (outVs_Position.z + shadowConstantBias * passBuf.depthRange.y) * passBuf.depthRange.y;
+				outVs.depth	= outVs_Position.z * passBuf.depthRange.y + shadowConstantBias;
 			@end
 			@property( hlms_no_reverse_depth && (syntax == glsl || syntax == glsles) )outVs.depth = (outVs.depth * 0.5) + 0.5;@end
 		@end
@@ -22,7 +22,7 @@
 		@property( hlms_shadowcaster_point )
 			outVs.toCameraWS	= worldPos.xyz - passBuf.cameraPosWS.xyz;
 			@property( !exponential_shadow_maps )
-				outVs.constBias = shadowConstantBias * passBuf.depthRange.y * passBuf.depthRange.y;
+				outVs.constBias = shadowConstantBias;
 			@end
 		@end
 
@@ -31,16 +31,16 @@
 			//however we can use a cheap approximation ("pseudo linear depth")
 			//see http://www.yosoygames.com.ar/wp/2014/01/linear-depth-buffer-my-ass/
 			@property( hlms_shadowcaster_directional || !hlms_no_reverse_depth )
-				outVs_Position.z = outVs_Position.z + shadowConstantBias * passBuf.depthRange.y * passBuf.depthRange.y;
+				outVs_Position.z = outVs_Position.z + shadowConstantBias;
 			@else
-				outVs_Position.z = (outVs_Position.z + shadowConstantBias * passBuf.depthRange.y) * passBuf.depthRange.y * outVs_Position.w;
+				outVs_Position.z = (outVs_Position.z * passBuf.depthRange.y + shadowConstantBias) * outVs_Position.w;
 			@end
 		@end
 
 		@property( exponential_shadow_maps && !hlms_shadowcaster_point )
 			//It's the same as (float4( worldPos.xyz, 1 ) * viewMatrix).z
 			float linearZ = -(dot( worldPos.xyz, passBuf.viewZRow.xyz ) + passBuf.viewZRow.w);
-            //linearZ += (shadowConstantBias * passBuf.depthRange.y);
+			//linearZ += shadowConstantBias;
 			outVs.depth = (linearZ - passBuf.depthRange.x) * passBuf.depthRange.y;
 		@end
 	@end

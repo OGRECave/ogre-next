@@ -54,6 +54,7 @@ namespace Ogre
     HlmsMacroblock::HlmsMacroblock() :
         BasicBlock( BLOCK_MACRO ),
         mScissorTestEnabled( false ),
+        mDepthClamp( false ),
         mDepthCheck( true ),
         mDepthWrite( true ),
         mDepthFunc( CMPF_LESS_EQUAL ),
@@ -247,19 +248,7 @@ namespace Ogre
         if( !casterBlock )
         {
             mIgnoreFlushRenderables = true;
-            bool useBackFaces = mCreator->getHlmsManager()->getShadowMappingUseBackFaces();
-
-            if( useBackFaces && macroblock.mCullMode != CULL_NONE )
-            {
-                HlmsMacroblock casterblock = macroblock;
-                casterblock.mCullMode = macroblock.mCullMode == CULL_CLOCKWISE ? CULL_ANTICLOCKWISE :
-                                                                                 CULL_CLOCKWISE;
-                setMacroblock( casterblock, true );
-            }
-            else
-            {
-                setMacroblock( mMacroblock[0], true );
-            }
+            setMacroblock( mMacroblock[0], true );
             mIgnoreFlushRenderables = false;
         }
 
@@ -289,19 +278,7 @@ namespace Ogre
         if( !casterBlock )
         {
             mIgnoreFlushRenderables = true;
-            bool useBackFaces = mCreator->getHlmsManager()->getShadowMappingUseBackFaces();
-
-            if( useBackFaces && macroblock->mCullMode != CULL_NONE )
-            {
-                HlmsMacroblock casterblock = *macroblock;
-                casterblock.mCullMode = macroblock->mCullMode == CULL_CLOCKWISE ? CULL_ANTICLOCKWISE :
-                                                                                  CULL_CLOCKWISE;
-                setMacroblock( casterblock, true );
-            }
-            else
-            {
-                setMacroblock( mMacroblock[0], true );
-            }
+            setMacroblock( mMacroblock[0], true );
             mIgnoreFlushRenderables = false;
         }
 
@@ -505,20 +482,10 @@ namespace Ogre
     bool HlmsDatablock::hasCustomShadowMacroblock(void) const
     {
         const HlmsMacroblock *macroblock0 = mMacroblock[0];
-        //Hard copy
-        HlmsMacroblock macroblock1 = *mMacroblock[1];
-
-        const bool useBackFaces = mCreator->getHlmsManager()->getShadowMappingUseBackFaces();
-
-        //Revert the flipping
-        if( useBackFaces && macroblock0->mCullMode != CULL_NONE && macroblock1.mCullMode != CULL_NONE )
-        {
-            macroblock1.mCullMode = macroblock1.mCullMode == CULL_CLOCKWISE ? CULL_ANTICLOCKWISE :
-                                                                              CULL_CLOCKWISE;
-        }
+        const HlmsMacroblock *macroblock1 = mMacroblock[1];
 
         //Now compare if they're equal
-        return *macroblock0 != macroblock1;
+        return *macroblock0 != *macroblock1;
     }
     //-----------------------------------------------------------------------------------
     ColourValue HlmsDatablock::getDiffuseColour(void) const

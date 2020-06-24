@@ -182,6 +182,8 @@ namespace Ogre
 
         ConstBufferPool::BufferPool const *mLastBoundPool;
 
+        float mConstantBiasScale;
+
         bool mHasSeparateSamplers;
         DescriptorSetTexture const *mLastDescTexture;
         DescriptorSetSampler const *mLastDescSampler;

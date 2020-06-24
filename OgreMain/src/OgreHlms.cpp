@@ -2031,6 +2031,11 @@ namespace Ogre
             //Without culling there's nothing to invert, we don't need to hold a strong reference.
             pso.pass.strongMacroblockBits &= ~HlmsPassPso::InvertVertexWinding;
         }
+        if( pso.macroblock->mDepthClamp )
+        {
+            //Macroblock already enabled depth clamp, we don't need to hold a strong reference.
+            pso.pass.strongMacroblockBits &= ~HlmsPassPso::ForceDepthClamp;
+        }
 
         if( pso.pass.hasStrongMacroblock() )
         {
@@ -2048,6 +2053,9 @@ namespace Ogre
                 prepassMacroblock.mCullMode = prepassMacroblock.mCullMode == CULL_CLOCKWISE ?
                             CULL_ANTICLOCKWISE : CULL_CLOCKWISE;
             }
+            //Force depth clamp. Probably a directional shadow caster pass
+            if( pso.pass.strongMacroblockBits & HlmsPassPso::ForceDepthClamp )
+                prepassMacroblock.mDepthClamp = true;
 
             pso.macroblock = mHlmsManager->getMacroblock( prepassMacroblock );
         }
@@ -2627,6 +2635,12 @@ namespace Ogre
                         setProperty( propName.c_str(),
                                      shadowNode->getIndexToContiguousShadowMapTex( shadowMapTexIdx ) );
 
+                        propName.resize( basePropSize );
+                        propName.a( "_light_idx" );
+                        setProperty( propName.c_str(),
+                                     static_cast<int32>(
+                                         shadowNode->getLightIdxAssociatedWith( shadowMapTexIdx ) ) );
+
                         if( shadowTexDef->uvOffset != Vector2::ZERO ||
                             shadowTexDef->uvLength != Vector2::UNIT_SCALE )
                         {
@@ -2702,6 +2716,12 @@ namespace Ogre
                             propName.resize( basePropSize );
                             propName.a( "_uv_length_y_fract" );
                             setProperty( propName.c_str(), (int32)(fractPart * 100000.0f) );
+                        }
+                        else if( light->getType() == Light::LT_SPOTLIGHT )
+                        {
+                            propName.resize( basePropSize );
+                            propName.a( "_is_spot" );
+                            setProperty( propName.c_str(), 1 );
                         }
 
                         ++shadowMapTexIdx;
@@ -3063,6 +3083,9 @@ namespace Ogre
         if( sceneManager->getCurrentPrePassMode() == PrePassUse )
             passPso.strongMacroblockBits |= HlmsPassPso::ForceDisableDepthWrites;
 
+        if( sceneManager->getCamerasInProgress().renderingCamera->getNeedsDepthClamp() )
+            passPso.strongMacroblockBits |= HlmsPassPso::ForceDepthClamp;
+
         const bool invertVertexWinding = mRenderSystem->getInvertVertexWinding();
 
         if( (renderPassDesc->requiresTextureFlipping() && !invertVertexWinding) ||
@@ -3172,20 +3195,6 @@ namespace Ogre
     HlmsListener* Hlms::getListener(void) const
     {
         return mListener == &c_defaultListener ? 0 : mListener;
-    }
-    //-----------------------------------------------------------------------------------
-    void Hlms::_notifyShadowMappingBackFaceSetting(void)
-    {
-        HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
-        HlmsDatablockMap::const_iterator end  = mDatablocks.end();
-
-        while( itor != end )
-        {
-            HlmsDatablock *datablock = itor->second.datablock;
-            datablock->setMacroblock( datablock->getMacroblock( false ), false );
-
-            ++itor;
-        }
     }
     //-----------------------------------------------------------------------------------
     void Hlms::_clearShaderCache(void)

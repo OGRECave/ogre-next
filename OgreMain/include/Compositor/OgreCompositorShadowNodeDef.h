@@ -63,6 +63,24 @@ namespace Ogre
         size_t      light;  //Render Nth closest light
         size_t      split;  //Split for that light (only for PSSM/CSM)
 
+        /// Constant bias is per material (tweak HlmsDatablock::mShadowConstantBias).
+        /// This value lets you multiply it 'mShadowConstantBias * constantBiasScale'
+        /// per cascade / shadow map
+        ///
+        /// This is applied on top of the autocalculated bias from autoConstantBiasScale
+        float constantBiasScale;
+        /// Normal offset bias is per cascade / shadow map
+        ///
+        /// This is applied on top of the autocalculated bias from autoNormalOffsetBiasScale
+        float normalOffsetBias;
+
+        /// 0 to disable.
+        /// Non-zero to increase bias based on orthographic projection's window size.
+        float autoConstantBiasScale;
+        /// 0 to disable.
+        /// Non-zero to increase bias based on orthographic projection's window size.
+        float autoNormalOffsetBiasScale;
+
         ShadowMapTechniques shadowMapTechnique;
 
         //PSSM params
@@ -87,6 +105,10 @@ namespace Ogre
             arrayIdx( _arrayIdx ),
             light( _light ),
             split( _split ),
+            constantBiasScale( 1.0f ),
+            normalOffsetBias( 168.0f ),
+            autoConstantBiasScale( 100.0f ),
+            autoNormalOffsetBiasScale( 4.0f ),
             shadowMapTechnique( t ),
             pssmLambda( 0.95f ),
             splitPadding( 1.0f ),

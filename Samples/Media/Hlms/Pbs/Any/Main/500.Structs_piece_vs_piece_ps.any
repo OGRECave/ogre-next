@@ -6,7 +6,8 @@ struct ShadowReceiverData
 	float4 texViewZRow;
 @end
 	float2 shadowDepthRange;
-	float2 padding;
+	float normalOffsetBias;
+	float padding;
 	float4 invShadowMapSize;
 };
 

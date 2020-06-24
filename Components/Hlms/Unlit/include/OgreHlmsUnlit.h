@@ -79,6 +79,7 @@ namespace Ogre
         DescriptorSetTexture const *mLastDescTexture;
         DescriptorSetSampler const *mLastDescSampler;
 
+        float mConstantBiasScale;
         bool mUsingInstancedStereo;
 
         bool    mUsingExponentialShadowMaps;
