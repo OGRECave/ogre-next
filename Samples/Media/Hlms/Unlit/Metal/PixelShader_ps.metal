@@ -27,11 +27,6 @@ fragment @insertpiece( output_type ) main_metal
 	// END UNIFORM DECLARATION
 	@property( hlms_vpos ), float4 gl_FragCoord [[position]]@end
 
-	@foreach( num_array_textures, n )
-		, texture2d_array<float> textureMapsArray@n [[texture(@value(array_texture_bind@n))]]@end
-	@foreach( num_textures, n )
-		, texture2d<float> textureMaps@n [[texture(@value(texture_bind@n))]]@end
-
 	@property( !hlms_shadowcaster || alpha_test )
 		@foreach( num_textures, n )
 			@property( is_texture@n_array )
