@@ -43,7 +43,9 @@ layout(location = FRAG_COLOR, index = 0) out float outColour;
 void main()
 {
 	@insertpiece( custom_ps_preExecution )
-	@insertpiece( DefaultBodyPS )
+	@property( !hlms_shadowcaster || alpha_test )
+		@insertpiece( DefaultBodyPS )
+	@end
 	@property( hlms_shadowcaster )
 		@insertpiece( DoShadowCastPS )
 	@end
