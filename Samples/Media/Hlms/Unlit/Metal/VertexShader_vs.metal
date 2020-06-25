@@ -36,6 +36,9 @@ vertex PS_INPUT main_metal
 	@end
 	// START UNIFORM DECLARATION
 	@insertpiece( PassDecl )
+	@property( ( !hlms_shadowcaster || alpha_test ) && hlms_colour && diffuse )
+		@insertpiece( MaterialDecl )
+	@end
 	@insertpiece( InstanceDecl )
 	, device const float4 *worldMatBuf [[buffer(TEX_SLOT_START+0)]]
 	@property( texture_matrix ), device const float4 *animationMatrixBuf [[buffer(TEX_SLOT_START+1)]]@end

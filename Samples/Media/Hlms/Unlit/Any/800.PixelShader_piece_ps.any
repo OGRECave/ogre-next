@@ -5,28 +5,21 @@
 	@foreach( diffuse_map, n )
 		#define DiffuseSampler@n samplerState@value(diffuse_map@n_sampler)
 		@property( diffuse_map@n_array )
-			#define SampleDiffuse@n( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+			#define SampleDiffuse@n( tex, sampler, uv, d ) OGRE_SampleArray2D( tex, sampler, uv, d )
 			#define DiffuseTexture@n textureMapsArray@value(diffuse_map@n_idx)
-			@property( !diffuse_map@n_reflection )
-				#define DiffuseUV@n inPs.uv@value( uv_diffuse@n ).@insertpiece( uv_diffuse_swizzle@n ), diffuseIdx@n
-			@else
-				@property( !hlms_forwardplus_flipY )
-					#define DiffuseUV@n float2( gl_FragCoord.x * passBuf.invWindowSize.x, 1.0f - gl_FragCoord.y * passBuf.invWindowSize.y ), diffuseIdx@n
-				@else
-					#define DiffuseUV@n gl_FragCoord.xy * passBuf.invWindowSize.xy, diffuseIdx@n
-				@end
-			@end
+			@piece( diffuseIdx@n ), diffuseIdx@n@end
 		@else
 			#define SampleDiffuse@n( tex, sampler, uv ) OGRE_Sample( tex, sampler, uv )
 			#define DiffuseTexture@n textureMaps@value(diffuse_map@n_idx)
-			@property( !diffuse_map@n_reflection )
-				#define DiffuseUV@n inPs.uv@value( uv_diffuse@n ).@insertpiece( uv_diffuse_swizzle@n )
+		@end
+
+		@property( !diffuse_map@n_reflection )
+			#define DiffuseUV@n inPs.uv@value( uv_diffuse@n ).@insertpiece( uv_diffuse_swizzle@n )
+		@else
+			@property( !hlms_forwardplus_flipY )
+				#define DiffuseUV@n float2( gl_FragCoord.x * passBuf.invWindowSize.x, 1.0f - gl_FragCoord.y * passBuf.invWindowSize.y )
 			@else
-				@property( !hlms_forwardplus_flipY )
-					#define DiffuseUV@n float2( gl_FragCoord.x * passBuf.invWindowSize.x, 1.0f - gl_FragCoord.y * passBuf.invWindowSize.y )
-				@else
-					#define DiffuseUV@n gl_FragCoord.xy * passBuf.invWindowSize.xy
-				@end
+				#define DiffuseUV@n gl_FragCoord.xy * passBuf.invWindowSize.xy
 			@end
 		@end
 	@end
@@ -87,14 +80,14 @@
 	@property( diffuse_map0 )
 		// Load base image
 		diffuseCol = SampleDiffuse0( DiffuseTexture0, DiffuseSampler0,
-									 DiffuseUV0 ).@insertpiece(diffuse_map0_tex_swizzle);
+									 DiffuseUV0 @insertpiece( diffuseIdx0 ) ).@insertpiece(diffuse_map0_tex_swizzle);
 	@end
 
 	// Load each additional layer and blend it
 	@foreach( diffuse_map, n, 1 )
 		@property( diffuse_map@n )
 			float4 topImage@n = SampleDiffuse@n( DiffuseTexture@n, DiffuseSampler@n,
-												 DiffuseUV@n ).@insertpiece(diffuse_map@n_tex_swizzle);
+												 DiffuseUV@n @insertpiece( diffuseIdx@n ) ).@insertpiece(diffuse_map@n_tex_swizzle);
 			@insertpiece( blend_mode_idx@n )
 		@end
 	@end

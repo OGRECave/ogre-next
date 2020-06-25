@@ -535,7 +535,7 @@ namespace Ogre
 
                 isTexArrayProp.a( i, "_array" );  // is_texture0_array
                 if( getProperty( isTexArrayProp.c_str() ) )
-                    texName.a( "array" );  // textureMapsArray0
+                    texName.a( "Array" );  // textureMapsArray0
                 texName.a( i );            // textureMaps0 or textureMapsArray0
 
                 setTextureReg( PixelShader, texName.c_str(), texUnit++ );
