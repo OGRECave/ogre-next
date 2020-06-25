@@ -66,6 +66,9 @@
 	@property( !hlms_shadowcaster )
 		@property( hlms_colour )
 			outVs.colour = inVs_colour;
+			@property( diffuse )
+				outVs.colour *= material.diffuse;
+			@end
 		@end
 
 		@property( texture_matrix )

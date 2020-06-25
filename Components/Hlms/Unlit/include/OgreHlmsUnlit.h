@@ -103,6 +103,8 @@ namespace Ogre
         virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces );
         virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces );
 
+        virtual void notifyPropertiesMergedPreGenerationStep( void );
+
         virtual void destroyAllBuffers(void);
 
         FORCEINLINE uint32 fillBuffersFor( const HlmsCache *cache,

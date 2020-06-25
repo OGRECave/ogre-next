@@ -37,6 +37,7 @@ namespace Ogre
     const IdString UnlitProperty::HwGammaWrite      = IdString( "hw_gamma_write" );
     const IdString UnlitProperty::SignedIntTex      = IdString( "signed_int_textures" );
     const IdString UnlitProperty::MaterialsPerBuffer= IdString( "materials_per_buffer" );
+    const IdString UnlitProperty::LowerGpuOverhead  = IdString( "lower_gpu_overhead" );
     const IdString UnlitProperty::AnimationMatricesPerBuffer = IdString( "animation_matrices_per_buffer" );
     const IdString UnlitProperty::TextureMatrix     = IdString( "texture_matrix" );
     const IdString UnlitProperty::ExponentialShadowMaps = IdString( "exponential_shadow_maps" );
@@ -54,10 +55,9 @@ namespace Ogre
 
     const IdString UnlitProperty::Diffuse               = IdString( "diffuse" );
 
-    const IdString UnlitProperty::NumArrayTextures      = IdString( "num_array_textures" );
     const IdString UnlitProperty::NumTextures           = IdString( "num_textures" );
     const IdString UnlitProperty::NumSamplers           = IdString( "num_samplers" );
-    const IdString UnlitProperty::SamplerUnitSlotStart  = IdString( "sampler_unit_slot_start" );
+    const IdString UnlitProperty::SamplerStateStart     = IdString( "samplerStateStart" );
 
     const IdString UnlitProperty::DiffuseMap            = IdString( "diffuse_map" );
     //const IdString UnlitProperty::DiffuseMap0           = IdString( "diffuse_map0" );
