@@ -14,7 +14,7 @@ struct PS_INPUT
 		@property( is_texture@n_array )
 			Texture2DArray textureMapsArray@n : register(t@value(textureMapsArray@n));
 		@else
-			Texture2D textureMaps@n : register(t@value(textureMapsArray@n));
+			Texture2D textureMaps@n : register(t@value(textureMaps@n));
 		@end
 	@end
 @end
