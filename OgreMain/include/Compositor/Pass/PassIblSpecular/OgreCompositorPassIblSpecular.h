@@ -85,6 +85,8 @@ namespace Ogre
 
         virtual bool notifyRecreated( const TextureGpu *channel );
 
+        virtual void resetNumPassesLeft(void);
+
     private:
         CompositorPassIblSpecularDef const *mDefinition;
     };

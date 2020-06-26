@@ -138,6 +138,7 @@ namespace Demo
                 static_cast<CompositorPassIblSpecularDef *>( passes.back() );
             iblSpecPassDef->mForceMipmapFallback = mIblQuality == MipmapsLowest;
             iblSpecPassDef->mSamplesPerIteration = mIblQuality == IblLow ? 32.0f : 128.0f;
+            iblSpecPassDef->mSamplesSingleIterationFallback = iblSpecPassDef->mSamplesPerIteration;
         }
 
         //Setup the cubemap's compositor.

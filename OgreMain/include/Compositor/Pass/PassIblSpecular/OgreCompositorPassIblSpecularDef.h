@@ -51,6 +51,10 @@ namespace Ogre
 
     public:
         float mSamplesPerIteration;
+        /// Value to use when we can't spread IBL generation over multiple frames
+        /// (mNumInitialPasses != std::numeric_limits<uint32>::max()) due to
+        /// GPU not having RSC_TYPED_UAV_LOADS
+        float mSamplesSingleIterationFallback;
         /// Value Saturation Hue
         Vector4 mIblCorrectionVSH;
 
@@ -64,6 +68,7 @@ namespace Ogre
                                       CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_IBL_SPECULAR, parentTargetDef ),
             mSamplesPerIteration( 128.0 ),
+            mSamplesSingleIterationFallback( 128.0 ),
             mIblCorrectionVSH( 0, 1.0f, 0, 0 ),
             mForceMipmapFallback( false ),
             mParentNodeDef( parentNodeDef )

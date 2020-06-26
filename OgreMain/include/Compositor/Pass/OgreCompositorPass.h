@@ -204,7 +204,7 @@ namespace Ogre
         /// @See CompositorNode::_notifyCleared
         virtual void notifyCleared(void);
 
-        void resetNumPassesLeft(void);
+        virtual void resetNumPassesLeft(void);
 
         Vector2 getActualDimensions(void) const;
 

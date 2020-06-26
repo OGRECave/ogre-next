@@ -1372,6 +1372,7 @@ namespace Ogre
         mIds["gauss_deviation"] = ID_GAUSS_DEVIATION;
 
         mIds["samples_per_iteration"] = ID_SAMPLES_PER_ITERATION;
+        mIds["samples_single_iteration_fallback"] = ID_SAMPLES_SINGLE_ITERATION_FALLBACK;
         mIds["force_mipmap_fallback"] = ID_FORCE_MIPMAP_FALLBACK;
 
         mIds["compositor_node_shadow"]  = ID_SHADOW_NODE;
