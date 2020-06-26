@@ -217,6 +217,8 @@ namespace Ogre
             return;
         }
 
+        const bool hasTypedUavLoads = caps->hasCapability( RSC_TYPED_UAV_LOADS );
+
         const String newId = StringConverter::toString( Id::generateNewId<CompositorPassIblSpecular>() );
 
         HlmsSamplerblock anisoSamplerblock;
@@ -231,6 +233,8 @@ namespace Ogre
             String mipNum = "/mip" + StringConverter::toString( mip );
             HlmsComputeJob *job = iblSpecular->clone( "IblSpecular/Integrate/" + newId + mipNum );
 
+            job->setProperty( "typed_uav_loads", hasTypedUavLoads ? 1 : 0 );
+
             DescriptorSetTexture2::TextureSlot texSlot(
                 DescriptorSetTexture2::TextureSlot::makeEmpty() );
             texSlot.texture = mInputTexture;
@@ -238,7 +242,7 @@ namespace Ogre
 
             DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
             uavSlot.texture = mOutputTexture;
-            uavSlot.access = ResourceAccess::ReadWrite;
+            uavSlot.access = hasTypedUavLoads ? ResourceAccess::ReadWrite : ResourceAccess::Write;
             uavSlot.mipmapLevel = mip;
             uavSlot.pixelFormat =
                 PixelFormatGpuUtils::getEquivalentLinear( mOutputTexture->getPixelFormat() );
