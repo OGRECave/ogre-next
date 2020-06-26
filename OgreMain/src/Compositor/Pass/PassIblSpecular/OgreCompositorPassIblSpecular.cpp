@@ -217,6 +217,8 @@ namespace Ogre
             return;
         }
 
+        const bool hasTypedUavLoads = caps->hasCapability( RSC_TYPED_UAV_LOADS );
+
         const String newId = StringConverter::toString( Id::generateNewId<CompositorPassIblSpecular>() );
 
         HlmsSamplerblock anisoSamplerblock;
@@ -231,6 +233,8 @@ namespace Ogre
             String mipNum = "/mip" + StringConverter::toString( mip );
             HlmsComputeJob *job = iblSpecular->clone( "IblSpecular/Integrate/" + newId + mipNum );
 
+            job->setProperty( "typed_uav_loads", hasTypedUavLoads ? 1 : 0 );
+
             DescriptorSetTexture2::TextureSlot texSlot(
                 DescriptorSetTexture2::TextureSlot::makeEmpty() );
             texSlot.texture = mInputTexture;
@@ -238,7 +242,7 @@ namespace Ogre
 
             DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
             uavSlot.texture = mOutputTexture;
-            uavSlot.access = ResourceAccess::ReadWrite;
+            uavSlot.access = hasTypedUavLoads ? ResourceAccess::ReadWrite : ResourceAccess::Write;
             uavSlot.mipmapLevel = mip;
             uavSlot.pixelFormat =
                 PixelFormatGpuUtils::getEquivalentLinear( mOutputTexture->getPixelFormat() );
@@ -249,12 +253,18 @@ namespace Ogre
             ShaderParams::Param *p;
 
             const float p_convolutionSamplesOffset = 0;
-            const float p_convolutionSampleCount = mDefinition->mSamplesPerIteration;
-            const float p_convolutionMaxSamples =
+            float p_convolutionSampleCount = mDefinition->mSamplesPerIteration;
+            float p_convolutionMaxSamples =
                 mDefinition->mNumInitialPasses != std::numeric_limits<uint32>::max()
                     ? ( mDefinition->mSamplesPerIteration * mDefinition->mNumInitialPasses )
                     : mDefinition->mSamplesPerIteration;
             const float p_convolutionRoughness = mip / static_cast<float>( outNumMips - 1u );
+
+            if( !hasTypedUavLoads && p_convolutionSampleCount != p_convolutionMaxSamples )
+            {
+                p_convolutionSampleCount = mDefinition->mSamplesSingleIterationFallback;
+                p_convolutionMaxSamples = mDefinition->mSamplesSingleIterationFallback;
+            }
 
             shaderParams.mParams.push_back( ShaderParams::Param() );
             p = &shaderParams.mParams.back();
@@ -284,6 +294,9 @@ namespace Ogre
 
             mJobs.push_back( job );
         }
+
+        if( !hasTypedUavLoads && mNumPassesLeft != std::numeric_limits<uint32>::max() )
+            mNumPassesLeft = 1u;
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassIblSpecular::execute( const Camera *lodCamera )
@@ -293,6 +306,21 @@ namespace Ogre
         {
             if( !mNumPassesLeft )
                 return;
+
+            vector<HlmsComputeJob *>::const_iterator itor = mJobs.begin();
+            vector<HlmsComputeJob *>::const_iterator endt = mJobs.end();
+
+            while( itor != endt )
+            {
+                ShaderParams &shaderParams = ( *itor )->getShaderParams( "default" );
+                ShaderParams::Param &p = shaderParams.mParams.front();
+                Vector4 oldParam = p.getManualValue<Vector4>();
+                oldParam.x += 1.0f;  // Advance p_convolutionSamplesOffset
+                p.setManualValue( oldParam );
+
+                ++itor;
+            }
+
             --mNumPassesLeft;
         }
 
@@ -388,5 +416,35 @@ namespace Ogre
             setupComputeShaders();
 
         return usedByUs;
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPassIblSpecular::resetNumPassesLeft( void )
+    {
+        vector<HlmsComputeJob *>::const_iterator itor = mJobs.begin();
+        vector<HlmsComputeJob *>::const_iterator endt = mJobs.end();
+
+        while( itor != endt )
+        {
+            ShaderParams &shaderParams = ( *itor )->getShaderParams( "default" );
+
+            // We don't know if shaderParams.mParams exists yet
+            if( !shaderParams.mParams.empty() )
+            {
+                ShaderParams::Param &p = shaderParams.mParams.front();
+                Vector4 oldParam = p.getManualValue<Vector4>();
+                oldParam.x = 0.0f;
+                p.setManualValue( oldParam );
+            }
+
+            ++itor;
+        }
+
+        CompositorPass::resetNumPassesLeft();
+
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
+        const bool hasTypedUavLoads = caps->hasCapability( RSC_TYPED_UAV_LOADS );
+        if( !hasTypedUavLoads && mNumPassesLeft != std::numeric_limits<uint32>::max() )
+            mNumPassesLeft = 1u;
     }
 }  // namespace Ogre

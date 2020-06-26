@@ -10685,6 +10685,22 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_SAMPLES_SINGLE_ITERATION_FALLBACK:
+                    if( prop->values.size() != 1u )
+                    {
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line );
+                        return;
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getFloat( *it0, &passIbl->mSamplesSingleIterationFallback ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file,
+                                                prop->line, "Boolean expected" );
+                        }
+                    }
+                    break;
                 case ID_FORCE_MIPMAP_FALLBACK:
                     if( prop->values.size() != 1u )
                     {

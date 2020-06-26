@@ -203,7 +203,7 @@
 		// Sample source cubemap at specified mip.
 		float4 importanceSampled = importanceSample( R PARAMS_ARG );
 
-		@property( !iOS )
+		@property( typed_uav_loads )
 		if( p_convolutionSamplesOffset >= 1 )
 		{
 			@property( uav0_texture_type == TextureTypes_TypeCube )

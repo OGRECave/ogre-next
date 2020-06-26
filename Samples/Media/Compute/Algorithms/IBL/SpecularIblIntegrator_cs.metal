@@ -1,7 +1,7 @@
 @insertpiece( SetCrossPlatformSettings )
 @insertpiece( DeclUavCrossPlatform )
 
-@property( !iOS )
+@property( typed_uav_loads )
 	@property( uav0_texture_type == TextureTypes_TypeCube )
 		#define UAV0_TEXTURE_WRITE texture2d_array<@insertpiece(uav0_pf_type), access::read_write>
 	@else
