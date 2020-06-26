@@ -468,6 +468,7 @@ namespace Ogre
                 node->parent = 0;
                 node->token = token->lexeme(true);
                 node->type = CNT_QUOTE;
+                break;
             default:
                 OGRE_EXCEPT(Exception::ERR_INVALID_STATE, 
                     Ogre::String("unexpected token") + token->lexeme() + " at line " + 
