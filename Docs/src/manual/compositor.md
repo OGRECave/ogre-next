@@ -261,12 +261,13 @@ texture, this value is silently ignored. Default: slice = 0
 
 ## Passes {#CompositorNodesPasses}
 
-Passes are the same as they were in Ogre 1.x. At the time of writing
-there are 8 types of passes:
+A pass is a single rendering action to be performed in a target section.
+
+There are 8 types of passes:
 
 -   clear (PASS\_CLEAR)
 -   generate\_mipmaps (PASS\_MIPMAP)
--   quad (PASS\_QUAD)
+-   render_quad (PASS\_QUAD)
 -   resolve (PASS\_RESOLVE)
 -   render\_scene (PASS\_SCENE)
 -   stencil (PASS\_STENCIL)
@@ -287,7 +288,7 @@ All passes support the following script parameters:
 
 -   pass \<type\>; \[customId\]
 
-'*type*' must be one of the supported types: clear, quad, resolve,
+'*type*' must be one of the supported types: clear, render_quad, resolve,
 render\_scene, stencil, custom.
 
 The *customId* parameter is optional and is used by custom passes to
@@ -407,7 +408,7 @@ The standard deviation of the gaussian filter. The default is 0,5.
 >  
 >  In order for compute-based mipmap generation to work, Ogre must be compiled with JSON support, and the user must include the resources included in Ogre's repository at Samples/Media/2.0/scripts/materials/Common
 
-### quad {#CompositorNodesPassesQuad}
+### render_quad {#CompositorNodesPassesQuad}
 
 Quad passes have the same syntax as 1.x; plus the following keywords
 have been added:

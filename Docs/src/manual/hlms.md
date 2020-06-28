@@ -1,99 +1,33 @@
 
-HLMS: High Level Material System {#hlms}
+Materials {#hlms}
 ================================
-
-The HLMS (often stylized Hlms) is the new material system used in Ogre
-2.0. It's more user friendly and performs faster.
-
-HLMS stands for "High Level Material System", because for the user, the
-HLMS means just define the material and start looking at it (no need for
-coding or shader knowledge!). But on retrospective, tweaking the shader
-code for an HLMS is much low level than the old Materials have ever been
-(and that makes them very powerful).
+This section gives an overview of Ogre's two material systems
 
 @tableofcontents
 
-# Fundamental changes {#HlmsChanges}
+# Introduction {#Introduction}
 
-## Viewports and Scissor tests {#HlmsChangesViewports}
+## Two different material systems
+Ogre 2.+ has two different material systems:
+- HLMS: The new shiny material system
+- Low level materials: A legacy material system inherited from Ogre 1.+
 
-Viewports now contain information about the scissor rectangle. Back in
-Ogre 1.x; Direct3D 9's support for scissor testing was optional, which
-caused lots of headaches. As a result, users could only use low-level
-function `RenderSystem::setScissorTest` for manually manipulating the
-scissor rect.
+## HLMS: High Level Material System
+The HLMS (often stylized Hlms) is the material system used in Ogre
+2.+. It's user friendly and is fast.
 
-In OpenGL, it was even messier because setting and enabling the scissor
-rect was needed to perform buffer clears on partial regions of the
-framebuffer; which could override user's manual input, potentially
-breaking applications that worked fine using Direct3D.
+HLMS stands for "High Level Material System", because for the user, the
+HLMS means just define the material and start looking at it (no need for
+coding or shader knowledge!). Additionally, the ability to tweak the shader
+code for an HLMS makes them very powerful.
 
-Fortunately, all targetted APIs by Ogre 2.0 support scissor tests, and
-thus it is now properly supported. As a result:
 
--   Viewports hold the information about the scissor rectangle (see
-    `Viewport::setScissors`)
--   Enabling and disabling scissor testing is controlled via
-    Macroblocks.
--   `RenderSystem::setScissorTest` was removed.
--   `RSC_SCISSOR_TEST` flag was removed.
+## Low level materials
 
-## A lot of data is stored in "Blocks" {#HlmsChangesBlocks}
-
-Described in detail in the [Blocks section](#9.3.Blocks|outline), many
-parameters have been grouped into blocks. Changing depth checks means
-changing the whole Macroblock.
-
-You could be thinking the reason I came up with these two is to fit with
-D3D11′s grand scheme of things while being compatible with OpenGL. But
-that's a half truth and an awesome side effect. I've been developing the
-Hlms using OpenGL this whole time.
-
-An OpenGL fan will tell you that grouping these together in single call
-like D3D11 did barely reduces API overhead in practice (as long as you
-keep sorting by state), and they're right about that.
-
-However, there are big advantages for using blocks:
-
-1.  Many materials in practice share the same Macro- & Blendblock
-    parameters. In an age where we want many 3D primitives with the same
-    shader but slightly different parameters like texture, colour, or
-    roughness (which equals, a different material) having these settings
-    repeated per material wastes a lot of memory space… and a lot of
-    bandwidth (and wastes cache space). Ogre 2.0 is bandwidth bound, so
-    having all materials share the same pointer to the same Macroblock
-    can potentially save a lot of bandwidth, and be friendlier to the
-    cache at the same time.This stays true whether we use D3D11, D3D12,
-    OpenGL, GL ES 2, or Mantle.
-2.  Sorting by Macroblock is a lot easier (and faster) than sorting by
-    its individual parameters: when preparing the hash used for sorting,
-    it's much easier to just do (every frame, per object) `hash
-    |= (macroblock->getId() << bits) & mask` than to do: `hash =| m->depth_check | m->depthWrite << 1 | m->depthBias << 2 | m->depth_slope_bias << 3 | m->cullMode << 18 | ... ;` We also need a lot more bits we can't afford. Ogre
-    2.0 imposes a limit on the amount of live Macroblocks you can have
-    at the same time; as we run out of hashing space (by the way, D3D11
-    has its own limit). It operates around the idea that most setting
-    combinations won't be used in practice.
-
-Of course it's not perfect, it can't fit every use case. We inherit the
-same problems D3D11 has. If a particular rendering technique relies on
-regularly changing a property that lives in a Macroblock (i.e. like
-alternating depth comparison function between less & greater with every
-draw call, or gradually incrementing the depth bias on each draw call);
-you'll end up redundantly changing a lot of other states (culling mode,
-polygon mode, depth check & write flags, depth bias) alongside it. This
-is rare. We're aiming the general use case.
-
-These problems make me wonder if D3D11 made the right choice of using
-blocks from an API perspective, since I'm not used to driver
-development. However from an engine perspective, blocks make sense.
-
-## Materials are still alive {#HlmsChangesMaterialsAlive}
-
-Let me get this straight: You should be using the HLMS. The usual
-"Materials" are slow. Very slow. They're inefficient and not suitable
+First of all: You should be using the HLMS. Low level materials are slow. Very slow. They're inefficient and not suitable
 for rendering most of your models.
 
-However, materials are still useful for:
+However, low level materials are useful for:
 
 -   Quick iteration. You need to write a shader, just define the
     material and start coding. Why would you deal with the template's
@@ -116,19 +50,16 @@ However, materials are still useful for:
 
 Under the hood there is an HLMS C++ implementation (`HLMS_LOW_LEVEL`)
 that acts just as a proxy to the material. The HLMS is an integral part
-of Ogre 2.0, not just a fancy add-in.
+of Ogre 2.+, not just a fancy add-in.
 
-Materials have been refactored, and thus your old code may need a few
-changes. Most notably Macroblocks & Blendblocks have been added to
-Materials, thus functions like `Pass::setDepthCheck` & Co have been
-replaced by a two calls: `Pass::setMacroblock` & `Pass::setBlendblock`.
+(Btw, Fixed Function Pipeline is not available in Ogre 2.+)
 
-## Fixed Function has been removed {#HlmsChangesFFP}
+# Getting started with a material
+HLMS materials are defined in JSON files which you need load into your application. Have a look at [PbsAllSettings.json](Docs/2.0/JSON/PbsAllSettings.json) for the possible properties to tweak.
 
-With FFP being removed, multitexturing and pass splitting functionality
-was cut as well. The HLMS default systems handle these.
+# The implementation of HLMS {#hlms}
 
-# The three components {#HlmsComponents}
+## The three components {#HlmsComponents}
 
 1.  **Scripts.** To set the material properties (i.e. type of Hlms to
     use: PBS, Toon shading, GUI; what textures, diffuse colour,
