@@ -243,7 +243,7 @@ namespace Ogre
             // There can and should only be one record.
             if( mWidth < blockWidth || mHeight < blockHeight )
             {
-                OGRE_ASSERT_LOW( mFreeBoxes.size() == 1u );
+                OGRE_ASSERT_LOW( mFreeBoxes[slice].size() == 1u );
                 canShrink = false;
             }
         }
