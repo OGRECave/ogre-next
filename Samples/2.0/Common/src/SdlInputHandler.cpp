@@ -281,5 +281,12 @@ namespace Demo
 
         return false;
     }
+    //-----------------------------------------------------------------------------------
+    void SdlInputHandler::_overrideKeyboardListener( KeyboardListener *listener )
+    {
+        mKeyboardListener = listener;
+    }
+    //-----------------------------------------------------------------------------------
+    KeyboardListener *SdlInputHandler::getKeyboardListener( void ) { return mKeyboardListener; }
 }
 #endif
