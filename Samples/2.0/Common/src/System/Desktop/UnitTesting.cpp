@@ -55,6 +55,11 @@ namespace Demo
         screenshotRenderWindow( false )
     {
     }
+    UnitTest::Params::Params() : bRecord( false ), bCompressDuration( false ) {}
+    //-------------------------------------------------------------------------
+    bool UnitTest::Params::isRecording() const { return bRecord && !recordPath.empty(); }
+    //-------------------------------------------------------------------------
+    bool UnitTest::Params::isPlayback() const { return !bRecord && !recordPath.empty(); }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -158,6 +163,56 @@ namespace Demo
         jsonStr.a( "}" );
 
         flushLwString( jsonStr, outJson );
+    }
+    //-------------------------------------------------------------------------
+    /** Returns true if 'str' starts with the text contained in 'what'
+    @param str
+    @param what
+    @param outStartIdx
+        str[outStartIdx] points to the first letter (including null terminator)
+        that diverged from 'what', even if we return false
+    @return
+        True if there's a match, false otherwise
+    */
+    static bool startsWith( const char *str, const char *what, size_t &outStartIdx )
+    {
+        const char *origStart = str;
+
+        while( *str && *what && *str == *what )
+        {
+            ++str;
+            ++what;
+        }
+
+        outStartIdx = static_cast<size_t>( str - origStart );
+
+        return *what == '\0';
+    }
+    //-------------------------------------------------------------------------
+    void UnitTest::parseCmdLine( int nargs, const char *argv[] )
+    {
+        for( int i = 1; i < nargs; ++i )
+        {
+            size_t startIdx;
+            if( startsWith( argv[i], "--ut_record=", startIdx ) )
+            {
+                mParams.bRecord = true;
+                mParams.recordPath = std::string( argv[i] + startIdx );
+            }
+            else if( startsWith( argv[i], "--ut_output=", startIdx ) )
+            {
+                mParams.outputPath = std::string( argv[i] + startIdx );
+            }
+            else if( startsWith( argv[i], "--ut_compress", startIdx ) )
+            {
+                mParams.bCompressDuration = true;
+            }
+            else if( startsWith( argv[i], "--ut_playback=", startIdx ) )
+            {
+                mParams.bRecord = false;
+                mParams.recordPath = std::string( argv[i] + startIdx );
+            }
+        }
     }
     //-------------------------------------------------------------------------
     void UnitTest::startRecording( GraphicsSystem *graphicsSystem )

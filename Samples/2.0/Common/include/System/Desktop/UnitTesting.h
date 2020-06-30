@@ -65,12 +65,28 @@ namespace Demo
             FrameActivity( uint32_t _frameId );
         };
 
+    public:
+        struct Params
+        {
+            bool bRecord;
+            bool bCompressDuration;
+            std::string recordPath;
+            std::string outputPath;
+            Params();
+
+            bool isRecording() const;
+            bool isPlayback() const;
+        };
+
+    protected:
         double mFrametime;
         uint32_t mFrameIdx;
         uint32_t mNumFrames;
         KeyboardListener *mRealKeyboardListener;
 
         std::vector<FrameActivity> mFrameActivity;
+
+        Params mParams;
 
         inline static void flushLwString( Ogre::LwString &jsonStr, std::string &outJson );
 
@@ -83,6 +99,10 @@ namespace Demo
 
     public:
         UnitTest();
+
+        void parseCmdLine( int nargs, const char *argv[] );
+
+        const Params &getParams( void ) const { return mParams; }
 
         void startRecording( Demo::GraphicsSystem *graphicsSystem );
         void notifyRecordingNewFrame( Demo::GraphicsSystem *graphicsSystem );
