@@ -2301,3 +2301,165 @@ for( int i=0; i<4; ++i )
 [^6]: Note: You're allowed to keep an explicitly resolved textured dirty
     forever (i.e. never resolve, in case your main purpose is to always
     access fsaa subsamples)
+
+# Advanced MSAA
+
+## What is MSAA?
+
+MSAA (Multisample Antialiasing) is a very common antialiasing technique.
+
+It is quite common to treat MSAA like black magic: it works automatically and makes
+those staircase effect aka jagged edges aka aliasing disappear.
+
+However there are times where we need to understand how it works, what's going on
+and how to control it explicitly via Ogre.
+
+### Supersampling Antialiasing (SSAA) vs MSAA
+
+It is best to explain what MSAA is by first explaining its most basic form: SSAA aka Supersampling Antialiasing.
+
+SSAA is simply rasterizing at higher resolution and then using a downscale filter.
+Huh? What's next you ask? That's it!
+
+If the original render target is 1920x1080, then SSAA 4x needs to render at 3840x2160 (1920x2 = 3840 and 1080x2 = 2160, twice the width and twice the height is 4x the area!) and then downscale back to 1920x1080
+either using a simple bilinear filter or something slightly more fancy (e.g. bicubic, gaussian, etc)
+
+Thus we just established that SSAA is not a complex algorithm: it's just rendering at higher
+resolution and then scaling down to blur each of the 4 pixels into 1, producing soft edges.
+
+This operation of scaling down is known as **'Resolve'**
+
+The problem with SSAA: it consumes a lot of bandwidth and processing power.
+4x of everything to be exact (for 4xSSAA).
+
+**That's where MSAA comes in.** MSAA in is basic form looks like SSAA: the GPU needs to allocate a 3840x2160 colour target and a 3840x2160 depth buffer. Thus it stll consumes 4x more memory.
+
+### MSAA approach to the problem
+
+What's different is that MSAA assumes only triangle edges are different and need special treatment.
+Thus for all pixels except the ones at the border of a triangle, the GPU will only run the
+pixel shader *once* and broadcast the colour to all 4 pixels *just as if it were rendering at 1920x1080*.
+This saves 4x of colour bandwidth and 4x processing power, making it very efficient.
+
+The depth however is still populated at 3840x2160.
+
+Ideally only at the polygon edges the pixel shader may run *up to* 4 times.
+
+The major drawbacks from MSAA are two:
+
+ * Performance is highly dependent on the geometry involved. A scene with lots of sharp & spiky
+ triangles will force the GPU to run the pixel shader up to 4 times very often
+ (grass blades often trigger this worst case scenario). While a scene with smoothly-connected
+ triangles (i.e. barely any edges) will run very fast.
+ * Only geometric aliasing (e.g. polygon edges) is fixed. There are other sources of aliasing
+ (texture, shading) which are not considered. Texture aliasing is often fixed with mipmapping though.
+ While fixing shading aliasing is still a hot topic.
+
+ The specific of how the GPU keeps the MSAA contents in memory are very vendor and device-specific.
+ However they're often not sampling-friendly (poor cache behavior, no bilinear filtering available)
+ therefore we often resolve the contents and work on the resolved data.
+
+ But there are exceptions:
+
+ 1. HDR tonemapping [should happen before resolving](https://mynameismjp.wordpress.com/2012/10/24/msaa-overview/), otherwise aliasing effects won't go away.
+ That means an HDR tonemap needs direct access to the MSAA contents.
+ See our HDR sample which deals with this issue.
+ 2. Resolving a depth buffer makes no sense. Averaging depth is meaningless.
+ Depth is often required by postprocessing effects such as Screen Space Reflections,
+ Depth of Field, SSAO. In order to do this, either the 1920x1080 4xMSAA depth buffer gets copied
+ to a regular 3840x2160 texture (to make it cache- and sampling-friendly) or we pretend MSAA
+ did not happen and just take of the values, or the minimum or maximum of each. There is no
+ right answer and it is a very similar problem
+ [mixed resolution particle rendering has](https://developer.nvidia.com/gpugems/gpugems3/part-iv-image-effects/chapter-23-high-speed-screen-particles).
+
+ ## Ogre + MSAA with Implicit Resolves
+
+ Ogre by default uses implicit resolves. When you call:
+
+```cpp
+texture = textureGpuManager->createTexture(
+                   "MyRtt",
+                   GpuPageOutStrategy::Discard,
+                   TextureFlags::RenderToTexture,
+                   TextureTypes::Type2D );
+texture->setResolution( 1920, 1080 );
+texture->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
+texture->setNumMipmaps( 1u );
+texture->setSampleDescription( SampleDescription( 4u ) ); // 4x MSAA
+texture->scheduleTransitionTo( GpuResidency::Resident );
+```
+
+Ogre creates two textures:
+  1. The MSAA surface. Generally you don't have direct access to it.
+  This one occupies 1920x1080x4x4 = 31.64MB
+  2. The implicitly resolved texture which can be used for sampling.
+  This one occupies 1920x1080x4 = 7.91MB
+
+StoreActions control when the texture is resolved:
+ * Store: Do not resolve. Useful if you have to interrupt rendering to a RenderTarget, switch to another RenderTarget, and come back to continue rendering; asuming you didn't need to sample from this texture (to fetch what has been rendered so far)
+ * MultisampleResolve: Always resolve the texture once we're done rendering,
+ and we do not care about the contents of the MSAA surface. This flag won't work on non-MSAA textures and will raise an exception. You should not continue rendering to this texture after this, unless you clear it.
+ * StoreAndMultisampleResolve: Always resolve the texture once we're done rendering,
+ and we do care about the contents of the MSAA surface.
+ It is valid to use this flag without an MSAA texture.
+ This flag is mostly meant for explicit-resolve textures as Ogre users have no way of accessing MSAA contents. However it may be useful if you need to interrupt rendering to a RenderTarget, switch to another RenderTarget while also sampling what has been rendered so far, and then come back to continue rendering to MSAA.
+ * StoreOrResolve: This is the compositor's default. It behaves like 'Store' if the texture is not MSAA. It behaves like 'MultisampleResolve' if the texture is MSAA.
+
+ Implicitly resolved textures is how Ogre traditionally worked before Ogre 2.2
+ Ogre 2.1 tried to implement this but it was very basic and often broken.
+
+## Ogre + MSAA with Explicit Resolves
+
+You need to explicitly ask for explicit resolves. When you call:
+
+```cpp
+texture = textureGpuManager->createTexture(
+                   "MyRtt",
+                   GpuPageOutStrategy::Discard,
+                   TextureFlags::RenderToTexture | TextureFlags::MsaaExplicitResolve,
+                   TextureTypes::Type2D );
+texture->setResolution( 1920, 1080 );
+texture->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
+texture->setNumMipmaps( 1u );
+texture->setSampleDescription( SampleDescription( 4u ) ); // 4x MSAA
+texture->scheduleTransitionTo( GpuResidency::Resident );
+```
+
+Ogre creates only one texture:
+  1. The MSAA surface. This one occupies 1920x1080x4x4 = 31.64MB
+
+Therefore:
+
+ 1. Binding this texture to a shader means the shader must access it via Texture2DMS (HLSL), sampler2DMS (GLSL), and texture2d_ms (Metal)
+ 1. Resolving must be done manually (assuming you want to resolve at all). This means setting up the RTV on the compositor manually
+
+In compositor scripts one would have to set the rtv like this:
+
+```
+compositor_node MyExplicitMsaaNode
+{
+	// This is the explicit MSAA surface
+	texture myMsaaTex	target_width target_height PFG_RGBA8_UNORM_SRGB msaa_auto explicit_resolve
+	// This is where myMsaaTex will be resolved to. It's just a regular texture
+	texture myResolvedResult	target_width target_height PFG_RGBA8_UNORM_SRGB
+
+    // Create a custom RenderTargetView.
+    // Normally Ogre automatically generates one with the same name as the texture
+    // (We could also modify that auto-generated one by specifying 'rtv myMsaaTex')
+    // but we create another one to emphasize it's custom-made
+	rtv myCustomRtv
+	{
+		// Specify we want to render to myMsaaTex at slot[0] but we want to resolve to myResolvedResult
+		colour	0 myMsaaTex resolve myResolvedResult
+	}
+
+	target myCustomRtv
+	{
+		// Render...
+	}
+}
+```
+Now you just rendered to myMsaaTex, resolved into myResolvedResult and can have direct
+access to MSAA samples (by binding myMsaaTex to a material).
+
+See Samples/Media/2.0/scripts/Compositors/ScreenSpaceReflections.compositor for a specific example
