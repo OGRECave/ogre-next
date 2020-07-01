@@ -381,6 +381,8 @@ namespace Demo
             const rapidjson::Value &frameActObjArray = itor->value;
             const size_t arraySize = frameActObjArray.Size();
 
+            mFrameActivity.reserve( arraySize );
+
             for( size_t i = 0u; i < arraySize; ++i )
             {
                 const rapidjson::Value &frameActObj = frameActObjArray[i];
@@ -468,6 +470,8 @@ namespace Demo
                             }
                         }
                     }
+
+                    mFrameActivity.push_back( frameActivity );
                 }
             }
         }
