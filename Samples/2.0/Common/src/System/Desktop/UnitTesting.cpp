@@ -36,6 +36,7 @@ THE SOFTWARE.
 
 #include "OgreCamera.h"
 #include "OgreLwString.h"
+#include "OgreRoot.h"
 #include "OgreStringConverter.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreWindow.h"
@@ -588,6 +589,7 @@ namespace Demo
 
                 if( frameActivity != mFrameActivity.end() && frameIdx == frameActivity->frameId )
                 {
+                    const Ogre::String frameIdxStr( Ogre::StringConverter::toString( frameIdx ) + "_" );
                     if( frameActivity->screenshotRenderWindow )
                     {
                         Ogre::Image2 img;
@@ -595,16 +597,17 @@ namespace Demo
 
                         texture = renderWindow->getTexture();
                         img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
-                        img.save( outputFolder + "RenderWindow_colour.oitd", 0u,
+                        img.save( outputFolder + frameIdxStr + "RenderWindow_colour.oitd", 0u,
                                   texture->getNumMipmaps() );
 
                         texture = renderWindow->getDepthBuffer();
                         img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
-                        img.save( outputFolder + "RenderWindow_depth.oitd", 0u,
+                        img.save( outputFolder + frameIdxStr + "RenderWindow_depth.oitd", 0u,
                                   texture->getNumMipmaps() );
                     }
 
-                    Ogre::TextureGpuManager *textureManager = 0;
+                    Ogre::TextureGpuManager *textureManager =
+                        graphicsSystem->getRoot()->getRenderSystem()->getTextureGpuManager();
                     Ogre::StringVector::const_iterator itor = frameActivity->targetsToScreenshot.begin();
                     Ogre::StringVector::const_iterator endt = frameActivity->targetsToScreenshot.end();
 
@@ -619,7 +622,8 @@ namespace Demo
 
                         Ogre::Image2 img;
                         img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
-                        img.save( outputFolder + *itor + ".oitd", 0u, texture->getNumMipmaps() );
+                        img.save( outputFolder + frameIdxStr + *itor + ".oitd", 0u,
+                                  texture->getNumMipmaps() );
 
                         ++itor;
                     }
