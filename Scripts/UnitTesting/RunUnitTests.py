@@ -11,18 +11,19 @@ g_unitTests = \
 
 print( 'Launched with ' + str( sys.argv ) )
 
-if len( sys.argv ) != 4 and len( sys.argv ) != 5:
+if len( sys.argv ) != 5 and len( sys.argv ) != 6:
 	print( 'Usage: ')
-	print( '    python3 RunUnitTests.py /pathTo/built/exes /pathTo/json_files ' \
+	print( '    python3 RunUnitTests.py metal|gl|d3d11 /pathTo/built/exes /pathTo/json_files ' \
 			'/pathTo/binary_output /pathTo/old_cmp_binary_output' )
 	print( 'Last argument can be skipped if generating the output (i.e. first run)' )
 	exit( -1 )
 
-g_exeFolder = sys.argv[1]
-g_jsonFolder = sys.argv[2]
-g_outputFolder = sys.argv[3]
-if len( sys.argv ) > 4:
-	g_cmpFolder = sys.argv[4]
+g_api = sys.argv[1]
+g_exeFolder = sys.argv[2]
+g_jsonFolder = sys.argv[3]
+g_outputFolder = sys.argv[4]
+if len( sys.argv ) > 5:
+	g_cmpFolder = sys.argv[5]
 else:
 	g_cmpFolder = ''
 
@@ -60,7 +61,8 @@ def runUnitTest( exeName, jsonName ):
 		compareResults( cmpFolder, outputFolder )
 
 # Setup ogre.cfg
-shutil.copyfile( './ogreGL.cfg', os.path.join( g_exeFolder, 'ogre.cfg' ) )
+if g_api == 'gl':
+	shutil.copyfile( './ogreGL.cfg', os.path.join( g_exeFolder, 'ogre.cfg' ) )
 
 # Iterate through all tests and run it
 for unitTest in g_unitTests:

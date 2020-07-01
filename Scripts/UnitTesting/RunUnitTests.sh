@@ -1,1 +1,1 @@
-python3 RunUnitTests.py ../../build/Debug/bin/ ./JSON ../../build/Debug/bin/ ../../build/Debug/bin/
+python3 RunUnitTests.py gl ../../build/Debug/bin/ ./JSON ../../build/Debug/bin/ ../../build/Debug/bin/
