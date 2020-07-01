@@ -73,9 +73,6 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
     MainEntryPoints::createSystems( &graphicsGameState, &graphicsSystem,
                                     &logicGameState, &logicSystem );
 
-    if( unitTest.getParams().isRecording() )
-        unitTest.startRecording( graphicsSystem );
-
     try
     {
         graphicsSystem->initialize( getWindowTitle() );
@@ -93,6 +90,9 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
 
             return 0; //User cancelled config
         }
+
+        if( unitTest.getParams().isRecording() )
+            unitTest.startRecording( graphicsSystem );
 
         Ogre::Window *renderWindow = graphicsSystem->getRenderWindow();
 

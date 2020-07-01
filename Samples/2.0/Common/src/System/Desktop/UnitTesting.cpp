@@ -90,21 +90,23 @@ namespace Demo
 
         if( !frameActivity.keyStrokes.empty() )
         {
-            jsonStr.a( "\n\t\t\t\"key_strokes\" : [" );
+            jsonStr.a(
+                "\n\t\t\t\"key_strokes\" :"
+                "\n\t\t\t[" );
 
             std::vector<KeyStroke>::const_iterator itor = frameActivity.keyStrokes.begin();
             std::vector<KeyStroke>::const_iterator endt = frameActivity.keyStrokes.end();
 
             while( itor != endt )
             {
-                jsonStr.a( "\n\t\t\t\t\"key_code\" : ", itor->keycode,
+                jsonStr.a( "\n\t\t\t\t{ \"key_code\" : ", itor->keycode,
                            ", \"scan_code\" : ", itor->scancode );
                 jsonStr.a( ", \"released\" : ", itor->bReleased ? "true }," : "false }," );
                 ++itor;
             }
 
-            jsonStr.resize( jsonStr.size() );  // Remove trailing comma
-            jsonStr.a( "]," );
+            jsonStr.resize( jsonStr.size() - 1u );  // Remove trailing comma
+            jsonStr.a( "\n\t\t\t]," );
 
             flushLwString( jsonStr, outJson );
         }
@@ -123,7 +125,7 @@ namespace Demo
             }
 
             jsonStr.resize( jsonStr.size() - 2u );  // Remove trailing space and comma
-            jsonStr.a( "]," );
+            jsonStr.a( "\n\t\t\t]," );
             flushLwString( jsonStr, outJson );
         }
 
@@ -158,9 +160,9 @@ namespace Demo
 
             outJson.resize( outJson.size() - 1u );  // Remove trailing comma
 
-            jsonStr.a( "\t]" );
+            jsonStr.a( "\n\t]" );
         }
-        jsonStr.a( "}" );
+        jsonStr.a( "\n}" );
 
         flushLwString( jsonStr, outJson );
     }
