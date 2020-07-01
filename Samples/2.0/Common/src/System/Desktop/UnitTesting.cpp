@@ -299,7 +299,7 @@ namespace Demo
                 mFrameActivity.push_back( FrameActivity( mFrameIdx ) );
 
             KeyStroke keyStroke;
-            keyStroke.keycode = arg.keysym.sym;
+            keyStroke.keycode = static_cast<uint16_t>( arg.keysym.sym );
             keyStroke.scancode = arg.keysym.scancode;
             keyStroke.bReleased = arg.type == SDL_KEYUP;
             mFrameActivity.back().keyStrokes.push_back( keyStroke );
@@ -324,7 +324,7 @@ namespace Demo
                 mFrameActivity.push_back( FrameActivity( mFrameIdx ) );
 
             KeyStroke keyStroke;
-            keyStroke.keycode = arg.keysym.sym;
+            keyStroke.keycode = static_cast<uint16_t>( arg.keysym.sym );
             keyStroke.scancode = arg.keysym.scancode;
             keyStroke.bReleased = arg.type == SDL_KEYUP;
             mFrameActivity.back().keyStrokes.push_back( keyStroke );
