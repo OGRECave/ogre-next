@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "System/MainEntryPoints.h"
 
 #include "OgreCamera.h"
+#include "OgreFrameStats.h"
 #include "OgreLwString.h"
 #include "OgreRoot.h"
 #include "OgreStringConverter.h"
@@ -529,6 +530,8 @@ namespace Demo
             const size_t numFrames = mNumFrames;
             MainEntryPoints::Frametime = mFrametime;
 
+            Ogre::Root *root = graphicsSystem->getRoot();
+
             std::vector<FrameActivity>::const_iterator frameActivity = mFrameActivity.begin();
 
             for( size_t frameIdx = 0u; frameIdx < numFrames; ++frameIdx )
@@ -558,6 +561,12 @@ namespace Demo
                     logicSystem->finishFrame();
                     graphicsSystem->finishFrame();
                 }
+
+                const Ogre::FrameStats *frameStats = root->getFrameStats();
+                // A bit hacky to const_cast, but we're intentionally tampering something we shouldn't
+                // in order to force deterministic output
+                Ogre::FrameStats *frameStatsNonConst = const_cast<Ogre::FrameStats *>( frameStats );
+                frameStatsNonConst->reset( 0 );
 
                 graphicsSystem->beginFrameParallel();
                 if( frameActivity != mFrameActivity.end() && frameIdx == frameActivity->frameId )
@@ -608,7 +617,7 @@ namespace Demo
                     }
 
                     Ogre::TextureGpuManager *textureManager =
-                        graphicsSystem->getRoot()->getRenderSystem()->getTextureGpuManager();
+                        root->getRenderSystem()->getTextureGpuManager();
                     Ogre::StringVector::const_iterator itor = frameActivity->targetsToScreenshot.begin();
                     Ogre::StringVector::const_iterator endt = frameActivity->targetsToScreenshot.end();
 
