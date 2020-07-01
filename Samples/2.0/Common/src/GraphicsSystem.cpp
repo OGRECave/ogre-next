@@ -854,6 +854,11 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
+    void GraphicsSystem::setAlwaysAskForConfig( bool alwaysAskForConfig )
+    {
+        mAlwaysAskForConfig = alwaysAskForConfig;
+    }
+    //-----------------------------------------------------------------------------------
     void GraphicsSystem::stopCompositor(void)
     {
         if( mWorkspace )

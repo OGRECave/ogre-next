@@ -346,10 +346,10 @@ namespace Demo
 
         std::vector<char> fileData;
         inFile.seekg( 0, std::ios::end );
-        fileData.resize( inFile.tellg() );
+        fileData.resize( static_cast<size_t>( inFile.tellg() ) );
         inFile.seekg( 0, std::ios::beg );
 
-        inFile.read( &fileData[0], fileData.size() );
+        inFile.read( &fileData[0], static_cast<std::streamsize>( fileData.size() ) );
         inFile.close();
         fileData.push_back( '\0' );  // Add null terminator just in case
 
@@ -497,6 +497,7 @@ namespace Demo
 
         try
         {
+            graphicsSystem->setAlwaysAskForConfig( false );
             graphicsSystem->initialize( Demo::MainEntryPoints::getWindowTitle() );
             if( logicSystem )
                 logicSystem->initialize();
@@ -597,12 +598,12 @@ namespace Demo
 
                         texture = renderWindow->getTexture();
                         img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
-                        img.save( outputFolder + frameIdxStr + "RenderWindow_colour.oitd", 0u,
+                        img.save( outputFolder + frameIdxStr + "RenderWindow_colour.png", 0u,
                                   texture->getNumMipmaps() );
 
                         texture = renderWindow->getDepthBuffer();
                         img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
-                        img.save( outputFolder + frameIdxStr + "RenderWindow_depth.oitd", 0u,
+                        img.save( outputFolder + frameIdxStr + "RenderWindow_depth.exr", 0u,
                                   texture->getNumMipmaps() );
                     }
 
