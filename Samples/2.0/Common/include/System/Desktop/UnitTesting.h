@@ -44,6 +44,17 @@ namespace Demo
     class GraphicsSystem;
     class KeyboardListener;
 
+    /**
+    Usage:
+        To record:
+            Start app with --ut_record=/home/username/Ogre/pbs.json --ut_compress
+            Move around and press F12 to take a picture
+        To playback:
+            --ut_playback=/home/username/Ogre/pbs.json --ut_output=/home/username/Ogre/
+
+        ut_compress is optional (recommended)
+        ut_output is where the the app should dump the captures (i.e. where you pressed F12)
+    */
     class UnitTest : public KeyboardListener
     {
         struct KeyStroke
