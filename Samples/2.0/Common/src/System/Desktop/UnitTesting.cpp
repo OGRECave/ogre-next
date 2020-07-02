@@ -197,7 +197,7 @@ namespace Demo
         return *what == '\0';
     }
     //-------------------------------------------------------------------------
-    void UnitTest::parseCmdLine( int nargs, const char **argv )
+    void UnitTest::parseCmdLine( int nargs, const char *const *argv )
     {
         for( int i = 1; i < nargs; ++i )
         {
