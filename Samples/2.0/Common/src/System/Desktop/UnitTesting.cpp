@@ -531,6 +531,7 @@ namespace Demo
             MainEntryPoints::Frametime = mFrametime;
 
             Ogre::Root *root = graphicsSystem->getRoot();
+            Ogre::TextureGpuManager *textureManager = root->getRenderSystem()->getTextureGpuManager();
 
             std::vector<FrameActivity>::const_iterator frameActivity = mFrameActivity.begin();
 
@@ -597,6 +598,10 @@ namespace Demo
                 if( !renderWindow->isVisible() )
                     renderWindow->setFocused( true );
 
+                // We must do this to ensure determinism, though it may mean
+                // we miss some coverage due to race conditions
+                textureManager->waitForStreamingCompletion();
+
                 if( frameActivity != mFrameActivity.end() && frameIdx == frameActivity->frameId )
                 {
                     const Ogre::String frameIdxStr( Ogre::StringConverter::toString( frameIdx ) + "_" );
@@ -616,8 +621,6 @@ namespace Demo
                                   texture->getNumMipmaps() );
                     }
 
-                    Ogre::TextureGpuManager *textureManager =
-                        root->getRenderSystem()->getTextureGpuManager();
                     Ogre::StringVector::const_iterator itor = frameActivity->targetsToScreenshot.begin();
                     Ogre::StringVector::const_iterator endt = frameActivity->targetsToScreenshot.end();
 
