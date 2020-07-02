@@ -11,6 +11,15 @@ g_unitTests = \
 [
 	['Sample_AnimationTagPoint', 'Sample_AnimationTagPoint.json'],
 	['Sample_AreaApproxLights', 'Sample_AreaApproxLights.json'],
+	['Sample_CustomRenderable', 'Sample_CustomRenderable.json'],
+	['Sample_Decals', 'Sample_Decals.json'],
+	['Sample_DynamicGeometry', 'Sample_DynamicGeometry.json'],
+	['Sample_Forward3D', 'Sample_Forward3D.json'],
+	['Sample_Hdr', 'Sample_Hdr.json'],
+	['Sample_HdrSmaa', 'Sample_Hdr.json'],
+	['Sample_IesProfiles', 'Sample_IesProfiles.json'],
+	['Sample_ImportAnimationsShareSkeletonInstance', 'Sample_ImportAnimationsShareSkeletonInstance.json'],
+	['Sample_InstancedStereo', 'Sample_InstancedStereo.json'],
 	['Sample_PbsMaterials', 'Sample_PbsMaterials.json']
 ]
 
