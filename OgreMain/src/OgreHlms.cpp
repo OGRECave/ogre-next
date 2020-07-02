@@ -2578,13 +2578,15 @@ namespace Ogre
 
         if( !casterPass )
         {
+            size_t numShadowMapLights = 0u;
+            size_t numPssmSplits = 0;
+
             if( shadowNode )
             {
-                int32 numPssmSplits = 0;
                 const vector<Real>::type *pssmSplits = shadowNode->getPssmSplits( 0 );
                 if( pssmSplits )
-                    numPssmSplits = static_cast<int32>( pssmSplits->size() - 1 );
-                setProperty( HlmsBaseProp::PssmSplits, numPssmSplits );
+                    numPssmSplits = pssmSplits->size() - 1u;
+                setProperty( HlmsBaseProp::PssmSplits, static_cast<int32>( numPssmSplits ) );
 
                 bool isPssmBlend = false;
                 const vector<Real>::type *pssmBlends = shadowNode->getPssmBlends( 0 );
@@ -2600,9 +2602,9 @@ namespace Ogre
 
                 const TextureGpuVec &contiguousShadowMapTex = shadowNode->getContiguousShadowMapTex();
 
-                size_t numShadowMapLights = shadowNode->getNumActiveShadowCastingLights();
+                numShadowMapLights = shadowNode->getNumActiveShadowCastingLights();
                 if( numPssmSplits )
-                    numShadowMapLights += numPssmSplits - 1;
+                    numShadowMapLights += numPssmSplits - 1u;
                 setProperty( HlmsBaseProp::NumShadowMapLights, numShadowMapLights );
                 setProperty( HlmsBaseProp::NumShadowMapTextures, contiguousShadowMapTex.size() );
 
@@ -2634,12 +2636,6 @@ namespace Ogre
 
                         setProperty( propName.c_str(),
                                      shadowNode->getIndexToContiguousShadowMapTex( shadowMapTexIdx ) );
-
-                        propName.resize( basePropSize );
-                        propName.a( "_light_idx" );
-                        setProperty( propName.c_str(),
-                                     static_cast<int32>(
-                                         shadowNode->getLightIdxAssociatedWith( shadowMapTexIdx ) ) );
 
                         if( shadowTexDef->uvOffset != Vector2::ZERO ||
                             shadowTexDef->uvLength != Vector2::UNIT_SCALE )
@@ -2940,6 +2936,65 @@ namespace Ogre
                 setProperty( HlmsBaseProp::LightsAreaLtc, mNumAreaLtcLightsLimit );
             if( numAreaApproxLightsWithMask > 0 )
                 setProperty( HlmsBaseProp::LightsAreaTexMask, 1 );
+
+            if( shadowNode )
+            {
+                // Map shadowMapIdx -> light0Buf.lights[i] which is surprisingly hard.
+                // This is needed by Normal Offset Mapping
+                //
+                // We couldn't do it up until now because we didn't know the light counts
+                char tmpBuffer[64];
+                LwString propName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+                propName = "hlms_shadowmap";
+                const size_t basePropNameSize = propName.size();
+
+                uint32 shadowMapIdx = 0u;
+                int32 shadowMapLightIdx = 0;
+
+                {
+                    // Deal with first directional light (which may be PSSM)
+                    size_t numFirstDirSplits = numPssmSplits;
+                    if( numFirstDirSplits == 0u )
+                        numFirstDirSplits = shadowCasterDirectional > 0u ? 1u : 0u;
+
+                    for( size_t i = 0u; i < numFirstDirSplits; ++i )
+                    {
+                        propName.resize( basePropNameSize );
+                        propName.a( shadowMapIdx, "_light_idx" );  // hlms_shadowmap0_light_idx
+                        setProperty( propName.c_str(), shadowMapLightIdx );
+                        ++shadowMapIdx;
+                    }
+
+                    if( numFirstDirSplits > 0u )
+                        ++shadowMapLightIdx;
+                }
+                {
+                    // Deal with rest of caster directional lights
+                    for( size_t i = 1u; i < shadowCasterDirectional; ++i )
+                    {
+                        propName.resize( basePropNameSize );
+                        propName.a( shadowMapIdx, "_light_idx" );  // hlms_shadowmap0_light_idx
+                        setProperty( propName.c_str(), shadowMapLightIdx );
+                        ++shadowMapIdx;
+                        ++shadowMapLightIdx;
+                    }
+                }
+
+                // Deal with rest of non-caster directional lights
+                shadowMapLightIdx += numLightsPerType[Light::LT_DIRECTIONAL] - shadowCasterDirectional;
+
+                // Deal with the rest of the casting lights (point & spot)
+                const size_t numLights = numLightsPerType[Light::LT_SPOTLIGHT];
+                for( size_t i = numLightsPerType[Light::LT_DIRECTIONAL]; i < numLights; ++i )
+                {
+                    propName.resize( basePropNameSize );
+                    propName.a( shadowMapIdx, "_light_idx" );  // hlms_shadowmap0_light_idx
+                    setProperty( propName.c_str(), shadowMapLightIdx );
+                    ++shadowMapIdx;
+                    ++shadowMapLightIdx;
+                }
+            }
         }
         else
         {

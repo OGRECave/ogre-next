@@ -858,14 +858,6 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    size_t CompositorShadowNode::getLightIdxAssociatedWith( const size_t shadowMapIdx ) const
-    {
-        size_t retVal = 0;
-        if( shadowMapIdx < mDefinition->mShadowMapTexDefinitions.size() )
-            retVal = mDefinition->mShadowMapTexDefinitions[shadowMapIdx].light;
-        return retVal;
-    }
-    //-----------------------------------------------------------------------------------
     void CompositorShadowNode::getMinMaxDepthRange( const Frustum *shadowMapCamera,
                                                     Real &outMin, Real &outMax ) const
     {
