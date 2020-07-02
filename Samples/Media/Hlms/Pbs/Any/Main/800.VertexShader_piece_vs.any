@@ -252,6 +252,15 @@
 	@end
 
 	@insertpiece( PoseTransform )
+
+	@property( !hlms_skeleton && hlms_pose && hlms_num_shadow_map_lights )
+		// We need worldNorm for normal offset bias, special path when using poses
+		float3 worldNorm;
+		worldNorm.x = dot( worldMat[0].xyz, inputNormal );
+		worldNorm.y = dot( worldMat[1].xyz, inputNormal );
+		worldNorm.z = dot( worldMat[2].xyz, inputNormal );
+	@end
+
 	@insertpiece( SkeletonTransform )
 	@insertpiece( VertexTransform )
 
