@@ -9,7 +9,8 @@ import pathlib
 
 g_unitTests = \
 [
-	['Sample_AnimationTagPoint', 'Sample_AnimationTagPoint.json']
+	['Sample_AnimationTagPoint', 'Sample_AnimationTagPoint.json'],
+	['Sample_AreaApproxLights', 'Sample_AreaApproxLights.json'],
 	['Sample_PbsMaterials', 'Sample_PbsMaterials.json']
 ]
 

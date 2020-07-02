@@ -49,7 +49,7 @@ THE SOFTWARE.
 
 namespace Demo
 {
-    UnitTest::KeyStroke::KeyStroke() : keycode( 0u ), scancode( 0u ), bReleased( false ) {}
+    UnitTest::KeyStroke::KeyStroke() : keycode( 0 ), scancode( 0u ), bReleased( false ) {}
     UnitTest::FrameActivity::FrameActivity( uint32_t _frameId ) :
         frameId( _frameId ),
         cameraPos( Ogre::Vector3::ZERO ),
@@ -308,7 +308,7 @@ namespace Demo
                     mFrameActivity.push_back( FrameActivity( mFrameIdx ) );
 
                 KeyStroke keyStroke;
-                keyStroke.keycode = static_cast<uint16_t>( arg.keysym.sym );
+                keyStroke.keycode = arg.keysym.sym;
                 keyStroke.scancode = arg.keysym.scancode;
                 keyStroke.bReleased = arg.type == SDL_KEYUP;
                 mFrameActivity.back().keyStrokes.push_back( keyStroke );
@@ -339,7 +339,7 @@ namespace Demo
                     mFrameActivity.push_back( FrameActivity( mFrameIdx ) );
 
                 KeyStroke keyStroke;
-                keyStroke.keycode = static_cast<uint16_t>( arg.keysym.sym );
+                keyStroke.keycode = arg.keysym.sym;
                 keyStroke.scancode = arg.keysym.scancode;
                 keyStroke.bReleased = arg.type == SDL_KEYUP;
                 mFrameActivity.back().keyStrokes.push_back( keyStroke );
@@ -479,8 +479,8 @@ namespace Demo
                                 KeyStroke keyStroke;
 
                                 itor = keyStrokeObj.FindMember( "key_code" );
-                                if( itor != keyStrokeObj.MemberEnd() && itor->value.IsUint() )
-                                    keyStroke.keycode = static_cast<uint16_t>( itor->value.GetUint() );
+                                if( itor != keyStrokeObj.MemberEnd() && itor->value.IsInt() )
+                                    keyStroke.keycode = static_cast<int32_t>( itor->value.GetInt() );
 
                                 itor = keyStrokeObj.FindMember( "scan_code" );
                                 if( itor != keyStrokeObj.MemberEnd() && itor->value.IsUint() )

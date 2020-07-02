@@ -59,7 +59,7 @@ namespace Demo
     {
         struct KeyStroke
         {
-            uint16_t keycode;   // SDL_keycode
+            int32_t keycode;    // SDL_Keycode
             uint16_t scancode;  // SDL_Scancode
             bool bReleased;
             KeyStroke();
