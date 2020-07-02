@@ -42,8 +42,10 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreWindow.h"
 
-#include "rapidjson/document.h"
-#include "rapidjson/error/en.h"
+#if !OGRE_NO_JSON
+#    include "rapidjson/document.h"
+#    include "rapidjson/error/en.h"
+#endif
 
 #include <fstream>
 
@@ -377,6 +379,7 @@ namespace Demo
     //-------------------------------------------------------------------------
     int UnitTest::loadFromJson( const char *fullpath, const Ogre::String &outputFolder )
     {
+#if !OGRE_NO_JSON
         rapidjson::Document d;
 
         std::ifstream inFile( fullpath, std::ios::binary | std::ios::in );
@@ -518,6 +521,10 @@ namespace Demo
                 }
             }
         }
+#else
+        OGRE_EXCEPT( Ogre::Exception::ERR_INVALID_CALL, "UnitTest::loadFromJson",
+                     "UnitTest playback requires compiling Ogre with OGRE_CONFIG_ENABLE_JSON" );
+#endif
 
         return runLoop( outputFolder );
     }
