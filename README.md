@@ -164,6 +164,20 @@ ninja OgreDoc
 
 If you want to test or evaluate Ogre, you can try the [prebuilt samples for Windows](https://bintray.com/darksylinc/ogre-next/download_file?file_path=ogre-samples-windows-x64-vs2015.7z).
 
+# Unit Tests
+
+To run the unit tests, go to Scripts/UnitTesting and to generate the comparison files type:
+
+```
+python3 RunUnitTests.py gl ../../build/Debug/bin/ ./JSON ../../build/UnitTestsOutput/
+```
+
+to check the diff against already generated data:
+
+```
+python3 RunUnitTests.py gl ../../build/Debug/bin/ ./JSON ../../build/UnitTestsOutput/ ../../build/UnitTestsOutput_old/
+```
+
 # License
 
 OGRE (www.ogre3d.org) is made available under the MIT License.
