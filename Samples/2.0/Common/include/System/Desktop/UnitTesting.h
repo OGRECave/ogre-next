@@ -115,7 +115,7 @@ namespace Demo
     public:
         UnitTest();
 
-        void parseCmdLine( int nargs, const char *argv[] );
+        void parseCmdLine( int nargs, const char **argv );
 
         const Params &getParams( void ) const { return mParams; }
 
