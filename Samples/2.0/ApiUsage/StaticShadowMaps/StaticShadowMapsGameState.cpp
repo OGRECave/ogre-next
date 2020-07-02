@@ -34,7 +34,10 @@ namespace Demo
     {
         "PCF 2x2",
         "PCF 3x3",
-        "PCF 4x4"
+        "PCF 4x4",
+        "PCF 5x5",
+        "PCF 6x6",
+        "ESM",
     };
 
     StaticShadowMapsGameState::StaticShadowMapsGameState( const Ogre::String &helpDescription ) :
