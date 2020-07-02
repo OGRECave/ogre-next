@@ -744,6 +744,11 @@ namespace Ogre
             mDepthBufferPoolId = 0;
     }
     //-----------------------------------------------------------------------------------
+    GL3PlusTextureGpuRenderTarget::~GL3PlusTextureGpuRenderTarget()
+    {
+        destroyInternalResourcesImpl();
+    }
+    //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuRenderTarget::createInternalResourcesImpl(void)
     {
         if( mPixelFormat == PFG_NULL )
