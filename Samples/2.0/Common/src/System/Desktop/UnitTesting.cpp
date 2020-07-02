@@ -57,7 +57,7 @@ namespace Demo
         screenshotRenderWindow( false )
     {
     }
-    UnitTest::Params::Params() : bRecord( false ), bCompressDuration( false ) {}
+    UnitTest::Params::Params() : bRecord( false ), bCompressDuration( false ), bSkipDump( false ) {}
     //-------------------------------------------------------------------------
     bool UnitTest::Params::isRecording() const { return bRecord && !recordPath.empty(); }
     //-------------------------------------------------------------------------
@@ -217,6 +217,10 @@ namespace Demo
             {
                 mParams.bRecord = false;
                 mParams.recordPath = std::string( argv[i] + startIdx );
+            }
+            else if( startsWith( argv[i], "--ut_skip_dump", startIdx ) )
+            {
+                mParams.bSkipDump = true;
             }
         }
     }
@@ -649,41 +653,47 @@ namespace Demo
 
                 if( frameActivity != mFrameActivity.end() && frameIdx == frameActivity->frameId )
                 {
-                    const Ogre::String frameIdxStr( Ogre::StringConverter::toString( frameIdx ) + "_" );
-                    if( frameActivity->screenshotRenderWindow )
+                    if( !mParams.bSkipDump )
                     {
-                        Ogre::Image2 img;
-                        Ogre::TextureGpu *texture;
-
-                        texture = renderWindow->getTexture();
-                        img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
-                        img.save( outputFolder + frameIdxStr + "RenderWindow_colour.png", 0u,
-                                  texture->getNumMipmaps() );
-
-                        texture = renderWindow->getDepthBuffer();
-                        img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
-                        img.save( outputFolder + frameIdxStr + "RenderWindow_depth.exr", 0u,
-                                  texture->getNumMipmaps() );
-                    }
-
-                    Ogre::StringVector::const_iterator itor = frameActivity->targetsToScreenshot.begin();
-                    Ogre::StringVector::const_iterator endt = frameActivity->targetsToScreenshot.end();
-
-                    while( itor != endt )
-                    {
-                        Ogre::TextureGpu *texture = textureManager->findTextureNoThrow( *itor );
-                        if( !texture )
+                        const Ogre::String frameIdxStr( Ogre::StringConverter::toString( frameIdx ) +
+                                                        "_" );
+                        if( frameActivity->screenshotRenderWindow )
                         {
-                            OGRE_EXCEPT( Ogre::Exception::ERR_ITEM_NOT_FOUND, "UnitTest::runLoop",
-                                         "Could not find texture " + *itor );
+                            Ogre::Image2 img;
+                            Ogre::TextureGpu *texture;
+
+                            texture = renderWindow->getTexture();
+                            img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
+                            img.save( outputFolder + frameIdxStr + "RenderWindow_colour.png", 0u,
+                                      texture->getNumMipmaps() );
+
+                            texture = renderWindow->getDepthBuffer();
+                            img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
+                            img.save( outputFolder + frameIdxStr + "RenderWindow_depth.exr", 0u,
+                                      texture->getNumMipmaps() );
                         }
 
-                        Ogre::Image2 img;
-                        img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
-                        img.save( outputFolder + frameIdxStr + *itor + ".oitd", 0u,
-                                  texture->getNumMipmaps() );
+                        Ogre::StringVector::const_iterator itor =
+                            frameActivity->targetsToScreenshot.begin();
+                        Ogre::StringVector::const_iterator endt =
+                            frameActivity->targetsToScreenshot.end();
 
-                        ++itor;
+                        while( itor != endt )
+                        {
+                            Ogre::TextureGpu *texture = textureManager->findTextureNoThrow( *itor );
+                            if( !texture )
+                            {
+                                OGRE_EXCEPT( Ogre::Exception::ERR_ITEM_NOT_FOUND, "UnitTest::runLoop",
+                                             "Could not find texture " + *itor );
+                            }
+
+                            Ogre::Image2 img;
+                            img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
+                            img.save( outputFolder + frameIdxStr + *itor + ".oitd", 0u,
+                                      texture->getNumMipmaps() );
+
+                            ++itor;
+                        }
                     }
                     ++frameActivity;
                 }

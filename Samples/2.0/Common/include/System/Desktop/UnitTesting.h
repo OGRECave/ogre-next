@@ -54,6 +54,7 @@ namespace Demo
 
         ut_compress is optional (recommended)
         ut_output is where the the app should dump the captures (i.e. where you pressed F12)
+        ut_skip_dump can be used in playback to skip dumping (i.e. to debug an error)
     */
     class UnitTest : public KeyboardListener, public MouseListener
     {
@@ -81,6 +82,7 @@ namespace Demo
         {
             bool bRecord;
             bool bCompressDuration;
+            bool bSkipDump;  // Useful for debugging a record showing something that is broken
             std::string recordPath;
             std::string outputPath;
             Params();
