@@ -1,6 +1,7 @@
 {
 	"framerate" : 60.000000,
-	"num_frames" : 95,	"frame_activity" :
+	"num_frames" : 95,
+	"frame_activity" :
 	[
 		{
 			"frame_id" : 2,

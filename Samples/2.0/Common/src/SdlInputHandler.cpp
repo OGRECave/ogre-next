@@ -287,6 +287,13 @@ namespace Demo
         mKeyboardListener = listener;
     }
     //-----------------------------------------------------------------------------------
+    void SdlInputHandler::_overrideMouseListener( MouseListener *listener )
+    {
+        mMouseListener = listener;
+    }
+    //-----------------------------------------------------------------------------------
     KeyboardListener *SdlInputHandler::getKeyboardListener( void ) { return mKeyboardListener; }
+    //-----------------------------------------------------------------------------------
+    MouseListener *SdlInputHandler::getMouseListener( void ) { return mMouseListener; }
 }
 #endif

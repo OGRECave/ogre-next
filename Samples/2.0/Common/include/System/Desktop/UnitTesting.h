@@ -55,7 +55,7 @@ namespace Demo
         ut_compress is optional (recommended)
         ut_output is where the the app should dump the captures (i.e. where you pressed F12)
     */
-    class UnitTest : public KeyboardListener
+    class UnitTest : public KeyboardListener, public MouseListener
     {
         struct KeyStroke
         {
@@ -94,10 +94,12 @@ namespace Demo
         uint32_t mFrameIdx;
         uint32_t mNumFrames;
         KeyboardListener *mRealKeyboardListener;
+        MouseListener *mRealMouseListener;
 
         std::vector<FrameActivity> mFrameActivity;
 
         Params mParams;
+        bool mBlockInputForwarding;
 
         inline static void flushLwString( Ogre::LwString &jsonStr, std::string &outJson );
 
@@ -130,6 +132,9 @@ namespace Demo
 
         virtual void keyPressed( const SDL_KeyboardEvent &arg );
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        virtual void mouseMoved( const SDL_Event &arg );
+        virtual void mousePressed( const SDL_MouseButtonEvent &arg, Ogre::uint8 id );
+        virtual void mouseReleased( const SDL_MouseButtonEvent &arg, Ogre::uint8 id );
 
         /** Loads JSON from fullpath and plays it back, saving the results to outputFolder
             Return value is the return value for main()

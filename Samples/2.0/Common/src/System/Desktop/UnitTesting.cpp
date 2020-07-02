@@ -69,7 +69,9 @@ namespace Demo
         mFrametime( 1.0 / 60.0 ),
         mFrameIdx( 0u ),
         mNumFrames( 0u ),
-        mRealKeyboardListener( 0 )
+        mRealKeyboardListener( 0 ),
+        mRealMouseListener( 0 ),
+        mBlockInputForwarding( false )
     {
     }
     //-------------------------------------------------------------------------
@@ -145,7 +147,7 @@ namespace Demo
         jsonStr.a( "\n\t\"num_frames\" : ", mNumFrames, "," );
         if( !mFrameActivity.empty() )
         {
-            jsonStr.a( "\t\"frame_activity\" :\n\t[" );
+            jsonStr.a( "\n\t\"frame_activity\" :\n\t[" );
             flushLwString( jsonStr, outJson );
 
             std::vector<FrameActivity>::const_iterator itor = mFrameActivity.begin();
@@ -253,7 +255,7 @@ namespace Demo
     {
         if( bCompressDuration )
         {
-            mNumFrames = mFrameActivity.size() + 3u;
+            mNumFrames = static_cast<uint32_t>( mFrameActivity.size() + 3u );
             std::vector<FrameActivity>::iterator itor = mFrameActivity.begin();
             std::vector<FrameActivity>::iterator endt = mFrameActivity.end();
 
@@ -263,6 +265,11 @@ namespace Demo
                 itor->frameId = currFrame++;
                 ++itor;
             }
+        }
+        else
+        {
+            if( !mFrameActivity.empty() )
+                mNumFrames = mFrameActivity.back().frameId + 1u;
         }
 
         std::string jsonStr;
@@ -289,49 +296,79 @@ namespace Demo
     //-------------------------------------------------------------------------
     void UnitTest::keyPressed( const SDL_KeyboardEvent &arg )
     {
-        if( arg.keysym.sym == SDLK_F12 || arg.keysym.sym == SDLK_PRINTSCREEN )
+        if( !mParams.isPlayback() )
         {
-            // Ignore (see keyReleased)
+            if( arg.keysym.sym == SDLK_F12 || arg.keysym.sym == SDLK_PRINTSCREEN )
+            {
+                // Ignore (see keyReleased)
+            }
+            else if( shouldRecordKey( arg ) )
+            {
+                if( mFrameActivity.empty() || mFrameActivity.back().frameId != mFrameIdx )
+                    mFrameActivity.push_back( FrameActivity( mFrameIdx ) );
+
+                KeyStroke keyStroke;
+                keyStroke.keycode = static_cast<uint16_t>( arg.keysym.sym );
+                keyStroke.scancode = arg.keysym.scancode;
+                keyStroke.bReleased = arg.type == SDL_KEYUP;
+                mFrameActivity.back().keyStrokes.push_back( keyStroke );
+            }
         }
-        else if( shouldRecordKey( arg ) )
+
+        if( !mBlockInputForwarding )
         {
-            if( mFrameActivity.empty() || mFrameActivity.back().frameId != mFrameIdx )
-                mFrameActivity.push_back( FrameActivity( mFrameIdx ) );
-
-            KeyStroke keyStroke;
-            keyStroke.keycode = static_cast<uint16_t>( arg.keysym.sym );
-            keyStroke.scancode = arg.keysym.scancode;
-            keyStroke.bReleased = arg.type == SDL_KEYUP;
-            mFrameActivity.back().keyStrokes.push_back( keyStroke );
+            // Forward to application
+            mRealKeyboardListener->keyPressed( arg );
         }
-
-        // Forward to application
-        mRealKeyboardListener->keyPressed( arg );
     }
     //-------------------------------------------------------------------------
     void UnitTest::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( arg.keysym.sym == SDLK_F12 || arg.keysym.sym == SDLK_PRINTSCREEN )
+        if( !mParams.isPlayback() )
         {
-            if( mFrameActivity.empty() || mFrameActivity.back().frameId != mFrameIdx )
-                mFrameActivity.push_back( FrameActivity( mFrameIdx ) );
+            if( arg.keysym.sym == SDLK_F12 || arg.keysym.sym == SDLK_PRINTSCREEN )
+            {
+                if( mFrameActivity.empty() || mFrameActivity.back().frameId != mFrameIdx )
+                    mFrameActivity.push_back( FrameActivity( mFrameIdx ) );
 
-            mFrameActivity.back().screenshotRenderWindow = true;
+                mFrameActivity.back().screenshotRenderWindow = true;
+            }
+            else if( shouldRecordKey( arg ) )
+            {
+                if( mFrameActivity.empty() || mFrameActivity.back().frameId != mFrameIdx )
+                    mFrameActivity.push_back( FrameActivity( mFrameIdx ) );
+
+                KeyStroke keyStroke;
+                keyStroke.keycode = static_cast<uint16_t>( arg.keysym.sym );
+                keyStroke.scancode = arg.keysym.scancode;
+                keyStroke.bReleased = arg.type == SDL_KEYUP;
+                mFrameActivity.back().keyStrokes.push_back( keyStroke );
+            }
         }
-        else if( shouldRecordKey( arg ) )
+
+        if( !mBlockInputForwarding )
         {
-            if( mFrameActivity.empty() || mFrameActivity.back().frameId != mFrameIdx )
-                mFrameActivity.push_back( FrameActivity( mFrameIdx ) );
-
-            KeyStroke keyStroke;
-            keyStroke.keycode = static_cast<uint16_t>( arg.keysym.sym );
-            keyStroke.scancode = arg.keysym.scancode;
-            keyStroke.bReleased = arg.type == SDL_KEYUP;
-            mFrameActivity.back().keyStrokes.push_back( keyStroke );
+            // Forward to application
+            mRealKeyboardListener->keyReleased( arg );
         }
-
-        // Forward to application
-        mRealKeyboardListener->keyReleased( arg );
+    }
+    //-------------------------------------------------------------------------
+    void UnitTest::mouseMoved( const SDL_Event &arg )
+    {
+        if( !mParams.isPlayback() )
+            mRealMouseListener->mouseMoved( arg );
+    }
+    //-------------------------------------------------------------------------
+    void UnitTest::mousePressed( const SDL_MouseButtonEvent &arg, Ogre::uint8 id )
+    {
+        if( !mParams.isPlayback() )
+            mRealMouseListener->mousePressed( arg, id );
+    }
+    //-------------------------------------------------------------------------
+    void UnitTest::mouseReleased( const SDL_MouseButtonEvent &arg, Ogre::uint8 id )
+    {
+        if( !mParams.isPlayback() )
+            mRealMouseListener->mouseReleased( arg, id );
     }
     //-------------------------------------------------------------------------
     int UnitTest::loadFromJson( const char *fullpath, const Ogre::String &outputFolder )
@@ -526,12 +563,18 @@ namespace Demo
                 logicSystem->createScene02();
 
             SdlInputHandler *inputHandler = graphicsSystem->getInputHandler();
+            mRealKeyboardListener = inputHandler->getKeyboardListener();
+            mRealMouseListener = inputHandler->getMouseListener();
+            inputHandler->_overrideKeyboardListener( this );
+            inputHandler->_overrideMouseListener( this );
 
             const size_t numFrames = mNumFrames;
             MainEntryPoints::Frametime = mFrametime;
 
             Ogre::Root *root = graphicsSystem->getRoot();
             Ogre::TextureGpuManager *textureManager = root->getRenderSystem()->getTextureGpuManager();
+
+            mBlockInputForwarding = true;
 
             std::vector<FrameActivity>::const_iterator frameActivity = mFrameActivity.begin();
 
@@ -575,6 +618,7 @@ namespace Demo
                     SDL_Event evt;
                     memset( &evt, 0, sizeof( evt ) );
 
+                    mBlockInputForwarding = false;
                     std::vector<KeyStroke>::const_iterator itor = frameActivity->keyStrokes.begin();
                     std::vector<KeyStroke>::const_iterator endt = frameActivity->keyStrokes.end();
 
@@ -589,6 +633,7 @@ namespace Demo
                         inputHandler->_handleSdlEvents( evt );
                         ++itor;
                     }
+                    mBlockInputForwarding = true;
                 }
                 graphicsSystem->update( static_cast<float>( MainEntryPoints::Frametime ) );
                 graphicsSystem->finishFrameParallel();
