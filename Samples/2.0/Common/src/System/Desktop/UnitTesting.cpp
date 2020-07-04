@@ -480,7 +480,7 @@ namespace Demo
 
                         for( size_t j = 0u; j < numCodes; ++j )
                         {
-                            if( itor->value[j].IsObject() )
+                            if( keyStrokeArray.IsObject() )
                             {
                                 const rapidjson::Value &keyStrokeObj = keyStrokeArray[j];
                                 KeyStroke keyStroke;
