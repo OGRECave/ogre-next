@@ -110,13 +110,18 @@ def runUnitTest( exeName, jsonName ):
 # Setup ogre.cfg
 if g_api == 'gl':
 	shutil.copyfile( './ogreGL.cfg', os.path.join( g_exeFolder, 'ogre.cfg' ) )
+else:
+	shutil.copyfile( './ogreD3D11.cfg', os.path.join( g_exeFolder, 'ogre.cfg' ) )
 
 # Iterate through all tests and run it
 for unitTest in g_unitTests:
 	runUnitTest( unitTest[0], unitTest[1] )
 
-if g_hasDifferentFiles:
-	print( 'ERROR: Some files in one of the tests were not equal' )
-	exit( -2 )
+if g_cmpFolder != '':
+	if g_hasDifferentFiles:
+		print( 'ERROR: Some files in one of the tests were not equal' )
+		exit( -2 )
+	else:
+		print( 'All files in all tests were equal' )
 else:
-	print( 'All files in all tests were equal' )
+	print( 'No comparison was made as the script was run in generation mode' )

@@ -158,6 +158,7 @@ namespace Ogre
         const TextureTypes::TextureTypes textureType = textureSrc->getInternalTextureType();
 
         D3D11_BOX srcBoxD3d;
+        D3D11_BOX *srcBoxD3dPtr = &srcBoxD3d;
 
         srcBoxD3d.left  = srcTextureBox.x;
         srcBoxD3d.top   = srcTextureBox.y;
@@ -193,6 +194,17 @@ namespace Ogre
         UINT zPos = 0;
         UINT dstSlicePos = 0;
 
+        // D3D11 complains about MSAA and depth texture when we send a non-nullptr
+        // To CopySubresourceRegion even if it's a valid copy. Thus check if it's
+        // a valid copy and unset the ptr if so.
+        if( srcTextureBox.x == 0u && srcTextureBox.y == 0u && srcTextureBox.z == 0u &&
+            srcTextureBox.width == fullSrcTextureBox.width &&
+            srcTextureBox.height == fullSrcTextureBox.height &&
+            srcTextureBox.depth == fullSrcTextureBox.depth )
+        {
+            srcBoxD3dPtr = 0;
+        }
+
         assert( dynamic_cast<D3D11TextureGpu*>( textureSrc ) );
         D3D11TextureGpu *srcTextureD3d = static_cast<D3D11TextureGpu*>( textureSrc );
 
@@ -207,7 +219,7 @@ namespace Ogre
 
             context->CopySubresourceRegion( mStagingTexture.Get(), dstSubResourceIdx,
                                             0, 0, zPos, srcTextureD3d->getFinalTextureName(),
-                                            srcSubResourceIdx, &srcBoxD3d );
+                                            srcSubResourceIdx, srcBoxD3dPtr );
             if( textureType == TextureTypes::Type3D )
             {
                 ++srcBoxD3d.front;
