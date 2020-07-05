@@ -65,7 +65,10 @@ namespace Ogre
         texCam->setNearClipDistance( light->_deriveShadowNearClipDistance( cam ) );
         texCam->setFarClipDistance( light->_deriveShadowFarClipDistance( cam ) );
 
-        const AxisAlignedBox &casterBox = sm->getCurrentCastersBox();
+        AxisAlignedBox casterBox = sm->getCurrentCastersBox();
+        // Add some padding. Needed to fix Disappearing shadows when sun is 0 -1 0
+        // See https://github.com/OGRECave/ogre-next/issues/107
+        casterBox.setExtents( casterBox.getMinimum() - 0.1f, casterBox.getMaximum() + 0.1f );
 
         // Will be overriden, but not always (in case we early out to use uniform shadows)
         mMaxDistance = casterBox.getMinimum().distance( casterBox.getMaximum() );
