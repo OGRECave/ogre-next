@@ -6460,7 +6460,7 @@ namespace Ogre{
                     if( format == PFG_UNKNOWN )
                     {
                         compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
-                                           "Unrecognized PixelFormat");
+                                           "Unrecognized PixelFormat: " + Ogre::String(atom->value));
                         return;
                     }
 
