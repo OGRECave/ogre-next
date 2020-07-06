@@ -2059,6 +2059,11 @@ namespace Ogre
             [mActiveRenderEncoder setRenderPipelineState:metalPso->pso];
             mPso = metalPso;
         }
+
+        MTLTriangleFillMode fillMode = (
+            pso->macroblock->mPolygonMode == PM_SOLID
+        ) ? MTLTriangleFillModeFill : MTLTriangleFillModeLines;
+        [mActiveRenderEncoder setTriangleFillMode:fillMode];
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setComputePso( const HlmsComputePso *pso )
