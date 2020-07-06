@@ -63,23 +63,32 @@ namespace Ogre {
         }
     };
 
-    /** Enumeration of queue groups, by which the application may group queued renderables
-        so that they are rendered together with events in between
-    @remarks
-        When passed into methods these are actually passed as a uint8 to allow you
-        to use values in between if you want to.
-    */
-
     /** Class to manage the scene object rendering queue.
         @remarks
             Objects are grouped by material to minimise rendering state changes. The map from
             material to renderable object is wrapped in a class for ease of use.
         @par
-            This class now includes the concept of 'queue groups' which allows the application
+            This class includes the concept of 'queue groups' which allows the application
             adding the renderable to specifically schedule it so that it is included in 
             a discrete group. Good for separating renderables into the main scene,
             backgrounds and overlays, and also could be used in the future for more
             complex multipass routines like stenciling.
+        @remarks
+            By default, movables will be assigned the following render queue ID:\n
+            Decal:              0 \n
+            Light:              0-5 (depends on light type, cannot be changed) \n
+            Item:               10 \n
+            Rectangle2D:        10 \n
+            v1::Entity:         110 \n
+            v1::Rectangle2D:    110 \n
+            ParticleSystem:     110 \n
+            [.. more unlisted ..]
+        @remarks
+            By default, the render queues have the following mode set: \n
+            0-99:    FAST \n
+            100-199: V1_FAST \n
+            200-224: FAST \n
+            225-255: V1_FAST
     */
     class _OgreExport RenderQueue : public RenderQueueAlloc
     {
