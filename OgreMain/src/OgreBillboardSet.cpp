@@ -877,6 +877,12 @@ namespace v1 {
         mMainBuf.setNull();
         mMainBuffers.clear();
 
+        if( mHlmsDatablock && getMaterial().isNull() )
+        {
+            mHlmsDatablock->_unlinkRenderable( this );
+            mHlmsDatablock = 0;
+        }
+
         mBuffersCreated = false;
     }
     //-----------------------------------------------------------------------
