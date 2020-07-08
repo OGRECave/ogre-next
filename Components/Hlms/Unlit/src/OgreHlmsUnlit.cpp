@@ -173,44 +173,10 @@ namespace Ogre
         }
 
         //Set samplers.
-        assert( dynamic_cast<const HlmsUnlitDatablock*>( queuedRenderable.renderable->getDatablock() ) );
+        /*assert(
+         dynamic_cast<const HlmsUnlitDatablock*>( queuedRenderable.renderable->getDatablock() ) );
         const HlmsUnlitDatablock *datablock = static_cast<const HlmsUnlitDatablock*>(
-                                                queuedRenderable.renderable->getDatablock() );
-
-        if( !retVal->pso.pixelShader.isNull() )
-        {
-            GpuProgramParametersSharedPtr psParams = retVal->pso.pixelShader->getDefaultParameters();
-
-            int texUnit = mTexUnitSlotStart; //Vertex shader consumes 2 slots with its two tbuffers.
-
-            if( !getProperty( HlmsBaseProp::ShadowCaster ) && datablock->mTexturesDescSet )
-            {
-                FastArray<const TextureGpu*>::const_iterator itor =
-                        datablock->mTexturesDescSet->mTextures.begin();
-                FastArray<const TextureGpu*>::const_iterator end  =
-                        datablock->mTexturesDescSet->mTextures.end();
-
-                int numTextures = 0;
-                int numArrayTextures = 0;
-                while( itor != end )
-                {
-                    if( (*itor)->getInternalTextureType() == TextureTypes::Type2DArray )
-                    {
-                        psParams->setNamedConstant( "textureMapsArray[" +
-                                                    StringConverter::toString( numArrayTextures++ ) +
-                                                    "]", texUnit++ );
-                    }
-                    else
-                    {
-                        psParams->setNamedConstant( "textureMaps[" +
-                                                    StringConverter::toString( numTextures++ ) + "]",
-                                                    texUnit++ );
-                    }
-
-                    ++itor;
-                }
-            }
-        }
+                                                queuedRenderable.renderable->getDatablock() );*/
 
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
         vsParams->setNamedConstant( "worldMatBuf", 0 );
@@ -310,43 +276,34 @@ namespace Ogre
         setProperty( HlmsBaseProp::Tangent,     0 );
         setProperty( HlmsBaseProp::BonesPerVertex, 0 );
 
-        int texUnit = mTexUnitSlotStart; //Vertex shader consumes 2 slots with its two tbuffers.
-        int numTextures = 0;
-        int numArrayTextures = 0;
-
         if( datablock->mTexturesDescSet )
         {
-            FastArray<const TextureGpu*>::const_iterator itor =
-                    datablock->mTexturesDescSet->mTextures.begin();
-            FastArray<const TextureGpu*>::const_iterator end  =
-                    datablock->mTexturesDescSet->mTextures.end();
+            setProperty( UnlitProperty::NumTextures,
+                         static_cast<int32>( datablock->mTexturesDescSet->mTextures.size() ) );
+
+            uint32 currentTextureIdx = 0u;
+
+            FastArray<const TextureGpu *>::const_iterator itor =
+                datablock->mTexturesDescSet->mTextures.begin();
+            FastArray<const TextureGpu *>::const_iterator end =
+                datablock->mTexturesDescSet->mTextures.end();
 
             while( itor != end )
             {
-                char tmpBuffer[64];
-                LwString propName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
-                if( (*itor)->getInternalTextureType() == TextureTypes::Type2DArray )
+                if( ( *itor )->getInternalTextureType() == TextureTypes::Type2DArray )
                 {
-                    propName.a( "array_texture_bind", numArrayTextures );
-                    ++numArrayTextures;
-                }
-                else
-                {
-                    propName.a( "texture_bind", numTextures );
-                    ++numTextures;
+                    char tmpBuffer[32];
+                    LwString propName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+                    propName.a( "is_texture", currentTextureIdx, "_array" );
+                    setProperty( propName.c_str(), 1 );
                 }
 
-                setProperty( propName.c_str(), texUnit );
-
-                ++texUnit;
+                ++currentTextureIdx;
                 ++itor;
             }
         }
 
         setProperty( UnlitProperty::Diffuse, datablock->mHasColour );
-
-        setProperty( UnlitProperty::NumArrayTextures, numArrayTextures );
-        setProperty( UnlitProperty::NumTextures, numTextures );
 
         if( datablock->mSamplersDescSet )
             setProperty( UnlitProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
@@ -519,26 +476,32 @@ namespace Ogre
         //HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock*>(
         //                                              renderable->getDatablock() );
 
-        HlmsPropertyVec::iterator itor = mSetProperties.begin();
-        HlmsPropertyVec::iterator end  = mSetProperties.end();
+        HlmsDatablock *datablock = renderable->getDatablock();
+        const bool hasAlphaTest = datablock->getAlphaTest() != CMPF_ALWAYS_PASS;
 
-        while( itor != end )
+        if( !hasAlphaTest )
         {
-            if( itor->keyName != UnlitProperty::HwGammaRead &&
-                     //itor->keyName != UnlitProperty::UvDiffuse &&
-                     itor->keyName != HlmsPsoProp::InputLayoutId &&
-                     itor->keyName != HlmsBaseProp::Skeleton &&
-                     itor->keyName != HlmsBaseProp::BonesPerVertex &&
-                     itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
-                     itor->keyName != HlmsBaseProp::AlphaTest &&
-                     itor->keyName != HlmsBaseProp::AlphaBlend )
+            HlmsPropertyVec::iterator itor = mSetProperties.begin();
+            HlmsPropertyVec::iterator endt = mSetProperties.end();
+
+            while( itor != endt )
             {
-                itor = mSetProperties.erase( itor );
-                end  = mSetProperties.end();
-            }
-            else
-            {
-                ++itor;
+                if( itor->keyName != UnlitProperty::HwGammaRead &&
+                    // itor->keyName != UnlitProperty::UvDiffuse &&
+                    itor->keyName != HlmsPsoProp::InputLayoutId &&
+                    itor->keyName != HlmsBaseProp::Skeleton &&
+                    itor->keyName != HlmsBaseProp::BonesPerVertex &&
+                    itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
+                    itor->keyName != HlmsBaseProp::AlphaTest &&
+                    itor->keyName != HlmsBaseProp::AlphaBlend )
+                {
+                    itor = mSetProperties.erase( itor );
+                    endt = mSetProperties.end();
+                }
+                else
+                {
+                    ++itor;
+                }
             }
         }
 
@@ -546,6 +509,38 @@ namespace Ogre
             setProperty( UnlitProperty::MaterialsPerBuffer, static_cast<int>( 2 ) );
         else
             setProperty( UnlitProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsUnlit::notifyPropertiesMergedPreGenerationStep( void )
+    {
+        const int32 samplerStateStart = getProperty( UnlitProperty::SamplerStateStart );
+        int32 texUnit = samplerStateStart;
+        {
+            char tmpData[32];
+            LwString texName = LwString::FromEmptyPointer( tmpData, sizeof( tmpData ) );
+            texName = "textureMaps";
+            const size_t baseTexSize = texName.size();
+
+            char tmpBuffer[32];
+            LwString isTexArrayProp = LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) );
+            isTexArrayProp = "is_texture";
+            const size_t baseIsTexArrayProp = isTexArrayProp.size();
+
+            const int32 numTextures = getProperty( UnlitProperty::NumTextures );
+
+            for( int32 i = 0; i < numTextures; ++i )
+            {
+                texName.resize( baseTexSize );
+                isTexArrayProp.resize( baseIsTexArrayProp );
+
+                isTexArrayProp.a( i, "_array" );  // is_texture0_array
+                if( getProperty( isTexArrayProp.c_str() ) )
+                    texName.a( "Array" );  // textureMapsArray0
+                texName.a( i );            // textureMaps0 or textureMapsArray0
+
+                setTextureReg( PixelShader, texName.c_str(), texUnit++ );
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsUnlit::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
@@ -593,7 +588,10 @@ namespace Ogre
         setProperty( HlmsBaseProp::RenderDepthOnly,
                      (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
 
-        setProperty( UnlitProperty::SamplerUnitSlotStart, (int32)mSamplerUnitSlotStart );
+        setProperty( UnlitProperty::SamplerStateStart, (int32)mSamplerUnitSlotStart );
+
+        if( mOptimizationStrategy == LowerGpuOverhead )
+            setProperty( UnlitProperty::LowerGpuOverhead, 1 );
 
         CamerasInProgress cameras = sceneManager->getCamerasInProgress();
         if( cameras.renderingCamera && cameras.renderingCamera->isReflected() )

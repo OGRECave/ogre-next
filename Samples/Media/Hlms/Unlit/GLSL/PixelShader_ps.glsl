@@ -15,83 +15,39 @@ layout(location = FRAG_COLOR, index = 0) out float outColour;
 @end
 
 // START UNIFORM DECLARATION
-@property( has_planar_reflections )
-	@insertpiece( PassStructDecl )
-@end
-@property( !hlms_shadowcaster )
-@insertpiece( MaterialStructDecl )
-@insertpiece( InstanceStructDecl )
-@end
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION
 @property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || exponential_shadow_maps )
-in block
-{
-@insertpiece( VStoPS_block )
-} inPs;
+	in block
+	{
+		@insertpiece( VStoPS_block )
+	} inPs;
 @end
 
-@property( !hlms_shadowcaster )
-@property( num_array_textures )uniform sampler2DArray	textureMapsArray[@value( num_array_textures )];@end
-@property( num_textures )uniform sampler2D	textureMaps[@value( num_textures )];@end
-
-@property( diffuse )@piece( MultiplyDiffuseConst )* material.diffuse@end @end
-
-@property( diffuse_map || alpha_test || diffuse )Material material;@end
-
-void main()
-{
-	@insertpiece( custom_ps_preExecution )
-@property( diffuse_map || alpha_test || diffuse )
-	uint materialId	= worldMaterialIdx[inPs.drawId].x;
-	material = materialArray[materialId];
-@end
-	@insertpiece( custom_ps_posMaterialLoad )
-
-@property( !diffuse_map && !diffuse_map0 )
-@property( hlms_colour && !diffuse_map )	outColour = inPs.colour @insertpiece( MultiplyDiffuseConst );@end
-@property( !hlms_colour && !diffuse )	outColour = vec4(1, 1, 1, 1);@end
-@property( !hlms_colour && diffuse )	outColour = material.diffuse;@end
-@end
-
-@property( diffuse_map )@property( diffuse_map0 )
-	//Load base image
-	outColour = texture( @insertpiece( SamplerOrigin0 ), @insertpiece( SamplerUV0 ) ).@insertpiece(diffuse_map0_tex_swizzle);@end
-
-@foreach( diffuse_map, n, 1 )@property( diffuse_map@n )
-	vec4 topImage@n = texture( @insertpiece( SamplerOrigin@n ), @insertpiece( SamplerUV@n ) ).@insertpiece(diffuse_map@n_tex_swizzle);@end @end
-
-@foreach( diffuse_map, n, 1 )@property( diffuse_map@n )
-	@insertpiece( blend_mode_idx@n )@end @end
-
-	@property( hlms_colour )outColour *= inPs.colour @insertpiece( MultiplyDiffuseConst );@end
-	@property( !hlms_colour && diffuse )outColour *= material.diffuse;@end
-@end
-
-	@insertpiece( custom_ps_preLights )
-
-@property( alpha_test && !alpha_test_shadow_caster_only )
-	if( material.alpha_test_threshold.x @insertpiece( alpha_test_cmp_func ) outColour.a )
-		discard;@end
-
-	@insertpiece( custom_ps_posExecution )
-}
-
-@end @property( hlms_shadowcaster )
-	@property( hlms_render_depth_only && !macOS)
-		@set( hlms_disable_stage, 1 )
+@property( !hlms_shadowcaster || alpha_test )
+	@foreach( num_textures, n )
+		@property( is_texture@n_array )
+			uniform sampler2DArray textureMapsArray@n;
+		@else
+			uniform sampler2D textureMaps@n;
+		@end
 	@end
+@end
 
-@insertpiece( DeclShadowCasterMacros )
+@insertpiece( DefaultHeaderPS )
 
-@property( hlms_shadowcaster_point )
-	@insertpiece( PassStructDecl )
+@property( hlms_shadowcaster )
+	@insertpiece( DeclShadowCasterMacros )
 @end
 
 void main()
 {
 	@insertpiece( custom_ps_preExecution )
-	@insertpiece( DoShadowCastPS )
+	@property( !hlms_shadowcaster || alpha_test )
+		@insertpiece( DefaultBodyPS )
+	@end
+	@property( hlms_shadowcaster )
+		@insertpiece( DoShadowCastPS )
+	@end
 	@insertpiece( custom_ps_posExecution )
 }
-@end

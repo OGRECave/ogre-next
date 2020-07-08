@@ -43,6 +43,7 @@ namespace Ogre
         static const IdString HwGammaWrite;
         static const IdString SignedIntTex;
         static const IdString MaterialsPerBuffer;
+        static const IdString LowerGpuOverhead;
         static const IdString AnimationMatricesPerBuffer; //TODO: Seems dead
         static const IdString TextureMatrix;
         static const IdString ExponentialShadowMaps;
@@ -62,10 +63,9 @@ namespace Ogre
         static const IdString Diffuse;
 
         /// Number of texture arrays actually baked.
-        static const IdString NumArrayTextures;
         static const IdString NumTextures;
         static const IdString NumSamplers;
-        static const IdString SamplerUnitSlotStart;
+        static const IdString SamplerStateStart;
 
         /// Number of diffuse maps.
         static const IdString DiffuseMap;

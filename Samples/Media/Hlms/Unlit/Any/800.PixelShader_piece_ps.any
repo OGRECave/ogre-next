@@ -1,0 +1,116 @@
+
+#include "/media/matias/Datos/SyntaxHighlightingMisc.h"
+
+@piece( DefaultHeaderPS )
+	@foreach( diffuse_map, n )
+		#define DiffuseSampler@n samplerState@value(diffuse_map@n_sampler)
+		@property( diffuse_map@n_array )
+			#define SampleDiffuse@n( tex, sampler, uv, d ) OGRE_SampleArray2D( tex, sampler, uv, d )
+			#define DiffuseTexture@n textureMapsArray@value(diffuse_map@n_idx)
+			@piece( diffuseIdx@n ), diffuseIdx@n@end
+		@else
+			#define SampleDiffuse@n( tex, sampler, uv ) OGRE_Sample( tex, sampler, uv )
+			#define DiffuseTexture@n textureMaps@value(diffuse_map@n_idx)
+		@end
+
+		@property( !diffuse_map@n_reflection )
+			#define DiffuseUV@n inPs.uv@value( uv_diffuse@n ).@insertpiece( uv_diffuse_swizzle@n )
+		@else
+			@property( hlms_forwardplus_flipY || syntax != glsl )
+				#define DiffuseUV@n gl_FragCoord.xy * passBuf.invWindowSize.xy
+			@else
+				#define DiffuseUV@n float2( gl_FragCoord.x * passBuf.invWindowSize.x, 1.0f - gl_FragCoord.y * passBuf.invWindowSize.y )
+			@end
+		@end
+	@end
+
+	// START UNIFORM DECLARATION
+	@property( has_planar_reflections || hlms_shadowcaster_point )
+		@insertpiece( PassStructDecl )
+	@end
+	@property( !hlms_shadowcaster || alpha_test )
+		@insertpiece( MaterialStructDecl )
+		@insertpiece( InstanceStructDecl )
+	@end
+	@insertpiece( custom_ps_uniformStructDeclaration )
+	// END UNIFORM DECLARATION
+@end
+
+//-----------------------------------------------------------------------------
+//		BODY CODE
+//-----------------------------------------------------------------------------
+
+@piece( LoadMaterial )
+	@property( !lower_gpu_overhead )
+		@property( syntax != metal )
+			ushort materialId	= worldMaterialIdx[inPs.drawId].x & 0x1FFu;
+			#define material materialArray[materialId]
+		@else
+			#define material materialArray[inPs.materialId]
+		@end
+	@else
+		#define material materialArray[0]
+	@end
+@end
+
+@piece( DefaultBodyPS )
+	float4 diffuseCol = float4( 1.0f, 1.0f, 1.0f, 1.0f );
+
+	@property( diffuse_map || alpha_test || diffuse )
+		@insertpiece( LoadMaterial )
+	@end
+
+	@insertpiece( custom_ps_posMaterialLoad )
+
+	// Decode diffuse indices (for array textures)
+	@property( syntax != metal )
+		@property( diffuse_map0 )ushort diffuseIdx0 = material.indices0_3.x & 0x0000FFFFu;@end
+		@property( diffuse_map1 )ushort diffuseIdx1 = material.indices0_3.x >> 16u;@end
+		@property( diffuse_map2 )ushort diffuseIdx2 = material.indices0_3.y & 0x0000FFFFu;@end
+		@property( diffuse_map3 )ushort diffuseIdx3 = material.indices0_3.y >> 16u;@end
+		@property( diffuse_map4 )ushort diffuseIdx4 = material.indices0_3.z & 0x0000FFFFu;@end
+		@property( diffuse_map5 )ushort diffuseIdx5 = material.indices0_3.z >> 16u;@end
+		@property( diffuse_map6 )ushort diffuseIdx6 = material.indices0_3.w & 0x0000FFFFu;@end
+		@property( diffuse_map7 )ushort diffuseIdx7 = material.indices0_3.w >> 16u;@end
+	@else
+		@foreach( diffuse_map, n )
+			ushort diffuseIdx@n = material.diffuseIdx@n;@end
+	@end
+
+	@property( diffuse_map0 )
+		// Load base image
+		diffuseCol = SampleDiffuse0( DiffuseTexture0, DiffuseSampler0,
+									 DiffuseUV0 @insertpiece( diffuseIdx0 ) ).@insertpiece(diffuse_map0_tex_swizzle);
+	@end
+
+	// Load each additional layer and blend it
+	@foreach( diffuse_map, n, 1 )
+		@property( diffuse_map@n )
+			float4 topImage@n = SampleDiffuse@n( DiffuseTexture@n, DiffuseSampler@n,
+												 DiffuseUV@n @insertpiece( diffuseIdx@n ) ).@insertpiece(diffuse_map@n_tex_swizzle);
+			@insertpiece( blend_mode_idx@n )
+		@end
+	@end
+
+	// Apply material colour
+	@property( hlms_colour )
+		diffuseCol *= inPs.colour;
+	@else
+		@property( diffuse )
+			diffuseCol *= material.diffuse;
+		@end
+	@end
+
+	@insertpiece( custom_ps_preLights )
+
+	@property( alpha_test && (!alpha_test_shadow_caster_only || hlms_shadowcaster) )
+		if( material.alpha_test_threshold.x @insertpiece( alpha_test_cmp_func ) diffuseCol.w )
+			discard;
+	@end
+
+	@property( !hlms_shadowcaster )
+		outPs_colour0 = diffuseCol;
+	@end
+
+	@insertpiece( custom_ps_posExecution )
+@end

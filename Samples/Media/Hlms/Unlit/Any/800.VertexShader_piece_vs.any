@@ -6,6 +6,9 @@
 
 	// START UNIFORM DECLARATION
 	@insertpiece( PassStructDecl )
+	@property( ( !hlms_shadowcaster || alpha_test ) && hlms_colour && diffuse )
+		@insertpiece( MaterialStructDecl )
+	@end
 	@insertpiece( InstanceStructDecl )
 	@insertpiece( custom_vs_uniformStructDeclaration )
 	// END UNIFORM DECLARATION
@@ -30,6 +33,18 @@
 				#define masterMatrix passBuf.viewProj[worldMaterialIdx[finalDrawId].z]
 			@end
 		@end
+	@end
+@end
+
+//-----------------------------------------------------------------------------
+//		BODY CODE
+//-----------------------------------------------------------------------------
+
+@piece( LoadMaterial )
+	@property( !lower_gpu_overhead )
+		#define material materialArray[ushort(worldMaterialIdx[finalDrawId].x)]
+	@else
+		#define material materialArray[0]
 	@end
 @end
 
@@ -63,9 +78,14 @@
 		outVs_Position = mul( worldPos, passBuf.viewProj[vpmatIdx] );
 	@end
 
-	@property( !hlms_shadowcaster )
+	@property( !hlms_shadowcaster || alpha_test )
 		@property( hlms_colour )
 			outVs.colour = inVs_colour;
+			@property( diffuse )
+				@insertpiece( LoadMaterial )
+				@insertpiece( custom_vs_posMaterialLoad )
+				outVs.colour *= material.diffuse;
+			@end
 		@end
 
 		@property( texture_matrix )
