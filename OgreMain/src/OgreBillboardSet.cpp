@@ -881,6 +881,7 @@ namespace v1 {
         {
             mHlmsDatablock->_unlinkRenderable( this );
             mHlmsDatablock = 0;
+            _setHlmsHashes( 0u, 0u );
         }
 
         mBuffersCreated = false;
