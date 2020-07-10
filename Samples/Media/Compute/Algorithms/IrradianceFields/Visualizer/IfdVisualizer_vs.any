@@ -39,10 +39,10 @@ INLINE float3 getSphereVertex( uint vertexId PARAMS_ARG_DECL )
 	x_angle *= p_sectionArc * 0.5f;  // remember - 180° x rot not 360
 	y_angle *= -p_sectionArc;
 
-	float3 point =
+	float3 vPoint =
 		float3( sin( x_angle ) * sin( y_angle ), cos( x_angle ), sin( x_angle ) * cos( y_angle ) );
 
-	return point;
+	return vPoint;
 }
 
 #else
