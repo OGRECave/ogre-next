@@ -503,8 +503,14 @@ namespace Ogre {
                 _BitScanForward64( &trailingZero, value );
             #endif
             return trailingZero;
+        #elif OGRE_PLATFORM == OGRE_PLATFORM_WIN32 && OGRE_COMPILER == OGRE_COMPILER_GNUC
+            return __builtin_ctzll( value );
         #else
-            return __builtin_ctzl( value );
+            #ifdef __MINGW32__
+                return __builtin_ctzll( value );
+            #else
+                return __builtin_ctzl( value );
+            #endif
         #endif
         }
 
@@ -527,7 +533,11 @@ namespace Ogre {
             #endif
             return 63u - lastBitSet;
         #else
-            return __builtin_clzl( value );
+            #ifdef __MINGW32__
+                return __builtin_clzll( value );
+            #else
+                return __builtin_clzl( value );
+            #endif
         #endif
         }
     };
