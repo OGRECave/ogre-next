@@ -201,6 +201,7 @@ namespace Ogre
         }
 
         _createSizeDependedD3DResources();
+        mClosed = false;
     }
     //---------------------------------------------------------------------
     void D3D11WindowSwapChainBased::destroy()
