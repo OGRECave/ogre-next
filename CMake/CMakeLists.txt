@@ -20,7 +20,6 @@ else()
 endif()
 
 set(INST_FILES
-  Packages/FindOIS.cmake
   Packages/FindRapidjson.cmake
   Packages/FindRemotery.cmake
   Packages/FindSDL2.cmake
@@ -44,7 +43,6 @@ if (OGRE_CONFIG_THREAD_PROVIDER STREQUAL "tbb")
 endif ()
 
 set(STATIC_INST_FILES
-  Packages/FindCg.cmake
   Packages/FindDirectX.cmake
   Packages/FindFreeImage.cmake
   Packages/FindFreetype.cmake
@@ -62,9 +60,6 @@ if (WIN32)
 endif ()
 
 if (APPLE)
-  set(INST_FILES ${INST_FILES}
-    Packages/FindCg.cmake
-  )
   set(STATIC_INST_FILES ${STATIC_INST_FILES}
     Packages/FindGLSLOptimizer.cmake
     Packages/FindHLSL2GLSL.cmake
