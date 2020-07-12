@@ -652,6 +652,10 @@ endif ()
 # Install CMake modules
 add_subdirectory(CMake)
 
+# provide option to install dependencies on Windows
+include(InstallDependencies)
+
+
 # Provide CPack packaging target
 include(Packaging)
 
