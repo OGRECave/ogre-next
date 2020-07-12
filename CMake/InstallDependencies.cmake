@@ -92,7 +92,6 @@ if (OGRE_INSTALL_DEPENDENCIES)
         install(DIRECTORY ${OGRE_DEP_DIR}/lib/ DESTINATION lib)
     endif ()
   endif () # OGRE_STATIC
-endif () # OGRE_INSTALL_DEPENDENCIES
     
   if(WIN32)
 	if( OGRE_PROFILING_PROVIDER STREQUAL "remotery" )
@@ -212,7 +211,7 @@ endif () # OGRE_INSTALL_DEPENDENCIES
       install(FILES ${Boost_CHRONO_LIBRARY_RELEASE} DESTINATION "boost/lib" CONFIGURATIONS Release)
     endif()
   endif()
-endif ()
+endif () # OGRE_INSTALL_DEPENDENCIES
 
 if (OGRE_COPY_DEPENDENCIES)
 
