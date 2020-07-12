@@ -162,20 +162,6 @@ endif () # OGRE_INSTALL_DEPENDENCIES
 		endif()
 	endif()
 
-    if (OGRE_BUILD_PLUGIN_CG)
-      # if MinGW or NMake, the release/debug cg.dll's would conflict, so just pick one
-      if (MINGW OR (CMAKE_GENERATOR STREQUAL "NMake Makefiles"))
-        if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-          install_debug(cg.dll)
-        else ()
-          install_release(cg.dll)
-        endif ()
-      else ()
-        install_debug(cg.dll)
-        install_release(cg.dll)
-      endif ()
-    endif () # OGRE_BUILD_PLUGIN_CG
-
     # install GLES dlls
     if (OGRE_BUILD_RENDERSYSTEM_GLES)
       install_debug(libgles_cm.dll)
@@ -313,26 +299,6 @@ if (OGRE_COPY_DEPENDENCIES)
 		  file(COPY ${AMDAGS_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/minsizerel)
 		endif()
 	endif()
-
-    if (OGRE_BUILD_PLUGIN_CG)
-      # if MinGW or NMake, the release/debug cg.dll's would conflict, so just pick one
-      if (MINGW OR (CMAKE_GENERATOR STREQUAL "NMake Makefiles"))
-        if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-          file(COPY ${Cg_BINARY_DBG} DESTINATION ${OGRE_BINARY_DIR}/bin/debug)
-        else ()
-          file(COPY ${Cg_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/release)
-    			file(COPY ${Cg_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/relwithdebinfo)
-    			file(COPY ${Cg_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/minsizerel)
-        endif ()
-      else ()
-	    if(EXISTS ${Cg_BINARY_DBG} AND EXISTS ${Cg_BINARY_REL})
-            file(COPY ${Cg_BINARY_DBG} DESTINATION ${OGRE_BINARY_DIR}/bin/debug)
-    		file(COPY ${Cg_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/release)
-    		file(COPY ${Cg_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/relwithdebinfo)
-    		file(COPY ${Cg_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/minsizerel)
-		endif()
-      endif ()
-    endif()
    
     if (OGRE_BUILD_RENDERSYSTEM_GLES)
       copy_debug(libgles_cm.dll)
