@@ -320,6 +320,8 @@ namespace Ogre
         RenderTargetViewDef* addRenderTextureView( IdString name );
         const RenderTargetViewDef* getRenderTargetViewDef( IdString name ) const;
         RenderTargetViewDef* getRenderTargetViewDefNonConstNoThrow( IdString name );
+        void removeRenderTextureView( IdString name );
+        void removeAllRenderTextureViews( void );
 
         /** Utility function to create the textures based on a given set of
             texture definitions and put them in a container.

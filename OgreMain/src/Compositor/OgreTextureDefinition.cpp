@@ -269,6 +269,15 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    void TextureDefinitionBase::removeRenderTextureView( IdString name )
+    {
+        RenderTargetViewDefMap::iterator itor = mLocalRtvs.find( name );
+        if( itor != mLocalRtvs.end() )
+            mLocalRtvs.erase( itor );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureDefinitionBase::removeAllRenderTextureViews( void ) { mLocalRtvs.clear(); }
+    //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::createTextures( const TextureDefinitionVec &textureDefs,
                                                 CompositorChannelVec &inOutTexContainer,
                                                 IdType id,
