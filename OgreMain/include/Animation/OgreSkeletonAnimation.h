@@ -165,6 +165,55 @@ namespace Ogre
         */
         Real* getBoneWeightPtr( IdString boneName );
 
+        /** Given all the bones this animation uses, sets the weight of these on _other_ animations
+
+            The use case is very specific: Imagine a 3rd person shooter. Normally animations get
+            blended together either additively or cummulative (e.g. to smoothly transition from walk
+            to idle, from idle to run, from run to cover, etc)
+
+            However certain animations, such as Reload, need to _override_ all other animations but
+            only on a particular set of bones.
+
+            Whether the character is idle, walking or running; we want the reload animation to
+            play at 100% weight (on torso, arms and hands), while the walk/idle/run animations still
+            also play at 100% weight on bones unaffected by the reload (like the legs).
+
+            Example code:
+
+            @code
+                // When starting reload
+                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( 0.0f );
+                reloadAnim->setEnabled( true );
+
+                // When starting reload is over
+                reloadAnim->setEnabled( false );
+                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( 1.0f );
+            @endcode
+
+            For this function to have any usefulness, the animation from Maya/Blender/etc
+            needs to have been exported with only animation tracks on bones that are modified
+            (i.e. the exporter should not create dummy nodes resetting to default pose on
+            unanimated bones)
+
+            If you're using [blender2ogre](https://github.com/OGRECave/blender2ogre), make sure
+            to tick "Only Keyframed Bones"
+
+        @remarks
+            This overload works only on currently active animations.
+            To override all (active and inactive) animations, use setOverrideBoneWeightsOnAllAnimations
+
+            Avoid calling this function unnecessarily (e.g. don't call it every frame if weight
+            value did not change). It's not super expensive, but it is not free either.
+
+            Any custom per-bone weight you set on other animations
+            (e.g. by calling other->setBoneWeight) will be overwritten.
+        @param weight
+        */
+        void setOverrideBoneWeightsOnActiveAnimations( float weight );
+
+        /// @see SkeletonAnimation::setOverrideBoneWeightsOnActiveAnimations
+        void setOverrideBoneWeightsOnAllAnimations( float weight );
+
         /// Enables or disables this animation. A disabled animation won't be processed at all.
         void setEnabled( bool bEnable );
         bool getEnabled(void) const                                 { return mEnabled; }

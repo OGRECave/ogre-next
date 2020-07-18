@@ -182,6 +182,56 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    void SkeletonAnimation::setOverrideBoneWeightsOnActiveAnimations( float weight )
+    {
+        const ActiveAnimationsVec &activeAnimations = mOwner->getActiveAnimations();
+        ActiveAnimationsVec::const_iterator itor = activeAnimations.begin();
+        ActiveAnimationsVec::const_iterator endt = activeAnimations.end();
+
+        while( itor != endt )
+        {
+            SkeletonAnimation *otherAnim = *itor;
+            if( otherAnim != this )
+            {
+                map<IdString, size_t>::type::const_iterator itBone = mDefinition->mBoneToWeights.begin();
+                map<IdString, size_t>::type::const_iterator enBone = mDefinition->mBoneToWeights.end();
+
+                while( itBone != enBone )
+                {
+                    otherAnim->setBoneWeight( itBone->first, weight );
+                    ++itBone;
+                }
+            }
+
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void SkeletonAnimation::setOverrideBoneWeightsOnAllAnimations( float weight )
+    {
+        SkeletonAnimationVec &animations = mOwner->getAnimationsNonConst();
+        SkeletonAnimationVec::iterator itor = animations.begin();
+        SkeletonAnimationVec::iterator endt = animations.end();
+
+        while( itor != endt )
+        {
+            SkeletonAnimation *otherAnim = &( *itor );
+            if( otherAnim != this )
+            {
+                map<IdString, size_t>::type::const_iterator itBone = mDefinition->mBoneToWeights.begin();
+                map<IdString, size_t>::type::const_iterator enBone = mDefinition->mBoneToWeights.end();
+
+                while( itBone != enBone )
+                {
+                    otherAnim->setBoneWeight( itBone->first, weight );
+                    ++itBone;
+                }
+            }
+
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void SkeletonAnimation::setEnabled( bool bEnable )
     {
         if( mEnabled != bEnable )
