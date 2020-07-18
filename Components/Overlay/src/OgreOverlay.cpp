@@ -119,25 +119,8 @@ namespace v1 {
         cont->_notifyParent(0, 0);
     }
     //---------------------------------------------------------------------
-    void Overlay::add3D(SceneNode* node)
-    {
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-        mRootNode->addChild(node);
-#endif
-    }
-    //---------------------------------------------------------------------
-    void Overlay::remove3D(SceneNode* node)
-    {
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-        mRootNode->removeChild(node);
-#endif
-    }
-    //---------------------------------------------------------------------
     void Overlay::clear(void)
     {
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-        mRootNode->removeAllChildren();
-#endif
         m2DElements.clear();
         // Note no deallocation, memory handled by OverlayManager & SceneManager
     }

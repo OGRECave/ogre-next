@@ -1009,13 +1009,6 @@ namespace Ogre {
         return msMovableType;
     }
     //-----------------------------------------------------------------------
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-    Real Frustum::getBoundingRadius(void) const
-    {
-        return (mFarDist == 0)? 100000 : mFarDist;
-    }
-#endif
-    //-----------------------------------------------------------------------
     void Frustum::getRenderOperation(v1::RenderOperation& op, bool casterPass)
     {
         updateVertexData();

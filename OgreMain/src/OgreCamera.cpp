@@ -802,16 +802,6 @@ namespace Ogre {
         setWindowImpl();
         return mWindowClipPlanes;
     }
-    // -------------------------------------------------------------------
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-    Real Camera::getBoundingRadius(void) const
-    {
-        // return a little bigger than the near distance
-        // just to keep things just outside
-        return mNearDist * 1.5f;
-
-    }
-#endif
     //-----------------------------------------------------------------------
     const Vector3& Camera::getPositionForViewUpdate(void) const
     {
