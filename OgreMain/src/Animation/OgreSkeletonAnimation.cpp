@@ -182,7 +182,8 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonAnimation::setOverrideBoneWeightsOnActiveAnimations( float weight )
+    void SkeletonAnimation::setOverrideBoneWeightsOnActiveAnimations( const Real constantWeight,
+                                                                      const bool bPerBone )
     {
         const ActiveAnimationsVec &activeAnimations = mOwner->getActiveAnimations();
         ActiveAnimationsVec::const_iterator itor = activeAnimations.begin();
@@ -198,7 +199,18 @@ namespace Ogre
 
                 while( itBone != enBone )
                 {
-                    otherAnim->setBoneWeight( itBone->first, weight );
+                    Real finalWeight = constantWeight;
+                    if( bPerBone )
+                    {
+                        const size_t level = itBone->second >> 24u;
+                        const size_t offset = itBone->second & 0x00FFFFFFu;
+                        const Real *aliasedBoneWeights =
+                            reinterpret_cast<const Real *>( mBoneWeights.get() ) + offset +
+                            ( *mSlotStarts )[level];
+                        const Real boneWeight = *aliasedBoneWeights;
+						finalWeight = Math::lerp( 1.0f - boneWeight, constantWeight, boneWeight );
+                    }
+                    otherAnim->setBoneWeight( itBone->first, finalWeight );
                     ++itBone;
                 }
             }
@@ -207,7 +219,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonAnimation::setOverrideBoneWeightsOnAllAnimations( float weight )
+    void SkeletonAnimation::setOverrideBoneWeightsOnAllAnimations( const Real constantWeight,
+                                                                   const bool bPerBone )
     {
         SkeletonAnimationVec &animations = mOwner->getAnimationsNonConst();
         SkeletonAnimationVec::iterator itor = animations.begin();
@@ -223,7 +236,18 @@ namespace Ogre
 
                 while( itBone != enBone )
                 {
-                    otherAnim->setBoneWeight( itBone->first, weight );
+                    Real finalWeight = constantWeight;
+                    if( bPerBone )
+                    {
+                        const size_t level = itBone->second >> 24u;
+                        const size_t offset = itBone->second & 0x00FFFFFFu;
+                        const Real *aliasedBoneWeights =
+                            reinterpret_cast<const Real *>( mBoneWeights.get() ) + offset +
+                            ( *mSlotStarts )[level];
+                        const Real boneWeight = *aliasedBoneWeights;
+                        finalWeight = Math::lerp( 1.0f - boneWeight, constantWeight, boneWeight );
+                    }
+                    otherAnim->setBoneWeight( itBone->first, finalWeight );
                     ++itBone;
                 }
             }

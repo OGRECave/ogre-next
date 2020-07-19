@@ -182,12 +182,20 @@ namespace Ogre
 
             @code
                 // When starting reload
-                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( 0.0f );
+                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( 0.0f, false );
                 reloadAnim->setEnabled( true );
 
                 // When starting reload is over
                 reloadAnim->setEnabled( false );
-                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( 1.0f );
+                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( 1.0f, false );
+
+                // To smoothly fade in/out while allowing per-bone granularity:
+                // fadeOutFactor = 0 means we're fully faded in
+                // fadeOutFactor = 1 means we're faded out entirely
+                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( fadeOutFactor, true );
+
+                // To smoothly fade in/out while overriding all bones:
+                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( fadeOutFactor, false );
             @endcode
 
             For this function to have any usefulness, the animation from Maya/Blender/etc
@@ -207,12 +215,34 @@ namespace Ogre
 
             Any custom per-bone weight you set on other animations
             (e.g. by calling other->setBoneWeight) will be overwritten.
-        @param weight
+        @param constantWeight
+            A constant weight to apply to all bone weights in other animations
+            Should be in range [0; 1]
+        @param bPerBone
+            When false, all other animations are set to constantWeight
+            When true, each bone in other animations are set to:
+
+                Math::lerp( 1.0f - boneWeight, constantWeight, boneWeight );
+
+            This allows you to selectively avoid overriding certain bones while also
+            smoothly fade in/out animations (i.e. gives you finer granularity control)
+
+            When true, the math operation we perform boils down to:
+
+            @code
+                for each affectedBone in this_animation
+                    for each otherAnim in parent->getAnimations()
+                        finalWeight = lerp( 1.0 - affectedBone->weight,
+                                            constantWeight, affectedBone->weight );
+                        otherAnim->setBoneWeight( affectedBone->name, finalWeight );
+            @endcode
         */
-        void setOverrideBoneWeightsOnActiveAnimations( float weight );
+        void setOverrideBoneWeightsOnActiveAnimations( const Real constantWeight,
+                                                       const bool bPerBone = false );
 
         /// @see SkeletonAnimation::setOverrideBoneWeightsOnActiveAnimations
-        void setOverrideBoneWeightsOnAllAnimations( float weight );
+        void setOverrideBoneWeightsOnAllAnimations( const Real constantWeight,
+                                                    const bool bPerBone = false );
 
         /// Enables or disables this animation. A disabled animation won't be processed at all.
         void setEnabled( bool bEnable );
