@@ -53,7 +53,9 @@ namespace v1 {
         mIndexStart = 0;
         mIndexEnd = 0;
 
-        mHasSkeletonAnimation = !subMeshBasis->parent->getSkeleton().isNull();
+        mHasSkeletonAnimation = !subMeshBasis->parent->getSkeleton().isNull() &&
+                                subMeshBasis->parent->getSharedVertexDataAnimationType() == VAT_NONE &&
+                                subMeshBasis->getVertexAnimationType() == VAT_NONE;
     }
     //-----------------------------------------------------------------------
     SubEntity::~SubEntity()

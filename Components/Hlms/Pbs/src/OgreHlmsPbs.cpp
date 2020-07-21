@@ -123,6 +123,7 @@ namespace Ogre
     const IdString PbsProperty::NormalLa              = IdString( "normal_la" );
     const IdString PbsProperty::NormalRgUnorm        = IdString( "normal_rg_unorm" );
     const IdString PbsProperty::NormalRgSnorm        = IdString( "normal_rg_snorm" );
+    const IdString PbsProperty::NormalBc3Unorm       = IdString( "normal_bc3_unorm" );
 
     const IdString PbsProperty::NormalWeight          = IdString( "normal_weight" );
     const IdString PbsProperty::NormalWeightTex       = IdString( "normal_weight_tex" );
@@ -789,8 +790,8 @@ namespace Ogre
             // NB if texture has not loaded yet, getPixelFormat will return PFG_UNKNOWN and so
             // isSigned may be incorrect. However calculateHasFor will be called again when it
             // has loaded, so just assume default for now.
-            const bool isSigned = PixelFormatGpuUtils::isSigned(
-                                      datablockNormalMaps[0]->getPixelFormat() );
+            PixelFormatGpu nmPixelFormat = datablockNormalMaps[0]->getPixelFormat();
+            const bool isSigned = PixelFormatGpuUtils::isSigned( nmPixelFormat );
             if (isSigned)
             {
                 setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgSnorm.mHash );
@@ -798,8 +799,16 @@ namespace Ogre
             }
             else
             {
-                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgUnorm.mHash );
-                setProperty( PbsProperty::NormalRgUnorm, PbsProperty::NormalRgUnorm.mHash );
+                if( nmPixelFormat != PFG_BC3_UNORM )
+                {
+                    setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgUnorm.mHash );
+                    setProperty( PbsProperty::NormalRgUnorm, PbsProperty::NormalRgUnorm.mHash );
+                }
+                else
+                {
+                    setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalBc3Unorm.mHash );
+                    setProperty( PbsProperty::NormalBc3Unorm, PbsProperty::NormalBc3Unorm.mHash );
+                }
             }
             //Reserved for supporting LA textures in GLES2.
 //            else

@@ -491,6 +491,7 @@ namespace Ogre
         static const IdString NormalLa;
         static const IdString NormalRgUnorm;
         static const IdString NormalRgSnorm;
+        static const IdString NormalBc3Unorm;
 
         static const IdString NormalWeight;
         static const IdString NormalWeightTex;
