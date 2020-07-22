@@ -49,6 +49,7 @@ THE SOFTWARE.
 #include "OgrePlugin.h"
 #include "OgreFileSystem.h"
 #include "OgreResourceBackgroundQueue.h"
+#include "OgreTextureGpuManager.h"
 #include "OgreDecal.h"
 #include "OgreInternalCubemapProbe.h"
 #include "OgreEntity.h"
@@ -682,6 +683,7 @@ namespace Ogre {
             mActiveRenderer->shutdown();
 
             OGRE_DELETE mCompositorManager2;
+            mCompositorManager2 = 0;
         }
 
         mActiveRenderer = system;
@@ -1168,6 +1170,8 @@ namespace Ogre {
         // ensure shutdown before destroying resource manager.
         mResourceBackgroundQueue->shutdown();
         mWorkQueue->shutdown();
+        if( mActiveRenderer )
+            mActiveRenderer->getTextureGpuManager()->shutdown();
 
 		OGRE_DELETE mCompositorManager2;
         mCompositorManager2 = 0;

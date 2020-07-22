@@ -178,26 +178,7 @@ namespace Ogre
     void D3D11TextureGpuManager::_destroyD3DResources()
     {
         mMutex.lock();
-
-        ThreadData &workerData  = mThreadData[/*c_workerThread*/1];
-        ThreadData &mainData    = mThreadData[/*c_mainThread*/0];
-        mLoadRequestsMutex.lock();
-        mainData.loadRequests.clear(); // TODO: if( loadRequest.autoDeleteImage ) delete loadRequest.image;
-        mainData.objCmdBuffer->clear();
-        mainData.usedStagingTex.clear();
-        workerData.loadRequests.clear(); // TODO: if( loadRequest.autoDeleteImage ) delete loadRequest.image;
-        workerData.objCmdBuffer->clear();
-        workerData.usedStagingTex.clear();
-        mLoadRequestsMutex.unlock();
-
-        while (!mStreamingData.queuedImages.empty())
-        {
-            TextureFilter::FilterBase::destroyFilters(mStreamingData.queuedImages.back().filters);
-            mStreamingData.queuedImages.pop_back();
-        }
-        mStreamingData.partialImages.clear(); // Is PartialImage::sysRamPtr owning ptr ??? Do we need to release allocated memory?
-
-        mScheduledTasks.clear();
+        abortAllRequests();
         destroyAllStagingBuffers();
         destroyAllPools();
         mMutex.unlock();
