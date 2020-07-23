@@ -623,14 +623,14 @@ namespace Ogre
                                               PixelFormatGpu desiredDepthBufferFormat )
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
-                     "Texture must've been created with TextureFlags::RenderTexture!",
+                     "Texture must've been created with TextureFlags::RenderToTexture!",
                      "TextureGpu::_setDepthBufferDefaults" );
     }
     //-----------------------------------------------------------------------------------
     uint16 TextureGpu::getDepthBufferPoolId(void) const
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
-                     "Texture must've been created with TextureFlags::RenderTexture!",
+                     "Texture must've been created with TextureFlags::RenderToTexture!",
                      "TextureGpu::getDepthBufferPoolId" );
         return 0;
     }
@@ -638,7 +638,7 @@ namespace Ogre
     bool TextureGpu::getPreferDepthTexture(void) const
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
-                     "Texture must've been created with TextureFlags::RenderTexture!",
+                     "Texture must've been created with TextureFlags::RenderToTexture!",
                      "TextureGpu::getPreferDepthTexture" );
         return false;
     }
@@ -646,7 +646,7 @@ namespace Ogre
     PixelFormatGpu TextureGpu::getDesiredDepthBufferFormat(void) const
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
-                     "Texture must've been created with TextureFlags::RenderTexture!",
+                     "Texture must've been created with TextureFlags::RenderToTexture!",
                      "TextureGpu::getDesiredDepthBufferFormat" );
         return PFG_UNKNOWN;
     }
