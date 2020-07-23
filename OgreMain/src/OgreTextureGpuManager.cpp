@@ -219,7 +219,21 @@ namespace Ogre
             TextureFilter::FilterBase::destroyFilters( mStreamingData.queuedImages.back().filters );
             mStreamingData.queuedImages.pop_back();
         }
-        mStreamingData.partialImages.clear();  // Is PartialImage::sysRamPtr owning ptr ??? Do we need to release allocated memory?
+
+        {
+            // These partial images were supposed to transfer ownership of sysRamPtr to TextureGpu
+            // But we now must free these ptrs ourselves
+            PartialImageMap::const_iterator itor = mStreamingData.partialImages.begin();
+            PartialImageMap::const_iterator endt = mStreamingData.partialImages.end();
+
+            while( itor != endt )
+            {
+                if( itor->second.sysRamPtr )
+                    OGRE_FREE_SIMD( itor->second.sysRamPtr, MEMCATEGORY_RESOURCE );
+                ++itor;
+            }
+            mStreamingData.partialImages.clear();
+        }
 
         mScheduledTasks.clear();
     }

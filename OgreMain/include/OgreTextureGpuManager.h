@@ -440,7 +440,7 @@ namespace Ogre
 
             /// Only used for textures that need more than one Image to load
             ///
-            /// Used by worker thread. No protection needed.
+            /// Used by worker thread. No protection needed (except in abortAllRequests).
             ///
             /// @see    TextureGpuManager::PartialImage
             PartialImageMap     partialImages;
