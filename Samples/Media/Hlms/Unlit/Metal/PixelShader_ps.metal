@@ -30,9 +30,9 @@ fragment @insertpiece( output_type ) main_metal
 	@property( !hlms_shadowcaster || alpha_test )
 		@foreach( num_textures, n )
 			@property( is_texture@n_array )
-				, texture2d_array<float> textureMapsArray@n [[texture(@value(textureMapsArray@n)]]
+				, texture2d_array<float> textureMapsArray@n [[texture(@value(textureMapsArray@n))]]
 			@else
-				, texture2d<float> textureMaps@n [[texture(@value(textureMaps@n)]]
+				, texture2d<float> textureMaps@n [[texture(@value(textureMaps@n))]]
 			@end
 		@end
 	@end
