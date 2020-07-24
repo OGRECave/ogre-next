@@ -60,7 +60,7 @@ namespace Ogre
         bool            mSupportsBaseInstance;
         uint8           mDynamicBufferMultiplier;
         uint8           mDynamicBufferCurrentFrame;
-        unsigned long   mNextStagingBufferTimestampCheckpoint;
+        uint64          mNextStagingBufferTimestampCheckpoint;
         uint32          mFrameCount;
 
         BufferPackedSet         mBuffers[NUM_BUFFER_PACKED_TYPES];

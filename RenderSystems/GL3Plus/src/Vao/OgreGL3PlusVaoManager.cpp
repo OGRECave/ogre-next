@@ -1335,7 +1335,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusVaoManager::_update(void)
     {
-        unsigned long currentTimeMs = mTimer->getMilliseconds();
+        uint64 currentTimeMs = mTimer->getMilliseconds();
 
         FastArray<GLuint> bufferNames;
 
