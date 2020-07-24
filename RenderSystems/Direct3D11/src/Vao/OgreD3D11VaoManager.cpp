@@ -1658,7 +1658,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11VaoManager::_update(void)
     {
-        unsigned long currentTimeMs = mTimer->getMilliseconds();
+        uint64 currentTimeMs = mTimer->getMilliseconds();
 
         if( currentTimeMs >= mNextStagingBufferTimestampCheckpoint )
         {
