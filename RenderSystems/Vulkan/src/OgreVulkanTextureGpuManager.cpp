@@ -122,10 +122,4 @@ namespace Ogre
     {
         return mBlankTexture[textureType];
     }
-    //-----------------------------------------------------------------------------------
-    VkImageView VulkanTextureGpuManager::getBlankTextureViewVulkanName(
-        TextureTypes::TextureTypes textureType ) const
-    {
-        return mBlankTextureView[textureType];
-    }
 }  // namespace Ogre

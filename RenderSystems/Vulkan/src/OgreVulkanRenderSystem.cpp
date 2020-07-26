@@ -532,24 +532,24 @@ namespace Ogre
             for( size_t j = 0u; j < numTexturesUsed; ++j )
             {
                 const VulkanTextureGpu *vulkanTex = static_cast<const VulkanTextureGpu *>( *itor );
-                VkImageView vulkanTexture = 0;
+                VkImageView srv = 0;
 
                 if( vulkanTex )
                 {
-                    vulkanTexture = vulkanTex->getDisplayTextureName();
+                    srv = vulkanTex->getDefaultDisplaySrv();
 
                     if( ( texUnit - slotStart ) == hazardousTexIdx &&
                         mCurrentRenderPassDescriptor->hasAttachment( set->mTextures[hazardousTexIdx] ) )
                     {
-                        vulkanTexture = 0;
+                        srv = 0;
                     }
                 }
 
-                if( vulkanTexture )
+                if( srv )
                 {
                     VkDescriptorImageInfo imageInfo;
                     imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-                    imageInfo.imageView = vulkanTexture;
+                    imageInfo.imageView = srv;
                     imageInfo.sampler = 0;
 #if VULKAN_HOTSHOT_DISABLED
                     mImageInfo[texUnit][0] = imageInfo;
@@ -1385,11 +1385,7 @@ namespace Ogre
         vulkanVertexBuffers[maxUsedSlot] = bufIntf->getVboName();
         offsets[maxUsedSlot] = 0;
 
-        vkCmdBindVertexBuffers( cmdBuffer, 0, maxUsedSlot + 1, vulkanVertexBuffers, offsets );
-
-        // [mActiveRenderEncoder setVertexBuffers:metalVertexBuffers
-        //                                offsets:offsets
-        //                              withRange:NSMakeRange( 0, maxUsedSlot )];
+        // vkCmdBindVertexBuffers( cmdBuffer, 0, maxUsedSlot + 1, vulkanVertexBuffers, offsets );
 
         mCurrentIndexBuffer = cmd->indexData;
         mCurrentVertexBuffer = cmd->vertexData;
@@ -1523,12 +1519,6 @@ namespace Ogre
                                          mDerivedDepthBiasMultiplier * mCurrentPassIterationNum ) *
                                            biasSign,
                                        0.f, mDerivedDepthBiasSlopeScale * biasSign );
-                    // [mActiveRenderEncoder
-                    // setDepthBias:( mDerivedDepthBiasBase +
-                    //                mDerivedDepthBiasMultiplier * mCurrentPassIterationNum ) *
-                    //              biasSign
-                    //       slopeScale:mDerivedDepthBiasSlopeScale * biasSign
-                    //            clamp:0.0f];
                 }
 
                 const VkPrimitiveTopology indexType =
@@ -1543,34 +1533,10 @@ namespace Ogre
                         mCurrentIndexBuffer->indexBuffer.get() );
                 VkBuffer indexBuffer = vulkanBuffer->getBufferName( offsetStart );
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-#    if OGRE_DEBUG_MODE
-                assert( ( ( mCurrentIndexBuffer->indexStart * bytesPerIndexElement ) & 0x03 ) == 0 &&
-                        "Index Buffer must be aligned to 4 bytes. If you're messing with "
-                        "IndexBuffer::indexStart, you've entered an invalid "
-                        "indexStart; not supported by the Metal API." );
-#    endif
-
-                // [mActiveRenderEncoder
-                //     drawIndexedPrimitives:mCurrentPrimType
-                //                indexCount:mCurrentIndexBuffer->indexCount
-                //                 indexType:indexType
-                //               indexBuffer:indexBuffer
-                //         indexBufferOffset:mCurrentIndexBuffer->indexStart * bytesPerIndexElement +
-                //                           offsetStart
-                //             instanceCount:numberOfInstances];
-#else
-                // [mActiveRenderEncoder
-                //     drawIndexedPrimitives:mCurrentPrimType
-                //                indexCount:mCurrentIndexBuffer->indexCount
-                //                 indexType:indexType
-                //               indexBuffer:indexBuffer
-                //         indexBufferOffset:mCurrentIndexBuffer->indexStart * bytesPerIndexElement +
-                //                           offsetStart
-                //             instanceCount:numberOfInstances
-                //                baseVertex:mCurrentVertexBuffer->vertexStart
-                //              baseInstance:0];
-#endif
+                vkCmdDrawIndexed(
+                    cmdBuffer, (uint32)mCurrentIndexBuffer->indexCount, (uint32)numberOfInstances,
+                    ( uint32 )( mCurrentIndexBuffer->indexStart * bytesPerIndexElement + offsetStart ),
+                    (int32)mCurrentVertexBuffer->vertexStart, 0u );
             } while( updatePassIterationRenderState() );
         }
         else
@@ -1585,13 +1551,7 @@ namespace Ogre
                                        ( mDerivedDepthBiasBase +
                                          mDerivedDepthBiasMultiplier * mCurrentPassIterationNum ) *
                                            biasSign,
-                                       0.f, mDerivedDepthBiasSlopeScale * biasSign );
-                    // [mActiveRenderEncoder
-                    //     setDepthBias:( mDerivedDepthBiasBase +
-                    //                    mDerivedDepthBiasMultiplier * mCurrentPassIterationNum ) *
-                    //                  biasSign
-                    //       slopeScale:mDerivedDepthBiasSlopeScale * biasSign
-                    //            clamp:0.0f];
+                                       0.0f, mDerivedDepthBiasSlopeScale * biasSign );
                 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
@@ -1600,19 +1560,8 @@ namespace Ogre
                 const uint32 vertexStart = static_cast<uint32>( mCurrentVertexBuffer->vertexStart );
 #endif
 
-                if( hasInstanceData )
-                {
-                    // [mActiveRenderEncoder drawPrimitives:mCurrentPrimType
-                    //                          vertexStart:vertexStart
-                    //                          vertexCount:mCurrentVertexBuffer->vertexCount
-                    //                        instanceCount:numberOfInstances];
-                }
-                else
-                {
-                    // [mActiveRenderEncoder drawPrimitives:mCurrentPrimType
-                    //                          vertexStart:vertexStart
-                    //                          vertexCount:mCurrentVertexBuffer->vertexCount];
-                }
+                vkCmdDraw( cmdBuffer, (uint32)mCurrentVertexBuffer->vertexCount,
+                           (uint32)numberOfInstances, vertexStart, 0u );
             } while( updatePassIterationRenderState() );
         }
     }
@@ -2105,7 +2054,7 @@ namespace Ogre
         // attributeDescriptions.resize( 16, VkVertexInputAttributeDescription{} );
 
         TODO_vertex_format;
-        if( !newPso->vertexShader.isNull() )
+        if( !newPso->vertexShader.isNull() && false )
         {
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->vertexShader->_getBindingDelegate() );
@@ -2129,9 +2078,9 @@ namespace Ogre
                 }
 
                 VertexElement2VecVec::const_iterator itor = newPso->vertexElements.begin();
-                VertexElement2VecVec::const_iterator end = newPso->vertexElements.end();
+                VertexElement2VecVec::const_iterator endt = newPso->vertexElements.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     size_t accumOffset = 0;
                     const size_t bufferIdx = itor - newPso->vertexElements.begin();
@@ -2152,8 +2101,8 @@ namespace Ogre
                         // vertexDescriptor.attributes[elementIdx].offset = accumOffset;
 
                         locationMap[elementIdx]->format = VulkanMappings::get( it->mType );
-                        locationMap[elementIdx]->binding = bufferIdx;
-                        locationMap[elementIdx]->offset = accumOffset;
+                        locationMap[elementIdx]->binding = static_cast<uint32_t>( bufferIdx );
+                        locationMap[elementIdx]->offset = static_cast<uint32_t>( accumOffset );
 
                         accumOffset += v1::VertexElement::getTypeSize( it->mType );
                         ++i;
@@ -2519,7 +2468,7 @@ namespace Ogre
 
         // Create two contiguous arrays of texture and buffers, but we'll split
         // it into regions as a buffer could be in the middle of two textures.
-        VkImageView *textures = 0;
+        VkImageView *srvList = 0;
         VkBuffer *buffers = 0;
         VkDeviceSize *offsets = 0;
 
@@ -2535,8 +2484,8 @@ namespace Ogre
         }
         if( numTextures > 0 )
         {
-            textures = (VkImageView *)OGRE_MALLOC_SIMD( sizeof( VkImageView * ) * numTextures,
-                                                        MEMCATEGORY_RENDERSYS );
+            srvList = (VkImageView *)OGRE_MALLOC_SIMD( sizeof( VkImageView * ) * numTextures,
+                                                       MEMCATEGORY_RENDERSYS );
         }
         if( numBuffers > 0 )
         {
@@ -2581,7 +2530,7 @@ namespace Ogre
                 {
                     vulkanSet->textures.push_back( VulkanTexRegion() );
                     VulkanTexRegion &texRegion = vulkanSet->textures.back();
-                    texRegion.textures = textures;
+                    texRegion.textures = srvList;
                     texRegion.shaderType = shaderType;
                     texRegion.range.location = itor - texContainer.begin();
                     texRegion.range.length = 0;
@@ -2592,20 +2541,20 @@ namespace Ogre
 
                 assert( dynamic_cast<VulkanTextureGpu *>( texSlot.texture ) );
                 VulkanTextureGpu *vulkanTex = static_cast<VulkanTextureGpu *>( texSlot.texture );
-                VkImageView textureHandle = vulkanTex->getDisplayTextureName();
+                VkImageView srv = vulkanTex->getDefaultDisplaySrv();
 
                 if( texSlot.needsDifferentView() )
                 {
-                    vulkanSet->textureViews[texViewIndex] = vulkanTex->getView( texSlot );
-                    textureHandle = vulkanSet->textureViews[texViewIndex];
+                    vulkanSet->textureViews[texViewIndex] = vulkanTex->createView( texSlot );
+                    srv = vulkanSet->textureViews[texViewIndex];
                     ++texViewIndex;
                 }
 
                 VulkanTexRegion &texRegion = vulkanSet->textures.back();
-                *textures = textureHandle;
+                *srvList = srv;
                 ++texRegion.range.length;
 
-                ++textures;
+                ++srvList;
             }
             else
             {

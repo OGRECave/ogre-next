@@ -51,6 +51,13 @@ namespace Ogre
     class _OgreVulkanExport VulkanTextureGpu : public TextureGpu
     {
     protected:
+        /// The general case is that the whole D3D11 texture will be accessed through the SRV.
+        /// That means: createSrv( this->getPixelFormat(), false );
+        /// To avoid creating multiple unnecessary copies of the SRV, we keep a cache of that
+        /// default SRV with us; and calling createSrv with default params will return
+        /// this cache instead.
+        VkImageView mDefaultDisplaySrv;
+
         /// This will not be owned by us if hasAutomaticBatching is true.
         /// It will also not be owned by us if we're not in GpuResidency::Resident
         /// This will always point to:
@@ -58,7 +65,8 @@ namespace Ogre
         ///     * A 4x4 dummy texture (now owned by us).
         ///     * A 64x64 mipmapped texture of us (but now owned by us).
         ///     * A GL texture not owned by us, but contains the final information.
-        VkImageView mDisplayTextureName;
+        VkImage mDisplayTextureName;
+
         /// When we're transitioning to GpuResidency::Resident but we're not there yet,
         /// we will be either displaying a 4x4 dummy texture or a 64x64 one. However
         /// we reserve a spot to a final place will already be there for us once the
@@ -71,7 +79,6 @@ namespace Ogre
         ///     4. The msaa resolved texture (hasMsaaExplicitResolves==false)
         /// This value may be a renderbuffer instead of a texture if isRenderbuffer() returns true.
         VkImage mFinalTextureName;
-        VkImageView mFinalTextureNameView;
 
         /// Only used when hasMsaaExplicitResolves() == false
         VkImage mMsaaFramebufferName;
@@ -99,26 +106,6 @@ namespace Ogre
                           TextureGpuManager *textureManager );
         virtual ~VulkanTextureGpu();
 
-        VkImageView getDisplayTextureName( void ) const { return mDisplayTextureName; }
-
-        /// Always returns the internal handle that belongs to this texture.
-        /// Note that for TextureFlags::AutomaticBatching textures, this will be the
-        /// handle of a 2D Array texture pool.
-        ///
-        /// If the texture has MSAA enabled, this returns the handle to the resolve
-        /// texture, not the MSAA one.
-        ///
-        /// If TextureFlags::MsaaExplicitResolve is set, it returns the handle
-        /// to the MSAA texture, since there is no resolve texture.
-        VkImage getFinalTextureName( void ) const { return mFinalTextureName; }
-
-        /// If MSAA > 1u and TextureFlags::MsaaExplicitResolve is not set, this
-        /// returns the handle to the temporary MSAA renderbuffer used for rendering,
-        /// which will later be resolved into the resolve texture.
-        ///
-        /// Otherwise it returns null.
-        VkImage getMsaaFramebufferName( void ) const { return mMsaaFramebufferName; }
-
         VkImageSubresourceRange getFullSubresourceRange( void ) const;
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
@@ -127,7 +114,8 @@ namespace Ogre
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel );
+                             const TextureBox &srcBox, uint8 srcMipLevel,
+                             bool keepResolvedTexSynced = true );
 
         virtual void _autogenerateMipmaps( void );
         virtual void _setToDisplayDummyTexture( void );
@@ -138,19 +126,25 @@ namespace Ogre
 
         VkImageViewType getVulkanTextureViewType( void ) const;
 
-        // Returns the image view for this complete image.
-        VkImageView getView(void);
+    protected:
+        VkImageView createView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint8 numMipmaps,
+                                uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav ) const;
 
-        VkImageView getView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint8 numMipmaps,
-                             uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav );
-        VkImageView getView( DescriptorSetTexture2::TextureSlot texSlot );
-        VkImageView getView( DescriptorSetUav::TextureSlot texSlot );
+    public:
+        VkImageView createView( const DescriptorSetTexture2::TextureSlot &texSlot ) const;
+        VkImageView createView( DescriptorSetUav::TextureSlot texSlot );
+        VkImageView createView( void ) const;
+        VkImageView getDefaultDisplaySrv( void ) const { return mDefaultDisplaySrv; }
 
         void destroyView( VkImageView imageView );
 
         /// Returns a fresh VkImageMemoryBarrier filled with common data.
         /// srcAccessMask, dstAccessMask, oldLayout and newLayout must be filled by caller
-        VkImageMemoryBarrier getImageMemoryBarrier(void) const;
+        VkImageMemoryBarrier getImageMemoryBarrier( void ) const;
+
+        VkImage getDisplayTextureName( void ) const { return mDisplayTextureName; }
+        VkImage getFinalTextureName( void ) const { return mFinalTextureName; }
+        VkImage getMsaaFramebufferName( void ) const { return mMsaaFramebufferName; }
     };
 
     class _OgreVulkanExport VulkanTextureGpuRenderTarget : public VulkanTextureGpu

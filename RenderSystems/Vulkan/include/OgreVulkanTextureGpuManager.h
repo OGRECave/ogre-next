@@ -53,7 +53,6 @@ namespace Ogre
     protected:
         /// 4x4 texture for when we have nothing to display.
         VkImage mBlankTexture[TextureTypes::Type3D + 1u];
-        VkImageView mBlankTextureView[TextureTypes::Type3D + 1u];
 
         VulkanDevice *mDevice;
 
@@ -77,7 +76,6 @@ namespace Ogre
         TextureGpu *createWindowDepthBuffer( void );
 
         VkImage getBlankTextureVulkanName( TextureTypes::TextureTypes textureType ) const;
-        VkImageView getBlankTextureViewVulkanName( TextureTypes::TextureTypes textureType ) const;
 
         VulkanDevice *getDevice() const
         {
