@@ -46,6 +46,8 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/Xrandr.h>
 
+#include <sstream>
+
 static bool ctxErrorOccurred = false;
 static int ctxErrorHandler( Display *dpy, XErrorEvent *ev )
 {
@@ -191,7 +193,7 @@ namespace Ogre
         optVSync.name = "VSync";
         optVSync.immutable = false;
 
-        optFSAA.name = "MSAA";
+        optFSAA.name = "FSAA";
         optFSAA.immutable = false;
 
         optRTTMode.name = "RTT Preferred Mode";
@@ -243,7 +245,7 @@ namespace Ogre
         optSRGB.possibleValues.push_back("No");
         optSRGB.possibleValues.push_back("Yes");
 
-        optSRGB.currentValue = optSRGB.possibleValues[0];
+        optSRGB.currentValue = optSRGB.possibleValues[1];
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		optStereoMode.name = "Stereo Mode";
@@ -375,8 +377,8 @@ namespace Ogre
                 }
             }
 
-            if((opt = mOptions.find("MSAA")) != end)
-                miscParams["MSAA"] = opt->second.currentValue;
+            if((opt = mOptions.find("FSAA")) != end)
+                miscParams["FSAA"] = opt->second.currentValue;
 
             if((opt = mOptions.find("VSync")) != end)
                 miscParams["vsync"] = opt->second.currentValue;

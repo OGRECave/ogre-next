@@ -26,9 +26,10 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
-
 #include "IrradianceField/OgreIrradianceField.h"
+
+#include "IrradianceField/OgreIfdProbeVisualizer.h"
+#include "IrradianceField/OgreIrradianceFieldRaster.h"
 #include "Vct/OgreVctLighting.h"
 #include "Vct/OgreVctVoxelizer.h"
 
@@ -50,6 +51,15 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    RasterParams::RasterParams() :
+        mPixelFormat( PFG_RGBA8_UNORM_SRGB ),
+        mCameraNear( 0.01f ),
+        mCameraFar( 500.0f )
+    {
+    }
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     IrradianceFieldSettings::IrradianceFieldSettings() :
         mNumRaysPerPixel( 1u ),
         mDepthProbeResolution( 12u ),
@@ -60,8 +70,13 @@ namespace Ogre
         mNumProbes[1] = 8u;
     }
     //-------------------------------------------------------------------------
+    bool IrradianceFieldSettings::isRaster() const { return mRasterParams.mWorkspaceName != IdString(); }
+    //-------------------------------------------------------------------------
     void IrradianceFieldSettings::createSubsamples( void )
     {
+        if( isRaster() )
+            return;
+
         const size_t numRaysPerPixel = mNumRaysPerPixel;
         mSubsamples.resize( numRaysPerPixel );
 
@@ -87,8 +102,8 @@ namespace Ogre
 
             for( size_t i = 0u; i < numGridCells && i < numRaysPerPixel; ++i )
             {
-                mSubsamples[i].x = ( i % ( gridSize ) ) * invGridSize;
-                mSubsamples[i].y = ( i / ( gridSize ) ) * invGridSize;
+                mSubsamples[i].x = ( ( i % ( gridSize ) ) + 0.5f ) * invGridSize;
+                mSubsamples[i].y = ( ( i / ( gridSize ) ) + 0.5f ) * invGridSize;
             }
         }
     }
@@ -105,10 +120,11 @@ namespace Ogre
         // Hence find the resolution where 2ᵃ * 2ᵇ = 2ⁿ
         const uint32 totalNumProbes = getTotalNumProbes();
         const uint32 exponent = Bitwise::ctz32( totalNumProbes );
-        outWidth = mDepthProbeResolution * ( 1u << ( exponent >> 1u ) );
-        outHeight = mDepthProbeResolution * ( 1u << ( exponent - ( exponent >> 1u ) ) );
+        const uint8 borderedDepthResolution = getBorderedDepthResolution();
+        outWidth = borderedDepthResolution * ( 1u << ( exponent >> 1u ) );
+        outHeight = borderedDepthResolution * ( 1u << ( exponent - ( exponent >> 1u ) ) );
         OGRE_ASSERT_LOW( outWidth * outHeight ==
-                         totalNumProbes * mDepthProbeResolution * mDepthProbeResolution );
+                         totalNumProbes * borderedDepthResolution * borderedDepthResolution );
     }
     //-------------------------------------------------------------------------
     void IrradianceFieldSettings::getIrradProbeFullResolution( uint32 &outWidth,
@@ -116,10 +132,21 @@ namespace Ogre
     {
         const uint32 totalNumProbes = getTotalNumProbes();
         const uint32 exponent = Bitwise::ctz32( totalNumProbes );
-        outWidth = mIrradianceResolution * ( 1u << ( exponent >> 1u ) );
-        outHeight = mIrradianceResolution * ( 1u << ( exponent - ( exponent >> 1u ) ) );
+        const uint8 borderedIrradResolution = getBorderedIrradResolution();
+        outWidth = borderedIrradResolution * ( 1u << ( exponent >> 1u ) );
+        outHeight = borderedIrradResolution * ( 1u << ( exponent - ( exponent >> 1u ) ) );
         OGRE_ASSERT_LOW( outWidth * outHeight ==
-                         totalNumProbes * mIrradianceResolution * mIrradianceResolution );
+                         totalNumProbes * borderedIrradResolution * borderedIrradResolution );
+    }
+    //-------------------------------------------------------------------------
+    uint8 IrradianceFieldSettings::getBorderedIrradResolution() const
+    {
+        return mIrradianceResolution + 2u;
+    }
+    //-------------------------------------------------------------------------
+    uint8 IrradianceFieldSettings::getBorderedDepthResolution() const
+    {
+        return mDepthProbeResolution + 2u;
     }
     //-------------------------------------------------------------------------
     uint32 IrradianceFieldSettings::getNumRaysPerIrradiancePixel( void ) const
@@ -150,10 +177,18 @@ namespace Ogre
         mGenerationJob( 0 ),
         mDepthIntegrationJob( 0 ),
         mColourIntegrationJob( 0 ),
+        mDepthMirrorBorderJob( 0 ),
+        mColourMirrorBorderJob( 0 ),
         mIfGenParamsBuffer( 0 ),
         mDirectionsBuffer( 0 ),
         mDepthTapsIntegrationBuffer( 0 ),
         mColourTapsIntegrationBuffer( 0 ),
+        mIfdDepthBorderMirrorParamsBuffer( 0 ),
+        mIfdColourBorderMirrorParamsBuffer( 0 ),
+        mIfRaster( 0 ),
+        mDebugVisualizationMode( DebugVisualizationNone ),
+        mDebugTessellation( 4u ),
+        mDebugIfdProbeVisualizer( 0 ),
         mRoot( root ),
         mSceneManager( sceneManager ),
         mAlreadyWarned( false )
@@ -169,6 +204,11 @@ namespace Ogre
         mIfGenParamsBuffer = vaoManager->createConstBuffer( sizeof( IrradianceFieldGenParams ),
                                                             BT_DYNAMIC_PERSISTENT, 0, false );
 
+        mIfdDepthBorderMirrorParamsBuffer =
+            vaoManager->createConstBuffer( sizeof( IfdBorderMirrorParams ), BT_DEFAULT, 0, false );
+        mIfdColourBorderMirrorParamsBuffer =
+            vaoManager->createConstBuffer( sizeof( IfdBorderMirrorParams ), BT_DEFAULT, 0, false );
+
         HlmsCompute *hlmsCompute = mRoot->getHlmsManager()->getComputeHlms();
         mGenerationJob = hlmsCompute->findComputeJobNoThrow( "IrradianceField/Gen" );
 
@@ -183,11 +223,19 @@ namespace Ogre
 
         mDepthIntegrationJob = hlmsCompute->findComputeJob( "IrradianceField/Integration/Depth" );
         mColourIntegrationJob = hlmsCompute->findComputeJob( "IrradianceField/Integration/Colour" );
+
+        mDepthMirrorBorderJob = hlmsCompute->findComputeJob( "IrradianceField/BorderMirror/Depth" );
+        mColourMirrorBorderJob = hlmsCompute->findComputeJob( "IrradianceField/BorderMirror/Colour" );
     }
     //-------------------------------------------------------------------------
     IrradianceField::~IrradianceField()
     {
+        setDebugVisualization( DebugVisualizationNone, 0, mDebugTessellation );
         destroyTextures();
+
+        delete mIfRaster;
+        mIfRaster = 0;
+
         VaoManager *vaoManager = mRoot->getRenderSystem()->getVaoManager();
         if( mIfGenParamsBuffer->getMappingState() != MS_UNMAPPED )
             mIfGenParamsBuffer->unmap( UO_UNMAP_ALL );
@@ -197,6 +245,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void IrradianceField::fillDirections( float *RESTRICT_ALIAS outBuffer )
     {
+        OGRE_ASSERT_LOW( !mSettings.isRaster() );
+
         float *RESTRICT_ALIAS updateData = reinterpret_cast<float * RESTRICT_ALIAS>( outBuffer );
         const float *RESTRICT_ALIAS updateDataStart = updateData;
 
@@ -374,6 +424,13 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void IrradianceField::setIrradianceFieldGenParams()
     {
+        if( mSettings.isRaster() )
+        {
+            // Avoid Valgrind from complaining when we copy the whole struct to GPU for the integrator
+            memset( &mIfGenParams, 0, sizeof( mIfGenParams ) );
+            return;
+        }
+
         const uint32 numRaysPerPixel = mSettings.mNumRaysPerPixel;
         const uint32 depthProbeRes = mSettings.mDepthProbeResolution;
         const uint32 irradProbeRes = mSettings.mIrradianceResolution;
@@ -403,7 +460,7 @@ namespace Ogre
         const VctVoxelizer *voxelizer = mVctLighting->getVoxelizer();
         Matrix4 irrProbeToVctTransform;
         irrProbeToVctTransform.makeTransform(
-            ( voxelizer->getVoxelOrigin() - mFieldOrigin ) / voxelizer->getVoxelSize(),
+            ( mFieldOrigin - voxelizer->getVoxelOrigin() ) / voxelizer->getVoxelSize(),
             ( mFieldSize / voxelizer->getVoxelSize() ) / mSettings.getNumProbes3f(),
             Quaternion::IDENTITY );
         mIfGenParams.irrProbeToVctTransform = irrProbeToVctTransform;
@@ -415,6 +472,8 @@ namespace Ogre
         mGenerationJob->setProperty( "irrad_resolution", static_cast<int32>( irradProbeRes ) );
         mGenerationJob->setProperty( "num_irrad_pixels_per_probe",
                                      static_cast<int32>( irradProbeRes * irradProbeRes ) );
+        mGenerationJob->setProperty( "irrad_full_width",
+                                     static_cast<int32>( mIrradianceTex->getWidth() ) );
 
         mGenerationJob->setProperty( "depth_resolution", static_cast<int32>( depthProbeRes ) );
         mGenerationJob->setProperty( "depth_full_width",
@@ -427,19 +486,75 @@ namespace Ogre
         mGenerationJob->setProperty( "num_rays_per_depth_pixel", static_cast<int32>( numRaysPerPixel ) );
     }
     //-------------------------------------------------------------------------
+    void IrradianceField::setupBorderMirrorParams( uint32 borderedRes, uint32 fullWidth,
+                                                   ConstBufferPacked *ifdBorderMirrorParamsBuffer,
+                                                   HlmsComputeJob *job )
+    {
+        const uint32 totalNumProbes = mSettings.getTotalNumProbes();
+        IfdBorderMirrorParams mirrorParams;
+        memset( &mirrorParams, 0, sizeof( mirrorParams ) );
+        mirrorParams.probeBorderedRes = borderedRes;
+        mirrorParams.numPixelsInEdges = ( borderedRes - 2u ) * 2u;
+        mirrorParams.numTopBottomPixels = ( borderedRes - 2u );
+        mirrorParams.numGlobalThreadsForEdges = mirrorParams.numPixelsInEdges * totalNumProbes;
+        mirrorParams.maxThreadId = ( mirrorParams.numPixelsInEdges + 1u ) * totalNumProbes;
+
+        const uint32 threadsPerGroup = 128u;
+        const uint32 totalThreads =
+            (uint32)alignToNextMultiple( mirrorParams.maxThreadId, threadsPerGroup );
+        const uint32 numWorkGroups = totalThreads / threadsPerGroup;
+        const uint32 numThreadGroupsY = numWorkGroups / 65535u + 1u;
+        const uint32 numThreadGroupsX = numWorkGroups / numThreadGroupsY;
+
+        mirrorParams.threadsPerThreadRow = numThreadGroupsX;
+        ifdBorderMirrorParamsBuffer->upload( &mirrorParams, 0,
+                                             ifdBorderMirrorParamsBuffer->getTotalSizeBytes() );
+
+        job->setProperty( "full_width", static_cast<int32>( fullWidth ) );
+        job->setConstBuffer( 0, ifdBorderMirrorParamsBuffer );
+
+        job->setThreadsPerGroup( 128u, 1u, 1u );
+        job->setNumThreadGroups( numThreadGroupsX, numThreadGroupsY, 1u );
+    }
+    //-------------------------------------------------------------------------
     void IrradianceField::initialize( const IrradianceFieldSettings &settings,
                                       const Vector3 &fieldOrigin, const Vector3 &fieldSize,
                                       VctLighting *vctLighting )
     {
         mSettings = settings;
         mSettings.createSubsamples();
-        mVctLighting = vctLighting;
+
+        OGRE_ASSERT_LOW( ( vctLighting || mSettings.isRaster() ) &&
+                         "vctLighting param must be provided when not using rasterization" );
+        if( !mSettings.isRaster() )
+            mVctLighting = vctLighting;
+        else
+            mVctLighting = 0;
         mFieldOrigin = fieldOrigin;
         mFieldSize = fieldSize;
+
+        // Enlarge our bounds because at the borders we have
+        // limited information thus there's often a hard line
+        Vector3 probeBlockSize = mFieldSize / mSettings.getNumProbes3f();
+        mFieldOrigin -= probeBlockSize;
+        mFieldSize += probeBlockSize * 2.0f;
+
         mAlreadyWarned = false;
         mNumProbesProcessed = 0u;
         createTextures();
         setIrradianceFieldGenParams();
+
+        if( mSettings.isRaster() )
+        {
+            if( !mIfRaster )
+                mIfRaster = OGRE_NEW IrradianceFieldRaster( this );
+            mIfRaster->createWorkspace();
+        }
+        else
+        {
+            delete mIfRaster;
+            mIfRaster = 0;
+        }
     }
     //-------------------------------------------------------------------------
     void IrradianceField::createTextures( void )
@@ -468,15 +583,7 @@ namespace Ogre
         mIrradianceTex->scheduleTransitionTo( GpuResidency::Resident );
         mDepthVarianceTex->scheduleTransitionTo( GpuResidency::Resident );
 
-        const size_t updateDataSize = sizeof( float ) * 4u * mSettings.mNumRaysPerPixel *
-                                      mSettings.mDepthProbeResolution * mSettings.mDepthProbeResolution;
-        float *directionsBuffer =
-            reinterpret_cast<float *>( OGRE_MALLOC_SIMD( updateDataSize, MEMCATEGORY_GEOMETRY ) );
-        FreeOnDestructor dataPtr( directionsBuffer );
-        fillDirections( directionsBuffer );
         VaoManager *vaoManager = textureManager->getVaoManager();
-        mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize, BT_DEFAULT,
-                                                         directionsBuffer, false );
 
         mDepthTapsIntegrationBuffer = setupIntegrationTaps(
             vaoManager, mSettings.mDepthProbeResolution, depthWidth, mDepthIntegrationJob,
@@ -484,6 +591,35 @@ namespace Ogre
         mColourTapsIntegrationBuffer = setupIntegrationTaps(
             vaoManager, mSettings.mIrradianceResolution, irradWidth, mColourIntegrationJob,
             mIfGenParamsBuffer, mColourMaxIntegrationTapsPerPixel );
+
+        setupBorderMirrorParams( mSettings.getBorderedDepthResolution(), mDepthVarianceTex->getWidth(),
+                                 mIfdDepthBorderMirrorParamsBuffer, mDepthMirrorBorderJob );
+        setupBorderMirrorParams( mSettings.getBorderedIrradResolution(), mIrradianceTex->getWidth(),
+                                 mIfdColourBorderMirrorParamsBuffer, mColourMirrorBorderJob );
+
+        if( mDebugIfdProbeVisualizer )
+        {
+            setTextureToDebugVisualizer();
+            mDebugIfdProbeVisualizer->setVisible( true );
+
+            // Field AABB may have changed
+            SceneNode *sceneNode = mDebugIfdProbeVisualizer->getParentSceneNode();
+            sceneNode->setPosition( mFieldOrigin );
+            sceneNode->setScale( mFieldSize / mSettings.getNumProbes3f() );
+            sceneNode->getCreator()->notifyStaticDirty( sceneNode );
+        }
+
+        if( !mVctLighting )
+            return;
+
+        const size_t updateDataSize = sizeof( float ) * 4u * mSettings.mNumRaysPerPixel *
+                                      mSettings.mDepthProbeResolution * mSettings.mDepthProbeResolution;
+        float *directionsBuffer =
+            reinterpret_cast<float *>( OGRE_MALLOC_SIMD( updateDataSize, MEMCATEGORY_GEOMETRY ) );
+        FreeOnDestructor dataPtr( directionsBuffer );
+        fillDirections( directionsBuffer );
+        mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize, BT_DEFAULT,
+                                                         directionsBuffer, false );
 
         mGenerationJob->setConstBuffer( 0, mIfGenParamsBuffer );
 
@@ -513,6 +649,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void IrradianceField::destroyTextures( void )
     {
+        if( mDebugIfdProbeVisualizer )
+            mDebugIfdProbeVisualizer->setVisible( false );
+
         TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
 
         if( mGenerationWorkspace )
@@ -549,6 +688,8 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void IrradianceField::reset() { mNumProbesProcessed = 0u; }
+    //-------------------------------------------------------------------------
     void IrradianceField::update( uint32 probesPerFrame )
     {
         const uint32 totalNumProbes = mSettings.getTotalNumProbes();
@@ -579,7 +720,7 @@ namespace Ogre
 
         const uint32 numRays = probesPerFrame * depthResolution * depthResolution * numRaysPerPixel;
 
-        OGRE_ASSERT_LOW( ( numRays % threadsPerGroup ) == 0u );
+        OGRE_ASSERT_LOW( ( numRays % threadsPerGroup ) == 0u || mSettings.isRaster() );
 
         const uint32 numWorkGroups = numRays / threadsPerGroup;
 
@@ -604,9 +745,16 @@ namespace Ogre
 
         mIfGenParamsBuffer->unmap( UO_KEEP_PERSISTENT );
 
-        mGenerationWorkspace->_beginUpdate( false );
-        mGenerationWorkspace->_update();
-        mGenerationWorkspace->_endUpdate( false );
+        if( !mSettings.isRaster() )
+        {
+            mGenerationWorkspace->_beginUpdate( false );
+            mGenerationWorkspace->_update();
+            mGenerationWorkspace->_endUpdate( false );
+        }
+        else
+        {
+            mIfRaster->renderProbes( probesPerFrame );
+        }
 
         mNumProbesProcessed += probesPerFrame;
     }
@@ -627,20 +775,27 @@ namespace Ogre
             float padding0;
             float padding1;
 
-            float depthResolution;
+            float depthBorderedRes;
             float depthFullWidth;
             float2 depthInvFullResolution;
+
+            float irradBorderedRes;
+            float irradFullWidth;
+            float2 irradInvFullResolution;
         };
 
         Vector3 numProbes( mSettings.mNumProbes[0], mSettings.mNumProbes[1], mSettings.mNumProbes[2] );
         const Vector3 finalSize = numProbes / mFieldSize;
 
         Matrix4 xform;
-        xform.makeTransform( -mFieldOrigin * finalSize - 0.5f, finalSize, Quaternion::IDENTITY );
+        xform.makeTransform( -mFieldOrigin * finalSize, finalSize, Quaternion::IDENTITY );
         xform = xform.concatenateAffine( viewMatrix.inverseAffine() );
 
         const float fDepthFullWidth = static_cast<float>( mDepthVarianceTex->getWidth() );
         const float fDepthFullHeight = static_cast<float>( mDepthVarianceTex->getHeight() );
+
+        const float fIrradFullWidth = static_cast<float>( mIrradianceTex->getWidth() );
+        const float fIrradFullHeight = static_cast<float>( mIrradianceTex->getHeight() );
 
         IrradianceFieldRenderParams *RESTRICT_ALIAS renderParams =
             reinterpret_cast<IrradianceFieldRenderParams * RESTRICT_ALIAS>( passBufferPtr );
@@ -651,9 +806,68 @@ namespace Ogre
         renderParams->padding0 = 0;
         renderParams->padding1 = 0;
 
-        renderParams->depthResolution = static_cast<float>( mSettings.mDepthProbeResolution );
+        renderParams->depthBorderedRes = static_cast<float>( mSettings.getBorderedDepthResolution() );
         renderParams->depthFullWidth = fDepthFullWidth;
         renderParams->depthInvFullResolution.x = 1.0f / fDepthFullWidth;
         renderParams->depthInvFullResolution.y = 1.0f / fDepthFullHeight;
+
+        renderParams->irradBorderedRes = static_cast<float>( mSettings.getBorderedIrradResolution() );
+        renderParams->irradFullWidth = fIrradFullWidth;
+        renderParams->irradInvFullResolution.x = 1.0f / fIrradFullWidth;
+        renderParams->irradInvFullResolution.y = 1.0f / fIrradFullHeight;
+    }
+    //-------------------------------------------------------------------------
+    void IrradianceField::setDebugVisualization( DebugVisualizationMode mode, SceneManager *sceneManager,
+                                                 uint8 tessellation )
+    {
+        if( mDebugIfdProbeVisualizer )
+        {
+            SceneNode *sceneNode = mDebugIfdProbeVisualizer->getParentSceneNode();
+            sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
+            OGRE_DELETE mDebugIfdProbeVisualizer;
+            mDebugIfdProbeVisualizer = 0;
+        }
+
+        mDebugVisualizationMode = mode;
+        mDebugTessellation = tessellation;
+
+        if( mode != DebugVisualizationNone )
+        {
+            SceneNode *rootNode = sceneManager->getRootSceneNode( SCENE_STATIC );
+            SceneNode *visNode = rootNode->createChildSceneNode( SCENE_STATIC );
+
+            mDebugIfdProbeVisualizer = OGRE_NEW IfdProbeVisualizer(
+                Ogre::Id::generateNewId<Ogre::MovableObject>(),
+                &sceneManager->_getEntityMemoryManager( SCENE_STATIC ), sceneManager, 0u );
+
+            setTextureToDebugVisualizer();
+
+            visNode->setPosition( mFieldOrigin );
+            visNode->setScale( mFieldSize / mSettings.getNumProbes3f() );
+            visNode->attachObject( mDebugIfdProbeVisualizer );
+        }
+    }
+    //-------------------------------------------------------------------------
+    bool IrradianceField::getDebugVisualizationMode( void ) const { return mDebugVisualizationMode; }
+    //-------------------------------------------------------------------------
+    uint8 IrradianceField::getDebugTessellation( void ) const { return mDebugTessellation; }
+    //-------------------------------------------------------------------------
+    void IrradianceField::setTextureToDebugVisualizer( void )
+    {
+        TextureGpu *trackedTex =
+            mDebugVisualizationMode == DebugVisualizationColour ? mIrradianceTex : mDepthVarianceTex;
+        const uint8 borderedRes = mDebugVisualizationMode == DebugVisualizationColour
+                                      ? mSettings.getBorderedIrradResolution()
+                                      : mSettings.getBorderedDepthResolution();
+        Vector2 rangeMult( 1.0f );
+        if( mDebugVisualizationMode == DebugVisualizationDepth )
+        {
+            // TODO: Find something better than a hardcoded 500
+            rangeMult.x = 500.0f;
+            rangeMult.y = rangeMult.x * rangeMult.x;
+        }
+        rangeMult = 2.0f / rangeMult;
+        mDebugIfdProbeVisualizer->setTrackingIfd( mSettings, mFieldSize, borderedRes, trackedTex,
+                                                  rangeMult, mDebugTessellation );
     }
 }  // namespace Ogre

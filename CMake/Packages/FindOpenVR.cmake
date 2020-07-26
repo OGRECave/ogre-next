@@ -35,9 +35,15 @@ clear_if_changed(OpenVR_PREFIX_PATH
 )
 
 set(OpenVR_LIBRARY_NAMES openvr_api)
-set(OpenVR_BINARY_NAMES openvr_api)
 set(OpenVR_LIBRARY_NAMES_DBG ${OpenVR_LIBRARY_NAMES})
-set(OpenVR_BINARY_NAMES_DBG ${OpenVR_BINARY_NAMES})
+
+if(WIN32)
+	set(OpenVR_BINARY_NAMES openvr_api.dll)
+	set(OpenVR_BINARY_NAMES_DBG ${OpenVR_BINARY_NAMES})
+else()
+	set(OpenVR_BINARY_NAMES openvr_api)
+	set(OpenVR_BINARY_NAMES_DBG ${OpenVR_BINARY_NAMES})
+endif()
 
 use_pkgconfig(OpenVR_PKGC OpenVR)
 
@@ -48,8 +54,20 @@ find_library(OpenVR_LIBRARY_REL NAMES ${OpenVR_LIBRARY_NAMES} HINTS ${OpenVR_LIB
 find_library(OpenVR_LIBRARY_DBG NAMES ${OpenVR_LIBRARY_NAMES_DBG} HINTS ${OpenVR_LIB_SEARCH_PATH} ${OpenVR_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" debug)
 make_library_set(OpenVR_LIBRARY)
 
-find_library(OpenVR_BINARY_REL NAMES ${OpenVR_BINARY_NAMES} HINTS ${OpenVR_LIB_SEARCH_PATH} ${OpenVR_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" release relwithdebinfo minsizerel)
-find_library(OpenVR_BINARY_DBG NAMES ${OpenVR_BINARY_NAMES_DBG} HINTS ${OpenVR_LIB_SEARCH_PATH} ${OpenVR_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" debug)
+if(WIN32)
+	set(OpenVR_BIN_SEARCH_PATH ${OGRE_DEPENDENCIES_DIR}/bin ${CMAKE_SOURCE_DIR}/Dependencies/bin ${OPENVR_HOME}/dll
+		${ENV_OPENVR_HOME}/dll ${ENV_OGRE_DEPENDENCIES_DIR}/bin
+		${OGRE_SOURCE}/Dependencies/bin ${ENV_OGRE_SOURCE}/Dependencies/bin
+		${OGRE_SDK}/bin ${ENV_OGRE_SDK}/bin
+		${OGRE_HOME}/bin ${ENV_OGRE_HOME}/bin)
+
+	find_file(OpenVR_BINARY_REL NAMES ${OpenVR_BINARY_NAMES} HINTS ${OpenVR_BIN_SEARCH_PATH} ${OpenVR_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" release relwithdebinfo minsizerel)
+	find_file(OpenVR_BINARY_DBG NAMES ${OpenVR_BINARY_NAMES} HINTS ${OpenVR_BIN_SEARCH_PATH} ${OpenVR_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" debug)
+else()
+	find_library(OpenVR_BINARY_REL NAMES ${OpenVR_BINARY_NAMES} HINTS ${OpenVR_LIB_SEARCH_PATH} ${OpenVR_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" release relwithdebinfo minsizerel)
+	find_library(OpenVR_BINARY_DBG NAMES ${OpenVR_BINARY_NAMES_DBG} HINTS ${OpenVR_LIB_SEARCH_PATH} ${OpenVR_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" debug)
+endif()
+
 make_library_set(OpenVR_BINARY)
 
 findpkg_finish(OpenVR)

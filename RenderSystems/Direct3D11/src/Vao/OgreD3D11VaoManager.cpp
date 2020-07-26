@@ -83,7 +83,6 @@ namespace Ogre
         mVaoNames( 1 ),
         mDevice( device ),
         mDrawId( 0 ),
-        mSplicingHelperBuffer( 0 ),
         mD3D11RenderSystem( renderSystem )
     {
         mDefaultPoolSize[VERTEX_BUFFER][BT_IMMUTABLE]   = 64 * 1024 * 1024;
@@ -116,7 +115,7 @@ namespace Ogre
             }
         }
 
-        mFrameSyncVec.resize( mDynamicBufferMultiplier, 0 );
+        mFrameSyncVec.resize( mDynamicBufferMultiplier );
 
         //There's no way to query the API, grrr... but this
         //is the minimum supported by all known GPUs
@@ -132,6 +131,45 @@ namespace Ogre
         mSupportsPersistentMapping  = false;
         mSupportsIndirectBuffers    = _supportsIndirectBuffers;
 
+        _createD3DResources();
+    }
+    //-----------------------------------------------------------------------------------
+    D3D11VaoManager::~D3D11VaoManager()
+    {
+        {
+            //Destroy all buffers which don't have a pool
+            BufferPackedSet::const_iterator itor = mBuffers[BP_TYPE_CONST].begin();
+            BufferPackedSet::const_iterator end  = mBuffers[BP_TYPE_CONST].end();
+            while( itor != end )
+                destroyConstBufferImpl( static_cast<ConstBufferPacked*>( *itor++ ) );
+        }
+
+        destroyAllVertexArrayObjects();
+        deleteAllBuffers();
+
+        mSplicingHelperBuffer.Reset();
+
+        for( size_t i=0; i<NumInternalBufferTypes; ++i )
+        {
+            for( size_t j=0; j<BT_DYNAMIC_DEFAULT+1; ++j )
+            {
+                //Free pointers and collect the buffer names from all VBOs to use one API call
+                VboVec::iterator itor = mVbos[i][j].begin();
+                VboVec::iterator end  = mVbos[i][j].end();
+
+                while( itor != end )
+                {
+                    itor->vboName.Reset();
+                    delete itor->dynamicBuffer;
+                    itor->dynamicBuffer = 0;
+                    ++itor;
+                }
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11VaoManager::_createD3DResources()
+    {
         //4096u is a sensible default because most Hlms implementations need 16 bytes per
         //instance in a const buffer. HlmsBufferManager::mapNextConstBuffer purposedly clamps
         //its const buffers to 64kb, so that 64kb / 16 = 4096 and thus it can never exceed
@@ -148,43 +186,41 @@ namespace Ogre
         createDelayedImmutableBuffers(); //Ensure mDrawId gets allocated before we continue
     }
     //-----------------------------------------------------------------------------------
-    D3D11VaoManager::~D3D11VaoManager()
+    void D3D11VaoManager::_destroyD3DResources()
     {
+        destroyVertexBuffer(mDrawId);
+        mDrawId = 0;
+
+        for( D3D11SyncVec::iterator it = mFrameSyncVec.begin(), it_end = mFrameSyncVec.end(); it != it_end; ++it )
+            it->Reset();
+
+        _destroyAllDelayedBuffers();
+
+        for( size_t i = 0; i < 2; ++i )
         {
-            //Destroy all buffers which don't have a pool
-            BufferPackedSet::const_iterator itor = mBuffers[BP_TYPE_CONST].begin();
-            BufferPackedSet::const_iterator end  = mBuffers[BP_TYPE_CONST].end();
-            while( itor != end )
-                destroyConstBufferImpl( static_cast<ConstBufferPacked*>( *itor++ ) );
+            for(StagingBufferVec::iterator it = mZeroRefStagingBuffers[i].begin(), it_end = mZeroRefStagingBuffers[i].end(); it != it_end; ++it)
+                SAFE_DELETE(*it);
+
+            mZeroRefStagingBuffers[i].clear();
         }
 
-        destroyAllVertexArrayObjects();
-        deleteAllBuffers();
-
-        if( mSplicingHelperBuffer )
+        for( VaoVec::iterator it = mVaos.begin(), it_end = mVaos.end(); it != it_end; ++it )
         {
-            mSplicingHelperBuffer->Release();
-            mSplicingHelperBuffer = 0;
+            for (Vao::VertexBindingVec::iterator it2 = it->vertexBuffers.begin(), it2_end = it->vertexBuffers.end(); it2 != it2_end; ++it2)
+                it2->vertexBufferVbo.Reset();
+            it->indexBufferVbo.Reset();
+
+            for( size_t i = 0; i < 16; ++i )
+                it->sharedData->mVertexBuffers[i].Reset();
+            it->sharedData->mIndexBuffer.Reset();
         }
 
-        for( size_t i=0; i<2; ++i )
+        for( size_t i=0; i<NumInternalBufferTypes; ++i )
         {
-            StagingBufferVec::const_iterator itor = mRefedStagingBuffers[i].begin();
-            StagingBufferVec::const_iterator end  = mRefedStagingBuffers[i].end();
-
-            while( itor != end )
+            for( size_t j=0; j<BT_DYNAMIC_DEFAULT+1; ++j )
             {
-                static_cast<D3D11StagingBuffer*>(*itor)->getBufferName()->Release();
-                ++itor;
-            }
-
-            itor = mZeroRefStagingBuffers[i].begin();
-            end  = mZeroRefStagingBuffers[i].end();
-
-            while( itor != end )
-            {
-                static_cast<D3D11StagingBuffer*>(*itor)->getBufferName()->Release();
-                ++itor;
+                for( VboVec::iterator it = mVbos[i][j].begin(), it_end = mVbos[i][j].end(); it != it_end; ++it )
+                    it->vboName.Reset();
             }
         }
 
@@ -198,23 +234,12 @@ namespace Ogre
 
                 while( itor != end )
                 {
-                    if( itor->vboName )
-                        itor->vboName->Release();
+                    itor->vboName.Reset();
                     delete itor->dynamicBuffer;
                     itor->dynamicBuffer = 0;
                     ++itor;
                 }
             }
-        }
-
-        D3D11SyncVec::const_iterator itor = mFrameSyncVec.begin();
-        D3D11SyncVec::const_iterator end  = mFrameSyncVec.end();
-
-        while( itor != end )
-        {
-            if( *itor )
-                (*itor)->Release();
-            ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -350,8 +375,7 @@ namespace Ogre
                     if( vbo.freeBlocks.size() == 1u &&
                         vbo.sizeBytes == vbo.freeBlocks.back().size )
                     {
-                        if( vbo.vboName )
-                            vbo.vboName->Release();
+                        vbo.vboName.Reset();
                         delete vbo.dynamicBuffer;
                         vbo.dynamicBuffer = 0;
 
@@ -459,7 +483,7 @@ namespace Ogre
             else
                 desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
-            HRESULT hr = d3dDevice->CreateBuffer( &desc, 0, &newVbo.vboName );
+            HRESULT hr = d3dDevice->CreateBuffer( &desc, 0, newVbo.vboName.GetAddressOf() );
 
             if( FAILED( hr ) )
             {
@@ -478,7 +502,7 @@ namespace Ogre
 
             if( bufferType >= BT_DYNAMIC_DEFAULT )
             {
-                newVbo.dynamicBuffer = new D3D11DynamicBuffer( newVbo.vboName, newVbo.sizeBytes,
+                newVbo.dynamicBuffer = new D3D11DynamicBuffer( newVbo.vboName.Get(), newVbo.sizeBytes,
                                                                mDevice );
             }
 
@@ -513,6 +537,9 @@ namespace Ogre
     void D3D11VaoManager::deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
                                          BufferType bufferType, InternalBufferType internalType )
     {
+        if( vboIdx == 0xFFFFFFFF )
+            return;
+
         if (bufferType >= BT_DYNAMIC_DEFAULT)
         {
             bufferType = BT_DYNAMIC_DEFAULT; //Persitent mapping not supported in D3D11.
@@ -542,11 +569,10 @@ namespace Ogre
             //The vbo is not removed from mVbos since that would alter the index of other
             //buffers (except if this is the last one).
             //We can call switchVboPoolIndex, but that has unknown run time
-            vbo.vboName->Release();
-            vbo.vboName = 0;
+            vbo.vboName.Reset();
 
             while( !mVbos[internalType][bufferType].empty() &&
-                   mVbos[internalType][bufferType].back().vboName == 0 )
+                   mVbos[internalType][bufferType].back().vboName.Get() == 0 )
             {
                 mVbos[internalType][bufferType].pop_back();
             }
@@ -578,7 +604,7 @@ namespace Ogre
         ZeroMemory( &subResData, sizeof(D3D11_SUBRESOURCE_DATA) );
         subResData.pSysMem = initialData;
 
-        HRESULT hr = d3dDevice->CreateBuffer( &desc, &subResData, &inOutVbo.vboName );
+        HRESULT hr = d3dDevice->CreateBuffer( &desc, &subResData, inOutVbo.vboName.GetAddressOf() );
 
         if( FAILED( hr ) )
         {
@@ -672,7 +698,7 @@ namespace Ogre
             if( vboFlag >= BT_DYNAMIC_DEFAULT )
                 vboFlag = BT_DYNAMIC_DEFAULT;
             Vbo &vbo = mVbos[VERTEX_BUFFER][vboFlag][vboIdx];
-            vboName         = vbo.vboName;
+            vboName         = vbo.vboName.Get();
             dynamicBuffer   = vbo.dynamicBuffer;
         }
 
@@ -836,7 +862,7 @@ namespace Ogre
                                        mergedData, newVbo );
 
                 const size_t vboIdx = mVbos[i][BT_IMMUTABLE].size() - 1;
-                ID3D11Buffer *vboName = newVbo.vboName;
+                ID3D11Buffer *vboName = newVbo.vboName.Get();
                 dstOffset = 0;
 
                 //Each buffer needs to be told about its new D3D11 object
@@ -986,7 +1012,7 @@ namespace Ogre
             if( vboFlag >= BT_DYNAMIC_DEFAULT )
                 vboFlag = BT_DYNAMIC_DEFAULT;
             Vbo &vbo = mVbos[INDEX_BUFFER][vboFlag][vboIdx];
-            vboName         = vbo.vboName;
+            vboName         = vbo.vboName.Get();
             dynamicBuffer   = vbo.dynamicBuffer;
         }
 
@@ -1059,9 +1085,9 @@ namespace Ogre
         D3D11_SUBRESOURCE_DATA subResData;
         ZeroMemory( &subResData, sizeof(D3D11_SUBRESOURCE_DATA) );
         subResData.pSysMem = initialData;
-        ID3D11Buffer *vboName = 0;
+        ComPtr<ID3D11Buffer> vboName;
 
-        HRESULT hr = d3dDevice->CreateBuffer( &desc, initialData ? &subResData : 0, &vboName );
+        HRESULT hr = d3dDevice->CreateBuffer( &desc, initialData ? &subResData : 0, vboName.GetAddressOf() );
 
         if( FAILED( hr ) )
         {
@@ -1074,7 +1100,7 @@ namespace Ogre
                          "D3D11VaoManager::createShaderBufferInterface" );
         }
 
-        return new D3D11CompatBufferInterface( 0, vboName, mDevice );
+        return new D3D11CompatBufferInterface( 0, vboName.Get(), mDevice );
     }
     //-----------------------------------------------------------------------------------
     ConstBufferPacked* D3D11VaoManager::createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
@@ -1101,7 +1127,7 @@ namespace Ogre
         D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
                                                                 constBuffer->getBufferInterface() );
 
-        bufferInterface->getVboName()->Release();
+        //bufferInterface->getVboNamePtr().Reset();
     }
     //-----------------------------------------------------------------------------------
     TexBufferPacked* D3D11VaoManager::createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
@@ -1128,16 +1154,23 @@ namespace Ogre
         if( mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
         {
             //D3D11.1 supports NO_OVERWRITE on shader buffers, use the common pool
-            size_t vboIdx;
+            size_t vboIdx = 0;
 
             BufferType vboFlag = bufferType;
             if( vboFlag >= BT_DYNAMIC_DEFAULT )
                 vboFlag = BT_DYNAMIC_DEFAULT;
 
-            allocateVbo( sizeBytes, alignment, bufferType, SHADER_BUFFER, vboIdx, bufferOffset );
+            if( bufferType == BT_IMMUTABLE )
+            {
+				bufferInterface = new D3D11BufferInterface( vboIdx, 0, 0 );
+            }
+            else
+            {
+				allocateVbo( sizeBytes, alignment, bufferType, SHADER_BUFFER, vboIdx, bufferOffset );
 
-            Vbo &vbo = mVbos[SHADER_BUFFER][vboFlag][vboIdx];
-            bufferInterface = new D3D11BufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
+				Vbo &vbo = mVbos[SHADER_BUFFER][vboFlag][vboIdx];
+				bufferInterface = new D3D11BufferInterface( vboIdx, vbo.vboName.Get(), vbo.dynamicBuffer );
+            }
         }
         else
         {
@@ -1191,7 +1224,7 @@ namespace Ogre
             D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
                                                                     texBuffer->getBufferInterface() );
 
-            bufferInterface->getVboName()->Release();
+            //bufferInterface->getVboNamePtr().Reset();
         }
     }
     //-----------------------------------------------------------------------------------
@@ -1221,7 +1254,7 @@ namespace Ogre
         D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
                                                                 uavBuffer->getBufferInterface() );
 
-        bufferInterface->getVboName()->Release();
+        //bufferInterface->getVboNamePtr().Reset();
     }
     //-----------------------------------------------------------------------------------
     IndirectBufferPacked* D3D11VaoManager::createIndirectBufferImpl( size_t sizeBytes,
@@ -1255,7 +1288,7 @@ namespace Ogre
             allocateVbo( sizeBytes, alignment, bufferType, SHADER_BUFFER, vboIdx, bufferOffset );
 
             Vbo &vbo = mVbos[SHADER_BUFFER][vboFlag][vboIdx];
-            bufferInterface = new D3D11BufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
+            bufferInterface = new D3D11BufferInterface( vboIdx, vbo.vboName.Get(), vbo.dynamicBuffer );
         }
 
         IndirectBufferPacked *retVal = OGRE_NEW IndirectBufferPacked(
@@ -1577,8 +1610,8 @@ namespace Ogre
             desc.Usage          = D3D11_USAGE_STAGING;
         }
 
-        ID3D11Buffer *bufferName = 0;
-        HRESULT hr = d3dDevice->CreateBuffer( &desc, 0, &bufferName );
+        ComPtr<ID3D11Buffer> bufferName;
+        HRESULT hr = d3dDevice->CreateBuffer( &desc, 0, bufferName.GetAddressOf() );
 
         if( FAILED( hr ) )
         {
@@ -1593,7 +1626,7 @@ namespace Ogre
         }
 
         D3D11StagingBuffer *stagingBuffer = OGRE_NEW D3D11StagingBuffer( sizeBytes, this,
-                                                                         forUpload, bufferName,
+                                                                         forUpload, bufferName.Get(),
                                                                          mDevice );
         mRefedStagingBuffers[forUpload].push_back( stagingBuffer );
 
@@ -1625,7 +1658,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11VaoManager::_update(void)
     {
-        unsigned long currentTimeMs = mTimer->getMilliseconds();
+        uint64 currentTimeMs = mTimer->getMilliseconds();
 
         if( currentTimeMs >= mNextStagingBufferTimestampCheckpoint )
         {
@@ -1643,14 +1676,12 @@ namespace Ogre
                     StagingBuffer *stagingBuffer = *itor;
 
                     mNextStagingBufferTimestampCheckpoint = std::min(
-                        mNextStagingBufferTimestampCheckpoint, 
+                        mNextStagingBufferTimestampCheckpoint,
                         stagingBuffer->getLastUsedTimestamp() + stagingBuffer->getLifetimeThreshold() );
 
                     if( stagingBuffer->getLastUsedTimestamp() + stagingBuffer->getLifetimeThreshold() < currentTimeMs )
                     {
                         //Time to delete this buffer.
-                        static_cast<D3D11StagingBuffer*>(stagingBuffer)->getBufferName()->Release();
-
                         delete *itor;
 
                         itor = efficientVectorRemove( mZeroRefStagingBuffers[i], itor );
@@ -1675,12 +1706,7 @@ namespace Ogre
 
         waitForTailFrameToFinish();
 
-        if( mFrameSyncVec[mDynamicBufferCurrentFrame] )
-        {
-            mFrameSyncVec[mDynamicBufferCurrentFrame]->Release();
-            mFrameSyncVec[mDynamicBufferCurrentFrame] = 0;
-        }
-
+        mFrameSyncVec[mDynamicBufferCurrentFrame].Reset();
         mFrameSyncVec[mDynamicBufferCurrentFrame] = createFence();
         mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
     }
@@ -1697,7 +1723,7 @@ namespace Ogre
             desc.CPUAccessFlags = 0;
             desc.Usage          = D3D11_USAGE_DEFAULT;
 
-            HRESULT hr = mDevice.get()->CreateBuffer( &desc, 0, &mSplicingHelperBuffer );
+            HRESULT hr = mDevice.get()->CreateBuffer( &desc, 0, mSplicingHelperBuffer.GetAddressOf() );
             if( FAILED( hr ) )
             {
                 OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
@@ -1705,17 +1731,17 @@ namespace Ogre
                                 "D3D11VaoManager::getSplicingHelperBuffer" );
             }
         }
-        return mSplicingHelperBuffer;
+        return mSplicingHelperBuffer.Get();
     }
     //-----------------------------------------------------------------------------------
-    ID3D11Query* D3D11VaoManager::createFence( D3D11Device &device )
+    ComPtr<ID3D11Query> D3D11VaoManager::createFence( D3D11Device &device )
     {
-        ID3D11Query *retVal = 0;
+        ComPtr<ID3D11Query> retVal;
 
         D3D11_QUERY_DESC queryDesc;
         queryDesc.Query     = D3D11_QUERY_EVENT;
         queryDesc.MiscFlags = 0;
-        HRESULT hr = device.get()->CreateQuery( &queryDesc, &retVal );
+        HRESULT hr = device.get()->CreateQuery( &queryDesc, retVal.GetAddressOf() );
 
         if( FAILED( hr ) )
         {
@@ -1728,12 +1754,12 @@ namespace Ogre
         }
 
         // Insert the fence into D3D's commands
-        device.GetImmediateContext()->End( retVal );
+        device.GetImmediateContext()->End( retVal.Get() );
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11Query* D3D11VaoManager::createFence(void)
+    ComPtr<ID3D11Query> D3D11VaoManager::createFence(void)
     {
         return D3D11VaoManager::createFence( mDevice );
     }
@@ -1742,9 +1768,8 @@ namespace Ogre
     {
         if( mFrameSyncVec[mDynamicBufferCurrentFrame] )
         {
-            waitFor( mFrameSyncVec[mDynamicBufferCurrentFrame] );
-            mFrameSyncVec[mDynamicBufferCurrentFrame]->Release();
-            mFrameSyncVec[mDynamicBufferCurrentFrame] = 0;
+            waitFor( mFrameSyncVec[mDynamicBufferCurrentFrame].Get() );
+            mFrameSyncVec[mDynamicBufferCurrentFrame].Reset();
         }
 
         return mDynamicBufferCurrentFrame;
@@ -1755,10 +1780,9 @@ namespace Ogre
         if( frameCount == mFrameCount )
         {
             //Full stall
-            ID3D11Query *fence = createFence();
-            waitFor( fence );
-            fence->Release();
-            fence = 0;
+            ComPtr<ID3D11Query> fence = createFence();
+            waitFor( fence.Get() );
+            fence.Reset();
 
             //All of the other per-frame fences are not needed anymore.
             D3D11SyncVec::iterator itor = mFrameSyncVec.begin();
@@ -1766,11 +1790,7 @@ namespace Ogre
 
             while( itor != end )
             {
-                if( *itor )
-                {
-                    (*itor)->Release();
-                    *itor = 0;
-                }
+                itor->Reset();
                 ++itor;
             }
 
@@ -1786,19 +1806,14 @@ namespace Ogre
                                 mDynamicBufferMultiplier - frameDiff) % mDynamicBufferMultiplier;
             if( mFrameSyncVec[idx] )
             {
-                waitFor( mFrameSyncVec[idx] );
-                mFrameSyncVec[idx]->Release();
-                mFrameSyncVec[idx] = 0;
+                waitFor( mFrameSyncVec[idx].Get() );
+                mFrameSyncVec[idx].Reset();
 
                 //Delete all the fences until this frame we've just waited.
                 size_t nextIdx = mDynamicBufferCurrentFrame;
                 while( nextIdx != idx )
                 {
-                    if( mFrameSyncVec[nextIdx] )
-                    {
-                        mFrameSyncVec[nextIdx]->Release();
-                        mFrameSyncVec[nextIdx] = 0;
-                    }
+                    mFrameSyncVec[nextIdx].Reset();
                     nextIdx = (nextIdx + 1u) % mDynamicBufferMultiplier;
                 }
             }
@@ -1826,7 +1841,7 @@ namespace Ogre
 
             if( mFrameSyncVec[idx] )
             {
-                HRESULT hr = mDevice.GetImmediateContext()->GetData( mFrameSyncVec[idx], NULL, 0, 0 );
+                HRESULT hr = mDevice.GetImmediateContext()->GetData( mFrameSyncVec[idx].Get(), NULL, 0, 0 );
 
                 if( FAILED( hr ) )
                 {
@@ -1841,18 +1856,13 @@ namespace Ogre
 
                 if( retVal )
                 {
-                    mFrameSyncVec[idx]->Release();
-                    mFrameSyncVec[idx] = 0;
+                    mFrameSyncVec[idx].Reset();
 
                     //Delete all the fences until this frame we've just waited.
                     size_t nextIdx = mDynamicBufferCurrentFrame;
                     while( nextIdx != idx )
                     {
-                        if( mFrameSyncVec[nextIdx] )
-                        {
-                            mFrameSyncVec[nextIdx]->Release();
-                            mFrameSyncVec[nextIdx] = 0;
-                        }
+                        mFrameSyncVec[nextIdx].Reset();
                         nextIdx = (nextIdx + 1u) % mDynamicBufferMultiplier;
                     }
                 }

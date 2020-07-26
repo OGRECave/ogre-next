@@ -29,6 +29,9 @@ THE SOFTWARE.
 #define __ParticleIterator_H__
 
 #include "OgrePrerequisites.h"
+
+#include "ogrestd/list.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {

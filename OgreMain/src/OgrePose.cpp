@@ -134,8 +134,8 @@ namespace v1 {
             mBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
                 vertexSize, numVertices, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
-            float* pFloat = static_cast<float*>(
-                mBuffer->lock(HardwareBuffer::HBL_DISCARD));
+            HardwareBufferLockGuard bufLock(mBuffer, HardwareBuffer::HBL_DISCARD);
+            float* pFloat = static_cast<float*>(bufLock.pData);
             // initialise - these will be the values used where no pose vertex is included
             memset(pFloat, 0, mBuffer->getSizeInBytes()); 
             if (normals)
@@ -149,10 +149,10 @@ namespace v1 {
                 
                 const HardwareVertexBufferSharedPtr& origBuffer = 
                     origData->vertexBufferBinding->getBuffer(origNormElem->getSource());
+                HardwareBufferLockGuard origBufLock(origBuffer, HardwareBuffer::HBL_READ_ONLY);
                 float* pDst = pFloat + 3;
-                void* pSrcBase = origBuffer->lock(HardwareBuffer::HBL_READ_ONLY);
                 float* pSrc;
-                origNormElem->baseVertexPointerToElement(pSrcBase, &pSrc);
+                origNormElem->baseVertexPointerToElement(origBufLock.pData, &pSrc);
                 for (size_t v = 0; v < numVertices; ++v)
                 {
                     memcpy(pDst, pSrc, sizeof(float)*3);
@@ -160,9 +160,6 @@ namespace v1 {
                     pDst += 6;
                     pSrc = (float*)(((char*)pSrc) + origBuffer->getVertexSize());
                 }
-                origBuffer->unlock();
-                
-                
             }
             // Set each vertex
             VertexOffsetMap::const_iterator v = mVertexOffsetMap.begin();
@@ -188,7 +185,6 @@ namespace v1 {
                 }
                 
             }
-            mBuffer->unlock();
         }
         return mBuffer;
     }

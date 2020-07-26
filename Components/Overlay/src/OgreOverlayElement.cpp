@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreMaterialManager.h"
 #include "OgreOverlayContainer.h"
+#include "OgreRenderQueue.h"
 
 namespace Ogre {
 namespace v1 {

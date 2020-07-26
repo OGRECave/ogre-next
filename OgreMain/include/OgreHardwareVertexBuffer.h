@@ -35,6 +35,9 @@ THE SOFTWARE.
 #include "OgreColourValue.h"
 #include "OgreHlmsPso.h"
 #include "Vao/OgreVertexBufferPacked.h"
+
+#include "ogrestd/list.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {

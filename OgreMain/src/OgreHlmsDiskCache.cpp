@@ -40,7 +40,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    static const uint16 c_hlmsDiskCacheVersion = 0u;
+    static const uint16 c_hlmsDiskCacheVersion = 1u;
 
     HlmsDiskCache::HlmsDiskCache( HlmsManager *hlmsManager ) :
         mTemplatesOutOfDate( false ),
@@ -387,7 +387,7 @@ namespace Ogre
 
                 write( dataStream, itor->blendblock.mAlphaToCoverageEnabled );
                 write( dataStream, itor->blendblock.mBlendChannelMask );
-//                write( dataStream, itor->blendblock.mIsTransparent );
+                write<uint8>( dataStream, itor->blendblock.mIsTransparent & 0x02u );
                 write( dataStream, itor->blendblock.mSeparateBlend );
                 write( dataStream, itor->blendblock.mSourceBlendFactor );
                 write( dataStream, itor->blendblock.mDestBlendFactor );
@@ -572,7 +572,7 @@ namespace Ogre
 
                 read( dataStream, pso.blendblock.mAlphaToCoverageEnabled );
                 read( dataStream, pso.blendblock.mBlendChannelMask );
-    //          read( dataStream, pso.blendblock.mIsTransparent );
+                read( dataStream, pso.blendblock.mIsTransparent );
                 read( dataStream, pso.blendblock.mSeparateBlend );
                 read( dataStream, pso.blendblock.mSourceBlendFactor );
                 read( dataStream, pso.blendblock.mDestBlendFactor );

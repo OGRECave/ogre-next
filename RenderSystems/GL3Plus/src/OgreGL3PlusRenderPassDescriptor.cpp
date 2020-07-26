@@ -236,7 +236,7 @@ namespace Ogre
 
                 if( mColour[i].allLayers || !hasLayers )
                 {
-                    if( texture->getMsaa() > 1u && (!texture->hasMsaaExplicitResolves() ||
+                    if( texture->isMultisample() && (!texture->hasMsaaExplicitResolves() ||
                                                     !texture->isTexture()) )
                     {
                         OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
@@ -252,7 +252,7 @@ namespace Ogre
                 }
                 else
                 {
-                    if( texture->getMsaa() > 1u && (!texture->hasMsaaExplicitResolves() ||
+                    if( texture->isMultisample() && (!texture->hasMsaaExplicitResolves() ||
                                                     !texture->isTexture()) )
                     {
                         OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
@@ -273,10 +273,11 @@ namespace Ogre
                                                mColour[i].texture->getWidth() ) );
                 OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT,
                                                mColour[i].texture->getHeight() ) );
-
-                OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES,
-                                               mColour[i].texture->getMsaa() > 1u ?
-                                                   mColour[i].texture->getMsaa() : 0 ) );
+                OCGE( glFramebufferParameteri(
+                    GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES,
+                    mColour[i].texture->isMultisample()
+                        ? mColour[i].texture->getSampleDescription().getColourSamples()
+                        : 0 ) );
             }
 
             if( (mColour[i].storeAction == StoreAction::MultisampleResolve ||
@@ -619,6 +620,8 @@ namespace Ogre
 
         bool unbindReadDrawFramebuffers = false;
 
+        GLenum invalidateTarget = GL_DRAW_FRAMEBUFFER;
+
         if( entriesToFlush & RenderPassDescriptor::Colour && !mHasRenderWindow )
         {
             for( size_t i=0; i<mNumColourEntries; ++i )
@@ -639,6 +642,8 @@ namespace Ogre
                                 mColour[i].resolveTexture->getTextureType();
                         const bool hasLayers = resolveTextureType != TextureTypes::Type1D &&
                                                resolveTextureType != TextureTypes::Type2D;
+
+                        invalidateTarget = GL_READ_FRAMEBUFFER;
 
                         // Blit from multisample buffer to final buffer, triggers resolve
                         OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, mFboName ) );
@@ -702,7 +707,7 @@ namespace Ogre
 
         if( numAttachments > 0 && hasArbInvalidateSubdata )
         {
-            OCGE( glInvalidateFramebuffer( GL_FRAMEBUFFER, numAttachments, attachments ) );
+            OCGE( glInvalidateFramebuffer( invalidateTarget, numAttachments, attachments ) );
         }
 
         if( unbindReadDrawFramebuffers )

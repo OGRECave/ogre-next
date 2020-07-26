@@ -100,6 +100,9 @@ endmacro()
 function(ogre_add_library TARGETNAME LIBTYPE)
   create_unity_build_files(${TARGETNAME} ${ARGN})
   add_library(${TARGETNAME} ${LIBTYPE} ${_SOURCES})
+  if(WINDOWS_STORE OR WINDOWS_PHONE)
+    set_target_properties(${TARGETNAME} PROPERTIES VS_WINRT_COMPONENT "true")
+  endif()
 endfunction(ogre_add_library)
 
 

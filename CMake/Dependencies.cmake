@@ -176,12 +176,6 @@ if( Remotery_LIBRARIES )
     endif()
 endif()
 
-# Find Cg
-if (NOT (OGRE_BUILD_PLATFORM_APPLE_IOS OR WINDOWS_STORE OR WINDOWS_PHONE OR ANDROID OR EMSCRIPTEN))
-  find_package(Cg)
-  macro_log_feature(Cg_FOUND "cg" "C for graphics shader language" "http://developer.nvidia.com/object/cg_toolkit.html" FALSE "" "")
-endif ()
-
 # Find Boost
 # Prefer static linking in all cases
 if (WIN32 OR APPLE)
@@ -269,18 +263,6 @@ endif()
 # Samples dependencies
 #######################################################################
 
-# Find OIS
-if (WINDOWS_STORE OR WINDOWS_PHONE)
-	# for WinRT we need only includes
-	set(OIS_FIND_QUIETLY TRUE)
-        find_package(OIS)
-	set(OIS_INCLUDE_DIRS ${OIS_INCLUDE_DIR})
-	macro_log_feature(OIS_INCLUDE_DIRS "OIS" "Input library needed for the samples" "http://sourceforge.net/projects/wgois" FALSE "" "")
-else ()
-	find_package(OIS)
-	macro_log_feature(OIS_FOUND "OIS" "Input library needed for the samples" "http://sourceforge.net/projects/wgois" FALSE "" "")
-endif ()
-
 # Find sdl2
 find_package(SDL2)
 macro_log_feature(SDL2_FOUND "SDL2" "Simple DirectMedia Library" "https://www.libsdl.org/" FALSE "" "")
@@ -332,8 +314,6 @@ include_directories(
   ${OPENGLES_INCLUDE_DIRS}
   ${OPENGLES2_INCLUDE_DIRS}
   ${OPENGLES3_INCLUDE_DIRS}
-  ${OIS_INCLUDE_DIRS}
-  ${Cg_INCLUDE_DIRS}
   ${X11_INCLUDE_DIR}
   ${DirectX_INCLUDE_DIRS}
   ${CppUnit_INCLUDE_DIRS}
@@ -346,7 +326,6 @@ link_directories(
   ${OPENGLES_LIBRARY_DIRS}
   ${OPENGLES2_LIBRARY_DIRS}
   ${OPENGLES3_LIBRARY_DIRS}
-  ${Cg_LIBRARY_DIRS}
   ${X11_LIBRARY_DIRS}
   ${DirectX_LIBRARY_DIRS}
   ${CppUnit_LIBRARY_DIRS}
@@ -356,6 +335,3 @@ if (Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
   link_directories(${Boost_LIBRARY_DIRS})
 endif ()
-
-# provide option to install dependencies on Windows
-include(InstallDependencies)

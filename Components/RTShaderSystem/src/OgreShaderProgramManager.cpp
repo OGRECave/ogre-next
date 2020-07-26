@@ -49,6 +49,7 @@ THE SOFTWARE.
 #include "OgreShaderGLSLESProgramProcessor.h"
 #include "OgreGpuProgramManager.h"
 
+#include <fstream>
 
 namespace Ogre {
 

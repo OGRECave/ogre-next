@@ -56,8 +56,10 @@ namespace Ogre {
         mCullFrustum(0),
         mUseRenderingDistance(true),
         mLodCamera(0),
+        mNeedsDepthClamp(false),
         mUseMinPixelSize(false),
-        mPixelDisplayRatio(0)
+        mPixelDisplayRatio(0),
+        mConstantBiasScale(1.0f)
     {
 
         // Reasonable defaults to camera params
@@ -190,7 +192,7 @@ namespace Ogre {
         }
 
         // transform to parent space
-        mOrientation = mParentNode->_getDerivedOrientationUpdated().Inverse() * targetWorldOrientation;
+        mOrientation = mParentNode->convertWorldToLocalOrientationUpdated(targetWorldOrientation);
 
         // TODO If we have a fixed yaw axis, we mustn't break it by using the
         // shortest arc because this will sometimes cause a relative yaw
@@ -311,8 +313,8 @@ namespace Ogre {
             // Ok, we're out of date with SceneNode we're attached to
             mLastParentOrientation = derivedOrient;
             mLastParentPosition = derivedPos;
-            mRealOrientation = mLastParentOrientation * mOrientation;
-            mRealPosition = (mLastParentOrientation * mPosition) + mLastParentPosition;
+            mRealOrientation = mParentNode->convertLocalToWorldOrientation(mOrientation);
+            mRealPosition = mParentNode->convertLocalToWorldPosition(mPosition);
             mRecalcView = true;
             mRecalcWindow = true;
         }
@@ -455,27 +457,15 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void Camera::_notifyRenderedFaces(unsigned int numfaces)
-    {
-        mVisFacesLastRender = numfaces;
-    }
+    void Camera::_notifyRenderedFaces( size_t numfaces ) { mVisFacesLastRender = numfaces; }
 
     //-----------------------------------------------------------------------
-    void Camera::_notifyRenderedBatches(unsigned int numbatches)
-    {
-        mVisBatchesLastRender = numbatches;
-    }
+    void Camera::_notifyRenderedBatches( size_t numbatches ) { mVisBatchesLastRender = numbatches; }
 
     //-----------------------------------------------------------------------
-    unsigned int Camera::_getNumRenderedFaces(void) const
-    {
-        return mVisFacesLastRender;
-    }
+    size_t Camera::_getNumRenderedFaces( void ) const { return mVisFacesLastRender; }
     //-----------------------------------------------------------------------
-    unsigned int Camera::_getNumRenderedBatches(void) const
-    {
-        return mVisBatchesLastRender;
-    }
+    size_t Camera::_getNumRenderedBatches( void ) const { return mVisBatchesLastRender; }
     //-----------------------------------------------------------------------
     const Quaternion& Camera::getOrientation(void) const
     {
@@ -806,22 +796,12 @@ namespace Ogre {
 
     }
     // -------------------------------------------------------------------
-    const vector<Plane>::type& Camera::getWindowPlanes(void) const
+    const PlaneList& Camera::getWindowPlanes(void) const
     {
         updateView();
         setWindowImpl();
         return mWindowClipPlanes;
     }
-    // -------------------------------------------------------------------
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-    Real Camera::getBoundingRadius(void) const
-    {
-        // return a little bigger than the near distance
-        // just to keep things just outside
-        return mNearDist * 1.5f;
-
-    }
-#endif
     //-----------------------------------------------------------------------
     const Vector3& Camera::getPositionForViewUpdate(void) const
     {
@@ -1142,6 +1122,11 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
+    void Camera::_setNeedsDepthClamp( bool bNeedsDepthClamp )
+    {
+        mNeedsDepthClamp = bNeedsDepthClamp;
+    }
+    //-----------------------------------------------------------------------
     void Camera::_resetRenderedRqs( size_t numRqs )
     {
         mRenderedRqs.clear();
@@ -1154,6 +1139,6 @@ namespace Ogre {
         for( size_t i=rqStart; i<rqEnd; ++i )
             mRenderedRqs[i] = true;
     }
-
-
+    //-----------------------------------------------------------------------
+    Camera::Listener::~Listener() {}
 } // namespace Ogre

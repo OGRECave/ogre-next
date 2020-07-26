@@ -74,21 +74,17 @@ namespace Ogre
             --mNumPassesLeft;
         }
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        notifyPassEarlyPreExecuteListeners();
 
         executeResourceTransitions();
 
         //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        notifyPassPreExecuteListeners();
 
         setRenderPassDescToCurrent();
 
         mRenderSystem->setStencilBufferParams( mDefinition->mStencilRef, mDefinition->mStencilParams );
 
-        if( listener )
-            listener->passPosExecute( this );
+        notifyPassPosExecuteListeners();
     }
 }

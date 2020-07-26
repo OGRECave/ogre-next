@@ -53,6 +53,8 @@ THE SOFTWARE.
         #define OGRE_HASH128_FUNC MurmurHash3_x64_128
 #endif
 
+#include <fstream>
+
 namespace Ogre
 {
     const IdString ComputeProperty::ThreadsPerGroupX    = IdString( "threads_per_group_x" );
@@ -197,6 +199,8 @@ namespace Ogre
             setProperty( HlmsBaseProp::GL3Plus,
                          mRenderSystem->getNativeShadingLanguageVersion() );
         }
+        if( mShaderProfile == "glsles" ) //TODO: String comparision
+            setProperty( HlmsBaseProp::GLES, 300 );
 
         setProperty( HlmsBaseProp::Syntax,  mShaderSyntax.mHash );
         setProperty( HlmsBaseProp::Hlsl,    HlmsBaseProp::Hlsl.mHash );
@@ -298,7 +302,7 @@ namespace Ogre
 
                 gp->setSkeletalAnimationIncluded( getProperty( HlmsBaseProp::Skeleton ) != 0 );
                 gp->setMorphAnimationIncluded( false );
-                gp->setPoseAnimationIncluded( getProperty( HlmsBaseProp::Pose ) );
+                gp->setPoseAnimationIncluded( getProperty( HlmsBaseProp::Pose ) != 0);
                 gp->setVertexTextureFetchRequired( false );
 
                 gp->load();
@@ -537,6 +541,8 @@ namespace Ogre
                                                    const String &sourceFilename,
                                                    const StringVector &includedPieceFiles )
     {
+        OGRE_ASSERT_MEDIUM( mComputeJobs.find( datablockName ) == mComputeJobs.end() );
+
         HlmsComputeJob *retVal = OGRE_NEW HlmsComputeJob( datablockName, this,
                                                           sourceFilename, includedPieceFiles );
         mComputeJobs[datablockName] = ComputeJobEntry( retVal, refName );

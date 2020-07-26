@@ -81,9 +81,9 @@ namespace Ogre
         static MTLStoreAction get( StoreAction::StoreAction action );
 
         void sanitizeMsaaResolve( size_t colourIdx );
-        virtual void updateColourRtv( uint8 lastNumColourEntries );
-        virtual void updateDepthRtv(void);
-        virtual void updateStencilRtv(void);
+        void updateColourRtv( uint8 lastNumColourEntries );
+        void updateDepthRtv(void);
+        void updateStencilRtv(void);
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
         /// if 'other' wants to perform clears on colour, depth and/or stencil values.

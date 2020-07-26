@@ -12,7 +12,7 @@ syntax: glob
 .DS_Store
 Dependencies/*
 iOSDependencies
-build/*
+build*/*
 SDK/OSX/sdk_contents
 SDK/iOS/sdk_contents
 Samples/Browser/WinRT/Debug
@@ -28,3 +28,4 @@ AndroidDependencies/
 Build/
 EmscriptenDependencies
 EmscriptenBuild
+.vscode

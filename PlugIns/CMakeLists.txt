@@ -9,16 +9,6 @@
 
 # Configure Plugins build
 
-if (OGRE_BUILD_PLUGIN_CG)
-  if (NOT Cg_FOUND)
-    message(STATUS "Could not find dependency: Cg")
-    message(STATUS "Skipping Plugin_CgProgramManager")
-    set(OGRE_BUILD_PLUGIN_CG 0)
-  else (NOT Cg_FOUND)
-    add_subdirectory(CgProgramManager)
-  endif (NOT Cg_FOUND)
-endif (OGRE_BUILD_PLUGIN_CG)
-
 if (OGRE_BUILD_PLUGIN_PFX)
   add_subdirectory(ParticleFX)
 endif (OGRE_BUILD_PLUGIN_PFX)

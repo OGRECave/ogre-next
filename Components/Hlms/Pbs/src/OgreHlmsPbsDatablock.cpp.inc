@@ -43,6 +43,8 @@ namespace Ogre
         datablockImpl->mWorkflow = mWorkflow;
         datablockImpl->mReceiveShadows = mReceiveShadows;
         datablockImpl->mCubemapIdxInDescSet = mCubemapIdxInDescSet;
+        datablockImpl->mUseEmissiveAsLightmap = mUseEmissiveAsLightmap;
+        datablockImpl->mUseDiffuseMapAsGrayscale = mUseDiffuseMapAsGrayscale;
         datablockImpl->mTransparencyMode = mTransparencyMode;
         datablockImpl->mkDr = mkDr;
         datablockImpl->mkDg = mkDg;

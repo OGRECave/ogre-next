@@ -311,13 +311,15 @@ namespace v1 {
         HardwareVertexBufferSharedPtr vBuf = HardwareBufferManager::getSingleton().createVertexBuffer(vertexDecl->getVertexSize(0), vertexData->vertexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
         VertexBufferBinding* binding = vertexData->vertexBufferBinding;
         binding->setBinding(0, vBuf);
-        float* pVertex = static_cast<float*>(vBuf->lock(HardwareBuffer::HBL_DISCARD));
+        HardwareBufferLockGuard vBufLock(vBuf, HardwareBuffer::HBL_DISCARD);
+        float* pVertex = static_cast<float*>(vBufLock.pData);
 
         // allocate index buffer
         pSphereVertex->indexData[VpNormal]->indexCount = 6 * NUM_RINGS * (NUM_SEGMENTS + 1);
         pSphereVertex->indexData[VpNormal]->indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(HardwareIndexBuffer::IT_16BIT, pSphereVertex->indexData[VpNormal]->indexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
         HardwareIndexBufferSharedPtr iBuf = pSphereVertex->indexData[VpNormal]->indexBuffer;
-        unsigned short* pIndices = static_cast<unsigned short*>(iBuf->lock(HardwareBuffer::HBL_DISCARD));
+        HardwareBufferLockGuard iBufLock(iBuf, HardwareBuffer::HBL_DISCARD);
+        unsigned short* pIndices = static_cast<unsigned short*>(iBufLock.pData);
 
         float fDeltaRingAngle = (Math::PI / NUM_RINGS);
         float fDeltaSegAngle = (2 * Math::PI / NUM_SEGMENTS);
@@ -360,8 +362,8 @@ namespace v1 {
         } // end for ring
 
         // Unlock
-        vBuf->unlock();
-        iBuf->unlock();
+        vBufLock.unlock();
+        iBufLock.unlock();
         // Generate face list
         pSphereVertex->useSharedVertices = true;
 

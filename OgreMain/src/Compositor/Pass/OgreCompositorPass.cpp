@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
+#include "Compositor/OgreCompositorWorkspaceListener.h"
 
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreViewport.h"
@@ -115,6 +116,38 @@ namespace Ogre
         }
 
         populateTextureDependenciesFromExposedTextures();
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPass::setViewportSizeToViewport( size_t vpIdx, Viewport *outVp )
+    {
+        if( mDefinition->mNumViewports == 0u )
+            return;
+
+        CompositorWorkspace *workspace = mParentNode->getWorkspace();
+        uint8 workspaceVpMask = workspace->getViewportModifierMask();
+
+        bool applyModifier = ( workspaceVpMask & mDefinition->mViewportModifierMask ) != 0;
+        Vector4 vpModifier = applyModifier ? workspace->getViewportModifier() : Vector4( 0, 0, 1, 1 );
+
+        vpIdx = std::min<size_t>( vpIdx, mDefinition->mNumViewports - 1u );
+
+        Vector4 vpSize;
+        Vector4 scissors;
+
+        const Real left = mDefinition->mVpRect[vpIdx].mVpLeft + vpModifier.x;
+        const Real top = mDefinition->mVpRect[vpIdx].mVpTop + vpModifier.y;
+        const Real width = mDefinition->mVpRect[vpIdx].mVpWidth * vpModifier.z;
+        const Real height = mDefinition->mVpRect[vpIdx].mVpHeight * vpModifier.w;
+
+        const Real scLeft = mDefinition->mVpRect[vpIdx].mVpScissorLeft + vpModifier.x;
+        const Real scTop = mDefinition->mVpRect[vpIdx].mVpScissorTop + vpModifier.y;
+        const Real scWidth = mDefinition->mVpRect[vpIdx].mVpScissorWidth * vpModifier.z;
+        const Real scHeight = mDefinition->mVpRect[vpIdx].mVpScissorHeight * vpModifier.w;
+
+        vpSize = Vector4( left, top, width, height );
+        scissors = Vector4( scLeft, scTop, scWidth, scHeight );
+
+        outVp->setDimensions( mAnyTargetTexture, vpSize, scissors, mAnyMipLevel );
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::setRenderPassDescToCurrent(void)
@@ -318,7 +351,7 @@ namespace Ogre
             }
 
             //Deal with MSAA resolve textures.
-            if( renderPassTargetAttachment->texture->getMsaa() > 1u )
+            if( renderPassTargetAttachment->texture->isMultisample() )
             {
                 if( renderPassTargetAttachment->storeAction == StoreAction::MultisampleResolve ||
                     renderPassTargetAttachment->storeAction == StoreAction::StoreAndMultisampleResolve ||
@@ -364,7 +397,7 @@ namespace Ogre
                                          "CompositorPass::setupRenderPassTarget" );
                         }
 
-                        if( renderPassTargetAttachment->resolveTexture->getMsaa() > 1u )
+                        if( renderPassTargetAttachment->resolveTexture->isMultisample() )
                         {
                             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                          "Cannot specify a non-MSAA texture for resolving an "
@@ -389,9 +422,14 @@ namespace Ogre
         }
         else
         {
-            //This is colour target asking to override the RTV.
-            renderPassTargetAttachment->slice       = mDefinition->getRtIndex();
-            renderPassTargetAttachment->resolveSlice= mDefinition->getRtIndex();
+            // This is colour target asking to override the RTV.
+            // It's common when doing MSAA that only the resolveSlice can be > 0 so we check for that
+            if( renderPassTargetAttachment->texture &&
+                mDefinition->getRtIndex() < renderPassTargetAttachment->texture->getNumSlices() )
+            {
+                renderPassTargetAttachment->slice = (uint16)mDefinition->getRtIndex();
+            }
+            renderPassTargetAttachment->resolveSlice= (uint16)mDefinition->getRtIndex();
         }
 
         if( renderPassTargetAttachment->storeAction == StoreAction::StoreOrResolve )
@@ -400,7 +438,7 @@ namespace Ogre
                 renderPassTargetAttachment->storeAction = StoreAction::DontCare;
             else
             {
-                if( renderPassTargetAttachment->texture->getMsaa() > 1u &&
+                if( renderPassTargetAttachment->texture->isMultisample() &&
                     renderPassTargetAttachment->resolveTexture )
                 {
                     renderPassTargetAttachment->storeAction = StoreAction::MultisampleResolve;
@@ -482,6 +520,48 @@ namespace Ogre
         }
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPass::notifyPassEarlyPreExecuteListeners(void)
+    {
+        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+
+        CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+        while( itor != end )
+        {
+            (*itor)->passEarlyPreExecute( this );
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPass::notifyPassPreExecuteListeners(void)
+    {
+        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+
+        CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+        while( itor != end )
+        {
+            (*itor)->passPreExecute( this );
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPass::notifyPassPosExecuteListeners(void)
+    {
+        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+
+        CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+        while( itor != end )
+        {
+            (*itor)->passPosExecute( this );
+            ++itor;
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::addResourceTransition( ResourceLayoutMap::iterator currentLayout,
@@ -751,8 +831,24 @@ namespace Ogre
             mNumPassesLeft = mDefinition->mNumInitialPasses;
 
             //Reset texture pointers and setup RenderPassDescriptor again
-            mRenderPassDesc->mDepth.texture = 0;
-            mRenderPassDesc->mStencil.texture = 0;
+			RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            if( mRenderPassDesc->mDepth.texture )
+            {
+                renderSystem->_dereferenceSharedDepthBuffer( mRenderPassDesc->mDepth.texture );
+                mRenderPassDesc->mDepth.texture = 0;
+
+                if( mRenderPassDesc->mStencil.texture &&
+                    mRenderPassDesc->mStencil.texture == mRenderPassDesc->mDepth.texture )
+                {
+                    renderSystem->_dereferenceSharedDepthBuffer( mRenderPassDesc->mStencil.texture );
+                    mRenderPassDesc->mStencil.texture = 0;
+                }
+            }
+            if( mRenderPassDesc->mStencil.texture )
+            {
+                renderSystem->_dereferenceSharedDepthBuffer( mRenderPassDesc->mStencil.texture );
+                mRenderPassDesc->mStencil.texture = 0;
+            }
 
             for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
             {

@@ -77,7 +77,7 @@ namespace Ogre {
         HlmsManager *hlmsManager = parent->_getDatablock()->getCreator()->getHlmsManager();
         HlmsSamplerblock samplerblock;
         samplerblock.setAddressingMode( TAM_WRAP );
-        mSamplerblock = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+        mSamplerblock = hlmsManager->getSamplerblock( samplerblock );
     }
     //-----------------------------------------------------------------------
     TextureUnitState::TextureUnitState(Pass* parent, const TextureUnitState& oth )
@@ -124,7 +124,7 @@ namespace Ogre {
         HlmsManager *hlmsManager = parent->_getDatablock()->getCreator()->getHlmsManager();
         HlmsSamplerblock samplerblock;
         samplerblock.setAddressingMode( TAM_WRAP );
-        mSamplerblock = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+        mSamplerblock = hlmsManager->getSamplerblock( samplerblock );
     }
     //-----------------------------------------------------------------------
     TextureUnitState::~TextureUnitState()
@@ -156,7 +156,8 @@ namespace Ogre {
             vector<TextureGpu*>::type::iterator end  = mFramePtrs.end();
             while( itor != end )
             {
-                (*itor)->addListener( this );
+                if( *itor )
+                    (*itor)->addListener( this );
                 ++itor;
             }
         }
@@ -487,9 +488,7 @@ namespace Ogre {
 
         for (unsigned int i = 0; i < mFrames.size(); ++i)
         {
-            StringStream str;
-            str << baseName << "_" << i << ext;
-            mFrames[i] = str.str();
+            mFrames[i] = baseName + "_" + StringConverter::toString( i ) + ext;
             mFramePtrs[i] = 0;
         }
 

@@ -66,9 +66,6 @@ THE SOFTWARE.
 #       include <GLES2/gl2.h>
 #       include <GLES2/gl2ext.h>
 #   endif
-#   if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
-#       define gleswIsSupported(x,y) (false)
-#   endif
 #   if (OGRE_PLATFORM == OGRE_PLATFORM_NACL)
 #       include "ppapi/cpp/completion_callback.h"
 #       include "ppapi/cpp/instance.h"
@@ -118,25 +115,49 @@ THE SOFTWARE.
 
 #if (OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS)
 #define OGRE_IF_IOS_VERSION_IS_GREATER_THAN(vers) \
-    if(static_cast<EAGL2Support*>(dynamic_cast<GLES2RenderSystem*>(Root::getSingleton().getRenderSystem())->getGLSupportRef())->getCurrentOSVersion() >= vers)
+    if(static_cast<EAGL2Support*>(dynamic_cast<GLES2RenderSystem*>(Root::getSingleton().getRenderSystem())->getGLES2Support())->getCurrentOSVersion() >= vers)
 #else
 #define OGRE_IF_IOS_VERSION_IS_GREATER_THAN(vers)
 #endif
 
-#define getGLES2SupportRef() dynamic_cast<GLES2RenderSystem*>(Root::getSingleton().getRenderSystem())->getGLSupportRef()
+#define getGLES2RenderSystem() dynamic_cast<GLES2RenderSystem*>(Root::getSingleton().getRenderSystem())
 
 // Copy this definition from desktop GL.  Used for polygon modes.
+#ifndef GL_POINT
+#   define GL_POINT   0x1B00
+#endif
+#ifndef GL_LINE
+#   define GL_LINE    0x1B01
+#endif
 #ifndef GL_FILL
 #   define GL_FILL    0x1B02
 #endif
 
 namespace Ogre {
-    struct GLES2HlmsSamplerblock;
-    class GLES2GpuProgram;
+    // Forward declarations
+    class GLES2DynamicBuffer;
+    class GLES2StagingBuffer;
+    class GLES2Support;
+    class GLES2RenderSystem;
     class GLES2Texture;
-    typedef SharedPtr<GLES2GpuProgram> GLES2GpuProgramPtr;
+    class GLES2TextureManager;
+    class GLES2Context;
+    struct GLES2HlmsPso;
+    class GLES2RTTManager;
+    class GLES2FBOManager;
+    class GLES2DepthBuffer;
+    class GLES2VaoManager;
+    
+    class GLSLESShader;
+
+    namespace v1
+    {
+        class GLES2HardwarePixelBuffer;
+        class GLES2RenderBuffer;
+    }
+
     typedef SharedPtr<GLES2Texture> GLES2TexturePtr;
-};
+}
 
 // Apple doesn't define this in their extension.  We'll do it just for convenience.
 // Using the value from desktop GL
@@ -276,8 +297,8 @@ namespace Ogre {
     }
 
 #define ENABLE_GL_CHECK 0
-
 #if ENABLE_GL_CHECK
+#include "OgreStringVector.h"
 #define OGRE_CHECK_GL_ERROR(glFunc) \
 { \
         glFunc; \

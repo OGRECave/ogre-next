@@ -49,8 +49,8 @@ namespace Ogre {
         ScriptParser();
         virtual ~ScriptParser() {}
 
-        ConcreteNodeListPtr parse(const ScriptTokenListPtr &tokens);
-        ConcreteNodeListPtr parseChunk(const ScriptTokenListPtr &tokens);
+        ConcreteNodeListPtr parse(const ScriptTokenListPtr &tokens, const String& sourceFile);
+        ConcreteNodeListPtr parseChunk(const ScriptTokenListPtr &tokens, const String &sourceFile);
     private:
         ScriptToken *getToken(ScriptTokenList::iterator i, ScriptTokenList::iterator end, int offset);
         ScriptTokenList::iterator skipNewlines(ScriptTokenList::iterator i, ScriptTokenList::iterator end);

@@ -81,7 +81,7 @@ namespace Ogre
                                        D3D11Driver* d3dDriver, D3D_DRIVER_TYPE driverType,
                                        D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
                                        D3D_FEATURE_LEVEL* pFeatureLevel,
-                                       ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 );
+                                       ID3D11Device **outDevice );
 
         D3D11DriverList* getDirect3DDrivers(bool refreshList = false);
         void refreshD3DSettings(void);
@@ -89,9 +89,7 @@ namespace Ogre
 
         void freeDevice(void);
         void createDevice( const String &windowTitle );
-#if OGRE_PLATFORM != OGRE_PLATFORM_WINRT
-            bool isWindows8OrGreater();
-#endif
+
         v1::D3D11HardwareBufferManager* mHardwareBufferManager;
         D3D11GpuProgramManager* mGpuProgramManager;
         D3D11HLSLProgramFactory* mHLSLProgramFactory;
@@ -128,9 +126,6 @@ namespace Ogre
 
         UINT                        mStencilRef;
 
-        ID3D11ShaderResourceView * mBoundTextures[OGRE_MAX_TEXTURE_LAYERS];
-        size_t mBoundTexturesCount;
-
         // List of class instances per shader stage
         ID3D11ClassInstance* mClassInstances[6][8];
 
@@ -141,9 +136,6 @@ namespace Ogre
         typedef std::map<String, ID3D11ClassInstance*> ClassInstanceMap;
         typedef std::map<String, ID3D11ClassInstance*>::iterator ClassInstanceIterator;
         ClassInstanceMap mInstanceMap;
-
-        size_t     mLastTextureUnitState;
-		bool       mSamplerStatesChanged;
 
         D3D11FrameBufferDescMap mFrameBufferDescMap;
 
@@ -190,7 +182,7 @@ namespace Ogre
 		
         void initRenderSystem();
 
-        virtual void initConfigOptions(void);
+        void initConfigOptions(void);
 
         // Overridden RenderSystem functions
         ConfigOptionMap& getConfigOptions(void);
@@ -203,11 +195,7 @@ namespace Ogre
 
         /// @copydoc RenderSystem::fireDeviceEvent
         void fireDeviceEvent( D3D11Device* device, const String & name,
-                              D3D11Window *sendingWindow );
-#if !TODO_OGRE_2_2
-        void fireDeviceEvent( D3D11Device* device, const String & name,
-                              D3D11RenderWindowBase *sendingWindow = NULL ) {}
-#endif
+                              D3D11Window *sendingWindow = NULL );
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture ) {}
 
@@ -223,7 +211,7 @@ namespace Ogre
         virtual void endRenderPassDescriptor(void);
 
         TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
-                                          PixelFormatGpu depthBufferFormat );
+                                          PixelFormatGpu depthBufferFormat, uint16 poolId );
 
         const String& getName(void) const;
 		
@@ -234,7 +222,7 @@ namespace Ogre
         void setConfigOption( const String &name, const String &value );
         void reinitialise();
         void shutdown();
-        void validateDevice(bool forceDeviceElection = false);
+        bool validateDevice(bool forceDeviceElection = false);
         void handleDeviceLost();
         void setShadingType( ShadeOptions so );
         void setLightingEnabled( bool enabled );
@@ -338,7 +326,8 @@ namespace Ogre
         void preExtraThreadsStarted();
         void postExtraThreadsStarted();
 
-        void determineFSAASettings(uint fsaa, const String& fsaaHint, DXGI_FORMAT format, DXGI_SAMPLE_DESC* outFSAASettings);
+        virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
+                                                             PixelFormatGpu format );
 
         /// @copydoc RenderSystem::getDisplayMonitorCount
         unsigned int getDisplayMonitorCount() const;

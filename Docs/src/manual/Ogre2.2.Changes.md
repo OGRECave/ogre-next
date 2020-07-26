@@ -316,7 +316,7 @@ This will block the calling thread until **all** pending textures are loaded.
 The following snippet creates a texture that will be filled by hand (e.g. manually
 loading from file yourself, procedural generation, etc):
 
-```
+```cpp
 Ogre::Root *root = ...;
 Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
@@ -329,10 +329,11 @@ Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
 texture->setPixelFormat( Ogre::PFG_RGBA8_UNORM_SRGB );
 texture->setTextureType( Ogre::TextureTypes::Type2D );
 texture->setNumMipmaps( 1u );
+texture->setResolution(width, height);
 ```
 
 ### Uploading data to a TextureGpu
-```
+```cpp
 const uint32 rowAlignment = 4u;
 const size_t dataSize = Ogre::PixelFormatGpuUtils::getSizeBytes( texture->getWidth(),
                                                                  texture->getHeight(),
@@ -401,7 +402,7 @@ For example you could have four 1024x1024 TextureGpus and request one StagingTex
 2048x2048 or one of 1024x1024x4; map it four times and perform four uploads. In pseudo
 code:
 
-```
+```cpp
 StagingTexture *stagingTexture = textureManager->getStagingTexture( 2048u, 2048u,
                                                                     1u, 1u,
                                                                     pixelFormat );
@@ -458,7 +459,7 @@ in cycle (do not release these StagingTextures every frame, hold on to them inst
 For that we'll use AsyncTextureTickets. They're like StagingTextures, but in the opposite
 direction.
 
-```
+```cpp
 AsyncTextureTicket *asyncTicket =
         textureManager->createAsyncTextureTicket( width, height, depthOrSlices,
                                                   texture->getTextureType(),
@@ -1034,8 +1035,7 @@ documentation.
 You could use `getCustomAttribute` to retrieve several D3D11 internal pointers. These
 have changed:
 
-* "FSAA" -> "MSAA"
-* "FSAAHint" -> "MSAA_quality"
+* "FSAA" + "FSAAHint" -> "FSAA"
 * "First_ID3D11Texture2D" -> TextureGpu::getCustomAttribute( "ID3D11Resource" )
 * "ID3D11RenderTargetView" ->
 RenderPassDescriptor::getCustomAttribute( "ID3D11RenderTargetView" )

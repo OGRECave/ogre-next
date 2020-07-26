@@ -110,6 +110,12 @@ namespace Ogre {
         String doGet(const void* target) const;
         void doSet(void* target, const String& val);
     };
+    class _OgreExport CmdVPRTI : public ParamCommand
+    {
+    public:
+        String doGet(const void* target) const;
+        void doSet(void* target, const String& val);
+    };
     class _OgreExport CmdManualNamedConstsFile : public ParamCommand
     {
     public:
@@ -136,6 +142,7 @@ namespace Ogre {
     static CmdMorph msMorphCmd;
     static CmdPose msPoseCmd;
     static CmdVTF msVTFCmd;
+    static CmdVPRTI msVPRTICmd;
     static CmdManualNamedConstsFile msManNamedConstsFileCmd;
     static CmdAdjacency msAdjacencyCmd;
     static CmdComputeGroupDims msComputeGroupDimsCmd;
@@ -160,6 +167,8 @@ namespace Ogre {
     ushort mPoseAnimation;
     /// Does this (vertex) program require support for vertex texture fetch?
     bool mVertexTextureFetch;
+    /// Does this program require support for choosing viewport or render target index from any shader?
+    bool mVpAndRtArrayIndexFromAnyShader;
     /// Does this (geometry) program require adjacency information?
     bool mNeedsAdjacencyInfo;
     /// The number of process groups dispatched by this (compute) program.
@@ -357,6 +366,14 @@ namespace Ogre {
         texture fetch from the hardware.
     */
     virtual bool isVertexTextureFetchRequired(void) const { return mVertexTextureFetch; }
+    /** Sets whether this program requires support for choosing
+        viewport or render target index in any program or only geometry one.
+    */
+    virtual void setVpAndRtArrayIndexFromAnyShaderRequired( bool r ) { mVpAndRtArrayIndexFromAnyShader = r; }
+    /** Returns whether this program requires support for choosing
+        viewport or render target index in any program or only geometry one.
+    */
+    virtual bool isVpAndRtArrayIndexFromAnyShaderRequired( void ) const { return mVpAndRtArrayIndexFromAnyShader; }
 
     /** Sets whether this geometry program requires adjacency information
         from the input primitives.

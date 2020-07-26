@@ -1,0 +1,59 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+#ifdef HEADER
+
+#    define IfdProbeIndex uint
+
+INLINE float2 octahedronMappingWrap( float2 v )
+{
+	float2 signVal;
+	signVal.x = v.x >= 0.0 ? 1.0 : -1.0;
+	signVal.y = v.y >= 0.0 ? 1.0 : -1.0;
+	return ( 1.0 - abs( v.yx ) ) * signVal;
+}
+
+INLINE float2 octahedronMappingEncode( float3 n )
+{
+	// https://twitter.com/Stubbesaurus/status/937994790553227264
+	n /= ( abs( n.x ) + abs( n.y ) + abs( n.z ) );
+	n.xy = n.z >= 0.0 ? n.xy : octahedronMappingWrap( n.xy );
+	n.xy = n.xy * 0.5 + 0.5;
+	return n.xy;
+}
+
+INLINE float2 getIrradianceFieldXY( float3 dir, IfdProbeIndex probeIdx, float borderedRes,
+									float fullWidth, float2 invFullResolution )
+{
+	float2 retVal;
+	/* Perform the following, but in floating point:
+	retVal.x = ( probeIdx * borderedRes ) % fullWidth;
+	retVal.y = ( ( probeIdx * borderedRes ) / fullWidth ) * borderedRes;*/
+	float temp = probeIdx * borderedRes;
+	retVal.y = floor( temp * invFullResolution.x );
+	retVal.x = temp - retVal.y * fullWidth;
+	retVal.y *= borderedRes;
+
+	// Skip top-left border
+	retVal.xy += 1.0f;
+
+	// Quantize direction to fix noise artifacts where the texels output from
+	// octahedronMappingEncode keep jumping due to octahedronMappingWrap being too sharp
+	// https://github.com/OGRECave/ogre-next/issues/29#issuecomment-541491145
+	/*dir = ceil( dir * 2048.0 );
+	dir *= 1.0 / 2048.0;*/
+	float2 uv = octahedronMappingEncode( dir ) * ( borderedRes - 2.0f );
+
+	retVal += uv;
+	retVal *= invFullResolution;
+	return retVal;
+}
+
+#else
+	float2 ifdUV = getIrradianceFieldXY( inPs.normal.xyz, inPs.probeIdx, p_borderedRes, p_fullWidth,
+										 p_invFullResolution );
+	float3 irrVal = OGRE_SampleLevel( ifdTex, ifdSampler, ifdUV, 0 ).xyz;
+
+	outColour.xyz = irrVal * p_rangeMult.xyx;
+	outColour.w = 1.0;
+#endif

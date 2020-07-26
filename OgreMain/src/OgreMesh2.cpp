@@ -499,13 +499,13 @@ namespace Ogre {
         return retVal;
     }
     //---------------------------------------------------------------------
-    void Mesh::importV1( v1::Mesh *mesh, bool halfPos, bool halfTexCoords, bool qTangents )
+    void Mesh::importV1( v1::Mesh *mesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose )
     {
         OgreProfileExhaustive( "Mesh2::importV1" );
 
         mesh->load();
 
-        if( mLoadingState.get() != LOADSTATE_UNLOADED )
+        if( mLoadingState.get() != LOADSTATE_UNLOADED && mLoadingState.get() != LOADSTATE_LOADING )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                          "To import a v1 mesh, the v2 mesh must be in unloaded state!",
@@ -543,7 +543,7 @@ namespace Ogre {
         for( size_t i=0; i<mesh->getNumSubMeshes(); ++i )
         {
             SubMesh *subMesh = createSubMesh();
-            subMesh->importFromV1( mesh->getSubMesh( i ), halfPos, halfTexCoords, qTangents );
+            subMesh->importFromV1( mesh->getSubMesh( i ), halfPos, halfTexCoords, qTangents, halfPose );
         }
 
         mSubMeshNameMap = mesh->getSubMeshNameMap();

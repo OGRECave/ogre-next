@@ -1,5 +1,7 @@
 @piece( SetCrossPlatformSettings )
 #define ushort uint
+#define ushort3 uint3
+#define ushort4 uint4
 #define ogre_float4x3 float4x3
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
@@ -20,7 +22,6 @@
 #define NO_INTERPOLATION_PREFIX nointerpolation
 #define NO_INTERPOLATION_SUFFIX
 
-#define finalDrawId input.drawId
 #define PARAMS_ARG_DECL
 #define PARAMS_ARG
 
@@ -35,6 +36,7 @@
 #define inVs_blendWeights input.blendWeights
 #define inVs_blendIndices input.blendIndices
 #define inVs_qtangent input.qtangent
+#define inVs_colour input.colour
 @property( !hlms_instanced_stereo )
 	#define inVs_drawId input.drawId
 @else
@@ -42,17 +44,20 @@
 	#define inVs_stereoDrawId input.drawId
 @end
 
+#define finalDrawId input.drawId
+
 @foreach( hlms_uv_count, n )
 	#define inVs_uv@n input.uv@n@end
 
 #define outVs_Position outVs.gl_Position
 #define outVs_viewportIndex outVs.gl_ViewportIndex
-#define outVs_clipDistance0 outVs.gl_ClipDistance0
+#define outVs_clipDistance0 outVs.gl_ClipDistance0.x
 
 #define gl_SampleMaskIn0 gl_SampleMask
 #define interpolateAtSample( interp, subsample ) EvaluateAttributeAtSample( interp, subsample )
 #define findLSB firstbitlow
 #define findMSB firstbithigh
+#define mod( a, b ) (a - b * floor(a / b))
 
 #define outPs_colour0 outPs.colour0
 #define OGRE_Sample( tex, sampler, uv ) tex.Sample( sampler, uv )
@@ -65,6 +70,7 @@
 #define OGRE_ddx( val ) ddx( val )
 #define OGRE_ddy( val ) ddy( val )
 #define OGRE_Load2D( tex, iuv, lod ) tex.Load( int3( iuv, lod ) )
+#define OGRE_LoadArray2D( tex, iuv, arrayIdx, lod ) tex.Load( int4( iuv, arrayIdx, lod ) )
 #define OGRE_Load2DMS( tex, iuv, subsample ) tex.Load( iuv, subsample )
 
 #define OGRE_Load3D( tex, iuv, lod ) tex.Load( int4( iuv, lod ) )

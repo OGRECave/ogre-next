@@ -82,6 +82,15 @@ THE SOFTWARE.
     return self;
 }
 
+- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
+{
+    if(self.superview == nil) {
+        return NO;
+    } else {
+        return [self.superview acceptsFirstMouse:theEvent];
+    }
+}
+
 - (void)setContentScaleFactor:(CGFloat)contentScaleFactor
 {
     self.scaleToNative = false;

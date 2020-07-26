@@ -30,6 +30,8 @@ THE SOFTWARE.
 
 #include "Threading/OgreThreads.h"
 
+#include "ogrestd/vector.h"
+
 namespace Ogre
 {
     ThreadHandle::ThreadHandle( size_t threadIdx, void *userParam ) :

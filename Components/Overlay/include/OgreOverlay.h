@@ -144,43 +144,6 @@ namespace v1 {
         */
         void remove2D(OverlayContainer* cont);
 
-        /** Adds a node capable of holding 3D objects to the overlay.
-        @remarks    
-            Although overlays are traditionally associated with 2D elements, there 
-            are reasons why you might want to attach 3D elements to the overlay too.
-            For example, if you wanted to have a 3D cockpit, which was overlaid with a
-            HUD, then you would create 2 overlays, one with a 3D object attached for the
-            cockpit, and one with the HUD elements attached (the zorder of the HUD 
-            overlay would be higher than the cockpit to ensure it was always on top).
-        @par    
-            A SceneNode can have any number of 3D objects attached to it. SceneNodes
-            are usually created using SceneManager::createSceneNode, but in this case
-            you should create a standard SceneNode instance <b>manually</b>; this is
-            because these scene nodes are not managed by the SceneManager and some custom
-            SceneManager plugins will rely on specialist behaviour the overlay does not
-            support. By attaching a SceneNode to an overlay, you indicate that:<OL>
-            <LI>You want the contents of this node to only appear when the overlay is active</LI>
-            <LI>You want the node to inherit a coordinate space relative to the camera,
-                rather than relative to the root scene node</LI>
-            <LI>You want these objects to be rendered after the contents of the main scene
-                to ensure they are rendered on top</LI>
-            </OL>
-            One major consideration when using 3D objects in overlays is the behaviour of 
-            the depth buffer. Overlays should use materials with depth checking off, to ensure
-            that their contents are always displayed on top of the main scene (to do 
-            otherwise would result in objects 'poking through' the overlay). The problem
-            with using 3D objects is that if they are concave, or self-overlap, then you
-            can get artefacts because of the lack of depth buffer checking. So you should 
-            ensure that any 3D objects you us in the overlay are convex, and don't overlap
-            each other. If they must overlap, split them up and put them in 2 overlays.
-            Alternatively, use a 2D element underneath them which will clear the depth buffer
-            values underneath ready for the 3D element to be rendered correctly.
-        */
-        void add3D(SceneNode* node);
-
-        /** Removes a 3D element from the overlay. */
-        void remove3D(SceneNode* node);
-
         /** Clears the overlay of all attached items. */
         void clear();
 

@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _Ogre_D3D11BufferInterfaceBase_H_
 
 #include "OgreD3D11Prerequisites.h"
+#include "OgreD3D11DeviceResource.h"
 
 #include "Vao/OgreBufferInterface.h"
 
@@ -38,23 +39,27 @@ namespace Ogre
     /** For D3D11, most (if not all) buffers, can be treated with the same code.
         Hence most equivalent functionality is encapsulated here.
     */
-    class _OgreD3D11Export D3D11BufferInterfaceBase : public BufferInterface
+    class _OgreD3D11Export D3D11BufferInterfaceBase : public BufferInterface,
+                                                      protected D3D11DeviceResource
     {
     protected:
         size_t          mVboPoolIdx;
-        ID3D11Buffer    *mVboName;
+        ComPtr<ID3D11Buffer> mVboName;
         void            *mMappedPtr;
 
         void splicedCopy( size_t dstOffsetBytes, size_t srcOffsetBytes, size_t sizeBytes,
                           size_t alignment, ID3D11Buffer *dstBuffer, ID3D11Buffer *srcBuffer,
                           ID3D11DeviceContextN *context );
 
+        void notifyDeviceLost( D3D11Device *device );
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass );
+
     public:
         D3D11BufferInterfaceBase( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer );
         ~D3D11BufferInterfaceBase();
 
         size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
-        ID3D11Buffer* getVboName(void) const        { return mVboName; }
+        ID3D11Buffer* getVboName(void) const        { return mVboName.Get(); }
 
         virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
                              size_t srcOffsetBytes, size_t sizeBytes );

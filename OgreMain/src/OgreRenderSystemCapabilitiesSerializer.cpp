@@ -34,8 +34,10 @@ THE SOFTWARE.
 #include "OgreRenderSystemCapabilities.h"
 
 #include "OgreDataStream.h"
+#include "OgreString.h"
 
 #include <fstream>
+#include <sstream>
 
 
 namespace Ogre

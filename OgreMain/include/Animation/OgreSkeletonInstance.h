@@ -168,12 +168,20 @@ namespace Ogre
         /// Returns the requested animations. Throws if not found. O(N) Linear search
         SkeletonAnimation* getAnimation( IdString name );
 
-        ///Return all animations associated with this skeleton
-        const SkeletonAnimationVec& getAnimations() const { return mAnimations; }
+        /// Return all animations associated with this skeleton
+        const SkeletonAnimationVec &getAnimations( void ) const { return mAnimations; }
 
-        /**    Add all animation clips found in skelName. 
+        /// Return all animations associated with this skeleton
+        /// Be careful with this one! Do not insert/remove elements
+        SkeletonAnimationVec &getAnimationsNonConst( void ) { return mAnimations; }
+
+        /// Returns all animations that are currently active
+        const ActiveAnimationsVec &getActiveAnimations( void ) const { return mActiveAnimations; }
+
+        /**    Add all animation clips found in skelName.
         @remarks
-            skelName skeleton must have the same structure (bone count, bone hierarchy) as this, otherwise it may output unexpected behavior or crashes.
+            skelName skeleton must have the same structure (bone count, bone hierarchy) as this,
+            otherwise it may output unexpected behavior or crashes.
         */
         void addAnimationsFromSkeleton( const String &skelName, const String &groupName );
 

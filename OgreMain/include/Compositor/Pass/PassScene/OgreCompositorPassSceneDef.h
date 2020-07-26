@@ -92,11 +92,17 @@ namespace Ogre
         IdString        mPrePassDepthTexture;
         IdString        mPrePassSsrTexture;
 
+        IdString        mDepthTextureNoMsaa;
+        IdString        mRefractionsTexture;
+
         /// This is a depth pre-pass. Note: Implementations may write
         /// to colour too for hybrid deferred & forward rendering.
         /// If you modify this, you probably want to modify
         /// mReadOnlyDepth & mReadOnlyStencil too
         PrePassMode     mPrePassMode;
+        /// Generate Normals for a GBuffer in RTV output 1,
+        /// This flag is ignored mPrePassMode if mPrePassMode != PrePassNone
+        bool            mGenNormalsGBuf;
 
         /// First Render Queue ID to render. Inclusive
         uint8           mFirstRQ;
@@ -188,8 +194,9 @@ namespace Ogre
             mLightVisibilityMask( VisibilityFlags::RESERVED_VISIBILITY_FLAGS ),
             mShadowNodeRecalculation( SHADOW_NODE_FIRST_ONLY ),
             mPrePassMode( PrePassNone ),
+            mGenNormalsGBuf( false ),
             mFirstRQ( 0 ),
-            mLastRQ( -1 ),
+            mLastRQ( (uint8)-1 ),
             mEnableForwardPlus( true ),
             mCameraCubemapReorient( false ),
             mUpdateLodLists( true ),
@@ -224,9 +231,22 @@ namespace Ogre
         {
             mPrePassMode = PrePassUse;
             mPrePassTexture = textureName;
-            mPrePassDepthTexture = depthTextureName;
-            mPrePassSsrTexture = ssrTexture;
             mExposedTextures.insert( mExposedTextures.end(), textureName.begin(), textureName.end() );
+            mPrePassDepthTexture = depthTextureName;
+            mExposedTextures.push_back( depthTextureName );
+            mPrePassSsrTexture = ssrTexture;
+            mExposedTextures.push_back( ssrTexture );
+
+            mReadOnlyDepth = true;
+            mReadOnlyStencil = true;
+        }
+
+        void setUseRefractions( IdString depthTextureName, IdString refractionsTexture )
+        {
+            mDepthTextureNoMsaa = depthTextureName;
+            mExposedTextures.push_back( depthTextureName );
+            mRefractionsTexture = refractionsTexture;
+            mExposedTextures.push_back( refractionsTexture );
 
             mReadOnlyDepth = true;
             mReadOnlyStencil = true;

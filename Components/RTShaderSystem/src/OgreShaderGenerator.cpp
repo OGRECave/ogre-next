@@ -46,6 +46,8 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 #include "OgreException.h"
 
+#include <fstream>
+
 namespace Ogre {
 
 const String cBlankString;

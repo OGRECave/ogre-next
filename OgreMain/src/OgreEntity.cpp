@@ -36,8 +36,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreLogManager.h"
 #include "OgreSkeleton.h"
 #include "OgreOldBone.h"
-#include "OgreCamera.h"
-#include "OgreTagPoint.h"
 #include "OgreAxisAlignedBox.h"
 #include "OgreHardwareBufferManager.h"
 #include "OgreVector4.h"
@@ -57,7 +55,7 @@ namespace v1 {
     extern const FastArray<Real> c_DefaultLodMesh;
     //-----------------------------------------------------------------------
     Entity::Entity ( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager )
-        : MovableObject( id, objectMemoryManager, manager, 1 ),
+        : MovableObject( id, objectMemoryManager, manager, 110u ),
           mAnimationState(NULL),
           mSkelAnimVertexData(0),
           mTempVertexAnimInfo(),
@@ -89,7 +87,7 @@ namespace v1 {
     //-----------------------------------------------------------------------
     Entity::Entity( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
                     const MeshPtr& mesh ) :
-        MovableObject(id, objectMemoryManager, manager, 1),
+        MovableObject(id, objectMemoryManager, manager, 110u),
         mMesh(mesh),
         mAnimationState(NULL),
         mSkelAnimVertexData(0),
@@ -118,10 +116,29 @@ namespace v1 {
         mObjectData.mQueryFlags[mObjectData.mIndex] = SceneManager::QUERY_ENTITY_DEFAULT_MASK;
     }
     //-----------------------------------------------------------------------
+    void Entity::_releaseManualHardwareResources()
+    {
+        // do not call _deinitialise() here to preserve material names
+    }
+    //-----------------------------------------------------------------------
+    void Entity::_restoreManualHardwareResources()
+    {
+        _initialise(true);
+    }
+    //-----------------------------------------------------------------------
     void Entity::_initialise(bool forceReinitialise)
     {
+        vector<String>::type prevMaterialsList;
         if (forceReinitialise)
+        {
+            if (mMesh->getNumSubMeshes() == mSubEntityList.size())
+            {
+                SubEntityList::iterator seend = mSubEntityList.end();
+                for(SubEntityList::iterator i = mSubEntityList.begin(); i != seend; ++i)
+                    prevMaterialsList.push_back(i->getDatablockOrMaterialName());
+            }
             _deinitialise();
+        }
 
         if (mInitialised)
             return;
@@ -151,7 +168,7 @@ namespace v1 {
         mLodMesh = mMesh->_getLodValueArray();
 
         // Build main subentity list
-        buildSubEntityList(mMesh, &mSubEntityList);
+        buildSubEntityList(mMesh, &mSubEntityList, prevMaterialsList.empty() ? 0 : &prevMaterialsList);
 
         {
             //Without filling the renderables list, the RenderQueue won't
@@ -256,12 +273,6 @@ namespace v1 {
             *li = 0;
         }
         mLodEntityList.clear();
-        
-        // Detach all child objects, do this manually to avoid needUpdate() call
-        // which can fail because of deleted items
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-        detachAllObjectsImpl();
-#endif
 
         if (mSkeletonInstance) {
             OGRE_FREE_SIMD(mBoneWorldMatrices, MEMCATEGORY_ANIMATION);
@@ -469,99 +480,6 @@ namespace v1 {
             mMesh->_computeBoneBoundingRadius();
         }
     }
-    //-----------------------------------------------------------------------
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-    void Entity::_notifyCurrentCamera(Camera* cam)
-    {
-        //TODO (dark_sylinc): This whole state tracking thing feels wrong.
-        // Calculate the LOD
-        if (mParentNode)
-        {
-            // Get mesh lod strategy
-            const LodStrategy *meshStrategy = mMesh->getLodStrategy();
-            // Get the appropriate LOD value
-            Real lodValue = meshStrategy->getValue(this, cam);
-            // Bias the LOD value
-            Real biasedMeshLodValue = lodValue * mMeshLodFactorTransformed;
-
-
-            // Get the index at this biased depth
-            ushort newMeshLodIndex = mMesh->getLodIndex(biasedMeshLodValue);
-            // Apply maximum detail restriction (remember lower = higher detail)
-            newMeshLodIndex = std::max<ushort>(mMaxMeshLodIndex, newMeshLodIndex);
-            // Apply minimum detail restriction (remember higher = lower detail)
-            newMeshLodIndex = std::min<ushort>(mMinMeshLodIndex, newMeshLodIndex);
-
-            // Construct event object
-            EntityMeshLodChangedEvent evt;
-            evt.entity = this;
-            evt.camera = cam;
-            evt.lodValue = biasedMeshLodValue;
-            evt.previousLodIndex = mCurrentMeshLod;
-            evt.newLodIndex = newMeshLodIndex;
-
-            // Notify LOD event listeners
-            cam->getSceneManager()->_notifyEntityMeshLodChanged(evt);
-
-            // Change LOD index
-            //mMeshLodIndex = evt.newLodIndex;
-
-            // Now do material LOD
-            lodValue *= mMaterialLodFactorTransformed;
-
-
-            SubEntityList::iterator i, iend;
-            iend = mSubEntityList.end();
-            for (i = mSubEntityList.begin(); i != iend; ++i)
-            {
-                // Get sub-entity material
-                const MaterialPtr& material = i->getMaterial();
-                
-                // Get material LOD strategy
-                const LodStrategy *materialStrategy = material->getLodStrategy();
-                
-                // Recalculate LOD value if strategies do not match
-                Real biasedMaterialLodValue;
-                if (meshStrategy == materialStrategy)
-                    biasedMaterialLodValue = lodValue;
-                else
-                    biasedMaterialLodValue = materialStrategy->getValue(this, cam) * materialStrategy->transformBias(mMaterialLodFactor);
-
-                // Get the index at this biased depth
-                unsigned short idx = material->getLodIndex(biasedMaterialLodValue);
-                // Apply maximum detail restriction (remember lower = higher detail)
-                idx = std::max(mMaxMaterialLodIndex, idx);
-                // Apply minimum detail restriction (remember higher = lower detail)
-                idx = std::min(mMinMaterialLodIndex, idx);
-
-                // Construct event object
-                EntityMaterialLodChangedEvent subEntEvt;
-                subEntEvt.subEntity = &(*i);
-                subEntEvt.camera = cam;
-                subEntEvt.lodValue = biasedMaterialLodValue;
-                subEntEvt.previousLodIndex = i->mMaterialLodIndex;
-                subEntEvt.newLodIndex = idx;
-
-                // Notify LOD event listeners
-                cam->getSceneManager()->_notifyEntityMaterialLodChanged(subEntEvt);
-
-                // Change LOD index
-                i->mMaterialLodIndex = subEntEvt.newLodIndex;
-                // Also invalidate any camera distance cache
-                (*i)->_invalidateCameraCache ();
-            }
-
-
-        }
-        // Notify any child objects
-        ChildObjectList::iterator child_itr = mChildObjectList.begin();
-        ChildObjectList::iterator child_itr_end = mChildObjectList.end();
-        for( ; child_itr != child_itr_end; ++child_itr)
-        {
-            (*child_itr).second->_notifyCurrentCamera(cam);
-        }
-    }
-#endif
     //-----------------------------------------------------------------------
     void Entity::_updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera)
     {
@@ -928,11 +846,12 @@ namespace v1 {
                 if (msh->getSharedVertexDataAnimationType() == VAT_POSE && 
                     supportedCount < mHardwarePoseCount)
                 {
-                    LogManager::getSingleton().stream() <<
-                      "Vertex program assigned to Entity '" << mName << 
-                      "' claimed to support " << mHardwarePoseCount << 
-                      " morph/pose vertex sets, but in fact only " << supportedCount <<
-                      " were able to be supported in the shared mesh data.";
+                    LogManager::getSingleton().logMessage(
+                        "Vertex program assigned to Entity '" + mName +                              //
+                        "' claimed to support " + StringConverter::toString( mHardwarePoseCount ) +  //
+                        " morph/pose vertex sets, but in fact only " +                               //
+                        StringConverter::toString( supportedCount ) +
+                        " were able to be supported in the shared mesh data." );
                     mHardwarePoseCount = supportedCount;
                 }
                     
@@ -953,11 +872,13 @@ namespace v1 {
                     if (sub.getSubMesh()->getVertexAnimationType() == VAT_POSE &&
                         supportedCount < sub.mHardwarePoseCount)
                     {
-                        LogManager::getSingleton().stream() <<
-                        "Vertex program assigned to SubEntity of '" << mName << 
-                        "' claimed to support " << sub.mHardwarePoseCount <<
-                        " morph/pose vertex sets, but in fact only " << supportedCount <<
-                        " were able to be supported in the mesh data.";
+                        LogManager::getSingleton().logMessage(
+                            "Vertex program assigned to SubEntity of '" + mName +  //
+                            "' claimed to support " +                              //
+                            StringConverter::toString( sub.mHardwarePoseCount ) +  //
+                            " morph/pose vertex sets, but in fact only " +         //
+                            StringConverter::toString( supportedCount ) +
+                            " were able to be supported in the mesh data." );
                         sub.mHardwarePoseCount = supportedCount;
                     }
                     
@@ -1178,8 +1099,8 @@ namespace v1 {
             {
                 HardwareVertexBufferSharedPtr buf = 
                     destData->vertexBufferBinding->getBuffer(normElem->getSource());
-                char* pBase = static_cast<char*>(buf->lock(HardwareBuffer::HBL_NORMAL));
-                pBase += destData->vertexStart * buf->getVertexSize();
+                HardwareBufferLockGuard vertexLock(buf, HardwareBuffer::HBL_NORMAL);
+                char* pBase = static_cast<char*>(vertexLock.pData) + destData->vertexStart * buf->getVertexSize();
                 
                 for (size_t v = 0; v < destData->vertexCount; ++v)
                 {
@@ -1191,7 +1112,6 @@ namespace v1 {
                     
                     pBase += buf->getVertexSize();
                 }
-                buf->unlock();
             }
         }
     }
@@ -1209,10 +1129,10 @@ namespace v1 {
                 srcData->vertexBufferBinding->getBuffer(srcNormElem->getSource());
             HardwareVertexBufferSharedPtr dstbuf = 
                 destData->vertexBufferBinding->getBuffer(destNormElem->getSource());
-            char* pSrcBase = static_cast<char*>(srcbuf->lock(HardwareBuffer::HBL_READ_ONLY));
-            char* pDstBase = static_cast<char*>(dstbuf->lock(HardwareBuffer::HBL_NORMAL));
-            pSrcBase += srcData->vertexStart * srcbuf->getVertexSize();
-            pDstBase += destData->vertexStart * dstbuf->getVertexSize();
+            HardwareBufferLockGuard srcLock(srcbuf, HardwareBuffer::HBL_READ_ONLY);
+            HardwareBufferLockGuard dstLock(dstbuf, HardwareBuffer::HBL_NORMAL);
+            char* pSrcBase = static_cast<char*>(srcLock.pData) + srcData->vertexStart * srcbuf->getVertexSize();
+            char* pDstBase = static_cast<char*>(dstLock.pData) + destData->vertexStart * dstbuf->getVertexSize();
             
             // The goal here is to detect the length of the vertices, and to apply
             // the base mesh vertex normal at one minus that length; this deals with 
@@ -1245,8 +1165,6 @@ namespace v1 {
                 pDstBase += dstbuf->getVertexSize();
                 pSrcBase += dstbuf->getVertexSize();
             }
-            srcbuf->unlock();
-            dstbuf->unlock();
         }
     }
     //-----------------------------------------------------------------------
@@ -1343,7 +1261,7 @@ namespace v1 {
         return mLodEntityList.size();
     }
     //-----------------------------------------------------------------------
-    void Entity::buildSubEntityList(MeshPtr& mesh, SubEntityList* sublist)
+    void Entity::buildSubEntityList(MeshPtr& mesh, SubEntityList* sublist, vector<String>::type* materialList)
     {
         // Create SubEntities
         unsigned short i, numSubMeshes;
@@ -1355,6 +1273,8 @@ namespace v1 {
         {
             subMesh = mesh->getSubMesh(i);
             sublist->push_back( SubEntity( this, subMesh ) );
+            if (materialList)
+                sublist->back().setDatablockOrMaterialName((*materialList)[i], mesh->getGroup());
         }
     }
     //-----------------------------------------------------------------------
@@ -1368,133 +1288,6 @@ namespace v1 {
             i->setPolygonModeOverrideable(overrideable);
         }
     }
-
-    //-----------------------------------------------------------------------
-    TagPoint* Entity::attachObjectToBone(const String &boneName, MovableObject *pMovable, const Quaternion &offsetOrientation, const Vector3 &offsetPosition)
-    {
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-        if (mChildObjectList.find(pMovable->getName()) != mChildObjectList.end())
-        {
-            OGRE_EXCEPT(Exception::ERR_DUPLICATE_ITEM,
-                "An object with the name " + pMovable->getName() + " already attached",
-                "Entity::attachObjectToBone");
-        }
-        if(pMovable->isAttached())
-        {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Object already attached to a sceneNode or a OldBone",
-                "Entity::attachObjectToBone");
-        }
-        if (!hasSkeleton())
-        {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "This entity's mesh has no skeleton to attach object to.",
-                "Entity::attachObjectToBone");
-        }
-        OldBone* bone = mSkeletonInstance->getBone(boneName);
-        if (!bone)
-        {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Cannot locate bone named " + boneName,
-                "Entity::attachObjectToBone");
-        }
-
-        TagPoint *tp = mSkeletonInstance->createTagPointOnBone(
-            bone, offsetOrientation, offsetPosition);
-        tp->setParentEntity(this);
-        tp->setChildObject(pMovable);
-
-        attachObjectImpl(pMovable, tp);
-
-        return tp;
-#endif
-        return 0;
-    }
-
-    //-----------------------------------------------------------------------
-    void Entity::attachObjectImpl(MovableObject *pObject, TagPoint *pAttachingPoint)
-    {
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-        assert(mChildObjectList.find(pObject->getName()) == mChildObjectList.end());
-        mChildObjectList[pObject->getName()] = pObject;
-        pObject->_notifyAttached(pAttachingPoint, true);
-#endif
-    }
-
-    //-----------------------------------------------------------------------
-    MovableObject* Entity::detachObjectFromBone(const String &name)
-    {
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-        ChildObjectList::iterator i = mChildObjectList.find(name);
-
-        if (i == mChildObjectList.end())
-        {
-            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, "No child object entry found named " + name,
-                "Entity::detachObjectFromBone");
-        }
-        MovableObject *obj = i->second;
-        detachObjectImpl(obj);
-        mChildObjectList.erase(i);
-
-        return obj;
-#endif
-        return 0;
-    }
-    //-----------------------------------------------------------------------
-    void Entity::detachObjectFromBone(MovableObject* obj)
-    {
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-        ChildObjectList::iterator i, iend;
-        iend = mChildObjectList.end();
-        for (i = mChildObjectList.begin(); i != iend; ++i)
-        {
-            if (i->second == obj)
-            {
-                detachObjectImpl(obj);
-                mChildObjectList.erase(i);
-                break;
-            }
-        }
-#endif
-    }
-    //-----------------------------------------------------------------------
-    void Entity::detachAllObjectsFromBone(void)
-    {
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-        detachAllObjectsImpl();
-#endif
-    }
-    //-----------------------------------------------------------------------
-    void Entity::detachObjectImpl(MovableObject* pObject)
-    {
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-        TagPoint* tp = static_cast<TagPoint*>(pObject->getParentNode());
-
-        // free the TagPoint so we can reuse it later
-        mSkeletonInstance->freeTagPoint(tp);
-
-        pObject->_notifyAttached((TagPoint*)0);
-#endif
-    }
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-    //-----------------------------------------------------------------------
-    void Entity::detachAllObjectsImpl(void)
-    {
-
-        ChildObjectList::const_iterator i, iend;
-        iend = mChildObjectList.end();
-        for (i = mChildObjectList.begin(); i != iend; ++i)
-        {
-            detachObjectImpl(i->second);
-        }
-        mChildObjectList.clear()
-    }
-#endif
-
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-    //-----------------------------------------------------------------------
-    Entity::ChildObjectListIterator Entity::getAttachedObjectIterator()
-    {
-        return ChildObjectListIterator(mChildObjectList.begin(), mChildObjectList.end());
-    }
-#endif
     //-----------------------------------------------------------------------
     void Entity::prepareTempBlendBuffers(void)
     {

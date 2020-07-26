@@ -95,14 +95,8 @@ namespace Ogre
                     "D3D11DriverList::refresh");
             }
 
-            std::wstring wstrDesc = desc1.Description;
-            map<std::wstring, unsigned>::type::iterator nameCounterIt = sameNameCounter.find( wstrDesc );
-            if( nameCounterIt == sameNameCounter.end() )
-            {
-                sameNameCounter[wstrDesc] = 0;
-                nameCounterIt = sameNameCounter.find( wstrDesc );
-            }
-            unsigned sameNameIndex = nameCounterIt->second++;
+            // inserted map entry would be zero-initialized by map::operator[]
+            unsigned sameNameIndex = sameNameCounter[std::wstring( desc1.Description )]++;
 
             SharedPtr<D3D11Driver> driver(
                         OGRE_NEW_T( D3D11Driver, MEMCATEGORY_GENERAL )(

@@ -8,6 +8,8 @@
 #include "OgreRoot.h"
 #include "OgreLogManager.h"
 
+#include <fstream>
+
 namespace Ogre
 {
     OfflineProfiler::OfflineProfiler() :
@@ -223,7 +225,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void OfflineProfiler::
     PerThreadData::dumpSample( ProfileSample *sample, LwString &tmpStr, String &outCsvString,
-                               map<IdString, ProfileSample>::type &accumStats, uint32 stackDepth )
+                               StdMap<IdString, ProfileSample> &accumStats, uint32 stackDepth )
     {
         map<IdString, ProfileSample>::type::iterator itAccum = accumStats.find( sample->nameHash );
         if( itAccum == accumStats.end() )
@@ -268,7 +270,7 @@ namespace Ogre
         char tmpBuffer[128];
         LwString tmpStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
-        map<IdString, ProfileSample>::type accumStats;
+        StdMap<IdString, ProfileSample> accumStats;
 
         {
             uint32 stackDepth = 0;
@@ -286,8 +288,8 @@ namespace Ogre
         {
             csvString1 += "Name|Milliseconds|%\n";
 
-            map<IdString, ProfileSample>::type::const_iterator itor = accumStats.begin();
-            map<IdString, ProfileSample>::type::const_iterator end  = accumStats.end();
+            StdMap<IdString, ProfileSample>::const_iterator itor = accumStats.begin();
+            StdMap<IdString, ProfileSample>::const_iterator end  = accumStats.end();
 
             while( itor != end )
             {

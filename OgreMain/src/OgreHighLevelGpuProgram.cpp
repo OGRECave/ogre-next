@@ -33,6 +33,8 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 #include "OgreProfiler.h"
 
+#include <sstream>
+
 namespace Ogre
 {
     //---------------------------------------------------------------------------

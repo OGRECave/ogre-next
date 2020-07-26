@@ -48,7 +48,9 @@ THE SOFTWARE.
 #include "OgreTextureGpu.h"
 
 #include "OgreSceneManager.h"
+#include "OgreRenderQueue.h"
 #include "Compositor/OgreCompositorShadowNode.h"
+#include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreTexBufferPacked.h"
@@ -78,6 +80,8 @@ namespace Ogre
         mHasSeparateSamplers( 0 ),
         mLastDescTexture( 0 ),
         mLastDescSampler( 0 ),
+        mConstantBiasScale( 0.1f ),
+        mUsingInstancedStereo( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
         mTexUnitSlotStart( 2u ),
@@ -88,6 +92,9 @@ namespace Ogre
 
         //Always use this strategy, even on mobile
         mOptimizationStrategy = LowerCpuOverhead;
+
+        // Always an identity matrix
+        mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
     }
     HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders,
                           HlmsTypes type, const String &typeName ) :
@@ -98,6 +105,8 @@ namespace Ogre
         mLastBoundPool( 0 ),
         mLastDescTexture( 0 ),
         mLastDescSampler( 0 ),
+        mConstantBiasScale( 0.1f ),
+        mUsingInstancedStereo( false ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
         mTexUnitSlotStart( 2u ),
@@ -108,6 +117,9 @@ namespace Ogre
 
         //Always use this strategy, even on mobile
         mOptimizationStrategy = LowerCpuOverhead;
+
+        // Always an identity matrix
+        mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
     }
     //-----------------------------------------------------------------------------------
     HlmsUnlit::~HlmsUnlit()
@@ -161,44 +173,10 @@ namespace Ogre
         }
 
         //Set samplers.
-        assert( dynamic_cast<const HlmsUnlitDatablock*>( queuedRenderable.renderable->getDatablock() ) );
+        /*assert(
+         dynamic_cast<const HlmsUnlitDatablock*>( queuedRenderable.renderable->getDatablock() ) );
         const HlmsUnlitDatablock *datablock = static_cast<const HlmsUnlitDatablock*>(
-                                                queuedRenderable.renderable->getDatablock() );
-
-        if( !retVal->pso.pixelShader.isNull() )
-        {
-            GpuProgramParametersSharedPtr psParams = retVal->pso.pixelShader->getDefaultParameters();
-
-            int texUnit = mTexUnitSlotStart; //Vertex shader consumes 2 slots with its two tbuffers.
-
-            if( !getProperty( HlmsBaseProp::ShadowCaster ) && datablock->mTexturesDescSet )
-            {
-                FastArray<const TextureGpu*>::const_iterator itor =
-                        datablock->mTexturesDescSet->mTextures.begin();
-                FastArray<const TextureGpu*>::const_iterator end  =
-                        datablock->mTexturesDescSet->mTextures.end();
-
-                int numTextures = 0;
-                int numArrayTextures = 0;
-                while( itor != end )
-                {
-                    if( (*itor)->getInternalTextureType() == TextureTypes::Type2DArray )
-                    {
-                        psParams->setNamedConstant( "textureMapsArray[" +
-                                                    StringConverter::toString( numArrayTextures++ ) +
-                                                    "]", texUnit++ );
-                    }
-                    else
-                    {
-                        psParams->setNamedConstant( "textureMaps[" +
-                                                    StringConverter::toString( numTextures++ ) + "]",
-                                                    texUnit++ );
-                    }
-
-                    ++itor;
-                }
-            }
-        }
+                                                queuedRenderable.renderable->getDatablock() );*/
 
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
         vsParams->setNamedConstant( "worldMatBuf", 0 );
@@ -298,43 +276,34 @@ namespace Ogre
         setProperty( HlmsBaseProp::Tangent,     0 );
         setProperty( HlmsBaseProp::BonesPerVertex, 0 );
 
-        int texUnit = mTexUnitSlotStart; //Vertex shader consumes 2 slots with its two tbuffers.
-        int numTextures = 0;
-        int numArrayTextures = 0;
-
         if( datablock->mTexturesDescSet )
         {
-            FastArray<const TextureGpu*>::const_iterator itor =
-                    datablock->mTexturesDescSet->mTextures.begin();
-            FastArray<const TextureGpu*>::const_iterator end  =
-                    datablock->mTexturesDescSet->mTextures.end();
+            setProperty( UnlitProperty::NumTextures,
+                         static_cast<int32>( datablock->mTexturesDescSet->mTextures.size() ) );
+
+            uint32 currentTextureIdx = 0u;
+
+            FastArray<const TextureGpu *>::const_iterator itor =
+                datablock->mTexturesDescSet->mTextures.begin();
+            FastArray<const TextureGpu *>::const_iterator end =
+                datablock->mTexturesDescSet->mTextures.end();
 
             while( itor != end )
             {
-                char tmpBuffer[64];
-                LwString propName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
-                if( (*itor)->getInternalTextureType() == TextureTypes::Type2DArray )
+                if( ( *itor )->getInternalTextureType() == TextureTypes::Type2DArray )
                 {
-                    propName.a( "array_texture_bind", numArrayTextures );
-                    ++numArrayTextures;
-                }
-                else
-                {
-                    propName.a( "texture_bind", numTextures );
-                    ++numTextures;
+                    char tmpBuffer[32];
+                    LwString propName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+                    propName.a( "is_texture", currentTextureIdx, "_array" );
+                    setProperty( propName.c_str(), 1 );
                 }
 
-                setProperty( propName.c_str(), texUnit );
-
-                ++texUnit;
+                ++currentTextureIdx;
                 ++itor;
             }
         }
 
         setProperty( UnlitProperty::Diffuse, datablock->mHasColour );
-
-        setProperty( UnlitProperty::NumArrayTextures, numArrayTextures );
-        setProperty( UnlitProperty::NumTextures, numTextures );
 
         if( datablock->mSamplersDescSet )
             setProperty( UnlitProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
@@ -507,26 +476,32 @@ namespace Ogre
         //HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock*>(
         //                                              renderable->getDatablock() );
 
-        HlmsPropertyVec::iterator itor = mSetProperties.begin();
-        HlmsPropertyVec::iterator end  = mSetProperties.end();
+        HlmsDatablock *datablock = renderable->getDatablock();
+        const bool hasAlphaTest = datablock->getAlphaTest() != CMPF_ALWAYS_PASS;
 
-        while( itor != end )
+        if( !hasAlphaTest )
         {
-            if( itor->keyName != UnlitProperty::HwGammaRead &&
-                     //itor->keyName != UnlitProperty::UvDiffuse &&
-                     itor->keyName != HlmsPsoProp::InputLayoutId &&
-                     itor->keyName != HlmsBaseProp::Skeleton &&
-                     itor->keyName != HlmsBaseProp::BonesPerVertex &&
-                     itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
-                     itor->keyName != HlmsBaseProp::AlphaTest &&
-                     itor->keyName != HlmsBaseProp::AlphaBlend )
+            HlmsPropertyVec::iterator itor = mSetProperties.begin();
+            HlmsPropertyVec::iterator endt = mSetProperties.end();
+
+            while( itor != endt )
             {
-                itor = mSetProperties.erase( itor );
-                end  = mSetProperties.end();
-            }
-            else
-            {
-                ++itor;
+                if( itor->keyName != UnlitProperty::HwGammaRead &&
+                    // itor->keyName != UnlitProperty::UvDiffuse &&
+                    itor->keyName != HlmsPsoProp::InputLayoutId &&
+                    itor->keyName != HlmsBaseProp::Skeleton &&
+                    itor->keyName != HlmsBaseProp::BonesPerVertex &&
+                    itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
+                    itor->keyName != HlmsBaseProp::AlphaTest &&
+                    itor->keyName != HlmsBaseProp::AlphaBlend )
+                {
+                    itor = mSetProperties.erase( itor );
+                    endt = mSetProperties.end();
+                }
+                else
+                {
+                    ++itor;
+                }
             }
         }
 
@@ -534,6 +509,38 @@ namespace Ogre
             setProperty( UnlitProperty::MaterialsPerBuffer, static_cast<int>( 2 ) );
         else
             setProperty( UnlitProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsUnlit::notifyPropertiesMergedPreGenerationStep( void )
+    {
+        const int32 samplerStateStart = getProperty( UnlitProperty::SamplerStateStart );
+        int32 texUnit = samplerStateStart;
+        {
+            char tmpData[32];
+            LwString texName = LwString::FromEmptyPointer( tmpData, sizeof( tmpData ) );
+            texName = "textureMaps";
+            const size_t baseTexSize = texName.size();
+
+            char tmpBuffer[32];
+            LwString isTexArrayProp = LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) );
+            isTexArrayProp = "is_texture";
+            const size_t baseIsTexArrayProp = isTexArrayProp.size();
+
+            const int32 numTextures = getProperty( UnlitProperty::NumTextures );
+
+            for( int32 i = 0; i < numTextures; ++i )
+            {
+                texName.resize( baseTexSize );
+                isTexArrayProp.resize( baseIsTexArrayProp );
+
+                isTexArrayProp.a( i, "_array" );  // is_texture0_array
+                if( getProperty( isTexArrayProp.c_str() ) )
+                    texName.a( "Array" );  // textureMapsArray0
+                texName.a( i );            // textureMaps0 or textureMapsArray0
+
+                setTextureReg( PixelShader, texName.c_str(), texUnit++ );
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsUnlit::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
@@ -562,13 +569,29 @@ namespace Ogre
             }
         }
 
+        const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
+        CompositorPassSceneDef const *passSceneDef = 0;
+
+        if( pass && pass->getType() == PASS_SCENE )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef *>( pass->getDefinition() ) );
+            passSceneDef = static_cast<const CompositorPassSceneDef *>( pass->getDefinition() );
+
+            if( passSceneDef->mInstancedStereo )
+                setProperty( HlmsBaseProp::InstancedStereo, 1 );
+        }
+        const bool isInstancedStereo = passSceneDef && passSceneDef->mInstancedStereo;
+
         RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
         setProperty( HlmsBaseProp::ShadowUsesDepthTexture,
                      (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
         setProperty( HlmsBaseProp::RenderDepthOnly,
                      (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
 
-        setProperty( UnlitProperty::SamplerUnitSlotStart, (int32)mSamplerUnitSlotStart );
+        setProperty( UnlitProperty::SamplerStateStart, (int32)mSamplerUnitSlotStart );
+
+        if( mOptimizationStrategy == LowerGpuOverhead )
+            setProperty( UnlitProperty::LowerGpuOverhead, 1 );
 
         CamerasInProgress cameras = sceneManager->getCamerasInProgress();
         if( cameras.renderingCamera && cameras.renderingCamera->isReflected() )
@@ -600,6 +623,8 @@ namespace Ogre
         retVal.setProperties = mSetProperties;
         retVal.pso.pass = passCache.passPso;
 
+        mUsingInstancedStereo = isInstancedStereo;
+        mConstantBiasScale = cameras.renderingCamera->_getConstantBiasScale();
         Matrix4 viewMatrix = cameras.renderingCamera->getViewMatrix(true);
 
         Matrix4 projectionMatrix = cameras.renderingCamera->getProjectionMatrixWithRSDepth();
@@ -620,25 +645,57 @@ namespace Ogre
             identityProjMat[1][3]   = -identityProjMat[1][3];
         }
 
-        mPreparedPass.viewProjMatrix[0] = projectionMatrix * viewMatrix;
-        mPreparedPass.viewProjMatrix[1] = identityProjMat;
+        if( !isInstancedStereo )
+        {
+            mPreparedPass.viewProjMatrix[0] = projectionMatrix * viewMatrix;
+            mPreparedPass.viewProjMatrix[1] = identityProjMat;
+        }
+        else
+        {
+            mPreparedPass.viewProjMatrix[1] = identityProjMat;
+            mPreparedPass.viewProjMatrix[3] = identityProjMat;
+
+            Matrix4 vrViewMat[2];
+            for( size_t eyeIdx = 0u; eyeIdx < 2u; ++eyeIdx )
+            {
+                vrViewMat[eyeIdx] = cameras.renderingCamera->getVrViewMatrix( eyeIdx );
+                Matrix4 vrProjMat = cameras.renderingCamera->getVrProjectionMatrix( eyeIdx );
+                if( renderPassDesc->requiresTextureFlipping() )
+                {
+                    vrProjMat[1][0] = -vrProjMat[1][0];
+                    vrProjMat[1][1] = -vrProjMat[1][1];
+                    vrProjMat[1][2] = -vrProjMat[1][2];
+                    vrProjMat[1][3] = -vrProjMat[1][3];
+                }
+                Matrix4 vrViewProjMatrix = vrProjMat * vrViewMat[eyeIdx];
+                mPreparedPass.viewProjMatrix[eyeIdx * 2u] = vrViewProjMatrix;
+            }
+        }
+
+        bool isShadowCastingPointLight =  casterPass && getProperty( HlmsBaseProp::ShadowCasterPoint ) != 0;
 
         mSetProperties.clear();
-
-        bool isShadowCastingPointLight = false;
 
         //mat4 viewProj[2] + vec4 invWindowSize;
         size_t mapSize = (16 + 16 + 4) * 4;
 
+        if( isInstancedStereo )
+        {
+            // mat4 viewProj[2] becomes => mat4 viewProj[4]
+            mapSize += ( 16 + 16 ) * 4;
+        }
+
         const bool isCameraReflected = cameras.renderingCamera->isReflected();
         //mat4 invViewProj
-        if( isCameraReflected || (casterPass && (mUsingExponentialShadowMaps || isShadowCastingPointLight)) )
-            mapSize += 16 * 4;
+        if( ( isCameraReflected ||
+              ( casterPass && ( mUsingExponentialShadowMaps || isShadowCastingPointLight ) ) ) &&
+            !isInstancedStereo )
+        {
+            mapSize += 16u * 4u;
+        }
 
         if( casterPass )
         {
-            isShadowCastingPointLight = getProperty( HlmsBaseProp::ShadowCasterPoint ) != 0;
-
             //vec4 viewZRow
             if( mUsingExponentialShadowMaps )
                 mapSize += 4 * 4;
@@ -684,6 +741,17 @@ namespace Ogre
         for( size_t i=0; i<16; ++i )
             *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[1][0][i];
 
+        if( isInstancedStereo )
+        {
+            // mat4 viewProj[2]; (right eye)
+            for( size_t i = 0u; i < 16u; ++i )
+                *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[2][0][i];
+
+            // mat4 viewProj[1] (identityProj, right eye);
+            for( size_t i = 0u; i < 16u; ++i )
+                *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[3][0][i];
+        }
+
         //vec4 clipPlane0
         if( isCameraReflected )
         {
@@ -694,7 +762,9 @@ namespace Ogre
             *passBufferPtr++ = (float)reflPlane.d;
         }
 
-        if( isCameraReflected || (casterPass && (mUsingExponentialShadowMaps || isShadowCastingPointLight)) )
+        if( ( isCameraReflected ||
+              ( casterPass && ( mUsingExponentialShadowMaps || isShadowCastingPointLight ) ) ) &&
+            !isInstancedStereo )
         {
             //We don't care about the inverse of the identity proj because that's not
             //really compatible with shadows anyway.
@@ -889,13 +959,14 @@ namespace Ogre
 
         //uint materialIdx[]
         *currentMappedConstBuffer = datablock->getAssignedSlot();
-        *reinterpret_cast<float * RESTRICT_ALIAS>( currentMappedConstBuffer+1 ) = datablock->
-                                                                                    mShadowConstantBias;
+        *reinterpret_cast<float * RESTRICT_ALIAS>( currentMappedConstBuffer + 1 ) =
+            datablock->mShadowConstantBias * mConstantBiasScale;
         *(currentMappedConstBuffer+2) = useIdentityProjection;
         currentMappedConstBuffer += 4;
 
         //mat4 worldViewProj
-        Matrix4 tmp = mPreparedPass.viewProjMatrix[ useIdentityProjection ] * worldMat;
+        Matrix4 tmp =
+            mPreparedPass.viewProjMatrix[mUsingInstancedStereo ? 4u : useIdentityProjection] * worldMat;
 #if !OGRE_DOUBLE_PRECISION
         memcpy( currentMappedTexBuffer, &tmp, sizeof( Matrix4 ) );
         currentMappedTexBuffer += 16;
@@ -988,14 +1059,6 @@ namespace Ogre
     void HlmsUnlit::setShadowSettings( bool useExponentialShadowMaps )
     {
         mUsingExponentialShadowMaps = useExponentialShadowMaps;
-
-        if( mUsingExponentialShadowMaps && mHlmsManager->getShadowMappingUseBackFaces() )
-        {
-            LogManager::getSingleton().logMessage(
-                        "QUALITY WARNING: It is highly recommended that you call "
-                        "mHlmsManager->setShadowMappingUseBackFaces( false ) when using Exponential "
-                        "Shadow Maps (HlmsUnlit::setShadowSettings)" );
-        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::setEsmK( uint16 K )
@@ -1010,7 +1073,9 @@ namespace Ogre
         //name of the compatible shading language is part of the path
         RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
         String shaderSyntax = "GLSL";
-        if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
+        if (renderSystem->getName() == "OpenGL ES 2.x Rendering Subsystem")
+            shaderSyntax = "GLSLES";
+        else if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
             shaderSyntax = "HLSL";
         else if( renderSystem->getName() == "Metal Rendering Subsystem" )
             shaderSyntax = "Metal";

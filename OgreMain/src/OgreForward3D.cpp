@@ -147,13 +147,20 @@ namespace Ogre
 
             //Exclude shadow casting lights
             const LightClosestArray &shadowCastingLights = shadowNode->getShadowCastingLights();
+
+            mShadowCastingLightVisibility.clear();
+            mShadowCastingLightVisibility.reserve( shadowCastingLights.size() );
+
             LightClosestArray::const_iterator itor = shadowCastingLights.begin();
             LightClosestArray::const_iterator end  = shadowCastingLights.end();
 
             while( itor != end )
             {
                 if( itor->light )
+                {
+                    mShadowCastingLightVisibility.push_back( itor->light->getVisible() );
                     itor->light->setVisible( false );
+                }
                 ++itor;
             }
 
@@ -161,13 +168,17 @@ namespace Ogre
                                        Light::MAX_FORWARD_PLUS_LIGHTS, mCurrentLightList );
 
             //Restore shadow casting lights
+            FastArray<bool>::const_iterator itVis = mShadowCastingLightVisibility.begin();
             itor = shadowCastingLights.begin();
             end  = shadowCastingLights.end();
 
             while( itor != end )
             {
                 if( itor->light )
-                    itor->light->setVisible( true );
+                {
+                    itor->light->setVisible( *itVis );
+                    ++itVis;
+                }
                 ++itor;
             }
         }

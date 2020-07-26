@@ -56,6 +56,7 @@ namespace Ogre {
           mTexture( 0 ),
           mTextureLightMaskIdx( std::numeric_limits<uint16>::max() ),
           mTexLightMaskDiffuseMipStart( (uint16)(0.95f * 65535) ),
+          mLightProfileIdx( 0u ),
           mShadowFarDist(0),
           mShadowFarDistSquared(0),
           mShadowNearClipDist(-1),
@@ -329,11 +330,15 @@ namespace Ogre {
     Vector3 Light::getDerivedDirection(void) const
     {
         return -mParentNode->_getDerivedOrientation().zAxis();
+        // Same as:
+        // return mParentNode->convertLocalToWorldDirection(Vector3::NEGATIVE_UNIT_Z, false);
     }
     //-----------------------------------------------------------------------
     Vector3 Light::getDerivedDirectionUpdated(void) const
     {
         return -mParentNode->_getDerivedOrientationUpdated().zAxis();
+        // Same as:
+        // return mParentNode->convertLocalToWorldDirectionUpdated(Vector3::NEGATIVE_UNIT_Z, false);
     }
     //-----------------------------------------------------------------------
     Vector4 Light::getAs4DVector(void) const
@@ -659,7 +664,9 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------
-    void Light::_updateCustomGpuParameter(uint16 paramIndex, const GpuProgramParameters::AutoConstantEntry& constantEntry, GpuProgramParameters *params) const
+    void Light::_updateCustomGpuParameter( uint16 paramIndex,
+                                           const GpuProgramParameters_AutoConstantEntry &constantEntry,
+                                           GpuProgramParameters *params ) const
     {
         CustomParameterMap::const_iterator i = mCustomParameters.find(paramIndex);
         if (i != mCustomParameters.end())

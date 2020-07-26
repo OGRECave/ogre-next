@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgreId.h"
 
+#include "ogrestd/map.h"
+
 namespace Ogre
 {
     /** \addtogroup Core
@@ -99,18 +101,15 @@ namespace Ogre
             uint32 width;           //0 means adapt to target width
             uint32 height;          //0 means adapt to target height
             uint32 depthOrSlices;   //Can never be 0.
-            uint8 numMipmaps;       //1u to disable mipmaps, Negative to generate until the max
-                                    //Will be set to -1 if value is 1u and automipmaps is true
-                                    //Can never be 0.
+            uint8 numMipmaps;       //1u to disable mipmaps, 0 to generate until the max
             float widthFactor;  //multiple of target width to use (if width = 0)
             float heightFactor; //multiple of target height to use (if height = 0)
             /// Use PFG_UNKNOWN to use same format as main target
             PixelFormatGpu format;
-            /// 1u  = Disable.
-            /// >1u = Enable
-            /// 0   = Use same setting as main target
-            uint8 msaa;
-            MsaaPatterns::MsaaPatterns msaaPattern;
+            /// "1"  = Disable.
+            /// "8", "8x", "8x MSAA Center", "8x CSAA" = Enable
+            /// ""   = Use same setting as main target
+            String fsaa;
 
             /// See TextureFlags::TextureFlags. Valid flags are:
             ///     NotTexture (only valid if Uav is present)
@@ -136,7 +135,7 @@ namespace Ogre
             TextureDefinition( IdString _name ) : name(_name), textureType( TextureTypes::Type2D ),
                     width( 0 ), height( 0 ), depthOrSlices( 1u ), numMipmaps( 1u ),
                     widthFactor( 1.0f ), heightFactor( 1.0f ),
-                    format( PFG_UNKNOWN ), msaa( 1u ), msaaPattern( MsaaPatterns::Undefined ),
+                    format( PFG_UNKNOWN ), fsaa( "1" ),
                     textureFlags( TextureFlags::RenderToTexture ),
                     depthBufferId( 1u ), preferDepthTexture( false ), depthBufferFormat( PFG_UNKNOWN ) {}
         };
@@ -321,6 +320,8 @@ namespace Ogre
         RenderTargetViewDef* addRenderTextureView( IdString name );
         const RenderTargetViewDef* getRenderTargetViewDef( IdString name ) const;
         RenderTargetViewDef* getRenderTargetViewDefNonConstNoThrow( IdString name );
+        void removeRenderTextureView( IdString name );
+        void removeAllRenderTextureViews( void );
 
         /** Utility function to create the textures based on a given set of
             texture definitions and put them in a container.

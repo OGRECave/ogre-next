@@ -6,20 +6,22 @@
 @insertpiece( DeclareUvModifierMacros )
 
 layout(std140) uniform;
-#define FRAG_COLOR		0
 
 @property( !hlms_render_depth_only )
 	@property( !hlms_shadowcaster )
 		@property( !hlms_prepass )
-			layout(location = FRAG_COLOR, index = 0) out vec4 outColour;
-		@end @property( hlms_prepass )
-			#define outPs_normals outNormals
-			#define outPs_shadowRoughness outShadowRoughness
-			layout(location = 0) out vec4 outNormals;
-			layout(location = 1) out vec2 outShadowRoughness;
+			layout(location = @counter(rtv_target), index = 0) out vec4 outColour;
 		@end
-	@end @property( hlms_shadowcaster )
-	layout(location = FRAG_COLOR, index = 0) out float outColour;
+		@property( hlms_gen_normals_gbuffer )
+			#define outPs_normals outNormals
+			layout(location = @counter(rtv_target)) out vec4 outNormals;
+		@end
+		@property( hlms_prepass )
+			#define outPs_shadowRoughness outShadowRoughness
+			layout(location = @counter(rtv_target)) out vec2 outShadowRoughness;
+		@end
+	@else
+		layout(location = @counter(rtv_target), index = 0) out float outColour;
 	@end
 @end
 
@@ -38,8 +40,21 @@ layout(std140) uniform;
 	@end
 @end
 
+@property( hlms_ss_refractions_available )
+	@property( !hlms_use_prepass || !hlms_use_prepass_msaa )
+		@property( !hlms_use_prepass_msaa )
+			uniform sampler2D gBuf_depthTexture;
+			#define depthTextureNoMsaa gBuf_depthTexture
+		@else
+			uniform sampler2D depthTextureNoMsaa;
+		@end
+	@end
+	uniform sampler2D refractionMap;
+@end
+
 @insertpiece( DeclPlanarReflTextures )
 @insertpiece( DeclAreaApproxTextures )
+@insertpiece( DeclLightProfilesTexture )
 
 @property( hlms_vpos )
 in vec4 gl_FragCoord;

@@ -37,6 +37,8 @@
 #include "OgreWin32Window.h"
 #include <GL/wglext.h>
 
+#include <sstream>
+
 using namespace Ogre;
 
 namespace Ogre {
@@ -134,7 +136,7 @@ namespace Ogre {
         optVSyncInterval.possibleValues.push_back( "4" );
         optVSyncInterval.currentValue = "1";
 
-        optFSAA.name = "MSAA";
+        optFSAA.name = "FSAA";
         optFSAA.immutable = false;
         optFSAA.possibleValues.push_back("1");
         for (vector<int>::type::iterator it = mFSAALevels.begin(); it != mFSAALevels.end(); ++it)
@@ -161,7 +163,7 @@ namespace Ogre {
         optSRGB.name = "sRGB Gamma Conversion";
         optSRGB.possibleValues.push_back("Yes");
         optSRGB.possibleValues.push_back("No");
-        optSRGB.currentValue = "No";
+        optSRGB.currentValue = "Yes";
         optSRGB.immutable = false;
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
@@ -311,18 +313,15 @@ namespace Ogre {
                 winOptions["displayFrequency"] = StringConverter::toString(displayFrequency);
             }
 
-            opt = mOptions.find("MSAA");
+            opt = mOptions.find("FSAA");
             if( opt == mOptions.end() )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Can't find MSAA options!",
+                             "Can't find FSAA options!",
                              "Win32GLSupport::createWindow" );
             }
-            StringVector aavalues = StringUtil::split(opt->second.currentValue, " ", 1);
-            unsigned int multisample = StringConverter::parseUnsignedInt(aavalues[0]);
-            String multisample_hint;
-            if (aavalues.size() > 1)
-                multisample_hint = aavalues[1];
+            String fsaa = opt->second.currentValue;
+            winOptions["FSAA"] = fsaa;
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 			opt = mOptions.find("Stereo Mode");
@@ -331,9 +330,6 @@ namespace Ogre {
 			winOptions["stereoMode"] = opt->second.currentValue;
 			mStereoMode = StringConverter::parseStereoMode(opt->second.currentValue);
 #endif
-
-            winOptions["MSAA"] = StringConverter::toString(multisample);
-            winOptions["MSAA_quality"] = multisample_hint;
 
             opt = mOptions.find("sRGB Gamma Conversion");
             if (opt == mOptions.end())

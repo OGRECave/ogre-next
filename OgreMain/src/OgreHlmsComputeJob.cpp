@@ -176,16 +176,16 @@ namespace Ogre
         propName.resize( texturePropSize );
 
         propName.a( "_msaa" );                  //texture0_msaa
-        setProperty( propName.c_str(), texture->getMsaa() > 1u ? 1 : 0 );
+        setProperty( propName.c_str(), texture->isMultisample() ? 1 : 0 );
         propName.resize( texturePropSize );
 
         propName.a( "_msaa_samples" );          //texture0_msaa_samples
-        setProperty( propName.c_str(), texture->getMsaa() );
+        setProperty( propName.c_str(), texture->getSampleDescription().getColourSamples() );
         propName.resize( texturePropSize );
 
         propName.a( "_texture_type" );          //_texture_type
         setProperty( propName.c_str(),
-                     c_textureTypesProps[texture->getTextureType()].mHash );
+                     c_textureTypesProps[texture->getInternalTextureType()].mHash );
         propName.resize( texturePropSize );
 
         propName.a( "_pf_type" );               //uav0_pf_type
@@ -194,10 +194,14 @@ namespace Ogre
             setPiece( propName.c_str(), typeName );
         propName.resize( texturePropSize );
 
+        propName.a( "_orig_pf_srgb" );  // uav0_orig_pf_srgb
+        setProperty( propName.c_str(), PixelFormatGpuUtils::isSRgb( texture->getPixelFormat() ) );
+        propName.resize( texturePropSize );
+
         propName.a( "_data_type" );             //uav0_data_type
         const char *dataType = toShaderType->getDataType( pixelFormat,
-                                                          texture->getTextureType(),
-                                                          texture->getMsaa() > 1u,
+                                                          texture->getInternalTextureType(),
+                                                          texture->isMultisample(),
                                                           access );
         if( typeName )
             setPiece( propName.c_str(), dataType );
@@ -523,7 +527,10 @@ namespace Ogre
                 uint32 resolution[3];
                 resolution[0] = std::max( tex->getWidth() >> mipLevel, 1u );
                 resolution[1] = std::max( tex->getHeight() >> mipLevel, 1u );
-                resolution[2] = std::max( tex->getDepthOrSlices() >> mipLevel, 1u );
+                if( tex->getInternalTextureType() == TextureTypes::Type3D )
+                    resolution[2] = std::max( tex->getDepthOrSlices() >> mipLevel, 1u );
+                else
+                    resolution[2] = std::max( tex->getDepthOrSlices(), 1u );
 
                 for( int i=0; i<3; ++i )
                 {

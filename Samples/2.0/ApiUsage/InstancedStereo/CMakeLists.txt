@@ -24,8 +24,4 @@ ogre_add_executable(Sample_InstancedStereo WIN32 MACOSX_BUNDLE ${SOURCE_FILES} $
 
 target_link_libraries(Sample_InstancedStereo ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(Sample_InstancedStereo)
-
-if( APPLE )
-	set_target_properties( Sample_InstancedStereo PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Sample_InstancedStereo PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Sample_InstancedStereo)

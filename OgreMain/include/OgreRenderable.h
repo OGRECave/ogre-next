@@ -32,8 +32,6 @@ THE SOFTWARE.
 #include "OgreCommon.h"
 
 #include "OgreIdString.h"
-#include "OgreGpuProgram.h"
-#include "OgreGpuProgramParams.h"
 #include "OgreMatrix4.h"
 #include "OgreMaterial.h"
 #include "OgrePlane.h"
@@ -46,6 +44,7 @@ THE SOFTWARE.
 namespace Ogre {
 
     typedef FastArray<VertexArrayObject*> VertexArrayObjectArray;
+    class GpuProgramParameters_AutoConstantEntry;
 
     /** \addtogroup Core
     *  @{
@@ -145,7 +144,17 @@ namespace Ogre {
 
         bool hasSkeletonAnimation(void) const               { return mHasSkeletonAnimation; }
 
-        /** Returns whether the world matrix is an identify matrix.
+        unsigned short getNumPoses(void) const;
+        bool getPoseHalfPrecision() const;
+        bool getPoseNormals() const;
+        float* getPoseWeights() const;
+        float getPoseWeight(size_t index) const;
+        void setPoseWeight(size_t index, float w);
+        void addPoseWeight(size_t index, float w);
+        
+        TexBufferPacked* getPoseTexBuffer() const;
+        
+        /** Returns whether the world matrix is an identity matrix.
         @remarks
             It is up to the Hlms implementation whether to honour this request. Take in mind
             changes of this value at runtime may not be seen until the datablock is flushed.
@@ -316,16 +325,8 @@ namespace Ogre {
             set the updated parameters.
         */
         virtual void _updateCustomGpuParameter(
-            const GpuProgramParameters::AutoConstantEntry& constantEntry,
-            GpuProgramParameters* params) const
-        {
-            CustomParameterMap::const_iterator i = mCustomParameters.find(constantEntry.data);
-            if (i != mCustomParameters.end())
-            {
-                params->_writeRawConstant(constantEntry.physicalIndex, i->second, 
-                    constantEntry.elementCount);
-            }
-        }
+            const GpuProgramParameters_AutoConstantEntry &constantEntry,
+            GpuProgramParameters *params ) const;
 
         /** Sets whether this renderable's chosen detail level can be
             overridden (downgraded) by the camera setting. 
@@ -377,6 +378,8 @@ namespace Ogre {
         uint32 getHlmsHash(void) const          { return mHlmsHash; }
         uint32 getHlmsCasterHash(void) const    { return mHlmsCasterHash; }
         HlmsDatablock* getDatablock(void) const { return mHlmsDatablock; }
+
+        const String& getDatablockOrMaterialName() const;
 
         /** First tries to see if an HLMS datablock exist with the given name,
             if not, tries to search among low level materials.
@@ -448,7 +451,7 @@ namespace Ogre {
         bool                    mHasSkeletonAnimation;
         uint8                   mCurrentMaterialLod;
         FastArray<Real> const   *mLodMaterial;
-
+        
         /** Index in the vector holding this Rendrable reference in the HLMS datablock.
             Used for O(1) removals.
         @remarks
@@ -460,6 +463,18 @@ namespace Ogre {
         bool mUseIdentityProjection;
         bool mUseIdentityView;
         UserObjectBindings mUserObjectBindings;      /// User objects binding.
+        
+        struct PoseData
+        {
+            unsigned short   numPoses;
+            float            weights[OGRE_MAX_POSES];
+            TexBufferPacked* buffer;
+            bool             halfPrecision;
+            bool             hasNormals;
+            
+            PoseData();
+        };
+        SharedPtr<PoseData> mPoseData;
     };
 
     class _OgreExport RenderableAnimated : public Renderable

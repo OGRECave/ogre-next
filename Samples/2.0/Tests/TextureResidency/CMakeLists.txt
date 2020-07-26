@@ -24,8 +24,4 @@ ogre_add_executable(Test_TextureResidency WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${
 
 target_link_libraries(Test_TextureResidency ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(Test_TextureResidency)
-
-if( APPLE )
-	set_target_properties( Test_TextureResidency PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Test_TextureResidency PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Test_TextureResidency)

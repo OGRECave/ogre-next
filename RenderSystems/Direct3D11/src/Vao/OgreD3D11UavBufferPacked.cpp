@@ -52,14 +52,20 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     D3D11UavBufferPacked::~D3D11UavBufferPacked()
     {
-        for( int i=0; i<16; ++i )
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11UavBufferPacked::notifyDeviceLost(D3D11Device* device)
+    {
+        for(unsigned cacheIdx = 0; cacheIdx < 16; ++cacheIdx)
         {
-            if( mCachedResourceViews[i].mResourceView )
-            {
-                mCachedResourceViews[i].mResourceView->Release();
-                mCachedResourceViews[i].mResourceView = 0;
-            }
+            mCachedResourceViews[cacheIdx].mResourceView.Reset();
+            mCachedResourceViews[cacheIdx].mOffset = 0;
+            mCachedResourceViews[cacheIdx].mSize = 0;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11UavBufferPacked::notifyDeviceRestored(D3D11Device* device, unsigned pass)
+    {
     }
     //-----------------------------------------------------------------------------------
     TexBufferPacked* D3D11UavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
@@ -87,8 +93,7 @@ namespace Ogre
     {
         assert( cacheIdx < 16 );
 
-        if( mCachedResourceViews[cacheIdx].mResourceView )
-            mCachedResourceViews[cacheIdx].mResourceView->Release();
+        mCachedResourceViews[cacheIdx].mResourceView.Reset();
 
         mCachedResourceViews[cacheIdx].mOffset  = mFinalBufferStart + offset;
         mCachedResourceViews[cacheIdx].mSize    = sizeBytes;
@@ -109,10 +114,10 @@ namespace Ogre
         ID3D11Buffer *vboName = bufferInterface->getVboName();
 
         mDevice.get()->CreateUnorderedAccessView( vboName, &srDesc,
-                                                  &mCachedResourceViews[cacheIdx].mResourceView );
+            mCachedResourceViews[cacheIdx].mResourceView.ReleaseAndGetAddressOf() );
         mCurrentCacheCursor = (cacheIdx + 1) % 16;
 
-        return mCachedResourceViews[cacheIdx].mResourceView;
+        return mCachedResourceViews[cacheIdx].mResourceView.Get();
     }
     //-----------------------------------------------------------------------------------
     ID3D11UnorderedAccessView* D3D11UavBufferPacked::_bindBufferCommon( size_t offset, size_t sizeBytes )
@@ -130,7 +135,7 @@ namespace Ogre
             if( mFinalBufferStart + offset == mCachedResourceViews[i].mOffset &&
                 sizeBytes <= mCachedResourceViews[i].mSize )
             {
-                resourceView = mCachedResourceViews[i].mResourceView;
+                resourceView = mCachedResourceViews[i].mResourceView.Get();
                 break;
             }
             else if( !mCachedResourceViews[i].mResourceView )
@@ -150,7 +155,7 @@ namespace Ogre
         return resourceView;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11UnorderedAccessView* D3D11UavBufferPacked::createUav(
+    ComPtr<ID3D11UnorderedAccessView> D3D11UavBufferPacked::createUav(
             const DescriptorSetUav::BufferSlot &bufferSlot ) const
     {
         assert( bufferSlot.offset <= getTotalSizeBytes() );
@@ -176,8 +181,8 @@ namespace Ogre
                     mBufferInterface );
         ID3D11Buffer *vboName = bufferInterface->getVboName();
 
-        ID3D11UnorderedAccessView *retVal = 0;
-        HRESULT hr = mDevice->CreateUnorderedAccessView( vboName, &uavDesc, &retVal );
+        ComPtr<ID3D11UnorderedAccessView> retVal;
+        HRESULT hr = mDevice->CreateUnorderedAccessView( vboName, &uavDesc, retVal.GetAddressOf() );
         if( FAILED(hr) )
         {
             String errorDescription = mDevice.getErrorDescription(hr);

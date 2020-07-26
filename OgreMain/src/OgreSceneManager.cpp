@@ -99,6 +99,7 @@ mStaticMinDepthLevelDirty( 0 ),
 mStaticEntitiesDirty( true ),
 mPrePassMode( PrePassNone ),
 mSsrTexture( 0 ),
+mRefractionsTexture( 0 ),
 mName(name),
 mRenderQueue( 0 ),
 mForwardPlusSystem( 0 ),
@@ -157,6 +158,8 @@ mGpuParamsDirty((uint16)GPV_ALL)
     for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
         mSceneRoot[i] = 0;
     mSceneDummy = 0;
+
+    memset( mAmbientSphericalHarmonics, 0, sizeof( mAmbientSphericalHarmonics ) );
 
     setAmbientLight( ColourValue::Black, ColourValue::Black, Vector3::UNIT_Y, 1.0f );
 
@@ -999,6 +1002,7 @@ void SceneManager::setSky( bool bEnabled, SkyMethod skyMethod, TextureGpu *textu
             mSky->initialize( BT_DEFAULT,
                               Rectangle2D::GeometryFlagQuad | Rectangle2D::GeometryFlagNormals );
             mSky->setGeometry( -Ogre::Vector2::UNIT_SCALE, Ogre::Vector2( 2.0f ) );
+            mSky->setRenderQueueGroup( 212u ); // Render after most stuff
             mSceneRoot[SCENE_STATIC]->attachObject( mSky );
         }
 
@@ -1177,6 +1181,12 @@ void SceneManager::_setPrePassMode( PrePassMode mode, const TextureGpuVec &prepa
     mPrePassTextures = prepassTextures;
     mPrePassDepthTexture = prepassDepthTexture;
     mSsrTexture = ssrTexture;
+}
+//-----------------------------------------------------------------------
+void SceneManager::_setRefractions( TextureGpu *depthTextureNoMsaa, TextureGpu *refractionsTexture )
+{
+    mPassDepthTextureNoMsaa = depthTextureNoMsaa;
+    mRefractionsTexture = refractionsTexture;
 }
 //-----------------------------------------------------------------------
 void SceneManager::setDecalsDiffuse( TextureGpu *tex )
@@ -1434,7 +1444,7 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
         }
     } // end lock on scene graph mutex
 
-    mDestRenderSystem->_beginGeometryCount();
+    mDestRenderSystem->_resetMetrics();
 
     // Set initial camera state
     mDestRenderSystem->_setProjectionMatrix( Matrix4::IDENTITY );
@@ -1459,10 +1469,10 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
     mDestRenderSystem->setInvertVertexWinding(false);
 
     // Notify camera of vis faces
-    camera->_notifyRenderedFaces(mDestRenderSystem->_getFaceCount());
+    camera->_notifyRenderedFaces( mDestRenderSystem->getMetrics().mFaceCount );
 
     // Notify camera of vis batches
-    camera->_notifyRenderedBatches(mDestRenderSystem->_getBatchCount());
+    camera->_notifyRenderedBatches( mDestRenderSystem->getMetrics().mBatchCount );
 
     Root::getSingleton()._popCurrentSceneManager(this);
 }
@@ -2858,6 +2868,16 @@ void SceneManager::setAmbientLight( const ColourValue &upperHemisphere,
     mEnvFeatures = envFeatures;
 }
 //-----------------------------------------------------------------------
+void SceneManager::setSphericalHarmonics( Vector3 ambientSphericalHarmonics[9] )
+{
+    for( size_t i = 0u; i < 9u; ++i )
+    {
+        mAmbientSphericalHarmonics[i * 3u + 0u] = (float)ambientSphericalHarmonics[i].x;
+        mAmbientSphericalHarmonics[i * 3u + 1u] = (float)ambientSphericalHarmonics[i].y;
+        mAmbientSphericalHarmonics[i * 3u + 2u] = (float)ambientSphericalHarmonics[i].z;
+    }
+}
+//-----------------------------------------------------------------------
 ViewPoint SceneManager::getSuggestedViewpoint(bool random)
 {
     // By default return the origin
@@ -3207,24 +3227,6 @@ void SceneManager::removeListener(Listener* delListener)
     ListenerList::iterator i = std::find(mListeners.begin(), mListeners.end(), delListener);
     if (i != mListeners.end())
         mListeners.erase(i);
-}
-//---------------------------------------------------------------------
-void SceneManager::firePreRenderQueues()
-{
-    for (RenderQueueListenerList::iterator i = mRenderQueueListeners.begin(); 
-        i != mRenderQueueListeners.end(); ++i)
-    {
-        (*i)->preRenderQueues();
-    }
-}
-//---------------------------------------------------------------------
-void SceneManager::firePostRenderQueues()
-{
-    for (RenderQueueListenerList::iterator i = mRenderQueueListeners.begin(); 
-        i != mRenderQueueListeners.end(); ++i)
-    {
-        (*i)->postRenderQueues();
-    }
 }
 //---------------------------------------------------------------------
 bool SceneManager::fireRenderQueueStarted(uint8 id, const String& invocation)
@@ -4749,4 +4751,5 @@ inline bool SceneManager::updateWorkerThreadImpl( size_t threadIdx )
 
     return exitThread;
 }
+SceneManagerFactory::~SceneManagerFactory() {}
 }

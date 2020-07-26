@@ -1,0 +1,129 @@
+
+#include "/media/matias/Datos/SyntaxHighlightingMisc.h"
+
+@piece( DefaultHeaderVS )
+	@insertpiece( Common_Matrix_DeclUnpackMatrix4x4 )
+
+	// START UNIFORM DECLARATION
+	@insertpiece( PassStructDecl )
+	@property( ( !hlms_shadowcaster || alpha_test ) && hlms_colour && diffuse )
+		@insertpiece( MaterialStructDecl )
+	@end
+	@insertpiece( InstanceStructDecl )
+	@insertpiece( custom_vs_uniformStructDeclaration )
+	// END UNIFORM DECLARATION
+
+	@property( !hlms_instanced_stereo )
+		@property( !hlms_identity_world )
+			// Most common path
+			#define masterMatrix worldViewProj
+		@else
+			@property( !hlms_identity_viewproj_dynamic )
+				// World matrix is ignored. Billboards may need this setting.
+				//
+				// Multiply against a hardcoded regular or almost-identity
+				// projection matrix ('almost' because the projection matrix is
+				// used to flip Y rendering in GL)
+				#define masterMatrix passBuf.viewProj[@value(hlms_identity_viewproj)]
+			@else
+				// World matrix is ignored. Billboards may need this setting.
+				//
+				// Switching between regular & almost-identity projection
+				// matrix can be done dynamically
+				#define masterMatrix passBuf.viewProj[worldMaterialIdx[finalDrawId].z]
+			@end
+		@end
+	@end
+@end
+
+//-----------------------------------------------------------------------------
+//		BODY CODE
+//-----------------------------------------------------------------------------
+
+@piece( LoadMaterial )
+	@property( !lower_gpu_overhead )
+		#define material materialArray[ushort(worldMaterialIdx[finalDrawId].x)]
+	@else
+		#define material materialArray[0]
+	@end
+@end
+
+@piece( DefaultBodyVS )
+	@property( !hlms_instanced_stereo )
+		@property( !hlms_identity_world )
+			float4x4 worldViewProj = UNPACK_MAT4( worldMatBuf, finalDrawId );
+		@end
+
+		@property( !hlms_dual_paraboloid_mapping )
+			outVs_Position = mul( inVs_vertex, masterMatrix );
+		@else
+			//Dual Paraboloid Mapping
+			outVs_Position.w	= 1.0f;
+			outVs_Position.xyz	= mul( vertex, masterMatrix ).xyz;
+			float L = length( outVs_Position.xyz );
+			outVs_Position.z	+= 1.0f;
+			outVs_Position.xy	/= outVs_Position.z;
+			outVs_Position.z	= (L - NearPlane) / (FarPlane - NearPlane);
+		@end
+	@else
+		// Instanced stereo must index the viewProj matrix dynamically, thus considering
+		// hlms_identity_viewproj_dynamic to save performance by hardcoding the index is pointless
+		float4x4 worldMat = UNPACK_MAT4( worldMatBuf, finalDrawId );
+		@property( !hlms_identity_world )
+			float4 worldPos = float4( mul( inVs_vertex, worldMat ).xyz, 1.0f );
+		@else
+			float4 worldPos = float4( inVs_vertex.xyz, 1.0f );
+		@end
+		uint vpmatIdx = ( (inVs_stereoDrawId & 0x01u) << 1u ) + worldMaterialIdx[finalDrawId].z;
+		outVs_Position = mul( worldPos, passBuf.viewProj[vpmatIdx] );
+	@end
+
+	@property( !hlms_shadowcaster || alpha_test )
+		@property( hlms_colour )
+			outVs.colour = inVs_colour;
+			@property( diffuse )
+				@insertpiece( LoadMaterial )
+				@insertpiece( custom_vs_posMaterialLoad )
+				outVs.colour *= material.diffuse;
+			@end
+		@end
+
+		@property( texture_matrix )
+			float4x4 textureMatrix;
+		@end
+
+		@foreach( out_uv_count, n )
+			@property( out_uv@n_texture_matrix )
+				textureMatrix = UNPACK_MAT4( animationMatrixBuf,
+											 (worldMaterialIdx[finalDrawId].x << 4u) +
+											 @value( out_uv@n_tex_unit )u );
+				outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) =
+						mul( float4( inVs_uv@value( out_uv@n_source_uv ).xy, 0, 1 ), textureMatrix ).xy;
+			@else
+				outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) =
+						inVs_uv@value( out_uv@n_source_uv ).xy;
+			@end
+		@end
+
+		@property( syntax != metal )
+			outVs.drawId = finalDrawId;
+		@else
+			outVs.materialId = (ushort)worldMaterialIdx[finalDrawId].x;
+		@end
+	@end
+
+	@property( (hlms_global_clip_planes || (hlms_shadowcaster && (exponential_shadow_maps || hlms_shadowcaster_point))) && !hlms_instanced_stereo )
+		float3 worldPos = mul( outVs_Position, passBuf.invViewProj ).xyz;
+	@end
+	@insertpiece( DoShadowCasterVS )
+
+	@property( hlms_global_clip_planes )
+		outVs_clipDistance0 = dot( float4( worldPos.xyz, 1.0 ), passBuf.clipPlane0.xyzw );
+	@end
+
+	@property( hlms_instanced_stereo )
+		outVs_viewportIndex	= int( inVs_stereoDrawId & 0x01u );
+	@end
+
+	@insertpiece( custom_vs_posExecution )
+@end

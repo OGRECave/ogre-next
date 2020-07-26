@@ -30,7 +30,6 @@ THE SOFTWARE.
 
 // Precompiler options
 #include "OgrePrerequisites.h"
-#include "OgreString.h"
 #include <exception>
 #include "OgreHeaderPrefix.h"
 
@@ -131,7 +130,7 @@ namespace Ogre {
         Exception(const Exception& rhs);
 
         /// Needed for compatibility with std::exception
-        ~Exception() throw() {}
+        virtual ~Exception() throw();
 
         /** Assignment operator.
         */
@@ -187,65 +186,75 @@ namespace Ogre {
     // Specialised exceptions allowing each to be caught specifically
     // backwards-compatible since exception codes still used
 
-    class _OgreExport UnimplementedException : public Exception 
+    class _OgreExport UnimplementedException : public Exception
     {
     public:
-        UnimplementedException(int inNumber, const String& inDescription, const String& inSource, const char* inFile, long inLine)
-            : Exception(inNumber, inDescription, inSource, "UnimplementedException", inFile, inLine) {}
+        UnimplementedException( int inNumber, const String &inDescription, const String &inSource,
+                                const char *inFile, long inLine );
+        virtual ~UnimplementedException() throw();
     };
     class _OgreExport FileNotFoundException : public Exception
     {
     public:
-        FileNotFoundException(int inNumber, const String& inDescription, const String& inSource, const char* inFile, long inLine)
-            : Exception(inNumber, inDescription, inSource, "FileNotFoundException", inFile, inLine) {}
+        FileNotFoundException( int inNumber, const String &inDescription, const String &inSource,
+                               const char *inFile, long inLine );
+        virtual ~FileNotFoundException() throw();
     };
     class _OgreExport IOException : public Exception
     {
     public:
-        IOException(int inNumber, const String& inDescription, const String& inSource, const char* inFile, long inLine)
-            : Exception(inNumber, inDescription, inSource, "IOException", inFile, inLine) {}
+        IOException( int inNumber, const String &inDescription, const String &inSource,
+                     const char *inFile, long inLine );
+        virtual ~IOException() throw();
     };
     class _OgreExport InvalidStateException : public Exception
     {
     public:
-        InvalidStateException(int inNumber, const String& inDescription, const String& inSource, const char* inFile, long inLine)
-            : Exception(inNumber, inDescription, inSource, "InvalidStateException", inFile, inLine) {}
+        InvalidStateException( int inNumber, const String &inDescription, const String &inSource,
+                               const char *inFile, long inLine );
+        virtual ~InvalidStateException() throw();
     };
     class _OgreExport InvalidParametersException : public Exception
     {
     public:
-        InvalidParametersException(int inNumber, const String& inDescription, const String& inSource, const char* inFile, long inLine)
-            : Exception(inNumber, inDescription, inSource, "InvalidParametersException", inFile, inLine) {}
+        InvalidParametersException( int inNumber, const String &inDescription, const String &inSource,
+                                    const char *inFile, long inLine );
+        virtual ~InvalidParametersException() throw();
     };
     class _OgreExport ItemIdentityException : public Exception
     {
     public:
-        ItemIdentityException(int inNumber, const String& inDescription, const String& inSource, const char* inFile, long inLine)
-            : Exception(inNumber, inDescription, inSource, "ItemIdentityException", inFile, inLine) {}
+        ItemIdentityException( int inNumber, const String &inDescription, const String &inSource,
+                               const char *inFile, long inLine );
+        virtual ~ItemIdentityException() throw();
     };
     class _OgreExport InternalErrorException : public Exception
     {
     public:
-        InternalErrorException(int inNumber, const String& inDescription, const String& inSource, const char* inFile, long inLine)
-            : Exception(inNumber, inDescription, inSource, "InternalErrorException", inFile, inLine) {}
+        InternalErrorException( int inNumber, const String &inDescription, const String &inSource,
+                                const char *inFile, long inLine );
+        virtual ~InternalErrorException() throw();
     };
     class _OgreExport RenderingAPIException : public Exception
     {
     public:
-        RenderingAPIException(int inNumber, const String& inDescription, const String& inSource, const char* inFile, long inLine)
-            : Exception(inNumber, inDescription, inSource, "RenderingAPIException", inFile, inLine) {}
+        RenderingAPIException( int inNumber, const String &inDescription, const String &inSource,
+                               const char *inFile, long inLine );
+        virtual ~RenderingAPIException() throw();
     };
     class _OgreExport RuntimeAssertionException : public Exception
     {
     public:
-        RuntimeAssertionException(int inNumber, const String& inDescription, const String& inSource, const char* inFile, long inLine)
-            : Exception(inNumber, inDescription, inSource, "RuntimeAssertionException", inFile, inLine) {}
+        RuntimeAssertionException( int inNumber, const String &inDescription, const String &inSource,
+                                   const char *inFile, long inLine );
+        virtual ~RuntimeAssertionException() throw();
     };
     class _OgreExport InvalidCallException : public Exception
     {
     public:
-        InvalidCallException(int inNumber, const String& inDescription, const String& inSource, const char* inFile, long inLine)
-            : Exception(inNumber, inDescription, inSource, "InvalidCallException", inFile, inLine) {}
+        InvalidCallException( int inNumber, const String &inDescription, const String &inSource,
+                              const char *inFile, long inLine );
+        virtual ~InvalidCallException() throw();
     };
 
     /** Class implementing dispatch methods in order to construct by-value

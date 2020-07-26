@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreLogManager.h"
 
+#include <sstream>
+
 #ifdef __BORLANDC__
     #include <stdio.h>
 #endif
@@ -74,6 +76,8 @@ namespace Ogre {
     {
     }
 
+    Exception::~Exception() throw() {}
+
     Exception& Exception::operator = ( const Exception& rhs )
     {
         description = rhs.description;
@@ -113,5 +117,93 @@ namespace Ogre {
         return number;
     }
 
+    UnimplementedException::UnimplementedException( int inNumber, const String &inDescription,
+                                                    const String &inSource, const char *inFile,
+                                                    long inLine ) :
+        Exception( inNumber, inDescription, inSource, "UnimplementedException", inFile, inLine )
+    {
+    }
+
+    UnimplementedException::~UnimplementedException() throw() {}
+
+    FileNotFoundException::FileNotFoundException( int inNumber, const String &inDescription,
+                                                  const String &inSource, const char *inFile,
+                                                  long inLine ) :
+        Exception( inNumber, inDescription, inSource, "FileNotFoundException", inFile, inLine )
+    {
+    }
+
+    FileNotFoundException::~FileNotFoundException() throw() {}
+
+    IOException::IOException( int inNumber, const String &inDescription, const String &inSource,
+                              const char *inFile, long inLine ) :
+        Exception( inNumber, inDescription, inSource, "IOException", inFile, inLine )
+    {
+    }
+
+    IOException::~IOException() throw() {}
+
+    InvalidStateException::InvalidStateException( int inNumber, const String &inDescription,
+                                                  const String &inSource, const char *inFile,
+                                                  long inLine ) :
+        Exception( inNumber, inDescription, inSource, "InvalidStateException", inFile, inLine )
+    {
+    }
+
+    InvalidStateException::~InvalidStateException() throw() {}
+
+    InvalidParametersException::InvalidParametersException( int inNumber, const String &inDescription,
+                                                            const String &inSource, const char *inFile,
+                                                            long inLine ) :
+        Exception( inNumber, inDescription, inSource, "InvalidParametersException", inFile, inLine )
+    {
+    }
+
+    InvalidParametersException::~InvalidParametersException() throw() {}
+
+    ItemIdentityException::ItemIdentityException( int inNumber, const String &inDescription,
+                                                  const String &inSource, const char *inFile,
+                                                  long inLine ) :
+        Exception( inNumber, inDescription, inSource, "ItemIdentityException", inFile, inLine )
+    {
+    }
+
+    ItemIdentityException::~ItemIdentityException() throw() {}
+
+    InternalErrorException::InternalErrorException( int inNumber, const String &inDescription,
+                                                    const String &inSource, const char *inFile,
+                                                    long inLine ) :
+        Exception( inNumber, inDescription, inSource, "InternalErrorException", inFile, inLine )
+    {
+    }
+
+    InternalErrorException::~InternalErrorException() throw() {}
+
+    RenderingAPIException::RenderingAPIException( int inNumber, const String &inDescription,
+                                                  const String &inSource, const char *inFile,
+                                                  long inLine ) :
+        Exception( inNumber, inDescription, inSource, "RenderingAPIException", inFile, inLine )
+    {
+    }
+
+    RenderingAPIException::~RenderingAPIException() throw() {}
+
+    RuntimeAssertionException::RuntimeAssertionException( int inNumber, const String &inDescription,
+                                                          const String &inSource, const char *inFile,
+                                                          long inLine ) :
+        Exception( inNumber, inDescription, inSource, "RuntimeAssertionException", inFile, inLine )
+    {
+    }
+
+    RuntimeAssertionException::~RuntimeAssertionException() throw() {}
+
+    InvalidCallException::InvalidCallException( int inNumber, const String &inDescription,
+                                                const String &inSource, const char *inFile,
+                                                long inLine ) :
+        Exception( inNumber, inDescription, inSource, "InvalidCallException", inFile, inLine )
+    {
+    }
+
+    InvalidCallException::~InvalidCallException() throw() {}
 }
 

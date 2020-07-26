@@ -370,6 +370,8 @@ namespace Ogre{
                                CompositorTargetDef *targetDef );
         void translateMipmap( ScriptCompiler *compiler, const AbstractNodePtr &node,
                               CompositorTargetDef *targetDef );
+        void translateIblSpecular( ScriptCompiler *compiler, const AbstractNodePtr &node,
+                                   CompositorTargetDef *targetDef );
 
     public:
         CompositorPassTranslator();

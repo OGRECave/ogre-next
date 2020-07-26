@@ -60,28 +60,28 @@
 		return retVal;
 	}
 
-	INLINE float2 getIrradianceFieldXY( float3 dir, IrfProbeIndex probeIdx, float resolution,
+	INLINE float2 getIrradianceFieldXY( float3 dir, IrfProbeIndex probeIdx, float borderedRes,
 										float fullWidth, float2 invFullResolution )
 	{
 		float2 retVal;
 		/* Perform the following, but in floating point:
-		retVal.x = ( probeIdx * resolution ) % fullWidth;
-		retVal.y = ( ( probeIdx * resolution ) / fullWidth ) * resolution;*/
-		float temp = probeIdx * resolution;
+		retVal.x = ( probeIdx * borderedRes ) % fullWidth;
+		retVal.y = ( ( probeIdx * borderedRes ) / fullWidth ) * borderedRes;*/
+		float temp = probeIdx * borderedRes;
 		retVal.y = floor( temp * invFullResolution.x );
 		retVal.x = temp - retVal.y * fullWidth;
-		retVal.y *= resolution;
+		retVal.y *= borderedRes;
 
-		// Texel's center offset to avoid bleeding with adjacent probes
-		retVal += 0.5;
+		// Skip top-left border
+		retVal.xy += 1.0f;
 
 		//dir.y = -dir.y;
 		// Quantize direction to fix noise artifacts where the texels output from
 		// octahedronMappingEncode keep jumping due to octahedronMappingWrap being too sharp
 		// https://github.com/OGRECave/ogre-next/issues/29#issuecomment-541491145
-		dir = ceil( dir * 2048.0 );
-		dir *= 1.0 / 2048.0;
-		float2 uv = octahedronMappingEncode( dir ) * resolution;
+		dir = ceil( dir * 1048576.0 );
+		dir *= 1.0 / 1048576.0;
+		float2 uv = octahedronMappingEncode( dir ) * ( borderedRes - 2.0f );
 
 		retVal += uv;
 		retVal *= invFullResolution;
@@ -158,7 +158,7 @@
 
 		// Visibility (Chebyshev)
 		float2 ifdDepthUV = getIrradianceFieldXY(
-			-dir, probeIdx, passBuf.irradianceField.depthResolution,
+			-dir, probeIdx, passBuf.irradianceField.depthBorderedRes,
 			passBuf.irradianceField.depthFullWidth, passBuf.irradianceField.depthInvFullResolution );
 		float2 temp = OGRE_SampleLevel( ifdDepth, ifdSampler, ifdDepthUV, 0 ).xy;
 		float mean = temp.x;
@@ -184,8 +184,8 @@
 		weight *= trilinear.x * trilinear.y * trilinear.z;
 
 		float2 ifdColourUV = getIrradianceFieldXY(
-			ifdSpaceNormal, probeIdx, passBuf.irradianceField.depthResolution,
-			passBuf.irradianceField.depthFullWidth, passBuf.irradianceField.depthInvFullResolution );
+			ifdSpaceNormal, probeIdx, passBuf.irradianceField.irradBorderedRes,
+			passBuf.irradianceField.irradFullWidth, passBuf.irradianceField.irradInvFullResolution );
 
 		float3 irrColour = OGRE_SampleLevel( ifdColour, ifdSampler, ifdColourUV, 0 ).xyz;
 //		irrColour = sqrt(irrColour);

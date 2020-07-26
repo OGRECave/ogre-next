@@ -30,6 +30,9 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreRenderSystemCapabilities.h"
+
+#include "ogrestd/map.h"
+
 #include "OgreHeaderPrefix.h"
 
 

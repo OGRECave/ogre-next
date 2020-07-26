@@ -217,11 +217,7 @@ namespace Ogre
             vst1q_f32( dstPtr, mChunkBase[0] );
             vst1q_f32( dstPtr + 4, mChunkBase[1] );
             vst1q_f32( dstPtr + 8, mChunkBase[2] );
-            dstPtr += 12;
-            *dstPtr++ = 0;
-            *dstPtr++ = 0;
-            *dstPtr++ = 0;
-            *dstPtr++ = 1;
+            vst1q_f32( dstPtr + 12, MathlibNEON::LAST_AFFINE_COLUMN );
         }
 
         /// Assumes dst is aligned

@@ -30,8 +30,11 @@ THE SOFTWARE.
 #define _Ogre_D3D11DynamicBuffer_H_
 
 #include "OgreD3D11Prerequisites.h"
+#include "OgreD3D11DeviceResource.h"
 
 #include "Vao/OgreBufferPacked.h"
+
+#include "ogrestd/vector.h"
 
 namespace Ogre
 {
@@ -49,7 +52,7 @@ namespace Ogre
             Caller is responsible for proper synchronization.
             No check is performed to see if two map calls overlap.
     */
-    class _OgreD3D11Export D3D11DynamicBuffer
+    class _OgreD3D11Export D3D11DynamicBuffer : protected D3D11DeviceResource
     {
     protected:
         struct MappedRange
@@ -62,7 +65,7 @@ namespace Ogre
 
         typedef vector<MappedRange>::type MappedRangeVec;
 
-        ID3D11Buffer    *mVboName;
+        ComPtr<ID3D11Buffer> mVboName;
         size_t          mVboSize;
         void            *mMappedPtr;
 
@@ -73,11 +76,14 @@ namespace Ogre
 
         size_t addMappedRange( size_t start, size_t count );
 
+        void notifyDeviceLost( D3D11Device *device );
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass );
+
     public:
         D3D11DynamicBuffer( ID3D11Buffer *vboName, size_t vboSize, D3D11Device &device );
         ~D3D11DynamicBuffer();
 
-        ID3D11Buffer* getVboName(void) const        { return mVboName; }
+        ID3D11Buffer* getVboName(void) const        { return mVboName.Get(); }
 
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
         void* RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );

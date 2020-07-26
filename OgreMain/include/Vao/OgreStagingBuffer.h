@@ -30,7 +30,10 @@ THE SOFTWARE.
 #define _Ogre_StagingBuffer_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreBufferPacked.h"
+
+#include "ogrestd/vector.h"
 
 namespace Ogre
 {
@@ -137,7 +140,7 @@ namespace Ogre
         int16           mRefCount;
         uint32          mUnfenceTimeThreshold;
         uint32          mLifetimeThreshold;
-        unsigned long   mLastUsedTimestamp;
+        uint64          mLastUsedTimestamp;
 
         //------------------------------------
         // Begin used for downloads
@@ -289,7 +292,7 @@ namespace Ogre
         */
         void removeReferenceCount(void);
 
-        uint16 getReferenceCount(void) const        { return mRefCount; }
+        int16 getReferenceCount(void) const         { return mRefCount; }
 
         /// Returns the time in milliseconds in which a StagingBuffer should
         /// hazards unfenced while with a reference count of 0. @see getLifetimeThreshold
@@ -300,7 +303,7 @@ namespace Ogre
         uint32 getLifetimeThreshold(void) const     { return mLifetimeThreshold; }
 
         /// Returns the time in millisecond when the ref. count became 0.
-        unsigned long getLastUsedTimestamp(void)    { return mLastUsedTimestamp; }
+        uint64 getLastUsedTimestamp(void) const     { return mLastUsedTimestamp; }
     };
 }
 

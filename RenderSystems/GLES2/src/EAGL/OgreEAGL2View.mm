@@ -59,68 +59,27 @@ using namespace Ogre;
 
 - (void)layoutSubviews
 {
-    // Change the viewport orientation based upon the current device orientation.
-    // Note: This only operates on the main viewport, usually the main view.
-
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
-    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-
-    // Return if the orientation is not a valid interface orientation(face up, face down)
-    if(!UIDeviceOrientationIsValidInterfaceOrientation(deviceOrientation))
-        return;
-
-    // Check if orientation is supported
-    NSString *rotateToOrientation = @"";
-    if(deviceOrientation == UIDeviceOrientationPortrait)
-        rotateToOrientation = @"UIInterfaceOrientationPortrait";
-    else if(deviceOrientation == UIDeviceOrientationPortraitUpsideDown)
-        rotateToOrientation = @"UIInterfaceOrientationPortraitUpsideDown";
-    else if(deviceOrientation == UIDeviceOrientationLandscapeLeft)
-        rotateToOrientation = @"UIInterfaceOrientationLandscapeLeft";
-    else if(deviceOrientation == UIDeviceOrientationLandscapeRight)
-        rotateToOrientation = @"UIInterfaceOrientationLandscapeRight";
-
-    NSArray *supportedOrientations = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UISupportedInterfaceOrientations"];
-
-    BOOL supported = [supportedOrientations containsObject:rotateToOrientation];
-
-    if (!supported)
-        return;
-
+    [super layoutSubviews];
+    
     // Get the window using the name that we saved
     RenderWindow *window = static_cast<RenderWindow *>(Root::getSingleton().getRenderSystem()->getRenderTarget(mWindowName));
 
     if(window != NULL)
     {
-        // Get the window size and initialize temp variables
-        unsigned int w = 0, h = 0;
-        unsigned int width = (uint)self.bounds.size.width;
-        unsigned int height = (uint)self.bounds.size.height;
-
-        if (UIDeviceOrientationIsLandscape(deviceOrientation))
-        {
-            w = std::max(width, height);
-            h = std::min(width, height);
-        }
-        else
-        {
-            h = std::max(width, height);
-            w = std::min(width, height);
-        }
-
-        width = w;
-        height = h;
-
-        // Resize the window
-        window->resize(width, height);
+        // Resize underlying frame buffer
+        window->windowMovedOrResized();
         
         // After rotation the aspect ratio of the viewport has changed, update that as well.
-//        if(window->getNumViewports() > 0)
-//        {
-//            Ogre::Viewport *viewPort = window->getViewport(0);
-//            viewPort->getCamera()->setAspectRatio((Real) width / (Real) height);
-//        }
+#if 0 // TODO: fix compilation or remove
+        if(window->getNumViewports() > 0)
+        {
+            // Get the view size and initialize temp variables
+            unsigned int width = (uint)self.bounds.size.width;
+            unsigned int height = (uint)self.bounds.size.height;
+            Ogre::Viewport *viewPort = window->getViewport(0);
+            viewPort->getCamera()->setAspectRatio((Real) width / (Real) height);
+        }
+#endif
     }
 }
 

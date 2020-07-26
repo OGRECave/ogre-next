@@ -29,10 +29,13 @@ THE SOFTWARE.
 #ifndef _OgreTextureGpu_H_
 #define _OgreTextureGpu_H_
 
+#include "OgreCommon.h"
 #include "OgreGpuResource.h"
 #include "OgrePixelFormatGpu.h"
 
 #include "Vao/OgreBufferPacked.h"
+
+#include "ogrestd/vector.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -44,24 +47,6 @@ namespace Ogre
     /** \addtogroup Resources
     *  @{
     */
-
-    namespace MsaaPatterns
-    {
-        enum MsaaPatterns
-        {
-            /// Let the GPU decide.
-            Undefined,
-            /// The subsample locations follow a fixed known pattern.
-            /// Call TextureGpu::getSubsampleLocations to get them.
-            Standard,
-            /// The subsample locations are centered in a grid.
-            /// May not be supported by the GPU/API, in which case Standard will be used instead
-            /// Call TextureGpu::isMsaaPatternSupported to check whether it will be honoured.
-            Center,
-            /// All subsamples are at 0, 0; effectively "disabling" msaa.
-            CenterZero
-        };
-    }
 
     namespace TextureTypes
     {
@@ -172,6 +157,21 @@ namespace Ogre
             PoolOwner           = 1u << 13u
         };
     }
+
+    namespace TextureSourceType
+    {
+        enum TextureSourceType
+        {
+            Standard,           /// Regular texture
+            Shadow,             /// Created by compositor, for shadow mapping
+            Compositor,         /// Created by compositor
+            PoolOwner,          /// TextureFlags::PoolOwner is set
+            SharedDepthBuffer,  /// Created automatically, may be shared and reused by multiple colour
+                                /// targets
+            NumTextureSourceTypes
+        };
+    }
+
     /**
     @remarks
         Internal layout of data in memory:
@@ -216,12 +216,20 @@ namespace Ogre
         /// Set mNumMipmaps = 0 to auto generate until last level.
         /// mNumMipmaps = 1 means no extra mipmaps other than level 0.
         uint8       mNumMipmaps;
-        uint8       mMsaa;
-        MsaaPatterns::MsaaPatterns  mMsaaPattern;
+        SampleDescription mSampleDescription;
+        SampleDescription mRequestedSampleDescription;
 
         /// Used when AutomaticBatching is set. It indicates in which slice
         /// our actual data is, inside a texture array which we do not own.
         uint16      mInternalSliceStart;
+
+        /// This setting is for where the texture is created, e.g. its a compositor texture, a shadow
+        /// texture or standard texture loaded for a mesh etc...
+        ///
+        /// This value is merely for statistical tracking purposes
+        ///
+        /// @see    TextureSourceType::TextureSourceType
+        uint8 mSourceType;
 
         /// This setting can only be altered if mResidencyStatus == OnStorage).
         TextureTypes::TextureTypes  mTextureType;
@@ -320,6 +328,10 @@ namespace Ogre
         TextureTypes::TextureTypes getTextureType(void) const;
         TextureTypes::TextureTypes getInternalTextureType(void) const;
 
+        void _setSourceType( uint8 type );
+        /// @copydoc TextureGpu::mSourceType
+        uint8 getSourceType( void ) const;
+
         /** Sets the pixel format.
         @remarks
             If prefersLoadingFromFileAsSRGB() returns true, the format may not be fully honoured
@@ -328,30 +340,23 @@ namespace Ogre
         void setPixelFormat( PixelFormatGpu pixelFormat );
         PixelFormatGpu getPixelFormat(void) const;
 
-        /** In almost all cases, getPixelFormat will match with getInternalPixelFormat.
-        @par
-            However there are a few exceptions, suchs as D3D11's render window where
-            the internal pixel format will be most likely PFG_RGBA8_UNORM however
-            getPixelFormat will report PFG_RGBA8_UNORM_SRGB if HW gamma correction was asked.
-        @remarks
-            The real internal pixel format only is relevant for operations like _resolveTo
-        @return
-            The real pixel format, and not the one we pretend it is.
-        */
-        virtual PixelFormatGpu getInternalPixelFormat(void) const;
+        void setSampleDescription( SampleDescription desc );
+        /// For internal use
+        void _setSampleDescription( SampleDescription desc, SampleDescription validatedSampleDesc );
 
-        /// Note: Passing 0 will be forced to 1.
-        void setMsaa( uint8 msaa );
-        uint8 getMsaa(void) const;
+        /// Returns effective sample description supported by the API.
+        /// Note it's only useful after having transitioned to resident.
+        SampleDescription getSampleDescription( void ) const;
+        /// Returns original requested sample description, i.e. the raw input to setSampleDescription
+        SampleDescription getRequestedSampleDescription( void ) const;
+        bool isMultisample( void ) const;
 
         void copyParametersFrom( TextureGpu *src );
         bool hasEquivalentParameters( TextureGpu *other ) const;
-        void setHlmsProperties( Hlms *hlms, LwString &propBaseName );
 
-        void setMsaaPattern( MsaaPatterns::MsaaPatterns pattern );
-        MsaaPatterns::MsaaPatterns getMsaaPattern(void) const;
         virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
-        /** Get the MSAA subsample locations. mMsaaPatterns must not be MsaaPatterns::Undefined.
+        /** Get the MSAA subsample locations.
+            mSampleDescription.pattern must not be MsaaPatterns::Undefined.
         @param locations
             Outputs an array with the locations for each subsample. Values are in range [-1; 1]
         */
@@ -408,8 +413,23 @@ namespace Ogre
         /// GpuResidency::OnSystemRam
         void _notifySysRamDownloadIsReady( uint8 *sysRamPtr, bool resyncOnly );
 
+        /**
+        @param dst
+        @param dstBox
+        @param dstMipLevel
+        @param srcBox
+        @param srcMipLevel
+        @param keepResolvedTexSynced
+            When true, if dst is an MSAA texture and is implicitly resolved
+            (i.e. dst->hasMsaaExplicitResolves() == false); the resolved texture
+            is also kept up to date.
+
+            Typically the reason to set this to false is if you plane on rendering more
+            stuff to dst texture and then resolve.
+        */
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel );
+                             const TextureBox &srcBox, uint8 srcMipLevel,
+                             bool keepResolvedTexSynced = true );
 
         /** These 3 values  are used as defaults for the compositor to use, but they may be
             explicitly overriden by a RenderPassDescriptor.
@@ -520,6 +540,10 @@ namespace Ogre
         /// Writes the current contents of the render target to the named file.
         void writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip,
                                   bool automaticResolve=true );
+
+        /// Writes the current contents of the render target to the memory.
+        void copyContentsToMemory(TextureBox src, TextureBox dst, PixelFormatGpu dstFormat,
+                                   bool automaticResolve=true);
 
         static const IdString msFinalTextureBuffer;
         static const IdString msMsaaTextureBuffer;

@@ -1,0 +1,125 @@
+
+#include "/media/matias/Datos/SyntaxHighlightingMisc.h"
+
+@piece( PassStructDecl )
+	//Uniforms that change per pass
+	CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
+	{
+		//Vertex shader
+		@property( !hlms_instanced_stereo )
+			float4x4 viewProj[2];
+		@else
+			float4x4 viewProj[4];
+		@end
+		@property( hlms_global_clip_planes )
+			float4 clipPlane0;
+		@end
+		@property( (hlms_global_clip_planes || exponential_shadow_maps || hlms_shadowcaster_point) && !hlms_instanced_stereo )
+			float4x4 invViewProj;
+		@end
+		@property( hlms_shadowcaster )
+			@property( exponential_shadow_maps )float4 viewZRow;@end
+			float4 depthRange;
+			@property( hlms_shadowcaster_point )
+				float4 cameraPosWS;	//Camera position in world space
+			@end
+		@end
+		//Pixel Shader
+		float4 invWindowSize;
+		@insertpiece( custom_passBuffer )
+	}
+	CONST_BUFFER_STRUCT_END( passBuf );
+@end
+
+@piece( MaterialStructDecl )
+	struct Material
+	{
+		float4 alpha_test_threshold;
+		float4 diffuse;
+
+		@property( syntax != metal )
+			uint4 indices0_3;
+			uint4 indices4_7;
+		@else
+			@foreach( 16, n )
+				ushort diffuseIdx@n;@end
+		@end
+
+		@insertpiece( custom_materialBuffer )
+	};
+
+	@property( syntax != metal )
+		CONST_BUFFER( MaterialBuf, 1 )
+		{
+			Material materialArray[@value( materials_per_buffer )];
+		};
+	@end
+@end
+
+
+@property( syntax != metal )
+	@piece( InstanceStructDecl )
+		//Uniforms that change per Item/Entity
+		CONST_BUFFER( InstanceBuffer, 2 )
+		{
+			//.x =
+			//Contains the material's start index.
+			//
+			//.y =
+			//shadowConstantBias. Send the bias directly to avoid an
+			//unnecessary indirection during the shadow mapping pass.
+			//Must be loaded with uintBitsToFloat
+			//
+			//.z =
+			//Contains 0 or 1 to index into passBuf.viewProj[]. Only used
+			//if hlms_identity_viewproj_dynamic is set.
+			@property( fast_shader_build_hack )
+				uint4 worldMaterialIdx[2];
+			@else
+				uint4 worldMaterialIdx[4096];
+			@end
+		};
+	@end
+@else
+	@piece( InstanceDecl )
+		, constant uint4 *worldMaterialIdx [[buffer(CONST_SLOT_START+2)]]
+	@end
+@end
+
+//Reset texcoord to 0 for every shader stage (since values are preserved).
+@pset( texcoord, 0 )
+
+@piece( VStoPS_block )
+	@property( !hlms_shadowcaster )
+		@property( syntax != metal )
+			FLAT_INTERPOLANT( uint drawId, @counter(texcoord) );
+		@else
+			FLAT_INTERPOLANT( ushort materialId, @counter(texcoord) );
+		@end
+		@property( hlms_colour )
+			INTERPOLANT( float4 colour, @counter(texcoord) );
+		@end
+		@foreach( out_uv_half_count, n )
+			INTERPOLANT( float@value( out_uv_half_count@n ) uv@n, @counter(texcoord) );@end
+	@else
+		@property( (!hlms_shadow_uses_depth_texture || exponential_shadow_maps) && !hlms_shadowcaster_point )
+			INTERPOLANT( float depth, @counter(texcoord) );
+		@end
+		@property( hlms_shadowcaster_point )
+			INTERPOLANT( float3 toCameraWS, @counter(texcoord) );
+			@property( !exponential_shadow_maps )
+				FLAT_INTERPOLANT( float constBias, @counter(texcoord) );
+			@end
+		@end
+	@end
+	@insertpiece( custom_VStoPS )
+@end
+
+@property( syntax == metal )
+	@piece( PassDecl )
+	, constant PassBuffer &passBuf [[buffer(CONST_SLOT_START+0)]]
+	@end
+	@piece( MaterialDecl )
+		, constant Material *materialArray [[buffer(CONST_SLOT_START+1)]]
+	@end
+@end

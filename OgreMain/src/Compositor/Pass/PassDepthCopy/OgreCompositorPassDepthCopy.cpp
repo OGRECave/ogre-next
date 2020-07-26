@@ -80,13 +80,10 @@ namespace Ogre
             --mNumPassesLeft;
         }
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        notifyPassEarlyPreExecuteListeners();
 
         //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        notifyPassPreExecuteListeners();
 
         executeResourceTransitions();
 
@@ -97,10 +94,9 @@ namespace Ogre
 
         TextureBox srcBox = srcChannel->getEmptyBox( 0 );
         TextureBox dstBox = dstChannel->getEmptyBox( 0 );
-        srcChannel->copyTo( dstChannel, dstBox, 0, srcBox, 0 );
+        srcChannel->copyTo( dstChannel, dstBox, 0, srcBox, 0, false );
 
-        if( listener )
-            listener->passPosExecute( this );
+        notifyPassPosExecuteListeners();
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassDepthCopy::_placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],

@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassClear/OgreCompositorPassClearDef.h"
 #include "Compositor/Pass/PassCompute/OgreCompositorPassComputeDef.h"
 #include "Compositor/Pass/PassDepthCopy/OgreCompositorPassDepthCopyDef.h"
+#include "Compositor/Pass/PassIblSpecular/OgreCompositorPassIblSpecularDef.h"
 #include "Compositor/Pass/PassMipmap/OgreCompositorPassMipmapDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
@@ -57,10 +58,21 @@ namespace Ogre
         "DEPTHCOPY",
         "UAV",
         "MIPMAP",
+        "IBL_SPECULAR",
         "COMPUTE",
         "CUSTOM"
     };
 
+    CompositorTargetDef::CompositorTargetDef( const String &renderTargetName, uint32 rtIndex,
+                                              CompositorNodeDef *parentNodeDef ) :
+        mRenderTargetName( renderTargetName.empty() ? IdString() : renderTargetName ),
+        mRenderTargetNameStr( renderTargetName ),
+        mRtIndex( rtIndex ),
+        mShadowMapSupportedLightTypes( 0 ),
+        mParentNodeDef( parentNodeDef )
+    {
+    }
+    //-----------------------------------------------------------------------------------
     CompositorTargetDef::~CompositorTargetDef()
     {
         CompositorPassDefVec::const_iterator itor = mCompositorPasses.begin();
@@ -104,6 +116,9 @@ namespace Ogre
         case PASS_COMPUTE:
             retVal = OGRE_NEW CompositorPassComputeDef( mParentNodeDef, this );
             break;
+        case PASS_IBL_SPECULAR:
+            retVal = OGRE_NEW CompositorPassIblSpecularDef( mParentNodeDef, this );
+            break;
         case PASS_CUSTOM:
             {
                 CompositorPassProvider *passProvider = mParentNodeDef->getCompositorManager()->
@@ -134,6 +149,8 @@ namespace Ogre
         
         return retVal;
     }
+    //-----------------------------------------------------------------------------------
+    CompositorPassDef::~CompositorPassDef() {}
     //-----------------------------------------------------------------------------------
     void CompositorPassDef::setAllClearColours( const ColourValue &clearValue )
     {

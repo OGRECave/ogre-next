@@ -43,14 +43,12 @@ namespace Ogre
     {
         bool    mClosed;
         bool    mHwGamma;
-        uint8   mMsaa;
 
         CAMetalLayer        *mMetalLayer;
         id<CAMetalDrawable> mCurrentDrawable;
         OgreMetalView       *mMetalView;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         NSWindow            *mWindow;
-        id                  mResizeObserver;
 #endif
         MetalDevice         *mDevice;
 
@@ -60,6 +58,8 @@ namespace Ogre
         MetalWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
                      const NameValuePairList *miscParams, MetalDevice *ownerDevice );
         virtual ~MetalWindow();
+
+        virtual float getViewPointToPixelScale() const;
 
         virtual void swapBuffers(void);
         virtual void windowMovedOrResized(void);

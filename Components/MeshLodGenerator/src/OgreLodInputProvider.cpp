@@ -31,6 +31,8 @@
 
 #include "OgreLogManager.h"
 
+#include <sstream>
+
 namespace Ogre
 {
 

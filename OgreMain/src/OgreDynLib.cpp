@@ -77,7 +77,7 @@ namespace Ogre {
 #if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
         if (name.find(".js") == String::npos)
             name += ".js";
-#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_NACL
+#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_NACL || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
         // dlopen() does not add .so to the filename, like windows does for .dll
         if (name.find(".so") == String::npos)
         {
@@ -184,7 +184,7 @@ namespace Ogre {
         String ret = narrowMsgBuf;
 #endif
         return ret;
-#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
         return String(dlerror());
 #else
         return String("");

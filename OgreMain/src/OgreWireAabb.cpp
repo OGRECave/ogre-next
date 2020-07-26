@@ -15,7 +15,7 @@
 namespace Ogre
 {
     WireAabb::WireAabb( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager) :
-        MovableObject( id, objectMemoryManager, manager, 0 ),
+        MovableObject( id, objectMemoryManager, manager, 10u ),
         Renderable(),
         mTrackedObject( 0 )
     {

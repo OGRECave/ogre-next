@@ -30,6 +30,11 @@ THE SOFTWARE.
 
 #include "OgreHlmsPbsPrerequisites.h"
 #include "OgreId.h"
+
+#include "ogrestd/map.h"
+#include "ogrestd/set.h"
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

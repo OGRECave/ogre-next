@@ -51,6 +51,7 @@ THE SOFTWARE.
 #include "XML/OgreXMLSkeletonSerializer.h"
 
 #include <iostream>
+#include <sstream>
 #include <sys/stat.h>
 
 using namespace std;
@@ -1240,6 +1241,7 @@ int main(int numargs, char** args)
         if( !loadMesh( source, v1Mesh, v2Mesh, v1Skeleton, meshSerializer2,
                        xmlMeshSerializer, xmlSkeletonSerializer ) )
         {
+            // The contents of the XML may also be invalid
             OGRE_EXCEPT( Exception::ERR_FILE_NOT_FOUND, "Could not open '" + source + "'", "main" );
         }
 

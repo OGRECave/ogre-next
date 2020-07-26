@@ -26,6 +26,7 @@ including invalid combinations (i.e. having a Metallic texture and a Specular te
         "unique_name" :
         {
             "scissor_test" : false,
+            "depth_clamp" : false,
             "depth_check" : true,
             "depth_write" : true,
             "depth_function" : "less" "less_equal" "equal" "not_equal" "greater_equal" "greater" "never" "always",

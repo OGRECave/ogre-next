@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 #include "OgreLogManager.h"
 
+#include <sstream>
+
 namespace Ogre
 {
     //-----------------------------------------------------------------------------
@@ -44,6 +46,7 @@ namespace Ogre
     GpuProgram::CmdMorph GpuProgram::msMorphCmd;
     GpuProgram::CmdPose GpuProgram::msPoseCmd;
     GpuProgram::CmdVTF GpuProgram::msVTFCmd;
+    GpuProgram::CmdVPRTI GpuProgram::msVPRTICmd;
     GpuProgram::CmdManualNamedConstsFile GpuProgram::msManNamedConstsFileCmd;
     GpuProgram::CmdAdjacency GpuProgram::msAdjacencyCmd;
     GpuProgram::CmdComputeGroupDims GpuProgram::msComputeGroupDimsCmd;
@@ -55,7 +58,7 @@ namespace Ogre
         :Resource(creator, name, handle, group, isManual, loader),
         mType(GPT_VERTEX_PROGRAM), mLoadFromFile(true), mBuildParametersFromReflection(true),
         mSkeletalAnimation(false), mMorphAnimation(false), mPoseAnimation(0),
-        mVertexTextureFetch(false), mNeedsAdjacencyInfo(false),
+        mVertexTextureFetch(false), mVpAndRtArrayIndexFromAnyShader(false), mNeedsAdjacencyInfo(false),
         mCompileError(false), mLoadedManualNamedConstants(false)
     {
         createParameterMappingStructures();
@@ -181,6 +184,13 @@ namespace Ogre
         // Vertex texture fetch required?
         if (isVertexTextureFetchRequired() && 
             !caps->hasCapability(RSC_VERTEX_TEXTURE_FETCH))
+        {
+            return false;
+        }
+
+        // Can we choose viewport and render target in any shader or only geometry one?
+        if( isVpAndRtArrayIndexFromAnyShaderRequired() &&
+            !caps->hasCapability( RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER ) )
         {
             return false;
         }
@@ -351,6 +361,10 @@ namespace Ogre
                          "Whether this vertex program requires vertex texture fetch support.", PT_BOOL), 
             &msVTFCmd);
         dict->addParameter(
+            ParameterDef("sets_vp_or_rt_array_index",
+                         "Whether this program requires support for choosing viewport or render target index from any shader.", PT_BOOL ),
+            &msVPRTICmd );
+        dict->addParameter(
             ParameterDef("manual_named_constants", 
                          "File containing named parameter mappings for low-level programs.", PT_BOOL), 
             &msManNamedConstsFileCmd);
@@ -495,6 +509,17 @@ namespace Ogre
     {
         GpuProgram* t = static_cast<GpuProgram*>(target);
         t->setVertexTextureFetchRequired(StringConverter::parseBool(val));
+    }
+    //-----------------------------------------------------------------------
+    String GpuProgram::CmdVPRTI::doGet(const void* target) const
+    {
+        const GpuProgram* t = static_cast<const GpuProgram*>(target);
+        return StringConverter::toString(t->isVpAndRtArrayIndexFromAnyShaderRequired());
+    }
+    void GpuProgram::CmdVPRTI::doSet(void* target, const String& val)
+    {
+        GpuProgram* t = static_cast<GpuProgram*>(target);
+        t->setVpAndRtArrayIndexFromAnyShaderRequired(StringConverter::parseBool(val));
     }
     //-----------------------------------------------------------------------
     String GpuProgram::CmdManualNamedConstsFile::doGet(const void* target) const

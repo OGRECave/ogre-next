@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "OgreVertexBoneAssignment.h"
 #include "OgreDataStream.h"
 
+#include "ogrestd/unordered_map.h"
+
 #include "OgreHeaderPrefix.h"
 
 
@@ -400,7 +402,8 @@ namespace Ogre {
         const LodValueArray* _getLodValueArray(void) const                      { return &mLodValues; }
 
         /** Imports a v1 mesh to this mesh, with optional optimization conversions.
-            This mesh must be in unloaded state.
+            This mesh must be in unloaded state. Resulting mesh would be non-reloadable, use
+            MeshManager::createByImportingV1 to create mesh that will survive device lost event.
         @remarks
             The vertex stream will be converted to a single interleaved buffer; i.e.
             if the original mesh had 3 vertex buffers:
@@ -428,8 +431,12 @@ namespace Ogre {
             vertex shader for decoding the QTangent.
             Highly recommended on both desktop and mobile if you need tangents (i.e.
             normal mapping).
+        @param halfPose
+            True if you want the pose buffer to have pixel format PF_FLOAT16_RGBA
+            which uses significantly less memory. Otherwise it is created with pixel
+            format PF_FLOAT32_RGBA. Rarely the extra precision is needed.
         */
-        void importV1( v1::Mesh *mesh, bool halfPos, bool halfTexCoords, bool qTangents );
+        void importV1( v1::Mesh *mesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose = true );
 
         /// Converts this SubMesh to an efficient arrangement. @See Mesh::importV1 for an
         /// explanation on the parameters. @see dearrangeEfficientToInefficient

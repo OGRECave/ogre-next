@@ -63,6 +63,24 @@ namespace Ogre
         size_t      light;  //Render Nth closest light
         size_t      split;  //Split for that light (only for PSSM/CSM)
 
+        /// Constant bias is per material (tweak HlmsDatablock::mShadowConstantBias).
+        /// This value lets you multiply it 'mShadowConstantBias * constantBiasScale'
+        /// per cascade / shadow map
+        ///
+        /// This is applied on top of the autocalculated bias from autoConstantBiasScale
+        float constantBiasScale;
+        /// Normal offset bias is per cascade / shadow map
+        ///
+        /// This is applied on top of the autocalculated bias from autoNormalOffsetBiasScale
+        float normalOffsetBias;
+
+        /// 0 to disable.
+        /// Non-zero to increase bias based on orthographic projection's window size.
+        float autoConstantBiasScale;
+        /// 0 to disable.
+        /// Non-zero to increase bias based on orthographic projection's window size.
+        float autoNormalOffsetBiasScale;
+
         ShadowMapTechniques shadowMapTechnique;
 
         //PSSM params
@@ -70,7 +88,8 @@ namespace Ogre
         Real                splitPadding;
         Real                splitBlend;
         Real                splitFade;
-        uint                numSplits;
+        uint32              numSplits;
+        uint32              numStableSplits;
 
     protected:
         IdString    texName;
@@ -79,13 +98,29 @@ namespace Ogre
 
     public:
         ShadowTextureDefinition( ShadowMapTechniques t, const String &texRefName,
-                                 const Vector2 &_uvOffset, const Vector2 &_uvLength,
-                                 uint8 _arrayIdx, size_t _light, size_t _split ) :
-                uvOffset( _uvOffset ), uvLength( _uvLength ), arrayIdx( _arrayIdx ),
-                light(_light), split(_split), shadowMapTechnique(t),
-                pssmLambda( 0.95f ), splitPadding( 1.0f ), splitBlend( 0.125f ), splitFade( 0.313f ), numSplits( 3 ),
-                texName( texRefName ), texNameStr( texRefName ),
-                sharesSetupWith( -1 ) {}
+                                 const Vector2 &_uvOffset, const Vector2 &_uvLength, uint8 _arrayIdx,
+                                 size_t _light, size_t _split ) :
+            uvOffset( _uvOffset ),
+            uvLength( _uvLength ),
+            arrayIdx( _arrayIdx ),
+            light( _light ),
+            split( _split ),
+            constantBiasScale( 1.0f ),
+            normalOffsetBias( 168.0f ),
+            autoConstantBiasScale( 100.0f ),
+            autoNormalOffsetBiasScale( 4.0f ),
+            shadowMapTechnique( t ),
+            pssmLambda( 0.95f ),
+            splitPadding( 1.0f ),
+            splitBlend( 0.125f ),
+            splitFade( 0.313f ),
+            numSplits( 3u ),
+            numStableSplits( 0u ),
+            texName( texRefName ),
+            texNameStr( texRefName ),
+            sharesSetupWith( -1 )
+        {
+        }
 
         IdString getTextureName() const             { return texName; }
         String getTextureNameStr() const            { return texNameStr; }

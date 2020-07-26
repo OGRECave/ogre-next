@@ -119,6 +119,17 @@ namespace Ogre
             return length == 0 && *origStr == *stringCompare;
         }
 
+        bool startWith( const char *stringCompare ) const
+        {
+            return strncmp( mOriginal->c_str() + mStart, stringCompare, strlen( stringCompare ) ) == 0;
+        }
+
+        bool startWith( const String &stringCompare ) const
+        {
+            return strncmp( mOriginal->c_str() + mStart, stringCompare.c_str(),  //
+                            stringCompare.size() ) == 0;
+        }
+
         void setStart( size_t newStart )            { mStart = std::min( newStart, mOriginal->size() ); }
         void setEnd( size_t newEnd )                { mEnd = std::min( newEnd, mOriginal->size() ); }
         size_t getStart(void) const                 { return mStart; }

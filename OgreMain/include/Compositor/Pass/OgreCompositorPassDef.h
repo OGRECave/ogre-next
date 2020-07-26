@@ -36,6 +36,8 @@ THE SOFTWARE.
 #include "OgreResourceTransition.h"
 #include "OgreRenderPassDescriptor.h"
 
+#include "ogrestd/vector.h"
+
 namespace Ogre
 {
     class CompositorNodeDef;
@@ -57,6 +59,7 @@ namespace Ogre
         PASS_DEPTHCOPY,
         PASS_UAV,
         PASS_MIPMAP,
+        PASS_IBL_SPECULAR,
         PASS_COMPUTE,
         PASS_CUSTOM
     };
@@ -232,7 +235,7 @@ namespace Ogre
                 mStoreActionColour[i] = StoreAction::StoreOrResolve;
             }
         }
-        virtual ~CompositorPassDef() {}
+        virtual ~CompositorPassDef();
 
         void setAllClearColours( const ColourValue &clearValue );
         void setAllLoadActions( LoadAction::LoadAction loadAction );
@@ -249,6 +252,8 @@ namespace Ogre
     {
         /// Name is local to Node! (unless using 'global_' prefix)
         IdString                mRenderTargetName;
+        String                  mRenderTargetNameStr;
+
         CompositorPassDefVec    mCompositorPasses;
 
         /// Used for cubemaps and 3D textures.
@@ -266,15 +271,13 @@ namespace Ogre
         CompositorNodeDef       *mParentNodeDef;
 
     public:
-        CompositorTargetDef( IdString renderTargetName, uint32 rtIndex,
-                             CompositorNodeDef *parentNodeDef ) :
-                mRenderTargetName( renderTargetName ),
-                mRtIndex( rtIndex ),
-                mShadowMapSupportedLightTypes( 0 ),
-                mParentNodeDef( parentNodeDef ) {}
+		CompositorTargetDef( const String &renderTargetName, uint32 rtIndex,
+							 CompositorNodeDef *parentNodeDef );
         ~CompositorTargetDef();
 
         IdString getRenderTargetName() const            { return mRenderTargetName; }
+        String getRenderTargetNameStr() const           { return mRenderTargetNameStr; }
+
         uint32 getRtIndex(void) const                   { return mRtIndex; }
 
         void setShadowMapSupportedLightTypes( uint8 types ) { mShadowMapSupportedLightTypes = types; }

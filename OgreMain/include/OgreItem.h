@@ -115,12 +115,17 @@ namespace Ogre {
         bool mInitialised;
 
         /** Builds a list of SubItems based on the SubMeshes contained in the Mesh. */
-        void buildSubItems(void);
+        void buildSubItems( vector<String>::type* materialsList = 0 );
 
     public:
         /** Default destructor.
         */
         ~Item();
+
+        /** @copydoc MovableObject::_releaseManualHardwareResources */
+        void _releaseManualHardwareResources();
+        /** @copydoc MovableObject::_restoreManualHardwareResources */
+        void _restoreManualHardwareResources();
 
         /** Gets the Mesh that this Item is based on.
         */

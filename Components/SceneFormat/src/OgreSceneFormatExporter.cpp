@@ -59,6 +59,9 @@ THE SOFTWARE.
 
 #include "math.h"
 
+#include <queue>
+#include <fstream>
+
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
     inline float isfinite( float x )
     {
@@ -808,7 +811,8 @@ namespace Ogre
                 {
                     jsonStr.a( ",\n\t\t\t\t\t\"width\" : ", probeTex->getWidth() );
                     jsonStr.a( ",\n\t\t\t\t\t\"height\" : ", probeTex->getHeight() );
-                    jsonStr.a( ",\n\t\t\t\t\t\"msaa\" : ", probeTex->getMsaa() );
+                    jsonStr.a( ",\n\t\t\t\t\t\"msaa\" : ",
+                               probeTex->getSampleDescription().getColourSamples() );
                     jsonStr.a( ",\n\t\t\t\t\t\"pixel_format\" : \"",
                                PixelFormatGpuUtils::toString( probeTex->getPixelFormat() ), "\"" );
                     jsonStr.a( ",\n\t\t\t\t\t\"use_manual\" : ",
@@ -907,8 +911,6 @@ namespace Ogre
 
             if( hlmsPbs && hlmsPbs->getAreaLightMasks() )
             {
-                jsonStr.a( ",\n\t\t\"area_light_masks\" : true" );
-
                 TextureGpu *areaLightMask = hlmsPbs->getAreaLightMasks();
                 Image2 image;
                 image.convertFromTexture( areaLightMask, 0, areaLightMask->getNumMipmaps() );
@@ -977,6 +979,10 @@ namespace Ogre
         jsonStr.a( ",\n\t\"use_binary_floating_point\" : ", toQuotedStr( mUseBinaryFloatingPoint ) );
         jsonStr.a( ",\n\t\"MovableObject_msDefaultVisibilityFlags\" : ",
                    MovableObject::getDefaultVisibilityFlags() );
+        jsonStr.a( ",\n\t\"MovableObject_msDefaultQueryFlags\" : ",
+                   MovableObject::getDefaultQueryFlags() );
+        jsonStr.a( ",\n\t\"MovableObject_msDefaultLightMask\" : ",
+                   MovableObject::getDefaultLightMask() );
 
         if( exportFlags & SceneFlags::TexturesOitd )
             jsonStr.a( ",\n\t\"saved_oitd_textures\" : true" );

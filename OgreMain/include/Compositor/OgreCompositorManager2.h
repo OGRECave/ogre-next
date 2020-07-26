@@ -39,6 +39,8 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpu.h"
 #include "Compositor/OgreCompositorChannel.h"
 
+#include "ogrestd/map.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -129,7 +131,6 @@ namespace Ogre
 
         typedef vector<CompositorWorkspace*>::type              WorkspaceVec;
         typedef vector<QueuedWorkspace>::type                   QueuedWorkspaceVec;
-        typedef vector<CompositorWorkspaceListener*>::type      CompositorWorkspaceListenerVec;
         WorkspaceVec            mWorkspaces;
         /// All workspaces created via addWorkspace are first stored in this
         /// container, to prevent corrupting mWorkspaces' iterators in

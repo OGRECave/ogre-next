@@ -358,6 +358,10 @@
 			@property( debug_pssm_splits )
 				outPs_colour0.xyz = mix( outPs_colour0.xyz, debugPssmSplit.xyz, 0.2f );
 			@end
+
+            @property( hlms_gen_normals_gbuffer )
+                outPs_normals = float4( pixelData.normal * 0.5 + 0.5, 1.0 );
+            @end
 		@else
 			outPs_normals			= float4( pixelData.normal * 0.5 + 0.5, 1.0 );
 			@property( hlms_pssm_splits )

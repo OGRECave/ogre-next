@@ -56,7 +56,7 @@ namespace Ogre
         ~D3D11Device();
 
         void ReleaseAll();
-        void TransferOwnership(ID3D11DeviceN* device, ID3D11Device1* device1 );
+        void TransferOwnership(ComPtr<ID3D11Device>& device);
         bool IsDeviceLost();
 
         bool isNull()                                { return !mD3D11Device; }

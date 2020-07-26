@@ -73,13 +73,15 @@ namespace Ogre {
         : PixelCountLodStrategyBase("pixel_count")
     { }
     //-----------------------------------------------------------------------
-    Real AbsolutePixelCountLodStrategy::getValueImpl(const MovableObject *movableObject, const Ogre::Camera *camera) const
+    Real AbsolutePixelCountLodStrategy::getValueImpl( const MovableObject *movableObject,
+                                                      const Ogre::Camera *camera ) const
     {
         // Get viewport
         const Viewport *viewport = camera->getLastViewport();
 
         // Get viewport area
-        Real viewportArea = static_cast<Real>(viewport->getActualWidth() * viewport->getActualHeight());
+        const Real viewportHeight = static_cast<Real>( viewport->getActualHeight() );
+        const Real viewportArea = static_cast<Real>( viewport->getActualWidth() ) * viewportHeight;
 
         // Get area of unprojected circle with object bounding radius
         Real boundingArea = Math::PI * Math::Sqr(movableObject->getWorldRadius());
@@ -97,10 +99,12 @@ namespace Ogre {
                     return getBaseValue();
 
                 // Get projection matrix (this is done to avoid computation of tan(FOV / 2))
-                const Matrix4& projectionMatrix = camera->getProjectionMatrix();
+                const Matrix4& projMat = camera->getProjectionMatrix();
 
                 // Estimate pixel count
-                return -(boundingArea * viewportArea * projectionMatrix[0][0] * projectionMatrix[1][1]) / distanceSquared;
+                return -( boundingArea * projMat[1][1] * projMat[1][1] * viewportHeight *
+                          viewportHeight ) /
+                       ( 4.0f * distanceSquared );
             }
         case PT_ORTHOGRAPHIC:
             {
@@ -126,7 +130,7 @@ namespace Ogre {
                                                        const Camera *camera, Real bias ) const
     {
         const Viewport *viewport = camera->getLastViewport();
-        Real viewportArea = static_cast<Real>(viewport->getActualWidth() * viewport->getActualHeight());
+        const Real viewportHeight = static_cast<Real>( viewport->getActualHeight() );
         ArrayVector3 cameraPos;
         cameraPos.setAll( camera->_getCachedDerivedPosition() );
 
@@ -135,11 +139,12 @@ namespace Ogre {
 
         if( camera->getProjectionType() == PT_PERSPECTIVE )
         {
-            //vpAreaDotProjMat00dot11 is negative so we can store Lod values in ascending
-            //order and use lower_bound (which wouldn't be the same as using upper_bound)
-            ArrayReal PiDotVpAreaDotProjMat00dot11(
-                            Mathlib::SetAll( -Math::PI * viewportArea * projMat[0][0] * projMat[1][1] *
-                                             camera->getLodBias() * bias ) );
+            // See ScreenRatioPixelCountLodStrategy::lodUpdateImpl for formula derivation
+            // constTerm is negative so we can store Lod values in ascending
+            // order and use lower_bound (which wouldn't be the same as using upper_bound)
+            const ArrayReal constTerm( Mathlib::SetAll( -Math::PI * projMat[1][1] * projMat[1][1] *
+                                                        viewportHeight * viewportHeight *
+                                                        camera->getLodBias() * bias / 4.0f ) );
 
             for( size_t i=0; i<numNodes; i += ARRAY_PACKED_REALS )
             {
@@ -151,11 +156,8 @@ namespace Ogre {
                 sqDistance = Mathlib::Max( sqDistance, Mathlib::fEpsilon );
 
                 // Get area of unprojected circle with object bounding radius
-                //ArrayReal boundingArea = Mathlib::PI * (*worldRadius * *worldRadius);
-                //ArrayReal arrayLodValue = (boundingArea * vpAreaDotProjMat00dot11) / sqDistance;
-
                 ArrayReal sqRadius = (*worldRadius * *worldRadius);
-                ArrayReal arrayLodValue = (sqRadius * PiDotVpAreaDotProjMat00dot11) / sqDistance;
+                ArrayReal arrayLodValue = (sqRadius * constTerm) / sqDistance;
 
                 CastArrayToReal( lodValues, arrayLodValue );
 
@@ -166,6 +168,7 @@ namespace Ogre {
         }
         else
         {
+            const Real viewportArea = static_cast<Real>( viewport->getActualWidth() ) * viewportHeight;
             Real orthoArea = camera->getOrthoWindowHeight() * camera->getOrthoWindowWidth();
 
             //Avoid division by zero
@@ -212,21 +215,24 @@ namespace Ogre {
         : PixelCountLodStrategyBase("screen_ratio_pixel_count")
     { }
     //-----------------------------------------------------------------------
-    Real ScreenRatioPixelCountLodStrategy::getValueImpl(const MovableObject *movableObject, const Ogre::Camera *camera) const
+    Real ScreenRatioPixelCountLodStrategy::getValueImpl( const MovableObject *movableObject,
+                                                         const Ogre::Camera *camera ) const
     {
         // Get absolute pixel count
-        Real absoluteValue = AbsolutePixelCountLodStrategy::getSingletonPtr()->getValueImpl(movableObject, camera);
+        Real absoluteValue =
+            AbsolutePixelCountLodStrategy::getSingletonPtr()->getValueImpl( movableObject, camera );
 
         // Get viewport area
-        const Viewport *viewport = camera->getLastViewport();        
-        Real viewportArea = static_cast<Real>(viewport->getActualWidth() * viewport->getActualHeight());
-        
+        const Viewport *viewport = camera->getLastViewport();
+        Real viewportArea =
+            static_cast<Real>( viewport->getActualWidth() * viewport->getActualHeight() );
+
         // Return ratio of screen size to absolutely covered pixel count
         return absoluteValue / viewportArea;
     }
     //-----------------------------------------------------------------------
     void ScreenRatioPixelCountLodStrategy::lodUpdateImpl( const size_t numNodes, ObjectData objData,
-                                                       const Camera *camera, Real bias ) const
+                                                          const Camera *camera, Real bias ) const
     {
         ArrayVector3 cameraPos;
         cameraPos.setAll( camera->_getCachedDerivedPosition() );
@@ -236,11 +242,44 @@ namespace Ogre {
 
         if( camera->getProjectionType() == PT_PERSPECTIVE )
         {
-            //vpAreaDotProjMat00dot11 is negative so we can store Lod values in ascending
-            //order and use lower_bound (which wouldn't be the same as using upper_bound)
-            ArrayReal PiDotVpAreaDotProjMat00dot11(
-                            Mathlib::SetAll( -Math::PI * projMat[0][0] * projMat[1][1] *
-                                             camera->getLodBias() * bias ) );
+            // See:
+            //  https://forums.ogre3d.org/viewtopic.php?p=548059#p548059
+            //  https://stackoverflow.com/questions/21648630/radius-of-projected-sphere-in-screen-space
+            //
+            // Note: _sp means screen_space; _ws means world_space
+            //
+            //             cot( fovy / 2 ) * radius_ws   viewport_height
+            // radius_sp = --------------------------- * ---------------
+            //                      distance                    2
+            //
+            //                 cot( fovy / 2 ) * radius_ws   viewport_height
+            // area_sp = PI *( --------------------------- * --------------- )²
+            //                         distance                      2
+            //
+            // Since cot(fovy / 2) = 1 / tan(fovy / 2) = projMatrix[1][1], thus:
+            //
+            //            PI * projMatrix[1][1]² * radius_ws² * viewport_height²
+            // area_sp = --------------------------------------------------------
+            //                                4 * distance²
+            //
+            // Divide all by the total pixel count (viewport_height * viewport_width)
+            // to get screen coverage:
+            //
+            //               PI * projMatrix[1][1]² * radius_ws² * viewport_height
+            // screen_cvg = -------------------------------------------------------
+            //                        4 * distance² * viewport_width
+            //
+            // Since projMatrix[0][0] = projMatrix[1][1] * viewport_width / viewport_height, thus:
+            //
+            //               PI * projMatrix[0][0] * projMatrix[1][1] * radius_ws²
+            // screen_cvg = -------------------------------------------------------
+            //                                 4 * distance²
+            //
+            // From this formula, only distance and radius varies per object.
+            // constTerm is negative so we can store Lod values in ascending
+            // order and use lower_bound (which wouldn't be the same as using upper_bound)
+            const ArrayReal constTerm( Mathlib::SetAll( -Math::PI * projMat[0][0] * projMat[1][1] *
+                                                        camera->getLodBias() * bias / 4.0f ) );
 
             for( size_t i=0; i<numNodes; i += ARRAY_PACKED_REALS )
             {
@@ -252,11 +291,8 @@ namespace Ogre {
                 sqDistance = Mathlib::Max( sqDistance, Mathlib::fEpsilon );
 
                 // Get area of unprojected circle with object bounding radius
-                //ArrayReal boundingArea = Mathlib::PI * (*worldRadius * *worldRadius);
-                //ArrayReal arrayLodValue = (boundingArea * vpAreaDotProjMat00dot11) / sqDistance;
-
                 ArrayReal sqRadius = (*worldRadius * *worldRadius);
-                ArrayReal arrayLodValue = (sqRadius * PiDotVpAreaDotProjMat00dot11) / sqDistance;
+                ArrayReal arrayLodValue = (sqRadius * constTerm) / sqDistance;
 
                 CastArrayToReal( lodValues, arrayLodValue );
 

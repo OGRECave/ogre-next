@@ -62,10 +62,9 @@ namespace Demo
 			Ogre::v1::HardwareBuffer::HBU_STATIC,
 			Ogre::v1::HardwareBuffer::HBU_STATIC);
 
-		Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createManual(
-			"Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-
-		planeMesh->importV1(planeMeshV1.get(), true, true, true);
+		Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+			"Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+			planeMeshV1.get(), true, true, true);
 
 		{
 			Ogre::Item *item = sceneManager->createItem(planeMesh, Ogre::SCENE_DYNAMIC);
@@ -241,8 +240,8 @@ namespace Demo
 		but we are going to create just simple spheres.
 		*/
 		{
-			//Lets setup a new render queue for distortion pass. Set ID 6 to be our distortion queue
-            mGraphicsSystem->getSceneManager()->getRenderQueue()->setRenderQueueMode(6, Ogre::RenderQueue::FAST);
+			//Lets setup a new render queue for distortion pass. Set ID 16 to be our distortion queue
+			mGraphicsSystem->getSceneManager()->getRenderQueue()->setRenderQueueMode(16, Ogre::RenderQueue::FAST);
 
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 
@@ -304,8 +303,8 @@ namespace Demo
 
 				item->setDatablock(datablock);
 
-				//Set item to be rendered in distortion queue pass (ID 6)
-				item->setRenderQueueGroup(6);
+				//Set item to be rendered in distortion queue pass (ID 16)
+				item->setRenderQueueGroup(16);
 
 				mDistortionSceneNode[i] = sceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->
 					createChildSceneNode(Ogre::SCENE_DYNAMIC);

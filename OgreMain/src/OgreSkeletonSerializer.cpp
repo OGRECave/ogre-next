@@ -34,9 +34,11 @@ THE SOFTWARE.
 #include "OgreAnimationTrack.h"
 #include "OgreKeyFrame.h"
 #include "OgreOldBone.h"
-#include "OgreString.h"
 #include "OgreDataStream.h"
 #include "OgreLogManager.h"
+
+#include <fstream>
+#include <sstream>
 
 namespace Ogre {
 namespace v1 {

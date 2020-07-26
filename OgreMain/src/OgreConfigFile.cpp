@@ -26,12 +26,16 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreConfigFile.h"
+
 #include "OgreResourceGroupManager.h"
+#include "OgreString.h"
 
 #include "OgreException.h"
 
 #include <iostream>
+#include <fstream>
 
 namespace Ogre {
 

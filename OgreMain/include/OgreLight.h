@@ -243,6 +243,9 @@ namespace Ogre {
         */
         Real getAttenuationQuadric(void) const                      { return mAttenuationQuad; }
 
+        void _setLightProfileIdx( uint16 profileIdx )               { mLightProfileIdx = profileIdx; }
+        uint16 getLightProfileIdx(void) const                       { return mLightProfileIdx; }
+
         /** Sets the direction in which a light points.
         @remarks
             Applicable only to the spotlight and directional light types.
@@ -555,7 +558,7 @@ namespace Ogre {
             set the updated parameters.
         */
         virtual void _updateCustomGpuParameter(uint16 paramIndex, 
-            const GpuProgramParameters::AutoConstantEntry& constantEntry, 
+            const GpuProgramParameters_AutoConstantEntry& constantEntry,
             GpuProgramParameters* params) const;
                 
         /** Check whether a sphere is included in the lighted area of the light 
@@ -624,6 +627,8 @@ namespace Ogre {
         /// 1.0 means to use the highest mip level, and 0 the lowest mip.
         uint16 mTexLightMaskDiffuseMipStart;
     protected:
+        /// Used for IES photogametry
+        uint16 mLightProfileIdx;
         Real mShadowFarDist;
         Real mShadowFarDistSquared;
 

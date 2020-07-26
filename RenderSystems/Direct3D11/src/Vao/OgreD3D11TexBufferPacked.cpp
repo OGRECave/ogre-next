@@ -57,14 +57,20 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     D3D11TexBufferPacked::~D3D11TexBufferPacked()
     {
-        for( int i=0; i<16; ++i )
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11TexBufferPacked::notifyDeviceLost(D3D11Device* device)
+    {
+        for(unsigned cacheIdx = 0; cacheIdx < 16; ++cacheIdx)
         {
-            if( mCachedResourceViews[i].mResourceView )
-            {
-                mCachedResourceViews[i].mResourceView->Release();
-                mCachedResourceViews[i].mResourceView = 0;
-            }
+            mCachedResourceViews[cacheIdx].mResourceView.Reset();
+            mCachedResourceViews[cacheIdx].mOffset = 0;
+            mCachedResourceViews[cacheIdx].mSize = 0;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11TexBufferPacked::notifyDeviceRestored(D3D11Device* device, unsigned pass)
+    {
     }
     //-----------------------------------------------------------------------------------
     bool D3D11TexBufferPacked::isD3D11Structured(void) const
@@ -81,8 +87,7 @@ namespace Ogre
                                       ? mBytesPerElement
                                       : PixelFormatGpuUtils::getBytesPerPixel( mPixelFormat );
 
-        if( mCachedResourceViews[cacheIdx].mResourceView )
-            mCachedResourceViews[cacheIdx].mResourceView->Release();
+        mCachedResourceViews[cacheIdx].mResourceView.Reset();
 
         mCachedResourceViews[cacheIdx].mOffset  = static_cast<uint32>( mFinalBufferStart + offset );
         mCachedResourceViews[cacheIdx].mSize    = sizeBytes;
@@ -102,11 +107,11 @@ namespace Ogre
         vboName = bufferInterface->getVboName();
 
         mDevice.get()->CreateShaderResourceView( vboName, &srDesc,
-                                                 &mCachedResourceViews[cacheIdx].mResourceView );
+            mCachedResourceViews[cacheIdx].mResourceView.ReleaseAndGetAddressOf() );
 
         mCurrentCacheCursor = (cacheIdx + 1) % 16;
 
-        return mCachedResourceViews[cacheIdx].mResourceView;
+        return mCachedResourceViews[cacheIdx].mResourceView.Get();
     }
     //-----------------------------------------------------------------------------------
     ID3D11ShaderResourceView* D3D11TexBufferPacked::bindBufferCommon( size_t offset, size_t sizeBytes )
@@ -124,7 +129,7 @@ namespace Ogre
             if( mFinalBufferStart + offset == mCachedResourceViews[i].mOffset &&
                 sizeBytes <= mCachedResourceViews[i].mSize )
             {
-                resourceView = mCachedResourceViews[i].mResourceView;
+                resourceView = mCachedResourceViews[i].mResourceView.Get();
                 break;
             }
             else if( !mCachedResourceViews[i].mResourceView )
@@ -144,7 +149,7 @@ namespace Ogre
         return resourceView;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11ShaderResourceView* D3D11TexBufferPacked::createSrv(
+    ComPtr<ID3D11ShaderResourceView> D3D11TexBufferPacked::createSrv(
             const DescriptorSetTexture2::BufferSlot &bufferSlot ) const
     {
         assert( bufferSlot.offset <= getTotalSizeBytes() );
@@ -171,8 +176,8 @@ namespace Ogre
                                                         mBufferInterface );
         ID3D11Buffer *vboName = bufferInterface->getVboName();
 
-        ID3D11ShaderResourceView *retVal = 0;
-        HRESULT hr = mDevice->CreateShaderResourceView( vboName, &srvDesc, &retVal );
+        ComPtr<ID3D11ShaderResourceView> retVal;
+        HRESULT hr = mDevice->CreateShaderResourceView( vboName, &srvDesc, retVal.GetAddressOf() );
 
         if( FAILED(hr) )
         {

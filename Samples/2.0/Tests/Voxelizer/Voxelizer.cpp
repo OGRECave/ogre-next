@@ -53,11 +53,9 @@ namespace Demo
                 "Compute/Tools/HLSL",
                 "Compute/Tools/Metal",
                 "Compute/Algorithms/IrradianceFields",
+                "Compute/Algorithms/IrradianceFields/Visualizer",
                 "VCT",
                 "VCT/Visualizer",
-                "Hlms/Common/GLSL",
-                "Hlms/Common/HLSL",
-                "Hlms/Common/Metal",
                 "Hlms/Pbs/Any",
                 "2.0/scripts/materials/Postprocessing/SceneAssets"
             };

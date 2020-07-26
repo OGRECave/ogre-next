@@ -42,6 +42,8 @@ THE SOFTWARE.
 
 #include "IGame/IGame.h"
 
+#include <fstream>
+
 namespace OgreMax
 {
     MeshXMLExporter::MeshXMLExporter(const Config& config, MaterialMap& map) : m_materialMap(map), OgreMaxExporter(config)

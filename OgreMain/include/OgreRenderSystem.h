@@ -55,6 +55,8 @@ namespace Ogre
 
     typedef vector<TextureGpu*>::type TextureGpuVec;
     typedef map< uint16, TextureGpuVec >::type DepthBufferMap2;
+    typedef map<TextureGpu *, uint16>::type DepthBufferRefMap;
+    typedef set<TextureGpu *>::type TextureGpuSet;
 
     /// Enum describing the ways to generate texture coordinates
     enum TexCoordCalcMethod
@@ -71,6 +73,18 @@ namespace Ogre
         TEXCALC_PROJECTIVE_TEXTURE
     };
 
+    /// Render window creation parameters.
+    struct RenderWindowDescription
+    {
+        String              name;
+        unsigned int        width;
+        unsigned int        height;
+        bool                useFullScreen;
+        NameValuePairList   miscParams;
+    };
+
+    /// Render window creation parameters container.
+    typedef vector<RenderWindowDescription>::type RenderWindowDescriptionList;
 
     /** Defines the functionality of a 3D API
     @remarks
@@ -98,6 +112,17 @@ namespace Ogre
     class _OgreExport RenderSystem : public RenderSysAlloc
     {
     public:
+        struct _OgreExport Metrics
+        {
+            bool mIsRecordingMetrics;
+            size_t mBatchCount;
+            size_t mFaceCount;
+            size_t mVertexCount;
+            size_t mDrawCount;
+            size_t mInstanceCount;
+            Metrics();
+        };
+
         /** Default Constructor.
         */
         RenderSystem();
@@ -224,6 +249,11 @@ namespace Ogre
         */
         virtual void shutdown(void);
 
+        /** Some render systems have moments when GPU device is temporarily unavailable,
+            for example when D3D11 device is lost, or when iOS app is in background, etc.
+         */
+        virtual bool validateDevice( bool forceDeviceElection = false ) { return true; }
+
         /** Sets whether or not W-buffers are enabled if they are available for this renderer.
         @param
         enabled If true and the renderer supports them W-buffers will be used.  If false 
@@ -235,6 +265,11 @@ namespace Ogre
         /** Returns true if the renderer will try to use W-buffers when available.
         */
         bool getWBufferEnabled(void) const;
+
+        /** Returns supported sample description for requested FSAA mode, with graceful downgrading.
+        */
+        virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
+                                                             PixelFormatGpu format );
 
         /** Creates a new rendering window.
         @remarks
@@ -554,9 +589,6 @@ namespace Ogre
         */
         void setGlobalNumberOfInstances(const size_t val);
 
-        /** Returns true if fixed pipeline rendering is enabled on the system.
-        */
-        bool getFixedPipelineEnabled(void) const;
 
         // ------------------------------------------------------------------------
         //                     Internal Rendering Access
@@ -725,9 +757,17 @@ namespace Ogre
 
     protected:
         virtual TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
-                                                  PixelFormatGpu depthBufferFormat );
+                                                  PixelFormatGpu depthBufferFormat, uint16 poolId );
 
+        /// Detroys a depth buffer associated in the pool. If no texture is found the it skips.
+        void destroySharedDepthBuffer( TextureGpu *depthTexture );
+        void referenceSharedDepthBuffer( TextureGpu *depthBuffer );
     public:
+        void _cleanupDepthBuffers( void );
+        /// Releases the reference count on a shared depth buffer.
+        /// Does nothing if input is not a shared depth buffer.
+        void _dereferenceSharedDepthBuffer( TextureGpu *depthBuffer );
+
         virtual TextureGpu* getDepthBufferFor( TextureGpu *colourTexture, uint16 poolId,
                                                bool preferDepthTexture,
                                                PixelFormatGpu depthBufferFormat );
@@ -906,14 +946,12 @@ namespace Ogre
         /// at Hlms level)
         virtual void _setComputePso( const HlmsComputePso *pso ) = 0;
 
-        /** The RenderSystem will keep a count of tris rendered, this resets the count. */
-        virtual void _beginGeometryCount(void);
-        /** Reports the number of tris rendered since the last _beginGeometryCount call. */
-        virtual unsigned int _getFaceCount(void) const;
-        /** Reports the number of batches rendered since the last _beginGeometryCount call. */
-        virtual unsigned int _getBatchCount(void) const;
-        /** Reports the number of vertices passed to the renderer since the last _beginGeometryCount call. */
-        virtual unsigned int _getVertexCount(void) const;
+        void _resetMetrics();
+        void _addMetrics( const Metrics &newMetrics );
+
+        void setMetricsRecordingEnabled( bool bEnable );
+
+        const Metrics& getMetrics() const;
 
         /** Generates a packed data version of the passed in ColourValue suitable for
         use as with this RenderSystem.
@@ -1195,7 +1233,7 @@ namespace Ogre
         {
         public:
             Listener() {}
-            virtual ~Listener() {}
+            virtual ~Listener();
 
             /** A rendersystem-specific event occurred.
             @param eventName The name of the event which has occurred
@@ -1366,6 +1404,8 @@ namespace Ogre
         void destroyAllRenderPassDescriptors(void);
 
         DepthBufferMap2 mDepthBufferPool2;
+        DepthBufferRefMap mSharedDepthBufferRefs;
+        TextureGpuSet mSharedDepthBufferZeroRefCandidates;
 
         typedef set<RenderPassDescriptor*>::type RenderPassDescriptorSet;
         RenderPassDescriptorSet mRenderPassDescs;
@@ -1392,9 +1432,7 @@ namespace Ogre
         bool mDebugShaders;
         bool mWBuffer;
 
-        size_t mBatchCount;
-        size_t mFaceCount;
-        size_t mVertexCount;
+        Metrics mMetrics;
 
         /// Saved manual colour blends
         ColourValue mManualBlendColours[OGRE_MAX_TEXTURE_LAYERS][2];

@@ -42,6 +42,7 @@
 #include "OgreDepthBuffer.h"
 
 #include "OgreProfiler.h"
+#include "OgreString.h"
 
 #include <iostream>
 #include <algorithm>
@@ -96,6 +97,7 @@ namespace Ogre
         if (mWindow)
         {
             XDestroyWindow(xDisplay, mWindow);
+            XSync(xDisplay, false);
         }
 
         if (mContext)
@@ -507,7 +509,7 @@ namespace Ogre
             // setHidden takes care of mapping or unmapping the window
             // and also calls setFullScreen if appropriate.
             setHidden(hidden);
-            XFlush(xDisplay);
+            XSync(xDisplay, False);
 
             WindowEventUtilities::_addRenderWindow(this);
         }
@@ -536,14 +538,15 @@ namespace Ogre
 
         mTexture = textureManager->createTextureGpuWindow( mContext, this );
 
+        mTexture->setPixelFormat( PFG_RGBA8_UNORM );
+
         ::GLXFBConfig fbConfig = mContext->_getFbConfig();
 
         // Now check the actual supported fsaa value
         GLint maxSamples;
         mGLSupport->getFBConfigAttrib( fbConfig, GLX_SAMPLES, &maxSamples );
-        mTexture->setMsaa( maxSamples );
-
-        mTexture->setPixelFormat( PFG_RGBA8_UNORM );
+        SampleDescription sampleDesc( std::max<uint8>( 1u, static_cast<uint8>( maxSamples ) ) );
+        mTexture->setSampleDescription( sampleDesc );
 
         GLint depthSupport = 0, stencilSupport = 0;
         mGLSupport->getFBConfigAttrib( fbConfig, GLX_DEPTH_SIZE, &depthSupport );
@@ -551,7 +554,7 @@ namespace Ogre
         if( depthSupport != 0 )
         {
             mDepthBuffer = textureManager->createTextureGpuWindow( mContext, this );
-            mDepthBuffer->setMsaa( maxSamples );
+            mDepthBuffer->setSampleDescription( sampleDesc );
 
             if( depthSupport == 24 )
             {

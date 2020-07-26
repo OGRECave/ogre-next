@@ -63,7 +63,7 @@ namespace Ogre
                 mTextures.push_back( mRenderPassDesc->mColour[i].resolveTexture );
             else
             {
-                if( mRenderPassDesc->mColour[i].texture->getMsaa() > 1u )
+                if( mRenderPassDesc->mColour[i].texture->isMultisample() )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "Cannot generate mipmaps for MSAA textures! Node: " +
@@ -360,6 +360,8 @@ namespace Ogre
             }
         }
 
+        const bool bIsHlsl = job->getCreator()->getShaderProfile() == "hlsl";
+
         //Set the shader constants, 16 at a time (since that's the limit of what ManualParam can hold)
         char tmp[32];
         LwString weightsString( LwString::FromEmptyPointer( tmp, sizeof(tmp) ) );
@@ -367,7 +369,10 @@ namespace Ogre
         for( uint32 i=0; i<kernelRadius + 1u; i += floatsPerParam )
         {
             weightsString.clear();
-            weightsString.a( "c_weights[", i, "]" );
+            if( !bIsHlsl )
+                weightsString.a( "c_weights[", i, "]" );
+            else
+                weightsString.a( "c_weights[", ( i >> 2u ), "]" );
 
             ShaderParams::Param p;
             p.isAutomatic   = false;
@@ -394,15 +399,12 @@ namespace Ogre
 
         profilingBegin();
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        notifyPassEarlyPreExecuteListeners();
 
         executeResourceTransitions();
 
         //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        notifyPassPreExecuteListeners();
 
         const bool usesCompute = !mJobs.empty();
 
@@ -452,8 +454,7 @@ namespace Ogre
             }
         }
 
-        if( listener )
-            listener->passPosExecute( this );
+        notifyPassPosExecuteListeners();
 
         profilingEnd();
     }

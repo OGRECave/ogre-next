@@ -30,6 +30,8 @@ THE SOFTWARE
 #include "OgreDataStream.h"
 #include "OgreString.h"
 
+#include <fstream>
+
 using Ogre::DataStream;
 using Ogre::DataStreamPtr;
 using Ogre::FileStreamDataStream;

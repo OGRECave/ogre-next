@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include "OgreFrustum.h"
 #include "OgreAxisAlignedBox.h"
 
+#include <sstream>
+
 
 namespace Ogre
 {

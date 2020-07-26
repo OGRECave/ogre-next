@@ -33,12 +33,30 @@ THE SOFTWARE.
 
 #include "OgreId.h"
 
+#include "Math/Simple/OgreAabb.h"
+#include "OgreIdString.h"
+#include "OgrePixelFormatGpu.h"
 #include "OgreShaderPrimitives.h"
+
+#include "ogrestd/vector.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
+    class IrradianceFieldRaster;
+    class IfdProbeVisualizer;
+
+    struct _OgreHlmsPbsExport RasterParams
+    {
+        IdString mWorkspaceName;
+        PixelFormatGpu mPixelFormat;
+        float mCameraNear;
+        float mCameraFar;
+
+        RasterParams();
+    };
+
     struct _OgreHlmsPbsExport IrradianceFieldSettings
     {
         /** Number of rays per pixel in terms of mDepthProbeResolution.
@@ -59,6 +77,9 @@ namespace Ogre
         /// Must be power of two
         uint32 mNumProbes[3];
 
+        /// Use rasterization to generate light & depth data, instead of voxelization
+        RasterParams mRasterParams;
+
     protected:
         /// mSubsamples.size() == mNumRaysPerPixel
         /// Contains the offsets for generating the rays
@@ -78,11 +99,19 @@ namespace Ogre
             }
         }
 
+        bool isRaster() const;
+
         void createSubsamples( void );
 
         uint32 getTotalNumProbes( void ) const;
         void getDepthProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
         void getIrradProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
+
+        /// Returns mIrradianceResolution + 2u, since we need to reserverve 1 pixel border
+        /// around the probe for proper interpolation.
+        /// This means a 8x8 probe actually occupies 10x10.
+        uint8 getBorderedIrradResolution() const;
+        uint8 getBorderedDepthResolution() const;
 
         uint32 getNumRaysPerIrradiancePixel( void ) const;
 
@@ -110,12 +139,23 @@ namespace Ogre
     */
     class _OgreHlmsPbsExport IrradianceField : public IdObject
     {
+        friend class IrradianceFieldRaster;
+
+    public:
+        enum DebugVisualizationMode
+        {
+            DebugVisualizationColour,
+            DebugVisualizationDepth,
+            DebugVisualizationNone
+        };
+
+    protected:
         struct IrradianceFieldGenParams
         {
             float invNumRaysPerPixel;
             float invNumRaysPerIrradiancePixel;
             float unused0;
-            uint32 probesPerRow; // Used by integration CS
+            uint32 probesPerRow;  // Used by integration CS
 
             float coneAngleTan;
             uint32 numProcessedProbes;
@@ -126,6 +166,18 @@ namespace Ogre
             uint4 numProbes_threadsPerRow;
 
             float4x4 irrProbeToVctTransform;
+        };
+
+        struct IfdBorderMirrorParams
+        {
+            uint32 probeBorderedRes;
+            uint32 numPixelsInEdges;
+            uint32 numTopBottomPixels;
+            uint32 numGlobalThreadsForEdges;
+
+            uint32 maxThreadId;
+            uint32 threadsPerThreadRow;
+            uint32 padding[2];
         };
 
         IrradianceFieldSettings mSettings;
@@ -148,12 +200,22 @@ namespace Ogre
         HlmsComputeJob *mGenerationJob;
         HlmsComputeJob *mDepthIntegrationJob;
         HlmsComputeJob *mColourIntegrationJob;
+        HlmsComputeJob *mDepthMirrorBorderJob;
+        HlmsComputeJob *mColourMirrorBorderJob;
 
         IrradianceFieldGenParams mIfGenParams;
         ConstBufferPacked *mIfGenParamsBuffer;
         TexBufferPacked *mDirectionsBuffer;
         TexBufferPacked *mDepthTapsIntegrationBuffer;
         TexBufferPacked *mColourTapsIntegrationBuffer;
+        ConstBufferPacked *mIfdDepthBorderMirrorParamsBuffer;
+        ConstBufferPacked *mIfdColourBorderMirrorParamsBuffer;
+
+        IrradianceFieldRaster *mIfRaster;
+
+        DebugVisualizationMode mDebugVisualizationMode;
+        uint8 mDebugTessellation;
+        IfdProbeVisualizer *mDebugIfdProbeVisualizer;
 
         Root *mRoot;
         SceneManager *mSceneManager;
@@ -166,6 +228,7 @@ namespace Ogre
                                                       ConstBufferPacked *ifGenParamsBuffer,
                                                       uint32 &outMaxIntegrationTapsPerPixel );
         static uint32 countNumIntegrationTaps( uint32 probeRes );
+
         /**
          * @brief fillIntegrationWeights
         @param outBuffer
@@ -173,7 +236,13 @@ namespace Ogre
         */
         static void fillIntegrationWeights( float2 *RESTRICT_ALIAS outBuffer, uint32 probeRes,
                                             uint32 maxTapsPerPixel );
-        void setIrradianceFieldGenParams();
+        void setIrradianceFieldGenParams( void );
+
+        void setupBorderMirrorParams( uint32 borderedRes, uint32 fullWidth,
+                                      ConstBufferPacked *ifdBorderMirrorParamsBuffer,
+                                      HlmsComputeJob *job );
+
+        void setTextureToDebugVisualizer( void );
 
     public:
         IrradianceField( Root *root, SceneManager *sceneManager );
@@ -188,14 +257,44 @@ namespace Ogre
         @param fieldOrigin
         @param fieldSize
         @param vctLighting
+            This value is ignored if IrradianceFieldSettings::usesRaster() returns true,
+            and must be non-null if it returns false
          */
         void initialize( const IrradianceFieldSettings &settings, const Vector3 &fieldOrigin,
                          const Vector3 &fieldSize, VctLighting *vctLighting );
+
+        /// If VctLighting was updated with minor changes (e.g. light position/direction changed,
+        /// number of bounces setting changed) then call this function so update() process it
+        /// again.
+        ///
+        /// If major changes happens to VctLighting, then call initialize() again
+        void reset();
 
         void update( uint32 probesPerFrame = 200u );
 
         size_t getConstBufferSize( void ) const;
         void fillConstBufferData( const Matrix4 &viewMatrix, float *RESTRICT_ALIAS passBufferPtr ) const;
+
+        /**
+        @param mode
+        @param sceneManager
+            Can be nullptr only if mode == IrradianceField::DebugVisualizationNone
+        @param tessellation
+            Value in range [3; 16]
+            Note this value increases exponentially:
+                tessellation = 3u -> 24 vertices (per sphere)
+                tessellation = 4u -> 112 vertices
+                tessellation = 5u -> 480 vertices
+                tessellation = 6u -> 1984 vertices
+                tessellation = 7u -> 8064 vertices
+                tessellation = 8u -> 32512 vertices
+                tessellation = 9u -> 130560 vertices
+                tessellation = 16u -> 2.147.418.112 vertices
+        */
+        void setDebugVisualization( IrradianceField::DebugVisualizationMode mode,
+                                    SceneManager *sceneManager, uint8 tessellation );
+        bool getDebugVisualizationMode( void ) const;
+        uint8 getDebugTessellation( void ) const;
 
         TextureGpu *getIrradianceTex( void ) const { return mIrradianceTex; }
         TextureGpu *getDepthVarianceTex( void ) const { return mDepthVarianceTex; }

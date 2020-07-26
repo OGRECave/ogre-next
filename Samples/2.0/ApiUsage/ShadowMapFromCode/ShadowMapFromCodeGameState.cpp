@@ -42,6 +42,8 @@ namespace Demo
         "PCF 2x2",
         "PCF 3x3",
         "PCF 4x4",
+        "PCF 5x5",
+        "PCF 6x6",
         "ESM"
     };
 
@@ -65,10 +67,9 @@ namespace Demo
                                             Ogre::v1::HardwareBuffer::HBU_STATIC,
                                             Ogre::v1::HardwareBuffer::HBU_STATIC );
 
-        Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createManual(
-                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-
-        planeMesh->importV1( planeMeshV1.get(), true, true, true );
+        Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                    planeMeshV1.get(), true, true, true );
 
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
@@ -430,11 +431,6 @@ namespace Demo
                                  (nextFilter + 1u) % Ogre::HlmsPbs::NumShadowFilter );
             }
 #endif
-
-            if( nextFilter == Ogre::HlmsPbs::ExponentialShadowMaps )
-                pbs->getHlmsManager()->setShadowMappingUseBackFaces( false );
-            else
-                pbs->getHlmsManager()->setShadowMappingUseBackFaces( true );
 
             pbs->setShadowSettings( nextFilter );
 

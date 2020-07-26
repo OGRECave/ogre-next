@@ -35,6 +35,8 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 namespace Ogre
 {
+    class MetalDeviceItem;
+
     struct _OgreMetalExport MetalDevice
     {
         /// Once a frame is aborted, MTLRenderCommandEncoder are no longer created (ignored).
@@ -51,7 +53,7 @@ namespace Ogre
         MetalDevice( MetalRenderSystem *renderSystem );
         ~MetalDevice();
 
-        void init(void);
+        void init( const MetalDeviceItem *device );
 
         void endBlitEncoder(void);
         void endRenderEncoder( bool endRenderPassDesc=true );
@@ -77,6 +79,31 @@ namespace Ogre
 
         /// Waits for the GPU to finish all pending commands.
         void stall(void);
+    };
+
+
+    class _OgreMetalExport MetalDeviceItem
+    {
+        id<MTLDevice> mDevice;
+        unsigned mSameNameAdapterIndex;
+    public:
+        MetalDeviceItem();
+        MetalDeviceItem(id<MTLDevice> device, unsigned sameNameIndex);
+        
+        String getDescription() const;
+        id<MTLDevice> getMTLDevice() const;
+    };
+
+    class _OgreMetalExport MetalDeviceList
+    {
+        vector<MetalDeviceItem>::type mItems;
+    public:
+        void refresh();
+        void clear();
+        
+        size_t count() const;
+        const MetalDeviceItem* item( size_t index ) const;
+        const MetalDeviceItem* item( const String &name ) const;
     };
 }
 

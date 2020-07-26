@@ -1,48 +1,52 @@
-compositor_node Tutorial_OpenVRNode
+
+abstract target main_stereo_render
+{
+	//Eye render
+	pass render_scene
+	{
+		load
+		{
+			all				clear
+			clear_colour	0.2 0.4 0.6 1
+		}
+		store
+		{
+			depth	dont_care
+			stencil	dont_care
+		}
+
+		//0x01234567
+		identifier 19088743
+
+		overlays	off
+
+		cull_camera VrCullCamera
+
+		shadows		ShadowMapDebuggingShadowNode
+
+		instanced_stereo true
+		viewport 0 0.0 0.0 0.5 1.0
+		viewport 1 0.5 0.0 0.5 1.0
+	}
+
+	//Render overlays last on the entire screen
+	pass render_scene
+	{
+		rq_first	254
+		rq_last		255
+
+		overlays	on
+	}
+}
+
+
+compositor_node Tutorial_OpenVRNodeRDM
 {
 	in 0 stereo_output
 
 	texture rtt target_width target_height target_format msaa 4
 
-	target rtt
-	{
-		//Eye render
-		pass render_scene
-		{
-			load
-			{
-				all				clear
-				clear_colour	0.2 0.4 0.6 1
-			}
-			store
-			{
-				depth	dont_care
-				stencil	dont_care
-			}
-
-			//0x01234567
-			identifier 19088743
-
-			overlays	off
-
-			cull_camera VrCullCamera
-
-			shadows		ShadowMapDebuggingShadowNode
-
-			instanced_stereo true
-			viewport 0 0.0 0.0 0.5 1.0
-			viewport 1 0.5 0.0 0.5 1.0
-		}
-
-		//Render overlays last on the entire screen
-		pass render_scene
-		{
-			rq_first	254
-			rq_last		255
-
-			overlays	on
-		}
-	}
+	target rtt : main_stereo_render	{}
 
 	target stereo_output
 	{
@@ -54,6 +58,13 @@ compositor_node Tutorial_OpenVRNode
 			uav 0 stereo_output write PFG_RGBA8_UNORM
 		}
 	}
+}
+
+compositor_node Tutorial_OpenVRNodeNoRDM
+{
+	in 0 stereo_output
+
+	target stereo_output : main_stereo_render	{}
 }
 
 compositor_node Tutorial_OpenVRMirrorWindowNode
@@ -78,9 +89,14 @@ compositor_node Tutorial_OpenVRMirrorWindowNode
 	}
 }
 
-workspace Tutorial_OpenVRWorkspace
+workspace Tutorial_OpenVRWorkspaceRDM
 {
-	connect_output Tutorial_OpenVRNode 0
+	connect_output Tutorial_OpenVRNodeRDM 0
+}
+
+workspace Tutorial_OpenVRWorkspaceNoRDM
+{
+	connect_output Tutorial_OpenVRNodeNoRDM 0
 }
 
 workspace Tutorial_OpenVRMirrorWindowWorkspace

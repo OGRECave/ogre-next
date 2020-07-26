@@ -24,8 +24,4 @@ ogre_add_executable(Sample_SceneFormat WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAM
 
 target_link_libraries(Sample_SceneFormat ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} OgreSceneFormat)
 ogre_config_sample_lib(Sample_SceneFormat)
-
-if( APPLE )
-	set_target_properties( Sample_SceneFormat PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Sample_SceneFormat PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Sample_SceneFormat)

@@ -35,6 +35,9 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuListener.h"
+
+#include "ogrestd/map.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {

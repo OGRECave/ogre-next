@@ -37,6 +37,15 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    class _OgreHlmsPbsExport ParallaxCorrectedCubemapAutoListener
+    {
+    public:
+        virtual ~ParallaxCorrectedCubemapAutoListener();
+        /// Called when the probe is done rendering to the temporary cubemap, and is now about
+        /// to be copied to the cubemap array (or about to be converted to DPM 2D array texture)
+        virtual void preCopyRenderTargetToCubemap( TextureGpu *renderTarget, uint32 cubemapArrayIdx );
+    };
+
     /**
     @class ParallaxCorrectedCubemapAuto
         Per-Pixel reflection probes.
@@ -63,17 +72,11 @@ namespace Ogre
         public: Vector3                 mTrackedPosition;
     private:
         TextureGpu                      *mRenderTarget;
-        TextureGpu                      *mDpmRenderTarget;
-        Camera                          *mDpmCamera;
+        TextureGpu                      *mIblTarget;
 
         vector<uint64>::type            mReservedSlotBitset;
 
-        CompositorWorkspace             *mCubeToDpmWorkspace;
-
-        static void createCubemapToDpmWorkspaceDef( CompositorManager2 *compositorManager,
-                                                    TextureGpu *cubeTexture );
-        static void destroyCubemapToDpmWorkspaceDef( CompositorManager2 *compositorManager,
-                                                     TextureGpu *cubeTexture );
+        ParallaxCorrectedCubemapAutoListener *mListener;
 
         void updateSceneGraph(void);
         /// Probes with a large number of iterations will blow up our memory consumption
@@ -92,11 +95,19 @@ namespace Ogre
                                       const CompositorWorkspaceDef *probeWorkspaceDef );
         ~ParallaxCorrectedCubemapAuto();
 
+        virtual void destroyProbe( CubemapProbe *probe );
+
+        void setListener( ParallaxCorrectedCubemapAutoListener *listener ) { mListener = listener; }
+        ParallaxCorrectedCubemapAutoListener *getListener( void ) const { return mListener; }
+
         virtual TextureGpu* _acquireTextureSlot( uint16 &outTexSlot );
         virtual void _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );
 
         virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
         virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
+
+        virtual TextureGpu* findIbl( const TextureGpu *baseParams );
+        virtual void releaseIbl( const TextureGpu *tmpRtt );
 
         virtual void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx );
 

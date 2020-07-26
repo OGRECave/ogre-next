@@ -1,3 +1,4 @@
+
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE
@@ -30,6 +31,8 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 #include "OgreRoot.h"
 #include "OgreRenderSystem.h"
+
+#include <sstream>
 
 namespace Ogre
 {
@@ -168,7 +171,7 @@ namespace Ogre
     {
         // default worker thread
 #if OGRE_THREAD_SUPPORT
-        LogManager::getSingleton().stream() << 
+        LogManager::getSingleton().stream() <<
             "DefaultWorkQueue('" << getName() << "')::WorkerFunc - thread " 
             << OGRE_THREAD_CURRENT_ID << " starting.";
 
@@ -186,7 +189,7 @@ namespace Ogre
             _processNextRequest();
         }
 
-        LogManager::getSingleton().stream() << 
+        LogManager::getSingleton().stream() <<
             "DefaultWorkQueue('" << getName() << "')::WorkerFunc - thread " 
             << OGRE_THREAD_CURRENT_ID << " stopped.";
 #endif

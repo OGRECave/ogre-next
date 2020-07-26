@@ -138,6 +138,7 @@ namespace Ogre
         friend class D3D11BufferInterface;
         friend class D3D11CompatBufferInterface;
         friend class GL3PlusBufferInterface;
+        friend class GLES2BufferInterface;
         friend class MetalBufferInterface;
         friend class NULLBufferInterface;
         friend class VulkanBufferInterface;
@@ -327,8 +328,8 @@ namespace Ogre
         void _setShadowCopy( void* copy );
     };
 
-    typedef vector<BufferPacked*>::type BufferPackedVec;
-    typedef unordered_set<BufferPacked*>::type BufferPackedSet;
+    typedef StdVector<BufferPacked*>BufferPackedVec;
+    typedef StdUnorderedSet<BufferPacked*> BufferPackedSet;
 }
 
 #endif

@@ -36,7 +36,7 @@ namespace Ogre{
 	{
 	}
 
-	ScriptTokenListPtr ScriptLexer::tokenize(const String &str, const String &source)
+	ScriptTokenListPtr ScriptLexer::tokenize(const String &str)
 	{
 		// State enums
 		enum{ READY = 0, COMMENT, MULTICOMMENT, WORD, QUOTE, VAR, POSSIBLECOMMENT };
@@ -53,9 +53,10 @@ namespace Ogre{
 		String lexeme;
 		uint32 line = 1, state = READY, lastQuote = 0;
 		ScriptTokenListPtr tokens(OGRE_NEW_T(ScriptTokenList, MEMCATEGORY_GENERAL)(), SPFM_DELETE_T);
+		lexemeStorage.reserve(str.length());
 
         // Iterate over the input
-        String::const_iterator i = str.begin(), end = str.end();
+        const char *i = str.c_str(), *end = i + str.size();
         while(i != end)
         {
             lastc = c;
@@ -93,7 +94,7 @@ namespace Ogre{
 				else if(isNewline(c))
 				{
 					lexeme = c;
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 				}
 				else if(!isWhitespace(c))
 				{
@@ -108,7 +109,7 @@ namespace Ogre{
                 if(isNewline(c))
                 {
                     lexeme = c;
-                    setToken(lexeme, line, source, tokens.get());
+                    setToken(lexeme, line, tokens.get());
                     state = READY;
                 }
 				break;
@@ -136,21 +137,21 @@ namespace Ogre{
 			case WORD:
 				if(isNewline(c))
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					lexeme = c;
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else if(isWhitespace(c))
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else if(c == openbrace || c == closebrace || c == colon)
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					lexeme = c;
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else
@@ -169,7 +170,7 @@ namespace Ogre{
 					else if(c == quote)
 					{
 						lexeme += c;
-						setToken(lexeme, line, source, tokens.get());
+						setToken(lexeme, line, tokens.get());
 						state = READY;
 					}
 					else
@@ -185,21 +186,21 @@ namespace Ogre{
 			case VAR:
 				if(isNewline(c))
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					lexeme = c;
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else if(isWhitespace(c))
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else if(c == openbrace || c == closebrace || c == colon)
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					lexeme = c;
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else
@@ -220,7 +221,7 @@ namespace Ogre{
 		if(state == WORD || state == VAR)
 		{
 			if(!lexeme.empty())
-				setToken(lexeme, line, source, tokens.get());
+				setToken(lexeme, line, tokens.get());
 		}
 		else
 		{
@@ -236,7 +237,7 @@ namespace Ogre{
 		return tokens;
 	}
 
-    void ScriptLexer::setToken(const Ogre::String &lexeme, Ogre::uint32 line, const String &source, Ogre::ScriptTokenList *tokens)
+    void ScriptLexer::setToken(const Ogre::String &lexeme, Ogre::uint32 line, Ogre::ScriptTokenList *tokens)
     {
 #if OGRE_WCHAR_T_STRINGS
         const wchar_t openBracket = L'{', closeBracket = L'}', colon = L':', 
@@ -246,37 +247,39 @@ namespace Ogre{
             quote = '\"', var = '$';
 #endif
 
-		ScriptTokenPtr token(OGRE_NEW_T(ScriptToken, MEMCATEGORY_GENERAL)(), SPFM_DELETE_T);
-		token->lexeme = lexeme;
-		token->line = line;
-		token->file = source;
+		ScriptToken token;
+		assert(lexemeStorage.capacity() >= lexemeStorage.size() + lexeme.size()); // lexemeStorage is preallocated
+		token.lexemePtr = lexemeStorage.c_str() + lexemeStorage.size();
+		token.lexemeLen = lexeme.size();
+		lexemeStorage.append(lexeme);
+		token.line = line;
 		bool ignore = false;
 
 		// Check the user token map first
 		if(lexeme.size() == 1 && isNewline(lexeme[0]))
 		{
-			token->type = TID_NEWLINE;
-			if(!tokens->empty() && tokens->back()->type == TID_NEWLINE)
+			token.type = TID_NEWLINE;
+			if(!tokens->empty() && tokens->back().type == TID_NEWLINE)
 				ignore = true;
 		}
 		else if(lexeme.size() == 1 && lexeme[0] == openBracket)
-			token->type = TID_LBRACKET;
+			token.type = TID_LBRACKET;
 		else if(lexeme.size() == 1 && lexeme[0] == closeBracket)
-			token->type = TID_RBRACKET;
+			token.type = TID_RBRACKET;
 		else if(lexeme.size() == 1 && lexeme[0] == colon)
-			token->type = TID_COLON;
+			token.type = TID_COLON;
 		else if(lexeme[0] == var)
-			token->type = TID_VARIABLE;
+			token.type = TID_VARIABLE;
 		else
 		{
 			// This is either a non-zero length phrase or quoted phrase
 			if(lexeme.size() >= 2 && lexeme[0] == quote && lexeme[lexeme.size() - 1] == quote)
 			{
-				token->type = TID_QUOTE;
+				token.type = TID_QUOTE;
 			}
 			else
 			{
-				token->type = TID_WORD;
+				token.type = TID_WORD;
 			}
 		}
 

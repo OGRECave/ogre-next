@@ -1,0 +1,107 @@
+{
+	"framerate" : 60.000000,
+	"num_frames" : 2011,
+	"frame_activity" :
+	[
+		{
+			"frame_id" : 0,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000000, 0.000000],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 51,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 59,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 216,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 493,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 802,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 842,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 901,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 1002,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 1134,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 1294,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 1455,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 1674,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 1896,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 1962,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 2010,
+			"camera_pos" : [0.000000, 2.500000, 4.000000],
+			"camera_rot" : [0.987087, -0.160182, 0.000386, 0.000063],
+			"key_strokes" :
+			[
+				{ "key_code" : 226, "scan_code" : 226, "released" : false }
+			],
+			"screenshot_render_window" : false
+		}
+	]
+}

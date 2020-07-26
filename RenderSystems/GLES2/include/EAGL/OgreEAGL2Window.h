@@ -52,6 +52,7 @@ namespace Ogre {
         protected:
             bool mClosed;
             bool mVisible;
+            bool mHidden;
             /// Is this using an external window handle?
             bool mIsExternal;
             /// Is this using an external view handle?
@@ -69,30 +70,33 @@ namespace Ogre {
             NativeWindowType mWindow;
             EAGL2View *mView;
             EAGL2ViewController *mViewController;
+#else
+            void *mWindowPlaceholder;
+            void *mViewPlaceholder;
+            void *mViewControllerPlaceholder;
 #endif
 
-            void switchFullScreen(bool fullscreen) { }
-            void getLeftAndTopFromNativeWindow(int & left, int & top, uint width, uint height);
-            void initNativeCreatedWindow(const NameValuePairList *miscParams);
-            void createNativeWindow(int &left, int &top, uint &width, uint &height, String &title);
-            void reposition(int left, int top);
-            void resize(unsigned int width, unsigned int height);
+            void createNativeWindow(uint widthPt, uint heightPt, const NameValuePairList *miscParams);
+            void reposition(int leftPt, int topPt);
+            void resize(unsigned int widthPt, unsigned int heightPt);
             void windowMovedOrResized();
-            virtual void _beginUpdate();
+            int _getPixelFromPoint(float viewPt) { return mIsContentScalingSupported ? (int)viewPt * mContentScalingFactor : (int)viewPt; }
 
     public:
             EAGL2Window(EAGL2Support* glsupport);
             virtual ~EAGL2Window();
 
-            void create(const String& name, unsigned int width, unsigned int height,
+            float getViewPointToPixelScale() { return mIsContentScalingSupported ? mContentScalingFactor : 1.0f; }
+            void create(const String& name, unsigned int widthPt, unsigned int heightPt,
                         bool fullScreen, const NameValuePairList *miscParams);
 
-            virtual void setFullscreen(bool fullscreen, uint width, uint height);
+            virtual void setFullscreen(bool fullscreen, uint widthPt, uint heightPt);
             void destroy(void);
             bool isClosed(void) const { return mClosed; }
             bool isVisible(void) const { return mVisible; }
-
             void setVisible(bool visible) { mVisible = visible; }
+            bool isHidden(void) const { return mHidden; }
+            void setHidden(bool hidden);
             void setClosed(bool closed) { mClosed = closed; }
             void swapBuffers();
             void copyContentsToMemory(const Box& src, const PixelBox &dst, FrameBuffer buffer);

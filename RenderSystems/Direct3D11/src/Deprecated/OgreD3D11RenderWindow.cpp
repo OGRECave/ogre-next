@@ -339,7 +339,7 @@ namespace Ogre
         : D3D11RenderWindowBase(device)
     {
         ZeroMemory( &mSwapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC_N) );
-        mUseFlipSequentialMode = false;
+        mUseFlipMode = false;
         mVSync = false;
         mVSyncInterval = 1;
 
@@ -394,9 +394,9 @@ namespace Ogre
         mpBackBufferNoMSAA.Reset();
 
         HRESULT hr = S_OK;
-        if(mUseFlipSequentialMode && mFSAAType.Count > 1)
+        if(mUseFlipMode && mFSAAType.Count > 1)
         {
-            // Swapchain does not support FSAA in FlipSequentialMode, therefore create separate back buffer with FSAA
+            // Swapchain does not support FSAA in FlipMode, therefore create separate back buffer with FSAA
             // Swapchain(FSAA=0, SRGB=0) <-ResolveSubresource- Buffer(FSAA=4x, SRGB=0) <= RenderTargetView(FSAA=4x, SRGB=0)
             D3D11_TEXTURE2D_DESC desc = { 0 };
             desc.Width               = mWidth;
@@ -447,7 +447,7 @@ namespace Ogre
 
         _destroySizeDependedD3DResources();
 
-        if(mUseFlipSequentialMode)
+        if(mUseFlipMode)
         {
             // swapchain is not multisampled in flip sequential mode, so we reuse it
             D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
@@ -516,8 +516,8 @@ namespace Ogre
 
         if( !mDevice.isNull() )
         {
-            // Step of resolving MSAA resource for swap chains in FlipSequentialMode should be done by application rather than by OS.
-            if(mUseFlipSequentialMode && mFSAAType.Count > 1)
+            // Step of resolving MSAA resource for swap chains in FlipMode should be done by application rather than by OS.
+            if(mUseFlipMode && mFSAAType.Count > 1)
             {
                 OgreProfileBeginDynamic( ("Resolve Sequential MSAA: " + mName).c_str() );
                 OgreProfileGpuBeginDynamic( "Resolve Sequential MSAA: " + mName );
@@ -547,7 +547,7 @@ namespace Ogre
             OgreProfileGpuBeginDynamic( "SwapBuffers: " + mName );
 
             // flip presentation model swap chains have another semantic for first parameter
-            UINT syncInterval = mUseFlipSequentialMode ? std::max(1U, mVSyncInterval) : (mVSync ? mVSyncInterval : 0);
+            UINT syncInterval = mUseFlipMode ? std::max(1U, mVSyncInterval) : (mVSync ? mVSyncInterval : 0);
             HRESULT hr = mpSwapChain->Present(syncInterval, 0);
             if( FAILED(hr) )
                 OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr, "Error Presenting surfaces", "D3D11RenderWindowSwapChainBased::swapBuffers");
@@ -565,7 +565,7 @@ namespace Ogre
         // If in window mode, flip mode must be active and FSAA disabled.
         if (isVSyncEnabled() == false 
         || mIsFullScreen == false 
-        && (mUseFlipSequentialMode == false || mFSAA != 0))
+        && (mUseFlipMode == false || mFSAA != 0))
 		{
 			return -1;
 		}
@@ -692,10 +692,10 @@ namespace Ogre
                 mVSync = StringConverter::parseBool(opt->second);
 
 #if defined(_WIN32_WINNT_WIN8) && _WIN32_WINNT >= _WIN32_WINNT_WIN8
-            // useFlipSequentialMode    [parseBool]
-            opt = miscParams->find("useFlipSequentialMode");
+            // useFlipMode    [parseBool]
+            opt = miscParams->find("useFlipMode");
             if (opt != miscParams->end())
-                mUseFlipSequentialMode = mVSync && IsWindows8OrGreater() && StringConverter::parseBool(opt->second);
+                mUseFlipMode = mVSync && IsWindows8OrGreater() && StringConverter::parseBool(opt->second);
 #endif
             // vsyncInterval    [parseUnsignedInt]
             opt = miscParams->find("vsyncInterval");
@@ -909,7 +909,7 @@ namespace Ogre
 		mSwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 		mSwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 
-		if(mUseFlipSequentialMode)
+		if(mUseFlipMode)
 		{
 			mSwapChainDesc.SampleDesc.Count = 1;
 			mSwapChainDesc.SampleDesc.Quality = 0;
@@ -921,8 +921,8 @@ namespace Ogre
 		}
 
 #if defined(_WIN32_WINNT_WIN8) && _WIN32_WINNT >= _WIN32_WINNT_WIN8
-		mSwapChainDesc.BufferCount = mUseFlipSequentialMode ? 2 : 1;
-		mSwapChainDesc.SwapEffect = mUseFlipSequentialMode ? DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL : DXGI_SWAP_EFFECT_DISCARD;
+		mSwapChainDesc.BufferCount = mUseFlipMode ? 2 : 1;
+		mSwapChainDesc.SwapEffect = mUseFlipMode ? DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL : DXGI_SWAP_EFFECT_DISCARD;
 #else
 		mSwapChainDesc.BufferCount = 1;
 		mSwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
@@ -1250,7 +1250,7 @@ namespace Ogre
     D3D11RenderWindowCoreWindow::D3D11RenderWindowCoreWindow(D3D11Device& device)
         : D3D11RenderWindowSwapChainBased(device)
     {
-        mUseFlipSequentialMode = true;
+        mUseFlipMode = true;
     }
 
     float D3D11RenderWindowCoreWindow::getViewPointToPixelScale()
@@ -1336,7 +1336,7 @@ namespace Ogre
         mSwapChainDesc.Format               = _getSwapChainFormat();
         mSwapChainDesc.Stereo               = false;
 
-        assert(mUseFlipSequentialMode);                                             // i.e. no FSAA for swapchain, but can be enabled in separate backbuffer
+        assert(mUseFlipMode);                                                       // i.e. no FSAA for swapchain, but can be enabled in separate backbuffer
         mSwapChainDesc.SampleDesc.Count     = 1;
         mSwapChainDesc.SampleDesc.Quality   = 0;
 
@@ -1393,7 +1393,7 @@ namespace Ogre
         : D3D11RenderWindowSwapChainBased(device)
         , mCompositionScale(1.0f, 1.0f)
     {
-        mUseFlipSequentialMode = true;
+        mUseFlipMode = true;
     }
 
     float D3D11RenderWindowSwapChainPanel::getViewPointToPixelScale()
@@ -1490,7 +1490,7 @@ namespace Ogre
         mSwapChainDesc.Format               = _getSwapChainFormat();
         mSwapChainDesc.Stereo               = false;
 
-        assert(mUseFlipSequentialMode);                                             // i.e. no FSAA for swapchain, but can be enabled in separate backbuffer
+        assert(mUseFlipMode);                                                       // i.e. no FSAA for swapchain, but can be enabled in separate backbuffer
         mSwapChainDesc.SampleDesc.Count     = 1;
         mSwapChainDesc.SampleDesc.Quality   = 0;
 

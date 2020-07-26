@@ -36,15 +36,12 @@ Torus Knot Software Ltd.
 #include "OgrePlane.h"
 #include "OgreQuaternion.h"
 #include "OgreColourValue.h"
-#include "OgreCommon.h"
 #include "OgreSceneQuery.h"
 #include "OgreAutoParamDataSource.h"
 #include "OgreAnimationState.h"
-#include "OgreRenderQueue.h"
 #include "OgreResourceGroupManager.h"
 #include "OgreRenderSystem.h"
 #include "OgreLodListener.h"
-#include "OgreManualObject2.h"
 #include "OgreRawPtr.h"
 #include "Math/Array/OgreNodeMemoryManager.h"
 #include "Math/Array/OgreObjectMemoryManager.h"
@@ -412,6 +409,8 @@ namespace Ogre {
         TextureGpuVec   mPrePassTextures;
         TextureGpu      *mPrePassDepthTexture;
         TextureGpu      *mSsrTexture;
+        TextureGpu      *mPassDepthTextureNoMsaa;
+        TextureGpu      *mRefractionsTexture;
 
         /// See CompositorPassSceneDef::mUvBakingSet
         uint8       mUvBakingSet;
@@ -444,6 +443,8 @@ namespace Ogre {
         ColourValue mAmbientLight[2];
         Vector3     mAmbientLightHemisphereDir;
         uint32      mEnvFeatures;
+
+        float       mAmbientSphericalHarmonics[9u*3u];
 
         /// The rendering system to send the scene to
         RenderSystem *mDestRenderSystem;
@@ -640,10 +641,6 @@ namespace Ogre {
         RenderObjectListenerList mRenderObjectListeners;
         typedef vector<Listener*>::type ListenerList;
         ListenerList mListeners;
-        /// Internal method for firing the queue start event
-        virtual void firePreRenderQueues();
-        /// Internal method for firing the queue end event
-        virtual void firePostRenderQueues();
         /// Internal method for firing the queue start event, returns true if queue is to be skipped
         virtual bool fireRenderQueueStarted(uint8 id, const String& invocation);
         /// Internal method for firing the queue end event, returns true if queue is to be repeated
@@ -1312,10 +1309,13 @@ namespace Ogre {
         /// @see CompositorPassSceneDef::mPrePassMode
         void _setPrePassMode( PrePassMode mode, const TextureGpuVec &prepassTextures,
                               TextureGpu *prepassDepthTexture, TextureGpu *ssrTexture );
+        void _setRefractions( TextureGpu *depthTextureNoMsaa, TextureGpu *refractionsTexture );
         PrePassMode getCurrentPrePassMode(void) const               { return mPrePassMode; }
         const TextureGpuVec& getCurrentPrePassTextures(void) const  { return mPrePassTextures; }
         TextureGpu* getCurrentPrePassDepthTexture(void) const       { return mPrePassDepthTexture; }
         TextureGpu* getCurrentSsrTexture(void) const                { return mSsrTexture; }
+        TextureGpu* getCurrentPassDepthTextureNoMsaa(void) const	{ return mPassDepthTextureNoMsaa; }
+        TextureGpu* getCurrentRefractionsTexture(void) const        { return mRefractionsTexture; }
 
 
 
@@ -1642,12 +1642,15 @@ namespace Ogre {
                               const Vector3 &hemisphereDir, Real envmapScale = 1.0f,
                               uint32 envFeatures=0xffffffff );
 
+        void setSphericalHarmonics( Vector3 ambientSphericalHarmonics[9] );
+
         /** Returns the ambient light level to be used for the scene.
         */
         const ColourValue& getAmbientLightUpperHemisphere(void) const   { return mAmbientLight[0]; }
         const ColourValue& getAmbientLightLowerHemisphere(void) const   { return mAmbientLight[1]; }
         const Vector3& getAmbientLightHemisphereDir(void) const { return mAmbientLightHemisphereDir; }
         uint32 getEnvFeatures(void) const                       { return mEnvFeatures; }
+        const float* getSphericalHarmonics(void) const          { return mAmbientSphericalHarmonics; }
 
         /** Sets the source of the 'world' geometry, i.e. the large, mainly static geometry
             making up the world e.g. rooms, landscape etc.
@@ -2862,7 +2865,7 @@ namespace Ogre {
         virtual void initMetaData(void) const = 0;
     public:
         SceneManagerFactory() : mMetaDataInit(true) {}
-        virtual ~SceneManagerFactory() {}
+        virtual ~SceneManagerFactory();
         /** Get information about the SceneManager type created by this factory. */
         virtual const SceneManagerMetaData& getMetaData(void) const 
         {

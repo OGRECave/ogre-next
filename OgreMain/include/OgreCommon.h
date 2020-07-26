@@ -34,16 +34,6 @@ THE SOFTWARE.
 #if OGRE_CPU == OGRE_CPU_X86
     #include <xmmintrin.h>
     #include <emmintrin.h>
-#elif OGRE_CPU == OGRE_CPU_ARM && OGRE_USE_SIMD
-    #include <arm_neon.h>
-#endif
-
-#if defined ( OGRE_GCC_VISIBILITY )
-#   pragma GCC visibility push(default)
-#endif
-
-#if defined ( OGRE_GCC_VISIBILITY )
-#   pragma GCC visibility pop
 #endif
 
 #include "OgreHeaderPrefix.h"
@@ -715,20 +705,19 @@ namespace Ogre {
         }
     };
     typedef HashedVector<LightClosest> LightList;
-    typedef vector<LightClosest>::type LightClosestVec;
     typedef FastArray<LightClosest> LightClosestArray;
 
     /// Constant blank string, useful for returning by ref where local does not exist
     const String BLANKSTRING;
 
-    typedef map<String, bool>::type UnaryOptionList;
-    typedef map<String, String>::type BinaryOptionList;
+    typedef StdMap<String, bool> UnaryOptionList;
+    typedef StdMap<String, String> BinaryOptionList;
 
     /// Name / value parameter pair (first = name, second = value)
-    typedef map<String, String>::type NameValuePairList;
+    typedef StdMap<String, String> NameValuePairList;
 
     /// Alias / Texture name pair (first = alias, second = texture name)
-    typedef map<String, String>::type AliasTextureNamePairList;
+    typedef StdMap<String, String> AliasTextureNamePairList;
 
         template< typename T > struct TRect
         {
@@ -810,12 +799,12 @@ namespace Ogre {
           }
 
         };
-        template<typename T>
+        /*template<typename T>
         std::ostream& operator<<(std::ostream& o, const TRect<T>& r)
         {
             o << "TRect<>(l:" << r.left << ", t:" << r.top << ", r:" << r.right << ", b:" << r.bottom << ")";
             return o;
-        }
+        }*/
 
         /** Structure used to define a rectangle in a 2-D floating point space.
         */
@@ -925,21 +914,116 @@ namespace Ogre {
         CLIPPED_ALL = 2
     };
 
-    /// Render window creation parameters.
-    struct RenderWindowDescription
+    namespace MsaaPatterns
     {
-        String              name;
-        unsigned int        width;
-        unsigned int        height;
-        bool                useFullScreen;
-        NameValuePairList   miscParams;
+        enum MsaaPatterns
+        {
+            /// Let the GPU decide.
+            Undefined,
+            /// The subsample locations follow a fixed known mPattern.
+            /// Call TextureGpu::getSubsampleLocations to get them.
+            Standard,
+            /// The subsample locations are centered in a grid.
+            /// May not be supported by the GPU/API, in which case Standard will be used instead
+            /// Call TextureGpu::isMsaaPatternSupported to check whether it will be honoured.
+            Center,
+            /// All subsamples are at 0, 0; effectively "disabling" msaa.
+            CenterZero
+        };
+    }
+
+    /// Opaque struct that holds effective FSAA (MSAA, CSAA, etc.) mode.
+    ///
+    /// Note that you can request a SampleDescription, but you may get the closest
+    /// quality if that particular setting is not supported by the GPU.
+    ///
+    /// Additionally, device lost events can cause FSAA settings to be degraded on the fly
+    /// Listen for TextureGpuListener::FsaaSettingAlteredByApi events to be notified of
+    /// this
+    struct _OgreExport SampleDescription
+    {
+    protected:
+        uint8 mColourSamples;
+        uint8 mCoverageSamples;
+        MsaaPatterns::MsaaPatterns mPattern;
+
+    public:
+        SampleDescription( uint8 msaa = 1u,
+                           MsaaPatterns::MsaaPatterns _mPattern = MsaaPatterns::Undefined ) :
+            mColourSamples( msaa ),
+            mCoverageSamples( 0 ),
+            mPattern( _mPattern )
+        {
+        }
+        explicit SampleDescription( const String &fsaaSetting )
+        {
+            parseString( fsaaSetting );
+        }
+
+        bool operator==( const SampleDescription &rhs ) const
+        {
+            return mColourSamples == rhs.mColourSamples && mCoverageSamples == rhs.mCoverageSamples &&
+                   mPattern == rhs.mPattern;
+        }
+
+        bool isMultisample( void ) const { return mColourSamples > 1u; }
+
+        /// For internal use
+        void _set( uint8 colourSamples, uint8 coverageSamples, MsaaPatterns::MsaaPatterns pattern );
+
+        uint8 getColourSamples( void ) const { return mColourSamples; }
+        uint8 getCoverageSamples( void ) const { return mCoverageSamples; }
+        uint8 getMaxSamples( void ) const { return std::max( mCoverageSamples, mColourSamples ); }
+        MsaaPatterns::MsaaPatterns getMsaaPattern( void ) const { return mPattern; }
+
+        void setMsaa( uint8 msaa, MsaaPatterns::MsaaPatterns pattern = MsaaPatterns::Undefined );
+
+        bool isMsaa( void ) const;
+
+        /** Set CSAA by NVIDIA's marketing names e.g.
+                8x CSAA call setCsaa( 8u, false )
+                8x CSAA (Quality) then call setCsaa( 8u, true )
+                16x CSAA call setCsaa( 16u, false )
+                16x CSAA (Quality) then call setCsaa( 16u, true )
+        @param samples
+            Marketing value. Can be 8 or 16
+        @param bQuality
+            True to use the 'quality' variation, false otherwise
+        */
+        void setCsaa( uint8 samples, bool bQuality );
+
+        /** Returns true if this is CSAA, whether it's quality or not
+        @remark
+            There is some overlap between CSAA and EQAA modes, hence this
+            function may return true even if setEqaa was called
+        */
+        bool isCsaa( void ) const;
+
+        /** Returns true if this is CSAA in quality mode
+        @remark
+            There is some overlap between CSAA and EQAA modes, hence this
+            function may return true even if setEqaa was called
+        */
+        bool isCsaaQuality( void ) const;
+
+        /** Set EQAA by its marketing number (which coincides with its technical spec) e.g.
+                2f4x EQAA call setEqaa( 2u, 4u )
+                4f8x EQAA call setEqaa( 4u, 8u )
+                8f16x EQAA call setEqaa( 8u, 16u )
+        @param mColourSamples
+        @param coverageSample
+        */
+        void setEqaa( uint8 colourSamples, uint8 coverageSamples );
+
+        void parseString( const String &fsaaSetting );
+        /// Appends the FSAA description to the string
+        void getFsaaDesc( LwString &outFsaaSetting ) const;
+        /// Appends the FSAA description to the string
+        void getFsaaDesc( String &outFsaaSetting ) const;
     };
 
-    /// Render window creation parameters container.
-    typedef vector<RenderWindowDescription>::type RenderWindowDescriptionList;
-
     /// Render window container.
-    typedef vector<Window*>::type WindowList;
+    typedef StdVector<Window*> WindowList;
 
     /** @} */
     /** @} */

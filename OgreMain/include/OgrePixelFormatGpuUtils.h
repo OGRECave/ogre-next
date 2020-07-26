@@ -43,6 +43,32 @@ namespace Ogre {
     class _OgreExport PixelFormatGpuUtils
     {
     public:
+        /// Pixel components size and order, typeless.
+        enum PixelFormatLayout
+        {
+            PFL_OTHER = 0,
+
+            PFL_RGBA32,
+            PFL_RGB32,
+            PFL_RG32,
+            PFL_R32,
+
+            PFL_RGBA16,
+            PFL_RGB16,
+            PFL_RG16,
+            PFL_R16,
+
+            PFL_RGBA8,
+            PFL_BGRA8,
+            PFL_BGRX8,
+            PFL_RGB8,
+            PFL_BGR8,
+            PFL_RG8,
+            PFL_R8,
+
+            PFL_COUNT
+        };
+
         enum PixelFormatFlags
         {
             /// Pixel Format is an actual float (32-bit float)
@@ -79,8 +105,9 @@ namespace Ogre {
         struct PixelFormatDesc
         {
             const char  *name;
-            uint32      components;
-            uint32      bytesPerPixel;
+            uint8       components;
+            uint8       bytesPerPixel;
+            uint16      layout;
             uint32      flags;
         };
 
@@ -98,6 +125,7 @@ namespace Ogre {
     public:
         static size_t getBytesPerPixel( PixelFormatGpu format );
         static size_t getNumberOfComponents( PixelFormatGpu format );
+        static PixelFormatLayout getPixelLayout( PixelFormatGpu format );
 
         static size_t getSizeBytes( uint32 width, uint32 height, uint32 depth,
                                     uint32 slices, PixelFormatGpu format,
@@ -184,7 +212,8 @@ namespace Ogre {
         static void convertForNormalMapping( TextureBox src, PixelFormatGpu srcFormat,
                                              TextureBox dst, PixelFormatGpu dstFormat );
         static void bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
-                                         TextureBox &dst, PixelFormatGpu dstFormat );
+                                         TextureBox &dst, PixelFormatGpu dstFormat,
+                                         bool verticalFlip = false );
 
         /// See PixelFormatFlags
         static uint32 getFlags( PixelFormatGpu format );
@@ -200,6 +229,7 @@ namespace Ogre {
         static bool isCompressed( PixelFormatGpu format );
         static bool isPallete( PixelFormatGpu format );
         static bool isAccessible( PixelFormatGpu format );
+        static bool hasAlpha( PixelFormatGpu format );
 
         static bool hasSRGBEquivalent( PixelFormatGpu format );
         static PixelFormatGpu getEquivalentSRGB( PixelFormatGpu format );

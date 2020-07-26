@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "OgreOverlayPrerequisites.h"
 #include "OgreProfiler.h"
 
+#include "ogrestd/list.h"
+
 namespace Ogre  {
 namespace v1 {
 

@@ -20,7 +20,7 @@ compositor_node SceneRenderingNode
 			shadows				PbsMaterialsShadowNode
 			overlays			off
             rq_first	0
-			rq_last		6
+			rq_last		16
 		}
 	}
     
@@ -39,8 +39,8 @@ compositor_node SceneRenderingNode
 
 			lod_update_list	off
 			overlays			off
-            rq_first	6
-			rq_last		7
+			rq_first	16
+			rq_last		17
 		}
 	}
 	

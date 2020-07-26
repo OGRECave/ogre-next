@@ -44,9 +44,9 @@ namespace Ogre
     /// to avoid doing it every time we set the Pso
     struct _OgreD3D11Export D3D11HlmsPso
     {
-        D3D11_PRIMITIVE_TOPOLOGY    topology;
-        ID3D11InputLayout           *inputLayout;
-        ID3D11DepthStencilState     *depthStencilState;
+        D3D11_PRIMITIVE_TOPOLOGY        topology;
+        ComPtr<ID3D11InputLayout>       inputLayout;
+        ComPtr<ID3D11DepthStencilState> depthStencilState;
 
         //Shader
         D3D11HLSLProgram *vertexShader;

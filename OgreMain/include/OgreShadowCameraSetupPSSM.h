@@ -30,7 +30,12 @@ THE SOFTWARE.
 #define __ShadowCameraSetupPSSM_H__
 
 #include "OgrePrerequisites.h"
+
+#include "OgreShadowCameraSetupConcentric.h"
 #include "OgreShadowCameraSetupFocused.h"
+
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -59,13 +64,16 @@ namespace Ogre
         typedef vector<Real>::type SplitPointList;
 
     protected:
-        uint mSplitCount;
+        uint32 mSplitCount;
+        uint32 mNumStableSplits;
         SplitPointList mSplitPoints;
         SplitPointList mSplitBlendPoints;
         Real mSplitFadePoint;
         Real mSplitPadding;
 
         mutable size_t mCurrentIteration;
+
+        ConcentricShadowCamera mConcentricShadowCamera;
 
     public:
         /// Constructor, defaults to 3 splits
@@ -108,6 +116,21 @@ namespace Ogre
         Real getSplitPadding() const { return mSplitPadding; }
         /// Get the number of splits. 
         uint getSplitCount() const { return mSplitCount; }
+
+        /// PSSM tends to be very unstable to camera rotation changes. Rotate the camera around
+        /// and the shadow mapping artifacts keep changing.
+        ///
+        /// setNumStableSplits allows you to fix that problem; by switching to ConcentricShadowCamera
+        /// for the first N splits you specify; while the rest of the splits will use
+        /// FocusedShadowCameraSetup.
+        ///
+        /// We achieve rotation stability by sacrificing overall quality. Using ConcentricShadowCamera
+        /// on higher splits means sacrificing exponentially a lot more quality (and even performance);
+        /// thus the recommended values are numStableSplits = 1 or numStableSplits = 2
+        ///
+        /// The default is numStableSplits = 0 which disables the feature
+        void setNumStableSplits( uint32 numStableSplits ) { mNumStableSplits = numStableSplits; }
+        uint32 getNumStableSplits( void ) const { return mNumStableSplits; }
 
         /// Returns a LiSPSM shadow camera with PSSM splits base on iteration.
         virtual void getShadowCamera( const Ogre::SceneManager *sm, const Ogre::Camera *cam,

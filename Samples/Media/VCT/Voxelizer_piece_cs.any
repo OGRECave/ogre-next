@@ -286,20 +286,25 @@
 		float3 a22 = float3( -f2.y, f2.x, 0); // Z and f2
 
 		// Test 9 axes
-		if (
-			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a00 ) ||
-			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a01 ) ||
-			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a02 ) ||
-			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a10 ) ||
-			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a11 ) ||
-			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a12 ) ||
-			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a20 ) ||
-			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a21 ) ||
-			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a22 )
-		)
-		{
+		if ( !intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a00 ) )
 			return false;
-		}
+		if ( !intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a01 ) )
+			return false;
+		if ( !intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a02 ) )
+			return false;
+		if ( !intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a10 ) )
+			return false;
+		if ( !intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a11 ) )
+			return false;
+		if ( !intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a12 ) )
+			return false;
+		if ( !intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a20 ) )
+			return false;
+		if ( !intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a21 ) )
+			return false;
+		if ( !intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a22 ) )
+			return false;
+
 
 		// Test triangle normal
 		Plane pl;

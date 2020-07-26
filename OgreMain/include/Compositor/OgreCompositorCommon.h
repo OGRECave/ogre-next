@@ -30,6 +30,9 @@ THE SOFTWARE.
 #define _OgreCompositorCommon_H_
 
 #include "OgrePrerequisites.h"
+
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -53,9 +56,10 @@ namespace Ogre
 
     class CompositorManager2;
 
-    typedef vector<CompositorNode*>::type       CompositorNodeVec;
-    typedef vector<CompositorPass*>::type       CompositorPassVec;
-    typedef vector<CompositorShadowNode*>::type CompositorShadowNodeVec;
+    typedef vector<CompositorNode*>::type              CompositorNodeVec;
+    typedef vector<CompositorPass*>::type              CompositorPassVec;
+    typedef vector<CompositorShadowNode*>::type        CompositorShadowNodeVec;
+    typedef vector<CompositorWorkspaceListener*>::type CompositorWorkspaceListenerVec;
 }
 
 #include "OgreHeaderSuffix.h"

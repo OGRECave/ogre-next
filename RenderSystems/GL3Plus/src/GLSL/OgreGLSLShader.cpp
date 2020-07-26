@@ -30,6 +30,7 @@
 #include "OgreLogManager.h"
 #include "OgreRoot.h"
 #include "OgreStringConverter.h"
+#include "OgreString.h"
 
 #include "OgreGLSLShader.h"
 #include "OgreGLSLShader.h"
@@ -39,6 +40,8 @@
 #include "OgreGL3PlusUtil.h"
 
 #include "OgreLwString.h"
+
+#include <sstream>
 
 namespace Ogre {
 

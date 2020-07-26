@@ -42,6 +42,8 @@ namespace Demo
         "PCF 2x2",
         "PCF 3x3",
         "PCF 4x4",
+        "PCF 5x5",
+        "PCF 6x6",
         "ESM"
     };
 
@@ -65,10 +67,9 @@ namespace Demo
                                             Ogre::v1::HardwareBuffer::HBU_STATIC,
                                             Ogre::v1::HardwareBuffer::HBU_STATIC );
 
-        Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createManual(
-                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-
-        planeMesh->importV1( planeMeshV1.get(), true, true, true );
+        Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                    planeMeshV1.get(), true, true, true );
 
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
@@ -374,6 +375,15 @@ namespace Demo
         assert( dynamic_cast<Ogre::HlmsPbs*>( hlms ) );
         Ogre::HlmsPbs *pbs = static_cast<Ogre::HlmsPbs*>( hlms );
 
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::CompositorManager2 *compositorManager = root->getCompositorManager2();
+        const Ogre::CompositorShadowNodeDef *shadowNodeDef =
+            compositorManager->getShadowNodeDefinition( "ShadowMapDebuggingShadowNode" );
+
+        const Ogre::ShadowTextureDefinition *shadowTexDef =
+            shadowNodeDef->getShadowTextureDefinition( 0 );
+        ;
+
         TutorialGameState::generateDebugText( timeSinceLast, outText );
         outText += "\nPress F2 to toggle animation. ";
         outText += mAnimateObjects ? "[On]" : "[Off]";
@@ -382,6 +392,17 @@ namespace Demo
         outText += "\nPress F4 to show/hide spotlight maps. ";
         outText += mDebugOverlaySpotlights->getVisible() ? "[On]" : "[Off]";
         outText += "\nPress F5 to switch filter. [" + c_shadowMapFilters[pbs->getShadowFilter()] + "]";
+
+        if( pbs->getShadowFilter() != Ogre::HlmsPbs::ExponentialShadowMaps )
+        {
+            if( shadowTexDef->numStableSplits > 0u )
+            {
+                outText += "\nPress F6 for stable splits. [Stable splits: " +
+                           Ogre::StringConverter::toString( shadowTexDef->numStableSplits ) + "]";
+            }
+            else
+                outText += "\nPress F6 for stable splits. [Stable splits: None]";
+        }
     }
     //-----------------------------------------------------------------------------------
     void ShadowMapDebuggingGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -428,17 +449,33 @@ namespace Demo
             }
 #endif
 
-            if( nextFilter == Ogre::HlmsPbs::ExponentialShadowMaps )
-                pbs->getHlmsManager()->setShadowMappingUseBackFaces( false );
-            else
-                pbs->getHlmsManager()->setShadowMappingUseBackFaces( true );
-
             pbs->setShadowSettings( nextFilter );
 
             if( nextFilter == Ogre::HlmsPbs::ExponentialShadowMaps )
                 setupShadowNode( true );
             else
                 setupShadowNode( false );
+        }
+        else if( arg.keysym.sym == SDLK_F6 )
+        {
+            Ogre::Root *root = mGraphicsSystem->getRoot();
+            Ogre::CompositorManager2 *compositorManager = root->getCompositorManager2();
+            Ogre::CompositorShadowNodeDef *shadowNodeDef;
+
+            shadowNodeDef =
+                compositorManager->getShadowNodeDefinitionNonConst( "ShadowMapDebuggingShadowNode" );
+
+            for( size_t i = 0u; i < 3u; ++i )
+            {
+                Ogre::ShadowTextureDefinition *shadowTexDef =
+                    shadowNodeDef->getShadowTextureDefinitionNonConst( i );
+                shadowTexDef->numStableSplits = ( shadowTexDef->numStableSplits + 1u ) % 4u;
+            }
+
+            destroyShadowMapDebugOverlays();
+            mGraphicsSystem->stopCompositor();
+            mGraphicsSystem->restartCompositor();
+            createShadowMapDebugOverlays();
         }
         else
         {

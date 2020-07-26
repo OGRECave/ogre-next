@@ -78,13 +78,13 @@ namespace Ogre
         desc.sampleCount        = 1u;
         desc.storageMode        = MTLStorageModePrivate;
 
-        if( mTextureType == TextureTypes::TypeCube )
+        if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
             desc.arrayLength /= 6u;
 
-        if( mMsaa > 1u && hasMsaaExplicitResolves() )
+        if( isMultisample() && hasMsaaExplicitResolves() )
         {
             desc.textureType = MTLTextureType2DMultisample;
-            desc.sampleCount = mMsaa;
+            desc.sampleCount = mSampleDescription.getColourSamples();
         }
 
         desc.usage = MTLTextureUsageShaderRead;
@@ -107,8 +107,8 @@ namespace Ogre
             size_t sizeBytes = PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(),
                                                                         getNumSlices(),
                                                                         mPixelFormat, mNumMipmaps, 4u );
-            if( mMsaa > 1u && hasMsaaExplicitResolves() )
-                sizeBytes *= mMsaa;
+            if( isMultisample() && hasMsaaExplicitResolves() )
+                sizeBytes *= mSampleDescription.getColourSamples();
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Out of GPU memory or driver refused.\n"
                          "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
@@ -116,12 +116,12 @@ namespace Ogre
         }
         mFinalTextureName.label = [NSString stringWithUTF8String:textureName.c_str()];
 
-        if( mMsaa > 1u && !hasMsaaExplicitResolves() )
+        if( isMultisample() && !hasMsaaExplicitResolves() )
         {
             desc.textureType    = MTLTextureType2DMultisample;
             desc.depth          = 1u;
             desc.arrayLength    = 1u;
-            desc.sampleCount    = mMsaa;
+            desc.sampleCount    = mSampleDescription.getColourSamples();
             desc.usage          = MTLTextureUsageRenderTarget;
             mMsaaFramebufferName = [device->mDevice newTextureWithDescriptor:desc];
             if( !mMsaaFramebufferName )
@@ -129,7 +129,7 @@ namespace Ogre
                 size_t sizeBytes = PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(),
                                                                             getNumSlices(),
                                                                             mPixelFormat, mNumMipmaps, 4u );
-                sizeBytes *= mMsaa;
+                sizeBytes *= mSampleDescription.getColourSamples();
                 OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                              "Out of GPU memory or driver refused (MSAA surface).\n"
                              "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
@@ -240,7 +240,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                                  const TextureBox &srcBox, uint8 srcMipLevel )
+                                  const TextureBox &srcBox, uint8 srcMipLevel,
+                                  bool keepResolvedTexSynced )
     {
         TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
 
@@ -256,20 +257,10 @@ namespace Ogre
         id<MTLTexture> srcTextureName = this->mFinalTextureName;
         id<MTLTexture> dstTextureName = dstMetal->mFinalTextureName;
 
-        //Source has explicit resolves. If destination doesn't,
-        //we must copy to its internal MSAA surface.
-        if( this->mMsaa > 1u && this->hasMsaaExplicitResolves() )
-        {
-            if( !dstMetal->hasMsaaExplicitResolves() )
-                dstTextureName = dstMetal->mMsaaFramebufferName;
-        }
-        //Destination has explicit resolves. If source doesn't,
-        //we must copy from its internal MSAA surface.
-        if( dstMetal->mMsaa > 1u && dstMetal->hasMsaaExplicitResolves() )
-        {
-            if( !this->hasMsaaExplicitResolves() )
-                srcTextureName = this->mMsaaFramebufferName;
-        }
+        if( this->isMultisample() && !this->hasMsaaExplicitResolves() )
+            srcTextureName = this->mMsaaFramebufferName;
+        if( dstMetal->isMultisample() && !dstMetal->hasMsaaExplicitResolves() )
+            dstTextureName = dstMetal->mMsaaFramebufferName;
 
         __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = device->getBlitEncoder();
         for( uint32 slice=0; slice<numSlices; ++slice )
@@ -286,7 +277,7 @@ namespace Ogre
         }
 
         //Must keep the resolved texture up to date.
-        if( dstMetal->mMsaa > 1u && !dstMetal->hasMsaaExplicitResolves() )
+        if( dstMetal->isMultisample() && !dstMetal->hasMsaaExplicitResolves() && keepResolvedTexSynced )
         {
             device->endAllEncoders();
 
@@ -341,12 +332,12 @@ namespace Ogre
         }
         MTLTextureType texType = this->getMetalTextureType();
 
-        if( mMsaa > 1u && hasMsaaExplicitResolves() )
+        if( isMultisample() && hasMsaaExplicitResolves() )
             texType = MTLTextureType2DMultisample;
 
-        if( cubemapsAs2DArrays &&
-            (mTextureType == TextureTypes::TypeCube ||
-             mTextureType == TextureTypes::TypeCubeArray) )
+        if( ( cubemapsAs2DArrays || forUav ) &&          //
+            ( mTextureType == TextureTypes::TypeCube ||  //
+              mTextureType == TextureTypes::TypeCubeArray ) )
         {
             texType = MTLTextureType2DArray;
         }
@@ -382,14 +373,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
-        locations.reserve( mMsaa );
-        if( mMsaa <= 1u )
+        locations.reserve( mSampleDescription.getColourSamples() );
+        if( mSampleDescription.getColourSamples() <= 1u )
         {
             locations.push_back( Vector2( 0.0f, 0.0f ) );
         }
         else
         {
-            assert( mMsaaPattern != MsaaPatterns::Undefined );
+            assert( mSampleDescription.getMsaaPattern() != MsaaPatterns::Undefined );
 
             //TODO
         }
@@ -416,6 +407,8 @@ namespace Ogre
             uint16 depthBufferPoolId, bool preferDepthTexture, PixelFormatGpu desiredDepthBufferFormat )
     {
         assert( isRenderToTexture() );
+        OGRE_ASSERT_MEDIUM( mSourceType != TextureSourceType::SharedDepthBuffer &&
+                            "Cannot call _setDepthBufferDefaults on a shared depth buffer!" );
         mDepthBufferPoolId          = depthBufferPoolId;
         mPreferDepthTexture         = preferDepthTexture;
         mDesiredDepthBufferFormat   = desiredDepthBufferFormat;

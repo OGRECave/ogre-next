@@ -29,9 +29,10 @@ THE SOFTWARE.
 #ifndef _OgreCompositorWorkspaceListener_H_
 #define _OgreCompositorWorkspaceListener_H_
 
-#include "OgreHeaderPrefix.h"
 #include "Compositor/OgreCompositorCommon.h"
 #include "Compositor/Pass/OgreCompositorPassDef.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -50,6 +51,9 @@ namespace Ogre
             @CompositorWorkspace::_beginUpdate( forceBeginFrame=true )
         */
         virtual void workspacePreUpdate( CompositorWorkspace *workspace ) {}
+        /** Called after all nodes has been updated.
+        */
+        virtual void workspacePosUpdate( CompositorWorkspace *workspace ) {}
         /** Called early on in pass' execution. Happens before passPreExecute,
             before the pass has set anything.
             Warning: calling pass->execute can result in recursive calls.

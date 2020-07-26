@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreRenderSystem.h"
 #include "OgreTextureFilters.h"
 #include "OgreLogManager.h"
+#include "OgreShaderPrimitives.h"
 
 #define _OgreHlmsTextureBaseClassExport
 #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsTerraBaseTextureDatablock
@@ -138,8 +139,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsTerraDatablock::uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags )
     {
-        memcpy( dstPtr, &mkDr, MaterialSizeInGpu );
-
         if( dirtyFlags & (ConstBufferPool::DirtyTextures|ConstBufferPool::DirtySamplers) )
         {
             //Must be called first so mTexIndices[i] gets updated before uploading to GPU.
@@ -151,10 +150,20 @@ namespace Ogre
         for( size_t i=0; i<OGRE_NumTexIndices; ++i )
             texIndices[i] = mTexIndices[i] & ~ManualTexIndexBit;
 
-        memcpy( dstPtr, &mkDr, MaterialSizeInGpu - sizeof(mTexIndices) );
-        dstPtr += MaterialSizeInGpu - sizeof(mTexIndices);
-        memcpy( dstPtr, texIndices, sizeof(texIndices) );
-        dstPtr += sizeof(texIndices);
+        const size_t numOffsetScale = sizeof( mDetailsOffsetScale ) / sizeof( mDetailsOffsetScale[0] );
+        float4 detailsOffsetScale[numOffsetScale];
+        for( size_t i = 0u; i < numOffsetScale; ++i )
+            detailsOffsetScale[i] = mDetailsOffsetScale[i];
+
+        memcpy( dstPtr, &mkDr,
+                MaterialSizeInGpu - numOffsetScale * sizeof( float4 ) - sizeof( mTexIndices ) );
+        dstPtr += MaterialSizeInGpu - numOffsetScale * sizeof( float4 ) - sizeof( mTexIndices );
+
+        memcpy( dstPtr, &detailsOffsetScale, numOffsetScale * sizeof( float4 ) );
+        dstPtr += numOffsetScale * sizeof( float4 );
+
+        memcpy( dstPtr, texIndices, sizeof( texIndices ) );
+        dstPtr += sizeof( texIndices );
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerraDatablock::setDiffuse( const Vector3 &diffuseColour )
@@ -201,7 +210,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsTerraDatablock::setDetailMapOffsetScale( uint8 detailMap, const Vector4 &offsetScale )
     {
-        assert( detailMap < 8 );
+        assert( detailMap < 4u );
         bool wasDisabled = mDetailsOffsetScale[detailMap] == Vector4( 0, 0, 1, 1 );
 
         mDetailsOffsetScale[detailMap] = offsetScale;

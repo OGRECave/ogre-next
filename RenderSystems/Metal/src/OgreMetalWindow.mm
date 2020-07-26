@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreMetalTextureGpuManager.h"
 #include "OgreMetalDevice.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreRenderSystem.h"
 #include "OgreDepthBuffer.h"
 #include "OgreViewport.h"
 #include "OgreStringConverter.h"
@@ -43,7 +44,6 @@ namespace Ogre
         Window( title, width, height, fullscreenMode ),
         mClosed( false ),
         mHwGamma( true ),
-        mMsaa( 1u ),
         mMetalLayer( 0 ),
         mCurrentDrawable( 0 ),
         mDevice( ownerDevice )
@@ -56,24 +56,21 @@ namespace Ogre
         destroy();
     }
     //-------------------------------------------------------------------------
+    float MetalWindow::getViewPointToPixelScale() const
+    {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        return mMetalLayer.contentsScale;
+#else
+        NSScreen* screen = mMetalView.window.screen ?: [NSScreen mainScreen];
+        return screen.backingScaleFactor;
+#endif
+    }
+    //-------------------------------------------------------------------------
     inline void MetalWindow::checkLayerSizeChanges(void)
     {
         // Handle display changes here
         if( mMetalView.layerSizeDidUpdate )
         {
-            // set the metal layer to the drawable size in case orientation or size changes
-            CGSize drawableSize = CGSizeMake( mMetalView.bounds.size.width,
-                                              mMetalView.bounds.size.height );
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS  
-            drawableSize.width  *= mMetalView.layer.contentsScale;
-            drawableSize.height *= mMetalView.layer.contentsScale;
-#else
-            NSScreen* screen = mMetalView.window.screen ?: [NSScreen mainScreen];
-            drawableSize.width *= screen.backingScaleFactor;
-            drawableSize.height *= screen.backingScaleFactor;
-#endif
-            mMetalLayer.drawableSize = drawableSize;
-
             // Resize anything if needed
             this->windowMovedOrResized();
 
@@ -83,23 +80,27 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalWindow::setResolutionFromView(void)
     {
-        const uint32 newWidth = static_cast<uint32>( mMetalLayer.drawableSize.width );
-        const uint32 newHeight = static_cast<uint32>( mMetalLayer.drawableSize.height );
+        // update drawable size to match layer and thus view size
+        float scale = getViewPointToPixelScale();
+        CGSize sizePt = mMetalLayer.frame.size;
+        const uint32 widthPx = std::max(1u, (uint32)floor(sizePt.width * scale + 0.5));
+        const uint32 heightPx = std::max(1u, (uint32)floor(sizePt.height * scale + 0.5));
+        mMetalLayer.drawableSize = CGSizeMake( widthPx, heightPx );
 
-        if( newWidth > 0 && newHeight > 0 && mTexture )
+        if( mTexture )
         {
             assert( dynamic_cast<MetalTextureGpuWindow*>( mTexture ) );
             MetalTextureGpuWindow *texWindow = static_cast<MetalTextureGpuWindow*>( mTexture );
             texWindow->_setMsaaBackbuffer( 0 );
 
-            if( mMsaa > 1u )
+            if( isMultisample() )
             {
                 MTLTextureDescriptor* desc = [MTLTextureDescriptor
                                              texture2DDescriptorWithPixelFormat:
                                              MetalMappings::get( mTexture->getPixelFormat() )
-                                             width: newWidth height: newHeight mipmapped: NO];
+                                             width: widthPx height: heightPx mipmapped: NO];
                 desc.textureType = MTLTextureType2DMultisample;
-                desc.sampleCount = mMsaa;
+                desc.sampleCount = mSampleDescription.getColourSamples();
                 desc.usage       = MTLTextureUsageRenderTarget;
                 desc.storageMode = MTLStorageModePrivate;
 
@@ -120,7 +121,7 @@ namespace Ogre
                 wasResident = true;
             }
 
-            setFinalResolution( newWidth, newHeight );
+            setFinalResolution( widthPx, heightPx );
 
             if( mDepthBuffer && wasResident )
                 mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
@@ -149,11 +150,12 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalWindow::windowMovedOrResized(void)
     {
-        if( mRequestedWidth != mMetalLayer.drawableSize.width ||
-            mRequestedHeight != mMetalLayer.drawableSize.height )
+        CGSize sizePt = mMetalLayer.frame.size;
+        if( mRequestedWidth != sizePt.width ||
+            mRequestedHeight != sizePt.height )
         {
-            mRequestedWidth  = mMetalLayer.drawableSize.width;
-            mRequestedHeight = mMetalLayer.drawableSize.height;
+            mRequestedWidth  = sizePt.width;
+            mRequestedHeight = sizePt.height;
 
             setResolutionFromView();
         }
@@ -201,60 +203,87 @@ namespace Ogre
         destroy();
 
         mClosed = false;
-
-        mMsaa       = 1u;
-        mHwGamma    = true;
+        mHwGamma = true;
+        NSObject *externalWindowHandle; // OgreMetalView, NSView or NSWindow
 
         if( miscParams )
         {
             NameValuePairList::const_iterator opt;
             NameValuePairList::const_iterator end = miscParams->end();
 
-            opt = miscParams->find("MSAA");
+            opt = miscParams->find("FSAA");
             if( opt != end )
-                mMsaa = std::max( 1u, StringConverter::parseUnsignedInt( opt->second ) );
+                mRequestedSampleDescription.parseString( opt->second );
 
             opt = miscParams->find("gamma");
             if( opt != end )
                 mHwGamma = StringConverter::parseBool( opt->second );
             
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-            opt = miscParams->find("macAPICocoaUseNSView");
+            opt = miscParams->find("externalWindowHandle");
             if( opt != end )
+                externalWindowHandle = (__bridge NSObject*)(void*)StringConverter::parseSizeT(opt->second);
+
+            if( !externalWindowHandle )
             {
-                LogManager::getSingleton().logMessage("Mac Cocoa Window: Rendering on an external plain NSView*");
                 opt = miscParams->find("parentWindowHandle");
-                NSView *nsview = (__bridge NSView*)reinterpret_cast<void*>(StringConverter::parseSizeT(opt->second));
-                assert( nsview &&
-                       "Unable to get a pointer to the parent NSView."
-                       "Was the 'parentWindowHandle' parameter set correctly in the call to createRenderWindow()?");
-                mWindow = [nsview window];
+                if( opt != end )
+                    externalWindowHandle = (__bridge NSObject*)(void*)StringConverter::parseSizeT(opt->second);
             }
-#endif
         }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        CGRect frame;
+        if( externalWindowHandle && [externalWindowHandle isKindOfClass:[OgreMetalView class]] )
+        {
+            mMetalView = (OgreMetalView*)externalWindowHandle;
+        }
+        else
+        {
+            CGRect frame = CGRectMake(0.0, 0.0, mRequestedWidth, mRequestedHeight);
+            mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+        }
 #else
-        NSRect frame;
-#endif
+        // create window if nothing was provided
+        if( !externalWindowHandle )
+        {
+            NSRect frame = NSMakeRect(0.0, 0.0, mRequestedWidth, mRequestedHeight);
+            NSWindowStyleMask style = NSWindowStyleMaskResizable | NSWindowStyleMaskTitled;
+            if( mRequestedFullscreenMode )
+            {
+                frame.size = NSScreen.mainScreen.visibleFrame.size;
+                style = NSWindowStyleMaskBorderless;
+            }
+            NSWindow* window = [[NSWindow alloc] initWithContentRect:frame
+                                                           styleMask:style
+                                                             backing:NSBackingStoreBuffered
+                                                               defer:YES];
+            window.title = @(mTitle.c_str());
+            window.contentView = [[OgreMetalView alloc] initWithFrame:frame];
+            
+            externalWindowHandle = window;
+        }
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        frame.origin.x = 0;
-        frame.origin.y = 0;
-        frame.size.width = mRequestedWidth;
-        frame.size.height = mRequestedHeight;
-#else
-        frame = [mWindow.contentView bounds];
-#endif
-        mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+        NSView* externalView;
+        if( [externalWindowHandle isKindOfClass:[NSWindow class]] )
+        {
+            mWindow = (NSWindow*)externalWindowHandle;
+            externalView = mWindow.contentView;
+        }
+        else
+        {
+            assert( [externalWindowHandle isKindOfClass:[NSView class]] );
+            externalView = (NSView*)externalWindowHandle;
+            mWindow = externalView.window;
+        }
 
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        NSView *view = mWindow.contentView;
-        [view addSubview:mMetalView];
-        mResizeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResizeNotification object:mWindow queue:nil usingBlock:^(NSNotification *){
-          mMetalView.frame = [mWindow.contentView bounds];
-        }];
+        if( [externalView isKindOfClass:[OgreMetalView class]] )
+            mMetalView = (OgreMetalView*)externalView;
+        else
+        {
+            NSRect frame = externalView.bounds;
+            mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+            mMetalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+            [externalView addSubview:mMetalView];
+        }
 #endif
 
         mMetalLayer = (CAMetalLayer*)mMetalView.layer;
@@ -277,9 +306,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalWindow::destroy()
     {
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        [[NSNotificationCenter defaultCenter] removeObserver:mResizeObserver];
-#endif
         mClosed = true;
 
         OGRE_DELETE mTexture;
@@ -318,8 +344,10 @@ namespace Ogre
             mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
         }
 
-        mTexture->setMsaa( mMsaa );
-        mDepthBuffer->setMsaa( mMsaa );
+        mSampleDescription = textureManager->getRenderSystem()->validateSampleDescription(
+            mRequestedSampleDescription, mTexture->getPixelFormat() );
+        mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
+        mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
 
         setResolutionFromView();
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );

@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "OgreTextureFilters.h"
 #include "Cubemaps/OgreCubemapProbe.h"
 #include "OgreProfiler.h"
+#include "OgreString.h"
 
 #define _OgreHlmsTextureBaseClassExport _OgreHlmsPbsExport
 #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsPbsBaseTextureDatablock
@@ -61,7 +62,7 @@ namespace Ogre
         "GrainMerge", "Difference"
     };
 
-    const size_t HlmsPbsDatablock::MaterialSizeInGpu          = 56 * 4 + NUM_PBSM_TEXTURE_TYPES * 2;
+    const size_t HlmsPbsDatablock::MaterialSizeInGpu          = 60u * 4u + NUM_PBSM_TEXTURE_TYPES * 2u;
     const size_t HlmsPbsDatablock::MaterialSizeInGpuAligned   = alignToNextMultiple(
                                                                     HlmsPbsDatablock::MaterialSizeInGpu,
                                                                     4 * 4 );
@@ -79,6 +80,7 @@ namespace Ogre
         mReceiveShadows( true ),
         mCubemapIdxInDescSet( std::numeric_limits<uint8>::max() ),
         mUseEmissiveAsLightmap( false ),
+        mUseDiffuseMapAsGrayscale( false ),
         mTransparencyMode( None ),
         mkDr( 0.318309886f ), mkDg( 0.318309886f ), mkDb( 0.318309886f ), //Max Diffuse = 1 / PI
         _padding0( 1 ),
@@ -87,11 +89,13 @@ namespace Ogre
         mFresnelR( 0.818f ), mFresnelG( 0.818f ), mFresnelB( 0.818f ),
         mTransparencyValue( 1.0f ),
         mNormalMapWeight( 1.0f ),
+        mRefractionStrength( 0.075f ),
         mCubemapProbe( 0 ),
         mBrdf( PbsBrdf::Default )
     {
         memset( mUvSource, 0, sizeof( mUvSource ) );
         memset( mBlendModes, 0, sizeof( mBlendModes ) );
+        memset( _padding1, 0, sizeof( _padding1 ) );
         memset( mUserValue, 0, sizeof( mUserValue ) );
 
         mBgDiffuse[0] = mBgDiffuse[1] = mBgDiffuse[2] = mBgDiffuse[3] = 1.0f;
@@ -189,6 +193,8 @@ namespace Ogre
 
         if( Hlms::findParamInVec( params, "diffuse_map", paramVal ) )
             setTexture( PBSM_DIFFUSE, paramVal );
+        if( Hlms::findParamInVec( params, "diffuse_map_grayscale", paramVal ) )
+            mUseDiffuseMapAsGrayscale = StringConverter::parseBool( paramVal );
         if( Hlms::findParamInVec( params, "normal_map", paramVal ) )
             setTexture( PBSM_NORMAL, paramVal );
         if( Hlms::findParamInVec( params, "specular_map", paramVal ) )
@@ -425,7 +431,7 @@ namespace Ogre
         float oldkDg = mkDg;
         float oldkDb = mkDb;
 
-        if( mTransparencyMode == Transparent )
+        if( mTransparencyMode == Transparent || mTransparencyMode == Refractive )
         {
             //Precompute the transparency CPU-side.
             if( mWorkflow != MetallicWorkflow )
@@ -703,10 +709,8 @@ namespace Ogre
         mDetailNormalWeight[detailNormalMapIdx] = weight;
 
         if( wasOne != (mDetailNormalWeight[detailNormalMapIdx] == 1.0f) )
-        {
             flushRenderables();
-            scheduleConstBufferUpdate();
-        }
+        scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
     Real HlmsPbsDatablock::getDetailNormalWeight( uint8 detailNormalMapIdx ) const
@@ -721,10 +725,8 @@ namespace Ogre
         mNormalMapWeight = weight;
 
         if( wasDisabled != (mNormalMapWeight == 1.0f) )
-        {
             flushRenderables();
-            scheduleConstBufferUpdate();
-        }
+        scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
     Real HlmsPbsDatablock::getNormalMapWeight(void) const
@@ -840,10 +842,12 @@ namespace Ogre
         {
             HlmsBlendblock newBlendblock;
 
-            if( mTransparencyMode == None )
+            if( mTransparencyMode == None || mTransparencyMode == Refractive )
             {
                 newBlendblock.mSourceBlendFactor    = SBF_ONE;
                 newBlendblock.mDestBlendFactor      = SBF_ZERO;
+                if( mTransparencyMode == Refractive )
+                    newBlendblock.setForceTransparentRenderOrder( true );
             }
             else if( mTransparencyMode == Transparent )
             {
@@ -858,6 +862,14 @@ namespace Ogre
 
             if( newBlendblock != *mBlendblock[0] )
                 setBlendblock( newBlendblock );
+
+            if( mTransparencyMode == Refractive && mMacroblock[0]->mDepthWrite )
+            {
+                // When doing refractions, depth write must be forced off
+                HlmsMacroblock macroblock = *mMacroblock[0];
+                macroblock.mDepthWrite = false;
+                setMacroblock( macroblock );
+            }
         }
         else
         {
@@ -882,6 +894,12 @@ namespace Ogre
             flushRenderables();
     }
     //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::setRefractionStrength( float strength )
+    {
+        mRefractionStrength = strength;
+        scheduleConstBufferUpdate();
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setReceiveShadows( bool receiveShadows )
     {
         if( mReceiveShadows != receiveShadows )
@@ -903,6 +921,20 @@ namespace Ogre
     bool HlmsPbsDatablock::getUseEmissiveAsLightmap(void) const
     {
         return mUseEmissiveAsLightmap;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::setUseDiffuseMapAsGrayscale( bool bUseDiffuseMapAsGrayscale )
+    {
+        if( mUseDiffuseMapAsGrayscale != bUseDiffuseMapAsGrayscale )
+        {
+            mUseDiffuseMapAsGrayscale = bUseDiffuseMapAsGrayscale;
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    bool HlmsPbsDatablock::getUseDiffuseMapAsGrayscale( void ) const
+    {
+        return mUseDiffuseMapAsGrayscale;
     }
     //-----------------------------------------------------------------------------------
     bool HlmsPbsDatablock::getReceiveShadows(void) const
@@ -1086,5 +1118,20 @@ namespace Ogre
     TextureGpu* HlmsPbsDatablock::getEmissiveTexture(void) const
     {
         return getTexture( PBSM_EMISSIVE );
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::notifyTextureChanged( TextureGpu *texture,
+                                                             TextureGpuListener::Reason reason,
+                                                             void *extraData )
+    {
+        HlmsPbsBaseTextureDatablock::notifyTextureChanged( texture, reason, extraData );
+        if( texture == mTextures[PBSM_REFLECTION] )
+        {
+            if( reason == TextureGpuListener::FromStorageToSysRam ||
+                reason == TextureGpuListener::GainedResidency )
+            {
+                static_cast<HlmsPbs *>( mCreator )->_notifyIblSpecMipmap( texture->getNumMipmaps() );
+            }
+        }
     }
 }

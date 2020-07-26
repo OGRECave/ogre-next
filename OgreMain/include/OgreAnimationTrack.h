@@ -132,7 +132,7 @@ namespace v1
         class _OgreExport Listener
         {
         public:
-            virtual ~Listener() {}
+            virtual ~Listener();
 
             /** Get an interpolated keyframe for this track at the given time.
             @return true if the KeyFrame was populated, false if not.

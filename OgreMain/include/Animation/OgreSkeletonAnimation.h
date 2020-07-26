@@ -165,6 +165,85 @@ namespace Ogre
         */
         Real* getBoneWeightPtr( IdString boneName );
 
+        /** Given all the bones this animation uses, sets the weight of these on _other_ animations
+
+            The use case is very specific: Imagine a 3rd person shooter. Normally animations get
+            blended together either additively or cummulative (e.g. to smoothly transition from walk
+            to idle, from idle to run, from run to cover, etc)
+
+            However certain animations, such as Reload, need to _override_ all other animations but
+            only on a particular set of bones.
+
+            Whether the character is idle, walking or running; we want the reload animation to
+            play at 100% weight (on torso, arms and hands), while the walk/idle/run animations still
+            also play at 100% weight on bones unaffected by the reload (like the legs).
+
+            Example code:
+
+            @code
+                // When starting reload
+                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( 0.0f, false );
+                reloadAnim->setEnabled( true );
+
+                // When starting reload is over
+                reloadAnim->setEnabled( false );
+                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( 1.0f, false );
+
+                // To smoothly fade in/out while allowing per-bone granularity:
+                // fadeOutFactor = 0 means we're fully faded in
+                // fadeOutFactor = 1 means we're faded out entirely
+                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( fadeOutFactor, true );
+
+                // To smoothly fade in/out while overriding all bones:
+                reloadAnim->setOverrideBoneWeightsOnActiveAnimations( fadeOutFactor, false );
+            @endcode
+
+            For this function to have any usefulness, the animation from Maya/Blender/etc
+            needs to have been exported with only animation tracks on bones that are modified
+            (i.e. the exporter should not create dummy nodes resetting to default pose on
+            unanimated bones)
+
+            If you're using [blender2ogre](https://github.com/OGRECave/blender2ogre), make sure
+            to tick "Only Keyframed Bones"
+
+        @remarks
+            This overload works only on currently active animations.
+            To override all (active and inactive) animations, use setOverrideBoneWeightsOnAllAnimations
+
+            Avoid calling this function unnecessarily (e.g. don't call it every frame if weight
+            value did not change). It's not super expensive, but it is not free either.
+
+            Any custom per-bone weight you set on other animations
+            (e.g. by calling other->setBoneWeight) will be overwritten.
+        @param constantWeight
+            A constant weight to apply to all bone weights in other animations
+            Should be in range [0; 1]
+        @param bPerBone
+            When false, all other animations are set to constantWeight
+            When true, each bone in other animations are set to:
+
+                Math::lerp( 1.0f - boneWeight, constantWeight, boneWeight );
+
+            This allows you to selectively avoid overriding certain bones while also
+            smoothly fade in/out animations (i.e. gives you finer granularity control)
+
+            When true, the math operation we perform boils down to:
+
+            @code
+                for each affectedBone in this_animation
+                    for each otherAnim in parent->getAnimations()
+                        finalWeight = lerp( 1.0 - affectedBone->weight,
+                                            constantWeight, affectedBone->weight );
+                        otherAnim->setBoneWeight( affectedBone->name, finalWeight );
+            @endcode
+        */
+        void setOverrideBoneWeightsOnActiveAnimations( const Real constantWeight,
+                                                       const bool bPerBone = false );
+
+        /// @see SkeletonAnimation::setOverrideBoneWeightsOnActiveAnimations
+        void setOverrideBoneWeightsOnAllAnimations( const Real constantWeight,
+                                                    const bool bPerBone = false );
+
         /// Enables or disables this animation. A disabled animation won't be processed at all.
         void setEnabled( bool bEnable );
         bool getEnabled(void) const                                 { return mEnabled; }

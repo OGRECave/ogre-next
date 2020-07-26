@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 #include "OgreRenderSystem.h"
 
+#include <sstream>
+
 namespace Ogre
 {
     /// Worker function to register threads with the RenderSystem, if required

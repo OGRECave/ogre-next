@@ -42,6 +42,8 @@ THE SOFTWARE.
 #define STB_IMAGE_STATIC
 #include "stbi/stb_image.h"
 
+#include <sstream>
+
 namespace Ogre {
 
     STBIImageCodec::RegisteredCodecList STBIImageCodec::msCodecList;

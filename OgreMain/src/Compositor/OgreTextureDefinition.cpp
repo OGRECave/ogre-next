@@ -269,6 +269,15 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    void TextureDefinitionBase::removeRenderTextureView( IdString name )
+    {
+        RenderTargetViewDefMap::iterator itor = mLocalRtvs.find( name );
+        if( itor != mLocalRtvs.end() )
+            mLocalRtvs.erase( itor );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureDefinitionBase::removeAllRenderTextureViews( void ) { mLocalRtvs.clear(); }
+    //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::createTextures( const TextureDefinitionVec &textureDefs,
                                                 CompositorChannelVec &inOutTexContainer,
                                                 IdType id,
@@ -312,14 +321,12 @@ namespace Ogre
     void TextureDefinitionBase::setupTexture( TextureGpu *tex, const TextureDefinition &textureDef,
                                               const TextureGpu *finalTarget )
     {
-        uint8 defaultMsaa                               = 1u;
-        MsaaPatterns::MsaaPatterns defaultMsaaPattern   = MsaaPatterns::Undefined;
+        SampleDescription defaultSampleDescription;
         PixelFormatGpu defaultPixelFormat               = PFG_RGBA8_UNORM_SRGB;
         if( finalTarget )
         {
             //Inherit settings from target
-            defaultMsaa         = finalTarget->getMsaa();
-            defaultMsaaPattern  = finalTarget->getMsaaPattern();
+            defaultSampleDescription = finalTarget->getSampleDescription();
             defaultPixelFormat  = finalTarget->getPixelFormat();
         }
         uint32 width  = textureDef.width;
@@ -342,6 +349,7 @@ namespace Ogre
                 (textureDef.depthOrSlices == 1u || textureDef.textureType > TextureTypes::Type2D ) &&
                 (textureDef.depthOrSlices == 6 || textureDef.textureType != TextureTypes::TypeCube) );
 
+        tex->_setSourceType( TextureSourceType::Compositor );
         tex->setResolution( width, height, textureDef.depthOrSlices );
         if( textureDef.format != PFG_UNKNOWN )
             tex->setPixelFormat( textureDef.format );
@@ -356,15 +364,13 @@ namespace Ogre
             tex->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( width, height,
                                                                         tex->getDepth() ) );
         }
-        if( textureDef.msaa != 0 )
+        if( !textureDef.fsaa.empty() )
         {
-            tex->setMsaa( textureDef.msaa );
-            tex->setMsaaPattern( textureDef.msaaPattern );
+            tex->setSampleDescription( SampleDescription( textureDef.fsaa ) );
         }
         else
         {
-            tex->setMsaa( defaultMsaa );
-            tex->setMsaaPattern( defaultMsaaPattern );
+            tex->setSampleDescription( defaultSampleDescription );
         }
 
         tex->_setDepthBufferDefaults( textureDef.depthBufferId, textureDef.preferDepthTexture,

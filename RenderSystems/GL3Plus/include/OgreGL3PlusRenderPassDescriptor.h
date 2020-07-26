@@ -76,9 +76,9 @@ namespace Ogre
         /// which can be used for quickly taking fast paths during rendering.
         void analyzeClearColour(void);
 
-        virtual void updateColourFbo( uint8 lastNumColourEntries );
-        virtual void updateDepthFbo(void);
-        virtual void updateStencilFbo(void);
+        void updateColourFbo( uint8 lastNumColourEntries );
+        void updateDepthFbo(void);
+        void updateStencilFbo(void);
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
         /// if 'other' wants to perform clears on colour, depth and/or stencil values.

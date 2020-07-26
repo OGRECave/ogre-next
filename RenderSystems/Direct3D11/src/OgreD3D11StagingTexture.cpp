@@ -42,7 +42,6 @@ namespace Ogre
                                               uint32 width, uint32 height, uint32 depthOrSlices,
                                               D3D11Device &device ) :
         StagingTexture( vaoManager, formatFamily ),
-        mStagingTexture( 0 ),
         mWidth( width ),
         mHeight( height ),
         mDepthOrSlices( depthOrSlices ),
@@ -69,13 +68,17 @@ namespace Ogre
 
             if( PixelFormatGpuUtils::isCompressed( mFormatFamily ) )
             {
-                desc.Width  = std::max( desc.Width, 4u );
-                desc.Height = std::max( desc.Height, 4u );
+                const uint32 blockWidth =
+                    PixelFormatGpuUtils::getCompressedBlockWidth( mFormatFamily, false );
+                const uint32 blockHeight =
+                    PixelFormatGpuUtils::getCompressedBlockHeight( mFormatFamily, false );
+                desc.Width  = std::max( desc.Width, blockWidth );
+                desc.Height = std::max( desc.Height, blockHeight );
             }
 
             ID3D11Texture3D *texture = 0;
             hr = mDevice->CreateTexture3D( &desc, 0, &texture );
-            mStagingTexture = texture;
+            mStagingTexture.Attach( texture );
             mIsArray2DTexture = false;
 
             mSubresourceData.resize( 1u );
@@ -101,13 +104,17 @@ namespace Ogre
 
             if( PixelFormatGpuUtils::isCompressed( mFormatFamily ) )
             {
-                desc.Width  = std::max( desc.Width, 4u );
-                desc.Height = std::max( desc.Height, 4u );
+                const uint32 blockWidth =
+                    PixelFormatGpuUtils::getCompressedBlockWidth( mFormatFamily, false );
+                const uint32 blockHeight =
+                    PixelFormatGpuUtils::getCompressedBlockHeight( mFormatFamily, false );
+                desc.Width  = std::max( desc.Width, blockWidth );
+                desc.Height = std::max( desc.Height, blockHeight );
             }
 
             ID3D11Texture2D *texture = 0;
             hr = mDevice->CreateTexture2D( &desc, 0, &texture );
-            mStagingTexture = texture;
+            mStagingTexture.Attach( texture );
             mIsArray2DTexture = true;
 
             mSubresourceData.resize( mDepthOrSlices );
@@ -121,7 +128,6 @@ namespace Ogre
 
         if( FAILED(hr) || mDevice.isError() )
         {
-            SAFE_RELEASE( mStagingTexture );
             String errorDescription = mDevice.getErrorDescription( hr );
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Error creating StagingTexture\nError Description:" + errorDescription,
@@ -138,8 +144,6 @@ namespace Ogre
                         "call stopMapRegion. Calling it for you.", LML_CRITICAL );
             stopMapRegion();
         }
-
-        SAFE_RELEASE( mStagingTexture );
     }
     //-----------------------------------------------------------------------------------
     bool D3D11StagingTexture::supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
@@ -224,6 +228,8 @@ namespace Ogre
         uint32 blockWidth = 1u;
         uint32 blockHeight= 1u;
 
+        bool canShrink = true;
+
         if( isCompressed )
         {
             //Always consume the whole block for compressed formats.
@@ -231,9 +237,19 @@ namespace Ogre
             blockHeight= PixelFormatGpuUtils::getCompressedBlockHeight( mFormatFamily, false );
             consumedBox.width   = alignToNextMultiple( consumedBox.width, blockWidth );
             consumedBox.height  = alignToNextMultiple( consumedBox.height, blockHeight );
+
+            // This StagingTexture is theoretically smaller than the minimum block size and we only
+            // rounded it upwards to satisfy D3D11. We can't shrink this further.
+            // There can and should only be one record.
+            if( mWidth < blockWidth || mHeight < blockHeight )
+            {
+                OGRE_ASSERT_LOW( mFreeBoxes[slice].size() == 1u );
+                canShrink = false;
+            }
         }
 
-        if( record->width == consumedBox.width && record->height == consumedBox.height )
+        if( ( record->width == consumedBox.width && record->height == consumedBox.height ) ||
+            !canShrink )
         {
             //Whole record was consumed. Easy case.
             efficientVectorRemove( mFreeBoxes[slice], record );
@@ -559,7 +575,7 @@ namespace Ogre
         for( uint32 i=0; i<numSlices; ++i )
         {
             const UINT subresourceIdx = D3D11CalcSubresource( 0, i, 1u );
-            HRESULT hr = context->Map( mStagingTexture, subresourceIdx,
+            HRESULT hr = context->Map( mStagingTexture.Get(), subresourceIdx,
                                        D3D11_MAP_WRITE, 0, &mSubresourceData[i] );
             mLastSubresourceData[i] = mSubresourceData[i];
 
@@ -588,7 +604,7 @@ namespace Ogre
         for( uint32 i=0; i<numSlices; ++i )
         {
             const UINT subresourceIdx = D3D11CalcSubresource( 0, i, 1u );
-            context->Unmap( mStagingTexture, subresourceIdx );
+            context->Unmap( mStagingTexture.Get(), subresourceIdx );
             memset( &mSubresourceData[i], 0, sizeof( D3D11_MAPPED_SUBRESOURCE ) );
         }
         mFreeBoxes.clear();
@@ -658,7 +674,7 @@ namespace Ogre
                                                                  dstTexture->getNumMipmaps() );
 
             context->CopySubresourceRegion( dstTextureD3d->getFinalTextureName(), dstSubResourceIdx,
-                                            xPos, yPos, zPos, mStagingTexture,
+                                            xPos, yPos, zPos, mStagingTexture.Get(),
                                             srcSubResourceIdx, &srcBoxD3d );
             ++dstSlicePos;
             if( !mIsArray2DTexture )

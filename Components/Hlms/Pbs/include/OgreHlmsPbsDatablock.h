@@ -182,7 +182,14 @@ namespace Ogre
 
             /// Good 'ol regular alpha blending. Ideal for just fading out an
             /// object until it completely disappears.
-            Fade
+            Fade,
+
+            /// Similar to transparent, but also performs refractions.
+            /// The compositor scene pass must be set to render refractive
+            /// objects in its own pass.
+            ///
+            /// See Samples/2.0/ApiUsage/Refractions
+            Refractive
         };
 
         enum Workflows
@@ -213,6 +220,7 @@ namespace Ogre
         bool    mReceiveShadows;
         uint8   mCubemapIdxInDescSet;
         bool    mUseEmissiveAsLightmap;
+        bool    mUseDiffuseMapAsGrayscale;
         TransparencyModes mTransparencyMode;
 
         float	mBgDiffuse[4];
@@ -227,6 +235,8 @@ namespace Ogre
         float   mDetailsOffsetScale[4][4];
         float   mEmissive[3];
         float   mNormalMapWeight;
+        float   mRefractionStrength;
+        float   _padding1[3];
         float   mUserValue[3][4]; //can be used in custom pieces
         //uint16  mTexIndices[NUM_PBSM_TEXTURE_TYPES];
 
@@ -271,6 +281,10 @@ namespace Ogre
 
             * diffuse_map <texture name>
                 Name of the diffuse texture for the base image (optional)
+
+            * diffuse_map_grayscale <true, false>
+                When set to true diffuse map would be sampled with .rrra swizzle
+                Default: false
 
             * specular <r g b>
                 Specifies the RGB specular colour. "kS" in most books about PBS
@@ -584,6 +598,19 @@ namespace Ogre
         TransparencyModes getTransparencyMode(void) const           { return mTransparencyMode; }
         bool getUseAlphaFromTextures(void) const                    { return mUseAlphaFromTextures; }
 
+        /** Sets the strength of the refraction, i.e. how much displacement in screen space.
+
+            This value is not physically based.
+            Only used when HlmsPbsDatablock::setTransparency was set to HlmsPbsDatablock::Refractive
+        @param strength
+            Refraction strength. Useful range is often (0; 1) but any value is valid (even negative),
+            but the bigger the number, the more likely glitches will appear (with large values
+            we have to fallback to regular alpha blending due to the screen space pixel landing
+            outside the screen)
+        */
+        void setRefractionStrength( float strength );
+        float getRefractionStrength( void ) const                   { return mRefractionStrength; }
+
         /** When false, objects with this material will not receive shadows (independent of
             whether they case shadows or not)
         @remarks
@@ -611,6 +638,14 @@ namespace Ogre
         */
         void setUseEmissiveAsLightmap( bool bUseEmissiveAsLightmap );
         bool getUseEmissiveAsLightmap(void) const;
+
+        /** When set, it treats the diffuse map as a grayscale map; which means it will
+            spread red component to all rgb channels.
+        @remarks
+            With this option you can use PFG_R8_UNORM for diffuse map in the same way as old PF_L8 format
+        */
+        void setUseDiffuseMapAsGrayscale( bool bUseDiffuseMapAsGrayscale );
+        bool getUseDiffuseMapAsGrayscale( void ) const;
 
         /** Manually set a probe to affect this particular material.
         @remarks
@@ -699,6 +734,9 @@ namespace Ogre
         virtual ColourValue getEmissiveColour(void) const;
         virtual TextureGpu* getDiffuseTexture(void) const;
         virtual TextureGpu* getEmissiveTexture(void) const;
+
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                           void *extraData );
 
         virtual void calculateHash();
 

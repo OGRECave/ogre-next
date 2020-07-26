@@ -86,6 +86,8 @@ namespace Ogre
 
         typedef vector<CachedDepthStencilState>::type CachedDepthStencilStateVec;
 
+    private:
+        String mDeviceName;    // it`s hint rather than hard requirement, could be ignored if empty or device removed
         bool mInitialized;
         v1::HardwareBufferManager   *mHardwareBufferManager;
         MetalGpuProgramManager      *mShaderManager;
@@ -119,6 +121,7 @@ namespace Ogre
 
         uint8           mNumMRTs;
         MetalRenderTargetCommon     *mCurrentColourRTs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        MetalDeviceList             mDeviceList;
         MetalDevice                 *mActiveDevice;
         __unsafe_unretained id<MTLRenderCommandEncoder> mActiveRenderEncoder;
 
@@ -131,6 +134,9 @@ namespace Ogre
         uint32                  mEntriesToFlush;
         bool                    mVpChanged;
         bool                    mInterruptedRenderCommandEncoder;
+
+        MetalDeviceList* getDeviceList( bool refreshList = false );
+        void refreshFSAAOptions(void);
 
         void setActiveDevice( MetalDevice *device );
 
@@ -147,8 +153,9 @@ namespace Ogre
 
         virtual const String& getName(void) const;
         virtual const String& getFriendlyName(void) const;
+        void initConfigOptions();
         virtual ConfigOptionMap& getConfigOptions(void) { return mOptions; }
-        virtual void setConfigOption(const String &name, const String &value) {}
+        virtual void setConfigOption(const String &name, const String &value);
 
         virtual HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
 
@@ -208,8 +215,9 @@ namespace Ogre
         inline void endRenderPassDescriptor( bool isInterruptingRender );
         virtual void endRenderPassDescriptor(void);
     protected:
-        virtual TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
-                                                  PixelFormatGpu depthBufferFormat );
+        virtual TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                                  PixelFormatGpu depthBufferFormat, uint16 poolId );
+
     public:
         virtual void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m,
                                                  const Frustum* frustum = 0);
@@ -239,7 +247,8 @@ namespace Ogre
     protected:
         template <typename TDescriptorSetTexture,
                   typename TTexSlot,
-                  typename TBufferPacked>
+                  typename TBufferPacked,
+                  bool isUav>
         void _descriptorSetTextureCreated( TDescriptorSetTexture *newSet,
                                            const FastArray<TTexSlot> &texContainer,
                                            uint16 *shaderTypeTexCount );
@@ -287,6 +296,9 @@ namespace Ogre
         virtual void registerThread();
         virtual void unregisterThread();
         virtual unsigned int getDisplayMonitorCount() const     { return 1; }
+
+        virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
+                                                             PixelFormatGpu format );
 
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
 

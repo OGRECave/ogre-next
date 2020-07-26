@@ -1,0 +1,76 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+#ifdef HEADER
+
+/** Creates a unit sphere triangle strip from just vertex ID
+
+	Credit to Polaris / Northern Dragons
+	http://in4k.untergrund.net/html_articles/hugi_27_-_coding_corner_polaris_sphere_tessellation_101.htm
+
+	The original code used:
+		#define Band_Power  4  // 2^Band_Power = Total Points in a band.
+		#define Band_Points 16 // 16 = 2^Band_Power
+		#define Band_Mask (Band_Points-2)
+		#define Sections_In_Band ((Band_Points/2)-1)
+		#define Total_Points (Sections_In_Band*Band_Points)
+		// remember - for each section in a band, we have a band
+		#define Section_Arc ((2 * M_PI)/Sections_In_Band)
+\remarks
+	The original implementation simplified 2xPI as 6.28.
+	This causes small visible gaps and hence was corrected.
+\param vertexId
+	Must be in range [0; sectionsInBand * bandPoints)
+\return
+	Sphere vertex position. It is in range [-1; 1] (i.e. it is centered around 0.0, 0.0, 0.0 )
+*/
+INLINE float3 getSphereVertex( uint vertexId PARAMS_ARG_DECL )
+{
+	// using last bit to alternate,+band number (which band)
+	float x_angle = float( vertexId & 1u ) + ( vertexId >> p_bandPower );
+
+	// ( i & p_bandMask ) >> 1 == Local Y value in the band
+	// ( i >> p_bandPower ) * ( ( Band_Points / 2 ) - 1 ) == how many bands have we processed?
+	// Remember - we go "right" one value for every 2 points.
+	//  i >> bandpower - tells us our band number
+	float y_angle =
+		float( ( vertexId & p_bandMask ) >> 1 ) + ( ( vertexId >> p_bandPower ) * p_sectionsInBand );
+
+	x_angle *= p_sectionArc * 0.5f;  // remember - 180° x rot not 360
+	y_angle *= -p_sectionArc;
+
+	float3 vPoint =
+		float3( sin( x_angle ) * sin( y_angle ), cos( x_angle ), sin( x_angle ) * cos( y_angle ) );
+
+	return vPoint;
+}
+
+#else
+	uint uVertexId = uint( inVs_vertexId );
+
+	// We need p_totalPoints vertices, but we have to use p_totalPoints + 2
+	// (one extra at beginning and one at the end) for degenerate triangles
+	uint probeIdx = uVertexId / ( p_totalPoints + 2u );
+
+	uint yRow = probeIdx / p_numProbes.x;
+
+	uint3 xyzCoord;
+	xyzCoord.x = probeIdx % p_numProbes.x;
+	xyzCoord.y = yRow % p_numProbes.y;
+	xyzCoord.z = yRow / p_numProbes.y;
+
+	uint sphereVertId = clamp( uVertexId % ( p_totalPoints + 2u ), 1u, p_totalPoints ) - 1u;
+	float3 localPos = getSphereVertex( sphereVertId PARAMS_ARG );
+
+	outVs.normal.xyz = normalize( localPos.xyz );
+	outVs.probeIdx = probeIdx;
+
+	// Bring sphere from center at 0 to center at 0.5
+	// Also ensure the spheres are always round instead of elliptical
+	localPos.xyz = localPos * 0.15f * p_aspectRatioFixer + 0.5f;
+	// Translate to probe location in grid
+	localPos.xyz += float3( xyzCoord.xyz );
+
+	outVs_Position.xyzw = mul( p_worldViewProjMatrix, float4( localPos, 1.0f ) );
+
+#endif

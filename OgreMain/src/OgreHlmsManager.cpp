@@ -37,12 +37,13 @@ THE SOFTWARE.
     #include "OgreResourceGroupManager.h"
 #endif
 
+#include <fstream>
+
 namespace Ogre
 {
     HlmsManager::HlmsManager() :
         mComputeHlms( 0 ),
         mRenderSystem( 0 ),
-        mShadowMappingUseBackFaces( true ),
         mDefaultHlmsType( HLMS_PBS )
   #if !OGRE_NO_JSON
     ,   mJsonListener( 0 )
@@ -248,12 +249,14 @@ namespace Ogre
 
         if( !retVal->mRefCount )
         {
-            retVal->mIsTransparent =
-                    !( baseParams.mDestBlendFactor == SBF_ZERO &&
-                       baseParams.mSourceBlendFactor != SBF_DEST_COLOUR &&
-                       baseParams.mSourceBlendFactor != SBF_ONE_MINUS_DEST_COLOUR &&
-                       baseParams.mSourceBlendFactor != SBF_DEST_ALPHA &&
-                       baseParams.mSourceBlendFactor != SBF_ONE_MINUS_DEST_ALPHA );
+            if( !( baseParams.mDestBlendFactor == SBF_ZERO &&
+                   baseParams.mSourceBlendFactor != SBF_DEST_COLOUR &&
+                   baseParams.mSourceBlendFactor != SBF_ONE_MINUS_DEST_COLOUR &&
+                   baseParams.mSourceBlendFactor != SBF_DEST_ALPHA &&
+                   baseParams.mSourceBlendFactor != SBF_ONE_MINUS_DEST_ALPHA ) )
+            {
+                retVal->mIsTransparent |= 1u;
+            }
             mRenderSystem->_hlmsBlendblockCreated( retVal );
         }
 
@@ -364,35 +367,35 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void createDescriptorSetTextureImpl( RenderSystem *renderSystem, DescriptorSetTexture *desc )
     {
-        renderSystem->_descriptorSetTextureCreated( desc );
+        if( renderSystem ) renderSystem->_descriptorSetTextureCreated( desc );
     }
     void destroyDescriptorSetTextureImpl( RenderSystem *renderSystem, DescriptorSetTexture *desc )
     {
-        renderSystem->_descriptorSetTextureDestroyed( desc );
+        if( renderSystem ) renderSystem->_descriptorSetTextureDestroyed( desc );
     }
     void createDescriptorSetTexture2Impl( RenderSystem *renderSystem, DescriptorSetTexture2 *desc )
     {
-        renderSystem->_descriptorSetTexture2Created( desc );
+        if( renderSystem ) renderSystem->_descriptorSetTexture2Created( desc );
     }
     void destroyDescriptorSetTexture2Impl( RenderSystem *renderSystem, DescriptorSetTexture2 *desc )
     {
-        renderSystem->_descriptorSetTexture2Destroyed( desc );
+        if( renderSystem ) renderSystem->_descriptorSetTexture2Destroyed( desc );
     }
     void createDescriptorSetSamplerImpl( RenderSystem *renderSystem, DescriptorSetSampler *desc )
     {
-        renderSystem->_descriptorSetSamplerCreated( desc );
+        if( renderSystem ) renderSystem->_descriptorSetSamplerCreated( desc );
     }
     void destroyDescriptorSetSamplerImpl( RenderSystem *renderSystem, DescriptorSetSampler *desc )
     {
-        renderSystem->_descriptorSetSamplerDestroyed( desc );
+        if( renderSystem ) renderSystem->_descriptorSetSamplerDestroyed( desc );
     }
     void createDescriptorSetUavImpl( RenderSystem *renderSystem, DescriptorSetUav *desc )
     {
-        renderSystem->_descriptorSetUavCreated( desc );
+        if( renderSystem ) renderSystem->_descriptorSetUavCreated( desc );
     }
     void destroyDescriptorSetUavImpl( RenderSystem *renderSystem, DescriptorSetUav *desc )
     {
-        renderSystem->_descriptorSetUavDestroyed( desc );
+        if( renderSystem ) renderSystem->_descriptorSetUavDestroyed( desc );
     }
     template <typename T>
     const T* HlmsManager::getDescriptorSet( typename set<T>::type &container, const T &baseParams,
@@ -656,20 +659,6 @@ namespace Ogre
         {
             mComputeHlms->_notifyManager( 0 );
             mComputeHlms = 0;
-        }
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsManager::setShadowMappingUseBackFaces( bool useBackFaces )
-    {
-        if( mShadowMappingUseBackFaces != useBackFaces )
-        {
-            mShadowMappingUseBackFaces = useBackFaces;
-
-            for( int i=0; i<HLMS_MAX; ++i )
-            {
-                if( mRegisteredHlms[i] )
-                    mRegisteredHlms[i]->_notifyShadowMappingBackFaceSetting();
-            }
         }
     }
     //-----------------------------------------------------------------------------------

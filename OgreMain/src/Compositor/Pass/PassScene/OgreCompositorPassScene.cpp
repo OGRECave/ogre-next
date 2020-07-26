@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 
+#include "OgreCamera.h"
 #include "OgreViewport.h"
 #include "OgreSceneManager.h"
 
@@ -50,7 +51,9 @@ namespace Ogre
                 mUpdateShadowNode( false ),
                 mPrePassTextures( 0 ),
                 mPrePassDepthTexture( 0 ),
-                mSsrTexture( 0 )
+                mSsrTexture( 0 ),
+                mDepthTextureNoMsaa( 0 ),
+                mRefractionsTexture( 0 )
     {
         initialize( rtv );
 
@@ -82,6 +85,15 @@ namespace Ogre
         else
             mCullCamera = mCamera;
 
+        if( mDefinition->mPrePassMode == PrePassNone && mDefinition->mGenNormalsGBuf &&
+            rtv->colourAttachments.size() < 2u )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Requesting mGenNormalsGBuf (generate normals in GBuffer alongside colour) but "
+                         "there is less than 2 colour render textures to render to!",
+                         "CompositorPassScene::CompositorPassScene" );
+        }
+
         if( mDefinition->mPrePassMode == PrePassUse && !mDefinition->mPrePassTexture.empty() )
         {
             {
@@ -97,8 +109,8 @@ namespace Ogre
 
             if( mDefinition->mPrePassDepthTexture != IdString() )
             {
-                mPrePassDepthTexture = parentNode->getDefinedTexture(
-                                           mDefinition->mPrePassDepthTexture );
+                mPrePassDepthTexture =
+                    parentNode->getDefinedTexture( mDefinition->mPrePassDepthTexture );
             };
 
             if( mDefinition->mPrePassSsrTexture != IdString() )
@@ -106,10 +118,53 @@ namespace Ogre
                 mSsrTexture = parentNode->getDefinedTexture( mDefinition->mPrePassSsrTexture );
             }
         }
+
+        if( mDefinition->mDepthTextureNoMsaa != IdString() )
+        {
+            mDepthTextureNoMsaa = parentNode->getDefinedTexture( mDefinition->mDepthTextureNoMsaa );
+            if( mDepthTextureNoMsaa->isMultisample() )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "CompositorPassSceneDef::mDepthTextureNoMsaa must point to a depth buffer "
+                             "WITHOUT MSAA",
+                             "CompositorPassScene::CompositorPassScene" );
+            }
+        };
+
+        if( mDefinition->mRefractionsTexture != IdString() )
+            mRefractionsTexture = parentNode->getDefinedTexture( mDefinition->mRefractionsTexture );
     }
     //-----------------------------------------------------------------------------------
     CompositorPassScene::~CompositorPassScene()
     {
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPassScene::notifyPassSceneAfterShadowMapsListeners(void)
+    {
+        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+
+        CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+        while( itor != end )
+        {
+            (*itor)->passSceneAfterShadowMaps( this );
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPassScene::notifyPassSceneAfterFrustumCullingListeners(void)
+    {
+        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+
+        CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+        while( itor != end )
+        {
+            (*itor)->passSceneAfterFrustumCulling( this );
+            ++itor;
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassScene::execute( const Camera *lodCamera )
@@ -124,9 +179,9 @@ namespace Ogre
 
         profilingBegin();
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        notifyPassEarlyPreExecuteListeners();
+
+        SceneManager *sceneManager = mCamera->getSceneManager();
 
         Camera const *usedLodCamera = mLodCamera;
         if( lodCamera && mDefinition->mLodCameraName == IdString() )
@@ -138,8 +193,6 @@ namespace Ogre
         mViewport->setMaterialScheme(mDefinition->mMaterialScheme);
 #endif
 
-        SceneManager *sceneManager = mCamera->getSceneManager();
-
         const Quaternion oldCameraOrientation( mCamera->getOrientation() );
 
         //We have to do this first in case usedLodCamera == mCamera
@@ -149,10 +202,25 @@ namespace Ogre
             mCamera->setOrientation( oldCameraOrientation * CubemapRotations[sliceIdx] );
         }
 
+        Viewport *viewport = sceneManager->getCurrentViewport0();
+        viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
+
         if( mDefinition->mUpdateLodLists )
         {
-            sceneManager->updateAllLods( usedLodCamera, mDefinition->mLodBias,
+            // LODs may require up to date viewports. But we can't write to the viewport's dimensions
+            // without messing up beginRenderPassDescriptor internal state, so we use a local copy.
+            //
+            // Our LOD camera must have set a valid viewport. If usedLodCamera != mLodCamera due to
+            // our input argument, then it's caller's responsibility to have set a valid viewport
+            Viewport localVp = *viewport;
+            setViewportSizeToViewport( 0u, &localVp );
+            mLodCamera->_notifyViewport( &localVp );
+
+            sceneManager->updateAllLods( usedLodCamera, mDefinition->mLodBias,  //
                                          mDefinition->mFirstRQ, mDefinition->mLastRQ );
+
+            // Restore viewport
+            mLodCamera->_notifyViewport( viewport );
         }
 
         //Passes belonging to a ShadowNode should not override their parent.
@@ -163,12 +231,8 @@ namespace Ogre
                                                                                     SHADOW_NODE_REUSE );
         }
 
-        Viewport *viewport = sceneManager->getCurrentViewport0();
-        viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
-
         //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        notifyPassPreExecuteListeners();
 
         if( mUpdateShadowNode && shadowNode )
         {
@@ -198,8 +262,7 @@ namespace Ogre
             //We need to restore the previous RT's update
         }
 
-        if( listener )
-            listener->passSceneAfterShadowMaps( this );
+        notifyPassSceneAfterShadowMapsListeners();
 
         executeResourceTransitions();
         setRenderPassDescToCurrent();
@@ -207,14 +270,14 @@ namespace Ogre
         sceneManager->_setForwardPlusEnabledInPass( mDefinition->mEnableForwardPlus );
         sceneManager->_setPrePassMode( mDefinition->mPrePassMode, mPrePassTextures,
                                        mPrePassDepthTexture, mSsrTexture );
+        sceneManager->_setRefractions( mDepthTextureNoMsaa, mRefractionsTexture );
         sceneManager->_setCurrentCompositorPass( this );
 
         viewport->_updateCullPhase01( mCamera, mCullCamera, usedLodCamera,
                                       mDefinition->mFirstRQ, mDefinition->mLastRQ,
                                       mDefinition->mReuseCullData );
 
-        if( listener )
-            listener->passSceneAfterFrustumCulling( this );
+        notifyPassSceneAfterFrustumCullingListeners();
 
 #if TODO_OGRE_2_2
         mTarget->setFsaaResolveDirty();
@@ -242,8 +305,7 @@ namespace Ogre
             sceneManager->_setForwardPlusEnabledInPass( false );
         }
 
-        if( listener )
-            listener->passPosExecute( this );
+        notifyPassPosExecuteListeners();
 
         profilingEnd();
     }
@@ -252,15 +314,36 @@ namespace Ogre
                                                                     ResourceAccessMap &uavsAccess,
                                                                     ResourceLayoutMap &resourcesLayout )
     {
-        if( mShadowNode && mUpdateShadowNode )
-        {
-            mShadowNode->_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess,
-                                                               resourcesLayout );
-        }
-
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
+
+        if( mShadowNode )
+        {
+            if( mUpdateShadowNode )
+            {
+                mShadowNode->_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess,
+                                                                   resourcesLayout );
+            }
+
+            //Check <anything> -> Texture (Shadow maps)
+            const TextureGpuVec &contiguousShadowMapTex = mShadowNode->getContiguousShadowMapTex();
+            TextureGpuVec::const_iterator itShadowMap = contiguousShadowMapTex.begin();
+            TextureGpuVec::const_iterator enShadowMap = contiguousShadowMapTex.end();
+
+            while( itShadowMap != enShadowMap )
+            {
+                TextureGpu *texture = *itShadowMap;
+                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
+                if( ( currentLayout->second != ResourceLayout::Texture && explicitApi ) ||
+                    currentLayout->second == ResourceLayout::Uav )
+                {
+                    addResourceTransition( currentLayout, ResourceLayout::Texture,
+                                           ReadBarrier::Texture );
+                }
+                ++itShadowMap;
+            }
+        }
 
         //Check <anything> -> Texture (GBuffers)
         {
@@ -288,6 +371,22 @@ namespace Ogre
         if( mPrePassDepthTexture )
         {
             TextureGpu *texture = mPrePassDepthTexture;
+
+            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
+
+            if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
+                currentLayout->second == ResourceLayout::Uav )
+            {
+                addResourceTransition( currentLayout,
+                                       ResourceLayout::Texture,
+                                       ReadBarrier::Texture );
+            }
+        }
+
+        //Check <anything> -> DepthTexture (Depth Texture)
+        if( mDepthTextureNoMsaa && mDepthTextureNoMsaa != mPrePassDepthTexture )
+        {
+            TextureGpu *texture = mDepthTextureNoMsaa;
 
             ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
 

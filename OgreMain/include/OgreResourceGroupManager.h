@@ -36,6 +36,11 @@ THE SOFTWARE.
 #include "OgreCommon.h"
 #include "Threading/OgreThreadHeaders.h"
 #include <ctime>
+
+#include "ogrestd/list.h"
+#include "ogrestd/map.h"
+#include "ogrestd/unordered_set.h"
+
 #include "OgreHeaderPrefix.h"
 
 // If X11/Xlib.h gets included before this header (for example it happens when
@@ -86,7 +91,7 @@ namespace Ogre {
     class _OgreExport ResourceGroupListener
     {
     public:
-        virtual ~ResourceGroupListener() {}
+        virtual ~ResourceGroupListener();
 
         /** This event is fired when a resource group begins parsing scripts.
         @note
@@ -190,10 +195,10 @@ namespace Ogre {
                 By overriding this class' methods, you can change how resources
                 are loaded and the behavior for resource name collisions.
     */
-    class ResourceLoadingListener
+    class _OgreExport ResourceLoadingListener
     {
     public:
-        virtual ~ResourceLoadingListener() {}
+        virtual ~ResourceLoadingListener();
 
         /** This event is called when a resource beings loading. */
         virtual DataStreamPtr resourceLoading(const String &name, const String &group, Resource *resource) = 0;

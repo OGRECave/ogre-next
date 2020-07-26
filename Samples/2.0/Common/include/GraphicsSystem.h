@@ -96,6 +96,7 @@ namespace Demo
         void gameEntityRemoved( GameEntity *toRemove );
     public:
         GraphicsSystem( GameState *gameState,
+                        Ogre::String resourcePath = Ogre::String(""),
                         Ogre::ColourValue backgroundColour = Ogre::ColourValue( 0.2f, 0.4f, 0.6f ) );
         virtual ~GraphicsSystem();
 
@@ -139,6 +140,9 @@ namespace Demo
         Ogre::Camera* getCamera(void) const                     { return mCamera; }
         Ogre::CompositorWorkspace* getCompositorWorkspace(void) const { return mWorkspace; }
         Ogre::v1::OverlaySystem* getOverlaySystem(void) const   { return mOverlaySystem; }
+
+        void setAlwaysAskForConfig( bool alwaysAskForConfig );
+        bool getAlwaysAskForConfig( void ) const                { return mAlwaysAskForConfig; }
 
         const Ogre::String& getPluginsFolder(void) const        { return mPluginsFolder; }
         const Ogre::String& getWriteAccessFolder(void) const    { return mWriteAccessFolder; }

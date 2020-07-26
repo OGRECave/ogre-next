@@ -34,6 +34,9 @@ THE SOFTWARE.
 #include "OgreScriptLoader.h"
 #include "OgreSceneManager.h"
 #include "OgreResourceManager.h"
+#include "OgreString.h"
+
+#include <sstream>
 
 namespace Ogre {
 
@@ -2148,4 +2151,9 @@ namespace Ogre {
         }
 
     }
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    ResourceGroupListener::~ResourceGroupListener() {}
+    ResourceLoadingListener::~ResourceLoadingListener() {}
 }

@@ -129,30 +129,44 @@
 		return rayIndex / @value( num_rays_per_probe )u + p.numProcessedProbes;
 	}
 
-	INLINE ushort2 getIrradianceFieldDepthXY( RayIndex rayIndex, ProbeIndex probeIdx )
+	INLINE ushort4 getIrradianceFieldIrradDepthXY( RayIndex rayIndex, ProbeIndex probeIdx )
 	{
-		ushort2 retVal;
+		ushort2 irradXY;
 		uint irradPixelIdx = rayIndex / @value( num_rays_per_irrad_pixel )u;
-		retVal.x = irradPixelIdx % @value( irrad_resolution )u;
-		retVal.y = (irradPixelIdx % @value( num_irrad_pixels_per_probe )u) / @value( irrad_resolution )u;
+		// Calculate local xy pixel e.g. irradXY is in range [0; 8)
+		irradXY.x = irradPixelIdx % @value( irrad_resolution )u;
+		irradXY.y = (irradPixelIdx % @value( num_irrad_pixels_per_probe )u) / @value( irrad_resolution )u;
 
-		retVal.xy *= @value( colour_to_depth_resolution_ratio );
+		ushort2 depthXY = irradXY; // Store depthXY for later
 
+		// Calculate local -> global xy pixel e.g. irradXY is in range [0; 2560)
+		ushort borderedResolution = @value( irrad_resolution )u + 2u;
+		irradXY.x += (probeIdx * borderedResolution) % @value( irrad_full_width )u;
+		irradXY.y += ((probeIdx * borderedResolution) / @value( irrad_full_width )u) *
+					 borderedResolution;
+
+		// Scale depthXY to proper range e.g. depthXY is in range [0; 16)
+		depthXY.xy *= @value( colour_to_depth_resolution_ratio );
+
+		// depthXY is in proper range, but instead of being 0, 1, 2, 3, 4, 5, ... 15
+		// many of these values are repeated: 0, 0, 0, 0, 4, 4, 4, 4, 8, 8, 8, 8, 12, 12, 12, 12
+		// We need to fix that
 		uint irradPixelRaySubIdx = rayIndex % @value( num_rays_per_irrad_pixel )u;
-		retVal.x += irradPixelRaySubIdx % @value( colour_to_depth_resolution_ratio );
-		retVal.y += irradPixelRaySubIdx / @value( colour_to_depth_resolution_ratio );
+		depthXY.x += irradPixelRaySubIdx % @value( colour_to_depth_resolution_ratio )u;
+		depthXY.y += irradPixelRaySubIdx / @value( colour_to_depth_resolution_ratio )u;
 
+		// Calculate local -> global xy pixel e.g. depthXY is in range [0; 4608)
+		borderedResolution = @value( depth_resolution )u + 2u;
+		depthXY.x += (probeIdx * borderedResolution) % @value( depth_full_width )u;
+		depthXY.y += ((probeIdx * borderedResolution) / @value( depth_full_width )u) *
+					 borderedResolution;
 
-		retVal.x += (probeIdx * @value( depth_resolution )u) % @value( depth_full_width )u;
-		retVal.y += ((probeIdx * @value( depth_resolution )u) / @value( depth_full_width )u) *
-					@value( depth_resolution )u;
+		ushort4 retVal = ushort4 ( irradXY, depthXY );
+
+		// Skip top-left border
+		retVal += 1u;
 
 		return retVal;
-	}
-
-	INLINE ushort2 depthXyToColourXy( ushort2 depthXy )
-	{
-		return depthXy / @value( colour_to_depth_resolution_ratio )u;
 	}
 
 	INLINE float3 getProbeCenterInVctSpace( ProbeIndex probeIdx PARAMS_ARG_DECL )
@@ -176,7 +190,7 @@
 		vPos.x = probeIdx & (p.numProbes.x - 1u);
 		vPos.y = (probeIdx & ((p.numProbes.x * p.numProbes.y) - 1u)) >> findMSB( p.numProbes.x );
 		vPos.z = probeIdx >> findMSB( p.numProbes.x * p.numProbes.y );
-		return vPos + 0.5;
+		return vPos;
 	}
 @end
 
@@ -203,7 +217,7 @@
 
 	__sharedOnlyBarrier;
 
-	ushort2 irradianceFieldDepthXY = getIrradianceFieldDepthXY( rayIdx, probeIdx );
+	ushort4 irradDepthXY = getIrradianceFieldIrradDepthXY( rayIdx, probeIdx );
 
 	if( gl_LocalInvocationIndex % @value( num_rays_per_depth_pixel )u == 0u )
 	{
@@ -220,7 +234,7 @@
 		//We can already write depth
 		diffuse.w *= p.invNumRaysPerPixel;
 		sqDepth *= p.invNumRaysPerPixel;
-		OGRE_imageWrite2D2( irradianceFieldDepth, irradianceFieldDepthXY, float2( diffuse.w, sqDepth ) );
+		OGRE_imageWrite2D2( irradianceFieldDepth, irradDepthXY.zw, float2( diffuse.w, sqDepth ) );
 
 		g_diffuseDepth[gl_LocalInvocationIndex].xyz = diffuse.xyz;
 	}
@@ -235,8 +249,6 @@
 
 		diffuse.xyz *= p.invNumRaysPerIrradiancePixel;
 
-		ushort2 irradianceFieldXY = depthXyToColourXy( irradianceFieldDepthXY );
-
-		OGRE_imageWrite2D4( irradianceField, irradianceFieldXY, diffuse );
+		OGRE_imageWrite2D4( irradianceField, irradDepthXY.xy, diffuse );
 	}
 @end

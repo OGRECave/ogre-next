@@ -8,6 +8,8 @@
 
 #include "OgreCamera.h"
 
+#include <sstream>
+
 using namespace Demo;
 
 namespace Demo

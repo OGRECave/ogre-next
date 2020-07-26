@@ -51,11 +51,12 @@ namespace Ogre
         "specular_fresnel",
         "metallic"
     };
-    const char* c_transparencyModes[HlmsPbsDatablock::Fade+1] =
+    const char* c_transparencyModes[HlmsPbsDatablock::Refractive+1] =
     {
         "None",
         "Transparent",
-        "Fade"
+        "Fade",
+        "Refractive"
     };
 
     HlmsJsonPbs::HlmsJsonPbs( HlmsManager *hlmsManager, TextureGpuManager *textureManager,
@@ -193,6 +194,15 @@ namespace Ogre
             {
                 textureName = itor->value[0].GetString();
                 aliasName = itor->value[1].GetString();
+            }
+
+            if( textureType == PBSM_DIFFUSE )
+            {
+                itor = json.FindMember("grayscale");
+                if( itor != json.MemberEnd() && itor->value.IsBool() )
+                {
+                    datablock->setUseDiffuseMapAsGrayscale( itor->value.GetBool() );
+                }
             }
 
             uint32 textureFlags = TextureFlags::AutomaticBatching;
@@ -673,13 +683,14 @@ namespace Ogre
                 const String *aliasName = mTextureManager->findAliasNameStr( texture->getName() );
                 if( texName && aliasName )
                 {
+                    String finalAliasName = *aliasName;
                     String finalTexName = *texName;
-                    mListener->savingChangeTextureName( finalTexName );
+                    mListener->savingChangeTextureName( finalAliasName, finalTexName );
 
-                    if( finalTexName != *aliasName )
+                    if( finalTexName != finalAliasName )
                     {
                         outString += ",\n\t\t\t\t\"texture\" : [\"";
-                        outString += *aliasName;
+                        outString += finalAliasName;
                         outString += "\", \"";
                         outString += finalTexName;
                         outString += "\"]";
@@ -689,6 +700,11 @@ namespace Ogre
                         outString += ",\n\t\t\t\t\"texture\" : \"";
                         outString += finalTexName;
                         outString += '"';
+                    }
+                    
+                    if(textureType == PBSM_DIFFUSE && datablock->getUseDiffuseMapAsGrayscale())
+                    {
+                        outString += ",\n\t\t\t\t\"grayscale\" : true";
                     }
                 }
             }

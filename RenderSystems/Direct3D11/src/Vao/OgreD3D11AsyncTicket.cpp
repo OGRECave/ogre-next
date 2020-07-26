@@ -43,7 +43,6 @@ namespace Ogre
                                         size_t elementCount,
                                         D3D11Device &device ) :
         AsyncTicket( creator, stagingBuffer, elementStart, elementCount ),
-        mFenceName( 0 ),
         mDevice( device )
     {
         //Base constructor has already called _asyncDownload. We should now place a fence.
@@ -52,17 +51,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     D3D11AsyncTicket::~D3D11AsyncTicket()
     {
-        if( mFenceName )
-        {
-            mFenceName->Release();
-            mFenceName = 0;
-        }
     }
     //-----------------------------------------------------------------------------------
     const void* D3D11AsyncTicket::mapImpl(void)
     {
         if( mFenceName )
-            mFenceName = D3D11VaoManager::waitFor( mFenceName, mDevice.GetImmediateContext() );
+            *mFenceName.GetAddressOf() = D3D11VaoManager::waitFor( mFenceName.Get(), mDevice.GetImmediateContext() );
 
         return mStagingBuffer->_mapForRead( mStagingBufferMapOffset,
                                             mElementCount * mCreator->getBytesPerElement() );
@@ -74,7 +68,7 @@ namespace Ogre
 
         if( mFenceName )
         {
-            HRESULT hr = mDevice.GetImmediateContext()->GetData( mFenceName, NULL, 0, 0 );
+            HRESULT hr = mDevice.GetImmediateContext()->GetData( mFenceName.Get(), NULL, 0, 0 );
 
             if( FAILED( hr ) )
             {

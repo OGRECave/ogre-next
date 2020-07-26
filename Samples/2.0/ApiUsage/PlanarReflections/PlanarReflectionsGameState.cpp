@@ -104,7 +104,7 @@ namespace Demo
         mWorkspaceListener = new PlanarReflectionsWorkspaceListener( mPlanarReflections );
         {
             Ogre::CompositorWorkspace *workspace = mGraphicsSystem->getCompositorWorkspace();
-            workspace->setListener( mWorkspaceListener );
+            workspace->addListener( mWorkspaceListener );
         }
 
         //The perfect mirror doesn't need mipmaps.
@@ -298,7 +298,7 @@ namespace Demo
     void PlanarReflectionsGameState::destroyScene(void)
     {
         Ogre::CompositorWorkspace *workspace = mGraphicsSystem->getCompositorWorkspace();
-        workspace->setListener( (Ogre::CompositorWorkspaceListener*)0 );
+        workspace->removeListener( mWorkspaceListener );
         delete mWorkspaceListener;
         mWorkspaceListener = 0;
         delete mPlanarReflections;

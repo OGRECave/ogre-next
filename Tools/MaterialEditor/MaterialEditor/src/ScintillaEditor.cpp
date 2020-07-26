@@ -29,6 +29,8 @@ THE SOFTWARE
 
 #include "OgreDataStream.h"
 
+#include <fstream>
+
 using Ogre::DataStream;
 using Ogre::DataStreamPtr;
 using Ogre::FileStreamDataStream;

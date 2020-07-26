@@ -45,10 +45,13 @@ in block
 @property( !hlms_render_depth_only )
 	@property( !hlms_prepass )
 		layout(location = FRAG_COLOR, index = 0) out vec4 outColour;
-	@end @property( hlms_prepass )
+	@end
+	@property( hlms_gen_normals_gbuffer )
 		#define outPs_normals outNormals
-		#define outPs_shadowRoughness outShadowRoughness
 		layout(location = 0) out vec4 outNormals;
+	@end
+	@property( hlms_prepass )
+		#define outPs_shadowRoughness outShadowRoughness
 		layout(location = 1) out vec2 outShadowRoughness;
 	@end
 @end

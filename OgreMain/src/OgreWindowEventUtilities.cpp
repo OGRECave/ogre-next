@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "OgreWindowEventUtilities.h"
 #include "OgreLogManager.h"
 #include "OgreWindow.h"
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
 #include <xcb/xcb.h>
 #include <X11/Xlib.h>
 static void GLXProc( Ogre::Window *win, const XEvent &event );
@@ -57,7 +57,7 @@ void WindowEventUtilities::messagePump()
         TranslateMessage( &msg );
         DispatchMessage( &msg );
     }
-#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
     //GLX Message Pump
 
     xcb_connection_t *xcbConnection = 0;
@@ -81,7 +81,7 @@ void WindowEventUtilities::messagePump()
             if( !xDisplay )
                 ( *win )->getCustomAttribute( "XDISPLAY", &xDisplay );
 
-            ( *win )->getCustomAttribute( "WINDOW", &xid );
+        (*win)->getCustomAttribute("WINDOW", &xid);
 
             while( XCheckWindowEvent(
                        xDisplay, xid, StructureNotifyMask | VisibilityChangeMask | FocusChangeMask, &event ) )
@@ -296,7 +296,7 @@ LRESULT CALLBACK WindowEventUtilities::_WndProc(HWND hWnd, UINT uMsg, WPARAM wPa
     return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
 }
-#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
 //--------------------------------------------------------------------------------//
 void GLXProc( Ogre::Window *win, const XEvent &event )
 {

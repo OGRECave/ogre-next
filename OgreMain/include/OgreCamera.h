@@ -107,7 +107,7 @@ namespace Ogre {
         {
         public:
             Listener() {}
-            virtual ~Listener() {}
+            virtual ~Listener();
 
             /// Called prior to the scene being rendered with this camera
             virtual void cameraPreRenderScene(Camera* cam)
@@ -146,10 +146,10 @@ namespace Ogre {
         Vector3 mYawFixedAxis;
 
         /// Stored number of visible faces in the last render
-        unsigned int mVisFacesLastRender;
+        size_t mVisFacesLastRender;
 
         /// Stored number of visible batches in the last render
-        unsigned int mVisBatchesLastRender;
+        size_t mVisBatchesLastRender;
 
         VrData *mVrData;
 
@@ -174,7 +174,7 @@ namespace Ogre {
         /// Is viewing window used.
         bool mWindowSet;
         /// Windowed viewport clip planes 
-        mutable vector<Plane>::type mWindowClipPlanes;
+        mutable PlaneList mWindowClipPlanes;
         /// Was viewing window changed.
         mutable bool mRecalcWindow;
         /// The last viewport to be added using this camera
@@ -190,10 +190,14 @@ namespace Ogre {
         /// Camera to use for LOD calculation
         const Camera* mLodCamera;
         
+        bool mNeedsDepthClamp;
+
         /// Whether or not the minimum display size of objects should take effect for this camera
         bool mUseMinPixelSize;
         /// @see Camera::getPixelDisplayRatio
         Real mPixelDisplayRatio;
+
+        float mConstantBiasScale;
 
         /// Each frame it is set to all false. After rendering each RQ, it is set to true
         vector<bool>::type  mRenderedRqs;
@@ -390,19 +394,19 @@ namespace Ogre {
 
         /** Internal method to notify camera of the visible faces in the last render.
         */
-        void _notifyRenderedFaces(unsigned int numfaces);
+        void _notifyRenderedFaces( size_t numfaces );
 
         /** Internal method to notify camera of the visible batches in the last render.
-        */
-        void _notifyRenderedBatches(unsigned int numbatches);
+         */
+        void _notifyRenderedBatches( size_t numbatches );
 
         /** Internal method to retrieve the number of visible faces in the last render.
         */
-        unsigned int _getNumRenderedFaces(void) const;
+        size_t _getNumRenderedFaces( void ) const;
 
         /** Internal method to retrieve the number of visible batches in the last render.
-        */
-        unsigned int _getNumRenderedBatches(void) const;
+         */
+        size_t _getNumRenderedBatches( void ) const;
 
         /** Gets the derived orientation of the camera, including any
             rotation inherited from a node attachment and reflection matrix. */
@@ -581,7 +585,7 @@ namespace Ogre {
         /// Returns if a viewport window is being used
         virtual bool isWindowSet(void) const { return mWindowSet; }
         /// Gets the window clip planes, only applicable if isWindowSet == true
-        const vector<Plane>::type& getWindowPlanes(void) const;
+        const PlaneList &getWindowPlanes( void ) const;
 
         /** Get the auto tracking target for this camera, if any. */
         SceneNode* getAutoTrackTarget(void) const { return mAutoTrackTarget; }
@@ -709,6 +713,9 @@ namespace Ogre {
         */
         bool getUseMinPixelSize() const { return mUseMinPixelSize; }
 
+        void _setNeedsDepthClamp( bool bNeedsDepthClamp );
+        bool getNeedsDepthClamp( void ) const { return mNeedsDepthClamp; }
+
         /** Returns an estimated ratio between a pixel and the display area it represents.
             For orthographic cameras this function returns the amount of meters covered by
             a single pixel along the vertical axis. For perspective cameras the value
@@ -720,6 +727,9 @@ namespace Ogre {
             This parameter is used in min display size calculations.
         */
         Real getPixelDisplayRatio() const { return mPixelDisplayRatio; }
+
+        void _setConstantBiasScale( const float bias ) { mConstantBiasScale = bias; }
+        float _getConstantBiasScale( void ) const { return mConstantBiasScale; }
 
         /** Called at the beginning of each frame to know which RenderQueue IDs have been rendered
         @param numRqs

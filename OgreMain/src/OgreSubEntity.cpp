@@ -53,7 +53,9 @@ namespace v1 {
         mIndexStart = 0;
         mIndexEnd = 0;
 
-        mHasSkeletonAnimation = !subMeshBasis->parent->getSkeleton().isNull();
+        mHasSkeletonAnimation = !subMeshBasis->parent->getSkeleton().isNull() &&
+                                subMeshBasis->parent->getSharedVertexDataAnimationType() == VAT_NONE &&
+                                subMeshBasis->getVertexAnimationType() == VAT_NONE;
     }
     //-----------------------------------------------------------------------
     SubEntity::~SubEntity()
@@ -361,8 +363,7 @@ namespace v1 {
     }
     //-----------------------------------------------------------------------
     void SubEntity::_updateCustomGpuParameter(
-        const GpuProgramParameters::AutoConstantEntry& constantEntry,
-        GpuProgramParameters* params) const
+        const GpuProgramParameters_AutoConstantEntry &constantEntry, GpuProgramParameters *params ) const
     {
         if (constantEntry.paramType == GpuProgramParameters::ACT_ANIMATION_PARAMETRIC)
         {

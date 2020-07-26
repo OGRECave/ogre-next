@@ -21,7 +21,7 @@ differences have diverged long enough.
 
 | Build | Status (github) |
 |-------|-----------------|
-| MSVC | [![Build status](https://ci.appveyor.com/api/projects/status/github/OGRECave/ogre-next?branch=v2-2&svg=true)](https://ci.appveyor.com/project/MatiasNGoldberg/ogre-next/branch/v2-2)|
+| MSVC | [![Build status](https://ci.appveyor.com/api/projects/status/github/OGRECave/ogre-next?branch=master&svg=true)](https://ci.appveyor.com/project/MatiasNGoldberg/ogre-next/branch/master)|
 
 ## Supported Backends
 
@@ -163,6 +163,20 @@ ninja OgreDoc
 # Samples
 
 If you want to test or evaluate Ogre, you can try the [prebuilt samples for Windows](https://bintray.com/darksylinc/ogre-next/download_file?file_path=ogre-samples-windows-x64-vs2015.7z).
+
+# Unit Tests
+
+To run the unit tests, go to Scripts/UnitTesting and to generate the comparison files type:
+
+```
+python3 RunUnitTests.py gl ../../build/Debug/bin/ ./JSON ../../build/UnitTestsOutput/
+```
+
+to check the diff against already generated data:
+
+```
+python3 RunUnitTests.py gl ../../build/Debug/bin/ ./JSON ../../build/UnitTestsOutput/ ../../build/UnitTestsOutput_old/
+```
 
 # License
 

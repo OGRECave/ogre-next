@@ -9,8 +9,8 @@ abstract target cubemap_target
 		}
 		store
 		{
-			//We only care about the contents of the colour target
-			depth			dont_care
+			//We DO care about the contents of depth for the depth compressor
+			depth			store
 			stencil			dont_care
 		}
 
@@ -66,6 +66,7 @@ abstract target pcc_depth_compress
 compositor_node LocalCubemapProbeRendererNode
 {
 	in 0 cubemap
+	in 1 ibl_output
 
 	texture depthTexture	target_width target_height PFG_D32_FLOAT
 
@@ -93,9 +94,10 @@ compositor_node LocalCubemapProbeRendererNode
 	target cubemap_customRtv	-Z : cubemap_target { }
 	target cubemap_noDepth		-Z : pcc_depth_compress
 	{
-		pass generate_mipmaps
+		pass ibl_specular
 		{
-			execution_mask		0x01
+			input cubemap
+			output ibl_output
 		}
 	}
 }
@@ -275,4 +277,5 @@ workspace LocalCubemapsWorkspace
 workspace LocalCubemapsProbeWorkspace
 {
 	connect_external 0 LocalCubemapProbeRendererNode 0
+	connect_external 1 LocalCubemapProbeRendererNode 1
 }

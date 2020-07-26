@@ -68,6 +68,12 @@ namespace Ogre
         return desc.components;
     }
     //-----------------------------------------------------------------------------------
+    PixelFormatGpuUtils::PixelFormatLayout PixelFormatGpuUtils::getPixelLayout( PixelFormatGpu format )
+    {
+        const PixelFormatDesc &desc = getDescriptionFor( format );
+        return (PixelFormatLayout)desc.layout;
+    }
+    //-----------------------------------------------------------------------------------
     size_t PixelFormatGpuUtils::getSizeBytes( uint32 width, uint32 height, uint32 depth,
                                               uint32 slices, PixelFormatGpu format,
                                               uint32 rowAlignment )
@@ -523,7 +529,7 @@ namespace Ogre
                 if( !(flags & PFF_SIGNED) )
                 {
                     val = Math::saturate( val );
-                    if( flags & PFF_SRGB )
+                    if( flags & PFF_SRGB && i != 3u )
                         val = toSRGB( val );
                     val *= (float)std::numeric_limits<T>::max();
                     ((T*)dstPtr)[i] = static_cast<T>( roundf( val ) );
@@ -556,7 +562,7 @@ namespace Ogre
                 float rawValue = val / (float)std::numeric_limits<T>::max();
                 if( !(flags & PFF_SIGNED) )
                 {
-                    if( flags & PFF_SRGB )
+                    if( flags & PFF_SRGB && i != 3u )
                         rawValue = fromSRGB( rawValue );
                     rgbaPtr[i] = rawValue;
                 }
@@ -816,6 +822,30 @@ namespace Ogre
             ((uint16*)dstPtr)[0] = (ia << 12u) | (ir << 8u) | (ig << 4u) | (ib);
             break;
         }
+
+        case PFG_RGB8_UNORM:
+            convertFromFloat<uint8>( rgbaPtr, dstPtr, 3u, flags );
+            break;
+        case PFG_RGB8_UNORM_SRGB:
+            convertFromFloat<uint8>( rgbaPtr, dstPtr, 3u, flags );
+            break;
+        case PFG_BGR8_UNORM:
+            ((uint8*)dstPtr)[0] = static_cast<uint8>( Math::saturate( rgbaPtr[2] ) * 255.0f + 0.5f );
+            ((uint8*)dstPtr)[1] = static_cast<uint8>( Math::saturate( rgbaPtr[1] ) * 255.0f + 0.5f );
+            ((uint8*)dstPtr)[2] = static_cast<uint8>( Math::saturate( rgbaPtr[0] ) * 255.0f + 0.5f );
+            break;
+        case PFG_BGR8_UNORM_SRGB:
+            ((uint8*)dstPtr)[0] =
+                    static_cast<uint8>( Math::saturate( toSRGB( rgbaPtr[2] ) ) * 255.0f + 0.5f );
+            ((uint8*)dstPtr)[1] =
+                    static_cast<uint8>( Math::saturate( toSRGB( rgbaPtr[1] ) ) * 255.0f + 0.5f );
+            ((uint8*)dstPtr)[2] =
+                    static_cast<uint8>( Math::saturate( toSRGB( rgbaPtr[0] ) ) * 255.0f + 0.5f );
+            break;
+
+        case PFG_RGB16_UNORM:
+            convertFromFloat<uint16>( rgbaPtr, dstPtr, 3u, flags );
+            break;
 
         case PFG_AYUV: case PFG_Y410: case PFG_Y416:
         case PFG_NV12: case PFG_P010: case PFG_P016:
@@ -1103,6 +1133,25 @@ namespace Ogre
             break;
         }
 
+        case PFG_RGB8_UNORM:
+            convertToFloat<uint8>( rgbaPtr, srcPtr, 3u, flags );
+            break;
+        case PFG_RGB8_UNORM_SRGB:
+            convertToFloat<uint8>( rgbaPtr, srcPtr, 3u, flags );
+            break;
+        case PFG_BGR8_UNORM:
+            convertToFloat<uint8>( rgbaPtr, srcPtr, 3u, flags );
+            std::swap( rgbaPtr[0], rgbaPtr[2] );
+            break;
+        case PFG_BGR8_UNORM_SRGB:
+            convertToFloat<uint8>( rgbaPtr, srcPtr, 3u, flags );
+            std::swap( rgbaPtr[0], rgbaPtr[2] );
+            break;
+
+        case PFG_RGB16_UNORM:
+            convertToFloat<uint16>( rgbaPtr, srcPtr, 3u, flags );
+            break;
+
         case PFG_AYUV: case PFG_Y410: case PFG_Y416:
         case PFG_NV12: case PFG_P010: case PFG_P016:
         case PFG_420_OPAQUE:
@@ -1229,10 +1278,134 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void PixelFormatGpuUtils::bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
-                                                   TextureBox &dst, PixelFormatGpu dstFormat )
+    namespace
     {
-        if( srcFormat == dstFormat )
+        typedef void ( *row_conversion_func_t )( uint8 *src, uint8 *dst, size_t width );
+
+        void convCopy16Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 16 * width ); }
+        void convCopy12Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 12 * width ); }
+        void convCopy8Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 8 * width ); }
+        void convCopy6Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 6 * width ); }
+        void convCopy4Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 4 * width ); }
+        void convCopy3Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 3 * width ); }
+        void convCopy2Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 2 * width ); }
+        void convCopy1Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 1 * width ); }
+
+        // clang-format off
+        void convRGBA32toRGB32(uint8* _src, uint8* _dst, size_t width) {
+            uint32* src = (uint32*)_src; uint32* dst = (uint32*)_dst;
+            while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; src += 4; dst += 3; }
+        }
+        void convRGB32toRG32(uint8* _src, uint8* _dst, size_t width) {
+            uint32* src = (uint32*)_src; uint32* dst = (uint32*)_dst;
+            while (width--) { dst[0] = src[0]; dst[1] = src[1]; src += 3; dst += 2; }
+        }
+        void convRG32toRGB32(uint8* _src, uint8* _dst, size_t width) {
+            uint32* src = (uint32*)_src; uint32* dst = (uint32*)_dst;
+            while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = 0u; src += 2; dst += 3; }
+        }
+        void convRG32toR32(uint8* _src, uint8* _dst, size_t width) {
+            uint32* src = (uint32*)_src; uint32* dst = (uint32*)_dst;
+            while (width--) { dst[0] = src[0]; src += 2; dst += 1; }
+        }
+
+        void convRGBA16toRGB16(uint8* _src, uint8* _dst, size_t width) {
+            uint16* src = (uint16*)_src; uint16* dst = (uint16*)_dst;
+            while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; src += 4; dst += 3; }
+        }
+        void convRGB16toRGBA16(uint8* _src, uint8* _dst, size_t width) {
+            uint16* src = (uint16*)_src; uint16* dst = (uint16*)_dst;
+            while (width--)
+            { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = 0xFFFF; src += 3; dst += 4; }
+        }
+        void convRGB16toRG16(uint8* _src, uint8* _dst, size_t width) {
+            uint16* src = (uint16*)_src; uint16* dst = (uint16*)_dst;
+            while (width--) { dst[0] = src[0]; dst[1] = src[1]; src += 3; dst += 2; }
+        }
+        void convRG16toRGB16(uint8* _src, uint8* _dst, size_t width) {
+            uint16* src = (uint16*)_src; uint16* dst = (uint16*)_dst;
+            while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[0] = 0u; src += 2; dst += 3; }
+        }
+        void convRG16toR16(uint8* _src, uint8* _dst, size_t width) {
+            uint16* src = (uint16*)_src; uint16* dst = (uint16*)_dst;
+            while (width--) { dst[0] = src[0]; src += 2; dst += 1; }
+        }
+
+        void convRGBAtoBGRA(uint8* src, uint8* dst, size_t width) {
+            while (width--)
+            { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; dst[3] = src[3]; src += 4; dst += 4; }
+        }
+        void convRGBAtoRGB(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; src += 4; dst += 3; }
+        }
+        void convRGBAtoBGR(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; src += 4; dst += 3; }
+        }
+        void convRGBAtoRG(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0]; dst[1] = src[1]; src += 4; dst += 2; }
+        }
+        void convRGBAtoR(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0]; src += 4; dst += 1; }
+        }
+
+        void convBGRAtoRG(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[2]; dst[1] = src[1]; src += 4; dst += 2; }
+        }
+        void convBGRAtoR(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[2]; src += 4; dst += 1; }
+        }
+
+        void convBGRXtoRGBA(uint8* src, uint8* dst, size_t width) {
+            while (width--)
+            { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; dst[3] = 0xFF; src += 4; dst += 4; }
+        }
+        void convBGRXtoBGRA(uint8* src, uint8* dst, size_t width) {
+            while (width--)
+            { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = 0xFF; src += 4; dst += 4; }
+        }
+
+        void convRGBtoRGBA(uint8* src, uint8* dst, size_t width) {
+            while (width--)
+            { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = 0xFF; src += 3; dst += 4; }
+        }
+        void convRGBtoBGRA(uint8* src, uint8* dst, size_t width) {
+            while (width--)
+            { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; dst[3] = 0xFF; src += 3; dst += 4; }
+        }
+        void convRGBtoBGR(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; src += 3; dst += 3; }
+        }
+        void convRGBtoRG(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0]; dst[1] = src[1]; src += 3; dst += 2; }
+        }
+        void convRGBtoR(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0]; src += 3; dst += 1; }
+        }
+
+        void convBGRtoRG(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[2]; dst[1] = src[1]; src += 3; dst += 2; }
+        }
+        void convBGRtoR(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[2]; src += 3; dst += 1; }
+        }
+
+        void convRGtoRGB(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = 0u; src += 2; dst += 3; }
+        }
+        void convRGtoBGR(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = 0u; dst[1] = src[1]; dst[2] = src[0]; src += 2; dst += 3; }
+        }
+        void convRGtoR(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0]; src += 2; dst += 1; }
+        }
+        // clang-format on
+    }  // namespace
+    //-----------------------------------------------------------------------------------
+    void PixelFormatGpuUtils::bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
+                                                   TextureBox &dst, PixelFormatGpu dstFormat,
+                                                   bool verticalFlip )
+    {
+        if( srcFormat == dstFormat && !verticalFlip )
         {
             dst.copyFrom( src );
             return;
@@ -1246,13 +1419,8 @@ namespace Ogre
         }
 
         assert( src.equalSize( dst ) );
-
-        // Is there a specialized, inlined, conversion?
-        /*if(doOptimizedConversion(src, dst))
-        {
-            // If so, good
-            return;
-        }*/
+        assert( getBytesPerPixel(srcFormat) == src.bytesPerPixel );
+        assert( getBytesPerPixel(dstFormat) == dst.bytesPerPixel );
 
         const size_t srcBytesPerPixel = src.bytesPerPixel;
         const size_t dstBytesPerPixel = dst.bytesPerPixel;
@@ -1264,18 +1432,137 @@ namespace Ogre
         const size_t height = src.height;
         const size_t depthOrSlices = src.getDepthOrSlices();
 
+        // Is there a optimized row conversion?
+        row_conversion_func_t rowConversionFunc = 0;
+        if( srcFormat == dstFormat )
+        {
+            switch( srcBytesPerPixel )
+            {
+                // clang-format off
+            case 1: rowConversionFunc = convCopy1Bpx; break;
+            case 2: rowConversionFunc = convCopy2Bpx; break;
+            case 3: rowConversionFunc = convCopy3Bpx; break;
+            case 4: rowConversionFunc = convCopy4Bpx; break;
+            case 6: rowConversionFunc = convCopy6Bpx; break;
+            case 8: rowConversionFunc = convCopy8Bpx; break;
+            case 12: rowConversionFunc = convCopy12Bpx; break;
+            case 16: rowConversionFunc = convCopy16Bpx; break;
+                // clang-format on
+            }
+        }
+        else if( getFlags( srcFormat ) == getFlags( dstFormat ) )  // semantic match, copy as typeless
+        {
+            assert(PFL_COUNT <= 16); // adjust PFL_PAIR definition if assertion failed
+#define PFL_PAIR( a, b ) ( ( a << 4 ) | b )
+            PixelFormatLayout srcLayout = getPixelLayout( srcFormat );
+            PixelFormatLayout dstLayout = getPixelLayout( dstFormat );
+            switch( PFL_PAIR( srcLayout, dstLayout ) )
+            {
+                // clang-format off
+            case PFL_PAIR( PFL_RGBA32, PFL_RGB32 ): rowConversionFunc = convRGBA32toRGB32; break;
+            case PFL_PAIR( PFL_RGB32, PFL_RG32 ): rowConversionFunc = convRGB32toRG32; break;
+            case PFL_PAIR( PFL_RG32, PFL_RGB32 ): rowConversionFunc = convRG32toRGB32; break;
+            case PFL_PAIR( PFL_RG32, PFL_R32 ): rowConversionFunc = convRG32toR32; break;
+
+            case PFL_PAIR( PFL_RGBA16, PFL_RGB16 ): rowConversionFunc = convRGBA16toRGB16; break;
+            case PFL_PAIR( PFL_RGB16, PFL_RGBA16 ): rowConversionFunc = convRGB16toRGBA16; break;
+            case PFL_PAIR( PFL_RGB16, PFL_RG16 ): rowConversionFunc = convRGB16toRG16; break;
+            case PFL_PAIR( PFL_RG16, PFL_RGB16 ): rowConversionFunc = convRG16toRGB16; break;
+            case PFL_PAIR( PFL_RG16, PFL_R16 ): rowConversionFunc = convRG16toR16; break;
+
+            case PFL_PAIR( PFL_RGBA8, PFL_BGRA8 ): rowConversionFunc = convRGBAtoBGRA; break;
+            case PFL_PAIR( PFL_RGBA8, PFL_BGRX8 ): rowConversionFunc = convRGBAtoBGRA; break;
+            case PFL_PAIR( PFL_RGBA8, PFL_RGB8 ): rowConversionFunc = convRGBAtoRGB; break;
+            case PFL_PAIR( PFL_RGBA8, PFL_BGR8 ): rowConversionFunc = convRGBAtoBGR; break;
+            case PFL_PAIR( PFL_RGBA8, PFL_RG8 ): rowConversionFunc = convRGBAtoRG; break;
+            case PFL_PAIR( PFL_RGBA8, PFL_R8 ): rowConversionFunc = convRGBAtoR; break;
+
+            case PFL_PAIR( PFL_BGRA8, PFL_RGBA8 ): rowConversionFunc = convRGBAtoBGRA; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_BGRX8 ): rowConversionFunc = convCopy4Bpx; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_RGB8 ): rowConversionFunc = convRGBAtoBGR; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_BGR8 ): rowConversionFunc = convRGBAtoRGB; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_RG8 ): rowConversionFunc = convBGRAtoRG; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_R8 ): rowConversionFunc = convBGRAtoR; break;
+
+            case PFL_PAIR( PFL_BGRX8, PFL_RGBA8 ): rowConversionFunc = convBGRXtoRGBA; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_BGRA8 ): rowConversionFunc = convBGRXtoBGRA; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_RGB8 ): rowConversionFunc = convRGBAtoBGR; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_BGR8 ): rowConversionFunc = convRGBAtoRGB; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_RG8 ): rowConversionFunc = convBGRAtoRG; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_R8 ): rowConversionFunc = convBGRAtoR; break;
+
+            case PFL_PAIR( PFL_RGB8, PFL_RGBA8 ): rowConversionFunc = convRGBtoRGBA; break;
+            case PFL_PAIR( PFL_RGB8, PFL_BGRA8 ): rowConversionFunc = convRGBtoBGRA; break;
+            case PFL_PAIR( PFL_RGB8, PFL_BGRX8 ): rowConversionFunc = convRGBtoBGRA; break;
+            case PFL_PAIR( PFL_RGB8, PFL_BGR8 ): rowConversionFunc = convRGBtoBGR; break;
+            case PFL_PAIR( PFL_RGB8, PFL_RG8 ): rowConversionFunc = convRGBtoRG; break;
+            case PFL_PAIR( PFL_RGB8, PFL_R8 ): rowConversionFunc = convRGBtoR; break;
+
+            case PFL_PAIR( PFL_BGR8, PFL_RGBA8 ): rowConversionFunc = convRGBtoBGRA; break;
+            case PFL_PAIR( PFL_BGR8, PFL_BGRA8 ): rowConversionFunc = convRGBtoRGBA; break;
+            case PFL_PAIR( PFL_BGR8, PFL_BGRX8 ): rowConversionFunc = convRGBtoRGBA; break;
+            case PFL_PAIR( PFL_BGR8, PFL_RGB8 ): rowConversionFunc = convRGBAtoBGR; break;
+            case PFL_PAIR( PFL_BGR8, PFL_RG8 ): rowConversionFunc = convBGRtoRG; break;
+            case PFL_PAIR( PFL_BGR8, PFL_R8 ): rowConversionFunc = convBGRtoR; break;
+
+            case PFL_PAIR( PFL_RG8, PFL_RGB8 ): rowConversionFunc = convRGtoRGB; break;
+            case PFL_PAIR( PFL_RG8, PFL_BGR8 ): rowConversionFunc = convRGtoBGR; break;
+            case PFL_PAIR( PFL_RG8, PFL_R8 ): rowConversionFunc = convRGtoR; break;
+                // clang-format on
+            }
+#undef PFL_PAIR
+        }
+
+        if (rowConversionFunc)
+        {
+            for( size_t z=0; z<depthOrSlices; ++z )
+            {
+                for( size_t y=0; y<height; ++y )
+                {
+                    size_t dest_y = verticalFlip ? height - 1 - y : y;
+                    uint8* srcPtr = srcData + src.bytesPerImage * z + src.bytesPerRow * y;
+                    uint8* dstPtr = dstData + dst.bytesPerImage * z + dst.bytesPerRow * dest_y;
+                    rowConversionFunc( srcPtr, dstPtr, width );
+                }
+            }
+            return;
+        }
+
         // The brute force fallback
+        float rangeM = 1.0f;
+        float rangeA = 0.0f;
+
+        const bool bSrcSigned = isSigned( srcFormat );
+        if( bSrcSigned != isSigned( dstFormat ) && isNormalized( srcFormat ) )
+        {
+            if( !bSrcSigned )
+            {
+                // unormToSnorm
+                rangeM = 2.0f;
+                rangeA = -1.0f;
+            }
+            else
+            {
+                // snormToUnorm
+                rangeM = 0.5f;
+                rangeA = 0.5f;
+            }
+        }
+
         float rgba[4];
         for( size_t z=0; z<depthOrSlices; ++z )
         {
             for( size_t y=0; y<height; ++y )
             {
+                size_t dest_y = verticalFlip ? height - 1 - y : y;
                 uint8 *srcPtr = srcData + src.bytesPerImage * z + src.bytesPerRow * y;
-                uint8 *dstPtr = dstData + dst.bytesPerImage * z + dst.bytesPerRow * y;
+                uint8 *dstPtr = dstData + dst.bytesPerImage * z + dst.bytesPerRow * dest_y;
 
                 for( size_t x=0; x<width; ++x )
                 {
                     unpackColour( rgba, srcFormat, srcPtr );
+                    for( int i = 0; i < 4; ++i )
+                        rgba[i] = rgba[i] * rangeM + rangeA;
                     packColour( rgba, dstFormat, dstPtr );
                     srcPtr += srcBytesPerPixel;
                     dstPtr += dstBytesPerPixel;
@@ -1361,7 +1648,14 @@ namespace Ogre
         if( format == PFG_UNKNOWN )
             return false;
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return ( desc.flags & ( PFF_COMPRESSED | PFF_DEPTH | PFF_STENCIL ) ) != 0;
+        return ( desc.flags & ( PFF_COMPRESSED | PFF_DEPTH | PFF_STENCIL ) ) == 0;
+    }
+    //-----------------------------------------------------------------------------------
+    bool PixelFormatGpuUtils::hasAlpha( PixelFormatGpu format )
+    {
+        return ( getNumberOfComponents( format ) == 4u && format != PFG_R8G8_B8G8_UNORM &&
+                 format != PFG_G8R8_G8B8_UNORM ) ||
+               format == PFG_A8_UNORM || format == PFG_A8P8 || format == PFG_IA44 || format == PFG_AI44;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::hasSRGBEquivalent( PixelFormatGpu format )
@@ -1380,6 +1674,8 @@ namespace Ogre
         case PFG_BGRA8_UNORM:       return PFG_BGRA8_UNORM_SRGB;
         case PFG_BGRX8_UNORM:       return PFG_BGRX8_UNORM_SRGB;
         case PFG_BC7_UNORM:         return PFG_BC7_UNORM_SRGB;
+        case PFG_RGB8_UNORM:        return PFG_RGB8_UNORM_SRGB;
+        case PFG_BGR8_UNORM:        return PFG_BGR8_UNORM_SRGB;
         case PFG_ETC2_RGB8_UNORM:   return PFG_ETC2_RGB8_UNORM_SRGB;
         case PFG_ETC2_RGBA8_UNORM:  return PFG_ETC2_RGBA8_UNORM_SRGB;
         case PFG_ETC2_RGB8A1_UNORM: return PFG_ETC2_RGB8A1_UNORM_SRGB;
@@ -1415,6 +1711,8 @@ namespace Ogre
         case PFG_BGRA8_UNORM_SRGB:          return PFG_BGRA8_UNORM;
         case PFG_BGRX8_UNORM_SRGB:          return PFG_BGRX8_UNORM;
         case PFG_BC7_UNORM_SRGB:            return PFG_BC7_UNORM;
+        case PFG_RGB8_UNORM_SRGB:           return PFG_RGB8_UNORM;
+        case PFG_BGR8_UNORM_SRGB:           return PFG_BGR8_UNORM;
         case PFG_ETC2_RGB8_UNORM_SRGB:      return PFG_ETC2_RGB8_UNORM;
         case PFG_ETC2_RGBA8_UNORM_SRGB:     return PFG_ETC2_RGBA8_UNORM;
         case PFG_ETC2_RGB8A1_UNORM_SRGB:    return PFG_ETC2_RGB8A1_UNORM;
@@ -1561,185 +1859,192 @@ namespace Ogre
 
     PixelFormatGpuUtils::PixelFormatDesc PixelFormatGpuUtils::msPixelFormatDesc[PFG_COUNT + 1u] =
     {
-        {"PFG_UNKNOWN", 1u, 0, 0 },
-        {"PFG_NULL", 1u, 0, 0 },
-        {"PFG_RGBA32_FLOAT",		4u, 4u * sizeof(uint32),    PFF_FLOAT },
-        {"PFG_RGBA32_UINT",			4u, 4u * sizeof(uint32),	PFF_INTEGER },
-        {"PFG_RGBA32_INT",			4u, 4u * sizeof(uint32),	PFF_INTEGER|PFF_SIGNED },
+        {"PFG_UNKNOWN", 1u, 0, 0, 0 },
+        {"PFG_NULL", 1u, 0, 0, 0 },
+        {"PFG_RGBA32_FLOAT",		4u, 4u * sizeof(uint32),	PFL_RGBA32,	PFF_FLOAT },
+        {"PFG_RGBA32_UINT",			4u, 4u * sizeof(uint32),	PFL_RGBA32,	PFF_INTEGER },
+        {"PFG_RGBA32_INT",			4u, 4u * sizeof(uint32),	PFL_RGBA32,	PFF_INTEGER|PFF_SIGNED },
 
-        {"PFG_RGB32_FLOAT",			3u, 3u * sizeof(uint32),	PFF_FLOAT },
-        {"PFG_RGB32_UINT",			3u, 3u * sizeof(uint32),	PFF_INTEGER },
-        {"PFG_RGB32_INT",			3u, 3u * sizeof(uint32),	PFF_INTEGER|PFF_SIGNED },
+        {"PFG_RGB32_FLOAT",			3u, 3u * sizeof(uint32),	PFL_RGB32,	PFF_FLOAT },
+        {"PFG_RGB32_UINT",			3u, 3u * sizeof(uint32),	PFL_RGB32,	PFF_INTEGER },
+        {"PFG_RGB32_INT",			3u, 3u * sizeof(uint32),	PFL_RGB32,	PFF_INTEGER|PFF_SIGNED },
 
-        {"PFG_RGBA16_FLOAT",		4u, 4u * sizeof(uint16),	PFF_HALF },
-        {"PFG_RGBA16_UNORM",		4u, 4u * sizeof(uint16),	PFF_NORMALIZED },
-        {"PFG_RGBA16_UINT",			4u, 4u * sizeof(uint16),	PFF_INTEGER },
-        {"PFG_RGBA16_SNORM",		4u, 4u * sizeof(uint16),	PFF_NORMALIZED|PFF_SIGNED },
-        {"PFG_RGBA16_SINT",			4u, 4u * sizeof(uint16),	PFF_INTEGER|PFF_SIGNED },
+        {"PFG_RGBA16_FLOAT",		4u, 4u * sizeof(uint16),	PFL_RGBA16, PFF_HALF },
+        {"PFG_RGBA16_UNORM",		4u, 4u * sizeof(uint16),	PFL_RGBA16, PFF_NORMALIZED },
+        {"PFG_RGBA16_UINT",			4u, 4u * sizeof(uint16),	PFL_RGBA16, PFF_INTEGER },
+        {"PFG_RGBA16_SNORM",		4u, 4u * sizeof(uint16),	PFL_RGBA16, PFF_NORMALIZED|PFF_SIGNED },
+        {"PFG_RGBA16_SINT",			4u, 4u * sizeof(uint16),	PFL_RGBA16, PFF_INTEGER|PFF_SIGNED },
 
-        {"PFG_RG32_FLOAT",			2u, 2u * sizeof(uint32),	PFF_FLOAT },
-        {"PFG_RG32_UINT",			2u, 2u * sizeof(uint32),	PFF_INTEGER },
-        {"PFG_RG32_SINT",			2u, 2u * sizeof(uint32),	PFF_INTEGER|PFF_SIGNED },
+        {"PFG_RG32_FLOAT",			2u, 2u * sizeof(uint32),	PFL_RG32,	PFF_FLOAT },
+        {"PFG_RG32_UINT",			2u, 2u * sizeof(uint32),	PFL_RG32,	PFF_INTEGER },
+        {"PFG_RG32_SINT",			2u, 2u * sizeof(uint32),	PFL_RG32,	PFF_INTEGER|PFF_SIGNED },
 
-        {"PFG_D32_FLOAT_S8X24_UINT",2u, 2u * sizeof(uint32),	PFF_FLOAT|PFF_DEPTH|PFF_STENCIL },
+        {"PFG_D32_FLOAT_S8X24_UINT",2u, 2u * sizeof(uint32),	PFL_OTHER,	PFF_FLOAT|PFF_DEPTH|PFF_STENCIL },
 
-        {"PFG_R10G10B10A2_UNORM",	4u, 1u * sizeof(uint32),	PFF_NORMALIZED },
-        {"PFG_R10G10B10A2_UINT",	4u, 1u * sizeof(uint32),	PFF_INTEGER },
-        {"PFG_R11G11B10_FLOAT",		3u, 1u * sizeof(uint32),	PFF_FLOAT_RARE },
+        {"PFG_R10G10B10A2_UNORM",	4u, 1u * sizeof(uint32),	PFL_OTHER,	PFF_NORMALIZED },
+        {"PFG_R10G10B10A2_UINT",	4u, 1u * sizeof(uint32),	PFL_OTHER,	PFF_INTEGER },
+        {"PFG_R11G11B10_FLOAT",		3u, 1u * sizeof(uint32),	PFL_OTHER,	PFF_FLOAT_RARE },
 
-        {"PFG_RGBA8_UNORM",			4u, 4u * sizeof(uint8),		PFF_NORMALIZED },
-        {"PFG_RGBA8_UNORM_SRGB",	4u, 4u * sizeof(uint8),		PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_RGBA8_UINT",			4u, 4u * sizeof(uint8),		PFF_INTEGER },
-        {"PFG_RGBA8_SNORM",			4u, 4u * sizeof(uint8),		PFF_NORMALIZED|PFF_SIGNED },
-        {"PFG_RGBA8_SINT",			4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_SIGNED },
+        {"PFG_RGBA8_UNORM",			4u, 4u * sizeof(uint8),		PFL_RGBA8,	PFF_NORMALIZED },
+        {"PFG_RGBA8_UNORM_SRGB",	4u, 4u * sizeof(uint8),		PFL_RGBA8,	PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_RGBA8_UINT",			4u, 4u * sizeof(uint8),		PFL_RGBA8,	PFF_INTEGER },
+        {"PFG_RGBA8_SNORM",			4u, 4u * sizeof(uint8),		PFL_RGBA8,	PFF_NORMALIZED|PFF_SIGNED },
+        {"PFG_RGBA8_SINT",			4u, 4u * sizeof(uint8),		PFL_RGBA8,	PFF_INTEGER|PFF_SIGNED },
 
-        {"PFG_RG16_FLOAT",			2u, 2u * sizeof(uint16),	PFF_HALF },
-        {"PFG_RG16_UNORM",			2u, 2u * sizeof(uint16),	PFF_NORMALIZED },
-        {"PFG_RG16_UINT",			2u, 2u * sizeof(uint16),	PFF_INTEGER },
-        {"PFG_RG16_SNORM",			2u, 2u * sizeof(uint16),	PFF_NORMALIZED|PFF_SIGNED },
-        {"PFG_RG16_SINT",			2u, 2u * sizeof(uint16),	PFF_INTEGER|PFF_SIGNED },
+        {"PFG_RG16_FLOAT",			2u, 2u * sizeof(uint16),	PFL_RG16,	PFF_HALF },
+        {"PFG_RG16_UNORM",			2u, 2u * sizeof(uint16),	PFL_RG16,	PFF_NORMALIZED },
+        {"PFG_RG16_UINT",			2u, 2u * sizeof(uint16),	PFL_RG16,	PFF_INTEGER },
+        {"PFG_RG16_SNORM",			2u, 2u * sizeof(uint16),	PFL_RG16,	PFF_NORMALIZED|PFF_SIGNED },
+        {"PFG_RG16_SINT",			2u, 2u * sizeof(uint16),	PFL_RG16,	PFF_INTEGER|PFF_SIGNED },
 
-        {"PFG_D32_FLOAT",			1u, 1u * sizeof(uint32),	PFF_FLOAT|PFF_DEPTH },
-        {"PFG_R32_FLOAT",			1u, 1u * sizeof(uint32),	PFF_FLOAT },
-        {"PFG_R32_UINT",			1u, 1u * sizeof(uint32),	PFF_INTEGER },
-        {"PFG_R32_SINT",			1u, 1u * sizeof(uint32),	PFF_INTEGER|PFF_SIGNED },
+        {"PFG_D32_FLOAT",			1u, 1u * sizeof(uint32),	PFL_R32,	PFF_FLOAT|PFF_DEPTH },
+        {"PFG_R32_FLOAT",			1u, 1u * sizeof(uint32),	PFL_R32,	PFF_FLOAT },
+        {"PFG_R32_UINT",			1u, 1u * sizeof(uint32),	PFL_R32,	PFF_INTEGER },
+        {"PFG_R32_SINT",			1u, 1u * sizeof(uint32),	PFL_R32,	PFF_INTEGER|PFF_SIGNED },
 
-        {"PFG_D24_UNORM",			1u, 1u * sizeof(uint32),	PFF_NORMALIZED|PFF_DEPTH },
-        {"PFG_D24_UNORM_S8_UINT",	1u, 1u * sizeof(uint32),	PFF_NORMALIZED|
+        {"PFG_D24_UNORM",			1u, 1u * sizeof(uint32),	PFL_OTHER,	PFF_NORMALIZED|PFF_DEPTH },
+        {"PFG_D24_UNORM_S8_UINT",	1u, 1u * sizeof(uint32),	PFL_OTHER,	PFF_NORMALIZED|
                                                                 PFF_DEPTH|PFF_STENCIL },
 
-        {"PFG_RG8_UNORM",			2u, 2u * sizeof(uint8),		PFF_NORMALIZED },
-        {"PFG_RG8_UINT",			2u, 2u * sizeof(uint8),		PFF_INTEGER },
-        {"PFG_RG8_SNORM",			2u, 2u * sizeof(uint8),		PFF_NORMALIZED|PFF_SIGNED },
-        {"PFG_RG8_SINT",			2u, 2u * sizeof(uint8),		PFF_INTEGER|PFF_SIGNED },
+        {"PFG_RG8_UNORM",			2u, 2u * sizeof(uint8),		PFL_RG8,	PFF_NORMALIZED },
+        {"PFG_RG8_UINT",			2u, 2u * sizeof(uint8),		PFL_RG8,	PFF_INTEGER },
+        {"PFG_RG8_SNORM",			2u, 2u * sizeof(uint8),		PFL_RG8,	PFF_NORMALIZED|PFF_SIGNED },
+        {"PFG_RG8_SINT",			2u, 2u * sizeof(uint8),		PFL_RG8,	PFF_INTEGER|PFF_SIGNED },
 
-        {"PFG_R16_FLOAT",			1u, 1u * sizeof(uint16),	PFF_HALF },
-        {"PFG_D16_UNORM",			1u, 1u * sizeof(uint16),	PFF_NORMALIZED|PFF_DEPTH },
-        {"PFG_R16_UNORM",			1u, 1u * sizeof(uint16),	PFF_NORMALIZED },
-        {"PFG_R16_UINT",			1u, 1u * sizeof(uint16),	PFF_INTEGER },
-        {"PFG_R16_SNORM",			1u, 1u * sizeof(uint16),	PFF_NORMALIZED|PFF_SIGNED },
-        {"PFG_R16_SINT",			1u, 1u * sizeof(uint16),	PFF_INTEGER|PFF_SIGNED },
+        {"PFG_R16_FLOAT",			1u, 1u * sizeof(uint16),	PFL_R16,	PFF_HALF },
+        {"PFG_D16_UNORM",			1u, 1u * sizeof(uint16),	PFL_R16,	PFF_NORMALIZED|PFF_DEPTH },
+        {"PFG_R16_UNORM",			1u, 1u * sizeof(uint16),	PFL_R16,	PFF_NORMALIZED },
+        {"PFG_R16_UINT",			1u, 1u * sizeof(uint16),	PFL_R16,	PFF_INTEGER },
+        {"PFG_R16_SNORM",			1u, 1u * sizeof(uint16),	PFL_R16,	PFF_NORMALIZED|PFF_SIGNED },
+        {"PFG_R16_SINT",			1u, 1u * sizeof(uint16),	PFL_R16,	PFF_INTEGER|PFF_SIGNED },
 
-        {"PFG_R8_UNORM",			1u, 1u * sizeof(uint8),		PFF_NORMALIZED },
-        {"PFG_R8_UINT",				1u, 1u * sizeof(uint8),		PFF_INTEGER },
-        {"PFG_R8_SNORM",			1u, 1u * sizeof(uint8),		PFF_NORMALIZED|PFF_SIGNED },
-        {"PFG_R8_SINT",				1u, 1u * sizeof(uint8),		PFF_INTEGER|PFF_SIGNED },
-        {"PFG_A8_UNORM",			1u, 1u * sizeof(uint8),		PFF_NORMALIZED },
-        {"PFG_R1_UNORM",			1u, 0,						0 }, // ???
+        {"PFG_R8_UNORM",			1u, 1u * sizeof(uint8),		PFL_R8,		PFF_NORMALIZED },
+        {"PFG_R8_UINT",				1u, 1u * sizeof(uint8),		PFL_R8,		PFF_INTEGER },
+        {"PFG_R8_SNORM",			1u, 1u * sizeof(uint8),		PFL_R8,		PFF_NORMALIZED|PFF_SIGNED },
+        {"PFG_R8_SINT",				1u, 1u * sizeof(uint8),		PFL_R8,		PFF_INTEGER|PFF_SIGNED },
+        {"PFG_A8_UNORM",			1u, 1u * sizeof(uint8),		PFL_R8,		PFF_NORMALIZED },
+        {"PFG_R1_UNORM",			1u, 0,						0, 0 }, // ???
 
-        {"PFG_R9G9B9E5_SHAREDEXP",	1u, 1u * sizeof(uint32),	PFF_FLOAT_RARE },
+        {"PFG_R9G9B9E5_SHAREDEXP",	1u, 1u * sizeof(uint32),	PFL_OTHER,	PFF_FLOAT_RARE },
 
-        {"PFG_R8G8_B8G8_UNORM",		4u, 4u * sizeof(uint8),		PFF_NORMALIZED },
-        {"PFG_G8R8_G8B8_UNORM",		4u, 4u * sizeof(uint8),		PFF_NORMALIZED|PFF_SIGNED },
+        {"PFG_R8G8_B8G8_UNORM",		4u, 4u * sizeof(uint8),		PFL_OTHER,	PFF_NORMALIZED },
+        {"PFG_G8R8_G8B8_UNORM",		4u, 4u * sizeof(uint8),		PFL_OTHER,	PFF_NORMALIZED|PFF_SIGNED },
 
-        {"PFG_BC1_UNORM",			4u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_BC1_UNORM_SRGB",		4u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_BC1_UNORM",			4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_BC1_UNORM_SRGB",		4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
 
-        {"PFG_BC2_UNORM",			4u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_BC2_UNORM_SRGB",		4u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_BC2_UNORM",			4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_BC2_UNORM_SRGB",		4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
 
-        {"PFG_BC3_UNORM",			4u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_BC3_UNORM_SRGB",		4u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_BC3_UNORM",			4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_BC3_UNORM_SRGB",		4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
 
-        {"PFG_BC4_UNORM",			1u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_BC4_SNORM",			1u, 0,						PFF_COMPRESSED_COMMON|PFF_SIGNED },
+        {"PFG_BC4_UNORM",			1u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_BC4_SNORM",			1u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SIGNED },
 
-        {"PFG_BC5_UNORM",			2u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_BC5_SNORM",			2u, 0,						PFF_COMPRESSED_COMMON|PFF_SIGNED },
+        {"PFG_BC5_UNORM",			2u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_BC5_SNORM",			2u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SIGNED },
 
-        {"PFG_B5G6R5_UNORM",		3u, 1u * sizeof(uint16),	PFF_NORMALIZED },
-        {"PFG_B5G5R5A1_UNORM",		3u, 1u * sizeof(uint16),	PFF_NORMALIZED },
-        {"PFG_BGRA8_UNORM",			4u, 4u * sizeof(uint8),		PFF_NORMALIZED },
-        {"PFG_BGRX8_UNORM",			4u, 4u * sizeof(uint8),		PFF_NORMALIZED },
-        {"PFG_R10G10B10_XR_BIAS_A2_UNORM",4u, 1u * sizeof(uint32),PFF_FLOAT_RARE },
+        {"PFG_B5G6R5_UNORM",		3u, 1u * sizeof(uint16),	PFL_OTHER,	PFF_NORMALIZED },
+        {"PFG_B5G5R5A1_UNORM",		3u, 1u * sizeof(uint16),	PFL_OTHER,	PFF_NORMALIZED },
+        {"PFG_BGRA8_UNORM",			4u, 4u * sizeof(uint8),		PFL_BGRA8,	PFF_NORMALIZED },
+        {"PFG_BGRX8_UNORM",			3u, 4u * sizeof(uint8),		PFL_BGRX8,	PFF_NORMALIZED },
+        {"PFG_R10G10B10_XR_BIAS_A2_UNORM",4u, 1u * sizeof(uint32),PFL_OTHER,PFF_FLOAT_RARE },
 
-        {"PFG_BGRA8_UNORM_SRGB",	4u, 4u * sizeof(uint8),		PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_BGRX8_UNORM_SRGB",	3u, 4u * sizeof(uint8),		PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_BGRA8_UNORM_SRGB",	4u, 4u * sizeof(uint8),		PFL_BGRA8,	PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_BGRX8_UNORM_SRGB",	3u, 4u * sizeof(uint8),		PFL_BGRX8,	PFF_NORMALIZED|PFF_SRGB },
 
-        {"PFG_BC6H_UF16",			3u, 0,						PFF_COMPRESSED|PFF_FLOAT_RARE },
-        {"PFG_BC6H_SF16",			3u, 0,						PFF_COMPRESSED|PFF_FLOAT_RARE|PFF_SIGNED },
+        {"PFG_BC6H_UF16",			3u, 0,						PFL_OTHER,	PFF_COMPRESSED|PFF_FLOAT_RARE },
+        {"PFG_BC6H_SF16",			3u, 0,						PFL_OTHER,	PFF_COMPRESSED|PFF_FLOAT_RARE|PFF_SIGNED },
 
-        {"PFG_BC7_UNORM",			4u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_BC7_UNORM_SRGB",		4u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_BC7_UNORM",			4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_BC7_UNORM_SRGB",		4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
 
-        {"PFG_AYUV",				3u, 0,						0 },
-        {"PFG_Y410",				3u, 0,						0 },
-        {"PFG_Y416",				3u, 0,						0 },
-        {"PFG_NV12",				3u, 0,						0 },
-        {"PFG_P010",				3u, 0,						0 },
-        {"PFG_P016",				3u, 0,						0 },
-        {"PFG_420_OPAQUE",			3u, 0,						0 },
-        {"PFG_YUY2",				3u, 0,						0 },
-        {"PFG_Y210",				3u, 0,						0 },
-        {"PFG_Y216",				3u, 0,						0 },
-        {"PFG_NV11",				3u, 0,						0 },
-        {"PFG_AI44",				3u, 0,						0 },
-        {"PFG_IA44",				3u, 0,						0 },
-        {"PFG_P8",					1u, 1u * sizeof(uint8),		PFF_PALLETE },
-        {"PFG_A8P8",				1u, 2u * sizeof(uint8),		PFF_PALLETE },
-        {"PFG_B4G4R4A4_UNORM",		4u, 1u * sizeof(uint16),	PFF_NORMALIZED },
-        {"PFG_P208",				3u, 0,						0 },
-        {"PFG_V208",				3u, 0,						0 },
-        {"PFG_V408",				3u, 0,						0 },
+        {"PFG_AYUV",				3u, 0,						0, 0 },
+        {"PFG_Y410",				3u, 0,						0, 0 },
+        {"PFG_Y416",				3u, 0,						0, 0 },
+        {"PFG_NV12",				3u, 0,						0, 0 },
+        {"PFG_P010",				3u, 0,						0, 0 },
+        {"PFG_P016",				3u, 0,						0, 0 },
+        {"PFG_420_OPAQUE",			3u, 0,						0, 0 },
+        {"PFG_YUY2",				3u, 0,						0, 0 },
+        {"PFG_Y210",				3u, 0,						0, 0 },
+        {"PFG_Y216",				3u, 0,						0, 0 },
+        {"PFG_NV11",				3u, 0,						0, 0 },
+        {"PFG_AI44",				3u, 0,						0, 0 },
+        {"PFG_IA44",				3u, 0,						0, 0 },
+        {"PFG_P8",					1u, 1u * sizeof(uint8),		PFL_OTHER,	PFF_PALLETE },
+        {"PFG_A8P8",				2u, 2u * sizeof(uint8),		PFL_OTHER,	PFF_PALLETE },
+        {"PFG_B4G4R4A4_UNORM",		4u, 1u * sizeof(uint16),	PFL_OTHER,	PFF_NORMALIZED },
+        {"PFG_P208",				3u, 0,						0, 0 },
+        {"PFG_V208",				3u, 0,						0, 0 },
+        {"PFG_V408",				3u, 0,						0, 0 },
 
-        {"PFG_PVRTC_RGB2",			3u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_PVRTC_RGB2_SRGB",		3u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
-        {"PFG_PVRTC_RGBA2",			4u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_PVRTC_RGBA2_SRGB",	4u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
-        {"PFG_PVRTC_RGB4",			3u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_PVRTC_RGB4_SRGB",		3u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
-        {"PFG_PVRTC_RGBA4",			4u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_PVRTC_RGBA4_SRGB",	4u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
-        {"PFG_PVRTC2_2BPP",			3u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_PVRTC2_2BPP_SRGB",	3u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
-        {"PFG_PVRTC2_4BPP",			3u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_PVRTC2_4BPP_SRGB",    3u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_RGB8_UNORM",			3u, 3u * sizeof(uint8),		PFL_RGB8,	PFF_NORMALIZED },
+        {"PFG_RGB8_UNORM_SRGB",		3u, 3u * sizeof(uint8),		PFL_RGB8,	PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_BGR8_UNORM",			3u, 3u * sizeof(uint8),		PFL_BGR8,	PFF_NORMALIZED },
+        {"PFG_BGR8_UNORM_SRGB",		3u, 3u * sizeof(uint8),		PFL_BGR8,	PFF_NORMALIZED|PFF_SRGB },
 
-        {"PFG_ETC1_RGB8_UNORM",		3u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_ETC2_RGB8_UNORM",		3u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_ETC2_RGB8_UNORM_SRGB",3u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
-        {"PFG_ETC2_RGBA8_UNORM",	4u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_ETC2_RGBA8_UNORM_SRGB",4u,0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
-        {"PFG_ETC2_RGB8A1_UNORM",	4u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_ETC2_RGB8A1_UNORM_SRGB",4u, 0,					PFF_COMPRESSED_COMMON|PFF_SRGB },
-        {"PFG_EAC_R11_UNORM",		1u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_EAC_R11_SNORM",		1u, 0,						PFF_COMPRESSED_COMMON|PFF_SIGNED },
-        {"PFG_EAC_R11G11_UNORM",	2u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_EAC_R11G11_SNORM",	2u, 0,						PFF_COMPRESSED_COMMON|PFF_SIGNED },
+        {"PFG_RGB16_UNORM",			3u, 3u * sizeof(uint16),	PFL_RGB16,	PFF_NORMALIZED },
 
-        {"PFG_ATC_RGB",				3u, 0,						PFF_COMPRESSED_COMMON },
-        {"PFG_ATC_RGBA_EXPLICIT_ALPHA",			4u, 0,			PFF_COMPRESSED_COMMON },
-        {"PFG_ATC_RGBA_INTERPOLATED_ALPHA",		4u, 0,			PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC_RGB2",			3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC_RGB2_SRGB",		3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_PVRTC_RGBA2",			4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC_RGBA2_SRGB",	4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_PVRTC_RGB4",			3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC_RGB4_SRGB",		3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_PVRTC_RGBA4",			4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC_RGBA4_SRGB",	4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_PVRTC2_2BPP",			3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC2_2BPP_SRGB",	3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_PVRTC2_4BPP",			3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC2_4BPP_SRGB",    3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
 
-        {"PFG_ASTC_RGBA_UNORM_4X4_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_5X4_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_5X5_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_6X5_LDR",  		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_6X6_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_8X5_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_8X6_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_6X5_LDR",  		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_10X5_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_10X6_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_10X8_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_10X10_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_12X10_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
-        {"PFG_ASTC_RGBA_UNORM_12X12_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ETC1_RGB8_UNORM",		3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_ETC2_RGB8_UNORM",		3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_ETC2_RGB8_UNORM_SRGB",3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_ETC2_RGBA8_UNORM",	4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_ETC2_RGBA8_UNORM_SRGB",4u,0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_ETC2_RGB8A1_UNORM",	4u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_ETC2_RGB8A1_UNORM_SRGB",4u, 0,					PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
+        {"PFG_EAC_R11_UNORM",		1u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_EAC_R11_SNORM",		1u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SIGNED },
+        {"PFG_EAC_R11G11_UNORM",	2u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_EAC_R11G11_SNORM",	2u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SIGNED },
 
-        {"PFG_ASTC_RGBA_UNORM_4X4_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_5X4_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_5X5_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_6X5_sRGB",  		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_6X6_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_8X5_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_8X6_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_6X5_sRGB",  		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_10X5_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_10X6_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_10X8_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_10X10_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_12X10_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_ASTC_RGBA_UNORM_12X12_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ATC_RGB",				3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_ATC_RGBA_EXPLICIT_ALPHA",			4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON },
+        {"PFG_ATC_RGBA_INTERPOLATED_ALPHA",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON },
+
+        {"PFG_ASTC_RGBA_UNORM_4X4_LDR",			4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_5X4_LDR",			4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_5X5_LDR",			4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_6X5_LDR",  		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_6X6_LDR",			4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_8X5_LDR",			4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_8X6_LDR",			4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_6X5_LDR",  		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_10X5_LDR",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_10X6_LDR",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_10X8_LDR",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_10X10_LDR",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_12X10_LDR",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_12X12_LDR",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+
+        {"PFG_ASTC_RGBA_UNORM_4X4_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_5X4_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_5X5_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_6X5_sRGB",  		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_6X6_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_8X5_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_8X6_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_6X5_sRGB",  		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_10X5_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_10X6_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_10X8_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_10X10_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_12X10_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_12X12_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
 
         {"PFG_COUNT", 1u, 0, 0 },
     };

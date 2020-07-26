@@ -13,7 +13,7 @@
 
 # Set media target directory
 if (WIN32)
-  set(OGRE_MEDIA_PATH "media")
+  set(OGRE_MEDIA_PATH "Media")
 elseif (APPLE)
   set(OGRE_MEDIA_PATH "Media")
 elseif (UNIX)

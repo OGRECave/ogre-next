@@ -343,9 +343,8 @@ namespace v1 {
             // Default behaviour is that billboards are in local node space
             // so orientation of camera (in world space) must be reverse-transformed
             // into node space
-            mCamQ = mParentNode->_getDerivedOrientation().UnitInverse() * mCamQ;
-            mCamPos = mParentNode->_getDerivedOrientation().UnitInverse() *
-                (mCamPos - mParentNode->_getDerivedPosition()) / mParentNode->_getDerivedScale();
+            mCamQ = mParentNode->convertWorldToLocalOrientation(mCamQ);
+            mCamPos = mParentNode->convertWorldToLocalPosition(mCamPos);
         }
 
         // Camera direction points down -Z
@@ -806,10 +805,8 @@ namespace v1 {
                 2-----3
             */
 
-            ushort* pIdx = static_cast<ushort*>(
-                mIndexData->indexBuffer->lock(0,
-                  mIndexData->indexBuffer->getSizeInBytes(),
-                  HardwareBuffer::HBL_DISCARD) );
+            HardwareBufferLockGuard indexLock(mIndexData->indexBuffer, HardwareBuffer::HBL_DISCARD);
+            ushort* pIdx = static_cast<ushort*>(indexLock.pData);
 
             for(
                 size_t idx, idxOff, bboard = 0;
@@ -828,8 +825,6 @@ namespace v1 {
                 pIdx[idx+5] = static_cast<unsigned short>(idxOff + 3);
 
             }
-
-            mIndexData->indexBuffer->unlock();
         }
 
         if( mHlmsDatablock && getMaterial().isNull() )
@@ -881,6 +876,13 @@ namespace v1 {
 
         mMainBuf.setNull();
         mMainBuffers.clear();
+
+        if( mHlmsDatablock && getMaterial().isNull() )
+        {
+            mHlmsDatablock->_unlinkRenderable( this );
+            mHlmsDatablock = 0;
+            _setHlmsHashes( 0u, 0u );
+        }
 
         mBuffersCreated = false;
     }

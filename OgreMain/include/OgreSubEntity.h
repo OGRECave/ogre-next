@@ -225,9 +225,8 @@ namespace v1 {
         void _restoreBuffersForUnusedAnimation(bool hardwareAnimation);
 
         /** Overridden from Renderable to provide some custom behaviour. */
-        void _updateCustomGpuParameter(
-            const GpuProgramParameters::AutoConstantEntry& constantEntry,
-            GpuProgramParameters* params) const;
+        void _updateCustomGpuParameter( const GpuProgramParameters_AutoConstantEntry &constantEntry,
+                                        GpuProgramParameters *params ) const;
     };
     /** @} */
     /** @} */

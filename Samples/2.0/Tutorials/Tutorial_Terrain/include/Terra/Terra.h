@@ -148,6 +148,8 @@ namespace Ogre
         const Vector2& getXZInvDimensions(void) const   { return m_xzInvDimensions; }
         float getHeight(void) const                     { return m_height; }
         const Vector3& getTerrainOrigin(void) const     { return m_terrainOrigin; }
+
+        Vector2 getTerrainXZCenter(void) const;
     };
 }
 

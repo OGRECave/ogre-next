@@ -6,7 +6,8 @@ struct ShadowReceiverData
 	float4 texViewZRow;
 @end
 	float2 shadowDepthRange;
-	float2 padding;
+	float normalOffsetBias;
+	float padding;
 	float4 invShadowMapSize;
 };
 
@@ -28,6 +29,8 @@ struct Light
 	float4 spotDirection;
 	float4 spotParams;
 @end
+
+#define lightTexProfileIdx spotDirection.w
 };
 
 #define numNonCasterDirectionalLights lights[0].diffuse.w
@@ -127,11 +130,12 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float padding; //Compatibility with GLSL
 @end
 
-	float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused;
+	float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps;
 
-@property( hlms_use_prepass )
-	float4 windowHeight;
-@end
+	float4 aspectRatio_planarReflNumMips_unused2;
+
+	float2 invWindowRes;
+	float2 windowResolution;
 
 @property( ambient_hemisphere || ambient_fixed || envmap_scale || vct_ambient_hemisphere )
 	float4 ambientUpperHemi;
@@ -139,6 +143,17 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 @property( ambient_hemisphere || vct_ambient_hemisphere )
 	float4 ambientLowerHemi;
 	float4 ambientHemisphereDir;
+@end
+
+@property( ambient_sh )
+	@property( ambient_sh_monochrome )
+		float4 sh0;
+		float4 sh1;
+		float4 sh2; // sh2.yzw are unused
+	@else
+		@foreach( 7, n )
+			float4 sh@n;@end
+	@end
 @end
 
 @property( irradiance_volumes )
@@ -153,9 +168,13 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float pssmBlendPoints@n;@end @end
 @property( hlms_pssm_fade )
 	float pssmFadePoint;@end
+
+@property( !use_light_buffers )
 	@property( hlms_lights_spot )Light lights[@value(hlms_lights_spot)];@end
 	@property( hlms_lights_area_approx )AreaLight areaApproxLights[@value(hlms_lights_area_approx)];@end
 	@property( hlms_lights_area_ltc )AreaLtcLight areaLtcLights[@value(hlms_lights_area_ltc)];@end
+@end // !use_light_buffers
+
 @end @property( hlms_shadowcaster )
 	//Vertex shader
 	@property( exponential_shadow_maps )float4 viewZRow;@end
@@ -195,16 +214,55 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 
 	@insertpiece( custom_passBuffer )
 
-#define pccVctMinDistance		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused.x
-#define invPccVctInvDistance	pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused.y
-#define rightEyePixelStartX		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused.z
+#define pccVctMinDistance		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps.x
+#define invPccVctInvDistance	pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps.y
+#define rightEyePixelStartX		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps.z
+#define envMapNumMipmaps		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps.w
+
+#define aspectRatio			aspectRatio_planarReflNumMips_unused2.x
+#define planarReflNumMips	aspectRatio_planarReflNumMips_unused2.y
 }
 CONST_BUFFER_STRUCT_END( passBuf );
+
+@property( use_light_buffers )
+
+CONST_BUFFER_STRUCT_BEGIN( Light0Buffer, 4 )
+{
+	Light lights[16];
+}
+CONST_BUFFER_STRUCT_END( light0Buf );
+
+CONST_BUFFER_STRUCT_BEGIN( Light1Buffer, 5 )
+{
+	AreaLight areaApproxLights[2];
+}
+CONST_BUFFER_STRUCT_END( light1Buf );
+
+CONST_BUFFER_STRUCT_BEGIN( Light2Buffer, 6 )
+{
+	AreaLtcLight areaLtcLights[2];
+}
+CONST_BUFFER_STRUCT_END( light2Buf );
+
+
+@else
+
+#define light0Buf		passBuf
+#define light1Buf		passBuf
+#define light2Buf		passBuf
+
+@end // use_light_buffers
+
 @end
 
 @property( syntax == metal )
 	@piece( PassDecl )
 	, constant PassBuffer &passBuf [[buffer(CONST_SLOT_START+0)]]
+	@property( use_light_buffers )
+	, constant Light0Buffer &light0Buf [[buffer(CONST_SLOT_START+4)]]
+	, constant Light1Buffer &light1Buf [[buffer(CONST_SLOT_START+5)]]
+	, constant Light2Buffer &light2Buf [[buffer(CONST_SLOT_START+6)]]
+	@end // use_light_buffers
 	@end
 @end
 
@@ -231,6 +289,10 @@ struct Material
 	float4 cDetailWeights;
 	float4 detailOffsetScale[4];
 	float4 emissive;		//emissive.w contains mNormalMapWeight.
+	float refractionStrength;
+	float _padding10;
+	float _padding11;
+	float _padding12;
 	float4 userValue[3];
 
 	@property( syntax != metal )
@@ -250,6 +312,7 @@ struct Material
 		ushort detailNormMapIdx0;
 		ushort detailNormMapIdx1;
 		ushort detailNormMapIdx2;
+
 		ushort detailNormMapIdx3;
 		ushort emissiveMapIdx;
 		ushort envMapIdx;
@@ -319,23 +382,23 @@ struct Material
 @pset( texcoord, 0 )
 
 @piece( VStoPS_block )
-	@property( !hlms_shadowcaster )
-		@property( syntax == metal )
-			@property( !lower_gpu_overhead )
-				ushort materialId [[flat]];
-			@end
-			@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
-				uint objLightMask [[flat]];
-			@end
-			@property( use_planar_reflections )
-				ushort planarReflectionIdx [[flat]];
-			@end
-		@else
-			@property( !lower_gpu_overhead )
-				FLAT_INTERPOLANT( ushort drawId, @counter(texcoord) );
-			@end
+	@property( syntax == metal )
+		@property( (!hlms_shadowcaster || alpha_test) && !lower_gpu_overhead )
+			ushort materialId [[flat]];
 		@end
+		@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
+			uint objLightMask [[flat]];
+		@end
+		@property( use_planar_reflections )
+			ushort planarReflectionIdx [[flat]];
+		@end
+	@else
+		@property( (!hlms_shadowcaster || alpha_test) && !lower_gpu_overhead )
+			FLAT_INTERPOLANT( ushort drawId, @counter(texcoord) );
+		@end
+	@end
 
+	@property( !hlms_shadowcaster )
 		@property( hlms_normal || hlms_qtangent )
 			INTERPOLANT( float3 pos, @counter(texcoord) );
 			INTERPOLANT( float3 normal, @counter(texcoord) );
@@ -360,9 +423,6 @@ struct Material
 		@end
 	@else
 		@property( alpha_test )
-			@property( !lower_gpu_overhead )
-				FLAT_INTERPOLANT( ushort drawId, @counter(texcoord) );
-			@end
 			@foreach( hlms_uv_count, n )
 				INTERPOLANT( float@value( hlms_uv_count@n ) uv@n, @counter(texcoord) );@end
 		@end

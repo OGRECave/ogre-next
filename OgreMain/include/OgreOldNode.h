@@ -35,11 +35,14 @@ THE SOFTWARE.
 #include "OgreMatrix4.h"
 #include "OgreVector3.h"
 #include "OgreQuaternion.h"
-#include "OgreString.h"
 #include "OgreRenderable.h"
 #include "OgreIteratorWrappers.h"
 #include "OgreMesh.h"
 #include "OgreUserObjectBindings.h"
+
+#include "ogrestd/unordered_map.h"
+#include "ogrestd/set.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {
@@ -85,7 +88,7 @@ namespace v1 {
         {
         public:
             Listener() {}
-            virtual ~Listener() {}
+            virtual ~Listener();
             /** Called when a OldNode gets updated.
             @remarks
                 Note that this happens when the OldNode's derived update happens,

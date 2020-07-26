@@ -44,7 +44,8 @@ include(PrecompiledHeader)
 # define header and source files for the library
 file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/include/*.inl")
-file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.inl")
 
 add_filtered_std("Animation")
 add_filtered_std("CommandBuffer")
@@ -53,6 +54,7 @@ add_filtered_std("Compositor/Pass")
 add_filtered_std("Compositor/Pass/PassClear")
 add_filtered_std("Compositor/Pass/PassCompute")
 add_filtered_std("Compositor/Pass/PassDepthCopy")
+add_filtered_std("Compositor/Pass/PassIblSpecular")
 add_filtered_std("Compositor/Pass/PassMipmap")
 add_filtered_std("Compositor/Pass/PassQuad")
 add_filtered_std("Compositor/Pass/PassScene")
@@ -64,6 +66,7 @@ add_filtered_std("Hash")
 add_filtered_std("Math/Array")
 add_filtered_std("Math/Simple")
 add_filtered_std("Math/Simple/C")
+add_filtered_std("ogrestd")
 add_filtered_std("Vao")
 
 list(APPEND HEADER_FILES ${OGRE_BINARY_DIR}/include/OgreBuildSettings.h
@@ -379,17 +382,12 @@ if (OGRE_CONFIG_ENABLE_GLES2_GLSL_OPTIMISER)
   list(APPEND LIBRARIES "${GLSL_Optimizer_LIBRARIES}")
 endif ()
 
-if (OGRE_CONFIG_ENABLE_GLES2_CG_SUPPORT)
-  list(APPEND LIBRARIES "${HLSL2GLSL_LIBRARIES}")
-endif ()
-
 set (TARGET_LINK_FLAGS "")
 
 # setup OgreMain target
 if (WINDOWS_STORE OR WINDOWS_PHONE)
 	# exclude OgreTimer.cpp from unity builds; causes problem
 	ogre_add_library(OgreMain ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE "src/WIN32/OgreTimer.cpp")
-	set_target_properties(OgreMain PROPERTIES VS_WINRT_COMPONENT "true")
 else ()
 	# exclude OgreAlignedAllocator.cpp from unity builds; causes problems on Linux
 	ogre_add_library(OgreMain ${OGRE_LIB_TYPE} ${PREC_HEADER} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADERS} ${PLATFORM_SOURCE_FILES} ${THREAD_HEADER_FILES} ${THREAD_SOURCE_FILES} SEPARATE "src/OgreAlignedAllocator.cpp")
@@ -405,7 +403,11 @@ else()
 endif()
 
 if(OGRE_GCC_VERSION VERSION_EQUAL 4.8 OR OGRE_GCC_VERSION VERSION_GREATER 4.8)
-  list(APPEND LIBRARIES "-latomic")
+  if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+    list(APPEND LIBRARIES "-latomic_ops")
+  else()
+    list(APPEND LIBRARIES "-latomic")
+  endif()
 endif()
 
 if (APPLE)

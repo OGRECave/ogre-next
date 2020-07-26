@@ -41,6 +41,8 @@ THE SOFTWARE.
 #include "OgreLodStrategy.h"
 #include <cstddef>
 
+#include <sstream>
+
 // Ignore annoying warnings on GCC
 #if defined(__MINGW32__) || defined(__GNUC__)
     #pragma GCC diagnostic ignored "-Wswitch"
@@ -297,19 +299,10 @@ namespace v1 {
                 StringConverter::toString(numFaces));
             // Write each face in turn
             size_t i;
-            unsigned int* pInt = 0;
-            unsigned short* pShort = 0;
             HardwareIndexBufferSharedPtr ibuf = s->indexData[VpNormal]->indexBuffer;
-            if (use32BitIndexes)
-            {
-                pInt = static_cast<unsigned int*>(
-                    ibuf->lock(HardwareBuffer::HBL_READ_ONLY)); 
-            }
-            else
-            {
-                pShort = static_cast<unsigned short*>(
-                    ibuf->lock(HardwareBuffer::HBL_READ_ONLY)); 
-            }
+            HardwareBufferLockGuard ibufLock(ibuf, HardwareBuffer::HBL_READ_ONLY);
+            unsigned int* pInt = static_cast<unsigned int*>(ibufLock.pData);
+            unsigned short* pShort = static_cast<unsigned short*>(ibufLock.pData);
             for (i = 0; i < numFaces; ++i)
             {
                 TiXmlElement* faceNode = 
@@ -343,7 +336,6 @@ namespace v1 {
                     }
                 }
             }
-            ibuf->unlock();
         }
 
         // M_GEOMETRY chunk (Optional: present only if useSharedVertices = false)
@@ -407,8 +399,8 @@ namespace v1 {
             uint8* pChar;
             ARGB* pColour;
 
-            pVert = static_cast<unsigned char*>(
-                vbuf->lock(HardwareBuffer::HBL_READ_ONLY));
+            HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_READ_ONLY);
+            pVert = static_cast<unsigned char*>(vbufLock.pData);
 
             // Skim over the elements to set up the general data
             unsigned short numTextureCoords = 0;
@@ -630,7 +622,6 @@ namespace v1 {
                 }
                 pVert += vbuf->getVertexSize();
             }
-            vbuf->unlock();
         }
 
     }
@@ -790,18 +781,9 @@ namespace v1 {
                             HardwareBuffer::HBU_DYNAMIC,
                             false);
                     sm->indexData[VpNormal]->indexBuffer = ibuf;
-                    unsigned int *pInt = 0;
-                    unsigned short *pShort = 0;
-                    if (use32BitIndexes)
-                    {
-                        pInt = static_cast<unsigned int*>(
-                            ibuf->lock(HardwareBuffer::HBL_DISCARD));
-                    }
-                    else
-                    {
-                        pShort = static_cast<unsigned short*>(
-                            ibuf->lock(HardwareBuffer::HBL_DISCARD));
-                    }
+                    HardwareBufferLockGuard ibufLock(ibuf, HardwareBuffer::HBL_DISCARD);
+                    unsigned int* pInt = static_cast<unsigned int*>(ibufLock.pData);
+                    unsigned short* pShort = static_cast<unsigned short*>(ibufLock.pData);
                     TiXmlElement* faceElem;
                     bool firstTri = true;
                     for (faceElem = faces->FirstChildElement();
@@ -837,7 +819,6 @@ namespace v1 {
                         }
                         firstTri = false;
                     }
-                    ibuf->unlock();
                 }
             }
 
@@ -1031,8 +1012,8 @@ namespace v1 {
             // Bind it
             bind->setBinding(bufCount, vbuf);
             // Lock it
-            pVert = static_cast<unsigned char*>(
-                vbuf->lock(HardwareBuffer::HBL_DISCARD));
+            HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_DISCARD);
+            pVert = static_cast<unsigned char*>(vbufLock.pData);
 
             // Get the element list for this buffer alone
             VertexDeclaration::VertexElementList elems = decl->findElementsBySource(bufCount);
@@ -1296,7 +1277,6 @@ namespace v1 {
                 pVert += vbuf->getVertexSize();
             } // vertex
             bufCount++;
-            vbuf->unlock();
         } // vertexbuffer
 
         // Set bounds
@@ -1494,21 +1474,10 @@ namespace v1 {
                 bool use32BitIndexes = (facedata->indexBuffer->getType() == HardwareIndexBuffer::IT_32BIT);
 
                 // Write each face in turn
-                unsigned int* pInt = 0;
-                unsigned short* pShort = 0;
                 HardwareIndexBufferSharedPtr ibuf = facedata->indexBuffer;
-                if (use32BitIndexes)
-                {
-                    pInt = static_cast<unsigned int*>(
-                        ibuf->lock(HardwareBuffer::HBL_READ_ONLY)); 
-                    pInt += facedata->indexStart;
-                }
-                else
-                {
-                    pShort = static_cast<unsigned short*>(
-                        ibuf->lock(HardwareBuffer::HBL_READ_ONLY)); 
-                    pShort += facedata->indexStart;
-                }
+                HardwareBufferLockGuard ibufLock(ibuf, HardwareBuffer::HBL_READ_ONLY);
+                unsigned int* pInt = static_cast<unsigned int*>(ibufLock.pData) + facedata->indexStart;
+                unsigned short* pShort = static_cast<unsigned short*>(ibufLock.pData) + facedata->indexStart;
                 
                 for (size_t f = 0; f < facedata->indexCount; f += 3)
                 {
@@ -1526,10 +1495,7 @@ namespace v1 {
                         faceNode->SetAttribute("v2", StringConverter::toString(*pShort++));
                         faceNode->SetAttribute("v3", StringConverter::toString(*pShort++));
                     }
-
                 }
-
-                ibuf->unlock();
             }
 
         }
@@ -1690,18 +1656,10 @@ namespace v1 {
                     createIndexBuffer(
                         itype, numFaces * 3, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
-                unsigned short *pShort = 0;
-                unsigned int *pInt = 0;
-                if (use32bitindexes)
-                {
-                    pInt = static_cast<unsigned int*>(
-                        ibuf->lock(HardwareBuffer::HBL_DISCARD));
-                }
-                else
-                {
-                    pShort = static_cast<unsigned short*>(
-                        ibuf->lock(HardwareBuffer::HBL_DISCARD));
-                }
+                HardwareBufferLockGuard ibufLock(ibuf, HardwareBuffer::HBL_DISCARD);
+                unsigned int* pInt = static_cast<unsigned int*>(ibufLock.pData);
+                unsigned short* pShort = static_cast<unsigned short*>(ibufLock.pData);
+
                 TiXmlElement* faceElem = faceListElem->FirstChildElement("face");
                 for (unsigned int face = 0; face < numFaces; ++face, faceElem = faceElem->NextSiblingElement())
                 {
@@ -1723,10 +1681,7 @@ namespace v1 {
                         val = faceElem->Attribute("v3");
                         *pShort++ = StringConverter::parseUnsignedInt(val);
                     }
-
                 }
-
-                ibuf->unlock();
             }
             IndexData* facedata = new IndexData(); // will be deleted by SubMesh
             facedata->indexCount = numFaces * 3;
@@ -1978,9 +1933,8 @@ namespace v1 {
                 vertexSize, vertexCount, 
                 HardwareBuffer::HBU_STATIC, true);
 
-            float* pFloat = static_cast<float*>(
-                vbuf->lock(HardwareBuffer::HBL_DISCARD));
-
+            HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_DISCARD);
+            float* pFloat = static_cast<float*>(vbufLock.pData);
 
             TiXmlElement* posNode = keyNode->FirstChildElement("position");
             TiXmlElement* normNode = keyNode->FirstChildElement("normal");
@@ -2024,7 +1978,7 @@ namespace v1 {
                 posNode = posNode->NextSiblingElement("position");
             }
 
-            vbuf->unlock();
+            vbufLock.unlock();
 
             kf->setVertexBuffer(vbuf);
                 
@@ -2229,8 +2183,8 @@ namespace v1 {
             
             bool includesNormals = vbuf->getVertexSize() > (sizeof(float) * 3);
             
-            float* pFloat = static_cast<float*>(
-                vbuf->lock(HardwareBuffer::HBL_READ_ONLY));
+            HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_READ_ONLY);
+            float* pFloat = static_cast<float*>(vbufLock.pData);
 
             for (size_t v = 0; v < vertexCount; ++v)
             {

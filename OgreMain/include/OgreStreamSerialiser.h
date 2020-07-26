@@ -31,6 +31,9 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 #include "OgreCommon.h"
 #include "OgreDataStream.h"
+
+#include "ogrestd/deque.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre 

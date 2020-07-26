@@ -29,12 +29,12 @@ THE SOFTWARE.
 #ifndef _OgreCompositorWorkspace_H_
 #define _OgreCompositorWorkspace_H_
 
-#include "OgreHeaderPrefix.h"
 #include "Compositor/OgreCompositorWorkspaceDef.h"
 #include "Compositor/OgreCompositorChannel.h"
 #include "OgreVector4.h"
-#include "OgreCamera.h"
 #include "OgreResourceTransition.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -90,7 +90,7 @@ namespace Ogre
         bool                    mEnabled;
         bool                    mAmalgamatedProfiling;
 
-        CompositorWorkspaceListener *mListener;
+        CompositorWorkspaceListenerVec mListeners;
 
         /// Main sequence in the order they should be executed
         CompositorNodeVec       mNodeSequence;
@@ -181,11 +181,54 @@ namespace Ogre
         void setAmalgamatedProfiling( bool bEnabled )       { mAmalgamatedProfiling = bEnabled; }
         bool getAmalgamatedProfiling(void) const            { return mAmalgamatedProfiling; }
 
-        void setListener( CompositorWorkspaceListener *listener )   { mListener = listener; }
-        CompositorWorkspaceListener* getListener(void) const        { return mListener; }
+        /// @deprecated use addListener and removeListener instead
+        void setListener( CompositorWorkspaceListener *listener );
+        /// @deprecated use getListeners instead
+        CompositorWorkspaceListener* getListener(void) const;
+
+        void addListener( CompositorWorkspaceListener *listener );
+        void removeListener( CompositorWorkspaceListener *listener );
+
+        const CompositorWorkspaceListenerVec& getListeners(void) const { return mListeners; }
 
         const ResourceLayoutMap& getResourcesLayout(void) const     { return mResourcesLayout; }
         const ResourceAccessMap& getUavsAccess(void) const          { return mUavsAccess; }
+
+        /** When two workspaces work on the same channels/textures, to avoid race conditions
+            in Compute Shaders each workspace needs to know what the the previous workspace did;
+            and that information must be supplied during workspace creation.
+
+            This function fills outInitialLayouts & outInitialUavAccess with the state in
+            which the UAVs will be when 'this' is done executing; and can be used
+            by the next workspace.
+
+            In code:
+            @code
+                CompositorWorkspace *first, *next;
+                first = compositorManager->addWorkspace( sceneManager, channels,
+                                                         camera, "CompoName_A", true );
+
+                ResourceLayoutMap initialLayouts;
+                ResourceAccessMap initialAccess;
+                first->fillUavDependenciesForNextWorkspace( initialLayouts, initialAccess );
+                after = compositorManager->addWorkspace( sceneManager, channels,
+                                                         camera, "CompoName_B", true, 0,
+                                                         &initialLayouts, &initialAccess );
+            @endcode
+
+        @remarks
+            Compute shaders are guaranteed to start in order; but they're not guaranteed to
+            be processed in sequence nor finish in order unless explicitly requested.
+            This is why this function exists.
+        @param outInitialLayouts [in/out]
+            Fills outInitialLayouts. Previous content is not removed; but we may
+            overwrite some entries.
+        @param outInitialUavAccess [in/out]
+            Fills outInitialUavAccess. Previous content is not removed; but we may
+            overwrite some entries.
+        */
+        void fillUavDependenciesForNextWorkspace( ResourceLayoutMap &outInitialLayouts,
+                                                  ResourceAccessMap &outInitialUavAccess ) const;
 
         /** Finds a node instance with the given aliased name
         @remarks
@@ -311,7 +354,9 @@ namespace Ogre
         TextureGpu* getFinalTarget(void) const;
 
         uint8 getViewportModifierMask(void) const           { return mViewportModifierMask; }
+        void setViewportModifierMask(uint8 mask)            { mViewportModifierMask = mask; }
         const Vector4& getViewportModifier(void) const      { return mViewportModifier; }
+        void setViewportModifier(const Vector4& modifier)   { mViewportModifier = modifier; }
 
         uint8 getExecutionMask(void) const                  { return mExecutionMask; }
 

@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgrePlanarReflections.h"
 #include "OgreSceneManager.h"
+#include "OgreCamera.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Math/Array/OgreBooleanMask.h"
@@ -59,7 +60,8 @@ namespace Ogre
         //mLockCamera( lockCamera ),
         mUpdatingRenderablesHlms( false ),
         mAnyPendingFlushRenderable( false ),
-        mMaxActiveActors( 0 ),
+        mMaxNumMipmaps( 0u ),
+        mMaxActiveActors( 0u ),
         mInvMaxDistance( Real(1.0) / maxDistance ),
         mMaxSqDistance( maxDistance * maxDistance ),
         mSceneManager( sceneManager ),
@@ -145,6 +147,17 @@ namespace Ogre
             }
 
             mActiveActorData.resize( maxActiveActors );
+
+            // Recalculate mMaxNumMipmaps
+            mMaxNumMipmaps = 0u;
+            itor = mActiveActorData.begin() + maxActiveActors;
+            end = mActiveActorData.end();
+
+            while( itor != end )
+            {
+                mMaxNumMipmaps = std::max( itor->reflectionTexture->getNumMipmaps(), mMaxNumMipmaps );
+                ++itor;
+            }
         }
 
         const uint8 oldValue = mMaxActiveActors;
@@ -186,8 +199,10 @@ namespace Ogre
                             GpuPageOutStrategy::Discard, textureFlags, TextureTypes::Type2D );
                 actorData.reflectionTexture->setResolution( width, height );
                 actorData.reflectionTexture->setPixelFormat( pixelFormat );
-                actorData.reflectionTexture->setNumMipmaps( numMips );
+                actorData.reflectionTexture->setNumMipmaps( static_cast<uint8>( numMips ) );
                 actorData.reflectionTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+
+                mMaxNumMipmaps = std::max( mMaxNumMipmaps, static_cast<uint8>( numMips ) );
 
                 CompositorChannelVec channels;
                 channels.push_back( actorData.reflectionTexture );

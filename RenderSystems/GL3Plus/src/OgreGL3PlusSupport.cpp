@@ -29,6 +29,8 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreGL3PlusSupport.h"
 #include "OgreLogManager.h"
 
+#include <sstream>
+
 namespace Ogre {
 
     void GL3PlusSupport::setConfigOption(const String &name, const String &value)

@@ -47,10 +47,7 @@ namespace Ogre
                                       TextureTypes::TextureTypes initialType,
                                       TextureGpuManager *textureManager ) :
         TextureGpu( pageOutStrategy, vaoManager, name, textureFlags, initialType, textureManager ),
-        mDefaultDisplaySrv( 0 ),
-        mDisplayTextureName( 0 ),
-        mFinalTextureName( 0 ),
-        mMsaaFramebufferName( 0 )
+        mDisplayTextureName( 0 )
     {
         _setToDisplayDummyTexture();
     }
@@ -58,9 +55,35 @@ namespace Ogre
     D3D11TextureGpu::~D3D11TextureGpu()
     {
         destroyInternalResourcesImpl();
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11TextureGpu::notifyDeviceLost(D3D11Device* device)
+    {
+        mPendingResidencyChanges = 0; // we already cleared D3D11TextureGpuManager::mScheduledTasks
+        mTexturePool = 0;             // texture pool is already destroyed
+        mInternalSliceStart = 0;
+        if(getResidencyStatus() == GpuResidency::Resident)
+        {
+            _transitionTo(GpuResidency::OnStorage, (uint8*)0);
+            mNextResidencyStatus = GpuResidency::Resident;
+        }
 
-        //destroyInternalResourcesImpl grabbed the dummy SRV again. Release it.
-        SAFE_RELEASE( mDefaultDisplaySrv );
+        mDisplayTextureName = 0;
+        mDefaultDisplaySrv.Reset();
+    }
+    //---------------------------------------------------------------------
+    void D3D11TextureGpu::notifyDeviceRestored(D3D11Device* device, unsigned pass)
+    {
+        if( pass == 0 )
+        {
+            _setToDisplayDummyTexture();
+
+            if( !isRenderWindowSpecific() && getNextResidencyStatus() == GpuResidency::Resident)
+            {
+                mNextResidencyStatus = mResidencyStatus;
+                scheduleTransitionTo(GpuResidency::Resident);
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::create1DTexture(void)
@@ -103,7 +126,7 @@ namespace Ogre
 
         ID3D11Texture1D *texture = 0;
         HRESULT hr = device->CreateTexture1D( &desc, 0, &texture );
-        mFinalTextureName = texture;
+        mFinalTextureName.Attach( texture );
 
         if( FAILED(hr) || device.isError() )
         {
@@ -119,7 +142,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::create2DTexture(void)
+    void D3D11TextureGpu::create2DTexture( bool msaaTextureOnly /* = false */)
     {
         D3D11_TEXTURE2D_DESC desc;
         memset( &desc, 0, sizeof( desc ) );
@@ -132,10 +155,12 @@ namespace Ogre
             desc.Format = D3D11Mappings::getFamily( mPixelFormat );
         else
             desc.Format = D3D11Mappings::get( mPixelFormat );
-        if( mMsaa > 1u && hasMsaaExplicitResolves() )
+        if( isMultisample() && hasMsaaExplicitResolves() )
         {
-            desc.SampleDesc.Count   = mMsaa;
-            desc.SampleDesc.Quality = D3D11Mappings::get( mMsaaPattern );
+            desc.SampleDesc.Count   = mSampleDescription.getColourSamples();
+            desc.SampleDesc.Quality = mSampleDescription.getCoverageSamples()
+                                          ? mSampleDescription.getCoverageSamples()
+                                          : D3D11Mappings::get( mSampleDescription.getMsaaPattern() );
         }
         else
         {
@@ -160,11 +185,7 @@ namespace Ogre
             desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
 
         if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
-        {
             desc.MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
-            if( mTextureType == TextureTypes::TypeCubeArray )
-                desc.ArraySize *= 6u;
-        }
         if( allowsAutoMipmaps() )
             desc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
 
@@ -173,8 +194,12 @@ namespace Ogre
         D3D11Device &device = textureManagerD3d->getDevice();
 
         ID3D11Texture2D *texture = 0;
-        HRESULT hr = device->CreateTexture2D( &desc, 0, &texture );
-        mFinalTextureName = texture;
+        HRESULT hr = S_FALSE;
+        if( !msaaTextureOnly )
+        {
+            hr = device->CreateTexture2D(&desc, 0, &texture);
+            mFinalTextureName.Attach( texture );
+        }
 
         if( FAILED(hr) || device.isError() )
         {
@@ -189,11 +214,13 @@ namespace Ogre
                             "D3D11TextureGpu::create2DTexture" );
         }
 
-        if( mMsaa > 1u && !hasMsaaExplicitResolves() )
+        if( isMultisample() && !hasMsaaExplicitResolves() )
         {
             //We just created the resolve texture. Must create the actual MSAA surface now.
-            desc.SampleDesc.Count   = mMsaa;
-            desc.SampleDesc.Quality = D3D11Mappings::get( mMsaaPattern );
+            desc.SampleDesc.Count = mSampleDescription.getColourSamples();
+            desc.SampleDesc.Quality = mSampleDescription.getCoverageSamples()
+                                          ? mSampleDescription.getCoverageSamples()
+                                          : D3D11Mappings::get( mSampleDescription.getMsaaPattern() );
 
             //Reset bind flags. We won't bind it as SRV, allows more aggressive
             //optimizations on AMD cards (DCC - Delta Color Compression since GCN 1.2)
@@ -205,7 +232,7 @@ namespace Ogre
 
             texture = 0;
             hr = device->CreateTexture2D( &desc, 0, &texture );
-            mMsaaFramebufferName = texture;
+            mMsaaFramebufferName.Attach( texture );
 
             if( FAILED(hr) || device.isError() )
             {
@@ -266,7 +293,7 @@ namespace Ogre
 
         ID3D11Texture3D *texture = 0;
         HRESULT hr = device->CreateTexture3D( &desc, 0, &texture );
-        mFinalTextureName = texture;
+        mFinalTextureName.Attach( texture );
 
         if( FAILED(hr) || device.isError() )
         {
@@ -318,25 +345,16 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::destroyInternalResourcesImpl(void)
     {
-        SAFE_RELEASE( mDefaultDisplaySrv );
+        mDefaultDisplaySrv.Reset();
 
-        if( !hasAutomaticBatching() )
+        if( hasAutomaticBatching() && mTexturePool )
         {
-            SAFE_RELEASE( mFinalTextureName );
-            SAFE_RELEASE( mMsaaFramebufferName );
+            //This will end up calling _notifyTextureSlotChanged,
+            //setting mTexturePool & mInternalSliceStart to 0
+            mTextureManager->_releaseSlotFromTexture( this );
         }
-        else
-        {
-            if( mTexturePool )
-            {
-                //This will end up calling _notifyTextureSlotChanged,
-                //setting mTexturePool & mInternalSliceStart to 0
-                mTextureManager->_releaseSlotFromTexture( this );
-            }
-
-            mFinalTextureName = 0;
-            mMsaaFramebufferName = 0;
-        }
+        mFinalTextureName.Reset();
+        mMsaaFramebufferName.Reset();
 
         _setToDisplayDummyTexture();
     }
@@ -346,9 +364,9 @@ namespace Ogre
         assert( mResidencyStatus == GpuResidency::Resident );
         assert( mFinalTextureName || mPixelFormat == PFG_NULL );
 
-        SAFE_RELEASE( mDefaultDisplaySrv );
+        mDefaultDisplaySrv.Reset();
 
-        mDisplayTextureName = mFinalTextureName;
+        mDisplayTextureName = mFinalTextureName.Get();
         if( isTexture() )
         {
             DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::
@@ -361,12 +379,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool D3D11TextureGpu::_isDataReadyImpl(void) const
     {
-        return mDisplayTextureName == mFinalTextureName;
+        return mDisplayTextureName == mFinalTextureName.Get();
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::_setToDisplayDummyTexture(void)
     {
-        SAFE_RELEASE( mDefaultDisplaySrv );
+        mDefaultDisplaySrv.Reset();
 
         if( !mTextureManager )
         {
@@ -382,7 +400,6 @@ namespace Ogre
             if( isTexture() )
             {
                 mDefaultDisplaySrv = textureManagerD3d->getBlankTextureSrv( TextureTypes::Type2DArray );
-                mDefaultDisplaySrv->AddRef();
             }
         }
         else
@@ -391,7 +408,6 @@ namespace Ogre
             if( isTexture() )
             {
                 mDefaultDisplaySrv = textureManagerD3d->getBlankTextureSrv( mTextureType );
-                mDefaultDisplaySrv->AddRef();
             }
         }
     }
@@ -417,12 +433,13 @@ namespace Ogre
         const TextureTypes::TextureTypes oldType = mTextureType;
         TextureGpu::setTextureType( textureType );
 
-        if( oldType != mTextureType && mDisplayTextureName != mFinalTextureName )
+        if( oldType != mTextureType && mDisplayTextureName != mFinalTextureName.Get() )
             _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                                  const TextureBox &srcBox, uint8 srcMipLevel )
+                                  const TextureBox &srcBox, uint8 srcMipLevel,
+                                  bool keepResolvedTexSynced )
     {
         TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
 
@@ -442,23 +459,13 @@ namespace Ogre
         if( srcBox.equalSize( this->getEmptyBox( srcMipLevel ) ) )
             d3dBoxPtr = 0;
 
-        ID3D11Resource *srcTextureName = this->mFinalTextureName;
-        ID3D11Resource *dstTextureName = dstD3d->mFinalTextureName;
+        ID3D11Resource *srcTextureName = this->mFinalTextureName.Get();
+        ID3D11Resource *dstTextureName = dstD3d->mFinalTextureName.Get();
 
-        //Source has explicit resolves. If destination doesn't,
-        //we must copy to its internal MSAA surface.
-        if( this->mMsaa > 1u && this->hasMsaaExplicitResolves() )
-        {
-            if( !dstD3d->hasMsaaExplicitResolves() )
-                dstTextureName = dstD3d->mMsaaFramebufferName;
-        }
-        //Destination has explicit resolves. If source doesn't,
-        //we must copy from its internal MSAA surface.
-        if( dstD3d->mMsaa > 1u && dstD3d->hasMsaaExplicitResolves() )
-        {
-            if( !this->hasMsaaExplicitResolves() )
-                srcTextureName = this->mMsaaFramebufferName;
-        }
+        if( this->isMultisample() && !this->hasMsaaExplicitResolves() )
+            srcTextureName = this->mMsaaFramebufferName.Get();
+        if( dstD3d->isMultisample() && !dstD3d->hasMsaaExplicitResolves() )
+            dstTextureName = dstD3d->mMsaaFramebufferName.Get();
 
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
@@ -480,12 +487,12 @@ namespace Ogre
                                             srcTextureName, srcResourceIndex,
                                             d3dBoxPtr );
 
-            if( dstD3d->mMsaa > 1u && !dstD3d->hasMsaaExplicitResolves() )
+            if( dstD3d->isMultisample() && !dstD3d->hasMsaaExplicitResolves() && keepResolvedTexSynced )
             {
                 //Must keep the resolved texture up to date.
-                context->ResolveSubresource( dstD3d->mFinalTextureName,
+                context->ResolveSubresource( dstD3d->mFinalTextureName.Get(),
                                              dstResourceIndex,
-                                             dstD3d->mMsaaFramebufferName,
+                                             dstD3d->mMsaaFramebufferName.Get(),
                                              dstResourceIndex,
                                              format );
             }
@@ -517,10 +524,10 @@ namespace Ogre
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
         D3D11Device &device = textureManagerD3d->getDevice();
-        device.GetImmediateContext()->GenerateMips( mDefaultDisplaySrv );
+        device.GetImmediateContext()->GenerateMips( mDefaultDisplaySrv.Get() );
     }
     //-----------------------------------------------------------------------------------
-    ID3D11ShaderResourceView* D3D11TextureGpu::createSrv(
+    ComPtr<ID3D11ShaderResourceView> D3D11TextureGpu::createSrv(
             const DescriptorSetTexture2::TextureSlot &texSlot ) const
     {
         assert( isTexture() &&
@@ -550,7 +557,7 @@ namespace Ogre
 
             const TextureTypes::TextureTypes textureType = getInternalTextureType();
 
-            const bool isMsaaSrv = mMsaa > 1u && hasMsaaExplicitResolves();
+            const bool isMsaaSrv = isMultisample() && hasMsaaExplicitResolves();
             srvDesc.ViewDimension = D3D11Mappings::get( textureType, texSlot.cubemapsAs2DArrays,
                                                         isMsaaSrv );
 
@@ -595,8 +602,8 @@ namespace Ogre
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
         D3D11Device &device = textureManagerD3d->getDevice();
-        ID3D11ShaderResourceView *retVal = 0;
-        HRESULT hr = device->CreateShaderResourceView( mDisplayTextureName, srvDescPtr, &retVal );
+        ComPtr<ID3D11ShaderResourceView> retVal;
+        HRESULT hr = device->CreateShaderResourceView( mDisplayTextureName, srvDescPtr, retVal.GetAddressOf() );
         if( FAILED(hr) || device.isError() )
         {
             String errorDescription = device.getErrorDescription( hr );
@@ -609,20 +616,19 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11ShaderResourceView* D3D11TextureGpu::createSrv(void) const
+    ComPtr<ID3D11ShaderResourceView> D3D11TextureGpu::createSrv(void) const
     {
         assert( isTexture() &&
                 "This texture is marked as 'TextureFlags::NotTexture', which "
                 "means it can't be used for reading as a regular texture." );
-        assert( mDefaultDisplaySrv &&
+        assert( mDefaultDisplaySrv.Get() &&
                 "Either the texture wasn't properly loaded or _setToDisplayDummyTexture "
                 "wasn't called when it should have been" );
 
-        mDefaultDisplaySrv->AddRef();
         return mDefaultDisplaySrv;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11UnorderedAccessView* D3D11TextureGpu::createUav(
+    ComPtr<ID3D11UnorderedAccessView> D3D11TextureGpu::createUav(
             const DescriptorSetUav::TextureSlot &texSlot ) const
     {
         D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
@@ -676,8 +682,8 @@ namespace Ogre
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
         D3D11Device &device = textureManagerD3d->getDevice();
 
-        ID3D11UnorderedAccessView *retVal = 0;
-        HRESULT hr = device->CreateUnorderedAccessView( mFinalTextureName, &uavDesc, &retVal );
+        ComPtr<ID3D11UnorderedAccessView> retVal;
+        HRESULT hr = device->CreateUnorderedAccessView( mFinalTextureName.Get(), &uavDesc, retVal.GetAddressOf() );
         if( FAILED(hr) )
         {
             String errorDescription = device.getErrorDescription(hr);
@@ -697,19 +703,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
-        locations.reserve( mMsaa );
-        if( mMsaa <= 1u )
+        locations.reserve( mSampleDescription.getColourSamples() );
+        if( mSampleDescription.getColourSamples() <= 1u )
         {
             locations.push_back( Vector2( 0.0f, 0.0f ) );
         }
         else
         {
-            assert( mMsaaPattern != MsaaPatterns::Undefined );
+            assert( mSampleDescription.getMsaaPattern() != MsaaPatterns::Undefined );
 
-            if( mMsaaPattern == MsaaPatterns::Standard )
+            if( mSampleDescription.getMsaaPattern() == MsaaPatterns::Standard )
             {
                 //As defined per D3D11_STANDARD_MULTISAMPLE_PATTERN docs.
-                switch( mMsaa )
+                switch( mSampleDescription.getColourSamples() )
                 {
                 case 2:
                     locations.push_back( Vector2( Real(  4.0 / 8.0 ), Real(  4.0 / 8.0 ) ) );
@@ -758,7 +764,7 @@ namespace Ogre
             else
             {
                 //Center
-                for( uint8 i=0; i<mMsaa; ++i )
+                for( uint8 i=0; i<mSampleDescription.getColourSamples(); ++i )
                     locations.push_back( Vector2( 0, 0 ) );
             }
         }
@@ -769,12 +775,12 @@ namespace Ogre
         if( name == msFinalTextureBuffer || name == "ID3D11Resource" )
         {
             ID3D11Resource **pTex = (ID3D11Resource**)pData;
-            *pTex = mFinalTextureName;
+            *pTex = mFinalTextureName.Get();
         }
         else if( name == msMsaaTextureBuffer )
         {
             ID3D11Resource **pTex = (ID3D11Resource**)pData;
-            *pTex = mMsaaFramebufferName;
+            *pTex = mMsaaFramebufferName.Get();
         }
         else
         {
@@ -803,6 +809,8 @@ namespace Ogre
             uint16 depthBufferPoolId, bool preferDepthTexture, PixelFormatGpu desiredDepthBufferFormat )
     {
         assert( isRenderToTexture() );
+        OGRE_ASSERT_MEDIUM( mSourceType != TextureSourceType::SharedDepthBuffer &&
+                            "Cannot call _setDepthBufferDefaults on a shared depth buffer!" );
         mDepthBufferPoolId          = depthBufferPoolId;
         mPreferDepthTexture         = preferDepthTexture;
         mDesiredDepthBufferFormat   = desiredDepthBufferFormat;

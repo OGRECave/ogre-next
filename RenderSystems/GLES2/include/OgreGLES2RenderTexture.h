@@ -97,46 +97,6 @@ namespace v1 {
             */
             virtual PixelFormat getSupportedAlternative(PixelFormat format);
     };
-
-    /** RenderTexture for simple copying from frame buffer
-    */
-    class GLES2CopyingRTTManager;
-    class _OgreGLES2Export GLES2CopyingRenderTexture : public GLES2RenderTexture
-    {
-        public:
-            GLES2CopyingRenderTexture(GLES2CopyingRTTManager *manager,
-                                   const String &name,
-                                   const GLES2SurfaceDesc &target,
-                                   bool writeGamma, uint fsaa);
-
-            virtual void getCustomAttribute(const String& name, void* pData);
-    };
-
-    /** Simple, copying manager/factory for RenderTextures. This is only used as the last fallback if
-        FBOs aren't supported.
-    */
-    class _OgreGLES2Export GLES2CopyingRTTManager : public GLES2RTTManager
-    {
-        public:
-            GLES2CopyingRTTManager();
-            virtual ~GLES2CopyingRTTManager();
-
-            /** @copydoc GLES2RTTManager::createRenderTexture
-            */
-            virtual RenderTexture *createRenderTexture(const String &name, const GLES2SurfaceDesc &target, bool writeGamma, uint fsaa);
-            
-            /** @copydoc GLES2RTTManager::checkFormat
-            */
-            virtual bool checkFormat(PixelFormat format);
-
-            /** @copydoc GLES2RTTManager::bind
-            */
-            virtual void bind(RenderTarget *target);
-
-            /** @copydoc GLES2RTTManager::unbind
-            */
-            virtual void unbind(RenderTarget *target);
-    };
 }
 
 #endif

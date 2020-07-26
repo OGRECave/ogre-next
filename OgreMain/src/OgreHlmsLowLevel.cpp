@@ -39,9 +39,12 @@ THE SOFTWARE.
 #include "OgrePass.h"
 
 #include "OgreSceneManager.h"
+#include "OgreRenderQueue.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 
 #include "Animation/OgreSkeletonInstance.h"
+
+#include "Vao/OgreVertexArrayObject.h"
 
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbLowLevelMaterial.h"

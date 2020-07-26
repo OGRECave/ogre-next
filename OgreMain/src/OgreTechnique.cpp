@@ -34,7 +34,9 @@ THE SOFTWARE.
 #include "OgreRenderSystem.h"
 #include "OgreHlmsDatablock.h"
 #include "OgreMaterialManager.h"
+#include "OgreString.h"
 
+#include <sstream>
 
 namespace Ogre {
     //-----------------------------------------------------------------------------

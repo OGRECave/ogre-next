@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define __D3D11HARDWAREBUFFER_H__
 
 #include "OgreD3D11Prerequisites.h"
+#include "OgreD3D11DeviceResource.h"
 #include "OgreHardwareBuffer.h"
 
 namespace Ogre { 
@@ -37,7 +38,8 @@ namespace v1 {
     /** Base implementation of a D3D11 buffer, dealing with all the common
     aspects.
     */
-    class _OgreD3D11Export D3D11HardwareBuffer : public HardwareBuffer
+    class _OgreD3D11Export D3D11HardwareBuffer : public HardwareBuffer,
+                                                 protected D3D11DeviceResource
     {
     public:
         enum BufferType
@@ -61,6 +63,9 @@ namespace v1 {
         void* lockImpl(size_t offset, size_t length, LockOptions options);
         /** See HardwareBuffer. */
         void unlockImpl(void);
+
+        void notifyDeviceLost( D3D11Device *device );
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass );
 
     public:
         D3D11HardwareBuffer(BufferType btype, size_t sizeBytes, HardwareBuffer::Usage usage, 

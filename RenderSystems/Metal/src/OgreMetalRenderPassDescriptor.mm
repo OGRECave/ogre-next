@@ -179,7 +179,7 @@ namespace Ogre
         //iOS_GPUFamily3_v2, OSX_GPUFamily1_v2
         if( mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve &&
             !mRenderSystem->hasStoreAndMultisampleResolve() &&
-            (mColour[i].texture->getMsaa() > 1u && mColour[i].resolveTexture) )
+            (mColour[i].texture->isMultisample() && mColour[i].resolveTexture) )
         {
             //Must emulate the behavior (slower)
             mColourAttachment[i].storeAction = MTLStoreActionStore;
@@ -241,7 +241,7 @@ namespace Ogre
                 assert( dynamic_cast<MetalTextureGpu*>( mColour[i].texture ) );
                 MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mColour[i].texture );
 
-                if( mColour[i].texture->getMsaa() > 1u )
+                if( mColour[i].texture->isMultisample() )
                 {
                     MetalTextureGpu *resolveTexture = 0;
                     if( mColour[i].resolveTexture )
@@ -289,7 +289,7 @@ namespace Ogre
             mColourAttachment[i].storeAction = MetalRenderPassDescriptor::get( mColour[i].storeAction );
 
             if( mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve &&
-                (mColour[i].texture->getMsaa() <= 1u || !mColour[i].resolveTexture) )
+                (!mColour[i].texture->isMultisample() || !mColour[i].resolveTexture) )
             {
                 //Ogre allows non-MSAA textures to use this flag. Metal may complain.
                 mColourAttachment[i].storeAction = MTLStoreActionStore;
@@ -298,7 +298,7 @@ namespace Ogre
             //iOS_GPUFamily3_v2, OSX_GPUFamily1_v2
             if( mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve &&
                 !mRenderSystem->hasStoreAndMultisampleResolve() &&
-                (mColour[i].texture->getMsaa() > 1u && mColour[i].resolveTexture) )
+                (mColour[i].texture->isMultisample() && mColour[i].resolveTexture) )
             {
                 //Must emulate the behavior (slower)
                 mColourAttachment[i].storeAction = MTLStoreActionStore;
@@ -354,7 +354,7 @@ namespace Ogre
         mDepthAttachment.storeAction = MetalRenderPassDescriptor::get( mDepth.storeAction );
 
         if( mDepth.storeAction == StoreAction::StoreAndMultisampleResolve &&
-            (mDepth.texture->getMsaa() <= 1u || !mDepth.resolveTexture) )
+            (!mDepth.texture->isMultisample() || !mDepth.resolveTexture) )
         {
             //Ogre allows non-MSAA textures to use this flag. Metal may complain.
             mDepthAttachment.storeAction = MTLStoreActionStore;
@@ -386,7 +386,7 @@ namespace Ogre
         mStencilAttachment.storeAction = MetalRenderPassDescriptor::get( mStencil.storeAction );
 
         if( mStencil.storeAction == StoreAction::StoreAndMultisampleResolve &&
-            (mStencil.texture->getMsaa() <= 1u || !mStencil.resolveTexture) )
+            (!mStencil.texture->isMultisample() || !mStencil.resolveTexture) )
         {
             //Ogre allows non-MSAA textures to use this flag. Metal may complain.
             mStencilAttachment.storeAction = MTLStoreActionStore;
@@ -544,7 +544,7 @@ namespace Ogre
             MetalTextureGpuWindow *textureMetal =
                     static_cast<MetalTextureGpuWindow*>( mColour[0].texture );
             textureMetal->nextDrawable();
-            if( textureMetal->getMsaa() > 1u )
+            if( textureMetal->isMultisample() )
             {
                 passDesc.colorAttachments[0].texture = textureMetal->getMsaaFramebufferName();
                 passDesc.colorAttachments[0].resolveTexture = textureMetal->getFinalTextureName();

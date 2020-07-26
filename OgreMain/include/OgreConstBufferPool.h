@@ -30,6 +30,10 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "Vao/OgreBufferPacked.h"
+
+#include "ogrestd/map.h"
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

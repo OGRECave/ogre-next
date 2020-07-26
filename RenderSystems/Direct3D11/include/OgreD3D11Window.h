@@ -30,12 +30,14 @@ THE SOFTWARE.
 #define _OgreD3D11Window_H_
 
 #include "OgreD3D11Prerequisites.h"
+#include "OgreD3D11DeviceResource.h"
 #include "OgreWindow.h"
 #include "OgreCommon.h"
 
 namespace Ogre
 {
-    class _OgreD3D11Export D3D11Window : public Window
+    class _OgreD3D11Export D3D11Window : public Window,
+                                         protected D3D11DeviceResource
     {
     protected:
         D3D11Device     &mDevice;
@@ -48,19 +50,16 @@ namespace Ogre
         bool mHwGamma;
         bool mVisible;
 
-        /// Effective FSAA mode, limited by hardware capabilities
-        DXGI_SAMPLE_DESC mMsaaDesc;
-
         // Window size depended resources - must be released
         // before swapchain resize and recreated later
-        ID3D11Texture2D         *mpBackBuffer;
+        ComPtr<ID3D11Texture2D> mpBackBuffer;
         /// Optional, always holds up-to-date copy data from mpBackBuffer if not NULL
-        ID3D11Texture2D         *mpBackBufferNoMSAA;
-        //ID3D11RenderTargetView  *mRenderTargetView;
+        ComPtr<ID3D11Texture2D> mpBackBufferInterim;
 
         D3D11RenderSystem       *mRenderSystem;
 
-        //IDXGIDeviceN* _queryDxgiDevice();       // release after use!
+    protected:
+        virtual PixelFormatGpu _getRenderFormat() { return mHwGamma ? PFG_BGRA8_UNORM_SRGB : PFG_BGRA8_UNORM; } // preferred since Win8
 
     public:
         D3D11Window( const String &title, uint32 width, uint32 height,
@@ -68,9 +67,14 @@ namespace Ogre
                      const NameValuePairList *miscParams,
                      D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11Window();
+        virtual void destroy();
 
-        bool isClosed() const                                   { return mClosed; }
-        bool isHidden() const                                   { return mHidden; }
+        virtual void reposition(int leftPt, int topPt)          {}
+
+        virtual bool isClosed() const                           { return mClosed; }
+        virtual void _setVisible( bool visible )                { mVisible = visible; }
+        virtual void setHidden( bool hidden )                   { mHidden = hidden; }
+        virtual bool isHidden() const                           { return mHidden; }
 
         virtual void getCustomAttribute( IdString name, void* pData );
     };
@@ -78,13 +82,13 @@ namespace Ogre
     class _OgreD3D11Export D3D11WindowSwapChainBased : public D3D11Window
     {
     protected:
-        IDXGISwapChain  *mSwapChain;
-        IDXGISwapChain1 *mSwapChain1;
+        ComPtr<IDXGISwapChain>  mSwapChain;
+        ComPtr<IDXGISwapChain1> mSwapChain1;
         //DXGI_SWAP_CHAIN_DESC_N  mSwapChainDesc;
 
-        /// Flag to determine if the swapchain flip sequential model is enabled.
+        /// Flag to determine if the swapchain flip model is active.
         /// Not supported before Win8.0, required for WinRT.
-        bool mUseFlipSequentialMode;
+        bool mUseFlipMode;
 
         // We save the previous present stats - so we can detect a "vblank miss"
         DXGI_FRAME_STATISTICS   mPreviousPresentStats;
@@ -93,15 +97,38 @@ namespace Ogre
         // Number of times we missed the v sync blank
         uint32                  mVBlankMissCount;
 
+    protected:
+        DXGI_FORMAT _getSwapChainFormat();
+        DXGI_SWAP_CHAIN_FLAG _getSwapChainFlags();
+        uint8 _getSwapChainBufferCount(void) const;
+        void _createSwapChain();
+        virtual HRESULT _createSwapChainImpl() = 0;
+        void _destroySwapChain();
+        void _createSizeDependedD3DResources();
+        void _destroySizeDependedD3DResources();
+        void resizeSwapChainBuffers( uint32 width, uint32 height );
+        void notifyResolutionChanged(void);
+        void notifyDeviceLost(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
+
     public:
         D3D11WindowSwapChainBased( const String &title, uint32 width, uint32 height,
                                    bool fullscreenMode, PixelFormatGpu depthStencilFormat,
                                    const NameValuePairList *miscParams,
                                    D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowSwapChainBased();
+
+        virtual void _initialize( TextureGpuManager *textureGpuManager );
+        virtual void destroy();
+
+        /// @copydoc Window::setFsaa
+        virtual void setFsaa(const String& fsaa);
+
+        virtual void swapBuffers(void);
     };
 }
 
 #include "Windowing/WIN32/OgreD3D11WindowHwnd.h"
+#include "Windowing/WIN32/OgreD3D11WindowWinRT.h"
 
 #endif

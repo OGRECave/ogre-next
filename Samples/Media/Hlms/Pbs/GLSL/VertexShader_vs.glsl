@@ -48,6 +48,9 @@ in vec4 vertex;
 // START UNIFORM GL DECLARATION
 /*layout(binding = 0) */uniform samplerBuffer worldMatBuf;
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
+@property( hlms_pose )
+	uniform samplerBuffer poseBuf;
+@end
 // END UNIFORM GL DECLARATION
 
 void main()

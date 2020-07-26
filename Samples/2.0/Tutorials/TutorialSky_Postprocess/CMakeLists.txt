@@ -19,8 +19,4 @@ ogre_add_executable(Sample_TutorialSky_Postprocess WIN32 MACOSX_BUNDLE ${SOURCE_
 
 target_link_libraries(Sample_TutorialSky_Postprocess ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(Sample_TutorialSky_Postprocess)
-
-if( APPLE )
-	set_target_properties( Sample_TutorialSky_Postprocess PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Sample_TutorialSky_Postprocess PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Sample_TutorialSky_Postprocess)

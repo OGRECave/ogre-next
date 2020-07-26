@@ -168,8 +168,18 @@ inline void ComputeFilterKernel( int iPixelOffset, int iLineOffset, int2 i2Cente
 kernel void main_metal
 (
 	  sampler inputSampler												[[sampler(0)]]
-	, texture2d<@insertpiece(texture0_pf_type)> inputImage				[[texture(0)]]
-	, texture2d<@insertpiece(uav0_pf_type), access::write> outputImage	[[texture(UAV_SLOT_START+0)]]
+	@property( texture0_texture_type == TextureTypes_Type2DArray )
+		, texture2d_array<@insertpiece(texture0_pf_type)> inputImage		[[texture(0)]]
+	@else
+		, texture2d<@insertpiece(texture0_pf_type)> inputImage				[[texture(0)]]
+	@end
+
+	@property( uav0_texture_type == TextureTypes_Type2DArray )
+		, texture2d_array<@insertpiece(uav0_pf_type), access::write> outputImage	[[texture(UAV_SLOT_START+0)]]
+	@else
+		, texture2d<@insertpiece(uav0_pf_type), access::write> outputImage			[[texture(UAV_SLOT_START+0)]]
+	@end
+
 
 	, constant Params &p [[buffer(PARAMETER_SLOT)]]
 

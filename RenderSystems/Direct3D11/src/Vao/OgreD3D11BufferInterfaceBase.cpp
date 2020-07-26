@@ -43,6 +43,16 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    void D3D11BufferInterfaceBase::notifyDeviceLost( D3D11Device *device )
+    {
+        mVboPoolIdx = 0xFFFFFFFF;
+        mVboName.Reset();
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11BufferInterfaceBase::notifyDeviceRestored( D3D11Device *device, unsigned pass )
+    {
+    }
+    //-----------------------------------------------------------------------------------
     void D3D11BufferInterfaceBase::splicedCopy( size_t dstOffsetBytes, size_t srcOffsetBytes,
                                                 size_t sizeBytes, size_t alignment,
                                                 ID3D11Buffer *dstBuffer, ID3D11Buffer *srcBuffer,
@@ -121,22 +131,22 @@ namespace Ogre
                 srcBox.left     = static_cast<UINT>( srcOffsetBytes );
                 srcBox.right    = static_cast<UINT>( srcOffsetBytes +
                                                      alignToPreviousMult( sizeBytes, alignment ) );
-                context->CopySubresourceRegion( dstBufferD3d->mVboName, 0,
+                context->CopySubresourceRegion( dstBufferD3d->mVboName.Get(), 0,
                                                 static_cast<UINT>( dstOffsetBytes ), 0, 0,
-                                                this->mVboName, 0, &srcBox );
+                                                this->mVboName.Get(), 0, &srcBox );
             }
 
             //Now deal with the last few bytes (which is up to 'alignment - 1u' bytes)
             splicedCopy( dstOffsetBytes, srcOffsetBytes, sizeBytes, alignment,
-                         dstBufferD3d->mVboName, this->mVboName, context );
+                         dstBufferD3d->mVboName.Get(), this->mVboName.Get(), context );
         }
         else
         {
             srcBox.left     = static_cast<UINT>( srcOffsetBytes );
             srcBox.right    = static_cast<UINT>( srcOffsetBytes + sizeBytes );
-            context->CopySubresourceRegion( dstBufferD3d->mVboName, 0,
+            context->CopySubresourceRegion( dstBufferD3d->mVboName.Get(), 0,
                                             static_cast<UINT>( dstOffsetBytes ), 0, 0,
-                                            this->mVboName, 0, &srcBox );
+                                            this->mVboName.Get(), 0, &srcBox );
         }
     }
     //-----------------------------------------------------------------------------------

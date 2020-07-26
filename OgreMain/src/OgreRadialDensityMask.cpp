@@ -40,6 +40,8 @@ THE SOFTWARE.
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
 #include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
+#include "Vao/OgreVertexArrayObject.h"
 
 #include "OgreShaderPrimitives.h"
 
@@ -73,6 +75,7 @@ namespace Ogre
         mRectangle->setGeometry( mLeftEyeCenter, mRightEyeCenter );
         mRectangle->initialize(
             BT_IMMUTABLE, Rectangle2D::GeometryFlagStereo | Rectangle2D::GeometryFlagHollowFsRect );
+        mRectangle->setRenderQueueGroup( 0u ); // Render first!
 
         const String baseMatName = "Ogre/VR/RadialDensityMask";
         const String matName = baseMatName + StringConverter::toString( sceneManager->getId() );

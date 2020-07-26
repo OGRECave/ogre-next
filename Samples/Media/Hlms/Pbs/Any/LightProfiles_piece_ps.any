@@ -1,0 +1,55 @@
+
+#include "/media/matias/Datos/SyntaxHighlightingMisc.h"
+
+@property( light_profiles_texture )
+
+@piece( DeclLightProfilesTexture )
+	@property( syntax == glsl || syntax == glsles )
+		uniform sampler2D lightProfiles;
+	@end
+	@property( syntax == hlsl )
+		Texture2D lightProfiles					: register(t@value(lightProfiles));
+		SamplerState lightProfilesSampler		: register(s@value(lightProfiles));
+	@end
+	@property( syntax == metal )
+		, texture2d<float> lightProfiles		[[texture(@value(lightProfiles))]]
+		, sampler lightProfilesSampler			[[sampler(@value(lightProfiles))]]
+	@end
+@end
+
+
+@piece( DeclLightProfilesTextureFuncs )
+	@property( syntax == metal )
+		#define OGRE_PHOTOMETRIC_ARG_DECL , texture2d<float> lightProfiles, sampler lightProfilesSampler
+		#define OGRE_PHOTOMETRIC_ARG , lightProfiles, lightProfilesSampler
+	@else
+		#define OGRE_PHOTOMETRIC_ARG_DECL
+		#define OGRE_PHOTOMETRIC_ARG
+	@end
+
+	// polynomial degree 1
+	// input [-1, 1] and output [0, PI]
+	// See
+	// https://seblagarde.wordpress.com/2014/12/01/inverse-trigonometric-functions-gpu-optimization-for-amd-gcn-architecture/
+	float fast_acos(float inX)
+	{
+		float C0 = 1.56467f;
+		float C1 = -0.155972;
+
+		float x = abs(inX);
+		float res = C1 * x + C0; // p(x)
+		res *= sqrt(1.0f - x);
+
+		return (inX >= 0) ? res : 3.14159265359f - res; // Undo range reduction
+	}
+
+	float getPhotometricAttenuation( float cosAngle, float profileIdx OGRE_PHOTOMETRIC_ARG_DECL )
+	{
+		//float angle = acos( clamp( cosAngle, -1.0, 1.0 ) ) * ( 1.0 / 3.14159265359f );
+		float angle = fast_acos( clamp( cosAngle, -1.0, 1.0 ) ) * ( 1.0 / 3.14159265359f );
+		return OGRE_SampleLevel( lightProfiles, lightProfilesSampler,
+								 float2( angle, profileIdx ), 0.0 ).r;
+	}
+@end
+
+@end

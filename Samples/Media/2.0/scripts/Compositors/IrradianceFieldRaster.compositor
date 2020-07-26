@@ -1,0 +1,97 @@
+abstract target cubemap_target
+{
+	pass render_scene
+	{
+		load
+		{
+			all				clear
+			clear_colour	0.2 0.4 0.6 1
+		}
+		store
+		{
+			//We DO care about the contents of depth
+			depth			store
+			stencil			dont_care
+		}
+
+		overlays			off
+		camera_cubemap_reorient true
+
+		rq_first	0
+		rq_last		250
+
+		//We want very accurate shadows in the reflections and Ogre seems to
+		//be unable to detect for each pass shadows should be recalculated,
+		//so force it.
+		shadows LocalCubemapsShadowNode recalculate
+	}
+
+	//Render sky (see TutorialSky_Postprocess)
+	/*pass render_quad
+	{
+		store
+		{
+			//We only care about the contents of the colour target
+			depth			dont_care
+			stencil			dont_care
+		}
+
+		quad_normals	camera_direction
+		material SkyPostprocess
+		camera_cubemap_reorient true
+	}*/
+}
+
+abstract target depth_to_cubemap
+{
+	pass render_quad
+	{
+		load
+		{
+			all		dont_care
+		}
+		store
+		{
+			depth	dont_care
+			stencil	dont_care
+		}
+
+		material		Ogre/Copy/4xFP32
+		input			0 depthTexture
+
+		camera_cubemap_reorient true
+	}
+}
+
+compositor_node IrradianceFieldRasterRendererNode
+{
+	in 0 cubemap
+	in 1 cubemap_depth
+
+	texture depthTexture	target_width target_height PFG_D32_FLOAT
+
+	rtv cubemap_customRtv
+	{
+		colour	cubemap
+		depth	depthTexture
+	}
+
+	target cubemap_customRtv	+X : cubemap_target { }
+	target cubemap_depth		+X : depth_to_cubemap { }
+	target cubemap_customRtv	-X : cubemap_target { }
+	target cubemap_depth		-X : depth_to_cubemap { }
+	target cubemap_customRtv	+Y : cubemap_target { }
+	target cubemap_depth		+Y : depth_to_cubemap { }
+	target cubemap_customRtv	-Y : cubemap_target { }
+	target cubemap_depth		-Y : depth_to_cubemap { }
+	target cubemap_customRtv	+Z : cubemap_target { }
+	target cubemap_depth		+Z : depth_to_cubemap { }
+	target cubemap_customRtv	-Z : cubemap_target { }
+	target cubemap_depth		-Z : depth_to_cubemap { }
+}
+
+workspace IrradianceFieldRasterWorkspace
+{
+	connect_external 0 IrradianceFieldRasterRendererNode 0
+	connect_external 1 IrradianceFieldRasterRendererNode 1
+}

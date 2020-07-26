@@ -574,23 +574,8 @@ namespace Ogre
 
         /** Function for writing to a stream.
         */
-        inline _OgreExport friend std::ostream& operator <<
-            ( std::ostream& o, const Matrix4& mat )
-        {
-            o << "Matrix4(";
-            for (size_t i = 0; i < 4; ++i)
-            {
-                o << " row" << (unsigned)i << "{";
-                for(size_t j = 0; j < 4; ++j)
-                {
-                    o << mat[i][j] << " ";
-                }
-                o << "}";
-            }
-            o << ")";
-            return o;
-        }
-        
+        _OgreExport friend std::ostream &operator<<( std::ostream &o, const Matrix4 &mat );
+
         Matrix4 adjoint() const;
         Real determinant() const;
         Matrix4 inverse() const;

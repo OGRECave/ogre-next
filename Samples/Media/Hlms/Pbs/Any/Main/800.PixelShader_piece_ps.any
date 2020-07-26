@@ -1,4 +1,4 @@
-@piece( envSpecularRoughness ) pixelData.roughness * 12.0 @end
+@piece( envSpecularRoughness ) pixelData.perceptualRoughness * passBuf.envMapNumMipmaps @end
 
 @piece( DefaultHeaderPS )
 	@property( !fresnel_scalar )
@@ -10,6 +10,14 @@
 	@end
 
 	@insertpiece( DeclReverseDepthMacros )
+
+	@property( syntax == metal )
+		#define PASSBUF_ARG_DECL , constant PassBuffer &passBuf
+		#define PASSBUF_ARG , passBuf
+	@else
+		#define PASSBUF_ARG_DECL
+		#define PASSBUF_ARG
+	@end
 
 	@property( hlms_enable_cubemaps_auto )
 		@insertpiece( UnpackHelpers )
@@ -26,6 +34,7 @@
 			@end
 			float4	diffuse;
 			float3	specular;
+			float	perceptualRoughness;
 			float	roughness;
 			float_fresnel	F0;
 
@@ -51,7 +60,7 @@
 		@property( detail_map@n )#define SampleDetailCol@n( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )@end
 	@end
 	@property( diffuse_map )
-		#define SampleDiffuse( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+		#define SampleDiffuse( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) @property( diffuse_map_grayscale ).rrra@end
 	@end
 	@property( specular_map )
 		#define SampleSpecular( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
@@ -91,6 +100,10 @@
 			//Normal texture must be in RG8_UNORM or similar format!
 			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xy * 2.0 - 1.0 )
 		@end
+		@property( normal_sampling_format == normal_bc3_unorm )
+			//Normal texture must be in BC3 or similar format!
+			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).yw * 2.0 - 1.0 )
+		@end
 		@property( normal_sampling_format == normal_la )
 			//Normal texture must be in LA format!
 			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xw * 2.0 - 1.0 )
@@ -123,6 +136,9 @@
 
 	@insertpiece( DeclVctFuncs )
 	@insertpiece( DeclIrradianceFieldFuncs )
+	@insertpiece( DeclRefractionsFuncs )
+	@insertpiece( DeclIrradianceSH )
+	@insertpiece( DeclLightProfilesTextureFuncs )
 @end
 
 
@@ -235,7 +251,7 @@
 
 	/// Apply the material's diffuse over the textures
 	pixelData.diffuse.xyz *= material.kD.xyz;
-	@property( transparent_mode )
+	@property( transparent_mode || hlms_screen_space_refractions )
 		pixelData.diffuse.xyz *= (pixelData.diffuse.w * pixelData.diffuse.w);
 	@end
 
@@ -272,20 +288,29 @@
 		@end
 		pixelData.F0 = lerp( make_float_fresnel( 0.03f ), pixelData.diffuse.xyz * 3.14159f, metalness );
 		pixelData.diffuse.xyz = pixelData.diffuse.xyz - pixelData.diffuse.xyz * metalness;
-		@property( hlms_alphablend )pixelData.F0 *= material.F0.w;@end ///Should this be done for non-metallic as well???
+		@property( hlms_alphablend || hlms_screen_space_refractions )
+			pixelData.F0 *= material.F0.w; ///Should this be done for non-metallic as well???
+		@end
 	@end
-	@property( transparent_mode )pixelData.F0 *= pixelData.diffuse.w;@end
+	@property( transparent_mode || hlms_screen_space_refractions )
+		pixelData.F0 *= pixelData.diffuse.w;
+	@end
 @end
 
 @piece( SampleRoughnessMap )
 	/// ROUGHNESS MAP
-	pixelData.roughness = material.kS.w;
+	pixelData.perceptualRoughness = material.kS.w;
 	@property( roughness_map )
-		pixelData.roughness *= SampleRoughness( textureMaps@value( roughness_map_idx ),
-												samplerState@value( roughness_map_sampler ),
-												UV_ROUGHNESS( inPs.uv@value(uv_roughness).xy ),
-												texIndex_roughnessIdx ).x;
-		pixelData.roughness = max( pixelData.roughness, 0.001f );
+		pixelData.perceptualRoughness *=
+			SampleRoughness( textureMaps@value( roughness_map_idx ),
+							 samplerState@value( roughness_map_sampler ),
+							 UV_ROUGHNESS( inPs.uv@value(uv_roughness).xy ),
+							 texIndex_roughnessIdx ).x;
+	@end
+	@property( perceptual_roughness )
+		pixelData.roughness = max( pixelData.perceptualRoughness * pixelData.perceptualRoughness, 0.001f );
+	@else
+		pixelData.roughness = max( pixelData.perceptualRoughness, 0.001f );
 	@end
 @end
 
@@ -399,31 +424,28 @@
 		pixelData.reflDir = 2.0 * dot( pixelData.viewDir, pixelData.normal ) * pixelData.normal - pixelData.viewDir;
 	@end
 
-	@property( ambient_hemisphere || vct_ambient_hemisphere )
-		float ambientWD = dot( passBuf.ambientHemisphereDir.xyz, pixelData.normal ) * 0.5 + 0.5;
-		float ambientWS = dot( passBuf.ambientHemisphereDir.xyz, pixelData.reflDir ) * 0.5 + 0.5;
-	@end
+	@insertpiece( DoAmbientHeader )
 @end
 
 @piece( DoDirectionalLights )
 	@property( hlms_lights_directional )
 		@insertpiece( ObjLightMaskCmp )
-			finalColour += BRDF( passBuf.lights[0].position.xyz, passBuf.lights[0].diffuse.xyz, passBuf.lights[0].specular, pixelData ) @insertpiece( DarkenWithShadowFirstLight );
+			finalColour += BRDF( light0Buf.lights[0].position.xyz, light0Buf.lights[0].diffuse.xyz, light0Buf.lights[0].specular, pixelData ) @insertpiece( DarkenWithShadowFirstLight );
 	@end
 	@foreach( hlms_lights_directional, n, 1 )
 		@insertpiece( ObjLightMaskCmp )
-			finalColour += BRDF( passBuf.lights[@n].position.xyz, passBuf.lights[@n].diffuse.xyz, passBuf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadow );@end
+			finalColour += BRDF( light0Buf.lights[@n].position.xyz, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadow );@end
 
 	@property( !hlms_static_branch_lights )
 		@foreach( hlms_lights_directional_non_caster, n, hlms_lights_directional )
 			@insertpiece( ObjLightMaskCmp )
-				finalColour += BRDF( passBuf.lights[@n].position.xyz, passBuf.lights[@n].diffuse.xyz, passBuf.lights[@n].specular, pixelData );@end
+				finalColour += BRDF( light0Buf.lights[@n].position.xyz, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData );@end
 	@else
-		for( int n=0; n<floatBitsToInt( passBuf.numNonCasterDirectionalLights ); ++n )
+		for( int n=0; n<floatBitsToInt( light0Buf.numNonCasterDirectionalLights ); ++n )
 		{
 			int i = @value( hlms_lights_directional ) + n;
 			@insertpiece( ObjLightMaskCmpNonCasterLoop )
-				finalColour += BRDF( passBuf.lights[i].position.xyz, passBuf.lights[i].diffuse.xyz, passBuf.lights[i].specular, pixelData );
+				finalColour += BRDF( light0Buf.lights[i].position.xyz, light0Buf.lights[i].diffuse.xyz, light0Buf.lights[i].specular, pixelData );
 		}
 		/// Increase fineMaskLightIdx to keep it working with spot/point lights
 		@insertpiece( ObjLightMaskCmpNonCasterLoopEnd )
@@ -433,13 +455,13 @@
 //Point lights
 @piece( DoPointLights )
 	@foreach( hlms_lights_point, n, hlms_lights_directional_non_caster )
-		lightDir = passBuf.lights[@n].position.xyz - inPs.pos;
+		lightDir = light0Buf.lights[@n].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
-		if( fDistance <= passBuf.lights[@n].attenuation.x @insertpiece( andObjLightMaskCmp ) )
+		if( fDistance <= light0Buf.lights[@n].attenuation.x @insertpiece( andObjLightMaskCmp ) )
 		{
 			lightDir *= 1.0 / fDistance;
-			tmpColour = BRDF( lightDir, passBuf.lights[@n].diffuse.xyz, passBuf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadowPoint );
-			float atten = 1.0 / (0.5 + (passBuf.lights[@n].attenuation.y + passBuf.lights[@n].attenuation.z * fDistance) * fDistance );
+			tmpColour = BRDF( lightDir, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadowPoint );
+			float atten = 1.0 / (0.5 + (light0Buf.lights[@n].attenuation.y + light0Buf.lights[@n].attenuation.z * fDistance) * fDistance );
 			finalColour += tmpColour * atten;
 		}
 	@end
@@ -451,25 +473,32 @@
 //spotParams[@value(spot_params)].z = falloff
 @piece( DoSpotLights )
 	@foreach( hlms_lights_spot, n, hlms_lights_point )
-		lightDir = passBuf.lights[@n].position.xyz - inPs.pos;
+		lightDir = light0Buf.lights[@n].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
 		lightDir *= 1.0 / fDistance;
 		@property( !hlms_lights_spot_textured )
-			spotCosAngle = dot( -lightDir, passBuf.lights[@n].spotDirection.xyz );
+			spotCosAngle = dot( -lightDir, light0Buf.lights[@n].spotDirection.xyz );
 		@else
-			spotCosAngle = dot( -lightDir, zAxis( passBuf.lights[@n].spotQuaternion ) );
+			spotCosAngle = dot( -lightDir, zAxis( light0Buf.lights[@n].spotQuaternion ) );
 		@end
-		if( fDistance <= passBuf.lights[@n].attenuation.x && spotCosAngle >= passBuf.lights[@n].spotParams.y @insertpiece( andObjLightMaskCmp ) )
+		if( fDistance <= light0Buf.lights[@n].attenuation.x && spotCosAngle >= light0Buf.lights[@n].spotParams.y @insertpiece( andObjLightMaskCmp ) )
 		{
 			@property( hlms_lights_spot_textured )
 				float3 posInLightSpace = qmul( spotQuaternion[@value(spot_params)], inPs.pos );
 				float spotAtten = texture( texSpotLight, normalize( posInLightSpace ).xy ).x; //TODO
 			@else
-				float spotAtten = saturate( (spotCosAngle - passBuf.lights[@n].spotParams.y) * passBuf.lights[@n].spotParams.x );
-				spotAtten = pow( spotAtten, passBuf.lights[@n].spotParams.z );
+				float spotAtten = saturate( (spotCosAngle - light0Buf.lights[@n].spotParams.y) * light0Buf.lights[@n].spotParams.x );
+				spotAtten = pow( spotAtten, light0Buf.lights[@n].spotParams.z );
 			@end
-			tmpColour = BRDF( lightDir, passBuf.lights[@n].diffuse.xyz, passBuf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadow );
-			float atten = 1.0 / (0.5 + (passBuf.lights[@n].attenuation.y + passBuf.lights[@n].attenuation.z * fDistance) * fDistance );
+
+			@property( light_profiles_texture )
+				spotAtten *= getPhotometricAttenuation( spotCosAngle,
+														light0Buf.lights[@n].lightTexProfileIdx
+														OGRE_PHOTOMETRIC_ARG );
+			@end
+
+			tmpColour = BRDF( lightDir, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadow );
+			float atten = 1.0 / (0.5 + (light0Buf.lights[@n].attenuation.y + light0Buf.lights[@n].attenuation.z * fDistance) * fDistance );
 			finalColour += tmpColour * (atten * spotAtten);
 		}
 	@end
@@ -514,7 +543,7 @@
 		@end
 		float3 nNormalLS = localCorrect( pixelData.normal, posInProbSpace, @insertpiece( pccProbeSource ) ).xyz;
 		float4 envS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-									  reflDirLS, sqrt( pixelData.roughness ) * 11.0 );
+									  reflDirLS, @insertpiece( envSpecularRoughness ) );
 		@property( envmap_scale )
 			envS.xyz *= passBuf.ambientUpperHemi.w;
 		@end
@@ -561,6 +590,16 @@
 
 @property( !hlms_shadowcaster )
 @piece( DefaultBodyPS )
+	@property( hlms_screen_pos_uv )
+		float2 screenPosUv = gl_FragCoord.xy * passBuf.invWindowRes.xy;
+	@end
+	@property( hlms_screen_pos_int )
+		rshort2 iFragCoord =
+			rshort2( gl_FragCoord.x,
+					 @property( !hlms_forwardplus_flipY && syntax == glsl )passBuf.windowResolution.y - @end
+					 gl_FragCoord.y );
+	@end
+
 	@property( hlms_normal || hlms_qtangent )
 		PixelData pixelData;
 
@@ -603,10 +642,6 @@
 			@insertpiece( DoDirectionalShadowMaps )
 
 		@end @property( hlms_use_prepass )
-			rshort2 iFragCoord = rshort2( gl_FragCoord.x,
-										  @property( !hlms_forwardplus_flipY && syntax == glsl )passBuf.windowHeight.x - @end
-										  gl_FragCoord.y );
-
 			@property( hlms_use_prepass_msaa )
 				//SV_Coverage/gl_SampleMaskIn is always before depth & stencil tests,
 				//so we need to perform the test ourselves
@@ -671,7 +706,7 @@
 
 			@insertpiece( forward3dLighting )
 
-			@property( needs_env_brdf && (use_envprobe_map || hlms_use_ssr || use_planar_reflections || vct_num_probes || irradiance_field) )
+			@property( needs_env_brdf )
 				pixelData.envColourS = float3( 0, 0, 0 );
 				pixelData.envColourD = float3( 0, 0, 0 );
 			@end
@@ -704,32 +739,13 @@
 
 			@insertpiece( DoPlanarReflectionsPS )
 
-			@property( ambient_hemisphere )
-				@property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || vct_num_probes || irradiance_field )
-					@property( vct_num_probes )
-						//Only use ambient lighting if object is outside any VCT probe
-						if( vctSpecular.w == 0 )
-						{
-					@end
-							pixelData.envColourS += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
-							pixelData.envColourD += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
-					@property( vct_num_probes )
-						}
-					@end
-				@else
-					pixelData.envColourS = lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
-					pixelData.envColourD = lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
-				@end
-			@end
-			@property( ambient_fixed && vct_num_probes )
-				//Only use ambient lighting if object is outside any VCT probe
-				finalColour += vctSpecular.w == 0 ? float3( 0, 0, 0 ) :
-													(passBuf.ambientUpperHemi.xyz * pixelData.diffuse.xyz);
-			@end
+			@insertpiece( DoAmbientLighting )
 
 			@property( needs_env_brdf )
 				@insertpiece( BRDF_EnvMap )
 			@end
+
+			@insertpiece( applyRefractions )
 		@end ///!hlms_prepass
 
 	@end ///!hlms_normal || hlms_qtangent
@@ -756,9 +772,15 @@
 
 				@property( debug_pssm_splits )
 					outPs_colour0.xyz = mix( outPs_colour0.xyz, debugPssmSplit.xyz, 0.2f );
+				@end				
+				@property( hlms_gen_normals_gbuffer )
+					outPs_normals = float4( pixelData.normal * 0.5 + 0.5, 1.0 );
 				@end
 			@else
 				outPs_colour0 = float4( 1.0, 1.0, 1.0, 1.0 );
+				@property( hlms_gen_normals_gbuffer )
+					outPs_normals = float4( 0.5, 0.5, 1.0, 1.0 );
+				@end
 			@end
 		@else
 			outPs_normals			= float4( pixelData.normal * 0.5 + 0.5, 1.0 );

@@ -25,8 +25,4 @@ ogre_add_executable(Sample_Tutorial_Memory WIN32 MACOSX_BUNDLE ${SOURCE_FILES} $
 
 target_link_libraries(Sample_Tutorial_Memory ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} OgreSceneFormat)
 ogre_config_sample_lib(Sample_Tutorial_Memory)
-
-if( APPLE )
-	set_target_properties( Sample_Tutorial_Memory PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Sample_Tutorial_Memory PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Sample_Tutorial_Memory)

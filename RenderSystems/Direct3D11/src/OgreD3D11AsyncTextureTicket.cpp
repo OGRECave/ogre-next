@@ -47,9 +47,7 @@ namespace Ogre
                                                       D3D11VaoManager *vaoManager ) :
         AsyncTextureTicket( width, height, depthOrSlices, textureType,
                             pixelFormatFamily ),
-        mStagingTexture( 0 ),
         mDownloadFrame( 0 ),
-        mAccurateFence( 0 ),
         mVaoManager( vaoManager ),
         mMappedSlice( 0 ),
         mIsArray2DTexture( false )
@@ -82,7 +80,7 @@ namespace Ogre
 
             ID3D11Texture3D *texture = 0;
             hr = device->CreateTexture3D( &desc, 0, &texture );
-            mStagingTexture = texture;
+            mStagingTexture.Attach( texture );
         }
         else
         {
@@ -108,13 +106,12 @@ namespace Ogre
 
             ID3D11Texture2D *texture = 0;
             hr = device->CreateTexture2D( &desc, 0, &texture );
-            mStagingTexture = texture;
+            mStagingTexture.Attach( texture );
             mIsArray2DTexture = true;
         }
 
         if( FAILED(hr) || device.isError() )
         {
-            SAFE_RELEASE( mStagingTexture );
             String errorDescription = device.getErrorDescription( hr );
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Error creating AsyncTextureTicket\nError Description:" + errorDescription,
@@ -126,9 +123,6 @@ namespace Ogre
     {
         if( mStatus == Mapped )
             unmap();
-
-        SAFE_RELEASE( mStagingTexture );
-        SAFE_RELEASE( mAccurateFence );
     }
     //-----------------------------------------------------------------------------------
     void D3D11AsyncTextureTicket::downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
@@ -138,7 +132,7 @@ namespace Ogre
 
         mDownloadFrame = mVaoManager->getFrameCount();
 
-        SAFE_RELEASE( mAccurateFence );
+        mAccurateFence.Reset();
 
         TextureBox srcTextureBox;
         TextureBox fullSrcTextureBox( textureSrc->getEmptyBox( mipLevel ) );
@@ -164,6 +158,7 @@ namespace Ogre
         const TextureTypes::TextureTypes textureType = textureSrc->getInternalTextureType();
 
         D3D11_BOX srcBoxD3d;
+        D3D11_BOX *srcBoxD3dPtr = &srcBoxD3d;
 
         srcBoxD3d.left  = srcTextureBox.x;
         srcBoxD3d.top   = srcTextureBox.y;
@@ -199,6 +194,17 @@ namespace Ogre
         UINT zPos = 0;
         UINT dstSlicePos = 0;
 
+        // D3D11 complains about MSAA and depth texture when we send a non-nullptr
+        // To CopySubresourceRegion even if it's a valid copy. Thus check if it's
+        // a valid copy and unset the ptr if so.
+        if( srcTextureBox.x == 0u && srcTextureBox.y == 0u && srcTextureBox.z == 0u &&
+            srcTextureBox.width == fullSrcTextureBox.width &&
+            srcTextureBox.height == fullSrcTextureBox.height &&
+            srcTextureBox.depth == fullSrcTextureBox.depth )
+        {
+            srcBoxD3dPtr = 0;
+        }
+
         assert( dynamic_cast<D3D11TextureGpu*>( textureSrc ) );
         D3D11TextureGpu *srcTextureD3d = static_cast<D3D11TextureGpu*>( textureSrc );
 
@@ -211,9 +217,9 @@ namespace Ogre
                                                                  textureSrc->getNumMipmaps() );
             const UINT dstSubResourceIdx = D3D11CalcSubresource( 0, dstSlicePos, 1u );
 
-            context->CopySubresourceRegion( mStagingTexture, dstSubResourceIdx,
+            context->CopySubresourceRegion( mStagingTexture.Get(), dstSubResourceIdx,
                                             0, 0, zPos, srcTextureD3d->getFinalTextureName(),
-                                            srcSubResourceIdx, &srcBoxD3d );
+                                            srcSubResourceIdx, srcBoxD3dPtr );
             if( textureType == TextureTypes::Type3D )
             {
                 ++srcBoxD3d.front;
@@ -253,7 +259,7 @@ namespace Ogre
         const UINT subresourceIdx = D3D11CalcSubresource( 0, slice, 1u );
 
         D3D11_MAPPED_SUBRESOURCE mappedSubresource;
-        context->Map( mStagingTexture, subresourceIdx, D3D11_MAP_READ, 0, &mappedSubresource );
+        context->Map( mStagingTexture.Get(), subresourceIdx, D3D11_MAP_READ, 0, &mappedSubresource );
 
         TextureBox retVal( mWidth, mHeight, getDepth(), getNumSlices(),
                            PixelFormatGpuUtils::getBytesPerPixel( mPixelFormatFamily ),
@@ -269,7 +275,7 @@ namespace Ogre
 
         D3D11Device &device = mVaoManager->getDevice();
         ID3D11DeviceContextN *context = device.GetImmediateContext();
-        context->Unmap( mStagingTexture, subresourceIdx );
+        context->Unmap( mStagingTexture.Get(), subresourceIdx );
     }
     //-----------------------------------------------------------------------------------
     bool D3D11AsyncTextureTicket::canMapMoreThanOneSlice(void) const
@@ -284,8 +290,8 @@ namespace Ogre
 
         if( mAccurateFence )
         {
-            mAccurateFence = mVaoManager->waitFor( mAccurateFence );
-            SAFE_RELEASE( mAccurateFence );
+            *mAccurateFence.GetAddressOf() = mVaoManager->waitFor( mAccurateFence.Get() );
+            mAccurateFence.Reset();
         }
         else
         {
@@ -314,9 +320,9 @@ namespace Ogre
         else if( mAccurateFence )
         {
             //Ask D3D11 API to return immediately and tells us about the fence
-            if( mVaoManager->queryIsDone( mAccurateFence ) )
+            if( mVaoManager->queryIsDone( mAccurateFence.Get() ) )
             {
-                SAFE_RELEASE( mAccurateFence );
+                mAccurateFence.Reset();
                 if( mStatus != Mapped )
                     mStatus = Ready;
             }
@@ -330,7 +336,7 @@ namespace Ogre
                     //Use is not calling vaoManager->update(). Likely it's stuck in an
                     //infinite loop checking if we're done, but we'll always return false.
                     //If so, switch to accurate tracking.
-                    mAccurateFence = mVaoManager->createFence();
+                    mAccurateFence = mVaoManager->createFence() ;
 
                     D3D11Device &device = mVaoManager->getDevice();
                     ID3D11DeviceContextN *context = device.GetImmediateContext();

@@ -34,10 +34,7 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgreTextureGpu.h"
 #include "OgreHeaderPrefix.h"
-
-//It's slightly more accurate if we render the cubemaps and generate the cubemaps, then blend.
-//But Ogre doesn't yet support RTT to mipmaps, so we generate the mipmaps after blending.
-#define GENERATE_MIPMAPS_ON_BLEND 1
+#include "Compositor/OgreCompositorChannel.h"
 
 namespace Ogre
 {
@@ -61,9 +58,8 @@ namespace Ogre
 
         TextureGpu  *mTexture;
         uint16      mCubemapArrayIdx;
-        uint8       mMsaa;
+        SampleDescription mSampleDescription;
 
-        uint8               mWorkspaceMipmapsExecMask;
         IdString            mWorkspaceDefName;
         CompositorWorkspace *mClearWorkspace;
         CompositorWorkspace *mWorkspace;
@@ -131,14 +127,15 @@ namespace Ogre
         @param pf
         @param isStatic
             Set to False if it should be updated every frame. True if only updated when dirty
-        @param msaa
+        @param sampleDesc
         @param useManual
             Set to true if you plan on using thie probe for manually rendering, so we keep
             mipmaps at the probe level. User is responsible for supplying a workspace
             definition that will generate mipmaps though!
         */
         void setTextureParams( uint32 width, uint32 height, bool useManual=false,
-                               PixelFormatGpu pf=PFG_RGBA8_UNORM_SRGB, bool isStatic=true, uint8 msaa=0 );
+                               PixelFormatGpu pf=PFG_RGBA8_UNORM_SRGB, bool isStatic=true,
+                               SampleDescription sampleDesc=SampleDescription() );
 
         /** Initializes the workspace so we can actually render to the cubemap.
             You must call setTextureParams first.
@@ -159,8 +156,9 @@ namespace Ogre
             This value allows you to override it with a different workspace definition.
         */
         void initWorkspace( float cameraNear = 0.5f, float cameraFar = 500.0f,
-                            uint8 mipmapsExecutionMask=0x01,
-                            IdString workspaceDefOverride=IdString() );
+                            IdString workspaceDefOverride = IdString(),
+                            const CompositorChannelVec &additionalChannels = CompositorChannelVec(),
+                            uint8 executionMask = 0xFF );
         bool isInitialized(void) const;
 
         /** Sets cubemap probe's parameters.
@@ -226,6 +224,7 @@ namespace Ogre
         const Aabb& getArea(void) const                     { return mArea; }
         const Vector3& getAreaInnerRegion(void) const       { return mAreaInnerRegion; }
         const Matrix3& getOrientation(void) const           { return mOrientation; }
+        const Matrix3& getInvOrientation(void) const        { return mInvOrientation; }
         const Aabb& getProbeShape(void) const               { return mProbeShape; }
 
         CompositorWorkspace *getWorkspace(void) const       { return mWorkspace; }

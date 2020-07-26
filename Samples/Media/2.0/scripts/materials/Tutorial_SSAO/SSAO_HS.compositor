@@ -2,7 +2,8 @@ compositor_node SSAO_RenderNode
 {
 	in 0 rt_renderwindow
 
-	texture RT0 target_width target_height PFG_RGBA8_UNORM_SRGB msaa_auto
+	texture RT0				target_width target_height PFG_RGBA8_UNORM_SRGB		msaa_auto
+	texture gBufferNormals	target_width target_height PFG_R10G10B10A2_UNORM	msaa_auto explicit_resolve
 	
 	texture depthTexture		target_width			target_height				PFG_D32_FLOAT msaa_auto
 	texture depthTextureCopy	target_width_scaled 0.5	target_height_scaled 0.5	PFG_D32_FLOAT
@@ -14,9 +15,10 @@ compositor_node SSAO_RenderNode
 
 	rtv RT0
 	{
-		depth_stencil depthTexture
+		colour			RT0 gBufferNormals
+		depth_stencil	depthTexture
 	}
-	
+
 	target RT0
 	{
 		pass render_scene
@@ -24,10 +26,13 @@ compositor_node SSAO_RenderNode
 			load
 			{
 				all				clear
-				clear_colour	0.2 0.4 0.6 1
+				clear_colour	0	0.2 0.4 0.6 1
+				clear_colour	1	0.5 0.5 1.0 1
 			}
 			lod_update_list	off
 			overlays	off
+
+			gen_normals_gbuffer true
 		}
 	}
 	
@@ -52,6 +57,7 @@ compositor_node SSAO_RenderNode
 			}
 			material SSAO/HS
 	    	input 0 depthTextureCopy
+			input 1 gBufferNormals
 
 			quad_normals	camera_far_corners_view_space
 		}

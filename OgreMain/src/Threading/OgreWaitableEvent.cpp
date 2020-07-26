@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "Threading/OgreWaitableEvent.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
     #define WIN32_LEAN_AND_MEAN
     #define NOMINMAX
     #include <windows.h>
@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
     WaitableEvent::WaitableEvent() :
         mEvent( 0 )
     {

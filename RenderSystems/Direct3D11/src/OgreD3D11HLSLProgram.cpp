@@ -65,30 +65,10 @@ namespace Ogre {
             unloadHighLevelImpl();
     }
     //-----------------------------------------------------------------------
-    void D3D11HLSLProgram::notifyDeviceRestored(D3D11Device* device)
+    void D3D11HLSLProgram::notifyDeviceRestored(D3D11Device* device, unsigned pass)
     {
-        if(mHighLevelLoaded)
+        if(pass == 0 && mHighLevelLoaded)
             loadHighLevelImpl();
-    }
-    //-----------------------------------------------------------------------
-    void D3D11HLSLProgram::createConstantBuffer(const UINT ByteWidth)
-    {
-
-        // Create a constant buffer
-        D3D11_BUFFER_DESC cbDesc;
-        cbDesc.ByteWidth = ByteWidth;
-        cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-        cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        cbDesc.MiscFlags = 0;
-        HRESULT hr = mDevice->CreateBuffer( &cbDesc, NULL, mConstantBuffer.ReleaseAndGetAddressOf() );
-        if (FAILED(hr) || mDevice.isError())
-        {
-            String errorDescription = mDevice.getErrorDescription(hr);
-			OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                "D3D11 device Cannot create constant buffer.\nError Description:" + errorDescription,
-                "D3D11HLSLProgram::createConstantBuffer");  
-        }
     }
     //-----------------------------------------------------------------------
     void D3D11HLSLProgram::fixVariableNameFromCg(const ShaderVarWithPosInBuf& newVar)
@@ -606,6 +586,18 @@ namespace Ogre {
                 String message = "Cannot get reflect info for D3D11 high-level shader " + mName;
 				OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr, message,
                     "D3D11HLSLProgram::compileMicrocode");
+            }
+
+            UINT64 requiresFlags = shaderReflection->GetRequiresFlags();
+            if( requiresFlags != 0 )
+            {
+                // Ensure that all additional shader requirements are pre-declared in material script.
+                // We need this to know if shader is supported before loading attempt, so that alternate
+                // technique or shader has chance to be selected for shaders unsupported on current GPU.
+                //
+                // 0x2000 == D3D_SHADER_REQUIRES_VIEWPORT_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER_FEEDING_RASTERIZER
+                assert( !( requiresFlags & 0x2000 ) || isVpAndRtArrayIndexFromAnyShaderRequired()
+                    && "add sets_vp_or_rt_array_index = true in shader declaration script" );
             }
 
             // get the input parameters
@@ -1291,7 +1283,6 @@ namespace Ogre {
         mDomainShader.Reset();
         mHullShader.Reset();
         mComputeShader.Reset();
-        mConstantBuffer.Reset();
     }
 
     //-----------------------------------------------------------------------
@@ -1592,7 +1583,6 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     D3D11HLSLProgram::~D3D11HLSLProgram()
     {
-        //mConstantBuffer.Reset();
         for( size_t i=0; i<NumDefaultBufferTypes; ++i )
             mDefaultBuffers[i] = BufferInfo();
 
@@ -1990,7 +1980,7 @@ namespace Ogre {
         return it->second;
     }
     //-----------------------------------------------------------------------------
-    ID3D11InputLayout* D3D11HLSLProgram::getLayoutForPso( const VertexElement2VecVec &vertexElements )
+    ComPtr<ID3D11InputLayout> D3D11HLSLProgram::getLayoutForPso( const VertexElement2VecVec &vertexElements )
     {
         OgreProfileExhaustive( "D3D11HLSLProgram::getLayoutForPso" );
 
@@ -2106,7 +2096,7 @@ namespace Ogre {
 
         ID3D11DeviceN *d3dDevice = mDevice.get();
 
-        ID3D11InputLayout *d3dInputLayout = 0;
+        ComPtr<ID3D11InputLayout> d3dInputLayout;
 
         if( currDesc > 0u )
         {
@@ -2115,7 +2105,7 @@ namespace Ogre {
                              currDesc,
                              &mMicroCode[0],
                     mMicroCode.size(),
-                    &d3dInputLayout );
+                    d3dInputLayout.GetAddressOf() );
 
             if( FAILED(hr) || mDevice.isError() )
             {
@@ -2145,7 +2135,7 @@ namespace Ogre {
             BufferInfo *it = &mDefaultBuffers[i];
             if (!it->mUniformBuffer.isNull())
             {
-                void* pMappedData = it->mUniformBuffer->lock(v1::HardwareBuffer::HBL_DISCARD);
+                v1::HardwareBufferLockGuard uniformLock(it->mUniformBuffer, v1::HardwareBuffer::HBL_DISCARD);
 
                 // Only iterate through parsed variables (getting size of list)
                 void* src = 0;
@@ -2171,11 +2161,9 @@ namespace Ogre {
                             src = (void *)&(*(params->getIntConstantList().begin() + def.physicalIndex));
                         }
 
-                        memcpy( &(((char *)(pMappedData))[iter->startOffset]), src , iter->size);
+                        memcpy( &(((char *)(uniformLock.pData))[iter->startOffset]), src , iter->size);
                     }
                 }
-
-                it->mUniformBuffer->unlock();
 
                 // Add buffer to list
                 buffers[numBuffers] = static_cast<v1::D3D11HardwareUniformBuffer*>(

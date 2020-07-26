@@ -1,0 +1,63 @@
+
+#include "/media/matias/Datos/SyntaxHighlightingMisc.h"
+
+@property( hlms_screen_space_refractions )
+@piece( DeclRefractionsFuncs )
+	float3 OGRE_refract( float3 viewDir, float3 normal, float refractionIndex, float NdotV )
+	{
+		float3 retVal;
+		float k = 1.0 - refractionIndex * refractionIndex * (1.0 - NdotV  * NdotV);
+		if( k < 0.0 )
+			retVal = float3( 0, 0, 0 );
+		else
+			retVal = -refractionIndex * viewDir - (sqrt( k ) - refractionIndex * NdotV) * normal;
+		return retVal;
+	}
+@end
+
+@piece( applyRefractions )
+	@property( !fresnel_scalar )
+		float refractF0 = pixelData.F0;
+	@else
+		float refractF0 = max( pixelData.F0.x, pixelData.F0.y, pixelData.F0.z );
+	@end
+
+	// refractNormal must be in view space, and we ignore .z component
+	float2 refractNormal2d = OGRE_refract( pixelData.viewDir, pixelData.normal,
+										   refractF0, pixelData.NdotV ).xy;
+	float2 refractUv = screenPosUv.xy + refractNormal2d.xy *
+					   float2( material.refractionStrength,
+							   material.refractionStrength * passBuf.aspectRatio ) /
+					   ( (-inPs.pos.z + 1.0) * (-inPs.pos.z + 1.0) );
+	float3 refractionCol = OGRE_SampleLevel( refractionMap, refractionMapSampler, refractUv, 0 ).xyz;
+	float refractionDepth = OGRE_SampleLevel( depthTextureNoMsaa, refractionMapSampler, refractUv, 0 ).x;
+
+	// We may need to fallback to regular transparency if we're sampling to close to the edges
+	// or the object being refracted is in front of us.
+	float3 fallbackRefractionCol = OGRE_Load2D( refractionMap, iFragCoord.xy, 0 ).xyz;
+
+	refractUv = saturate( abs( screenPosUv.xy * 2.0 - 1.0 ) * 10.0 - 9.0 );
+	float fallbackRefrW = max( refractUv.x, refractUv.y );
+	fallbackRefrW = fallbackRefrW * fallbackRefrW;
+
+	@property( hlms_no_reverse_depth )
+		if( refractionDepth < gl_FragCoord.z - 0.025 )
+	@else
+		if( refractionDepth > gl_FragCoord.z + 0.025 )
+	@end
+		{
+			// We're trying to refract an object that is in front of us. We can't do that.
+			fallbackRefrW = 1.0;
+		}
+
+	refractionCol = lerp( refractionCol, fallbackRefractionCol, fallbackRefrW );
+
+	@property( use_texture_alpha )
+		float refractionAlpha = material.F0.w * pixelData.diffuse.w;
+	@else
+		float refractionAlpha = material.F0.w;
+	@end
+
+	finalColour += refractionCol.xyz * (1.0 - refractionAlpha);
+@end
+@end

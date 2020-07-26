@@ -213,6 +213,9 @@ namespace Ogre {
          const Renderable* getCurrentRenderable(void) const;
          const Pass* getCurrentPass(void) const;
          const HlmsComputeJob* getCurrentJob(void) const;
+         Vector4 getUavSize(size_t index) const;
+         Vector4 getInverseUavSize(size_t index) const;
+         Vector4 getPackedUavSize(size_t index) const;
          Vector4 getTextureSize(size_t index) const;
          Vector4 getInverseTextureSize(size_t index) const;
          Vector4 getPackedTextureSize(size_t index) const;
@@ -264,9 +267,10 @@ namespace Ogre {
          int getPassNumber(void) const;
          void setPassNumber(const int passNumber);
          void incPassNumber(void);
-         void updateLightCustomGpuParameter(const GpuProgramParameters::AutoConstantEntry& constantEntry, GpuProgramParameters *params) const;
+         void updateLightCustomGpuParameter( const GpuProgramParameters_AutoConstantEntry &constantEntry,
+                                             GpuProgramParameters *params ) const;
 
-		 const Light& _getBlankLight(void) const		{ return mBlankLight; }
+         const Light& _getBlankLight(void) const		{ return mBlankLight; }
     };
     /** @} */
     /** @} */

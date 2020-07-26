@@ -73,8 +73,15 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreDepthBuffer.h"
 #include "OgreWindow.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreString.h"
 
 #include "OgreProfiler.h"
+
+#include <sstream>
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+extern "C" void glFlushRenderAPPLE();
+#endif
 
 #if OGRE_DEBUG_MODE
 static void APIENTRY GLDebugCallback(GLenum source,
@@ -141,7 +148,8 @@ static void APIENTRY GLDebugCallback(GLenum source,
     else
         strcpy(debSev, "unknown");
 
-    Ogre::LogManager::getSingleton().stream() << debSource << ":" << debType << "(" << debSev << ") " << id << ": " << message;
+    Ogre::LogManager::getSingleton().stream()
+        << debSource << ":" << debType << "(" << debSev << ") " << id << ": " << message;
 }
 #endif
 
@@ -285,7 +293,9 @@ namespace Ogre {
 
         // Check for hardware mipmapping support.
         bool disableAutoMip = false;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || \
+    OGRE_PLATFORM == OGRE_PLATFORM_LINUX || \
+    OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
         // Apple & Linux ATI drivers have faults in hardware mipmap generation
         // TODO: Test this with GL3+
         if (rsc->getVendor() == GPU_AMD)
@@ -388,6 +398,15 @@ namespace Ogre {
             rsc->setCapability(RSC_UAV);
             rsc->setCapability(RSC_TYPED_UAV_LOADS);
         }
+
+        if( mHasGL43 || mGLSupport->checkExtension( "GL_ARB_depth_clamp" ) ||
+            mGLSupport->checkExtension( "GL_NV_depth_clamp" ) )
+        {
+            rsc->setCapability( RSC_DEPTH_CLAMP );
+        }
+
+        if( mGLSupport->checkExtension( "GL_ARB_shader_viewport_layer_array" ) )
+            rsc->setCapability( RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER );
 
         rsc->setCapability(RSC_FBO);
         rsc->setCapability(RSC_HWRENDER_TO_TEXTURE);
@@ -974,7 +993,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     TextureGpu* GL3PlusRenderSystem::createDepthBufferFor( TextureGpu *colourTexture,
                                                            bool preferDepthTexture,
-                                                           PixelFormatGpu depthBufferFormat )
+                                                           PixelFormatGpu depthBufferFormat, uint16 poolId )
     {
         if( depthBufferFormat == PFG_UNKNOWN )
         {
@@ -985,7 +1004,7 @@ namespace Ogre {
         }
 
         return RenderSystem::createDepthBufferFor( colourTexture, preferDepthTexture,
-                                                   depthBufferFormat );
+                                                   depthBufferFormat, poolId );
     }
 
     String GL3PlusRenderSystem::getErrorDescription(long errorNumber) const
@@ -1740,8 +1759,8 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_hlmsSamplerblockCreated( HlmsSamplerblock *newBlock )
     {
-        GLuint samplerName;
-        glGenSamplers( 1, &samplerName );
+        GLuint samplerName = 0;
+        OCGE( glGenSamplers( 1, &samplerName ) );
 
         GLint minFilter, magFilter;
         switch( newBlock->mMinFilter )
@@ -2041,6 +2060,14 @@ namespace Ogre {
 
         _setDepthBias( macroblock->mDepthBiasConstant, macroblock->mDepthBiasSlopeScale );
 
+        if( macroblock->mDepthClamp )
+        {
+            OCGE( glEnable( GL_DEPTH_CLAMP ) );
+        }
+        else
+        {
+            OCGE( glDisable( GL_DEPTH_CLAMP ) );
+        }
 
         //Cull mode
         if( pso->cullMode == 0 )
@@ -2164,6 +2191,7 @@ namespace Ogre {
         GLSLShader::unbindAll();
 
         RenderSystem::_setPipelineStateObject( pso );
+        _setComputePso( 0 );
 
         uint8 newClipDistances = 0;
         if( pso )
@@ -2689,7 +2717,7 @@ namespace Ogre {
                                                  static_cast<v1::GL3PlusHardwareIndexBuffer*>(op.indexData->indexBuffer.get())->getGLBufferId()));
                 void *pBufferData = GL_BUFFER_OFFSET(op.indexData->indexStart *
                                                      op.indexData->indexBuffer->getIndexSize());
-                GLenum indexType = (op.indexData->indexBuffer->getType() == v1::HardwareIndexBuffer::IT_32BIT) ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT;
+                GLenum indexType = (op.indexData->indexBuffer->getType() == v1::HardwareIndexBuffer::IT_16BIT) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
                 OGRE_CHECK_GL_ERROR(glDrawElements(GL_PATCHES, op.indexData->indexCount, indexType, pBufferData));
                 //OGRE_CHECK_GL_ERROR(glDrawElements(GL_PATCHES, op.indexData->indexCount, indexType, pBufferData));
                 //                OGRE_CHECK_GL_ERROR(glDrawArraysInstanced(GL_PATCHES, 0, primCount, 1));
@@ -2709,9 +2737,7 @@ namespace Ogre {
             void *pBufferData = GL_BUFFER_OFFSET(op.indexData->indexStart *
                                                  op.indexData->indexBuffer->getIndexSize());
 
-            //TODO : GL_UNSIGNED_INT or GL_UNSIGNED_BYTE?  Latter breaks samples.
-            GLenum indexType = (op.indexData->indexBuffer->getType() == v1::HardwareIndexBuffer::IT_16BIT) ?
-                                GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
+            GLenum indexType = (op.indexData->indexBuffer->getType() == v1::HardwareIndexBuffer::IT_16BIT) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
 
             do
             {
@@ -3172,9 +3198,15 @@ namespace Ogre {
             mCurrentComputeShader->unbind();
 
         // It's ready for switching
-        if (mCurrentContext)
+        if (mCurrentContext!=context)
+        {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+            // NSGLContext::makeCurrentContext does not flush automatically. everybody else does.
+            glFlushRenderAPPLE();
+#endif
             mCurrentContext->endCurrent();
-        mCurrentContext = context;
+            mCurrentContext = context;
+        }
         mCurrentContext->setCurrent();
 
         // Check if the context has already done one-time initialisation

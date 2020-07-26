@@ -49,7 +49,7 @@ namespace v1 {
     //-----------------------------------------------------------------------------
     ManualObject::ManualObject( IdType id, ObjectMemoryManager *objectMemoryManager,
                                 SceneManager *manager )
-        : MovableObject( id, objectMemoryManager, manager, 1 ),
+        : MovableObject( id, objectMemoryManager, manager, 110u ),
           mDynamic(false), mWriteOnly(true), mCurrentSection(0), mFirstVertex(true),
           mTempVertexPending(false),
           mTempVertexBuffer(0), mTempVertexSize(TEMP_INITIAL_VERTEX_SIZE),
@@ -761,14 +761,13 @@ namespace v1 {
                 }
                 else //(HardwareIndexBuffer::IT_16BIT == indexType)
                 {
-                    uint16* pIdx = static_cast<uint16*>(rop->indexData->indexBuffer->lock(HardwareBuffer::HBL_DISCARD));
+                    HardwareBufferLockGuard indexLock(rop->indexData->indexBuffer, HardwareBuffer::HBL_DISCARD);
+                    uint16* pIdx = static_cast<uint16*>(indexLock.pData);
                     uint32* pSrc = mTempIndexBuffer;
                     for (size_t i = 0; i < rop->indexData->indexCount; i++)
                     {
                         *pIdx++ = static_cast<uint16>(*pSrc++);
                     }
-                    rop->indexData->indexBuffer->unlock();
-
                 }
             }
 

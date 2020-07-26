@@ -29,7 +29,11 @@ THE SOFTWARE.
 #define _OgrePlanarReflections_H_
 
 #include "OgrePlanarReflectionActor.h"
+
 #include "OgrePixelFormatGpu.h"
+
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -127,6 +131,7 @@ namespace Ogre
         bool                        mUpdatingRenderablesHlms;
         bool                        mAnyPendingFlushRenderable;
 
+        uint8               mMaxNumMipmaps;
         uint8               mMaxActiveActors;
         Real                mInvMaxDistance;
         Real                mMaxSqDistance;
@@ -165,7 +170,8 @@ namespace Ogre
             are ignored.
             When this value is higher than its previous, value, the new active actors
             will use these parameters; which don't have to necessarily match previous
-            calls.
+            calls (not recommended since we assume the number of mipmaps is the same for all
+            actors. This affects surfaces with roughness > 0).
         @param workspaceName
             Workspace to use for rendering.
         @param useAccurateLighting
@@ -265,6 +271,8 @@ namespace Ogre
         bool hasPlanarReflections( const Renderable *renderable ) const;
         bool hasFlushPending( const Renderable *renderable ) const;
         bool hasActiveActor( const Renderable *renderable ) const;
+
+        uint8 getMaxNumMipmaps() const { return mMaxNumMipmaps; }
 
         enum CustomParameterBits
         {

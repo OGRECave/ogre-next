@@ -290,6 +290,13 @@ namespace Ogre
 
         vMin.z = Ogre::min( vMin.z, vMinCamFrustumLS.z );
 
+        const RenderSystemCapabilities *caps = Root::getSingleton().getRenderSystem()->getCapabilities();
+        if( caps->hasCapability( RSC_DEPTH_CLAMP ) )
+        {
+            // We can only do shadow pancaking (increasing precision) if depth clamp is supported
+            vMax.z = Ogre::max( vMax.z, vMaxCamFrustumLS.z );
+        }
+
         //Some padding
         vMax += 1.5f;
         vMin -= 1.5f;
@@ -299,6 +306,16 @@ namespace Ogre
         texCam->setProjectionType( PT_ORTHOGRAPHIC );
         Vector3 shadowCameraPos = (vMin + vMax) * 0.5f;
         shadowCameraPos.z       = vMax.z + zPadding; // Backwards is towards +Z!
+
+        // Round local x/y position based on a world-space texel; this helps to reduce
+        // jittering caused by the projection moving with the camera
+        const Real worldTexelSizeX = ( texCam->getOrthoWindowWidth() ) / viewportRealSize.x;
+        const Real worldTexelSizeY = ( texCam->getOrthoWindowHeight() ) / viewportRealSize.y;
+
+        // snap to nearest texel
+        shadowCameraPos.x -= fmod( shadowCameraPos.x, worldTexelSizeX );
+        shadowCameraPos.y -= fmod( shadowCameraPos.y, worldTexelSizeY );
+
         //Go back from light space to world space
         shadowCameraPos = scalarLightSpaceToWorld * shadowCameraPos;
         texCam->setPosition( shadowCameraPos );

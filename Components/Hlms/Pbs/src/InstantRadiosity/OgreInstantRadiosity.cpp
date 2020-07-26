@@ -38,6 +38,8 @@ THE SOFTWARE.
 #include "OgreLight.h"
 #include "OgreSceneManager.h"
 #include "Vao/OgreAsyncTicket.h"
+#include "Vao/OgreIndexBufferPacked.h"
+#include "Vao/OgreVertexArrayObject.h"
 
 #include "Math/Array/OgreBooleanMask.h"
 
@@ -51,7 +53,8 @@ THE SOFTWARE.
 
 #if (OGRE_COMPILER == OGRE_COMPILER_MSVC ||\
     OGRE_PLATFORM == OGRE_PLATFORM_APPLE ||\
-    OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS)
+    OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS ||\
+    OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD)
     #include <random>
 #else
     #include <tr1/random>
@@ -61,7 +64,10 @@ namespace Ogre
 {
     class RandomNumberGenerator
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS || ( OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER >= 1910 )
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE ||\
+    OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS ||\
+    ( OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER >= 1910 ) ||\
+    OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
         std::mt19937        mRng;
 #else
         std::tr1::mt19937   mRng;
@@ -1019,14 +1025,13 @@ namespace Ogre
         //Copy index buffer
         if( renderOp.useIndexes )
         {
-            const void *indexData = renderOp.indexData->indexBuffer->lock(
+            v1::HardwareBufferLockGuard indexLock( renderOp.indexData->indexBuffer,
                         renderOp.indexData->indexStart,
                         renderOp.indexData->indexCount,
                         v1::HardwareBuffer::HBL_READ_ONLY );
-            memcpy( meshData.indexData, indexData,
+            memcpy( meshData.indexData, indexLock.pData,
                     renderOp.indexData->indexCount *
                     renderOp.indexData->indexBuffer->getIndexSize() );
-            renderOp.indexData->indexBuffer->unlock();
         }
 
         mMeshDataMapV1[renderOp] = meshData;

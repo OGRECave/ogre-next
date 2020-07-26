@@ -40,6 +40,7 @@ THE SOFTWARE.
 #include "OgreRectangle2D.h"
 #include "OgreSceneManager.h"
 #include "OgreTechnique.h"
+#include "OgreCamera.h"
 
 namespace Ogre
 {
@@ -150,9 +151,7 @@ namespace Ogre
 
         profilingBegin();
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        notifyPassEarlyPreExecuteListeners();
 
         if( mPass )
         {
@@ -170,6 +169,15 @@ namespace Ogre
                 }
 
                 ++itor;
+            }
+
+            // Force all non-AutomaticBatching textures to be loaded before calling _renderSingleObject,
+            // since low level materials need these textures to be loaded (streaming is opt-in)
+            const size_t numTUs = mPass->getNumTextureUnitStates();
+            for( size_t i = 0u; i < numTUs; ++i )
+            {
+                TextureUnitState *tu = mPass->getTextureUnitState( i );
+                tu->_getTexturePtr();
             }
         }
 
@@ -254,8 +262,7 @@ namespace Ogre
         setRenderPassDescToCurrent();
 
         //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        notifyPassPreExecuteListeners();
 
 #if TODO_OGRE_2_2
         mTarget->setFsaaResolveDirty();
@@ -284,8 +291,7 @@ namespace Ogre
 
         sceneManager->_setCurrentCompositorPass( 0 );
 
-        if( listener )
-            listener->passPosExecute( this );
+        notifyPassPosExecuteListeners();
 
         profilingEnd();
     }

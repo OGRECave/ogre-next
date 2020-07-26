@@ -1,0 +1,90 @@
+
+@property( ambient_sh )
+	@property( !ambient_sh_monochrome )
+		@piece( DeclIrradianceSH )
+			float3 irradianceSH( float3 n PASSBUF_ARG_DECL )
+			{
+				// We can use only the first 2 bands for better performance
+				/*return
+					  passBuf.sh0.xyz
+					+ passBuf.sh1.xyz * (n.y)
+					+ passBuf.sh2.xyz * (n.z)
+					+ passBuf.sh3.xyz * (n.x)
+					+ passBuf.sh4.xyz * (n.y * n.x)
+					+ passBuf.sh5.xyz * (n.y * n.z)
+					+ passBuf.sh6.xyz * (3.0 * n.z * n.z - 1.0)
+					+ passBuf.sh7.xyz * (n.z * n.x)
+					+ passBuf.sh8.xyz * (n.x * n.x - n.y * n.y);*/
+				return
+					  passBuf.sh0.xyz
+					+ float3( passBuf.sh0.w, passBuf.sh1.x, passBuf.sh1.y ) * (n.y)
+					+ float3( passBuf.sh1.z, passBuf.sh1.w, passBuf.sh2.x ) * (n.z)
+					+ float3( passBuf.sh2.y, passBuf.sh2.z, passBuf.sh2.w ) * (n.x)
+					+ float3( passBuf.sh3.x, passBuf.sh3.y, passBuf.sh3.z ) * (n.y * n.x)
+					+ float3( passBuf.sh3.w, passBuf.sh4.x, passBuf.sh4.y ) * (n.y * n.z)
+					+ float3( passBuf.sh4.z, passBuf.sh4.w, passBuf.sh5.x ) * (3.0 * n.z * n.z - 1.0)
+					+ float3( passBuf.sh5.y, passBuf.sh5.z, passBuf.sh5.w ) * (n.z * n.x)
+					+ float3( passBuf.sh6.x, passBuf.sh6.y, passBuf.sh6.z ) * (n.x * n.x - n.y * n.y);
+			}
+		@end
+	@else
+		@piece( DeclIrradianceSH )
+			float irradianceSH( float3 n PASSBUF_ARG_DECL )
+			{
+				// We can use only the first 2 bands for better performance
+				return
+					  passBuf.sh0.x
+					+ passBuf.sh0.y * (n.y)
+					+ passBuf.sh0.z * (n.z)
+					+ passBuf.sh0.w * (n.x)
+					+ passBuf.sh1.x * (n.y * n.x)
+					+ passBuf.sh1.y * (n.y * n.z)
+					+ passBuf.sh1.z * (3.0 * n.z * n.z - 1.0)
+					+ passBuf.sh1.w * (n.z * n.x)
+					+ passBuf.sh2.x * (n.x * n.x - n.y * n.y);
+			}
+		@end
+	@end
+@end
+
+@property( ambient_hemisphere || vct_ambient_hemisphere )
+	@piece( DoAmbientHeader )
+		float ambientWD = dot( passBuf.ambientHemisphereDir.xyz, pixelData.normal ) * 0.5 + 0.5;
+		float ambientWS = dot( passBuf.ambientHemisphereDir.xyz, pixelData.reflDir ) * 0.5 + 0.5;
+	@end
+@end
+
+@piece( DoAmbientLighting )
+	@property( ambient_sh )
+		@property( vct_num_probes )
+			//Only use ambient lighting if object is outside any VCT probe
+			if( vctSpecular.w == 0 )
+			{
+		@end
+				float3 wsNormal = mul( passBuf.invViewMatCubemap, pixelData.normal );
+				wsNormal.x = -wsNormal.x;
+				pixelData.envColourD += irradianceSH( wsNormal PASSBUF_ARG );
+		@property( vct_num_probes )
+			}
+		@end
+	@end
+
+	@property( ambient_hemisphere )
+		@property( vct_num_probes )
+			//Only use ambient lighting if object is outside any VCT probe
+			if( vctSpecular.w == 0 )
+			{
+		@end
+				pixelData.envColourS += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
+				pixelData.envColourD += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
+		@property( vct_num_probes )
+			}
+		@end
+	@end
+
+	@property( ambient_fixed && vct_num_probes )
+		//Only use ambient lighting if object is outside any VCT probe
+		finalColour += vctSpecular.w == 0 ? float3( 0, 0, 0 ) :
+											(passBuf.ambientUpperHemi.xyz * pixelData.diffuse.xyz);
+	@end
+@end

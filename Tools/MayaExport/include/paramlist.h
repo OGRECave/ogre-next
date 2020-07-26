@@ -21,6 +21,8 @@
 
 #include "mayaExportLayer.h"
 
+#include <fstream>
+
 // Length units multipliers from Maya internal unit (cm)
 
 #define CM2MM 10.0

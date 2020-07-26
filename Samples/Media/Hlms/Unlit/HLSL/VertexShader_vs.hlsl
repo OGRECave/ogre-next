@@ -1,14 +1,15 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
 @insertpiece( SetCrossPlatformSettings )
 
-@insertpiece( Common_Matrix_DeclUnpackMatrix4x4 )
+@insertpiece( DefaultHeaderVS )
+@insertpiece( custom_vs_uniformDeclaration )
 
-// START UNIFORM DECLARATION
-@insertpiece( PassDecl )
-@insertpiece( InstanceDecl )
+// START UNIFORM D3D DECLARATION
 Buffer<float4> worldMatBuf : register(t0);
 @property( texture_matrix )Buffer<float4> animationMatrixBuf : register(t1);@end
-@insertpiece( custom_vs_uniformDeclaration )
-// END UNIFORM DECLARATION
+// END UNIFORM D3D DECLARATION
 
 struct VS_INPUT
 {
@@ -35,66 +36,11 @@ struct PS_INPUT
 	@end
 };
 
-@property( !hlms_identity_world )
-	@piece( worldViewProj )worldViewProj@end
-@end @property( hlms_identity_world )
-	@property( !hlms_identity_viewproj_dynamic )
-		@piece( worldViewProj )passBuf.viewProj[@value(hlms_identity_viewproj)]@end
-	@end @property( hlms_identity_viewproj_dynamic )
-		@piece( worldViewProj )passBuf.viewProj[worldMaterialIdx[finalDrawId].z]@end
-	@end
-@end
-
 PS_INPUT main( VS_INPUT input )
 {
 	PS_INPUT outVs;
 	@insertpiece( custom_vs_preExecution )
-
-	@property( !hlms_identity_world )
-		float4x4 worldViewProj;
-		worldViewProj = UNPACK_MAT4( worldMatBuf, finalDrawId );
-	@end
-
-@property( !hlms_dual_paraboloid_mapping )
-	outVs.gl_Position = mul( input.vertex, @insertpiece( worldViewProj ) );
-@end
-
-@property( hlms_dual_paraboloid_mapping )
-	//Dual Paraboloid Mapping
-	outVs.gl_Position.w		= 1.0f;
-	outVs.gl_Position.xyz	= mul( input.vertex, @insertpiece( worldViewProj ) ).xyz;
-	float L = length( outVs.gl_Position.xyz );
-	outVs.gl_Position.z		+= 1.0f;
-	outVs.gl_Position.xy	/= outVs.gl_Position.z;
-	outVs.gl_Position.z	= (L - NearPlane) / (FarPlane - NearPlane);
-@end
-
-@property( !hlms_shadowcaster )
-@property( hlms_colour )	outVs.colour = input.colour;@end
-
-@property( texture_matrix )	float4x4 textureMatrix;@end
-
-@foreach( out_uv_count, n )
-	@property( out_uv@n_texture_matrix )
-		textureMatrix = UNPACK_MAT4( animationMatrixBuf, (worldMaterialIdx[finalDrawId].x << 4u) + @value( out_uv@n_tex_unit ) );
-		outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) = mul( float4( input.uv@value( out_uv@n_source_uv ).xy, 0, 1 ), textureMatrix ).xy;
-	@end @property( !out_uv@n_texture_matrix )
-		outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) = input.uv@value( out_uv@n_source_uv ).xy;
-	@end @end
-
-	outVs.drawId = finalDrawId;
-
-@end
-
-	@property( hlms_global_clip_planes || (hlms_shadowcaster && (exponential_shadow_maps || hlms_shadowcaster_point)) )
-		float3 worldPos = mul(outVs.gl_Position, passBuf.invViewProj).xyz;
-	@end
-	@insertpiece( DoShadowCasterVS )
-
-@property( hlms_global_clip_planes )
-	outVs.gl_ClipDistance0 = dot( float4( worldPos.xyz, 1.0 ), passBuf.clipPlane0.xyzw );
-@end
-
+	@insertpiece( DefaultBodyVS )
 	@insertpiece( custom_vs_posExecution )
 
 	return outVs;

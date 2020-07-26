@@ -28,6 +28,8 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 #include "OgreUserObjectBindings.h"
 
+#include "ogrestd/map.h"
+
 namespace Ogre {
 
     Any UserObjectBindings::msEmptyAny;
@@ -89,7 +91,7 @@ namespace Ogre {
         if (mAttributes->mUserObjectsMap == NULL)
             return msEmptyAny;
 
-        UserObjectsMapConstIterator it = mAttributes->mUserObjectsMap->find(key);
+        UserObjectsMap::const_iterator it = mAttributes->mUserObjectsMap->find(key);
 
         // Case user data found.
         if (it != mAttributes->mUserObjectsMap->end())
@@ -106,7 +108,7 @@ namespace Ogre {
         // Case attributes and map allocated.
         if (mAttributes != NULL && mAttributes->mUserObjectsMap != NULL)
         {
-            UserObjectsMapIterator it = mAttributes->mUserObjectsMap->find(key);
+            UserObjectsMap::iterator it = mAttributes->mUserObjectsMap->find(key);
 
             // Case object found -> erase it from the map.
             if (it != mAttributes->mUserObjectsMap->end())
@@ -123,6 +125,17 @@ namespace Ogre {
         {           
             OGRE_DELETE mAttributes;
             mAttributes = NULL;
+        }
+    }
+    //-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+    UserObjectBindings::Attributes::~Attributes()
+    {
+        if (mUserObjectsMap != NULL)
+        {
+            OGRE_DELETE mUserObjectsMap;
+            mUserObjectsMap = NULL;
         }
     }
 }

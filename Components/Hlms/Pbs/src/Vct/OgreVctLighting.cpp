@@ -45,6 +45,7 @@ THE SOFTWARE.
 
 #include "OgreLight.h"
 #include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
 
 #include "OgreLwString.h"
 

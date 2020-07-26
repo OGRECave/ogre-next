@@ -64,6 +64,29 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void Renderable::_updateCustomGpuParameter(
+        const GpuProgramParameters_AutoConstantEntry &constantEntry, GpuProgramParameters *params ) const
+    {
+        CustomParameterMap::const_iterator i = mCustomParameters.find( constantEntry.data );
+        if( i != mCustomParameters.end() )
+        {
+            params->_writeRawConstant( constantEntry.physicalIndex, i->second,
+                                       constantEntry.elementCount );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    const String& Renderable::getDatablockOrMaterialName() const
+    {
+        if( HlmsDatablock *datablock = getDatablock() )
+            if( const String *nameStr = datablock->getNameStr() )  // could be null if leaked
+                return *nameStr;
+
+        if( MaterialPtr mat = getMaterial() )
+            return mat->getName();
+
+        return BLANKSTRING;
+    }
+    //-----------------------------------------------------------------------------------
     void Renderable::setDatablockOrMaterialName( String materialName, String resourceGroup )
     {
         //Try first Hlms materials, then the low level ones.
@@ -147,7 +170,7 @@ namespace Ogre
         mHlmsHash       = hash;
         mHlmsCasterHash = casterHash;
 
-        assert( (mHlmsDatablock->getAlphaTest() == CMPF_ALWAYS_PASS ||
+        assert( (mHlmsDatablock == 0 || mHlmsDatablock->getAlphaTest() == CMPF_ALWAYS_PASS ||
                 mVaoPerLod[0].empty() || mVaoPerLod[0][0] == mVaoPerLod[1][0])
                 && "v2 objects must overload _setHlmsHashes to disable special "
                 "shadow mapping buffers on objects with alpha testing materials" );
@@ -193,9 +216,69 @@ namespace Ogre
         return mMaterial;
     }
     //-----------------------------------------------------------------------------------
+    unsigned short Renderable::getNumPoses(void) const
+    {
+        return mPoseData ? mPoseData->numPoses : 0;
+    }
+    //-----------------------------------------------------------------------------------
+    bool Renderable::getPoseHalfPrecision() const
+    {
+      return mPoseData ? mPoseData->halfPrecision : false;
+    }
+    //-----------------------------------------------------------------------------------
+    bool Renderable::getPoseNormals() const
+    {
+      return mPoseData ? mPoseData->hasNormals : false;
+    }
+    //-----------------------------------------------------------------------------------
+    float* Renderable::getPoseWeights(void) const
+    { 
+        return mPoseData ? mPoseData->weights : 0;
+    }
+    //-----------------------------------------------------------------------------------
+    float Renderable::getPoseWeight(size_t index) const
+    { 
+        assert( (index < OGRE_MAX_POSES) && "Pose weight index out of bounds" );
+        return mPoseData ? mPoseData->weights[index] : 0; 
+    }
+    //-----------------------------------------------------------------------------------
+    void Renderable::setPoseWeight(size_t index, float w)
+    { 
+        if( !mPoseData ) 
+            return;
+        
+        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) &&
+                "Pose weight index out of bounds" );
+        mPoseData->weights[index] = w; 
+    }
+    //-----------------------------------------------------------------------------------
+    void Renderable::addPoseWeight(size_t index, float w)
+    {
+        if( !mPoseData ) 
+            return;
+
+        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) &&
+                "Pose weight index out of bounds" );
+        mPoseData->weights[index] += w;
+    }
+    //-----------------------------------------------------------------------------------
+    TexBufferPacked* Renderable::getPoseTexBuffer(void) const
+    {
+        return mPoseData ? mPoseData->buffer : 0;
+    }
+    //-----------------------------------------------------------------------------------
     RenderableAnimated::RenderableAnimated() :
         Renderable(),
         mBlendIndexToBoneIndexMap( 0 )
     {
+    }
+    //-----------------------------------------------------------------------------------
+    Renderable::PoseData::PoseData():
+    numPoses( 0 ),
+    buffer( 0 ),
+    halfPrecision( false ),
+    hasNormals( false )
+    {
+        memset(weights, 0, OGRE_MAX_POSES * sizeof(float));
     }
 }

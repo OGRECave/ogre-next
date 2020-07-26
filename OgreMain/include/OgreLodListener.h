@@ -118,7 +118,7 @@ namespace Ogre {
     {
     public:
 
-        virtual ~LodListener() {}
+        virtual ~LodListener();
 
         /**
         Called before a movable object's LOD has changed.

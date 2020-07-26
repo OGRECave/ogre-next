@@ -189,11 +189,12 @@ namespace v1 {
 
             // Iterate over the old buffer, copying the appropriate elements and initialising the rest
             float* pSrc;
-            unsigned char *pBaseSrc = static_cast<unsigned char*>(
-                vbuf->lock(HardwareBuffer::HBL_READ_ONLY));
+            HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_READ_ONLY);
+            unsigned char *pBaseSrc = static_cast<unsigned char*>(vbufLock.pData);
             // Point first destination pointer at the start of the new position buffer,
             // the other one half way along
-            float *pDest = static_cast<float*>(newPosBuffer->lock(HardwareBuffer::HBL_DISCARD));
+            HardwareBufferLockGuard newPosLock(newPosBuffer, HardwareBuffer::HBL_DISCARD);
+            float *pDest = static_cast<float*>(newPosLock.pData);
             float* pDest2 = pDest + oldVertexCount * 3; 
 
             // Precalculate any dimensions of vertex areas outside the position
@@ -202,8 +203,8 @@ namespace v1 {
             if (wasSharedBuffer)
             {
                 size_t postPosVertexSize, postPosVertexOffset;
-                pBaseDestRem = static_cast<unsigned char*>(
-                    newRemainderBuffer->lock(HardwareBuffer::HBL_DISCARD));
+                HardwareBufferLockGuard newRemainderLock(newRemainderBuffer, HardwareBuffer::HBL_DISCARD);
+                pBaseDestRem = static_cast<unsigned char*>(newRemainderLock.pData);
                 prePosVertexSize = posElem->getOffset();
                 postPosVertexOffset = prePosVertexSize + posElem->getSize();
                 postPosVertexSize = vbuf->getVertexSize() - postPosVertexOffset;
@@ -239,10 +240,8 @@ namespace v1 {
                 memcpy(pDest2, pBaseSrc, vbuf->getSizeInBytes());
             }
 
-            vbuf->unlock();
-            newPosBuffer->unlock();
-            if (wasSharedBuffer)
-                newRemainderBuffer->unlock();
+            vbufLock.unlock();
+            newPosLock.unlock();
 
             // At this stage, he original vertex buffer is going to be destroyed
             // So we should force the deallocation of any temporary copies
@@ -254,8 +253,8 @@ namespace v1 {
                 hardwareShadowVolWBuffer = vbuf->getManager()->createVertexBuffer(
                     sizeof(float), newVertexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
                 // Fill the first half with 1.0, second half with 0.0
-                pDest = static_cast<float*>(
-                    hardwareShadowVolWBuffer->lock(HardwareBuffer::HBL_DISCARD));
+                HardwareBufferLockGuard hardwareShadowVolWBufferLock(hardwareShadowVolWBuffer, HardwareBuffer::HBL_DISCARD);
+                pDest = static_cast<float*>(hardwareShadowVolWBufferLock.pData);
                 for (v = 0; v < oldVertexCount; ++v)
                 {
                     *pDest++ = 1.0f;
@@ -264,7 +263,6 @@ namespace v1 {
                 {
                     *pDest++ = 0.0f;
                 }
-                hardwareShadowVolWBuffer->unlock();
             }
 
             unsigned short newPosBufferSource; 
@@ -357,11 +355,8 @@ namespace v1 {
         {
             assert(itBinding->second->getNumVertices() >= vertexCount);
 
-            oldBufferVertexSizes[itBinding->first] =
-                itBinding->second->getVertexSize();
-            oldBufferLocks[itBinding->first] =
-                itBinding->second->lock(
-                    HardwareBuffer::HBL_READ_ONLY);
+            oldBufferVertexSizes[itBinding->first] = itBinding->second->getVertexSize();
+            oldBufferLocks[itBinding->first] = itBinding->second->lock( HardwareBuffer::HBL_READ_ONLY );
         }
         
         // Create new buffers and lock all for writing
@@ -378,8 +373,7 @@ namespace v1 {
             newBinding->setBinding(buf, vbuf);
 
             newBufferVertexSizes.push_back(vertexSize);
-            newBufferLocks.push_back(
-                vbuf->lock(HardwareBuffer::HBL_DISCARD));
+            newBufferLocks.push_back( vbuf->lock( HardwareBuffer::HBL_DISCARD ) );
             buf++;
         }
 
@@ -618,7 +612,8 @@ namespace v1 {
 
             if (conversionNeeded)
             {
-                void* pBase = bindi->second->lock(HardwareBuffer::HBL_NORMAL);
+                HardwareBufferLockGuard bufferLock(bindi->second, HardwareBuffer::HBL_NORMAL);
+                char* pBase = static_cast<char*>(bufferLock.pData);
 
                 for (size_t v = 0; v < bindi->second->getNumVertices(); ++v)
                 {
@@ -637,10 +632,9 @@ namespace v1 {
                             VertexElement::convertColourValue(currType, destType, pRGBA);
                         }
                     }
-                    pBase = static_cast<void*>(
-                        static_cast<char*>(pBase) + bindi->second->getVertexSize());
+                    pBase += bindi->second->getVertexSize();
                 }
-                bindi->second->unlock();
+                bufferLock.unlock();
 
                 // Modify the elements to reflect the changed type
                 const VertexDeclaration::VertexElementList& allelems = 
@@ -890,7 +884,7 @@ namespace v1 {
     {
         if (indexBuffer->isLocked()) return;
 
-        void *buffer = indexBuffer->lock(HardwareBuffer::HBL_NORMAL);
+        HardwareBufferLockGuard indexLock(indexBuffer, HardwareBuffer::HBL_NORMAL);
 
         Triangle* triangles;
 
@@ -902,12 +896,12 @@ namespace v1 {
         if (indexBuffer->getType() == HardwareIndexBuffer::IT_16BIT)
         {
             triangles = OGRE_ALLOC_T(Triangle, nTriangles, MEMCATEGORY_GEOMETRY);
-            source = (uint16 *)buffer;
+            source = (uint16 *)indexLock.pData;
             uint32 *dest = (uint32 *)triangles;
             for (i = 0; i < nIndexes; ++i) dest[i] = source[i];
         }
         else
-            triangles = static_cast<Triangle*>(buffer);
+            triangles = static_cast<Triangle*>(indexLock.pData);
 
         // sort triangles based on shared edges
         uint32 *destlist = OGRE_ALLOC_T(uint32, nTriangles, MEMCATEGORY_GEOMETRY);
@@ -990,8 +984,6 @@ namespace v1 {
 
         OGRE_FREE(destlist, MEMCATEGORY_GEOMETRY);
         OGRE_FREE(visited, MEMCATEGORY_GEOMETRY);
-                    
-        indexBuffer->unlock();
     }
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
@@ -999,7 +991,8 @@ namespace v1 {
     {
         if (indexBuffer->isLocked()) return;
 
-        uint16 *shortbuffer = (uint16 *)indexBuffer->lock(HardwareBuffer::HBL_READ_ONLY);
+        HardwareBufferLockGuard indexLock(indexBuffer, HardwareBuffer::HBL_READ_ONLY);
+        uint16 *shortbuffer = (uint16 *)indexLock.pData;
 
         if (indexBuffer->getType() == HardwareIndexBuffer::IT_16BIT)
             for (unsigned int i = 0; i < indexBuffer->getNumIndexes(); ++i)
@@ -1010,8 +1003,6 @@ namespace v1 {
             for (unsigned int i = 0; i < indexBuffer->getNumIndexes(); ++i)
                 inCache(buffer[i]);
         }
-
-        indexBuffer->unlock();
     }
 
     //-----------------------------------------------------------------------

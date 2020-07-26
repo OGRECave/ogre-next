@@ -45,6 +45,8 @@ THE SOFTWARE.
 #include "OgreDeflate.h"
 #include "OgreStringConverter.h"
 
+#include <sstream>
+
 namespace Ogre
 {
     //---------------------------------------------------------------------
@@ -146,7 +148,7 @@ namespace Ogre
         }
         else if (c->version > maxVersion)
         {
-            LogManager::getSingleton().stream() << "Error: " << msg 
+            LogManager::getSingleton().stream() << "Error: " << msg
                 << " : Data version is " << c->version << " but this software can only read "
                 << "up to version " << maxVersion;
             // skip

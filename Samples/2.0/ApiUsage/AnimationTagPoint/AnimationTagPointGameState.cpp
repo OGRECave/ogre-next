@@ -40,15 +40,14 @@ namespace Demo
                     "Stickman.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                     Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC );
 
-        v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                    "Stickman.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-
         bool halfPosition   = true;
         bool halfUVs        = true;
         bool useQtangents   = false;
 
         //Import the v1 mesh to v2
-        v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents );
+        v2Mesh = Ogre::MeshManager::getSingleton().createByImportingV1(
+                    "Stickman.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                    v1Mesh.get(), halfPosition, halfUVs, useQtangents );
 
         //We don't need the v1 mesh. Free CPU memory, get it out of the GPU.
         //Leave it loaded if you want to use athene with v1 Entity.

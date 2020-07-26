@@ -27,7 +27,6 @@ THE SOFTWARE.
 */
 #include "OgreStableHeaders.h"
 #include "OgreMovablePlane.h"
-#include "OgreRenderQueue.h"
 #include "OgreNode.h"
 
 namespace Ogre {
@@ -38,7 +37,7 @@ namespace Ogre {
     MovablePlane::MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager,
                                 SceneManager *manager ) :
         Plane(),
-        MovableObject(id, objectMemoryManager, manager, 1),
+        MovableObject(id, objectMemoryManager, manager, 110u),
         mLastTranslate(Vector3::ZERO), 
         mLastRotate(Quaternion::IDENTITY),
         mDirty(true)
@@ -48,7 +47,7 @@ namespace Ogre {
     MovablePlane::MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager,
                                 SceneManager *manager, const Plane& rhs ) :
         Plane(rhs), 
-        MovableObject( id, objectMemoryManager, manager, 1 ),
+        MovableObject( id, objectMemoryManager, manager, 110u ),
         mLastTranslate(Vector3::ZERO), mLastRotate(Quaternion::IDENTITY), 
         mDirty(true)
     {
@@ -58,7 +57,7 @@ namespace Ogre {
                                 SceneManager *manager,
                                 const Vector3& rkNormal, Real fConstant )
         : Plane (rkNormal, fConstant),
-        MovableObject( id, objectMemoryManager, manager, 1 ),
+        MovableObject( id, objectMemoryManager, manager, 110u ),
         mLastTranslate(Vector3::ZERO),
         mLastRotate(Quaternion::IDENTITY), mDirty(true)
     {
@@ -68,7 +67,7 @@ namespace Ogre {
                                 SceneManager *manager,
                                 const Vector3& rkNormal, const Vector3& rkPoint )
         : Plane(rkNormal, rkPoint),
-        MovableObject( id, objectMemoryManager, manager, 1 ),
+        MovableObject( id, objectMemoryManager, manager, 110u ),
         mLastTranslate(Vector3::ZERO), 
         mLastRotate(Quaternion::IDENTITY), mDirty(true)
     {
@@ -79,7 +78,7 @@ namespace Ogre {
                                 const Vector3& rkPoint0, const Vector3& rkPoint1,
                                 const Vector3& rkPoint2 )
         : Plane(rkPoint0, rkPoint1, rkPoint2),
-        MovableObject( id, objectMemoryManager, manager, 1 ),
+        MovableObject( id, objectMemoryManager, manager, 110u ),
         mLastTranslate(Vector3::ZERO), 
         mLastRotate(Quaternion::IDENTITY), mDirty(true)
     {

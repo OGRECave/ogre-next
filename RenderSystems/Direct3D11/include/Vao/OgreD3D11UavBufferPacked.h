@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _Ogre_D3D11UavBufferPacked_H_
 
 #include "OgreD3D11Prerequisites.h"
+#include "OgreD3D11DeviceResource.h"
 #include "Vao/OgreUavBufferPacked.h"
 #include "OgreDescriptorSetUav.h"
 
@@ -37,14 +38,15 @@ namespace Ogre
 {
     class D3D11BufferInterface;
 
-    class _OgreD3D11Export D3D11UavBufferPacked : public UavBufferPacked
+    class _OgreD3D11Export D3D11UavBufferPacked : public UavBufferPacked,
+                                                  protected D3D11DeviceResource
     {
     protected:
         D3D11Device &mDevice;
 
         struct CachedResourceView
         {
-            ID3D11UnorderedAccessView   *mResourceView;
+            ComPtr<ID3D11UnorderedAccessView> mResourceView;
             uint32                      mOffset;
             uint32                      mSize;
         };
@@ -56,6 +58,9 @@ namespace Ogre
 
         ID3D11UnorderedAccessView* createResourceView( int cacheIdx, uint32 offset, uint32 sizeBytes );
 
+        void notifyDeviceLost(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
+
     public:
         D3D11UavBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
                               uint32 bindFlags, void *initialData, bool keepAsShadow,
@@ -65,7 +70,7 @@ namespace Ogre
 
         ID3D11UnorderedAccessView* _bindBufferCommon( size_t offset, size_t sizeBytes );
 
-        ID3D11UnorderedAccessView* createUav( const DescriptorSetUav::BufferSlot &bufferSlot ) const;
+        ComPtr<ID3D11UnorderedAccessView> createUav( const DescriptorSetUav::BufferSlot &bufferSlot ) const;
 
 //        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
 //        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );

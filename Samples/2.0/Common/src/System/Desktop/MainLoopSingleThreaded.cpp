@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 #include "System/MainEntryPoints.h"
 
+#include "System/Desktop/UnitTesting.h"
+
 #include "GraphicsSystem.h"
 #include "LogicSystem.h"
 #include "GameState.h"
@@ -50,6 +52,19 @@ INT WINAPI Demo::MainEntryPoints::mainAppSingleThreaded( HINSTANCE hInst, HINSTA
 int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
 #endif
 {
+    UnitTest unitTest;
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+    unitTest.parseCmdLine( __argc, __argv );
+#else
+    unitTest.parseCmdLine( argc, argv );
+#endif
+
+    if( unitTest.getParams().isPlayback() )
+    {
+        return unitTest.loadFromJson( unitTest.getParams().recordPath.c_str(),
+                                      unitTest.getParams().outputPath );
+    }
+
     GameState *graphicsGameState = 0;
     GraphicsSystem *graphicsSystem = 0;
     GameState *logicGameState = 0;
@@ -75,6 +90,9 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
 
             return 0; //User cancelled config
         }
+
+        if( unitTest.getParams().isRecording() )
+            unitTest.startRecording( graphicsSystem );
 
         Ogre::Window *renderWindow = graphicsSystem->getRenderWindow();
 
@@ -120,6 +138,9 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
             if( !logicSystem )
                 graphicsSystem->finishFrame();
 
+            if( unitTest.getParams().isRecording() )
+                unitTest.notifyRecordingNewFrame( graphicsSystem );
+
             if( !renderWindow->isVisible() )
             {
                 //Don't burn CPU cycles unnecessary when we're minimized.
@@ -131,6 +152,12 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
             timeSinceLast = std::min( 1.0, timeSinceLast ); //Prevent from going haywire.
             accumulator += timeSinceLast;
             startTime = endTime;
+        }
+
+        if( unitTest.getParams().isRecording() )
+        {
+            unitTest.saveToJson( unitTest.getParams().recordPath.c_str(),
+                                 unitTest.getParams().bCompressDuration );
         }
 
         graphicsSystem->destroyScene();

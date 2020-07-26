@@ -169,6 +169,22 @@ namespace Ogre
         {
             const RenderPassColourTarget &colourEntry = mColour[mNumColourEntries];
 
+            if( colourEntry.texture->isRenderWindowSpecific() )
+            {
+                RenderPassColourTarget& colourEntryRW = mColour[mNumColourEntries];
+                if( !colourEntry.texture->isMultisample() && colourEntry.resolveTexture )
+                {
+                    colourEntryRW.resolveTexture = 0;
+                    colourEntryRW.storeAction = StoreAction::Store;
+                }
+                else if( colourEntry.texture->isMultisample() && !colourEntry.resolveTexture
+                    && !colourEntry.texture->hasMsaaExplicitResolves() )
+                {
+                    colourEntryRW.resolveTexture = colourEntryRW.texture;
+                    colourEntryRW.storeAction = StoreAction::MultisampleResolve;
+                }
+            }
+
             if( colourEntry.storeAction == StoreAction::MultisampleResolve &&
                 !colourEntry.resolveTexture )
             {
@@ -180,7 +196,7 @@ namespace Ogre
 
             if( colourEntry.resolveTexture )
             {
-                if( colourEntry.texture->getMsaa() <= 1u )
+                if( !colourEntry.texture->isMultisample() )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "Resolve Texture '" + colourEntry.resolveTexture->getNameStr() +

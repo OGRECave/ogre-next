@@ -217,11 +217,7 @@ namespace Ogre
             _mm_store_ps( dstPtr, mChunkBase[0] );
             _mm_store_ps( dstPtr + 4, mChunkBase[1] );
             _mm_store_ps( dstPtr + 8, mChunkBase[2] );
-            dstPtr += 12;
-            *dstPtr++ = 0;
-            *dstPtr++ = 0;
-            *dstPtr++ = 0;
-            *dstPtr++ = 1;
+            _mm_store_ps( dstPtr + 12, MathlibSSE2::LAST_AFFINE_COLUMN );
         }
 
         /// Assumes dst is aligned

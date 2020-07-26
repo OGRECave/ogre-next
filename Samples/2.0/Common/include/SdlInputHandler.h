@@ -88,6 +88,11 @@ namespace Demo
 
         /// Shows or hides the mouse cursor.
         void setMouseVisible( bool visible );
+
+        void _overrideKeyboardListener( KeyboardListener *listener );
+        void _overrideMouseListener( MouseListener *listener );
+        KeyboardListener *getKeyboardListener( void );
+        MouseListener *getMouseListener( void );
     };
 }
 

@@ -81,7 +81,7 @@ namespace Ogre {
 #   include <GL/gl3w.h>
 #   include <GL/glext.h>
 #   include <GL/wglext.h>
-#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
 #   include <GL/gl3w.h>
 #   include <GL/glext.h>
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE

@@ -22,8 +22,4 @@ ogre_add_executable(Sample_PbsMaterials WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SA
 
 target_link_libraries(Sample_PbsMaterials ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(Sample_PbsMaterials)
-
-if( APPLE )
-	set_target_properties( Sample_PbsMaterials PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Sample_PbsMaterials PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Sample_PbsMaterials)

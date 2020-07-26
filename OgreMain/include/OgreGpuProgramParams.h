@@ -35,6 +35,11 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreSerializer.h"
 #include "OgreAny.h"
 #include "Threading/OgreThreadHeaders.h"
+
+#include "ogrestd/map.h"
+#include "ogrestd/unordered_map.h"
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {
@@ -858,6 +863,8 @@ namespace Ogre {
 
     };
 
+    class GpuProgramParameters_AutoConstantEntry;
+
     /** Collects together the program parameters used for a GpuProgram.
         @remarks
         Gpu program state includes constant parameters used by the program, and
@@ -1327,6 +1334,18 @@ namespace Ogre {
             /** Provides texture size of the texture unit (index determined by setAutoConstant
                 call). Packed as float4(width, height, depth, 1)
             */
+            ACT_UAV_SIZE,
+            /** Provides inverse uav size of the uav unit (index determined by setAutoConstant
+                call). Packed as float4(1 / width, 1 / height, 1 / depth, 1)
+            */
+            ACT_INVERSE_UAV_SIZE,
+            /** Provides packed uav size of the uav unit (index determined by setAutoConstant
+                call). Packed as float4(width, height, 1 / width, 1 / height)
+            */
+            ACT_PACKED_UAV_SIZE,
+            /** Provides texture size of the texture unit (index determined by setAutoConstant
+                call). Packed as float4(width, height, depth, 1)
+            */
             ACT_TEXTURE_SIZE,
             /** Provides inverse texture size of the texture unit (index determined by setAutoConstant
                 call). Packed as float4(1 / width, 1 / height, 1 / depth, 1)
@@ -1424,39 +1443,8 @@ namespace Ogre {
             }
         };
 
-        /** Structure recording the use of an automatic parameter. */
-        class AutoConstantEntry
-        {
-        public:
-            /// The type of parameter
-            AutoConstantType paramType;
-            /// The target (physical) constant index
-            size_t physicalIndex;
-            /** The number of elements per individual entry in this constant
-                Used in case people used packed elements smaller than 4 (e.g. GLSL)
-                and bind an auto which is 4-element packed to it */
-            size_t elementCount;
-            /// Additional information to go with the parameter
-            union{
-                size_t data;
-                Real fData;
-            };
-            /// The variability of this parameter (see GpuParamVariability)
-            uint16 variability;
-
-        AutoConstantEntry(AutoConstantType theType, size_t theIndex, size_t theData,
-                          uint16 theVariability, size_t theElemCount = 4)
-            : paramType(theType), physicalIndex(theIndex), elementCount(theElemCount),
-                data(theData), variability(theVariability) {}
-
-        AutoConstantEntry(AutoConstantType theType, size_t theIndex, Real theData,
-                          uint16 theVariability, size_t theElemCount = 4)
-            : paramType(theType), physicalIndex(theIndex), elementCount(theElemCount),
-                fData(theData), variability(theVariability) {}
-
-        };
         // Auto parameter storage
-        typedef vector<AutoConstantEntry>::type AutoConstantList;
+        typedef vector<GpuProgramParameters_AutoConstantEntry>::type AutoConstantList;
 
         typedef vector<GpuSharedParametersUsage>::type GpuSharedParamUsageList;
 
@@ -2000,58 +1988,66 @@ namespace Ogre {
             otherwise returns a NULL
             @param index which entry is to be retrieved
         */
-        AutoConstantEntry* getAutoConstantEntry(const size_t index);
+        GpuProgramParameters_AutoConstantEntry *getAutoConstantEntry(
+            const size_t index );
         /** Returns true if this instance has any automatic constants. */
-        bool hasAutoConstants(void) const { return !(mAutoConstants.empty()); }
+        bool hasAutoConstants( void ) const { return !( mAutoConstants.empty() ); }
         /** Finds an auto constant that's affecting a given logical parameter
             index for floating-point values.
             @note Only applicable for low-level programs.
         */
-        const AutoConstantEntry* findFloatAutoConstantEntry(size_t logicalIndex);
+        const GpuProgramParameters_AutoConstantEntry *findFloatAutoConstantEntry( size_t logicalIndex );
         /** Finds an auto constant that's affecting a given logical parameter
             index for double-point values.
             @note Only applicable for low-level programs.
         */
-        const AutoConstantEntry* findDoubleAutoConstantEntry(size_t logicalIndex);
+        const GpuProgramParameters_AutoConstantEntry *findDoubleAutoConstantEntry( size_t logicalIndex );
         /** Finds an auto constant that's affecting a given logical parameter
             index for integer values.
             @note Only applicable for low-level programs.
         */
-        const AutoConstantEntry* findIntAutoConstantEntry(size_t logicalIndex);
+        const GpuProgramParameters_AutoConstantEntry *findIntAutoConstantEntry( size_t logicalIndex );
         /** Finds an auto constant that's affecting a given logical parameter
             index for unsigned integer values.
             @note Only applicable for low-level programs.
         */
-        const AutoConstantEntry* findUnsignedIntAutoConstantEntry(size_t logicalIndex);
+        const GpuProgramParameters_AutoConstantEntry *findUnsignedIntAutoConstantEntry(
+            size_t logicalIndex );
         // /** Finds an auto constant that's affecting a given logical parameter
         //     index for boolean values.
         //     @note Only applicable for low-level programs.
         // */
-        // const AutoConstantEntry* findBoolAutoConstantEntry(size_t logicalIndex);
+        // const GpuProgramParameters_AutoConstantEntry*
+        // findBoolAutoConstantEntry(size_t logicalIndex);
         /** Finds an auto constant that's affecting a given named parameter index.
             @note Only applicable to high-level programs.
         */
-        const AutoConstantEntry* findAutoConstantEntry(const String& paramName);
+        const GpuProgramParameters_AutoConstantEntry *findAutoConstantEntry( const String &paramName );
         /** Finds an auto constant that's affecting a given physical position in
             the floating-point buffer
         */
-        const AutoConstantEntry* _findRawAutoConstantEntryFloat(size_t physicalIndex);
+        const GpuProgramParameters_AutoConstantEntry *_findRawAutoConstantEntryFloat(
+            size_t physicalIndex );
         /** Finds an auto constant that's affecting a given physical position in
             the double-point buffer
         */
-        const AutoConstantEntry* _findRawAutoConstantEntryDouble(size_t physicalIndex);
+        const GpuProgramParameters_AutoConstantEntry *_findRawAutoConstantEntryDouble(
+            size_t physicalIndex );
         /** Finds an auto constant that's affecting a given physical position in
             the integer buffer
         */
-        const AutoConstantEntry* _findRawAutoConstantEntryInt(size_t physicalIndex);
+        const GpuProgramParameters_AutoConstantEntry *_findRawAutoConstantEntryInt(
+            size_t physicalIndex );
         /** Finds an auto constant that's affecting a given physical position in
             the unsigned integer buffer
         */
-        const AutoConstantEntry* _findRawAutoConstantEntryUnsignedInt(size_t physicalIndex);
+        const GpuProgramParameters_AutoConstantEntry *_findRawAutoConstantEntryUnsignedInt(
+            size_t physicalIndex );
         /** Finds an auto constant that's affecting a given physical position in
             the boolean buffer
         */
-        const AutoConstantEntry* _findRawAutoConstantEntryBool(size_t physicalIndex);
+        const GpuProgramParameters_AutoConstantEntry *_findRawAutoConstantEntryBool(
+            size_t physicalIndex );
 
         /** Update automatic parameters.
             @param source The source of the parameters
@@ -2477,6 +2473,50 @@ namespace Ogre {
         /** Get map with
          */
         const SubroutineMap& getSubroutineMap() const { return mSubroutineMap; }
+    };
+
+    /** Structure recording the use of an automatic parameter. */
+    class GpuProgramParameters_AutoConstantEntry
+    {
+    public:
+        /// The type of parameter
+        GpuProgramParameters::AutoConstantType paramType;
+        /// The target (physical) constant index
+        size_t physicalIndex;
+        /** The number of elements per individual entry in this constant
+            Used in case people used packed elements smaller than 4 (e.g. GLSL)
+            and bind an auto which is 4-element packed to it */
+        size_t elementCount;
+        /// Additional information to go with the parameter
+        union
+        {
+            size_t data;
+            Real fData;
+        };
+        /// The variability of this parameter (see GpuParamVariability)
+        uint16 variability;
+
+        GpuProgramParameters_AutoConstantEntry( GpuProgramParameters::AutoConstantType theType,
+                                                size_t theIndex, size_t theData, uint16 theVariability,
+                                                size_t theElemCount = 4 ) :
+            paramType( theType ),
+            physicalIndex( theIndex ),
+            elementCount( theElemCount ),
+            data( theData ),
+            variability( theVariability )
+        {
+        }
+
+        GpuProgramParameters_AutoConstantEntry( GpuProgramParameters::AutoConstantType theType,
+                                                size_t theIndex, Real theData, uint16 theVariability,
+                                                size_t theElemCount = 4 ) :
+            paramType( theType ),
+            physicalIndex( theIndex ),
+            elementCount( theElemCount ),
+            fData( theData ),
+            variability( theVariability )
+        {
+        }
     };
 
     /** @} */

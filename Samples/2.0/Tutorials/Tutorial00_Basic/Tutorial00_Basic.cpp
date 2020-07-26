@@ -23,6 +23,9 @@
 
 #include "OgreWindowEventUtilities.h"
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#   include "OSX/macUtils.h"
+#endif
 static void registerHlms( void )
 {
     using namespace Ogre;

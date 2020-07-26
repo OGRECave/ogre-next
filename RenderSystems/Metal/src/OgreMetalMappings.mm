@@ -322,6 +322,8 @@ namespace Ogre
         case MTLDataTypeBool3:          return MTLVertexFormatFloat3;
         case MTLDataTypeBool4:          return MTLVertexFormatFloat4;
         }
+
+        return MTLVertexFormatInvalid;
     }
     //-----------------------------------------------------------------------------------
     MTLPixelFormat MetalMappings::get( PixelFormatGpu pf )
@@ -475,7 +477,11 @@ namespace Ogre
         case PFG_ASTC_RGBA_UNORM_12X10_sRGB:    return MTLPixelFormatASTC_12x10_sRGB;
         case PFG_ASTC_RGBA_UNORM_12X12_sRGB:    return MTLPixelFormatASTC_12x12_sRGB;
 #endif
-
+        case PFG_RGB8_UNORM:
+        case PFG_RGB8_UNORM_SRGB:
+        case PFG_BGR8_UNORM:
+        case PFG_BGR8_UNORM_SRGB:
+        case PFG_RGB16_UNORM:
         case PFG_AYUV:
         case PFG_Y410:
         case PFG_Y416:
@@ -579,5 +585,7 @@ namespace Ogre
         case MTLDataTypeBool3:          return GCT_BOOL3;
         case MTLDataTypeBool4:          return GCT_BOOL4;
         }
+
+        return GCT_UNKNOWN;
     }
 }

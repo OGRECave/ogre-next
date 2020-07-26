@@ -280,6 +280,8 @@ namespace Ogre
         const TextureGpuVec& getContiguousShadowMapTex(void) const  { return mContiguousShadowMapTex; }
         uint32 getIndexToContiguousShadowMapTex( size_t shadowMapIdx ) const;
 
+        float getNormalOffsetBias( const size_t shadowMapIdx ) const;
+
         /** Marks a shadow map as statically updated, and ties the given light to always use
             that shadow map.
         @remarks
@@ -409,7 +411,9 @@ namespace Ogre
                                                   bool useEsm,
                                                   uint32 pointLightCubemapResolution=1024u,
                                                   Real pssmLambda=0.95f, Real splitPadding=1.0f,
-                                                  Real splitBlend=0.125f, Real splitFade=0.313f );
+                                                  Real splitBlend = 0.125f, Real splitFade = 0.313f,
+                                                  uint32 numStableSplits = 0,
+                                                  uint32 visibilityMask = VisibilityFlags::RESERVED_VISIBILITY_FLAGS );
     };
 
     /** @} */

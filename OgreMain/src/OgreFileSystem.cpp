@@ -28,15 +28,20 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 #include "OgreFileSystem.h"
 #include "OgreException.h"
+#include "OgreString.h"
 #include "OgreStringVector.h"
+
+#include <fstream>
 
 #include <sys/stat.h>
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_APPLE || \
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || \
+    OGRE_PLATFORM == OGRE_PLATFORM_APPLE || \
     OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS || \
     OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || \
     OGRE_PLATFORM == OGRE_PLATFORM_NACL || \
-    OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
+    OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN || \
+    OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
 #   include "OgreSearchOps.h"
 #   include <sys/param.h>
 #endif

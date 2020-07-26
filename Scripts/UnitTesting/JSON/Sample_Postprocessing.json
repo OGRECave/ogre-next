@@ -1,0 +1,2079 @@
+{
+	"framerate" : 60.000000,
+	"num_frames" : 273,
+	"frame_activity" :
+	[
+		{
+			"frame_id" : 2,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 3,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 4,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 5,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 6,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 7,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 8,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 9,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 10,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 11,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 12,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 13,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 14,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 15,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 16,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 17,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 18,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 19,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 20,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 21,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 22,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 23,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 24,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 25,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 26,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 27,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 28,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 29,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 30,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 31,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 32,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 33,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 34,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 35,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 36,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 37,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 38,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 39,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 40,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 41,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 42,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 43,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 44,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 32, "scan_code" : 44, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 45,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 32, "scan_code" : 44, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 46,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 47,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 48,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 49,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 50,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 51,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 52,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 53,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 54,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 55,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 56,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 57,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 58,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 59,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 60,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 61,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 62,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 63,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 64,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 65,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 66,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 67,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 68,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 69,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 70,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 71,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 72,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 73,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 74,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 75,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 76,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 77,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 78,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 79,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 80,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 81,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 82,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 83,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 84,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 85,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 86,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 32, "scan_code" : 44, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 87,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 32, "scan_code" : 44, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 88,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 89,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 90,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 91,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 92,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 93,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 32, "scan_code" : 44, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 94,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943650, -0.085087, -0.318527, -0.028721],
+			"key_strokes" :
+			[
+				{ "key_code" : 32, "scan_code" : 44, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 95,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943585, -0.084420, -0.318915, -0.028532],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 96,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.943144, -0.083720, -0.320409, -0.028442],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 97,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.942631, -0.082356, -0.322290, -0.028158],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 98,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.941900, -0.078997, -0.325331, -0.027286],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 99,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.941531, -0.075675, -0.327263, -0.026304],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 100,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.940452, -0.072960, -0.331011, -0.025680],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 101,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.939399, -0.069597, -0.334770, -0.024802],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 102,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.938538, -0.066913, -0.337772, -0.024081],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 103,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.937393, -0.064215, -0.341502, -0.023394],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 104,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.936275, -0.062832, -0.344828, -0.023141],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 105,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.935133, -0.059494, -0.348562, -0.022176],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 106,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.933827, -0.056156, -0.352653, -0.021207],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 107,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.932771, -0.052843, -0.356006, -0.020168],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 108,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.931340, -0.050815, -0.360052, -0.019645],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 109,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.929746, -0.048786, -0.364454, -0.019124],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 110,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.928271, -0.046769, -0.368485, -0.018566],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 111,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.927469, -0.045438, -0.370686, -0.018160],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 112,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.925843, -0.042781, -0.375079, -0.017331],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 113,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.923326, -0.039452, -0.381638, -0.016307],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 114,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.921731, -0.038101, -0.385624, -0.015940],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 115,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.920270, -0.036761, -0.389244, -0.015549],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 116,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.918710, -0.033504, -0.393247, -0.014341],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 117,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.916189, -0.030227, -0.399387, -0.013176],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 118,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.913458, -0.026962, -0.405863, -0.011980],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 119,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.910185, -0.023702, -0.413382, -0.010765],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 120,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.907511, -0.019849, -0.419459, -0.009174],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 121,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.904269, -0.016637, -0.426566, -0.007848],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 122,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.901140, -0.012824, -0.433295, -0.006166],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 123,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.897938, -0.009660, -0.439991, -0.004733],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 124,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.895024, -0.006521, -0.445958, -0.003249],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 125,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.891707, -0.003400, -0.452597, -0.001726],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 126,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.886333, 0.005237, -0.463010, 0.002736],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 127,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.882823, 0.010735, -0.469549, 0.005710],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 128,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.879786, 0.016198, -0.475012, 0.008746],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 129,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.876619, 0.024058, -0.480402, 0.013184],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 130,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.874294, 0.031895, -0.484025, 0.017658],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 131,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.872018, 0.040911, -0.487225, 0.022859],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 132,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.870401, 0.049927, -0.489002, 0.028050],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 133,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.869369, 0.060172, -0.489316, 0.033867],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 134,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.868598, 0.070431, -0.488882, 0.039642],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 135,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.868602, 0.081372, -0.486653, 0.045590],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 136,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.869220, 0.092404, -0.482992, 0.051345],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 137,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.869972, 0.101047, -0.479414, 0.055684],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 138,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.871431, 0.112273, -0.473583, 0.061015],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 139,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.872838, 0.118622, -0.469062, 0.063747],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 140,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.874731, 0.126311, -0.463056, 0.066865],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 141,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.877590, 0.134199, -0.454958, 0.069571],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 142,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.880859, 0.140966, -0.446225, 0.071411],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 143,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.883999, 0.147772, -0.437451, 0.073125],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 144,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.887222, 0.153382, -0.428739, 0.074120],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 145,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.890224, 0.157724, -0.420792, 0.074553],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 146,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.893140, 0.162082, -0.412817, 0.074916],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 147,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.895926, 0.165803, -0.405219, 0.074991],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 148,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.898364, 0.170128, -0.397897, 0.075352],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 149,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.901151, 0.173899, -0.389903, 0.075241],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 150,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.905785, 0.178058, -0.377291, 0.074167],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 151,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.908619, 0.180582, -0.369341, 0.073404],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 152,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.910970, 0.183681, -0.362030, 0.072997],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 153,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.913524, 0.186177, -0.354395, 0.072226],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 154,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.916148, 0.189364, -0.345976, 0.071512],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 155,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.918822, 0.191914, -0.337585, 0.070511],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 156,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.921292, 0.193765, -0.329941, 0.069393],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 157,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.923308, 0.196199, -0.322952, 0.068626],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 158,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.926418, 0.196860, -0.313920, 0.066707],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 159,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.929440, 0.197502, -0.304858, 0.064781],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 160,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.934655, 0.198610, -0.288474, 0.061299],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 161,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.938326, 0.198709, -0.276809, 0.058620],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 162,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.940207, 0.197744, -0.271386, 0.057078],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 163,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.944209, 0.195164, -0.259801, 0.053700],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 164,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.949969, 0.189486, -0.243507, 0.048571],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 165,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.953872, 0.183386, -0.233420, 0.044876],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 166,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.957411, 0.177869, -0.223611, 0.041543],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 167,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.961217, 0.170990, -0.213046, 0.037899],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 168,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.964258, 0.164632, -0.204650, 0.034941],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 169,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.967354, 0.156186, -0.197028, 0.031812],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 170,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.970134, 0.148351, -0.189713, 0.029011],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 171,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.972791, 0.140471, -0.182354, 0.026332],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 172,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.975002, 0.133885, -0.175681, 0.024124],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 173,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.978015, 0.123934, -0.166380, 0.021084],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 174,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.979829, 0.116566, -0.161180, 0.019175],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 175,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.981723, 0.107123, -0.156376, 0.017063],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 176,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.983761, 0.095607, -0.151189, 0.014693],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 177,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.985806, 0.081313, -0.146383, 0.012074],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 178,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.987610, 0.066289, -0.141922, 0.009526],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 179,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.989144, 0.052604, -0.137020, 0.007287],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 180,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.990203, 0.038878, -0.134014, 0.005262],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 181,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.990974, 0.026507, -0.131360, 0.003514],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 182,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.991510, 0.012056, -0.129461, 0.001574],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 183,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.991582, -0.001715, -0.129471, -0.000224],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 184,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.991451, -0.016175, -0.129453, -0.002112],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 185,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.991121, -0.028565, -0.129804, -0.003741],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 186,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.990365, -0.043694, -0.131279, -0.005792],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 187,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.989753, -0.054003, -0.131985, -0.007201],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 188,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.988930, -0.064296, -0.133448, -0.008676],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 189,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.987996, -0.073888, -0.135288, -0.010118],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 190,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.987300, -0.080734, -0.136371, -0.011151],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 191,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.986681, -0.085514, -0.137857, -0.011948],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 192,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.986092, -0.090294, -0.138953, -0.012724],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 193,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.985368, -0.095060, -0.140815, -0.013585],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 194,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.984506, -0.099810, -0.143439, -0.014542],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 195,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.983369, -0.105217, -0.147199, -0.015750],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 196,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.982118, -0.108534, -0.152900, -0.016897],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 197,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.979927, -0.112426, -0.163556, -0.018765],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 198,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.978127, -0.113596, -0.173090, -0.020102],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 199,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.976103, -0.113361, -0.184159, -0.021388],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 200,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.973494, -0.113058, -0.197487, -0.022935],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 201,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.970621, -0.112725, -0.211156, -0.024523],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 202,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.968010, -0.113784, -0.222102, -0.026107],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 203,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.965986, -0.114227, -0.230394, -0.027244],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 204,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.964540, -0.114735, -0.236030, -0.028076],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 205,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.963798, -0.114647, -0.239043, -0.028435],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 206,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.963704, -0.114635, -0.239420, -0.028480],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 207,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.963611, -0.114624, -0.239796, -0.028524],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 208,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.963423, -0.114602, -0.240549, -0.028614],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 209,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.963329, -0.114591, -0.240925, -0.028659],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 210,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.963235, -0.114580, -0.241301, -0.028704],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 211,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.962476, -0.114489, -0.244310, -0.029061],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 212,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.962189, -0.114455, -0.245438, -0.029196],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 213,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.961997, -0.114432, -0.246190, -0.029285],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 214,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.961751, -0.112371, -0.248129, -0.028992],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 215,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.961279, -0.109611, -0.251214, -0.028645],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 216,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.959880, -0.104052, -0.258876, -0.028063],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 217,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.958771, -0.099892, -0.264613, -0.027569],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 218,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.957583, -0.097080, -0.269929, -0.027366],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 219,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.956894, -0.094326, -0.273370, -0.026947],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 220,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.956423, -0.093609, -0.275257, -0.026941],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 221,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.955642, -0.091523, -0.278674, -0.026689],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 222,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.954893, -0.090113, -0.281696, -0.026584],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 223,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.954031, -0.087359, -0.285498, -0.026142],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 224,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.952976, -0.085260, -0.289649, -0.025914],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 225,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.951896, -0.084497, -0.293388, -0.026043],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 226,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.951148, -0.083765, -0.296008, -0.026069],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 227,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.949570, -0.081633, -0.301630, -0.025931],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 228,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.948433, -0.079545, -0.305762, -0.025644],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 229,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 230,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 231,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 232,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 233,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 234,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 235,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 236,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 237,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 238,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 239,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 240,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 241,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 242,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 243,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 244,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 245,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 246,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 247,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 32, "scan_code" : 44, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 248,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 32, "scan_code" : 44, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 249,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 250,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 251,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 252,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 50, "scan_code" : 31, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 253,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 254,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 51, "scan_code" : 32, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 255,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 256,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 52, "scan_code" : 33, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 257,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 258,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 53, "scan_code" : 34, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 259,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 260,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 54, "scan_code" : 35, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 261,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 262,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 55, "scan_code" : 36, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 263,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 264,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 265,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 56, "scan_code" : 37, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 266,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"screenshot_render_window" : true
+		},
+		{
+			"frame_id" : 267,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 32, "scan_code" : 44, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 268,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 32, "scan_code" : 44, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 269,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : false }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 270,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 49, "scan_code" : 30, "released" : true }
+			],
+			"screenshot_render_window" : false
+		},
+		{
+			"frame_id" : 271,
+			"camera_pos" : [-8.000000, 2.400000, 10.500000],
+			"camera_rot" : [0.947395, -0.077471, -0.309518, -0.025310],
+			"key_strokes" :
+			[
+				{ "key_code" : 1073742050, "scan_code" : 226, "released" : false }
+			],
+			"screenshot_render_window" : false
+		}
+	]
+}

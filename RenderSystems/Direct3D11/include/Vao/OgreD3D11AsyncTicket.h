@@ -38,7 +38,7 @@ namespace Ogre
     class _OgreD3D11Export D3D11AsyncTicket : public AsyncTicket
     {
     protected:
-        ID3D11Query *mFenceName;
+        ComPtr<ID3D11Query> mFenceName;
         D3D11Device &mDevice;
 
         virtual const void* mapImpl(void);

@@ -71,6 +71,11 @@ namespace Ogre
         TextureGpuVec   mPrePassTextures;
         TextureGpu      *mPrePassDepthTexture;
         TextureGpu      *mSsrTexture;
+        TextureGpu      *mDepthTextureNoMsaa;
+        TextureGpu      *mRefractionsTexture;
+
+        void notifyPassSceneAfterShadowMapsListeners(void);
+        void notifyPassSceneAfterFrustumCullingListeners(void);
 
     public:
         /** Constructor

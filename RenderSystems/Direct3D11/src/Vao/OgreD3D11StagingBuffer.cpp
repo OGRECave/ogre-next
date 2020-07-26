@@ -49,6 +49,15 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    void D3D11StagingBuffer::notifyDeviceLost( D3D11Device *device )
+    {
+        mVboName.Reset();
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11StagingBuffer::notifyDeviceRestored( D3D11Device *device, unsigned pass )
+    {
+    }
+    //-----------------------------------------------------------------------------------
     void* D3D11StagingBuffer::mapImpl( size_t sizeBytes )
     {
         assert( mUploadOnly );
@@ -64,8 +73,14 @@ namespace Ogre
         mMappingCount = sizeBytes;
 
         D3D11_MAPPED_SUBRESOURCE mappedSubres;
-        mDevice.GetImmediateContext()->Map( mVboName, 0, mapFlag,
-                                            0, &mappedSubres );
+        HRESULT hr = mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, mapFlag, 0, &mappedSubres );
+        if (FAILED(hr) || mDevice.isError())
+        {
+            String msg = mDevice.getErrorDescription(hr);
+            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
+                "Error calling Map: " + msg, 
+                "D3D11StagingBuffer::mapImpl");
+        }
         mMappedPtr = reinterpret_cast<uint8*>( mappedSubres.pData ) + mMappingStart;
 
         return mMappedPtr;
@@ -74,7 +89,7 @@ namespace Ogre
     void D3D11StagingBuffer::unmapImpl( const Destination *destinations, size_t numDestinations )
     {
         ID3D11DeviceContextN *d3dContext = mDevice.GetImmediateContext();
-        d3dContext->Unmap( mVboName, 0 );
+        d3dContext->Unmap( mVboName.Get(), 0 );
         mMappedPtr = 0;
 
         for( size_t i=0; i<numDestinations; ++i )
@@ -98,7 +113,7 @@ namespace Ogre
             srcBox.bottom   = 1;
 
             d3dContext->CopySubresourceRegion( bufferInterface->getVboName(), 0,
-                                               dstOffset, 0, 0, mVboName, 0, &srcBox );
+                                               dstOffset, 0, 0, mVboName.Get(), 0, &srcBox );
         }
 
         //We must wrap exactly to zero so that next map uses DISCARD.
@@ -158,7 +173,7 @@ namespace Ogre
         srcBox.bottom   = 1;
 
         ID3D11DeviceContextN *d3dContext = mDevice.GetImmediateContext();
-        d3dContext->CopySubresourceRegion( mVboName, 0, freeRegionOffset,
+        d3dContext->CopySubresourceRegion( mVboName.Get(), 0, freeRegionOffset,
                                            0, 0, bufferInterface->getVboName(),
                                            0, &srcBox );
 
@@ -169,11 +184,17 @@ namespace Ogre
     {
         assert( !mUploadOnly );
 
+        D3D11_MAPPED_SUBRESOURCE mappedSubres;
+        HRESULT hr = mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, D3D11_MAP_READ, 0, &mappedSubres );
+        if (FAILED(hr) || mDevice.isError())
+        {
+            String msg = mDevice.getErrorDescription(hr);
+            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
+                "Error calling Map: " + msg, 
+                "D3D11StagingBuffer::_mapForReadImpl");
+        }
         mMappingStart = offset;
         mMappingCount = sizeBytes;
-
-        D3D11_MAPPED_SUBRESOURCE mappedSubres;
-        mDevice.GetImmediateContext()->Map( mVboName, 0, D3D11_MAP_READ, 0, &mappedSubres );
         mMappedPtr = reinterpret_cast<uint8*>( mappedSubres.pData ) + mMappingStart;
 
         //Put the mapped region back to our records as "available" for subsequent _asyncDownload

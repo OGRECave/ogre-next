@@ -53,8 +53,11 @@ THE SOFTWARE.
 #include "OgreRenderSystem.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
+#include "OgreString.h"
 
 #include "OgreProfiler.h"
+
+#include <fstream>
 
 #if !OGRE_NO_JSON
     #include "rapidjson/document.h"
@@ -159,11 +162,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpuManager::~TextureGpuManager()
     {
-        mShuttingDown = true;
-#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN && !OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
-        mWorkerWaitableEvent.wake();
-        Threads::WaitForThreads( 1u, &mWorkerThread );
-#endif
+        shutdown();
 
         assert( mAvailableStagingTextures.empty() && "Derived class didn't call destroyAll!" );
         assert( mUsedStagingTextures.empty() && "Derived class didn't call destroyAll!" );
@@ -179,16 +178,64 @@ namespace Ogre
         mTextureGpuManagerListener = 0;
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::shutdown(void)
+    {
+        if( !mShuttingDown )
+        {
+            mShuttingDown = true;
+#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN && !OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
+            mWorkerWaitableEvent.wake();
+            Threads::WaitForThreads( 1u, &mWorkerThread );
+#endif
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyAll(void)
     {
-        waitForStreamingCompletion();
-
         mMutex.lock();
+        abortAllRequests();
         destroyAllStagingBuffers();
         destroyAllAsyncTextureTicket();
         destroyAllTextures();
         destroyAllPools();
         mMutex.unlock();
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::abortAllRequests( void )
+    {
+        ThreadData &workerData = mThreadData[c_workerThread];
+        ThreadData &mainData = mThreadData[c_mainThread];
+        mLoadRequestsMutex.lock();
+        mainData.loadRequests.clear();  // TODO: if( loadRequest.autoDeleteImage ) delete loadRequest.image;
+        mainData.objCmdBuffer->clear();
+        mainData.usedStagingTex.clear();
+        workerData.loadRequests.clear();  // TODO: if( loadRequest.autoDeleteImage ) delete loadRequest.image;
+        workerData.objCmdBuffer->clear();
+        workerData.usedStagingTex.clear();
+        mLoadRequestsMutex.unlock();
+
+        while( !mStreamingData.queuedImages.empty() )
+        {
+            TextureFilter::FilterBase::destroyFilters( mStreamingData.queuedImages.back().filters );
+            mStreamingData.queuedImages.pop_back();
+        }
+
+        {
+            // These partial images were supposed to transfer ownership of sysRamPtr to TextureGpu
+            // But we now must free these ptrs ourselves
+            PartialImageMap::const_iterator itor = mStreamingData.partialImages.begin();
+            PartialImageMap::const_iterator endt = mStreamingData.partialImages.end();
+
+            while( itor != endt )
+            {
+                if( itor->second.sysRamPtr )
+                    OGRE_FREE_SIMD( itor->second.sysRamPtr, MEMCATEGORY_RESOURCE );
+                ++itor;
+            }
+            mStreamingData.partialImages.clear();
+        }
+
+        mScheduledTasks.clear();
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyAllStagingBuffers(void)
@@ -276,6 +323,7 @@ namespace Ogre
         newPool.usedMemory = 0;
         newPool.usedSlots.reserve( numSlices );
 
+        newPool.masterTexture->_setSourceType( TextureSourceType::PoolOwner );
         newPool.masterTexture->setResolution( width, height, numSlices );
         newPool.masterTexture->setPixelFormat( pixelFormat );
         newPool.masterTexture->setNumMipmaps( numMipmaps );
@@ -344,6 +392,7 @@ namespace Ogre
 
         TextureGpu *retVal = createTextureImpl( pageOutStrategy, idName, textureFlags, initialType );
         retVal->setTexturePoolId( poolId );
+        retVal->_setSourceType( TextureSourceType::Standard );
 
         mEntriesMutex.lock();
         mEntries[idName] = ResourceEntry( name, aliasName, resourceGroup, retVal, filters );
@@ -1152,7 +1201,8 @@ namespace Ogre
                     pool.masterTexture->getNumMipmaps(), "|" );
             const size_t bytesInPool = pool.masterTexture->getSizeBytes();
             text.a( (uint32)bytesInPool, "|" );
-            text.a( pool.usedMemory, "|", pool.masterTexture->getDepthOrSlices() );
+            text.a( pool.usedMemory - (uint16)pool.availableSlots.size(), "|",
+                    pool.masterTexture->getDepthOrSlices() );
             text.a( "|", pool.masterTexture->getTexturePoolId() );
 
             bytesInPoolInclWaste += bytesInPool;
@@ -1196,7 +1246,7 @@ namespace Ogre
             text.a( entry.texture->getDepth(), "|", entry.texture->getNumSlices(), "|" );
             text.a( PixelFormatGpuUtils::toString( entry.texture->getPixelFormat() ), "|",
                     entry.texture->getNumMipmaps(), "|" );
-            text.a( entry.texture->getMsaa(), "|",
+            text.a( entry.texture->getSampleDescription().getColourSamples(), "|",
                     (uint32)bytesTexture, "|" );
             text.a( entry.texture->isRenderToTexture(), "|",
                     entry.texture->isUav(), "|",
@@ -1880,6 +1930,7 @@ namespace Ogre
                                                        TextureFlags::PoolOwner,
                                                        TextureTypes::Type2DArray );
             const uint16 numSlices = mTextureGpuManagerListener->getNumSlicesFor( texture, this );
+            newPool.masterTexture->_setSourceType( TextureSourceType::PoolOwner );
 
             newPool.manuallyReserved = false;
             newPool.usedMemory = 0;
@@ -3287,7 +3338,7 @@ namespace Ogre
         srcImage._setAutoDelete( false );
         image = srcImage;
 
-        uint32 numMipSlices = numMips * numSlices;
+        uint64 numMipSlices = numMips * numSlices;
 
         assert( numMipSlices < 256u );
 
@@ -3300,7 +3351,7 @@ namespace Ogre
             }
             else
             {
-                mipLevelBitSet[i] = (1ul << numMipSlices) - 1ul;
+                mipLevelBitSet[i] = ( uint64( 1ul ) << numMipSlices ) - uint64( 1ul );
                 numMipSlices = 0;
             }
         }

@@ -1,0 +1,87 @@
+vertex_program IFD/ProbeVisualizer_vs_HLSL hlsl
+{
+	source IfdVisualizer_vs.hlsl
+	entry_point main
+	target vs_5_0 vs_4_0
+}
+
+vertex_program IFD/ProbeVisualizer_vs_GLSL glsl
+{
+	source IfdVisualizer_vs.glsl
+	enable_include_header true
+}
+
+vertex_program IFD/ProbeVisualizer_vs_Metal metal
+{
+	source IfdVisualizer_vs.metal
+	enable_include_header true
+}
+
+vertex_program IFD/ProbeVisualizer_vs unified
+{
+	delegate IFD/ProbeVisualizer_vs_GLSL
+	delegate IFD/ProbeVisualizer_vs_HLSL
+	delegate IFD/ProbeVisualizer_vs_Metal
+
+	default_params
+	{
+		param_named_auto worldViewProjMatrix worldviewproj_matrix
+	}
+}
+
+fragment_program IFD/ProbeVisualizer_ps_HLSL hlsl
+{
+	source IfdVisualizer_ps.hlsl
+	entry_point main
+	target ps_5_0 ps_4_0
+}
+
+fragment_program IFD/ProbeVisualizer_ps_GLSL glsl
+{
+	source IfdVisualizer_ps.glsl
+	enable_include_header true
+	default_params { param_named ifdTex int 0 }
+}
+
+fragment_program IFD/ProbeVisualizer_ps_Metal metal
+{
+	source IfdVisualizer_ps.metal
+	enable_include_header true
+	shader_reflection_pair_hint IFD/ProbeVisualizer_vs
+}
+
+fragment_program IFD/ProbeVisualizer_ps unified
+{
+	delegate IFD/ProbeVisualizer_ps_GLSL
+	delegate IFD/ProbeVisualizer_ps_HLSL
+	delegate IFD/ProbeVisualizer_ps_Metal
+}
+
+material IFD/ProbeVisualizer
+{
+	technique
+	{
+		pass
+		{
+			depth_check on
+			depth_write on
+
+			//cull_hardware anticlockwise
+			//cull_hardware none
+
+			vertex_program_ref IFD/ProbeVisualizer_vs
+			{
+			}
+
+			fragment_program_ref IFD/ProbeVisualizer_ps
+			{
+			}
+
+			texture_unit
+			{
+				filtering bilinear
+				tex_address_mode clamp
+			}
+		}
+	}
+}

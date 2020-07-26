@@ -49,6 +49,7 @@ THE SOFTWARE.
 #include "OgrePlugin.h"
 #include "OgreFileSystem.h"
 #include "OgreResourceBackgroundQueue.h"
+#include "OgreTextureGpuManager.h"
 #include "OgreDecal.h"
 #include "OgreInternalCubemapProbe.h"
 #include "OgreEntity.h"
@@ -59,6 +60,7 @@ THE SOFTWARE.
 #include "OgreLight.h"
 #include "OgreRectangle2D2.h"
 #include "OgreManualObject.h"
+#include "OgreManualObject2.h"
 #include "OgrePlatformInformation.h"
 #include "OgreConvexBody.h"
 #include "OgreFrameStats.h"
@@ -73,6 +75,7 @@ THE SOFTWARE.
 #include "OgreHlmsLowLevel.h"
 #include "Animation/OgreSkeletonManager.h"
 #include "Compositor/OgreCompositorManager2.h"
+#include "OgreString.h"
 
 #if OGRE_NO_FREEIMAGE == 0
 #include "OgreFreeImageCodec2.h"
@@ -110,6 +113,9 @@ THE SOFTWARE.
 #  include "OgreASTCCodec.h"
 #endif
 
+#include <fstream>
+#include <sstream>
+
 namespace Ogre {
     //-----------------------------------------------------------------------
     template<> Root* Singleton<Root>::msSingleton = 0;
@@ -139,6 +145,7 @@ namespace Ogre {
       , mFrameSmoothingTime(0.0f)
       , mRemoveQueueStructuresOnClear(false)
       , mDefaultMinPixelSize(0)
+      , mLightProfilesInvHeight(1.0f)
       , mNextMovableObjectTypeFlag(1)
       , mIsInitialised(false)
       , mFrameStarted( false )
@@ -676,6 +683,7 @@ namespace Ogre {
             mActiveRenderer->shutdown();
 
             OGRE_DELETE mCompositorManager2;
+            mCompositorManager2 = 0;
         }
 
         mActiveRenderer = system;
@@ -917,6 +925,10 @@ namespace Ogre {
             OgreProfileGpuBeginDynamicHashed( frameNum.c_str(), &hashValue );
         }
 #endif
+
+        if(!mActiveRenderer->validateDevice())
+            return false;
+
         _syncAddedRemovedFrameListeners();
 
         // Tell all listeners
@@ -1158,6 +1170,8 @@ namespace Ogre {
         // ensure shutdown before destroying resource manager.
         mResourceBackgroundQueue->shutdown();
         mWorkQueue->shutdown();
+        if( mActiveRenderer )
+            mActiveRenderer->getTextureGpuManager()->shutdown();
 
 		OGRE_DELETE mCompositorManager2;
         mCompositorManager2 = 0;
@@ -1197,7 +1211,7 @@ namespace Ogre {
         {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
             pluginDir += "\\";
-#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
             pluginDir += "/";
 #endif
         }
@@ -1535,8 +1549,14 @@ namespace Ogre {
         // This belongs here, as all render targets must be updated before events are
         // triggered, otherwise targets could be mismatched.  This could produce artifacts,
         // for instance, with shadows.
-        for (SceneManagerEnumerator::SceneManagerIterator it = getSceneManagerIterator(); it.hasMoreElements(); it.moveNext())
+        for( SceneManagerEnumerator::SceneManagerIterator it = getSceneManagerIterator();
+             it.hasMoreElements(); it.moveNext() )
+        {
             it.peekNextValue()->_handleLodEvents();
+        }
+
+        // Release all the depth buffers which are no longer in use
+        mActiveRenderer->_cleanupDepthBuffers();
 
         return ret;
     }

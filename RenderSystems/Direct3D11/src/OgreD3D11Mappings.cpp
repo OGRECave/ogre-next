@@ -538,6 +538,11 @@ namespace Ogre
         case PFG_P208:
         case PFG_V208:
         case PFG_V408:
+        case PFG_RGB8_UNORM:
+        case PFG_RGB8_UNORM_SRGB:
+        case PFG_BGR8_UNORM:
+        case PFG_BGR8_UNORM_SRGB:
+        case PFG_RGB16_UNORM:
         case PFG_PVRTC_RGB2:
         case PFG_PVRTC_RGB2_SRGB:
         case PFG_PVRTC_RGBA2:

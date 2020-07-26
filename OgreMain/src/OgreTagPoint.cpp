@@ -105,20 +105,6 @@ namespace v1 {
     void TagPoint::needUpdate(bool forceParentUpdate)
     {
         OldBone::needUpdate(forceParentUpdate);
-
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
-        // We need to tell parent entities node
-        if (mParentEntity)
-        {
-            Node* n = mParentEntity->getParentNode();
-            if (n)
-            {
-                n->needUpdate();
-            }
-
-        }
-#endif
-
     }
     //-----------------------------------------------------------------------------
     void TagPoint::updateFromParentImpl(void) const

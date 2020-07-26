@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "OgreHighLevelGpuProgram.h"
 #include "OgreHardwareUniformBuffer.h"
 #include "Vao/OgreVertexBufferPacked.h"
-
+#include "OgreString.h"
 
 namespace Ogre {
     typedef vector<byte>::type MicroCode;
@@ -89,25 +89,6 @@ namespace Ogre {
 
     protected:
 
-        struct InputLayoutVaoBind
-        {
-            uint32              vaoName;
-            ID3D11InputLayout   *inputLayout;
-
-            InputLayoutVaoBind() {}
-
-            InputLayoutVaoBind( uint32 _vaoName, ID3D11InputLayout *_inputLayout ) :
-                vaoName( _vaoName ),
-                inputLayout( _inputLayout )
-            {
-            }
-
-            bool operator < ( const InputLayoutVaoBind &_r ) const
-            {
-                return this->vaoName < _r.vaoName;
-            }
-        };
-
         static CmdEntryPoint msCmdEntryPoint;
         static CmdTarget msCmdTarget;
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
@@ -115,7 +96,7 @@ namespace Ogre {
         static CmdEnableBackwardsCompatibility msCmdEnableBackwardsCompatibility;
         
         void notifyDeviceLost(D3D11Device* device);
-        void notifyDeviceRestored(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
 
         /** Internal method for creating an appropriate low-level program from this
         high-level program, must be implemented by subclasses. */
@@ -140,7 +121,6 @@ namespace Ogre {
 
         bool mErrorsInCompile;
         MicroCode mMicroCode;
-        ComPtr<ID3D11Buffer> mConstantBuffer;
         
         D3D_SHADER_MACRO* mShaderMacros;
         bool shaderMacroSet;
@@ -314,7 +294,6 @@ namespace Ogre {
         MemberTypeNames mMemberTypeName;
         InterfaceSlots mInterfaceSlots;
 
-        void createConstantBuffer(const UINT ByteWidth);
         void analizeMicrocode();
         void getMicrocodeFromCache(void);
         void compileMicrocode(void);
@@ -371,7 +350,7 @@ namespace Ogre {
         // Get slot for a specific interface
         unsigned int getSubroutineSlot(const String& subroutineSlotName) const;
 
-        ID3D11InputLayout* getLayoutForPso( const VertexElement2VecVec &vertexElements );
+        ComPtr<ID3D11InputLayout> getLayoutForPso( const VertexElement2VecVec &vertexElements );
 
         void CreateVertexShader();
         void CreatePixelShader();

@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include <iostream>
 #include <algorithm>
 #include <climits>
+#include <sstream>
 
 
 namespace Ogre {

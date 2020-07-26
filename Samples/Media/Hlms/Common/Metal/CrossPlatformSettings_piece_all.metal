@@ -40,8 +40,6 @@ inline float3x3 toMat3x3( float3x4 m )
 #define NO_INTERPOLATION_PREFIX
 #define NO_INTERPOLATION_SUFFIX [[flat]]
 
-#define finalDrawId drawId
-
 #define floatBitsToUint(x) as_type<uint>(x)
 #define uintBitsToFloat(x) as_type<float>(x)
 #define floatBitsToInt(x) as_type<int>(x)
@@ -52,6 +50,7 @@ inline float3x3 toMat3x3( float3x4 m )
 #define inVs_blendWeights input.blendWeights
 #define inVs_blendIndices input.blendIndices
 #define inVs_qtangent input.qtangent
+#define inVs_colour input.colour
 @property( iOS )
 	@property( !hlms_instanced_stereo )
 		#define inVs_drawId (baseInstance + instanceId)
@@ -70,14 +69,18 @@ inline float3x3 toMat3x3( float3x4 m )
 @foreach( hlms_uv_count, n )
     #define inVs_uv@n input.uv@n@end
 
+#define finalDrawId inVs_drawId
+
 #define outVs_Position outVs.gl_Position
 #define outVs_viewportIndex outVs.gl_ViewportIndex
-#define outVs_clipDistance0 outVs.gl_ClipDistance0
+#define outVs_clipDistance0 outVs.gl_ClipDistance[0]
 
 #define gl_SampleMaskIn0 gl_SampleMask
 //#define interpolateAtSample( interp, subsample ) interpolateAtSample( interp, subsample )
 #define findLSB clz
 #define findMSB ctz
+#define reversebits reverse_bits
+#define mod( a, b ) (a - b * floor(a / b))
 
 #define outPs_colour0 outPs.colour0
 #define OGRE_Sample( tex, sampler, uv ) tex.sample( sampler, uv )
@@ -90,6 +93,7 @@ inline float3x3 toMat3x3( float3x4 m )
 #define OGRE_ddx( val ) dfdx( val )
 #define OGRE_ddy( val ) dfdy( val )
 #define OGRE_Load2D( tex, iuv, lod ) tex.read( iuv, lod )
+#define OGRE_LoadArray2D( tex, iuv, arrayIdx, lod ) tex.read( iuv, arrayIdx, lod )
 #define OGRE_Load2DMS( tex, iuv, subsample ) tex.read( iuv, subsample )
 
 #define OGRE_Load3D( tex, iuv, lod ) tex.read( ushort3( iuv ), lod )
