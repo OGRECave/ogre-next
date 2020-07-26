@@ -1439,7 +1439,6 @@ namespace Ogre {
         cleanFramePtrs();
         mFrames.resize(1);
         mFramePtrs.resize(1);
-        mFrames[0] = textureName;
         mCompositorRefTexName = textureName;
     }
     //-----------------------------------------------------------------------
