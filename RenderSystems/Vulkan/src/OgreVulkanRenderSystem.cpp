@@ -1983,7 +1983,7 @@ namespace Ogre
                 ++numColourAttachments;
 
                 attachments[attachmentIdx].samples =
-                    static_cast<VkSampleCountFlagBits>( passPso.multisampleCount );
+                    static_cast<VkSampleCountFlagBits>( passPso.sampleDescription.getColourSamples() );
                 attachments[attachmentIdx].format = VulkanMappings::get( passPso.colourFormat[i] );
                 attachments[attachmentIdx].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 attachments[attachmentIdx].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -2012,7 +2012,7 @@ namespace Ogre
         {
             attachments[attachmentIdx].format = VulkanMappings::get( passPso.depthFormat );
             attachments[attachmentIdx].samples =
-                static_cast<VkSampleCountFlagBits>( passPso.multisampleCount );
+                static_cast<VkSampleCountFlagBits>( passPso.sampleDescription.getColourSamples() );
             attachments[attachmentIdx].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
             attachments[attachmentIdx].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
@@ -2224,7 +2224,8 @@ namespace Ogre
 
         VkPipelineMultisampleStateCreateInfo mssCi;
         makeVkStruct( mssCi, VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO );
-        mssCi.rasterizationSamples = static_cast<VkSampleCountFlagBits>( newPso->pass.multisampleCount );
+        mssCi.rasterizationSamples =
+            static_cast<VkSampleCountFlagBits>( newPso->pass.sampleDescription.getColourSamples() );
         mssCi.alphaToCoverageEnable = newPso->blendblock->mAlphaToCoverageEnabled;
 
         VkPipelineDepthStencilStateCreateInfo depthStencilStateCi;

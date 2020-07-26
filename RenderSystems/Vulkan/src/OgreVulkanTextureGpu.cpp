@@ -73,7 +73,10 @@ namespace Ogre
         imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         if( hasMsaaExplicitResolves() )
-            imageInfo.samples = static_cast<VkSampleCountFlagBits>( mMsaa );
+        {
+            imageInfo.samples =
+                    static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
+        }
         else
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
         imageInfo.flags = 0;
@@ -132,7 +135,7 @@ namespace Ogre
                          "VulkanTextureGpu::createInternalResourcesImpl" );
         }
 
-        if( mMsaa > 1u && !hasMsaaExplicitResolves() )
+        if( mSampleDescription.isMultisample() && !hasMsaaExplicitResolves() )
         {
         }
     }
@@ -163,7 +166,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
-        uint8 msaaCount = mMsaa;
+        uint8 msaaCount = mSampleDescription.getMaxSamples();
         locations.reserve( msaaCount );
         for( size_t i = 0; i < msaaCount; ++i )
             locations.push_back( Vector2( 0, 0 ) );
@@ -264,7 +267,7 @@ namespace Ogre
         }
         VkImageViewType texType = this->getVulkanTextureViewType();
 
-        if( mMsaa > 1u && hasMsaaExplicitResolves() )
+        if( mSampleDescription.isMultisample() && hasMsaaExplicitResolves() )
             texType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
         // MTLTextureType2DMultisample;
 

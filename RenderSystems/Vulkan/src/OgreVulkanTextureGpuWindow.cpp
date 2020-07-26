@@ -121,14 +121,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::getSubsampleLocations( vector<Vector2>::type locations )
     {
-        locations.reserve( mMsaa );
-        if( mMsaa <= 1u )
+        locations.reserve( mSampleDescription.getColourSamples() );
+        if( mSampleDescription.getColourSamples() <= 1u )
         {
             locations.push_back( Vector2( 0.0f, 0.0f ) );
         }
         else
         {
-            assert( mMsaaPattern != MsaaPatterns::Undefined );
+            assert( mSampleDescription.getMsaaPattern() != MsaaPatterns::Undefined );
 
             OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "",
                          "VulkanTextureGpuWindow::getSubsampleLocations" );
