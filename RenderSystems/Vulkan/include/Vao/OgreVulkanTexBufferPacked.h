@@ -29,6 +29,8 @@ THE SOFTWARE.
 #ifndef _Ogre_VulkanTexBufferPacked_H_
 #define _Ogre_VulkanTexBufferPacked_H_
 
+#include <vulkan/vulkan.h>
+
 #include "OgreVulkanPrerequisites.h"
 
 #include "Vao/OgreTexBufferPacked.h"
@@ -46,12 +48,40 @@ namespace Ogre
                                VulkanBufferInterface *bufferInterface, PixelFormatGpu pf );
         ~VulkanTexBufferPacked();
 
-        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
         virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
         virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
         virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+
+        void bindBufferForDescriptor( VkBuffer *buffers, VkDeviceSize *offsets,
+                                      size_t offset );
+
+        // Used to check if it makes sense to update VkWriteDescriptorSet with this buffer info.
+        bool isDirty() const { return mDirty; }
+
+        void resetDirty() { mDirty = false; }
+
+
+        VkBufferView getBufferView() const
+        {
+            return mBufferView;
+        }
+
+        uint16 getCurrentBinding() const
+        {
+            return mCurrentBinding;
+        }
+
+    private:
+        void bindBuffer( uint16 slot, size_t offset, size_t sizeBytes );
+
+        VkBufferView mBufferView;
+        size_t mPrevSizeBytes;
+        size_t mPrevOffset;
+        uint16 mCurrentBinding;
+        bool mDirty;
     };
 }  // namespace Ogre
 

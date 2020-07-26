@@ -67,17 +67,16 @@ namespace Ogre
         MappedRangeVec mMappedRanges;
         vector<size_t>::type mFreeRanges;
 
-        BufferType mPersistentMethod;
-
         VulkanDevice *mDevice;
 
-        bool mNonCoherentMemory;
+        bool mCoherentMemory;
+        bool mHasReadAccess;
 
         size_t addMappedRange( size_t start, size_t count );
 
     public:
-        VulkanDynamicBuffer( VkDeviceMemory deviceMemory, size_t vboSize, VulkanVaoManager *vaoManager,
-                             BufferType persistentMethod, VulkanDevice *device );
+        VulkanDynamicBuffer( VkDeviceMemory deviceMemory, size_t vboSize, const bool isNonCoherent,
+                             const bool hasReadAccess, VulkanDevice *device );
         ~VulkanDynamicBuffer();
 
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
@@ -90,6 +89,9 @@ namespace Ogre
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
         /// The ticket becomes invalid after this.
         void unmap( size_t ticket );
+
+        bool isCoherentMemory( void ) const { return mCoherentMemory; }
+        VkDeviceMemory getDeviceMemory( void ) { return mDeviceMemory; }
     };
 }  // namespace Ogre
 

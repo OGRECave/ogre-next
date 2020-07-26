@@ -32,15 +32,21 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanPrerequisites.h"
 
 #include "OgreRenderSystem.h"
+#include "OgreVulkanProgram.h"
 
 #include "OgreVulkanRenderPassDescriptor.h"
+#include "Vao/OgreVulkanConstBufferPacked.h"
 
 namespace Ogre
 {
+    struct VulkanDescriptorSetTexture;
+
     namespace v1
     {
         class HardwareBufferManager;
     }
+
+    class VulkanHlmsPso;
 
     class _OgreVulkanExport VulkanPixelFormatToShaderType : public PixelFormatToShaderType
     {
@@ -65,16 +71,34 @@ namespace Ogre
 
         VulkanPixelFormatToShaderType mPixelFormatToShaderType;
 
+        VkBuffer mIndirectBuffer;
+        unsigned char *mSwIndirectBufferPtr;
+
         VulkanGpuProgramManager *mShaderManager;
         VulkanProgramFactory *mVulkanProgramFactory;
 
         VkInstance mVkInstance;
+
+        // TODO: AutoParamsBuffer probably belongs to MetalDevice (because it's per device?)
+        typedef vector<ConstBufferPacked *>::type ConstBufferPackedVec;
+        ConstBufferPackedVec mAutoParamsBuffer;
+        size_t mAutoParamsBufferIdx;
+        uint8 *mCurrentAutoParamsBufferPtr;
+        size_t mCurrentAutoParamsBufferSpaceLeft;
+        size_t mHistoricalAutoParamsSize[60];
+
+        // For v1 rendering.
+        v1::IndexData *mCurrentIndexBuffer;
+        v1::VertexData *mCurrentVertexBuffer;
+        VkPrimitiveTopology mCurrentPrimType;
 
         VulkanDevice *mActiveDevice;
 
         VulkanDevice *mDevice;
 
         VulkanCache *mCache;
+
+        VulkanHlmsPso *mPso;
 
         // clang-format off
         VulkanFrameBufferDescMap    mFrameBufferDescMap;
@@ -86,10 +110,19 @@ namespace Ogre
         PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;
         VkDebugReportCallbackEXT mDebugReportCallback;
 
+#if VULKAN_HOTSHOT_DISABLED
+        BindingMap<VkDescriptorImageInfo> mImageInfo;
+        BindingMap<VkDescriptorBufferInfo> mBufferInfo;
+        BindingMap<VkDescriptorImageInfo> mSamplerInfo;
+#endif
+        VulkanDescriptorSetTexture *mCurrentDescriptorSetTexture;
+
         void addInstanceDebugCallback( void );
 
         /// Creates a dummy VkRenderPass for use in PSO creation
         VkRenderPass getVkRenderPass( HlmsPassPso passPso, uint8 &outMrtCount );
+
+        void bindDescriptorSet() const;
 
     public:
         VulkanRenderSystem();
@@ -162,14 +195,18 @@ namespace Ogre
         virtual void _setComputePso( const HlmsComputePso *pso );
 
         virtual VertexElementType getColourVertexElementType( void ) const;
-        virtual void _convertProjectionMatrix( const Matrix4 &matrix, Matrix4 &dest ) {}
 
         virtual void _dispatch( const HlmsComputePso &pso );
 
         virtual void _setVertexArrayObject( const VertexArrayObject *vao );
+        void flushDescriptorState(
+            VkPipelineBindPoint pipeline_bind_point, const VulkanConstBufferPacked &constBuffer,
+            const size_t bindOffset, const size_t bytesToWrite,
+            const unordered_map<unsigned, VulkanConstantDefinitionBindingParam>::type &shaderBindings );
 
         virtual void _render( const CbDrawCallIndexed *cmd );
         virtual void _render( const CbDrawCallStrip *cmd );
+        void bindDescriptorSet( VulkanVaoManager *&vaoManager );
         virtual void _renderEmulated( const CbDrawCallIndexed *cmd );
         virtual void _renderEmulated( const CbDrawCallStrip *cmd );
 
@@ -227,8 +264,32 @@ namespace Ogre
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );
 
-        virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
-        virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pos );
+        virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) override;
+        virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pos ) override;
+        virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) override;
+        virtual void _hlmsMacroblockDestroyed( HlmsMacroblock *block ) override;
+        virtual void _hlmsBlendblockCreated( HlmsBlendblock *newBlock ) override;
+        virtual void _hlmsBlendblockDestroyed( HlmsBlendblock *block ) override;
+        virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock ) override;
+        virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block ) override;
+        virtual void _descriptorSetTextureCreated( DescriptorSetTexture *newSet ) override;
+        virtual void _descriptorSetTextureDestroyed( DescriptorSetTexture *set ) override;
+        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet ) override;
+        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set ) override;
+        virtual void _descriptorSetSamplerCreated( DescriptorSetSampler *newSet ) override;
+        virtual void _descriptorSetSamplerDestroyed( DescriptorSetSampler *set ) override;
+        virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet ) override;
+        virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
+
+        VulkanDevice *getVulkanDevice() const { return mDevice; }
+        void _notifyDeviceStalled();
+
+    protected:
+        template <typename TDescriptorSetTexture, typename TTexSlot, typename TBufferPacked>
+        void _descriptorSetTextureCreated( TDescriptorSetTexture *newSet,
+                                           const FastArray<TTexSlot> &texContainer,
+                                           uint16 *shaderTypeTexCount );
+        void destroyVulkanDescriptorSetTexture( VulkanDescriptorSetTexture *metalSet );
     };
 }  // namespace Ogre
 

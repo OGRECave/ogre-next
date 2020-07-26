@@ -42,11 +42,11 @@ namespace Ogre
     // Sets' descriptor
     typedef FastArray<VkDescriptorSetLayoutBinding> VkDescriptorSetLayoutBindingArray;
     // Sets' opaque handles
-    typedef FastArray<VkDescriptorSetLayout> VkDescriptorSetLayoutArray;
+    typedef FastArray<VkDescriptorSetLayout> DescriptorSetLayoutArray;
 
     bool operator<( const VkDescriptorSetLayoutBindingArray &a,
                     const VkDescriptorSetLayoutBindingArray &b );
-    bool operator<( const VkDescriptorSetLayoutArray &a, const VkDescriptorSetLayoutArray &b );
+    bool operator<( const DescriptorSetLayoutArray &a, const DescriptorSetLayoutArray &b );
 
     class _OgreVulkanExport VulkanGpuProgramManager : public GpuProgramManager
     {
@@ -64,7 +64,7 @@ namespace Ogre
         typedef map<VkDescriptorSetLayoutBindingArray, VkDescriptorSetLayout>::type DescriptorSetMap;
         DescriptorSetMap mDescriptorSetMap;
 
-        typedef map<VkDescriptorSetLayoutArray, VkPipelineLayout>::type DescriptorSetsVkMap;
+        typedef map<DescriptorSetLayoutArray, VkPipelineLayout>::type DescriptorSetsVkMap;
         DescriptorSetsVkMap mDescriptorSetsVkMap;
 
         VulkanDevice *mDevice;
@@ -86,7 +86,7 @@ namespace Ogre
         bool unregisterProgramFactory( const String &syntaxCode );
 
         VkDescriptorSetLayout getCachedSet( const VkDescriptorSetLayoutBindingArray &set );
-        VkPipelineLayout getCachedSets( const VkDescriptorSetLayoutArray &vkSets );
+        VkPipelineLayout getCachedSets( const DescriptorSetLayoutArray &vkSets );
     };
 }  // namespace Ogre
 

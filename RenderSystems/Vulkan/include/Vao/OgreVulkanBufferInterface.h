@@ -82,6 +82,7 @@ namespace Ogre
 
         virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes,
                              size_t sizeBytes );
+        void *getVulkanDataPtr() { return mMappedPtr; };
     };
 }  // namespace Ogre
 

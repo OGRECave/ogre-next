@@ -156,8 +156,12 @@ namespace Ogre
 
         VaoManager *vaoManager = mDevice->mVaoManager;
 
+        // We may sometimes have to wait on the driver to complete internal operations
+        // before we can acquire another image to render to.
+        // Therefore it is recommended to request at least one more image than the minimum.
+        // https://vulkan-tutorial.com/Drawing_a_triangle/Presentation/Swap_chain
         uint32 minImageCount =
-            std::max<uint32>( surfaceCaps.minImageCount, vaoManager->getDynamicBufferMultiplier() );
+            std::max<uint32>( surfaceCaps.minImageCount, vaoManager->getDynamicBufferMultiplier() ) + 1;
         if( surfaceCaps.maxImageCount != 0u )
             minImageCount = std::min<uint32>( minImageCount, surfaceCaps.maxImageCount );
 

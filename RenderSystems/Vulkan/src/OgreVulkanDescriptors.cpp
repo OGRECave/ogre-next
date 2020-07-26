@@ -33,73 +33,33 @@ THE SOFTWARE.
 
 #include "OgreException.h"
 #include "OgreLwString.h"
+#include "OgreStringConverter.h"
+#include "OgreVulkanMappings.h"
 
 #include "SPIRV-Reflect/spirv_reflect.h"
 
 namespace Ogre
 {
     //-------------------------------------------------------------------------
-    static String getSpirvReflectError( SpvReflectResult spirvReflectResult )
-    {
-        switch( spirvReflectResult )
-        {
-        case SPV_REFLECT_RESULT_SUCCESS:
-            return "SPV_REFLECT_RESULT_SUCCESS";
-        case SPV_REFLECT_RESULT_NOT_READY:
-            return "SPV_REFLECT_RESULT_NOT_READY";
-        case SPV_REFLECT_RESULT_ERROR_PARSE_FAILED:
-            return "SPV_REFLECT_RESULT_ERROR_PARSE_FAILED";
-        case SPV_REFLECT_RESULT_ERROR_ALLOC_FAILED:
-            return "SPV_REFLECT_RESULT_ERROR_ALLOC_FAILED";
-        case SPV_REFLECT_RESULT_ERROR_RANGE_EXCEEDED:
-            return "SPV_REFLECT_RESULT_ERROR_RANGE_EXCEEDED";
-        case SPV_REFLECT_RESULT_ERROR_NULL_POINTER:
-            return "SPV_REFLECT_RESULT_ERROR_NULL_POINTER";
-        case SPV_REFLECT_RESULT_ERROR_INTERNAL_ERROR:
-            return "SPV_REFLECT_RESULT_ERROR_INTERNAL_ERROR";
-        case SPV_REFLECT_RESULT_ERROR_COUNT_MISMATCH:
-            return "SPV_REFLECT_RESULT_ERROR_COUNT_MISMATCH";
-        case SPV_REFLECT_RESULT_ERROR_ELEMENT_NOT_FOUND:
-            return "SPV_REFLECT_RESULT_ERROR_ELEMENT_NOT_FOUND";
-        case SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_CODE_SIZE:
-            return "SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_CODE_SIZE";
-        case SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_MAGIC_NUMBER:
-            return "SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_MAGIC_NUMBER";
-        case SPV_REFLECT_RESULT_ERROR_SPIRV_UNEXPECTED_EOF:
-            return "SPV_REFLECT_RESULT_ERROR_SPIRV_UNEXPECTED_EOF";
-        case SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_ID_REFERENCE:
-            return "SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_ID_REFERENCE";
-        case SPV_REFLECT_RESULT_ERROR_SPIRV_SET_NUMBER_OVERFLOW:
-            return "SPV_REFLECT_RESULT_ERROR_SPIRV_SET_NUMBER_OVERFLOW";
-        case SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_STORAGE_CLASS:
-            return "SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_STORAGE_CLASS";
-        case SPV_REFLECT_RESULT_ERROR_SPIRV_RECURSION:
-            return "SPV_REFLECT_RESULT_ERROR_SPIRV_RECURSION";
-        case SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_INSTRUCTION:
-            return "SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_INSTRUCTION";
-        case SPV_REFLECT_RESULT_ERROR_SPIRV_UNEXPECTED_BLOCK_DATA:
-            return "SPV_REFLECT_RESULT_ERROR_SPIRV_UNEXPECTED_BLOCK_DATA";
-        case SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_BLOCK_MEMBER_REFERENCE:
-            return "SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_BLOCK_MEMBER_REFERENCE";
-        }
-
-        return "SPV_REFLECT_INVALID_ERROR_CODE";
-    }
-    //-------------------------------------------------------------------------
     bool VulkanDescriptors::areBindingsCompatible( const VkDescriptorSetLayoutBinding &a,
                                                    const VkDescriptorSetLayoutBinding &b )
     {
-        OGRE_ASSERT_HIGH( a.binding == b.binding && "Comparding bindings from different slots!" );
+        // OGRE_ASSERT_HIGH( a.binding == b.binding && "Comparing bindings from different slots!" );
+        // if( a.binding != b.binding )
+        //     return false;
+
         return a.descriptorCount == 0u || b.descriptorCount == 0 ||
                ( a.descriptorType == b.descriptorType &&  //
                  a.descriptorCount == b.descriptorCount &&
                  a.pImmutableSamplers == b.pImmutableSamplers );
     }
     //-------------------------------------------------------------------------
-    bool VulkanDescriptors::canMergeDescriptorSets( const DescriptorSetLayoutArray &a,
-                                                    const DescriptorSetLayoutArray &b )
+    bool VulkanDescriptors::canMergeDescriptorSets( const DescriptorSetLayoutBindingArray &a,
+                                                    const DescriptorSetLayoutBindingArray &b )
     {
         const size_t minSize = std::min( a.size(), b.size() );
+
+        bool retVal = true;
 
         for( size_t i = 0u; i < minSize; ++i )
         {
@@ -117,17 +77,19 @@ namespace Ogre
                               " of two shader stages (e.g. vertex and pixel shader?) are not "
                               "compatible. These shaders cannot be used together" );
                     LogManager::getSingleton().logMessage( logMsg.c_str() );
+                    retVal = false;
                 }
             }
         }
 
-        return true;
+        return retVal;
     }
     //-------------------------------------------------------------------------
-    void VulkanDescriptors::mergeDescriptorSets( DescriptorSetLayoutArray &a, const String &shaderB,
-                                                 const DescriptorSetLayoutArray &b )
+    void VulkanDescriptors::mergeDescriptorSets( DescriptorSetLayoutBindingArray &a,
+                                                 const String &shaderB,
+                                                 const DescriptorSetLayoutBindingArray &b )
     {
-        if( canMergeDescriptorSets( a, b ) )
+        if( !canMergeDescriptorSets( a, b ) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Descriptor Sets from shader '" + shaderB +
@@ -137,6 +99,7 @@ namespace Ogre
         }
 
         const size_t minSize = std::min( a.size(), b.size() );
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
 
         for( size_t i = 0u; i < minSize; ++i )
         {
@@ -148,14 +111,50 @@ namespace Ogre
             else if( !b[i].empty() )
             {
                 const size_t minBindings = std::min( a[i].size(), b[i].size() );
+
+                defaultLog->logMessage( String( "BEFORE MERGING" ) );
+
                 for( size_t j = 0u; j < minBindings; ++j )
                 {
-                    OGRE_ASSERT_HIGH( a[i][j].binding == j );
-                    OGRE_ASSERT_HIGH( b[i][j].binding == j );
-                    a[i][j].stageFlags |= b[i][j].stageFlags;
+                    if( defaultLog )
+                    {
+                        defaultLog->logMessage(
+                            String( " * j " ) + StringConverter::toString( j ) +
+                            " binding: " + StringConverter::toString( a[i][j].binding ) );
+                    }
+                }
+                for( size_t j = 0u; j < minBindings; ++j )
+                {
+                    // OGRE_ASSERT_HIGH( a[i][j].binding == j );
+                    // OGRE_ASSERT_HIGH( b[i][j].binding == j );
+                    if( a[i][j].binding == j && b[i][j].binding == j && a[i][j].descriptorCount > 0 &&
+                        b[i][j].descriptorCount > 0 )
+                    {
+                        a[i][j].stageFlags |= b[i][j].stageFlags;
+                    }
+                    else if( a[i][j].descriptorCount == 0 && b[i][j].descriptorCount > 0 )
+                    {
+                        // We have a descriptor in the new set that does not exist in the original set.
+                        a[i][j].binding = b[i][j].binding;
+                        a[i][j].descriptorType = b[i][j].descriptorType;
+                        a[i][j].descriptorCount = b[i][j].descriptorCount;
+                        a[i][j].stageFlags = b[i][j].stageFlags;
+                        a[i][j].pImmutableSamplers = b[i][j].pImmutableSamplers;
+                    }
                 }
 
                 a[i].appendPOD( b[i].begin() + minBindings, b[i].end() );
+
+                defaultLog->logMessage( String( "AFTER MERGING" ) );
+                for( size_t j = 0u; j < a[i].size(); ++j )
+                {
+                    if( defaultLog )
+                    {
+                        defaultLog->logMessage(
+                            String( " * j " ) + StringConverter::toString( j ) +
+                            " binding: " + StringConverter::toString( a[i][j].binding ) );
+                    }
+                }
             }
             // else
             //{
@@ -169,7 +168,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanDescriptors::generateDescriptorSets( const String &shaderName,
                                                     const std::vector<uint32> &spirv,
-                                                    DescriptorSetLayoutArray &outputSets )
+                                                    DescriptorSetLayoutBindingArray &outputSets )
     {
         if( spirv.empty() )
             return;
@@ -238,8 +237,8 @@ namespace Ogre
             for( size_t i = 0; i < numUsedBindings; ++i )
             {
                 const SpvReflectDescriptorBinding &reflBinding = *( reflSet.bindings[i] );
-                VkDescriptorSetLayoutBinding descSetLayoutBinding;
-                memset( &descSetLayoutBinding, 0, sizeof( descSetLayoutBinding ) );
+                // VkDescriptorSetLayoutBinding descSetLayoutBinding;
+                // memset( &descSetLayoutBinding, 0, sizeof( descSetLayoutBinding ) );
 
                 const size_t bindingIdx = reflBinding.binding;
 
@@ -251,25 +250,26 @@ namespace Ogre
                     bindings[bindingIdx].descriptorCount *= reflBinding.array.dims[i_dim];
                 bindings[bindingIdx].stageFlags =
                     static_cast<VkShaderStageFlagBits>( module.shader_stage );
-                bindings.push_back( descSetLayoutBinding );
             }
 
             ++itor;
         }
+
+        spvReflectDestroyShaderModule( &module );
     }
     //-------------------------------------------------------------------------
     void VulkanDescriptors::generateAndMergeDescriptorSets( VulkanProgram *shader,
-                                                            DescriptorSetLayoutArray &outputSets )
+                                                            DescriptorSetLayoutBindingArray &outputSets )
     {
-        DescriptorSetLayoutArray sets;
-        generateDescriptorSets( shader->getName(), shader->getSpirv(), outputSets );
+        DescriptorSetLayoutBindingArray sets;
+        generateDescriptorSets( shader->getName(), shader->getSpirv(), sets );
         if( outputSets.empty() )
             outputSets.swap( sets );
         else
             mergeDescriptorSets( outputSets, shader->getName(), sets );
     }
     //-------------------------------------------------------------------------
-    void VulkanDescriptors::optimizeDescriptorSets( DescriptorSetLayoutArray &sets )
+    void VulkanDescriptors::optimizeDescriptorSets( DescriptorSetLayoutBindingArray &sets )
     {
         const size_t numSets = sets.size();
         for( size_t i = numSets; i--; )
@@ -283,26 +283,129 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    VkPipelineLayout VulkanDescriptors::generateVkDescriptorSets( const DescriptorSetLayoutArray &sets )
+    VkPipelineLayout VulkanDescriptors::generateVkDescriptorSets(
+        const DescriptorSetLayoutBindingArray &bindingSets, DescriptorSetLayoutArray &sets )
     {
-        VkDescriptorSetLayoutArray vkSets;
-
         VulkanGpuProgramManager *vulkanProgramManager =
             static_cast<VulkanGpuProgramManager *>( VulkanGpuProgramManager::getSingletonPtr() );
 
-        vkSets.reserve( sets.size() );
+        sets.reserve( bindingSets.size() );
 
-        DescriptorSetLayoutArray::const_iterator itor = sets.begin();
-        DescriptorSetLayoutArray::const_iterator endt = sets.end();
+        DescriptorSetLayoutBindingArray::const_iterator itor = bindingSets.begin();
+        DescriptorSetLayoutBindingArray::const_iterator endt = bindingSets.end();
 
         while( itor != endt )
         {
-            vkSets.push_back( vulkanProgramManager->getCachedSet( *itor ) );
+            sets.push_back( vulkanProgramManager->getCachedSet( *itor ) );
             ++itor;
         }
 
-        VkPipelineLayout retVal = vulkanProgramManager->getCachedSets( vkSets );
+        VkPipelineLayout retVal = vulkanProgramManager->getCachedSets( sets );
         return retVal;
     }
+
+    static bool SortByVertexInputLocation( const VkVertexInputAttributeDescription &a,
+                                           const VkVertexInputAttributeDescription &b )
+    {
+        return a.location < b.location;
+    }
+
+    void VulkanDescriptors::generateVertexInputBindings(
+        VulkanProgram *shader, HlmsPso *newPso,
+        std::vector<VkVertexInputBindingDescription> &bindingDescription,
+        std::vector<VkVertexInputAttributeDescription> &attributeDescriptions )
+    {
+        const std::vector<uint32> &spirv = shader->getSpirv();
+        if( spirv.empty() )
+            return;
+
+        const String &shaderName = shader->getName();
+
+        SpvReflectShaderModule module;
+        memset( &module, 0, sizeof( module ) );
+        SpvReflectResult result =
+            spvReflectCreateShaderModule( spirv.size() * sizeof( uint32 ), &spirv[0], &module );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "spvReflectCreateShaderModule failed on shader " + shaderName +
+                             " error code: " + getSpirvReflectError( result ),
+                         "VulkanDescriptors::generateVertexInputBindings" );
+        }
+
+        uint32_t count = 0;
+        result = spvReflectEnumerateInputVariables( &module, &count, NULL );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "spvReflectCreateShaderModule failed on shader " + shaderName +
+                             " error code: " + getSpirvReflectError( result ),
+                         "VulkanDescriptors::generateVertexInputBindings" );
+        }
+
+        std::vector<SpvReflectInterfaceVariable *> inputVars( count );
+        result = spvReflectEnumerateInputVariables( &module, &count, inputVars.data() );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "spvReflectCreateShaderModule failed on shader " + shaderName +
+                             " error code: " + getSpirvReflectError( result ),
+                         "VulkanDescriptors::generateVertexInputBindings" );
+        }
+
+        // bindingDescription.resize( 2, VkVertexInputBindingDescription{} );
+        //
+        // bindingDescription[0].binding = 0;
+        // bindingDescription[0].stride = 0;  // computed below
+        // bindingDescription[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+        //
+        // bindingDescription[1].binding = 1;
+        // bindingDescription[1].stride = 0;  // computed below
+        // bindingDescription[1].inputRate = VK_VERTEX_INPUT_RATE_INSTANCE; // DrawId is per instance.
+
+        // Ignore the drawId. That is declared manually.
+        // attributeDescriptions.resize(
+        // inputVars.size() - 1, VkVertexInputAttributeDescription{} );
+
+        for( size_t i_var = 0; i_var < inputVars.size(); ++i_var )
+        {
+            const SpvReflectInterfaceVariable &reflVar = *( inputVars[i_var] );
+            if( reflVar.location == 15 )
+                continue;
+            VkVertexInputAttributeDescription attrDesc;
+            attrDesc.location = reflVar.location;
+            // if( attrDesc.location == 15 )
+            //     attrDesc.binding = bindingDescription[1].binding;
+            // else
+            //     attrDesc.binding = bindingDescription[0].binding;
+            attrDesc.format = static_cast<VkFormat>( reflVar.format );
+            // attrDesc.offset = 0;  // final offset computed below after sorting.
+
+            attributeDescriptions.push_back( attrDesc );
+        }
+
+        // Sort attributes by location
+        std::sort( attributeDescriptions.begin(), attributeDescriptions.end(),
+                   SortByVertexInputLocation );
+
+        // Compute final offsets of each attribute, and total vertex stride.
+        // for( auto &attribute : attributeDescriptions )
+        // {
+        //     uint32_t formatSize = VulkanMappings::getFormatSize( attribute.format );
+        //     if( attribute.location == 15 )
+        //     {
+        //         attribute.offset = bindingDescription[1].stride;
+        //         bindingDescription[1].stride += formatSize;
+        //     }
+        //     else
+        //     {
+        //         attribute.offset = bindingDescription[0].stride;
+        //         bindingDescription[0].stride += formatSize;
+        //     }
+        // }
+
+        spvReflectDestroyShaderModule( &module );
+    }
+
     //-------------------------------------------------------------------------
 }  // namespace Ogre

@@ -136,6 +136,12 @@ namespace Ogre
 
         return CmpResultEqual;
     }
+    VulkanCache::VkRenderPassCreateInfoCmp::CmpResult
+    VulkanCache::VkRenderPassCreateInfoCmp::cmp( const VkSubpassDependency &a,
+                                                           const VkSubpassDependency &b ) const
+    {
+        return CmpResult();
+    }
     //-------------------------------------------------------------------------
     bool VulkanCache::VkRenderPassCreateInfoCmp::operator()( const VkRenderPassCreateInfo &a,
                                                              const VkRenderPassCreateInfo &b ) const

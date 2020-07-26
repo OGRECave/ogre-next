@@ -34,36 +34,44 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    typedef FastArray<FastArray<VkDescriptorSetLayoutBinding> > DescriptorSetLayoutArray;
+    typedef FastArray<FastArray<VkDescriptorSetLayoutBinding> > DescriptorSetLayoutBindingArray;
+
+    typedef FastArray<VkDescriptorSetLayout> DescriptorSetLayoutArray;
 
     class _OgreVulkanExport VulkanDescriptors
     {
     protected:
         static bool areBindingsCompatible( const VkDescriptorSetLayoutBinding &a,
                                            const VkDescriptorSetLayoutBinding &b );
-        static bool canMergeDescriptorSets( const DescriptorSetLayoutArray &a,
-                                            const DescriptorSetLayoutArray &b );
+        static bool canMergeDescriptorSets( const DescriptorSetLayoutBindingArray &a,
+                                            const DescriptorSetLayoutBindingArray &b );
 
     public:
         /// Merges b into a. Raises an exception if these two cannot be merged
         /// There's no 'shaderA' string because a could be an amalgamation of stuff
-        static void mergeDescriptorSets( DescriptorSetLayoutArray &a, const String &shaderB,
-                                         const DescriptorSetLayoutArray &b );
+        static void mergeDescriptorSets( DescriptorSetLayoutBindingArray &a, const String &shaderB,
+                                         const DescriptorSetLayoutBindingArray &b );
 
         /// Uses SPIRV reflection to generate Descriptor Sets from the given SPIRV binary.
         /// Empty bindings are included as... empty. This means that if there are gaps, these gaps
         /// will be included in outputSets
         static void generateDescriptorSets( const String &shaderName, const std::vector<uint32> &spirv,
-                                            DescriptorSetLayoutArray &outputSets );
+                                            DescriptorSetLayoutBindingArray &outputSets );
 
         static void generateAndMergeDescriptorSets( VulkanProgram *shader,
-                                                    DescriptorSetLayoutArray &outputSets );
+                                                    DescriptorSetLayoutBindingArray &outputSets );
 
         /// Removes all empty bindings. Do this **after** the last mergeDescriptorSets call
         /// This operation can cause gaps to appear in the bindings.
-        static void optimizeDescriptorSets( DescriptorSetLayoutArray &sets );
+        static void optimizeDescriptorSets( DescriptorSetLayoutBindingArray &sets );
 
-        static VkPipelineLayout generateVkDescriptorSets( const DescriptorSetLayoutArray &sets );
+        static VkPipelineLayout generateVkDescriptorSets( const DescriptorSetLayoutBindingArray &bindingSets,
+                                                          DescriptorSetLayoutArray &sets );
+
+        static void generateVertexInputBindings(
+            VulkanProgram *shader, HlmsPso *newPso,
+            std::vector<VkVertexInputBindingDescription> &bindingDescription,
+            std::vector<VkVertexInputAttributeDescription> &attributeDescriptions );
     };
 }  // namespace Ogre
 

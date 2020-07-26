@@ -37,6 +37,9 @@ THE SOFTWARE.
 
 #include "OgreHeaderPrefix.h"
 
+#include "OgreVulkanRenderSystem.h"
+#include "OgreVulkanDevice.h"
+
 namespace Ogre
 {
     /** \addtogroup Core
@@ -48,6 +51,12 @@ namespace Ogre
     class _OgreVulkanExport VulkanTextureGpuManager : public TextureGpuManager
     {
     protected:
+        /// 4x4 texture for when we have nothing to display.
+        VkImage mBlankTexture[TextureTypes::Type3D + 1u];
+        VkImageView mBlankTextureView[TextureTypes::Type3D + 1u];
+
+        VulkanDevice *mDevice;
+
         virtual TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                IdString name, uint32 textureFlags,
                                                TextureTypes::TextureTypes initialType );
@@ -61,10 +70,19 @@ namespace Ogre
                                                                   PixelFormatGpu pixelFormatFamily );
 
     public:
-        VulkanTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem );
+        VulkanTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem, VulkanDevice *device );
         virtual ~VulkanTextureGpuManager();
 
         TextureGpu *createTextureGpuWindow( VulkanWindow *window );
+        TextureGpu *createWindowDepthBuffer( void );
+
+        VkImage getBlankTextureVulkanName( TextureTypes::TextureTypes textureType ) const;
+        VkImageView getBlankTextureViewVulkanName( TextureTypes::TextureTypes textureType ) const;
+
+        VulkanDevice *getDevice() const
+        {
+            return mDevice;
+        }
     };
 
     /** @} */

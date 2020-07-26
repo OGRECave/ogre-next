@@ -34,7 +34,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanGpuProgramManager.h"
 #include "OgreVulkanMappings.h"
-#include "OgreVulkanProgram.h"
 #include "OgreVulkanProgramFactory.h"
 #include "OgreVulkanRenderPassDescriptor.h"
 #include "OgreVulkanTextureGpuManager.h"
@@ -43,8 +42,31 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "Vao/OgreVulkanVaoManager.h"
 
 #include "OgreDefaultHardwareBufferManager.h"
+#include "Vao/OgreVulkanVertexArrayObject.h"
 
-#include "Windowing/X11/OgreVulkanXcbWindow.h"
+#include "CommandBuffer/OgreCbDrawCall.h"
+
+#include "OgreVulkanHlmsPso.h"
+#include "Vao/OgreIndirectBufferPacked.h"
+#include "Vao/OgreVulkanBufferInterface.h"
+#include "Vao/OgreVulkanConstBufferPacked.h"
+
+#include "OgreVulkanHardwareBufferManager.h"
+#include "OgreVulkanHardwareIndexBuffer.h"
+#include "OgreVulkanHardwareVertexBuffer.h"
+
+#include "OgreVulkanDescriptorSetTexture.h"
+
+#include "OgreVulkanHardwareIndexBuffer.h"
+#include "OgreVulkanHardwareVertexBuffer.h"
+#include "OgreVulkanTextureGpu.h"
+#include "Vao/OgreVulkanUavBufferPacked.h"
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#    include "Windowing/win32/OgreVulkanWin32Window.h"
+#else
+#    include "Windowing/X11/OgreVulkanXcbWindow.h"
+#endif
 
 #define TODO_check_layers_exist
 
@@ -124,14 +146,19 @@ namespace Ogre
         mShaderManager( 0 ),
         mVulkanProgramFactory( 0 ),
         mVkInstance( 0 ),
+        mAutoParamsBufferIdx( 0 ),
+        mCurrentAutoParamsBufferPtr( 0 ),
+        mCurrentAutoParamsBufferSpaceLeft( 0 ),
         mActiveDevice( 0 ),
         mDevice( 0 ),
         mCache( 0 ),
+        mPso( 0 ),
         mEntriesToFlush( 0u ),
         mVpChanged( false ),
         CreateDebugReportCallback( 0 ),
         DestroyDebugReportCallback( 0 ),
-        mDebugReportCallback( 0 )
+        mDebugReportCallback( 0 ),
+        mCurrentDescriptorSetTexture( 0 )
     {
     }
     //-------------------------------------------------------------------------
@@ -240,8 +267,13 @@ namespace Ogre
         RenderSystemCapabilities *rsc = new RenderSystemCapabilities();
         rsc->setRenderSystemName( getName() );
 
-        VkPhysicalDeviceProperties properties;
-        vkGetPhysicalDeviceProperties( mActiveDevice->mPhysicalDevice, &properties );
+        // We would like to save the device properties for the device capabilities limits.
+        // These limits are needed for buffers' binding alignments.
+        VkPhysicalDeviceProperties *vkProperties =
+            const_cast<VkPhysicalDeviceProperties *>( &mActiveDevice->mDeviceProperties );
+        vkGetPhysicalDeviceProperties( mActiveDevice->mPhysicalDevice, vkProperties );
+
+        VkPhysicalDeviceProperties &properties = mActiveDevice->mDeviceProperties;
 
         rsc->setDeviceName( properties.deviceName );
 
@@ -316,6 +348,7 @@ namespace Ogre
         rsc->setCapability( RSC_POINT_EXTENDED_PARAMETERS );
         rsc->setCapability( RSC_TEXTURE_2D_ARRAY );
         rsc->setCapability( RSC_CONST_BUFFER_SLOTS_IN_SHADER );
+        rsc->setCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
         rsc->setMaxPointSize( 256 );
 
         rsc->setMaximumResolutions( 16384, 4096, 16384 );
@@ -339,7 +372,7 @@ namespace Ogre
         rsc->setComputeProgramConstantIntCount( 256u );
         rsc->setComputeProgramConstantBoolCount( 256u );
 
-        rsc->addShaderProfile( "glsl" );
+        rsc->addShaderProfile( "glsl-vulkan" );
 
         return rsc;
     }
@@ -365,8 +398,13 @@ namespace Ogre
                                                      const NameValuePairList *miscParams )
     {
         FastArray<const char *> reqInstanceExtensions;
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+        VulkanWindow *win =
+            OGRE_NEW OgreVulkanWin32Window( reqInstanceExtensions, name, width, height, fullScreen );
+#else
         VulkanWindow *win =
             OGRE_NEW VulkanXcbWindow( reqInstanceExtensions, name, width, height, fullScreen );
+#endif
         mWindows.insert( win );
 
         if( !mInitialized )
@@ -399,17 +437,19 @@ namespace Ogre
 
             initialiseFromRenderSystemCapabilities( mCurrentCapabilities, 0 );
 
+            mNativeShadingLanguageVersion = 450;
+
             FastArray<const char *> deviceExtensions;
             mDevice->createDevice( deviceExtensions, 0u, 0u );
 
-            mHardwareBufferManager = new v1::DefaultHardwareBufferManager();
             VulkanVaoManager *vaoManager = OGRE_NEW VulkanVaoManager( dynBufferMultiplier, mDevice );
             mVaoManager = vaoManager;
-            mTextureGpuManager = OGRE_NEW VulkanTextureGpuManager( mVaoManager, this );
+            mHardwareBufferManager = OGRE_NEW v1::VulkanHardwareBufferManager( mDevice, mVaoManager );
+            mTextureGpuManager = OGRE_NEW VulkanTextureGpuManager( mVaoManager, this, mDevice );
 
             mActiveDevice->mVaoManager = vaoManager;
             mActiveDevice->initQueues();
-
+            vaoManager->initDrawIdVertexBuffer();
             mInitialized = true;
         }
 
@@ -417,6 +457,16 @@ namespace Ogre
         win->_initialize( mTextureGpuManager );
 
         return win;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_notifyDeviceStalled()
+    {
+        v1::VulkanHardwareBufferManager *hwBufferMgr =
+            static_cast<v1::VulkanHardwareBufferManager *>( mHardwareBufferManager );
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+
+        hwBufferMgr->_notifyDeviceStalled();
+        vaoManager->_notifyDeviceStalled();
     }
     //-------------------------------------------------------------------------
     String VulkanRenderSystem::getErrorDescription( long errorNumber ) const { return BLANKSTRING; }
@@ -443,20 +493,239 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::flushUAVs( void ) {}
+    void VulkanRenderSystem::flushUAVs( void )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " flushUAVs " ) );
+        }
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setCurrentDeviceFromTexture( TextureGpu *texture ) {}
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr ) {}
+    void VulkanRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " _setTexture " ) );
+        }
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set,
                                            uint32 hazardousTexIdx )
     {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " _setTextures DescriptorSetTexture " ) );
+        }
+
+        uint32 texUnit = slotStart + 8;
+        FastArray<const TextureGpu *>::const_iterator itor = set->mTextures.begin();
+
+        // for( size_t i=0u; i<NumShaderTypes; ++i )
+        for( size_t i = 0u; i < PixelShader + 1u; ++i )
+        {
+            const size_t numTexturesUsed = set->mShaderTypeTexCount[i];
+            for( size_t j = 0u; j < numTexturesUsed; ++j )
+            {
+                const VulkanTextureGpu *vulkanTex = static_cast<const VulkanTextureGpu *>( *itor );
+                VkImageView vulkanTexture = 0;
+
+                if( vulkanTex )
+                {
+                    vulkanTexture = vulkanTex->getDisplayTextureName();
+
+                    if( ( texUnit - slotStart ) == hazardousTexIdx &&
+                        mCurrentRenderPassDescriptor->hasAttachment( set->mTextures[hazardousTexIdx] ) )
+                    {
+                        vulkanTexture = 0;
+                    }
+                }
+
+                if( vulkanTexture )
+                {
+                    VkDescriptorImageInfo imageInfo;
+                    imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                    imageInfo.imageView = vulkanTexture;
+                    imageInfo.sampler = 0;
+#if VULKAN_HOTSHOT_DISABLED
+                    mImageInfo[texUnit][0] = imageInfo;
+#endif
+                }
+
+                ++texUnit;
+                ++itor;
+            }
+        }
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set ) {}
+    void VulkanRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " _setTextures DescriptorSetTexture2 " ) );
+        }
+
+        VulkanDescriptorSetTexture *vulkanSet =
+            reinterpret_cast<VulkanDescriptorSetTexture *>( set->mRsData );
+
+        mCurrentDescriptorSetTexture = vulkanSet;
+
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+
+        // Bind textures
+        {
+            uint32 pos = OGRE_VULKAN_TEX_SLOT_START;
+            FastArray<VulkanTexRegion>::const_iterator itor = vulkanSet->textures.begin();
+            FastArray<VulkanTexRegion>::const_iterator end = vulkanSet->textures.end();
+
+            while( itor != end )
+            {
+                Range range = itor->range;
+                range.location += slotStart;
+
+                uint32 lastPos = range.location + range.length;
+
+                VkDescriptorImageInfo imageInfo;
+                imageInfo.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                imageInfo.imageView = *itor->textures;
+                imageInfo.sampler = 0;
+#if VULKAN_HOTSHOT_DISABLED
+                mImageInfo[pos++][0] = imageInfo;
+#endif
+                // uint32 i = 0;
+                // for( uint32 texUnit = range.location; texUnit < lastPos; ++texUnit)
+                // {
+                //     VkDescriptorImageInfo imageInfo;
+                //     imageInfo.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                //     imageInfo.imageView = itor->textures[i++];
+                //     imageInfo.sampler = 0;
+                //     mImageInfo[texUnit][0] = imageInfo;
+                // }
+                ++itor;
+            }
+        }
+
+        // Bind buffers
+        {
+            uint32 pos = 0;
+            FastArray<VulkanBufferRegion>::const_iterator itor = vulkanSet->buffers.begin();
+            FastArray<VulkanBufferRegion>::const_iterator end = vulkanSet->buffers.end();
+
+            VkDeviceSize offsets[15];
+            memset( offsets, 0, sizeof( offsets ) );
+
+            while( itor != end )
+            {
+                Range range = itor->range;
+                // range.location += slotStart + OGRE_VULKAN_TEX_SLOT_START;
+
+                VkDescriptorBufferInfo bufferInfo;
+                bufferInfo.buffer = *itor->buffers;
+                bufferInfo.offset = range.location;
+                bufferInfo.range = range.length;
+#if VULKAN_HOTSHOT_DISABLED
+                mBufferInfo[pos++][0] = bufferInfo;
+#endif
+
+                // for( uint32 texUnit = 0; texUnit < itor->b; ++texUnit )
+                // {
+                //     VkDescriptorBufferInfo bufferInfo;
+                //     bufferInfo.buffer = itor->buffers[texUnit];
+                //     bufferInfo.offset = range.location;
+                //     bufferInfo.range = range.length;
+                //     mBufferInfo[texUnit][0] = bufferInfo;
+                // }
+
+                // switch( itor->shaderType )
+                // {
+                // case VertexShader:
+                //     vkCmdBindVertexBuffers( cmdBuffer, range.location, range.length, itor->buffers,
+                //                             itor->offsets );
+                //     // [mActiveRenderEncoder setVertexBuffers:itor->buffers
+                //     //                                offsets:itor->offsets
+                //     //                              withRange:range];
+                //     break;
+                // case PixelShader:
+                //     vkCmdBindVertexBuffers( cmdBuffer, range.location, range.length, itor->buffers,
+                //                             itor->offsets );
+                //     // [mActiveRenderEncoder setFragmentBuffers:itor->buffers
+                //     //                                  offsets:itor->offsets
+                //     //                                withRange:range];
+                //     break;
+                // case GeometryShader:
+                // case HullShader:
+                // case DomainShader:
+                // case NumShaderTypes:
+                //     break;
+                // }
+
+                ++itor;
+            }
+        }
+    }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) {}
+    void VulkanRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " _setSamplers " ) );
+        }
+
+        VkSampler samplers[16];
+
+        FastArray<const HlmsSamplerblock *>::const_iterator itor = set->mSamplers.begin();
+
+        Range texUnitRange;
+        texUnitRange.location = slotStart;
+        // for( size_t i=0u; i<NumShaderTypes; ++i )
+        for( size_t i = 0u; i < PixelShader + 1u; ++i )
+        {
+            const uint32 numSamplersUsed = set->mShaderTypeSamplerCount[i];
+
+            if( !numSamplersUsed )
+                continue;
+
+            for( size_t j = 0; j < numSamplersUsed; ++j )
+            {
+                if( *itor )
+                    samplers[j] = static_cast<VkSampler>( ( *itor )->mRsData );
+                else
+                    samplers[j] = 0;
+                ++itor;
+            }
+
+            texUnitRange.length = numSamplersUsed;
+
+            VkDescriptorImageInfo samplerInfo;
+            samplerInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            samplerInfo.imageView = 0;
+            samplerInfo.sampler = samplers[0];
+#if VULKAN_HOTSHOT_DISABLED
+            mImageInfo[texUnitRange.location][0] = samplerInfo;
+#endif
+            // switch( i )
+            // {
+            // case VertexShader:
+            //     [mActiveRenderEncoder setVertexSamplerStates:samplers withRange:texUnitRange];
+            //     break;
+            // case PixelShader:
+            //     [mActiveRenderEncoder setFragmentSamplerStates:samplers withRange:texUnitRange];
+            //     break;
+            // case GeometryShader:
+            // case HullShader:
+            // case DomainShader:
+            //     break;
+            // }
+
+            texUnitRange.location += numSamplersUsed;
+        }
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set ) {}
     //-------------------------------------------------------------------------
@@ -475,7 +744,35 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTextureMatrix( size_t unit, const Matrix4 &xform ) {}
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setIndirectBuffer( IndirectBufferPacked *indirectBuffer ) {}
+    void VulkanRenderSystem::_setIndirectBuffer( IndirectBufferPacked *indirectBuffer )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " * _setIndirectBuffer: " ) +
+                                    StringConverter::toString( indirectBuffer->getBufferPackedType() ) );
+        }
+        if( mVaoManager->supportsIndirectBuffers() )
+        {
+            if( indirectBuffer )
+            {
+                VulkanBufferInterface *bufferInterface =
+                    static_cast<VulkanBufferInterface *>( indirectBuffer->getBufferInterface() );
+                mIndirectBuffer = bufferInterface->getVboName();
+            }
+            else
+            {
+                mIndirectBuffer = 0;
+            }
+        }
+        else
+        {
+            if( indirectBuffer )
+                mSwIndirectBufferPtr = indirectBuffer->getSwBufferPtr();
+            else
+                mSwIndirectBufferPtr = 0;
+        }
+    }
     //-------------------------------------------------------------------------
     RenderPassDescriptor *VulkanRenderSystem::createRenderPassDescriptor( void )
     {
@@ -496,15 +793,44 @@ namespace Ogre
         mActiveDevice->commitAndNextCommandBuffer( true );
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock )
+    void VulkanRenderSystem::_setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock )
     {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " * _setHlmsSamplerblock: " ) +
+                                    StringConverter::toString( texUnit ) );
+        }
+
+        // assert( ( !samplerblock || samplerblock->mRsData ) &&
+        //         "The block must have been created via HlmsManager::getSamplerblock!" );
+        //
+        // if( !samplerblock )
+        // {
+        //     [mActiveRenderEncoder setFragmentSamplerState:0 atIndex:texUnit];
+        // }
+        // else
+        // {
+        //     __unsafe_unretained id<MTLSamplerState> sampler =
+        //         (__bridge id<MTLSamplerState>)samplerblock->mRsData;
+        //     [mActiveRenderEncoder setVertexSamplerState:sampler atIndex:texUnit];
+        //     [mActiveRenderEncoder setFragmentSamplerState:sampler atIndex:texUnit];
+        // }
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setPipelineStateObject( const HlmsPso *pso )
     {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( " * _setPipelineStateObject: pso " );
+        }
+
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
-        vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                           reinterpret_cast<VkPipeline>( pso->rsData ) );
+        assert( pso->rsData );
+        VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
+        vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPso->pso );
+        mPso = vulkanPso;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setComputePso( const HlmsComputePso *pso ) {}
@@ -514,28 +840,892 @@ namespace Ogre
         return VET_COLOUR_ARGB;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_dispatch( const HlmsComputePso &pso ) {}
+    void VulkanRenderSystem::_dispatch( const HlmsComputePso &pso )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( " * _dispatch: pso " );
+        }
+    }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setVertexArrayObject( const VertexArrayObject *vao ) {}
+    void VulkanRenderSystem::_setVertexArrayObject( const VertexArrayObject *vao )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " * _setVertexArrayObject: vaoName " ) +
+                                    StringConverter::toString( vao->getVaoName() ) );
+        }
+    }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_render( const CbDrawCallIndexed *cmd ) {}
+    void VulkanRenderSystem::flushDescriptorState(
+        VkPipelineBindPoint pipeline_bind_point, const VulkanConstBufferPacked &constBuffer,
+        const size_t bindOffset, const size_t bytesToWrite,
+        const unordered_map<unsigned, VulkanConstantDefinitionBindingParam>::type &shaderBindings )
+    {
+#if VULKAN_HOTSHOT_DISABLED
+        VulkanHlmsPso *pso = mPso;
+
+        // std::unordered_set<uint32_t> update_descriptor_sets;
+        //
+        // DescriptorSetLayoutArray::iterator itor = pso->descriptorSets.begin();
+        // DescriptorSetLayoutArray::iterator end = pso->descriptorSets.end();
+        //
+        // while( itor != end )
+        // {
+        //     VkDescriptorSetLayout &descSet = *itor;
+        //
+        //     update_descriptor_sets.emplace( descSet );
+        //     ++itor;
+        // }
+        //
+        // if( update_descriptor_sets.empty() )
+        //     return;
+
+        const VulkanBufferInterface *bufferInterface =
+            static_cast<const VulkanBufferInterface *>( constBuffer.getBufferInterface() );
+
+        BindingMap<VkDescriptorBufferInfo> buffer_infos;
+        BindingMap<VkDescriptorImageInfo> image_infos;
+
+        DescriptorSetLayoutBindingArray::const_iterator bindingArraySetItor =
+            pso->descriptorLayoutBindingSets.begin();
+        DescriptorSetLayoutBindingArray::const_iterator bindingArraySetEnd =
+            pso->descriptorLayoutBindingSets.end();
+
+        // uint32 set = 0;
+
+        // size_t currentOffset = bindOffset;
+
+        while( bindingArraySetItor != bindingArraySetEnd )
+        {
+            const FastArray<struct VkDescriptorSetLayoutBinding> bindings = *bindingArraySetItor;
+
+            FastArray<struct VkDescriptorSetLayoutBinding>::const_iterator bindingsItor =
+                bindings.begin();
+            FastArray<struct VkDescriptorSetLayoutBinding>::const_iterator bindingsItorEnd =
+                bindings.end();
+
+            // uint32 arrayElement = 0;
+
+            while( bindingsItor != bindingsItorEnd )
+            {
+                const VkDescriptorSetLayoutBinding &binding = *bindingsItor;
+
+                if( is_buffer_descriptor_type( binding.descriptorType ) )
+                {
+                    VkDescriptorBufferInfo buffer_info;
+
+                    VulkanConstantDefinitionBindingParam bindingParam;
+                    unordered_map<unsigned, VulkanConstantDefinitionBindingParam>::type::const_iterator
+                        constantDefinitionBinding = shaderBindings.find( binding.binding );
+                    if( constantDefinitionBinding == shaderBindings.end() )
+                    {
+                        ++bindingsItor;
+                        continue;
+                    }
+                    else
+                    {
+                        bindingParam = ( *constantDefinitionBinding ).second;
+                    }
+
+                    buffer_info.buffer = bufferInterface->getVboName();
+                    buffer_info.offset = bindingParam.offset;
+                    buffer_info.range = bindingParam.size;
+
+                    // currentOffset += bytesToWrite;
+
+                    // if( is_dynamic_buffer_descriptor_type( binding_info->descriptorType ) )
+                    // {
+                    //     dynamic_offsets.push_back( to_u32( buffer_info.offset ) );
+                    //
+                    //     buffer_info.offset = 0;
+                    // }
+
+                    buffer_infos[binding.binding][0] = buffer_info;
+                }
+                // else if( image_view != nullptr || sampler != VK_NULL_HANDLE )
+                // {
+                //     // Can be null for input attachments
+                //     VkDescriptorImageInfo image_info{};
+                //     image_info.sampler = sampler ? sampler->get_handle() : VK_NULL_HANDLE;
+                //     image_info.imageView = image_view->get_handle();
+                //
+                //     if( image_view != nullptr )
+                //     {
+                //         // Add image layout info based on descriptor type
+                //         switch( binding.descriptorType )
+                //         {
+                //         case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+                //         case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
+                //             if( is_depth_stencil_format( image_view->get_format() ) )
+                //             {
+                //                 image_info.imageLayout =
+                //                 VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+                //             }
+                //             else
+                //             {
+                //                 image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                //             }
+                //             break;
+                //         case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
+                //             image_info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+                //             break;
+                //
+                //         default:
+                //             continue;
+                //         }
+                //     }
+                //
+                //     image_infos[binding.binding][0] = std::move( image_info );
+                // }
+
+                ++bindingsItor;
+                // ++arrayElement;
+            }
+
+            ++bindingArraySetItor;
+            // ++set;
+        }
+
+        VulkanDescriptorPool *descriptorPool =
+            new VulkanDescriptorPool( mDevice->mDevice, pso->descriptorLayoutSets[0] );
+
+        VulkanDescriptorSet *descriptorSet = new VulkanDescriptorSet(
+            mDevice->mDevice, pso->descriptorLayoutSets[0], *descriptorPool, buffer_infos, image_infos );
+
+        VkDescriptorSet descriptorSetHandle = descriptorSet->get_handle();
+
+        // Bind descriptor set
+        vkCmdBindDescriptorSets( mDevice->mGraphicsQueue.mCurrentCmdBuffer, pipeline_bind_point,
+                                 pso->pipelineLayout, 0, 1, &descriptorSetHandle, 0, 0 );
+
+        // const auto &pipeline_layout = pipeline_state.get_pipeline_layout();
+        //
+        //
+        //
+        // // Iterate over the shader sets to check if they have already been bound
+        // // If they have, add the set so that the command buffer later updates it
+        // for( auto &set_it : pipeline_layout.get_shader_sets() )
+        // {
+        //     uint32_t descriptor_set_id = set_it.first;
+        //
+        //     auto descriptor_set_layout_it =
+        //         descriptor_set_layout_binding_state.find( descriptor_set_id );
+        //
+        //     if( descriptor_set_layout_it != descriptor_set_layout_binding_state.end() )
+        //     {
+        //         if( descriptor_set_layout_it->second->get_handle() !=
+        //             pipeline_layout.get_descriptor_set_layout( descriptor_set_id ).get_handle() )
+        //         {
+        //             update_descriptor_sets.emplace( descriptor_set_id );
+        //         }
+        //     }
+        // }
+        //
+        // // Validate that the bound descriptor set layouts exist in the pipeline layout
+        // for( auto set_it = descriptor_set_layout_binding_state.begin();
+        //      set_it != descriptor_set_layout_binding_state.end(); )
+        // {
+        //     if( !pipeline_layout.has_descriptor_set_layout( set_it->first ) )
+        //     {
+        //         set_it = descriptor_set_layout_binding_state.erase( set_it );
+        //     }
+        //     else
+        //     {
+        //         ++set_it;
+        //     }
+        // }
+        //
+        // // Check if a descriptor set needs to be created
+        // if( resource_binding_state.is_dirty() || !update_descriptor_sets.empty() )
+        // {
+        //     resource_binding_state.clear_dirty();
+        //
+        //     // Iterate over all of the resource sets bound by the command buffer
+        //     for( auto &resource_set_it : resource_binding_state.get_resource_sets() )
+        //     {
+        //         uint32_t descriptor_set_id = resource_set_it.first;
+        //         auto &resource_set = resource_set_it.second;
+        //
+        //         // Don't update resource set if it's not in the update list OR its state hasn't
+        //         changed if( !resource_set.is_dirty() && ( update_descriptor_sets.find(
+        //         descriptor_set_id ) ==
+        //                                           update_descriptor_sets.end() ) )
+        //         {
+        //             continue;
+        //         }
+        //
+        //         // Clear dirty flag for resource set
+        //         resource_binding_state.clear_dirty( descriptor_set_id );
+        //
+        //         // Skip resource set if a descriptor set layout doesn't exist for it
+        //         if( !pipeline_layout.has_descriptor_set_layout( descriptor_set_id ) )
+        //         {
+        //             continue;
+        //         }
+        //
+        //         auto &descriptor_set_layout =
+        //             pipeline_layout.get_descriptor_set_layout( descriptor_set_id );
+        //
+        //         // Make descriptor set layout bound for current set
+        //         descriptor_set_layout_binding_state[descriptor_set_id] = &descriptor_set_layout;
+        //
+        //         BindingMap<VkDescriptorBufferInfo> buffer_infos;
+        //         BindingMap<VkDescriptorImageInfo> image_infos;
+        //
+        //         std::vector<uint32_t> dynamic_offsets;
+        //
+        //         // Iterate over all resource bindings
+        //         for( auto &binding_it : resource_set.get_resource_bindings() )
+        //         {
+        //             auto binding_index = binding_it.first;
+        //             auto &binding_resources = binding_it.second;
+        //
+        //             // Check if binding exists in the pipeline layout
+        //             if( auto binding_info = descriptor_set_layout.get_layout_binding( binding_index )
+        //             )
+        //             {
+        //                 // Iterate over all binding resources
+        //                 for( auto &element_it : binding_resources )
+        //                 {
+        //                     auto array_element = element_it.first;
+        //                     auto &resource_info = element_it.second;
+        //
+        //                     // Pointer references
+        //                     auto &buffer = resource_info.buffer;
+        //                     auto &sampler = resource_info.sampler;
+        //                     auto &image_view = resource_info.image_view;
+        //
+        //                     // Get buffer info
+        //                     if( buffer != nullptr &&
+        //                         is_buffer_descriptor_type( binding_info->descriptorType ) )
+        //                     {
+        //                         VkDescriptorBufferInfo buffer_info{};
+        //
+        //                         buffer_info.buffer = resource_info.buffer->get_handle();
+        //                         buffer_info.offset = resource_info.offset;
+        //                         buffer_info.range = resource_info.range;
+        //
+        //                         if( is_dynamic_buffer_descriptor_type( binding_info->descriptorType )
+        //                         )
+        //                         {
+        //                             dynamic_offsets.push_back( to_u32( buffer_info.offset ) );
+        //
+        //                             buffer_info.offset = 0;
+        //                         }
+        //
+        //                         buffer_infos[binding_index][array_element] = buffer_info;
+        //                     }
+        //
+        //                     // Get image info
+        //                     else if( image_view != nullptr || sampler != VK_NULL_HANDLE )
+        //                     {
+        //                         // Can be null for input attachments
+        //                         VkDescriptorImageInfo image_info{};
+        //                         image_info.sampler = sampler ? sampler->get_handle() : VK_NULL_HANDLE;
+        //                         image_info.imageView = image_view->get_handle();
+        //
+        //                         if( image_view != nullptr )
+        //                         {
+        //                             // Add image layout info based on descriptor type
+        //                             switch( binding_info->descriptorType )
+        //                             {
+        //                             case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
+        //                             case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
+        //                                 if( is_depth_stencil_format( image_view->get_format() ) )
+        //                                 {
+        //                                     image_info.imageLayout =
+        //                                         VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+        //                                 }
+        //                                 else
+        //                                 {
+        //                                     image_info.imageLayout =
+        //                                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        //                                 }
+        //                                 break;
+        //                             case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
+        //                                 image_info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+        //                                 break;
+        //
+        //                             default:
+        //                                 continue;
+        //                             }
+        //                         }
+        //
+        //                         image_infos[binding_index][array_element] = std::move( image_info );
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //
+        //         auto &descriptor_set = command_pool.get_render_frame()->request_descriptor_set(
+        //             descriptor_set_layout, buffer_infos, image_infos, command_pool.get_thread_index()
+        //             );
+        //
+        //         VkDescriptorSet descriptor_set_handle = descriptor_set.get_handle();
+        //
+        //         // Bind descriptor set
+        //         vkCmdBindDescriptorSets( get_handle(), pipeline_bind_point,
+        //         pipeline_layout.get_handle(),
+        //                                  descriptor_set_id, 1, &descriptor_set_handle,
+        //                                  to_u32( dynamic_offsets.size() ), dynamic_offsets.data() );
+        //     }
+        // }
+#endif
+    }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_render( const CbDrawCallStrip *cmd ) {}
+    VulkanHlmsPso *lastPso = 0;
+    void VulkanRenderSystem::bindDescriptorSet() const
+    {
+#if VULKAN_HOTSHOT_DISABLED
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+
+        BindingMap<VkDescriptorBufferInfo> buffer_infos;
+        BindingMap<VkBufferView> buffer_views;
+        const BindingMap<VkDescriptorImageInfo> &image_infos = mImageInfo;
+
+        const vector<VulkanConstBufferPacked *>::type &constBuffers = vaoManager->getConstBuffers();
+        vector<VulkanConstBufferPacked *>::type::const_iterator constBuffersIt = constBuffers.begin();
+        vector<VulkanConstBufferPacked *>::type::const_iterator constBuffersEnd = constBuffers.end();
+
+        while( constBuffersIt != constBuffersEnd )
+        {
+            VulkanConstBufferPacked *const constBuffer = *constBuffersIt;
+            if( constBuffer->isDirty() )
+            {
+                const VkDescriptorBufferInfo &bufferInfo = constBuffer->getBufferInfo();
+                uint16 binding = constBuffer->getCurrentBinding();
+                buffer_infos[binding][0] = bufferInfo;
+                constBuffer->resetDirty();
+            }
+            ++constBuffersIt;
+        }
+
+        const vector<VulkanTexBufferPacked *>::type &texBuffers = vaoManager->getTexBuffersPacked();
+        vector<VulkanTexBufferPacked *>::type::const_iterator texBuffersIt = texBuffers.begin();
+        vector<VulkanTexBufferPacked *>::type::const_iterator texBuffersEnd = texBuffers.end();
+
+        while( texBuffersIt != texBuffersEnd )
+        {
+            VulkanTexBufferPacked *const texBuffer = *texBuffersIt;
+            if( texBuffer->isDirty() )
+            {
+                VkBufferView bufferView = texBuffer->getBufferView();
+                uint16 binding = texBuffer->getCurrentBinding();
+                buffer_views[binding][0] = bufferView;
+                texBuffer->resetDirty();
+            }
+            ++texBuffersIt;
+        }
+        if( lastPso == mPso )
+            return;
+
+        VulkanHlmsPso *pso = mPso;
+        lastPso = mPso;
+
+        VulkanDescriptorPool *descriptorPool =
+            new VulkanDescriptorPool( mDevice->mDevice, pso->descriptorLayoutSets[0] );
+
+        VulkanDescriptorSet *descriptorSet =
+            new VulkanDescriptorSet( mDevice->mDevice, pso->descriptorLayoutSets[0], *descriptorPool,
+                                     buffer_infos, image_infos, buffer_views );
+
+        VkDescriptorSet descriptorSetHandle = descriptorSet->get_handle();
+
+        // Bind descriptor set
+        vkCmdBindDescriptorSets( mDevice->mGraphicsQueue.mCurrentCmdBuffer,
+                                 VK_PIPELINE_BIND_POINT_GRAPHICS, pso->pipelineLayout, 0, 1,
+                                 &descriptorSetHandle, 0, 0 );
+#endif
+    }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_renderEmulated( const CbDrawCallIndexed *cmd ) {}
+    void VulkanRenderSystem::_render( const CbDrawCallIndexed *cmd )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " * _render: CbDrawCallIndexed " ) +
+                                    StringConverter::toString( cmd->vao->getVaoName() ) );
+        }
+    }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_renderEmulated( const CbDrawCallStrip *cmd ) {}
+    void VulkanRenderSystem::_render( const CbDrawCallStrip *cmd )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " * _render: CbDrawCallStrip " ) +
+                                    StringConverter::toString( cmd->vao->getVaoName() ) );
+        }
+    }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setRenderOperation( const v1::CbRenderOp *cmd ) {}
+    void VulkanRenderSystem::_renderEmulated( const CbDrawCallIndexed *cmd )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " * _renderEmulated: CbDrawCallIndexed " ) +
+                                    StringConverter::toString( cmd->vao->getVaoName() ) );
+        }
+
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+
+        bindDescriptorSet();
+
+        const VulkanVertexArrayObject *vao = static_cast<const VulkanVertexArrayObject *>( cmd->vao );
+
+        // Calculate bytesPerVertexBuffer & numVertexBuffers which is the same for all draws in this cmd
+        size_t bytesPerVertexBuffer[15];
+        size_t numVertexBuffers = 0;
+        const VertexBufferPackedVec &vertexBuffersPackedVec = vao->getVertexBuffers();
+        VertexBufferPackedVec::const_iterator itor = vertexBuffersPackedVec.begin();
+        VertexBufferPackedVec::const_iterator end = vertexBuffersPackedVec.end();
+
+        while( itor != end )
+        {
+            bytesPerVertexBuffer[numVertexBuffers] = ( *itor )->getBytesPerElement();
+            ++numVertexBuffers;
+            ++itor;
+        }
+
+        const VulkanBufferInterface *bufferInterface =
+            static_cast<const VulkanBufferInterface *>( vao->getIndexBuffer()->getBufferInterface() );
+        CbDrawIndexed *drawCmd = reinterpret_cast<CbDrawIndexed *>( mSwIndirectBufferPtr +
+                                                                    (size_t)cmd->indirectBufferOffset );
+
+        const size_t bytesPerIndexElement = vao->getIndexBuffer()->getBytesPerElement();
+
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+
+        vkCmdBindIndexBuffer( cmdBuffer, bufferInterface->getVboName(), 0, VK_INDEX_TYPE_UINT16 );
+
+        for( uint32 i = cmd->numDraws; i--; )
+        {
+            std::vector<VkBuffer> vertexBuffers;
+            std::vector<VkDeviceSize> offsets;
+
+            vertexBuffers.resize( numVertexBuffers );
+            offsets.resize( numVertexBuffers );
+
+            for( size_t j = 0; j < numVertexBuffers; ++j )
+            {
+                VulkanBufferInterface *bufIntf = static_cast<VulkanBufferInterface *>(
+                    vertexBuffersPackedVec[j]->getBufferInterface() );
+                vertexBuffers[j] = bufIntf->getVboName();
+                offsets[j] = drawCmd->baseVertex * bytesPerVertexBuffer[j];
+            }
+
+            vkCmdBindVertexBuffers( cmdBuffer, 0, numVertexBuffers, vertexBuffers.data(),
+                                    offsets.data() );
+
+            vaoManager->bindDrawIdVertexBuffer( cmdBuffer );
+
+            vkCmdDrawIndexed( cmdBuffer, drawCmd->primCount, drawCmd->instanceCount,
+                              drawCmd->firstVertexIndex, drawCmd->baseVertex, drawCmd->baseInstance );
+            ++drawCmd;
+        }
+    }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_render( const v1::CbDrawCallIndexed *cmd ) {}
+    void VulkanRenderSystem::_renderEmulated( const CbDrawCallStrip *cmd )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " * _renderEmulated: CbDrawCallStrip " ) +
+                                    StringConverter::toString( cmd->vao->getVaoName() ) );
+        }
+    }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_render( const v1::CbDrawCallStrip *cmd ) {}
+    void VulkanRenderSystem::_setRenderOperation( const v1::CbRenderOp *cmd )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " v1 * _render: CbRenderOp " ) );
+        }
+
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+
+        VkBuffer vulkanVertexBuffers[16];
+        VkDeviceSize offsets[16];
+        memset( vulkanVertexBuffers, 0, sizeof( vulkanVertexBuffers ) );
+        memset( offsets, 0, sizeof( offsets ) );
+
+        size_t maxUsedSlot = 0;
+        const v1::VertexBufferBinding::VertexBufferBindingMap &binds =
+            cmd->vertexData->vertexBufferBinding->getBindings();
+        v1::VertexBufferBinding::VertexBufferBindingMap::const_iterator itor = binds.begin();
+        v1::VertexBufferBinding::VertexBufferBindingMap::const_iterator end = binds.end();
+
+        while( itor != end )
+        {
+            v1::VulkanHardwareVertexBuffer *vulkanBuffer =
+                reinterpret_cast<v1::VulkanHardwareVertexBuffer *>( itor->second.get() );
+
+            const size_t slot = itor->first;
+#if OGRE_DEBUG_MODE
+            assert( slot < 15u );
+#endif
+            size_t offsetStart;
+            vulkanVertexBuffers[slot] = vulkanBuffer->getBufferName( offsetStart );
+            offsets[slot] = offsetStart;
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+            offsets[slot] += cmd->vertexData->vertexStart * vulkanBuffer->getVertexSize();
+#endif
+            ++itor;
+            maxUsedSlot = std::max( maxUsedSlot, slot + 1u );
+        }
+
+        VulkanBufferInterface *bufIntf =
+            static_cast<VulkanBufferInterface *>( vaoManager->getDrawId()->getBufferInterface() );
+        vulkanVertexBuffers[maxUsedSlot] = bufIntf->getVboName();
+        offsets[maxUsedSlot] = 0;
+
+        vkCmdBindVertexBuffers( cmdBuffer, 0, maxUsedSlot + 1, vulkanVertexBuffers, offsets );
+
+        // [mActiveRenderEncoder setVertexBuffers:metalVertexBuffers
+        //                                offsets:offsets
+        //                              withRange:NSMakeRange( 0, maxUsedSlot )];
+
+        mCurrentIndexBuffer = cmd->indexData;
+        mCurrentVertexBuffer = cmd->vertexData;
+        mCurrentPrimType = std::min( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP,
+                                     static_cast<VkPrimitiveTopology>( cmd->operationType - 1u ) );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_render( const v1::CbDrawCallIndexed *cmd )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " v1 * _render: CbDrawCallIndexed " ) );
+        }
+
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+
+        bindDescriptorSet();
+
+        const VkPrimitiveTopology indexType =
+            static_cast<VkPrimitiveTopology>( mCurrentIndexBuffer->indexBuffer->getType() );
+
+        // Get index buffer stuff which is the same for all draws in this cmd
+        const size_t bytesPerIndexElement = mCurrentIndexBuffer->indexBuffer->getIndexSize();
+
+        size_t offsetStart;
+        v1::VulkanHardwareIndexBuffer *vulkanBuffer =
+            static_cast<v1::VulkanHardwareIndexBuffer *>( mCurrentIndexBuffer->indexBuffer.get() );
+        VkBuffer indexBuffer = vulkanBuffer->getBufferName( offsetStart );
+
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        vkCmdBindIndexBuffer( cmdBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT16 );
+
+        vkCmdDrawIndexed( cmdBuffer, cmd->primCount, cmd->instanceCount,
+                          cmd->firstVertexIndex + offsetStart, mCurrentVertexBuffer->vertexStart,
+                          cmd->baseInstance );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#    if OGRE_DEBUG_MODE
+        assert( ( ( cmd->firstVertexIndex * bytesPerIndexElement ) & 0x03 ) == 0 &&
+                "Index Buffer must be aligned to 4 bytes. If you're messing with "
+                "IndexBuffer::indexStart, you've entered an invalid "
+                "indexStart; not supported by the Metal API." );
+#    endif
+
+        // Setup baseInstance.
+        // [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * sizeof( uint32 ) atIndex:15];
+        //
+        // [mActiveRenderEncoder
+        //     drawIndexedPrimitives:mCurrentPrimType
+        //                indexCount:cmd->primCount
+        //                 indexType:indexType
+        //               indexBuffer:indexBuffer
+        //         indexBufferOffset:cmd->firstVertexIndex * bytesPerIndexElement + offsetStart
+        //             instanceCount:cmd->instanceCount];
+#else
+        // [mActiveRenderEncoder
+        //     drawIndexedPrimitives:mCurrentPrimType
+        //                indexCount:cmd->primCount
+        //                 indexType:indexType
+        //               indexBuffer:indexBuffer
+        //         indexBufferOffset:cmd->firstVertexIndex * bytesPerIndexElement + offsetStart
+        //             instanceCount:cmd->instanceCount
+        //                baseVertex:mCurrentVertexBuffer->vertexStart
+        //              baseInstance:cmd->baseInstance];
+#endif
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_render( const v1::CbDrawCallStrip *cmd )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " v1 * _render: CbDrawCallStrip " ) );
+        }
+
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+
+        bindDescriptorSet();
+
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+
+        vkCmdDraw( cmdBuffer, mCurrentVertexBuffer->vertexCount, cmd->instanceCount,
+                   mCurrentVertexBuffer->vertexStart, cmd->baseInstance );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        // Setup baseInstance.
+        // [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * sizeof( uint32 ) atIndex:15];
+        // [mActiveRenderEncoder
+        //     drawPrimitives:mCurrentPrimType
+        //        vertexStart:0 /*cmd->firstVertexIndex already handled in _setRenderOperation*/
+        //        vertexCount:cmd->primCount
+        //      instanceCount:cmd->instanceCount];
+#else
+        // [mActiveRenderEncoder drawPrimitives:mCurrentPrimType
+        //                          vertexStart:cmd->firstVertexIndex
+        //                          vertexCount:cmd->primCount
+        //                        instanceCount:cmd->instanceCount
+        //                         baseInstance:cmd->baseInstance];
+#endif
+    }
+
+    void VulkanRenderSystem::_render( const v1::RenderOperation &op )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " * _render: RenderOperation " ) +
+                                    StringConverter::toString( op.operationType ) );
+        }
+
+        // Call super class.
+        RenderSystem::_render( op );
+
+        const size_t numberOfInstances = op.numberOfInstances;
+        const bool hasInstanceData = mCurrentVertexBuffer->vertexBufferBinding->getHasInstanceData();
+
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+
+        // Render to screen!
+        if( op.useIndexes )
+        {
+            do
+            {
+                // Update derived depth bias.
+                if( mDerivedDepthBias && mCurrentPassIterationNum > 0 )
+                {
+                    const float biasSign = mReverseDepth ? 1.0f : -1.0f;
+                    vkCmdSetDepthBias( cmdBuffer,
+                                       ( mDerivedDepthBiasBase +
+                                         mDerivedDepthBiasMultiplier * mCurrentPassIterationNum ) *
+                                           biasSign,
+                                       0.f, mDerivedDepthBiasSlopeScale * biasSign );
+                    // [mActiveRenderEncoder
+                    // setDepthBias:( mDerivedDepthBiasBase +
+                    //                mDerivedDepthBiasMultiplier * mCurrentPassIterationNum ) *
+                    //              biasSign
+                    //       slopeScale:mDerivedDepthBiasSlopeScale * biasSign
+                    //            clamp:0.0f];
+                }
+
+                const VkPrimitiveTopology indexType =
+                    static_cast<VkPrimitiveTopology>( mCurrentIndexBuffer->indexBuffer->getType() );
+
+                // Get index buffer stuff which is the same for all draws in this cmd
+                const size_t bytesPerIndexElement = mCurrentIndexBuffer->indexBuffer->getIndexSize();
+
+                size_t offsetStart;
+                v1::VulkanHardwareIndexBuffer *vulkanBuffer =
+                    static_cast<v1::VulkanHardwareIndexBuffer *>(
+                        mCurrentIndexBuffer->indexBuffer.get() );
+                VkBuffer indexBuffer = vulkanBuffer->getBufferName( offsetStart );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#    if OGRE_DEBUG_MODE
+                assert( ( ( mCurrentIndexBuffer->indexStart * bytesPerIndexElement ) & 0x03 ) == 0 &&
+                        "Index Buffer must be aligned to 4 bytes. If you're messing with "
+                        "IndexBuffer::indexStart, you've entered an invalid "
+                        "indexStart; not supported by the Metal API." );
+#    endif
+
+                // [mActiveRenderEncoder
+                //     drawIndexedPrimitives:mCurrentPrimType
+                //                indexCount:mCurrentIndexBuffer->indexCount
+                //                 indexType:indexType
+                //               indexBuffer:indexBuffer
+                //         indexBufferOffset:mCurrentIndexBuffer->indexStart * bytesPerIndexElement +
+                //                           offsetStart
+                //             instanceCount:numberOfInstances];
+#else
+                // [mActiveRenderEncoder
+                //     drawIndexedPrimitives:mCurrentPrimType
+                //                indexCount:mCurrentIndexBuffer->indexCount
+                //                 indexType:indexType
+                //               indexBuffer:indexBuffer
+                //         indexBufferOffset:mCurrentIndexBuffer->indexStart * bytesPerIndexElement +
+                //                           offsetStart
+                //             instanceCount:numberOfInstances
+                //                baseVertex:mCurrentVertexBuffer->vertexStart
+                //              baseInstance:0];
+#endif
+            } while( updatePassIterationRenderState() );
+        }
+        else
+        {
+            do
+            {
+                // Update derived depth bias.
+                if( mDerivedDepthBias && mCurrentPassIterationNum > 0 )
+                {
+                    const float biasSign = mReverseDepth ? 1.0f : -1.0f;
+                    vkCmdSetDepthBias( cmdBuffer,
+                                       ( mDerivedDepthBiasBase +
+                                         mDerivedDepthBiasMultiplier * mCurrentPassIterationNum ) *
+                                           biasSign,
+                                       0.f, mDerivedDepthBiasSlopeScale * biasSign );
+                    // [mActiveRenderEncoder
+                    //     setDepthBias:( mDerivedDepthBiasBase +
+                    //                    mDerivedDepthBiasMultiplier * mCurrentPassIterationNum ) *
+                    //                  biasSign
+                    //       slopeScale:mDerivedDepthBiasSlopeScale * biasSign
+                    //            clamp:0.0f];
+                }
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+                const uint32 vertexStart = 0;
+#else
+                const uint32 vertexStart = static_cast<uint32>( mCurrentVertexBuffer->vertexStart );
+#endif
+
+                if( hasInstanceData )
+                {
+                    // [mActiveRenderEncoder drawPrimitives:mCurrentPrimType
+                    //                          vertexStart:vertexStart
+                    //                          vertexCount:mCurrentVertexBuffer->vertexCount
+                    //                        instanceCount:numberOfInstances];
+                }
+                else
+                {
+                    // [mActiveRenderEncoder drawPrimitives:mCurrentPrimType
+                    //                          vertexStart:vertexStart
+                    //                          vertexCount:mCurrentVertexBuffer->vertexCount];
+                }
+            } while( updatePassIterationRenderState() );
+        }
+    }
+
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::bindGpuProgramParameters( GpuProgramType gptype,
                                                        GpuProgramParametersSharedPtr params,
                                                        uint16 variabilityMask )
     {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " * bindGpuProgramParameters:  " ) );
+        }
+        VulkanProgram *shader = 0;
+        switch( gptype )
+        {
+        case GPT_VERTEX_PROGRAM:
+            mActiveVertexGpuProgramParameters = params;
+            shader = mPso->vertexShader;
+            break;
+        case GPT_FRAGMENT_PROGRAM:
+            mActiveFragmentGpuProgramParameters = params;
+            shader = mPso->pixelShader;
+            break;
+        case GPT_GEOMETRY_PROGRAM:
+            mActiveGeometryGpuProgramParameters = params;
+            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Geometry Shaders are not supported in Vulkan.",
+                         "VulkanRenderSystem::bindGpuProgramParameters" );
+            break;
+        case GPT_HULL_PROGRAM:
+            mActiveTessellationHullGpuProgramParameters = params;
+            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Tesselation is different in Vulkan.",
+                         "VulkanRenderSystem::bindGpuProgramParameters" );
+            break;
+        case GPT_DOMAIN_PROGRAM:
+            mActiveTessellationDomainGpuProgramParameters = params;
+            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Tesselation is different in Vulkan.",
+                         "VulkanRenderSystem::bindGpuProgramParameters" );
+            break;
+        case GPT_COMPUTE_PROGRAM:
+            // mActiveComputeGpuProgramParameters = params;
+            // shader = static_cast<VulkanProgram *>( mComputePso->computeShader->_getBindingDelegate()
+            // );
+            break;
+        }
+
+        size_t bytesToWrite =
+            shader->getBufferRequiredSize();  // + mPso->pixelShader->getBufferRequiredSize();
+        if( shader && bytesToWrite > 0 )
+        {
+            if( mCurrentAutoParamsBufferSpaceLeft < bytesToWrite )
+            {
+                if( mAutoParamsBufferIdx >= mAutoParamsBuffer.size() )
+                {
+                    ConstBufferPacked *constBuffer =
+                        mVaoManager->createConstBuffer( std::max<size_t>( 512u * 1024u, bytesToWrite ),
+                                                        BT_DYNAMIC_PERSISTENT, 0, false );
+                    mAutoParamsBuffer.push_back( constBuffer );
+                }
+
+                ConstBufferPacked *constBuffer = mAutoParamsBuffer[mAutoParamsBufferIdx];
+                mCurrentAutoParamsBufferPtr =
+                    reinterpret_cast<uint8 *>( constBuffer->map( 0, constBuffer->getNumElements() ) );
+                mCurrentAutoParamsBufferSpaceLeft = constBuffer->getTotalSizeBytes();
+
+                ++mAutoParamsBufferIdx;
+            }
+
+            shader->updateBuffers( params, mCurrentAutoParamsBufferPtr );
+
+            assert( dynamic_cast<VulkanConstBufferPacked *>(
+                mAutoParamsBuffer[mAutoParamsBufferIdx - 1u] ) );
+
+            VulkanConstBufferPacked *constBuffer =
+                static_cast<VulkanConstBufferPacked *>( mAutoParamsBuffer[mAutoParamsBufferIdx - 1u] );
+            const size_t bindOffset =
+                constBuffer->getTotalSizeBytes() - mCurrentAutoParamsBufferSpaceLeft;
+
+            // const unordered_map<unsigned, VulkanConstantDefinitionBindingParam>::type
+            // &vertexShaderBindings =
+            //     shader->getConstantDefsBindingParams();
+            //
+            // flushDescriptorState( VK_PIPELINE_BIND_POINT_GRAPHICS, *constBuffer, bindOffset,
+            //                       bytesToWrite, vertexShaderBindings );
+            VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+            switch( gptype )
+            {
+            case GPT_VERTEX_PROGRAM:
+            case GPT_FRAGMENT_PROGRAM:
+            case GPT_COMPUTE_PROGRAM:
+                constBuffer->bindBuffer( OGRE_VULKAN_PARAMETER_SLOT - OGRE_VULKAN_CONST_SLOT_START,
+                                         bindOffset );
+                break;
+            case GPT_GEOMETRY_PROGRAM:
+            case GPT_HULL_PROGRAM:
+            case GPT_DOMAIN_PROGRAM:
+                break;
+            }
+
+            mCurrentAutoParamsBufferPtr += bytesToWrite;
+
+            const uint8 *oldBufferPos = mCurrentAutoParamsBufferPtr;
+            mCurrentAutoParamsBufferPtr = reinterpret_cast<uint8 *>(
+                alignToNextMultiple( reinterpret_cast<uintptr_t>( mCurrentAutoParamsBufferPtr ),
+                                     mVaoManager->getConstBufferAlignment() ) );
+            bytesToWrite += mCurrentAutoParamsBufferPtr - oldBufferPos;
+
+            // We know that bytesToWrite <= mCurrentAutoParamsBufferSpaceLeft, but that was
+            // before padding. After padding this may no longer hold true.
+            mCurrentAutoParamsBufferSpaceLeft -=
+                std::min( mCurrentAutoParamsBufferSpaceLeft, bytesToWrite );
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::bindGpuProgramPassIterationParameters( GpuProgramType gptype ) {}
@@ -856,14 +2046,17 @@ namespace Ogre
         size_t numShaderStages = 0u;
         VkPipelineShaderStageCreateInfo shaderStages[GPT_COMPUTE_PROGRAM];
 
-        DescriptorSetLayoutArray descriptorSets;
+        DescriptorSetLayoutBindingArray descriptorLayoutBindingSets;
+
+        VulkanProgram *vertexShader = 0;
+        VulkanProgram *pixelShader = 0;
 
         if( !newPso->vertexShader.isNull() )
         {
-            VulkanProgram *shader =
-                static_cast<VulkanProgram *>( newPso->vertexShader->_getBindingDelegate() );
-            shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
-            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorSets );
+            vertexShader = static_cast<VulkanProgram *>( newPso->vertexShader->_getBindingDelegate() );
+            vertexShader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
+            VulkanDescriptors::generateAndMergeDescriptorSets( vertexShader,
+                                                               descriptorLayoutBindingSets );
         }
 
         if( !newPso->geometryShader.isNull() )
@@ -871,7 +2064,7 @@ namespace Ogre
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->geometryShader->_getBindingDelegate() );
             shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
-            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorSets );
+            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorLayoutBindingSets );
         }
 
         if( !newPso->tesselationHullShader.isNull() )
@@ -879,7 +2072,7 @@ namespace Ogre
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->tesselationHullShader->_getBindingDelegate() );
             shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
-            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorSets );
+            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorLayoutBindingSets );
         }
 
         if( !newPso->tesselationDomainShader.isNull() )
@@ -887,23 +2080,122 @@ namespace Ogre
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->tesselationDomainShader->_getBindingDelegate() );
             shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
-            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorSets );
+            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorLayoutBindingSets );
         }
 
         if( !newPso->pixelShader.isNull() )
         {
-            VulkanProgram *shader =
-                static_cast<VulkanProgram *>( newPso->pixelShader->_getBindingDelegate() );
-            shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
-            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorSets );
+            pixelShader = static_cast<VulkanProgram *>( newPso->pixelShader->_getBindingDelegate() );
+            pixelShader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
+            VulkanDescriptors::generateAndMergeDescriptorSets( pixelShader,
+                                                               descriptorLayoutBindingSets );
         }
 
-        VulkanDescriptors::optimizeDescriptorSets( descriptorSets );
-        VkPipelineLayout layout = VulkanDescriptors::generateVkDescriptorSets( descriptorSets );
+        VulkanDescriptors::optimizeDescriptorSets( descriptorLayoutBindingSets );
+
+        DescriptorSetLayoutArray sets;
+        VkPipelineLayout layout =
+            VulkanDescriptors::generateVkDescriptorSets( descriptorLayoutBindingSets, sets );
 
         VkPipelineVertexInputStateCreateInfo vertexFormatCi;
         makeVkStruct( vertexFormatCi, VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO );
+        std::vector<VkVertexInputBindingDescription> bindingDescriptions;
+        std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
+        // bindingDescriptions.resize( 16, VkVertexInputBindingDescription{} );
+        // attributeDescriptions.resize( 16, VkVertexInputAttributeDescription{} );
+
         TODO_vertex_format;
+        if( !newPso->vertexShader.isNull() )
+        {
+            VulkanProgram *shader =
+                static_cast<VulkanProgram *>( newPso->vertexShader->_getBindingDelegate() );
+            VulkanDescriptors::generateVertexInputBindings( shader, newPso, bindingDescriptions,
+                                                            attributeDescriptions );
+
+            if( !newPso->vertexElements.empty() )
+            {
+                size_t numUVs = 0;
+
+                std::map<uint32, VkVertexInputAttributeDescription *> locationMap;
+                std::vector<VkVertexInputAttributeDescription>::iterator attrItor =
+                    attributeDescriptions.begin();
+                std::vector<VkVertexInputAttributeDescription>::iterator attrItorEnd =
+                    attributeDescriptions.end();
+                while( attrItor != attrItorEnd )
+                {
+                    locationMap.insert( std::pair<uint32, VkVertexInputAttributeDescription *>(
+                        attrItor->location, &( *attrItor ) ) );
+                    ++attrItor;
+                }
+
+                VertexElement2VecVec::const_iterator itor = newPso->vertexElements.begin();
+                VertexElement2VecVec::const_iterator end = newPso->vertexElements.end();
+
+                while( itor != end )
+                {
+                    size_t accumOffset = 0;
+                    const size_t bufferIdx = itor - newPso->vertexElements.begin();
+                    VertexElement2Vec::const_iterator it = itor->begin();
+                    VertexElement2Vec::const_iterator en = itor->end();
+
+                    uint32 i = 0;
+                    while( it != en )
+                    {
+                        size_t elementIdx = VulkanVaoManager::getAttributeIndexFor( it->mSemantic );
+                        if( it->mSemantic == VES_TEXTURE_COORDINATES )
+                        {
+                            elementIdx += numUVs;
+                            ++numUVs;
+                        }
+                        // vertexDescriptor.attributes[elementIdx].format = VulkanMappings::get(
+                        // it->mType ); vertexDescriptor.attributes[elementIdx].bufferIndex = bufferIdx;
+                        // vertexDescriptor.attributes[elementIdx].offset = accumOffset;
+
+                        locationMap[elementIdx]->format = VulkanMappings::get( it->mType );
+                        locationMap[elementIdx]->binding = bufferIdx;
+                        locationMap[elementIdx]->offset = accumOffset;
+
+                        accumOffset += v1::VertexElement::getTypeSize( it->mType );
+                        ++i;
+                        ++it;
+                    }
+                    VkVertexInputBindingDescription bindingDesc;
+                    bindingDesc.binding = bufferIdx;
+                    bindingDesc.stride = accumOffset;
+                    bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+                    bindingDescriptions.push_back( bindingDesc );
+
+                    ++itor;
+                }
+
+                VkVertexInputAttributeDescription drawIdAttributeDescription;
+                drawIdAttributeDescription.offset = 0;
+                drawIdAttributeDescription.location = 15;
+                drawIdAttributeDescription.binding = 15;
+                drawIdAttributeDescription.format = VK_FORMAT_R32_UINT;
+                attributeDescriptions.push_back( drawIdAttributeDescription );
+
+                VkVertexInputBindingDescription drawIdBindingDescription;
+                drawIdBindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
+                drawIdBindingDescription.binding = 15;
+                drawIdBindingDescription.stride = 4;
+                bindingDescriptions.push_back( drawIdBindingDescription );
+
+                // vertexDescriptor.attributes[15].format = MTLVertexFormatUInt;
+                // vertexDescriptor.attributes[15].bufferIndex = 15;
+                // vertexDescriptor.attributes[15].offset = 0;
+                //
+                // vertexDescriptor.layouts[15].stride = 4;
+                // vertexDescriptor.layouts[15].stepFunction = VK_VERTEX_INPUT_RATE_INSTANCE;
+            }
+
+            vertexFormatCi.vertexBindingDescriptionCount =
+                static_cast<uint32_t>( bindingDescriptions.size() );
+            vertexFormatCi.vertexAttributeDescriptionCount =
+                static_cast<uint32_t>( attributeDescriptions.size() );
+            vertexFormatCi.pVertexBindingDescriptions = bindingDescriptions.data();
+            vertexFormatCi.pVertexAttributeDescriptions = attributeDescriptions.data();
+        }
 
         VkPipelineInputAssemblyStateCreateInfo inputAssemblyCi;
         makeVkStruct( inputAssemblyCi, VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO );
@@ -923,7 +2215,7 @@ namespace Ogre
         makeVkStruct( rasterState, VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO );
         rasterState.polygonMode = VulkanMappings::get( newPso->macroblock->mPolygonMode );
         rasterState.cullMode = VulkanMappings::get( newPso->macroblock->mCullMode );
-        rasterState.frontFace = VK_FRONT_FACE_CLOCKWISE;
+        rasterState.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
         rasterState.depthBiasEnable = newPso->macroblock->mDepthBiasConstant != 0.0f;
         rasterState.depthBiasConstantFactor = newPso->macroblock->mDepthBiasConstant;
         rasterState.depthBiasClamp = 0.0f;
@@ -1064,19 +2356,385 @@ namespace Ogre
                                                      &pipeline, 0, &vulkanPso );
         checkVkResult( result, "vkCreateGraphicsPipelines" );
 
-        newPso->rsData = vulkanPso;
+        VulkanHlmsPso *pso = new VulkanHlmsPso( vulkanPso, vertexShader, pixelShader,
+                                                descriptorLayoutBindingSets, sets, layout );
+        // pso->pso = vulkanPso;
+        // pso->vertexShader = vertexShader;
+        // pso->pixelShader = pixelShader;
+        // pso->descriptorLayoutBindingSets = descriptorLayoutBindingSets;
+        // pso->descriptorSets = sets;
+
+        newPso->rsData = pso;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )
     {
         assert( pso->rsData );
 
+        VulkanHlmsPso *vulkanPso = static_cast<VulkanHlmsPso *>( pso->rsData );
+
         //        removeDepthStencilState( pso );
 
-        //        MetalHlmsPso *metalPso = reinterpret_cast<MetalHlmsPso *>( pso->rsData );
-        //        delete metalPso;
+        vkDestroyPipeline( mActiveDevice->mDevice, reinterpret_cast<VkPipeline>( vulkanPso->pso ), 0 );
 
-        vkDestroyPipeline( mActiveDevice->mDevice, reinterpret_cast<VkPipeline>( pso->rsData ), 0 );
+        delete vulkanPso;
         pso->rsData = 0;
+    }
+
+    void VulkanRenderSystem::_hlmsMacroblockCreated( HlmsMacroblock *newBlock )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " _hlmsMacroblockCreated " ) );
+        }
+    }
+
+    void VulkanRenderSystem::_hlmsMacroblockDestroyed( HlmsMacroblock *block ) {}
+
+    void VulkanRenderSystem::_hlmsBlendblockCreated( HlmsBlendblock *newBlock )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " _hlmsBlendblockCreated " ) );
+        }
+    }
+
+    void VulkanRenderSystem::_hlmsBlendblockDestroyed( HlmsBlendblock *block ) {}
+
+    void VulkanRenderSystem::_hlmsSamplerblockCreated( HlmsSamplerblock *newBlock )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " _hlmsSamplerblockCreated " ) );
+        }
+
+        VkSamplerCreateInfo samplerDescriptor;
+        makeVkStruct( samplerDescriptor, VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
+        samplerDescriptor.minFilter = VulkanMappings::get( newBlock->mMinFilter );
+        samplerDescriptor.magFilter = VulkanMappings::get( newBlock->mMagFilter );
+        samplerDescriptor.mipmapMode = VulkanMappings::getMipFilter( newBlock->mMipFilter );
+        samplerDescriptor.mipLodBias = newBlock->mMipLodBias;
+        samplerDescriptor.anisotropyEnable = newBlock->mMaxAnisotropy > 0.0f ? VK_TRUE : VK_FALSE;
+        float maxAllowedAnisotropy = mActiveDevice->mDeviceProperties.limits.maxSamplerAnisotropy;
+        samplerDescriptor.maxAnisotropy = newBlock->mMaxAnisotropy > maxAllowedAnisotropy
+                                              ? maxAllowedAnisotropy
+                                              : newBlock->mMaxAnisotropy;
+        samplerDescriptor.addressModeU = VulkanMappings::get( newBlock->mU );
+        samplerDescriptor.addressModeV = VulkanMappings::get( newBlock->mV );
+        samplerDescriptor.addressModeW = VulkanMappings::get( newBlock->mW );
+        samplerDescriptor.unnormalizedCoordinates = VK_FALSE;
+        samplerDescriptor.minLod = newBlock->mMinLod;
+        samplerDescriptor.maxLod = newBlock->mMaxLod;
+
+        if( newBlock->mCompareFunction != NUM_COMPARE_FUNCTIONS )
+        {
+            samplerDescriptor.compareEnable = VK_TRUE;
+            samplerDescriptor.compareOp = VulkanMappings::get( newBlock->mCompareFunction );
+        }
+
+        VkSampler textureSampler;
+        VkResult result = vkCreateSampler( mDevice->mDevice, &samplerDescriptor, 0, &textureSampler );
+        checkVkResult( result, "vkCreateSampler" );
+
+        newBlock->mRsData = textureSampler;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_hlmsSamplerblockDestroyed( HlmsSamplerblock *block )
+    {
+        assert( block->mRsData );
+        VkSampler textureSampler = static_cast<VkSampler>( block->mRsData );
+        vkDestroySampler( mDevice->mDevice, textureSampler, 0 );
+    }
+    //-------------------------------------------------------------------------
+    template <typename TDescriptorSetTexture, typename TTexSlot, typename TBufferPacked>
+    void VulkanRenderSystem::_descriptorSetTextureCreated( TDescriptorSetTexture *newSet,
+                                                           const FastArray<TTexSlot> &texContainer,
+                                                           uint16 *shaderTypeTexCount )
+    {
+        VulkanDescriptorSetTexture *vulkanSet = new VulkanDescriptorSetTexture();
+
+        vulkanSet->numTextureViews = 0;
+
+        size_t numBuffers = 0;
+        size_t numTextures = 0;
+
+        size_t numBufferRanges = 0;
+        size_t numTextureRanges = 0;
+
+        bool needsNewTexRange = true;
+        bool needsNewBufferRange = true;
+
+        ShaderType shaderType = VertexShader;
+        size_t numProcessedSlots = 0;
+
+        typename FastArray<TTexSlot>::const_iterator itor = texContainer.begin();
+        typename FastArray<TTexSlot>::const_iterator end = texContainer.end();
+
+        while( itor != end )
+        {
+            if( shaderTypeTexCount )
+            {
+                // We need to break the ranges if we crossed stages
+                while( shaderType <= PixelShader && numProcessedSlots >= shaderTypeTexCount[shaderType] )
+                {
+                    numProcessedSlots = 0;
+                    shaderType = static_cast<ShaderType>( shaderType + 1u );
+                    needsNewTexRange = true;
+                    needsNewBufferRange = true;
+                }
+            }
+
+            if( itor->isTexture() )
+            {
+                needsNewBufferRange = true;
+                if( needsNewTexRange )
+                {
+                    ++numTextureRanges;
+                    needsNewTexRange = false;
+                }
+
+                const typename TDescriptorSetTexture::TextureSlot &texSlot = itor->getTexture();
+                if( texSlot.needsDifferentView() )
+                    ++vulkanSet->numTextureViews;
+                ++numTextures;
+            }
+            else
+            {
+                needsNewTexRange = true;
+                if( needsNewBufferRange )
+                {
+                    ++numBufferRanges;
+                    needsNewBufferRange = false;
+                }
+
+                ++numBuffers;
+            }
+            ++numProcessedSlots;
+            ++itor;
+        }
+
+        // Create two contiguous arrays of texture and buffers, but we'll split
+        // it into regions as a buffer could be in the middle of two textures.
+        VkImageView *textures = 0;
+        VkBuffer *buffers = 0;
+        VkDeviceSize *offsets = 0;
+
+        if( vulkanSet->numTextureViews > 0 )
+        {
+            // Create a third array to hold the strong reference
+            // to the reinterpreted versions of textures.
+            // Must be init to 0 before ARC sees it.
+            void *textureViews = OGRE_MALLOC_SIMD( sizeof( VkImageView * ) * vulkanSet->numTextureViews,
+                                                   MEMCATEGORY_RENDERSYS );
+            memset( textureViews, 0, sizeof( VkImageView * ) * vulkanSet->numTextureViews );
+            vulkanSet->textureViews = (VkImageView *)textureViews;
+        }
+        if( numTextures > 0 )
+        {
+            textures = (VkImageView *)OGRE_MALLOC_SIMD( sizeof( VkImageView * ) * numTextures,
+                                                        MEMCATEGORY_RENDERSYS );
+        }
+        if( numBuffers > 0 )
+        {
+            buffers =
+                (VkBuffer *)OGRE_MALLOC_SIMD( sizeof( VkBuffer * ) * numBuffers, MEMCATEGORY_RENDERSYS );
+            offsets = (VkDeviceSize *)OGRE_MALLOC_SIMD( sizeof( VkDeviceSize ) * numBuffers,
+                                                        MEMCATEGORY_RENDERSYS );
+        }
+
+        vulkanSet->textures.reserve( numTextureRanges );
+        vulkanSet->buffers.reserve( numBufferRanges );
+
+        needsNewTexRange = true;
+        needsNewBufferRange = true;
+
+        shaderType = VertexShader;
+        numProcessedSlots = 0;
+
+        size_t texViewIndex = 0;
+
+        itor = texContainer.begin();
+        end = texContainer.end();
+
+        while( itor != end )
+        {
+            if( shaderTypeTexCount )
+            {
+                // We need to break the ranges if we crossed stages
+                while( shaderType <= PixelShader && numProcessedSlots >= shaderTypeTexCount[shaderType] )
+                {
+                    numProcessedSlots = 0;
+                    shaderType = static_cast<ShaderType>( shaderType + 1u );
+                    needsNewTexRange = true;
+                    needsNewBufferRange = true;
+                }
+            }
+
+            if( itor->isTexture() )
+            {
+                needsNewBufferRange = true;
+                if( needsNewTexRange )
+                {
+                    vulkanSet->textures.push_back( VulkanTexRegion() );
+                    VulkanTexRegion &texRegion = vulkanSet->textures.back();
+                    texRegion.textures = textures;
+                    texRegion.shaderType = shaderType;
+                    texRegion.range.location = itor - texContainer.begin();
+                    texRegion.range.length = 0;
+                    needsNewTexRange = false;
+                }
+
+                const typename TDescriptorSetTexture::TextureSlot &texSlot = itor->getTexture();
+
+                assert( dynamic_cast<VulkanTextureGpu *>( texSlot.texture ) );
+                VulkanTextureGpu *vulkanTex = static_cast<VulkanTextureGpu *>( texSlot.texture );
+                VkImageView textureHandle = vulkanTex->getDisplayTextureName();
+
+                if( texSlot.needsDifferentView() )
+                {
+                    vulkanSet->textureViews[texViewIndex] = vulkanTex->getView( texSlot );
+                    textureHandle = vulkanSet->textureViews[texViewIndex];
+                    ++texViewIndex;
+                }
+
+                VulkanTexRegion &texRegion = vulkanSet->textures.back();
+                *textures = textureHandle;
+                ++texRegion.range.length;
+
+                ++textures;
+            }
+            else
+            {
+                needsNewTexRange = true;
+                if( needsNewBufferRange )
+                {
+                    vulkanSet->buffers.push_back( VulkanBufferRegion() );
+                    VulkanBufferRegion &bufferRegion = vulkanSet->buffers.back();
+                    bufferRegion.buffers = buffers;
+                    bufferRegion.offsets = offsets;
+                    bufferRegion.shaderType = shaderType;
+                    bufferRegion.range.location = itor - texContainer.begin();
+                    bufferRegion.range.length = VK_WHOLE_SIZE;
+                    needsNewBufferRange = false;
+                }
+
+                const typename TDescriptorSetTexture::BufferSlot &bufferSlot = itor->getBuffer();
+
+                assert( dynamic_cast<TBufferPacked *>( bufferSlot.buffer ) );
+                TBufferPacked *vulkanBuf = static_cast<TBufferPacked *>( bufferSlot.buffer );
+
+                VulkanBufferRegion &bufferRegion = vulkanSet->buffers.back();
+                vulkanBuf->bindBufferForDescriptor( buffers, offsets, bufferSlot.offset );
+                ++bufferRegion.range.length;
+
+                ++buffers;
+                ++offsets;
+            }
+            ++numProcessedSlots;
+            ++itor;
+        }
+
+        newSet->mRsData = vulkanSet;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::destroyVulkanDescriptorSetTexture( VulkanDescriptorSetTexture *vulkanSet )
+    {
+        const size_t numTextureViews = vulkanSet->numTextureViews;
+        for( size_t i = 0; i < numTextureViews; ++i )
+            vulkanSet->textureViews[i] = 0;  // Let ARC free these pointers
+
+        if( numTextureViews )
+        {
+            OGRE_FREE_SIMD( vulkanSet->textureViews, MEMCATEGORY_RENDERSYS );
+            vulkanSet->textureViews = 0;
+        }
+
+        if( !vulkanSet->textures.empty() )
+        {
+            VulkanTexRegion &texRegion = vulkanSet->textures.front();
+            OGRE_FREE_SIMD( texRegion.textures, MEMCATEGORY_RENDERSYS );
+        }
+
+        if( !vulkanSet->buffers.empty() )
+        {
+            VulkanBufferRegion &bufferRegion = vulkanSet->buffers.front();
+            OGRE_FREE_SIMD( bufferRegion.buffers, MEMCATEGORY_RENDERSYS );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_descriptorSetTextureCreated( DescriptorSetTexture *newSet )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " _descriptorSetTextureCreated " ) );
+        }
+    }
+
+    void VulkanRenderSystem::_descriptorSetTextureDestroyed( DescriptorSetTexture *set ) {}
+
+    void VulkanRenderSystem::_descriptorSetTexture2Created( DescriptorSetTexture2 *newSet )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " _descriptorSetTexture2Created " ) );
+        }
+
+        _descriptorSetTextureCreated<DescriptorSetTexture2, DescriptorSetTexture2::Slot,
+                                     VulkanTexBufferPacked>( newSet, newSet->mTextures,
+                                                             newSet->mShaderTypeTexCount );
+    }
+
+    void VulkanRenderSystem::_descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set )
+    {
+        assert( set->mRsData );
+
+        VulkanDescriptorSetTexture *metalSet =
+            reinterpret_cast<VulkanDescriptorSetTexture *>( set->mRsData );
+
+        destroyVulkanDescriptorSetTexture( metalSet );
+        delete metalSet;
+
+        set->mRsData = 0;
+    }
+
+    void VulkanRenderSystem::_descriptorSetSamplerCreated( DescriptorSetSampler *newSet )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " _descriptorSetSamplerCreated " ) );
+        }
+    }
+
+    void VulkanRenderSystem::_descriptorSetSamplerDestroyed( DescriptorSetSampler *set ) {}
+
+    void VulkanRenderSystem::_descriptorSetUavCreated( DescriptorSetUav *newSet )
+    {
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            defaultLog->logMessage( String( " _descriptorSetUavCreated " ) );
+        }
+
+        _descriptorSetTextureCreated<DescriptorSetUav, DescriptorSetUav::Slot, VulkanUavBufferPacked>(
+            newSet, newSet->mUavs, 0 );
+    }
+
+    void VulkanRenderSystem::_descriptorSetUavDestroyed( DescriptorSetUav *set )
+    {
+        assert( set->mRsData );
+
+        VulkanDescriptorSetTexture *metalSet =
+            reinterpret_cast<VulkanDescriptorSetTexture *>( set->mRsData );
+
+        destroyVulkanDescriptorSetTexture( metalSet );
+        delete metalSet;
+
+        set->mRsData = 0;
     }
 }  // namespace Ogre

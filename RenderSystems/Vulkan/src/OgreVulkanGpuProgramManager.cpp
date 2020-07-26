@@ -75,7 +75,7 @@ namespace Ogre
         return false;
     }
 
-    bool operator<( const VkDescriptorSetLayoutArray &a, const VkDescriptorSetLayoutArray &b )
+    bool operator<( const DescriptorSetLayoutArray &a, const DescriptorSetLayoutArray &b )
     {
         const size_t aSize = b.size();
         const size_t bSize = b.size();
@@ -146,7 +146,7 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    VkPipelineLayout VulkanGpuProgramManager::getCachedSets( const VkDescriptorSetLayoutArray &vkSets )
+    VkPipelineLayout VulkanGpuProgramManager::getCachedSets( const DescriptorSetLayoutArray &vkSets )
     {
         VkPipelineLayout retVal = 0;
 

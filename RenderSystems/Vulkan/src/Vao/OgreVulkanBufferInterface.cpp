@@ -85,10 +85,13 @@ namespace Ogre
                             mBuffer->_getInternalNumElements() * dynamicCurrentFrame;
             size_t length = elementCount;
 
-            // Persistent buffers map the *whole* assigned buffer,
-            // we later care for the offsets and lengths
-            offset = mBuffer->mInternalBufferStart;
-            length = mBuffer->_getInternalNumElements() * vaoManager->getDynamicBufferMultiplier();
+            if( mBuffer->mBufferType >= BT_DYNAMIC_PERSISTENT )
+            {
+                // Persistent buffers map the *whole* assigned buffer,
+                // we later care for the offsets and lengths
+                offset = mBuffer->mInternalBufferStart;
+                length = mBuffer->_getInternalNumElements() * vaoManager->getDynamicBufferMultiplier();
+            }
 
             mMappedPtr = mDynamicBuffer->map( offset * bytesPerElement,  //
                                               length * bytesPerElement,  //

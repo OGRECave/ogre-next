@@ -39,10 +39,44 @@ namespace Ogre
                                                       VaoManager *vaoManager,
                                                       BufferInterface *bufferInterface ) :
         ConstBufferPacked( internalBufferStartBytes, numElements, bytesPerElement, numElementsPadding,
-                           bufferType, initialData, keepAsShadow, vaoManager, bufferInterface )
+                           bufferType, initialData, keepAsShadow, vaoManager, bufferInterface ),
+        mCurrentBinding( -1 ),
+        mDirty( false )
     {
     }
     //-----------------------------------------------------------------------------------
     VulkanConstBufferPacked::~VulkanConstBufferPacked() {}
+
+    void VulkanConstBufferPacked::bindBufferVS( uint16 slot )
+    {
+        bindBuffer( slot, 0 );
+    }
+
+    void VulkanConstBufferPacked::bindBufferPS( uint16 slot )
+    {
+        bindBuffer( slot, 0 );
+    }
+
+    void VulkanConstBufferPacked::bindBufferGS( uint16 slot ) {}
+    void VulkanConstBufferPacked::bindBufferHS( uint16 slot ) {}
+    void VulkanConstBufferPacked::bindBufferDS( uint16 slot ) {}
+
+    void VulkanConstBufferPacked::bindBufferCS( uint16 slot )
+    {
+        bindBuffer( slot, 0 );
+    }    
+
+    void VulkanConstBufferPacked::VulkanConstBufferPacked::bindBuffer( uint16 slot,
+                                                                            uint32 offsetBytes )
+    {
+        assert( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
+        VulkanBufferInterface *bufferInterface = static_cast<VulkanBufferInterface *>( mBufferInterface );
+        mBufferInfo.buffer = bufferInterface->getVboName();
+        mBufferInfo.offset = mFinalBufferStart * mBytesPerElement + offsetBytes;
+        mBufferInfo.range = mNumElements * mBytesPerElement;
+        mCurrentBinding = slot + OGRE_VULKAN_CONST_SLOT_START;
+        mDirty = true;
+    }
+
     //-----------------------------------------------------------------------------------
 }  // namespace Ogre

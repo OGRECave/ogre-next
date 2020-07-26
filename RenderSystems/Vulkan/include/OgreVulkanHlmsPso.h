@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2017 Torus Knot Software Ltd
+Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,47 +25,55 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+#ifndef _OgreVulkanHlmsPso_H_
+#define _OgreVulkanHlmsPso_H_
 
-#ifndef _OgreVulkanStagingTexture_H_
-#define _OgreVulkanStagingTexture_H_
+#include <vulkan/vulkan.h>
 
 #include "OgreVulkanPrerequisites.h"
 
-#include "OgreStagingTextureBufferImpl.h"
+#include "OgreVulkanDescriptors.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
-    class _OgreVulkanExport VulkanStagingTexture : public StagingTextureBufferImpl
+    /** \addtogroup Core
+     *  @{
+     */
+    /** \addtogroup Resources
+     *  @{
+     */
+
+    /// @See HlmsPso
+    class _OgreVulkanExport VulkanHlmsPso
     {
-        VkBuffer mVboName;
-        VulkanDynamicBuffer *mDynamicBuffer;
-        size_t mUnmapTicket;
-
-        void *mMappedPtr;
-        void *mLastMappedPtr;
-
-        virtual bool belongsToUs( const TextureBox &box );
-        virtual void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr( void );
-
     public:
-        VulkanStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, size_t size,
-                              VkBuffer vboName, VulkanDynamicBuffer *dynamicBuffer );
-        virtual ~VulkanStagingTexture();
+        VkPipeline pso;
+        // id<MTLDepthStencilState> depthStencilState;
+        // MTLCullMode cullMode;
 
-        void _unmapBuffer( void );
+        VulkanProgram *vertexShader;
+        VulkanProgram *pixelShader;
 
-        virtual void startMapRegion( void );
-        virtual void stopMapRegion( void );
+        DescriptorSetLayoutBindingArray descriptorLayoutBindingSets;
+        DescriptorSetLayoutArray descriptorSets;
 
-        virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
-                             const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
-                             bool skipSysRamCopy = false );
+        //std::vector<VulkanDescriptorSetLayout> descriptorLayoutSets;
 
-        VulkanDynamicBuffer *_getDynamicBuffer( void ) { return mDynamicBuffer; }
-        void _resetDynamicBuffer( void ) { mDynamicBuffer = 0; }
+        VkPipelineLayout pipelineLayout;
+
+
+        VulkanHlmsPso( VkPipeline pso, VulkanProgram *vertexShader, VulkanProgram *pixelShader,
+                       const DescriptorSetLayoutBindingArray &descriptorLayoutBindingSets,
+                       const DescriptorSetLayoutArray &descriptorSets, VkPipelineLayout layout );
+
+        ~VulkanHlmsPso();
     };
+
+    /** @} */
+    /** @} */
+
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"

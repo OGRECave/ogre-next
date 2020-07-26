@@ -52,7 +52,7 @@ namespace Ogre
         mVaoManager( 0 ),
         mRenderSystem( renderSystem )
     {
-        memset( &mMemoryProperties, 0, sizeof( mMemoryProperties ) );
+        memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
         createPhysicalDevice( deviceIdx );
     }
     //-------------------------------------------------------------------------
@@ -176,7 +176,8 @@ namespace Ogre
         checkVkResult( result, "vkEnumeratePhysicalDevices" );
         mPhysicalDevice = pd[0];
 
-        vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mMemoryProperties );
+        vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
+        vkGetPhysicalDeviceFeatures( mPhysicalDevice, &mDeviceFeatures );
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::findGraphicsQueue( FastArray<uint32> &inOutUsedQueueCount )
@@ -283,6 +284,7 @@ namespace Ogre
         }
 
         extensions.push_back( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
+        extensions.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
 
         VkDeviceCreateInfo createInfo;
         makeVkStruct( createInfo, VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO );
@@ -293,8 +295,12 @@ namespace Ogre
         createInfo.queueCreateInfoCount = static_cast<uint32>( queueCreateInfo.size() );
         createInfo.pQueueCreateInfos = &queueCreateInfo[0];
 
+        createInfo.pEnabledFeatures = &mDeviceFeatures;
+
         VkResult result = vkCreateDevice( mPhysicalDevice, &createInfo, NULL, &mDevice );
         checkVkResult( result, "vkCreateDevice" );
+
+        initUtils( mDevice );
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::initQueues( void )
@@ -333,7 +339,12 @@ namespace Ogre
         mGraphicsQueue.commitAndNextCommandBuffer( endingFrame );
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::stall( void ) { vkDeviceWaitIdle( mDevice ); }
+    void VulkanDevice::stall( void )
+    {
+        vkDeviceWaitIdle( mDevice );
+
+        mRenderSystem->_notifyDeviceStalled();
+    }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

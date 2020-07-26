@@ -29,26 +29,164 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanStagingBuffer.h"
 
 #include "Vao/OgreVulkanBufferInterface.h"
+#include "Vao/OgreVulkanDynamicBuffer.h"
 #include "Vao/OgreVulkanVaoManager.h"
 
 #include "OgreStringConverter.h"
 
+#include "OgreVulkanDevice.h"
+#include "OgreVulkanHardwareBufferCommon.h"
+#include "OgreVulkanQueue.h"
+#include "OgreVulkanUtils.h"
+
+#define TODO_deallocate_StagingBufferVbo  // Cannot be destructor
+
 namespace Ogre
 {
     VulkanStagingBuffer::VulkanStagingBuffer( size_t internalBufferStart, size_t sizeBytes,
-                                              VaoManager *vaoManager, bool uploadOnly ) :
+                                              VaoManager *vaoManager, bool uploadOnly, VkBuffer vboName,
+                                              VulkanDynamicBuffer *dynamicBuffer ) :
         StagingBuffer( internalBufferStart, sizeBytes, vaoManager, uploadOnly ),
         mMappedPtr( 0 ),
-        mVulkanDataPtr( 0 )
+        mVboName( vboName ),
+        mDynamicBuffer( dynamicBuffer ),
+        mUnmapTicket( std::numeric_limits<size_t>::max() ),
+        mFenceThreshold( sizeBytes / 4 ),
+        mUnfencedBytes( 0 )
     {
-        mVulkanDataPtr =
-            reinterpret_cast<uint8 *>( OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RENDERSYS ) );
+        TODO_deallocate_StagingBufferVbo;
     }
     //-----------------------------------------------------------------------------------
     VulkanStagingBuffer::~VulkanStagingBuffer()
     {
-        OGRE_FREE_SIMD( mVulkanDataPtr, MEMCATEGORY_RENDERSYS );
-        mVulkanDataPtr = 0;
+        if( !mFences.empty() )
+            wait( mFences.back().fenceName );
+
+        deleteFences( mFences.begin(), mFences.end() );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanStagingBuffer::addFence( size_t from, size_t to, bool forceFence )
+    {
+        assert( to <= mSizeBytes );
+
+        VulkanFence unfencedHazard( from, to );
+
+        mUnfencedHazards.push_back( unfencedHazard );
+
+        assert( from <= to );
+
+        mUnfencedBytes += to - from;
+
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        VulkanDevice *device = vaoManager->getDevice();
+
+        if( mUnfencedBytes >= mFenceThreshold || forceFence )
+        {
+            VulkanFenceVec::const_iterator itor = mUnfencedHazards.begin();
+            VulkanFenceVec::const_iterator endt = mUnfencedHazards.end();
+
+            size_t startRange = itor->start;
+            size_t endRange = itor->end;
+
+            while( itor != endt )
+            {
+                if( endRange <= itor->end )
+                {
+                    // Keep growing (merging) the fences into one fence
+                    endRange = itor->end;
+                }
+                else
+                {
+                    // We wrapped back to 0. Can't keep merging. Make a fence.
+                    VulkanFence fence( startRange, endRange );
+                    fence.fenceName = device->mGraphicsQueue.getCurrentFence();
+                    mFences.push_back( fence );
+
+                    startRange = itor->start;
+                    endRange = itor->end;
+                }
+
+                ++itor;
+            }
+
+            // Make the last fence.
+            VulkanFence fence( startRange, endRange );
+            fence.fenceName = device->mGraphicsQueue.getCurrentFence();
+
+            // Flush the device for accuracy in the fences.
+            device->commitAndNextCommandBuffer( false );
+            mFences.push_back( fence );
+
+            mUnfencedHazards.clear();
+            mUnfencedBytes = 0;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanStagingBuffer::deleteFences( VulkanFenceVec::iterator itor, VulkanFenceVec::iterator end )
+    {
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        VulkanDevice *device = vaoManager->getDevice();
+        while( itor != end )
+        {
+            vkDestroyFence( device->mDevice, itor->fenceName, 0 );
+            itor->fenceName = 0;
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanStagingBuffer::wait( VkFence syncObj )
+    {
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        VulkanDevice *device = vaoManager->getDevice();
+
+        VkResult result = vkWaitForFences( device->mDevice, 1, &syncObj, true,
+                                           UINT64_MAX );  // You can't wait forever in Vulkan?!?
+        checkVkResult( result, "VulkanStagingBuffer::wait" );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanStagingBuffer::waitIfNeeded()
+    {
+        assert( mUploadOnly );
+
+        size_t mappingStart = mMappingStart;
+        size_t sizeBytes = mMappingCount;
+
+        if( mappingStart + sizeBytes > mSizeBytes )
+        {
+            if( !mUnfencedHazards.empty() )
+            {
+                // mUnfencedHazards will be cleared in addFence
+                addFence( mUnfencedHazards.front().start, mSizeBytes - 1, true );
+            }
+
+            // Wraps around the ring buffer. Sadly we can't do advanced virtual memory
+            // manipulation to keep the virtual space contiguous, so we'll have to reset to 0
+            mappingStart = 0;
+        }
+
+        VulkanFence regionToMap( mappingStart, mappingStart + sizeBytes );
+
+        VulkanFenceVec::iterator itor = mFences.begin();
+        VulkanFenceVec::iterator endt = mFences.end();
+
+        VulkanFenceVec::iterator lastWaitableFence = endt;
+
+        while( itor != endt )
+        {
+            if( regionToMap.overlaps( *itor ) )
+                lastWaitableFence = itor;
+
+            ++itor;
+        }
+
+        if( lastWaitableFence != endt )
+        {
+            wait( lastWaitableFence->fenceName );
+            deleteFences( mFences.begin(), lastWaitableFence + 1 );
+            mFences.erase( mFences.begin(), lastWaitableFence + 1 );
+        }
+
+        mMappingStart = mappingStart;
     }
     //-----------------------------------------------------------------------------------
     void *VulkanStagingBuffer::mapImpl( size_t sizeBytes )
@@ -58,13 +196,27 @@ namespace Ogre
         mMappingStart = 0;
         mMappingCount = sizeBytes;
 
-        mMappedPtr = mVulkanDataPtr + mInternalBufferStart + mMappingStart;
+        OGRE_ASSERT_MEDIUM( mUnmapTicket == std::numeric_limits<size_t>::max() &&
+                            "VulkanStagingBuffer still mapped!" );
+        mMappedPtr =
+            mDynamicBuffer->map( mInternalBufferStart + mMappingStart, sizeBytes, mUnmapTicket );
 
         return mMappedPtr;
     }
     //-----------------------------------------------------------------------------------
     void VulkanStagingBuffer::unmapImpl( const Destination *destinations, size_t numDestinations )
     {
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        VulkanDevice *device = vaoManager->getDevice();
+
+        VkCommandBuffer cmdBuffer = device->mGraphicsQueue.mCurrentCmdBuffer;
+
+        OGRE_ASSERT_MEDIUM( mUnmapTicket != std::numeric_limits<size_t>::max() &&
+                            "VulkanStagingBuffer already unmapped!" );
+
+        mDynamicBuffer->flush( mUnmapTicket, mInternalBufferStart + mMappingStart, mMappingCount );
+        mDynamicBuffer->unmap( mUnmapTicket );
+        mUnmapTicket = std::numeric_limits<size_t>::max();
         mMappedPtr = 0;
 
         for( size_t i = 0; i < numDestinations; ++i )
@@ -76,13 +228,16 @@ namespace Ogre
 
             assert( dst.destination->getBufferType() == BT_DEFAULT );
 
+            device->mGraphicsQueue.getCopyEncoder( dst.destination, 0, false );
+
             size_t dstOffset = dst.dstOffset + dst.destination->_getInternalBufferStart() *
                                                    dst.destination->getBytesPerElement();
 
-            uint8 *dstPtr = bufferInterface->getVulkanDataPtr();
-
-            memcpy( dstPtr + dstOffset,
-                    mVulkanDataPtr + mInternalBufferStart + mMappingStart + dst.srcOffset, dst.length );
+            VkBufferCopy region;
+            region.srcOffset = mInternalBufferStart + mMappingStart + dst.srcOffset;
+            region.dstOffset = dstOffset;
+            region.size = dst.length;
+            vkCmdCopyBuffer( cmdBuffer, mVboName, bufferInterface->getVboName(), 1u, &region );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -100,7 +255,7 @@ namespace Ogre
                                                 size_t srcLength )
     {
         size_t freeRegionOffset = getFreeDownloadRegion( srcLength );
-        size_t errorCode = -1;  // dodge comile error about signed/unsigned compare
+        size_t errorCode = (size_t)-1;
 
         if( freeRegionOffset == errorCode )
         {
@@ -119,13 +274,116 @@ namespace Ogre
         VulkanBufferInterface *bufferInterface =
             static_cast<VulkanBufferInterface *>( source->getBufferInterface() );
 
-        uint8 *srcPtr = bufferInterface->getVulkanDataPtr();
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        VulkanDevice *device = vaoManager->getDevice();
 
-        memcpy( mVulkanDataPtr + mInternalBufferStart + freeRegionOffset,
-                srcPtr + source->_getFinalBufferStart() * source->getBytesPerElement() + srcOffset,
-                srcLength );
+        device->mGraphicsQueue.getCopyEncoder( source, 0, true );
+
+        VkBufferCopy region;
+        region.srcOffset = source->_getFinalBufferStart() * source->getBytesPerElement() + srcOffset;
+        region.dstOffset = mInternalBufferStart + freeRegionOffset;
+        region.size = srcLength;
+        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, mVboName,
+                         bufferInterface->getVboName(), 1u, &region );
 
         return freeRegionOffset;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanStagingBuffer::_unmapToV1( v1::VulkanHardwareBufferCommon *hwBuffer, size_t lockStart,
+                                          size_t lockSize )
+    {
+        assert( mUploadOnly );
+
+        if( mMappingState != MS_MAPPED )
+        {
+            // This stuff would normally be done in StagingBuffer::unmap
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Unmapping an unmapped buffer!",
+                         "VulkanStagingBuffer::unmap" );
+        }
+
+        mDynamicBuffer->flush( mUnmapTicket, mInternalBufferStart + mMappingStart, mMappingCount );
+        mDynamicBuffer->unmap( mUnmapTicket );
+        mUnmapTicket = std::numeric_limits<size_t>::max();
+        mMappedPtr = 0;
+
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        VulkanDevice *device = vaoManager->getDevice();
+
+        device->mGraphicsQueue.getCopyEncoderV1Buffer( false );
+
+        VkBufferCopy region;
+        region.srcOffset = mInternalBufferStart + mMappingStart;
+        region.dstOffset = lockStart;
+        region.size = alignToNextMultiple( lockSize, 4u );
+        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, mVboName,
+                         hwBuffer->getBufferNameForGpuWrite(), 1u, &region );
+
+        if( mUploadOnly )
+        {
+            // Add fence to this region (or at least, track the hazard).
+            addFence( mMappingStart, mMappingStart + mMappingCount - 1, false );
+        }
+
+        // This stuff would normally be done in StagingBuffer::unmap
+        mMappingState = MS_UNMAPPED;
+        mMappingStart += mMappingCount;
+
+        if( mMappingStart >= mSizeBytes )
+            mMappingStart = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    size_t VulkanStagingBuffer::_asyncDownloadV1( v1::VulkanHardwareBufferCommon *source,
+                                                  size_t srcOffset, size_t srcLength )
+    {
+        // Vulkan has alignment restrictions of 4 bytes for offset and size in copyFromBuffer
+        size_t freeRegionOffset = getFreeDownloadRegion( srcLength );
+
+        if( freeRegionOffset == ( size_t )( -1 ) )
+        {
+            OGRE_EXCEPT(
+                Exception::ERR_INVALIDPARAMS,
+                "Cannot download the request amount of " + StringConverter::toString( srcLength ) +
+                    " bytes to this staging buffer. "
+                    "Try another one (we're full of requests that haven't been read by CPU yet)",
+                "VulkanStagingBuffer::_asyncDownload" );
+        }
+
+        assert( !mUploadOnly );
+        assert( ( srcOffset + srcLength ) <= source->getSizeBytes() );
+
+        size_t extraOffset = 0;
+        if( srcOffset & 0x03 )
+        {
+            // Not multiple of 4. Backtrack to make it multiple of 4, then add this value
+            // to the return value so it gets correctly mapped in _mapForRead.
+            extraOffset = srcOffset & 0x03;
+            srcOffset -= extraOffset;
+        }
+
+        size_t srcOffsetStart = 0;
+
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        VulkanDevice *device = vaoManager->getDevice();
+
+        device->mGraphicsQueue.getCopyEncoderV1Buffer( true );
+
+        VkBuffer srcBuffer = source->getBufferName( srcOffsetStart );
+
+        VkBufferCopy region;
+        region.srcOffset = srcOffset + srcOffsetStart;
+        region.dstOffset = mInternalBufferStart + freeRegionOffset;
+        region.size = alignToNextMultiple( srcLength, 4u );
+        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, srcBuffer, mVboName, 1u, &region );
+
+        return freeRegionOffset + extraOffset;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanStagingBuffer::_notifyDeviceStalled()
+    {
+        deleteFences( mFences.begin(), mFences.end() );
+        mFences.clear();
+        mUnfencedHazards.clear();
+        mUnfencedBytes = 0;
     }
     //-----------------------------------------------------------------------------------
     const void *VulkanStagingBuffer::_mapForReadImpl( size_t offset, size_t sizeBytes )
@@ -135,7 +393,10 @@ namespace Ogre
         mMappingStart = offset;
         mMappingCount = sizeBytes;
 
-        mMappedPtr = mVulkanDataPtr + mInternalBufferStart + mMappingStart;
+        OGRE_ASSERT_MEDIUM( mUnmapTicket == std::numeric_limits<size_t>::max() &&
+                            "VulkanStagingBuffer::_mapForReadImpl still mapped!" );
+        mMappedPtr =
+            mDynamicBuffer->map( mInternalBufferStart + mMappingStart, mMappingCount, mUnmapTicket );
 
         // Put the mapped region back to our records as "available" for subsequent _asyncDownload
         _cancelDownload( offset, sizeBytes );

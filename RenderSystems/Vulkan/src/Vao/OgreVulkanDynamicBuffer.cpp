@@ -37,27 +37,15 @@ THE SOFTWARE.
 namespace Ogre
 {
     VulkanDynamicBuffer::VulkanDynamicBuffer( VkDeviceMemory deviceMemory, size_t vboSize,
-                                              VulkanVaoManager *vaoManager, BufferType persistentMethod,
+                                              const bool isCoherent, const bool hasReadAccess,
                                               VulkanDevice *device ) :
         mDeviceMemory( deviceMemory ),
         mVboSize( vboSize ),
         mMappedPtr( 0 ),
-        mPersistentMethod( persistentMethod ),
         mDevice( device ),
-        mNonCoherentMemory( false )
+        mCoherentMemory( isCoherent ),
+        mHasReadAccess( hasReadAccess )
     {
-        if( mPersistentMethod == BT_DYNAMIC_DEFAULT )
-            mPersistentMethod = BT_DYNAMIC_PERSISTENT;
-
-        if( !vaoManager->supportsCoherentMapping() &&
-            mPersistentMethod == BT_DYNAMIC_PERSISTENT_COHERENT )
-        {
-            mPersistentMethod = BT_DYNAMIC_PERSISTENT;
-        }
-        if( !vaoManager->supportsNonCoherentMapping() && mPersistentMethod == BT_DYNAMIC_PERSISTENT )
-            mPersistentMethod = BT_DYNAMIC_PERSISTENT_COHERENT;
-
-        mNonCoherentMemory = mPersistentMethod == BT_DYNAMIC_PERSISTENT;
     }
     //-----------------------------------------------------------------------------------
     VulkanDynamicBuffer::~VulkanDynamicBuffer() {}
@@ -94,21 +82,33 @@ namespace Ogre
 
         outTicket = addMappedRange( start, count );
 
+        if( !mCoherentMemory && mHasReadAccess )
+        {
+            VkMappedMemoryRange memRange;
+            makeVkStruct( memRange, VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE );
+            memRange.memory = mDeviceMemory;
+            memRange.offset = start;
+            memRange.size = alignMemory( count, mDevice->mDeviceProperties.limits.nonCoherentAtomSize );
+            VkResult result = vkInvalidateMappedMemoryRanges( mDevice->mDevice, 1u, &memRange );
+            checkVkResult( result, "vkInvalidateMappedMemoryRanges" );
+        }
+
         return static_cast<uint8 *>( mMappedPtr ) + start;
     }
     //-----------------------------------------------------------------------------------
     void VulkanDynamicBuffer::flush( size_t ticket, size_t start, size_t count )
     {
         assert( start <= mMappedRanges[ticket].count && start + count <= mMappedRanges[ticket].count );
-        if( mNonCoherentMemory )
+        if( !mCoherentMemory )
         {
             VkMappedMemoryRange mappedRange;
             // Not using makeVkStruct due to how frequent this function may get called
             mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
             mappedRange.pNext = 0;
             mappedRange.memory = mDeviceMemory;
-            mappedRange.offset = start;
-            mappedRange.size = count;
+            mappedRange.offset = mMappedRanges[ticket].start + start;
+            mappedRange.size =
+                alignMemory( count, mDevice->mDeviceProperties.limits.nonCoherentAtomSize );
             VkResult result = vkFlushMappedMemoryRanges( mDevice->mDevice, 1u, &mappedRange );
             checkVkResult( result, "vkFlushMappedMemoryRanges" );
         }

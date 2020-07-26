@@ -29,15 +29,18 @@ THE SOFTWARE.
 #ifndef _Ogre_VulkanVaoManager_H_
 #define _Ogre_VulkanVaoManager_H_
 
+#include "OgreVulkanConstBufferPacked.h"
 #include "OgreVulkanPrerequisites.h"
+#include "OgreVulkanTexBufferPacked.h"
 
 #include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
+    class VulkanStagingTexture;
     class _OgreVulkanExport VulkanVaoManager : public VaoManager
     {
-    protected:
+    public:
         enum VboFlag
         {
             CPU_INACCESSIBLE,
@@ -157,7 +160,16 @@ namespace Ogre
 
         VulkanDevice *mDevice;
 
+#ifndef VULKAN_HOTSHOT_WILL_REMOVE
+        vector<VulkanConstBufferPacked *>::type mConstBuffers;
+        vector<VulkanTexBufferPacked *>::type mTexBuffersPacked;
+#endif
+
         bool mFenceFlushed;
+        bool mSupportsCoherentMemory;
+        bool mSupportsNonCoherentMemory;
+
+        static const uint32 VERTEX_ATTRIBUTE_INDEX[VES_COUNT];
 
     protected:
         void determineBestMemoryTypes( void );
@@ -202,8 +214,7 @@ namespace Ogre
         void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
                             BufferType bufferType );
 
-        /// @see StagingBuffer::mergeContiguousBlocks
-        static void mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks );
+        
 
         virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                             BufferType bufferType, void *initialData,
@@ -246,7 +257,8 @@ namespace Ogre
 
         virtual void destroyVertexArrayObjectImpl( VertexArrayObject *vao );
 
-        static VboFlag bufferTypeToVboFlag( BufferType bufferType );
+        VboFlag bufferTypeToVboFlag( BufferType bufferType ) const;
+        bool isVboFlagCoherent( VboFlag vboFlag ) const;
 
         virtual void switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
                                              BufferPacked *buffer );
@@ -254,6 +266,9 @@ namespace Ogre
     public:
         VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device );
         virtual ~VulkanVaoManager();
+
+        void initDrawIdVertexBuffer();
+        void bindDrawIdVertexBuffer( VkCommandBuffer cmdBuffer );
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log ) const;
@@ -299,6 +314,31 @@ namespace Ogre
         uint8 waitForTailFrameToFinish( void );
         virtual void waitForSpecificFrameToFinish( uint32 frameCount );
         virtual bool isFrameFinished( uint32 frameCount );
+        void _notifyDeviceStalled();
+        VulkanStagingTexture *createStagingTexture( PixelFormatGpu formatFamily, size_t sizeBytes );
+
+        /// @see StagingBuffer::mergeContiguousBlocks
+        static void mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks );
+
+        const vector<VulkanConstBufferPacked *>::type &getConstBuffers() const
+        {
+            return mConstBuffers;
+        }
+
+        const vector<VulkanTexBufferPacked *>::type &getTexBuffersPacked() const
+        {
+            return mTexBuffersPacked;
+        }
+
+
+        VertexBufferPacked * getDrawId() const
+        {
+            return mDrawId;
+        }
+
+        const uint32 *getBestVkMemoryTypeIndex() { return mBestVkMemoryTypeIndex; }
+
+        static uint32 getAttributeIndexFor( VertexElementSemantic semantic );
     };
 }  // namespace Ogre
 

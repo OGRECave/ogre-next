@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
+#include "Vao/OgreBufferPacked.h"
+
 #include "vulkan/vulkan_core.h"
 
 #include "OgreHeaderPrefix.h"
@@ -56,10 +58,21 @@ namespace Ogre
             FastArray<VkFence> mProtectingFences;
         };
 
+        enum EncoderState
+        {
+            EncoderGraphicsOpen,
+            EncoderComputeOpen,
+            EncoderCopyOpen,
+            EncoderClosed
+        };
+
         VkDevice mDevice;
         QueueFamily mFamily;
 
         uint32 mFamilyIdx;
+
+        uint32 getFamilyIdx() const { return mFamilyIdx; }
+
         uint32 mQueueIdx;
 
         VkQueue mQueue;
@@ -92,10 +105,41 @@ namespace Ogre
         VulkanVaoManager *mVaoManager;
         VulkanRenderSystem *mRenderSystem;
 
+        VkFence mCurrentFence;
+
+        typedef map<const BufferPacked *, bool>::type BufferPackedDownloadMap;
+        typedef map<VulkanTextureGpu *, bool>::type TextureGpuDownloadMap;
+
+        EncoderState mEncoderState;
+        VkAccessFlags mCopyEndReadSrcBufferFlags;
+        VkAccessFlags mCopyEndReadDstBufferFlags;
+        VkAccessFlags mCopyEndReadDstTextureFlags;
+        VkAccessFlags mCopyStartWriteSrcBufferFlags;
+        FastArray<VkImageMemoryBarrier> mImageMemBarriers;
+        FastArray<TextureGpu *> mImageMemBarrierPtrs;
+        /// When mCopyDownloadTextures[buffer] = true, this buffer has been last downloaded
+        /// When mCopyDownloadTextures[buffer] = false, this buffer has been last uploaded
+        /// When mCopyDownloadTextures[buffer] = not_found, this buffer hasn't been downloaded/uploaded
+        TextureGpuDownloadMap mCopyDownloadTextures;
+        /// When mCopyDownloadBuffers[buffer] = true, this buffer has been last downloaded
+        /// When mCopyDownloadBuffers[buffer] = false, this buffer has been last uploaded
+        /// When mCopyDownloadBuffers[buffer] = not_found, this buffer hasn't been downloaded/uploaded
+        BufferPackedDownloadMap mCopyDownloadBuffers;
+
         /// Returns a signaled fence, could be recycled or new
         VkFence getFence( void );
 
         VkCommandBuffer getCmdBuffer( size_t currFrame );
+
+        static VkPipelineStageFlags deriveStageFromBufferAccessFlags( VkAccessFlags accessFlags );
+        static VkPipelineStageFlags deriveStageFromTextureAccessFlags( VkAccessFlags accessFlags );
+
+        /// Schedules a barrier to be issued in endCopyEncoder
+        /// This is to RESTORE the texture's layout and force future rendering cmds to wait
+        /// for our transfer to finish.
+        void insertRestoreBarrier( VulkanTextureGpu *vkTexture, const VkImageLayout newTransferLayout );
+        void prepareForUpload( const BufferPacked *buffer, TextureGpu *texture );
+        void prepareForDownload( const BufferPacked *buffer, TextureGpu *texture );
 
     public:
         VulkanQueue();
@@ -108,7 +152,46 @@ namespace Ogre
 
         void newCommandBuffer( void );
 
-    protected:
+        void getGraphicsEncoder( void );
+        void getComputeEncoder( void );
+        /** Call this function when you need to start copy/transfer operations
+        @remarks
+            buffer and texture pointers cannot be both nullptr at the same time
+
+            You don't have to pair every getCopyEncoder call with an endCopyEncoder call. In
+            fact this is discouraged.
+
+            Keep calling getCopyEncoder until you're done with all transfer operations
+        @param buffer
+            The buffer we're copying from/to. Can be nullptr
+        @param texture
+            The texture we're copying from/to. Can be nullptr
+
+            If uploading, the texture will be transitioned to VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+            If downloading, the texture will be transitioned to VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+        @param bDownload
+            True if we plan to do CPU -> GPU transfers
+            False if we plan to do GPU -> CPU transfers
+        */
+        void getCopyEncoder( const BufferPacked *buffer, TextureGpu *texture, const bool bDownload );
+        void getCopyEncoderV1Buffer( const bool bDownload );
+
+        void endCopyEncoder( void );
+        void endRenderEncoder( const bool endRenderPassDesc = true );
+        void endComputeEncoder( void );
+
+        void endAllEncoders( bool endRenderPassDesc = true );
+
+        VkFence getCurrentFence()
+        {
+            if( mCurrentFence == 0 )
+            {
+                mCurrentFence = getFence();
+            }
+            return mCurrentFence;
+        }
+
+    public:
         void endCommandBuffer( void );
 
     public:

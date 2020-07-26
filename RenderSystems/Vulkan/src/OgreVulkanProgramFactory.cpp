@@ -38,7 +38,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     //-----------------------------------------------------------------------
-    String VulkanProgramFactory::sLanguageName = "glsl";
+    String VulkanProgramFactory::sLanguageName = "glsl-vulkan";
     //-----------------------------------------------------------------------
     VulkanProgramFactory::VulkanProgramFactory( VulkanDevice *device ) : mDevice( device )
     {

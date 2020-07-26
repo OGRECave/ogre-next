@@ -148,6 +148,124 @@ namespace Ogre
         return VK_BLEND_OP_ADD;
     }
     //-----------------------------------------------------------------------------------
+    VkFormat VulkanMappings::get( VertexElementType vertexElemType )
+    {
+        switch( vertexElemType )
+        {
+        case VET_FLOAT1:
+            return VK_FORMAT_R32_SFLOAT;
+        case VET_FLOAT2:
+            return VK_FORMAT_R32G32_SFLOAT;
+        case VET_FLOAT3:
+            return VK_FORMAT_R32G32B32_SFLOAT;
+        case VET_FLOAT4:
+            return VK_FORMAT_R32G32B32A32_SFLOAT;
+        case VET_COLOUR:
+        case VET_COLOUR_ARGB:
+        case VET_COLOUR_ABGR:
+            return VK_FORMAT_R8G8B8A8_UNORM;
+        case VET_SHORT2:
+            return VK_FORMAT_R16G16_SINT;
+        case VET_SHORT4:
+            return VK_FORMAT_R16G16B16A16_SINT;
+        case VET_UBYTE4:
+            return VK_FORMAT_R8G8B8A8_UINT;
+        case VET_USHORT2:
+            return VK_FORMAT_R16G16_SINT;
+        case VET_USHORT4:
+            return VK_FORMAT_R16G16B16A16_SINT;
+        case VET_INT1:
+            return VK_FORMAT_R32_SINT;
+        case VET_INT2:
+            return VK_FORMAT_R32G32_SINT;
+        case VET_INT3:
+            return VK_FORMAT_R32G32B32_SINT;
+        case VET_INT4:
+            return VK_FORMAT_R32G32B32A32_SINT;
+        case VET_UINT1:
+            return VK_FORMAT_R32_UINT;
+        case VET_UINT2:
+            return VK_FORMAT_R32G32_UINT;
+        case VET_UINT3:
+            return VK_FORMAT_R32G32B32_UINT;
+        case VET_UINT4:
+            return VK_FORMAT_R32G32B32A32_SINT;
+        case VET_BYTE4:
+            return VK_FORMAT_R8G8B8A8_SINT;
+        case VET_BYTE4_SNORM:
+            return VK_FORMAT_R8G8B8A8_SNORM;
+        case VET_UBYTE4_NORM:
+            return VK_FORMAT_R8G8B8A8_UNORM;
+        case VET_SHORT2_SNORM:
+            return VK_FORMAT_R16G16_SNORM;
+        case VET_SHORT4_SNORM:
+            return VK_FORMAT_R16G16B16A16_SNORM;
+        case VET_USHORT2_NORM:
+            return VK_FORMAT_R16G16_UNORM;
+        case VET_USHORT4_NORM:
+            return VK_FORMAT_R16G16B16A16_UNORM;
+        case VET_HALF2:
+            return VK_FORMAT_R16G16_SFLOAT;
+        case VET_HALF4:
+            return VK_FORMAT_R16G16B16A16_SFLOAT;
+        case VET_DOUBLE1:
+        case VET_DOUBLE2:
+        case VET_DOUBLE3:
+        case VET_DOUBLE4:
+        case VET_USHORT1_DEPRECATED:
+        case VET_USHORT3_DEPRECATED:
+        default:
+            return VK_FORMAT_UNDEFINED;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    VkFilter VulkanMappings::get( FilterOptions filter )
+    {
+        switch( filter )
+        {
+            // clang-format off
+        case FO_NONE:                   return VK_FILTER_NEAREST;
+        case FO_POINT:                  return VK_FILTER_NEAREST;
+        case FO_LINEAR:                 return VK_FILTER_LINEAR;
+        case FO_ANISOTROPIC:            return VK_FILTER_LINEAR;
+            // clang-format on
+        }
+
+        return VK_FILTER_NEAREST;
+    }
+    //-----------------------------------------------------------------------------------
+    VkSamplerMipmapMode VulkanMappings::getMipFilter( FilterOptions filter )
+    {
+        switch( filter )
+        {
+            // clang-format off
+        case FO_NONE:                   return VK_SAMPLER_MIPMAP_MODE_NEAREST;
+        case FO_POINT:                  return VK_SAMPLER_MIPMAP_MODE_NEAREST;
+        case FO_LINEAR:                 return VK_SAMPLER_MIPMAP_MODE_LINEAR;
+        case FO_ANISOTROPIC:            return VK_SAMPLER_MIPMAP_MODE_LINEAR;
+            // clang-format on
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    VkSamplerAddressMode VulkanMappings::get( TextureAddressingMode mode )
+    {
+        switch( mode )
+        {
+        case TAM_WRAP:
+            return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        case TAM_MIRROR:
+            return VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
+        case TAM_CLAMP:
+            return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        case TAM_BORDER:
+            return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+        case TAM_UNKNOWN:
+            return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        default:
+            return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     VkImageViewType VulkanMappings::get( TextureTypes::TextureTypes textureType )
     {
         switch( textureType )
@@ -293,5 +411,480 @@ namespace Ogre
         // clang-format on
 
         return VK_FORMAT_UNDEFINED;
+    }
+    //-----------------------------------------------------------------------------------
+    VkImageAspectFlags VulkanMappings::getImageAspect( PixelFormatGpu pf )
+    {
+        const uint32 pfFlags = PixelFormatGpuUtils::getFlags( pf );
+
+        VkImageAspectFlags retVal = 0;
+        if( pfFlags & ( PixelFormatGpuUtils::PFF_DEPTH | PixelFormatGpuUtils::PFF_STENCIL ) )
+        {
+            if( pfFlags & PixelFormatGpuUtils::PFF_DEPTH )
+                retVal = VK_IMAGE_ASPECT_DEPTH_BIT;
+            if( pfFlags & PixelFormatGpuUtils::PFF_STENCIL )
+                retVal |= VK_IMAGE_ASPECT_STENCIL_BIT;
+        }
+        else
+        {
+            retVal = VK_IMAGE_ASPECT_COLOR_BIT;
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    VkAccessFlags VulkanMappings::get( const TextureGpu *texture )
+    {
+        VkAccessFlags texAccessFlags = 0;
+
+        if( texture->isTexture() || texture->isUav() )
+        {
+            texAccessFlags |= VK_ACCESS_SHADER_READ_BIT;
+            if( texture->isUav() )
+                texAccessFlags |= VK_ACCESS_SHADER_WRITE_BIT;
+        }
+        if( texture->isRenderToTexture() )
+        {
+            texAccessFlags |= VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+            if( !PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
+            {
+                texAccessFlags |=
+                    VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            }
+            else
+            {
+                texAccessFlags |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
+                                  VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+            }
+        }
+
+        return texAccessFlags;
+    }
+    //-----------------------------------------------------------------------------------
+    VkAccessFlags VulkanMappings::get( BufferPackedTypes bufferPackedTypes )
+    {
+        switch( bufferPackedTypes )
+        {
+            // clang-format off
+        case BP_TYPE_VERTEX:    return VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
+        case BP_TYPE_INDEX:     return VK_ACCESS_INDEX_READ_BIT;
+        case BP_TYPE_CONST:     return VK_ACCESS_UNIFORM_READ_BIT;
+        case BP_TYPE_TEX:       return VK_ACCESS_SHADER_READ_BIT;
+        case BP_TYPE_INDIRECT:  return VK_ACCESS_INDIRECT_COMMAND_READ_BIT;
+        case BP_TYPE_UAV:       return VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT;
+        case NUM_BUFFER_PACKED_TYPES: return 0;  // Keep compiler happy
+            // clang-format on
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    uint32_t VulkanMappings::getFormatSize( VkFormat format )
+    {
+        uint32_t result = 0;
+        switch( format )
+        {
+        case VK_FORMAT_UNDEFINED:
+            result = 0;
+            break;
+        case VK_FORMAT_R4G4_UNORM_PACK8:
+            result = 1;
+            break;
+        case VK_FORMAT_R4G4B4A4_UNORM_PACK16:
+            result = 2;
+            break;
+        case VK_FORMAT_B4G4R4A4_UNORM_PACK16:
+            result = 2;
+            break;
+        case VK_FORMAT_R5G6B5_UNORM_PACK16:
+            result = 2;
+            break;
+        case VK_FORMAT_B5G6R5_UNORM_PACK16:
+            result = 2;
+            break;
+        case VK_FORMAT_R5G5B5A1_UNORM_PACK16:
+            result = 2;
+            break;
+        case VK_FORMAT_B5G5R5A1_UNORM_PACK16:
+            result = 2;
+            break;
+        case VK_FORMAT_A1R5G5B5_UNORM_PACK16:
+            result = 2;
+            break;
+        case VK_FORMAT_R8_UNORM:
+            result = 1;
+            break;
+        case VK_FORMAT_R8_SNORM:
+            result = 1;
+            break;
+        case VK_FORMAT_R8_USCALED:
+            result = 1;
+            break;
+        case VK_FORMAT_R8_SSCALED:
+            result = 1;
+            break;
+        case VK_FORMAT_R8_UINT:
+            result = 1;
+            break;
+        case VK_FORMAT_R8_SINT:
+            result = 1;
+            break;
+        case VK_FORMAT_R8_SRGB:
+            result = 1;
+            break;
+        case VK_FORMAT_R8G8_UNORM:
+            result = 2;
+            break;
+        case VK_FORMAT_R8G8_SNORM:
+            result = 2;
+            break;
+        case VK_FORMAT_R8G8_USCALED:
+            result = 2;
+            break;
+        case VK_FORMAT_R8G8_SSCALED:
+            result = 2;
+            break;
+        case VK_FORMAT_R8G8_UINT:
+            result = 2;
+            break;
+        case VK_FORMAT_R8G8_SINT:
+            result = 2;
+            break;
+        case VK_FORMAT_R8G8_SRGB:
+            result = 2;
+            break;
+        case VK_FORMAT_R8G8B8_UNORM:
+            result = 3;
+            break;
+        case VK_FORMAT_R8G8B8_SNORM:
+            result = 3;
+            break;
+        case VK_FORMAT_R8G8B8_USCALED:
+            result = 3;
+            break;
+        case VK_FORMAT_R8G8B8_SSCALED:
+            result = 3;
+            break;
+        case VK_FORMAT_R8G8B8_UINT:
+            result = 3;
+            break;
+        case VK_FORMAT_R8G8B8_SINT:
+            result = 3;
+            break;
+        case VK_FORMAT_R8G8B8_SRGB:
+            result = 3;
+            break;
+        case VK_FORMAT_B8G8R8_UNORM:
+            result = 3;
+            break;
+        case VK_FORMAT_B8G8R8_SNORM:
+            result = 3;
+            break;
+        case VK_FORMAT_B8G8R8_USCALED:
+            result = 3;
+            break;
+        case VK_FORMAT_B8G8R8_SSCALED:
+            result = 3;
+            break;
+        case VK_FORMAT_B8G8R8_UINT:
+            result = 3;
+            break;
+        case VK_FORMAT_B8G8R8_SINT:
+            result = 3;
+            break;
+        case VK_FORMAT_B8G8R8_SRGB:
+            result = 3;
+            break;
+        case VK_FORMAT_R8G8B8A8_UNORM:
+            result = 4;
+            break;
+        case VK_FORMAT_R8G8B8A8_SNORM:
+            result = 4;
+            break;
+        case VK_FORMAT_R8G8B8A8_USCALED:
+            result = 4;
+            break;
+        case VK_FORMAT_R8G8B8A8_SSCALED:
+            result = 4;
+            break;
+        case VK_FORMAT_R8G8B8A8_UINT:
+            result = 4;
+            break;
+        case VK_FORMAT_R8G8B8A8_SINT:
+            result = 4;
+            break;
+        case VK_FORMAT_R8G8B8A8_SRGB:
+            result = 4;
+            break;
+        case VK_FORMAT_B8G8R8A8_UNORM:
+            result = 4;
+            break;
+        case VK_FORMAT_B8G8R8A8_SNORM:
+            result = 4;
+            break;
+        case VK_FORMAT_B8G8R8A8_USCALED:
+            result = 4;
+            break;
+        case VK_FORMAT_B8G8R8A8_SSCALED:
+            result = 4;
+            break;
+        case VK_FORMAT_B8G8R8A8_UINT:
+            result = 4;
+            break;
+        case VK_FORMAT_B8G8R8A8_SINT:
+            result = 4;
+            break;
+        case VK_FORMAT_B8G8R8A8_SRGB:
+            result = 4;
+            break;
+        case VK_FORMAT_A8B8G8R8_UNORM_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A8B8G8R8_SNORM_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A8B8G8R8_USCALED_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A8B8G8R8_SSCALED_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A8B8G8R8_UINT_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A8B8G8R8_SINT_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A8B8G8R8_SRGB_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2R10G10B10_UNORM_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2R10G10B10_SNORM_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2R10G10B10_USCALED_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2R10G10B10_SSCALED_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2R10G10B10_UINT_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2R10G10B10_SINT_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2B10G10R10_UNORM_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2B10G10R10_SNORM_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2B10G10R10_USCALED_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2B10G10R10_SSCALED_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2B10G10R10_UINT_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_A2B10G10R10_SINT_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_R16_UNORM:
+            result = 2;
+            break;
+        case VK_FORMAT_R16_SNORM:
+            result = 2;
+            break;
+        case VK_FORMAT_R16_USCALED:
+            result = 2;
+            break;
+        case VK_FORMAT_R16_SSCALED:
+            result = 2;
+            break;
+        case VK_FORMAT_R16_UINT:
+            result = 2;
+            break;
+        case VK_FORMAT_R16_SINT:
+            result = 2;
+            break;
+        case VK_FORMAT_R16_SFLOAT:
+            result = 2;
+            break;
+        case VK_FORMAT_R16G16_UNORM:
+            result = 4;
+            break;
+        case VK_FORMAT_R16G16_SNORM:
+            result = 4;
+            break;
+        case VK_FORMAT_R16G16_USCALED:
+            result = 4;
+            break;
+        case VK_FORMAT_R16G16_SSCALED:
+            result = 4;
+            break;
+        case VK_FORMAT_R16G16_UINT:
+            result = 4;
+            break;
+        case VK_FORMAT_R16G16_SINT:
+            result = 4;
+            break;
+        case VK_FORMAT_R16G16_SFLOAT:
+            result = 4;
+            break;
+        case VK_FORMAT_R16G16B16_UNORM:
+            result = 6;
+            break;
+        case VK_FORMAT_R16G16B16_SNORM:
+            result = 6;
+            break;
+        case VK_FORMAT_R16G16B16_USCALED:
+            result = 6;
+            break;
+        case VK_FORMAT_R16G16B16_SSCALED:
+            result = 6;
+            break;
+        case VK_FORMAT_R16G16B16_UINT:
+            result = 6;
+            break;
+        case VK_FORMAT_R16G16B16_SINT:
+            result = 6;
+            break;
+        case VK_FORMAT_R16G16B16_SFLOAT:
+            result = 6;
+            break;
+        case VK_FORMAT_R16G16B16A16_UNORM:
+            result = 8;
+            break;
+        case VK_FORMAT_R16G16B16A16_SNORM:
+            result = 8;
+            break;
+        case VK_FORMAT_R16G16B16A16_USCALED:
+            result = 8;
+            break;
+        case VK_FORMAT_R16G16B16A16_SSCALED:
+            result = 8;
+            break;
+        case VK_FORMAT_R16G16B16A16_UINT:
+            result = 8;
+            break;
+        case VK_FORMAT_R16G16B16A16_SINT:
+            result = 8;
+            break;
+        case VK_FORMAT_R16G16B16A16_SFLOAT:
+            result = 8;
+            break;
+        case VK_FORMAT_R32_UINT:
+            result = 4;
+            break;
+        case VK_FORMAT_R32_SINT:
+            result = 4;
+            break;
+        case VK_FORMAT_R32_SFLOAT:
+            result = 4;
+            break;
+        case VK_FORMAT_R32G32_UINT:
+            result = 8;
+            break;
+        case VK_FORMAT_R32G32_SINT:
+            result = 8;
+            break;
+        case VK_FORMAT_R32G32_SFLOAT:
+            result = 8;
+            break;
+        case VK_FORMAT_R32G32B32_UINT:
+            result = 12;
+            break;
+        case VK_FORMAT_R32G32B32_SINT:
+            result = 12;
+            break;
+        case VK_FORMAT_R32G32B32_SFLOAT:
+            result = 12;
+            break;
+        case VK_FORMAT_R32G32B32A32_UINT:
+            result = 16;
+            break;
+        case VK_FORMAT_R32G32B32A32_SINT:
+            result = 16;
+            break;
+        case VK_FORMAT_R32G32B32A32_SFLOAT:
+            result = 16;
+            break;
+        case VK_FORMAT_R64_UINT:
+            result = 8;
+            break;
+        case VK_FORMAT_R64_SINT:
+            result = 8;
+            break;
+        case VK_FORMAT_R64_SFLOAT:
+            result = 8;
+            break;
+        case VK_FORMAT_R64G64_UINT:
+            result = 16;
+            break;
+        case VK_FORMAT_R64G64_SINT:
+            result = 16;
+            break;
+        case VK_FORMAT_R64G64_SFLOAT:
+            result = 16;
+            break;
+        case VK_FORMAT_R64G64B64_UINT:
+            result = 24;
+            break;
+        case VK_FORMAT_R64G64B64_SINT:
+            result = 24;
+            break;
+        case VK_FORMAT_R64G64B64_SFLOAT:
+            result = 24;
+            break;
+        case VK_FORMAT_R64G64B64A64_UINT:
+            result = 32;
+            break;
+        case VK_FORMAT_R64G64B64A64_SINT:
+            result = 32;
+            break;
+        case VK_FORMAT_R64G64B64A64_SFLOAT:
+            result = 32;
+            break;
+        case VK_FORMAT_B10G11R11_UFLOAT_PACK32:
+            result = 4;
+            break;
+        case VK_FORMAT_E5B9G9R9_UFLOAT_PACK32:
+            result = 4;
+            break;
+
+        default:
+            break;
+        }
+        return result;
+    }
+
+    GpuConstantType VulkanMappings::get( SpvOp op )
+    {
+        switch( op )
+        {
+        case SpvOpTypeBool:
+            return GCT_BOOL1;
+        case SpvOpTypeInt:
+            return GCT_INT1;
+        case SpvOpTypeFloat:
+            return GCT_FLOAT1;
+        case SpvOpTypeMatrix:
+            return GCT_MATRIX_4X4;  // Need to check for actual number of rows and columns
+        case SpvOpTypeImage:
+            return GCT_SAMPLER2D;  // Need to check for actual sampler dimensions
+        case SpvOpTypeSampler:
+            return GCT_SAMPLER2D;  // Need to check for actual sampler dimensions
+        case SpvOpTypeSampledImage:
+            return GCT_SAMPLER2D;  // Need to check for actual sampler dimensions
+        case SpvOpTypeArray:
+            return GCT_UNKNOWN;
+        case SpvOpTypeStruct:
+            return GCT_UNKNOWN;
+        default:
+            return GCT_UNKNOWN;
+        }
     }
 }  // namespace Ogre

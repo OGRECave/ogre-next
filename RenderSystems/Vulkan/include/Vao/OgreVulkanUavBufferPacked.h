@@ -29,6 +29,8 @@ THE SOFTWARE.
 #ifndef _Ogre_VulkanUavBufferPacked_H_
 #define _Ogre_VulkanUavBufferPacked_H_
 
+#include <vulkan/vulkan.h>
+
 #include "OgreVulkanPrerequisites.h"
 
 #include "Vao/OgreUavBufferPacked.h"
@@ -54,6 +56,8 @@ namespace Ogre
         //        virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
         //        virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
         virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+
+        void bindBufferForDescriptor( VkBuffer *buffers, VkDeviceSize *offsets, size_t offset );
     };
 }  // namespace Ogre
 

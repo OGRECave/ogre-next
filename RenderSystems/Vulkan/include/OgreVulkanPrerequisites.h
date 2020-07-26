@@ -52,6 +52,16 @@ typedef struct VkDescriptorSetLayout_T *VkDescriptorSetLayout;
 
 struct VkPipelineShaderStageCreateInfo;
 
+#define OGRE_VULKAN_CONST_SLOT_START 16u
+#define OGRE_VULKAN_TEX_SLOT_START 24u
+#define OGRE_VULKAN_PARAMETER_SLOT 23u
+#define OGRE_VULKAN_UAV_SLOT_START 28u
+
+#define OGRE_VULKAN_CS_PARAMETER_SLOT 7u
+#define OGRE_VULKAN_CS_CONST_SLOT_START 0u
+#define OGRE_VULKAN_CS_UAV_SLOT_START 8u
+#define OGRE_VULKAN_CS_TEX_SLOT_START 16u
+
 namespace Ogre
 {
     // Forward declarations
@@ -63,13 +73,23 @@ namespace Ogre
     class VulkanProgram;
     class VulkanProgramFactory;
     class VulkanQueue;
-    class VulkanStagingBuffer;
     class VulkanRenderSystem;
+    class VulkanStagingBuffer;
+    class VulkanTextureGpu;
     class VulkanVaoManager;
     class VulkanWindow;
+    class VulkanDiscardBuffer;
+    class VulkanDiscardBufferManager;
 
     typedef FastArray<VkSemaphore> VkSemaphoreArray;
     typedef FastArray<VkFence> VkFenceArray;
+
+    namespace v1
+    {
+        class VulkanHardwareBufferCommon;
+        class VulkanHardwareIndexBuffer;
+        class VulkanHardwareVertexBuffer;
+    }
 }  // namespace Ogre
 
 #define OGRE_VK_EXCEPT( code, num, desc, src ) \

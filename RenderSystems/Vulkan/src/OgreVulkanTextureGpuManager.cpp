@@ -42,9 +42,10 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    VulkanTextureGpuManager::VulkanTextureGpuManager( VaoManager *vaoManager,
-                                                      RenderSystem *renderSystem ) :
-        TextureGpuManager( vaoManager, renderSystem )
+    VulkanTextureGpuManager::VulkanTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem,
+                                                      VulkanDevice *device ) :
+        TextureGpuManager( vaoManager, renderSystem ),
+        mDevice( device )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -58,6 +59,16 @@ namespace Ogre
                                                     TextureFlags::RenderToTexture |  //
                                                     TextureFlags::RenderWindowSpecific,
                                                 TextureTypes::Type2D, this, window );
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu *VulkanTextureGpuManager::createWindowDepthBuffer( void )
+    {
+        return OGRE_NEW VulkanTextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
+                                                      "RenderWindow DepthBuffer",          //
+                                                      TextureFlags::NotTexture |           //
+                                                          TextureFlags::RenderToTexture |  //
+                                                          TextureFlags::RenderWindowSpecific,
+                                                      TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu *VulkanTextureGpuManager::createTextureImpl(
@@ -88,9 +99,8 @@ namespace Ogre
             PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices, pixelFormat, rowAlignment );
 
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-        VulkanStagingTexture *retVal = OGRE_NEW VulkanStagingTexture(
-            vaoManager, PixelFormatGpuUtils::getFamily( pixelFormat ), sizeBytes );
-
+        VulkanStagingTexture *retVal =
+            vaoManager->createStagingTexture( PixelFormatGpuUtils::getFamily( pixelFormat ), sizeBytes );
         return retVal;
     }
     //-----------------------------------------------------------------------------------
@@ -105,5 +115,17 @@ namespace Ogre
     {
         return OGRE_NEW VulkanAsyncTextureTicket( width, height, depthOrSlices, textureType,
                                                   pixelFormatFamily );
+    }
+    //-----------------------------------------------------------------------------------
+    VkImage VulkanTextureGpuManager::getBlankTextureVulkanName(
+        TextureTypes::TextureTypes textureType ) const
+    {
+        return mBlankTexture[textureType];
+    }
+    //-----------------------------------------------------------------------------------
+    VkImageView VulkanTextureGpuManager::getBlankTextureViewVulkanName(
+        TextureTypes::TextureTypes textureType ) const
+    {
+        return mBlankTextureView[textureType];
     }
 }  // namespace Ogre
