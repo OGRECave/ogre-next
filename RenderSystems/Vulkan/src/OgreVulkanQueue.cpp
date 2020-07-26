@@ -472,6 +472,7 @@ namespace Ogre
                 insertRestoreBarrier( vkTexture, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
 
                 vkTexture->mCurrLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+                numImageMemBarriers = 1u;
             }
 
             // Wait until earlier render, compute and transfers are done so we can copy what
@@ -617,6 +618,7 @@ namespace Ogre
                 insertRestoreBarrier( vkTexture, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
 
                 vkTexture->mCurrLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+                numImageMemBarriers = 1u;
             }
 
             // Wait until earlier render, compute and transfers are done so we can copy what
