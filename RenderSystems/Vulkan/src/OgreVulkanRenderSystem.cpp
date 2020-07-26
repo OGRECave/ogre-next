@@ -70,7 +70,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #define TODO_check_layers_exist
 
-#define TODO_vertex_format
 #define TODO_addVpCount_to_passpso
 
 namespace Ogre
@@ -2048,102 +2047,23 @@ namespace Ogre
 
         VkPipelineVertexInputStateCreateInfo vertexFormatCi;
         makeVkStruct( vertexFormatCi, VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO );
-        std::vector<VkVertexInputBindingDescription> bindingDescriptions;
-        std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
-        // bindingDescriptions.resize( 16, VkVertexInputBindingDescription{} );
-        // attributeDescriptions.resize( 16, VkVertexInputAttributeDescription{} );
+        FastArray<VkVertexInputBindingDescription> bindingDescriptions;
+        FastArray<VkVertexInputAttributeDescription> attributeDescriptions;
 
-        TODO_vertex_format;
-        if( !newPso->vertexShader.isNull() && false )
+        if( !newPso->vertexShader.isNull() )
         {
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->vertexShader->_getBindingDelegate() );
-            VulkanDescriptors::generateVertexInputBindings( shader, newPso, bindingDescriptions,
-                                                            attributeDescriptions );
 
-            if( !newPso->vertexElements.empty() )
-            {
-                size_t numUVs = 0;
+            shader->getLayoutForPso( newPso->vertexElements, bindingDescriptions,
+                                     attributeDescriptions );
 
-                std::map<uint32, VkVertexInputAttributeDescription *> locationMap;
-                std::vector<VkVertexInputAttributeDescription>::iterator attrItor =
-                    attributeDescriptions.begin();
-                std::vector<VkVertexInputAttributeDescription>::iterator attrItorEnd =
-                    attributeDescriptions.end();
-                while( attrItor != attrItorEnd )
-                {
-                    locationMap.insert( std::pair<uint32, VkVertexInputAttributeDescription *>(
-                        attrItor->location, &( *attrItor ) ) );
-                    ++attrItor;
-                }
-
-                VertexElement2VecVec::const_iterator itor = newPso->vertexElements.begin();
-                VertexElement2VecVec::const_iterator endt = newPso->vertexElements.end();
-
-                while( itor != endt )
-                {
-                    size_t accumOffset = 0;
-                    const size_t bufferIdx = itor - newPso->vertexElements.begin();
-                    VertexElement2Vec::const_iterator it = itor->begin();
-                    VertexElement2Vec::const_iterator en = itor->end();
-
-                    uint32 i = 0;
-                    while( it != en )
-                    {
-                        size_t elementIdx = VulkanVaoManager::getAttributeIndexFor( it->mSemantic );
-                        if( it->mSemantic == VES_TEXTURE_COORDINATES )
-                        {
-                            elementIdx += numUVs;
-                            ++numUVs;
-                        }
-                        // vertexDescriptor.attributes[elementIdx].format = VulkanMappings::get(
-                        // it->mType ); vertexDescriptor.attributes[elementIdx].bufferIndex = bufferIdx;
-                        // vertexDescriptor.attributes[elementIdx].offset = accumOffset;
-
-                        locationMap[elementIdx]->format = VulkanMappings::get( it->mType );
-                        locationMap[elementIdx]->binding = static_cast<uint32_t>( bufferIdx );
-                        locationMap[elementIdx]->offset = static_cast<uint32_t>( accumOffset );
-
-                        accumOffset += v1::VertexElement::getTypeSize( it->mType );
-                        ++i;
-                        ++it;
-                    }
-                    VkVertexInputBindingDescription bindingDesc;
-                    bindingDesc.binding = bufferIdx;
-                    bindingDesc.stride = accumOffset;
-                    bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-                    bindingDescriptions.push_back( bindingDesc );
-
-                    ++itor;
-                }
-
-                VkVertexInputAttributeDescription drawIdAttributeDescription;
-                drawIdAttributeDescription.offset = 0;
-                drawIdAttributeDescription.location = 15;
-                drawIdAttributeDescription.binding = 15;
-                drawIdAttributeDescription.format = VK_FORMAT_R32_UINT;
-                attributeDescriptions.push_back( drawIdAttributeDescription );
-
-                VkVertexInputBindingDescription drawIdBindingDescription;
-                drawIdBindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
-                drawIdBindingDescription.binding = 15;
-                drawIdBindingDescription.stride = 4;
-                bindingDescriptions.push_back( drawIdBindingDescription );
-
-                // vertexDescriptor.attributes[15].format = MTLVertexFormatUInt;
-                // vertexDescriptor.attributes[15].bufferIndex = 15;
-                // vertexDescriptor.attributes[15].offset = 0;
-                //
-                // vertexDescriptor.layouts[15].stride = 4;
-                // vertexDescriptor.layouts[15].stepFunction = VK_VERTEX_INPUT_RATE_INSTANCE;
-            }
-
-            vertexFormatCi.vertexBindingDescriptionCount =
+             vertexFormatCi.vertexBindingDescriptionCount =
                 static_cast<uint32_t>( bindingDescriptions.size() );
             vertexFormatCi.vertexAttributeDescriptionCount =
                 static_cast<uint32_t>( attributeDescriptions.size() );
-            vertexFormatCi.pVertexBindingDescriptions = bindingDescriptions.data();
-            vertexFormatCi.pVertexAttributeDescriptions = attributeDescriptions.data();
+            vertexFormatCi.pVertexBindingDescriptions = bindingDescriptions.begin();
+            vertexFormatCi.pVertexAttributeDescriptions = attributeDescriptions.begin();
         }
 
         VkPipelineInputAssemblyStateCreateInfo inputAssemblyCi;

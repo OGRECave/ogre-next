@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 #include "OgreLogManager.h"
 #include "OgreProfiler.h"
+#include "OgreVulkanDescriptors.h"
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanGpuProgramManager.h"
 #include "OgreVulkanMappings.h"
@@ -83,6 +84,7 @@ namespace Ogre
         HighLevelGpuProgram( creator, name, handle, group, isManual, loader ),
         mDevice( device ),
         mShaderModule( 0 ),
+        mNumSystemGenVertexInputs( 0u ),
         mCompiled( false ),
         mConstantsBytesToWrite( 0 )
     {
@@ -339,6 +341,24 @@ namespace Ogre
             moduleCi.pCode = &mSpirv[0];
             VkResult result = vkCreateShaderModule( mDevice->mDevice, &moduleCi, 0, &mShaderModule );
             checkVkResult( result, "vkCreateShaderModule" );
+        }
+
+        if( !mSpirv.empty() )
+        {
+            OgreProfileExhaustive( "VulkanProgram::compile::SpvReflectShaderModule" );
+            SpvReflectShaderModule module;
+            memset( &module, 0, sizeof( module ) );
+            SpvReflectResult result =
+                spvReflectCreateShaderModule( mSpirv.size() * sizeof( uint32 ), &mSpirv[0], &module );
+            if( result != SPV_REFLECT_RESULT_SUCCESS )
+            {
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "spvReflectCreateShaderModule failed on shader " + mName +
+                                 " error code: " + getSpirvReflectError( result ),
+                             "VulkanProgram::compile" );
+            }
+
+            gatherVertexInputs( module );
         }
 
         return mCompiled;
@@ -737,6 +757,81 @@ namespace Ogre
         spvReflectDestroyShaderModule( &module );
     }
     //-----------------------------------------------------------------------
+    struct SortByVertexInputLocation
+    {
+        bool operator()( const VkVertexInputAttributeDescription &a,
+                         const VkVertexInputAttributeDescription &b ) const
+        {
+            return a.location < b.location;
+        }
+        bool operator()( const VkVertexInputAttributeDescription &a, uint32 bLocation ) const
+        {
+            return a.location < bLocation;
+        }
+        bool operator()( uint32 aLocation, const VkVertexInputAttributeDescription &b ) const
+        {
+            return aLocation < b.location;
+        }
+    };
+
+    void VulkanProgram::gatherVertexInputs( SpvReflectShaderModule &module )
+    {
+        OgreProfileExhaustive( "VulkanProgram::gatherVertexInputs" );
+
+        mNumSystemGenVertexInputs = 0u;
+        mVertexInputs.clear();
+
+        uint32_t count = 0u;
+
+        SpvReflectResult result = spvReflectEnumerateInputVariables( &module, &count, NULL );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "spvReflectEnumerateInputVariables failed on shader " + mName +
+                             " error code: " + getSpirvReflectError( result ),
+                         "VulkanProgram::gatherVertexInputs" );
+        }
+
+        if( count == 0u )
+            return;
+
+        FastArray<SpvReflectInterfaceVariable *> inputVars;
+        inputVars.resize( count );
+
+        result = spvReflectEnumerateInputVariables( &module, &count, &inputVars[0] );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "spvReflectEnumerateInputVariables failed on shader " + mName +
+                             " error code: " + getSpirvReflectError( result ),
+                         "VulkanProgram::gatherVertexInputs" );
+        }
+
+        mVertexInputs.reserve( inputVars.size() );
+
+        FastArray<SpvReflectInterfaceVariable *>::const_iterator itor = inputVars.begin();
+        FastArray<SpvReflectInterfaceVariable *>::const_iterator endt = inputVars.end();
+
+        while( itor != endt )
+        {
+            const SpvReflectInterfaceVariable *reflVar = *itor;
+            VkVertexInputAttributeDescription attrDesc;
+            attrDesc.location = reflVar->location;
+            attrDesc.binding = 0u;
+            attrDesc.format = static_cast<VkFormat>( reflVar->format );
+            attrDesc.offset = 0u;
+
+            if( attrDesc.location == std::numeric_limits<uint32_t>::max() )
+                ++mNumSystemGenVertexInputs;
+
+            mVertexInputs.push_back( attrDesc );
+            ++itor;
+        }
+
+        // Sort attributes by location
+        std::sort( mVertexInputs.begin(), mVertexInputs.end(), SortByVertexInputLocation() );
+    }
+    //-----------------------------------------------------------------------
     static VkShaderStageFlagBits get( GpuProgramType programType )
     {
         switch( programType )
@@ -783,6 +878,130 @@ namespace Ogre
             memcpy( &dstData[def.logicalIndex], src, def.elementSize * def.arraySize * sizeof( float ) );
 
             ++itor;
+        }
+    }
+    //---------------------------------------------------------------------
+    void VulkanProgram::getLayoutForPso(
+        const VertexElement2VecVec &vertexElements,
+        FastArray<VkVertexInputBindingDescription> &outBufferBindingDescs,
+        FastArray<VkVertexInputAttributeDescription> &outVertexInputs )
+    {
+        OgreProfileExhaustive( "VulkanProgram::getLayoutForPso" );
+
+        outBufferBindingDescs.reserve( vertexElements.size() + 1u );  // +1 due to DRAWID
+        outVertexInputs.reserve( mVertexInputs.size() );
+
+        const size_t numShaderInputs = mVertexInputs.size();
+        size_t numShaderInputsFound = mNumSystemGenVertexInputs;
+
+        size_t uvCount = 0;
+
+        // Iterate through the vertexElements and see what is actually used by the shader
+        const size_t vertexElementsSize = vertexElements.size();
+        for( size_t bufferIdx = 0; bufferIdx < vertexElementsSize; ++bufferIdx )
+        {
+            VertexElement2Vec::const_iterator it = vertexElements[bufferIdx].begin();
+            VertexElement2Vec::const_iterator en = vertexElements[bufferIdx].end();
+
+            VkVertexInputRate inputRate = VK_VERTEX_INPUT_RATE_MAX_ENUM;
+
+            uint32 bindAccumOffset = 0u;
+
+            while( it != en )
+            {
+                size_t locationIdx = VulkanVaoManager::getAttributeIndexFor( it->mSemantic );
+
+                if( it->mSemantic == VES_TEXTURE_COORDINATES )
+                    locationIdx += uvCount++;
+
+                FastArray<VkVertexInputAttributeDescription>::const_iterator itor =
+                    std::lower_bound( mVertexInputs.begin(), mVertexInputs.end(), locationIdx,
+                                      SortByVertexInputLocation() );
+
+                if( itor != mVertexInputs.end() && itor->location == locationIdx )
+                {
+                    if( it->mInstancingStepRate > 1u )
+                    {
+                        OGRE_EXCEPT(
+                            Exception::ERR_RENDERINGAPI_ERROR,
+                            "Shader: '" + mName + "' Vulkan only supports mInstancingStepRate = 0 or 1 ",
+                            "VulkanProgram::getLayoutForPso" );
+                    }
+                    else if( inputRate == VK_VERTEX_INPUT_RATE_MAX_ENUM )
+                    {
+                        if( it->mInstancingStepRate == 0u )
+                            inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+                        else
+                            inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
+                    }
+                    else if( ( it->mInstancingStepRate == 0u &&
+                               inputRate != VK_VERTEX_INPUT_RATE_VERTEX ) ||
+                             ( it->mInstancingStepRate == 1u &&
+                               inputRate != VK_VERTEX_INPUT_RATE_INSTANCE ) )
+                    {
+                        OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                                     "Shader: '" + mName +
+                                         "' can only have all-instancing or all-vertex rate semantics "
+                                         "for the same vertex buffer, but it is mixing vertex and "
+                                         "instancing semantics for the same buffer idx",
+                                     "VulkanProgram::getLayoutForPso" );
+                    }
+
+                    outVertexInputs.push_back( *itor );
+                    VkVertexInputAttributeDescription &inputDesc = outVertexInputs.back();
+                    inputDesc.format = VulkanMappings::get( it->mType );
+                    inputDesc.binding = static_cast<uint32_t>( bufferIdx );
+                    inputDesc.offset = bindAccumOffset;
+
+                    ++numShaderInputsFound;
+                }
+
+                bindAccumOffset += v1::VertexElement::getTypeSize( it->mType );
+                ++it;
+            }
+
+            if( inputRate != VK_VERTEX_INPUT_RATE_MAX_ENUM )
+            {
+                // Only bind this buffer's entry if it's actually used by the shader
+                VkVertexInputBindingDescription bindingDesc;
+                bindingDesc.binding = static_cast<uint32_t>( bufferIdx );
+                bindingDesc.stride = bindAccumOffset;
+                bindingDesc.inputRate = inputRate;
+                outBufferBindingDescs.push_back( bindingDesc );
+            }
+        }
+
+        // Check if DRAWID is being used
+        {
+            const size_t locationIdx = 15u;
+            FastArray<VkVertexInputAttributeDescription>::const_iterator itor = std::lower_bound(
+                mVertexInputs.begin(), mVertexInputs.end(), locationIdx, SortByVertexInputLocation() );
+
+            if( itor != mVertexInputs.end() && itor->location == locationIdx )
+            {
+                outVertexInputs.push_back( *itor );
+                VkVertexInputAttributeDescription &inputDesc = outVertexInputs.back();
+                inputDesc.format = VK_FORMAT_R32_UINT;
+                inputDesc.binding = 15u;
+                inputDesc.offset = 0u;
+
+                ++numShaderInputsFound;
+
+                VkVertexInputBindingDescription bindingDesc;
+                bindingDesc.binding = 15u;
+                bindingDesc.stride = 4u;
+                bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
+                outBufferBindingDescs.push_back( bindingDesc );
+            }
+        }
+
+        if( numShaderInputsFound < numShaderInputs )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "The shader requires more input attributes/semantics than what the "
+                         "VertexArrayObject / v1::VertexDeclaration has to offer. You're "
+                         "missing a component",
+                         "VulkanProgram::getLayoutForPso" );
         }
     }
     //---------------------------------------------------------------------

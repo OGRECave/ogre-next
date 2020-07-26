@@ -35,6 +35,10 @@ THE SOFTWARE.
 
 #include "OgreVulkanGlslangHeader.h"
 
+struct VkVertexInputBindingDescription;
+struct VkVertexInputAttributeDescription;
+struct SpvReflectShaderModule;
+
 namespace Ogre
 {
     struct _OgreVulkanExport VulkanConstantDefinitionBindingParam
@@ -106,6 +110,10 @@ namespace Ogre
             return mConstantDefsBindingParams;
         }
 
+        void getLayoutForPso( const VertexElement2VecVec &vertexElements,
+                              FastArray<VkVertexInputBindingDescription> &outBufferBindingDescs,
+                              FastArray<VkVertexInputAttributeDescription> &outVertexInputs );
+
     protected:
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
 
@@ -132,11 +140,16 @@ namespace Ogre
         /// Populate the passed parameters with name->index map, must be overridden
         void buildConstantDefinitions( void ) const;
 
+        void gatherVertexInputs( SpvReflectShaderModule &module );
+
     private:
         VulkanDevice *mDevice;
 
         std::vector<uint32> mSpirv;
         VkShaderModule mShaderModule;
+
+        FastArray<VkVertexInputAttributeDescription> mVertexInputs;
+        uint8 mNumSystemGenVertexInputs; // System-generated inputs like gl_VertexIndex
 
         /// Flag indicating if shader object successfully compiled
         bool mCompiled;
