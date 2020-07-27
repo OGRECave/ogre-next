@@ -1366,9 +1366,9 @@ namespace Ogre
                 reinterpret_cast<v1::VulkanHardwareVertexBuffer *>( itor->second.get() );
 
             const size_t slot = itor->first;
-#if OGRE_DEBUG_MODE
-            assert( slot < 15u );
-#endif
+
+            OGRE_ASSERT_LOW( slot < 15u );
+
             size_t offsetStart;
             vulkanVertexBuffers[slot] = vulkanBuffer->getBufferName( offsetStart );
             offsets[slot] = offsetStart;
@@ -1384,7 +1384,19 @@ namespace Ogre
         vulkanVertexBuffers[maxUsedSlot] = bufIntf->getVboName();
         offsets[maxUsedSlot] = 0;
 
-        // vkCmdBindVertexBuffers( cmdBuffer, 0, maxUsedSlot + 1, vulkanVertexBuffers, offsets );
+        vkCmdBindVertexBuffers( cmdBuffer, 0u, (uint32)maxUsedSlot + 1u, vulkanVertexBuffers, offsets );
+
+        if( cmd->indexData )
+        {
+            size_t offsetStart = 0u;
+
+            v1::VulkanHardwareIndexBuffer *vulkanBuffer =
+                static_cast<v1::VulkanHardwareIndexBuffer *>( cmd->indexData->indexBuffer.get() );
+            VkIndexType indexType = static_cast<VkIndexType>( vulkanBuffer->getType() );
+            VkBuffer indexBuffer = vulkanBuffer->getBufferName( offsetStart );
+
+            vkCmdBindIndexBuffer( cmdBuffer, indexBuffer, offsetStart, indexType );
+        }
 
         mCurrentIndexBuffer = cmd->indexData;
         mCurrentVertexBuffer = cmd->vertexData;
@@ -1400,57 +1412,11 @@ namespace Ogre
             defaultLog->logMessage( String( " v1 * _render: CbDrawCallIndexed " ) );
         }
 
-        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-
         bindDescriptorSet();
 
-        const VkPrimitiveTopology indexType =
-            static_cast<VkPrimitiveTopology>( mCurrentIndexBuffer->indexBuffer->getType() );
-
-        // Get index buffer stuff which is the same for all draws in this cmd
-        const size_t bytesPerIndexElement = mCurrentIndexBuffer->indexBuffer->getIndexSize();
-
-        size_t offsetStart;
-        v1::VulkanHardwareIndexBuffer *vulkanBuffer =
-            static_cast<v1::VulkanHardwareIndexBuffer *>( mCurrentIndexBuffer->indexBuffer.get() );
-        VkBuffer indexBuffer = vulkanBuffer->getBufferName( offsetStart );
-
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
-        vkCmdBindIndexBuffer( cmdBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT16 );
-
-        vkCmdDrawIndexed( cmdBuffer, cmd->primCount, cmd->instanceCount,
-                          cmd->firstVertexIndex + offsetStart, mCurrentVertexBuffer->vertexStart,
-                          cmd->baseInstance );
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-#    if OGRE_DEBUG_MODE
-        assert( ( ( cmd->firstVertexIndex * bytesPerIndexElement ) & 0x03 ) == 0 &&
-                "Index Buffer must be aligned to 4 bytes. If you're messing with "
-                "IndexBuffer::indexStart, you've entered an invalid "
-                "indexStart; not supported by the Metal API." );
-#    endif
-
-        // Setup baseInstance.
-        // [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * sizeof( uint32 ) atIndex:15];
-        //
-        // [mActiveRenderEncoder
-        //     drawIndexedPrimitives:mCurrentPrimType
-        //                indexCount:cmd->primCount
-        //                 indexType:indexType
-        //               indexBuffer:indexBuffer
-        //         indexBufferOffset:cmd->firstVertexIndex * bytesPerIndexElement + offsetStart
-        //             instanceCount:cmd->instanceCount];
-#else
-        // [mActiveRenderEncoder
-        //     drawIndexedPrimitives:mCurrentPrimType
-        //                indexCount:cmd->primCount
-        //                 indexType:indexType
-        //               indexBuffer:indexBuffer
-        //         indexBufferOffset:cmd->firstVertexIndex * bytesPerIndexElement + offsetStart
-        //             instanceCount:cmd->instanceCount
-        //                baseVertex:mCurrentVertexBuffer->vertexStart
-        //              baseInstance:cmd->baseInstance];
-#endif
+        vkCmdDrawIndexed( cmdBuffer, cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
+                          (int32_t)mCurrentVertexBuffer->vertexStart, cmd->baseInstance );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const v1::CbDrawCallStrip *cmd )
@@ -1520,22 +1486,9 @@ namespace Ogre
                                        0.f, mDerivedDepthBiasSlopeScale * biasSign );
                 }
 
-                const VkPrimitiveTopology indexType =
-                    static_cast<VkPrimitiveTopology>( mCurrentIndexBuffer->indexBuffer->getType() );
-
-                // Get index buffer stuff which is the same for all draws in this cmd
-                const size_t bytesPerIndexElement = mCurrentIndexBuffer->indexBuffer->getIndexSize();
-
-                size_t offsetStart;
-                v1::VulkanHardwareIndexBuffer *vulkanBuffer =
-                    static_cast<v1::VulkanHardwareIndexBuffer *>(
-                        mCurrentIndexBuffer->indexBuffer.get() );
-                VkBuffer indexBuffer = vulkanBuffer->getBufferName( offsetStart );
-
-                vkCmdDrawIndexed(
-                    cmdBuffer, (uint32)mCurrentIndexBuffer->indexCount, (uint32)numberOfInstances,
-                    ( uint32 )( mCurrentIndexBuffer->indexStart * bytesPerIndexElement + offsetStart ),
-                    (int32)mCurrentVertexBuffer->vertexStart, 0u );
+                vkCmdDrawIndexed( cmdBuffer, (uint32)mCurrentIndexBuffer->indexCount,
+                                  (uint32)numberOfInstances, (uint32)mCurrentIndexBuffer->indexStart,
+                                  (int32)mCurrentVertexBuffer->vertexStart, 0u );
             } while( updatePassIterationRenderState() );
         }
         else
@@ -2058,7 +2011,7 @@ namespace Ogre
             shader->getLayoutForPso( newPso->vertexElements, bindingDescriptions,
                                      attributeDescriptions );
 
-             vertexFormatCi.vertexBindingDescriptionCount =
+            vertexFormatCi.vertexBindingDescriptionCount =
                 static_cast<uint32_t>( bindingDescriptions.size() );
             vertexFormatCi.vertexAttributeDescriptionCount =
                 static_cast<uint32_t>( attributeDescriptions.size() );
