@@ -50,6 +50,8 @@ typedef struct VkFramebuffer_T *VkFramebuffer;
 typedef struct VkShaderModule_T *VkShaderModule;
 typedef struct VkDescriptorSetLayout_T *VkDescriptorSetLayout;
 
+typedef struct VkPipelineLayout_T *VkPipelineLayout;
+
 struct VkPipelineShaderStageCreateInfo;
 
 #define OGRE_VULKAN_CONST_SLOT_START 16u

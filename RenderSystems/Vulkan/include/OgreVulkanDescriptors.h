@@ -30,7 +30,8 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
-#include "vulkan/vulkan_core.h"
+struct VkDescriptorSetLayoutBinding;
+struct DescriptorSetLayoutBindingArray;
 
 namespace Ogre
 {
