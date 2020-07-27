@@ -36,8 +36,6 @@ THE SOFTWARE.
 
 #include "vulkan/vulkan_core.h"
 
-#define TODO_missing_barrier
-
 namespace Ogre
 {
     VulkanBufferInterface::VulkanBufferInterface( size_t vboPoolIdx, VkBuffer vboName,
@@ -175,9 +173,11 @@ namespace Ogre
     void VulkanBufferInterface::copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
                                         size_t srcOffsetBytes, size_t sizeBytes )
     {
-        TODO_missing_barrier;
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mBuffer->mVaoManager );
         VulkanDevice *device = vaoManager->getDevice();
+
+        device->mGraphicsQueue.getCopyEncoder( this->getBufferPacked(), 0, true );
+        device->mGraphicsQueue.getCopyEncoder( dstBuffer->getBufferPacked(), 0, false );
 
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( dstBuffer ) );
         VulkanBufferInterface *dstBufferVk = static_cast<VulkanBufferInterface *>( dstBuffer );

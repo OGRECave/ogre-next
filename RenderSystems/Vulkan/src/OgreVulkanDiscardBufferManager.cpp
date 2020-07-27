@@ -126,6 +126,8 @@ void Ogre::VulkanDiscardBufferManager::growToFit( size_t extraBytes,
     result = vkBindBufferMemory( mDevice->mDevice, mBuffer, mDeviceMemory, offset );
     checkVkResult( result, "vkBindBufferMemory" );
 
+    mDevice->mGraphicsQueue.getCopyEncoderV1Buffer( false );
+
     {
         // Update our buffers so they point to the new buffer, copy their blocks in use from old
         // MTLBuffer to new one, and tag all of them as in use by GPU (due to the copyFromBuffer);
@@ -147,11 +149,6 @@ void Ogre::VulkanDiscardBufferManager::growToFit( size_t extraBytes,
                 region.size = alignToNextMultiple( ( *itor )->getBlockSize(), 4u );
                 vkCmdCopyBuffer( mDevice->mGraphicsQueue.mCurrentCmdBuffer, oldBuffer, mBuffer, 1u,
                                  &region );
-                // [blitEncoder copyFromBuffer:oldBuffer
-                //                sourceOffset:( *itor )->getBlockStart()
-                //                    toBuffer:mBuffer
-                //           destinationOffset:( *itor )->getBlockStart()
-                //                        size:( *itor )->getBlockSize()];
                 ( *itor )->mLastFrameUsed = currentFrame;
             }
             else

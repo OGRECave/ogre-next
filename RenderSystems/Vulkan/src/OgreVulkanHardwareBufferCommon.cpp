@@ -322,6 +322,8 @@ namespace v1
     {
         if( !this->mDiscardBuffer || mVboFlag == VulkanVaoManager::CPU_INACCESSIBLE )
         {
+            mDevice->mGraphicsQueue.getCopyEncoderV1Buffer( false );
+
             size_t srcOffsetStart = 0;
             VkBuffer srcBuf = srcBuffer->getBufferName( srcOffsetStart );
             VkBuffer dstBuf = this->getBufferNameForGpuWrite();
@@ -331,13 +333,6 @@ namespace v1
             region.dstOffset = dstOffset;
             region.size = alignToNextMultiple( length, 4u );
             vkCmdCopyBuffer( mDevice->mGraphicsQueue.mCurrentCmdBuffer, srcBuf, dstBuf, 1u, &region );
-
-            // __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = mDevice->getBlitEncoder();
-            // [blitEncoder copyFromBuffer:srcBuf
-            //                sourceOffset:srcOffset + srcOffsetStart
-            //                    toBuffer:dstBuf
-            //           destinationOffset:dstOffset
-            //                        size:length];
 
             if( this->mDiscardBuffer )
                 mDevice->stall();

@@ -172,6 +172,12 @@ namespace Ogre
         @param bDownload
             True if we plan to do CPU -> GPU transfers
             False if we plan to do GPU -> CPU transfers
+
+            If you want to perform GPU -> GPU transfers, then you need to call:
+            @code
+                queue->getCopyEncoder( src, src, true );
+                queue->getCopyEncoder( dst, dst, false );
+            @endcode
         */
         void getCopyEncoder( const BufferPacked *buffer, TextureGpu *texture, const bool bDownload );
         void getCopyEncoderV1Buffer( const bool bDownload );
