@@ -193,11 +193,13 @@ namespace Ogre
     {
         assert( mUploadOnly );
 
-        mMappingStart = 0;
         mMappingCount = sizeBytes;
 
         OGRE_ASSERT_MEDIUM( mUnmapTicket == std::numeric_limits<size_t>::max() &&
                             "VulkanStagingBuffer still mapped!" );
+
+        waitIfNeeded(); //Will fill mMappingStart
+
         mMappedPtr =
             mDynamicBuffer->map( mInternalBufferStart + mMappingStart, sizeBytes, mUnmapTicket );
 
@@ -214,7 +216,7 @@ namespace Ogre
         OGRE_ASSERT_MEDIUM( mUnmapTicket != std::numeric_limits<size_t>::max() &&
                             "VulkanStagingBuffer already unmapped!" );
 
-        mDynamicBuffer->flush( mUnmapTicket, mInternalBufferStart + mMappingStart, mMappingCount );
+        mDynamicBuffer->flush( mUnmapTicket, 0u, mMappingCount );
         mDynamicBuffer->unmap( mUnmapTicket );
         mUnmapTicket = std::numeric_limits<size_t>::max();
         mMappedPtr = 0;
@@ -238,6 +240,12 @@ namespace Ogre
             region.dstOffset = dstOffset;
             region.size = dst.length;
             vkCmdCopyBuffer( cmdBuffer, mVboName, bufferInterface->getVboName(), 1u, &region );
+        }
+
+        if( mUploadOnly )
+        {
+            //Add fence to this region (or at least, track the hazard).
+            addFence( mMappingStart, mMappingStart + mMappingCount - 1, false );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -301,7 +309,7 @@ namespace Ogre
                          "VulkanStagingBuffer::unmap" );
         }
 
-        mDynamicBuffer->flush( mUnmapTicket, mInternalBufferStart + mMappingStart, mMappingCount );
+        mDynamicBuffer->flush( mUnmapTicket, 0u, mMappingCount );
         mDynamicBuffer->unmap( mUnmapTicket );
         mUnmapTicket = std::numeric_limits<size_t>::max();
         mMappedPtr = 0;
