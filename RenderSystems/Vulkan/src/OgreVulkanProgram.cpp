@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreVulkanMappings.h"
 #include "Vao/OgreVulkanVaoManager.h"
 
+#include "OgreStringConverter.h"
 #include "OgreVulkanUtils.h"
 #include "SPIRV-Reflect/spirv_reflect.h"
 
@@ -74,6 +75,17 @@ namespace glslang
 
 namespace Ogre
 {
+    VulkanDescBindingRange::VulkanDescBindingRange() :
+        start( std::numeric_limits<uint16>::max() ),
+        end( 0 )
+    {
+    }
+    //-----------------------------------------------------------------------
+    void VulkanDescBindingRange::merge( uint16 idx )
+    {
+        start = std::min( idx, start );
+        end = std::max<uint16>( idx + 1u, end );
+    }
     //-----------------------------------------------------------------------
     VulkanProgram::CmdPreprocessorDefines VulkanProgram::msCmdPreprocessorDefines;
     //-----------------------------------------------------------------------
@@ -132,6 +144,131 @@ namespace Ogre
         }
 
         return EShLangFragment;
+    }
+    //-----------------------------------------------------------------------
+    static const String c_ogreSetKeyword = "ogre_set";
+    static const String c_ogreTypeKeyword = "ogre_";
+    void VulkanProgram::parseNumBindingsFromSource( void )
+    {
+        // TODO: Do not account what's inside comments and #ifdefs
+        for( size_t i = 0u; i < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
+        {
+            for( size_t j = 0u; j < VulkanDescBindingTypes::NumDescBindingTypes; ++j )
+                mDescBindingRanges[i][j] = VulkanDescBindingRange();
+        }
+
+        const char bufferTypes[] = "s tuT BU";
+        const size_t numBufferTypes = sizeof( bufferTypes ) - 1u;
+        const LwConstString bufferTypesStr( bufferTypes, sizeof( bufferTypes ) );
+
+        /* ogre_setN must always come before ogre_xN
+
+        layout( std140, ogre_set0, ogre_B0 ) uniform GlobalUniform {} globalUniform;
+        layout( ogre_set0, ogre_T0 ) uniform samplerBuffer texelBuffer;
+        layout( ogre_set0, ogre_t0 ) uniform sampler2D myTexture0;
+        layout( ogre_set0, ogre_t1 ) uniform sampler2D myTexture1;
+        layout( ogre_set0, ogre_u0 ) uniform image2D myTexture1;
+        layout( std430, ogre_set0, ogre_U0 ) buffer MySsbo {};
+
+        // Set 1. Note that 't2' does not reset to 0
+        layout( ogre_set1, ogre_t2 ) uniform sampler2D anotherTex2;
+
+        // You can have gaps. However you can't go back, e.g. if you have:
+        layout( ogre_set0, ogre_t0 ) uniform sampler2D myTex0;
+        layout( ogre_set0, ogre_t4 ) uniform sampler2D myTex4;
+
+        layout( ogre_set1, ogre_t3 ) uniform sampler2D myTex3; // Invalid, t3 must be in set0
+        */
+        // mSource.end();
+        size_t startPos = 0u;
+        startPos = mSource.find( c_ogreSetKeyword, startPos );
+
+        while( startPos != String::npos )
+        {
+            const size_t pos = startPos + c_ogreSetKeyword.length();
+            const size_t eolMarkerPos = mSource.find( '\n', pos );
+            const size_t endPos0 = mSource.find( ',', pos );
+            const size_t endPos1 = mSource.find( ')', pos );
+            const size_t endPos = std::min( endPos0, endPos1 );
+
+            if( endPos == String::npos || ( endPos >= eolMarkerPos && eolMarkerPos != String::npos ) )
+            {
+                mCompileError = true;
+                LogManager::getSingleton().logMessage(
+                    "Ogre Vulkan compiler error in " + mName + ":\n" +
+                    "Invalid ogre_set syntax, expecting ',' or ')' near:\n" +
+                    mSource.substr( startPos, std::min( startPos + 64u, mSource.size() - startPos ) ) );
+                return;
+            }
+
+            const String setNumStr = mSource.substr( pos, endPos - pos );
+            const int iSetNum = atoi( setNumStr.c_str() );
+
+            if( iSetNum < 0 || iSetNum >= OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS )
+            {
+                mCompileError = true;
+                LogManager::getSingleton().logMessage(
+                    "Ogre Vulkan compiler error in " + mName + ":\n" + "ogre_set must be in range [0;" +
+                    StringConverter::toString( OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS ) +
+                    ") near:\n" +
+                    mSource.substr( startPos, std::min( startPos + 64u, mSource.size() - startPos ) ) );
+                return;
+            }
+
+            const String lineStr = mSource.substr( pos, eolMarkerPos - pos );
+            const size_t typeStartPos = lineStr.find( c_ogreTypeKeyword );
+            const size_t typePos = typeStartPos + c_ogreTypeKeyword.length();
+
+            if( typeStartPos == String::npos || typePos >= lineStr.size() - 1u )
+            {
+                mCompileError = true;
+                LogManager::getSingleton().logMessage(
+                    "Ogre Vulkan compiler error in " + mName + ":\n" +
+                    "expecting ogre_xN (e.g. ogre_b0) after ogre_set near:\n" +
+                    mSource.substr( startPos, std::min( startPos + 64u, mSource.size() - startPos ) ) );
+                return;
+            }
+
+            const char typeLetter = lineStr[typePos];
+
+            const size_t letterIdx = bufferTypesStr.find_first_of( typeLetter );
+            if( letterIdx >= numBufferTypes || typeLetter == ' ' )
+            {
+                mCompileError = true;
+                LogManager::getSingleton().logMessage( "Ogre Vulkan compiler error in " + mName + ":\n" +
+                                                       "expecting possible values:" );
+
+                for( size_t i = 0u; i < numBufferTypes; ++i )
+                {
+                    if( bufferTypes[i] != ' ' )
+                        LogManager::getSingleton().logMessage( c_ogreTypeKeyword + bufferTypes[i] +
+                                                               "N" );
+                }
+
+                LogManager::getSingleton().logMessage(
+                    "where N is a number, near:\n" +
+                    mSource.substr( startPos, std::min( startPos + 64u, mSource.size() - startPos ) ) );
+                return;
+            }
+
+            const int buffIdx = atoi( &lineStr[typePos + 1u] );
+
+            if( buffIdx < 0 || buffIdx >= 65535 )
+            {
+                mCompileError = true;
+                LogManager::getSingleton().logMessage( "Ogre Vulkan compiler error in " + mName + ":\n" +
+                                                       c_ogreTypeKeyword + typeLetter +
+                                                       " must be in range [0; 65535)" );
+                LogManager::getSingleton().logMessage(
+                    "near:\n" +
+                    mSource.substr( startPos, std::min( startPos + 64u, mSource.size() - startPos ) ) );
+                return;
+            }
+
+            mDescBindingRanges[iSetNum][letterIdx].merge( static_cast<uint16>( buffIdx ) );
+
+            startPos = mSource.find( c_ogreSetKeyword, eolMarkerPos );
+        }
     }
     //-----------------------------------------------------------------------
     void VulkanProgram::initGlslResources( TBuiltInResource &resources )
@@ -246,6 +383,8 @@ namespace Ogre
         mCompiled = false;
         mCompileError = false;
 
+        parseNumBindingsFromSource();
+
         const EShLanguage stage = getEshLanguage();
         glslang::TShader shader( stage );
 
@@ -259,12 +398,15 @@ namespace Ogre
         const char *sourceCString = mSource.c_str();
         shader.setStrings( &sourceCString, 1 );
 
-        if( !shader.parse( &resources, 450, false, messages ) )
+        if( !mCompileError )
         {
-            LogManager::getSingleton().logMessage( "Vulkan GLSL compiler error in " + mName + ":\n" +
-                                                   shader.getInfoLog() + "\nDEBUG LOG:\n" +
-                                                   shader.getInfoDebugLog() );
-            mCompileError = true;
+            if( !shader.parse( &resources, 450, false, messages ) )
+            {
+                LogManager::getSingleton().logMessage( "Vulkan GLSL compiler error in " + mName + ":\n" +
+                                                       shader.getInfoLog() + "\nDEBUG LOG:\n" +
+                                                       shader.getInfoDebugLog() );
+                mCompileError = true;
+            }
         }
 
         // Add shader to new program object.

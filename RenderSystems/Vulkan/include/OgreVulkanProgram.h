@@ -41,11 +41,38 @@ struct SpvReflectShaderModule;
 
 namespace Ogre
 {
+#define OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS 4
+
     struct _OgreVulkanExport VulkanConstantDefinitionBindingParam
     {
         size_t offset;
         size_t size;
     };
+
+    struct VulkanDescBindingRange
+    {
+        uint16 start;  // Inclusive
+        uint16 end;    // Exclusive
+        VulkanDescBindingRange();
+        void merge( uint16 idx );
+    };
+
+    namespace VulkanDescBindingTypes
+    {
+        // This enum should match the first entries of VkDescriptorType
+        enum VulkanDescBindingTypes
+        {
+            Sampler,
+            SamplerTextureCombined,  // Not used by Ogre
+            Texture,
+            UavTexture,
+            TexBuffer,
+            UavBufferAutoConvert,  // Not used by Ogre
+            ConstBuffer,
+            UavBuffer,
+            NumDescBindingTypes
+        };
+    }  // namespace VulkanDescBindingTypes
 
     /** Specialisation of HighLevelGpuProgram to provide support for Vulkan
         Shader Language.
@@ -119,6 +146,8 @@ namespace Ogre
 
         EShLanguage getEshLanguage( void ) const;
 
+        void parseNumBindingsFromSource( void );
+
         static void initGlslResources( TBuiltInResource &resources );
 
         /** Internal load implementation, must be implemented by subclasses.
@@ -145,11 +174,14 @@ namespace Ogre
     private:
         VulkanDevice *mDevice;
 
+        VulkanDescBindingRange mDescBindingRanges[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS]
+                                                 [VulkanDescBindingTypes::NumDescBindingTypes];
+
         std::vector<uint32> mSpirv;
         VkShaderModule mShaderModule;
 
         FastArray<VkVertexInputAttributeDescription> mVertexInputs;
-        uint8 mNumSystemGenVertexInputs; // System-generated inputs like gl_VertexIndex
+        uint8 mNumSystemGenVertexInputs;  // System-generated inputs like gl_VertexIndex
 
         /// Flag indicating if shader object successfully compiled
         bool mCompiled;
