@@ -148,6 +148,37 @@ namespace Ogre
     //-----------------------------------------------------------------------
     static const String c_ogreSetKeyword = "ogre_set";
     static const String c_ogreTypeKeyword = "ogre_";
+    const char c_bufferTypes[] = "s tuT BU";
+    bool VulkanProgram::validate(
+        const VulkanDescBindingRange descBindingRanges[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS]
+                                                      [VulkanDescBindingTypes::NumDescBindingTypes],
+        const String &shaderName )
+    {
+        bool isValid = true;
+
+        for( size_t i = 0u; i < VulkanDescBindingTypes::NumDescBindingTypes; ++i )
+        {
+            for( size_t j = 0u; j < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS - 1u; ++j )
+            {
+                if( descBindingRanges[j][i].end > descBindingRanges[j + 1][i].start )
+                {
+                    LogManager::getSingleton().logMessage(
+                        "Ogre Vulkan compiler error in " + shaderName + ":\n" + c_ogreSetKeyword +
+                        StringConverter::toString( j ) + " goes up to " + c_ogreTypeKeyword +
+                        c_bufferTypes[i] + StringConverter::toString( descBindingRanges[j][i].end ) +
+                        " however " + c_ogreSetKeyword + StringConverter::toString( j + 1u ) +
+                        " starts from " + c_ogreTypeKeyword + c_bufferTypes[i] +
+                        StringConverter::toString( descBindingRanges[j + 1][i].start ) +
+                        "\n"
+                        "There cannot be overlaps between sets" );
+                    isValid = false;
+                }
+            }
+        }
+
+        return isValid;
+    }
+    //-----------------------------------------------------------------------
     void VulkanProgram::parseNumBindingsFromSource( void )
     {
         // TODO: Do not account what's inside comments and #ifdefs
@@ -157,18 +188,17 @@ namespace Ogre
                 mDescBindingRanges[i][j] = VulkanDescBindingRange();
         }
 
-        const char bufferTypes[] = "s tuT BU";
-        const size_t numBufferTypes = sizeof( bufferTypes ) - 1u;
-        const LwConstString bufferTypesStr( bufferTypes, sizeof( bufferTypes ) );
+        const size_t numBufferTypes = sizeof( c_bufferTypes ) - 1u;
+        const LwConstString bufferTypesStr( c_bufferTypes, sizeof( c_bufferTypes ) );
 
         /* ogre_setN must always come before ogre_xN
 
         layout( std140, ogre_set0, ogre_B0 ) uniform GlobalUniform {} globalUniform;
-        layout( ogre_set0, ogre_T0 ) uniform samplerBuffer texelBuffer;
-        layout( ogre_set0, ogre_t0 ) uniform sampler2D myTexture0;
-        layout( ogre_set0, ogre_t1 ) uniform sampler2D myTexture1;
-        layout( ogre_set0, ogre_u0 ) uniform image2D myTexture1;
-        layout( std430, ogre_set0, ogre_U0 ) buffer MySsbo {};
+        layout( ogre_set0, ogre_T0 ) uniform samplerBuffer texelBuffer; // T0 = texture buffer slot 0
+        layout( ogre_set0, ogre_t1 ) uniform sampler2D myTexture1;  // t1 = texture slot 1
+        layout( ogre_set0, ogre_t2 ) uniform sampler2D myTexture2;
+        layout( ogre_set0, ogre_u0 ) uniform image2D myTexture1;    // u0 = uav texture slot 0
+        layout( std430, ogre_set0, ogre_U1 ) buffer MySsbo {};      // U1 = uav buffer slot 1
 
         // Set 1. Note that 't2' does not reset to 0
         layout( ogre_set1, ogre_t2 ) uniform sampler2D anotherTex2;
@@ -240,8 +270,8 @@ namespace Ogre
 
                 for( size_t i = 0u; i < numBufferTypes; ++i )
                 {
-                    if( bufferTypes[i] != ' ' )
-                        LogManager::getSingleton().logMessage( c_ogreTypeKeyword + bufferTypes[i] +
+                    if( c_bufferTypes[i] != ' ' )
+                        LogManager::getSingleton().logMessage( c_ogreTypeKeyword + c_bufferTypes[i] +
                                                                "N" );
                 }
 
@@ -269,6 +299,9 @@ namespace Ogre
 
             startPos = mSource.find( c_ogreSetKeyword, eolMarkerPos );
         }
+
+        if( !mCompileError )
+            mCompileError = !validate( mDescBindingRanges, mName );
     }
     //-----------------------------------------------------------------------
     void VulkanProgram::initGlslResources( TBuiltInResource &resources )

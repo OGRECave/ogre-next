@@ -141,6 +141,12 @@ namespace Ogre
                               FastArray<VkVertexInputBindingDescription> &outBufferBindingDescs,
                               FastArray<VkVertexInputAttributeDescription> &outVertexInputs );
 
+        /// Returns true if descBindingRanges is valid. If invalid, it will also log the error
+        static bool validate(
+            const VulkanDescBindingRange descBindingRanges[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS]
+                                                          [VulkanDescBindingTypes::NumDescBindingTypes],
+            const String &shaderName );
+
     protected:
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
 
