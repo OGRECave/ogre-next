@@ -159,6 +159,10 @@ namespace Ogre
         /** Internal load implementation, must be implemented by subclasses.
          */
         void loadFromSource( void );
+
+        void addDescBindingsToPreamble( String &inOutPreamble ) const;
+        void addPreprocessorToPreamble( String &inOutPreamble ) const;
+
         /** Internal method for creating a dummy low-level program for this
         high-level program. Vulkan does not give access to the low level implementation of the
         shader so this method creates an object sub-classed from VulkanGpuProgram just to be

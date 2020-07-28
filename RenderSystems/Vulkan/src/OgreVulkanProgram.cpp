@@ -411,6 +411,94 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void VulkanProgram::loadFromSource( void ) { compile( true ); }
     //-----------------------------------------------------------------------
+    void VulkanProgram::addDescBindingsToPreamble( String &inOutPreamble ) const
+    {
+        String preamble;
+        preamble.swap( inOutPreamble );
+        for( size_t i = 0u; i < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
+        {
+            const String idxStr = StringConverter::toString( i );
+            preamble += "#define " + c_ogreSetKeyword + idxStr + " " + idxStr;
+
+            for( size_t j = 0u; j < VulkanDescBindingTypes::NumDescBindingTypes; ++j )
+            {
+                const size_t start = mDescBindingRanges[i][j].start;
+                const size_t end = mDescBindingRanges[i][j].end;
+                for( size_t r = start; r < end; ++r )
+                {
+                    preamble += "#define " + c_ogreTypeKeyword + c_bufferTypes[j] + " " +
+                                StringConverter::toString( r );
+                }
+            }
+        }
+        preamble.swap( inOutPreamble );
+    }
+    //-----------------------------------------------------------------------
+    void VulkanProgram::addPreprocessorToPreamble( String &inOutPreamble ) const
+    {
+        String preamble;
+        preamble.swap( inOutPreamble );
+        // Pass all user-defined macros to preprocessor
+        if( !mPreprocessorDefines.empty() )
+        {
+            String::size_type pos = 0u;
+            while( pos != String::npos )
+            {
+                // Find delims
+                String::size_type endPos = mPreprocessorDefines.find_first_of( ";,=", pos );
+                if( endPos != String::npos )
+                {
+                    String::size_type macro_name_start = pos;
+                    size_t macro_name_len = endPos - pos;
+                    pos = endPos;
+
+                    // Check definition part
+                    if( mPreprocessorDefines[pos] == '=' )
+                    {
+                        // Set up a definition, skip delim
+                        ++pos;
+                        String::size_type macro_val_start = pos;
+                        size_t macro_val_len;
+
+                        endPos = mPreprocessorDefines.find_first_of( ";,", pos );
+                        if( endPos == String::npos )
+                        {
+                            macro_val_len = mPreprocessorDefines.size() - pos;
+                            pos = endPos;
+                        }
+                        else
+                        {
+                            macro_val_len = endPos - pos;
+                            pos = endPos + 1u;
+                        }
+                        preamble += "#define " +
+                                    mPreprocessorDefines.substr( macro_name_start, macro_name_len ) +
+                                    " " + mPreprocessorDefines.substr( macro_val_start, macro_val_len );
+                    }
+                    else
+                    {
+                        // No definition part, define as "1"
+                        ++pos;
+                        preamble += "#define " +
+                                    mPreprocessorDefines.substr( macro_name_start, macro_name_len ) +
+                                    " 1";
+                    }
+                }
+                else
+                {
+                    if( pos < mPreprocessorDefines.size() )
+                    {
+                        preamble +=
+                            "#define " +
+                            mPreprocessorDefines.substr( pos, mPreprocessorDefines.size() - pos ) + " 1";
+                    }
+                    pos = endPos;
+                }
+            }
+        }
+        preamble.swap( inOutPreamble );
+    }
+    //-----------------------------------------------------------------------
     bool VulkanProgram::compile( const bool checkErrors )
     {
         mCompiled = false;
@@ -433,6 +521,13 @@ namespace Ogre
 
         if( !mCompileError )
         {
+            String preamble;
+
+            addDescBindingsToPreamble( preamble );
+            addPreprocessorToPreamble( preamble );
+
+            shader.setPreamble( preamble.c_str() );
+
             if( !shader.parse( &resources, 450, false, messages ) )
             {
                 LogManager::getSingleton().logMessage( "Vulkan GLSL compiler error in " + mName + ":\n" +
@@ -624,7 +719,6 @@ namespace Ogre
         // const_cast to get around the fact that buildConstantDefinitions() is const.
         VulkanProgram *vp = const_cast<VulkanProgram *>( this );
 
-        size_t numSets = 0u;
         FastArray<SpvReflectDescriptorSet *>::const_iterator itor = sets.begin();
         FastArray<SpvReflectDescriptorSet *>::const_iterator endt = sets.end();
 
