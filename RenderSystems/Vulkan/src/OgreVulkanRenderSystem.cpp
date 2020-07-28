@@ -30,12 +30,12 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include "OgreRenderPassDescriptor.h"
 #include "OgreVulkanCache.h"
-#include "OgreVulkanDescriptors.h"
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanGpuProgramManager.h"
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanProgramFactory.h"
 #include "OgreVulkanRenderPassDescriptor.h"
+#include "OgreVulkanRootLayout.h"
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
 #include "OgreVulkanWindow.h"
@@ -1947,7 +1947,7 @@ namespace Ogre
         size_t numShaderStages = 0u;
         VkPipelineShaderStageCreateInfo shaderStages[GPT_COMPUTE_PROGRAM];
 
-        DescriptorSetLayoutBindingArray descriptorLayoutBindingSets;
+        VulkanRootLayout *rootLayout = 0;
 
         VulkanProgram *vertexShader = 0;
         VulkanProgram *pixelShader = 0;
@@ -1956,8 +1956,7 @@ namespace Ogre
         {
             vertexShader = static_cast<VulkanProgram *>( newPso->vertexShader->_getBindingDelegate() );
             vertexShader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
-            VulkanDescriptors::generateAndMergeDescriptorSets( vertexShader,
-                                                               descriptorLayoutBindingSets );
+            rootLayout = VulkanRootLayout::findBest( rootLayout, vertexShader->getRootLayout() );
         }
 
         if( !newPso->geometryShader.isNull() )
@@ -1965,7 +1964,7 @@ namespace Ogre
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->geometryShader->_getBindingDelegate() );
             shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
-            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorLayoutBindingSets );
+            rootLayout = VulkanRootLayout::findBest( rootLayout, shader->getRootLayout() );
         }
 
         if( !newPso->tesselationHullShader.isNull() )
@@ -1973,7 +1972,7 @@ namespace Ogre
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->tesselationHullShader->_getBindingDelegate() );
             shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
-            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorLayoutBindingSets );
+            rootLayout = VulkanRootLayout::findBest( rootLayout, shader->getRootLayout() );
         }
 
         if( !newPso->tesselationDomainShader.isNull() )
@@ -1981,22 +1980,39 @@ namespace Ogre
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->tesselationDomainShader->_getBindingDelegate() );
             shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
-            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorLayoutBindingSets );
+            rootLayout = VulkanRootLayout::findBest( rootLayout, shader->getRootLayout() );
         }
 
         if( !newPso->pixelShader.isNull() )
         {
             pixelShader = static_cast<VulkanProgram *>( newPso->pixelShader->_getBindingDelegate() );
             pixelShader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
-            VulkanDescriptors::generateAndMergeDescriptorSets( pixelShader,
-                                                               descriptorLayoutBindingSets );
+            rootLayout = VulkanRootLayout::findBest( rootLayout, pixelShader->getRootLayout() );
         }
 
-        VulkanDescriptors::optimizeDescriptorSets( descriptorLayoutBindingSets );
+        if( !rootLayout )
+        {
+            String shaderNames =
+                "The following shaders cannot be linked. Their Root Layouts are incompatible:\n";
+            if( newPso->vertexShader )
+                shaderNames += newPso->vertexShader->getName() + " ";
+            if( newPso->geometryShader )
+                shaderNames += newPso->geometryShader->getName() + " ";
+            if( newPso->tesselationHullShader )
+                shaderNames += newPso->tesselationHullShader->getName() + " ";
+            if( newPso->tesselationDomainShader )
+                shaderNames += newPso->tesselationDomainShader->getName() + " ";
+            if( newPso->pixelShader )
+                shaderNames += newPso->pixelShader->getName() + " ";
 
-        DescriptorSetLayoutArray sets;
-        VkPipelineLayout layout =
-            VulkanDescriptors::generateVkDescriptorSets( descriptorLayoutBindingSets, sets );
+            LogManager::getSingleton().logMessage( shaderNames, LML_CRITICAL );
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Shaders cannot be linked together. Their Root Layouts are incompatible. See "
+                         "Ogre.log for more info",
+                         "VulkanRenderSystem::_hlmsPipelineStateObjectCreated" );
+        }
+
+        VkPipelineLayout layout = rootLayout->createVulkanHandles();
 
         VkPipelineVertexInputStateCreateInfo vertexFormatCi;
         makeVkStruct( vertexFormatCi, VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO );
@@ -2179,8 +2195,7 @@ namespace Ogre
                                                      &pipeline, 0, &vulkanPso );
         checkVkResult( result, "vkCreateGraphicsPipelines" );
 
-        VulkanHlmsPso *pso = new VulkanHlmsPso( vulkanPso, vertexShader, pixelShader,
-                                                descriptorLayoutBindingSets, sets, layout );
+        VulkanHlmsPso *pso = new VulkanHlmsPso( vulkanPso, vertexShader, pixelShader, rootLayout );
         // pso->pso = vulkanPso;
         // pso->vertexShader = vertexShader;
         // pso->pixelShader = pixelShader;

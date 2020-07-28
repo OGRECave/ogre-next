@@ -41,38 +41,11 @@ struct SpvReflectShaderModule;
 
 namespace Ogre
 {
-#define OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS 4
-
     struct _OgreVulkanExport VulkanConstantDefinitionBindingParam
     {
         size_t offset;
         size_t size;
     };
-
-    struct VulkanDescBindingRange
-    {
-        uint16 start;  // Inclusive
-        uint16 end;    // Exclusive
-        VulkanDescBindingRange();
-        void merge( uint16 idx );
-    };
-
-    namespace VulkanDescBindingTypes
-    {
-        // This enum should match the first entries of VkDescriptorType
-        enum VulkanDescBindingTypes
-        {
-            Sampler,
-            SamplerTextureCombined,  // Not used by Ogre
-            Texture,
-            UavTexture,
-            TexBuffer,
-            UavBufferAutoConvert,  // Not used by Ogre
-            ConstBuffer,
-            UavBuffer,
-            NumDescBindingTypes
-        };
-    }  // namespace VulkanDescBindingTypes
 
     /** Specialisation of HighLevelGpuProgram to provide support for Vulkan
         Shader Language.
@@ -137,22 +110,18 @@ namespace Ogre
             return mConstantDefsBindingParams;
         }
 
+        VulkanRootLayout *getRootLayout( void ) { return mRootLayout; }
+
         void getLayoutForPso( const VertexElement2VecVec &vertexElements,
                               FastArray<VkVertexInputBindingDescription> &outBufferBindingDescs,
                               FastArray<VkVertexInputAttributeDescription> &outVertexInputs );
-
-        /// Returns true if descBindingRanges is valid. If invalid, it will also log the error
-        static bool validate(
-            const VulkanDescBindingRange descBindingRanges[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS]
-                                                          [VulkanDescBindingTypes::NumDescBindingTypes],
-            const String &shaderName );
 
     protected:
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
 
         EShLanguage getEshLanguage( void ) const;
 
-        void parseNumBindingsFromSource( void );
+        void extractRootLayoutFromSource( void );
 
         static void initGlslResources( TBuiltInResource &resources );
 
@@ -160,7 +129,6 @@ namespace Ogre
          */
         void loadFromSource( void );
 
-        void addDescBindingsToPreamble( String &inOutPreamble ) const;
         void addPreprocessorToPreamble( String &inOutPreamble ) const;
 
         /** Internal method for creating a dummy low-level program for this
@@ -184,8 +152,7 @@ namespace Ogre
     private:
         VulkanDevice *mDevice;
 
-        VulkanDescBindingRange mDescBindingRanges[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS]
-                                                 [VulkanDescBindingTypes::NumDescBindingTypes];
+        VulkanRootLayout *mRootLayout;
 
         std::vector<uint32> mSpirv;
         VkShaderModule mShaderModule;

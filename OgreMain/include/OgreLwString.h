@@ -225,6 +225,18 @@ namespace Ogre
             return *this;
         }
 
+        LwString& aChar( char a0 )
+        {
+            assert( mSize + 1u < mCapacity );
+            if( mSize + 1u < mCapacity )
+            {
+                mStrPtr[mSize] = a0;
+                mStrPtr[mSize+1u] = '\0';
+                ++mSize;
+            }
+            return *this;
+        }
+
         LwString& a( int32 a0 )
         {
             int written = _snprintf( mStrPtr + mSize,

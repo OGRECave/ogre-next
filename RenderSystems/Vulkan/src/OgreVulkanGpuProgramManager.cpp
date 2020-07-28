@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreVulkanGpuProgramManager.h"
 
 #include "OgreVulkanDevice.h"
+#include "OgreVulkanRootLayout.h"
 #include "OgreVulkanUtils.h"
 
 #include "OgreLogManager.h"
@@ -57,25 +58,7 @@ namespace Ogre
                a.pImmutableSamplers < b.pImmutableSamplers;
     }
 
-    bool operator<( const VkDescriptorSetLayoutBindingArray &a,
-                    const VkDescriptorSetLayoutBindingArray &b )
-    {
-        const size_t aSize = b.size();
-        const size_t bSize = b.size();
-        if( aSize != bSize )
-            return aSize < bSize;
-
-        for( size_t i = 0u; i < aSize; ++i )
-        {
-            if( a[i] != b[i] )
-                return a[i] < b[i];
-        }
-
-        // If we're here then a and b are equals, thus a < b returns false
-        return false;
-    }
-
-    bool operator<( const DescriptorSetLayoutArray &a, const DescriptorSetLayoutArray &b )
+    bool operator<( const VulkanSingleSetLayoutDesc &a, const VulkanSingleSetLayoutDesc &b )
     {
         const size_t aSize = b.size();
         const size_t bSize = b.size();
@@ -94,7 +77,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    VulkanGpuProgramManager::VulkanGpuProgramManager( VulkanDevice *device ) : mDevice( device )
+    VulkanGpuProgramManager::VulkanGpuProgramManager( VulkanDevice *device ) :
+        mTmpRootLayout( new VulkanRootLayout( this ) ),
+        mDevice( device )
     {
         // Superclass sets up members
 
@@ -104,6 +89,35 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanGpuProgramManager::~VulkanGpuProgramManager()
     {
+        delete mTmpRootLayout;
+        mTmpRootLayout = 0;
+
+        {
+            VulkanRootLayoutSet::const_iterator itor = mRootLayouts.begin();
+            VulkanRootLayoutSet::const_iterator endt = mRootLayouts.end();
+
+            while( itor != endt )
+            {
+                delete *itor;
+                ++itor;
+            }
+
+            mRootLayouts.clear();
+        }
+
+        {
+            DescriptorSetMap::const_iterator itor = mDescriptorSetMap.begin();
+            DescriptorSetMap::const_iterator endt = mDescriptorSetMap.end();
+
+            while( itor != endt )
+            {
+                vkDestroyDescriptorSetLayout( mDevice->mDevice, itor->second, 0 );
+                ++itor;
+            }
+
+            mDescriptorSetMap.clear();
+        }
+
         // Unregister with resource group manager
         ResourceGroupManager::getSingleton()._unregisterResourceManager( mResourceType );
     }
@@ -119,8 +133,7 @@ namespace Ogre
         return mProgramMap.erase( syntaxCode ) != 0;
     }
     //-------------------------------------------------------------------------
-    VkDescriptorSetLayout VulkanGpuProgramManager::getCachedSet(
-        const VkDescriptorSetLayoutBindingArray &set )
+    VkDescriptorSetLayout VulkanGpuProgramManager::getCachedSet( const VulkanSingleSetLayoutDesc &set )
     {
         VkDescriptorSetLayout retVal = 0;
 
@@ -146,26 +159,25 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    VkPipelineLayout VulkanGpuProgramManager::getCachedSets( const DescriptorSetLayoutArray &vkSets )
+    VulkanRootLayout *VulkanGpuProgramManager::getRootLayout( const char *rootLayout,
+                                                              const bool bCompute,
+                                                              const String &filename )
     {
-        VkPipelineLayout retVal = 0;
+        VulkanRootLayout *retVal = 0;
 
-        DescriptorSetsVkMap::const_iterator itor = mDescriptorSetsVkMap.find( vkSets );
+        mTmpRootLayout->parseRootLayout( rootLayout, bCompute, filename );
 
-        if( itor == mDescriptorSetsVkMap.end() )
+        VulkanRootLayoutSet::const_iterator itor = mRootLayouts.find( mTmpRootLayout );
+
+        if( itor == mRootLayouts.end() )
         {
-            VkPipelineLayoutCreateInfo pipelineLayoutCi;
-            makeVkStruct( pipelineLayoutCi, VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO );
-            pipelineLayoutCi.setLayoutCount = static_cast<uint32>( vkSets.size() );
-            pipelineLayoutCi.pSetLayouts = vkSets.begin();
-
-            VkResult result = vkCreatePipelineLayout( mDevice->mDevice, &pipelineLayoutCi, 0, &retVal );
-            checkVkResult( result, "vkCreatePipelineLayout" );
-            mDescriptorSetsVkMap[vkSets] = retVal;
+            retVal = mTmpRootLayout;
+            mRootLayouts.insert( mTmpRootLayout );
+            mTmpRootLayout = new VulkanRootLayout( this );
         }
         else
         {
-            retVal = itor->second;
+            retVal = *itor;
         }
 
         return retVal;
@@ -222,5 +234,11 @@ namespace Ogre
         }
 
         return ( iter->second )( this, name, handle, group, isManual, loader, gptype, syntaxCode );
+    }
+    //-------------------------------------------------------------------------
+    bool VulkanGpuProgramManager::SortByVulkanRootLayout::operator()( const VulkanRootLayout *a,
+                                                                      const VulkanRootLayout *b ) const
+    {
+        return *a < *b;
     }
 }  // namespace Ogre

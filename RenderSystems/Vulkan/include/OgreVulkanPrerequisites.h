@@ -76,6 +76,7 @@ namespace Ogre
     class VulkanProgramFactory;
     class VulkanQueue;
     class VulkanRenderSystem;
+    class VulkanRootLayout;
     class VulkanStagingBuffer;
     class VulkanTextureGpu;
     class VulkanVaoManager;

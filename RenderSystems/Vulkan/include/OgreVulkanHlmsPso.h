@@ -32,8 +32,6 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
-#include "OgreVulkanDescriptors.h"
-
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -56,17 +54,10 @@ namespace Ogre
         VulkanProgram *vertexShader;
         VulkanProgram *pixelShader;
 
-        DescriptorSetLayoutBindingArray descriptorLayoutBindingSets;
-        DescriptorSetLayoutArray descriptorSets;
-
-        //std::vector<VulkanDescriptorSetLayout> descriptorLayoutSets;
-
-        VkPipelineLayout pipelineLayout;
-
+        VulkanRootLayout const *rootLayout;
 
         VulkanHlmsPso( VkPipeline pso, VulkanProgram *vertexShader, VulkanProgram *pixelShader,
-                       const DescriptorSetLayoutBindingArray &descriptorLayoutBindingSets,
-                       const DescriptorSetLayoutArray &descriptorSets, VkPipelineLayout layout );
+                       VulkanRootLayout const *_rootLayout );
 
         ~VulkanHlmsPso();
     };

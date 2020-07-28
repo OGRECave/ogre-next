@@ -40,13 +40,9 @@ namespace Ogre
     class VulkanProgram;
 
     // Sets' descriptor
-    typedef FastArray<VkDescriptorSetLayoutBinding> VkDescriptorSetLayoutBindingArray;
-    // Sets' opaque handles
-    typedef FastArray<VkDescriptorSetLayout> DescriptorSetLayoutArray;
+    typedef FastArray<VkDescriptorSetLayoutBinding> VulkanSingleSetLayoutDesc;
 
-    bool operator<( const VkDescriptorSetLayoutBindingArray &a,
-                    const VkDescriptorSetLayoutBindingArray &b );
-    bool operator<( const DescriptorSetLayoutArray &a, const DescriptorSetLayoutArray &b );
+    bool operator<( const VulkanSingleSetLayoutDesc &a, const VulkanSingleSetLayoutDesc &b );
 
     class _OgreVulkanExport VulkanGpuProgramManager : public GpuProgramManager
     {
@@ -58,14 +54,21 @@ namespace Ogre
                                                            const String &syntaxCode );
 
     private:
+        struct SortByVulkanRootLayout
+        {
+            bool operator()( const VulkanRootLayout *a, const VulkanRootLayout *b ) const;
+        };
+
         typedef map<String, CreateGpuProgramCallback>::type ProgramMap;
         ProgramMap mProgramMap;
 
-        typedef map<VkDescriptorSetLayoutBindingArray, VkDescriptorSetLayout>::type DescriptorSetMap;
+        typedef map<VulkanSingleSetLayoutDesc, VkDescriptorSetLayout>::type DescriptorSetMap;
         DescriptorSetMap mDescriptorSetMap;
 
-        typedef map<DescriptorSetLayoutArray, VkPipelineLayout>::type DescriptorSetsVkMap;
-        DescriptorSetsVkMap mDescriptorSetsVkMap;
+        typedef set<VulkanRootLayout *, SortByVulkanRootLayout>::type VulkanRootLayoutSet;
+        VulkanRootLayoutSet mRootLayouts;
+
+        VulkanRootLayout *mTmpRootLayout;
 
         VulkanDevice *mDevice;
 
@@ -85,8 +88,17 @@ namespace Ogre
         bool registerProgramFactory( const String &syntaxCode, CreateGpuProgramCallback createFn );
         bool unregisterProgramFactory( const String &syntaxCode );
 
-        VkDescriptorSetLayout getCachedSet( const VkDescriptorSetLayoutBindingArray &set );
-        VkPipelineLayout getCachedSets( const DescriptorSetLayoutArray &vkSets );
+        VulkanDevice *getDevice( void ) const { return mDevice; }
+
+        VkDescriptorSetLayout getCachedSet( const VulkanSingleSetLayoutDesc &set );
+
+        /// Finds a cached root layout from the given JSON data, creates a new one if not found.
+        ///
+        /// filename is only for error/debugging purposes
+        ///
+        /// @see    VulkanRootLayout::parseRootLayout
+        VulkanRootLayout *getRootLayout( const char *rootLayout, const bool bCompute,
+                                         const String &filename );
     };
 }  // namespace Ogre
 
