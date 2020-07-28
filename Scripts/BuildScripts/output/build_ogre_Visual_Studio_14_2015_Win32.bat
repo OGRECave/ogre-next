@@ -2,7 +2,7 @@
 @echo off
 SETLOCAL
 
-set OGRE_BRANCH_NAME=master
+set OGRE_BRANCH_NAME=v2-2
 set GENERATOR="Visual Studio 14 2015"
 set PLATFORM=Win32
 
@@ -44,12 +44,16 @@ echo --- Building ogre-next-deps ---
 
 cd ../../
 IF NOT EXIST ogre-next (
-	echo --- Cloning Ogre master ---
+	echo --- Cloning Ogre v2-2 ---
 	git clone --branch %OGRE_BRANCH_NAME% https://github.com/OGRECave/ogre-next
 )
 cd ogre-next
 IF NOT EXIST Dependencies (
 	mklink /D Dependencies ..\ogre-next-deps\build\ogredeps
+	IF ERRORLEVEL 1 (
+		echo Failed to create Dependency directory symlink. Run the script as Administrator.
+		EXIT /B 1
+	)
 )
 mkdir build
 cd build
