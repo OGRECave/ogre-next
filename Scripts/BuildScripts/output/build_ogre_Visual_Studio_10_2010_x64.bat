@@ -50,6 +50,10 @@ IF NOT EXIST ogre-next (
 cd ogre-next
 IF NOT EXIST Dependencies (
 	mklink /D Dependencies ..\ogre-next-deps\build\ogredeps
+	IF ERRORLEVEL 1 (
+		echo Failed to create Dependency directory symlink. Run the script as Administrator.
+		EXIT /B 1
+	)
 )
 mkdir build
 cd build
