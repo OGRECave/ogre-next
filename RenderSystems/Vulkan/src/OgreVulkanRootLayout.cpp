@@ -242,7 +242,7 @@ namespace Ogre
             for( size_t j = 0u; j < VulkanDescBindingTypes::NumDescBindingTypes; ++j )
             {
                 if( mDescBindingRanges[i][j].isInUse() )
-                    numSets = i;
+                    numSets = i + 1u;
             }
         }
         return numSets;
