@@ -28,7 +28,9 @@ THE SOFTWARE.
 
 #include "OgreVulkanRootLayout.h"
 
+#include "OgreVulkanDescriptorPool.h"
 #include "OgreVulkanDevice.h"
+#include "OgreVulkanGlobalBindingTable.h"
 #include "OgreVulkanGpuProgramManager.h"
 #include "OgreVulkanUtils.h"
 
@@ -299,6 +301,116 @@ namespace Ogre
         checkVkResult( result, "vkCreatePipelineLayout" );
 
         return mRootLayout;
+    }
+    //-------------------------------------------------------------------------
+    inline void VulkanRootLayout::bindCommon( VkWriteDescriptorSet &writeDescSet,
+                                              size_t &numWriteDescSets, uint32 &currBinding,
+                                              VkDescriptorSet descSet,
+                                              const VulkanDescBindingRange &bindRanges )
+    {
+        makeVkStruct( writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
+        writeDescSet.dstSet = descSet;
+        writeDescSet.dstBinding = currBinding;
+        writeDescSet.dstArrayElement = 1u;
+        writeDescSet.descriptorCount = static_cast<uint32_t>( bindRanges.getNumUsedSlots() );
+        currBinding += bindRanges.getNumUsedSlots();
+        ++numWriteDescSets;
+    }
+    //-------------------------------------------------------------------------
+    inline void VulkanRootLayout::bindConstBuffers( VkWriteDescriptorSet *writeDescSets,
+                                                    size_t &numWriteDescSets, uint32 &currBinding,
+                                                    VkDescriptorSet descSet,
+                                                    const VulkanDescBindingRange *descBindingRanges,
+                                                    const VulkanGlobalBindingTable &table )
+    {
+        const VulkanDescBindingRange &bindRanges =
+            descBindingRanges[VulkanDescBindingTypes::ConstBuffer];
+
+        if( !bindRanges.isInUse() )
+            return;
+
+        VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        writeDescSet.pBufferInfo = &table.constBuffers[bindRanges.start];
+    }
+    //-------------------------------------------------------------------------
+    inline void VulkanRootLayout::bindTexBuffers( VkWriteDescriptorSet *writeDescSets,
+                                                  size_t &numWriteDescSets, uint32 &currBinding,
+                                                  VkDescriptorSet descSet,
+                                                  const VulkanDescBindingRange *descBindingRanges,
+                                                  const VulkanGlobalBindingTable &table )
+    {
+        const VulkanDescBindingRange &bindRanges = descBindingRanges[VulkanDescBindingTypes::TexBuffer];
+
+        if( !bindRanges.isInUse() )
+            return;
+
+        VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
+        writeDescSet.pTexelBufferView = &table.texBuffers[bindRanges.start];
+    }
+    //-------------------------------------------------------------------------
+    inline void VulkanRootLayout::bindTextures( VkWriteDescriptorSet *writeDescSets,
+                                                size_t &numWriteDescSets, uint32 &currBinding,
+                                                VkDescriptorSet descSet,
+                                                const VulkanDescBindingRange *descBindingRanges,
+                                                const VulkanGlobalBindingTable &table )
+    {
+        const VulkanDescBindingRange &bindRanges = descBindingRanges[VulkanDescBindingTypes::Texture];
+
+        if( !bindRanges.isInUse() )
+            return;
+
+        VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
+        writeDescSet.pImageInfo = &table.textures[bindRanges.start];
+    }
+    //-------------------------------------------------------------------------
+    inline void VulkanRootLayout::bindSamplers( VkWriteDescriptorSet *writeDescSets,
+                                                size_t &numWriteDescSets, uint32 &currBinding,
+                                                VkDescriptorSet descSet,
+                                                const VulkanDescBindingRange *descBindingRanges,
+                                                const VulkanGlobalBindingTable &table )
+    {
+        const VulkanDescBindingRange &bindRanges = descBindingRanges[VulkanDescBindingTypes::Texture];
+
+        if( !bindRanges.isInUse() )
+            return;
+
+        VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
+        writeDescSet.pImageInfo = &table.samplers[bindRanges.start];
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRootLayout::bind( VulkanDevice *device, const VulkanGlobalBindingTable &table )
+    {
+        VulkanDescriptorPool *pool = 0;
+
+        const size_t numSets = mSets.size();
+
+        for( size_t i = 0u; i < numSets; ++i )
+        {
+            VkDescriptorSet descSet = pool->allocate( device, mSets[i] );
+
+            const VulkanDescBindingRange *descBindingRanges = mDescBindingRanges[i];
+
+            size_t numWriteDescSets = 0u;
+            uint32 currBinding = 0u;
+            VkWriteDescriptorSet writeDescSets[VulkanDescBindingTypes::Sampler + 1u];
+
+            bindConstBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
+                              table );
+            bindTexBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
+                            table );
+            bindTextures( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
+                          table );
+            bindSamplers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
+                          table );
+        }
     }
     //-------------------------------------------------------------------------
     VulkanRootLayout *VulkanRootLayout::findBest( VulkanRootLayout *a, VulkanRootLayout *b )

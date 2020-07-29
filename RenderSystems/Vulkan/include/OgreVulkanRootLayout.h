@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreVulkanPrerequisites.h"
 
 struct VkDescriptorSetLayoutBinding;
+struct VkWriteDescriptorSet;
 
 // Forward declaration for |Document|.
 namespace rapidjson
@@ -83,8 +84,19 @@ namespace Ogre
         bool mCompute;
         VulkanDescBindingRange mDescBindingRanges[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS]
                                                  [VulkanDescBindingTypes::NumDescBindingTypes];
+
+        /// One handle per binding set (up to OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS)
+        /// Doesn't have gaps (e.g. if mDescBindingRanges[3] is not empty, then mSets[3] must exist)
+        /// Won't be initialized if this VulkanRootLayout never makes it into a PSO.
         FastArray<VkDescriptorSetLayout> mSets;
+
+        /// The Vulkan Handle to our root layout. Won't be initialized if this
+        /// VulkanRootLayout never makes it into a PSO.
         VkPipelineLayout mRootLayout;
+
+        /// There's one VulkanDescriptorPool per binding set, per frame index
+        /// mPools[setIdx][frameNum]
+        FastArray<VulkanDescriptorPool> mPools[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS];
 
         VulkanGpuProgramManager *mProgramManager;
 
@@ -94,6 +106,26 @@ namespace Ogre
         size_t calculateNumUsedSets( void ) const;
         size_t calculateNumBindings( const size_t setIdx ) const;
 
+        inline void bindCommon( VkWriteDescriptorSet &writeDescSet, size_t &numWriteDescSets,
+                                uint32 &currBinding, VkDescriptorSet descSet,
+                                const VulkanDescBindingRange &bindRanges );
+        inline void bindConstBuffers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
+                                      uint32 &currBinding, VkDescriptorSet descSet,
+                                      const VulkanDescBindingRange *descBindingRanges,
+                                      const VulkanGlobalBindingTable &table );
+        inline void bindTexBuffers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
+                                    uint32 &currBinding, VkDescriptorSet descSet,
+                                    const VulkanDescBindingRange *descBindingRanges,
+                                    const VulkanGlobalBindingTable &table );
+        inline void bindTextures( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
+                                  uint32 &currBinding, VkDescriptorSet descSet,
+                                  const VulkanDescBindingRange *descBindingRanges,
+                                  const VulkanGlobalBindingTable &table );
+        inline void bindSamplers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
+                                  uint32 &currBinding, VkDescriptorSet descSet,
+                                  const VulkanDescBindingRange *descBindingRanges,
+                                  const VulkanGlobalBindingTable &table );
+
     public:
         VulkanRootLayout( VulkanGpuProgramManager *programManager );
         ~VulkanRootLayout();
@@ -102,6 +134,8 @@ namespace Ogre
         void generateRootLayoutMacros( String &outString ) const;
 
         VkPipelineLayout createVulkanHandles( void );
+
+        void bind( VulkanDevice *device, const VulkanGlobalBindingTable &table );
 
         /// Two root layouts can be incompatible. If so, we return nullptr
         ///

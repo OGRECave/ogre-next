@@ -72,8 +72,10 @@ namespace Ogre
     // Forward declarations
     class VulkanBufferInterface;
     class VulkanCache;
+    class VulkanDescriptorPool;
     struct VulkanDevice;
     class VulkanDynamicBuffer;
+    struct VulkanGlobalBindingTable;
     class VulkanGpuProgramManager;
     class VulkanProgram;
     class VulkanProgramFactory;
