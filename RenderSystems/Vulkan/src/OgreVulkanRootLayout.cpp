@@ -97,7 +97,8 @@ namespace Ogre
         {
             for( size_t j = 0u; j < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS - 1u; ++j )
             {
-                if( mDescBindingRanges[j][i].end > mDescBindingRanges[j + 1][i].start )
+                if( mDescBindingRanges[j][i].end > mDescBindingRanges[j + 1][i].start &&
+                    mDescBindingRanges[j + 1][i].isInUse() )
                 {
                     char tmpBuffer[1024];
                     LwString tmpStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
@@ -126,10 +127,10 @@ namespace Ogre
         for( size_t i = 0u; i < VulkanDescBindingTypes::NumDescBindingTypes; ++i )
         {
             itor = jsonValue.FindMember( c_rootLayoutVarNames[i] );
-            if( itor != jsonValue.MemberEnd() && jsonValue.IsArray() && jsonValue.Size() == 2u &&
-                jsonValue[0].IsUint() && jsonValue[1].IsUint() )
+            if( itor != jsonValue.MemberEnd() && itor->value.IsArray() && itor->value.Size() == 2u &&
+                itor->value[0].IsUint() && itor->value[1].IsUint() )
             {
-                if( jsonValue[0].GetUint() > 65535 || jsonValue[1].GetUint() > 65535 )
+                if( itor->value[0].GetUint() > 65535 || itor->value[1].GetUint() > 65535 )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "Error at file " + filename +
@@ -140,8 +141,8 @@ namespace Ogre
 
                 TODO_limit_NUM_BIND_TEXTURES;  // Only for dynamic sets
 
-                mDescBindingRanges[setIdx][i].start = static_cast<uint16>( jsonValue[0].GetUint() );
-                mDescBindingRanges[setIdx][i].end = static_cast<uint16>( jsonValue[1].GetUint() );
+                mDescBindingRanges[setIdx][i].start = static_cast<uint16>( itor->value[0].GetUint() );
+                mDescBindingRanges[setIdx][i].end = static_cast<uint16>( itor->value[1].GetUint() );
 
                 if( mDescBindingRanges[setIdx][i].start > mDescBindingRanges[setIdx][i].end )
                 {
@@ -223,7 +224,7 @@ namespace Ogre
                 {
                     textStr.resize( prefixSize1 );  // #define ogre_B
                     // #define ogre_B3 set = 1, binding = 6
-                    textStr.a( bindingCounts[j], " set = ", (uint32)i, ", binding = ", (uint32)k );
+                    textStr.a( bindingCounts[j], " set = ", (uint32)i, ", binding = ", (uint32)k, "\n" );
                     ++bindingCounts[j];
 
                     macroStr += textStr.c_str();
@@ -394,6 +395,8 @@ namespace Ogre
     {
         VulkanDescriptorPool *pool = 0;
 
+        VkDescriptorSet descSets[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS];
+
         const size_t numSets = mSets.size();
 
         for( size_t i = 0u; i < numSets; ++i )
@@ -417,7 +420,13 @@ namespace Ogre
 
             vkUpdateDescriptorSets( device->mDevice, static_cast<uint32_t>( numWriteDescSets ),
                                     writeDescSets, 0u, 0 );
+            descSets[i] = descSet;
         }
+
+        vkCmdBindDescriptorSets(
+            device->mGraphicsQueue.mCurrentCmdBuffer,
+            mCompute ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS, mRootLayout, 0u,
+            static_cast<uint32_t>( mSets.size() ), descSets, 0u, 0 );
     }
     //-------------------------------------------------------------------------
     VulkanRootLayout *VulkanRootLayout::findBest( VulkanRootLayout *a, VulkanRootLayout *b )
@@ -488,6 +497,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     bool VulkanRootLayout::operator<( const VulkanRootLayout &other ) const
     {
+        if( this->mCompute != other.mCompute )
+            return this->mCompute < other.mCompute;
+
         for( size_t i = 0u; i < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
         {
             for( size_t j = 0u; j < VulkanDescBindingTypes::NumDescBindingTypes; ++j )

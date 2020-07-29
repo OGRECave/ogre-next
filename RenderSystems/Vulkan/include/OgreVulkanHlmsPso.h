@@ -54,10 +54,10 @@ namespace Ogre
         VulkanProgram *vertexShader;
         VulkanProgram *pixelShader;
 
-        VulkanRootLayout const *rootLayout;
+        VulkanRootLayout *rootLayout;
 
         VulkanHlmsPso( VkPipeline pso, VulkanProgram *vertexShader, VulkanProgram *pixelShader,
-                       VulkanRootLayout const *_rootLayout );
+                       VulkanRootLayout *_rootLayout );
 
         ~VulkanHlmsPso();
     };

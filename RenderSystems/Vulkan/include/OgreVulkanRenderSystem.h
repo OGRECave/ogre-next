@@ -128,6 +128,8 @@ namespace Ogre
 
         void bindDescriptorSet() const;
 
+        void flushRootLayout( void );
+
     public:
         VulkanRenderSystem();
 

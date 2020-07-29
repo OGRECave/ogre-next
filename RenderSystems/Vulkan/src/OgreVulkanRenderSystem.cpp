@@ -1240,6 +1240,16 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::flushRootLayout( void )
+    {
+        if( !mTableDirty )
+            return;
+
+        VulkanRootLayout *rootLayout = mPso->rootLayout;
+        rootLayout->bind( mDevice, mGlobalTable );
+        mTableDirty = false;
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const CbDrawCallIndexed *cmd )
     {
         Log *defaultLog = LogManager::getSingleton().getDefaultLog();
@@ -1461,6 +1471,8 @@ namespace Ogre
             defaultLog->logMessage( String( " * _render: RenderOperation " ) +
                                     StringConverter::toString( op.operationType ) );
         }
+
+        flushRootLayout();
 
         // Call super class.
         RenderSystem::_render( op );
