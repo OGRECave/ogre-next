@@ -152,6 +152,7 @@ namespace Ogre
         mDevice( 0 ),
         mCache( 0 ),
         mPso( 0 ),
+        mTableDirty( false ),
         mEntriesToFlush( 0u ),
         mVpChanged( false ),
         CreateDebugReportCallback( 0 ),
@@ -159,6 +160,10 @@ namespace Ogre
         mDebugReportCallback( 0 ),
         mCurrentDescriptorSetTexture( 0 )
     {
+        memset( &mGlobalTable, 0, sizeof( mGlobalTable ) );
+
+        for( size_t i = 0u; i < NUM_BIND_TEXTURES; ++i )
+            mGlobalTable.textures[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::shutdown( void )
@@ -510,6 +515,11 @@ namespace Ogre
         {
             defaultLog->logMessage( String( " _setTexture " ) );
         }
+
+        OGRE_ASSERT_MEDIUM( unit < NUM_BIND_TEXTURES );
+        VulkanTextureGpu *tex = static_cast<VulkanTextureGpu *>( texPtr );
+        mGlobalTable.textures[unit].imageView = tex->getDefaultDisplaySrv();
+        mTableDirty = true;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set,
@@ -801,20 +811,10 @@ namespace Ogre
                                     StringConverter::toString( texUnit ) );
         }
 
-        // assert( ( !samplerblock || samplerblock->mRsData ) &&
-        //         "The block must have been created via HlmsManager::getSamplerblock!" );
-        //
-        // if( !samplerblock )
-        // {
-        //     [mActiveRenderEncoder setFragmentSamplerState:0 atIndex:texUnit];
-        // }
-        // else
-        // {
-        //     __unsafe_unretained id<MTLSamplerState> sampler =
-        //         (__bridge id<MTLSamplerState>)samplerblock->mRsData;
-        //     [mActiveRenderEncoder setVertexSamplerState:sampler atIndex:texUnit];
-        //     [mActiveRenderEncoder setFragmentSamplerState:sampler atIndex:texUnit];
-        // }
+        OGRE_ASSERT_MEDIUM( texUnit < NUM_BIND_SAMPLERS );
+        VkSampler textureSampler = reinterpret_cast<VkSampler>( samplerblock->mRsData );
+        mGlobalTable.samplers[texUnit].sampler = textureSampler;
+        mTableDirty = true;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setPipelineStateObject( const HlmsPso *pso )

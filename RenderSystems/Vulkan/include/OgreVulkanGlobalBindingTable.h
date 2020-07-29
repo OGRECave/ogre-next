@@ -34,18 +34,22 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+#define NUM_BIND_CONST_BUFFERS 16u
+#define NUM_BIND_TEX_BUFFERS 16u
+// We don't use OGRE_MAX_TEXTURE_LAYERS. That's overkill and thus
+// reserved for DescriptorSetTextures kind of textures
+#define NUM_BIND_TEXTURES 32u
+#define NUM_BIND_SAMPLERS 32u
+
     /// This table holds an emulation of D3D11/Metal style of resource binding
     /// @see    VulkanRootLayout::bind
     struct VulkanGlobalBindingTable
     {
-        VkDescriptorBufferInfo constBuffers[16];
-        VkBufferView texBuffers[16];
-        // We don't use OGRE_MAX_TEXTURE_LAYERS. That's overkill and thus
-        // reserved for DescriptorSetTextures kind of textures
-        VkDescriptorImageInfo textures[32];
-        VkDescriptorImageInfo samplers[32];
+        VkDescriptorBufferInfo constBuffers[NUM_BIND_CONST_BUFFERS];
+        VkBufferView texBuffers[NUM_BIND_TEX_BUFFERS];
 
-        VulkanGlobalBindingTable();
+        VkDescriptorImageInfo textures[NUM_BIND_TEXTURES];
+        VkDescriptorImageInfo samplers[NUM_BIND_SAMPLERS];
     };
 }  // namespace Ogre
 

@@ -32,6 +32,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanPrerequisites.h"
 
 #include "OgreRenderSystem.h"
+#include "OgreVulkanGlobalBindingTable.h"
 #include "OgreVulkanProgram.h"
 
 #include "OgreVulkanRenderPassDescriptor.h"
@@ -99,6 +100,9 @@ namespace Ogre
         VulkanCache *mCache;
 
         VulkanHlmsPso *mPso;
+
+        bool mTableDirty;
+        VulkanGlobalBindingTable mGlobalTable;
 
         // clang-format off
         VulkanFrameBufferDescMap    mFrameBufferDescMap;

@@ -43,6 +43,8 @@ THE SOFTWARE.
 
 #include "vulkan/vulkan_core.h"
 
+#define TODO_limit_NUM_BIND_TEXTURES  // and co.
+
 namespace Ogre
 {
     static const char *c_rootLayoutVarNames[VulkanDescBindingTypes::NumDescBindingTypes] = {
@@ -135,6 +137,8 @@ namespace Ogre
                                      "Root Layout descriptors must be in range [0; 65535]",
                                  "VulkanRootLayout::parseSet" );
                 }
+
+                TODO_limit_NUM_BIND_TEXTURES;  // Only for dynamic sets
 
                 mDescBindingRanges[setIdx][i].start = static_cast<uint16>( jsonValue[0].GetUint() );
                 mDescBindingRanges[setIdx][i].end = static_cast<uint16>( jsonValue[1].GetUint() );
@@ -410,6 +414,9 @@ namespace Ogre
                           table );
             bindSamplers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
                           table );
+
+            vkUpdateDescriptorSets( device->mDevice, static_cast<uint32_t>( numWriteDescSets ),
+                                    writeDescSets, 0u, 0 );
         }
     }
     //-------------------------------------------------------------------------
