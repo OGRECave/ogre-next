@@ -50,6 +50,9 @@ typedef struct VkFramebuffer_T *VkFramebuffer;
 typedef struct VkShaderModule_T *VkShaderModule;
 typedef struct VkDescriptorSetLayout_T *VkDescriptorSetLayout;
 
+typedef struct VkDescriptorPool_T *VkDescriptorPool;
+typedef struct VkDescriptorSet_T *VkDescriptorSet;
+
 typedef struct VkPipelineLayout_T *VkPipelineLayout;
 
 struct VkPipelineShaderStageCreateInfo;
@@ -92,7 +95,7 @@ namespace Ogre
         class VulkanHardwareBufferCommon;
         class VulkanHardwareIndexBuffer;
         class VulkanHardwareVertexBuffer;
-    }
+    }  // namespace v1
 }  // namespace Ogre
 
 #define OGRE_VK_EXCEPT( code, num, desc, src ) \
@@ -100,18 +103,24 @@ namespace Ogre
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
 #    define checkVkResult( result, functionName ) \
-        if( result != VK_SUCCESS ) \
+        do \
         { \
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, functionName " failed", \
-                            __FUNCSIG__ ); \
-        }
+            if( result != VK_SUCCESS ) \
+            { \
+                OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, functionName " failed", \
+                                __FUNCSIG__ ); \
+            } \
+        } while( 0 )
 #else
 #    define checkVkResult( result, functionName ) \
-        if( result != VK_SUCCESS ) \
+        do \
         { \
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, functionName " failed", \
-                            __PRETTY_FUNCTION__ ); \
-        }
+            if( result != VK_SUCCESS ) \
+            { \
+                OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, functionName " failed", \
+                                __PRETTY_FUNCTION__ ); \
+            } \
+        } while( 0 )
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

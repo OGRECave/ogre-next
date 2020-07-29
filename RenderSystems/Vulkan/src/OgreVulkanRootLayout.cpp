@@ -52,7 +52,7 @@ namespace Ogre
         "uav_buffers",    //
     };
     //-------------------------------------------------------------------------
-    static VkDescriptorType toVkDescriptorType( VulkanDescBindingTypes::VulkanDescBindingTypes type )
+    uint32 toVkDescriptorType( VulkanDescBindingTypes::VulkanDescBindingTypes type )
     {
         switch( type )
         {
@@ -273,8 +273,9 @@ namespace Ogre
                 for( size_t k = 0u; k < numSlots; ++k )
                 {
                     rootLayoutDesc[i][bindingIdx].binding = static_cast<uint32_t>( bindingIdx );
-                    rootLayoutDesc[i][bindingIdx].descriptorType = toVkDescriptorType(
-                        static_cast<VulkanDescBindingTypes::VulkanDescBindingTypes>( j ) );
+                    rootLayoutDesc[i][bindingIdx].descriptorType =
+                        static_cast<VkDescriptorType>( toVkDescriptorType(
+                            static_cast<VulkanDescBindingTypes::VulkanDescBindingTypes>( j ) ) );
                     rootLayoutDesc[i][bindingIdx].descriptorCount = 1u;
                     rootLayoutDesc[i][bindingIdx].stageFlags =
                         mCompute ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_ALL_GRAPHICS;

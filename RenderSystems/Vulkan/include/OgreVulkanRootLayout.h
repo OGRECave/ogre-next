@@ -76,6 +76,8 @@ namespace Ogre
         };
     }  // namespace VulkanDescBindingTypes
 
+    uint32 toVkDescriptorType( VulkanDescBindingTypes::VulkanDescBindingTypes type );
+
     class _OgreVulkanExport VulkanRootLayout : public ResourceAlloc
     {
         bool mCompute;
@@ -107,6 +109,11 @@ namespace Ogre
         ///
         /// a or b can be nullptr
         static VulkanRootLayout *findBest( VulkanRootLayout *a, VulkanRootLayout *b );
+
+        const VulkanDescBindingRange *getDescBindingRanges( size_t setIdx ) const
+        {
+            return mDescBindingRanges[setIdx];
+        }
 
         bool operator<( const VulkanRootLayout &other ) const;
     };
