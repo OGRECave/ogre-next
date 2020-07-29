@@ -64,7 +64,9 @@ namespace Ogre
 
     namespace VulkanDescBindingTypes
     {
-        // The order is important as it affects compatibility between root layouts
+        /// The order is important as it affects compatibility between root layouts
+        ///
+        /// If the relative order is changed, then VulkanRootLayout::bind needs to be modified
         enum VulkanDescBindingTypes
         {
             ConstBuffer,

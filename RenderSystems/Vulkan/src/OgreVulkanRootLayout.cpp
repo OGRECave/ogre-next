@@ -213,6 +213,7 @@ namespace Ogre
 
         for( size_t i = 0u; i < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
         {
+            uint32 bindingIdx = 0u;
             for( size_t j = 0u; j < VulkanDescBindingTypes::NumDescBindingTypes; ++j )
             {
                 textStr.resize( prefixSize0 );
@@ -224,7 +225,9 @@ namespace Ogre
                 {
                     textStr.resize( prefixSize1 );  // #define ogre_B
                     // #define ogre_B3 set = 1, binding = 6
-                    textStr.a( bindingCounts[j], " set = ", (uint32)i, ", binding = ", (uint32)k, "\n" );
+                    textStr.a( bindingCounts[j], " set = ", (uint32)i, ", binding = ", bindingIdx,
+                               "\n" );
+                    ++bindingIdx;
                     ++bindingCounts[j];
 
                     macroStr += textStr.c_str();
@@ -289,7 +292,8 @@ namespace Ogre
                     rootLayoutDesc[i][bindingIdx].pImmutableSamplers = 0;
                 }
 
-                ++bindingIdx;
+                if( numSlots > 0u )
+                    ++bindingIdx;
             }
 
             mSets[i] = mProgramManager->getCachedSet( rootLayoutDesc[i] );
@@ -409,6 +413,7 @@ namespace Ogre
             uint32 currBinding = 0u;
             VkWriteDescriptorSet writeDescSets[VulkanDescBindingTypes::Sampler + 1u];
 
+            // Note: We must bind in the same order as VulkanDescBindingTypes
             bindConstBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
                               table );
             bindTexBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
