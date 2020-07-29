@@ -58,6 +58,7 @@ namespace Ogre
             A threshold of zero means to put a fence after every unmap operation.
         */
         size_t mFenceThreshold;
+        size_t mVboIdx;
 
         struct VulkanFence : Fence
         {
@@ -105,7 +106,7 @@ namespace Ogre
         virtual const void *_mapForReadImpl( size_t offset, size_t sizeBytes );
 
     public:
-        VulkanStagingBuffer( size_t internalBufferStart, size_t sizeBytes, VaoManager *vaoManager,
+        VulkanStagingBuffer( size_t vboIdx, size_t internalBufferStart, size_t sizeBytes, VaoManager *vaoManager,
                              bool uploadOnly, VkBuffer vboName, VulkanDynamicBuffer *dynamicBuffer );
         virtual ~VulkanStagingBuffer();
 

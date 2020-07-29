@@ -129,6 +129,20 @@ namespace Ogre
                 ++itor;
             }
         }
+
+        deleteStagingBuffers();
+
+        {
+            vector<VulkanStagingTexture *>::type::iterator itor = mUsedStagingTextures.begin();
+            vector<VulkanStagingTexture *>::type::iterator endt = mUsedStagingTextures.end();
+
+            while( itor != endt )
+            {
+                OGRE_DELETE *itor;
+                ++itor;
+            }
+        }
+        
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::initDrawIdVertexBuffer()
@@ -800,7 +814,7 @@ namespace Ogre
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
 
-        VulkanStagingBuffer *stagingBuffer = OGRE_NEW VulkanStagingBuffer(
+        VulkanStagingBuffer *stagingBuffer = OGRE_NEW VulkanStagingBuffer( vboIdx,
             bufferOffset, sizeBytes, this, forUpload, vbo.vkBuffer, vbo.dynamicBuffer );
         mRefedStagingBuffers[forUpload].push_back( stagingBuffer );
 
@@ -826,8 +840,9 @@ namespace Ogre
         Vbo &vbo = mVbos[vboFlag][vboIdx];
 
         VulkanStagingTexture *retVal =
-            OGRE_NEW VulkanStagingTexture( this, PixelFormatGpuUtils::getFamily( formatFamily ),
+            OGRE_NEW VulkanStagingTexture( this, vboIdx, bufferOffset, PixelFormatGpuUtils::getFamily( formatFamily ),
                                            sizeBytes, vbo.vkBuffer, vbo.dynamicBuffer );
+        mUsedStagingTextures.push_back( retVal );
 
         return retVal;
     }

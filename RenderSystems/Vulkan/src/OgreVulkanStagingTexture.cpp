@@ -38,10 +38,12 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    VulkanStagingTexture::VulkanStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily,
+    VulkanStagingTexture::VulkanStagingTexture( VaoManager *vaoManager, size_t vboIdx, size_t bufferOffset, PixelFormatGpu formatFamily,
                                                 size_t size, VkBuffer vboName,
                                                 VulkanDynamicBuffer *dynamicBuffer ) :
         StagingTextureBufferImpl( vaoManager, formatFamily, size, 0, 0 ),
+        mVboIdx( vboIdx ),
+        mBufferOffset( bufferOffset ),
         mVboName( vboName ),
         mDynamicBuffer( dynamicBuffer ),
         mUnmapTicket( std::numeric_limits<size_t>::max() ),
@@ -57,6 +59,10 @@ namespace Ogre
         if( mDynamicBuffer )
             mDynamicBuffer = 0;
         mMappedPtr = 0;
+
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        vaoManager->deallocateVbo( mVboIdx, mBufferOffset, mSize,
+                                   BT_DYNAMIC_DEFAULT );
     }
     //-----------------------------------------------------------------------------------
     bool VulkanStagingTexture::belongsToUs( const TextureBox &box )

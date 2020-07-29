@@ -162,6 +162,8 @@ namespace Ogre
         VaoManager( const NameValuePairList *params );
         virtual ~VaoManager();
 
+        void deleteStagingBuffers();
+
         struct _OgreExport MemoryStatsEntry
         {
             uint32 poolType;

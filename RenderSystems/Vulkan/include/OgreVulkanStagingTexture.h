@@ -45,12 +45,14 @@ namespace Ogre
 
         void *mMappedPtr;
         void *mLastMappedPtr;
+        size_t mVboIdx;
+        size_t mBufferOffset;
 
         virtual bool belongsToUs( const TextureBox &box );
         virtual void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr( void );
 
     public:
-        VulkanStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, size_t size,
+        VulkanStagingTexture( VaoManager *vaoManager, size_t vboIdx, size_t bufferOffset, PixelFormatGpu formatFamily, size_t size,
                               VkBuffer vboName, VulkanDynamicBuffer *dynamicBuffer );
         virtual ~VulkanStagingTexture();
 

@@ -79,29 +79,40 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VaoManager::~VaoManager()
     {
-        for( size_t i=0; i<2; ++i )
-        {
-            StagingBufferVec::const_iterator itor = mRefedStagingBuffers[i].begin();
-            StagingBufferVec::const_iterator end  = mRefedStagingBuffers[i].end();
-
-            while( itor != end )
-            {
-                OGRE_DELETE *itor;
-                ++itor;
-            }
-
-            itor = mZeroRefStagingBuffers[i].begin();
-            end  = mZeroRefStagingBuffers[i].end();
-
-            while( itor != end )
-            {
-                OGRE_DELETE *itor;
-                ++itor;
-            }
-        }
+        deleteStagingBuffers();
 
         OGRE_DELETE mTimer;
         mTimer = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void VaoManager::deleteStagingBuffers()
+    {
+        for( size_t i = 0; i < 2; ++i )
+        {
+            StagingBufferVec::const_iterator itor = mRefedStagingBuffers[i].begin();
+            StagingBufferVec::const_iterator end = mRefedStagingBuffers[i].end();
+
+            while( itor != end )
+            {
+                OGRE_DELETE *itor;
+                ++itor;
+            }
+            // VulkanVaoManager also calls this so the array needs to be cleared so the
+            // base VaoManager destructor doesn't delete the same objects twice.
+            mRefedStagingBuffers[i].clear();
+
+            itor = mZeroRefStagingBuffers[i].begin();
+            end = mZeroRefStagingBuffers[i].end();
+
+            while( itor != end )
+            {
+                OGRE_DELETE *itor;
+                ++itor;
+            }
+            // VulkanVaoManager also calls this so the array needs to be cleared so the
+            // base VaoManager destructor doesn't delete the same objects twice.
+            mZeroRefStagingBuffers[i].clear();
+        }
     }
     //-----------------------------------------------------------------------------------
     uint32 VaoManager::calculateVertexSize( const VertexElement2Vec &vertexElements )

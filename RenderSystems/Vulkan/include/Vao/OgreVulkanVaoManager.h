@@ -41,6 +41,8 @@ namespace Ogre
     class _OgreVulkanExport VulkanVaoManager : public VaoManager
     {
     public:
+        friend VulkanStagingBuffer;
+        friend VulkanStagingTexture;
         enum VboFlag
         {
             CPU_INACCESSIBLE,
@@ -142,6 +144,8 @@ namespace Ogre
         VaoVec mVaos;
 
         VertexBufferPacked *mDrawId;
+
+        vector<VulkanStagingTexture *>::type mUsedStagingTextures;
 
         struct UsedSemaphore
         {

@@ -43,10 +43,11 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    VulkanStagingBuffer::VulkanStagingBuffer( size_t internalBufferStart, size_t sizeBytes,
+    VulkanStagingBuffer::VulkanStagingBuffer( size_t vboIdx, size_t internalBufferStart, size_t sizeBytes,
                                               VaoManager *vaoManager, bool uploadOnly, VkBuffer vboName,
                                               VulkanDynamicBuffer *dynamicBuffer ) :
         StagingBuffer( internalBufferStart, sizeBytes, vaoManager, uploadOnly ),
+        mVboIdx( vboIdx ),
         mMappedPtr( 0 ),
         mVboName( vboName ),
         mDynamicBuffer( dynamicBuffer ),
@@ -63,6 +64,9 @@ namespace Ogre
             wait( mFences.back().fenceName );
 
         deleteFences( mFences.begin(), mFences.end() );
+
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        vaoManager->deallocateVbo( mVboIdx, mInternalBufferStart, getMaxSize(), BT_DYNAMIC_DEFAULT );
     }
     //-----------------------------------------------------------------------------------
     void VulkanStagingBuffer::addFence( size_t from, size_t to, bool forceFence )
