@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreVulkanVaoManager.h"
 
+#include "OgreVulkanDescriptorPool.h"
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanUtils.h"
 #include "Vao/OgreVulkanAsyncTicket.h"
@@ -847,6 +848,14 @@ namespace Ogre
     {
         return AsyncTicketPtr(
             OGRE_NEW VulkanAsyncTicket( creator, stagingBuffer, elementStart, elementCount ) );
+    }
+    //-----------------------------------------------------------------------------------
+    VulkanDescriptorPool *VulkanVaoManager::getDescriptorPool( const VulkanRootLayout *rootLayout,
+                                                               size_t setIdx )
+    {
+        size_t capacity = 16u;
+        VulkanDescriptorPool *pool = new VulkanDescriptorPool( this, rootLayout, setIdx, capacity );
+        return pool;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_update( void )

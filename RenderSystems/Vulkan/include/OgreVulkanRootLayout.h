@@ -137,7 +137,8 @@ namespace Ogre
 
         VkPipelineLayout createVulkanHandles( void );
 
-        void bind( VulkanDevice *device, const VulkanGlobalBindingTable &table );
+        void bind( VulkanDevice *device, VulkanVaoManager *vaoManager,
+                   const VulkanGlobalBindingTable &table );
 
         /// Two root layouts can be incompatible. If so, we return nullptr
         ///

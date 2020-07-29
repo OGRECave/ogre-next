@@ -105,13 +105,16 @@ namespace Ogre
         checkVkResult( result, "vkCreateDescriptorPool" );
 
         mPools.push_back( pool );
-        ++mCurrentPoolIdx;
+        mCurrentPoolIdx = mPools.size() - 1u;
     }
     //-------------------------------------------------------------------------
     VkDescriptorSet VulkanDescriptorPool::allocate( VulkanDevice *device,
                                                     VkDescriptorSetLayout setLayout )
     {
-        if( mPools[mCurrentPoolIdx].isFull() )
+        while( mPools[mCurrentPoolIdx].isFull() && mCurrentPoolIdx < mPools.size() )
+            ++mCurrentPoolIdx;
+
+        if( mCurrentPoolIdx >= mPools.size() )
             createNewPool( device );
 
         Pool &pool = mPools[mCurrentPoolIdx];

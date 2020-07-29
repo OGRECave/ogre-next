@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreVulkanGlobalBindingTable.h"
 #include "OgreVulkanGpuProgramManager.h"
 #include "OgreVulkanUtils.h"
+#include "Vao/OgreVulkanVaoManager.h"
 
 #include "OgreException.h"
 #include "OgreLwString.h"
@@ -320,7 +321,7 @@ namespace Ogre
         makeVkStruct( writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
         writeDescSet.dstSet = descSet;
         writeDescSet.dstBinding = currBinding;
-        writeDescSet.dstArrayElement = 1u;
+        writeDescSet.dstArrayElement = 0u;
         writeDescSet.descriptorCount = static_cast<uint32_t>( bindRanges.getNumUsedSlots() );
         currBinding += bindRanges.getNumUsedSlots();
         ++numWriteDescSets;
@@ -395,16 +396,16 @@ namespace Ogre
         writeDescSet.pImageInfo = &table.samplers[bindRanges.start];
     }
     //-------------------------------------------------------------------------
-    void VulkanRootLayout::bind( VulkanDevice *device, const VulkanGlobalBindingTable &table )
+    void VulkanRootLayout::bind( VulkanDevice *device, VulkanVaoManager *vaoManager,
+                                 const VulkanGlobalBindingTable &table )
     {
-        VulkanDescriptorPool *pool = 0;
-
         VkDescriptorSet descSets[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS];
 
         const size_t numSets = mSets.size();
 
         for( size_t i = 0u; i < numSets; ++i )
         {
+            VulkanDescriptorPool *pool = vaoManager->getDescriptorPool( this, i );
             VkDescriptorSet descSet = pool->allocate( device, mSets[i] );
 
             const VulkanDescBindingRange *descBindingRanges = mDescBindingRanges[i];

@@ -1245,8 +1245,9 @@ namespace Ogre
         if( !mTableDirty )
             return;
 
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
         VulkanRootLayout *rootLayout = mPso->rootLayout;
-        rootLayout->bind( mDevice, mGlobalTable );
+        rootLayout->bind( mDevice, vaoManager, mGlobalTable );
         mTableDirty = false;
     }
     //-------------------------------------------------------------------------
