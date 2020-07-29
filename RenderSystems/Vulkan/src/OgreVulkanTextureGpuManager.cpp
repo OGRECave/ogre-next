@@ -106,7 +106,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuManager::destroyStagingTextureImpl( StagingTexture *stagingTexture )
     {
-        // Do nothing, caller will delete stagingTexture.
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanStagingTexture *>( stagingTexture ) );
+
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        vaoManager->destroyStagingTexture( static_cast<VulkanStagingTexture *>( stagingTexture ) );
     }
     //-----------------------------------------------------------------------------------
     AsyncTextureTicket *VulkanTextureGpuManager::createAsyncTextureTicketImpl(

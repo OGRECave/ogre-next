@@ -42,7 +42,6 @@ namespace Ogre
     {
     public:
         friend VulkanStagingBuffer;
-        friend VulkanStagingTexture;
         enum VboFlag
         {
             CPU_INACCESSIBLE,
@@ -144,8 +143,6 @@ namespace Ogre
         VaoVec mVaos;
 
         VertexBufferPacked *mDrawId;
-
-        vector<VulkanStagingTexture *>::type mUsedStagingTextures;
 
         struct UsedSemaphore
         {
@@ -320,6 +317,7 @@ namespace Ogre
         virtual bool isFrameFinished( uint32 frameCount );
         void _notifyDeviceStalled();
         VulkanStagingTexture *createStagingTexture( PixelFormatGpu formatFamily, size_t sizeBytes );
+        void destroyStagingTexture( VulkanStagingTexture *stagingTexture );
 
         /// @see StagingBuffer::mergeContiguousBlocks
         static void mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks );

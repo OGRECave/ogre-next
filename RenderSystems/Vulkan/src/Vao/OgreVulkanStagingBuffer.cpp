@@ -39,23 +39,20 @@ THE SOFTWARE.
 #include "OgreVulkanQueue.h"
 #include "OgreVulkanUtils.h"
 
-#define TODO_deallocate_StagingBufferVbo  // Cannot be destructor
-
 namespace Ogre
 {
-    VulkanStagingBuffer::VulkanStagingBuffer( size_t vboIdx, size_t internalBufferStart, size_t sizeBytes,
-                                              VaoManager *vaoManager, bool uploadOnly, VkBuffer vboName,
-                                              VulkanDynamicBuffer *dynamicBuffer ) :
+    VulkanStagingBuffer::VulkanStagingBuffer( size_t vboIdx, size_t internalBufferStart,
+                                              size_t sizeBytes, VaoManager *vaoManager, bool uploadOnly,
+                                              VkBuffer vboName, VulkanDynamicBuffer *dynamicBuffer ) :
         StagingBuffer( internalBufferStart, sizeBytes, vaoManager, uploadOnly ),
-        mVboIdx( vboIdx ),
         mMappedPtr( 0 ),
         mVboName( vboName ),
         mDynamicBuffer( dynamicBuffer ),
         mUnmapTicket( std::numeric_limits<size_t>::max() ),
         mFenceThreshold( sizeBytes / 4 ),
+        mVboPoolIdx( vboIdx ),
         mUnfencedBytes( 0 )
     {
-        TODO_deallocate_StagingBufferVbo;
     }
     //-----------------------------------------------------------------------------------
     VulkanStagingBuffer::~VulkanStagingBuffer()
@@ -66,7 +63,7 @@ namespace Ogre
         deleteFences( mFences.begin(), mFences.end() );
 
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-        vaoManager->deallocateVbo( mVboIdx, mInternalBufferStart, getMaxSize(), BT_DYNAMIC_DEFAULT );
+        vaoManager->deallocateVbo( mVboPoolIdx, mInternalBufferStart, getMaxSize(), BT_DYNAMIC_DEFAULT );
     }
     //-----------------------------------------------------------------------------------
     void VulkanStagingBuffer::addFence( size_t from, size_t to, bool forceFence )
@@ -202,7 +199,7 @@ namespace Ogre
         OGRE_ASSERT_MEDIUM( mUnmapTicket == std::numeric_limits<size_t>::max() &&
                             "VulkanStagingBuffer still mapped!" );
 
-        waitIfNeeded(); //Will fill mMappingStart
+        waitIfNeeded();  // Will fill mMappingStart
 
         mMappedPtr =
             mDynamicBuffer->map( mInternalBufferStart + mMappingStart, sizeBytes, mUnmapTicket );
@@ -248,7 +245,7 @@ namespace Ogre
 
         if( mUploadOnly )
         {
-            //Add fence to this region (or at least, track the hazard).
+            // Add fence to this region (or at least, track the hazard).
             addFence( mMappingStart, mMappingStart + mMappingCount - 1, false );
         }
     }

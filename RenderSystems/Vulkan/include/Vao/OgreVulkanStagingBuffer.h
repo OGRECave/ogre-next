@@ -58,7 +58,7 @@ namespace Ogre
             A threshold of zero means to put a fence after every unmap operation.
         */
         size_t mFenceThreshold;
-        size_t mVboIdx;
+        size_t mVboPoolIdx;
 
         struct VulkanFence : Fence
         {

@@ -131,18 +131,6 @@ namespace Ogre
         }
 
         deleteStagingBuffers();
-
-        {
-            vector<VulkanStagingTexture *>::type::iterator itor = mUsedStagingTextures.begin();
-            vector<VulkanStagingTexture *>::type::iterator endt = mUsedStagingTextures.end();
-
-            while( itor != endt )
-            {
-                OGRE_DELETE *itor;
-                ++itor;
-            }
-        }
-        
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::initDrawIdVertexBuffer()
@@ -814,8 +802,8 @@ namespace Ogre
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
 
-        VulkanStagingBuffer *stagingBuffer = OGRE_NEW VulkanStagingBuffer( vboIdx,
-            bufferOffset, sizeBytes, this, forUpload, vbo.vkBuffer, vbo.dynamicBuffer );
+        VulkanStagingBuffer *stagingBuffer = OGRE_NEW VulkanStagingBuffer(
+            vboIdx, bufferOffset, sizeBytes, this, forUpload, vbo.vkBuffer, vbo.dynamicBuffer );
         mRefedStagingBuffers[forUpload].push_back( stagingBuffer );
 
         if( mNextStagingBufferTimestampCheckpoint == (unsigned long)( ~0 ) )
@@ -839,12 +827,18 @@ namespace Ogre
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
 
-        VulkanStagingTexture *retVal =
-            OGRE_NEW VulkanStagingTexture( this, vboIdx, bufferOffset, PixelFormatGpuUtils::getFamily( formatFamily ),
-                                           sizeBytes, vbo.vkBuffer, vbo.dynamicBuffer );
-        mUsedStagingTextures.push_back( retVal );
+        VulkanStagingTexture *retVal = OGRE_NEW VulkanStagingTexture(
+            this, PixelFormatGpuUtils::getFamily( formatFamily ), sizeBytes, bufferOffset, vboIdx,
+            vbo.vkBuffer, vbo.dynamicBuffer );
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::destroyStagingTexture( VulkanStagingTexture *stagingTexture )
+    {
+        stagingTexture->_unmapBuffer();
+        deallocateVbo( stagingTexture->getVboPoolIndex(), stagingTexture->_getInternalBufferStart(),
+                       stagingTexture->_getInternalTotalSizeBytes(), BT_DYNAMIC_DEFAULT );
     }
     //-----------------------------------------------------------------------------------
     AsyncTicketPtr VulkanVaoManager::createAsyncTicket( BufferPacked *creator,

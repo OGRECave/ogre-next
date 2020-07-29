@@ -34,16 +34,13 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanDynamicBuffer.h"
 #include "Vao/OgreVulkanVaoManager.h"
 
-#define TODO_deallocate_StagingBufferVbo  // Cannot be destructor
-
 namespace Ogre
 {
-    VulkanStagingTexture::VulkanStagingTexture( VaoManager *vaoManager, size_t vboIdx, size_t bufferOffset, PixelFormatGpu formatFamily,
-                                                size_t size, VkBuffer vboName,
+    VulkanStagingTexture::VulkanStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily,
+                                                size_t size, size_t internalBufferStart,
+                                                size_t vboPoolIdx, VkBuffer vboName,
                                                 VulkanDynamicBuffer *dynamicBuffer ) :
-        StagingTextureBufferImpl( vaoManager, formatFamily, size, 0, 0 ),
-        mVboIdx( vboIdx ),
-        mBufferOffset( bufferOffset ),
+        StagingTextureBufferImpl( vaoManager, formatFamily, size, internalBufferStart, vboPoolIdx ),
         mVboName( vboName ),
         mDynamicBuffer( dynamicBuffer ),
         mUnmapTicket( std::numeric_limits<size_t>::max() ),
@@ -56,13 +53,22 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VulkanStagingTexture::~VulkanStagingTexture()
     {
+        assert( mUnmapTicket == std::numeric_limits<size_t>::max() );
+
         if( mDynamicBuffer )
             mDynamicBuffer = 0;
         mMappedPtr = 0;
-
-        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-        vaoManager->deallocateVbo( mVboIdx, mBufferOffset, mSize,
-                                   BT_DYNAMIC_DEFAULT );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanStagingTexture::_unmapBuffer(void)
+    {
+        if( mUnmapTicket != std::numeric_limits<size_t>::max() )
+        {
+            mDynamicBuffer->flush( mUnmapTicket, 0u, mSize );
+            mDynamicBuffer->unmap( mUnmapTicket );
+            mUnmapTicket = std::numeric_limits<size_t>::max();
+            mMappedPtr = 0;
+        }
     }
     //-----------------------------------------------------------------------------------
     bool VulkanStagingTexture::belongsToUs( const TextureBox &box )
@@ -75,8 +81,6 @@ namespace Ogre
     {
         return static_cast<uint8 *>( mMappedPtr ) + mCurrentOffset;
     }
-    //-----------------------------------------------------------------------------------
-    void VulkanStagingTexture::_unmapBuffer() { mMappedPtr = 0; }
     //-----------------------------------------------------------------------------------
     void VulkanStagingTexture::startMapRegion()
     {
@@ -93,8 +97,9 @@ namespace Ogre
         OGRE_ASSERT_MEDIUM( mUnmapTicket != std::numeric_limits<size_t>::max() &&
                             "VulkanStagingTexture already unmapped!" );
 
-        mDynamicBuffer->flush( mUnmapTicket, mInternalBufferStart, mSize );
+        mDynamicBuffer->flush( mUnmapTicket, 0u, mSize );
         mDynamicBuffer->unmap( mUnmapTicket );
+        mUnmapTicket = std::numeric_limits<size_t>::max();
 
         mMappedPtr = 0;
 
