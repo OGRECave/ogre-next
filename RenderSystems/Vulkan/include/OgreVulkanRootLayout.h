@@ -60,13 +60,18 @@ namespace Ogre
 
         size_t getNumUsedSlots( void ) const { return end - start; }
         bool isInUse( void ) const { return start < end; }
+        bool isValid( void ) const { return start <= end; }
     };
 
     namespace VulkanDescBindingTypes
     {
         /// The order is important as it affects compatibility between root layouts
         ///
-        /// If the relative order is changed, then VulkanRootLayout::bind needs to be modified
+        /// If the relative order is changed, then the following needs to be modified:
+        ///     - VulkanRootLayout::bind
+        ///     - VulkanRootLayout::findParamsBuffer (if ParamBuffer stops being the 1st)
+        ///     - c_rootLayoutVarNames
+        ///     - c_bufferTypes
         enum VulkanDescBindingTypes
         {
             ParamBuffer,
@@ -136,13 +141,103 @@ namespace Ogre
         VulkanRootLayout( VulkanGpuProgramManager *programManager );
         ~VulkanRootLayout();
 
-        void parseRootLayout( const char *rootLayout, const bool bCompute, const String &filename );
-        void generateRootLayoutMacros( String &outString ) const;
+        /** Parses a root layout definition from a JSON string
+            The JSON string:
 
+            @code
+                {
+                    "0" :
+                    {
+                        "has_params" : true,
+                        "const_buffers" : [0, 16],
+                        "tex_buffers" : [1, 16],
+                        "textures" : [0, 1],
+                        "samplers" : [0, 1],
+                        "uav_buffers" : [0, 16]
+                        "uav_textures" : [16, 32]
+                    }
+                }
+            @endcode
+
+            Note that for compatibility with other APIs, textures and tex_buffers cannot overlap
+            Same with uav_buffers and uav_textures
+        @param rootLayout
+            JSON string containing root layout
+        @param bCompute
+            True if this is meant for compute. False for graphics
+        @param filename
+            Filename for logging purposes if errors are found
+        */
+        void parseRootLayout( const char *rootLayout, const bool bCompute, const String &filename );
+
+        /** Generates all the macros for compiling shaders, based on our layout
+
+            e.g. a layout like this:
+
+            @code
+                ## ROOT LAYOUT BEGIN
+                {
+                    "0" :
+                    {
+                        "has_params" : true
+                        "const_buffers" : [2, 4]
+                        "tex_buffers" : [0, 1]
+                        "samplers" : [1, 2],
+                        "textures" : [1, 2]
+                    }
+                }
+                ## ROOT LAYOUT END
+            @endcode
+
+            will generate the following:
+            @code
+                #define ogre_P0 set = 0, binding = 0 // Params buffer
+                #define ogre_B2 set = 0, binding = 1 // Const buffer at slot 2
+                #define ogre_B3 set = 0, binding = 2
+                #define ogre_T0 set = 0, binding = 3 // Tex buffer at slot 0
+                #define ogre_t1 set = 0, binding = 4 // Texture at slot 1
+                                                     // (other APIs share tex buffer & texture slots)
+                #define ogre_s1 set = 0, binding = 5 // Sampler at slot 1
+            @endcode
+        @param inOutString [in/out]
+            String to output our macros
+        */
+        void generateRootLayoutMacros( String &inOutString ) const;
+
+        /** Creates most of our Vulkan handles required to build a PSO.
+
+            This function is not called by parseRootLayout because if two Root Layouts are identical,
+            then after calling a->parseRootLayout(), instead of calling a->createVulkanHandles()
+            we first must look for an already existing VulkanRootLayout and reuse it.
+        @return
+            VkPipelineLayout handle for building the PSO.
+        */
         VkPipelineLayout createVulkanHandles( void );
 
+        /** Takes an emulated D3D11/Metal-style table and binds it according to this layout's rules
+
+            This updates N descriptors (1 for each set) and binds them
+        @param device
+        @param vaoManager
+            The VaoManager so we can grab new VulkanDescriptorPools shall we need them
+        @param table
+            The emulated table to bind it
+        */
         void bind( VulkanDevice *device, VulkanVaoManager *vaoManager,
                    const VulkanGlobalBindingTable &table );
+
+        /** Retrieves the set and binding idx of the params buffer
+        @param outSetIdx [out]
+            Set in which it is located
+            Value will not be modified if we return false
+        @param outBindingIdx [out]
+            Binding index in which it is located
+            Value will not be modified if we return false
+        @return
+            True if there is a params buffer
+            False otherwise and output params won't be modified
+        */
+        bool findParamsBuffer( size_t &outSetIdx, size_t &outBindingIdx ) const;
 
         /// Two root layouts can be incompatible. If so, we return nullptr
         ///

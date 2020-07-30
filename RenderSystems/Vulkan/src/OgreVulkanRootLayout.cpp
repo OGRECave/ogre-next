@@ -97,6 +97,83 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRootLayout::validate( const String &filename ) const
     {
+        // Check start <= end
+        for( size_t i = 0u; i < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
+        {
+            for( size_t j = 0u; j < VulkanDescBindingTypes::NumDescBindingTypes; ++j )
+            {
+                if( !mDescBindingRanges[i][j].isValid() )
+                {
+                    char tmpBuffer[512];
+                    LwString tmpStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+                    tmpStr.a( "Invalid descriptor start <= end must be true. Set ", (uint32)i,
+                              " specifies ", c_rootLayoutVarNames[j], " in range [",
+                              mDescBindingRanges[i][j].start );
+                    tmpStr.a( ", ", mDescBindingRanges[i][j].end, ")" );
+
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Error at file " + filename + ":\n" + tmpStr.c_str(),
+                                 "VulkanRootLayout::parseSet" );
+                }
+            }
+
+            // Ensure texture and texture buffer ranges don't overlap for compatibility with
+            // other APIs (we support it in Vulkan, but explicitly forbid it)
+            {
+                const VulkanDescBindingRange &bufferRange =
+                    mDescBindingRanges[i][VulkanDescBindingTypes::TexBuffer];
+                if( bufferRange.isInUse() )
+                {
+                    for( size_t j = i; j < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++j )
+                    {
+                        const VulkanDescBindingRange &texRange =
+                            mDescBindingRanges[j][VulkanDescBindingTypes::Texture];
+
+                        if( texRange.isInUse() )
+                        {
+                            if( !( bufferRange.end <= texRange.start ||
+                                   bufferRange.start >= texRange.end ) )
+                            {
+                                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                             "Error at file " + filename + ":\n" +
+                                                 "TexBuffer and Texture slots cannot overlap for "
+                                                 "compatibility with other APIs",
+                                             "VulkanRootLayout::parseSet" );
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                const VulkanDescBindingRange &bufferRange =
+                    mDescBindingRanges[i][VulkanDescBindingTypes::UavBuffer];
+                if( bufferRange.isInUse() )
+                {
+                    for( size_t j = i; j < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++j )
+                    {
+                        const VulkanDescBindingRange &texRange =
+                            mDescBindingRanges[j][VulkanDescBindingTypes::UavTexture];
+
+                        if( texRange.isInUse() )
+                        {
+                            if( !( bufferRange.end <= texRange.start ||
+                                   bufferRange.start >= texRange.end ) )
+                            {
+                                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                             "Error at file " + filename + ":\n" +
+                                                 "UavBuffer and UavTexture slots cannot overlap for "
+                                                 "compatibility with other APIs",
+                                             "VulkanRootLayout::parseSet" );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Check range[set = 0] does not overlap with range[set = 1] and comes before set = 1
+        // TODO: Do we really need this restriction? Even so, this restriction keeps things sane?
         for( size_t i = 0u; i < VulkanDescBindingTypes::NumDescBindingTypes; ++i )
         {
             for( size_t j = 0u; j < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS - 1u; ++j )
@@ -215,10 +292,10 @@ namespace Ogre
         validate( filename );
     }
     //-------------------------------------------------------------------------
-    void VulkanRootLayout::generateRootLayoutMacros( String &outString ) const
+    void VulkanRootLayout::generateRootLayoutMacros( String &inOutString ) const
     {
         String macroStr;
-        macroStr.swap( outString );
+        macroStr.swap( inOutString );
 
         char tmpBuffer[256];
         LwString textStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
@@ -252,7 +329,7 @@ namespace Ogre
                 }
             }
         }
-        macroStr.swap( outString );
+        macroStr.swap( inOutString );
     }
     //-------------------------------------------------------------------------
     size_t VulkanRootLayout::calculateNumUsedSets( void ) const
@@ -473,6 +550,21 @@ namespace Ogre
             device->mGraphicsQueue.mCurrentCmdBuffer,
             mCompute ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS, mRootLayout, 0u,
             static_cast<uint32_t>( mSets.size() ), descSets, 0u, 0 );
+    }
+    //-------------------------------------------------------------------------
+    bool VulkanRootLayout::findParamsBuffer( size_t &outSetIdx, size_t &outBindingIdx ) const
+    {
+        for( size_t i = 0u; i < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
+        {
+            if( mDescBindingRanges[i][VulkanDescBindingTypes::ParamBuffer].isInUse() )
+            {
+                outSetIdx = i;
+                outBindingIdx = 0u; // When present, it's always binding = 0
+                return true;
+            }
+        }
+
+        return false;
     }
     //-------------------------------------------------------------------------
     VulkanRootLayout *VulkanRootLayout::findBest( VulkanRootLayout *a, VulkanRootLayout *b )

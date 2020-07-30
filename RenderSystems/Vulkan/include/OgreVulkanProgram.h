@@ -37,6 +37,8 @@ THE SOFTWARE.
 
 struct VkVertexInputBindingDescription;
 struct VkVertexInputAttributeDescription;
+struct SpvReflectDescriptorBinding;
+struct SpvReflectDescriptorSet;
 struct SpvReflectShaderModule;
 
 namespace Ogre
@@ -147,6 +149,9 @@ namespace Ogre
         void populateParameterNames( GpuProgramParametersSharedPtr params );
         /// Populate the passed parameters with name->index map, must be overridden
         void buildConstantDefinitions( void ) const;
+
+        static const SpvReflectDescriptorBinding *findBinding(
+            const FastArray<SpvReflectDescriptorSet *> &sets, size_t setIdx, size_t bindingIdx );
 
         void gatherVertexInputs( SpvReflectShaderModule &module );
 
