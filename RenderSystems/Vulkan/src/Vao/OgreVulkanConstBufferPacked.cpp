@@ -70,7 +70,7 @@ namespace Ogre
         mRenderSystem->_setConstBuffer( slot, bufferInfo );
     }
     //-------------------------------------------------------------------------
-    void VulkanConstBufferPacked::bindAsParamBuffer( uint32 offsetBytes )
+    void VulkanConstBufferPacked::bindAsParamBuffer( GpuProgramType shaderStage, size_t offsetBytes )
     {
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
         VulkanBufferInterface *bufferInterface =
@@ -80,6 +80,6 @@ namespace Ogre
         bufferInfo.buffer = bufferInterface->getVboName();
         bufferInfo.offset = mFinalBufferStart * mBytesPerElement + offsetBytes;
         bufferInfo.range = mNumElements * mBytesPerElement;
-        mRenderSystem->_setParamBuffer( bufferInfo );
+        mRenderSystem->_setParamBuffer( shaderStage, bufferInfo );
     }
 }  // namespace Ogre

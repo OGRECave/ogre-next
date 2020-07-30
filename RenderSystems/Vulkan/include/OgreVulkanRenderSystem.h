@@ -172,7 +172,7 @@ namespace Ogre
 
         virtual void flushUAVs( void );
 
-        void _setParamBuffer( const VkDescriptorBufferInfo &bufferInfo );
+        void _setParamBuffer( GpuProgramType shaderStage, const VkDescriptorBufferInfo &bufferInfo );
         void _setConstBuffer( size_t slot, const VkDescriptorBufferInfo &bufferInfo );
         void _setTexBuffer( size_t slot, VkBufferView bufferView );
 

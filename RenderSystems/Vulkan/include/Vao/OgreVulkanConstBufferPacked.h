@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
+#include "OgreGpuProgram.h"
 #include "Vao/OgreConstBufferPacked.h"
 
 namespace Ogre
@@ -56,7 +57,7 @@ namespace Ogre
         virtual void bindBufferDS( uint16 slot );
         virtual void bindBufferCS( uint16 slot );
 
-        void bindAsParamBuffer( uint32 offsetBytes );
+        void bindAsParamBuffer( GpuProgramType shaderStage, size_t offsetBytes );
     };
 }  // namespace Ogre
 

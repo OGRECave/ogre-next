@@ -90,6 +90,7 @@ namespace Ogre
     class _OgreVulkanExport VulkanRootLayout : public ResourceAlloc
     {
         bool mCompute;
+        uint8 mParamsBuffStages;
         VulkanDescBindingRange mDescBindingRanges[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS]
                                                  [VulkanDescBindingTypes::NumDescBindingTypes];
 
@@ -148,7 +149,7 @@ namespace Ogre
                 {
                     "0" :
                     {
-                        "has_params" : true,
+                        "has_params" : ["all", "vs", "gs", "hs", "ds", "ps", "cs"],
                         "const_buffers" : [0, 16],
                         "tex_buffers" : [1, 16],
                         "textures" : [0, 1],
@@ -158,6 +159,9 @@ namespace Ogre
                     }
                 }
             @endcode
+
+            has_params can establish which shader stages allow parameters.
+                - "all" means all shader stages (vs through ps for graphics, cs for compute)
 
             Note that for compatibility with other APIs, textures and tex_buffers cannot overlap
             Same with uav_buffers and uav_textures
@@ -199,10 +203,12 @@ namespace Ogre
                                                      // (other APIs share tex buffer & texture slots)
                 #define ogre_s1 set = 0, binding = 5 // Sampler at slot 1
             @endcode
+        @param shaderStage
+            See GpuProgramType
         @param inOutString [in/out]
             String to output our macros
         */
-        void generateRootLayoutMacros( String &inOutString ) const;
+        void generateRootLayoutMacros( uint32 shaderStage, String &inOutString ) const;
 
         /** Creates most of our Vulkan handles required to build a PSO.
 
@@ -227,6 +233,8 @@ namespace Ogre
                    const VulkanGlobalBindingTable &table );
 
         /** Retrieves the set and binding idx of the params buffer
+        @param shaderStage
+            See GpuProgramType
         @param outSetIdx [out]
             Set in which it is located
             Value will not be modified if we return false
@@ -237,7 +245,7 @@ namespace Ogre
             True if there is a params buffer
             False otherwise and output params won't be modified
         */
-        bool findParamsBuffer( size_t &outSetIdx, size_t &outBindingIdx ) const;
+        bool findParamsBuffer( uint32 shaderStage, size_t &outSetIdx, size_t &outBindingIdx ) const;
 
         /// Two root layouts can be incompatible. If so, we return nullptr
         ///

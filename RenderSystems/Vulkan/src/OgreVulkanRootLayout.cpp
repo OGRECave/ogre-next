@@ -58,6 +58,9 @@ namespace Ogre
         "uav_buffers",    //
     };
     static const char c_bufferTypes[] = "PBTtsuU";
+    static const uint8 c_allGraphicStagesMask = ( 1u << VertexShader ) | ( 1u << PixelShader ) |
+                                                ( 1u << GeometryShader ) | ( 1u << HullShader ) |
+                                                ( 1u << DomainShader );
     //-------------------------------------------------------------------------
     uint32 toVkDescriptorType( VulkanDescBindingTypes::VulkanDescBindingTypes type )
     {
@@ -81,6 +84,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanRootLayout::VulkanRootLayout( VulkanGpuProgramManager *programManager ) :
         mCompute( false ),
+        mParamsBuffStages( 0u ),
         mRootLayout( 0 ),
         mProgramManager( programManager )
     {
@@ -211,12 +215,53 @@ namespace Ogre
 
             if( i == VulkanDescBindingTypes::ParamBuffer )
             {
-                if( itor != jsonValue.MemberEnd() && itor->value.IsBool() )
+                if( itor != jsonValue.MemberEnd() && itor->value.IsArray() )
                 {
-                    if( itor->value.GetBool() )
-                        mDescBindingRanges[setIdx][i].end = 1u;
-                    else
-                        mDescBindingRanges[setIdx][i].end = 0u;
+                    if( mParamsBuffStages != 0u )
+                    {
+                        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                     "Error at file " + filename +
+                                         ":\n"
+                                         "All 'has_params' declarations must live in the same set",
+                                     "VulkanRootLayout::parseSet" );
+                    }
+
+                    const size_t numStages = itor->value.Size();
+                    for( size_t j = 0u; j < numStages; ++j )
+                    {
+                        if( itor->value[j].IsString() )
+                        {
+                            if( !mCompute )
+                            {
+                                const char *stageAcronyms[NumShaderTypes] = { "vs", "ps", "gs", "hs",
+                                                                              "ds" };
+                                for( size_t k = 0u; k < NumShaderTypes; ++k )
+                                {
+                                    if( strncmp( itor->value[j].GetString(), stageAcronyms[k], 2u ) ==
+                                        0 )
+                                    {
+                                        mParamsBuffStages |= 1u << k;
+                                        ++mDescBindingRanges[setIdx][i].end;
+                                    }
+                                }
+
+                                if( strncmp( itor->value[j].GetString(), "all", 3u ) == 0 )
+                                {
+                                    mParamsBuffStages = c_allGraphicStagesMask;
+                                    mDescBindingRanges[setIdx][i].end = NumShaderTypes;
+                                }
+                            }
+                            else
+                            {
+                                if( strncmp( itor->value[j].GetString(), "cs", 2u ) == 0 ||
+                                    strncmp( itor->value[j].GetString(), "all", 3u ) == 0 )
+                                {
+                                    mParamsBuffStages = 1u << GPT_COMPUTE_PROGRAM;
+                                    mDescBindingRanges[setIdx][i].end = 1u;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             else
@@ -258,6 +303,7 @@ namespace Ogre
         OGRE_ASSERT_LOW( !mRootLayout && "Cannot call parseRootLayout after createVulkanHandles" );
 
         mCompute = bCompute;
+        mParamsBuffStages = 0u;
 
         rapidjson::Document d;
         d.Parse( rootLayout );
@@ -292,7 +338,7 @@ namespace Ogre
         validate( filename );
     }
     //-------------------------------------------------------------------------
-    void VulkanRootLayout::generateRootLayoutMacros( String &inOutString ) const
+    void VulkanRootLayout::generateRootLayoutMacros( uint32 shaderStage, String &inOutString ) const
     {
         String macroStr;
         macroStr.swap( inOutString );
@@ -315,17 +361,52 @@ namespace Ogre
                 textStr.aChar( c_bufferTypes[j] );
                 const size_t prefixSize1 = textStr.size();
 
-                const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
-                for( size_t k = 0u; k < numSlots; ++k )
+                if( j == VulkanDescBindingTypes::ParamBuffer )
                 {
-                    textStr.resize( prefixSize1 );  // #define ogre_B
-                    // #define ogre_B3 set = 1, binding = 6
-                    textStr.a( bindingCounts[j], " set = ", (uint32)i, ", binding = ", bindingIdx,
-                               "\n" );
-                    ++bindingIdx;
-                    ++bindingCounts[j];
+                    // ParamBuffer is special because it's always ogre_P0, but we still
+                    // must still account all the other stages' binding indices while counting
+                    if( mDescBindingRanges[i][j].isInUse() )
+                    {
+                        if( mParamsBuffStages & ( 1u << shaderStage ) )
+                        {
+                            textStr.resize( prefixSize1 );  // #define ogre_P
+                            uint32 numStagesWithParams = 0u;
+                            if( mCompute )
+                                numStagesWithParams = 1u;
+                            else
+                            {
+                                for( size_t k = 0u; k < shaderStage; ++k )
+                                {
+                                    if( mParamsBuffStages & ( 1u << k ) )
+                                        ++numStagesWithParams;
+                                }
+                            }
 
-                    macroStr += textStr.c_str();
+                            // #define ogre_P0 set = 1, binding = 6
+                            textStr.a( "0", " set = ", (uint32)i, ", binding = ", numStagesWithParams,
+                                       "\n" );
+                            macroStr += textStr.c_str();
+                        }
+
+                        const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
+                        bindingIdx += numSlots;
+                        bindingCounts[j] += numSlots;
+                    }
+                }
+                else
+                {
+                    const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
+                    for( size_t k = 0u; k < numSlots; ++k )
+                    {
+                        textStr.resize( prefixSize1 );  // #define ogre_B
+                        // #define ogre_B3 set = 1, binding = 6
+                        textStr.a( bindingCounts[j], " set = ", (uint32)i, ", binding = ", bindingIdx,
+                                   "\n" );
+                        ++bindingIdx;
+                        ++bindingCounts[j];
+
+                        macroStr += textStr.c_str();
+                    }
                 }
             }
         }
@@ -385,11 +466,31 @@ namespace Ogre
                     rootLayoutDesc[i][bindingIdx].descriptorCount = 1u;
                     rootLayoutDesc[i][bindingIdx].stageFlags =
                         mCompute ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_ALL_GRAPHICS;
-                    rootLayoutDesc[i][bindingIdx].pImmutableSamplers = 0;
-                }
 
-                if( numSlots > 0u )
+                    if( !mCompute && j == VulkanDescBindingTypes::ParamBuffer &&
+                        ( mParamsBuffStages & c_allGraphicStagesMask ) != c_allGraphicStagesMask )
+                    {
+                        if( mParamsBuffStages & ( 1u << VertexShader ) )
+                            rootLayoutDesc[i][bindingIdx].stageFlags |= VK_SHADER_STAGE_VERTEX_BIT;
+                        if( mParamsBuffStages & ( 1u << PixelShader ) )
+                            rootLayoutDesc[i][bindingIdx].stageFlags |= VK_SHADER_STAGE_FRAGMENT_BIT;
+                        if( mParamsBuffStages & ( 1u << GeometryShader ) )
+                            rootLayoutDesc[i][bindingIdx].stageFlags |= VK_SHADER_STAGE_GEOMETRY_BIT;
+                        if( mParamsBuffStages & ( 1u << HullShader ) )
+                        {
+                            rootLayoutDesc[i][bindingIdx].stageFlags |=
+                                VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+                        }
+                        if( mParamsBuffStages & ( 1u << DomainShader ) )
+                        {
+                            rootLayoutDesc[i][bindingIdx].stageFlags |=
+                                VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+                        }
+                    }
+                    rootLayoutDesc[i][bindingIdx].pImmutableSamplers = 0;
+
                     ++bindingIdx;
+                }
             }
 
             mSets[i] = mProgramManager->getCachedSet( rootLayoutDesc[i] );
@@ -434,10 +535,34 @@ namespace Ogre
         if( !bindRanges.isInUse() )
             return;
 
-        VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
-        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
-        writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        writeDescSet.pBufferInfo = &table.paramsBuffer;
+        if( mCompute )
+        {
+            VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
+            bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+            writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            writeDescSet.pBufferInfo = &table.paramsBuffer[GPT_COMPUTE_PROGRAM];
+        }
+        else
+        {
+            for( size_t i = 0u; i < NumShaderTypes; ++i )
+            {
+                if( mParamsBuffStages & ( 1u << i ) )
+                {
+                    VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
+
+                    makeVkStruct( writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
+                    writeDescSet.dstSet = descSet;
+                    writeDescSet.dstBinding = currBinding;
+                    writeDescSet.dstArrayElement = 0u;
+                    writeDescSet.descriptorCount = 1u;
+                    ++currBinding;
+                    ++numWriteDescSets;
+
+                    writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                    writeDescSet.pBufferInfo = &table.paramsBuffer[i];
+                }
+            }
+        }
     }
     //-------------------------------------------------------------------------
     inline void VulkanRootLayout::bindConstBuffers( VkWriteDescriptorSet *writeDescSets,
@@ -552,17 +677,37 @@ namespace Ogre
             static_cast<uint32_t>( mSets.size() ), descSets, 0u, 0 );
     }
     //-------------------------------------------------------------------------
-    bool VulkanRootLayout::findParamsBuffer( size_t &outSetIdx, size_t &outBindingIdx ) const
+    bool VulkanRootLayout::findParamsBuffer( uint32 shaderStage, size_t &outSetIdx,
+                                             size_t &outBindingIdx ) const
     {
+        if( !( mParamsBuffStages & ( 1u << shaderStage ) ) )
+            return false;  // There is no param buffer in this stage
+
+        size_t numStagesWithParams = 0u;
+        if( mCompute )
+        {
+            numStagesWithParams = 1u;
+        }
+        else
+        {
+            for( size_t i = 0u; i < shaderStage; ++i )
+            {
+                if( mParamsBuffStages & ( 1u << i ) )
+                    ++numStagesWithParams;
+            }
+        }
+
         for( size_t i = 0u; i < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
         {
             if( mDescBindingRanges[i][VulkanDescBindingTypes::ParamBuffer].isInUse() )
             {
                 outSetIdx = i;
-                outBindingIdx = 0u; // When present, it's always binding = 0
+                outBindingIdx = numStagesWithParams;
                 return true;
             }
         }
+
+        OGRE_ASSERT_LOW( false && "This path should not be reached" );
 
         return false;
     }
@@ -637,6 +782,8 @@ namespace Ogre
     {
         if( this->mCompute != other.mCompute )
             return this->mCompute < other.mCompute;
+        if( this->mParamsBuffStages != other.mParamsBuffStages )
+            return this->mParamsBuffStages < other.mParamsBuffStages;
 
         for( size_t i = 0u; i < OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
         {

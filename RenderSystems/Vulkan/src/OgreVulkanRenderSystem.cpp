@@ -507,13 +507,14 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setParamBuffer( const VkDescriptorBufferInfo &bufferInfo )
+    void VulkanRenderSystem::_setParamBuffer( GpuProgramType shaderStage,
+                                              const VkDescriptorBufferInfo &bufferInfo )
     {
-        if( mGlobalTable.paramsBuffer.buffer != bufferInfo.buffer ||
-            mGlobalTable.paramsBuffer.offset != bufferInfo.offset ||
-            mGlobalTable.paramsBuffer.range != bufferInfo.range )
+        if( mGlobalTable.paramsBuffer[shaderStage].buffer != bufferInfo.buffer ||
+            mGlobalTable.paramsBuffer[shaderStage].offset != bufferInfo.offset ||
+            mGlobalTable.paramsBuffer[shaderStage].range != bufferInfo.range )
         {
-            mGlobalTable.paramsBuffer = bufferInfo;
+            mGlobalTable.paramsBuffer[shaderStage] = bufferInfo;
             mTableDirty = true;
         }
     }
@@ -1643,14 +1644,7 @@ namespace Ogre
             const size_t bindOffset =
                 constBuffer->getTotalSizeBytes() - mCurrentAutoParamsBufferSpaceLeft;
 
-            // const unordered_map<unsigned, VulkanConstantDefinitionBindingParam>::type
-            // &vertexShaderBindings =
-            //     shader->getConstantDefsBindingParams();
-            //
-            // flushDescriptorState( VK_PIPELINE_BIND_POINT_GRAPHICS, *constBuffer, bindOffset,
-            //                       bytesToWrite, vertexShaderBindings );
-            VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
-            constBuffer->bindAsParamBuffer( bindOffset );
+            constBuffer->bindAsParamBuffer( gptype, bindOffset );
 
             mCurrentAutoParamsBufferPtr += bytesToWrite;
 
@@ -1658,7 +1652,7 @@ namespace Ogre
             mCurrentAutoParamsBufferPtr = reinterpret_cast<uint8 *>(
                 alignToNextMultiple( reinterpret_cast<uintptr_t>( mCurrentAutoParamsBufferPtr ),
                                      mVaoManager->getConstBufferAlignment() ) );
-            bytesToWrite += mCurrentAutoParamsBufferPtr - oldBufferPos;
+            bytesToWrite += ( size_t )( mCurrentAutoParamsBufferPtr - oldBufferPos );
 
             // We know that bytesToWrite <= mCurrentAutoParamsBufferSpaceLeft, but that was
             // before padding. After padding this may no longer hold true.

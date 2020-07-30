@@ -413,7 +413,7 @@ namespace Ogre
         {
             String preamble;
 
-            mRootLayout->generateRootLayoutMacros( preamble );
+            mRootLayout->generateRootLayoutMacros( mType, preamble );
             if( mType == GPT_VERTEX_PROGRAM )
                 addVertexSemanticsToPreamble( preamble );
             addPreprocessorToPreamble( preamble );
@@ -621,7 +621,7 @@ namespace Ogre
 
         size_t paramSetIdx = 0u;
         size_t paramBindingIdx = 0u;
-        if( !mRootLayout->findParamsBuffer( paramSetIdx, paramBindingIdx ) )
+        if( !mRootLayout->findParamsBuffer( mType, paramSetIdx, paramBindingIdx ) )
         {
             // Root layout does not specify a params buffer. Nothing to do here.
             return;
