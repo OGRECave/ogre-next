@@ -103,6 +103,13 @@ namespace Ogre
 
         bool mTableDirty;
         VulkanGlobalBindingTable mGlobalTable;
+        // Vulkan requires a valid handle when updating descriptors unless nullDescriptor is present
+        // So we just use a dummy. The dummy texture we get it from TextureGpuManager which needs
+        // to create some anyway for different reasons
+        ConstBufferPacked *mDummyBuffer;
+        TexBufferPacked *mDummyTexBuffer;
+        VkImageView mDummyTextureView;
+        VkSampler mDummySampler;
 
         // clang-format off
         VulkanFrameBufferDescMap    mFrameBufferDescMap;

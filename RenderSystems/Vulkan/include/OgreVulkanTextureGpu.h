@@ -124,7 +124,7 @@ namespace Ogre
 
         VkImageType getVulkanTextureType( void ) const;
 
-        VkImageViewType getVulkanTextureViewType( void ) const;
+        VkImageViewType getInternalVulkanTextureViewType( void ) const;
 
     protected:
         VkImageView createView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint8 numMipmaps,

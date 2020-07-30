@@ -71,6 +71,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #define TODO_check_layers_exist
 
 #define TODO_addVpCount_to_passpso
+#define TODO_enable
 
 namespace Ogre
 {
@@ -153,6 +154,10 @@ namespace Ogre
         mCache( 0 ),
         mPso( 0 ),
         mTableDirty( false ),
+        mDummyBuffer( 0 ),
+        mDummyTexBuffer( 0 ),
+        mDummyTextureView( 0 ),
+        mDummySampler( 0 ),
         mEntriesToFlush( 0u ),
         mVpChanged( false ),
         CreateDebugReportCallback( 0 ),
@@ -168,6 +173,30 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::shutdown( void )
     {
+        if( mDummySampler )
+        {
+            vkDestroySampler( mActiveDevice->mDevice, mDummySampler, 0 );
+            mDummySampler = 0;
+        }
+
+        if( mDummyTextureView )
+        {
+            vkDestroyImageView( mActiveDevice->mDevice, mDummyTextureView, 0 );
+            mDummyTextureView = 0;
+        }
+
+        if( mDummyTexBuffer )
+        {
+            mVaoManager->destroyTexBuffer( mDummyTexBuffer );
+            mDummyTexBuffer = 0;
+        }
+
+        if( mDummyBuffer )
+        {
+            mVaoManager->destroyConstBuffer( mDummyBuffer );
+            mDummyBuffer = 0;
+        }
+
         OGRE_DELETE mCache;
         mCache = 0;
 
@@ -450,11 +479,64 @@ namespace Ogre
                 OGRE_NEW VulkanVaoManager( dynBufferMultiplier, mDevice, this );
             mVaoManager = vaoManager;
             mHardwareBufferManager = OGRE_NEW v1::VulkanHardwareBufferManager( mDevice, mVaoManager );
-            mTextureGpuManager = OGRE_NEW VulkanTextureGpuManager( mVaoManager, this, mDevice );
+            VulkanTextureGpuManager *textureGpuManager =
+                OGRE_NEW VulkanTextureGpuManager( mVaoManager, this, mDevice );
+            mTextureGpuManager = textureGpuManager;
 
             mActiveDevice->mVaoManager = vaoManager;
             mActiveDevice->initQueues();
             vaoManager->initDrawIdVertexBuffer();
+
+            uint32 dummyData = 0u;
+            mDummyBuffer = vaoManager->createConstBuffer( 4u, BT_IMMUTABLE, &dummyData, false );
+            mDummyTexBuffer =
+                vaoManager->createTexBuffer( PFG_RGBA8_UNORM, 4u, BT_IMMUTABLE, &dummyData, false );
+
+            TODO_enable;
+            if( 0 )
+            {
+                VkImage dummyImage =
+                    textureGpuManager->getBlankTextureVulkanName( TextureTypes::Type2D );
+
+                VkImageViewCreateInfo imageViewCi;
+                makeVkStruct( imageViewCi, VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO );
+                imageViewCi.image = dummyImage;
+                imageViewCi.viewType = VK_IMAGE_VIEW_TYPE_2D;
+                imageViewCi.format = VK_FORMAT_R8G8B8A8_UNORM;
+                imageViewCi.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                imageViewCi.subresourceRange.levelCount = 1u;
+                imageViewCi.subresourceRange.layerCount = 1u;
+
+                VkResult result =
+                    vkCreateImageView( mActiveDevice->mDevice, &imageViewCi, 0, &mDummyTextureView );
+                checkVkResult( result, "VulkanTextureGpu::getView" );
+            }
+
+            {
+                VkSamplerCreateInfo samplerDescriptor;
+                makeVkStruct( samplerDescriptor, VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
+                float maxAllowedAnisotropy =
+                    mActiveDevice->mDeviceProperties.limits.maxSamplerAnisotropy;
+                samplerDescriptor.maxAnisotropy = maxAllowedAnisotropy;
+                samplerDescriptor.minLod = -std::numeric_limits<float>::max();
+                samplerDescriptor.maxLod = std::numeric_limits<float>::max();
+                VkResult result =
+                    vkCreateSampler( mActiveDevice->mDevice, &samplerDescriptor, 0, &mDummySampler );
+                checkVkResult( result, "vkCreateSampler" );
+            }
+
+            for( uint16 i = 0u; i < NUM_BIND_CONST_BUFFERS; ++i )
+                mDummyBuffer->bindBufferVS( i );
+            for( uint16 i = 0u; i < NUM_BIND_TEX_BUFFERS; ++i )
+                mDummyTexBuffer->bindBufferVS( i );
+            for( size_t i = 0u; i < NUM_BIND_TEXTURES; ++i )
+            {
+                mGlobalTable.textures[i].imageView = mDummyTextureView;
+                mGlobalTable.textures[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            }
+            for( size_t i = 0u; i < NUM_BIND_SAMPLERS; ++i )
+                mGlobalTable.samplers[i].sampler = mDummySampler;
+
             mInitialized = true;
         }
 
