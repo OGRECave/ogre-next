@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreVulkanDescriptorPool.h"
 #include "OgreVulkanDevice.h"
+#include "OgreVulkanRootLayout.h"
 #include "OgreVulkanUtils.h"
 #include "Vao/OgreVulkanAsyncTicket.h"
 #include "Vao/OgreVulkanBufferInterface.h"
@@ -53,6 +54,8 @@ THE SOFTWARE.
 #define TODO_whenImplemented_include_stagingBuffers
 #define TODO_add_cached_read_memory
 #define TODO_if_memory_non_coherent_align_size
+
+#define TODO_wait
 
 namespace Ogre
 {
@@ -851,11 +854,35 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     VulkanDescriptorPool *VulkanVaoManager::getDescriptorPool( const VulkanRootLayout *rootLayout,
-                                                               size_t setIdx )
+                                                               size_t setIdx,
+                                                               VkDescriptorSetLayout setLayout )
     {
         size_t capacity = 16u;
-        VulkanDescriptorPool *pool = new VulkanDescriptorPool( this, rootLayout, setIdx, capacity );
-        return pool;
+        VulkanDescriptorPool *retVal = 0;
+
+        VulkanDescriptorPoolMap::iterator itor = mDescriptorPools.find( setLayout );
+        if( itor != mDescriptorPools.end() )
+        {
+            FastArray<VulkanDescriptorPool *>::const_iterator it = itor->second.begin();
+            FastArray<VulkanDescriptorPool *>::const_iterator en = itor->second.end();
+
+            while( it != en && !retVal )
+            {
+                capacity = std::max( capacity, ( *it )->getCurrentCapacity() );
+
+                if( ( *it )->isAvailableInCurrentFrame() )
+                    retVal = *it;
+                ++it;
+            }
+        }
+
+        if( !retVal )
+        {
+            retVal = new VulkanDescriptorPool( this, rootLayout, setIdx, capacity );
+            mDescriptorPools[setLayout].push_back( retVal );
+        }
+
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_schedulePoolAdvanceFrame( VulkanDescriptorPool *pool )
@@ -870,7 +897,7 @@ namespace Ogre
 
         while( itor != endt )
         {
-            (*itor)->_advanceFrame();
+            ( *itor )->_advanceFrame();
             ++itor;
         }
 
@@ -1047,9 +1074,13 @@ namespace Ogre
         return mDynamicBufferCurrentFrame;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::waitForSpecificFrameToFinish( uint32 frameCount ) {}
+    void VulkanVaoManager::waitForSpecificFrameToFinish( uint32 frameCount ) { TODO_wait; }
     //-----------------------------------------------------------------------------------
-    bool VulkanVaoManager::isFrameFinished( uint32 frameCount ) { return true; }
+    bool VulkanVaoManager::isFrameFinished( uint32 frameCount )
+    {
+        TODO_wait;
+        return true;
+    }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_notifyDeviceStalled()
     {

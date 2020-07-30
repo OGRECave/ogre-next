@@ -76,6 +76,8 @@ namespace Ogre
         VkDescriptorSet allocate( VulkanDevice *device, VkDescriptorSetLayout setLayout );
         void reset( VulkanDevice *device );
 
+        size_t getCurrentCapacity( void ) const { return mCurrentCapacity; }
+
         void _advanceFrame( void );
         bool isAvailableInCurrentFrame( void ) const;
     };

@@ -161,6 +161,10 @@ namespace Ogre
 
         VulkanDevice *mDevice;
 
+        typedef map<VkDescriptorSetLayout, FastArray<VulkanDescriptorPool *> >::type
+            VulkanDescriptorPoolMap;
+
+        VulkanDescriptorPoolMap mDescriptorPools;
         FastArray<VulkanDescriptorPool *> mUsedDescriptorPools;
 
 #ifndef VULKAN_HOTSHOT_WILL_REMOVE
@@ -289,7 +293,8 @@ namespace Ogre
         virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                                                   size_t elementStart, size_t elementCount );
 
-        VulkanDescriptorPool *getDescriptorPool( const VulkanRootLayout *rootLayout, size_t setIdx );
+        VulkanDescriptorPool *getDescriptorPool( const VulkanRootLayout *rootLayout, size_t setIdx,
+                                                 VkDescriptorSetLayout setLayout );
         void _schedulePoolAdvanceFrame( VulkanDescriptorPool *pool );
 
         virtual void _update( void );

@@ -407,7 +407,7 @@ namespace Ogre
         for( size_t i = 0u; i < numSets; ++i )
         {
             if( !mPools[i] || !mPools[i]->isAvailableInCurrentFrame() )
-                mPools[i] = vaoManager->getDescriptorPool( this, i );
+                mPools[i] = vaoManager->getDescriptorPool( this, i, mSets[i] );
 
             VkDescriptorSet descSet = mPools[i]->allocate( device, mSets[i] );
 
