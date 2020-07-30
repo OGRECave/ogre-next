@@ -270,10 +270,10 @@ namespace Ogre
         return VK_IMAGE_TYPE_2D;
     }
     //-----------------------------------------------------------------------------------
-    VkImageViewType VulkanTextureGpu::getVulkanTextureViewType( void ) const
+    VkImageViewType VulkanTextureGpu::getInternalVulkanTextureViewType( void ) const
     {
         // clang-format off
-        switch( mTextureType )
+        switch( getInternalTextureType() )
         {
         case TextureTypes::Unknown:         return VK_IMAGE_VIEW_TYPE_2D;
         case TextureTypes::Type1D:          return VK_IMAGE_VIEW_TYPE_1D;
@@ -303,7 +303,7 @@ namespace Ogre
             if( forUav )
                 pixelFormat = PixelFormatGpuUtils::getEquivalentLinear( pixelFormat );
         }
-        VkImageViewType texType = this->getVulkanTextureViewType();
+        VkImageViewType texType = this->getInternalVulkanTextureViewType();
 
         if( mSampleDescription.isMultisample() && hasMsaaExplicitResolves() )
             texType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
