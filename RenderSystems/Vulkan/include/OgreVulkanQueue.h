@@ -138,7 +138,42 @@ namespace Ogre
         /// This is to RESTORE the texture's layout and force future rendering cmds to wait
         /// for our transfer to finish.
         void insertRestoreBarrier( VulkanTextureGpu *vkTexture, const VkImageLayout newTransferLayout );
+
+        /** There will be two barriers that prepareForUpload will generate:
+
+                1. We must wait until previous commands are done reading from/writing to dst
+                   before we can proceed with a copy command what writes to dst.<br/>
+                   That includes previous copy commands, but we don't because we assume two
+                   consecutive uploads to the same buffer (or textures) are always done to
+                   non-overlapping regions.
+                2. At endCopyEncoder: we must ensure future GPU commands wait for our copy
+                   command to end writing to dst before they can start.
+
+            prepareForUpload tries its best to generate no more than 2 barriers (except for
+            texture layout transitions) between getCopyEncoder and endCopyEncoder, but sometimes
+            more than 2 barriers may end up being issued
+        @param buffer
+        @param texture
+        */
         void prepareForUpload( const BufferPacked *buffer, TextureGpu *texture );
+
+        /** There between zero to two barriers that prepareForDownload will generate:
+
+                1. We must wait until previous commands are done writing to src before we can
+                   proceed with a copy command that reads from src. Some buffers/textures are
+                   guaranteed to be read-only, in this case we can avoid this barrier.
+                   Textures may still need to transition their layout though.
+                2. At endCopyEncoder: we must ensure future commands don't write to src before
+                   we're done reading from src. Again, buffers/textures which are guaranteed to
+                   be read-only don't need this.
+                   Textures may still need to transition their layout though
+
+            prepareForDownload tries its best to generate no more than 2 barriers (except for
+            texture layout transitions) between getCopyEncoder and endCopyEncoder, but sometimes
+            more than 2 barriers may end up being issued
+        @param buffer
+        @param texture
+        */
         void prepareForDownload( const BufferPacked *buffer, TextureGpu *texture );
 
     public:
@@ -162,6 +197,9 @@ namespace Ogre
             fact this is discouraged.
 
             Keep calling getCopyEncoder until you're done with all transfer operations
+
+            @see    VulkanQueue::prepareForUpload
+            @see    VulkanQueue::prepareForDownload
         @param buffer
             The buffer we're copying from/to. Can be nullptr
         @param texture
