@@ -55,8 +55,6 @@ THE SOFTWARE.
 #define TODO_add_cached_read_memory
 #define TODO_if_memory_non_coherent_align_size
 
-#define TODO_wait
-
 namespace Ogre
 {
     const uint32 VulkanVaoManager::VERTEX_ATTRIBUTE_INDEX[VES_COUNT] = {
@@ -1074,12 +1072,55 @@ namespace Ogre
         return mDynamicBufferCurrentFrame;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::waitForSpecificFrameToFinish( uint32 frameCount ) { TODO_wait; }
+    void VulkanVaoManager::waitForSpecificFrameToFinish( uint32 frameCount )
+    {
+        if( frameCount == mFrameCount )
+        {
+            // Full stall
+            mDevice->stall();
+            //"mFrameCount += mDynamicBufferMultiplier" is already handled in _notifyDeviceStalled;
+        }
+        if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
+        {
+            // Let's wait on one of our existing fences...
+            // frameDiff has to be in range [1; mDynamicBufferMultiplier]
+            size_t frameDiff = mFrameCount - frameCount;
+
+            const size_t idx = ( mDynamicBufferCurrentFrame + mDynamicBufferMultiplier - frameDiff ) %
+                               mDynamicBufferMultiplier;
+
+            mDevice->mGraphicsQueue._waitOnFrame( static_cast<uint8>( idx ) );
+        }
+        else
+        {
+            // No stall
+        }
+    }
     //-----------------------------------------------------------------------------------
     bool VulkanVaoManager::isFrameFinished( uint32 frameCount )
     {
-        TODO_wait;
-        return true;
+        bool retVal = false;
+        if( frameCount == mFrameCount )
+        {
+            // Full stall
+            // retVal = false;
+        }
+        else if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
+        {
+            // frameDiff has to be in range [1; mDynamicBufferMultiplier]
+            size_t frameDiff = mFrameCount - frameCount;
+            const size_t idx = ( mDynamicBufferCurrentFrame + mDynamicBufferMultiplier - frameDiff ) %
+                               mDynamicBufferMultiplier;
+
+            retVal = mDevice->mGraphicsQueue._isFrameFinished( static_cast<uint8>( idx ) );
+        }
+        else
+        {
+            // No stall
+            retVal = true;
+        }
+
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_notifyDeviceStalled()

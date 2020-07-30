@@ -206,6 +206,7 @@ namespace Ogre
         void addWindowToWaitFor( VkSemaphore imageAcquisitionSemaph );
 
         void _waitOnFrame( uint8 frameIdx );
+        bool _isFrameFinished( uint8 frameIdx );
 
         void commitAndNextCommandBuffer( bool endingFrame );
     };

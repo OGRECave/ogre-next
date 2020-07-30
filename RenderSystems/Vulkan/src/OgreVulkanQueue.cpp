@@ -799,6 +799,30 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    bool VulkanQueue::_isFrameFinished( uint8 frameIdx )
+    {
+        bool bIsFinished = true;
+        FastArray<VkFence> &fences = mPerFrameData[frameIdx].mProtectingFences;
+
+        if( !fences.empty() )
+        {
+            const uint32 numFences = static_cast<uint32>( fences.size() );
+            VkResult result = vkWaitForFences( mDevice, numFences, &fences[0], VK_TRUE, 0u );
+            if( result != VK_TIMEOUT )
+            {
+                vkResetFences( mDevice, numFences, &fences[0] );
+                mAvailableFences.appendPOD( fences.begin(), fences.end() );
+                fences.clear();
+            }
+            else
+            {
+                bIsFinished = false;
+            }
+        }
+
+        return bIsFinished;
+    }
+    //-------------------------------------------------------------------------
     void VulkanQueue::commitAndNextCommandBuffer( bool endingFrame )
     {
         VkSubmitInfo submitInfo;
