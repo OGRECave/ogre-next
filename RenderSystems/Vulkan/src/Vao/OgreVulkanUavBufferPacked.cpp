@@ -54,7 +54,7 @@ namespace Ogre
 
         TexBufferPacked *retVal = OGRE_NEW VulkanTexBufferPacked(
             mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
-            (void *)0, false, (VaoManager *)0, bufferInterface, pixelFormat );
+            (void *)0, false, (VulkanRenderSystem *)0, (VaoManager *)0, bufferInterface, pixelFormat );
         // We were overriden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 

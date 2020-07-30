@@ -49,6 +49,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     static const char *c_rootLayoutVarNames[VulkanDescBindingTypes::NumDescBindingTypes] = {
+        "has_params",     //
         "const_buffers",  //
         "tex_buffers",    //
         "textures",       //
@@ -56,12 +57,14 @@ namespace Ogre
         "uav_textures",   //
         "uav_buffers",    //
     };
+    static const char c_bufferTypes[] = "PBTtsuU";
     //-------------------------------------------------------------------------
     uint32 toVkDescriptorType( VulkanDescBindingTypes::VulkanDescBindingTypes type )
     {
         switch( type )
         {
             // clang-format off
+        case VulkanDescBindingTypes::ParamBuffer:       return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         case VulkanDescBindingTypes::ConstBuffer:       return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         case VulkanDescBindingTypes::TexBuffer:         return VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
         case VulkanDescBindingTypes::Texture:           return VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
@@ -128,30 +131,45 @@ namespace Ogre
         for( size_t i = 0u; i < VulkanDescBindingTypes::NumDescBindingTypes; ++i )
         {
             itor = jsonValue.FindMember( c_rootLayoutVarNames[i] );
-            if( itor != jsonValue.MemberEnd() && itor->value.IsArray() && itor->value.Size() == 2u &&
-                itor->value[0].IsUint() && itor->value[1].IsUint() )
+
+            if( i == VulkanDescBindingTypes::ParamBuffer )
             {
-                if( itor->value[0].GetUint() > 65535 || itor->value[1].GetUint() > 65535 )
+                if( itor != jsonValue.MemberEnd() && itor->value.IsBool() )
                 {
-                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                 "Error at file " + filename +
-                                     ":\n"
-                                     "Root Layout descriptors must be in range [0; 65535]",
-                                 "VulkanRootLayout::parseSet" );
+                    if( itor->value.GetBool() )
+                        mDescBindingRanges[setIdx][i].end = 1u;
+                    else
+                        mDescBindingRanges[setIdx][i].end = 0u;
                 }
-
-                TODO_limit_NUM_BIND_TEXTURES;  // Only for dynamic sets
-
-                mDescBindingRanges[setIdx][i].start = static_cast<uint16>( itor->value[0].GetUint() );
-                mDescBindingRanges[setIdx][i].end = static_cast<uint16>( itor->value[1].GetUint() );
-
-                if( mDescBindingRanges[setIdx][i].start > mDescBindingRanges[setIdx][i].end )
+            }
+            else
+            {
+                if( itor != jsonValue.MemberEnd() && itor->value.IsArray() && itor->value.Size() == 2u &&
+                    itor->value[0].IsUint() && itor->value[1].IsUint() )
                 {
-                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                 "Error at file " + filename +
-                                     ":\n"
-                                     "Root Layout descriptors must satisfy start < end",
-                                 "VulkanRootLayout::parseSet" );
+                    if( itor->value[0].GetUint() > 65535 || itor->value[1].GetUint() > 65535 )
+                    {
+                        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                     "Error at file " + filename +
+                                         ":\n"
+                                         "Root Layout descriptors must be in range [0; 65535]",
+                                     "VulkanRootLayout::parseSet" );
+                    }
+
+                    TODO_limit_NUM_BIND_TEXTURES;  // Only for dynamic sets
+
+                    mDescBindingRanges[setIdx][i].start =
+                        static_cast<uint16>( itor->value[0].GetUint() );
+                    mDescBindingRanges[setIdx][i].end = static_cast<uint16>( itor->value[1].GetUint() );
+
+                    if( mDescBindingRanges[setIdx][i].start > mDescBindingRanges[setIdx][i].end )
+                    {
+                        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                     "Error at file " + filename +
+                                         ":\n"
+                                         "Root Layout descriptors must satisfy start < end",
+                                     "VulkanRootLayout::parseSet" );
+                    }
                 }
             }
         }
@@ -197,7 +215,6 @@ namespace Ogre
         validate( filename );
     }
     //-------------------------------------------------------------------------
-    const char c_bufferTypes[] = "BTtsuU";
     void VulkanRootLayout::generateRootLayoutMacros( String &outString ) const
     {
         String macroStr;
@@ -328,6 +345,24 @@ namespace Ogre
         ++numWriteDescSets;
     }
     //-------------------------------------------------------------------------
+    inline void VulkanRootLayout::bindParamsBuffer( VkWriteDescriptorSet *writeDescSets,
+                                                    size_t &numWriteDescSets, uint32 &currBinding,
+                                                    VkDescriptorSet descSet,
+                                                    const VulkanDescBindingRange *descBindingRanges,
+                                                    const VulkanGlobalBindingTable &table )
+    {
+        const VulkanDescBindingRange &bindRanges =
+            descBindingRanges[VulkanDescBindingTypes::ConstBuffer];
+
+        if( !bindRanges.isInUse() )
+            return;
+
+        VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        writeDescSet.pBufferInfo = &table.paramsBuffer;
+    }
+    //-------------------------------------------------------------------------
     inline void VulkanRootLayout::bindConstBuffers( VkWriteDescriptorSet *writeDescSets,
                                                     size_t &numWriteDescSets, uint32 &currBinding,
                                                     VkDescriptorSet descSet,
@@ -418,6 +453,8 @@ namespace Ogre
             VkWriteDescriptorSet writeDescSets[VulkanDescBindingTypes::Sampler + 1u];
 
             // Note: We must bind in the same order as VulkanDescBindingTypes
+            bindParamsBuffer( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
+                              table );
             bindConstBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
                               table );
             bindTexBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,

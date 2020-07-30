@@ -446,7 +446,8 @@ namespace Ogre
             FastArray<const char *> deviceExtensions;
             mDevice->createDevice( deviceExtensions, 0u, 0u );
 
-            VulkanVaoManager *vaoManager = OGRE_NEW VulkanVaoManager( dynBufferMultiplier, mDevice );
+            VulkanVaoManager *vaoManager =
+                OGRE_NEW VulkanVaoManager( dynBufferMultiplier, mDevice, this );
             mVaoManager = vaoManager;
             mHardwareBufferManager = OGRE_NEW v1::VulkanHardwareBufferManager( mDevice, mVaoManager );
             mTextureGpuManager = OGRE_NEW VulkanTextureGpuManager( mVaoManager, this, mDevice );
@@ -506,6 +507,39 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_setParamBuffer( const VkDescriptorBufferInfo &bufferInfo )
+    {
+        if( mGlobalTable.paramsBuffer.buffer != bufferInfo.buffer ||
+            mGlobalTable.paramsBuffer.offset != bufferInfo.offset ||
+            mGlobalTable.paramsBuffer.range != bufferInfo.range )
+        {
+            mGlobalTable.paramsBuffer = bufferInfo;
+            mTableDirty = true;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_setConstBuffer( size_t slot, const VkDescriptorBufferInfo &bufferInfo )
+    {
+        OGRE_ASSERT_MEDIUM( slot < NUM_BIND_CONST_BUFFERS );
+        if( mGlobalTable.constBuffers[slot].buffer != bufferInfo.buffer ||
+            mGlobalTable.constBuffers[slot].offset != bufferInfo.offset ||
+            mGlobalTable.constBuffers[slot].range != bufferInfo.range )
+        {
+            mGlobalTable.constBuffers[slot] = bufferInfo;
+            mTableDirty = true;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_setTexBuffer( size_t slot, VkBufferView bufferView )
+    {
+        OGRE_ASSERT_MEDIUM( slot < NUM_BIND_TEX_BUFFERS );
+        if( mGlobalTable.texBuffers[slot] != bufferView )
+        {
+            mGlobalTable.texBuffers[slot] = bufferView;
+            mTableDirty = true;
+        }
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setCurrentDeviceFromTexture( TextureGpu *texture ) {}
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )
@@ -518,8 +552,11 @@ namespace Ogre
 
         OGRE_ASSERT_MEDIUM( unit < NUM_BIND_TEXTURES );
         VulkanTextureGpu *tex = static_cast<VulkanTextureGpu *>( texPtr );
-        mGlobalTable.textures[unit].imageView = tex->getDefaultDisplaySrv();
-        mTableDirty = true;
+        if( mGlobalTable.textures[unit].imageView != tex->getDefaultDisplaySrv() )
+        {
+            mGlobalTable.textures[unit].imageView = tex->getDefaultDisplaySrv();
+            mTableDirty = true;
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set,
@@ -1613,19 +1650,7 @@ namespace Ogre
             // flushDescriptorState( VK_PIPELINE_BIND_POINT_GRAPHICS, *constBuffer, bindOffset,
             //                       bytesToWrite, vertexShaderBindings );
             VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
-            switch( gptype )
-            {
-            case GPT_VERTEX_PROGRAM:
-            case GPT_FRAGMENT_PROGRAM:
-            case GPT_COMPUTE_PROGRAM:
-                constBuffer->bindBuffer( OGRE_VULKAN_PARAMETER_SLOT - OGRE_VULKAN_CONST_SLOT_START,
-                                         bindOffset );
-                break;
-            case GPT_GEOMETRY_PROGRAM:
-            case GPT_HULL_PROGRAM:
-            case GPT_DOMAIN_PROGRAM:
-                break;
-            }
+            constBuffer->bindAsParamBuffer( bindOffset );
 
             mCurrentAutoParamsBufferPtr += bytesToWrite;
 

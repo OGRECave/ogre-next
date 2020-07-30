@@ -29,8 +29,6 @@ THE SOFTWARE.
 #ifndef _Ogre_VulkanConstBufferPacked_H_
 #define _Ogre_VulkanConstBufferPacked_H_
 
-#include <vulkan/vulkan.h>
-
 #include "OgreVulkanPrerequisites.h"
 
 #include "Vao/OgreConstBufferPacked.h"
@@ -39,11 +37,16 @@ namespace Ogre
 {
     class _OgreVulkanExport VulkanConstBufferPacked : public ConstBufferPacked
     {
+        VulkanRenderSystem *mRenderSystem;
+
+        void bindBuffer( uint16 slot, uint32 offsetBytes );
+
     public:
         VulkanConstBufferPacked( size_t internalBufferStartBytes, size_t numElements,
                                  uint32 bytesPerElement, uint32 numElementsPadding,
                                  BufferType bufferType, void *initialData, bool keepAsShadow,
-                                 VaoManager *vaoManager, BufferInterface *bufferInterface );
+                                 VulkanRenderSystem *renderSystem, VaoManager *vaoManager,
+                                 BufferInterface *bufferInterface );
         ~VulkanConstBufferPacked();
 
         virtual void bindBufferVS( uint16 slot );
@@ -53,29 +56,7 @@ namespace Ogre
         virtual void bindBufferDS( uint16 slot );
         virtual void bindBufferCS( uint16 slot );
 
-        void bindBuffer( uint16 slot, uint32 offsetBytes );
-
-        const VkDescriptorBufferInfo &getBufferInfo() const { return mBufferInfo; }
-
-        // Used to check if it makes sense to update VkWriteDescriptorSet with this buffer info.
-        bool isDirty() const
-        {
-            return mDirty;
-        }
-
-        void resetDirty() { mDirty = false; }
-
-
-        uint16 getCurrentBinding() const
-        {
-            return mCurrentBinding;
-        }
-
-    private:
-
-        VkDescriptorBufferInfo mBufferInfo;
-        uint16 mCurrentBinding;
-        bool mDirty;
+        void bindAsParamBuffer( uint32 offsetBytes );
     };
 }  // namespace Ogre
 

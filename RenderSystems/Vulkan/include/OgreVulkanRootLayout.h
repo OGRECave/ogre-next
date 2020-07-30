@@ -69,6 +69,7 @@ namespace Ogre
         /// If the relative order is changed, then VulkanRootLayout::bind needs to be modified
         enum VulkanDescBindingTypes
         {
+            ParamBuffer,
             ConstBuffer,
             TexBuffer,
             Texture,
@@ -110,6 +111,10 @@ namespace Ogre
         inline void bindCommon( VkWriteDescriptorSet &writeDescSet, size_t &numWriteDescSets,
                                 uint32 &currBinding, VkDescriptorSet descSet,
                                 const VulkanDescBindingRange &bindRanges );
+        inline void bindParamsBuffer( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
+                                      uint32 &currBinding, VkDescriptorSet descSet,
+                                      const VulkanDescBindingRange *descBindingRanges,
+                                      const VulkanGlobalBindingTable &table );
         inline void bindConstBuffers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                       uint32 &currBinding, VkDescriptorSet descSet,
                                       const VulkanDescBindingRange *descBindingRanges,

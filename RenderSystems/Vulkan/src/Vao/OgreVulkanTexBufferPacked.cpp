@@ -28,100 +28,148 @@ THE SOFTWARE.
 
 #include "Vao/OgreVulkanTexBufferPacked.h"
 
-#include <vulkan/vulkan.h>
-
-
-
+#include "OgreVulkanDevice.h"
 #include "OgreVulkanMappings.h"
+#include "OgreVulkanRenderSystem.h"
 #include "OgreVulkanUtils.h"
 #include "Vao/OgreVulkanBufferInterface.h"
 #include "Vao/OgreVulkanVaoManager.h"
-#include "OgreVulkanDevice.h"
 
 namespace Ogre
 {
     VulkanTexBufferPacked::VulkanTexBufferPacked( size_t internalBufStartBytes, size_t numElements,
                                                   uint32 bytesPerElement, uint32 numElementsPadding,
                                                   BufferType bufferType, void *initialData,
-                                                  bool keepAsShadow, VaoManager *vaoManager,
+                                                  bool keepAsShadow, VulkanRenderSystem *renderSystem,
+                                                  VaoManager *vaoManager,
                                                   VulkanBufferInterface *bufferInterface,
                                                   PixelFormatGpu pf ) :
         TexBufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
                          bufferType, initialData, keepAsShadow, vaoManager, bufferInterface, pf ),
-        mBufferView( 0 ),
-        mPrevSizeBytes( -1 ),
-        mPrevOffset( -1 ),
-        mCurrentBinding( -1 ),
-        mDirty( false )
+        mRenderSystem( renderSystem ),
+        mCurrentCacheCursor( 0u )
     {
+        memset( mCachedResourceViews, 0, sizeof( mCachedResourceViews ) );
     }
-    //-----------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     VulkanTexBufferPacked::~VulkanTexBufferPacked() {}
+    //-------------------------------------------------------------------------
+    VkBufferView VulkanTexBufferPacked::createResourceView( int cacheIdx, size_t offset,
+                                                            size_t sizeBytes )
+    {
+        assert( cacheIdx < 16 );
 
+        VulkanVaoManager *vulkanVaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+
+        if( mCachedResourceViews[cacheIdx].mResourceView )
+        {
+            vkDestroyBufferView( vulkanVaoManager->getDevice()->mDevice,
+                                 mCachedResourceViews[cacheIdx].mResourceView, 0 );
+            mCachedResourceViews[cacheIdx].mResourceView = 0;
+        }
+
+        mCachedResourceViews[cacheIdx].mOffset = ( mFinalBufferStart + offset ) * mBytesPerElement;
+        mCachedResourceViews[cacheIdx].mSize = sizeBytes;
+
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( mBufferInterface );
+
+        VkBufferViewCreateInfo bufferCreateInfo;
+        makeVkStruct( bufferCreateInfo, VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO );
+        bufferCreateInfo.buffer = bufferInterface->getVboName();
+        bufferCreateInfo.format = VulkanMappings::get( mPixelFormat );
+        bufferCreateInfo.offset = mCachedResourceViews[cacheIdx].mOffset;
+        bufferCreateInfo.range = mCachedResourceViews[cacheIdx].mSize;
+
+        VkResult result = vkCreateBufferView( vulkanVaoManager->getDevice()->mDevice, &bufferCreateInfo,
+                                              0, &mCachedResourceViews[cacheIdx].mResourceView );
+        checkVkResult( result, "vkCreateBufferView" );
+
+        mCurrentCacheCursor = ( cacheIdx + 1 ) % 16;
+
+        return mCachedResourceViews[cacheIdx].mResourceView;
+    }
+    //-------------------------------------------------------------------------
+    VkBufferView VulkanTexBufferPacked::bindBufferCommon( size_t offset, size_t sizeBytes )
+    {
+        OGRE_ASSERT_LOW( offset <= getTotalSizeBytes() );
+        OGRE_ASSERT_LOW( sizeBytes <= getTotalSizeBytes() );
+        OGRE_ASSERT_LOW( ( offset + sizeBytes ) <= getTotalSizeBytes() );
+
+        sizeBytes = !sizeBytes ? ( mNumElements * mBytesPerElement - offset ) : sizeBytes;
+
+        VkBufferView resourceView = 0;
+        for( int i = 0; i < 16; ++i )
+        {
+            // Reuse resource views. Reuse res. views that are bigger than what's requested too.
+            if( mFinalBufferStart + offset == mCachedResourceViews[i].mOffset &&
+                sizeBytes <= mCachedResourceViews[i].mSize )
+            {
+                resourceView = mCachedResourceViews[i].mResourceView;
+                break;
+            }
+            else if( !mCachedResourceViews[i].mResourceView )
+            {
+                // We create in-order. If we hit here, the next ones are also null pointers.
+                resourceView = createResourceView( i, offset, sizeBytes );
+                break;
+            }
+        }
+
+        if( !resourceView )
+        {
+            // If we hit here, the cache is full and couldn't find a match.
+            resourceView = createResourceView( mCurrentCacheCursor, offset, sizeBytes );
+        }
+
+        return resourceView;
+    }
+    //-------------------------------------------------------------------------
     void VulkanTexBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        bindBuffer( slot, offset, sizeBytes );
+        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        mRenderSystem->_setTexBuffer( slot, resourceView );
     }
-
+    //-------------------------------------------------------------------------
     void VulkanTexBufferPacked::bindBufferPS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        bindBuffer( slot, offset, sizeBytes );
+        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        mRenderSystem->_setTexBuffer( slot, resourceView );
     }
-
+    //-------------------------------------------------------------------------
+    void VulkanTexBufferPacked::bindBufferGS( uint16 slot, size_t offset, size_t sizeBytes )
+    {
+        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        mRenderSystem->_setTexBuffer( slot, resourceView );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanTexBufferPacked::bindBufferDS( uint16 slot, size_t offset, size_t sizeBytes )
+    {
+        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        mRenderSystem->_setTexBuffer( slot, resourceView );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanTexBufferPacked::bindBufferHS( uint16 slot, size_t offset, size_t sizeBytes )
+    {
+        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        mRenderSystem->_setTexBuffer( slot, resourceView );
+    }
+    //-------------------------------------------------------------------------
     void VulkanTexBufferPacked::bindBufferCS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        bindBuffer( slot, offset, sizeBytes );
+        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        mRenderSystem->_setTexBuffer( slot, resourceView );
     }
-
-    void VulkanTexBufferPacked::bindBuffer( uint16 slot, size_t offset, size_t sizeBytes )
-    {
-        assert( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
-        assert( offset < ( mNumElements * mBytesPerElement - 1 ) );
-        assert( ( offset + sizeBytes ) <= mNumElements * mBytesPerElement );
-
-        size_t currentSizeBytes = !sizeBytes ? ( mNumElements * mBytesPerElement - offset ) : sizeBytes;
-
-        size_t currentOffset = mFinalBufferStart * mBytesPerElement + offset;
-
-        if( currentSizeBytes != mPrevSizeBytes || currentOffset != mPrevOffset )
-        {
-            VulkanBufferInterface *bufferInterface =
-                static_cast<VulkanBufferInterface *>( mBufferInterface );
-            VulkanVaoManager *vulkanVaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-
-            if( mBufferView != 0 )
-            {
-                // Destroy first? Is there any way to reuse these things instead of destroying and
-                // recreating them??
-                // vkDestroyBufferView( vulkanVaoManager->getDevice()->mDevice, mBufferView, 0 );
-            }
-
-            VkBufferViewCreateInfo bufferCreateInfo;
-            makeVkStruct( bufferCreateInfo, VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO );
-            bufferCreateInfo.buffer = bufferInterface->getVboName();
-            bufferCreateInfo.format = VulkanMappings::get( mPixelFormat );
-            bufferCreateInfo.offset = currentOffset;
-            bufferCreateInfo.range = currentSizeBytes;
-
-            checkVkResult(
-                vkCreateBufferView( vulkanVaoManager->getDevice()->mDevice, &bufferCreateInfo, 0, &mBufferView ), "vkCreateBufferView" );
-
-            mPrevSizeBytes = currentSizeBytes;
-            mPrevOffset = currentOffset;
-            mCurrentBinding = slot + OGRE_VULKAN_TEX_SLOT_START;
-            mDirty = true;
-        }
-    }
-
+    //-------------------------------------------------------------------------
     void VulkanTexBufferPacked::bindBufferForDescriptor( VkBuffer *buffers, VkDeviceSize *offsets,
                                                          size_t offset )
     {
-        assert( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
-        VulkanBufferInterface *bufferInterface = static_cast<VulkanBufferInterface *>( mBufferInterface );
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( mBufferInterface );
 
         *buffers = bufferInterface->getVboName();
         *offsets = mFinalBufferStart * mBytesPerElement + offset;
     }
-
-    //-----------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
 }  // namespace Ogre

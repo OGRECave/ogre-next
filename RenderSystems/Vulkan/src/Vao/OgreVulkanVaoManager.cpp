@@ -77,10 +77,12 @@ namespace Ogre
         14,   // VES_BLEND_INDICES2 - 1
     };
 
-    VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device ) :
+    VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device,
+                                        VulkanRenderSystem *renderSystem ) :
         VaoManager( 0 ),
         mDrawId( 0 ),
         mDevice( device ),
+        mVkRenderSystem( renderSystem ),
         mFenceFlushed( true ),
         mSupportsCoherentMemory( false ),
         mSupportsNonCoherentMemory( false )
@@ -581,7 +583,7 @@ namespace Ogre
 
         VulkanConstBufferPacked *retVal = OGRE_NEW VulkanConstBufferPacked(
             bufferOffset, requestedSize, 1u, ( uint32 )( sizeBytes - requestedSize ), bufferType,
-            initialData, keepAsShadow, this, bufferInterface );
+            initialData, keepAsShadow, mVkRenderSystem, this, bufferInterface );
 
         mConstBuffers.push_back( retVal );
 
@@ -635,7 +637,7 @@ namespace Ogre
 
         VulkanTexBufferPacked *retVal = OGRE_NEW VulkanTexBufferPacked(
             bufferOffset, requestedSize, 1u, ( uint32 )( sizeBytes - requestedSize ), bufferType,
-            initialData, keepAsShadow, this, bufferInterface, pixelFormat );
+            initialData, keepAsShadow, mVkRenderSystem, this, bufferInterface, pixelFormat );
 
         mTexBuffersPacked.push_back( retVal );
 

@@ -28,55 +28,58 @@ THE SOFTWARE.
 
 #include "Vao/OgreVulkanConstBufferPacked.h"
 
+#include "OgreVulkanRenderSystem.h"
 #include "Vao/OgreVulkanBufferInterface.h"
 
 namespace Ogre
 {
-    VulkanConstBufferPacked::VulkanConstBufferPacked( size_t internalBufferStartBytes,
-                                                      size_t numElements, uint32 bytesPerElement,
-                                                      uint32 numElementsPadding, BufferType bufferType,
-                                                      void *initialData, bool keepAsShadow,
-                                                      VaoManager *vaoManager,
-                                                      BufferInterface *bufferInterface ) :
+    VulkanConstBufferPacked::VulkanConstBufferPacked(
+        size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
+        uint32 numElementsPadding, BufferType bufferType, void *initialData, bool keepAsShadow,
+        VulkanRenderSystem *renderSystem, VaoManager *vaoManager, BufferInterface *bufferInterface ) :
         ConstBufferPacked( internalBufferStartBytes, numElements, bytesPerElement, numElementsPadding,
                            bufferType, initialData, keepAsShadow, vaoManager, bufferInterface ),
-        mCurrentBinding( -1 ),
-        mDirty( false )
+        mRenderSystem( renderSystem )
     {
     }
-    //-----------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     VulkanConstBufferPacked::~VulkanConstBufferPacked() {}
-
-    void VulkanConstBufferPacked::bindBufferVS( uint16 slot )
+    //-------------------------------------------------------------------------
+    void VulkanConstBufferPacked::bindBufferVS( uint16 slot ) { bindBuffer( slot, 0 ); }
+    //-------------------------------------------------------------------------
+    void VulkanConstBufferPacked::bindBufferPS( uint16 slot ) { bindBuffer( slot, 0 ); }
+    //-------------------------------------------------------------------------
+    void VulkanConstBufferPacked::bindBufferGS( uint16 slot ) { bindBuffer( slot, 0 ); }
+    //-------------------------------------------------------------------------
+    void VulkanConstBufferPacked::bindBufferHS( uint16 slot ) { bindBuffer( slot, 0 ); }
+    //-------------------------------------------------------------------------
+    void VulkanConstBufferPacked::bindBufferDS( uint16 slot ) { bindBuffer( slot, 0 ); }
+    //-------------------------------------------------------------------------
+    void VulkanConstBufferPacked::bindBufferCS( uint16 slot ) { bindBuffer( slot, 0 ); }
+    //-------------------------------------------------------------------------
+    void VulkanConstBufferPacked::bindBuffer( uint16 slot, uint32 offsetBytes )
     {
-        bindBuffer( slot, 0 );
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( mBufferInterface );
+
+        VkDescriptorBufferInfo bufferInfo;
+        bufferInfo.buffer = bufferInterface->getVboName();
+        bufferInfo.offset = mFinalBufferStart * mBytesPerElement + offsetBytes;
+        bufferInfo.range = mNumElements * mBytesPerElement;
+        mRenderSystem->_setConstBuffer( slot, bufferInfo );
     }
-
-    void VulkanConstBufferPacked::bindBufferPS( uint16 slot )
+    //-------------------------------------------------------------------------
+    void VulkanConstBufferPacked::bindAsParamBuffer( uint32 offsetBytes )
     {
-        bindBuffer( slot, 0 );
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( mBufferInterface );
+
+        VkDescriptorBufferInfo bufferInfo;
+        bufferInfo.buffer = bufferInterface->getVboName();
+        bufferInfo.offset = mFinalBufferStart * mBytesPerElement + offsetBytes;
+        bufferInfo.range = mNumElements * mBytesPerElement;
+        mRenderSystem->_setParamBuffer( bufferInfo );
     }
-
-    void VulkanConstBufferPacked::bindBufferGS( uint16 slot ) {}
-    void VulkanConstBufferPacked::bindBufferHS( uint16 slot ) {}
-    void VulkanConstBufferPacked::bindBufferDS( uint16 slot ) {}
-
-    void VulkanConstBufferPacked::bindBufferCS( uint16 slot )
-    {
-        bindBuffer( slot, 0 );
-    }    
-
-    void VulkanConstBufferPacked::VulkanConstBufferPacked::bindBuffer( uint16 slot,
-                                                                            uint32 offsetBytes )
-    {
-        assert( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
-        VulkanBufferInterface *bufferInterface = static_cast<VulkanBufferInterface *>( mBufferInterface );
-        mBufferInfo.buffer = bufferInterface->getVboName();
-        mBufferInfo.offset = mFinalBufferStart * mBytesPerElement + offsetBytes;
-        mBufferInfo.range = mNumElements * mBytesPerElement;
-        mCurrentBinding = slot + OGRE_VULKAN_CONST_SLOT_START;
-        mDirty = true;
-    }
-
-    //-----------------------------------------------------------------------------------
 }  // namespace Ogre

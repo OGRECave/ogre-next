@@ -160,6 +160,7 @@ namespace Ogre
         VkSemaphoreArray mAvailableSemaphores;
 
         VulkanDevice *mDevice;
+        VulkanRenderSystem *mVkRenderSystem;
 
         typedef map<VkDescriptorSetLayout, FastArray<VulkanDescriptorPool *> >::type
             VulkanDescriptorPoolMap;
@@ -269,7 +270,8 @@ namespace Ogre
                                              BufferPacked *buffer );
 
     public:
-        VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device );
+        VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device,
+                          VulkanRenderSystem *renderSystem );
         virtual ~VulkanVaoManager();
 
         void initDrawIdVertexBuffer();

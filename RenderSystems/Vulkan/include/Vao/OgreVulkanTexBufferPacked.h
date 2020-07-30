@@ -41,47 +41,38 @@ namespace Ogre
 
     class _OgreVulkanExport VulkanTexBufferPacked : public TexBufferPacked
     {
+        struct CachedResourceView
+        {
+            VkBufferView mResourceView;
+            size_t mOffset;
+            size_t mSize;
+        };
+
+        VulkanRenderSystem *mRenderSystem;
+        CachedResourceView mCachedResourceViews[16];
+        uint8 mCurrentCacheCursor;
+
+        VkBufferView createResourceView( int cacheIdx, size_t offset, size_t sizeBytes );
+        VkBufferView bindBufferCommon( size_t offset, size_t sizeBytes );
+
+        // VkBufferView createSrv( const DescriptorSetTexture2::BufferSlot &bufferSlot ) const;
+
     public:
         VulkanTexBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
                                uint32 numElementsPadding, BufferType bufferType, void *initialData,
-                               bool keepAsShadow, VaoManager *vaoManager,
-                               VulkanBufferInterface *bufferInterface, PixelFormatGpu pf );
+                               bool keepAsShadow, VulkanRenderSystem *renderSystem,
+                               VaoManager *vaoManager, VulkanBufferInterface *bufferInterface,
+                               PixelFormatGpu pf );
         ~VulkanTexBufferPacked();
 
         virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
         virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
         virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
 
-        void bindBufferForDescriptor( VkBuffer *buffers, VkDeviceSize *offsets,
-                                      size_t offset );
-
-        // Used to check if it makes sense to update VkWriteDescriptorSet with this buffer info.
-        bool isDirty() const { return mDirty; }
-
-        void resetDirty() { mDirty = false; }
-
-
-        VkBufferView getBufferView() const
-        {
-            return mBufferView;
-        }
-
-        uint16 getCurrentBinding() const
-        {
-            return mCurrentBinding;
-        }
-
-    private:
-        void bindBuffer( uint16 slot, size_t offset, size_t sizeBytes );
-
-        VkBufferView mBufferView;
-        size_t mPrevSizeBytes;
-        size_t mPrevOffset;
-        uint16 mCurrentBinding;
-        bool mDirty;
+        void bindBufferForDescriptor( VkBuffer *buffers, VkDeviceSize *offsets, size_t offset );
     };
 }  // namespace Ogre
 
