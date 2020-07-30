@@ -858,9 +858,25 @@ namespace Ogre
         return pool;
     }
     //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::_schedulePoolAdvanceFrame( VulkanDescriptorPool *pool )
+    {
+        mUsedDescriptorPools.push_back( pool );
+    }
+    //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_update( void )
     {
+        FastArray<VulkanDescriptorPool *>::const_iterator itor = mUsedDescriptorPools.begin();
+        FastArray<VulkanDescriptorPool *>::const_iterator endt = mUsedDescriptorPools.end();
+
+        while( itor != endt )
+        {
+            (*itor)->_advanceFrame();
+            ++itor;
+        }
+
         VaoManager::_update();
+
+        mUsedDescriptorPools.clear();
 
         if( !mFenceFlushed )
         {

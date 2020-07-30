@@ -62,6 +62,9 @@ namespace Ogre
         size_t mCurrentPoolIdx;
         uint32 mLastFrameUsed;
 
+        bool mAdvanceFrameScheduled;
+        VulkanVaoManager *mVaoManager;
+
         void createNewPool( VulkanDevice *device );
         void createNewPool( VulkanDevice *device, const size_t newCapacity );
 
@@ -72,6 +75,9 @@ namespace Ogre
 
         VkDescriptorSet allocate( VulkanDevice *device, VkDescriptorSetLayout setLayout );
         void reset( VulkanDevice *device );
+
+        void _advanceFrame( void );
+        bool isAvailableInCurrentFrame( void ) const;
     };
 }  // namespace Ogre
 

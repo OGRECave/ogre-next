@@ -51,7 +51,9 @@ namespace Ogre
                                                 const size_t capacity ) :
         mCurrentCapacity( 0u ),
         mCurrentPoolIdx( 0u ),
-        mLastFrameUsed( vaoManager->getFrameCount() - vaoManager->getDynamicBufferMultiplier() )
+        mLastFrameUsed( vaoManager->getFrameCount() - vaoManager->getDynamicBufferMultiplier() ),
+        mAdvanceFrameScheduled( false ),
+        mVaoManager( vaoManager )
     {
         const VulkanDescBindingRange *descBindingRanges = rootLayout->getDescBindingRanges( setIdx );
 
@@ -111,6 +113,11 @@ namespace Ogre
     VkDescriptorSet VulkanDescriptorPool::allocate( VulkanDevice *device,
                                                     VkDescriptorSetLayout setLayout )
     {
+        OGRE_ASSERT_HIGH( isAvailableInCurrentFrame() );
+
+        if( !mAdvanceFrameScheduled )
+            reset( device );
+
         while( mPools[mCurrentPoolIdx].isFull() && mCurrentPoolIdx < mPools.size() )
             ++mCurrentPoolIdx;
 
@@ -137,6 +144,12 @@ namespace Ogre
             return VK_NULL_HANDLE;
         }
 
+        if( !mAdvanceFrameScheduled )
+        {
+            mVaoManager->_schedulePoolAdvanceFrame( this );
+            mAdvanceFrameScheduled = true;
+        }
+
         ++pool.size;
 
         return handle;
@@ -155,5 +168,16 @@ namespace Ogre
         }
 
         mCurrentPoolIdx = 0u;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDescriptorPool::_advanceFrame( void )
+    {
+        mLastFrameUsed = mVaoManager->getFrameCount();
+        mAdvanceFrameScheduled = false;
+    }
+    //-------------------------------------------------------------------------
+    bool VulkanDescriptorPool::isAvailableInCurrentFrame( void ) const
+    {
+        return mVaoManager->isFrameFinished( mLastFrameUsed );
     }
 }  // namespace Ogre

@@ -161,6 +161,8 @@ namespace Ogre
 
         VulkanDevice *mDevice;
 
+        FastArray<VulkanDescriptorPool *> mUsedDescriptorPools;
+
 #ifndef VULKAN_HOTSHOT_WILL_REMOVE
         vector<VulkanConstBufferPacked *>::type mConstBuffers;
         vector<VulkanTexBufferPacked *>::type mTexBuffersPacked;
@@ -214,8 +216,6 @@ namespace Ogre
         */
         void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
                             BufferType bufferType );
-
-        
 
         virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                             BufferType bufferType, void *initialData,
@@ -290,6 +290,7 @@ namespace Ogre
                                                   size_t elementStart, size_t elementCount );
 
         VulkanDescriptorPool *getDescriptorPool( const VulkanRootLayout *rootLayout, size_t setIdx );
+        void _schedulePoolAdvanceFrame( VulkanDescriptorPool *pool );
 
         virtual void _update( void );
         void _notifyNewCommandBuffer( void );

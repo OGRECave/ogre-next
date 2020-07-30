@@ -96,9 +96,8 @@ namespace Ogre
         /// VulkanRootLayout never makes it into a PSO.
         VkPipelineLayout mRootLayout;
 
-        /// There's one VulkanDescriptorPool per binding set, per frame index
-        /// mPools[setIdx][frameNum]
-        FastArray<VulkanDescriptorPool> mPools[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS];
+        /// There's one VulkanDescriptorPool per binding set
+        FastArray<VulkanDescriptorPool *> mPools;
 
         VulkanGpuProgramManager *mProgramManager;
 

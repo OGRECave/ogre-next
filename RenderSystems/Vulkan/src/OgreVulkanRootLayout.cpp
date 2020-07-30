@@ -271,6 +271,7 @@ namespace Ogre
         const size_t numSets = calculateNumUsedSets();
         rootLayoutDesc.resize( numSets );
         mSets.resize( numSets );
+        mPools.resize( numSets );
 
         for( size_t i = 0u; i < numSets; ++i )
         {
@@ -405,8 +406,10 @@ namespace Ogre
 
         for( size_t i = 0u; i < numSets; ++i )
         {
-            VulkanDescriptorPool *pool = vaoManager->getDescriptorPool( this, i );
-            VkDescriptorSet descSet = pool->allocate( device, mSets[i] );
+            if( !mPools[i] || !mPools[i]->isAvailableInCurrentFrame() )
+                mPools[i] = vaoManager->getDescriptorPool( this, i );
+
+            VkDescriptorSet descSet = mPools[i]->allocate( device, mSets[i] );
 
             const VulkanDescBindingRange *descBindingRanges = mDescBindingRanges[i];
 
