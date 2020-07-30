@@ -352,7 +352,7 @@ namespace Ogre
                                                     const VulkanGlobalBindingTable &table )
     {
         const VulkanDescBindingRange &bindRanges =
-            descBindingRanges[VulkanDescBindingTypes::ConstBuffer];
+            descBindingRanges[VulkanDescBindingTypes::ParamBuffer];
 
         if( !bindRanges.isInUse() )
             return;
