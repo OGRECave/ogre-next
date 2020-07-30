@@ -129,6 +129,7 @@ namespace Ogre
          */
         void loadFromSource( void );
 
+        void addVertexSemanticsToPreamble( String &inOutPreamble ) const;
         void addPreprocessorToPreamble( String &inOutPreamble ) const;
 
         /** Internal method for creating a dummy low-level program for this

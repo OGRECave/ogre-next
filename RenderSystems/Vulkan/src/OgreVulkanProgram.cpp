@@ -272,6 +272,58 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void VulkanProgram::loadFromSource( void ) { compile( true ); }
     //-----------------------------------------------------------------------
+    struct SemanticMacro
+    {
+        const char *nameStr;
+        VertexElementSemantic semantic;
+        uint8 count;
+        SemanticMacro( const char *_nameStr, VertexElementSemantic _semantic, uint8 _count = 1u ) :
+            nameStr( _nameStr ),
+            semantic( _semantic ),
+            count( _count )
+        {
+        }
+    };
+    // The names match our HLSL bindings
+    static const SemanticMacro c_semanticMacros[] = {
+        SemanticMacro( "OGRE_POSITION", VES_POSITION ),
+        SemanticMacro( "OGRE_BLENDWEIGHT", VES_BLEND_WEIGHTS ),
+        SemanticMacro( "OGRE_BLENDINDICES", VES_BLEND_INDICES ),
+        SemanticMacro( "OGRE_BLENDWEIGHT2", VES_BLEND_WEIGHTS2 ),
+        SemanticMacro( "OGRE_BLENDINDICES2", VES_BLEND_INDICES2 ),
+        SemanticMacro( "OGRE_NORMAL", VES_NORMAL ),
+        SemanticMacro( "OGRE_DIFFUSE", VES_DIFFUSE ),
+        SemanticMacro( "OGRE_SPECULAR", VES_SPECULAR ),
+        SemanticMacro( "OGRE_TEXCOORD", VES_TEXTURE_COORDINATES, 8u ),
+        SemanticMacro( "OGRE_BINORMAL", VES_BINORMAL ),
+        SemanticMacro( "OGRE_TANGENT", VES_TANGENT ),
+    };
+    void VulkanProgram::addVertexSemanticsToPreamble( String &inOutPreamble ) const
+    {
+        // This code could be baked at compile time...
+        char tmpBuffer[768];
+        Ogre::LwString preamble( Ogre::LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+        for( size_t i = 0u; i < sizeof( c_semanticMacros ) / sizeof( c_semanticMacros[0] ); ++i )
+        {
+            uint32 attrIdx = VulkanVaoManager::getAttributeIndexFor( c_semanticMacros[i].semantic );
+            if( c_semanticMacros[i].count == 1u )
+            {
+                preamble.a( "#define ", c_semanticMacros[i].nameStr, " ", "location = ", attrIdx, "\n" );
+            }
+            else
+            {
+                for( uint8 j = 0u; j < c_semanticMacros[i].count; ++j )
+                {
+                    preamble.a( "#define ", c_semanticMacros[i].nameStr, j, " ", "location = ", attrIdx,
+                                "\n" );
+                }
+            }
+        }
+
+        inOutPreamble += preamble.c_str();
+    }
+    //-----------------------------------------------------------------------
     void VulkanProgram::addPreprocessorToPreamble( String &inOutPreamble ) const
     {
         String preamble;
@@ -362,6 +414,8 @@ namespace Ogre
             String preamble;
 
             mRootLayout->generateRootLayoutMacros( preamble );
+            if( mType == GPT_VERTEX_PROGRAM )
+                addVertexSemanticsToPreamble( preamble );
             addPreprocessorToPreamble( preamble );
 
             shader.setPreamble( preamble.c_str() );
