@@ -345,6 +345,7 @@ namespace Ogre
             VkResult result = vkAllocateMemory( mDevice->mDevice, &memAllocInfo, NULL, &newVbo.vboName );
             checkVkResult( result, "vkAllocateMemory" );
 
+            newVbo.vkBuffer = 0;
             if( !textureOnly )
             {
                 VkBufferCreateInfo bufferCi;
@@ -472,7 +473,7 @@ namespace Ogre
         outTexMemIdx = static_cast<uint16>( itor - mTextureMemory.begin() );
 
         const bool isTextureOnly = itor->vkMemoryTypeIndex == mBestVkMemoryTypeIndex[CPU_INACCESSIBLE];
-        VboVec &vboVec = isTextureOnly ? mVbos[CPU_INACCESSIBLE] : itor->vbos;
+        VboVec &vboVec = isTextureOnly ? itor->vbos : mVbos[CPU_INACCESSIBLE];
 
         allocateVbo( memReq.size, memReq.alignment, vboVec, itor->vkMemoryTypeIndex,
                      mDefaultPoolSize[CPU_INACCESSIBLE], isTextureOnly, false, false, outVboIdx,

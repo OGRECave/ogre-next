@@ -66,7 +66,6 @@ namespace Ogre
 
         VkImageCreateInfo imageInfo;
         makeVkStruct( imageInfo, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO );
-        imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         imageInfo.imageType = getVulkanTextureType();
         imageInfo.extent.width = mWidth;
         imageInfo.extent.height = mHeight;
@@ -108,7 +107,7 @@ namespace Ogre
         VulkanDevice *device = textureManager->getDevice();
 
         VkResult imageResult = vkCreateImage( device->mDevice, &imageInfo, 0, &mFinalTextureName );
-        checkVkResult( imageResult, "createInternalResourcesImpl" );
+        checkVkResult( imageResult, "vkCreateImage" );
 
         setObjectName( device->mDevice, (uint64_t)mFinalTextureName,
                        VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, textureName.c_str() );
@@ -258,8 +257,8 @@ namespace Ogre
         case TextureTypes::Type1DArray:     return VK_IMAGE_TYPE_1D;
         case TextureTypes::Type2D:          return VK_IMAGE_TYPE_2D;
         case TextureTypes::Type2DArray:     return VK_IMAGE_TYPE_2D;
-        case TextureTypes::TypeCube:        return VK_IMAGE_TYPE_3D;
-        case TextureTypes::TypeCubeArray:   return VK_IMAGE_TYPE_3D;
+        case TextureTypes::TypeCube:        return VK_IMAGE_TYPE_2D;
+        case TextureTypes::TypeCubeArray:   return VK_IMAGE_TYPE_2D;
         case TextureTypes::Type3D:          return VK_IMAGE_TYPE_3D;
         }
         // clang-format on
@@ -335,7 +334,7 @@ namespace Ogre
 
         VkImageView imageView;
         VkResult result = vkCreateImageView( device->mDevice, &imageViewCi, 0, &imageView );
-        checkVkResult( result, "VulkanTextureGpu::getView" );
+        checkVkResult( result, "vkCreateImageView" );
 
         return imageView;
     }
