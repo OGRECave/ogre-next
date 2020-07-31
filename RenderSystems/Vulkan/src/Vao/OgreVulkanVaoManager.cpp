@@ -270,8 +270,18 @@ namespace Ogre
         if( bufferType >= BT_DYNAMIC_DEFAULT )
             sizeBytes *= mDynamicBufferMultiplier;
 
-        VboVec::const_iterator itor = mVbos[vboFlag].begin();
-        VboVec::const_iterator endt = mVbos[vboFlag].end();
+        allocateVbo( sizeBytes, alignment, mVbos[vboFlag], mBestVkMemoryTypeIndex[vboFlag],
+                     mDefaultPoolSize[vboFlag], false, vboFlag != CPU_INACCESSIBLE,
+                     isVboFlagCoherent( vboFlag ), outVboIdx, outBufferOffset );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::allocateVbo( size_t sizeBytes, size_t alignment, VboVec &vboVec,
+                                        uint32 vkMemoryTypeIndex, size_t defaultPoolSize,
+                                        bool textureOnly, bool cpuAccessible, bool isCoherent,
+                                        size_t &outVboIdx, size_t &outBufferOffset )
+    {
+        VboVec::const_iterator itor = vboVec.begin();
+        VboVec::const_iterator endt = vboVec.end();
 
         // clang-format off
         // Find a suitable VBO that can hold the requested size. We prefer those free
@@ -298,7 +308,7 @@ namespace Ogre
                 if( sizeBytes + padding <= block.size )
                 {
                     // clang-format off
-                    bestVboIdx      = static_cast<size_t>( itor - mVbos[vboFlag].begin());
+                    bestVboIdx      = static_cast<size_t>( itor - vboVec.begin());
                     bestBlockIdx    = static_cast<size_t>( blockIt - itor->freeBlocks.begin() );
                     // clang-format on
 
@@ -315,64 +325,66 @@ namespace Ogre
         if( bestBlockIdx == (size_t)-1 )
         {
             // clang-format off
-            bestVboIdx      = mVbos[vboFlag].size();
+            bestVboIdx      = vboVec.size();
             bestBlockIdx    = 0;
             foundMatchingStride = true;
             // clang-format on
 
             Vbo newVbo;
 
-            size_t poolSize = std::max( mDefaultPoolSize[vboFlag], sizeBytes );
+            size_t poolSize = std::max( defaultPoolSize, sizeBytes );
 
             // No luck, allocate a new buffer.
-            OGRE_ASSERT_LOW( mBestVkMemoryTypeIndex[vboFlag] <
-                             mDevice->mDeviceMemoryProperties.memoryTypeCount );
+            OGRE_ASSERT_LOW( vkMemoryTypeIndex < mDevice->mDeviceMemoryProperties.memoryTypeCount );
 
             VkMemoryAllocateInfo memAllocInfo;
             makeVkStruct( memAllocInfo, VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO );
             memAllocInfo.allocationSize = poolSize;
-            memAllocInfo.memoryTypeIndex = mBestVkMemoryTypeIndex[vboFlag];
+            memAllocInfo.memoryTypeIndex = vkMemoryTypeIndex;
 
             VkResult result = vkAllocateMemory( mDevice->mDevice, &memAllocInfo, NULL, &newVbo.vboName );
             checkVkResult( result, "vkAllocateMemory" );
 
-            VkBufferCreateInfo bufferCi;
-            makeVkStruct( bufferCi, VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO );
-            bufferCi.size = poolSize;
-            bufferCi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-                             VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
-                             VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
-                             VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
-                             VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT |
-                             VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
-            result = vkCreateBuffer( mDevice->mDevice, &bufferCi, 0, &newVbo.vkBuffer );
-            checkVkResult( result, "vkCreateBuffer" );
+            if( !textureOnly )
+            {
+                VkBufferCreateInfo bufferCi;
+                makeVkStruct( bufferCi, VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO );
+                bufferCi.size = poolSize;
+                bufferCi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                                 VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
+                                 VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
+                                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT |
+                                 VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
+                                 VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
+                result = vkCreateBuffer( mDevice->mDevice, &bufferCi, 0, &newVbo.vkBuffer );
+                checkVkResult( result, "vkCreateBuffer" );
 
-            VkMemoryRequirements memRequirements;
-            vkGetBufferMemoryRequirements( mDevice->mDevice, newVbo.vkBuffer, &memRequirements );
+                VkMemoryRequirements memRequirements;
+                vkGetBufferMemoryRequirements( mDevice->mDevice, newVbo.vkBuffer, &memRequirements );
 
-            // TODO use one large buffer and multiple offsets
-            VkDeviceSize offset = 0;
-            offset = alignMemory( offset, memRequirements.alignment );
+                // TODO use one large buffer and multiple offsets
+                VkDeviceSize offset = 0;
+                offset = alignMemory( offset, memRequirements.alignment );
 
-            result = vkBindBufferMemory( mDevice->mDevice, newVbo.vkBuffer, newVbo.vboName, offset );
-            checkVkResult( result, "vkBindBufferMemory" );
+                result = vkBindBufferMemory( mDevice->mDevice, newVbo.vkBuffer, newVbo.vboName, offset );
+                checkVkResult( result, "vkBindBufferMemory" );
+            }
 
             newVbo.sizeBytes = poolSize;
             newVbo.freeBlocks.push_back( Block( 0, poolSize ) );
             newVbo.dynamicBuffer = 0;
 
-            if( vboFlag != CPU_INACCESSIBLE )
+            if( cpuAccessible )
             {
-                newVbo.dynamicBuffer = new VulkanDynamicBuffer(
-                    newVbo.vboName, newVbo.sizeBytes, isVboFlagCoherent( vboFlag ), false, mDevice );
+                newVbo.dynamicBuffer = new VulkanDynamicBuffer( newVbo.vboName, newVbo.sizeBytes,
+                                                                isCoherent, false, mDevice );
             }
 
-            mVbos[vboFlag].push_back( newVbo );
+            vboVec.push_back( newVbo );
         }
 
         // clang-format off
-        Vbo &bestVbo        = mVbos[vboFlag][bestVboIdx];
+        Vbo &bestVbo        = vboVec[bestVboIdx];
         Block &bestBlock    = bestVbo.freeBlocks[bestBlockIdx];
         // clang-format on
 
@@ -428,6 +440,39 @@ namespace Ogre
         // See if we're contiguous to a free block and make that block grow.
         vbo.freeBlocks.push_back( Block( bufferOffset, sizeBytes ) );
         mergeContiguousBlocks( vbo.freeBlocks.end() - 1u, vbo.freeBlocks );
+    }
+    //-----------------------------------------------------------------------------------
+    VkDeviceMemory VulkanVaoManager::allocateTexture( const VkMemoryRequirements &memReq,
+                                                      uint16 &outTexMemIdx, size_t &outVboIdx,
+                                                      size_t &outBufferOffset )
+    {
+        TextureMemoryVec::iterator itor = mTextureMemory.begin();
+        TextureMemoryVec::iterator endt = mTextureMemory.end();
+
+        while( itor != endt && ( 1u << itor->vkMemoryTypeIndex ) & memReq.memoryTypeBits )
+            ++itor;
+
+        if( itor == mTextureMemory.end() )
+        {
+            // No memory pool is capable of holding this texture. Create a new entry
+            TextureMemory texMemory;
+            texMemory.vkMemoryTypeIndex =
+                findMemoryType( mDevice->mDeviceMemoryProperties, memReq.memoryTypeBits,
+                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+            mTextureMemory.push_back( texMemory );
+            itor = mTextureMemory.end() - 1u;
+        }
+
+        outTexMemIdx = static_cast<uint16>( itor - mTextureMemory.begin() );
+
+        const bool isTextureOnly = itor->vkMemoryTypeIndex == mBestVkMemoryTypeIndex[CPU_INACCESSIBLE];
+        VboVec &vboVec = isTextureOnly ? mVbos[CPU_INACCESSIBLE] : itor->vbos;
+
+        allocateVbo( memReq.size, memReq.alignment, vboVec, itor->vkMemoryTypeIndex,
+                     mDefaultPoolSize[CPU_INACCESSIBLE], isTextureOnly, false, false, outVboIdx,
+                     outBufferOffset );
+
+        return vboVec[outVboIdx].vboName;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks )

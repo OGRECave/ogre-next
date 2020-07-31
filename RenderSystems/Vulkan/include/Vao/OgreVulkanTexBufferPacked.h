@@ -29,11 +29,11 @@ THE SOFTWARE.
 #ifndef _Ogre_VulkanTexBufferPacked_H_
 #define _Ogre_VulkanTexBufferPacked_H_
 
-#include <vulkan/vulkan.h>
-
 #include "OgreVulkanPrerequisites.h"
 
 #include "Vao/OgreTexBufferPacked.h"
+
+#include "vulkan/vulkan_core.h"
 
 namespace Ogre
 {

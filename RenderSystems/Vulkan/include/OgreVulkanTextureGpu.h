@@ -83,7 +83,9 @@ namespace Ogre
         /// Only used when hasMsaaExplicitResolves() == false
         VkImage mMsaaFramebufferName;
 
-        VkDeviceMemory mTextureImageMemory;
+        uint16 mTexMemIdx;
+        size_t mVboPoolIdx;
+        size_t mInternalBufferStart;
 
     public:
         /// The current layout we're in. Including any internal stuff.

@@ -29,11 +29,14 @@ THE SOFTWARE.
 #ifndef _Ogre_VulkanVaoManager_H_
 #define _Ogre_VulkanVaoManager_H_
 
-#include "OgreVulkanConstBufferPacked.h"
 #include "OgreVulkanPrerequisites.h"
+
+#include "OgreVulkanConstBufferPacked.h"
 #include "OgreVulkanTexBufferPacked.h"
 
 #include "Vao/OgreVaoManager.h"
+
+struct VkMemoryRequirements;
 
 namespace Ogre
 {
@@ -41,7 +44,7 @@ namespace Ogre
     class _OgreVulkanExport VulkanVaoManager : public VaoManager
     {
     public:
-        friend VulkanStagingBuffer;
+        friend class VulkanStagingBuffer;
         enum VboFlag
         {
             CPU_INACCESSIBLE,
@@ -135,10 +138,22 @@ namespace Ogre
         typedef vector<Vao>::type VaoVec;
         typedef map<VertexElement2Vec, Vbo>::type VboMap;
 
+        struct TextureMemory
+        {
+            /// If vkMemoryTypeIndex == mBestVkMemoryTypeIndex[CPU_INACCESSIBLE] then
+            /// TextureMemory::vbos is not used and mVbos[CPU_INACCESSIBLE] is used instead
+            uint32 vkMemoryTypeIndex;
+            VboVec vbos;
+        };
+
+        typedef vector<TextureMemory>::type TextureMemoryVec;
+
         uint32 mBestVkMemoryTypeIndex[MAX_VBO_FLAG];
 
         VboVec mVbos[MAX_VBO_FLAG];
         size_t mDefaultPoolSize[MAX_VBO_FLAG];
+
+        TextureMemoryVec mTextureMemory;
 
         VaoVec mVaos;
 
@@ -205,6 +220,10 @@ namespace Ogre
         */
         void allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType, size_t &outVboIdx,
                           size_t &outBufferOffset );
+
+        void allocateVbo( size_t sizeBytes, size_t alignment, VboVec &vboVec, uint32 vkMemoryTypeIndex,
+                          size_t defaultPoolSize, bool textureOnly, bool cpuAccessible, bool isCoherent,
+                          size_t &outVboIdx, size_t &outBufferOffset );
 
         /** Deallocates a buffer allocated with VulkanVaoManager::allocateVbo.
         @remarks
@@ -276,6 +295,9 @@ namespace Ogre
 
         void initDrawIdVertexBuffer();
         void bindDrawIdVertexBuffer( VkCommandBuffer cmdBuffer );
+
+        VkDeviceMemory allocateTexture( const VkMemoryRequirements &memReq, uint16 &outTexMemIdx,
+                                        size_t &outVboIdx, size_t &outBufferOffset );
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log ) const;

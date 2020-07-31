@@ -37,6 +37,7 @@ typedef struct VkPhysicalDevice_T *VkPhysicalDevice;
 typedef struct VkDevice_T *VkDevice;
 typedef struct VkDeviceMemory_T *VkDeviceMemory;
 typedef struct VkBuffer_T *VkBuffer;
+typedef struct VkBufferView_T *VkBufferView;
 
 typedef struct VkSurfaceKHR_T *VkSurfaceKHR;
 typedef struct VkSwapchainKHR_T *VkSwapchainKHR;

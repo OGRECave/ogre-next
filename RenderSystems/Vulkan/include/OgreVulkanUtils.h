@@ -58,8 +58,7 @@ namespace Ogre
                                         const FastArray<PixelFormatGpu> &candidates,
                                         VkImageTiling tiling, VkFormatFeatureFlags features );
 
-    uint32_t findMemoryType( VkPhysicalDevice physicalDevice,
-                             VkPhysicalDeviceMemoryProperties &memProperties, uint32_t typeFilter,
+    uint32_t findMemoryType( VkPhysicalDeviceMemoryProperties &memProperties, uint32_t typeFilter,
                              VkMemoryPropertyFlags properties );
 
     inline VkDeviceSize alignMemory( size_t offset, const VkDeviceSize &alignment )

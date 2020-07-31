@@ -28,6 +28,8 @@ THE SOFTWARE.
 
 #include "OgreVulkanTextureGpu.h"
 
+#include "Vao/OgreVulkanVaoManager.h"
+
 #include "OgrePixelFormatGpuUtils.h"
 
 #include "OgreException.h"
@@ -47,6 +49,9 @@ namespace Ogre
         mDisplayTextureName( 0 ),
         mFinalTextureName( 0 ),
         mMsaaFramebufferName( 0 ),
+        mTexMemIdx( 0u ),
+        mVboPoolIdx( 0u ),
+        mInternalBufferStart( 0u ),
         mCurrLayout( VK_IMAGE_LAYOUT_UNDEFINED ),
         mNextLayout( VK_IMAGE_LAYOUT_UNDEFINED )
     {
@@ -111,30 +116,14 @@ namespace Ogre
         VkMemoryRequirements memRequirements;
         vkGetImageMemoryRequirements( device->mDevice, mFinalTextureName, &memRequirements );
 
-        VkMemoryAllocateInfo allocInfo;
-        makeVkStruct( allocInfo, VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO );
-        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        allocInfo.allocationSize = memRequirements.size;
-        allocInfo.memoryTypeIndex =
-            findMemoryType( device->mPhysicalDevice, device->mDeviceMemoryProperties,
-                            memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+        VulkanVaoManager *vaoManager =
+            static_cast<VulkanVaoManager *>( textureManager->getVaoManager() );
+        VkDeviceMemory deviceMemory = vaoManager->allocateTexture( memRequirements, mTexMemIdx,
+                                                                   mVboPoolIdx, mInternalBufferStart );
 
-        if( vkAllocateMemory( device->mDevice, &allocInfo, 0, &mTextureImageMemory ) != VK_SUCCESS )
-        {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Could not allocate memory",
-                         "VulkanTextureGpu::createInternalResourcesImpl" );
-        }
-
-        // TODO use one large buffer and multiple offsets
-        VkDeviceSize offset = 0;
-        offset = alignMemory( offset, memRequirements.alignment );
-
-        if( vkBindImageMemory( device->mDevice, mFinalTextureName, mTextureImageMemory, offset ) !=
-            VK_SUCCESS )
-        {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Could not allocate bind image to memory",
-                         "VulkanTextureGpu::createInternalResourcesImpl" );
-        }
+        VkResult result =
+            vkBindImageMemory( device->mDevice, mFinalTextureName, deviceMemory, mInternalBufferStart );
+        checkVkResult( result, "vkBindImageMemory" );
 
         if( mSampleDescription.isMultisample() && !hasMsaaExplicitResolves() )
         {
