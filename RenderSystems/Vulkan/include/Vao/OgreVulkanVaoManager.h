@@ -241,6 +241,9 @@ namespace Ogre
         void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
                             BufferType bufferType );
 
+        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
+                            VboVec &vboVec );
+
         virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                             BufferType bufferType, void *initialData,
                                                             bool keepAsShadow,
@@ -298,6 +301,7 @@ namespace Ogre
 
         VkDeviceMemory allocateTexture( const VkMemoryRequirements &memReq, uint16 &outTexMemIdx,
                                         size_t &outVboIdx, size_t &outBufferOffset );
+        void deallocateTexture( uint16 texMemIdx, size_t vboIdx, size_t bufferOffset, size_t sizeBytes );
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log ) const;

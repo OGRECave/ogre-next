@@ -142,8 +142,16 @@ namespace Ogre
             VulkanDevice *device = textureManager->getDevice();
             if( mFinalTextureName )
             {
+                VkMemoryRequirements memRequirements;
+                vkGetImageMemoryRequirements( device->mDevice, mFinalTextureName, &memRequirements );
+
                 vkDestroyImage( device->mDevice, mFinalTextureName, 0 );
                 mFinalTextureName = 0;
+
+                VulkanVaoManager *vaoManager =
+                    static_cast<VulkanVaoManager *>( textureManager->getVaoManager() );
+                vaoManager->deallocateTexture( mTexMemIdx, mVboPoolIdx, mInternalBufferStart,
+                                               memRequirements.size );
             }
         }
         else

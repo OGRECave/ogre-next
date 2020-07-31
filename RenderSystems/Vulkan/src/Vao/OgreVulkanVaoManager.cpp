@@ -422,7 +422,13 @@ namespace Ogre
         if( bufferType >= BT_DYNAMIC_DEFAULT )
             sizeBytes *= mDynamicBufferMultiplier;
 
-        Vbo &vbo = mVbos[vboFlag][vboIdx];
+        deallocateVbo( vboIdx, bufferOffset, sizeBytes, mVbos[vboFlag] );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
+                                          VboVec &vboVec )
+    {
+        Vbo &vbo = vboVec[vboIdx];
         StrideChangerVec::iterator itStride =
             std::lower_bound( vbo.strideChangers.begin(), vbo.strideChangers.end(),  //
                               bufferOffset, StrideChanger() );
@@ -473,6 +479,16 @@ namespace Ogre
                      outBufferOffset );
 
         return vboVec[outVboIdx].vboName;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::deallocateTexture( uint16 texMemIdx, size_t vboIdx, size_t bufferOffset,
+                                              size_t sizeBytes )
+    {
+        VboVec &vboVec =
+            mTextureMemory[texMemIdx].vkMemoryTypeIndex == mBestVkMemoryTypeIndex[CPU_INACCESSIBLE]
+                ? mVbos[CPU_INACCESSIBLE]
+                : mTextureMemory[texMemIdx].vbos;
+        deallocateVbo( vboIdx, bufferOffset, sizeBytes, vboVec );
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks )
