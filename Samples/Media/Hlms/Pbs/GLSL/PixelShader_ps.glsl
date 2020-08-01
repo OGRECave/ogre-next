@@ -5,6 +5,8 @@
 @insertpiece( SetCompatibilityLayer )
 @insertpiece( DeclareUvModifierMacros )
 
+@insertpiece( RootLayout )
+
 layout(std140) uniform;
 
 @property( !hlms_render_depth_only )
@@ -75,7 +77,7 @@ in vec4 gl_FragCoord;
 @insertpiece( DefaultHeaderPS )
 
 @property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || exponential_shadow_maps )
-in block
+vulkan_layout( location = 0 ) in block
 {
 @insertpiece( VStoPS_block )
 } inPs;

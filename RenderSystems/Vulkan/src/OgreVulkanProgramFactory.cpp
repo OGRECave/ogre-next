@@ -38,23 +38,28 @@ THE SOFTWARE.
 namespace Ogre
 {
     //-----------------------------------------------------------------------
-    String VulkanProgramFactory::sLanguageName = "glsl-vulkan";
     //-----------------------------------------------------------------------
-    VulkanProgramFactory::VulkanProgramFactory( VulkanDevice *device ) : mDevice( device )
+    VulkanProgramFactory::VulkanProgramFactory( VulkanDevice *device, const char *languageName,
+                                                bool glslLangInitializer ) :
+        mLanguageName( languageName ),
+        mDevice( device ),
+        mGlslLangInitializer( glslLangInitializer )
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
-        glslang::InitializeProcess();
+        if( mGlslLangInitializer )
+            glslang::InitializeProcess();
 #endif
     }
     //-----------------------------------------------------------------------
     VulkanProgramFactory::~VulkanProgramFactory( void )
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
-        glslang::FinalizeProcess();
+        if( mGlslLangInitializer )
+            glslang::FinalizeProcess();
 #endif
     }
     //-----------------------------------------------------------------------
-    const String &VulkanProgramFactory::getLanguage( void ) const { return sLanguageName; }
+    const String &VulkanProgramFactory::getLanguage( void ) const { return mLanguageName; }
     //-----------------------------------------------------------------------
     HighLevelGpuProgram *VulkanProgramFactory::create( ResourceManager *creator, const String &name,
                                                        ResourceHandle handle, const String &group,

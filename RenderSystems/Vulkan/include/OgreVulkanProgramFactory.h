@@ -39,11 +39,13 @@ namespace Ogre
     class _OgreVulkanExport VulkanProgramFactory : public HighLevelGpuProgramFactory
     {
     protected:
-        static String sLanguageName;
+        String mLanguageName;
         VulkanDevice *mDevice;
 
+        bool mGlslLangInitializer;
+
     public:
-        VulkanProgramFactory( VulkanDevice *device );
+        VulkanProgramFactory( VulkanDevice *device, const char *languageName, bool glslLangInitializer );
         virtual ~VulkanProgramFactory( void );
         /// Get the name of the language this factory creates programs for
         const String &getLanguage( void ) const;

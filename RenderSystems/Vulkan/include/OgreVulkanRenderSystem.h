@@ -76,7 +76,8 @@ namespace Ogre
         unsigned char *mSwIndirectBufferPtr;
 
         VulkanGpuProgramManager *mShaderManager;
-        VulkanProgramFactory *mVulkanProgramFactory;
+        VulkanProgramFactory *mVulkanProgramFactory0;
+        VulkanProgramFactory *mVulkanProgramFactory1;
 
         VkInstance mVkInstance;
 

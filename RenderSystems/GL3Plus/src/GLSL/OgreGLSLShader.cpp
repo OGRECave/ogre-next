@@ -137,6 +137,10 @@ namespace Ogre {
         // Preprocess the GLSL shader in order to get a clean source
         CPreprocessor cpp;
 
+        // Mask out vulkan_layout() macros
+        size_t unusedVal = 0;
+        cpp.Parse( "#define vulkan_layout(x)", sizeof( "#define vulkan_layout(x)" ) - 1, unusedVal );
+
         // Pass all user-defined macros to preprocessor
         if (!mPreprocessorDefines.empty ())
         {

@@ -102,7 +102,7 @@ namespace Ogre
         }
 
         // Manually assign language now since we use it immediately
-        mSyntaxCode = "glsl-vulkan";
+        mSyntaxCode = "glslvk";
     }
     //---------------------------------------------------------------------------
     VulkanProgram::~VulkanProgram()
@@ -321,6 +321,8 @@ namespace Ogre
             }
         }
 
+        preamble.a( "#define OGRE_DRAWID location = 15u\n" );
+
         inOutPreamble += preamble.c_str();
     }
     //-----------------------------------------------------------------------
@@ -411,7 +413,7 @@ namespace Ogre
 
         if( !mCompileError )
         {
-            String preamble;
+            String preamble = "#define vulkan_layout layout\n";
 
             mRootLayout->generateRootLayoutMacros( mType, preamble );
             if( mType == GPT_VERTEX_PROGRAM )

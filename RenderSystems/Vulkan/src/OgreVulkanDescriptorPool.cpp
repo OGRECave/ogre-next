@@ -93,10 +93,21 @@ namespace Ogre
         VkDescriptorPoolCreateInfo poolCi;
         makeVkStruct( poolCi, VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO );
 
+        const size_t maxNumDescTypes = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT + 1u;
+        VkDescriptorPoolSize poolSizes[maxNumDescTypes];
+        OGRE_ASSERT_HIGH( mPoolSizes.size() < maxNumDescTypes );
+
+        const size_t numPoolSizes = mPoolSizes.size();
+        for( size_t i = 0u; i < numPoolSizes; ++i )
+        {
+            poolSizes[i] = mPoolSizes[i];
+            poolSizes[i].descriptorCount *= newCapacity;
+        }
+
         // We do not set FREE_DESCRIPTOR_SET_BIT as we do not need to free individual descriptor sets
         poolCi.flags = 0;
-        poolCi.poolSizeCount = static_cast<uint32>( mPoolSizes.size() );
-        poolCi.pPoolSizes = mPoolSizes.begin();
+        poolCi.poolSizeCount = static_cast<uint32>( numPoolSizes );
+        poolCi.pPoolSizes = poolSizes;
         poolCi.maxSets = static_cast<uint32_t>( newCapacity - mCurrentCapacity );
         mCurrentCapacity = newCapacity;
 

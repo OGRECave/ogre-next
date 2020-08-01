@@ -72,6 +72,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #define TODO_addVpCount_to_passpso
 #define TODO_uncomment
+#define TODO_optimize
 
 namespace Ogre
 {
@@ -144,7 +145,8 @@ namespace Ogre
         mInitialized( false ),
         mHardwareBufferManager( 0 ),
         mShaderManager( 0 ),
-        mVulkanProgramFactory( 0 ),
+        mVulkanProgramFactory0( 0 ),
+        mVulkanProgramFactory1( 0 ),
         mVkInstance( 0 ),
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
@@ -203,8 +205,10 @@ namespace Ogre
         OGRE_DELETE mShaderManager;
         mShaderManager = 0;
 
-        OGRE_DELETE mVulkanProgramFactory;
-        mVulkanProgramFactory = 0;
+        OGRE_DELETE mVulkanProgramFactory1;  // LIFO destruction order
+        mVulkanProgramFactory1 = 0;
+        OGRE_DELETE mVulkanProgramFactory0;
+        mVulkanProgramFactory0 = 0;
 
         OGRE_DELETE mHardwareBufferManager;
         mHardwareBufferManager = 0;
@@ -405,7 +409,8 @@ namespace Ogre
         rsc->setComputeProgramConstantIntCount( 256u );
         rsc->setComputeProgramConstantBoolCount( 256u );
 
-        rsc->addShaderProfile( "glsl-vulkan" );
+        rsc->addShaderProfile( "glslvk" );
+        rsc->addShaderProfile( "glsl" );
 
         return rsc;
     }
@@ -524,6 +529,14 @@ namespace Ogre
                 checkVkResult( result, "vkCreateSampler" );
             }
 
+            OGRE_ASSERT_HIGH( dynamic_cast<VulkanConstBufferPacked *>( mDummyBuffer ) );
+
+            for( uint16 i = 0u; i < NumShaderTypes + 1u; ++i )
+            {
+                VulkanConstBufferPacked *constBuffer =
+                    static_cast<VulkanConstBufferPacked *>( mDummyBuffer );
+                constBuffer->bindAsParamBuffer( static_cast<GpuProgramType>( i ), 0 );
+            }
             for( uint16 i = 0u; i < NUM_BIND_CONST_BUFFERS; ++i )
                 mDummyBuffer->bindBufferVS( i );
             for( uint16 i = 0u; i < NUM_BIND_TEX_BUFFERS; ++i )
@@ -924,7 +937,7 @@ namespace Ogre
         if( callEndRenderPassDesc )
         {
             TODO_uncomment;
-            //endRenderPassDescriptor( true );
+            // endRenderPassDescriptor( true );
         }
 
         mUavRenderingDirty = true;
@@ -988,11 +1001,41 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setVertexArrayObject( const VertexArrayObject *vao )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
+        VkBuffer vulkanVertexBuffers[15];
+        VkDeviceSize offsets[15];
+        memset( offsets, 0, sizeof( offsets ) );
+
+        const VertexBufferPackedVec &vertexBuffers = vao->getVertexBuffers();
+
+        size_t numVertexBuffers = 0;
+        VertexBufferPackedVec::const_iterator itor = vertexBuffers.begin();
+        VertexBufferPackedVec::const_iterator endt = vertexBuffers.end();
+
+        while( itor != endt )
         {
-            defaultLog->logMessage( String( " * _setVertexArrayObject: vaoName " ) +
-                                    StringConverter::toString( vao->getVaoName() ) );
+            VulkanBufferInterface *bufferInterface =
+                static_cast<VulkanBufferInterface *>( ( *itor )->getBufferInterface() );
+            vulkanVertexBuffers[numVertexBuffers++] = bufferInterface->getVboName();
+            ++itor;
+        }
+
+        OGRE_ASSERT_LOW( numVertexBuffers < 15u );
+
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        vkCmdBindVertexBuffers( cmdBuffer, 0, static_cast<uint32>( numVertexBuffers ),
+                                vulkanVertexBuffers, offsets );
+
+        TODO_optimize;
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        vaoManager->bindDrawIdVertexBuffer( cmdBuffer );
+
+        IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
+        if( indexBuffer )
+        {
+            VulkanBufferInterface *bufferInterface =
+                static_cast<VulkanBufferInterface *>( indexBuffer->getBufferInterface() );
+            vkCmdBindIndexBuffer( cmdBuffer, bufferInterface->getVboName(), 0,
+                                  static_cast<VkIndexType>( indexBuffer->getIndexType() ) );
         }
     }
     //-------------------------------------------------------------------------
@@ -1411,67 +1454,18 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_renderEmulated( const CbDrawCallIndexed *cmd )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " * _renderEmulated: CbDrawCallIndexed " ) +
-                                    StringConverter::toString( cmd->vao->getVaoName() ) );
-        }
+        flushRootLayout();
 
-        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-
-        bindDescriptorSet();
-
-        const VulkanVertexArrayObject *vao = static_cast<const VulkanVertexArrayObject *>( cmd->vao );
-
-        // Calculate bytesPerVertexBuffer & numVertexBuffers which is the same for all draws in this cmd
-        size_t bytesPerVertexBuffer[15];
-        size_t numVertexBuffers = 0;
-        const VertexBufferPackedVec &vertexBuffersPackedVec = vao->getVertexBuffers();
-        VertexBufferPackedVec::const_iterator itor = vertexBuffersPackedVec.begin();
-        VertexBufferPackedVec::const_iterator end = vertexBuffersPackedVec.end();
-
-        while( itor != end )
-        {
-            bytesPerVertexBuffer[numVertexBuffers] = ( *itor )->getBytesPerElement();
-            ++numVertexBuffers;
-            ++itor;
-        }
-
-        const VulkanBufferInterface *bufferInterface =
-            static_cast<const VulkanBufferInterface *>( vao->getIndexBuffer()->getBufferInterface() );
         CbDrawIndexed *drawCmd = reinterpret_cast<CbDrawIndexed *>( mSwIndirectBufferPtr +
                                                                     (size_t)cmd->indirectBufferOffset );
 
-        const size_t bytesPerIndexElement = vao->getIndexBuffer()->getBytesPerElement();
-
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
-
-        vkCmdBindIndexBuffer( cmdBuffer, bufferInterface->getVboName(), 0, VK_INDEX_TYPE_UINT16 );
 
         for( uint32 i = cmd->numDraws; i--; )
         {
-            std::vector<VkBuffer> vertexBuffers;
-            std::vector<VkDeviceSize> offsets;
-
-            vertexBuffers.resize( numVertexBuffers );
-            offsets.resize( numVertexBuffers );
-
-            for( size_t j = 0; j < numVertexBuffers; ++j )
-            {
-                VulkanBufferInterface *bufIntf = static_cast<VulkanBufferInterface *>(
-                    vertexBuffersPackedVec[j]->getBufferInterface() );
-                vertexBuffers[j] = bufIntf->getVboName();
-                offsets[j] = drawCmd->baseVertex * bytesPerVertexBuffer[j];
-            }
-
-            vkCmdBindVertexBuffers( cmdBuffer, 0, numVertexBuffers, vertexBuffers.data(),
-                                    offsets.data() );
-
-            vaoManager->bindDrawIdVertexBuffer( cmdBuffer );
-
             vkCmdDrawIndexed( cmdBuffer, drawCmd->primCount, drawCmd->instanceCount,
-                              drawCmd->firstVertexIndex, drawCmd->baseVertex, drawCmd->baseInstance );
+                              drawCmd->firstVertexIndex, static_cast<int32>( drawCmd->baseVertex ),
+                              drawCmd->baseInstance );
             ++drawCmd;
         }
     }
@@ -1561,7 +1555,7 @@ namespace Ogre
             defaultLog->logMessage( String( " v1 * _render: CbDrawCallIndexed " ) );
         }
 
-        bindDescriptorSet();
+        flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         vkCmdDrawIndexed( cmdBuffer, cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
@@ -1576,30 +1570,12 @@ namespace Ogre
             defaultLog->logMessage( String( " v1 * _render: CbDrawCallStrip " ) );
         }
 
-        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-
-        bindDescriptorSet();
+        flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
 
         vkCmdDraw( cmdBuffer, mCurrentVertexBuffer->vertexCount, cmd->instanceCount,
                    mCurrentVertexBuffer->vertexStart, cmd->baseInstance );
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        // Setup baseInstance.
-        // [mActiveRenderEncoder setVertexBufferOffset:cmd->baseInstance * sizeof( uint32 ) atIndex:15];
-        // [mActiveRenderEncoder
-        //     drawPrimitives:mCurrentPrimType
-        //        vertexStart:0 /*cmd->firstVertexIndex already handled in _setRenderOperation*/
-        //        vertexCount:cmd->primCount
-        //      instanceCount:cmd->instanceCount];
-#else
-        // [mActiveRenderEncoder drawPrimitives:mCurrentPrimType
-        //                          vertexStart:cmd->firstVertexIndex
-        //                          vertexCount:cmd->primCount
-        //                        instanceCount:cmd->instanceCount
-        //                         baseInstance:cmd->baseInstance];
-#endif
     }
 
     void VulkanRenderSystem::_render( const v1::RenderOperation &op )
@@ -1811,8 +1787,10 @@ namespace Ogre
                                                                      Window *primary )
     {
         mShaderManager = OGRE_NEW VulkanGpuProgramManager( mActiveDevice );
-        mVulkanProgramFactory = OGRE_NEW VulkanProgramFactory( mActiveDevice );
-        HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory );
+        mVulkanProgramFactory0 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "glslvk", true );
+        mVulkanProgramFactory1 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "glsl", false );
+        HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory0 );
+        // HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory1 );
 
         mCache = OGRE_NEW VulkanCache( mActiveDevice );
 

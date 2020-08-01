@@ -346,9 +346,6 @@ namespace Ogre
         char tmpBuffer[256];
         LwString textStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
-        uint32 bindingCounts[VulkanDescBindingTypes::NumDescBindingTypes];
-        memset( bindingCounts, 0, sizeof( bindingCounts ) );
-
         textStr.a( "#define ogre_" );
         const size_t prefixSize0 = textStr.size();
 
@@ -390,20 +387,20 @@ namespace Ogre
 
                         const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
                         bindingIdx += numSlots;
-                        bindingCounts[j] += numSlots;
                     }
                 }
                 else
                 {
+                    uint32 emulatedSlot = mDescBindingRanges[i][j].start;
                     const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
                     for( size_t k = 0u; k < numSlots; ++k )
                     {
                         textStr.resize( prefixSize1 );  // #define ogre_B
                         // #define ogre_B3 set = 1, binding = 6
-                        textStr.a( bindingCounts[j], " set = ", (uint32)i, ", binding = ", bindingIdx,
+                        textStr.a( emulatedSlot, " set = ", (uint32)i, ", binding = ", bindingIdx,
                                    "\n" );
                         ++bindingIdx;
-                        ++bindingCounts[j];
+                        ++emulatedSlot;
 
                         macroStr += textStr.c_str();
                     }
@@ -652,7 +649,8 @@ namespace Ogre
 
             size_t numWriteDescSets = 0u;
             uint32 currBinding = 0u;
-            VkWriteDescriptorSet writeDescSets[VulkanDescBindingTypes::Sampler + 1u];
+            // ParamBuffer consumes up to 1 per stage (not just 1)
+            VkWriteDescriptorSet writeDescSets[VulkanDescBindingTypes::Sampler + NumShaderTypes];
 
             // Note: We must bind in the same order as VulkanDescBindingTypes
             bindParamsBuffer( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
