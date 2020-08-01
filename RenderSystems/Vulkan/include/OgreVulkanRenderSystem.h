@@ -301,6 +301,8 @@ namespace Ogre
         VulkanDevice *getVulkanDevice() const { return mDevice; }
         void _notifyDeviceStalled();
 
+        void _notifyActiveEncoderEnded( bool callEndRenderPassDesc );
+
     protected:
         template <typename TDescriptorSetTexture, typename TTexSlot, typename TBufferPacked>
         void _descriptorSetTextureCreated( TDescriptorSetTexture *newSet,

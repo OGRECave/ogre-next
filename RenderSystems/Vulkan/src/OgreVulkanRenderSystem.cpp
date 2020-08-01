@@ -71,6 +71,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #define TODO_check_layers_exist
 
 #define TODO_addVpCount_to_passpso
+#define TODO_uncomment
 
 namespace Ogre
 {
@@ -913,6 +914,24 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_endFrame( void ) {}
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_notifyActiveEncoderEnded( bool callEndRenderPassDesc )
+    {
+        // VulkanQueue::endRenderEncoder gets called either because
+        //  * Another encoder was required. Thus we interrupted and callEndRenderPassDesc = true
+        //  * endRenderPassDescriptor called us. Thus callEndRenderPassDesc = false
+        //  * executeRenderPassDescriptorDelayedActions called us. Thus callEndRenderPassDesc = false
+        // In all cases, when callEndRenderPassDesc = true, it also implies rendering was interrupted.
+        if( callEndRenderPassDesc )
+        {
+            TODO_uncomment;
+            //endRenderPassDescriptor( true );
+        }
+
+        mUavRenderingDirty = true;
+        mTableDirty = true;
+        mPso = 0;
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_endFrameOnce( void )
     {
         RenderSystem::_endFrameOnce();
@@ -937,17 +956,18 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setPipelineStateObject( const HlmsPso *pso )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( " * _setPipelineStateObject: pso " );
-        }
+        VulkanRootLayout *oldRootLayout = 0;
+        if( mPso )
+            oldRootLayout = mPso->rootLayout;
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         assert( pso->rsData );
         VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
         vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPso->pso );
         mPso = vulkanPso;
+
+        if( vulkanPso && vulkanPso->rootLayout != oldRootLayout )
+            mTableDirty = true;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setComputePso( const HlmsComputePso *pso ) {}
