@@ -60,6 +60,7 @@ namespace Ogre
         mVaoManager( 0 ),
         mRenderSystem( 0 ),
         mCurrentFence( 0 ),
+        mCurrentFenceRefCount( 0u ),
         mEncoderState( EncoderClosed ),
         mCopyEndReadSrcBufferFlags( 0 ),
         mCopyEndReadDstBufferFlags( 0 ),
@@ -89,6 +90,20 @@ namespace Ogre
                     itor->mProtectingFences.clear();
                 }
             }
+            {
+                RefCountedFenceMap::const_iterator itor = mRefCountedFences.begin();
+                RefCountedFenceMap::const_iterator endt = mRefCountedFences.end();
+
+                while( itor != endt )
+                {
+                    // If recycleAfterRelease == false, then they were destroyed with mProtectingFences
+                    if( itor->second.recycleAfterRelease )
+                        vkDestroyFence( mDevice, itor->first, 0 );
+                    ++itor;
+                }
+
+                mRefCountedFences.clear();
+            }
 
             VkFenceArray::const_iterator itor = mAvailableFences.begin();
             VkFenceArray::const_iterator endt = mAvailableFences.end();
@@ -116,6 +131,45 @@ namespace Ogre
             checkVkResult( result, "vkCreateFence" );
         }
         return retVal;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanQueue::recycleFences( FastArray<VkFence> &fences )
+    {
+        FastArray<VkFence>::const_iterator itor = fences.begin();
+        FastArray<VkFence>::const_iterator endt = fences.end();
+
+        while( itor != endt )
+        {
+            // We can only put this fence back into mAvailableFences (for recycle)
+            // if there's no external reference holding onto it
+            RefCountedFenceMap::iterator itAcquired = mRefCountedFences.find( *itor );
+            if( itAcquired == mRefCountedFences.end() )
+            {
+                // There are no external references. Put back to mAvailableFences
+                mAvailableFences.push_back( *itor );
+            }
+            else
+            {
+                // We can't do it. External code still depends on this fence.
+                // releaseFence will recycle it later
+                OGRE_ASSERT_LOW( itAcquired->second.refCount > 0u );
+                OGRE_ASSERT_LOW( !itAcquired->second.recycleAfterRelease );
+                itAcquired->second.recycleAfterRelease = true;
+            }
+
+            ++itor;
+        }
+        fences.clear();
+    }
+    //-------------------------------------------------------------------------
+    inline VkFence VulkanQueue::getCurrentFence( void )
+    {
+        if( mCurrentFence == 0 )
+        {
+            mCurrentFence = getFence();
+            OGRE_ASSERT_LOW( mCurrentFenceRefCount == 0u );
+        }
+        return mCurrentFence;
     }
     //-------------------------------------------------------------------------
     VkCommandBuffer VulkanQueue::getCmdBuffer( size_t currFrame )
@@ -778,6 +832,37 @@ namespace Ogre
         endComputeEncoder();
     }
     //-------------------------------------------------------------------------
+    VkFence VulkanQueue::acquireCurrentFence( void )
+    {
+        VkFence retVal = getCurrentFence();
+        ++mCurrentFenceRefCount;
+        return retVal;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanQueue::releaseFence( VkFence fence )
+    {
+        OGRE_ASSERT_LOW( fence );
+        if( fence == mCurrentFence )
+        {
+            OGRE_ASSERT_MEDIUM( mRefCountedFences.find( fence ) == mRefCountedFences.end() );
+            --mCurrentFenceRefCount;
+        }
+        else
+        {
+            RefCountedFenceMap::iterator itor = mRefCountedFences.find( fence );
+            OGRE_ASSERT_LOW( itor != mRefCountedFences.end() );
+            OGRE_ASSERT_LOW( itor->second.refCount > 0u );
+            --itor->second.refCount;
+
+            if( itor->second.refCount == 0u )
+            {
+                mRefCountedFences.erase( itor );
+                if( itor->second.recycleAfterRelease )
+                    mAvailableFences.push_back( itor->first );
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
     void VulkanQueue::addWindowToWaitFor( VkSemaphore imageAcquisitionSemaph )
     {
         OGRE_ASSERT_MEDIUM( mFamily == Graphics );
@@ -794,8 +879,7 @@ namespace Ogre
             const uint32 numFences = static_cast<uint32>( fences.size() );
             vkWaitForFences( mDevice, numFences, &fences[0], VK_TRUE, UINT64_MAX );
             vkResetFences( mDevice, numFences, &fences[0] );
-            mAvailableFences.appendPOD( fences.begin(), fences.end() );
-            fences.clear();
+            recycleFences( fences );
         }
     }
     //-------------------------------------------------------------------------
@@ -811,8 +895,7 @@ namespace Ogre
             if( result != VK_TIMEOUT )
             {
                 vkResetFences( mDevice, numFences, &fences[0] );
-                mAvailableFences.appendPOD( fences.begin(), fences.end() );
-                fences.clear();
+                recycleFences( fences );
             }
             else
             {
@@ -865,6 +948,13 @@ namespace Ogre
 
         vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
         vkQueueWaitIdle( mQueue );
+
+        if( mCurrentFence && mCurrentFenceRefCount > 0 )
+        {
+            OGRE_ASSERT_MEDIUM( mRefCountedFences.find( mCurrentFence ) == mRefCountedFences.end() );
+            mRefCountedFences[mCurrentFence] = RefCountedFence( mCurrentFenceRefCount );
+            mCurrentFenceRefCount = 0u;
+        }
 
         mCurrentFence = 0;
 

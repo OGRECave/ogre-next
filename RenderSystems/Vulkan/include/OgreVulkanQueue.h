@@ -81,6 +81,16 @@ namespace Ogre
         VulkanDevice *mOwnerDevice;
 
     protected:
+        struct RefCountedFence
+        {
+            uint32 refCount;
+            /// When true, the VkFence is no longer inside PerFrameData::mProtectingFences and it is
+            /// VulkanQueue::releaseFence's responsibility to put the fence back into mAvailableFences
+            bool recycleAfterRelease;
+            RefCountedFence() {}
+            RefCountedFence( uint32 _refCount ) : refCount( _refCount ), recycleAfterRelease( false ) {}
+        };
+
         // clang-format off
         // One per buffered frame
         FastArray<PerFrameData> mPerFrameData;
@@ -94,7 +104,12 @@ namespace Ogre
         VkSemaphoreArray                mGpuSignalSemaphForCurrCmdBuff;
         // clang-format on
 
+        typedef map<VkFence, RefCountedFence>::type RefCountedFenceMap;
+
         VkFenceArray mAvailableFences;
+        /// Fences which haven't been released.
+        /// mCurrentFence is not included even if mCurrentFenceRefCount > 0
+        RefCountedFenceMap mRefCountedFences;
 
     public:
         FastArray<VulkanWindow *> mWindowsPendingSwap;
@@ -106,6 +121,10 @@ namespace Ogre
         VulkanRenderSystem *mRenderSystem;
 
         VkFence mCurrentFence;
+        /// Starts at 0. Increases with each acquireCurrentFence
+        /// If commitAndNextCommandBuffer gets called with mCurrentFenceRefCount == 0,
+        /// then mCurrentFence can enter into the recycle pool
+        uint32 mCurrentFenceRefCount;
 
         typedef map<const BufferPacked *, bool>::type BufferPackedDownloadMap;
         typedef map<VulkanTextureGpu *, bool>::type TextureGpuDownloadMap;
@@ -128,6 +147,13 @@ namespace Ogre
 
         /// Returns a signaled fence, could be recycled or new
         VkFence getFence( void );
+        /// Puts all input fences into mAvailableFences for recycling,
+        /// unless their external reference count isn't 0
+        ///
+        /// Clears fences.
+        void recycleFences( FastArray<VkFence> &fences );
+
+        inline VkFence getCurrentFence( void );
 
         VkCommandBuffer getCmdBuffer( size_t currFrame );
 
@@ -226,14 +252,8 @@ namespace Ogre
 
         void endAllEncoders( bool endRenderPassDesc = true );
 
-        VkFence getCurrentFence()
-        {
-            if( mCurrentFence == 0 )
-            {
-                mCurrentFence = getFence();
-            }
-            return mCurrentFence;
-        }
+        VkFence acquireCurrentFence( void );
+        void releaseFence( VkFence fence );
 
     public:
         void endCommandBuffer( void );

@@ -100,7 +100,7 @@ namespace Ogre
                 {
                     // We wrapped back to 0. Can't keep merging. Make a fence.
                     VulkanFence fence( startRange, endRange );
-                    fence.fenceName = device->mGraphicsQueue.getCurrentFence();
+                    fence.fenceName = device->mGraphicsQueue.acquireCurrentFence();
                     mFences.push_back( fence );
 
                     startRange = itor->start;
@@ -112,7 +112,7 @@ namespace Ogre
 
             // Make the last fence.
             VulkanFence fence( startRange, endRange );
-            fence.fenceName = device->mGraphicsQueue.getCurrentFence();
+            fence.fenceName = device->mGraphicsQueue.acquireCurrentFence();
 
             // Flush the device for accuracy in the fences.
             device->commitAndNextCommandBuffer( false );
@@ -129,7 +129,7 @@ namespace Ogre
         VulkanDevice *device = vaoManager->getDevice();
         while( itor != end )
         {
-            vkDestroyFence( device->mDevice, itor->fenceName, 0 );
+            device->mGraphicsQueue.releaseFence( itor->fenceName );
             itor->fenceName = 0;
             ++itor;
         }
