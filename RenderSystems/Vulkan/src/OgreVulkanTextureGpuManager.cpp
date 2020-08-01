@@ -269,7 +269,8 @@ namespace Ogre
                                                 "RenderWindow",                      //
                                                 TextureFlags::NotTexture |           //
                                                     TextureFlags::RenderToTexture |  //
-                                                    TextureFlags::RenderWindowSpecific,
+                                                    TextureFlags::RenderWindowSpecific |
+                                                    TextureFlags::RequiresTextureFlipping,
                                                 TextureTypes::Type2D, this, window );
     }
     //-----------------------------------------------------------------------------------
@@ -290,8 +291,9 @@ namespace Ogre
         VulkanTextureGpu *retVal = 0;
         if( textureFlags & TextureFlags::RenderToTexture )
         {
-            retVal = OGRE_NEW VulkanTextureGpuRenderTarget( pageOutStrategy, mVaoManager, name,
-                                                            textureFlags, initialType, this );
+            retVal = OGRE_NEW VulkanTextureGpuRenderTarget(
+                pageOutStrategy, mVaoManager, name, textureFlags | TextureFlags::RequiresTextureFlipping,
+                initialType, this );
         }
         else
         {
