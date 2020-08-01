@@ -64,6 +64,8 @@ namespace Ogre
                              const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
                              bool skipSysRamCopy = false );
 
+        VkBuffer _getVboName( void ) const { return mVboName; }
+
         VulkanDynamicBuffer *_getDynamicBuffer( void ) { return mDynamicBuffer; }
         void _resetDynamicBuffer( void ) { mDynamicBuffer = 0; }
     };

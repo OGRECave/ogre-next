@@ -71,7 +71,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #define TODO_check_layers_exist
 
 #define TODO_addVpCount_to_passpso
-#define TODO_enable
 
 namespace Ogre
 {
@@ -479,21 +478,20 @@ namespace Ogre
                 OGRE_NEW VulkanVaoManager( dynBufferMultiplier, mDevice, this );
             mVaoManager = vaoManager;
             mHardwareBufferManager = OGRE_NEW v1::VulkanHardwareBufferManager( mDevice, mVaoManager );
-            VulkanTextureGpuManager *textureGpuManager =
-                OGRE_NEW VulkanTextureGpuManager( mVaoManager, this, mDevice );
-            mTextureGpuManager = textureGpuManager;
 
             mActiveDevice->mVaoManager = vaoManager;
             mActiveDevice->initQueues();
             vaoManager->initDrawIdVertexBuffer();
+
+            VulkanTextureGpuManager *textureGpuManager =
+                OGRE_NEW VulkanTextureGpuManager( vaoManager, this, mDevice );
+            mTextureGpuManager = textureGpuManager;
 
             uint32 dummyData = 0u;
             mDummyBuffer = vaoManager->createConstBuffer( 4u, BT_IMMUTABLE, &dummyData, false );
             mDummyTexBuffer =
                 vaoManager->createTexBuffer( PFG_RGBA8_UNORM, 4u, BT_IMMUTABLE, &dummyData, false );
 
-            TODO_enable;
-            if( 0 )
             {
                 VkImage dummyImage =
                     textureGpuManager->getBlankTextureVulkanName( TextureTypes::Type2D );
@@ -509,7 +507,7 @@ namespace Ogre
 
                 VkResult result =
                     vkCreateImageView( mActiveDevice->mDevice, &imageViewCi, 0, &mDummyTextureView );
-                checkVkResult( result, "VulkanTextureGpu::getView" );
+                checkVkResult( result, "vkCreateImageView" );
             }
 
             {

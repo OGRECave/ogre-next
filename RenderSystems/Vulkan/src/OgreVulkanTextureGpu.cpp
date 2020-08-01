@@ -38,6 +38,8 @@ THE SOFTWARE.
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
 
+#define TODO_delay_everything_that_starts_with_vkDestroy
+
 namespace Ogre
 {
     VulkanTextureGpu::VulkanTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -86,8 +88,8 @@ namespace Ogre
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
         imageInfo.flags = 0;
 
-        if( mTextureType == TextureTypes::TypeCube )
-            imageInfo.arrayLayers /= 6u;
+        if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
+            imageInfo.flags |= VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
 
         if( isRenderToTexture() )
         {
@@ -144,6 +146,7 @@ namespace Ogre
                 VkMemoryRequirements memRequirements;
                 vkGetImageMemoryRequirements( device->mDevice, mFinalTextureName, &memRequirements );
 
+                TODO_delay_everything_that_starts_with_vkDestroy;
                 vkDestroyImage( device->mDevice, mFinalTextureName, 0 );
                 mFinalTextureName = 0;
 
