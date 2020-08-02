@@ -183,11 +183,6 @@ namespace Ogre
         VulkanDescriptorPoolMap mDescriptorPools;
         FastArray<VulkanDescriptorPool *> mUsedDescriptorPools;
 
-#ifndef VULKAN_HOTSHOT_WILL_REMOVE
-        vector<VulkanConstBufferPacked *>::type mConstBuffers;
-        vector<VulkanTexBufferPacked *>::type mTexBuffersPacked;
-#endif
-
         bool mFenceFlushed;
         bool mSupportsCoherentMemory;
         bool mSupportsNonCoherentMemory;
@@ -358,21 +353,7 @@ namespace Ogre
         /// @see StagingBuffer::mergeContiguousBlocks
         static void mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks );
 
-        const vector<VulkanConstBufferPacked *>::type &getConstBuffers() const
-        {
-            return mConstBuffers;
-        }
-
-        const vector<VulkanTexBufferPacked *>::type &getTexBuffersPacked() const
-        {
-            return mTexBuffersPacked;
-        }
-
-
-        VertexBufferPacked * getDrawId() const
-        {
-            return mDrawId;
-        }
+        VertexBufferPacked *getDrawId() const { return mDrawId; }
 
         const uint32 *getBestVkMemoryTypeIndex() { return mBestVkMemoryTypeIndex; }
 
