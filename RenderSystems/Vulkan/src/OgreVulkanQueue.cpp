@@ -162,8 +162,8 @@ namespace Ogre
         }
         fences.clear();
 
-        const uint32 numFencesToReset =
-            static_cast<uint32>( mAvailableFences.size() - oldNumAvailableFences );
+        // Reset the recycled fences so they can be used again
+        const uint32 numFencesToReset = ( uint32 )( mAvailableFences.size() - oldNumAvailableFences );
         if( numFencesToReset > 0u )
             vkResetFences( mDevice, numFencesToReset, &mAvailableFences[oldNumAvailableFences] );
     }
