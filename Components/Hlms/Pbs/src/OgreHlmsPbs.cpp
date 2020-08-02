@@ -467,9 +467,6 @@ namespace Ogre
         if( mSetupWorldMatBuf )
             vsParams->setNamedConstant( "worldMatBuf", 0 );
 
-        if( queuedRenderable.renderable->getNumPoses() > 0 )
-            vsParams->setNamedConstant( "poseBuf", 4 );
-
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                             mSetProperties, queuedRenderable );
 
@@ -1020,6 +1017,7 @@ namespace Ogre
         }
 
         int32 texUnit = mReservedTexSlots;
+
         if( getProperty( HlmsBaseProp::ForwardPlus ) )
         {
             setTextureReg( PixelShader, "f3dGrid", texUnit++ );
@@ -1186,6 +1184,9 @@ namespace Ogre
             else
                 setTextureReg( PixelShader, "texEnvProbeMap", texUnit++ );
         }
+
+        if( getProperty( HlmsBaseProp::Pose ) )
+            setTextureReg( VertexShader, "poseBuf", texUnit++ );
 
         //This is a regular property!
         setProperty( "samplerStateStart", samplerStateStart );
@@ -3202,11 +3203,14 @@ namespace Ogre
         #endif
                 }
 
-                TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
-                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
-                                                                               4, poseBuf, 0,
-                                                                               poseBuf->
-                                                                               getTotalSizeBytes() );
+                size_t numTextures = 0u;
+                if( datablock->mTexturesDescSet )
+                    numTextures = datablock->mTexturesDescSet->mTextures.size();
+
+                TexBufferPacked *poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
+                *commandBuffer->addCommand<CbShaderBuffer>() =
+                    CbShaderBuffer( VertexShader, mTexUnitSlotStart + numTextures, poseBuf, 0,
+                                    poseBuf->getTotalSizeBytes() );
             }
 
             //If the next entity will not be skeletally animated, we'll need
