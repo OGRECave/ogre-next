@@ -44,7 +44,6 @@ THE SOFTWARE.
 
 #define TODO_findRealPresentQueue
 #define TODO_we_assume_has_stencil
-#define TODO__notifyActiveEncoderEnded
 #define TODO_endEncodersAreNeverCalled
 
 namespace Ogre
@@ -813,9 +812,7 @@ namespace Ogre
         if( mEncoderState != EncoderGraphicsOpen )
             return;
         mEncoderState = EncoderClosed;
-
-        TODO__notifyActiveEncoderEnded;
-        // mRenderSystem->_notifyActiveEncoderEnded( endRenderPassDesc );
+        mRenderSystem->_notifyActiveEncoderEnded( endRenderPassDesc );
     }
     //-------------------------------------------------------------------------
     void VulkanQueue::endComputeEncoder( void )

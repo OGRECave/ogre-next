@@ -116,6 +116,7 @@ namespace Ogre
         VulkanFrameBufferDescMap    mFrameBufferDescMap;
         uint32                      mEntriesToFlush;
         bool                        mVpChanged;
+        bool                        mInterruptedRenderCommandEncoder;
         // clang-format on
 
         PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback;
@@ -276,7 +277,9 @@ namespace Ogre
                                                 uint8 mipLevel, const Vector4 *viewportSizes,
                                                 const Vector4 *scissors, uint32 numViewports,
                                                 bool overlaysEnabled, bool warnIfRtvWasFlushed );
+        void executeRenderPassDescriptorDelayedActions( bool officialCall );
         virtual void executeRenderPassDescriptorDelayedActions( void );
+        inline void endRenderPassDescriptor( bool isInterruptingRender );
         virtual void endRenderPassDescriptor( void );
 
         void notifySwapchainCreated( VulkanWindow *window );

@@ -40,9 +40,12 @@ THE SOFTWARE.
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanUtils.h"
 
-//#include <execinfo.h>  //backtrace
+#if OGRE_DEBUG_MODE && OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#    include <execinfo.h>  //backtrace
+#endif
 
 #define TODO_cannotInterruptRendering_is_wrong
+#define TODO_use_render_pass_that_can_load
 
 namespace Ogre
 {
@@ -57,6 +60,10 @@ namespace Ogre
         mTargetHeight( 0u ),
         mQueue( graphicsQueue ),
         mRenderSystem( renderSystem )
+#if OGRE_DEBUG_MODE && OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+        ,
+        mNumCallstackEntries( 0 )
+#endif
     {
         memset( mImageViews, 0, sizeof( mImageViews ) );
     }
@@ -745,7 +752,7 @@ namespace Ogre
     }
 #endif
     //-----------------------------------------------------------------------------------
-    void VulkanRenderPassDescriptor::performLoadActions( void )
+    void VulkanRenderPassDescriptor::performLoadActions( bool renderingWasInterrupted )
     {
         if( mInformationOnly )
             return;
@@ -819,15 +826,40 @@ namespace Ogre
         passBeginInfo.clearValueCount = sizeof( mClearValues ) / sizeof( mClearValues[0] );
         passBeginInfo.pClearValues = mClearValues;
 
+        if( renderingWasInterrupted )
+        {
+            TODO_use_render_pass_that_can_load;
+        }
+
         vkCmdBeginRenderPass( cmdBuffer, &passBeginInfo, VK_SUBPASS_CONTENTS_INLINE );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanRenderPassDescriptor::performStoreActions( void )
+    void VulkanRenderPassDescriptor::performStoreActions( bool isInterruptingRendering )
     {
         if( mInformationOnly )
             return;
 
+        if( isInterruptingRendering )
+        {
+#if OGRE_DEBUG_MODE && OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+            // Save the backtrace to report it later
+            const bool cannotInterrupt = cannotInterruptRendering();
+            static bool warnedOnce = false;
+            if( !warnedOnce || cannotInterrupt )
+            {
+                mNumCallstackEntries = backtrace( mCallstackBacktrace, 32 );
+                warnedOnce = true;
+            }
+#endif
+            return;
+        }
+
         vkCmdEndRenderPass( mQueue->mCurrentCmdBuffer );
+
+        // End (if exists) the render command encoder tied to this RenderPassDesc.
+        // Another encoder will have to be created, and don't let ours linger
+        // since mCurrentRenderPassDescriptor probably doesn't even point to 'this'
+        mQueue->endAllEncoders( false );
     }
 #if VULKAN_DISABLED
     //-----------------------------------------------------------------------------------

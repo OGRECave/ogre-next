@@ -213,6 +213,8 @@ namespace Ogre
 
         void newCommandBuffer( void );
 
+        EncoderState getEncoderState( void ) const { return mEncoderState; }
+
         void getGraphicsEncoder( void );
         void getComputeEncoder( void );
         /** Call this function when you need to start copy/transfer operations

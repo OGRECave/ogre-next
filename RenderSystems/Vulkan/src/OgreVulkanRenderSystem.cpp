@@ -71,7 +71,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #define TODO_check_layers_exist
 
 #define TODO_addVpCount_to_passpso
-#define TODO_uncomment
 #define TODO_optimize
 
 namespace Ogre
@@ -162,6 +161,7 @@ namespace Ogre
         mDummySampler( 0 ),
         mEntriesToFlush( 0u ),
         mVpChanged( false ),
+        mInterruptedRenderCommandEncoder( false ),
         CreateDebugReportCallback( 0 ),
         DestroyDebugReportCallback( 0 ),
         mDebugReportCallback( 0 ),
@@ -175,6 +175,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::shutdown( void )
     {
+        mActiveDevice->mGraphicsQueue.endAllEncoders();
+
         if( mDummySampler )
         {
             vkDestroySampler( mActiveDevice->mDevice, mDummySampler, 0 );
@@ -935,10 +937,7 @@ namespace Ogre
         //  * executeRenderPassDescriptorDelayedActions called us. Thus callEndRenderPassDesc = false
         // In all cases, when callEndRenderPassDesc = true, it also implies rendering was interrupted.
         if( callEndRenderPassDesc )
-        {
-            TODO_uncomment;
-            // endRenderPassDescriptor( true );
-        }
+            endRenderPassDescriptor( true );
 
         mUavRenderingDirty = true;
         mTableDirty = true;
@@ -948,7 +947,7 @@ namespace Ogre
     void VulkanRenderSystem::_endFrameOnce( void )
     {
         RenderSystem::_endFrameOnce();
-        endRenderPassDescriptor();
+        endRenderPassDescriptor( false );
         mActiveDevice->commitAndNextCommandBuffer( true );
     }
     //-------------------------------------------------------------------------
@@ -972,6 +971,15 @@ namespace Ogre
         VulkanRootLayout *oldRootLayout = 0;
         if( mPso )
             oldRootLayout = mPso->rootLayout;
+
+        if( pso && mActiveDevice->mGraphicsQueue.getEncoderState() != VulkanQueue::EncoderGraphicsOpen )
+        {
+            OGRE_ASSERT_LOW(
+                mInterruptedRenderCommandEncoder &&
+                "Encoder can't be in EncoderGraphicsOpen at this stage if rendering was interrupted."
+                " Did you call executeRenderPassDescriptorDelayedActions?" );
+            executeRenderPassDescriptorDelayedActions( false );
+        }
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         assert( pso->rsData );
@@ -1843,7 +1851,19 @@ namespace Ogre
             entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, warnIfRtvWasFlushed );
 
             if( entriesToFlush != 0 )
-                currPassDesc->performStoreActions();
+                currPassDesc->performStoreActions( false );
+
+            // If rendering was interrupted but we're still rendering to the same
+            // RTT, willSwitchTo will have returned 0 and thus we won't perform
+            // the necessary load actions.
+            // If RTTs were different, we need to have performStoreActions
+            // called by now (i.e. to emulate StoreAndResolve)
+            if( mInterruptedRenderCommandEncoder )
+            {
+                entriesToFlush = RenderPassDescriptor::All;
+                if( warnIfRtvWasFlushed )
+                    newPassDesc->checkWarnIfRtvWasFlushed( entriesToFlush );
+            }
         }
         else
         {
@@ -1852,16 +1872,29 @@ namespace Ogre
 
         mEntriesToFlush = entriesToFlush;
         mVpChanged = vpChanged;
+        mInterruptedRenderCommandEncoder = false;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::executeRenderPassDescriptorDelayedActions( void )
     {
+        executeRenderPassDescriptorDelayedActions( true );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::executeRenderPassDescriptorDelayedActions( bool officialCall )
+    {
+        if( officialCall )
+            mInterruptedRenderCommandEncoder = false;
+
         if( mEntriesToFlush )
         {
+            mActiveDevice->mGraphicsQueue.endAllEncoders( false );
+
             VulkanRenderPassDescriptor *newPassDesc =
                 static_cast<VulkanRenderPassDescriptor *>( mCurrentRenderPassDescriptor );
 
-            newPassDesc->performLoadActions();
+            newPassDesc->performLoadActions( mInterruptedRenderCommandEncoder );
+
+            mActiveDevice->mGraphicsQueue.getGraphicsEncoder();
 
 #if VULKAN_DISABLED
             [mActiveRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
@@ -1869,6 +1902,7 @@ namespace Ogre
             if( mStencilEnabled )
                 [mActiveRenderEncoder setStencilReferenceValue:mStencilRefValue];
 #endif
+            mInterruptedRenderCommandEncoder = false;
         }
 
         flushUAVs();
@@ -1910,22 +1944,30 @@ namespace Ogre
 
         mEntriesToFlush = 0;
         mVpChanged = false;
+        mInterruptedRenderCommandEncoder = false;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::endRenderPassDescriptor( void )
+    inline void VulkanRenderSystem::endRenderPassDescriptor( bool isInterruptingRender )
     {
         if( mCurrentRenderPassDescriptor )
         {
             VulkanRenderPassDescriptor *passDesc =
                 static_cast<VulkanRenderPassDescriptor *>( mCurrentRenderPassDescriptor );
-            passDesc->performStoreActions();
+            passDesc->performStoreActions( isInterruptingRender );
 
             mEntriesToFlush = 0;
             mVpChanged = false;
 
-            RenderSystem::endRenderPassDescriptor();
+            mInterruptedRenderCommandEncoder = isInterruptingRender;
+
+            if( !isInterruptingRender )
+                RenderSystem::endRenderPassDescriptor();
+            else
+                mEntriesToFlush = RenderPassDescriptor::All;
         }
     }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::endRenderPassDescriptor( void ) { endRenderPassDescriptor( false ); }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::notifySwapchainCreated( VulkanWindow *window )
     {

@@ -335,7 +335,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanDevice::commitAndNextCommandBuffer( bool endingFrame )
     {
-        mRenderSystem->endRenderPassDescriptor();
+        mGraphicsQueue.endAllEncoders();
         mGraphicsQueue.commitAndNextCommandBuffer( endingFrame );
     }
     //-------------------------------------------------------------------------
