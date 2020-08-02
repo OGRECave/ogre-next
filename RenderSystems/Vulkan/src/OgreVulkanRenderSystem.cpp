@@ -175,7 +175,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::shutdown( void )
     {
-        mActiveDevice->mGraphicsQueue.endAllEncoders();
+        if( mActiveDevice )
+            mActiveDevice->mGraphicsQueue.endAllEncoders();
 
         if( mDummySampler )
         {
