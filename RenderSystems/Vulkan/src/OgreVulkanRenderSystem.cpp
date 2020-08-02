@@ -659,46 +659,15 @@ namespace Ogre
     void VulkanRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set,
                                            uint32 hazardousTexIdx )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " _setTextures DescriptorSetTexture " ) );
-        }
-
-        uint32 texUnit = slotStart + 8;
+        uint32 texUnit = slotStart;
         FastArray<const TextureGpu *>::const_iterator itor = set->mTextures.begin();
 
-        // for( size_t i=0u; i<NumShaderTypes; ++i )
-        for( size_t i = 0u; i < PixelShader + 1u; ++i )
+        for( size_t i = 0u; i < NumShaderTypes; ++i )
         {
             const size_t numTexturesUsed = set->mShaderTypeTexCount[i];
             for( size_t j = 0u; j < numTexturesUsed; ++j )
             {
-                const VulkanTextureGpu *vulkanTex = static_cast<const VulkanTextureGpu *>( *itor );
-                VkImageView srv = 0;
-
-                if( vulkanTex )
-                {
-                    srv = vulkanTex->getDefaultDisplaySrv();
-
-                    if( ( texUnit - slotStart ) == hazardousTexIdx &&
-                        mCurrentRenderPassDescriptor->hasAttachment( set->mTextures[hazardousTexIdx] ) )
-                    {
-                        srv = 0;
-                    }
-                }
-
-                if( srv )
-                {
-                    VkDescriptorImageInfo imageInfo;
-                    imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-                    imageInfo.imageView = srv;
-                    imageInfo.sampler = 0;
-#if VULKAN_HOTSHOT_DISABLED
-                    mImageInfo[texUnit][0] = imageInfo;
-#endif
-                }
-
+                _setTexture( texUnit, const_cast<TextureGpu *>( *itor ) );
                 ++texUnit;
                 ++itor;
             }
@@ -814,59 +783,18 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " _setSamplers " ) );
-        }
-
-        VkSampler samplers[16];
-
         FastArray<const HlmsSamplerblock *>::const_iterator itor = set->mSamplers.begin();
 
-        Range texUnitRange;
-        texUnitRange.location = slotStart;
-        // for( size_t i=0u; i<NumShaderTypes; ++i )
-        for( size_t i = 0u; i < PixelShader + 1u; ++i )
+        for( size_t i = 0u; i < NumShaderTypes; ++i )
         {
             const uint32 numSamplersUsed = set->mShaderTypeSamplerCount[i];
 
-            if( !numSamplersUsed )
-                continue;
-
             for( size_t j = 0; j < numSamplersUsed; ++j )
             {
-                if( *itor )
-                    samplers[j] = static_cast<VkSampler>( ( *itor )->mRsData );
-                else
-                    samplers[j] = 0;
+                _setHlmsSamplerblock( static_cast<uint8>( slotStart ), *itor );
+                ++slotStart;
                 ++itor;
             }
-
-            texUnitRange.length = numSamplersUsed;
-
-            VkDescriptorImageInfo samplerInfo;
-            samplerInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-            samplerInfo.imageView = 0;
-            samplerInfo.sampler = samplers[0];
-#if VULKAN_HOTSHOT_DISABLED
-            mImageInfo[texUnitRange.location][0] = samplerInfo;
-#endif
-            // switch( i )
-            // {
-            // case VertexShader:
-            //     [mActiveRenderEncoder setVertexSamplerStates:samplers withRange:texUnitRange];
-            //     break;
-            // case PixelShader:
-            //     [mActiveRenderEncoder setFragmentSamplerStates:samplers withRange:texUnitRange];
-            //     break;
-            // case GeometryShader:
-            // case HullShader:
-            // case DomainShader:
-            //     break;
-            // }
-
-            texUnitRange.location += numSamplersUsed;
         }
     }
     //-------------------------------------------------------------------------
