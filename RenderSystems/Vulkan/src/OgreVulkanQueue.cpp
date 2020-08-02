@@ -134,6 +134,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanQueue::recycleFences( FastArray<VkFence> &fences )
     {
+        const size_t oldNumAvailableFences = mAvailableFences.size();
+
         FastArray<VkFence>::const_iterator itor = fences.begin();
         FastArray<VkFence>::const_iterator endt = fences.end();
 
@@ -159,6 +161,11 @@ namespace Ogre
             ++itor;
         }
         fences.clear();
+
+        const uint32 numFencesToReset =
+            static_cast<uint32>( mAvailableFences.size() - oldNumAvailableFences );
+        if( numFencesToReset > 0u )
+            vkResetFences( mDevice, numFencesToReset, &mAvailableFences[oldNumAvailableFences] );
     }
     //-------------------------------------------------------------------------
     inline VkFence VulkanQueue::getCurrentFence( void )
@@ -855,7 +862,10 @@ namespace Ogre
             {
                 mRefCountedFences.erase( itor );
                 if( itor->second.recycleAfterRelease )
+                {
+                    vkResetFences( mDevice, 1u, &itor->first );
                     mAvailableFences.push_back( itor->first );
+                }
             }
         }
     }
@@ -875,7 +885,6 @@ namespace Ogre
         {
             const uint32 numFences = static_cast<uint32>( fences.size() );
             vkWaitForFences( mDevice, numFences, &fences[0], VK_TRUE, UINT64_MAX );
-            vkResetFences( mDevice, numFences, &fences[0] );
             recycleFences( fences );
         }
     }
@@ -890,14 +899,9 @@ namespace Ogre
             const uint32 numFences = static_cast<uint32>( fences.size() );
             VkResult result = vkWaitForFences( mDevice, numFences, &fences[0], VK_TRUE, 0u );
             if( result != VK_TIMEOUT )
-            {
-                vkResetFences( mDevice, numFences, &fences[0] );
                 recycleFences( fences );
-            }
             else
-            {
                 bIsFinished = false;
-            }
         }
 
         return bIsFinished;
