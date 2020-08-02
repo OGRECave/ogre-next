@@ -118,7 +118,7 @@ namespace Ogre
 
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "Error at file " + filename + ":\n" + tmpStr.c_str(),
-                                 "VulkanRootLayout::parseSet" );
+                                 "VulkanRootLayout::validate" );
                 }
             }
 
@@ -143,7 +143,7 @@ namespace Ogre
                                              "Error at file " + filename + ":\n" +
                                                  "TexBuffer and Texture slots cannot overlap for "
                                                  "compatibility with other APIs",
-                                             "VulkanRootLayout::parseSet" );
+                                             "VulkanRootLayout::validate" );
                             }
                         }
                     }
@@ -168,7 +168,7 @@ namespace Ogre
                                              "Error at file " + filename + ":\n" +
                                                  "UavBuffer and UavTexture slots cannot overlap for "
                                                  "compatibility with other APIs",
-                                             "VulkanRootLayout::parseSet" );
+                                             "VulkanRootLayout::validate" );
                             }
                         }
                     }
@@ -198,7 +198,7 @@ namespace Ogre
 
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "Error at file " + filename + ":\n" + tmpStr.c_str(),
-                                 "VulkanRootLayout::parseSet" );
+                                 "VulkanRootLayout::validate" );
                 }
             }
         }
