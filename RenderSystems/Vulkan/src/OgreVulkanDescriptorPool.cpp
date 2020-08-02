@@ -55,10 +55,10 @@ namespace Ogre
         mAdvanceFrameScheduled( false ),
         mVaoManager( vaoManager )
     {
-        const VulkanDescBindingRange *descBindingRanges = rootLayout->getDescBindingRanges( setIdx );
+        const DescBindingRange *descBindingRanges = rootLayout->getDescBindingRanges( setIdx );
 
         size_t numPoolSizes = 0u;
-        for( size_t i = 0u; i < VulkanDescBindingTypes::NumDescBindingTypes; ++i )
+        for( size_t i = 0u; i < DescBindingTypes::NumDescBindingTypes; ++i )
         {
             if( descBindingRanges[i].isInUse() )
                 ++numPoolSizes;
@@ -67,12 +67,12 @@ namespace Ogre
         mPoolSizes.resize( numPoolSizes );
 
         size_t poolIdx = 0u;
-        for( size_t i = 0u; i < VulkanDescBindingTypes::NumDescBindingTypes; ++i )
+        for( size_t i = 0u; i < DescBindingTypes::NumDescBindingTypes; ++i )
         {
             if( descBindingRanges[i].isInUse() )
             {
-                mPoolSizes[poolIdx].type = static_cast<VkDescriptorType>( toVkDescriptorType(
-                    static_cast<VulkanDescBindingTypes::VulkanDescBindingTypes>( i ) ) );
+                mPoolSizes[poolIdx].type = static_cast<VkDescriptorType>(
+                    toVkDescriptorType( static_cast<DescBindingTypes::DescBindingTypes>( i ) ) );
                 mPoolSizes[poolIdx].descriptorCount =
                     static_cast<uint32>( descBindingRanges[i].getNumUsedSlots() );
                 ++poolIdx;

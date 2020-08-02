@@ -159,6 +159,28 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
+    VulkanRootLayout *VulkanGpuProgramManager::getRootLayout( const RootLayout &rootLayout )
+    {
+        VulkanRootLayout *retVal = 0;
+
+        mTmpRootLayout->copyFrom( rootLayout );
+
+        VulkanRootLayoutSet::const_iterator itor = mRootLayouts.find( mTmpRootLayout );
+
+        if( itor == mRootLayouts.end() )
+        {
+            retVal = mTmpRootLayout;
+            mRootLayouts.insert( mTmpRootLayout );
+            mTmpRootLayout = new VulkanRootLayout( this );
+        }
+        else
+        {
+            retVal = *itor;
+        }
+
+        return retVal;
+    }
+    //-------------------------------------------------------------------------
     VulkanRootLayout *VulkanGpuProgramManager::getRootLayout( const char *rootLayout,
                                                               const bool bCompute,
                                                               const String &filename )

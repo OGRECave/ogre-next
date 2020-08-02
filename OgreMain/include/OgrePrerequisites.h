@@ -308,6 +308,7 @@ namespace Ogre {
     class ResourceGroupManager;
     class ResourceManager;
     class Root;
+    class RootLayout;
     class SceneManager;
     class SceneManagerEnumerator;
     class SceneNode;

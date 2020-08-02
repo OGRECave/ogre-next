@@ -280,6 +280,14 @@ namespace Ogre {
     /// Get the program type
     virtual GpuProgramType getType(void) const { return mType; }
 
+    /// Sets a RootLayout programmatically, thus the shader source won't be parsed looking for one
+    /// We will call validate()
+    ///
+    /// Do not alter the type after calling this function.
+    ///
+    /// This setting will be cleared if the program gets unloaded
+    virtual void setRootLayout( GpuProgramType t, const RootLayout &rootLayout );
+
     /** Returns the GpuProgram which should be bound to the pipeline.
         @remarks
         This method is simply to allow some subclasses of GpuProgram to delegate

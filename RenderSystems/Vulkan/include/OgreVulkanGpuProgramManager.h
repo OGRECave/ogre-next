@@ -92,11 +92,19 @@ namespace Ogre
 
         VkDescriptorSetLayout getCachedSet( const VulkanSingleSetLayoutDesc &set );
 
+        /// Finds a cached root layout from a programmatically-generated structure,
+        /// creates a new one if not found.
+        ///
+        /// Assumes RootLayout::validate has already been called
+        ///
+        /// @see    RootLayout::parseRootLayout
+        VulkanRootLayout *getRootLayout( const RootLayout &rootLayout );
+
         /// Finds a cached root layout from the given JSON data, creates a new one if not found.
         ///
         /// filename is only for error/debugging purposes
         ///
-        /// @see    VulkanRootLayout::parseRootLayout
+        /// @see    RootLayout::parseRootLayout
         VulkanRootLayout *getRootLayout( const char *rootLayout, const bool bCompute,
                                          const String &filename );
     };

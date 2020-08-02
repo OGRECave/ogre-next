@@ -30,6 +30,8 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
+#include "OgreRootLayout.h"
+
 struct VkDescriptorSetLayoutBinding;
 struct VkWriteDescriptorSet;
 
@@ -51,49 +53,10 @@ namespace rapidjson
 
 namespace Ogre
 {
-#define OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS 4
-    struct VulkanDescBindingRange
+    uint32 toVkDescriptorType( DescBindingTypes::DescBindingTypes type );
+
+    class _OgreVulkanExport VulkanRootLayout : protected RootLayout, public ResourceAlloc
     {
-        uint16 start;  // Inclusive
-        uint16 end;    // Exclusive
-        VulkanDescBindingRange();
-
-        size_t getNumUsedSlots( void ) const { return end - start; }
-        bool isInUse( void ) const { return start < end; }
-        bool isValid( void ) const { return start <= end; }
-    };
-
-    namespace VulkanDescBindingTypes
-    {
-        /// The order is important as it affects compatibility between root layouts
-        ///
-        /// If the relative order is changed, then the following needs to be modified:
-        ///     - VulkanRootLayout::bind
-        ///     - VulkanRootLayout::findParamsBuffer (if ParamBuffer stops being the 1st)
-        ///     - c_rootLayoutVarNames
-        ///     - c_bufferTypes
-        enum VulkanDescBindingTypes
-        {
-            ParamBuffer,
-            ConstBuffer,
-            TexBuffer,
-            Texture,
-            Sampler,
-            UavTexture,
-            UavBuffer,
-            NumDescBindingTypes
-        };
-    }  // namespace VulkanDescBindingTypes
-
-    uint32 toVkDescriptorType( VulkanDescBindingTypes::VulkanDescBindingTypes type );
-
-    class _OgreVulkanExport VulkanRootLayout : public ResourceAlloc
-    {
-        bool mCompute;
-        uint8 mParamsBuffStages;
-        VulkanDescBindingRange mDescBindingRanges[OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS]
-                                                 [VulkanDescBindingTypes::NumDescBindingTypes];
-
         /// One handle per binding set (up to OGRE_VULKAN_MAX_NUM_BOUND_DESCRIPTOR_SETS)
         /// Doesn't have gaps (e.g. if mDescBindingRanges[3] is not empty, then mSets[3] must exist)
         /// Won't be initialized if this VulkanRootLayout never makes it into a PSO.
@@ -108,70 +71,41 @@ namespace Ogre
 
         VulkanGpuProgramManager *mProgramManager;
 
-        void validate( const String &filename ) const;
-        void parseSet( const rapidjson::Value &jsonValue, const size_t setIdx, const String &filename );
-
-        size_t calculateNumUsedSets( void ) const;
-        size_t calculateNumBindings( const size_t setIdx ) const;
-
         inline void bindCommon( VkWriteDescriptorSet &writeDescSet, size_t &numWriteDescSets,
                                 uint32 &currBinding, VkDescriptorSet descSet,
-                                const VulkanDescBindingRange &bindRanges );
+                                const DescBindingRange &bindRanges );
         inline void bindParamsBuffer( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                       uint32 &currBinding, VkDescriptorSet descSet,
-                                      const VulkanDescBindingRange *descBindingRanges,
+                                      const DescBindingRange *descBindingRanges,
                                       const VulkanGlobalBindingTable &table );
         inline void bindConstBuffers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                       uint32 &currBinding, VkDescriptorSet descSet,
-                                      const VulkanDescBindingRange *descBindingRanges,
+                                      const DescBindingRange *descBindingRanges,
                                       const VulkanGlobalBindingTable &table );
         inline void bindTexBuffers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                     uint32 &currBinding, VkDescriptorSet descSet,
-                                    const VulkanDescBindingRange *descBindingRanges,
+                                    const DescBindingRange *descBindingRanges,
                                     const VulkanGlobalBindingTable &table );
         inline void bindTextures( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                   uint32 &currBinding, VkDescriptorSet descSet,
-                                  const VulkanDescBindingRange *descBindingRanges,
+                                  const DescBindingRange *descBindingRanges,
                                   const VulkanGlobalBindingTable &table );
         inline void bindSamplers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                   uint32 &currBinding, VkDescriptorSet descSet,
-                                  const VulkanDescBindingRange *descBindingRanges,
+                                  const DescBindingRange *descBindingRanges,
                                   const VulkanGlobalBindingTable &table );
 
     public:
         VulkanRootLayout( VulkanGpuProgramManager *programManager );
         ~VulkanRootLayout();
 
-        /** Parses a root layout definition from a JSON string
-            The JSON string:
+        using RootLayout::findParamsBuffer;
+        using RootLayout::getDescBindingRanges;
 
-            @code
-                {
-                    "0" :
-                    {
-                        "has_params" : ["all", "vs", "gs", "hs", "ds", "ps", "cs"],
-                        "const_buffers" : [0, 16],
-                        "tex_buffers" : [1, 16],
-                        "textures" : [0, 1],
-                        "samplers" : [0, 1],
-                        "uav_buffers" : [0, 16]
-                        "uav_textures" : [16, 32]
-                    }
-                }
-            @endcode
+        /// @copydoc VulkanRootLayout::copyFrom
+        void copyFrom( const RootLayout &rootLayout );
 
-            has_params can establish which shader stages allow parameters.
-                - "all" means all shader stages (vs through ps for graphics, cs for compute)
-
-            Note that for compatibility with other APIs, textures and tex_buffers cannot overlap
-            Same with uav_buffers and uav_textures
-        @param rootLayout
-            JSON string containing root layout
-        @param bCompute
-            True if this is meant for compute. False for graphics
-        @param filename
-            Filename for logging purposes if errors are found
-        */
+        /// @copydoc VulkanRootLayout::parseRootLayout
         void parseRootLayout( const char *rootLayout, const bool bCompute, const String &filename );
 
         /** Generates all the macros for compiling shaders, based on our layout
@@ -232,21 +166,6 @@ namespace Ogre
         void bind( VulkanDevice *device, VulkanVaoManager *vaoManager,
                    const VulkanGlobalBindingTable &table );
 
-        /** Retrieves the set and binding idx of the params buffer
-        @param shaderStage
-            See GpuProgramType
-        @param outSetIdx [out]
-            Set in which it is located
-            Value will not be modified if we return false
-        @param outBindingIdx [out]
-            Binding index in which it is located
-            Value will not be modified if we return false
-        @return
-            True if there is a params buffer
-            False otherwise and output params won't be modified
-        */
-        bool findParamsBuffer( uint32 shaderStage, size_t &outSetIdx, size_t &outBindingIdx ) const;
-
         /// Two root layouts can be incompatible. If so, we return nullptr
         ///
         /// If a and b are compatible, we return the best one (one that can satisfy both a and b).
@@ -254,7 +173,7 @@ namespace Ogre
         /// a or b can be nullptr
         static VulkanRootLayout *findBest( VulkanRootLayout *a, VulkanRootLayout *b );
 
-        const VulkanDescBindingRange *getDescBindingRanges( size_t setIdx ) const
+        const DescBindingRange *getDescBindingRanges( size_t setIdx ) const
         {
             return mDescBindingRanges[setIdx];
         }

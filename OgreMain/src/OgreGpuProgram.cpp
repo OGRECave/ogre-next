@@ -26,9 +26,12 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreGpuProgram.h"
+
 #include "OgreGpuProgramManager.h"
 #include "OgreRoot.h"
+#include "OgreRootLayout.h"
 #include "OgreRenderSystem.h"
 #include "OgreRenderSystemCapabilities.h"
 #include "OgreStringConverter.h"
@@ -67,6 +70,19 @@ namespace Ogre
     void GpuProgram::setType(GpuProgramType t)
     {
         mType = t;
+    }
+    //-----------------------------------------------------------------------------
+    void GpuProgram::setRootLayout( GpuProgramType t, const RootLayout &rootLayout )
+    {
+        setType( t );
+
+        const bool bIsCompute = mType == GPT_COMPUTE_PROGRAM;
+        if( bIsCompute != rootLayout.mCompute )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "RootLayout::mCompute disagrees with GpuProgramType",
+                         "GpuProgram::setRootLayout" );
+        }
     }
     //-----------------------------------------------------------------------------
     void GpuProgram::setSyntaxCode(const String& syntax)

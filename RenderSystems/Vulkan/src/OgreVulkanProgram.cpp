@@ -138,6 +138,9 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void VulkanProgram::extractRootLayoutFromSource( void )
     {
+        if( mRootLayout )
+            return;  // Programmatically specified
+
         const String rootLayoutHeader = "## ROOT LAYOUT BEGIN";
         const String rootLayoutFooter = "## ROOT LAYOUT END";
 
@@ -391,6 +394,15 @@ namespace Ogre
         preamble.swap( inOutPreamble );
     }
     //-----------------------------------------------------------------------
+    void VulkanProgram::setRootLayout( GpuProgramType type, const RootLayout &rootLayout )
+    {
+        HighLevelGpuProgram::setRootLayout( type, rootLayout );
+
+        VulkanGpuProgramManager *vulkanProgramManager =
+            static_cast<VulkanGpuProgramManager *>( VulkanGpuProgramManager::getSingletonPtr() );
+        mRootLayout = vulkanProgramManager->getRootLayout( rootLayout );
+    }
+    //-----------------------------------------------------------------------
     bool VulkanProgram::compile( const bool checkErrors )
     {
         mCompiled = false;
@@ -543,6 +555,8 @@ namespace Ogre
         mAssemblerProgram.setNull();
 
         unloadHighLevel();
+
+        mRootLayout = 0;
     }
     //-----------------------------------------------------------------------
     void VulkanProgram::unloadHighLevelImpl( void )

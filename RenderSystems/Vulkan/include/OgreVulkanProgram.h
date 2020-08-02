@@ -84,6 +84,8 @@ namespace Ogre
         bool getPassSurfaceAndLightStates( void ) const;
         bool getPassFogStates( void ) const;
 
+        virtual void setRootLayout( GpuProgramType type, const RootLayout &rootLayout );
+
         /// Sets the preprocessor defines use to compile the program.
         void setPreprocessorDefines( const String &defines ) { mPreprocessorDefines = defines; }
         /// Sets the preprocessor defines use to compile the program.
