@@ -480,7 +480,13 @@ namespace Ogre
 
         if( mDepth.texture )
         {
-            mClearValues[attachmentIdx].depthStencil.depth = static_cast<float>( mDepth.clearDepth );
+            if( !mRenderSystem->isReverseDepth() )
+                mClearValues[attachmentIdx].depthStencil.depth = static_cast<float>( mDepth.clearDepth );
+            else
+            {
+                mClearValues[attachmentIdx].depthStencil.depth =
+                    static_cast<float>( 1.0 - mDepth.clearDepth );
+            }
             mClearValues[attachmentIdx].depthStencil.stencil = mStencil.clearStencil;
 
             mImageViews[attachmentIdx] = setupDepthAttachment( attachments[attachmentIdx] );
@@ -639,7 +645,13 @@ namespace Ogre
         if( mDepth.texture )
         {
             size_t attachmentIdx = mNumImageViews - 1u;
-            mClearValues[attachmentIdx].depthStencil.depth = static_cast<float>( clearDepth );
+            if( !mRenderSystem->isReverseDepth() )
+                mClearValues[attachmentIdx].depthStencil.depth = static_cast<float>( mDepth.clearDepth );
+            else
+            {
+                mClearValues[attachmentIdx].depthStencil.depth =
+                    static_cast<float>( 1.0 - mDepth.clearDepth );
+            }
         }
     }
     //-----------------------------------------------------------------------------------

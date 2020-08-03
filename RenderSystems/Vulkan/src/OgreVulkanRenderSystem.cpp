@@ -2149,7 +2149,10 @@ namespace Ogre
         makeVkStruct( depthStencilStateCi, VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO );
         depthStencilStateCi.depthTestEnable = newPso->macroblock->mDepthCheck;
         depthStencilStateCi.depthWriteEnable = newPso->macroblock->mDepthWrite;
-        depthStencilStateCi.depthCompareOp = VulkanMappings::get( newPso->macroblock->mDepthFunc );
+        CompareFunction depthFunc = newPso->macroblock->mDepthFunc;
+        if( mReverseDepth )
+            depthFunc = reverseCompareFunction( depthFunc );
+        depthStencilStateCi.depthCompareOp = VulkanMappings::get( depthFunc );
         depthStencilStateCi.stencilTestEnable = newPso->pass.stencilParams.enabled;
         if( newPso->pass.stencilParams.enabled )
         {
