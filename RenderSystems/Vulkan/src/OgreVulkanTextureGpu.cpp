@@ -33,11 +33,11 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 
 #include "OgreException.h"
+#include "OgreTextureBox.h"
 #include "OgreVector2.h"
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
-#include "OgreTextureBox.h"
 
 #define TODO_delay_everything_that_starts_with_vkDestroy
 
@@ -288,7 +288,7 @@ namespace Ogre
     {
         TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
 
-        assert( dynamic_cast<VulkanTextureGpu *>( dst ) );
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( dst ) );
 
         VulkanTextureGpu *dstTexture = static_cast<VulkanTextureGpu *>( dst );
         VulkanTextureGpuManager *textureManager =
