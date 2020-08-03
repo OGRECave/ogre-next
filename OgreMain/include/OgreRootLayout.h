@@ -90,8 +90,9 @@ namespace Ogre
         DescBindingRange mDescBindingRanges[OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS]
                                            [DescBindingTypes::NumDescBindingTypes];
 
-    protected:
         void validate( const String &filename ) const;
+
+    protected:
         void parseSet( const rapidjson::Value &jsonValue, const size_t setIdx, const String &filename );
 
         size_t calculateNumUsedSets( void ) const;

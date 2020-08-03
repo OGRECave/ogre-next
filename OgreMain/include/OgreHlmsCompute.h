@@ -119,6 +119,8 @@ namespace Ogre
                                                     const HlmsBlendblock *blendblock,
                                                     const HlmsParamVec &paramVec );
 
+        virtual void setupRootLayout( RootLayout &rootLayout );
+
     public:
         HlmsCompute( AutoParamDataSource *autoParamDataSource );
         virtual ~HlmsCompute();

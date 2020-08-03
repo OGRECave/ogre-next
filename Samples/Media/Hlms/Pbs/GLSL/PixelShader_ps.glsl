@@ -5,8 +5,6 @@
 @insertpiece( SetCompatibilityLayer )
 @insertpiece( DeclareUvModifierMacros )
 
-@insertpiece( RootLayout )
-
 layout(std140) uniform;
 
 @property( !hlms_render_depth_only )

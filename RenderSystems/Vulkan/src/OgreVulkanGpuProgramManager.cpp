@@ -60,7 +60,7 @@ namespace Ogre
 
     bool operator<( const VulkanSingleSetLayoutDesc &a, const VulkanSingleSetLayoutDesc &b )
     {
-        const size_t aSize = b.size();
+        const size_t aSize = a.size();
         const size_t bSize = b.size();
         if( aSize != bSize )
             return aSize < bSize;

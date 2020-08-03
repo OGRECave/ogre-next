@@ -359,6 +359,8 @@ namespace Ogre
         */
         void applyStrongMacroblockRules( HlmsPso &pso );
 
+        virtual void setupRootLayout( RootLayout &rootLayout ) = 0;
+
         HighLevelGpuProgramPtr compileShaderCode( const String &source,
                                                   const String &debugFilenameOutput,
                                                   uint32 finalHash, ShaderType shaderType );

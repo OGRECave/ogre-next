@@ -87,6 +87,8 @@ namespace Ogre
         uint32  mTexUnitSlotStart;
         uint32  mSamplerUnitSlotStart;
 
+        virtual void setupRootLayout( RootLayout &rootLayout );
+
         virtual const HlmsCache* createShaderCacheEntry( uint32 renderableHash,
                                                          const HlmsCache &passCache,
                                                          uint32 finalHash,

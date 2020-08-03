@@ -81,6 +81,23 @@ namespace Ogre
                 const HlmsPropertyVec &properties,
                 const QueuedRenderable &queuedRenderable ) {}
 
+        /** Called right before compiling. If customizations require additional resources slots
+            (e.g. more textures) then this function should modify the root layout accordingly
+
+            To allow caches to work, the rootLayout must only be generated from values in 'properties'
+            (or via constant modifications) otherwise there is no guarantee a cached version can
+            recreate the same state.
+
+            This is why the function is marked const.
+        @param rootLayout
+            An already-filled rootLayout derived classes can modify
+        @param properties
+            The current contents of Hlms::mSetProperties
+        */
+        virtual void setupRootLayout( RootLayout &rootLayout, const HlmsPropertyVec &properties ) const
+        {
+        }
+
         /** Called after the shader was created/compiled, and right before
             bindGpuProgramParameters (relevant information for OpenGL programs).
         @param shaderProfile

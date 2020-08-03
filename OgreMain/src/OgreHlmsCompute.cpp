@@ -496,6 +496,8 @@ namespace Ogre
         return 0;
     }
     //----------------------------------------------------------------------------------
+    void HlmsCompute::setupRootLayout( RootLayout &rootLayout ) {}
+    //----------------------------------------------------------------------------------
     void HlmsCompute::reloadFrom( Archive *newDataFolder, ArchiveVec *libraryFolders )
     {
         Hlms::reloadFrom( newDataFolder, libraryFolders );

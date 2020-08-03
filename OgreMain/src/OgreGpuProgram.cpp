@@ -83,6 +83,8 @@ namespace Ogre
                          "RootLayout::mCompute disagrees with GpuProgramType",
                          "GpuProgram::setRootLayout" );
         }
+
+        rootLayout.validate( mName );
     }
     //-----------------------------------------------------------------------------
     void GpuProgram::setSyntaxCode(const String& syntax)

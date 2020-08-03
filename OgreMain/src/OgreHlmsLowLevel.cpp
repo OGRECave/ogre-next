@@ -383,4 +383,6 @@ namespace Ogre
     {
         return OGRE_NEW HlmsLowLevelDatablock( datablockName, this, macroblock, blendblock, paramVec );
     }
+    //-----------------------------------------------------------------------------------
+    void HlmsLowLevel::setupRootLayout( RootLayout &rootLayout ) {}
 }

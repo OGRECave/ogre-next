@@ -43,6 +43,7 @@ THE SOFTWARE.
 #include "OgreCamera.h"
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
+#include "OgreRootLayout.h"
 
 #include "OgreDescriptorSetTexture.h"
 #include "OgreTextureGpu.h"
@@ -153,6 +154,28 @@ namespace Ogre
             const RenderSystemCapabilities *caps = newRs->getCapabilities();
             mHasSeparateSamplers = caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsUnlit::setupRootLayout( RootLayout &rootLayout )
+    {
+        DescBindingRange *descBindingRanges = rootLayout.mDescBindingRanges[0];
+
+        descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
+
+        if( getProperty( UnlitProperty::TextureMatrix ) == 0 )
+            descBindingRanges[DescBindingTypes::TexBuffer].end = 1u;
+        else
+            descBindingRanges[DescBindingTypes::TexBuffer].end = 2u;
+
+        descBindingRanges[DescBindingTypes::Texture].start = (uint16)mTexUnitSlotStart;
+        descBindingRanges[DescBindingTypes::Texture].end =
+            (uint16)mTexUnitSlotStart + (uint16)getProperty( UnlitProperty::NumTextures );
+
+        descBindingRanges[DescBindingTypes::Sampler].start = (uint16)mSamplerUnitSlotStart;
+        descBindingRanges[DescBindingTypes::Sampler].end =
+            (uint16)mSamplerUnitSlotStart + (uint16)getProperty( UnlitProperty::NumSamplers );
+
+        mListener->setupRootLayout( rootLayout, mSetProperties );
     }
     //-----------------------------------------------------------------------------------
     const HlmsCache* HlmsUnlit::createShaderCacheEntry( uint32 renderableHash,

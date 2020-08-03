@@ -33,6 +33,7 @@ THE SOFTWARE.
 
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
+#include "OgreRootLayout.h"
 
 #include "Vao/OgreVertexArrayObject.h"
 
@@ -2075,6 +2076,12 @@ namespace Ogre
                     ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
                     mShaderProfile, static_cast<GpuProgramType>(shaderType) );
         gp->setSource( source, debugFilenameOutput );
+
+        {
+            RootLayout rootLayout;
+            setupRootLayout( rootLayout );
+            gp->setRootLayout( gp->getType(), rootLayout );
+        }
 
         if( mShaderTargets[shaderType] )
         {

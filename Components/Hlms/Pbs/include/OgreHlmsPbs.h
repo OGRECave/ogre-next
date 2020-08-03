@@ -209,6 +209,8 @@ namespace Ogre
         uint16          mEsmK; /// K parameter for ESM.
         AmbientLightMode mAmbientLightMode;
 
+        virtual void setupRootLayout( RootLayout &rootLayout );
+
         virtual const HlmsCache* createShaderCacheEntry( uint32 renderableHash,
                                                          const HlmsCache &passCache,
                                                          uint32 finalHash,
@@ -458,6 +460,7 @@ namespace Ogre
         static const IdString PerceptualRoughness;
         static const IdString HasPlanarReflections;
 
+        static const IdString Set0TextureSlotEnd;
         static const IdString NumTextures;
         static const IdString NumSamplers;
         static const IdString DiffuseMapGrayscale;

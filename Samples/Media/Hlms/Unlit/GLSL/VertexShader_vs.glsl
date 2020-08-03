@@ -1,8 +1,6 @@
 @insertpiece( SetCrossPlatformSettings )
 @insertpiece( SetCompatibilityLayer )
 
-@insertpiece( RootLayout )
-
 out gl_PerVertex
 {
 	vec4 gl_Position;
