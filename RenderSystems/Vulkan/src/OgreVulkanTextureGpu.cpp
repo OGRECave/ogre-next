@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
+#include "OgreTextureBox.h"
 
 #define TODO_delay_everything_that_starts_with_vkDestroy
 
@@ -285,6 +286,48 @@ namespace Ogre
                                    const TextureBox &srcBox, uint8 srcMipLevel,
                                    bool keepResolvedTexSynced )
     {
+        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
+
+        assert( dynamic_cast<VulkanTextureGpu *>( dst ) );
+
+        VulkanTextureGpu *dstTexture = static_cast<VulkanTextureGpu *>( dst );
+        VulkanTextureGpuManager *textureManager =
+            static_cast<VulkanTextureGpuManager *>( mTextureManager );
+        VulkanDevice *device = textureManager->getDevice();
+
+        device->mGraphicsQueue.getCopyEncoder( 0, this, true );
+        device->mGraphicsQueue.getCopyEncoder( 0, dstTexture, false );
+
+        VkImageCopy region;
+
+        const uint32 sourceSlice = srcBox.sliceStart + getInternalSliceStart();
+        const uint32 destinationSlice = dstBox.sliceStart + dstTexture->getInternalSliceStart();
+        const uint32 numSlices = dstBox.numSlices != 0 ? dstBox.numSlices : dstTexture->getNumSlices();
+
+        region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.srcSubresource.mipLevel = srcMipLevel;
+        region.srcSubresource.baseArrayLayer = sourceSlice;
+        region.srcSubresource.layerCount = numSlices;
+
+        region.srcOffset.x = srcBox.x;
+        region.srcOffset.y = srcBox.y;
+        region.srcOffset.z = srcBox.z;
+
+        region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.dstSubresource.mipLevel = dstMipLevel;
+        region.dstSubresource.baseArrayLayer = destinationSlice;
+        region.dstSubresource.layerCount = numSlices;
+
+        region.dstOffset.x = dstBox.x;
+        region.dstOffset.y = dstBox.y;
+        region.dstOffset.z = dstBox.z;
+
+        region.extent.width = srcBox.width;
+        region.extent.height = srcBox.height;
+        region.extent.depth = srcBox.depth;
+
+        vkCmdCopyImage( device->mGraphicsQueue.mCurrentCmdBuffer, mFinalTextureName, mCurrLayout,
+                        dstTexture->getFinalTextureName(), dstTexture->mCurrLayout, 1, &region );
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::_autogenerateMipmaps( void ) {}
