@@ -383,7 +383,7 @@ namespace Ogre
 
         VkImageViewCreateInfo imageViewCi;
         makeVkStruct( imageViewCi, VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO );
-        imageViewCi.image = mFinalTextureName;
+        imageViewCi.image = mDisplayTextureName;
         imageViewCi.viewType = texType;
         imageViewCi.format = VulkanMappings::get( pixelFormat );
 
