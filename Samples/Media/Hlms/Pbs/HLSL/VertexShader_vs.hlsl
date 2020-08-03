@@ -54,7 +54,7 @@ struct PS_INPUT
 // START UNIFORM D3D DECLARATION
 Buffer<float4> worldMatBuf : register(t0);
 @property( hlms_pose )
-	Buffer<float4> poseBuf : register(t4);
+	Buffer<float4> poseBuf : register(t@value(poseBuf));
 @end
 // END UNIFORM D3D DECLARATION
 
