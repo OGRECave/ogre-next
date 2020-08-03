@@ -35,11 +35,14 @@ THE SOFTWARE.
 #include "OgreTextureGpuListener.h"
 
 #include "OgreException.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreWindowEventUtilities.h"
 
 #include <xcb/xcb.h>
 #include "vulkan/vulkan_core.h"
 #include "vulkan/vulkan_xcb.h"
+
+#define TODO_check_support_and_check_DepthBuffer_DefaultDepthBufferFormat
 
 namespace Ogre
 {
@@ -141,8 +144,7 @@ namespace Ogre
         PFN_vkCreateXcbSurfaceKHR create_xcb_surface = (PFN_vkCreateXcbSurfaceKHR)vkGetInstanceProcAddr(
             mDevice->mInstance, "vkCreateXcbSurfaceKHR" );
 
-        if( !get_xcb_presentation_support( mDevice->mPhysicalDevice,
-                                           mDevice->mGraphicsQueue.mFamilyIdx,
+        if( !get_xcb_presentation_support( mDevice->mPhysicalDevice, mDevice->mGraphicsQueue.mFamilyIdx,
                                            mConnection, mScreen->root_visual ) )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Vulkan not supported on given X11 window",
@@ -160,19 +162,22 @@ namespace Ogre
             static_cast<VulkanTextureGpuManager *>( textureGpuManager );
 
         mTexture = textureManager->createTextureGpuWindow( this );
-        //mDepthBuffer = textureManager->createTextureGpuWindow( this );
+        mDepthBuffer = textureManager->createWindowDepthBuffer();
         mStencilBuffer = mDepthBuffer;
 
-        //mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
+        // mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
 
         bool hwGamma = true;
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
         mTexture->setPixelFormat( chooseSurfaceFormat( hwGamma ) );
-        //mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
+        TODO_check_support_and_check_DepthBuffer_DefaultDepthBufferFormat;
+        mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
+        if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
+            mStencilBuffer = mDepthBuffer;
 
         mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
-        //mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         createSwapchain();
     }
