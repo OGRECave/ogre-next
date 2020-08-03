@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreVulkanTextureGpuManager.h"
 
 #include "OgreVulkanAsyncTextureTicket.h"
+#include "OgreVulkanMappings.h"
 #include "OgreVulkanStagingTexture.h"
 #include "OgreVulkanTextureGpu.h"
 #include "OgreVulkanTextureGpuWindow.h"
@@ -42,6 +43,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    static const bool c_bSkipAliasable = true;
+
     VulkanTextureGpuManager::VulkanTextureGpuManager( VulkanVaoManager *vaoManager,
                                                       RenderSystem *renderSystem,
                                                       VulkanDevice *device ) :
@@ -104,12 +107,10 @@ namespace Ogre
 
         VkBuffer stagingBuffVboName = stagingTex->_getVboName();
 
-        const bool bSkipAliasable = true;
-
         for( size_t i = 1u; i < TextureTypes::Type3D + 1u; ++i )
         {
-            if( bSkipAliasable && ( i == TextureTypes::Type1DArray || i == TextureTypes::Type2DArray ||
-                                    i == TextureTypes::TypeCubeArray ) )
+            if( c_bSkipAliasable && ( i == TextureTypes::Type1DArray || i == TextureTypes::Type2DArray ||
+                                      i == TextureTypes::TypeCubeArray ) )
             {
                 continue;
             }
@@ -168,8 +169,8 @@ namespace Ogre
         VkImageMemoryBarrier imageMemBarrier[TextureTypes::Type3D + 1u];
         for( size_t i = 1u; i < TextureTypes::Type3D + 1u; ++i )
         {
-            if( bSkipAliasable && ( i == TextureTypes::Type1DArray || i == TextureTypes::Type2DArray ||
-                                    i == TextureTypes::TypeCubeArray ) )
+            if( c_bSkipAliasable && ( i == TextureTypes::Type1DArray || i == TextureTypes::Type2DArray ||
+                                      i == TextureTypes::TypeCubeArray ) )
             {
                 continue;
             }
@@ -194,8 +195,8 @@ namespace Ogre
 
         for( size_t i = 1u; i < TextureTypes::Type3D + 1u; ++i )
         {
-            if( bSkipAliasable && ( i == TextureTypes::Type1DArray || i == TextureTypes::Type2DArray ||
-                                    i == TextureTypes::TypeCubeArray ) )
+            if( c_bSkipAliasable && ( i == TextureTypes::Type1DArray || i == TextureTypes::Type2DArray ||
+                                      i == TextureTypes::TypeCubeArray ) )
             {
                 continue;
             }
@@ -235,8 +236,8 @@ namespace Ogre
         barrierCount = 0u;
         for( size_t i = 1u; i < TextureTypes::Type3D + 1u; ++i )
         {
-            if( bSkipAliasable && ( i == TextureTypes::Type1DArray || i == TextureTypes::Type2DArray ||
-                                    i == TextureTypes::TypeCubeArray ) )
+            if( c_bSkipAliasable && ( i == TextureTypes::Type1DArray || i == TextureTypes::Type2DArray ||
+                                      i == TextureTypes::TypeCubeArray ) )
             {
                 continue;
             }
@@ -253,15 +254,57 @@ namespace Ogre
                               static_cast<uint32>( barrierCount ), imageMemBarrier );
 
         mBlankTexture[TextureTypes::Unknown] = mBlankTexture[TextureTypes::Type2D];
-        if( bSkipAliasable )
+        if( c_bSkipAliasable )
         {
             mBlankTexture[TextureTypes::Type1DArray] = mBlankTexture[TextureTypes::Type1D];
             mBlankTexture[TextureTypes::Type2DArray] = mBlankTexture[TextureTypes::Type2D];
             mBlankTexture[TextureTypes::TypeCubeArray] = mBlankTexture[TextureTypes::TypeCube];
         }
+
+        mBlankTexture[0].defaultView = 0;
+
+        for( size_t i = 1u; i < TextureTypes::Type3D + 1u; ++i )
+        {
+            VkImageViewCreateInfo imageViewCi;
+            makeVkStruct( imageViewCi, VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO );
+
+            imageViewCi.image = mBlankTexture[i].vkImage;
+            imageViewCi.viewType = VulkanMappings::get( static_cast<TextureTypes::TextureTypes>( i ) );
+            imageViewCi.format = VK_FORMAT_R8G8B8A8_UNORM;
+
+            imageViewCi.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            imageViewCi.subresourceRange.baseMipLevel = 0u;
+            imageViewCi.subresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+            imageViewCi.subresourceRange.baseArrayLayer = 0U;
+            imageViewCi.subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
+
+            VkResult result =
+                vkCreateImageView( device->mDevice, &imageViewCi, 0, &mBlankTexture[i].defaultView );
+            checkVkResult( result, "vkCreateImageView" );
+        }
     }
     //-----------------------------------------------------------------------------------
-    VulkanTextureGpuManager::~VulkanTextureGpuManager() { destroyAll(); }
+    VulkanTextureGpuManager::~VulkanTextureGpuManager()
+    {
+        destroyAll();
+
+        for( size_t i = 1u; i < TextureTypes::Type3D + 1u; ++i )
+        {
+            vkDestroyImageView( mDevice->mDevice, mBlankTexture[i].defaultView, 0 );
+            mBlankTexture[i].defaultView = 0;
+
+            if( c_bSkipAliasable && ( i == TextureTypes::Type1DArray || i == TextureTypes::Type2DArray ||
+                                      i == TextureTypes::TypeCubeArray ) )
+            {
+                mBlankTexture[i].vkImage = 0;
+            }
+            else
+            {
+                vkDestroyImage( mDevice->mDevice, mBlankTexture[i].vkImage, 0 );
+                mBlankTexture[i].vkImage = 0;
+            }
+        }
+    }
     //-----------------------------------------------------------------------------------
     TextureGpu *VulkanTextureGpuManager::createTextureGpuWindow( VulkanWindow *window )
     {
@@ -338,5 +381,11 @@ namespace Ogre
         TextureTypes::TextureTypes textureType ) const
     {
         return mBlankTexture[textureType].vkImage;
+    }
+    //-----------------------------------------------------------------------------------
+    VkImageView VulkanTextureGpuManager::getBlankTextureView(
+        TextureTypes::TextureTypes textureType ) const
+    {
+        return mBlankTexture[textureType].defaultView;
     }
 }  // namespace Ogre

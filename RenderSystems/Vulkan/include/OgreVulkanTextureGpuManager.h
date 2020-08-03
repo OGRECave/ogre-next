@@ -54,6 +54,7 @@ namespace Ogre
         struct BlankTexture
         {
             VkImage vkImage;
+            VkImageView defaultView;
             uint16 texMemIdx;
             size_t vboPoolIdx;
             size_t internalBufferStart;
@@ -84,6 +85,7 @@ namespace Ogre
         TextureGpu *createWindowDepthBuffer( void );
 
         VkImage getBlankTextureVulkanName( TextureTypes::TextureTypes textureType ) const;
+        VkImageView getBlankTextureView( TextureTypes::TextureTypes textureType ) const;
 
         VulkanDevice *getDevice() const { return mDevice; }
     };

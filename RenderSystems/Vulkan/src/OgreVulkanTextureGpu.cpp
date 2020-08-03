@@ -51,6 +51,7 @@ namespace Ogre
         mDisplayTextureName( 0 ),
         mFinalTextureName( 0 ),
         mMsaaFramebufferName( 0 ),
+        mOwnsSrv( false ),
         mTexMemIdx( 0u ),
         mVboPoolIdx( 0u ),
         mInternalBufferStart( 0u ),
@@ -136,6 +137,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::destroyInternalResourcesImpl( void )
     {
+        if( mDefaultDisplaySrv && mOwnsSrv )
+        {
+            destroyView( mDefaultDisplaySrv );
+            mDefaultDisplaySrv = 0;
+            mOwnsSrv = false;
+        }
+
         if( !hasAutomaticBatching() )
         {
             VulkanTextureGpuManager *textureManager =
@@ -175,6 +183,112 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::notifyDataIsReady( void )
+    {
+        assert( mResidencyStatus == GpuResidency::Resident );
+        assert( mFinalTextureName || mPixelFormat == PFG_NULL );
+
+        if( mDefaultDisplaySrv && mOwnsSrv )
+        {
+            destroyView( mDefaultDisplaySrv );
+            mDefaultDisplaySrv = 0;
+            mOwnsSrv = false;
+        }
+
+        mDisplayTextureName = mFinalTextureName;
+
+        if( isTexture() )
+        {
+            DescriptorSetTexture2::TextureSlot texSlot(
+                DescriptorSetTexture2::TextureSlot::makeEmpty() );
+            mDefaultDisplaySrv = createView( texSlot );
+            mOwnsSrv = true;
+        }
+
+        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
+    }
+    //-----------------------------------------------------------------------------------
+    bool VulkanTextureGpu::_isDataReadyImpl( void ) const
+    {
+        return mDisplayTextureName != mFinalTextureName;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::_setToDisplayDummyTexture( void )
+    {
+        if( !mTextureManager )
+        {
+            assert( isRenderWindowSpecific() );
+            return;  // This can happen if we're a window and we're on shutdown
+        }
+
+        if( mDefaultDisplaySrv && mOwnsSrv )
+        {
+            destroyView( mDefaultDisplaySrv );
+            mDefaultDisplaySrv = 0;
+            mOwnsSrv = false;
+        }
+
+        VulkanTextureGpuManager *textureManagerVk =
+            static_cast<VulkanTextureGpuManager *>( mTextureManager );
+        if( hasAutomaticBatching() )
+        {
+            mDisplayTextureName =
+                textureManagerVk->getBlankTextureVulkanName( TextureTypes::Type2DArray );
+
+            if( isTexture() )
+            {
+                mDefaultDisplaySrv = textureManagerVk->getBlankTextureView( TextureTypes::Type2DArray );
+                mOwnsSrv = false;
+            }
+        }
+        else
+        {
+            mDisplayTextureName = textureManagerVk->getBlankTextureVulkanName( mTextureType );
+            if( isTexture() )
+            {
+                mDefaultDisplaySrv = textureManagerVk->getBlankTextureView( mTextureType );
+                mOwnsSrv = false;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
+    {
+        TextureGpu::_notifyTextureSlotChanged( newPool, slice );
+
+        _setToDisplayDummyTexture();
+
+        mCurrLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        mNextLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+        if( mTexturePool )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( mTexturePool->masterTexture ) );
+            VulkanTextureGpu *masterTexture =
+                static_cast<VulkanTextureGpu *>( mTexturePool->masterTexture );
+            mFinalTextureName = masterTexture->mFinalTextureName;
+        }
+
+        notifyAllListenersTextureChanged( TextureGpuListener::PoolTextureSlotChanged );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::setTextureType( TextureTypes::TextureTypes textureType )
+    {
+        const TextureTypes::TextureTypes oldType = mTextureType;
+        TextureGpu::setTextureType( textureType );
+
+        if( oldType != mTextureType && mDisplayTextureName != mFinalTextureName )
+            _setToDisplayDummyTexture();
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
+                                   const TextureBox &srcBox, uint8 srcMipLevel,
+                                   bool keepResolvedTexSynced )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::_autogenerateMipmaps( void ) {}
+    //-----------------------------------------------------------------------------------
     VkImageSubresourceRange VulkanTextureGpu::getFullSubresourceRange( void ) const
     {
         VkImageSubresourceRange retVal;
@@ -193,62 +307,6 @@ namespace Ogre
         for( size_t i = 0; i < msaaCount; ++i )
             locations.push_back( Vector2( 0, 0 ) );
     }
-    //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::notifyDataIsReady( void )
-    {
-        assert( mResidencyStatus == GpuResidency::Resident );
-        assert( mFinalTextureName || mPixelFormat == PFG_NULL );
-
-        if( mDefaultDisplaySrv )
-        {
-            destroyView( mDefaultDisplaySrv );
-            mDefaultDisplaySrv = 0;
-        }
-
-        mDisplayTextureName = mFinalTextureName;
-
-        if( isTexture() )
-        {
-            DescriptorSetTexture2::TextureSlot texSlot(
-                DescriptorSetTexture2::TextureSlot::makeEmpty() );
-            mDefaultDisplaySrv = createView( texSlot );
-        }
-
-        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
-    }
-    //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::setTextureType( TextureTypes::TextureTypes textureType ) {}
-    //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                                   const TextureBox &srcBox, uint8 srcMipLevel,
-                                   bool keepResolvedTexSynced )
-    {
-    }
-    //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::_autogenerateMipmaps( void ) {}
-    //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::_setToDisplayDummyTexture( void )
-    {
-        if( !mTextureManager )
-        {
-            assert( isRenderWindowSpecific() );
-            return;  // This can happen if we're a window and we're on shutdown
-        }
-
-        VulkanTextureGpuManager *textureManagerVulkan =
-            static_cast<VulkanTextureGpuManager *>( mTextureManager );
-        if( hasAutomaticBatching() )
-        {
-            mDisplayTextureName =
-                textureManagerVulkan->getBlankTextureVulkanName( TextureTypes::Type2DArray );
-        }
-        else
-        {
-            mDisplayTextureName = textureManagerVulkan->getBlankTextureVulkanName( mTextureType );
-        }
-    }
-    //-----------------------------------------------------------------------------------
-    bool VulkanTextureGpu::_isDataReadyImpl( void ) const { return mDisplayTextureName != 0; }
     //-----------------------------------------------------------------------------------
     VkImageType VulkanTextureGpu::getVulkanTextureType( void ) const
     {
