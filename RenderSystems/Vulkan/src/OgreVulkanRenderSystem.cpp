@@ -439,8 +439,8 @@ namespace Ogre
     {
         FastArray<const char *> reqInstanceExtensions;
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        VulkanWindow *win =
-            OGRE_NEW OgreVulkanWin32Window( reqInstanceExtensions, name, width, height, fullScreen );
+        VulkanWindow *win = OGRE_NEW OgreVulkanWin32Window( reqInstanceExtensions, name, width, height,
+                                                            fullScreen, miscParams );
 #else
         VulkanWindow *win =
             OGRE_NEW VulkanXcbWindow( reqInstanceExtensions, name, width, height, fullScreen );

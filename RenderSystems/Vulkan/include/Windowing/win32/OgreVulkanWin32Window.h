@@ -29,6 +29,7 @@ private:
     uint8 mMsaaCount;
     DWORD mWindowedWinStyle;    // Windowed mode window style flags.
     DWORD mFullscreenWinStyle;  // Fullscreen mode window style flags.
+    const NameValuePairList *mMiscParams;
 
     static bool mClassRegistered;
 
@@ -38,7 +39,8 @@ private:
     void createWindow( const String &windowName, uint32 width, uint32 height );
 public:
     OgreVulkanWin32Window( FastArray<const char *> &inOutRequiredInstanceExts, const String &title,
-                           uint32 width, uint32 height, bool fullscreenMode );
+                           uint32 width, uint32 height, bool fullscreenMode,
+                           const NameValuePairList *miscParams );
 
     virtual ~OgreVulkanWin32Window();
 
