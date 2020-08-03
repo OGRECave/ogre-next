@@ -1064,7 +1064,18 @@ namespace Ogre {
     void TextureUnitState::_setTexturePtr( TextureGpu *texptr, size_t frame )
     {
         assert(frame < mFramePtrs.size());
-        mFramePtrs[frame] = texptr;
+
+        if (mFramePtrs[frame] != texptr)
+        {
+            if (mFramePtrs[frame])
+            {
+                mFramePtrs[frame]->removeListener(this);
+            }
+
+            mFramePtrs[frame] = texptr;
+
+            mFramePtrs[frame]->addListener(this);
+        }
     }
     //-----------------------------------------------------------------------
     void TextureUnitState::ensurePrepared(size_t frame) const
@@ -1439,7 +1450,6 @@ namespace Ogre {
         cleanFramePtrs();
         mFrames.resize(1);
         mFramePtrs.resize(1);
-        mFrames[0] = textureName;
         mCompositorRefTexName = textureName;
     }
     //-----------------------------------------------------------------------

@@ -111,7 +111,7 @@ namespace Ogre
         {
             mDynamicBuffer->unmap( mUnmapTicket );
             mUnmapTicket = std::numeric_limits<size_t>::max();
-            mMappedPtr = 0; //Do not zero it so belongsToUs can work.
+            mMappedPtr = 0;
         }
 
         StagingTextureBufferImpl::stopMapRegion();
@@ -123,7 +123,7 @@ namespace Ogre
                                                GLsizei width, GLsizei height, GLsizei numSlices )
     {
         const size_t distToStart = static_cast<uint8*>( srcBox.data ) -
-                                    static_cast<uint8*>( mMappedPtr );
+                                    static_cast<uint8*>( mLastMappedPtr );
         uint8 *offsetPtr = reinterpret_cast<uint8*>( mInternalBufferStart + distToStart );
 
         const GLsizei sizeBytes = static_cast<GLsizei>(
@@ -190,7 +190,7 @@ namespace Ogre
         GLsizei numSlices=static_cast<GLsizei>( srcBox.numSlices );
 
         const size_t distToStart = static_cast<uint8*>( srcBox.data ) -
-                                    static_cast<uint8*>( mMappedPtr );
+                                    static_cast<uint8*>( mLastMappedPtr );
         const void *offsetPtr = reinterpret_cast<void*>( mInternalBufferStart + distToStart );
 
         if( !PixelFormatGpuUtils::isCompressed( pixelFormat ) )
