@@ -2134,7 +2134,7 @@ namespace Ogre
         makeVkStruct( rasterState, VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO );
         rasterState.polygonMode = VulkanMappings::get( newPso->macroblock->mPolygonMode );
         rasterState.cullMode = VulkanMappings::get( newPso->macroblock->mCullMode );
-        rasterState.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+        rasterState.frontFace = VK_FRONT_FACE_CLOCKWISE;
         rasterState.depthBiasEnable = newPso->macroblock->mDepthBiasConstant != 0.0f;
         rasterState.depthBiasConstantFactor = newPso->macroblock->mDepthBiasConstant;
         rasterState.depthBiasClamp = 0.0f;
