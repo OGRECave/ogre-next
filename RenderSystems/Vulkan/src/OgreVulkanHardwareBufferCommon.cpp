@@ -80,8 +80,8 @@ namespace v1
         }
         else
         {
-            memAllocInfo.memoryTypeIndex = memoryTypeIndex[VulkanVaoManager::CPU_ACCESSIBLE_PERSISTENT_COHERENT];
-            mVboFlag = VulkanVaoManager::CPU_ACCESSIBLE_PERSISTENT_COHERENT;
+            memAllocInfo.memoryTypeIndex = memoryTypeIndex[VulkanVaoManager::CPU_WRITE_PERSISTENT_COHERENT];
+            mVboFlag = VulkanVaoManager::CPU_WRITE_PERSISTENT_COHERENT;
         }
 
         if( !( usage & HardwareBuffer::HBU_DISCARDABLE ) )

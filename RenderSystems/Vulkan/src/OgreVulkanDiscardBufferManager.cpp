@@ -56,7 +56,7 @@ Ogre::VulkanDiscardBufferManager::VulkanDiscardBufferManager( VulkanDevice *devi
     VkMemoryAllocateInfo memAllocInfo;
     makeVkStruct( memAllocInfo, VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO );
     memAllocInfo.allocationSize = mMemRequirements.size;
-    memAllocInfo.memoryTypeIndex = memoryTypeIndex[VulkanVaoManager::CPU_ACCESSIBLE_PERSISTENT_COHERENT];
+    memAllocInfo.memoryTypeIndex = memoryTypeIndex[VulkanVaoManager::CPU_WRITE_PERSISTENT_COHERENT];
 
     result = vkAllocateMemory( mDevice->mDevice, &memAllocInfo, NULL, &mDeviceMemory );
     checkVkResult( result, "vkAllocateMemory" );
@@ -114,7 +114,7 @@ void Ogre::VulkanDiscardBufferManager::growToFit( size_t extraBytes,
     VkMemoryAllocateInfo memAllocInfo;
     makeVkStruct( memAllocInfo, VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO );
     memAllocInfo.allocationSize = mMemRequirements.size;
-    memAllocInfo.memoryTypeIndex = memoryTypeIndex[VulkanVaoManager::CPU_ACCESSIBLE_PERSISTENT_COHERENT];
+    memAllocInfo.memoryTypeIndex = memoryTypeIndex[VulkanVaoManager::CPU_WRITE_PERSISTENT_COHERENT];
 
     result = vkAllocateMemory( mDevice->mDevice, &memAllocInfo, NULL, &mDeviceMemory );
     checkVkResult( result, "vkAllocateMemory" );

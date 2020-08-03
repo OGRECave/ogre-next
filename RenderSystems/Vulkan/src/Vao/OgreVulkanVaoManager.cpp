@@ -4,7 +4,7 @@ This source file is part of OGRE
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
-Copyright (c) 2000-2014 Torus Knot Software Ltd
+Copyright (c) 2000-present Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -85,7 +85,8 @@ namespace Ogre
         mVkRenderSystem( renderSystem ),
         mFenceFlushed( true ),
         mSupportsCoherentMemory( false ),
-        mSupportsNonCoherentMemory( false )
+        mSupportsNonCoherentMemory( false ),
+        mReadMemoryIsCoherent( false )
     {
         mConstBufferAlignment = 256;
         mTexBufferAlignment = 256;
@@ -99,10 +100,10 @@ namespace Ogre
         // Keep pools of 64MB each for static meshes
         mDefaultPoolSize[CPU_INACCESSIBLE] = 64u * 1024u * 1024u;
 
-        // Keep pools of 4MB each for most dynamic buffers, 16 for the most common one.
-        for( size_t i = CPU_ACCESSIBLE_DEFAULT; i <= CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
-            mDefaultPoolSize[i] = 4u * 1024u * 1024u;
-        mDefaultPoolSize[CPU_ACCESSIBLE_PERSISTENT] = 16u * 1024u * 1024u;
+        // Keep pools of 16MB each for write buffers, 4MB for read ones.
+        for( size_t i = CPU_WRITE_PERSISTENT; i <= CPU_WRITE_PERSISTENT_COHERENT; ++i )
+            mDefaultPoolSize[i] = 16u * 1024u * 1024u;
+        mDefaultPoolSize[CPU_READ_WRITE] = 4u * 1024u * 1024u;
 
         determineBestMemoryTypes();
 
@@ -198,55 +199,76 @@ namespace Ogre
             }
 
             // Find memory that isn't coherent (many desktop GPUs don't provide this)
+            // Prefer memory local to CPU
             if( ( memProperties.memoryTypes[i].propertyFlags &
                   ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) ) ==
                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT &&
-                mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT] >= numMemoryTypes )
+                mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT] >= numMemoryTypes )
             {
-                mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT] = i;
+                uint32 newValue = i;
+                const uint32 oldValue = mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT];
+                if( oldValue < numMemoryTypes )
+                {
+                    if( !( memProperties.memoryTypes[oldValue].propertyFlags &
+                           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) )
+                    {
+                        // We already had found our best match
+                        newValue = oldValue;
+                    }
+                }
+                mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT] = newValue;
             }
 
             // Find memory that is coherent, prefer write-combined (aka uncached)
+            // Prefer memory local to CPU
             if( ( memProperties.memoryTypes[i].propertyFlags &
                   ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) ) ==
                 ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) )
             {
-                uint32 newValue = i;
-                const uint32 oldValue = mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT_COHERENT];
-                if( oldValue < numMemoryTypes )
+                if( mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT] >= numMemoryTypes ||
+                    ( !( memProperties.memoryTypes[i].propertyFlags &
+                         VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) &&
+                      !( memProperties.memoryTypes[i].propertyFlags &
+                         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) ) )
                 {
-                    if( !( memProperties.memoryTypes[oldValue].propertyFlags &
-                           VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) )
-                    {
-                        // We already found our best match
-                        newValue = oldValue;
-                    }
+                    mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT] = i;
                 }
-                mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT_COHERENT] = newValue;
+            }
+
+            // Find the best memory that is cached for reading
+            if( ( memProperties.memoryTypes[i].propertyFlags &
+                  ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) ) ==
+                    ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) &&
+                mBestVkMemoryTypeIndex[CPU_READ_WRITE] >= numMemoryTypes )
+            {
+                mBestVkMemoryTypeIndex[CPU_READ_WRITE] = i;
             }
         }
 
-        // Set CPU_ACCESSIBLE_DEFAULT:
-        //  Prefer persistent non-coherent. If unavailable, we'll use persistent coherent
-        mSupportsNonCoherentMemory = mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT] < numMemoryTypes;
-        mSupportsCoherentMemory =
-            mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT_COHERENT] < numMemoryTypes;
+        if( mBestVkMemoryTypeIndex[CPU_READ_WRITE] >= numMemoryTypes )
+        {
+            LogManager::getSingleton().logMessage(
+                "VkDevice: could not find cached host-visible memory. GPU -> CPU transfers could be "
+                "slow" );
+
+            if( mSupportsCoherentMemory )
+            {
+                mBestVkMemoryTypeIndex[CPU_READ_WRITE] =
+                    mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT];
+            }
+            else
+            {
+                mBestVkMemoryTypeIndex[CPU_READ_WRITE] = mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT];
+            }
+        }
+
+        mSupportsNonCoherentMemory = mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT] < numMemoryTypes;
+        mSupportsCoherentMemory = mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT] < numMemoryTypes;
 
         LogManager::getSingleton().logMessage( "VkDevice supports coherent memory: " +
                                                StringConverter::toString( mSupportsCoherentMemory ) );
         LogManager::getSingleton().logMessage( "VkDevice supports non-coherent memory: " +
                                                StringConverter::toString( mSupportsNonCoherentMemory ) );
-
-        if( mSupportsNonCoherentMemory )
-        {
-            mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_DEFAULT] =
-                mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT];
-        }
-        else
-        {
-            mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_DEFAULT] =
-                mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT_COHERENT];
-        }
 
         if( !mSupportsNonCoherentMemory && !mSupportsCoherentMemory )
         {
@@ -255,19 +277,26 @@ namespace Ogre
                          "memory! This is a driver error",
                          "VulkanVaoManager::determineBestMemoryTypes" );
         }
+
+        mReadMemoryIsCoherent =
+            ( memProperties.memoryTypes[mBestVkMemoryTypeIndex[CPU_READ_WRITE]].propertyFlags &
+              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) != 0;
+
+        LogManager::getSingleton().logMessage( "VkDevice read memory is coherent: " +
+                                               StringConverter::toString( mReadMemoryIsCoherent ) );
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,
-                                        size_t &outVboIdx, size_t &outBufferOffset )
+                                        bool readCapable, size_t &outVboIdx, size_t &outBufferOffset )
     {
         OGRE_ASSERT_LOW( alignment > 0 );
 
         TODO_add_cached_read_memory;
         TODO_if_memory_non_coherent_align_size;
 
-        const VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+        const VboFlag vboFlag = bufferTypeToVboFlag( bufferType, readCapable );
 
-        if( bufferType >= BT_DYNAMIC_DEFAULT )
+        if( bufferType >= BT_DYNAMIC_DEFAULT && !readCapable )
             sizeBytes *= mDynamicBufferMultiplier;
 
         allocateVbo( sizeBytes, alignment, mVbos[vboFlag], mBestVkMemoryTypeIndex[vboFlag],
@@ -416,11 +445,11 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
-                                          BufferType bufferType )
+                                          BufferType bufferType, bool readCapable )
     {
-        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType, readCapable );
 
-        if( bufferType >= BT_DYNAMIC_DEFAULT )
+        if( bufferType >= BT_DYNAMIC_DEFAULT && !readCapable )
             sizeBytes *= mDynamicBufferMultiplier;
 
         deallocateVbo( vboIdx, bufferOffset, sizeBytes, mVbos[vboFlag] );
@@ -547,9 +576,10 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
-        allocateVbo( numElements * bytesPerElement, bytesPerElement, bufferType, vboIdx, bufferOffset );
+        allocateVbo( numElements * bytesPerElement, bytesPerElement, bufferType, false, vboIdx,
+                     bufferOffset );
 
-        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
         Vbo &vbo = mVbos[vboFlag][vboIdx];
         VulkanBufferInterface *bufferInterface =
             new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
@@ -571,7 +601,8 @@ namespace Ogre
 
         deallocateVbo( bufferInterface->getVboPoolIndex(),
                        vertexBuffer->_getInternalBufferStart() * vertexBuffer->getBytesPerElement(),
-                       vertexBuffer->_getInternalTotalSizeBytes(), vertexBuffer->getBufferType() );
+                       vertexBuffer->_getInternalTotalSizeBytes(), vertexBuffer->getBufferType(),
+                       false );
     }
     //-----------------------------------------------------------------------------------
     MultiSourceVertexBufferPool *VulkanVaoManager::createMultiSourceVertexBufferPoolImpl(
@@ -590,9 +621,10 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
-        allocateVbo( numElements * bytesPerElement, bytesPerElement, bufferType, vboIdx, bufferOffset );
+        allocateVbo( numElements * bytesPerElement, bytesPerElement, bufferType, false, vboIdx,
+                     bufferOffset );
 
-        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
         Vbo &vbo = mVbos[vboFlag][vboIdx];
         VulkanBufferInterface *bufferInterface =
             new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
@@ -614,7 +646,7 @@ namespace Ogre
 
         deallocateVbo( bufferInterface->getVboPoolIndex(),
                        indexBuffer->_getInternalBufferStart() * indexBuffer->getBytesPerElement(),
-                       indexBuffer->_getInternalTotalSizeBytes(), indexBuffer->getBufferType() );
+                       indexBuffer->_getInternalTotalSizeBytes(), indexBuffer->getBufferType(), false );
     }
     //-----------------------------------------------------------------------------------
     ConstBufferPacked *VulkanVaoManager::createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
@@ -626,7 +658,7 @@ namespace Ogre
         size_t alignment = mConstBufferAlignment;
         size_t requestedSize = sizeBytes;
 
-        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
@@ -637,7 +669,7 @@ namespace Ogre
             sizeBytes = alignToNextMultiple( sizeBytes, alignment );
         }
 
-        allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
+        allocateVbo( sizeBytes, alignment, bufferType, false, vboIdx, bufferOffset );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
         VulkanBufferInterface *bufferInterface =
@@ -657,7 +689,7 @@ namespace Ogre
 
         deallocateVbo( bufferInterface->getVboPoolIndex(),
                        constBuffer->_getInternalBufferStart() * constBuffer->getBytesPerElement(),
-                       constBuffer->_getInternalTotalSizeBytes(), constBuffer->getBufferType() );
+                       constBuffer->_getInternalTotalSizeBytes(), constBuffer->getBufferType(), false );
     }
     //-----------------------------------------------------------------------------------
     TexBufferPacked *VulkanVaoManager::createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
@@ -670,7 +702,7 @@ namespace Ogre
         size_t alignment = mTexBufferAlignment;
         size_t requestedSize = sizeBytes;
 
-        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
@@ -681,7 +713,7 @@ namespace Ogre
             sizeBytes = alignToNextMultiple( sizeBytes, alignment );
         }
 
-        allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
+        allocateVbo( sizeBytes, alignment, bufferType, false, vboIdx, bufferOffset );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
         VulkanBufferInterface *bufferInterface =
@@ -704,7 +736,7 @@ namespace Ogre
 
         deallocateVbo( bufferInterface->getVboPoolIndex(),
                        texBuffer->_getInternalBufferStart() * texBuffer->getBytesPerElement(),
-                       texBuffer->_getInternalTotalSizeBytes(), texBuffer->getBufferType() );
+                       texBuffer->_getInternalTotalSizeBytes(), texBuffer->getBufferType(), false );
     }
     //-----------------------------------------------------------------------------------
     UavBufferPacked *VulkanVaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
@@ -718,9 +750,9 @@ namespace Ogre
 
         // UAV Buffers can't be dynamic.
         const BufferType bufferType = BT_DEFAULT;
-        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
 
-        allocateVbo( numElements * bytesPerElement, alignment, bufferType, vboIdx, bufferOffset );
+        allocateVbo( numElements * bytesPerElement, alignment, bufferType, false, vboIdx, bufferOffset );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
         VulkanBufferInterface *bufferInterface =
@@ -743,7 +775,7 @@ namespace Ogre
 
         deallocateVbo( bufferInterface->getVboPoolIndex(),
                        uavBuffer->_getInternalBufferStart() * uavBuffer->getBytesPerElement(),
-                       uavBuffer->_getInternalTotalSizeBytes(), uavBuffer->getBufferType() );
+                       uavBuffer->_getInternalTotalSizeBytes(), uavBuffer->getBufferType(), false );
     }
     //-----------------------------------------------------------------------------------
     IndirectBufferPacked *VulkanVaoManager::createIndirectBufferImpl( size_t sizeBytes,
@@ -768,9 +800,9 @@ namespace Ogre
         if( mSupportsIndirectBuffers )
         {
             size_t vboIdx;
-            VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+            VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
 
-            allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
+            allocateVbo( sizeBytes, alignment, bufferType, false, vboIdx, bufferOffset );
 
             Vbo &vbo = mVbos[vboFlag][vboIdx];
             bufferInterface = new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
@@ -801,7 +833,7 @@ namespace Ogre
             deallocateVbo(
                 bufferInterface->getVboPoolIndex(),
                 indirectBuffer->_getInternalBufferStart() * indirectBuffer->getBytesPerElement(),
-                indirectBuffer->_getInternalTotalSizeBytes(), indirectBuffer->getBufferType() );
+                indirectBuffer->_getInternalTotalSizeBytes(), indirectBuffer->getBufferType(), false );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -843,8 +875,8 @@ namespace Ogre
 
         size_t vboIdx;
         size_t bufferOffset;
-        allocateVbo( sizeBytes, 4u, BT_DYNAMIC_DEFAULT, vboIdx, bufferOffset );
-        const VboFlag vboFlag = bufferTypeToVboFlag( BT_DYNAMIC_DEFAULT );
+        allocateVbo( sizeBytes, 4u, BT_DYNAMIC_DEFAULT, !forUpload, vboIdx, bufferOffset );
+        const VboFlag vboFlag = bufferTypeToVboFlag( BT_DYNAMIC_DEFAULT, !forUpload );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
 
@@ -868,8 +900,8 @@ namespace Ogre
 
         size_t vboIdx;
         size_t bufferOffset;
-        allocateVbo( sizeBytes, 4u, BT_DYNAMIC_DEFAULT, vboIdx, bufferOffset );
-        const VboFlag vboFlag = bufferTypeToVboFlag( BT_DYNAMIC_DEFAULT );
+        allocateVbo( sizeBytes, 4u, BT_DYNAMIC_DEFAULT, false, vboIdx, bufferOffset );
+        const VboFlag vboFlag = bufferTypeToVboFlag( BT_DYNAMIC_DEFAULT, false );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
 
@@ -884,7 +916,7 @@ namespace Ogre
     {
         stagingTexture->_unmapBuffer();
         deallocateVbo( stagingTexture->getVboPoolIndex(), stagingTexture->_getInternalBufferStart(),
-                       stagingTexture->_getInternalTotalSizeBytes(), BT_DYNAMIC_DEFAULT );
+                       stagingTexture->_getInternalTotalSizeBytes(), BT_DYNAMIC_DEFAULT, false );
     }
     //-----------------------------------------------------------------------------------
     AsyncTicketPtr VulkanVaoManager::createAsyncTicket( BufferPacked *creator,
@@ -934,13 +966,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_update( void )
     {
-        FastArray<VulkanDescriptorPool *>::const_iterator itor = mUsedDescriptorPools.begin();
-        FastArray<VulkanDescriptorPool *>::const_iterator endt = mUsedDescriptorPools.end();
-
-        while( itor != endt )
         {
-            ( *itor )->_advanceFrame();
-            ++itor;
+            FastArray<VulkanDescriptorPool *>::const_iterator itor = mUsedDescriptorPools.begin();
+            FastArray<VulkanDescriptorPool *>::const_iterator endt = mUsedDescriptorPools.end();
+
+            while( itor != endt )
+            {
+                ( *itor )->_advanceFrame();
+                ++itor;
+            }
         }
 
         VaoManager::_update();
@@ -1204,24 +1238,48 @@ namespace Ogre
         return VERTEX_ATTRIBUTE_INDEX[semantic - 1];
     }
     //-----------------------------------------------------------------------------------
-    VulkanVaoManager::VboFlag VulkanVaoManager::bufferTypeToVboFlag( BufferType bufferType ) const
+    VulkanVaoManager::VboFlag VulkanVaoManager::bufferTypeToVboFlag( BufferType bufferType,
+                                                                     const bool readCapable ) const
     {
-        VboFlag vboFlag = static_cast<VboFlag>(
-            std::max( 0, ( bufferType - BT_DYNAMIC_DEFAULT ) + CPU_ACCESSIBLE_DEFAULT ) );
+        if( readCapable )
+        {
+            OGRE_ASSERT_LOW( bufferType != BT_IMMUTABLE && bufferType != BT_DEFAULT );
+            return CPU_READ_WRITE;
+        }
 
-        if( vboFlag == CPU_ACCESSIBLE_PERSISTENT && !mSupportsNonCoherentMemory )
-            vboFlag = CPU_ACCESSIBLE_PERSISTENT_COHERENT;
-        else if( vboFlag == CPU_ACCESSIBLE_PERSISTENT_COHERENT && !mSupportsCoherentMemory )
-            vboFlag = CPU_ACCESSIBLE_PERSISTENT;
+        VboFlag vboFlag;
+
+        switch( bufferType )
+        {
+        case BT_IMMUTABLE:
+        case BT_DEFAULT:
+            vboFlag = CPU_INACCESSIBLE;
+            break;
+        case BT_DYNAMIC_DEFAULT:
+            vboFlag = CPU_WRITE_PERSISTENT;  // Prefer non-coherent memory by default
+            break;
+        case BT_DYNAMIC_PERSISTENT:
+            vboFlag = CPU_WRITE_PERSISTENT;
+            break;
+        case BT_DYNAMIC_PERSISTENT_COHERENT:
+            vboFlag = CPU_WRITE_PERSISTENT_COHERENT;
+            break;
+        }
+
+        // Change flag if unavailable
+        if( vboFlag == CPU_WRITE_PERSISTENT && !mSupportsNonCoherentMemory )
+            vboFlag = CPU_WRITE_PERSISTENT_COHERENT;
+        else if( vboFlag == CPU_WRITE_PERSISTENT_COHERENT && !mSupportsCoherentMemory )
+            vboFlag = CPU_WRITE_PERSISTENT;
 
         return vboFlag;
     }
     //-----------------------------------------------------------------------------------
     bool VulkanVaoManager::isVboFlagCoherent( VboFlag vboFlag ) const
     {
-        if( vboFlag == CPU_ACCESSIBLE_PERSISTENT_COHERENT )
+        if( vboFlag == CPU_WRITE_PERSISTENT_COHERENT )
             return true;
-        if( vboFlag == CPU_ACCESSIBLE_DEFAULT && !mSupportsNonCoherentMemory )
+        if( vboFlag == CPU_READ_WRITE && mReadMemoryIsCoherent )
             return true;
         return false;
     }

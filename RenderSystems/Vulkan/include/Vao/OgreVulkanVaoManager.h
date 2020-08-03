@@ -4,7 +4,7 @@ This source file is part of OGRE
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
-Copyright (c) 2000-2014 Torus Knot Software Ltd
+Copyright (c) 2000-present Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -48,9 +48,9 @@ namespace Ogre
         enum VboFlag
         {
             CPU_INACCESSIBLE,
-            CPU_ACCESSIBLE_DEFAULT,
-            CPU_ACCESSIBLE_PERSISTENT,
-            CPU_ACCESSIBLE_PERSISTENT_COHERENT,
+            CPU_WRITE_PERSISTENT,
+            CPU_WRITE_PERSISTENT_COHERENT,
+            CPU_READ_WRITE,
             MAX_VBO_FLAG
         };
 
@@ -186,6 +186,7 @@ namespace Ogre
         bool mFenceFlushed;
         bool mSupportsCoherentMemory;
         bool mSupportsNonCoherentMemory;
+        bool mReadMemoryIsCoherent;
 
         static const uint32 VERTEX_ATTRIBUTE_INDEX[VES_COUNT];
 
@@ -213,8 +214,8 @@ namespace Ogre
         @param outBufferOffset [out]
             The offset in bytes at which the buffer data should be placed.
         */
-        void allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType, size_t &outVboIdx,
-                          size_t &outBufferOffset );
+        void allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType, bool readCapable,
+                          size_t &outVboIdx, size_t &outBufferOffset );
 
         void allocateVbo( size_t sizeBytes, size_t alignment, VboVec &vboVec, uint32 vkMemoryTypeIndex,
                           size_t defaultPoolSize, bool textureOnly, bool cpuAccessible, bool isCoherent,
@@ -233,11 +234,10 @@ namespace Ogre
         @param bufferType
             The type of buffer that was passed to allocateVbo.
         */
-        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
-                            BufferType bufferType );
+        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes, BufferType bufferType,
+                            bool readCapable );
 
-        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
-                            VboVec &vboVec );
+        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes, VboVec &vboVec );
 
         virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                             BufferType bufferType, void *initialData,
@@ -280,7 +280,7 @@ namespace Ogre
 
         virtual void destroyVertexArrayObjectImpl( VertexArrayObject *vao );
 
-        VboFlag bufferTypeToVboFlag( BufferType bufferType ) const;
+        VboFlag bufferTypeToVboFlag( BufferType bufferType, const bool readCapable ) const;
         bool isVboFlagCoherent( VboFlag vboFlag ) const;
 
         virtual void switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
