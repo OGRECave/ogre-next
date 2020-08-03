@@ -71,7 +71,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #define TODO_check_layers_exist
 
 #define TODO_addVpCount_to_passpso
-#define TODO_optimize
 
 namespace Ogre
 {
@@ -962,10 +961,6 @@ namespace Ogre
         vkCmdBindVertexBuffers( cmdBuffer, 0, static_cast<uint32>( numVertexBuffers ),
                                 vulkanVertexBuffers, offsets );
 
-        TODO_optimize;
-        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-        vaoManager->bindDrawIdVertexBuffer( cmdBuffer );
-
         IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
         if( indexBuffer )
         {
@@ -1824,6 +1819,9 @@ namespace Ogre
             newPassDesc->performLoadActions( mInterruptedRenderCommandEncoder );
 
             mActiveDevice->mGraphicsQueue.getGraphicsEncoder();
+
+            VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+            vaoManager->bindDrawIdVertexBuffer( mDevice->mGraphicsQueue.mCurrentCmdBuffer );
 
 #if VULKAN_DISABLED
             [mActiveRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
