@@ -89,6 +89,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanGpuProgramManager::~VulkanGpuProgramManager()
     {
+        mDevice->stall();
+
         delete mTmpRootLayout;
         mTmpRootLayout = 0;
 

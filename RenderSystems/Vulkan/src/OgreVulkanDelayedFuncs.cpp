@@ -85,4 +85,21 @@ namespace Ogre
         vkVaoMgr->addDelayedFunc( cmd );
     }
 
+    void VulkanDelayed_vkDestroyShaderModule::execute()
+    {
+        vkDestroyShaderModule( device, shaderModule, pAllocator );
+    }
+
+    void delayed_vkDestroyShaderModule( VaoManager *vaoMgr, VkDevice device, VkShaderModule shaderModule,
+                                        VkAllocationCallbacks const *pAllocator )
+    {
+        VulkanVaoManager *vkVaoMgr = static_cast<VulkanVaoManager *>( vaoMgr );
+        VulkanDelayed_vkDestroyShaderModule *cmd = new VulkanDelayed_vkDestroyShaderModule();
+        cmd->device = device;
+        cmd->shaderModule = shaderModule;
+        cmd->pAllocator = pAllocator;
+
+        vkVaoMgr->addDelayedFunc( cmd );
+    }
+
 }  // namespace Ogre

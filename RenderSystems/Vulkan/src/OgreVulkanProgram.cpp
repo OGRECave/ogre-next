@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanVaoManager.h"
 
 #include "OgreStringConverter.h"
+#include "OgreVulkanDelayedFuncs.h"
 #include "OgreVulkanUtils.h"
 #include "SPIRV-Reflect/spirv_reflect.h"
 
@@ -569,7 +570,7 @@ namespace Ogre
         mSpirv.clear();
         if( mShaderModule )
         {
-            vkDestroyShaderModule( mDevice->mDevice, mShaderModule, 0 );
+            delayed_vkDestroyShaderModule( mDevice->mVaoManager, mDevice->mDevice, mShaderModule, 0 );
             mShaderModule = 0;
         }
     }
