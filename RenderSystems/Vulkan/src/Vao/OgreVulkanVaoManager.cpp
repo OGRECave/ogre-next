@@ -124,25 +124,6 @@ namespace Ogre
 
         mDevice->stall();
 
-        FastArray<VulkanDelayedFuncBaseArray>::const_iterator itFrame = mDelayedFuncs.begin();
-        FastArray<VulkanDelayedFuncBaseArray>::const_iterator enFrame = mDelayedFuncs.end();
-
-        while( itFrame != enFrame )
-        {
-            VulkanDelayedFuncBaseArray::const_iterator itor = itFrame->begin();
-            VulkanDelayedFuncBaseArray::const_iterator endt = itFrame->end();
-
-            while( itor != endt )
-            {
-                ( *itor )->execute();
-                delete *itor;
-                ++itor;
-            }
-
-            mDelayedFuncs[mDynamicBufferCurrentFrame].clear();
-            ++itFrame;
-        }
-
         {
             VkSemaphoreArray::const_iterator itor = mAvailableSemaphores.begin();
             VkSemaphoreArray::const_iterator endt = mAvailableSemaphores.end();
@@ -1489,6 +1470,25 @@ namespace Ogre
         }
 
         _destroyAllDelayedBuffers();
+
+        FastArray<VulkanDelayedFuncBaseArray>::const_iterator itFrame = mDelayedFuncs.begin();
+        FastArray<VulkanDelayedFuncBaseArray>::const_iterator enFrame = mDelayedFuncs.end();
+
+        while( itFrame != enFrame )
+        {
+            VulkanDelayedFuncBaseArray::const_iterator itor = itFrame->begin();
+            VulkanDelayedFuncBaseArray::const_iterator endt = itFrame->end();
+
+            while( itor != endt )
+            {
+                ( *itor )->execute();
+                delete *itor;
+                ++itor;
+            }
+
+            mDelayedFuncs[mDynamicBufferCurrentFrame].clear();
+            ++itFrame;
+        }
 
         mFrameCount += mDynamicBufferMultiplier;
     }
