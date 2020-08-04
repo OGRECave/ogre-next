@@ -139,7 +139,10 @@ namespace Ogre {
 
         // Mask out vulkan_layout() macros
         size_t unusedVal = 0;
-        cpp.Parse( "#define vulkan_layout(x)", sizeof( "#define vulkan_layout(x)" ) - 1, unusedVal );
+        const String preamble =
+            "#define vulkan_layout(x)\n"
+            "#define vulkan( x )\n";
+        cpp.Parse( preamble.c_str(), preamble.size(), unusedVal );
 
         // Pass all user-defined macros to preprocessor
         if (!mPreprocessorDefines.empty ())

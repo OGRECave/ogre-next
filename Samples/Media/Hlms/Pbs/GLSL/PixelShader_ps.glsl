@@ -27,8 +27,8 @@ layout(std140) uniform;
 
 @property( hlms_use_prepass )
 	@property( !hlms_use_prepass_msaa )
-		uniform sampler2D gBuf_normals;
-		uniform sampler2D gBuf_shadowRoughness;
+		vulkan_layout( ogre_t@value(gBuf_normals) )			uniform texture2D gBuf_normals;
+		vulkan_layout( ogre_t@value(gBuf_shadowRoughness) )	uniform texture2D gBuf_shadowRoughness;
 	@else
 		uniform sampler2DMS gBuf_normals;
 		uniform sampler2DMS gBuf_shadowRoughness;
@@ -36,20 +36,21 @@ layout(std140) uniform;
 	@end
 
 	@property( hlms_use_ssr )
-		uniform sampler2D ssrTexture;
+		vulkan_layout( ogre_t@value(ssrTexture) ) uniform texture2D ssrTexture;
 	@end
 @end
 
 @property( hlms_ss_refractions_available )
 	@property( !hlms_use_prepass || !hlms_use_prepass_msaa )
 		@property( !hlms_use_prepass_msaa )
-			uniform sampler2D gBuf_depthTexture;
+			vulkan_layout( ogre_t@value(gBuf_depthTexture) ) uniform texture2D gBuf_depthTexture;
 			#define depthTextureNoMsaa gBuf_depthTexture
 		@else
-			uniform sampler2D depthTextureNoMsaa;
+			vulkan_layout( ogre_t@value(depthTextureNoMsaa) ) uniform texture2D depthTextureNoMsaa;
 		@end
 	@end
-	uniform sampler2D refractionMap;
+	vulkan_layout( ogre_t@value(refractionMap) )	uniform texture2D	refractionMap;
+	vulkan( layout( ogre_s@value(refractionMap) )	uniform sampler		refractionMapSampler );
 @end
 
 @insertpiece( DeclPlanarReflTextures )
@@ -81,28 +82,42 @@ vulkan_layout( location = 0 ) in block
 } inPs;
 @end
 
+@pset( currSampler, samplerStateStart )
+
 @property( !hlms_shadowcaster )
 
 @property( hlms_forwardplus )
-/*layout(binding = 1) */uniform usamplerBuffer f3dGrid;
-/*layout(binding = 2) */uniform samplerBuffer f3dLightList;
+	vulkan_layout( ogre_t@value(f3dGrid) )		uniform usamplerBuffer f3dGrid;
+	vulkan_layout( ogre_t@value(f3dLightList) )	uniform samplerBuffer f3dLightList;
 @end
 @property( irradiance_volumes )
-	uniform sampler3D irradianceVolume;
+	vulkan_layout( ogre_t@value(irradianceVolume) )	uniform texture3D	irradianceVolume;
+	vulkan( layout( ogre_s@value(irradianceVolume) )uniform sampler		irradianceVolumeSampler );
 @end
 
 @foreach( num_textures, n )
-	uniform sampler2DArray textureMaps@n;@end
+	vulkan_layout( ogre_t@value(textureMaps@n) ) uniform texture2DArray textureMaps@n;@end
 
 @property( !hlms_enable_cubemaps_auto )
-	@property( use_envprobe_map )uniform samplerCube		texEnvProbeMap;@end
+	@property( use_envprobe_map )
+		vulkan_layout( ogre_t@value(texEnvProbeMap) ) uniform textureCube texEnvProbeMap;
+	@end
 @else
 	@property( !hlms_cubemaps_use_dpm )
-		@property( use_envprobe_map )uniform samplerCubeArray	texEnvProbeMap;@end
+		@property( use_envprobe_map )
+			vulkan_layout( ogre_t@value(texEnvProbeMap) ) uniform textureCubeArray texEnvProbeMap;
+		@end
 	@else
-		@property( use_envprobe_map )uniform sampler2DArray	texEnvProbeMap;@end
+		@property( use_envprobe_map )
+			vulkan_layout( ogre_t@value(texEnvProbeMap) ) uniform texture2DArray texEnvProbeMap;
+		@end
 		@insertpiece( DeclDualParaboloidFunc )
 	@end
+@end
+
+@property( syntax == glslvk )
+	@foreach( num_samplers, n )
+		layout( ogre_s@value(currSampler) ) uniform sampler samplerState@counter(currSampler);@end
 @end
 
 @property( use_parallax_correct_cubemaps )
@@ -135,7 +150,12 @@ void main()
 
 @property( alpha_test )
 	@foreach( num_textures, n )
-		uniform sampler2DArray textureMaps@n;@end
+		vulkan_layout( ogre_t@value(textureMaps@n) ) uniform texture2DArray textureMaps@n;@end
+
+	@property( syntax == glslvk )
+		@foreach( num_samplers, n )
+			layout( ogre_s@value(currSampler) ) uniform sampler samplerState@counter(currSampler);@end
+	@end
 @end
 
 @property( hlms_shadowcaster_point || exponential_shadow_maps )

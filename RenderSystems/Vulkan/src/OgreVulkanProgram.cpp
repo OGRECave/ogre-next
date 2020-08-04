@@ -425,7 +425,9 @@ namespace Ogre
 
         if( !mCompileError )
         {
-            String preamble = "#define vulkan_layout layout\n";
+            String preamble =
+                "#define vulkan_layout layout\n"
+                "#define vulkan( x ) x\n";
 
             mRootLayout->generateRootLayoutMacros( mType, preamble );
             if( mType == GPT_VERTEX_PROGRAM )
