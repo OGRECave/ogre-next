@@ -47,6 +47,7 @@ typedef struct VkFence_T *VkFence;
 
 typedef struct VkRenderPass_T *VkRenderPass;
 typedef struct VkFramebuffer_T *VkFramebuffer;
+typedef struct VkCommandBuffer_T *VkCommandBuffer;
 
 typedef struct VkShaderModule_T *VkShaderModule;
 typedef struct VkDescriptorSetLayout_T *VkDescriptorSetLayout;

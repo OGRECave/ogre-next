@@ -66,9 +66,9 @@ namespace v1
         return mVulkanHardwareBufferCommon.getBufferName( outOffset );
     }
     //-----------------------------------------------------------------------------------
-    VkBuffer VulkanHardwareVertexBuffer::getBufferNameForGpuWrite( void )
+    VkBuffer VulkanHardwareVertexBuffer::getBufferNameForGpuWrite( size_t &outOffset )
     {
-        return mVulkanHardwareBufferCommon.getBufferNameForGpuWrite();
+        return mVulkanHardwareBufferCommon.getBufferNameForGpuWrite( outOffset );
     }
     //-----------------------------------------------------------------------------------
     void VulkanHardwareVertexBuffer::readData( size_t offset, size_t length, void *pDest )

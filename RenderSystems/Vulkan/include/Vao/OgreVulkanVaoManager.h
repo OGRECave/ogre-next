@@ -31,9 +31,6 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
-#include "OgreVulkanConstBufferPacked.h"
-#include "OgreVulkanTexBufferPacked.h"
-
 #include "Vao/OgreVaoManager.h"
 
 struct VkMemoryRequirements;
@@ -41,6 +38,23 @@ struct VkMemoryRequirements;
 namespace Ogre
 {
     class VulkanStagingTexture;
+
+    /// Provides a simple interface similar to that of MTLBuffer
+    struct VulkanRawBuffer
+    {
+        VkBuffer mVboName;
+        VulkanDynamicBuffer *mDynamicBuffer;
+        uint32 mVboFlag;  /// See VulkanVaoManager::VboFlag
+        size_t mUnmapTicket;
+
+        size_t mSize;
+        size_t mInternalBufferStart;
+        size_t mVboPoolIdx;
+
+        void *map( void );
+        void unmap( void );
+    };
+
     class _OgreVulkanExport VulkanVaoManager : public VaoManager
     {
     public:
@@ -297,6 +311,9 @@ namespace Ogre
         VkDeviceMemory allocateTexture( const VkMemoryRequirements &memReq, uint16 &outTexMemIdx,
                                         size_t &outVboIdx, size_t &outBufferOffset );
         void deallocateTexture( uint16 texMemIdx, size_t vboIdx, size_t bufferOffset, size_t sizeBytes );
+
+        VulkanRawBuffer allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes );
+        void deallocateRawBuffer( VulkanRawBuffer &rawBuffer );
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log ) const;

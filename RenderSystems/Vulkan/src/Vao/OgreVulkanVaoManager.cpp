@@ -521,6 +521,36 @@ namespace Ogre
         deallocateVbo( vboIdx, bufferOffset, sizeBytes, vboVec );
     }
     //-----------------------------------------------------------------------------------
+    VulkanRawBuffer VulkanVaoManager::allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes )
+    {
+        // Change flag if unavailable
+        if( vboFlag == CPU_WRITE_PERSISTENT && !mSupportsNonCoherentMemory )
+            vboFlag = CPU_WRITE_PERSISTENT_COHERENT;
+        else if( vboFlag == CPU_WRITE_PERSISTENT_COHERENT && !mSupportsCoherentMemory )
+            vboFlag = CPU_WRITE_PERSISTENT;
+
+        VulkanRawBuffer retVal;
+        allocateVbo( sizeBytes, 4u, mVbos[vboFlag], mBestVkMemoryTypeIndex[vboFlag],
+                     mDefaultPoolSize[vboFlag], false, vboFlag != CPU_INACCESSIBLE,
+                     isVboFlagCoherent( vboFlag ), retVal.mVboPoolIdx, retVal.mInternalBufferStart );
+        Vbo &vbo = mVbos[vboFlag][retVal.mVboPoolIdx];
+        retVal.mVboFlag = vboFlag;
+        retVal.mVboName = vbo.vkBuffer;
+        retVal.mDynamicBuffer = vbo.dynamicBuffer;
+        retVal.mUnmapTicket = std::numeric_limits<size_t>::max();
+        retVal.mSize = sizeBytes;
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::deallocateRawBuffer( VulkanRawBuffer &rawBuffer )
+    {
+        OGRE_ASSERT_LOW( rawBuffer.mUnmapTicket == std::numeric_limits<size_t>::max() &&
+                         "VulkanRawBuffer not unmapped (or dangling)" );
+        deallocateVbo( rawBuffer.mVboPoolIdx, rawBuffer.mInternalBufferStart, rawBuffer.mSize,
+                       mVbos[rawBuffer.mVboFlag] );
+        memset( &rawBuffer, 0, sizeof( rawBuffer ) );
+    }
+    //-----------------------------------------------------------------------------------
     void VulkanVaoManager::mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks )
     {
         BlockVec::iterator itor = blocks.begin();
@@ -1294,5 +1324,21 @@ namespace Ogre
             if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
                 bufferInterface->_setVboPoolIndex( newPoolIdx );
         }
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    void *VulkanRawBuffer::map( void )
+    {
+        OGRE_ASSERT_LOW( mDynamicBuffer && "CPU_INACCESSIBLE buffers cannot be mapped!" );
+        OGRE_ASSERT_LOW( mUnmapTicket == std::numeric_limits<size_t>::max() &&
+                         "Mapping VulkanRawBuffer twice!" );
+        mDynamicBuffer->map( mInternalBufferStart, mSize, mUnmapTicket );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanRawBuffer::unmap( void )
+    {
+        mDynamicBuffer->unmap( mUnmapTicket );
+        mUnmapTicket = std::numeric_limits<size_t>::max();
     }
 }  // namespace Ogre

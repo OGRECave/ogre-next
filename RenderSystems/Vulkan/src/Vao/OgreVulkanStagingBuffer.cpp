@@ -321,12 +321,14 @@ namespace Ogre
 
         device->mGraphicsQueue.getCopyEncoderV1Buffer( false );
 
+        size_t dstOffsetStart = 0;
+        VkBuffer dstBuffer = hwBuffer->getBufferNameForGpuWrite( dstOffsetStart );
+
         VkBufferCopy region;
         region.srcOffset = mInternalBufferStart + mMappingStart;
-        region.dstOffset = lockStart;
+        region.dstOffset = lockStart + dstOffsetStart;
         region.size = alignToNextMultiple( lockSize, 4u );
-        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, mVboName,
-                         hwBuffer->getBufferNameForGpuWrite(), 1u, &region );
+        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, mVboName, dstBuffer, 1u, &region );
 
         if( mUploadOnly )
         {

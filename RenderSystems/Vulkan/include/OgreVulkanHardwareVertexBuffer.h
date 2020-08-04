@@ -56,7 +56,7 @@ namespace v1
         /// @copydoc VulkanHardwareBufferCommon::getBufferName
         VkBuffer getBufferName( size_t &outOffset );
         /// @copydoc VulkanHardwareBufferCommon::getBufferNameForGpuWrite
-        VkBuffer getBufferNameForGpuWrite( void );
+        VkBuffer getBufferNameForGpuWrite( size_t &outOffset );
 
         virtual void readData( size_t offset, size_t length, void *pDest ) override;
         

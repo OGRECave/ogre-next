@@ -4,7 +4,7 @@
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2014 Torus Knot Software Ltd
+Copyright (c) 2000-present Torus Knot Software Ltd
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #define _OgreVulkanDiscardBufferManager_H_
 
 #include "OgreVulkanPrerequisites.h"
+
 #include "Vao/OgreVulkanVaoManager.h"
 
 namespace Ogre
@@ -64,9 +65,7 @@ namespace Ogre
         typedef vector<UnsafeBlock>::type UnsafeBlockVec;
 
     private:
-        VkBuffer mBuffer;
-        VkDeviceMemory mDeviceMemory;
-        VkMemoryRequirements mMemRequirements;
+        VulkanRawBuffer mBuffer;
         VulkanDevice *mDevice;
         VaoManager *mVaoManager;
         VulkanVaoManager::BlockVec mFreeBlocks;
@@ -123,6 +122,8 @@ namespace Ogre
 
         VulkanDevice *getDevice( void ) const { return mDevice; }
         VaoManager *getVaoManager( void ) const { return mVaoManager; }
+
+        VulkanRawBuffer &getBuffer( void ) { return mBuffer; }
     };
 
     class _OgreVulkanExport VulkanDiscardBuffer : public BufferAlloc
@@ -143,8 +144,8 @@ namespace Ogre
         VulkanDiscardBufferManager *mOwner;
 
     public:
-        VulkanDiscardBuffer( size_t bufferSize, uint16 alignment, VaoManager *vaoManager, VulkanDevice *device, 
-                            VulkanDiscardBufferManager *owner );
+        VulkanDiscardBuffer( size_t bufferSize, uint16 alignment, VaoManager *vaoManager,
+                             VulkanDevice *device, VulkanDiscardBufferManager *owner );
 
         /** Returns a pointer that maps to the beginning of this buffer to begin writing.
         @param noOverwrite
@@ -175,6 +176,6 @@ namespace Ogre
 
         VulkanDiscardBufferManager *getOwner( void ) { return mOwner; }
     };
-}
+}  // namespace Ogre
 
 #endif

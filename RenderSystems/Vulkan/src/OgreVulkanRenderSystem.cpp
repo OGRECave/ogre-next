@@ -50,6 +50,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "Vao/OgreIndirectBufferPacked.h"
 #include "Vao/OgreVulkanBufferInterface.h"
 #include "Vao/OgreVulkanConstBufferPacked.h"
+#include "Vao/OgreVulkanTexBufferPacked.h"
 
 #include "OgreVulkanHardwareBufferManager.h"
 #include "OgreVulkanHardwareIndexBuffer.h"

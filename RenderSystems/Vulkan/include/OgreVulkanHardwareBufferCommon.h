@@ -30,6 +30,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #define _OgreVulkanHardwareBufferCommon_H_
 
 #include "OgreVulkanPrerequisites.h"
+
 #include "OgreHardwareBuffer.h"
 #include "Vao/OgreVulkanVaoManager.h"
 
@@ -40,22 +41,18 @@ namespace v1
     class _OgreVulkanExport VulkanHardwareBufferCommon
     {
     private:
-        VkBuffer mBuffer;
-        VkDeviceMemory mDeviceMemory;
-        size_t mSizeBytes;
+        VulkanRawBuffer mBuffer;
         VulkanDevice *mDevice;
         VulkanDiscardBuffer *mDiscardBuffer;
         VaoManager *mVaoManager;
         StagingBuffer *mStagingBuffer;
         uint32 mLastFrameUsed;
         uint32 mLastFrameGpuWrote;
-        VulkanVaoManager::VboFlag mVboFlag;
-        uint64_t mMappingCount;
 
     public:
         VulkanHardwareBufferCommon( size_t sizeBytes, HardwareBuffer::Usage usage, uint16 alignment,
-                                   VulkanDiscardBufferManager *discardBufferManager,
-                                   VulkanDevice *device );
+                                    VulkanDiscardBufferManager *discardBufferManager,
+                                    VulkanDevice *device );
         virtual ~VulkanHardwareBufferCommon();
 
         void _notifyDeviceStalled( void );
@@ -69,7 +66,7 @@ namespace v1
             The MTLBuffer in question.
         */
         VkBuffer getBufferName( size_t &outOffset );
-        VkBuffer getBufferNameForGpuWrite( void );
+        VkBuffer getBufferNameForGpuWrite( size_t &outOffset );
 
         /// @see HardwareBuffer.
         void *lockImpl( size_t offset, size_t length, HardwareBuffer::LockOptions options,
@@ -87,7 +84,7 @@ namespace v1
         void copyData( VulkanHardwareBufferCommon *srcBuffer, size_t srcOffset, size_t dstOffset,
                        size_t length, bool discardWholeBuffer = false );
 
-        size_t getSizeBytes( void ) const { return mSizeBytes; }
+        size_t getSizeBytes( void ) const { return mBuffer.mSize; }
     };
 }
 }
