@@ -2075,15 +2075,40 @@ namespace Ogre
             String shaderNames =
                 "The following shaders cannot be linked. Their Root Layouts are incompatible:\n";
             if( newPso->vertexShader )
-                shaderNames += newPso->vertexShader->getName() + " ";
+            {
+                shaderNames += newPso->vertexShader->getName() + "\n";
+                static_cast<VulkanProgram *>( newPso->vertexShader->_getBindingDelegate() )
+                    ->getRootLayout()
+                    ->dump( shaderNames );
+            }
             if( newPso->geometryShader )
-                shaderNames += newPso->geometryShader->getName() + " ";
+            {
+                shaderNames += newPso->geometryShader->getName() + "\n";
+                static_cast<VulkanProgram *>( newPso->geometryShader->_getBindingDelegate() )
+                    ->getRootLayout()
+                    ->dump( shaderNames );
+            }
             if( newPso->tesselationHullShader )
-                shaderNames += newPso->tesselationHullShader->getName() + " ";
+            {
+                shaderNames += newPso->tesselationHullShader->getName() + "\n";
+                static_cast<VulkanProgram *>( newPso->tesselationHullShader->_getBindingDelegate() )
+                    ->getRootLayout()
+                    ->dump( shaderNames );
+            }
             if( newPso->tesselationDomainShader )
-                shaderNames += newPso->tesselationDomainShader->getName() + " ";
+            {
+                shaderNames += newPso->tesselationDomainShader->getName() + "\n";
+                static_cast<VulkanProgram *>( newPso->tesselationDomainShader->_getBindingDelegate() )
+                    ->getRootLayout()
+                    ->dump( shaderNames );
+            }
             if( newPso->pixelShader )
-                shaderNames += newPso->pixelShader->getName() + " ";
+            {
+                shaderNames += newPso->pixelShader->getName() + "\n";
+                static_cast<VulkanProgram *>( newPso->pixelShader->_getBindingDelegate() )
+                    ->getRootLayout()
+                    ->dump( shaderNames );
+            }
 
             LogManager::getSingleton().logMessage( shaderNames, LML_CRITICAL );
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,

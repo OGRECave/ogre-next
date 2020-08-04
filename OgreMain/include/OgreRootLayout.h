@@ -95,6 +95,8 @@ namespace Ogre
     protected:
         void parseSet( const rapidjson::Value &jsonValue, const size_t setIdx, const String &filename );
 
+        inline static void flushLwString( LwString &jsonStr, String &outJson );
+
         size_t calculateNumUsedSets( void ) const;
         size_t calculateNumBindings( const size_t setIdx ) const;
 
@@ -138,6 +140,9 @@ namespace Ogre
             Filename for logging purposes if errors are found
         */
         void parseRootLayout( const char *rootLayout, const bool bCompute, const String &filename );
+
+        /// Dumps the current RootLayout to a JSON string
+        void dump( String &outJson );
 
         /** Retrieves the set and binding idx of the params buffer
         @param shaderStage

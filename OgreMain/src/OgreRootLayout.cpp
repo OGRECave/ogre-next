@@ -302,6 +302,75 @@ namespace Ogre
 
         validate( filename );
     }
+    //-----------------------------------------------------------------------------------
+    inline void RootLayout::flushLwString( LwString &jsonStr, String &outJson )
+    {
+        outJson += jsonStr.c_str();
+        jsonStr.clear();
+    }
+    //-------------------------------------------------------------------------
+    void RootLayout::dump( String &outJson )
+    {
+        char tmpBuffer[4096];
+        LwString jsonStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+        jsonStr.a( "{" );
+        for( size_t i = 0u; i < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
+        {
+            bool usesAnything = false;
+            for( size_t j = 0u; j < DescBindingTypes::NumDescBindingTypes && !usesAnything; ++j )
+            {
+                if( mDescBindingRanges[i][j].isInUse() )
+                    usesAnything = true;
+            }
+
+            if( !usesAnything )
+                continue;
+
+            if( i != 0u )
+                jsonStr.a( "," );
+
+            bool firstEntryWritten = false;
+
+            jsonStr.a( "\n\t\"", (uint32)i, "\" :\n\t{" );
+            if( mDescBindingRanges[i][DescBindingTypes::ParamBuffer].isInUse() )
+            {
+                jsonStr.a( "\n\t\t\"has_params\" : [" );
+
+                const char *suffixes[NumShaderTypes + 1u] = { "vs", "ps", "gs", "hs", "ds", "cs" };
+
+                bool firstShaderWritten = false;
+                for( size_t j = 0u; j < NumShaderTypes + 1u; ++j )
+                {
+                    if( mParamsBuffStages & ( 1u << j ) )
+                    {
+                        if( firstShaderWritten )
+                            jsonStr.a( ", " );
+                        jsonStr.a( "\"", suffixes[j], "\"" );
+                        firstShaderWritten = true;
+                    }
+                }
+            }
+
+            for( size_t j = DescBindingTypes::ParamBuffer + 1u;
+                 j < DescBindingTypes::NumDescBindingTypes; ++j )
+            {
+                if( mDescBindingRanges[i][j].isInUse() )
+                {
+                    if( firstEntryWritten )
+                        jsonStr.a( "," );
+                    jsonStr.a( "\n\t\t\"", c_rootLayoutVarNames[j], "\" : [",
+                               mDescBindingRanges[i][j].start, ", ", mDescBindingRanges[i][j].end, "]" );
+                    firstEntryWritten = true;
+                }
+            }
+
+            jsonStr.a( "\n\t}" );
+        }
+        jsonStr.a( "\n}\n" );
+
+        flushLwString( jsonStr, outJson );
+    }
     //-------------------------------------------------------------------------
     size_t RootLayout::calculateNumUsedSets( void ) const
     {

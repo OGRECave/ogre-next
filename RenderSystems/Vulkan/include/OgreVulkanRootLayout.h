@@ -99,6 +99,7 @@ namespace Ogre
         VulkanRootLayout( VulkanGpuProgramManager *programManager );
         ~VulkanRootLayout();
 
+        using RootLayout::dump;
         using RootLayout::findParamsBuffer;
         using RootLayout::getDescBindingRanges;
 
