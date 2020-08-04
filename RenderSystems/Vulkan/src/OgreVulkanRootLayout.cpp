@@ -439,11 +439,17 @@ namespace Ogre
                     {
                         VulkanRootLayout *newBest = 0;
                         if( numSlotsA > numSlotsB )
+                        {
                             newBest = a;
+                            other = b;
+                        }
                         else
+                        {
                             newBest = b;
+                            other = a;
+                        }
 
-                        if( best != newBest )
+                        if( best && best != newBest )
                         {
                             // This is the first divergence within this set idx
                             // However a previous set diverged; and the 'best' one
