@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanRootLayout.h"
 #include "OgreVulkanUtils.h"
+#include "Vao/OgreVertexArrayObject.h"
 #include "Vao/OgreVulkanAsyncTicket.h"
 #include "Vao/OgreVulkanBufferInterface.h"
 #include "Vao/OgreVulkanConstBufferPacked.h"
@@ -40,11 +41,12 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanStagingBuffer.h"
 #include "Vao/OgreVulkanTexBufferPacked.h"
 #include "Vao/OgreVulkanUavBufferPacked.h"
-#include "Vao/OgreVulkanVertexArrayObject.h"
 
 #include "Vao/OgreIndirectBufferPacked.h"
 
+#include "OgreHlmsManager.h"
 #include "OgreRenderQueue.h"
+#include "OgreRoot.h"
 
 #include "OgreStringConverter.h"
 #include "OgreTimer.h"
@@ -80,6 +82,7 @@ namespace Ogre
     VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device,
                                         VulkanRenderSystem *renderSystem ) :
         VaoManager( 0 ),
+        mVaoNames( 1u ),
         mDrawId( 0 ),
         mDevice( device ),
         mVkRenderSystem( renderSystem ),
@@ -166,7 +169,74 @@ namespace Ogre
         outFreeBytes = 0;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::cleanupEmptyPools( void ) { TODO_whenImplemented_include_stagingBuffers; }
+    void VulkanVaoManager::switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
+                                                   BufferPacked *buffer )
+    {
+        if( mSupportsIndirectBuffers || buffer->getBufferPackedType() != BP_TYPE_INDIRECT )
+        {
+            VulkanBufferInterface *bufferInterface =
+                static_cast<VulkanBufferInterface *>( buffer->getBufferInterface() );
+            if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
+                bufferInterface->_setVboPoolIndex( newPoolIdx );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::cleanupEmptyPools( void )
+    {
+        TODO_whenImplemented_include_stagingBuffers;
+
+        for( int vboIdx = 0; vboIdx < MAX_VBO_FLAG; ++vboIdx )
+        {
+            VboVec::iterator itor = mVbos[vboIdx].begin();
+            VboVec::iterator endt = mVbos[vboIdx].end();
+
+            while( itor != endt )
+            {
+                Vbo &vbo = *itor;
+                if( vbo.freeBlocks.size() == 1u && vbo.sizeBytes == vbo.freeBlocks.back().size )
+                {
+                    VaoVec::iterator itVao = mVaos.begin();
+                    VaoVec::iterator enVao = mVaos.end();
+
+                    while( itVao != enVao )
+                    {
+                        bool usesBuffer = false;
+                        Vao::VertexBindingVec::const_iterator itBuf = itVao->vertexBuffers.begin();
+                        Vao::VertexBindingVec::const_iterator enBuf = itVao->vertexBuffers.end();
+
+                        while( itBuf != enBuf && !usesBuffer )
+                        {
+                            OGRE_ASSERT_LOW( itBuf->vertexBufferVbo != vbo.vkBuffer &&
+                                             "A VertexArrayObject still references "
+                                             "a deleted vertex buffer!" );
+                            ++itBuf;
+                        }
+
+                        OGRE_ASSERT_LOW( itVao->indexBufferVbo != vbo.vkBuffer &&
+                                         "A VertexArrayObject still references "
+                                         "a deleted index buffer!" );
+                        ++itVao;
+                    }
+
+                    vbo.vboName = 0;
+                    delete vbo.dynamicBuffer;
+                    vbo.dynamicBuffer = 0;
+
+                    // There's (unrelated) live buffers whose vboIdx will now point out of bounds.
+                    // We need to update them so they don't crash deallocateVbo later.
+                    switchVboPoolIndex( ( size_t )( mVbos[vboIdx].size() - 1u ),
+                                        ( size_t )( itor - mVbos[vboIdx].begin() ) );
+
+                    itor = efficientVectorRemove( mVbos[vboIdx], itor );
+                    endt = mVbos[vboIdx].end();
+                }
+                else
+                {
+                    ++itor;
+                }
+            }
+        }
+    }
     //-----------------------------------------------------------------------------------
     bool VulkanVaoManager::supportsCoherentMapping() const { return mSupportsCoherentMemory; }
     //-----------------------------------------------------------------------------------
@@ -871,32 +941,145 @@ namespace Ogre
         const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
         OperationType opType )
     {
-        // To make the comparison with lastVao in RenderQueue::render() valid when lastVao is 0
-        // we just start the index from 1 here.
-        size_t idx = mVertexArrayObjects.size() + 1u;
+        HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
+        VertexElement2VecVec vertexElements = VertexArrayObject::getVertexDeclaration( vertexBuffers );
+        const uint16 inputLayout = hlmsManager->_getInputLayoutId( vertexElements, opType );
 
-        const int bitsOpType = 3;
-        const int bitsVaoGl = 2;
-        const uint32 maskOpType = OGRE_RQ_MAKE_MASK( bitsOpType );
-        const uint32 maskVaoGl = OGRE_RQ_MAKE_MASK( bitsVaoGl );
-        const uint32 maskVao = OGRE_RQ_MAKE_MASK( RqBits::MeshBits - bitsOpType - bitsVaoGl );
+        VaoVec::iterator itor = findVao( vertexBuffers, indexBuffer, opType );
 
-        const uint32 shiftOpType = RqBits::MeshBits - bitsOpType;
-        const uint32 shiftVaoGl = shiftOpType - bitsVaoGl;
+        const uint32 renderQueueId = generateRenderQueueId( itor->vaoName, mNumGeneratedVaos );
 
-        uint32 renderQueueId = ( ( opType & maskOpType ) << shiftOpType ) |
-                               ( ( idx & maskVaoGl ) << shiftVaoGl ) | ( idx & maskVao );
-
-        VulkanVertexArrayObject *retVal =
-            OGRE_NEW VulkanVertexArrayObject( idx, renderQueueId, vertexBuffers, indexBuffer, opType );
+        VertexArrayObject *retVal = OGRE_NEW VertexArrayObject(
+            itor->vaoName, renderQueueId, inputLayout, vertexBuffers, indexBuffer, opType );
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::destroyVertexArrayObjectImpl( VertexArrayObject *vao )
     {
-        VulkanVertexArrayObject *glVao = static_cast<VulkanVertexArrayObject *>( vao );
-        OGRE_DELETE glVao;
+        VaoVec::iterator itor = mVaos.begin();
+        VaoVec::iterator endt = mVaos.end();
+
+        while( itor != endt && itor->vaoName != vao->getVaoName() )
+            ++itor;
+
+        if( itor != endt )
+        {
+            --itor->refCount;
+
+            if( !itor->refCount )
+                efficientVectorRemove( mVaos, itor );
+        }
+
+        // We delete it here because this class has no virtual destructor on purpose
+        OGRE_DELETE vao;
+    }
+    //-----------------------------------------------------------------------------------
+    VulkanVaoManager::VaoVec::iterator VulkanVaoManager::findVao(
+        const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
+        OperationType opType )
+    {
+        Vao vao;
+
+        vao.operationType = opType;
+        vao.vertexBuffers.reserve( vertexBuffers.size() );
+
+        {
+            VertexBufferPackedVec::const_iterator itor = vertexBuffers.begin();
+            VertexBufferPackedVec::const_iterator end = vertexBuffers.end();
+
+            while( itor != end )
+            {
+                Vao::VertexBinding vertexBinding;
+                vertexBinding.vertexBufferVbo =
+                    static_cast<VulkanBufferInterface *>( ( *itor )->getBufferInterface() )
+                        ->getVboName();
+                vertexBinding.vertexElements = ( *itor )->getVertexElements();
+                vertexBinding.instancingDivisor = 0;
+
+                vao.vertexBuffers.push_back( vertexBinding );
+
+                ++itor;
+            }
+        }
+
+        vao.refCount = 0;
+
+        if( indexBuffer )
+        {
+            vao.indexBufferVbo =
+                static_cast<VulkanBufferInterface *>( indexBuffer->getBufferInterface() )->getVboName();
+            vao.indexType = indexBuffer->getIndexType();
+        }
+        else
+        {
+            vao.indexBufferVbo = 0;
+            vao.indexType = IndexBufferPacked::IT_16BIT;
+        }
+
+        bool bFound = false;
+        VaoVec::iterator itor = mVaos.begin();
+        VaoVec::iterator endt = mVaos.end();
+
+        while( itor != endt && !bFound )
+        {
+            if( itor->operationType == vao.operationType && itor->indexBufferVbo == vao.indexBufferVbo &&
+                itor->indexType == vao.indexType && itor->vertexBuffers == vao.vertexBuffers )
+            {
+                bFound = true;
+            }
+            else
+            {
+                ++itor;
+            }
+        }
+
+        if( !bFound )
+        {
+            vao.vaoName = createVao();
+            mVaos.push_back( vao );
+            itor = mVaos.begin() + mVaos.size() - 1u;
+        }
+
+        ++itor->refCount;
+
+        return itor;
+    }
+    //-----------------------------------------------------------------------------------
+    uint32 VulkanVaoManager::createVao( void ) { return mVaoNames++; }
+    //-----------------------------------------------------------------------------------
+    uint32 VulkanVaoManager::generateRenderQueueId( uint32 vaoName, uint32 uniqueVaoId )
+    {
+        // Mix mNumGeneratedVaos with the D3D11 Vao for better sorting purposes:
+        //  If we only use the D3D11's vao, the RQ will sort Meshes with
+        //  multiple submeshes mixed with other meshes.
+        //  For cache locality, and assuming all of them have the same GL vao,
+        //  we prefer the RQ to sort:
+        //      1. Mesh A - SubMesh 0
+        //      2. Mesh A - SubMesh 1
+        //      3. Mesh B - SubMesh 0
+        //      4. Mesh B - SubMesh 1
+        //      5. Mesh D - SubMesh 0
+        //  If we don't mix mNumGeneratedVaos in it; the following could be possible:
+        //      1. Mesh B - SubMesh 1
+        //      2. Mesh D - SubMesh 0
+        //      3. Mesh A - SubMesh 1
+        //      4. Mesh B - SubMesh 0
+        //      5. Mesh A - SubMesh 0
+        //  Thus thrashing the cache unnecessarily.
+        // clang-format off
+        const int bitsVaoGl  = 5;
+        const uint32 maskVaoGl  = OGRE_RQ_MAKE_MASK( bitsVaoGl );
+        const uint32 maskVao    = OGRE_RQ_MAKE_MASK( RqBits::MeshBits - bitsVaoGl );
+
+        const uint32 shiftVaoGl = ( uint32 )( RqBits::MeshBits - bitsVaoGl );
+
+        uint32 renderQueueId =
+                ( (vaoName & maskVaoGl) << shiftVaoGl ) |
+                (uniqueVaoId & maskVao);
+        // clang-format on
+
+        return renderQueueId;
     }
     //-----------------------------------------------------------------------------------
     StagingBuffer *VulkanVaoManager::createStagingBuffer( size_t sizeBytes, bool forUpload )
@@ -1312,18 +1495,6 @@ namespace Ogre
         if( vboFlag == CPU_READ_WRITE && mReadMemoryIsCoherent )
             return true;
         return false;
-    }
-    //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
-                                                   BufferPacked *buffer )
-    {
-        if( mSupportsIndirectBuffers || buffer->getBufferPackedType() != BP_TYPE_INDIRECT )
-        {
-            VulkanBufferInterface *bufferInterface =
-                static_cast<VulkanBufferInterface *>( buffer->getBufferInterface() );
-            if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
-                bufferInterface->_setVboPoolIndex( newPoolIdx );
-        }
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------

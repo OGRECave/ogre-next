@@ -42,7 +42,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "Vao/OgreVulkanVaoManager.h"
 
 #include "OgreDefaultHardwareBufferManager.h"
-#include "Vao/OgreVulkanVertexArrayObject.h"
+#include "Vao/OgreVertexArrayObject.h"
 
 #include "CommandBuffer/OgreCbDrawCall.h"
 

@@ -121,12 +121,12 @@ namespace Ogre
 
         struct Vao
         {
+            uint32 vaoName;
+
             struct VertexBinding
             {
-                // GLuint              vertexBufferVbo;
+                VkBuffer vertexBufferVbo;
                 VertexElement2Vec vertexElements;
-                uint32 stride;
-                size_t offset;
 
                 // OpenGL supports this parameter per attribute, but
                 // we're a bit more conservative and do it per buffer
@@ -134,16 +134,19 @@ namespace Ogre
 
                 bool operator==( const VertexBinding &_r ) const
                 {
-                    return  // vertexBufferVbo == _r.vertexBufferVbo &&
-                        vertexElements == _r.vertexElements && stride == _r.stride &&
-                        offset == _r.offset && instancingDivisor == _r.instancingDivisor;
+                    return vertexBufferVbo == _r.vertexBufferVbo &&
+                           vertexElements == _r.vertexElements &&
+                           instancingDivisor == _r.instancingDivisor;
                 }
             };
 
             typedef vector<VertexBinding>::type VertexBindingVec;
 
+            /// Not required anymore, however it's still useful for sorting
+            /// purposes in the RenderQueue (using the Vao's ID).
+            OperationType operationType;
             VertexBindingVec vertexBuffers;
-            uint32 indexBufferVbo;
+            VkBuffer indexBufferVbo;
             IndexBufferPacked::IndexType indexType;
             uint32 refCount;
         };
@@ -170,6 +173,7 @@ namespace Ogre
         TextureMemoryVec mTextureMemory;
 
         VaoVec mVaos;
+        uint32 mVaoNames;
 
         VertexBufferPacked *mDrawId;
 
@@ -293,6 +297,14 @@ namespace Ogre
             OperationType opType );
 
         virtual void destroyVertexArrayObjectImpl( VertexArrayObject *vao );
+
+        /// Finds the Vao. Calls createVao automatically if not found.
+        /// Increases refCount before returning the iterator.
+        VaoVec::iterator findVao( const VertexBufferPackedVec &vertexBuffers,
+                                  IndexBufferPacked *indexBuffer, OperationType opType );
+        uint32 createVao( void );
+
+        static uint32 generateRenderQueueId( uint32 vaoName, uint32 uniqueVaoId );
 
         VboFlag bufferTypeToVboFlag( BufferType bufferType, const bool readCapable ) const;
         bool isVboFlagCoherent( VboFlag vboFlag ) const;
