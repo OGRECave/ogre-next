@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreVulkanTexBufferPacked.h"
 
+#include "../OgreVulkanDelayedFuncs.h"
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanRenderSystem.h"
@@ -63,8 +64,8 @@ namespace Ogre
 
         if( mCachedResourceViews[cacheIdx].mResourceView )
         {
-            vkDestroyBufferView( vulkanVaoManager->getDevice()->mDevice,
-                                 mCachedResourceViews[cacheIdx].mResourceView, 0 );
+            delayed_vkDestroyBufferView( mVaoManager, vulkanVaoManager->getDevice()->mDevice,
+                                         mCachedResourceViews[cacheIdx].mResourceView, 0 );
             mCachedResourceViews[cacheIdx].mResourceView = 0;
         }
 

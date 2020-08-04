@@ -44,6 +44,8 @@ THE SOFTWARE.
 
 #include "Vao/OgreIndirectBufferPacked.h"
 
+#include "../OgreVulkanDelayedFuncs.h"
+
 #include "OgreHlmsManager.h"
 #include "OgreRenderQueue.h"
 #include "OgreRoot.h"
@@ -108,6 +110,8 @@ namespace Ogre
             mDefaultPoolSize[i] = 16u * 1024u * 1024u;
         mDefaultPoolSize[CPU_READ_WRITE] = 4u * 1024u * 1024u;
 
+        mDelayedFuncs.resize( dynBufferMultiplier );
+
         determineBestMemoryTypes();
 
         mDynamicBufferMultiplier = dynBufferMultiplier;
@@ -119,6 +123,25 @@ namespace Ogre
         deleteAllBuffers();
 
         mDevice->stall();
+
+        FastArray<VulkanDelayedFuncBaseArray>::const_iterator itFrame = mDelayedFuncs.begin();
+        FastArray<VulkanDelayedFuncBaseArray>::const_iterator enFrame = mDelayedFuncs.end();
+
+        while( itFrame != enFrame )
+        {
+            VulkanDelayedFuncBaseArray::const_iterator itor = itFrame->begin();
+            VulkanDelayedFuncBaseArray::const_iterator endt = itFrame->end();
+
+            while( itor != endt )
+            {
+                ( *itor )->execute();
+                delete *itor;
+                ++itor;
+            }
+
+            mDelayedFuncs[mDynamicBufferCurrentFrame].clear();
+            ++itFrame;
+        }
 
         {
             VkSemaphoreArray::const_iterator itor = mAvailableSemaphores.begin();
@@ -619,6 +642,11 @@ namespace Ogre
         deallocateVbo( rawBuffer.mVboPoolIdx, rawBuffer.mInternalBufferStart, rawBuffer.mSize,
                        mVbos[rawBuffer.mVboFlag] );
         memset( &rawBuffer, 0, sizeof( rawBuffer ) );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::addDelayedFunc( VulkanDelayedFuncBase *cmd )
+    {
+        mDelayedFuncs[mDynamicBufferCurrentFrame].push_back( cmd );
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks )
@@ -1263,6 +1291,25 @@ namespace Ogre
         {
             waitForTailFrameToFinish();
             destroyDelayedBuffers( mDynamicBufferCurrentFrame );
+        }
+
+        if( mDelayedFuncs[mDynamicBufferCurrentFrame].empty() )
+        {
+            waitForTailFrameToFinish();
+
+            VulkanDelayedFuncBaseArray::const_iterator itor =
+                mDelayedFuncs[mDynamicBufferCurrentFrame].begin();
+            VulkanDelayedFuncBaseArray::const_iterator endt =
+                mDelayedFuncs[mDynamicBufferCurrentFrame].end();
+
+            while( itor != endt )
+            {
+                ( *itor )->execute();
+                delete *itor;
+                ++itor;
+            }
+
+            mDelayedFuncs[mDynamicBufferCurrentFrame].clear();
         }
 
         if( !mFenceFlushed )

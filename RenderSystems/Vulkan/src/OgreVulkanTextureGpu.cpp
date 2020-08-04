@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "OgreVulkanTextureGpu.h"
 
+#include "OgreVulkanDelayedFuncs.h"
 #include "Vao/OgreVulkanVaoManager.h"
 
 #include "OgrePixelFormatGpuUtils.h"
@@ -158,11 +159,12 @@ namespace Ogre
                 vkGetImageMemoryRequirements( device->mDevice, mFinalTextureName, &memRequirements );
 
                 TODO_delay_everything_that_starts_with_vkDestroy;
-                vkDestroyImage( device->mDevice, mFinalTextureName, 0 );
-                mFinalTextureName = 0;
-
                 VulkanVaoManager *vaoManager =
                     static_cast<VulkanVaoManager *>( textureManager->getVaoManager() );
+
+                delayed_vkDestroyImage( vaoManager, device->mDevice, mFinalTextureName, 0 );
+                mFinalTextureName = 0;
+
                 vaoManager->deallocateTexture( mTexMemIdx, mVboPoolIdx, mInternalBufferStart,
                                                memRequirements.size );
             }
@@ -458,7 +460,8 @@ namespace Ogre
         VulkanTextureGpuManager *textureManager =
             static_cast<VulkanTextureGpuManager *>( mTextureManager );
         VulkanDevice *device = textureManager->getDevice();
-        vkDestroyImageView( device->mDevice, imageView, 0 );
+
+        delayed_vkDestroyImageView( textureManager->getVaoManager(), device->mDevice, imageView, 0 );
     }
     //-----------------------------------------------------------------------------------
     VkImageView VulkanTextureGpu::createView( void ) const

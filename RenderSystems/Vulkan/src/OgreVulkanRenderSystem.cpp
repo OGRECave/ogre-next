@@ -30,6 +30,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include "OgreRenderPassDescriptor.h"
 #include "OgreVulkanCache.h"
+#include "OgreVulkanDelayedFuncs.h"
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanGpuProgramManager.h"
 #include "OgreVulkanMappings.h"
@@ -849,7 +850,7 @@ namespace Ogre
     RenderPassDescriptor *VulkanRenderSystem::createRenderPassDescriptor( void )
     {
         VulkanRenderPassDescriptor *retVal =
-            OGRE_NEW VulkanRenderPassDescriptor( &mDevice->mGraphicsQueue, this );
+            OGRE_NEW VulkanRenderPassDescriptor( &mActiveDevice->mGraphicsQueue, this );
         mRenderPassDescs.insert( retVal );
         return retVal;
     }
@@ -1822,7 +1823,7 @@ namespace Ogre
             mActiveDevice->mGraphicsQueue.getGraphicsEncoder();
 
             VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-            vaoManager->bindDrawIdVertexBuffer( mDevice->mGraphicsQueue.mCurrentCmdBuffer );
+            vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer );
 
 #if VULKAN_DISABLED
             [mActiveRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
@@ -1851,7 +1852,7 @@ namespace Ogre
                 vkVp[i].maxDepth = 1;
             }
 
-            vkCmdSetViewport( mDevice->mGraphicsQueue.mCurrentCmdBuffer, 0u, numViewports, vkVp );
+            vkCmdSetViewport( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, 0u, numViewports, vkVp );
         }
 
         if( mVpChanged || numViewports > 1u )
@@ -1867,7 +1868,8 @@ namespace Ogre
                     static_cast<uint32>( mCurrentRenderViewport[i].getScissorActualHeight() );
             }
 
-            vkCmdSetScissor( mDevice->mGraphicsQueue.mCurrentCmdBuffer, 0u, numViewports, scissorRect );
+            vkCmdSetScissor( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, 0u, numViewports,
+                             scissorRect );
         }
 
         mEntriesToFlush = 0;
@@ -2319,9 +2321,8 @@ namespace Ogre
 
         VulkanHlmsPso *vulkanPso = static_cast<VulkanHlmsPso *>( pso->rsData );
 
-        //        removeDepthStencilState( pso );
-
-        vkDestroyPipeline( mActiveDevice->mDevice, reinterpret_cast<VkPipeline>( vulkanPso->pso ), 0 );
+        delayed_vkDestroyPipeline( mVaoManager, mActiveDevice->mDevice,
+                                   reinterpret_cast<VkPipeline>( vulkanPso->pso ), 0 );
 
         delete vulkanPso;
         pso->rsData = 0;
@@ -2382,7 +2383,8 @@ namespace Ogre
         }
 
         VkSampler textureSampler;
-        VkResult result = vkCreateSampler( mDevice->mDevice, &samplerDescriptor, 0, &textureSampler );
+        VkResult result =
+            vkCreateSampler( mActiveDevice->mDevice, &samplerDescriptor, 0, &textureSampler );
         checkVkResult( result, "vkCreateSampler" );
 
         newBlock->mRsData = textureSampler;
@@ -2392,7 +2394,7 @@ namespace Ogre
     {
         assert( block->mRsData );
         VkSampler textureSampler = static_cast<VkSampler>( block->mRsData );
-        vkDestroySampler( mDevice->mDevice, textureSampler, 0 );
+        delayed_vkDestroySampler( mVaoManager, mActiveDevice->mDevice, textureSampler, 0 );
     }
     //-------------------------------------------------------------------------
     template <typename TDescriptorSetTexture, typename TTexSlot, typename TBufferPacked>

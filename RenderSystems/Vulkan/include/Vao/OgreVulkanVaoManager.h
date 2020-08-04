@@ -37,6 +37,7 @@ struct VkMemoryRequirements;
 
 namespace Ogre
 {
+    class VulkanDelayedFuncBase;
     class VulkanStagingTexture;
 
     /// Provides a simple interface similar to that of MTLBuffer
@@ -201,6 +202,9 @@ namespace Ogre
         VulkanDescriptorPoolMap mDescriptorPools;
         FastArray<VulkanDescriptorPool *> mUsedDescriptorPools;
 
+        typedef FastArray<VulkanDelayedFuncBase *> VulkanDelayedFuncBaseArray;
+        FastArray<VulkanDelayedFuncBaseArray> mDelayedFuncs;
+
         bool mFenceFlushed;
         bool mSupportsCoherentMemory;
         bool mSupportsNonCoherentMemory;
@@ -326,6 +330,8 @@ namespace Ogre
 
         VulkanRawBuffer allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes );
         void deallocateRawBuffer( VulkanRawBuffer &rawBuffer );
+
+        void addDelayedFunc( VulkanDelayedFuncBase *cmd );
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log ) const;
