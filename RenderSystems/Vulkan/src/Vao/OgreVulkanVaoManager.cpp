@@ -1471,8 +1471,8 @@ namespace Ogre
 
         _destroyAllDelayedBuffers();
 
-        FastArray<VulkanDelayedFuncBaseArray>::const_iterator itFrame = mDelayedFuncs.begin();
-        FastArray<VulkanDelayedFuncBaseArray>::const_iterator enFrame = mDelayedFuncs.end();
+        FastArray<VulkanDelayedFuncBaseArray>::iterator itFrame = mDelayedFuncs.begin();
+        FastArray<VulkanDelayedFuncBaseArray>::iterator enFrame = mDelayedFuncs.end();
 
         while( itFrame != enFrame )
         {
@@ -1486,7 +1486,7 @@ namespace Ogre
                 ++itor;
             }
 
-            mDelayedFuncs[mDynamicBufferCurrentFrame].clear();
+            itFrame->clear();
             ++itFrame;
         }
 
