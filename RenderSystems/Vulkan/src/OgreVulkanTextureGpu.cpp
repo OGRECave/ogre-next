@@ -306,7 +306,7 @@ namespace Ogre
         const uint32 destinationSlice = dstBox.sliceStart + dstTexture->getInternalSliceStart();
         const uint32 numSlices = dstBox.numSlices != 0 ? dstBox.numSlices : dstTexture->getNumSlices();
 
-        region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.srcSubresource.aspectMask = VulkanMappings::getImageAspect( this->getPixelFormat() );
         region.srcSubresource.mipLevel = srcMipLevel;
         region.srcSubresource.baseArrayLayer = sourceSlice;
         region.srcSubresource.layerCount = numSlices;
@@ -315,7 +315,7 @@ namespace Ogre
         region.srcOffset.y = srcBox.y;
         region.srcOffset.z = srcBox.z;
 
-        region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.dstSubresource.aspectMask = VulkanMappings::getImageAspect( dst->getPixelFormat() );
         region.dstSubresource.mipLevel = dstMipLevel;
         region.dstSubresource.baseArrayLayer = destinationSlice;
         region.dstSubresource.layerCount = numSlices;
