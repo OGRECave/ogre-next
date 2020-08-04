@@ -355,7 +355,7 @@ namespace Ogre
                                                 const DescBindingRange *descBindingRanges,
                                                 const VulkanGlobalBindingTable &table )
     {
-        const DescBindingRange &bindRanges = descBindingRanges[DescBindingTypes::Texture];
+        const DescBindingRange &bindRanges = descBindingRanges[DescBindingTypes::Sampler];
 
         if( !bindRanges.isInUse() )
             return;
