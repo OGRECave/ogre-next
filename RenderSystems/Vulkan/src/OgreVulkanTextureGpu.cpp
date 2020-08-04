@@ -328,6 +328,14 @@ namespace Ogre
 
         vkCmdCopyImage( device->mGraphicsQueue.mCurrentCmdBuffer, mFinalTextureName, mCurrLayout,
                         dstTexture->getFinalTextureName(), dstTexture->mCurrLayout, 1, &region );
+
+        // Do not perform the sync if notifyDataIsReady hasn't been called yet (i.e. we're
+        // still building the HW mipmaps, and the texture will never be ready)
+        if( dst->_isDataReadyImpl() &&
+            dst->getGpuPageOutStrategy() == GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+        {
+            dst->_syncGpuResidentToSystemRam();
+        }
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::_autogenerateMipmaps( void ) {}
