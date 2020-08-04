@@ -628,6 +628,7 @@ namespace Ogre
                 {
                     OGRE_ASSERT_MEDIUM( vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
                     texAccessFlags = VK_ACCESS_TRANSFER_WRITE_BIT;
+                    srcStage |= VK_PIPELINE_STAGE_TRANSFER_BIT;
                 }
                 else
                 {
