@@ -211,7 +211,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool VulkanTextureGpu::_isDataReadyImpl( void ) const
     {
-        return mDisplayTextureName != mFinalTextureName;
+        return mDisplayTextureName == mFinalTextureName;
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::_setToDisplayDummyTexture( void )
