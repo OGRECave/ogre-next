@@ -118,14 +118,17 @@ namespace Ogre
 
         device->mGraphicsQueue.getCopyEncoder( 0, dstTexture, false );
 
-        /*size_t bytesPerRow = srcBox.bytesPerRow;
-        size_t bytesPerImage = srcBox.bytesPerImage;
+        size_t bytesPerRow = srcBox.bytesPerRow;
+        // size_t bytesPerImage = srcBox.bytesPerImage;
 
-        if( PixelFormatGpuUtils::isCompressed( mFormatFamily ) )
+        // We can't trust mFormatFamily because supportsFormat accepts any format
+        const PixelFormatGpu pixelFormat = dstTexture->getPixelFormat();
+
+        if( PixelFormatGpuUtils::isCompressed( pixelFormat ) )
         {
             bytesPerRow = 0;
-            bytesPerImage = 0;
-        }*/
+            // bytesPerImage = 0;
+        }
 
         assert( dynamic_cast<VulkanTextureGpu *>( dstTexture ) );
         VulkanTextureGpu *dstTextureVulkan = static_cast<VulkanTextureGpu *>( dstTexture );
@@ -144,6 +147,11 @@ namespace Ogre
         VkBufferImageCopy region;
         region.bufferOffset = offsetPtr;
         region.bufferRowLength = 0;
+        if( bytesPerRow != 0 )
+        {
+            region.bufferRowLength = static_cast<uint32_t>(
+                bytesPerRow / PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
+        }
         region.bufferImageHeight = 0;
 
         region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
