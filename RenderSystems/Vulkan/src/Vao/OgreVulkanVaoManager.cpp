@@ -1504,7 +1504,7 @@ namespace Ogre
         OGRE_ASSERT_LOW( mDynamicBuffer && "CPU_INACCESSIBLE buffers cannot be mapped!" );
         OGRE_ASSERT_LOW( mUnmapTicket == std::numeric_limits<size_t>::max() &&
                          "Mapping VulkanRawBuffer twice!" );
-        mDynamicBuffer->map( mInternalBufferStart, mSize, mUnmapTicket );
+        return mDynamicBuffer->map( mInternalBufferStart, mSize, mUnmapTicket );
     }
     //-----------------------------------------------------------------------------------
     void VulkanRawBuffer::unmap( void )
