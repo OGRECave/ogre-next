@@ -81,6 +81,7 @@ namespace Ogre
     {
         if( mRootLayout )
         {
+            // This should not need to be delayed, since VulkanRootLayouts persists until shutdown
             vkDestroyPipelineLayout( mProgramManager->getDevice()->mDevice, mRootLayout, 0 );
             mRootLayout = 0;
         }
