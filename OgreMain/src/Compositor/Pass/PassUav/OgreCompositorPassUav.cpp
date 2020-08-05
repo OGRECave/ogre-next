@@ -227,7 +227,7 @@ namespace Ogre
         //The transitions are made when the bindings are needed
         //(<sarcasm>we'll have fun with the validation layers later</sarcasm>).
         //executeResourceTransitions();
-        assert( mResourceTransitions.empty() );
+        OGRE_ASSERT_LOW( mResourceTransitions.resourceTransitions.empty() );
 
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
 

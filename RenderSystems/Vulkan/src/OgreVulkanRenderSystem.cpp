@@ -36,6 +36,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanProgramFactory.h"
 #include "OgreVulkanRenderPassDescriptor.h"
+#include "OgreVulkanResourceTransition.h"
 #include "OgreVulkanRootLayout.h"
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
@@ -70,9 +71,12 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #    include "Windowing/X11/OgreVulkanXcbWindow.h"
 #endif
 
+#include "OgrePixelFormatGpuUtils.h"
+
 #define TODO_check_layers_exist
 
 #define TODO_addVpCount_to_passpso
+#define TODO_depth_readOnly_passes_dont_need_flushing
 
 namespace Ogre
 {
@@ -390,6 +394,7 @@ namespace Ogre
         rsc->setCapability( RSC_TEXTURE_2D_ARRAY );
         rsc->setCapability( RSC_CONST_BUFFER_SLOTS_IN_SHADER );
         rsc->setCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
+        rsc->setCapability( RSC_EXPLICIT_API );
         rsc->setMaxPointSize( 256 );
 
         rsc->setMaximumResolutions( 16384, 4096, 16384 );
@@ -2022,6 +2027,169 @@ namespace Ogre
 
         VkRenderPass retVal = mCache->getRenderPass( renderPassCreateInfo );
         return retVal;
+    }
+    //-------------------------------------------------------------------------
+    static VkPipelineStageFlags toVkPipelineStageFlags( ResourceLayout::Layout layout,
+                                                        const bool bIsDepth )
+    {
+        VkPipelineStageFlags stage = 0;
+        if( layout == ResourceLayout::RenderTarget || ( layout == ResourceLayout::Clear && !bIsDepth ) )
+        {
+            stage |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        }
+        if( layout == ResourceLayout::RenderDepth || ( layout == ResourceLayout::Clear && bIsDepth ) )
+        {
+            stage |=
+                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        }
+        if( layout == ResourceLayout::Texture || layout == ResourceLayout::TextureDepth )
+        {
+            stage |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
+                     VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
+                     VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT |
+                     VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        }
+
+        if( layout == ResourceLayout::Uav )
+            stage |= VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;  // TODO (compute vs graphics)
+
+        return stage;
+    }
+
+    void VulkanRenderSystem::_resourceTransitionCreated( ResourceTransitionCollection *rstCollection )
+    {
+        OGRE_ASSERT_LOW( !rstCollection->mRsData );
+
+        if( rstCollection->resourceTransitions.empty() )
+            return;
+
+        VulkanResourceTransition *resTrans = new VulkanResourceTransition();
+        memset( resTrans, 0, sizeof( VulkanResourceTransition ) );
+
+        size_t numTextures = 0u;
+
+        uint32 bufferWriteBarrierBits = 0u;
+        uint32 bufferReadBarrierBits = 0u;
+
+        ResourceTransitionArray::const_iterator itor = rstCollection->resourceTransitions.begin();
+        ResourceTransitionArray::const_iterator endt = rstCollection->resourceTransitions.end();
+
+        while( itor != endt )
+        {
+            if( itor->resource && itor->resource->isTextureGpu() )
+                ++numTextures;
+            else
+            {
+                bufferWriteBarrierBits |= itor->writeBarrierBits;
+                bufferReadBarrierBits |= itor->readBarrierBits;
+            }
+            ++itor;
+        }
+
+        if( bufferWriteBarrierBits || bufferReadBarrierBits )
+        {
+            makeVkStruct( resTrans->memBarrier, VK_STRUCTURE_TYPE_MEMORY_BARRIER );
+
+            if( bufferWriteBarrierBits & WriteBarrier::Uav )
+                resTrans->memBarrier.srcAccessMask |= VK_ACCESS_SHADER_WRITE_BIT;
+            if( bufferReadBarrierBits & ( ReadBarrier::Uav | ReadBarrier::Texture ) )
+                resTrans->memBarrier.dstAccessMask |= VK_ACCESS_SHADER_READ_BIT;
+        }
+
+        resTrans->imageBarriers.resizePOD( numTextures );
+
+        numTextures = 0u;
+        itor = rstCollection->resourceTransitions.begin();
+        while( itor != endt )
+        {
+            if( itor->resource && itor->resource->isTextureGpu() )
+            {
+                VulkanTextureGpu *texture = static_cast<VulkanTextureGpu *>( itor->resource );
+                VkImageMemoryBarrier &imageBarrier = resTrans->imageBarriers[numTextures];
+                imageBarrier = texture->getImageMemoryBarrier();
+                imageBarrier.oldLayout = VulkanMappings::get( itor->oldLayout, texture );
+                imageBarrier.newLayout = VulkanMappings::get( itor->newLayout, texture );
+
+                const bool bIsDepth = PixelFormatGpuUtils::isDepth( texture->getPixelFormat() );
+
+                TODO_depth_readOnly_passes_dont_need_flushing;
+
+                resTrans->srcStage |= toVkPipelineStageFlags( itor->oldLayout, bIsDepth );
+                resTrans->dstStage |= toVkPipelineStageFlags( itor->newLayout, bIsDepth );
+
+                if( itor->writeBarrierBits & WriteBarrier::Uav )
+                    imageBarrier.srcAccessMask |= VK_ACCESS_SHADER_WRITE_BIT;
+                if( itor->writeBarrierBits & WriteBarrier::RenderTarget )
+                    imageBarrier.srcAccessMask |= VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+                if( itor->writeBarrierBits & WriteBarrier::DepthStencil )
+                    imageBarrier.srcAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+
+                if( itor->readBarrierBits & ( ReadBarrier::Texture | ReadBarrier::Uav ) )
+                    imageBarrier.dstAccessMask |= VK_ACCESS_SHADER_READ_BIT;
+                if( itor->readBarrierBits & ReadBarrier::RenderTarget )
+                    imageBarrier.dstAccessMask |= VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+                if( itor->readBarrierBits & ReadBarrier::DepthStencil )
+                    imageBarrier.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+
+                ++numTextures;
+            }
+            ++itor;
+        }
+
+        if( resTrans->srcStage == 0 )
+            resTrans->srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+
+        OGRE_ASSERT_LOW( resTrans->dstStage );
+
+        rstCollection->mRsData = resTrans;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_resourceTransitionDestroyed( ResourceTransitionCollection *rstCollection )
+    {
+        OGRE_ASSERT_LOW( ( rstCollection->mRsData && !rstCollection->resourceTransitions.empty() ) ||
+                         ( !rstCollection->mRsData && rstCollection->resourceTransitions.empty() ) );
+        if( !rstCollection->resourceTransitions.empty() )
+        {
+            VulkanResourceTransition *rsData =
+                reinterpret_cast<VulkanResourceTransition *>( rstCollection->mRsData );
+            delete rsData;
+            rstCollection->mRsData = 0;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_executeResourceTransition( ResourceTransitionCollection *rstCollection )
+    {
+        if( rstCollection->resourceTransitions.empty() )
+            return;
+
+        VulkanResourceTransition *rsData =
+            reinterpret_cast<VulkanResourceTransition *>( rstCollection->mRsData );
+
+        uint32 numMemBarriers = 0u;
+        if( rsData->memBarrier.sType == VK_STRUCTURE_TYPE_MEMORY_BARRIER )
+            numMemBarriers = 1u;
+
+        size_t numTextures = 0u;
+        ResourceTransitionArray::const_iterator itor = rstCollection->resourceTransitions.begin();
+        ResourceTransitionArray::const_iterator endt = rstCollection->resourceTransitions.end();
+
+        while( itor != endt )
+        {
+            if( itor->resource && itor->resource->isTextureGpu() )
+            {
+                VulkanTextureGpu *texture = static_cast<VulkanTextureGpu *>( itor->resource );
+                rsData->imageBarriers[numTextures].image = texture->getFinalTextureName();
+                ++numTextures;
+            }
+            ++itor;
+        }
+
+        mActiveDevice->mGraphicsQueue.endAllEncoders();
+
+        vkCmdPipelineBarrier( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, rsData->srcStage,
+                              rsData->dstStage, 0, numMemBarriers, &rsData->memBarrier, 0u, 0,
+                              static_cast<uint32>( rsData->imageBarriers.size() ),
+                              rsData->imageBarriers.begin() );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso )

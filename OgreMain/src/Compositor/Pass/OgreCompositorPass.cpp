@@ -73,8 +73,7 @@ namespace Ogre
             mAnyTargetTexture( 0 ),
             mAnyMipLevel( 0u ),
             mNumPassesLeft( definition->mNumInitialPasses ),
-            mParentNode( parentNode ),
-            mNumValidResourceTransitions( 0 )
+            mParentNode( parentNode )
     {
         assert( definition->mNumInitialPasses && "Definition is broken, pass will never execute!" );
     }
@@ -494,14 +493,7 @@ namespace Ogre
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
 
-        assert( mNumValidResourceTransitions <= mResourceTransitions.size() );
-        ResourceTransitionVec::iterator itor = mResourceTransitions.begin();
-
-        for( size_t i=0; i<mNumValidResourceTransitions; ++i )
-        {
-            renderSystem->_executeResourceTransition( &(*itor) );
-            ++itor;
-        }
+        renderSystem->_executeResourceTransition( &mResourceTransitions );
     }
     inline uint32 transitionWriteBarrierBits( ResourceLayout::Layout oldLayout )
     {
@@ -569,52 +561,14 @@ namespace Ogre
                                                 uint32 readBarrierBits )
     {
         ResourceTransition transition;
-        //transition.resource = ; TODO
+        transition.resource = currentLayout->first;
         transition.oldLayout = currentLayout->second;
         transition.newLayout = newLayout;
         transition.writeBarrierBits = transitionWriteBarrierBits( transition.oldLayout );
         transition.readBarrierBits  = readBarrierBits;
 
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-        if( !caps->hasCapability( RSC_EXPLICIT_API ) )
-        {
-            //OpenGL. Merge the bits and use only one global barrier.
-            //Keep the extra barriers uninitialized for debugging purposes,
-            //but we won't be really using them.
-            if( mResourceTransitions.empty() )
-            {
-                ResourceTransition globalBarrier;
-                globalBarrier.oldLayout = ResourceLayout::Undefined;
-                globalBarrier.newLayout = ResourceLayout::Undefined;
-                globalBarrier.writeBarrierBits  = transition.writeBarrierBits;
-                globalBarrier.readBarrierBits   = transition.readBarrierBits;
-                globalBarrier.mRsData = 0;
-                renderSystem->_resourceTransitionCreated( &globalBarrier );
-                mResourceTransitions.push_back( globalBarrier );
-            }
-            else
-            {
-                ResourceTransition &globalBarrier = mResourceTransitions.front();
-
-                renderSystem->_resourceTransitionDestroyed( &globalBarrier );
-
-                globalBarrier.writeBarrierBits  |= transition.writeBarrierBits;
-                globalBarrier.readBarrierBits   |= transition.readBarrierBits;
-
-                renderSystem->_resourceTransitionCreated( &globalBarrier );
-            }
-
-            mNumValidResourceTransitions = 1;
-        }
-        else
-        {
-            //D3D12, Vulkan, Mantle. Takes advantage of per-resource barriers
-            renderSystem->_resourceTransitionCreated( &transition );
-            ++mNumValidResourceTransitions;
-        }
-
-        mResourceTransitions.push_back( transition );
+        OGRE_ASSERT_LOW( !mResourceTransitions.mRsData );
+        mResourceTransitions.resourceTransitions.push_back( transition );
 
         currentLayout->second = transition.newLayout;
     }
@@ -628,22 +582,24 @@ namespace Ogre
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
 
         {
-            //mResourceTransitions will be non-empty if we call _placeBarriersAndEmulateUavExecution
-            //for a second time (i.e. 2nd pass to check frame-to-frame dependencies). We need
-            //to tell what is shielded. On the first time, it should be empty.
-            ResourceTransitionVec::const_iterator itor = mResourceTransitions.begin();
-            ResourceTransitionVec::const_iterator end  = mResourceTransitions.end();
+            // mResourceTransitions will be non-empty if we call _placeBarriersAndEmulateUavExecution
+            // for a second time (i.e. 2nd pass to check frame-to-frame dependencies). We need
+            // to tell what is shielded. On the first time, it should be empty.
+            ResourceTransitionArray::const_iterator itor =
+                mResourceTransitions.resourceTransitions.begin();
+            ResourceTransitionArray::const_iterator endt =
+                mResourceTransitions.resourceTransitions.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->newLayout == ResourceLayout::Uav &&
                     itor->writeBarrierBits & WriteBarrier::Uav &&
                     itor->readBarrierBits & ReadBarrier::Uav )
                 {
-                    TextureGpu *renderTarget = 0;
+                    GpuTrackedResource *renderTarget = itor->resource;
                     resourcesLayout[renderTarget] = ResourceLayout::Uav;
-                    //Set to undefined so that following passes
-                    //can see it's safe / shielded by a barrier
+                    // Set to undefined so that following passes
+                    // can see it's safe / shielded by a barrier
                     uavsAccess[renderTarget] = ResourceAccess::Undefined;
                 }
                 ++itor;
@@ -788,21 +744,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void CompositorPass::_initializeBarriers( void )
+    {
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        renderSystem->_resourceTransitionCreated( &mResourceTransitions );
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorPass::_removeAllBarriers(void)
     {
-        assert( mNumValidResourceTransitions <= mResourceTransitions.size() );
-
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        ResourceTransitionVec::iterator itor = mResourceTransitions.begin();
-
-        for( size_t i=0; i<mNumValidResourceTransitions; ++i )
+        if( !mResourceTransitions.resourceTransitions.empty() )
         {
-            renderSystem->_resourceTransitionDestroyed( &(*itor) );
-            ++itor;
+            RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            renderSystem->_resourceTransitionDestroyed( &mResourceTransitions );
+            mResourceTransitions.resourceTransitions.clear();
         }
-
-        mNumValidResourceTransitions = 0;
-        mResourceTransitions.clear();
     }
     //-----------------------------------------------------------------------------------
     bool CompositorPass::notifyRecreated( const TextureGpu *channel )

@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2014 Torus Knot Software Ltd
+Copyright (c) 2000-present Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,27 +25,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+#ifndef _OgreVulkanResourceTransition_H_
+#define _OgreVulkanResourceTransition_H_
 
-#include "OgreStableHeaders.h"
-#include "OgreResourceTransition.h"
+#include "OgreVulkanPrerequisites.h"
+
+#include "vulkan/vulkan_core.h"
 
 namespace Ogre
 {
-    namespace ResourceAccess
+	struct _OgreVulkanExport VulkanResourceTransition
     {
-        const char* resourceAccessTable[] =
-        {
-            "Undefined",
-            "Read",
-            "Write",
-            "ReadWrite"
-        };
+		VkPipelineStageFlags srcStage;
+		VkPipelineStageFlags dstStage;
 
-        const char* toString( ResourceAccess value )
-        {
-            return resourceAccessTable[value];
-        }
-    }
+		VkMemoryBarrier memBarrier;
+		FastArray<VkImageMemoryBarrier> imageBarriers;
+    };
+}  // namespace Ogre
 
-    GpuTrackedResource::~GpuTrackedResource() {}
-}
+#endif  // _OgreVulkanResourceTransition_H_

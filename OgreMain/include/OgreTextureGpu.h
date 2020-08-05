@@ -549,6 +549,8 @@ namespace Ogre
         static const IdString msMsaaTextureBuffer;
         virtual void getCustomAttribute( IdString name, void *pData ) {}
 
+        virtual bool isTextureGpu( void ) const;
+
         TextureGpuManager* getTextureManager(void) const;
 
         TextureBox getEmptyBox( uint8 mipLevel );

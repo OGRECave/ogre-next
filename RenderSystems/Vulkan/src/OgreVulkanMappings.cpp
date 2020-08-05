@@ -214,9 +214,10 @@ namespace Ogre
         case VET_DOUBLE4:
         case VET_USHORT1_DEPRECATED:
         case VET_USHORT3_DEPRECATED:
-        default:
             return VK_FORMAT_UNDEFINED;
         }
+
+        return VK_FORMAT_UNDEFINED;
     }
     //-----------------------------------------------------------------------------------
     VkFilter VulkanMappings::get( FilterOptions filter )
@@ -245,6 +246,8 @@ namespace Ogre
         case FO_ANISOTROPIC:            return VK_SAMPLER_MIPMAP_MODE_LINEAR;
             // clang-format on
         }
+
+        return VK_SAMPLER_MIPMAP_MODE_NEAREST;
     }
     //-----------------------------------------------------------------------------------
     VkSamplerAddressMode VulkanMappings::get( TextureAddressingMode mode )
@@ -261,9 +264,9 @@ namespace Ogre
             return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
         case TAM_UNKNOWN:
             return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        default:
-            return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
         }
+
+        return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
     }
     //-----------------------------------------------------------------------------------
     VkImageViewType VulkanMappings::get( TextureTypes::TextureTypes textureType )
@@ -409,8 +412,6 @@ namespace Ogre
             return VK_FORMAT_UNDEFINED;
         }
         // clang-format on
-
-        return VK_FORMAT_UNDEFINED;
     }
     //-----------------------------------------------------------------------------------
     VkImageAspectFlags VulkanMappings::getImageAspect( PixelFormatGpu pf )
@@ -475,6 +476,38 @@ namespace Ogre
         case NUM_BUFFER_PACKED_TYPES: return 0;  // Keep compiler happy
             // clang-format on
         }
+
+        return 0;
+    }
+    //-----------------------------------------------------------------------------------
+    VkImageLayout VulkanMappings::get( ResourceLayout::Layout layout, const TextureGpu *texture )
+    {
+        switch( layout )
+        {
+        case ResourceLayout::Undefined:
+        case ResourceLayout::NumResourceLayouts:
+            return VK_IMAGE_LAYOUT_UNDEFINED;
+        case ResourceLayout::Texture:
+            return VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        case ResourceLayout::TextureDepth:
+            return VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        case ResourceLayout::RenderTarget:
+            return VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        case ResourceLayout::RenderDepth:
+            return VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        case ResourceLayout::Clear:
+            return PixelFormatGpuUtils::isDepth( texture->getPixelFormat() )
+                       ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+                       : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        case ResourceLayout::Uav:
+            return VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        case ResourceLayout::CopySrc:
+            return VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+        case ResourceLayout::CopyDst:
+            return VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        }
+
+        return VK_IMAGE_LAYOUT_UNDEFINED;
     }
     //-----------------------------------------------------------------------------------
     uint32_t VulkanMappings::getFormatSize( VkFormat format )

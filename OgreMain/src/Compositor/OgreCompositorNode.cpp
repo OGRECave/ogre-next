@@ -824,6 +824,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void CompositorNode::_initializeBarriers( void )
+    {
+        CompositorPassVec::const_iterator itPasses = mPasses.begin();
+        CompositorPassVec::const_iterator enPasses = mPasses.end();
+
+        while( itPasses != enPasses )
+        {
+            CompositorPass *pass = *itPasses;
+            pass->_initializeBarriers();
+
+            ++itPasses;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorNode::_removeAllBarriers(void)
     {
         CompositorPassVec::const_iterator itPasses = mPasses.begin();

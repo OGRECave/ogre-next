@@ -126,7 +126,7 @@ namespace Ogre
                                             dstTexture->_getSysRamCopyBytesPerRow( mipLevel ),
                                             dstTexture->_getSysRamCopyBytesPerImage( mipLevel ) );
 
-        assert( !dstBox || srcBox.equalSize( *dstBox ) && "Src & Dst must be equal" );
+        assert( ( !dstBox || srcBox.equalSize( *dstBox ) ) && "Src & Dst must be equal" );
         assert( !dstBox || fullDstTextureBox.fullyContains( *dstBox ) );
         assert( mipLevel < dstTexture->getNumMipmaps() );
         assert(( !srcBox.bytesPerRow || (srcBox.bytesPerImage % srcBox.bytesPerRow) == 0) &&

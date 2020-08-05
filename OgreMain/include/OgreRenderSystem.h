@@ -825,6 +825,10 @@ namespace Ogre
         virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition )  {}
         virtual void _executeResourceTransition( ResourceTransition *resTransition )    {}
 
+        virtual void _resourceTransitionCreated( ResourceTransitionCollection *outRstCollection ) {}
+        virtual void _resourceTransitionDestroyed( ResourceTransitionCollection *rstCollection ) {}
+        virtual void _executeResourceTransition( ResourceTransitionCollection *rstCollection ) {}
+
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) {}
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso ) {}
         virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) {}

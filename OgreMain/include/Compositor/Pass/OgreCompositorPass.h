@@ -101,14 +101,7 @@ namespace Ogre
 
         CompositorTextureVec    mTextureDependencies;
 
-        typedef vector<ResourceTransition>::type ResourceTransitionVec;
-        ResourceTransitionVec   mResourceTransitions;
-        /// In OpenGL, only the first entry in mResourceTransitions contains a real
-        /// memory barrier. The rest is just kept for debugging purposes. So
-        /// mNumValidResourceTransitions is either 0 or 1.
-        /// In D3D12/Vulkan/Mantle however,
-        /// mNumValidResourceTransitions = mResourceTransitions.size()
-        uint32                  mNumValidResourceTransitions;
+        ResourceTransitionCollection mResourceTransitions;
 
         /// MUST be called by derived class.
         void initialize( const RenderTargetViewDef *rtv, bool supportsNoRtv=false );
@@ -191,7 +184,8 @@ namespace Ogre
         virtual void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
                                                            ResourceAccessMap &uavsAccess,
                                                            ResourceLayoutMap &resourcesLayout );
-        void _removeAllBarriers(void);
+        virtual void _initializeBarriers( void );
+        virtual void _removeAllBarriers( void );
 
         /// @See CompositorNode::notifyRecreated
         virtual bool notifyRecreated( const TextureGpu *channel );

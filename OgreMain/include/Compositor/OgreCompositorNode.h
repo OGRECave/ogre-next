@@ -286,6 +286,8 @@ namespace Ogre
         void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
                                                    ResourceAccessMap &uavsAccess,
                                                    ResourceLayoutMap &resourcesLayout );
+        /// @see CompositorPass::_initializeBarriers
+        void _initializeBarriers( void );
         /// @see CompositorPass::_removeAllBarriers
         void _removeAllBarriers(void);
 

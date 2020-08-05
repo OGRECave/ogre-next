@@ -120,7 +120,8 @@ namespace Ogre
 
     struct ResourceTransition
     {
-        //Resource *resource; //TODO: We'll get here when D3D12/Vulkan is finished
+        GpuTrackedResource *resource;
+
         ResourceLayout::Layout      oldLayout;
         ResourceLayout::Layout      newLayout;
 
@@ -130,8 +131,19 @@ namespace Ogre
         void    *mRsData;       /// Render-System specific data
     };
 
+    typedef FastArray<ResourceTransition> ResourceTransitionArray;
+    struct ResourceTransitionCollection
+    {
+        ResourceTransitionArray resourceTransitions;
+        void *mRsData;  /// Render-System specific data
+
+        ResourceTransitionCollection() : mRsData( 0 ) {}
+    };
+
     struct GpuTrackedResource
     {
+        virtual ~GpuTrackedResource();
+        virtual bool isTextureGpu( void ) const { return false; }
     };
 
     typedef StdMap<GpuTrackedResource*, ResourceLayout::Layout> ResourceLayoutMap;

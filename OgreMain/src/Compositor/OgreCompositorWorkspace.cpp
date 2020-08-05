@@ -545,6 +545,18 @@ namespace Ogre
             }
         }
 
+        {
+            CompositorNodeVec::iterator itor = mNodeSequence.begin();
+            CompositorNodeVec::iterator end  = mNodeSequence.end();
+
+            while( itor != end )
+            {
+                if( (*itor)->getEnabled() )
+                    (*itor)->_initializeBarriers();
+                ++itor;
+            }
+        }
+
         mBarriersDirty = false;
     }
     //-----------------------------------------------------------------------------------

@@ -285,6 +285,10 @@ namespace Ogre
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );
 
+        virtual void _resourceTransitionCreated( ResourceTransitionCollection *rstCollection );
+        virtual void _resourceTransitionDestroyed( ResourceTransitionCollection *rstCollection );
+        virtual void _executeResourceTransition( ResourceTransitionCollection *rstCollection );
+
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) override;
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pos ) override;
         virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) override;

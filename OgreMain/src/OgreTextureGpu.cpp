@@ -867,6 +867,8 @@ namespace Ogre
         Image2::copyContentsToMemory( this, src, dst, dstFormat, automaticResolve );
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpu::isTextureGpu( void ) const { return true; }
+    //-----------------------------------------------------------------------------------
     TextureGpuManager* TextureGpu::getTextureManager(void) const
     {
         return mTextureManager;
