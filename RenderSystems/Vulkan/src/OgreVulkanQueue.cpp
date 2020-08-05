@@ -861,12 +861,12 @@ namespace Ogre
 
             if( itor->second.refCount == 0u )
             {
-                mRefCountedFences.erase( itor );
                 if( itor->second.recycleAfterRelease )
                 {
                     vkResetFences( mDevice, 1u, &itor->first );
                     mAvailableFences.push_back( itor->first );
                 }
+                mRefCountedFences.erase( itor );
             }
         }
     }
