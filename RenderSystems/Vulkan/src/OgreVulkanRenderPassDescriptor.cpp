@@ -782,6 +782,7 @@ namespace Ogre
             if( semaphore )
             {
                 // We cannot start executing color attachment commands until the semaphore says so
+                /*
                 VkImageMemoryBarrier imageBarrier[2];
                 makeVkStruct( imageBarrier[0], VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER );
                 imageBarrier[0].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
@@ -822,7 +823,7 @@ namespace Ogre
                 }
 
                 vkCmdPipelineBarrier( mQueue->mCurrentCmdBuffer, stageMask, stageMask, 0u, 0u, 0, 0u, 0,
-                                      numBarriers, imageBarrier );
+                                      numBarriers, imageBarrier );*/
                 mQueue->addWindowToWaitFor( semaphore );
             }
         }

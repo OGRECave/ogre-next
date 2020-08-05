@@ -135,8 +135,34 @@ namespace Ogre
         {
         }
 
-        mCurrLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        mNextLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        if( isPoolOwner() )
+        {
+            device->mGraphicsQueue.endAllEncoders();
+
+            // Pool owners transition all its slices to read_only_optimal to avoid the validation layers
+            // from complaining the unused (and untouched) slices are in the wrong layout.
+            // We wait for no stage, and no stage waits for us. No caches are flushed.
+            //
+            // Later our TextureGpus using individual slices will perform an
+            // undefined -> read_only_optimal transition on the individual slices & mips
+            // to fill the data; and those transitions will be the ones who take care of blocking
+            // previous/later stages in their respective barriers
+            VkImageMemoryBarrier imageBarrier = this->getImageMemoryBarrier();
+            imageBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            imageBarrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+            vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
+                                  VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                                  0, 0u, 0, 0u, 0, 1u, &imageBarrier );
+
+            mCurrLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            mNextLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        }
+        else
+        {
+            mCurrLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            mNextLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        }
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::destroyInternalResourcesImpl( void )
@@ -206,8 +232,18 @@ namespace Ogre
         {
             DescriptorSetTexture2::TextureSlot texSlot(
                 DescriptorSetTexture2::TextureSlot::makeEmpty() );
-            mDefaultDisplaySrv = createView( texSlot );
-            mOwnsSrv = true;
+            if( hasAutomaticBatching() )
+            {
+                VulkanTextureGpu *masterTex =
+                    static_cast<VulkanTextureGpu *>( mTexturePool->masterTexture );
+                mDefaultDisplaySrv = masterTex->mDefaultDisplaySrv;
+                mOwnsSrv = false;
+            }
+            else
+            {
+                mDefaultDisplaySrv = createView( texSlot );
+                mOwnsSrv = true;
+            }
         }
 
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
@@ -446,7 +482,7 @@ namespace Ogre
         imageViewCi.subresourceRange.baseMipLevel = mipLevel;
         imageViewCi.subresourceRange.levelCount = numMipmaps;
         imageViewCi.subresourceRange.baseArrayLayer = arraySlice;
-        imageViewCi.subresourceRange.layerCount = this->getNumSlices() - arraySlice;
+        imageViewCi.subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
 
         VkImageView imageView;
         VkResult result = vkCreateImageView( device->mDevice, &imageViewCi, 0, &imageView );
