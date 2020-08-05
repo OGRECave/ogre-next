@@ -87,8 +87,8 @@ vulkan_layout( location = 0 ) in block
 @property( !hlms_shadowcaster )
 
 @property( hlms_forwardplus )
-	vulkan_layout( ogre_t@value(f3dGrid) )		uniform usamplerBuffer f3dGrid;
-	vulkan_layout( ogre_t@value(f3dLightList) )	uniform samplerBuffer f3dLightList;
+	vulkan_layout( ogre_T@value(f3dGrid) )		uniform usamplerBuffer f3dGrid;
+	vulkan_layout( ogre_T@value(f3dLightList) )	uniform samplerBuffer f3dLightList;
 @end
 @property( irradiance_volumes )
 	vulkan_layout( ogre_t@value(irradianceVolume) )	uniform texture3D	irradianceVolume;
