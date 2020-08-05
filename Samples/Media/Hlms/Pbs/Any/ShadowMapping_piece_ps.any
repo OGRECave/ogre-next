@@ -25,6 +25,17 @@
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) textureLod( tex, uv, 0 ).x
 @end
 
+@property( syntax == glslvk )
+	float OGRE_SAMPLE_SHADOW( texture2D t, samplerShadow s, float2 uv, float depth )
+	{
+		return OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? 1.0 : textureLod( sampler2DShadow( t, s ), vec3( uv, depth ), 0.0f );
+	}
+	float OGRE_SAMPLE_SHADOW_ESM( texture2D t, sampler s, float2 uv )
+	{
+		return textureLod( sampler2D( t, s ), uv, 0.0f ).x;
+	}
+@end
+
 @property( syntax == hlsl )
 	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? 1.0 : tex.SampleCmpLevelZero( sampler, uv.xy, depth ).x)
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) tex.SampleLevel( sampler, uv, 0 ).x
@@ -96,6 +107,21 @@
 	@piece( DeclShadowSamplers )
 		@foreach( hlms_num_shadow_map_textures, n )
 			uniform @insertpiece( TEXTURE2DSHADOW ) texShadowMap@n;@end
+	@end
+@end
+@property( syntax == glslvk )
+	@piece( TEXTURE2DSHADOW )texture2D@end
+	@property( !exponential_shadow_maps )
+		@piece( SAMPLERSTATESHADOW )samplerShadow@end
+	@end
+	@property( exponential_shadow_maps )
+		@piece( SAMPLERSTATESHADOW )sampler@end
+	@end
+	@piece( SamplerShadow )@insertpiece( SAMPLERSTATESHADOW ) shadowSampler, @end
+	@piece( DeclShadowSamplers )
+		layout( ogre_s@value(texShadowMap0) ) uniform @insertpiece( SAMPLERSTATESHADOW ) shadowSampler;
+		@foreach( hlms_num_shadow_map_textures, n )
+			layout( ogre_t@value(texShadowMap@n) ) uniform texture2D texShadowMap@n;@end
 	@end
 @end
 @property( syntax == hlsl )
