@@ -1681,6 +1681,10 @@ namespace Ogre
     void VulkanRenderSystem::clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
                                                TextureGpu *anyTarget, uint8 mipLevel )
     {
+        Vector4 fullVp( 0, 0, 1, 1 );
+        beginRenderPassDescriptor( renderPassDesc, anyTarget, mipLevel,  //
+                                   &fullVp, &fullVp, 1u, false, false );
+        executeRenderPassDescriptorDelayedActions();
     }
     //-------------------------------------------------------------------------
     Real VulkanRenderSystem::getHorizontalTexelOffset( void ) { return 0.0f; }
