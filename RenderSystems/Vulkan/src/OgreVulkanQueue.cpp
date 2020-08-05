@@ -574,7 +574,10 @@ namespace Ogre
             else
             {
                 if( !it->second )
+                {
                     bufferAccessFlags = VK_ACCESS_TRANSFER_WRITE_BIT;
+                    srcStage |= VK_PIPELINE_STAGE_TRANSFER_BIT;
+                }
                 else
                     bufferAccessFlags = 0;  // Consecutive reads don't require waiting
             }
