@@ -942,11 +942,11 @@ namespace Ogre
         const uint8 dynBufferFrame = mVaoManager->waitForTailFrameToFinish();
         VkFence fence = getCurrentFence();
 
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( "VulkanQueue::commitAndNextCommandBuffer" ) );
-        }
+        //        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        //        if( defaultLog )
+        //        {
+        //            defaultLog->logMessage( String( "VulkanQueue::commitAndNextCommandBuffer" ) );
+        //        }
 
         vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
         vkQueueWaitIdle( mQueue );

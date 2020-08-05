@@ -603,11 +603,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::flushUAVs( void )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        /*Log *defaultLog = LogManager::getSingleton().getDefaultLog();
         if( defaultLog )
         {
             defaultLog->logMessage( String( " flushUAVs " ) );
-        }
+        }*/
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setParamBuffer( GpuProgramType shaderStage,
@@ -648,12 +648,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " _setTexture " ) );
-        }
-
         OGRE_ASSERT_MEDIUM( unit < NUM_BIND_TEXTURES );
         VulkanTextureGpu *tex = static_cast<VulkanTextureGpu *>( texPtr );
         if( mGlobalTable.textures[unit].imageView != tex->getDefaultDisplaySrv() )
@@ -824,12 +818,12 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setIndirectBuffer( IndirectBufferPacked *indirectBuffer )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        /*Log *defaultLog = LogManager::getSingleton().getDefaultLog();
         if( defaultLog )
         {
             defaultLog->logMessage( String( " * _setIndirectBuffer: " ) +
                                     StringConverter::toString( indirectBuffer->getBufferPackedType() ) );
-        }
+        }*/
         if( mVaoManager->supportsIndirectBuffers() )
         {
             if( indirectBuffer )
@@ -888,13 +882,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " * _setHlmsSamplerblock: " ) +
-                                    StringConverter::toString( texUnit ) );
-        }
-
         OGRE_ASSERT_MEDIUM( texUnit < NUM_BIND_SAMPLERS );
         VkSampler textureSampler = reinterpret_cast<VkSampler>( samplerblock->mRsData );
         mGlobalTable.samplers[texUnit].sampler = textureSampler;
@@ -1421,12 +1408,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setRenderOperation( const v1::CbRenderOp *cmd )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " v1 * _render: CbRenderOp " ) );
-        }
-
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
@@ -1503,12 +1484,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const v1::CbDrawCallStrip *cmd )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " v1 * _render: CbDrawCallStrip " ) );
-        }
-
         flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
