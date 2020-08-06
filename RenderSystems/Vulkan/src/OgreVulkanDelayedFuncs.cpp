@@ -102,4 +102,21 @@ namespace Ogre
         vkVaoMgr->addDelayedFunc( cmd );
     }
 
+    void VulkanDelayed_vkDestroyFramebuffer::execute()
+    {
+        vkDestroyFramebuffer( device, framebuffer, pAllocator );
+    }
+
+    void delayed_vkDestroyFramebuffer( VaoManager *vaoMgr, VkDevice device, VkFramebuffer framebuffer,
+                                       VkAllocationCallbacks const *pAllocator )
+    {
+        VulkanVaoManager *vkVaoMgr = static_cast<VulkanVaoManager *>( vaoMgr );
+        VulkanDelayed_vkDestroyFramebuffer *cmd = new VulkanDelayed_vkDestroyFramebuffer();
+        cmd->device = device;
+        cmd->framebuffer = framebuffer;
+        cmd->pAllocator = pAllocator;
+
+        vkVaoMgr->addDelayedFunc( cmd );
+    }
+
 }  // namespace Ogre

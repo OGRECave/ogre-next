@@ -7,6 +7,7 @@ functions = \
 	["vkDestroySampler", "VkDevice", "device", "VkSampler", "sampler", "VkAllocationCallbacks const *", "pAllocator"],
 	["vkDestroyBufferView", "VkDevice", "device", "VkBufferView", "bufferView", "VkAllocationCallbacks const *", "pAllocator"],
 	["vkDestroyShaderModule", "VkDevice", "device", "VkShaderModule", "shaderModule", "VkAllocationCallbacks const *", "pAllocator"],
+	["vkDestroyFramebuffer", "VkDevice", "device", "VkFramebuffer", "framebuffer", "VkAllocationCallbacks const *", "pAllocator"],
 ]
 
 headerFileTemplate = \

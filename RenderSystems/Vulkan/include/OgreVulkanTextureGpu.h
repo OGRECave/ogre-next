@@ -120,10 +120,10 @@ namespace Ogre
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
-        virtual void notifyDataIsReady(void);
+        virtual void notifyDataIsReady( void );
         virtual bool _isDataReadyImpl( void ) const;
 
-        virtual void _setToDisplayDummyTexture(void);
+        virtual void _setToDisplayDummyTexture( void );
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
         VkImageSubresourceRange getFullSubresourceRange( void ) const;
@@ -132,11 +132,10 @@ namespace Ogre
 
         VkImageViewType getInternalVulkanTextureViewType( void ) const;
 
-    protected:
-        VkImageView createView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint8 numMipmaps,
-                                uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav ) const;
+        VkImageView _createView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint8 numMipmaps,
+                                 uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav,
+                                 uint32 numSlices = 0u, VkImage imageOverride = 0 ) const;
 
-    public:
         VkImageView createView( const DescriptorSetTexture2::TextureSlot &texSlot ) const;
         VkImageView createView( DescriptorSetUav::TextureSlot texSlot );
         VkImageView createView( void ) const;

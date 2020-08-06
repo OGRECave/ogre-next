@@ -59,15 +59,25 @@ namespace Ogre
     class _OgreVulkanExport VulkanRenderPassDescriptor : public RenderPassDescriptor
     {
     protected:
+        /// Contains baked info of load/store/clear
+        /// Doesn't reference ImageViews, however it mentions them by attachmentIdx
+        /// which makes VkRenderPass difficult to actually share
+        ///
+        /// Thus we generate VkRenderPass and FBOs together
         VkRenderPass mRenderPass;
 
-        uint8 mDepthStencilIdxToAttachmIdx;
+        // 1 per MRT
+        // 1 per MRT MSAA resolve
+        // 1 for Depth buffer
+        // 1 for Stencil buffer
         VkClearValue mClearValues[OGRE_MAX_MULTIPLE_RENDER_TARGETS * 2u + 2u];
         VkImageView mImageViews[OGRE_MAX_MULTIPLE_RENDER_TARGETS * 2u + 2u];
         uint32 mNumImageViews;
         FastArray<VkImageView> mWindowImageViews;  // Only used by windows
         // We normally need just one, but Windows are a special case
         // because we need to have one per swapchain image, hence FastArray
+        //
+        // A single VkFramebuffer contains the VkRenderPass + the actual imageviews + resolution
         FastArray<VkFramebuffer> mFramebuffers;
 
         VulkanFrameBufferDescMap::iterator mSharedFboItor;
@@ -92,8 +102,10 @@ namespace Ogre
                                                  PixelFormatGpu pixelFormat );
 
         void sanitizeMsaaResolve( size_t colourIdx );
-        VkImageView setupColourAttachment( VkAttachmentDescription &attachment, VkImage texName,
-                                           const RenderPassColourTarget &colour, bool resolveTex );
+        void setupColourAttachment( const size_t idx, VkAttachmentDescription *attachments,
+                                    uint32 &currAttachmIdx, VkAttachmentReference *colourAttachRefs,
+                                    VkAttachmentReference *resolveAttachRefs, const size_t vkIdx,
+                                    const bool resolveTex );
         VkImageView setupDepthAttachment( VkAttachmentDescription &attachment );
         void updateFbo( void );
         void destroyFbo( void );

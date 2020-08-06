@@ -257,10 +257,8 @@ namespace Ogre
         VkFence acquireCurrentFence( void );
         void releaseFence( VkFence fence );
 
-    public:
         void endCommandBuffer( void );
 
-    public:
         /// When we'll call commitAndNextCommandBuffer, we'll have to wait for
         /// this semaphore on to execute STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
         void addWindowToWaitFor( VkSemaphore imageAcquisitionSemaph );
@@ -269,6 +267,8 @@ namespace Ogre
         bool _isFrameFinished( uint8 frameIdx );
 
         void commitAndNextCommandBuffer( bool endingFrame );
+
+        VulkanVaoManager *getVaoManager( void ) { return mVaoManager; }
     };
 
 }  // namespace Ogre

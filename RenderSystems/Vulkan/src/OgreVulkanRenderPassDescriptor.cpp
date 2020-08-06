@@ -34,9 +34,10 @@ THE SOFTWARE.
 #include "OgreVulkanTextureGpuWindow.h"
 #include "OgreVulkanWindow.h"
 
-#include "OgreHlmsDatablock.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "Vao/OgreVulkanVaoManager.h"
 
+#include "OgreVulkanDelayedFuncs.h"
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanUtils.h"
 
@@ -237,19 +238,84 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    VkImageView VulkanRenderPassDescriptor::setupColourAttachment( VkAttachmentDescription &attachment,
-                                                                   VkImage texName,
-                                                                   const RenderPassColourTarget &colour,
-                                                                   bool resolveTex )
+    /**
+    @brief VulkanRenderPassDescriptor::setupColourAttachment
+        This will setup:
+            attachments[currAttachmIdx]
+            colourAttachRefs[vkIdx]
+            resolveAttachRefs[vkIdx]
+            mImageViews[currAttachmIdx]
+            mWindowImageViews
+
+        Except mWindowImageViews, all the other variables are *always* written to.
+    @param idx [in]
+        idx to mColour[idx]
+    @param attachments [out]
+        A pointer to setup VkAttachmentDescription
+    @param currAttachmIdx [in/out]
+        A value to index attachments[currAttachmIdx]
+    @param colourAttachRefs [out]
+        A pointer to setup VkAttachmentReference
+    @param resolveAttachRefs [out]
+        A pointer to setup VkAttachmentReference
+    @param vkIdx [in]
+        A value to index both colourAttachRefs[vkIdx] & resolveAttachRefs[vkIdx]
+        Very often idx == vkIdx except when we skip a colour entry due to being PFG_NULL
+    @param resolveTex
+        False if we're setting up the main target
+        True if we're setting up the resolve target
+    */
+    void VulkanRenderPassDescriptor::setupColourAttachment( const size_t idx,
+                                                            VkAttachmentDescription *attachments,
+                                                            uint32 &currAttachmIdx,
+                                                            VkAttachmentReference *colourAttachRefs,
+                                                            VkAttachmentReference *resolveAttachRefs,
+                                                            const size_t vkIdx, const bool resolveTex )
     {
-        attachment.format = VulkanMappings::get( colour.texture->getPixelFormat() );
-        attachment.samples = static_cast<VkSampleCountFlagBits>(
-            colour.texture->getSampleDescription().getColourSamples() );
+        const RenderPassColourTarget &colour = mColour[idx];
+
+        if( ( !colour.texture->getSampleDescription().isMultisample() || !colour.resolveTexture ) &&
+            resolveTex )
+        {
+            // There's no resolve texture to setup
+            resolveAttachRefs[vkIdx].attachment = VK_ATTACHMENT_UNUSED;
+            resolveAttachRefs[vkIdx].layout = VK_IMAGE_LAYOUT_UNDEFINED;
+            return;
+        }
+
+        VkImage texName = 0;
+        VulkanTextureGpu *texture = 0;
+
+        if( !resolveTex )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( colour.texture ) );
+            texture = static_cast<VulkanTextureGpu *>( colour.texture );
+            if( colour.texture->getSampleDescription().isMultisample() )
+            {
+                if( !colour.texture->hasMsaaExplicitResolves() )
+                    texName = texture->getMsaaFramebufferName();
+                else
+                    texName = texture->getFinalTextureName();
+            }
+            else
+                texName = texture->getFinalTextureName();
+        }
+        else
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( colour.resolveTexture ) );
+            texture = static_cast<VulkanTextureGpu *>( colour.resolveTexture );
+            texName = texture->getFinalTextureName();
+        }
+
+        VkAttachmentDescription &attachment = attachments[currAttachmIdx];
+        attachment.format = VulkanMappings::get( texture->getPixelFormat() );
+        attachment.samples =
+            static_cast<VkSampleCountFlagBits>( texture->getSampleDescription().getColourSamples() );
         attachment.loadOp = get( colour.loadAction );
         attachment.storeOp = get( colour.storeAction );
         attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        if( colour.texture->isRenderWindowSpecific() )
+        if( texture->isRenderWindowSpecific() )
         {
             attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
@@ -260,50 +326,48 @@ namespace Ogre
             attachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         }
 
-        VkImageViewCreateInfo imgViewCreateInfo;
-        makeVkStruct( imgViewCreateInfo, VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO );
-        imgViewCreateInfo.viewType = VulkanMappings::get( colour.texture->getTextureType() );
-        imgViewCreateInfo.format = attachment.format;
-        imgViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        imgViewCreateInfo.subresourceRange.baseMipLevel =
-            resolveTex ? colour.resolveMipLevel : colour.mipLevel;
-        imgViewCreateInfo.subresourceRange.levelCount = 1u;
-        if( colour.allLayers )
+        const uint8 mipLevel = resolveTex ? colour.resolveMipLevel : colour.mipLevel;
+        const uint16 slice = resolveTex ? colour.resolveSlice : colour.slice;
+
+        if( !texture->isRenderWindowSpecific() )
         {
-            imgViewCreateInfo.subresourceRange.baseArrayLayer = 0u;
-            imgViewCreateInfo.subresourceRange.layerCount = colour.texture->getNumSlices();
+            mImageViews[currAttachmIdx] = texture->_createView( texture->getPixelFormat(), mipLevel, 1u,
+                                                                slice, false, false, 1u, texName );
         }
         else
         {
-            imgViewCreateInfo.subresourceRange.baseArrayLayer =
-                resolveTex ? colour.resolveSlice : colour.slice;
-            imgViewCreateInfo.subresourceRange.layerCount = 1u;
-        }
+            mImageViews[currAttachmIdx] = 0;  // Set to null (will be set later, 1 for each FBO)
 
-        VkImageView retVal = 0;
-
-        if( !colour.texture->isRenderWindowSpecific() )
-        {
-            imgViewCreateInfo.image = texName;
-            vkCreateImageView( mQueue->mDevice, &imgViewCreateInfo, 0, &retVal );
-        }
-        else
-        {
-            OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpuWindow *>( colour.texture ) );
-            VulkanTextureGpuWindow *textureVulkan =
-                static_cast<VulkanTextureGpuWindow *>( colour.texture );
+            OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpuWindow *>( texture ) );
+            VulkanTextureGpuWindow *textureVulkan = static_cast<VulkanTextureGpuWindow *>( texture );
 
             OGRE_ASSERT_LOW( mWindowImageViews.empty() && "Only one window can be used as target" );
             const size_t numSurfaces = textureVulkan->getWindowNumSurfaces();
             mWindowImageViews.resize( numSurfaces );
             for( size_t surfIdx = 0u; surfIdx < numSurfaces; ++surfIdx )
             {
-                imgViewCreateInfo.image = textureVulkan->getWindowFinalTextureName( surfIdx );
-                vkCreateImageView( mQueue->mDevice, &imgViewCreateInfo, 0, &mWindowImageViews[surfIdx] );
+                texName = textureVulkan->getWindowFinalTextureName( surfIdx );
+                mWindowImageViews[surfIdx] = texture->_createView(
+                    texture->getPixelFormat(), mipLevel, 1u, slice, false, false, 1u, texName );
             }
         }
 
-        return retVal;
+        if( resolveTex )
+        {
+            resolveAttachRefs[vkIdx].attachment = currAttachmIdx;
+            resolveAttachRefs[vkIdx].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            ++currAttachmIdx;
+        }
+        else
+        {
+            colourAttachRefs[vkIdx].attachment = currAttachmIdx;
+            colourAttachRefs[vkIdx].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            ++currAttachmIdx;
+
+            // Now repeat with the resolve texture (if applies)
+            setupColourAttachment( idx, attachments, currAttachmIdx, colourAttachRefs, resolveAttachRefs,
+                                   vkIdx, true );
+        }
     }
     //-----------------------------------------------------------------------------------
     VkImageView VulkanRenderPassDescriptor::setupDepthAttachment( VkAttachmentDescription &attachment )
@@ -327,27 +391,11 @@ namespace Ogre
         attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
         attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-        VkImageViewCreateInfo imgViewCreateInfo;
-        makeVkStruct( imgViewCreateInfo, VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO );
-        imgViewCreateInfo.viewType = VulkanMappings::get( mDepth.texture->getTextureType() );
-        imgViewCreateInfo.format = attachment.format;
-        imgViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-        if( mStencil.texture )
-            imgViewCreateInfo.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
-        imgViewCreateInfo.subresourceRange.baseMipLevel = mDepth.mipLevel;
-        imgViewCreateInfo.subresourceRange.levelCount = 1u;
-        imgViewCreateInfo.subresourceRange.baseArrayLayer = mDepth.slice;
-        imgViewCreateInfo.subresourceRange.layerCount = 1u;
-
-        VkImageView retVal = 0;
-
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( mDepth.texture ) );
-        VulkanTextureGpu *textureVulkan = static_cast<VulkanTextureGpu *>( mDepth.texture );
-
-        imgViewCreateInfo.image = textureVulkan->getFinalTextureName();
-        vkCreateImageView( mQueue->mDevice, &imgViewCreateInfo, 0, &retVal );
-
-        return retVal;
+        VulkanTextureGpu *texture = static_cast<VulkanTextureGpu *>( mDepth.texture );
+        VkImage texName = texture->getFinalTextureName();
+        return texture->_createView( texture->getPixelFormat(), mDepth.mipLevel, 1u, mDepth.slice, false,
+                                     false, 1u, texName );
     }
     //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::updateFbo( void )
@@ -422,57 +470,16 @@ namespace Ogre
             OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( mColour[i].texture ) );
             VulkanTextureGpu *textureVulkan = static_cast<VulkanTextureGpu *>( mColour[i].texture );
 
-            VkImage texName = 0;
-            VkImage resolveTexName = 0;
-
-            if( mColour[i].texture->getSampleDescription().isMultisample() )
-            {
-                VulkanTextureGpu *resolveTexture = 0;
-                if( mColour[i].resolveTexture )
-                {
-                    OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( mColour[i].resolveTexture ) );
-                    resolveTexture = static_cast<VulkanTextureGpu *>( mColour[i].resolveTexture );
-                }
-
-                if( !mColour[i].texture->hasMsaaExplicitResolves() )
-                    texName = textureVulkan->getMsaaFramebufferName();
-                else
-                    texName = textureVulkan->getFinalTextureName();
-
-                if( resolveTexture )
-                    resolveTexName = resolveTexture->getFinalTextureName();
-            }
-            else
-            {
-                texName = textureVulkan->getFinalTextureName();
-            }
-
             if( textureVulkan->isRenderWindowSpecific() )
                 windowAttachmentIdx = attachmentIdx;
 
             mClearValues[attachmentIdx].color =
                 getClearColour( mColour[i].clearColour, mColour[i].texture->getPixelFormat() );
 
-            mImageViews[attachmentIdx] =
-                setupColourAttachment( attachments[attachmentIdx], texName, mColour[i], false );
-            colourAttachRefs[numColourAttachments].attachment = attachmentIdx;
-            colourAttachRefs[numColourAttachments].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            ++attachmentIdx;
-            if( resolveTexName )
-            {
-                mImageViews[attachmentIdx] = setupColourAttachment( attachments[attachmentIdx],
-                                                                    resolveTexName, mColour[i], true );
-                resolveAttachRefs[numColourAttachments].attachment = attachmentIdx;
-                resolveAttachRefs[numColourAttachments].layout =
-                    VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                ++attachmentIdx;
+            setupColourAttachment( i, attachments, attachmentIdx, colourAttachRefs, resolveAttachRefs,
+                                   numColourAttachments, false );
+            if( resolveAttachRefs[numColourAttachments].attachment != VK_ATTACHMENT_UNUSED )
                 usesResolveAttachments = true;
-            }
-            else
-            {
-                resolveAttachRefs[numColourAttachments].attachment = VK_ATTACHMENT_UNUSED;
-                resolveAttachRefs[numColourAttachments].layout = VK_IMAGE_LAYOUT_UNDEFINED;
-            }
             ++numColourAttachments;
 
             sanitizeMsaaResolve( i );
@@ -485,7 +492,7 @@ namespace Ogre
             else
             {
                 mClearValues[attachmentIdx].depthStencil.depth =
-                    static_cast<float>( 1.0 - mDepth.clearDepth );
+                    static_cast<float>( Real( 1.0 ) - mDepth.clearDepth );
             }
             mClearValues[attachmentIdx].depthStencil.stencil = mStencil.clearStencil;
 
@@ -539,13 +546,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::destroyFbo( void )
     {
-        mQueue->mOwnerDevice->stall();
+        VaoManager *vaoManager = mQueue->getVaoManager();
 
         {
             FastArray<VkFramebuffer>::const_iterator itor = mFramebuffers.begin();
             FastArray<VkFramebuffer>::const_iterator endt = mFramebuffers.end();
             while( itor != endt )
-                vkDestroyFramebuffer( mQueue->mDevice, *itor++, 0 );
+                delayed_vkDestroyFramebuffer( vaoManager, mQueue->mDevice, *itor++, 0 );
             mFramebuffers.clear();
         }
 
@@ -554,7 +561,7 @@ namespace Ogre
             FastArray<VkImageView>::const_iterator endt = mWindowImageViews.end();
 
             while( itor != endt )
-                vkDestroyImageView( mQueue->mDevice, *itor++, 0 );
+                delayed_vkDestroyImageView( vaoManager, mQueue->mDevice, *itor++, 0 );
             mWindowImageViews.clear();
         }
 
@@ -562,7 +569,7 @@ namespace Ogre
         {
             if( mImageViews[i] )
             {
-                vkDestroyImageView( mQueue->mDevice, mImageViews[i], 0 );
+                delayed_vkDestroyImageView( vaoManager, mQueue->mDevice, mImageViews[i], 0 );
                 mImageViews[i] = 0;
             }
         }

@@ -139,8 +139,8 @@ namespace Ogre
          * That's what would happen without validation layers, so we'll
          * keep that behavior here.
          */
-        // return false;
-        return true;
+         return false;
+        //return true;
     }
 
     //-------------------------------------------------------------------------
