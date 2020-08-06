@@ -173,6 +173,8 @@ namespace Ogre {
         /** Gets whether matrix packed in column-major order. */
         bool getColumnMajorMatrices(void) const { return mColumnMajorMatrices; }
 
+        virtual void setReplaceVersionMacro( bool bReplace );
+
         /// Overridden from GpuProgram
         GpuProgramParametersSharedPtr createParameters(void);
 
@@ -219,6 +221,8 @@ namespace Ogre {
         static CmdInputOperationType msInputOperationTypeCmd;
         static CmdOutputOperationType msOutputOperationTypeCmd;
         static CmdMaxOutputVertices msMaxOutputVerticesCmd;
+
+        void replaceVersionMacros( void );
 
         /** Internal load implementation, must be implemented by subclasses.
          */
@@ -279,6 +283,8 @@ namespace Ogre {
         String mPreprocessorDefines;
         /// Matrix in column major pack format?
         bool mColumnMajorMatrices;
+
+        bool mReplaceVersionMacro;
 
         typedef vector< GLSLShader* >::type GLSLShaderContainer;
         typedef GLSLShaderContainer::iterator GLSLShaderContainerIterator;

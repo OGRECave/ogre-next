@@ -66,6 +66,7 @@ namespace Ogre {
         , mGLProgramHandle(0)
         , mCompiled(0)
         , mColumnMajorMatrices(true)
+        , mReplaceVersionMacro(false)
     {
         if (createParamDictionary("GLSLShader"))
         {
@@ -131,17 +132,35 @@ namespace Ogre {
         }
     }
 
+    //-----------------------------------------------------------------------
+    /**
+    @brief GLSLShader::replaceVersionMacros
+        Finds the first occurrence of "ogre_glsl_ver_xxx" and only leaves it with "xxx"
+    */
+    void GLSLShader::replaceVersionMacros( void )
+    {
+        const String matchStr = "ogre_glsl_ver_";
+        const size_t pos = mSource.find( matchStr );
+        if( pos != String::npos && mSource.size() - pos >= 3u )
+            mSource.erase( pos, matchStr.size() );
+    }
 
     void GLSLShader::loadFromSource(void)
     {
         // Preprocess the GLSL shader in order to get a clean source
         CPreprocessor cpp;
 
+        if( mReplaceVersionMacro )
+            replaceVersionMacros();
+
         // Mask out vulkan_layout() macros
         size_t unusedVal = 0;
         const String preamble =
             "#define vulkan_layout(x)\n"
-            "#define vulkan( x )\n";
+            "#define vulkan( x )\n"
+            "#define gl_uniform uniform\n"
+            "#define textureCube samplerCube\n"
+            "#define vkSamplerCube( a, b ) a\n";
         cpp.Parse( preamble.c_str(), preamble.size(), unusedVal );
 
         // Pass all user-defined macros to preprocessor
@@ -561,6 +580,7 @@ namespace Ogre {
         return language;
     }
 
+    void GLSLShader::setReplaceVersionMacro( bool bReplace ) { mReplaceVersionMacro = bReplace; }
 
     Ogre::GpuProgramParametersSharedPtr GLSLShader::createParameters(void)
     {

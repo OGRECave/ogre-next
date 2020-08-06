@@ -422,10 +422,7 @@ namespace Ogre
         mRootLayout = vulkanProgramManager->getRootLayout( rootLayout );
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::setReplaceVersionMacro( bool bReplace )
-    {
-        mReplaceVersionMacro = bReplace;
-    }
+    void VulkanProgram::setReplaceVersionMacro( bool bReplace ) { mReplaceVersionMacro = bReplace; }
     //-----------------------------------------------------------------------
     bool VulkanProgram::compile( const bool checkErrors )
     {
