@@ -88,6 +88,9 @@ namespace Ogre
         virtual void destroy( void );
 
         void _setDevice( VulkanDevice *device );
+        virtual void _initialize( TextureGpuManager *textureGpuManager );
+        virtual void _initialize( TextureGpuManager *textureGpuManager,
+                                  const NameValuePairList *miscParams ) = 0;
 
         /// Returns null if getImageAcquiredSemaphore has already been called during this frame
         VkSemaphore getImageAcquiredSemaphore( void );

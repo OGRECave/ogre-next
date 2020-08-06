@@ -4,29 +4,28 @@
 #include "OgreVulkanTextureGpu.h"
 #include "OgreVulkanTextureGpuManager.h"
 
-#include "OgreException.h"
-#include "OgreTextureGpuListener.h"
-#include "OgreWindowEventUtilities.h"
-#include "OgrePixelFormatGpuUtils.h"
 #include "OgreDepthBuffer.h"
-#include "OgreVulkanUtils.h"
+#include "OgreException.h"
 #include "OgreLogManager.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreTextureGpuListener.h"
+#include "OgreVulkanUtils.h"
+#include "OgreWindowEventUtilities.h"
 #define VK_USE_PLATFORM_WIN32_KHR
 #include <windows.h>
-#include "vulkan/vulkan_win32.h"
 #include "vulkan/vulkan.h"
+#include "vulkan/vulkan_win32.h"
 
 #include <sstream>
 
 namespace Ogre
 {
-    #define _MAX_CLASS_NAME_ 128
+#define _MAX_CLASS_NAME_ 128
     bool OgreVulkanWin32Window::mClassRegistered = false;
 
     OgreVulkanWin32Window::OgreVulkanWin32Window( FastArray<const char *> &inOutRequiredInstanceExts,
                                                   const String &title, uint32 width, uint32 height,
-                                                  bool fullscreenMode,
-                                                  const NameValuePairList *_miscParams ) :
+                                                  bool fullscreenMode ) :
         VulkanWindow( title, width, height, fullscreenMode ),
         mHwnd( 0 ),
         mHDC( 0 ),
@@ -43,8 +42,7 @@ namespace Ogre
         mIsTopLevel( true ),
         mMsaaCount( 1u ),
         mWindowedWinStyle( 0 ),
-        mFullscreenWinStyle( 0 ),
-        mMiscParams( _miscParams )
+        mFullscreenWinStyle( 0 )
     {
         inOutRequiredInstanceExts.push_back( VK_KHR_WIN32_SURFACE_EXTENSION_NAME );
     }
@@ -90,7 +88,8 @@ namespace Ogre
         }
     }
 
-    void OgreVulkanWin32Window::createWindow( const String &windowName, uint32 width, uint32 height )
+    void OgreVulkanWin32Window::createWindow( const String &windowName, uint32 width, uint32 height,
+                                              const NameValuePairList *miscParams )
     {
         mClosed = false;
         mColourDepth = mRequestedFullscreenMode ? 32 : GetDeviceCaps( GetDC( 0 ), BITSPIXEL );
@@ -110,39 +109,39 @@ namespace Ogre
         uint32 windowWidth = width;
         uint32 windowHeight = height;
 
-        if( mMiscParams )
+        if( miscParams )
         {
             // Get variable-length params
             NameValuePairList::const_iterator opt;
-            NameValuePairList::const_iterator end = mMiscParams->end();
+            NameValuePairList::const_iterator end = miscParams->end();
 
-            opt = mMiscParams->find( "title" );
+            opt = miscParams->find( "title" );
             if( opt != end )
                 mTitle = opt->second;
-            opt = mMiscParams->find( "left" );
+            opt = miscParams->find( "left" );
             if( opt != end )
                 left = StringConverter::parseInt( opt->second );
-            opt = mMiscParams->find( "top" );
+            opt = miscParams->find( "top" );
             if( opt != end )
                 top = StringConverter::parseInt( opt->second );
-            opt = mMiscParams->find( "vsync" );
+            opt = miscParams->find( "vsync" );
             if( opt != end )
                 mVSync = StringConverter::parseBool( opt->second );
-            opt = mMiscParams->find( "hidden" );
+            opt = miscParams->find( "hidden" );
             if( opt != end )
                 hidden = StringConverter::parseBool( opt->second );
-            opt = mMiscParams->find( "vsyncInterval" );
+            opt = miscParams->find( "vsyncInterval" );
             if( opt != end )
                 mVSyncInterval = StringConverter::parseUnsignedInt( opt->second );
-            opt = mMiscParams->find( "FSAA" );
+            opt = miscParams->find( "FSAA" );
             if( opt != end )
                 mRequestedSampleDescription.parseString( opt->second );
-            opt = mMiscParams->find( "gamma" );
+            opt = miscParams->find( "gamma" );
             if( opt != end )
                 mHwGamma = StringConverter::parseBool( opt->second );
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-            opt = mMiscParams->find( "stereoMode" );
+            opt = miscParams->find( "stereoMode" );
             if( opt != end )
             {
                 StereoModeType stereoMode = StringConverter::parseStereoMode( opt->second );
@@ -150,7 +149,7 @@ namespace Ogre
                     mStereoEnabled = true;
             }
 #endif
-            opt = mMiscParams->find( "externalWindowHandle" );
+            opt = miscParams->find( "externalWindowHandle" );
             if( opt != end )
             {
                 mHwnd = (HWND)StringConverter::parseSizeT( opt->second );
@@ -162,22 +161,21 @@ namespace Ogre
                 }
             }
 
-
             // window border style
-            opt = mMiscParams->find( "border" );
-            if( opt != mMiscParams->end() )
+            opt = miscParams->find( "border" );
+            if( opt != miscParams->end() )
                 border = opt->second;
             // set outer dimensions?
-            opt = mMiscParams->find( "outerDimensions" );
-            if( opt != mMiscParams->end() )
+            opt = miscParams->find( "outerDimensions" );
+            if( opt != miscParams->end() )
                 outerSize = StringConverter::parseBool( opt->second );
 
             // only available with fullscreen
-            opt = mMiscParams->find( "displayFrequency" );
+            opt = miscParams->find( "displayFrequency" );
             if( opt != end )
                 mFrequencyNumerator = StringConverter::parseUnsignedInt( opt->second );
 
-            opt = mMiscParams->find( "colourDepth" );
+            opt = miscParams->find( "colourDepth" );
             if( opt != end )
             {
                 mColourDepth = StringConverter::parseUnsignedInt( opt->second );
@@ -190,22 +188,22 @@ namespace Ogre
             }
 
             // incompatible with fullscreen
-            opt = mMiscParams->find( "parentWindowHandle" );
+            opt = miscParams->find( "parentWindowHandle" );
             if( opt != end )
                 parentHwnd = (HWND)StringConverter::parseSizeT( opt->second );
 
             // monitor index
-            opt = mMiscParams->find( "monitorIndex" );
+            opt = miscParams->find( "monitorIndex" );
             if( opt != end )
                 monitorIndex = StringConverter::parseInt( opt->second );
 
             // monitor handle
-            opt = mMiscParams->find( "monitorHandle" );
+            opt = miscParams->find( "monitorHandle" );
             if( opt != end )
                 hMonitor = (HMONITOR)StringConverter::parseInt( opt->second );
 
             // enable double click messages
-            opt = mMiscParams->find( "enableDoubleClick" );
+            opt = miscParams->find( "enableDoubleClick" );
             if( opt != end )
                 enableDoubleClick = StringConverter::parseBool( opt->second );
         }
@@ -402,8 +400,8 @@ namespace Ogre
 
             // Pass pointer to self as WM_CREATE parameter
             mHwnd = CreateWindowEx( dwStyleEx, "OgreVulkanWindow", mTitle.c_str(),
-                                    getWindowStyle( mRequestedFullscreenMode ), mLeft, mTop,
-                                    windowWidth, windowHeight, parentHwnd, 0, hInstance, this );
+                                    getWindowStyle( mRequestedFullscreenMode ), mLeft, mTop, windowWidth,
+                                    windowHeight, parentHwnd, 0, hInstance, this );
 
             WindowEventUtilities::_addRenderWindow( this );
 
@@ -417,18 +415,20 @@ namespace Ogre
         createInfo.hwnd = mHwnd;
         createInfo.hinstance = hInstance;
 
-        VkBool32 presentationSupportError = vkGetPhysicalDeviceWin32PresentationSupportKHR( mDevice->mPhysicalDevice,
-                                                        mDevice->mGraphicsQueue.mFamilyIdx );
+        VkBool32 presentationSupportError = vkGetPhysicalDeviceWin32PresentationSupportKHR(
+            mDevice->mPhysicalDevice, mDevice->mGraphicsQueue.mFamilyIdx );
 
         // if( !presentationSupportError )
         // {
-        //     OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Vulkan not supported on given X11 window",
+        //     OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Vulkan not supported on given X11
+        //     window",
         //                  "OgreVulkanWin32Window::_initialize" );
         // }
 
         VkSurfaceKHR surface;
 
-        VkResult createSurfaceResult = vkCreateWin32SurfaceKHR( mDevice->mInstance, &createInfo, nullptr, &surface );
+        VkResult createSurfaceResult =
+            vkCreateWin32SurfaceKHR( mDevice->mInstance, &createInfo, nullptr, &surface );
 
         // if( createSurfaceResult != VK_SUCCESS )
         // {
@@ -475,20 +475,17 @@ namespace Ogre
         }
     }
 
-    bool OgreVulkanWin32Window::isHidden() const
-    { return false;
-    }
+    bool OgreVulkanWin32Window::isHidden() const { return false; }
 
-    void OgreVulkanWin32Window::_initialize( TextureGpuManager *textureGpuManager )
+    void OgreVulkanWin32Window::_initialize( TextureGpuManager *textureGpuManager,
+                                             const NameValuePairList *miscParams )
     {
         destroy();
 
         mFocused = true;
         mClosed = false;
 
-        createWindow( mTitle, mRequestedWidth, mRequestedHeight );
-
-        
+        createWindow( mTitle, mRequestedWidth, mRequestedHeight, miscParams );
 
         VulkanTextureGpuManager *textureManager =
             static_cast<VulkanTextureGpuManager *>( textureGpuManager );
@@ -503,15 +500,13 @@ namespace Ogre
         // if( mColourDepth == 16u )
         //     mTexture->setPixelFormat( PFG_B5G5R5A1_UNORM );
         // else
-            mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
+        mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
         mDepthBuffer->setPixelFormat( findDepthFormat( mDevice->mPhysicalDevice ) );
         if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
             mStencilBuffer = mDepthBuffer;
 
         // mTexture->setMsaa( mMsaaCount );
         // mDepthBuffer->setMsaa( mMsaaCount );
-
-        
 
         if( mDepthBuffer )
         {

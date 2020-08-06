@@ -60,7 +60,8 @@ namespace Ogre
 
         void initConnection( void );
 
-        void createWindow( const String &windowName, uint32 width, uint32 height );
+        void createWindow( const String &windowName, uint32 width, uint32 height,
+                           const NameValuePairList *miscParams );
 
     public:
         VulkanXcbWindow( FastArray<const char *> &inOutRequiredInstanceExts, const String &title,
@@ -68,7 +69,8 @@ namespace Ogre
         ~VulkanXcbWindow();
 
         virtual void destroy( void );
-        virtual void _initialize( TextureGpuManager *textureGpuManager );
+        virtual void _initialize( TextureGpuManager *textureGpuManager,
+                                  const NameValuePairList *miscParams );
 
         virtual void reposition( int32 left, int32 top );
         virtual void requestResolution( uint32 width, uint32 height );

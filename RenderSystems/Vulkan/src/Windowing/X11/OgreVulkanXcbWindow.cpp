@@ -36,8 +36,10 @@ THE SOFTWARE.
 
 #include "OgreException.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreString.h"
 #include "OgreWindowEventUtilities.h"
 
+#include <X11/Xlib-xcb.h>
 #include <xcb/xcb.h>
 #include "vulkan/vulkan_core.h"
 #include "vulkan/vulkan_xcb.h"
@@ -127,16 +129,49 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanXcbWindow::_initialize( TextureGpuManager *textureGpuManager )
+    void VulkanXcbWindow::_initialize( TextureGpuManager *textureGpuManager,
+                                       const NameValuePairList *miscParams )
     {
         destroy();
 
         mFocused = true;
         mClosed = false;
 
-        initConnection();  // TODO: Connection must be shared by ALL windows
-        createWindow( mTitle, mRequestedWidth, mRequestedHeight );
-        setHidden( false );
+        NameValuePairList::const_iterator opt;
+        NameValuePairList::const_iterator end = miscParams->end();
+
+        opt = miscParams->find( "SDL2x11" );
+        if( opt != end )
+        {
+            struct SDLx11
+            {
+                Display *display; /**< The X11 display */
+                ::Window window;  /**< The X11 window */
+            };
+
+            SDLx11 *sdlHandles =
+                reinterpret_cast<SDLx11 *>( StringConverter::parseUnsignedLong( opt->second ) );
+            mConnection = XGetXCBConnection( sdlHandles->display );
+            mXcbWindow = (xcb_window_t)sdlHandles->window;
+
+            XWindowAttributes windowAttrib;
+            XGetWindowAttributes( sdlHandles->display, sdlHandles->window, &windowAttrib );
+
+            int scr = DefaultScreen( sdlHandles->display );
+
+            const xcb_setup_t *setup = xcb_get_setup( mConnection );
+            xcb_screen_iterator_t iter = xcb_setup_roots_iterator( setup );
+            while( scr-- > 0 )
+                xcb_screen_next( &iter );
+
+            mScreen = iter.data;
+        }
+        else
+        {
+            initConnection();  // TODO: Connection must be shared by ALL windows
+            createWindow( mTitle, mRequestedWidth, mRequestedHeight, miscParams );
+            setHidden( false );
+        }
 
         PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR get_xcb_presentation_support =
             (PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR)vkGetInstanceProcAddr(
@@ -202,7 +237,8 @@ namespace Ogre
         mScreen = iter.data;
     }
     //-------------------------------------------------------------------------
-    void VulkanXcbWindow::createWindow( const String &windowName, uint32 width, uint32 height )
+    void VulkanXcbWindow::createWindow( const String &windowName, uint32 width, uint32 height,
+                                        const NameValuePairList *miscParams )
     {
         mXcbWindow = xcb_generate_id( mConnection );
 

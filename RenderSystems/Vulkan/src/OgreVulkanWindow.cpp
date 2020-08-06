@@ -296,6 +296,13 @@ namespace Ogre
         mDevice = device;
     }
     //-------------------------------------------------------------------------
+    void VulkanWindow::_initialize( TextureGpuManager *textureGpuManager )
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
+                     "Call _initialize( TextureGpuManager*, const NameValuePairList * ) instead",
+                     "VulkanWindow::_initialize" );
+    }
+    //-------------------------------------------------------------------------
     VkSemaphore VulkanWindow::getImageAcquiredSemaphore( void )
     {
         OGRE_ASSERT_LOW( mSwapchainStatus != SwapchainReleased );
