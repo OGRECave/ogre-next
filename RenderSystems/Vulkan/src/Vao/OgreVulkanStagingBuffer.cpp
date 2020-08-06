@@ -293,8 +293,8 @@ namespace Ogre
         region.srcOffset = source->_getFinalBufferStart() * source->getBytesPerElement() + srcOffset;
         region.dstOffset = mInternalBufferStart + freeRegionOffset;
         region.size = srcLength;
-        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, mVboName,
-                         bufferInterface->getVboName(), 1u, &region );
+        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, bufferInterface->getVboName(),
+                         mVboName, 1u, &region );
 
         return freeRegionOffset;
     }
