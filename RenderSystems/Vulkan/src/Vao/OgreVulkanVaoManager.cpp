@@ -1200,14 +1200,10 @@ namespace Ogre
         }
 
         VaoManager::_update();
+        // Undo the increment from VaoManager::_update. This is done by _notifyNewCommandBuffer
+        --mFrameCount;
 
         mUsedDescriptorPools.clear();
-
-        if( !mFenceFlushed )
-        {
-            // Undo the increment from VaoManager::_update. We'll do it later
-            --mFrameCount;
-        }
 
         uint64 currentTimeMs = mTimer->getMilliseconds();
 
@@ -1299,7 +1295,6 @@ namespace Ogre
             // twice in a row without completing a full frame.
             // Without this, waitForTailFrameToFinish becomes unsafe.
             mDevice->commitAndNextCommandBuffer( false );
-            mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
         }
 
         mFenceFlushed = false;
