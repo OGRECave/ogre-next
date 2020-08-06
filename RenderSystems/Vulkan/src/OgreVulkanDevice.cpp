@@ -284,7 +284,9 @@ namespace Ogre
         }
 
         extensions.push_back( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         extensions.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
+#endif
 
         VkDeviceCreateInfo createInfo;
         makeVkStruct( createInfo, VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO );
