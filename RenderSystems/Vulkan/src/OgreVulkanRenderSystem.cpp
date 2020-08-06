@@ -1494,13 +1494,6 @@ namespace Ogre
 
     void VulkanRenderSystem::_render( const v1::RenderOperation &op )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " * _render: RenderOperation " ) +
-                                    StringConverter::toString( op.operationType ) );
-        }
-
         flushRootLayout();
 
         // Call super class.
@@ -1558,17 +1551,11 @@ namespace Ogre
             } while( updatePassIterationRenderState() );
         }
     }
-
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::bindGpuProgramParameters( GpuProgramType gptype,
                                                        GpuProgramParametersSharedPtr params,
                                                        uint16 variabilityMask )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " * bindGpuProgramParameters:  " ) );
-        }
         VulkanProgram *shader = 0;
         switch( gptype )
         {
