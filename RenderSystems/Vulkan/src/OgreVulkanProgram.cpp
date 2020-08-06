@@ -88,6 +88,7 @@ namespace Ogre
         mRootLayout( 0 ),
         mShaderModule( 0 ),
         mNumSystemGenVertexInputs( 0u ),
+        mReplaceVersionMacro( false ),
         mCompiled( false ),
         mConstantsBytesToWrite( 0 )
     {
@@ -276,6 +277,23 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void VulkanProgram::loadFromSource( void ) { compile( true ); }
     //-----------------------------------------------------------------------
+    /**
+    @brief VulkanProgram::replaceVersionMacros
+        Finds the first occurrence of "ogre_glsl_ver_xxx" and replaces it with "450"
+    */
+    void VulkanProgram::replaceVersionMacros( void )
+    {
+        const String matchStr = "ogre_glsl_ver_";
+        const size_t pos = mSource.find( matchStr );
+        if( pos != String::npos && mSource.size() - pos >= 3u )
+        {
+            mSource.erase( pos, matchStr.size() );
+            mSource[pos + 0] = '4';
+            mSource[pos + 1] = '5';
+            mSource[pos + 2] = '0';
+        }
+    }
+    //-----------------------------------------------------------------------
     struct SemanticMacro
     {
         const char *nameStr;
@@ -404,6 +422,11 @@ namespace Ogre
         mRootLayout = vulkanProgramManager->getRootLayout( rootLayout );
     }
     //-----------------------------------------------------------------------
+    void VulkanProgram::setReplaceVersionMacro( bool bReplace )
+    {
+        mReplaceVersionMacro = bReplace;
+    }
+    //-----------------------------------------------------------------------
     bool VulkanProgram::compile( const bool checkErrors )
     {
         mCompiled = false;
@@ -426,9 +449,14 @@ namespace Ogre
 
         if( !mCompileError )
         {
+            if( mReplaceVersionMacro )
+                replaceVersionMacros();
+
             String preamble =
                 "#define vulkan_layout layout\n"
-                "#define vulkan( x ) x\n";
+                "#define vulkan( x ) x\n"
+                "#define gl_uniform\n"
+                "#define vkSamplerCube samplerCube\n";
 
             mRootLayout->generateRootLayoutMacros( mType, preamble );
             if( mType == GPT_VERTEX_PROGRAM )

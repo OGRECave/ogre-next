@@ -4973,6 +4973,8 @@ namespace Ogre{
         prog->setPoseAnimationIncluded(0);
         prog->setSkeletalAnimationIncluded(false);
         prog->setVertexTextureFetchRequired(false);
+        prog->setPrefabRootLayout( PrefabRootLayout::Standard );
+        prog->setReplaceVersionMacro( true );
         prog->_notifyOrigin(obj->file);
 
         // Set the custom parameters

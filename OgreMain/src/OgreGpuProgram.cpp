@@ -53,6 +53,7 @@ namespace Ogre
     GpuProgram::CmdManualNamedConstsFile GpuProgram::msManNamedConstsFileCmd;
     GpuProgram::CmdAdjacency GpuProgram::msAdjacencyCmd;
     GpuProgram::CmdComputeGroupDims GpuProgram::msComputeGroupDimsCmd;
+    GpuProgram::CmdRootLayout GpuProgram::msRootLayout;
     
 
     //-----------------------------------------------------------------------------
@@ -86,6 +87,42 @@ namespace Ogre
 
         rootLayout.validate( mName );
     }
+    //-----------------------------------------------------------------------------
+    void GpuProgram::setPrefabRootLayout( const PrefabRootLayout::PrefabRootLayout &prefab )
+    {
+        RootLayout rootLayout;
+
+        DescBindingRange *descBindingRange = rootLayout.mDescBindingRanges[0];
+
+        uint16 maxTextures = 4u;
+        if( prefab == PrefabRootLayout::High )
+            maxTextures = 8u;
+        if( prefab == PrefabRootLayout::Max )
+            maxTextures = 32u;
+
+        descBindingRange[DescBindingTypes::Texture].start = 0u;
+        descBindingRange[DescBindingTypes::Texture].end = maxTextures;
+        descBindingRange[DescBindingTypes::Sampler].start = 0u;
+        descBindingRange[DescBindingTypes::Sampler].end = maxTextures;
+
+        if( prefab == PrefabRootLayout::Standard || prefab == PrefabRootLayout::High )
+        {
+            rootLayout.mParamsBuffStages = ( 1u << VertexShader ) | ( 1u << PixelShader );
+            descBindingRange[DescBindingTypes::ParamBuffer].start = 0u;
+            descBindingRange[DescBindingTypes::ParamBuffer].end = 2u;
+        }
+        else if( prefab == PrefabRootLayout::Max )
+        {
+            for( size_t i = 0u; i < NumShaderTypes; ++i )
+                rootLayout.mParamsBuffStages |= 1u << i;
+            descBindingRange[DescBindingTypes::ParamBuffer].start = 0u;
+            descBindingRange[DescBindingTypes::ParamBuffer].end = NumShaderTypes;
+        }
+
+        setRootLayout( mType, rootLayout );
+    }
+    //-----------------------------------------------------------------------------
+    void GpuProgram::setReplaceVersionMacro( bool bReplace ) {}
     //-----------------------------------------------------------------------------
     void GpuProgram::setSyntaxCode(const String& syntax)
     {
@@ -394,6 +431,10 @@ namespace Ogre
             ParameterDef("compute_group_dimensions",
                          "The number of process groups created by this compute program.", PT_VECTOR3),
             &msComputeGroupDimsCmd);
+        dict->addParameter(
+            ParameterDef("root_layout",
+                         "Accepted values are standard, high, max. See PrefabRootLayout", PT_STRING),
+            &msRootLayout);
             
     }
 
@@ -571,6 +612,21 @@ namespace Ogre
     {
         GpuProgram* t = static_cast<GpuProgram*>(target);
         t->setComputeGroupDimensions(StringConverter::parseVector3(val));
+    }
+    //-----------------------------------------------------------------------
+    String GpuProgram::CmdRootLayout::doGet(const void* target) const
+    {
+        return "Cannot retrieve PrefabRootLayout";
+    }
+    void GpuProgram::CmdRootLayout::doSet(void* target, const String& val)
+    {
+        GpuProgram* t = static_cast<GpuProgram*>(target);
+        if( val == "high" )
+            t->setPrefabRootLayout( PrefabRootLayout::High );
+        else if( val == "max" )
+            t->setPrefabRootLayout( PrefabRootLayout::Max );
+        else if( val == "standard" )
+            t->setPrefabRootLayout( PrefabRootLayout::Standard );
     }
 }
 

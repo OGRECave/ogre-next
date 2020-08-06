@@ -13,6 +13,15 @@ fragment_program Ogre/DPSM/CubeToDpsm_Colour_ps_GLSL glsl : Ogre/DPSM/CubeToDpsm
 	preprocessor_defines OUTPUT_TO_COLOUR=1
 }
 
+fragment_program Ogre/DPSM/CubeToDpsm_ps_VK glslvk
+{
+	source CubeToDpsm_ps.glsl
+}
+fragment_program Ogre/DPSM/CubeToDpsm_Colour_ps_VK glslvk : Ogre/DPSM/CubeToDpsm_ps_VK
+{
+	preprocessor_defines OUTPUT_TO_COLOUR=1
+}
+
 fragment_program Ogre/DPSM/CubeToDpsm_ps_GLSLES glsles
 {
 	source CubeToDpsm_ps.glsles
@@ -51,6 +60,7 @@ fragment_program Ogre/DPSM/CubeToDpsm_ps unified
 {
 	delegate Ogre/DPSM/CubeToDpsm_ps_GLSL
 	delegate Ogre/DPSM/CubeToDpsm_ps_GLSLES
+	delegate Ogre/DPSM/CubeToDpsm_ps_VK
 	delegate Ogre/DPSM/CubeToDpsm_ps_HLSL
 	delegate Ogre/DPSM/CubeToDpsm_ps_Metal
 }
@@ -58,6 +68,7 @@ fragment_program Ogre/DPSM/CubeToDpsm_Colour_ps unified
 {
 	delegate Ogre/DPSM/CubeToDpsm_Colour_ps_GLSL
 	delegate Ogre/DPSM/CubeToDpsm_Colour_ps_GLSLES
+	delegate Ogre/DPSM/CubeToDpsm_Colour_ps_VK
 	delegate Ogre/DPSM/CubeToDpsm_Colour_ps_HLSL
 	delegate Ogre/DPSM/CubeToDpsm_Colour_ps_Metal
 }

@@ -1,7 +1,9 @@
-#version 330
+#version ogre_glsl_ver_330
 
-uniform samplerCube depthTexture;
+vulkan_layout( ogre_t0 ) uniform textureCube depthTexture;
+vulkan( layout( ogre_s0 ) uniform sampler cubeSampler );
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
@@ -10,7 +12,8 @@ in block
 in vec4 gl_FragCoord;
 //out float gl_FragDepth;
 
-#if OUTPUT_TO_COLOUR
+#ifdef OUTPUT_TO_COLOUR
+	vulkan_layout( location = 0 )
 	out float fragColour;
 #endif
 
@@ -24,9 +27,9 @@ void main()
 
 	cubeDir.z = inPs.uv0.x < 0.5 ? cubeDir.z : -cubeDir.z;
 
-	float depthValue = textureLod( depthTexture, cubeDir.xyz, 0 ).x;
+	float depthValue = textureLod( vkSamplerCube( depthTexture, cubeSampler ), cubeDir.xyz, 0 ).x;
 
-#if OUTPUT_TO_COLOUR
+#ifdef OUTPUT_TO_COLOUR
 	fragColour = depthValue;
 #else
 	gl_FragDepth = depthValue;

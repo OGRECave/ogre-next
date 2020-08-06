@@ -91,6 +91,8 @@ namespace Ogre
         /// Sets the preprocessor defines use to compile the program.
         const String &getPreprocessorDefines( void ) const { return mPreprocessorDefines; }
 
+        virtual void setReplaceVersionMacro( bool bReplace );
+
         /// Overridden from GpuProgram
         const String &getLanguage( void ) const;
         /// Overridden from GpuProgram
@@ -133,6 +135,7 @@ namespace Ogre
          */
         void loadFromSource( void );
 
+        void replaceVersionMacros( void );
         void addVertexSemanticsToPreamble( String &inOutPreamble ) const;
         void addPreprocessorToPreamble( String &inOutPreamble ) const;
 
@@ -167,6 +170,8 @@ namespace Ogre
 
         FastArray<VkVertexInputAttributeDescription> mVertexInputs;
         uint8 mNumSystemGenVertexInputs;  // System-generated inputs like gl_VertexIndex
+
+        bool mReplaceVersionMacro;
 
         /// Flag indicating if shader object successfully compiled
         bool mCompiled;

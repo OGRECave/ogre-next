@@ -41,6 +41,8 @@ THE SOFTWARE.
 
 #include "OgreException.h"
 
+#define TODO_implement__autogenerateMipmaps
+
 namespace Ogre
 {
     static const bool c_bSkipAliasable = true;
@@ -282,6 +284,10 @@ namespace Ogre
                 vkCreateImageView( device->mDevice, &imageViewCi, 0, &mBlankTexture[i].defaultView );
             checkVkResult( result, "vkCreateImageView" );
         }
+
+        TODO_implement__autogenerateMipmaps;
+        mDefaultMipmapGen = DefaultMipmapGen::SwMode;
+        mDefaultMipmapGenCubemaps = DefaultMipmapGen::SwMode;
     }
     //-----------------------------------------------------------------------------------
     VulkanTextureGpuManager::~VulkanTextureGpuManager()
