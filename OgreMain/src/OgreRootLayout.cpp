@@ -26,6 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include "OgreStableHeaders.h"
+
 #include "OgreRootLayout.h"
 
 #include "OgreException.h"
