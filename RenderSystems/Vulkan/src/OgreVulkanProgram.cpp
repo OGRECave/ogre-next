@@ -82,7 +82,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     VulkanProgram::VulkanProgram( ResourceManager *creator, const String &name, ResourceHandle handle,
                                   const String &group, bool isManual, ManualResourceLoader *loader,
-                                  VulkanDevice *device ) :
+                                  VulkanDevice *device, String &languageName ) :
         HighLevelGpuProgram( creator, name, handle, group, isManual, loader ),
         mDevice( device ),
         mRootLayout( 0 ),
@@ -104,7 +104,7 @@ namespace Ogre
         }
 
         // Manually assign language now since we use it immediately
-        mSyntaxCode = "glslvk";
+        mSyntaxCode = languageName;
     }
     //---------------------------------------------------------------------------
     VulkanProgram::~VulkanProgram()
@@ -440,7 +440,18 @@ namespace Ogre
 
         // Enable SPIR-V and Vulkan rules when parsing GLSL
         EShMessages messages = ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgVulkanRules );
-
+        if( mSyntaxCode == "hlslvk" )
+        {
+            int ClientInputSemanticsVersion = 110;  // maps to, say, #define VULKAN 100
+            glslang::EShTargetClientVersion VulkanClientVersion = glslang::EShTargetVulkan_1_1;
+            glslang::EShTargetLanguageVersion TargetVersion = glslang::EShTargetSpv_1_1;
+            messages = ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgReadHlsl );
+            shader.setEnvInput( glslang::EShSourceHlsl, stage, glslang::EShClientVulkan, 110 );
+            shader.setEnvClient( glslang::EShClientVulkan, VulkanClientVersion );
+            shader.setEnvTarget( glslang::EShTargetSpv, TargetVersion );
+            shader.setEntryPoint( "main" );
+        }
+            
         const char *sourceCString = mSource.c_str();
         shader.setStrings( &sourceCString, 1 );
 

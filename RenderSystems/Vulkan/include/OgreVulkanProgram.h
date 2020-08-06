@@ -76,7 +76,7 @@ namespace Ogre
 
         VulkanProgram( ResourceManager *creator, const String &name, ResourceHandle handle,
                        const String &group, bool isManual, ManualResourceLoader *loader,
-                       VulkanDevice *device );
+                       VulkanDevice *device, String &languageName );
         virtual ~VulkanProgram();
 
         /// Overridden

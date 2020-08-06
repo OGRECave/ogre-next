@@ -78,6 +78,7 @@ namespace Ogre
         VulkanGpuProgramManager *mShaderManager;
         VulkanProgramFactory *mVulkanProgramFactory0;
         VulkanProgramFactory *mVulkanProgramFactory1;
+        VulkanProgramFactory *mVulkanProgramFactory2;
 
         VkInstance mVkInstance;
 

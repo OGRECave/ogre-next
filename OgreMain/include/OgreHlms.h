@@ -918,6 +918,7 @@ namespace Ogre
         static const IdString Glsl;
         static const IdString Glsles;
         static const IdString Glslvk;
+        static const IdString Hlslvk;
         static const IdString Metal;
         static const IdString GL3Plus;
         static const IdString GLES;

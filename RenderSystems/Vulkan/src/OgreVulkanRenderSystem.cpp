@@ -154,6 +154,7 @@ namespace Ogre
         mShaderManager( 0 ),
         mVulkanProgramFactory0( 0 ),
         mVulkanProgramFactory1( 0 ),
+        mVulkanProgramFactory2( 0 ),
         mVkInstance( 0 ),
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
@@ -216,10 +217,13 @@ namespace Ogre
         OGRE_DELETE mShaderManager;
         mShaderManager = 0;
 
-        OGRE_DELETE mVulkanProgramFactory1;  // LIFO destruction order
+        OGRE_DELETE mVulkanProgramFactory2; // LIFO destruction order
+        mVulkanProgramFactory2 = 0;
+        OGRE_DELETE mVulkanProgramFactory1;
         mVulkanProgramFactory1 = 0;
         OGRE_DELETE mVulkanProgramFactory0;
         mVulkanProgramFactory0 = 0;
+        
 
         OGRE_DELETE mHardwareBufferManager;
         mHardwareBufferManager = 0;
@@ -427,6 +431,7 @@ namespace Ogre
         rsc->setComputeProgramConstantIntCount( 256u );
         rsc->setComputeProgramConstantBoolCount( 256u );
 
+        rsc->addShaderProfile( "hlslvk" );
         rsc->addShaderProfile( "glslvk" );
         rsc->addShaderProfile( "glsl" );
 
@@ -1753,7 +1758,12 @@ namespace Ogre
         mShaderManager = OGRE_NEW VulkanGpuProgramManager( mActiveDevice );
         mVulkanProgramFactory0 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "glslvk", true );
         mVulkanProgramFactory1 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "glsl", false );
+        mVulkanProgramFactory2 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "hlslvk", true );
+#ifdef ENABLE_HLSL
+        HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory2 );
+#else
         HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory0 );
+#endif
         // HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory1 );
 
         mCache = OGRE_NEW VulkanCache( mActiveDevice );

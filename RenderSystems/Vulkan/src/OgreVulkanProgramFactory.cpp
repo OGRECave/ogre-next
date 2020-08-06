@@ -65,7 +65,8 @@ namespace Ogre
                                                        ResourceHandle handle, const String &group,
                                                        bool isManual, ManualResourceLoader *loader )
     {
-        return OGRE_NEW VulkanProgram( creator, name, handle, group, isManual, loader, mDevice );
+        return OGRE_NEW VulkanProgram( creator, name, handle, group, isManual, loader, mDevice,
+                                       mLanguageName );
     }
     //-----------------------------------------------------------------------
     void VulkanProgramFactory::destroy( HighLevelGpuProgram *prog ) { OGRE_DELETE prog; }

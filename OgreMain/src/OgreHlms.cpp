@@ -192,6 +192,7 @@ namespace Ogre
     const IdString HlmsBaseProp::Glsl           = IdString( "glsl" );
     const IdString HlmsBaseProp::Glsles         = IdString( "glsles" );
     const IdString HlmsBaseProp::Glslvk         = IdString( "glslvk" );
+    const IdString HlmsBaseProp::Hlslvk         = IdString( "hlslvk" );
     const IdString HlmsBaseProp::Metal          = IdString( "metal" );
     const IdString HlmsBaseProp::GL3Plus        = IdString( "GL3+" );
     const IdString HlmsBaseProp::GLES           = IdString( "GLES" );
@@ -2186,6 +2187,7 @@ namespace Ogre
                 setProperty( HlmsBaseProp::Glsl,    HlmsBaseProp::Glsl.mHash );
                 setProperty( HlmsBaseProp::Glsles,  HlmsBaseProp::Glsles.mHash );
                 setProperty( HlmsBaseProp::Glslvk,  HlmsBaseProp::Glslvk.mHash );
+                setProperty( HlmsBaseProp::Hlslvk,  HlmsBaseProp::Hlslvk.mHash );
                 setProperty( HlmsBaseProp::Metal,   HlmsBaseProp::Metal.mHash );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
@@ -3293,11 +3295,11 @@ namespace Ogre
                     mFastShaderBuildHack = StringConverter::parseBool( itor->second.currentValue );
             }
 
-            //Prefer glslvk over glsl, and glsl over glsles
-            const String shaderProfiles[5] = { "hlsl", "glsles", "glsl", "glslvk", "metal" };
+            //Prefer hlslvk over glslvk over glsl, and glsl over glsles
+            const String shaderProfiles[6] = { "hlsl", "glsles", "glsl", "glslvk", "hlslvk", "metal" };
             const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
 
-            for( size_t i=0; i<5; ++i )
+            for( size_t i=0; i<6; ++i )
             {
                 if( capabilities->isShaderProfileSupported( shaderProfiles[i] ) )
                 {
@@ -3306,7 +3308,7 @@ namespace Ogre
                 }
             }
 
-            if( mShaderProfile == "hlsl" )
+            if( mShaderProfile == "hlsl" || mShaderProfile == "hlslvk" )
             {
                 mShaderFileExt = ".hlsl";
 

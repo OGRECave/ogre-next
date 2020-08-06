@@ -100,7 +100,7 @@ namespace Ogre
         {
             const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
 
-            if( mShaderProfile == "hlsl" )
+            if( mShaderProfile == "hlsl" || mShaderProfile == "hlslvk" )
             {
                 for( size_t j=0; j<3 && !mComputeShaderTarget; ++j )
                 {
