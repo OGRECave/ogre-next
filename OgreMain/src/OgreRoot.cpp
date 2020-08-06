@@ -1170,7 +1170,7 @@ namespace Ogre {
         // ensure shutdown before destroying resource manager.
         mResourceBackgroundQueue->shutdown();
         mWorkQueue->shutdown();
-        if( mActiveRenderer )
+        if( mActiveRenderer && mActiveRenderer->getTextureGpuManager() )
             mActiveRenderer->getTextureGpuManager()->shutdown();
 
 		OGRE_DELETE mCompositorManager2;
