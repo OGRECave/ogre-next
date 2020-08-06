@@ -209,8 +209,8 @@ namespace Ogre
             memset( &region, 0, sizeof( region ) );
 
             region.bufferOffset = stagingTex->_getInternalBufferStart() + bufStart;
-            region.bufferRowLength = static_cast<uint32_t>( whiteBox.bytesPerRow );
-            region.bufferImageHeight = static_cast<uint32_t>( whiteBox.bytesPerImage );
+            region.bufferRowLength = 0u;
+            region.bufferImageHeight = 0u;
 
             region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             if( i == TextureTypes::TypeCube || i == TextureTypes::TypeCubeArray )
