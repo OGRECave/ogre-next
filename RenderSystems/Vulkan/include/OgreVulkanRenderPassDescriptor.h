@@ -51,6 +51,23 @@ namespace Ogre
     struct VulkanFrameBufferDescValue
     {
         uint16 refCount;
+
+        uint32 mNumImageViews;
+        VkImageView mImageViews[OGRE_MAX_MULTIPLE_RENDER_TARGETS * 2u + 2u];
+        FastArray<VkImageView> mWindowImageViews;  // Only used by windows
+        // We normally need just one, but Windows are a special case
+        // because we need to have one per swapchain image, hence FastArray
+        //
+        // A single VkFramebuffer contains the VkRenderPass + the actual imageviews + resolution
+        FastArray<VkFramebuffer> mFramebuffers;
+
+        /// Contains baked info of load/store/clear
+        /// Doesn't reference ImageViews, however it mentions them by attachmentIdx
+        /// which makes VkRenderPass difficult to actually share
+        ///
+        /// Thus we generate VkRenderPass and FBOs together
+        VkRenderPass mRenderPass;
+
         VulkanFrameBufferDescValue();
     };
 
@@ -59,29 +76,18 @@ namespace Ogre
     class _OgreVulkanExport VulkanRenderPassDescriptor : public RenderPassDescriptor
     {
     protected:
-        /// Contains baked info of load/store/clear
-        /// Doesn't reference ImageViews, however it mentions them by attachmentIdx
-        /// which makes VkRenderPass difficult to actually share
-        ///
-        /// Thus we generate VkRenderPass and FBOs together
-        VkRenderPass mRenderPass;
-
         // 1 per MRT
         // 1 per MRT MSAA resolve
         // 1 for Depth buffer
         // 1 for Stencil buffer
         VkClearValue mClearValues[OGRE_MAX_MULTIPLE_RENDER_TARGETS * 2u + 2u];
-        VkImageView mImageViews[OGRE_MAX_MULTIPLE_RENDER_TARGETS * 2u + 2u];
-        uint32 mNumImageViews;
-        FastArray<VkImageView> mWindowImageViews;  // Only used by windows
-        // We normally need just one, but Windows are a special case
-        // because we need to have one per swapchain image, hence FastArray
-        //
-        // A single VkFramebuffer contains the VkRenderPass + the actual imageviews + resolution
-        FastArray<VkFramebuffer> mFramebuffers;
 
         VulkanFrameBufferDescMap::iterator mSharedFboItor;
 
+        /// This value MUST be set to the resolution of any of the textures.
+        /// If it's changed arbitrarily then FrameBufferDescKey will not take
+        /// this into account (two RenderPassDescriptors will share the same
+        /// FBO when they should not)
         uint32 mTargetWidth;
         uint32 mTargetHeight;
 
@@ -102,13 +108,16 @@ namespace Ogre
                                                  PixelFormatGpu pixelFormat );
 
         void sanitizeMsaaResolve( size_t colourIdx );
-        void setupColourAttachment( const size_t idx, VkAttachmentDescription *attachments,
-                                    uint32 &currAttachmIdx, VkAttachmentReference *colourAttachRefs,
+        void setupColourAttachment( const size_t idx, VulkanFrameBufferDescValue &fboDesc,
+                                    VkAttachmentDescription *attachments, uint32 &currAttachmIdx,
+                                    VkAttachmentReference *colourAttachRefs,
                                     VkAttachmentReference *resolveAttachRefs, const size_t vkIdx,
                                     const bool resolveTex );
         VkImageView setupDepthAttachment( VkAttachmentDescription &attachment );
-        void updateFbo( void );
-        void destroyFbo( void );
+
+        void setupFbo( VulkanFrameBufferDescValue &fboDesc );
+        void releaseFbo( void );
+        static void destroyFbo( VulkanQueue *queue, VulkanFrameBufferDescValue &fboDesc );
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
         /// if 'other' wants to perform clears on colour, depth and/or stencil values.

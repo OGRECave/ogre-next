@@ -822,8 +822,8 @@ namespace Ogre
     {
         if( mEncoderState != EncoderGraphicsOpen )
             return;
-        mEncoderState = EncoderClosed;
         mRenderSystem->_notifyActiveEncoderEnded( endRenderPassDesc );
+        mEncoderState = EncoderClosed;
     }
     //-------------------------------------------------------------------------
     void VulkanQueue::endComputeEncoder( void )
