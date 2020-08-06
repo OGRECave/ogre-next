@@ -137,36 +137,40 @@ namespace Ogre
         mFocused = true;
         mClosed = false;
 
-        NameValuePairList::const_iterator opt;
-        NameValuePairList::const_iterator end = miscParams->end();
-
-        opt = miscParams->find( "SDL2x11" );
-        if( opt != end )
+        if( miscParams )
         {
-            struct SDLx11
+            NameValuePairList::const_iterator opt;
+            NameValuePairList::const_iterator end = miscParams->end();
+
+            opt = miscParams->find( "SDL2x11" );
+            if( opt != end )
             {
-                Display *display; /**< The X11 display */
-                ::Window window;  /**< The X11 window */
-            };
+                struct SDLx11
+                {
+                    Display *display; /**< The X11 display */
+                    ::Window window;  /**< The X11 window */
+                };
 
-            SDLx11 *sdlHandles =
-                reinterpret_cast<SDLx11 *>( StringConverter::parseUnsignedLong( opt->second ) );
-            mConnection = XGetXCBConnection( sdlHandles->display );
-            mXcbWindow = (xcb_window_t)sdlHandles->window;
+                SDLx11 *sdlHandles =
+                    reinterpret_cast<SDLx11 *>( StringConverter::parseUnsignedLong( opt->second ) );
+                mConnection = XGetXCBConnection( sdlHandles->display );
+                mXcbWindow = (xcb_window_t)sdlHandles->window;
 
-            XWindowAttributes windowAttrib;
-            XGetWindowAttributes( sdlHandles->display, sdlHandles->window, &windowAttrib );
+                XWindowAttributes windowAttrib;
+                XGetWindowAttributes( sdlHandles->display, sdlHandles->window, &windowAttrib );
 
-            int scr = DefaultScreen( sdlHandles->display );
+                int scr = DefaultScreen( sdlHandles->display );
 
-            const xcb_setup_t *setup = xcb_get_setup( mConnection );
-            xcb_screen_iterator_t iter = xcb_setup_roots_iterator( setup );
-            while( scr-- > 0 )
-                xcb_screen_next( &iter );
+                const xcb_setup_t *setup = xcb_get_setup( mConnection );
+                xcb_screen_iterator_t iter = xcb_setup_roots_iterator( setup );
+                while( scr-- > 0 )
+                    xcb_screen_next( &iter );
 
-            mScreen = iter.data;
+                mScreen = iter.data;
+            }
         }
-        else
+
+        if( !mXcbWindow )
         {
             initConnection();  // TODO: Connection must be shared by ALL windows
             createWindow( mTitle, mRequestedWidth, mRequestedHeight, miscParams );
