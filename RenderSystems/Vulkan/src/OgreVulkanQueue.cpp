@@ -909,7 +909,10 @@ namespace Ogre
             const uint32 numFences = static_cast<uint32>( fences.size() );
             VkResult result = vkWaitForFences( mDevice, numFences, &fences[0], VK_TRUE, 0u );
             if( result != VK_TIMEOUT )
+            {
+                checkVkResult( result, "vkWaitForFences" );
                 recycleFences( fences );
+            }
             else
                 bIsFinished = false;
         }
