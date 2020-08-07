@@ -38,11 +38,14 @@ namespace Ogre
     class _OgreVulkanExport VulkanAsyncTicket : public AsyncTicket
     {
     protected:
+        VkFence mFenceName;
+        VulkanQueue *mQueue;
+
         virtual const void *mapImpl( void );
 
     public:
         VulkanAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
-                           size_t elementCount );
+                           size_t elementCount, VulkanQueue *queue );
         virtual ~VulkanAsyncTicket();
 
         virtual bool queryIsTransferDone( void );

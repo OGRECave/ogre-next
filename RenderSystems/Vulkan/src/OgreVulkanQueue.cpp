@@ -881,6 +881,12 @@ namespace Ogre
         mGpuWaitSemaphForCurrCmdBuff.push_back( imageAcquisitionSemaph );
     }
     //-------------------------------------------------------------------------
+    bool VulkanQueue::isFenceFlushed( VkFence fence ) const
+    {
+        OGRE_ASSERT_MEDIUM( fence );
+        return fence != mCurrentFence;
+    }
+    //-------------------------------------------------------------------------
     void VulkanQueue::_waitOnFrame( uint8 frameIdx )
     {
         FastArray<VkFence> &fences = mPerFrameData[frameIdx].mProtectingFences;

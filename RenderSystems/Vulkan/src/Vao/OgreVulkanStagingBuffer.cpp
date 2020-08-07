@@ -141,7 +141,7 @@ namespace Ogre
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
         VulkanDevice *device = vaoManager->getDevice();
 
-        VkResult result = vkWaitForFences( device->mDevice, 1, &syncObj, true,
+        VkResult result = vkWaitForFences( device->mDevice, 1, &syncObj, VK_TRUE,
                                            UINT64_MAX );  // You can't wait forever in Vulkan?!?
         checkVkResult( result, "VulkanStagingBuffer::wait" );
     }

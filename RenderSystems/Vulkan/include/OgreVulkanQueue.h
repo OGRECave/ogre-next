@@ -263,10 +263,14 @@ namespace Ogre
         /// this semaphore on to execute STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
         void addWindowToWaitFor( VkSemaphore imageAcquisitionSemaph );
 
+        /// If this function returns false, waiting on the fence would cause a deadlock since
+        /// it will never signal. You must call commitAndNextCommandBuffer before waiting.
+        bool isFenceFlushed( VkFence fence ) const;
+
         void _waitOnFrame( uint8 frameIdx );
         bool _isFrameFinished( uint8 frameIdx );
 
-        void commitAndNextCommandBuffer( bool endingFrame );
+        void commitAndNextCommandBuffer( bool endingFrame = false );
 
         VulkanVaoManager *getVaoManager( void ) { return mVaoManager; }
     };

@@ -1147,8 +1147,8 @@ namespace Ogre
                                                         StagingBuffer *stagingBuffer,
                                                         size_t elementStart, size_t elementCount )
     {
-        return AsyncTicketPtr(
-            OGRE_NEW VulkanAsyncTicket( creator, stagingBuffer, elementStart, elementCount ) );
+        return AsyncTicketPtr( OGRE_NEW VulkanAsyncTicket( creator, stagingBuffer, elementStart,
+                                                           elementCount, &mDevice->mGraphicsQueue ) );
     }
     //-----------------------------------------------------------------------------------
     VulkanDescriptorPool *VulkanVaoManager::getDescriptorPool( const VulkanRootLayout *rootLayout,
@@ -1437,6 +1437,18 @@ namespace Ogre
         }
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    VkFence VulkanVaoManager::waitFor( VkFence fenceName, VulkanQueue *queue )
+    {
+        if( !queue->isFenceFlushed( fenceName ) )
+            queue->commitAndNextCommandBuffer();
+
+        VkResult result = vkWaitForFences( queue->mDevice, 1u, &fenceName, VK_TRUE,
+                                           UINT64_MAX );  // You can't wait forever in Vulkan?!?
+        checkVkResult( result, "VulkanStagingBuffer::wait" );
+        queue->releaseFence( fenceName );
+        return 0;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::_notifyDeviceStalled()

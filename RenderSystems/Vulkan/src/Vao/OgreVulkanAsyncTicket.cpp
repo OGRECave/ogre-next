@@ -26,28 +26,62 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreVulkanPrerequisites.h"
-
 #include "Vao/OgreVulkanAsyncTicket.h"
-#include "Vao/OgreVulkanVaoManager.h"
 
+#include "OgreVulkanQueue.h"
+#include "OgreVulkanUtils.h"
 #include "Vao/OgreStagingBuffer.h"
+#include "Vao/OgreVulkanVaoManager.h"
 
 namespace Ogre
 {
     VulkanAsyncTicket::VulkanAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                                          size_t elementStart, size_t elementCount ) :
-        AsyncTicket( creator, stagingBuffer, elementStart, elementCount )
+                                          size_t elementStart, size_t elementCount,
+                                          VulkanQueue *queue ) :
+        AsyncTicket( creator, stagingBuffer, elementStart, elementCount ),
+        mQueue( queue )
     {
+        mFenceName = queue->acquireCurrentFence();
+        // Flush now for accuracy with downloads.
+        mQueue->commitAndNextCommandBuffer();
     }
     //-----------------------------------------------------------------------------------
-    VulkanAsyncTicket::~VulkanAsyncTicket() {}
+    VulkanAsyncTicket::~VulkanAsyncTicket()
+    {
+        if( mFenceName )
+            mQueue->releaseFence( mFenceName );
+    }
     //-----------------------------------------------------------------------------------
     const void *VulkanAsyncTicket::mapImpl( void )
     {
+        if( mFenceName )
+            mFenceName = VulkanVaoManager::waitFor( mFenceName, mQueue );
+
         return mStagingBuffer->_mapForRead( mStagingBufferMapOffset,
                                             mElementCount * mCreator->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanAsyncTicket::queryIsTransferDone( void ) { return true; }
+    bool VulkanAsyncTicket::queryIsTransferDone( void )
+    {
+        bool retVal = false;
+
+        if( mFenceName )
+        {
+            // Ask to return immediately and tell us about the fence
+            VkResult result = vkWaitForFences( mQueue->mDevice, 1u, &mFenceName, VK_TRUE, 0 );
+            if( result != VK_TIMEOUT )
+            {
+                mQueue->releaseFence( mFenceName );
+                mFenceName = 0;
+
+                checkVkResult( result, "vkWaitForFences" );
+            }
+        }
+        else
+        {
+            retVal = true;
+        }
+
+        return retVal;
+    }
 }  // namespace Ogre

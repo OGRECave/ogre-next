@@ -379,8 +379,24 @@ namespace Ogre
         /// times). But first stalls until that mDynamicBufferMultiplier-1 frame behind
         /// is finished.
         uint8 waitForTailFrameToFinish( void );
+
+        /// See VaoManager::waitForSpecificFrameToFinish
         virtual void waitForSpecificFrameToFinish( uint32 frameCount );
+
+        /// See VaoManager::isFrameFinished
         virtual bool isFrameFinished( uint32 frameCount );
+
+        /** Will stall undefinitely until GPU finishes (signals the sync object).
+        @param fenceName
+            Sync object to wait for. Will be released on success. On failure,
+            throws an exception and fenceName will not be released.
+        @param queue
+            VulkanQueue this fence is linked to.
+        @returns
+            Null ptr on success. Should throw on failure.
+        */
+        static VkFence waitFor( VkFence fenceName, VulkanQueue *queue );
+
         void _notifyDeviceStalled();
         VulkanStagingTexture *createStagingTexture( PixelFormatGpu formatFamily, size_t sizeBytes );
         void destroyStagingTexture( VulkanStagingTexture *stagingTexture );
