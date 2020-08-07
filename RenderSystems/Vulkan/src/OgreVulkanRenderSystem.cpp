@@ -1398,11 +1398,18 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_renderEmulated( const CbDrawCallStrip *cmd )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
+        flushRootLayout();
+
+        CbDrawStrip *drawCmd =
+            reinterpret_cast<CbDrawStrip *>( mSwIndirectBufferPtr + (size_t)cmd->indirectBufferOffset );
+
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+
+        for( uint32 i = cmd->numDraws; i--; )
         {
-            defaultLog->logMessage( String( " * _renderEmulated: CbDrawCallStrip " ) +
-                                    StringConverter::toString( cmd->vao->getVaoName() ) );
+            vkCmdDraw( cmdBuffer, drawCmd->primCount, drawCmd->instanceCount, drawCmd->firstVertexIndex,
+                       drawCmd->baseInstance );
+            ++drawCmd;
         }
     }
     //-------------------------------------------------------------------------
