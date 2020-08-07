@@ -369,6 +369,9 @@ namespace Ogre
             rsc->setDriverVersion( driverVersion );
         }
 
+        if( mActiveDevice->mDeviceFeatures.depthClamp )
+            rsc->setCapability( RSC_DEPTH_CLAMP );
+
         rsc->setCapability( RSC_HWSTENCIL );
         rsc->setStencilBufferBitDepth( 8 );
         rsc->setNumTextureUnits( 16 );
@@ -2290,6 +2293,7 @@ namespace Ogre
         rasterState.polygonMode = VulkanMappings::get( newPso->macroblock->mPolygonMode );
         rasterState.cullMode = VulkanMappings::get( newPso->macroblock->mCullMode );
         rasterState.frontFace = VK_FRONT_FACE_CLOCKWISE;
+        rasterState.depthClampEnable = newPso->macroblock->mDepthClamp;
         rasterState.depthBiasEnable = newPso->macroblock->mDepthBiasConstant != 0.0f;
         rasterState.depthBiasConstantFactor = newPso->macroblock->mDepthBiasConstant;
         rasterState.depthBiasClamp = 0.0f;
