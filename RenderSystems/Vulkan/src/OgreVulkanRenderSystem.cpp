@@ -1476,12 +1476,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const v1::CbDrawCallIndexed *cmd )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " v1 * _render: CbDrawCallIndexed " ) );
-        }
-
         flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
@@ -1494,9 +1488,8 @@ namespace Ogre
         flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
-
-        vkCmdDraw( cmdBuffer, mCurrentVertexBuffer->vertexCount, cmd->instanceCount,
-                   mCurrentVertexBuffer->vertexStart, cmd->baseInstance );
+        vkCmdDraw( cmdBuffer, cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
+                   cmd->baseInstance );
     }
 
     void VulkanRenderSystem::_render( const v1::RenderOperation &op )
