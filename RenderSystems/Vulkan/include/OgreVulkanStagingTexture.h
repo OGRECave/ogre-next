@@ -57,6 +57,9 @@ namespace Ogre
 
         void _unmapBuffer( void );
 
+        bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                             PixelFormatGpu pixelFormat ) const;
+
         virtual void startMapRegion( void );
         virtual void stopMapRegion( void );
 

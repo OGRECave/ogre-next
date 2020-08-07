@@ -1120,9 +1120,11 @@ namespace Ogre
     {
         sizeBytes = std::max<size_t>( sizeBytes, 4u * 1024u * 1024u );
 
+        const size_t alignment = PixelFormatGpuUtils::getSizeBytes( 1u, 1u, 1u, 1u, formatFamily, 1u );
+
         size_t vboIdx;
         size_t bufferOffset;
-        allocateVbo( sizeBytes, 4u, BT_DYNAMIC_DEFAULT, false, vboIdx, bufferOffset );
+        allocateVbo( sizeBytes, alignment, BT_DYNAMIC_DEFAULT, false, vboIdx, bufferOffset );
         const VboFlag vboFlag = bufferTypeToVboFlag( BT_DYNAMIC_DEFAULT, false );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];

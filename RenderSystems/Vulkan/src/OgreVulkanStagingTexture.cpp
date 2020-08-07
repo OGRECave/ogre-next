@@ -71,6 +71,21 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    bool VulkanStagingTexture::supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                                               PixelFormatGpu pixelFormat ) const
+    {
+        // Vulkan requires offsets to be multiple of the texel's size. Accepting a texture with
+        // different texel size could unalign us.
+        //
+        // We use getSizeBytes rather than getBytesPerPixel because the former covers compressed formats
+        if( PixelFormatGpuUtils::getSizeBytes( 1u, 1u, 1u, 1u, mFormatFamily, 1u ) !=
+            PixelFormatGpuUtils::getSizeBytes( 1u, 1u, 1u, 1u, pixelFormat, 1u ) )
+        {
+            return false;
+        }
+        return StagingTextureBufferImpl::supportsFormat( width, height, depth, slices, pixelFormat );
+    }
+    //-----------------------------------------------------------------------------------
     bool VulkanStagingTexture::belongsToUs( const TextureBox &box )
     {
         return box.data >= mLastMappedPtr &&
