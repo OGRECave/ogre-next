@@ -139,8 +139,8 @@ namespace Ogre
          * That's what would happen without validation layers, so we'll
          * keep that behavior here.
          */
-         return false;
-        //return true;
+        return false;
+        // return true;
     }
 
     //-------------------------------------------------------------------------
@@ -148,6 +148,7 @@ namespace Ogre
         RenderSystem(),
         mInitialized( false ),
         mHardwareBufferManager( 0 ),
+        mIndirectBuffer( 0 ),
         mShaderManager( 0 ),
         mVulkanProgramFactory0( 0 ),
         mVulkanProgramFactory1( 0 ),
@@ -818,12 +819,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setIndirectBuffer( IndirectBufferPacked *indirectBuffer )
     {
-        /*Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " * _setIndirectBuffer: " ) +
-                                    StringConverter::toString( indirectBuffer->getBufferPackedType() ) );
-        }*/
         if( mVaoManager->supportsIndirectBuffers() )
         {
             if( indirectBuffer )
@@ -1360,22 +1355,22 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const CbDrawCallIndexed *cmd )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " * _render: CbDrawCallIndexed " ) +
-                                    StringConverter::toString( cmd->vao->getVaoName() ) );
-        }
+        flushRootLayout();
+
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        vkCmdDrawIndexedIndirect( cmdBuffer, mIndirectBuffer,
+                                  reinterpret_cast<VkDeviceSize>( cmd->indirectBufferOffset ),
+                                  cmd->numDraws, sizeof( CbDrawIndexed ) );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const CbDrawCallStrip *cmd )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " * _render: CbDrawCallStrip " ) +
-                                    StringConverter::toString( cmd->vao->getVaoName() ) );
-        }
+        flushRootLayout();
+
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        vkCmdDrawIndirect( cmdBuffer, mIndirectBuffer,
+                           reinterpret_cast<VkDeviceSize>( cmd->indirectBufferOffset ), cmd->numDraws,
+                           sizeof( CbDrawIndexed ) );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_renderEmulated( const CbDrawCallIndexed *cmd )

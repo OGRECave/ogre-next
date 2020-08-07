@@ -56,7 +56,6 @@ THE SOFTWARE.
 
 #define TODO_implement
 #define TODO_whenImplemented_include_stagingBuffers
-#define TODO_add_cached_read_memory
 #define TODO_if_memory_non_coherent_align_size
 
 namespace Ogre
@@ -100,7 +99,8 @@ namespace Ogre
         mTexBufferMaxSize = 128 * 1024 * 1024;  // 128MB
 
         mSupportsPersistentMapping = true;
-        mSupportsIndirectBuffers = false;
+        mSupportsIndirectBuffers = mDevice->mDeviceFeatures.multiDrawIndirect &&
+                                   mDevice->mDeviceFeatures.drawIndirectFirstInstance;
 
         // Keep pools of 64MB each for static meshes
         mDefaultPoolSize[CPU_INACCESSIBLE] = 64u * 1024u * 1024u;
@@ -365,7 +365,6 @@ namespace Ogre
     {
         OGRE_ASSERT_LOW( alignment > 0 );
 
-        TODO_add_cached_read_memory;
         TODO_if_memory_non_coherent_align_size;
 
         const VboFlag vboFlag = bufferTypeToVboFlag( bufferType, readCapable );
@@ -466,7 +465,6 @@ namespace Ogre
                 VkMemoryRequirements memRequirements;
                 vkGetBufferMemoryRequirements( mDevice->mDevice, newVbo.vkBuffer, &memRequirements );
 
-                // TODO use one large buffer and multiple offsets
                 VkDeviceSize offset = 0;
                 offset = alignMemory( offset, memRequirements.alignment );
 
