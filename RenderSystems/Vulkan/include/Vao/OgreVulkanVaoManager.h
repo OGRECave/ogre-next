@@ -328,7 +328,7 @@ namespace Ogre
                                         size_t &outVboIdx, size_t &outBufferOffset );
         void deallocateTexture( uint16 texMemIdx, size_t vboIdx, size_t bufferOffset, size_t sizeBytes );
 
-        VulkanRawBuffer allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes );
+        VulkanRawBuffer allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes, size_t alignment = 4u );
         void deallocateRawBuffer( VulkanRawBuffer &rawBuffer );
 
         void addDelayedFunc( VulkanDelayedFuncBase *cmd );

@@ -730,36 +730,36 @@ namespace Ogre
             endComputeEncoder();
 
             mEncoderState = EncoderCopyOpen;
+        }
 
-            if( !bDownload )
+        if( !bDownload )
+        {
+            // V1 buffers are only used for vertex and index buffers
+            // We assume v1 buffers don't try to write then read (or read then write) in a row
+            const VkAccessFlags bufferAccessFlags =
+                VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT | VK_ACCESS_INDEX_READ_BIT;
+
+            if( ( mCopyEndReadDstBufferFlags & bufferAccessFlags ) != bufferAccessFlags )
             {
-                // V1 buffers are only used for vertex and index buffers
-                // We assume v1 buffers don't try to write then read (or read then write) in a row
-                const VkAccessFlags bufferAccessFlags =
-                    VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT | VK_ACCESS_INDEX_READ_BIT;
+                uint32 numMemBarriers = 0u;
+                VkMemoryBarrier memBarrier;
+                makeVkStruct( memBarrier, VK_STRUCTURE_TYPE_MEMORY_BARRIER );
+                memBarrier.srcAccessMask = bufferAccessFlags;
+                memBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+                numMemBarriers = 1u;
 
-                if( ( mCopyEndReadDstBufferFlags & bufferAccessFlags ) != bufferAccessFlags )
-                {
-                    uint32 numMemBarriers = 0u;
-                    VkMemoryBarrier memBarrier;
-                    makeVkStruct( memBarrier, VK_STRUCTURE_TYPE_MEMORY_BARRIER );
-                    memBarrier.srcAccessMask = bufferAccessFlags;
-                    memBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
-                    numMemBarriers = 1u;
-
-                    // GPU must stop using this buffer before we can write into it
-                    vkCmdPipelineBarrier( mCurrentCmdBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
-                                          VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 1u, &memBarrier, 0u, 0, 0u,
-                                          0 );
-                }
-
-                mCopyEndReadDstBufferFlags |= bufferAccessFlags;
-                mCopyEndReadSrcBufferFlags |= VK_ACCESS_TRANSFER_WRITE_BIT;
+                // GPU must stop using this buffer before we can write into it
+                vkCmdPipelineBarrier( mCurrentCmdBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
+                                      VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 1u, &memBarrier, 0u, 0, 0u,
+                                      0 );
             }
-            else
-            {
-                mCopyEndReadSrcBufferFlags |= VK_ACCESS_TRANSFER_READ_BIT;
-            }
+
+            mCopyEndReadDstBufferFlags |= bufferAccessFlags;
+            mCopyEndReadSrcBufferFlags |= VK_ACCESS_TRANSFER_WRITE_BIT;
+        }
+        else
+        {
+            mCopyEndReadSrcBufferFlags |= VK_ACCESS_TRANSFER_READ_BIT;
         }
     }
     //-------------------------------------------------------------------------

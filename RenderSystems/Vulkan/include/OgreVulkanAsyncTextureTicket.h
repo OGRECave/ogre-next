@@ -32,7 +32,9 @@ THE SOFTWARE.
 #include "OgreVulkanPrerequisites.h"
 
 #include "OgreAsyncTextureTicket.h"
+
 #include "OgreTextureBox.h"
+#include "Vao/OgreVulkanVaoManager.h"
 
 namespace Ogre
 {
@@ -41,16 +43,27 @@ namespace Ogre
     class _OgreVulkanExport VulkanAsyncTextureTicket : public AsyncTextureTicket
     {
     protected:
-        uint8 *mVboName;
+        VulkanRawBuffer mVboName;
+
+        uint32 mDownloadFrame;
+        VkFence mAccurateFence;
+        VulkanVaoManager *mVaoManager;
+        VulkanQueue *mQueue;
 
         virtual TextureBox mapImpl( uint32 slice );
         virtual void unmapImpl( void );
 
+        void waitForDownloadToFinish( void );
+
     public:
         VulkanAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                   TextureTypes::TextureTypes textureType,
-                                  PixelFormatGpu pixelFormatFamily );
+                                  PixelFormatGpu pixelFormatFamily, VulkanVaoManager *vaoManager,
+                                  VulkanQueue *queue );
         virtual ~VulkanAsyncTextureTicket();
+
+        virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
+                                      TextureBox *srcBox );
 
         virtual bool queryIsTransferDone( void );
     };

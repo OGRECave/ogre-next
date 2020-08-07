@@ -595,7 +595,8 @@ namespace Ogre
         deallocateVbo( vboIdx, bufferOffset, sizeBytes, vboVec );
     }
     //-----------------------------------------------------------------------------------
-    VulkanRawBuffer VulkanVaoManager::allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes )
+    VulkanRawBuffer VulkanVaoManager::allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes,
+                                                         size_t alignment )
     {
         // Change flag if unavailable
         if( vboFlag == CPU_WRITE_PERSISTENT && !mSupportsNonCoherentMemory )
@@ -604,7 +605,7 @@ namespace Ogre
             vboFlag = CPU_WRITE_PERSISTENT;
 
         VulkanRawBuffer retVal;
-        allocateVbo( sizeBytes, 4u, mVbos[vboFlag], mBestVkMemoryTypeIndex[vboFlag],
+        allocateVbo( sizeBytes, alignment, mVbos[vboFlag], mBestVkMemoryTypeIndex[vboFlag],
                      mDefaultPoolSize[vboFlag], false, vboFlag != CPU_INACCESSIBLE,
                      isVboFlagCoherent( vboFlag ), retVal.mVboPoolIdx, retVal.mInternalBufferStart );
         Vbo &vbo = mVbos[vboFlag][retVal.mVboPoolIdx];

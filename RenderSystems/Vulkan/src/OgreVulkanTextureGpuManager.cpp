@@ -379,8 +379,10 @@ namespace Ogre
         uint32 width, uint32 height, uint32 depthOrSlices, TextureTypes::TextureTypes textureType,
         PixelFormatGpu pixelFormatFamily )
     {
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
         return OGRE_NEW VulkanAsyncTextureTicket( width, height, depthOrSlices, textureType,
-                                                  pixelFormatFamily );
+                                                  pixelFormatFamily, vaoManager,
+                                                  &mDevice->mGraphicsQueue );
     }
     //-----------------------------------------------------------------------------------
     VkImage VulkanTextureGpuManager::getBlankTextureVulkanName(

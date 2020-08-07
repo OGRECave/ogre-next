@@ -74,7 +74,7 @@ namespace Ogre
     bool VulkanStagingTexture::supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                                PixelFormatGpu pixelFormat ) const
     {
-        // Vulkan requires offsets to be multiple of the texel's size. Accepting a texture with
+        // Vulkan requires offsets to be multiple of the texel's block size. Accepting a texture with
         // different texel size could unalign us.
         //
         // We use getSizeBytes rather than getBytesPerPixel because the former covers compressed formats

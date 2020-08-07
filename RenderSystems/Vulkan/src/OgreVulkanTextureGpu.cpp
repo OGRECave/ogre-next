@@ -349,9 +349,9 @@ namespace Ogre
         region.srcSubresource.baseArrayLayer = sourceSlice;
         region.srcSubresource.layerCount = numSlices;
 
-        region.srcOffset.x = srcBox.x;
-        region.srcOffset.y = srcBox.y;
-        region.srcOffset.z = srcBox.z;
+        region.srcOffset.x = static_cast<int32_t>( srcBox.x );
+        region.srcOffset.y = static_cast<int32_t>( srcBox.y );
+        region.srcOffset.z = static_cast<int32_t>( srcBox.z );
 
         region.dstSubresource.aspectMask = VulkanMappings::getImageAspect( dst->getPixelFormat() );
         region.dstSubresource.mipLevel = dstMipLevel;
