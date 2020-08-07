@@ -547,7 +547,7 @@ namespace Ogre
             checkVkResult( result, "vkCreateShaderModule" );
         }
 
-        if( !mSpirv.empty() )
+        if( !mSpirv.empty() && mType == GPT_VERTEX_PROGRAM )
         {
             OgreProfileExhaustive( "VulkanProgram::compile::SpvReflectShaderModule" );
             SpvReflectShaderModule module;

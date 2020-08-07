@@ -7,6 +7,10 @@
 		@property( syntax == glsl || syntax == glsles )
 			uniform sampler2DArray areaLightMasks;
 		@end
+		@property( syntax == glslvk )
+			layout( ogre_t@value(areaLightMasks) ) uniform texture2DArray areaLightMasks;
+			layout( ogre_s@value(areaLightMasks) ) uniform sampler areaLightMasksSampler;
+		@end
 		@property( syntax == hlsl )
 			@property( !hlms_lights_area_tex_colour )
 				Texture2DArray<float> areaLightMasks	: register(t@value(areaLightMasks));

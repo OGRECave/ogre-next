@@ -2232,6 +2232,11 @@ static SpvReflectResult ParseDescriptorBlockVariableUsage(
         // Next access index
         index_index += 1;
       }
+
+      // added by dark_sylinc see https://github.com/KhronosGroup/SPIRV-Reflect/issues/77
+      if( index_index >= p_access_chain->index_count && p_type->op == SpvOpTypeArray )
+          return SPV_REFLECT_RESULT_SUCCESS;
+
       // Parse current var again with a type override and advanced index index
       SpvReflectResult result = ParseDescriptorBlockVariableUsage(
         p_parser,
