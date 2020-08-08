@@ -2152,6 +2152,7 @@ namespace Ogre
             {
                 VulkanTextureGpu *texture = static_cast<VulkanTextureGpu *>( itor->resource );
                 rsData->imageBarriers[numTextures].image = texture->getFinalTextureName();
+                texture->mCurrLayout = rsData->imageBarriers[numTextures].newLayout;
                 ++numTextures;
             }
             ++itor;

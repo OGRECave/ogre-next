@@ -106,9 +106,9 @@ namespace Ogre
         }
 
         if( mInputTexture == mOutputTexture )
-            return; // Special case for PCC - IBL is not wanted. Nothing to do
+            return;  // Special case for PCC - IBL is not wanted. Nothing to do
         if( mOutputTexture->getNumMipmaps() == 1u )
-            return; // Fast copy / passthrough
+            return;  // Fast copy / passthrough
 
         if( mInputTexture->getTextureType() != TextureTypes::TypeCube )
         {
@@ -390,18 +390,48 @@ namespace Ogre
 
         const bool usesCompute = !mJobs.empty();
 
-        // Check <anything> -> RT for mInputTexture (we need to generate mipmaps).
-        ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( mOutputTexture );
-        if( currentLayout->second != ResourceLayout::RenderTarget )
+        if( usesCompute )
         {
-            addResourceTransition( currentLayout, ResourceLayout::RenderTarget, ReadBarrier::Texture );
-        }
+            // Check <anything> -> RT for mInputTexture (we need to generate mipmaps).
+            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( mInputTexture );
+            if( currentLayout->second != ResourceLayout::RenderTarget )
+            {
+                addResourceTransition( currentLayout, ResourceLayout::RenderTarget,
+                                       ReadBarrier::Texture );
+            }
 
-        // Check <anything> -> UAV for mOutputTexture (we need to write to it).
-        currentLayout = resourcesLayout.find( mOutputTexture );
-        if( currentLayout->second != ResourceLayout::Uav )
+            // Check <anything> -> UAV for mOutputTexture (we need to write to it).
+            currentLayout = resourcesLayout.find( mOutputTexture );
+            if( currentLayout->second != ResourceLayout::Uav )
+            {
+                addResourceTransition( currentLayout, ResourceLayout::Uav, ReadBarrier::Texture );
+            }
+        }
+        else
         {
-            addResourceTransition( currentLayout, ResourceLayout::Uav, ReadBarrier::Texture );
+            if( mInputTexture != mOutputTexture )
+            {
+                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( mInputTexture );
+
+                if( mOutputTexture->getNumMipmaps() > 1u )
+                {
+                    // Check <anything> -> RT for mInputTexture (we need to generate mipmaps).
+                    if( currentLayout->second != ResourceLayout::RenderTarget )
+                    {
+                        addResourceTransition( currentLayout, ResourceLayout::RenderTarget,
+                                               ReadBarrier::Texture );
+                    }
+                }
+
+                // mInputTexture will leave from us as CopySrc, subsequent passes need to see this
+                // Don't insert that transition here though (that's done at runtime)
+                currentLayout->second = ResourceLayout::CopySrc;
+
+                // mInputTexture will leave from us as CopyDst, subsequent passes need to see this
+                // Don't insert that transition here though (that's done at runtime)
+                currentLayout = resourcesLayout.find( mOutputTexture );
+                currentLayout->second = ResourceLayout::CopyDst;
+            }
         }
 
         // Do not use base class functionality at all.
