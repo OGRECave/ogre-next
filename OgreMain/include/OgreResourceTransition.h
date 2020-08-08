@@ -54,6 +54,7 @@ namespace Ogre
         Uav,
         CopySrc,
         CopyDst,
+        PresentReady,
 
         NumResourceLayouts
     };

@@ -1997,7 +1997,8 @@ namespace Ogre
                                                         const bool bIsDepth )
     {
         VkPipelineStageFlags stage = 0;
-        if( layout == ResourceLayout::RenderTarget || ( layout == ResourceLayout::Clear && !bIsDepth ) )
+        if( layout == ResourceLayout::RenderTarget || layout == ResourceLayout::PresentReady ||
+            ( layout == ResourceLayout::Clear && !bIsDepth ) )
         {
             stage |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
         }

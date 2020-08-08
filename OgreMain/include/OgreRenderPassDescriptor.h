@@ -182,6 +182,12 @@ namespace Ogre
     protected:
         uint8                   mNumColourEntries;
         bool                    mRequiresTextureFlipping;
+        /// When true, if we have a RenderWindow among our colour entries, then this
+        /// pass is the last one to render to it and should ready the surface for
+        /// presentation/swapping. After changing this flag you MUST call entriesModified( Colour );
+        ///
+        /// This value will be automatically reset to false if no entry is a RenderWindow
+        public: bool            mReadyWindowForPresent;
         /// When true, beginRenderPassDescriptor & endRenderPassDescriptor won't actually
         /// load/store this pass descriptor; but will still set the mCurrentRenderPassDescriptor
         /// so we have required information by some passes.
@@ -243,6 +249,7 @@ namespace Ogre
 
     struct _OgreExport FrameBufferDescKey
     {
+        bool                    readyWindowForPresent;
         uint8                   numColourEntries;
         bool                    allLayers[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         RenderPassTargetBase    colour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];

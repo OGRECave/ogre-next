@@ -505,6 +505,8 @@ namespace Ogre
             return VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
         case ResourceLayout::CopyDst:
             return VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        case ResourceLayout::PresentReady:
+            return VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
         }
 
         return VK_IMAGE_LAYOUT_UNDEFINED;

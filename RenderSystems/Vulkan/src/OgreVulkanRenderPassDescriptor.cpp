@@ -287,7 +287,7 @@ namespace Ogre
         attachment.storeOp = get( colour.storeAction );
         attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        if( texture->isRenderWindowSpecific() )
+        if( texture->isRenderWindowSpecific() && mReadyWindowForPresent )
         {
             attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;

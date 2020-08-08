@@ -152,7 +152,11 @@ namespace Ogre
         /// For custom passes.
         CompositorPassProvider  *mCompositorPassProvider;
 
+        bool mRenderWindowsPresentBarrierDirty;
+
         void addQueuedWorkspaces(void);
+
+        void prepareRenderWindowsForPresent( void );
 
     public:
         CompositorManager2( RenderSystem *renderSystem );
@@ -412,6 +416,8 @@ namespace Ogre
 
         void addListener( CompositorWorkspaceListener *listener );
         void removeListener( CompositorWorkspaceListener *listener );
+
+        void _notifyBarriersDirty( void );
 
         RenderSystem* getRenderSystem(void) const;
     };

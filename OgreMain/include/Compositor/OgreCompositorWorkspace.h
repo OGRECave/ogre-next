@@ -46,7 +46,8 @@ namespace Ogre
     */
 
     struct BoundUav;
-    typedef vector<UavBufferPacked*>::type UavBufferPackedVec;
+    typedef vector<UavBufferPacked *>::type UavBufferPackedVec;
+    typedef map<TextureGpu *, FastArray<CompositorPass *> >::type PassesByRenderWindowMap;
 
     /** A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an
         RTT (Render Texture Target). Whereas Ogre 1.x needed you to set a Viewport in order to render
@@ -193,6 +194,14 @@ namespace Ogre
 
         const ResourceLayoutMap& getResourcesLayout(void) const     { return mResourcesLayout; }
         const ResourceAccessMap& getUavsAccess(void) const          { return mUavsAccess; }
+
+        /** Fills the input map + vector with all the passes that use a window,
+            classified per window.
+        @remarks
+            We do not support passes that write to more than one render window at once
+            (this should not be supported by APIs anyway)
+        */
+        void fillPassesUsingRenderWindows( PassesByRenderWindowMap &passesUsingRenderWindows );
 
         /** When two workspaces work on the same channels/textures, to avoid race conditions
             in Compute Shaders each workspace needs to know what the the previous workspace did;
@@ -360,7 +369,7 @@ namespace Ogre
 
         uint8 getExecutionMask(void) const                  { return mExecutionMask; }
 
-        void _notifyBarriersDirty(void)                     { mBarriersDirty = true; }
+        void _notifyBarriersDirty( void );
 
         /// Gets the compositor manager (non const)
         CompositorManager2* getCompositorManager();
