@@ -1156,7 +1156,7 @@ namespace Ogre
             passDesc->performStoreActions( RenderPassDescriptor::All, isInterruptingRender );
 
             mEntriesToFlush = 0;
-            mVpChanged = false;
+            mVpChanged = true;
 
             mInterruptedRenderCommandEncoder = isInterruptingRender;
 
