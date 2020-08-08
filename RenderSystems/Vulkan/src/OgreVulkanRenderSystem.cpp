@@ -65,6 +65,8 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanTextureGpu.h"
 #include "Vao/OgreVulkanUavBufferPacked.h"
 
+#include "OgreDepthBuffer.h"
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #    include "Windowing/win32/OgreVulkanWin32Window.h"
 #else
@@ -1875,6 +1877,18 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::endRenderPassDescriptor( void ) { endRenderPassDescriptor( false ); }
+    //-------------------------------------------------------------------------
+    TextureGpu *VulkanRenderSystem::createDepthBufferFor( TextureGpu *colourTexture,
+                                                          bool preferDepthTexture,
+                                                          PixelFormatGpu depthBufferFormat,
+                                                          uint16 poolId )
+    {
+        if( depthBufferFormat == PFG_UNKNOWN )
+            depthBufferFormat = DepthBuffer::DefaultDepthBufferFormat;
+
+        return RenderSystem::createDepthBufferFor( colourTexture, preferDepthTexture, depthBufferFormat,
+                                                   poolId );
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::notifySwapchainCreated( VulkanWindow *window )
     {

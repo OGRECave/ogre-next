@@ -283,6 +283,9 @@ namespace Ogre
         inline void endRenderPassDescriptor( bool isInterruptingRender );
         virtual void endRenderPassDescriptor( void );
 
+        TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                          PixelFormatGpu depthBufferFormat, uint16 poolId );
+
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );
 
