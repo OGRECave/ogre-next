@@ -516,35 +516,6 @@ namespace Ogre
             }
         }
 
-        const RenderSystemCapabilities *caps = mRenderSys->getCapabilities();
-        const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
-
-        if( explicitApi )
-        {
-            //Check the output is still a RenderTarget at the end.
-            CompositorNode *node = getLastEnabledNode();
-
-            if( node )
-            {
-                CompositorChannelVec::const_iterator itor = mExternalRenderTargets.begin();
-                CompositorChannelVec::const_iterator end  = mExternalRenderTargets.end();
-                while( itor != end )
-                {
-                    TextureGpu *renderTarget = *itor;
-                    if( renderTarget->isRenderWindowSpecific() )
-                    {
-                        ResourceLayoutMap::iterator currentLayout =
-                                mResourcesLayout.find( renderTarget );
-
-                        if( currentLayout->second != ResourceLayout::PresentReady )
-                            node->_setFinalTargetAsRenderTarget( currentLayout );
-                    }
-
-                    ++itor;
-                }
-            }
-        }
-
         {
             CompositorNodeVec::iterator itor = mNodeSequence.begin();
             CompositorNodeVec::iterator end  = mNodeSequence.end();

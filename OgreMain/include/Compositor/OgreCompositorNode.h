@@ -291,11 +291,6 @@ namespace Ogre
         /// @see CompositorPass::_removeAllBarriers
         void _removeAllBarriers(void);
 
-        /// Places a resource transition in our last pass to the given RenderTarget.
-        /// Usually needed to ensure the final 'RenderWindow' is still a RenderTarget
-        /// after the workspace is finished.
-        void _setFinalTargetAsRenderTarget( ResourceLayoutMap::iterator finalTargetCurrentLayout );
-
         /** Call this function when you're replacing the textures from oldChannel with the
             ones in newChannel. Useful when recreating textures (i.e. resolution changed)
         @param oldChannel

@@ -852,22 +852,6 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorNode::_setFinalTargetAsRenderTarget(
-                                                ResourceLayoutMap::iterator finalTargetCurrentLayout )
-    {
-        if( mPasses.empty() )
-        {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "Node " + mName.getFriendlyText() + " has no passes!",
-                         "CompositorNode::_setFinalTargetAsRenderTarget" );
-        }
-
-        CompositorPass *pass = mPasses.back();
-        pass->addResourceTransition( finalTargetCurrentLayout,
-                                     ResourceLayout::RenderTarget,
-                                     ReadBarrier::RenderTarget );
-    }
-    //-----------------------------------------------------------------------------------
     void CompositorNode::_update( const Camera *lodCamera, SceneManager *sceneManager )
     {
         //If we're in a caster pass, we need to skip shadow map passes that have no light associated
