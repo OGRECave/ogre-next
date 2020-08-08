@@ -1780,6 +1780,9 @@ namespace Ogre
         if( officialCall )
             mInterruptedRenderCommandEncoder = false;
 
+        const bool wasGraphicsOpen =
+            mActiveDevice->mGraphicsQueue.getEncoderState() != VulkanQueue::EncoderGraphicsOpen;
+
         if( mEntriesToFlush )
         {
             mActiveDevice->mGraphicsQueue.endAllEncoders( false );
@@ -1788,7 +1791,11 @@ namespace Ogre
                 static_cast<VulkanRenderPassDescriptor *>( mCurrentRenderPassDescriptor );
 
             newPassDesc->performLoadActions( mInterruptedRenderCommandEncoder );
+        }
 
+        // This is a new command buffer / encoder. State needs to be set again
+        if( mEntriesToFlush || !wasGraphicsOpen )
+        {
             mActiveDevice->mGraphicsQueue.getGraphicsEncoder();
 
             VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
@@ -1800,6 +1807,7 @@ namespace Ogre
             if( mStencilEnabled )
                 [mActiveRenderEncoder setStencilReferenceValue:mStencilRefValue];
 #endif
+            mVpChanged = true;
             mInterruptedRenderCommandEncoder = false;
         }
 
@@ -1855,7 +1863,7 @@ namespace Ogre
             passDesc->performStoreActions( isInterruptingRender );
 
             mEntriesToFlush = 0;
-            mVpChanged = false;
+            mVpChanged = true;
 
             mInterruptedRenderCommandEncoder = isInterruptingRender;
 

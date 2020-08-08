@@ -211,8 +211,11 @@ namespace Ogre
         void init( VkDevice device, VkQueue queue, VulkanRenderSystem *renderSystem );
         void destroy( void );
 
+    protected:
         void newCommandBuffer( void );
+        void endCommandBuffer( void );
 
+    public:
         EncoderState getEncoderState( void ) const { return mEncoderState; }
 
         void getGraphicsEncoder( void );
@@ -256,8 +259,6 @@ namespace Ogre
 
         VkFence acquireCurrentFence( void );
         void releaseFence( VkFence fence );
-
-        void endCommandBuffer( void );
 
         /// When we'll call commitAndNextCommandBuffer, we'll have to wait for
         /// this semaphore on to execute STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
