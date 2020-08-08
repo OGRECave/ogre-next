@@ -129,7 +129,7 @@ namespace Ogre
         if( !mAdvanceFrameScheduled )
             reset( device );
 
-        while( mPools[mCurrentPoolIdx].isFull() && mCurrentPoolIdx < mPools.size() )
+        while( mCurrentPoolIdx < mPools.size() && mPools[mCurrentPoolIdx].isFull() )
             ++mCurrentPoolIdx;
 
         if( mCurrentPoolIdx >= mPools.size() )
