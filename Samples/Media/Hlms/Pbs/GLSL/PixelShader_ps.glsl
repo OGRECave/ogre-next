@@ -98,20 +98,19 @@ vulkan_layout( location = 0 ) in block
 @foreach( num_textures, n )
 	vulkan_layout( ogre_t@value(textureMaps@n) ) uniform texture2DArray textureMaps@n;@end
 
-@property( !hlms_enable_cubemaps_auto )
-	@property( use_envprobe_map )
+@property( use_envprobe_map )
+	@property( !hlms_enable_cubemaps_auto )
 		vulkan_layout( ogre_t@value(texEnvProbeMap) ) uniform textureCube texEnvProbeMap;
-	@end
-@else
-	@property( !hlms_cubemaps_use_dpm )
-		@property( use_envprobe_map )
-			vulkan_layout( ogre_t@value(texEnvProbeMap) ) uniform textureCubeArray texEnvProbeMap;
-		@end
 	@else
-		@property( use_envprobe_map )
+		@property( !hlms_cubemaps_use_dpm )
+			vulkan_layout( ogre_t@value(texEnvProbeMap) ) uniform textureCubeArray texEnvProbeMap;
+		@else
 			vulkan_layout( ogre_t@value(texEnvProbeMap) ) uniform texture2DArray texEnvProbeMap;
+			@insertpiece( DeclDualParaboloidFunc )
 		@end
-		@insertpiece( DeclDualParaboloidFunc )
+	@end
+	@property( envMapRegSampler < samplerStateStart && syntax == glslvk )
+		layout( ogre_s@value(envMapRegSampler) ) uniform sampler samplerState@value(envMapRegSampler);
 	@end
 @end
 
