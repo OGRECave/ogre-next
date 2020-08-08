@@ -94,7 +94,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::calculateSharedKey( void )
     {
-        FrameBufferDescKey key( *this );
+        VulkanFrameBufferDescKey key( *this );
         VulkanFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
         VulkanFrameBufferDescMap::iterator newItor = frameBufferDescMap.find( key );
 
@@ -863,6 +863,31 @@ namespace Ogre
         // Another encoder will have to be created, and don't let ours linger
         // since mCurrentRenderPassDescriptor probably doesn't even point to 'this'
         mQueue->endAllEncoders( false );
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    VulkanFrameBufferDescKey::VulkanFrameBufferDescKey() : FrameBufferDescKey() {}
+    //-----------------------------------------------------------------------------------
+    VulkanFrameBufferDescKey::VulkanFrameBufferDescKey( const RenderPassDescriptor &desc ) :
+        FrameBufferDescKey( desc )
+    {
+        // Base class ignores these. We can't.
+        for( size_t i = 0; i < numColourEntries; ++i )
+        {
+            colour[i].loadAction = desc.mColour[i].loadAction;
+            colour[i].storeAction = desc.mColour[i].storeAction;
+        }
+
+        depth.loadAction = desc.mDepth.loadAction;
+        depth.storeAction = desc.mDepth.storeAction;
+        stencil.loadAction = desc.mStencil.loadAction;
+        stencil.storeAction = desc.mStencil.storeAction;
+    }
+    //-----------------------------------------------------------------------------------
+    bool VulkanFrameBufferDescKey::operator<( const VulkanFrameBufferDescKey &other ) const
+    {
+        return FrameBufferDescKey::operator<( other );
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------

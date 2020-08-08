@@ -48,6 +48,14 @@ namespace Ogre
      *  @{
      */
 
+    struct VulkanFrameBufferDescKey : public FrameBufferDescKey
+    {
+        VulkanFrameBufferDescKey();
+        VulkanFrameBufferDescKey( const RenderPassDescriptor &desc );
+
+        bool operator<( const VulkanFrameBufferDescKey &other ) const;
+    };
+
     struct VulkanFrameBufferDescValue
     {
         uint16 refCount;
@@ -71,7 +79,7 @@ namespace Ogre
         VulkanFrameBufferDescValue();
     };
 
-    typedef map<FrameBufferDescKey, VulkanFrameBufferDescValue>::type VulkanFrameBufferDescMap;
+    typedef map<VulkanFrameBufferDescKey, VulkanFrameBufferDescValue>::type VulkanFrameBufferDescMap;
 
     class _OgreVulkanExport VulkanRenderPassDescriptor : public RenderPassDescriptor
     {
