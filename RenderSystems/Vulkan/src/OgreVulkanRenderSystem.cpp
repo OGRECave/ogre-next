@@ -504,6 +504,28 @@ namespace Ogre
             mActiveDevice->initQueues();
             vaoManager->initDrawIdVertexBuffer();
 
+            FastArray<PixelFormatGpu> depthFormatCandidates( 5u );
+            if( PixelFormatGpuUtils::isStencil( DepthBuffer::DefaultDepthBufferFormat ) )
+            {
+                depthFormatCandidates.push_back( PFG_D32_FLOAT_S8X24_UINT );
+                depthFormatCandidates.push_back( PFG_D24_UNORM_S8_UINT );
+                depthFormatCandidates.push_back( PFG_D32_FLOAT );
+                depthFormatCandidates.push_back( PFG_D24_UNORM );
+                depthFormatCandidates.push_back( PFG_D16_UNORM );
+            }
+            else
+            {
+                depthFormatCandidates.push_back( PFG_D32_FLOAT );
+                depthFormatCandidates.push_back( PFG_D24_UNORM );
+                depthFormatCandidates.push_back( PFG_D32_FLOAT_S8X24_UINT );
+                depthFormatCandidates.push_back( PFG_D24_UNORM_S8_UINT );
+                depthFormatCandidates.push_back( PFG_D16_UNORM );
+            }
+
+            DepthBuffer::DefaultDepthBufferFormat = findSupportedFormat(
+                mDevice->mPhysicalDevice, depthFormatCandidates, VK_IMAGE_TILING_OPTIMAL,
+                VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
+
             VulkanTextureGpuManager *textureGpuManager =
                 OGRE_NEW VulkanTextureGpuManager( vaoManager, this, mDevice );
             mTextureGpuManager = textureGpuManager;

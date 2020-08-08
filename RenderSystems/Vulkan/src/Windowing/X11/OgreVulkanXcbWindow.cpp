@@ -34,6 +34,7 @@ THE SOFTWARE.
 
 #include "OgreTextureGpuListener.h"
 
+#include "OgreDepthBuffer.h"
 #include "OgreException.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreString.h"
@@ -43,8 +44,6 @@ THE SOFTWARE.
 #include <xcb/xcb.h>
 #include "vulkan/vulkan_core.h"
 #include "vulkan/vulkan_xcb.h"
-
-#define TODO_check_support_and_check_DepthBuffer_DefaultDepthBufferFormat
 
 namespace Ogre
 {
@@ -202,16 +201,13 @@ namespace Ogre
 
         mTexture = textureManager->createTextureGpuWindow( this );
         mDepthBuffer = textureManager->createWindowDepthBuffer();
-        mStencilBuffer = mDepthBuffer;
-
-        // mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
+        mStencilBuffer = 0;
 
         bool hwGamma = true;
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
         mTexture->setPixelFormat( chooseSurfaceFormat( hwGamma ) );
-        TODO_check_support_and_check_DepthBuffer_DefaultDepthBufferFormat;
-        mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
+        mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
         if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
             mStencilBuffer = mDepthBuffer;
 

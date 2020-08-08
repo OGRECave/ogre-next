@@ -501,7 +501,7 @@ namespace Ogre
         //     mTexture->setPixelFormat( PFG_B5G5R5A1_UNORM );
         // else
         mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
-        mDepthBuffer->setPixelFormat( findDepthFormat( mDevice->mPhysicalDevice ) );
+		mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
         if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
             mStencilBuffer = mDepthBuffer;
 
