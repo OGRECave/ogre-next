@@ -13,7 +13,7 @@
         #define override
     #endif
 #endif
-#define ENABLE_HLSL
+
 #include "glslang/Public/ShaderLang.h"
 #if __cplusplus <= 199711L
     #ifdef OgreVulkanNullptrDefined

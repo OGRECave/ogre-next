@@ -1104,13 +1104,14 @@ namespace Ogre
                     locationIdx += uvCount++;
 
                 unordered_map<uint32, uint32>::type::const_iterator locationIdxIt =
-                    mSemanticLocations.find( locationIdx );
+                    mSemanticLocations.find( static_cast<uint32>( locationIdx ) );
                 if( locationIdxIt == mSemanticLocations.end() )
                 {
-                    OGRE_EXCEPT(
-                        Exception::ERR_RENDERINGAPI_ERROR,
-                        "Shader: '" + mName + "' mSemanticLocations could not find locationIdx ",
-                        StringConverter::toString( locationIdx ), "VulkanProgram::getLayoutForPso" );
+                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                                 "Shader: '" + mName +
+                                     "' mSemanticLocations could not find locationIdx " +
+                                     StringConverter::toString( locationIdx ),
+                                 "VulkanProgram::getLayoutForPso" );
                 }
 
                 locationIdx = locationIdxIt->second;
@@ -1183,13 +1184,13 @@ namespace Ogre
                 outVertexInputs.push_back( *itor );
                 VkVertexInputAttributeDescription &inputDesc = outVertexInputs.back();
                 inputDesc.format = VK_FORMAT_R32_UINT;
-                inputDesc.binding = locationIdx;
+                inputDesc.binding = static_cast<uint32>( locationIdx );
                 inputDesc.offset = 0u;
 
                 ++numShaderInputsFound;
 
                 VkVertexInputBindingDescription bindingDesc;
-                bindingDesc.binding = locationIdx;
+                bindingDesc.binding = static_cast<uint32>( locationIdx );
                 bindingDesc.stride = 4u;
                 bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
                 outBufferBindingDescs.push_back( bindingDesc );

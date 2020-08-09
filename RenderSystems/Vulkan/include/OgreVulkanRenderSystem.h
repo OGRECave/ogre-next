@@ -81,7 +81,6 @@ namespace Ogre
         VulkanProgramFactory *mVulkanProgramFactory2;
 
         VkInstance mVkInstance;
-        ShaderSyntax mShaderSyntax;
 
         // TODO: AutoParamsBuffer probably belongs to MetalDevice (because it's per device?)
         typedef vector<ConstBufferPacked *>::type ConstBufferPackedVec;

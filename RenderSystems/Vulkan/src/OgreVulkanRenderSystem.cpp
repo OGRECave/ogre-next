@@ -156,7 +156,6 @@ namespace Ogre
         mVulkanProgramFactory1( 0 ),
         mVulkanProgramFactory2( 0 ),
         mVkInstance( 0 ),
-        mShaderSyntax( GLSL ),
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
         mCurrentAutoParamsBufferSpaceLeft( 0 ),
@@ -218,13 +217,12 @@ namespace Ogre
         OGRE_DELETE mShaderManager;
         mShaderManager = 0;
 
-        OGRE_DELETE mVulkanProgramFactory2; // LIFO destruction order
+        OGRE_DELETE mVulkanProgramFactory2;  // LIFO destruction order
         mVulkanProgramFactory2 = 0;
         OGRE_DELETE mVulkanProgramFactory1;
         mVulkanProgramFactory1 = 0;
         OGRE_DELETE mVulkanProgramFactory0;
         mVulkanProgramFactory0 = 0;
-        
 
         OGRE_DELETE mHardwareBufferManager;
         mHardwareBufferManager = 0;
@@ -1762,13 +1760,10 @@ namespace Ogre
         mVulkanProgramFactory0 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "glslvk", true );
         mVulkanProgramFactory1 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "glsl", false );
         mVulkanProgramFactory2 = OGRE_NEW VulkanProgramFactory( mActiveDevice, "hlslvk", true );
-#ifdef ENABLE_HLSL
-        HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory2 );
-#else
+
         HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory0 );
-#endif
         // HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory1 );
-        mShaderSyntax = mVulkanProgramFactory2->getLanguage() == "hlslvk" ? HLSL : GLSL;
+        HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory2 );
 
         mCache = OGRE_NEW VulkanCache( mActiveDevice );
 
@@ -1883,12 +1878,11 @@ namespace Ogre
             mActiveDevice->mGraphicsQueue.getGraphicsEncoder();
 
             // In HLSL the drawId location is not fixed.
-            if( mShaderSyntax == GLSL )
+            if( false )
             {
                 VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-                vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer);
+                vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer );
             }
-            
 
 #if VULKAN_DISABLED
             [mActiveRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
