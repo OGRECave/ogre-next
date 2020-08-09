@@ -177,7 +177,8 @@ namespace Ogre
         std::vector<uint32> mSpirv;
         VkShaderModule mShaderModule;
 
-        FastArray<VkVertexInputAttributeDescription> mVertexInputs;
+        typedef map<uint32, VkVertexInputAttributeDescription>::type VertexInputByLocationIdxMap;
+        VertexInputByLocationIdxMap mVertexInputs;
         uint8 mNumSystemGenVertexInputs;  // System-generated inputs like gl_VertexIndex
 
         bool mReplaceVersionMacro;
@@ -190,8 +191,6 @@ namespace Ogre
         vector<GpuConstantDefinition>::type mConstantDefsSorted;
         map<uint32, VulkanConstantDefinitionBindingParam>::type mConstantDefsBindingParams;
         uint32 mConstantsBytesToWrite;
-
-        map<uint32, uint32>::type mSemanticLocations;
 
         ShaderSyntax mShaderSyntax;
         uint32 mDrawIdLocation;
