@@ -3295,8 +3295,8 @@ namespace Ogre
                     mFastShaderBuildHack = StringConverter::parseBool( itor->second.currentValue );
             }
 
-            //Prefer hlslvk over glslvk over glsl, and glsl over glsles
-            const String shaderProfiles[6] = { "hlsl", "glsles", "glsl", "glslvk", "hlslvk", "metal" };
+            //Prefer glslvk over hlslvk over glsl, and glsl over glsles
+            const String shaderProfiles[6] = { "hlsl", "glsles", "glsl", "hlslvk", "glslvk", "metal" };
             const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
 
             for( size_t i=0; i<6; ++i )

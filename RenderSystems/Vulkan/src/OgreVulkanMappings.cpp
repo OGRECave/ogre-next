@@ -895,7 +895,7 @@ namespace Ogre
         }
         return result;
     }
-
+    //-----------------------------------------------------------------------------------
     GpuConstantType VulkanMappings::get( SpvOp op )
     {
         switch( op )
@@ -922,8 +922,8 @@ namespace Ogre
             return GCT_UNKNOWN;
         }
     }
-
-    VertexElementSemantic VulkanMappings::get( const char *sem )
+    //-----------------------------------------------------------------------------------
+    VertexElementSemantic VulkanMappings::getHlslSemantic( const char *sem )
     {
         if( strcmp( sem, "input.blendIndices" ) == 0 )
             return VES_BLEND_INDICES;

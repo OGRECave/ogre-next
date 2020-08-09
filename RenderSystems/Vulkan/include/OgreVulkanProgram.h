@@ -191,7 +191,7 @@ namespace Ogre
         map<uint32, VulkanConstantDefinitionBindingParam>::type mConstantDefsBindingParams;
         uint32 mConstantsBytesToWrite;
 
-        unordered_map<uint32, uint32>::type mSemanticLocations;
+        map<uint32, uint32>::type mSemanticLocations;
 
         ShaderSyntax mShaderSyntax;
         uint32 mDrawIdLocation;

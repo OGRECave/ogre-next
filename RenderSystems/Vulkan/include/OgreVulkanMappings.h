@@ -75,7 +75,7 @@ namespace Ogre
         static GpuConstantType get( SpvOp op );
 
         // For HLSL
-        static VertexElementSemantic get( const char *sem );
+        static VertexElementSemantic getHlslSemantic( const char *sem );
     };
 }  // namespace Ogre
 

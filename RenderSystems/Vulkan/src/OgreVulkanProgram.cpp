@@ -915,8 +915,8 @@ namespace Ogre
         }
 
         vp->mConstantDefsBindingParams.insert(
-            unordered_map<uint32, VulkanConstantDefinitionBindingParam>::type::value_type(
-                reflBinding.binding, bindingParam ) );
+            map<uint32, VulkanConstantDefinitionBindingParam>::type::value_type( reflBinding.binding,
+                                                                                 bindingParam ) );
 
         // prevBindingParam.offset = bindingParam.offset;
         // prevBindingParam.size = bindingParam.size;
@@ -996,7 +996,7 @@ namespace Ogre
                 }
                 else
                 {
-                    VertexElementSemantic sem = VulkanMappings::get( reflVar->name );
+                    VertexElementSemantic sem = VulkanMappings::getHlslSemantic( reflVar->name );
                     attrIdx = VulkanVaoManager::getAttributeIndexFor( sem );
                 }
             }
@@ -1005,7 +1005,7 @@ namespace Ogre
 
             // In GLSL the key and value are identical
             mSemanticLocations.insert(
-                unordered_map<uint32, uint32>::type::value_type( attrIdx, attrDesc.location ) );
+                map<uint32, uint32>::type::value_type( attrIdx, attrDesc.location ) );
             attrDesc.binding = 0u;
             attrDesc.format = static_cast<VkFormat>( reflVar->format );
             attrDesc.offset = 0u;
@@ -1103,59 +1103,54 @@ namespace Ogre
                 if( it->mSemantic == VES_TEXTURE_COORDINATES )
                     locationIdx += uvCount++;
 
-                unordered_map<uint32, uint32>::type::const_iterator locationIdxIt =
+                map<uint32, uint32>::type::const_iterator locationIdxIt =
                     mSemanticLocations.find( static_cast<uint32>( locationIdx ) );
-                if( locationIdxIt == mSemanticLocations.end() )
+                if( locationIdxIt != mSemanticLocations.end() )
                 {
-                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                                 "Shader: '" + mName +
-                                     "' mSemanticLocations could not find locationIdx " +
-                                     StringConverter::toString( locationIdx ),
-                                 "VulkanProgram::getLayoutForPso" );
-                }
+                    locationIdx = locationIdxIt->second;
 
-                locationIdx = locationIdxIt->second;
+                    FastArray<VkVertexInputAttributeDescription>::const_iterator itor =
+                        std::lower_bound( mVertexInputs.begin(), mVertexInputs.end(), locationIdx,
+                                          SortByVertexInputLocation() );
 
-                FastArray<VkVertexInputAttributeDescription>::const_iterator itor =
-                    std::lower_bound( mVertexInputs.begin(), mVertexInputs.end(), locationIdx,
-                                      SortByVertexInputLocation() );
-
-                if( itor != mVertexInputs.end() && itor->location == locationIdx )
-                {
-                    if( it->mInstancingStepRate > 1u )
+                    if( itor != mVertexInputs.end() && itor->location == locationIdx )
                     {
-                        OGRE_EXCEPT(
-                            Exception::ERR_RENDERINGAPI_ERROR,
-                            "Shader: '" + mName + "' Vulkan only supports mInstancingStepRate = 0 or 1 ",
-                            "VulkanProgram::getLayoutForPso" );
-                    }
-                    else if( inputRate == VK_VERTEX_INPUT_RATE_MAX_ENUM )
-                    {
-                        if( it->mInstancingStepRate == 0u )
-                            inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-                        else
-                            inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
-                    }
-                    else if( ( it->mInstancingStepRate == 0u &&
-                               inputRate != VK_VERTEX_INPUT_RATE_VERTEX ) ||
-                             ( it->mInstancingStepRate == 1u &&
-                               inputRate != VK_VERTEX_INPUT_RATE_INSTANCE ) )
-                    {
-                        OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                                     "Shader: '" + mName +
-                                         "' can only have all-instancing or all-vertex rate semantics "
-                                         "for the same vertex buffer, but it is mixing vertex and "
-                                         "instancing semantics for the same buffer idx",
-                                     "VulkanProgram::getLayoutForPso" );
-                    }
+                        if( it->mInstancingStepRate > 1u )
+                        {
+                            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                                         "Shader: '" + mName +
+                                             "' Vulkan only supports mInstancingStepRate = 0 or 1 ",
+                                         "VulkanProgram::getLayoutForPso" );
+                        }
+                        else if( inputRate == VK_VERTEX_INPUT_RATE_MAX_ENUM )
+                        {
+                            if( it->mInstancingStepRate == 0u )
+                                inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+                            else
+                                inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
+                        }
+                        else if( ( it->mInstancingStepRate == 0u &&
+                                   inputRate != VK_VERTEX_INPUT_RATE_VERTEX ) ||
+                                 ( it->mInstancingStepRate == 1u &&
+                                   inputRate != VK_VERTEX_INPUT_RATE_INSTANCE ) )
+                        {
+                            OGRE_EXCEPT(
+                                Exception::ERR_RENDERINGAPI_ERROR,
+                                "Shader: '" + mName +
+                                    "' can only have all-instancing or all-vertex rate semantics "
+                                    "for the same vertex buffer, but it is mixing vertex and "
+                                    "instancing semantics for the same buffer idx",
+                                "VulkanProgram::getLayoutForPso" );
+                        }
 
-                    outVertexInputs.push_back( *itor );
-                    VkVertexInputAttributeDescription &inputDesc = outVertexInputs.back();
-                    inputDesc.format = VulkanMappings::get( it->mType );
-                    inputDesc.binding = static_cast<uint32_t>( bufferIdx );
-                    inputDesc.offset = bindAccumOffset;
+                        outVertexInputs.push_back( *itor );
+                        VkVertexInputAttributeDescription &inputDesc = outVertexInputs.back();
+                        inputDesc.format = VulkanMappings::get( it->mType );
+                        inputDesc.binding = static_cast<uint32_t>( bufferIdx );
+                        inputDesc.offset = bindAccumOffset;
 
-                    ++numShaderInputsFound;
+                        ++numShaderInputsFound;
+                    }
                 }
 
                 bindAccumOffset += v1::VertexElement::getTypeSize( it->mType );
