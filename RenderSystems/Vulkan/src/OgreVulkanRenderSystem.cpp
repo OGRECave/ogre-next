@@ -1878,7 +1878,7 @@ namespace Ogre
             mActiveDevice->mGraphicsQueue.getGraphicsEncoder();
 
             // In HLSL the drawId location is not fixed.
-            if( false )
+            if( /* DISABLES CODE */ (false) )
             {
                 VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
                 vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer );
