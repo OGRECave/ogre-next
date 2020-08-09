@@ -184,6 +184,7 @@ namespace Ogre
         virtual void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
                                                            ResourceAccessMap &uavsAccess,
                                                            ResourceLayoutMap &resourcesLayout );
+        ResourceTransitionCollection &_getResourceTransitionCollection( void );
         virtual void _initializeBarriers( void );
         virtual void _removeAllBarriers( void );
 

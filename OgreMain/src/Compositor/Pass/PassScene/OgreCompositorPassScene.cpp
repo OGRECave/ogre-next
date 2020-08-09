@@ -246,7 +246,9 @@ namespace Ogre
             // shadows are not 'over culled'
             mCullCamera->_notifyViewport(viewport);
 
+            shadowNode->_swapResourceTransitions( mShadowNodeTransitions );
             shadowNode->_update(mCullCamera, usedLodCamera, sceneManager);
+            shadowNode->_swapResourceTransitions( mShadowNodeTransitions );
 
             //ShadowNode passes may've overriden these settings.
             sceneManager->_setCurrentShadowNode( shadowNode, mDefinition->mShadowNodeRecalculation ==
@@ -318,12 +320,16 @@ namespace Ogre
         const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
 
-        if( mShadowNode )
+        if( mShadowNode && mShadowNode->getEnabled() )
         {
             if( mUpdateShadowNode )
             {
+                OGRE_ASSERT_LOW( mShadowNodeTransitions.empty() );
+
                 mShadowNode->_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess,
                                                                    resourcesLayout );
+                mShadowNodeTransitions.resize( mShadowNode->getDefinition()->getNumTargetPasses() );
+                mShadowNode->_swapResourceTransitions( mShadowNodeTransitions );
             }
 
             //Check <anything> -> Texture (Shadow maps)
@@ -421,14 +427,31 @@ namespace Ogre
     void CompositorPassScene::_initializeBarriers( void )
     {
         CompositorPass::_initializeBarriers();
-        if( mShadowNode )
-            mShadowNode->_initializeBarriers();
+        if( mShadowNode && mShadowNode->getEnabled() && mUpdateShadowNode )
+        {
+            RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            FastArray<ResourceTransitionCollection>::iterator itor = mShadowNodeTransitions.begin();
+            FastArray<ResourceTransitionCollection>::iterator endt = mShadowNodeTransitions.end();
+            while( itor != endt )
+                renderSystem->_resourceTransitionCreated( itor++ );
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassScene::_removeAllBarriers( void )
     {
-        if( mShadowNode )
-            mShadowNode->_removeAllBarriers();
+        if( mShadowNode && mUpdateShadowNode )
+        {
+            RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            FastArray<ResourceTransitionCollection>::iterator itor = mShadowNodeTransitions.begin();
+            FastArray<ResourceTransitionCollection>::iterator endt = mShadowNodeTransitions.end();
+            while( itor != endt )
+            {
+                renderSystem->_resourceTransitionDestroyed( itor );
+                itor->resourceTransitions.clear();
+                ++itor;
+            }
+            mShadowNodeTransitions.clear();
+        }
         CompositorPass::_removeAllBarriers();
     }
     //-----------------------------------------------------------------------------------

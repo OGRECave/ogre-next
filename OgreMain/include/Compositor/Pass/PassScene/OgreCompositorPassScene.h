@@ -74,6 +74,9 @@ namespace Ogre
         TextureGpu      *mDepthTextureNoMsaa;
         TextureGpu      *mRefractionsTexture;
 
+        // One per shadow pass
+        FastArray<ResourceTransitionCollection> mShadowNodeTransitions;
+
         void notifyPassSceneAfterShadowMapsListeners(void);
         void notifyPassSceneAfterFrustumCullingListeners(void);
 

@@ -53,6 +53,21 @@ namespace Ogre
         return &mTargetPasses.back();
     }
     //-----------------------------------------------------------------------------------
+    size_t CompositorNodeDef::calculateNumPasses( void ) const
+    {
+        size_t numPasses = 0u;
+        CompositorTargetDefVec::const_iterator itor = mTargetPasses.begin();
+        CompositorTargetDefVec::const_iterator endt = mTargetPasses.end();
+
+        while( itor != endt )
+        {
+            numPasses += itor->getCompositorPasses().size();
+            ++itor;
+        }
+
+        return numPasses;
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorNodeDef::mapOutputChannel( size_t outChannel, IdString textureName )
     {
         size_t index;

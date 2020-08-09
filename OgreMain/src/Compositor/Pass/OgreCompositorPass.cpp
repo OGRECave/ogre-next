@@ -744,6 +744,11 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    ResourceTransitionCollection &CompositorPass::_getResourceTransitionCollection( void )
+    {
+        return mResourceTransitions;
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorPass::_initializeBarriers( void )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();

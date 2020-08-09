@@ -371,6 +371,9 @@ namespace Ogre
             rsc->setDriverVersion( driverVersion );
         }
 
+        if( mActiveDevice->mDeviceFeatures.imageCubeArray )
+            rsc->setCapability( RSC_TEXTURE_CUBE_MAP_ARRAY );
+
         if( mActiveDevice->mDeviceFeatures.depthClamp )
             rsc->setCapability( RSC_DEPTH_CLAMP );
 
