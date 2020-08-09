@@ -1416,8 +1416,6 @@ namespace Ogre
             return;
 
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-        vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer,
-                                            mPso->vertexShader->getDrawIdLocation() );
         VulkanRootLayout *rootLayout = mPso->rootLayout;
         rootLayout->bind( mDevice, vaoManager, mGlobalTable );
         mTableDirty = false;
@@ -1877,12 +1875,8 @@ namespace Ogre
         {
             mActiveDevice->mGraphicsQueue.getGraphicsEncoder();
 
-            // In HLSL the drawId location is not fixed.
-            if( /* DISABLES CODE */ (false) )
-            {
-                VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-                vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer );
-            }
+            VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+            vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer );
 
 #if VULKAN_DISABLED
             [mActiveRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
