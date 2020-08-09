@@ -79,6 +79,7 @@ namespace Ogre
         VulkanProgramFactory *mVulkanProgramFactory0;
         VulkanProgramFactory *mVulkanProgramFactory1;
         VulkanProgramFactory *mVulkanProgramFactory2;
+        VulkanProgramFactory *mVulkanProgramFactory3;
 
         VkInstance mVkInstance;
 

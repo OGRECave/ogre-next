@@ -105,7 +105,7 @@ namespace Ogre
 
         // Manually assign language now since we use it immediately
         mSyntaxCode = languageName;
-        mShaderSyntax = ( languageName == "hlslvk" ) ? HLSL : GLSL;
+        mShaderSyntax = ( languageName.find( "hlsl" ) != String::npos ) ? HLSL : GLSL;
         mDrawIdLocation = ( mShaderSyntax == GLSL ) ? 15 : 0;
     }
     //---------------------------------------------------------------------------
@@ -446,8 +446,7 @@ namespace Ogre
         {
             // glslang::EShTargetClientVersion VulkanClientVersion = glslang::EShTargetVulkan_1_0;
             // glslang::EShTargetLanguageVersion TargetVersion = glslang::EShTargetSpv_1_0;
-            messages =
-                ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgReadHlsl | EShMsgHlslOffsets );
+            messages = ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgReadHlsl );
             shader.setEnvInput( glslang::EShSourceHlsl, stage, glslang::EShClientVulkan, 100 );
             // shader.setEnvClient( glslang::EShClientVulkan, VulkanClientVersion );
             // shader.setEnvTarget( glslang::EShTargetSpv, TargetVersion );
