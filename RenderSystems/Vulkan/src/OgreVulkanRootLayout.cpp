@@ -52,6 +52,7 @@ namespace Ogre
                                                 ( 1u << GeometryShader ) | ( 1u << HullShader ) |
                                                 ( 1u << DomainShader );
     static const char c_bufferTypes[] = "PBTtsuU";
+    static const char c_HLSLBufferTypesMap[] = "ccttsuu";
     //-------------------------------------------------------------------------
     uint32 toVkDescriptorType( DescBindingTypes::DescBindingTypes type )
     {
@@ -100,7 +101,8 @@ namespace Ogre
         RootLayout::parseRootLayout( rootLayout, bCompute, filename );
     }
     //-------------------------------------------------------------------------
-    void VulkanRootLayout::generateRootLayoutMacros( uint32 shaderStage, String &inOutString ) const
+    void VulkanRootLayout::generateRootLayoutMacros( uint32 shaderStage, ShaderSyntax shaderType,
+                                                     String &inOutString ) const
     {
         String macroStr;
         macroStr.swap( inOutString );
@@ -141,9 +143,21 @@ namespace Ogre
                                 }
                             }
 
-                            // #define ogre_P0 set = 1, binding = 6
-                            textStr.a( "0", " set = ", (uint32)i, ", binding = ", numStagesWithParams,
-                                       "\n" );
+                            if( shaderType == GLSL )
+                            {
+                                // #define ogre_P0 set = 1, binding = 6
+                                textStr.a( "0", " set = ", (uint32)i,
+                                           ", binding = ", numStagesWithParams, "\n" );
+                            }
+                            else
+                            {
+                                // #define ogre_B3 c3
+                                textStr.a( "0 " );
+                                textStr.aChar( c_HLSLBufferTypesMap[j] );
+                                textStr.a( numStagesWithParams, "\n" );
+                            }
+
+                            
                             macroStr += textStr.c_str();
                         }
 
@@ -158,9 +172,20 @@ namespace Ogre
                     for( size_t k = 0u; k < numSlots; ++k )
                     {
                         textStr.resize( prefixSize1 );  // #define ogre_B
-                        // #define ogre_B3 set = 1, binding = 6
-                        textStr.a( emulatedSlot, " set = ", (uint32)i, ", binding = ", bindingIdx,
-                                   "\n" );
+                        if( shaderType == GLSL )
+                        {
+                            // #define ogre_B3 set = 1, binding = 6
+                            textStr.a( emulatedSlot, " set = ", (uint32)i, ", binding = ", bindingIdx,
+                                       "\n" );
+                        }
+                        else
+                        {
+                            // #define ogre_B3 c3
+                            textStr.a( emulatedSlot, " " );
+                            textStr.aChar( c_HLSLBufferTypesMap[j] );
+                            textStr.a( bindingIdx, "\n" );
+                        }
+                        
                         ++bindingIdx;
                         ++emulatedSlot;
 

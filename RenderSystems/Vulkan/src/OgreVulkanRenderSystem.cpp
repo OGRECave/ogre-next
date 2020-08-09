@@ -156,6 +156,7 @@ namespace Ogre
         mVulkanProgramFactory1( 0 ),
         mVulkanProgramFactory2( 0 ),
         mVkInstance( 0 ),
+        mShaderSyntax( GLSL ),
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
         mCurrentAutoParamsBufferSpaceLeft( 0 ),
@@ -1417,6 +1418,8 @@ namespace Ogre
             return;
 
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer,
+                                            mPso->vertexShader->getDrawIdLocation() );
         VulkanRootLayout *rootLayout = mPso->rootLayout;
         rootLayout->bind( mDevice, vaoManager, mGlobalTable );
         mTableDirty = false;
@@ -1765,6 +1768,7 @@ namespace Ogre
         HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory0 );
 #endif
         // HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory1 );
+        mShaderSyntax = mVulkanProgramFactory2->getLanguage() == "hlslvk" ? HLSL : GLSL;
 
         mCache = OGRE_NEW VulkanCache( mActiveDevice );
 
@@ -1878,8 +1882,13 @@ namespace Ogre
         {
             mActiveDevice->mGraphicsQueue.getGraphicsEncoder();
 
-            VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-            vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer );
+            // In HLSL the drawId location is not fixed.
+            if( mShaderSyntax == GLSL )
+            {
+                VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+                vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer);
+            }
+            
 
 #if VULKAN_DISABLED
             [mActiveRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];

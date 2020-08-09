@@ -43,6 +43,12 @@ struct SpvReflectShaderModule;
 
 namespace Ogre
 {
+    enum ShaderSyntax
+    {
+        GLSL,
+        HLSL
+    };
+
     struct _OgreVulkanExport VulkanConstantDefinitionBindingParam
     {
         size_t offset;
@@ -122,6 +128,9 @@ namespace Ogre
                               FastArray<VkVertexInputBindingDescription> &outBufferBindingDescs,
                               FastArray<VkVertexInputAttributeDescription> &outVertexInputs );
 
+
+        uint32 getDrawIdLocation() const { return mDrawIdLocation; }
+
     protected:
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
 
@@ -181,6 +190,11 @@ namespace Ogre
         vector<GpuConstantDefinition>::type mConstantDefsSorted;
         map<uint32, VulkanConstantDefinitionBindingParam>::type mConstantDefsBindingParams;
         uint32 mConstantsBytesToWrite;
+
+        unordered_map<uint32, uint32>::type mSemanticLocations;
+
+        ShaderSyntax mShaderSyntax;
+        uint32 mDrawIdLocation;
     };
 }  // namespace Ogre
 

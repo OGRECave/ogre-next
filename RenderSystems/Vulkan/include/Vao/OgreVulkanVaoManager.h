@@ -322,7 +322,7 @@ namespace Ogre
         virtual ~VulkanVaoManager();
 
         void initDrawIdVertexBuffer();
-        void bindDrawIdVertexBuffer( VkCommandBuffer cmdBuffer );
+        void bindDrawIdVertexBuffer( VkCommandBuffer cmdBuffer, uint32 binding = 15 );
 
         VkDeviceMemory allocateTexture( const VkMemoryRequirements &memReq, uint16 &outTexMemIdx,
                                         size_t &outVboIdx, size_t &outBufferOffset );

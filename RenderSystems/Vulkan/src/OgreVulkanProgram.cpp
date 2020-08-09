@@ -105,6 +105,8 @@ namespace Ogre
 
         // Manually assign language now since we use it immediately
         mSyntaxCode = languageName;
+        mShaderSyntax = ( languageName == "hlslvk" ) ? HLSL : GLSL;
+        mDrawIdLocation = ( mShaderSyntax == GLSL ) ? 15 : 0;
     }
     //---------------------------------------------------------------------------
     VulkanProgram::~VulkanProgram()
@@ -440,7 +442,7 @@ namespace Ogre
 
         // Enable SPIR-V and Vulkan rules when parsing GLSL
         EShMessages messages = ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgVulkanRules );
-        if( mSyntaxCode == "hlslvk" )
+        if( mShaderSyntax == HLSL )
         {
             int ClientInputSemanticsVersion = 110;  // maps to, say, #define VULKAN 100
             glslang::EShTargetClientVersion VulkanClientVersion = glslang::EShTargetVulkan_1_1;
@@ -451,7 +453,7 @@ namespace Ogre
             shader.setEnvTarget( glslang::EShTargetSpv, TargetVersion );
             shader.setEntryPoint( "main" );
         }
-            
+
         const char *sourceCString = mSource.c_str();
         shader.setStrings( &sourceCString, 1 );
 
@@ -460,13 +462,25 @@ namespace Ogre
             if( mReplaceVersionMacro )
                 replaceVersionMacros();
 
-            String preamble =
-                "#define vulkan_layout layout\n"
-                "#define vulkan( x ) x\n"
-                "#define gl_uniform\n"
-                "#define vkSamplerCube samplerCube\n";
+            String preamble;
+            if( mShaderSyntax == GLSL )
+            {
+                preamble =
+                    "#define vulkan_layout layout\n"
+                    "#define vulkan( x ) x\n"
+                    "#define gl_uniform\n"
+                    "#define vkSamplerCube samplerCube\n";
+            }
+            else
+            {
+                preamble =
+                    "#define vulkan_layout register\n"
+                    "#define vulkan( x ) x\n"
+                    "#define gl_uniform\n"
+                    "#define vkSamplerCube samplerCube\n";
+            }
 
-            mRootLayout->generateRootLayoutMacros( mType, preamble );
+            mRootLayout->generateRootLayoutMacros( mType, mShaderSyntax, preamble );
             if( mType == GPT_VERTEX_PROGRAM )
                 addVertexSemanticsToPreamble( preamble );
             addPreprocessorToPreamble( preamble );
@@ -933,6 +947,7 @@ namespace Ogre
 
         mNumSystemGenVertexInputs = 0u;
         mVertexInputs.clear();
+        mSemanticLocations.clear();
 
         uint32_t count = 0u;
 
@@ -969,7 +984,28 @@ namespace Ogre
         {
             const SpvReflectInterfaceVariable *reflVar = *itor;
             VkVertexInputAttributeDescription attrDesc;
+
             attrDesc.location = reflVar->location;
+            uint32 attrIdx;
+            if( mShaderSyntax == HLSL )
+            {
+                if( strcmp( reflVar->name, "input.drawId" ) == 0 )
+                {
+                    mDrawIdLocation = attrDesc.location;
+                    attrIdx = attrDesc.location;
+                }
+                else
+                {
+                    VertexElementSemantic sem = VulkanMappings::get( reflVar->name );
+                    attrIdx = VulkanVaoManager::getAttributeIndexFor( sem );
+                }
+            }
+            else
+                attrIdx = attrDesc.location;
+
+            // In GLSL the key and value are identical
+            mSemanticLocations.insert(
+                unordered_map<uint32, uint32>::type::value_type( attrIdx, attrDesc.location ) );
             attrDesc.binding = 0u;
             attrDesc.format = static_cast<VkFormat>( reflVar->format );
             attrDesc.offset = 0u;
@@ -1067,6 +1103,18 @@ namespace Ogre
                 if( it->mSemantic == VES_TEXTURE_COORDINATES )
                     locationIdx += uvCount++;
 
+                unordered_map<uint32, uint32>::type::const_iterator locationIdxIt =
+                    mSemanticLocations.find( locationIdx );
+                if( locationIdxIt == mSemanticLocations.end() )
+                {
+                    OGRE_EXCEPT(
+                        Exception::ERR_RENDERINGAPI_ERROR,
+                        "Shader: '" + mName + "' mSemanticLocations could not find locationIdx ",
+                        StringConverter::toString( locationIdx ), "VulkanProgram::getLayoutForPso" );
+                }
+
+                locationIdx = locationIdxIt->second;
+
                 FastArray<VkVertexInputAttributeDescription>::const_iterator itor =
                     std::lower_bound( mVertexInputs.begin(), mVertexInputs.end(), locationIdx,
                                       SortByVertexInputLocation() );
@@ -1126,7 +1174,7 @@ namespace Ogre
 
         // Check if DRAWID is being used
         {
-            const size_t locationIdx = 15u;
+            const size_t locationIdx = mShaderSyntax == GLSL ? 15u : mDrawIdLocation;
             FastArray<VkVertexInputAttributeDescription>::const_iterator itor = std::lower_bound(
                 mVertexInputs.begin(), mVertexInputs.end(), locationIdx, SortByVertexInputLocation() );
 
@@ -1135,13 +1183,13 @@ namespace Ogre
                 outVertexInputs.push_back( *itor );
                 VkVertexInputAttributeDescription &inputDesc = outVertexInputs.back();
                 inputDesc.format = VK_FORMAT_R32_UINT;
-                inputDesc.binding = 15u;
+                inputDesc.binding = locationIdx;
                 inputDesc.offset = 0u;
 
                 ++numShaderInputsFound;
 
                 VkVertexInputBindingDescription bindingDesc;
-                bindingDesc.binding = 15u;
+                bindingDesc.binding = locationIdx;
                 bindingDesc.stride = 4u;
                 bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
                 outBufferBindingDescs.push_back( bindingDesc );

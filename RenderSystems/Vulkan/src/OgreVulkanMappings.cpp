@@ -922,4 +922,29 @@ namespace Ogre
             return GCT_UNKNOWN;
         }
     }
+
+    VertexElementSemantic VulkanMappings::get( const char *sem )
+    {
+        if( strcmp( sem, "input.blendIndices" ) == 0 )
+            return VES_BLEND_INDICES;
+        if( strcmp( sem, "input.blendWeigth" ) == 0 )
+            return VES_BLEND_WEIGHTS;
+        if( strcmp( sem, "input.colour" ) == 0 )
+            return VES_DIFFUSE;
+        //      if( strcmp(sem, "COLOR") == 0 )
+        //          return VES_SPECULAR;
+        if( strcmp( sem, "input.normal" ) == 0 )
+            return VES_NORMAL;
+        if( strcmp( sem, "input.vertex" ) == 0 )
+            return VES_POSITION;
+        if( strncmp( sem, "input.uv", 8 ) == 0 )
+            return VES_TEXTURE_COORDINATES;
+        if( strcmp( sem, "input.binormal" ) == 0 )
+            return VES_BINORMAL;
+        if( strcmp( sem, "input.qtangent" ) == 0 || strcmp( sem, "input.tangent" ) == 0 )
+            return VES_TANGENT;
+
+        // to keep compiler happy
+        return VES_POSITION;
+    }
 }  // namespace Ogre

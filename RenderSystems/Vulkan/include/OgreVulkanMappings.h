@@ -73,6 +73,9 @@ namespace Ogre
         static uint32_t getFormatSize( VkFormat format );
 
         static GpuConstantType get( SpvOp op );
+
+        // For HLSL
+        static VertexElementSemantic get( const char *sem );
     };
 }  // namespace Ogre
 

@@ -156,13 +156,13 @@ namespace Ogre
         mDrawId = createVertexBuffer( vertexElements, 4096, BT_IMMUTABLE, drawIdPtr, true );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::bindDrawIdVertexBuffer( VkCommandBuffer cmdBuffer )
+    void VulkanVaoManager::bindDrawIdVertexBuffer( VkCommandBuffer cmdBuffer, uint32 binding )
     {
         VulkanBufferInterface *bufIntf =
             static_cast<VulkanBufferInterface *>( mDrawId->getBufferInterface() );
         VkBuffer vertexBuffers[] = { bufIntf->getVboName() };
         VkDeviceSize offsets[] = { 0 };
-        vkCmdBindVertexBuffers( cmdBuffer, 15, 1, vertexBuffers, offsets );
+        vkCmdBindVertexBuffers( cmdBuffer, binding, 1, vertexBuffers, offsets );
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
