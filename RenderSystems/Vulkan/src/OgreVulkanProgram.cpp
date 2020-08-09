@@ -444,13 +444,13 @@ namespace Ogre
         EShMessages messages = ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgVulkanRules );
         if( mShaderSyntax == HLSL )
         {
-            int ClientInputSemanticsVersion = 110;  // maps to, say, #define VULKAN 100
-            glslang::EShTargetClientVersion VulkanClientVersion = glslang::EShTargetVulkan_1_1;
-            glslang::EShTargetLanguageVersion TargetVersion = glslang::EShTargetSpv_1_1;
-            messages = ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgReadHlsl );
-            shader.setEnvInput( glslang::EShSourceHlsl, stage, glslang::EShClientVulkan, 110 );
-            shader.setEnvClient( glslang::EShClientVulkan, VulkanClientVersion );
-            shader.setEnvTarget( glslang::EShTargetSpv, TargetVersion );
+            // glslang::EShTargetClientVersion VulkanClientVersion = glslang::EShTargetVulkan_1_0;
+            // glslang::EShTargetLanguageVersion TargetVersion = glslang::EShTargetSpv_1_0;
+            messages =
+                ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgReadHlsl | EShMsgHlslOffsets );
+            shader.setEnvInput( glslang::EShSourceHlsl, stage, glslang::EShClientVulkan, 100 );
+            // shader.setEnvClient( glslang::EShClientVulkan, VulkanClientVersion );
+            // shader.setEnvTarget( glslang::EShTargetSpv, TargetVersion );
             shader.setEntryPoint( "main" );
         }
 
@@ -473,11 +473,7 @@ namespace Ogre
             }
             else
             {
-                preamble =
-                    "#define vulkan_layout register\n"
-                    "#define vulkan( x ) x\n"
-                    "#define gl_uniform\n"
-                    "#define vkSamplerCube samplerCube\n";
+                preamble = "#define vulkan( x ) x\n";
             }
 
             mRootLayout->generateRootLayoutMacros( mType, mShaderSyntax, preamble );
@@ -747,7 +743,6 @@ namespace Ogre
         // VulkanConstantDefinitionBindingParam prevBindingParam;
         // prevBindingParam.offset = 0;
         // prevBindingParam.size = 0;
-        size_t prevSize = 0;
 
         const SpvReflectDescriptorBinding &reflBinding = *descBinding;
 
@@ -844,7 +839,7 @@ namespace Ogre
 
             GpuConstantDefinition def;
             def.constType = constantType;
-            def.logicalIndex = prevSize;  // blockVariable.offset;
+            def.logicalIndex = vp->mConstantsBytesToWrite;
             // def.physicalIndex = blockVariable.offset;
             if( blockVariable.type_description->type_flags & SPV_REFLECT_TYPE_FLAG_ARRAY )
             {
@@ -907,12 +902,6 @@ namespace Ogre
         VulkanConstantDefinitionBindingParam bindingParam;
         bindingParam.offset = reflBinding.block.offset;
         bindingParam.size = reflBinding.block.size;
-        if( vp->mConstantDefsBindingParams.find( reflBinding.binding ) ==
-            vp->getConstantDefsBindingParams().end() )
-        {
-            prevSize += alignMemory( reflBinding.block.size,
-                                     mDevice->mDeviceProperties.limits.minUniformBufferOffsetAlignment );
-        }
 
         vp->mConstantDefsBindingParams.insert(
             map<uint32, VulkanConstantDefinitionBindingParam>::type::value_type( reflBinding.binding,

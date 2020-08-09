@@ -92,11 +92,14 @@ namespace Ogre
         mSupportsNonCoherentMemory( false ),
         mReadMemoryIsCoherent( false )
     {
-        mConstBufferAlignment = 256;
-        mTexBufferAlignment = 256;
+        mConstBufferAlignment =
+            (uint32)mDevice->mDeviceProperties.limits.minUniformBufferOffsetAlignment;
+        mTexBufferAlignment = (uint32)mDevice->mDeviceProperties.limits.minTexelBufferOffsetAlignment;
 
-        mConstBufferMaxSize = 64 * 1024;        // 64kb
-        mTexBufferMaxSize = 128 * 1024 * 1024;  // 128MB
+        mConstBufferMaxSize = mDevice->mDeviceProperties.limits.maxUniformBufferRange;
+        mConstBufferMaxSize =
+            std::min<size_t>( mConstBufferMaxSize, 64u * 1024u );  // No bigger than 64kb
+        mTexBufferMaxSize = mDevice->mDeviceProperties.limits.maxTexelBufferElements;
 
         mSupportsPersistentMapping = true;
         mSupportsIndirectBuffers = mDevice->mDeviceFeatures.multiDrawIndirect &&
