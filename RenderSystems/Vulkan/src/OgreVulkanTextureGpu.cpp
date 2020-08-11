@@ -344,6 +344,41 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::PoolTextureSlotChanged );
     }
     //-----------------------------------------------------------------------------------
+    ResourceLayout::Layout VulkanTextureGpu::getCurrentLayout( void ) const
+    {
+        switch( mCurrLayout )
+        {
+        case VK_IMAGE_LAYOUT_UNDEFINED:
+            return ResourceLayout::Undefined;
+        case VK_IMAGE_LAYOUT_GENERAL:
+            return ResourceLayout::Uav;
+        case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+        case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+            return ResourceLayout::RenderTarget;
+        case VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
+            return ResourceLayout::RenderTargetReadOnly;
+        case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+            return ResourceLayout::Texture;
+        case VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
+            return ResourceLayout::CopySrc;
+        case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
+            return ResourceLayout::CopyDst;
+        case VK_IMAGE_LAYOUT_PREINITIALIZED:
+            return ResourceLayout::Undefined;
+        case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL:
+        case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL:
+            return ResourceLayout::RenderTarget;
+        case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
+            return ResourceLayout::PresentReady;
+        case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
+        case VK_IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV:
+        case VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT:
+        case VK_IMAGE_LAYOUT_RANGE_SIZE:
+        case VK_IMAGE_LAYOUT_MAX_ENUM:
+            return ResourceLayout::Undefined;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::setTextureType( TextureTypes::TextureTypes textureType )
     {
         const TextureTypes::TextureTypes oldType = mTextureType;

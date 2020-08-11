@@ -50,9 +50,6 @@ THE SOFTWARE.
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
 
-// We can't finish a frame with TextureGpu left in CopySrc or CopyDst
-#define TODO_check_for_texturesInCopyStages
-
 namespace Ogre
 {
     template<typename T>
@@ -786,9 +783,9 @@ namespace Ogre
 
         mRenderSystem->endRenderPassDescriptor();
 
-        TODO_check_for_texturesInCopyStages;
-
-        mBarrierSolver.reset();
+        mBarrierSolver.reset( mLastResourceTransition );
+        mRenderSystem->_executeResourceTransition( &mLastResourceTransition );
+        mLastResourceTransition.resourceTransitions.clear();
 
         mRenderSystem->_update();
 

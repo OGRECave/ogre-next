@@ -55,13 +55,27 @@ namespace Ogre
 
     GpuTrackedResource::~GpuTrackedResource() {}
     //-------------------------------------------------------------------------
-    const ResourceStatusMap &BarrierSolver::getResourceStatus( void )
-    {
-        return mResourceStatus;
-    }
+    const ResourceStatusMap &BarrierSolver::getResourceStatus( void ) { return mResourceStatus; }
     //-------------------------------------------------------------------------
-    void BarrierSolver::reset( void )
+    void BarrierSolver::reset( ResourceTransitionCollection &resourceTransitions )
     {
+        FastArray<TextureGpu *>::const_iterator itor = mCopyStateTextures.begin();
+        FastArray<TextureGpu *>::const_iterator endt = mCopyStateTextures.end();
+
+        while( itor != endt )
+        {
+            TextureGpu *texture = *itor;
+            ResourceLayout::Layout currLayout = texture->getCurrentLayout();
+            if( currLayout == ResourceLayout::CopySrc || currLayout == ResourceLayout::CopyDst )
+            {
+                // It's still in copy layout. Transition the texture out of that.
+                resolveTransition( resourceTransitions, texture, texture->getDefaultLayout(),
+                                   ResourceAccess::Read, 0u );
+            }
+            ++itor;
+        }
+
+        mCopyStateTextures.clear();
         mResourceStatus.clear();
     }
     //-------------------------------------------------------------------------
@@ -86,6 +100,16 @@ namespace Ogre
                 access == ResourceAccess::Read ) ) &&
             "Invalid Layout-access pair" );
 
+        if( newLayout == ResourceLayout::CopySrc || newLayout == ResourceLayout::CopyDst )
+        {
+            // Keep track of textures which have been transitioned to Copy layouts, since
+            // we can't finish the frame with textures in that stage as they're automatically
+            // managed by the Copy Encoder.
+            // Duplicate entries are harmless but we try to avoid it.
+            if( mCopyStateTextures.empty() || mCopyStateTextures.back() != texture )
+                mCopyStateTextures.push_back( texture );
+        }
+
         ResourceStatusMap::iterator itor = mResourceStatus.find( texture );
 
         if( itor == mResourceStatus.end() )
@@ -98,7 +122,10 @@ namespace Ogre
 
             ResourceTransition resTrans;
             resTrans.resource = texture;
-            resTrans.oldLayout = texture->getInitialLayout();
+            if( texture->isDiscardableContent() )
+                resTrans.oldLayout = ResourceLayout::Undefined;
+            else
+                resTrans.oldLayout = texture->getCurrentLayout();
             resTrans.newLayout = newLayout;
             resTrans.oldStageMask = 0;
             resTrans.newStageMask = 0;
@@ -107,6 +134,11 @@ namespace Ogre
         else
         {
             RenderSystem *renderSystem = texture->getTextureManager()->getRenderSystem();
+
+            OGRE_ASSERT_LOW( renderSystem->isSameLayout( itor->second.layout,
+                                                         texture->getCurrentLayout(), texture ) &&
+                             "Layout was altered outside BarrierSolver!" );
+
             if( !renderSystem->isSameLayout( itor->second.layout, newLayout, texture ) ||
                 ( newLayout == ResourceLayout::Uav &&  //
                   ( access != ResourceAccess::Read ||  //

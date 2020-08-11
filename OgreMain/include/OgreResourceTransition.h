@@ -175,11 +175,12 @@ namespace Ogre
     {
         /// Contains previous state
         ResourceStatusMap mResourceStatus;
+        FastArray<TextureGpu*> mCopyStateTextures;
 
     public:
         const ResourceStatusMap &getResourceStatus( void );
 
-        void reset( void );
+        void reset( ResourceTransitionCollection &resourceTransitions );
 
         /** By specifying how a texture will be used next, this function figures out
             the necessary barriers that may be required and outputs to resourceTransitions

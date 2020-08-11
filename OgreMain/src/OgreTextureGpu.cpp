@@ -794,7 +794,7 @@ namespace Ogre
         return false;
     }
     //-----------------------------------------------------------------------------------
-    ResourceLayout::Layout TextureGpu::getInitialLayout( void ) const
+    ResourceLayout::Layout TextureGpu::getDefaultLayout( void ) const
     {
         if( isDiscardableContent() )
             return ResourceLayout::Undefined;
@@ -805,8 +805,10 @@ namespace Ogre
         else if( isUav() )
             return ResourceLayout::Uav;
 
-        return ResourceLayout::Undefined;
+        return ResourceLayout::Texture;
     }
+    //-----------------------------------------------------------------------------------
+    ResourceLayout::Layout TextureGpu::getCurrentLayout( void ) const { return getDefaultLayout(); }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_setNextLayout( ResourceLayout::Layout layout )
     {

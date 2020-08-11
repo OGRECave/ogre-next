@@ -153,6 +153,7 @@ namespace Ogre
         CompositorPassProvider  *mCompositorPassProvider;
 
         BarrierSolver mBarrierSolver;
+        ResourceTransitionCollection mLastResourceTransition;
 
         bool mRenderWindowsPresentBarrierDirty;
 

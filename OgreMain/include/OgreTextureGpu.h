@@ -515,9 +515,8 @@ namespace Ogre
         ///     * They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true
         virtual bool isOpenGLRenderWindow(void) const;
 
-        /// Gets the initial layout we can assume a texture is in after becoming resident
-        /// or at the beginning of a frame (for RenderTextures and UAVs)
-        ResourceLayout::Layout getInitialLayout( void ) const;
+        ResourceLayout::Layout getDefaultLayout( void ) const;
+        virtual ResourceLayout::Layout getCurrentLayout( void ) const;
 
         /// Sets the layout the texture should be transitioned to after the next copy operation
         /// (once the copy encoder gets closed)
