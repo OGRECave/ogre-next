@@ -199,7 +199,8 @@ namespace TextureFilter
         TextureGpu *tempTexture = textureManager->createTexture( "___tempMipmapTexture",
                                                                  GpuPageOutStrategy::Discard,
                                                                  TextureFlags::RenderToTexture |
-                                                                 TextureFlags::AllowAutomipmaps,
+                                                                 TextureFlags::AllowAutomipmaps |
+                                                                 TextureFlags::DiscardableContent,
                                                                  texture->getTextureType() );
         tempTexture->copyParametersFrom( texture );
         tempTexture->unsafeScheduleTransitionTo( GpuResidency::Resident );

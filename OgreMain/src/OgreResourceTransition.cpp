@@ -144,7 +144,18 @@ namespace Ogre
             ResourceTransition resTrans;
             resTrans.resource = texture;
             if( texture->isDiscardableContent() )
+            {
                 resTrans.oldLayout = ResourceLayout::Undefined;
+                if( access == ResourceAccess::Read )
+                {
+                    OGRE_EXCEPT(
+                        Exception::ERR_INVALID_STATE,
+                        "Transitioning texture " + texture->getNameStr() +
+                            " from Undefined to a read-only layout. Perhaps you didn't want to set "
+                            "TextureFlags::DiscardableContent / aka keep_content in compositor?",
+                        "BarrierSolver::resolveTransition" );
+                }
+            }
             else
                 resTrans.oldLayout = texture->getCurrentLayout();
             resTrans.oldAccess = ResourceAccess::Undefined;

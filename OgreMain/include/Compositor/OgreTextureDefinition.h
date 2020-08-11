@@ -118,6 +118,7 @@ namespace Ogre
             ///     AllowAutomipmaps
             ///     AutomipmapsAuto
             ///     MsaaExplicitResolve
+            ///     DiscardableContent
             /// Note that RenderToTexture & Uav can coexist.
             uint32 textureFlags;
 
@@ -136,7 +137,7 @@ namespace Ogre
                     width( 0 ), height( 0 ), depthOrSlices( 1u ), numMipmaps( 1u ),
                     widthFactor( 1.0f ), heightFactor( 1.0f ),
                     format( PFG_UNKNOWN ), fsaa( "1" ),
-                    textureFlags( TextureFlags::RenderToTexture ),
+                    textureFlags( TextureFlags::RenderToTexture | TextureFlags::DiscardableContent ),
                     depthBufferId( 1u ), preferDepthTexture( false ), depthBufferFormat( PFG_UNKNOWN ) {}
         };
         typedef vector<TextureDefinition>::type     TextureDefinitionVec;

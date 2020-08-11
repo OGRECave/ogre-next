@@ -591,7 +591,7 @@ namespace Ogre {
         uint32 textureFlags = TextureFlags::RenderToTexture;
 
         if( !preferDepthTexture )
-            textureFlags |= TextureFlags::NotTexture;
+            textureFlags |= TextureFlags::NotTexture | TextureFlags::DiscardableContent;
 
         char tmpBuffer[64];
         LwString depthBufferName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );

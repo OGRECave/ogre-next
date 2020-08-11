@@ -201,7 +201,8 @@ namespace Ogre
 
         if( bEnabled )
         {
-            uint32 textureFlags = TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
+            uint32 textureFlags = TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps |
+                                  TextureFlags::DiscardableContent;
 
             //Create Cubemap
             mRenderTarget =

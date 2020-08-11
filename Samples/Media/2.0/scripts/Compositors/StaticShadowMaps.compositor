@@ -47,7 +47,7 @@ compositor_node_shadow StaticShadowMapsShadowNode
 	technique pssm
 
 	texture atlas		3072 2048 PFG_D32_FLOAT
-	texture atlasStatic	4096 8192 PFG_D32_FLOAT
+	texture atlasStatic	4096 8192 PFG_D32_FLOAT keep_content
 	texture tmpCubemap	1024 1024 PFG_R32_FLOAT cubemap depth_format PFG_D32_FLOAT
 
 	num_splits		3
