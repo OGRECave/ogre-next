@@ -577,13 +577,13 @@ namespace Ogre
     }*/
     //-----------------------------------------------------------------------------------
     void CompositorPass::resolveTransition( TextureGpu *texture, ResourceLayout::Layout newLayout,
-                                            ResourceAccess::ResourceAccess access, uint32 stageMask )
+                                            ResourceAccess::ResourceAccess access, uint8 stageMask )
     {
         mBarrierSolver.resolveTransition( mResourceTransitions, texture, newLayout, access, stageMask );
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::resolveTransition( GpuTrackedResource *bufferRes,
-                                            ResourceAccess::ResourceAccess access, uint32 stageMask )
+                                            ResourceAccess::ResourceAccess access, uint8 stageMask )
     {
         mBarrierSolver.resolveTransition( mResourceTransitions, bufferRes, access, stageMask );
     }

@@ -145,10 +145,10 @@ namespace Ogre
 
         /// @see BarrierSolver::resolveTransition
         void resolveTransition( TextureGpu *texture, ResourceLayout::Layout newLayout,
-                                ResourceAccess::ResourceAccess access, uint32 stageMask );
+                                ResourceAccess::ResourceAccess access, uint8 stageMask );
         /// @see BarrierSolver::resolveTransition
         void resolveTransition( GpuTrackedResource *bufferRes, ResourceAccess::ResourceAccess access,
-                                uint32 stageMask );
+                                uint8 stageMask );
 
         /** Bakes most of the memory barriers / resource transition that will be needed
             during execution.

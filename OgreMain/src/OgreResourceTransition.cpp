@@ -147,7 +147,9 @@ namespace Ogre
                 resTrans.oldLayout = ResourceLayout::Undefined;
             else
                 resTrans.oldLayout = texture->getCurrentLayout();
+            resTrans.oldAccess = ResourceAccess::Undefined;
             resTrans.newLayout = newLayout;
+            resTrans.newAccess = access;
             resTrans.oldStageMask = 0;
             resTrans.newStageMask = 0;
             resourceTransitions.resourceTransitions.push_back( resTrans );
