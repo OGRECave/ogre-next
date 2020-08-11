@@ -50,6 +50,9 @@ THE SOFTWARE.
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
 
+// We can't finish a frame with TextureGpu left in CopySrc or CopyDst
+#define TODO_check_for_texturesInCopyStages
+
 namespace Ogre
 {
     template<typename T>
@@ -463,31 +466,23 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    CompositorWorkspace* CompositorManager2::addWorkspace( SceneManager *sceneManager,
-                                             TextureGpu *finalRenderTarget, Camera *defaultCam,
-                                             IdString definitionName, bool bEnabled, int position,
-                                             const UavBufferPackedVec *uavBuffers,
-                                             const ResourceLayoutMap* initialLayouts,
-                                             const ResourceAccessMap* initialUavAccess,
-                                             const Vector4 &vpOffsetScale,
-                                             uint8 vpModifierMask, uint8 executionMask )
+    CompositorWorkspace *CompositorManager2::addWorkspace(
+        SceneManager *sceneManager, TextureGpu *finalRenderTarget, Camera *defaultCam,
+        IdString definitionName, bool bEnabled, int position, const UavBufferPackedVec *uavBuffers,
+        const ResourceStatusMap *initialLayouts, const Vector4 &vpOffsetScale, uint8 vpModifierMask,
+        uint8 executionMask )
     {
         CompositorChannelVec channels;
         channels.push_back( finalRenderTarget );
         return addWorkspace( sceneManager, channels, defaultCam, definitionName, bEnabled, position,
-                             uavBuffers, initialLayouts, initialUavAccess,
-                             vpOffsetScale, vpModifierMask, executionMask );
+                             uavBuffers, initialLayouts, vpOffsetScale, vpModifierMask, executionMask );
     }
     //-----------------------------------------------------------------------------------
-    CompositorWorkspace* CompositorManager2::addWorkspace( SceneManager *sceneManager,
-                                             const CompositorChannelVec &externalRenderTargets,
-                                             Camera *defaultCam, IdString definitionName,
-                                             bool bEnabled, int position,
-                                             const UavBufferPackedVec *uavBuffers,
-                                             const ResourceLayoutMap* initialLayouts,
-                                             const ResourceAccessMap* initialUavAccess,
-                                             const Vector4 &vpOffsetScale,
-                                             uint8 vpModifierMask, uint8 executionMask )
+    CompositorWorkspace *CompositorManager2::addWorkspace(
+        SceneManager *sceneManager, const CompositorChannelVec &externalRenderTargets,
+        Camera *defaultCam, IdString definitionName, bool bEnabled, int position,
+        const UavBufferPackedVec *uavBuffers, const ResourceStatusMap *initialLayouts,
+        const Vector4 &vpOffsetScale, uint8 vpModifierMask, uint8 executionMask )
     {
         validateAllNodes();
 
@@ -503,10 +498,9 @@ namespace Ogre
         else
         {
             workspace = OGRE_NEW CompositorWorkspace(
-                                Id::generateNewId<CompositorWorkspace>(), itor->second,
-                                externalRenderTargets, sceneManager, defaultCam, mRenderSystem,
-                                bEnabled, executionMask, vpModifierMask, vpOffsetScale,
-                                uavBuffers, initialLayouts, initialUavAccess );
+                Id::generateNewId<CompositorWorkspace>(), itor->second, externalRenderTargets,
+                sceneManager, defaultCam, mRenderSystem, bEnabled, executionMask, vpModifierMask,
+                vpOffsetScale, uavBuffers, initialLayouts );
 
             mQueuedWorkspaces.push_back( QueuedWorkspace( workspace, position ) );
         }
@@ -792,6 +786,10 @@ namespace Ogre
 
         mRenderSystem->endRenderPassDescriptor();
 
+        TODO_check_for_texturesInCopyStages;
+
+        mBarrierSolver.reset();
+
         mRenderSystem->_update();
 
         ++mFrameCount;
@@ -874,7 +872,10 @@ namespace Ogre
             mListeners.erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::_notifyBarriersDirty( void ) { mRenderWindowsPresentBarrierDirty = true; }
+    void CompositorManager2::_notifyBarriersDirty( void )
+    {
+        mRenderWindowsPresentBarrierDirty = true;
+    }
     //-----------------------------------------------------------------------------------
     RenderSystem* CompositorManager2::getRenderSystem(void) const
     {

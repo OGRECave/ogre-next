@@ -74,11 +74,10 @@ namespace Ogre
         TextureGpu      *mDepthTextureNoMsaa;
         TextureGpu      *mRefractionsTexture;
 
-        // One per shadow pass
-        FastArray<ResourceTransitionCollection> mShadowNodeTransitions;
-
         void notifyPassSceneAfterShadowMapsListeners(void);
         void notifyPassSceneAfterFrustumCullingListeners(void);
+
+        void analyzeBarriers( void );
 
     public:
         /** Constructor
@@ -95,12 +94,6 @@ namespace Ogre
         ~CompositorPassScene();
 
         virtual void execute( const Camera *lodCamera );
-
-        virtual void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                           ResourceAccessMap &uavsAccess,
-                                                           ResourceLayoutMap &resourcesLayout );
-        virtual void _initializeBarriers( void );
-        virtual void _removeAllBarriers( void );
 
         CompositorShadowNode* getShadowNode() const             { return mShadowNode; }
         Camera* getCamera() const                               { return mCamera; }

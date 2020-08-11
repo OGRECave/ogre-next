@@ -56,7 +56,8 @@ namespace Ogre
                                                     "RenderWindow",
                                                     TextureFlags::NotTexture|
                                                     TextureFlags::RenderToTexture|
-                                                    TextureFlags::RenderWindowSpecific,
+                                                    TextureFlags::RenderWindowSpecific|
+                                                    TextureFlags::DiscardableContent,
                                                     TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------

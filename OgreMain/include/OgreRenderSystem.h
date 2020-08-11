@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreCommon.h"
 
 #include "OgreRenderSystemCapabilities.h"
+#include "OgreResourceTransition.h"
 #include "OgreConfigOptionMap.h"
 #include "OgreGpuProgram.h"
 #include "OgrePlane.h"
@@ -81,6 +82,12 @@ namespace Ogre
         unsigned int        height;
         bool                useFullScreen;
         NameValuePairList   miscParams;
+    };
+
+    struct BoundUav
+    {
+        GpuTrackedResource *rttOrBuffer;
+        ResourceAccess::ResourceAccess boundAccess;
     };
 
     /// Render window creation parameters container.
@@ -801,6 +808,8 @@ namespace Ogre
         */
         void queueBindUAVs( const DescriptorSetUav *descSetUav );
 
+        BoundUav getBoundUav( size_t slot ) const;
+
         /// Forces to take effect all the queued UAV binding requests. @see _queueBindUAV.
         /// You don't need to call this if you're going to set the render target next.
         virtual void flushUAVs(void) = 0;
@@ -825,8 +834,6 @@ namespace Ogre
         virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition )  {}
         virtual void _executeResourceTransition( ResourceTransition *resTransition )    {}
 
-        virtual void _resourceTransitionCreated( ResourceTransitionCollection *outRstCollection ) {}
-        virtual void _resourceTransitionDestroyed( ResourceTransitionCollection *rstCollection ) {}
         virtual void _executeResourceTransition( ResourceTransitionCollection *rstCollection ) {}
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) {}
@@ -1391,6 +1398,11 @@ namespace Ogre
         bool getDebugShaders(void) const                        { return mDebugShaders; }
 
         bool isReverseDepth(void) const                         { return mReverseDepth; }
+
+        /// Returns true if 'a' and 'b' internally map to the same layout and should be
+        /// considered equivalent for a given texture
+        virtual bool isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
+                                   const TextureGpu *texture ) const;
 
         /// On D3D11 calls ClearState followed by Flush().
         /// On GL3+ it calls glFlush

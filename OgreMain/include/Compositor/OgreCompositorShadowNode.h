@@ -336,8 +336,6 @@ namespace Ogre
         /// to call it for every shadow map (otherwise you will trigger a O(N^2) behavior).
         void setStaticShadowMapDirty( size_t shadowMapIdx, bool includeLinked=true );
 
-        void _swapResourceTransitions( FastArray<ResourceTransitionCollection> &resourceTransitions );
-
         /// @copydoc CompositorNode::finalTargetResized
         virtual void finalTargetResized01( const TextureGpu *finalTarget );
     };

@@ -1046,20 +1046,6 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorShadowNode::_swapResourceTransitions(
-        FastArray<ResourceTransitionCollection> &resourceTransitions )
-    {
-        OGRE_ASSERT_LOW( resourceTransitions.size() == mPasses.size() );
-        const size_t numPasses = mPasses.size();
-
-        for( size_t i = 0u; i < numPasses; ++i )
-        {
-            ResourceTransitionCollection &resTrans = mPasses[i]->_getResourceTransitionCollection();
-            resourceTransitions[i].resourceTransitions.swap( resTrans.resourceTransitions );
-            std::swap( resourceTransitions[i].mRsData, resTrans.mRsData );
-        }
-    }
-    //-----------------------------------------------------------------------------------
     void CompositorShadowNode::finalTargetResized01( const TextureGpu *finalTarget )
     {
         CompositorNode::finalTargetResized01( finalTarget );

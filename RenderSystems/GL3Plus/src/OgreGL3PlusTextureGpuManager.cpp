@@ -152,7 +152,8 @@ namespace Ogre
                                                  TextureFlags::NotTexture|
                                                  TextureFlags::RenderToTexture|
                                                  TextureFlags::MsaaExplicitResolve|
-                                                 TextureFlags::RenderWindowSpecific,
+                                                 TextureFlags::RenderWindowSpecific|
+                                                 TextureFlags::DiscardableContent,
                                                  TextureTypes::Type2D, this, context, window );
     }
     //-----------------------------------------------------------------------------------

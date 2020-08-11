@@ -71,6 +71,7 @@ namespace Ogre
         void destroyComputeShaders(void);
         void setGaussianFilterParams( HlmsComputeJob *job, uint8 kernelRadius,
                                       float gaussianDeviationFactor );
+        void analyzeBarriers( void );
 
     public:
         CompositorPassMipmap( const CompositorPassMipmapDef *definition,
@@ -78,10 +79,6 @@ namespace Ogre
         virtual ~CompositorPassMipmap();
 
         virtual void execute( const Camera *lodCamera );
-
-        virtual void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                           ResourceAccessMap &uavsAccess,
-                                                           ResourceLayoutMap &resourcesLayout );
 
         virtual bool notifyRecreated( const TextureGpu *channel );
 

@@ -155,7 +155,7 @@ namespace Ogre
         mVulkanProgramFactory0( 0 ),
         mVulkanProgramFactory1( 0 ),
         mVulkanProgramFactory2( 0 ),
-        mVulkanProgramFactory3(0),
+        mVulkanProgramFactory3( 0 ),
         mVkInstance( 0 ),
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
@@ -2100,17 +2100,24 @@ namespace Ogre
                                                         const bool bIsDepth )
     {
         VkPipelineStageFlags stage = 0;
-        if( layout == ResourceLayout::RenderTarget || layout == ResourceLayout::PresentReady ||
-            ( layout == ResourceLayout::Clear && !bIsDepth ) )
+        if( layout == ResourceLayout::PresentReady )
         {
             stage |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
         }
-        if( layout == ResourceLayout::RenderDepth || ( layout == ResourceLayout::Clear && bIsDepth ) )
+        if( layout == ResourceLayout::RenderTarget || layout == ResourceLayout::RenderTargetReadOnly ||
+            layout == ResourceLayout::Clear )
         {
-            stage |=
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+            if( bIsDepth )
+            {
+                stage |= VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
+                         VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+            }
+            else
+            {
+                stage |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            }
         }
-        if( layout == ResourceLayout::Texture || layout == ResourceLayout::TextureDepth )
+        if( layout == ResourceLayout::Texture )
         {
             stage |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
                      VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
@@ -2123,106 +2130,22 @@ namespace Ogre
 
         return stage;
     }
-
-    void VulkanRenderSystem::_resourceTransitionCreated( ResourceTransitionCollection *rstCollection )
-    {
-        OGRE_ASSERT_LOW( !rstCollection->mRsData );
-
-        if( rstCollection->resourceTransitions.empty() )
-            return;
-
-        VulkanResourceTransition *resTrans = new VulkanResourceTransition();
-        memset( resTrans, 0, sizeof( VulkanResourceTransition ) );
-
-        size_t numTextures = 0u;
-
-        uint32 bufferWriteBarrierBits = 0u;
-        uint32 bufferReadBarrierBits = 0u;
-
-        ResourceTransitionArray::const_iterator itor = rstCollection->resourceTransitions.begin();
-        ResourceTransitionArray::const_iterator endt = rstCollection->resourceTransitions.end();
-
-        while( itor != endt )
-        {
-            if( itor->resource && itor->resource->isTextureGpu() )
-                ++numTextures;
-            else
-            {
-                bufferWriteBarrierBits |= itor->writeBarrierBits;
-                bufferReadBarrierBits |= itor->readBarrierBits;
-            }
-            ++itor;
-        }
-
-        if( bufferWriteBarrierBits || bufferReadBarrierBits )
-        {
-            makeVkStruct( resTrans->memBarrier, VK_STRUCTURE_TYPE_MEMORY_BARRIER );
-
-            if( bufferWriteBarrierBits & WriteBarrier::Uav )
-                resTrans->memBarrier.srcAccessMask |= VK_ACCESS_SHADER_WRITE_BIT;
-            if( bufferReadBarrierBits & ( ReadBarrier::Uav | ReadBarrier::Texture ) )
-                resTrans->memBarrier.dstAccessMask |= VK_ACCESS_SHADER_READ_BIT;
-        }
-
-        resTrans->imageBarriers.resizePOD( numTextures );
-
-        numTextures = 0u;
-        itor = rstCollection->resourceTransitions.begin();
-        while( itor != endt )
-        {
-            if( itor->resource && itor->resource->isTextureGpu() )
-            {
-                VulkanTextureGpu *texture = static_cast<VulkanTextureGpu *>( itor->resource );
-                VkImageMemoryBarrier &imageBarrier = resTrans->imageBarriers[numTextures];
-                imageBarrier = texture->getImageMemoryBarrier();
-                imageBarrier.oldLayout = VulkanMappings::get( itor->oldLayout, texture );
-                imageBarrier.newLayout = VulkanMappings::get( itor->newLayout, texture );
-
-                const bool bIsDepth = PixelFormatGpuUtils::isDepth( texture->getPixelFormat() );
-
-                TODO_depth_readOnly_passes_dont_need_flushing;
-
-                resTrans->srcStage |= toVkPipelineStageFlags( itor->oldLayout, bIsDepth );
-                resTrans->dstStage |= toVkPipelineStageFlags( itor->newLayout, bIsDepth );
-
-                if( itor->writeBarrierBits & WriteBarrier::Uav )
-                    imageBarrier.srcAccessMask |= VK_ACCESS_SHADER_WRITE_BIT;
-                if( itor->writeBarrierBits & WriteBarrier::RenderTarget )
-                    imageBarrier.srcAccessMask |= VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-                if( itor->writeBarrierBits & WriteBarrier::DepthStencil )
-                    imageBarrier.srcAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-
-                if( itor->readBarrierBits & ( ReadBarrier::Texture | ReadBarrier::Uav ) )
-                    imageBarrier.dstAccessMask |= VK_ACCESS_SHADER_READ_BIT;
-                if( itor->readBarrierBits & ReadBarrier::RenderTarget )
-                    imageBarrier.dstAccessMask |= VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
-                if( itor->readBarrierBits & ReadBarrier::DepthStencil )
-                    imageBarrier.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-
-                ++numTextures;
-            }
-            ++itor;
-        }
-
-        if( resTrans->srcStage == 0 )
-            resTrans->srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-
-        OGRE_ASSERT_LOW( resTrans->dstStage );
-
-        rstCollection->mRsData = resTrans;
-    }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_resourceTransitionDestroyed( ResourceTransitionCollection *rstCollection )
+    static VkPipelineStageFlags ogreToVkStageFlags( uint8 ogreStageMask )
     {
-        OGRE_ASSERT_LOW( ( rstCollection->mRsData && !rstCollection->resourceTransitions.empty() ) ||
-                         ( !rstCollection->mRsData && rstCollection->resourceTransitions.empty() ) );
-        if( !rstCollection->resourceTransitions.empty() )
-        {
-            VulkanResourceTransition *rsData =
-                reinterpret_cast<VulkanResourceTransition *>( rstCollection->mRsData );
-            delete rsData;
-            rstCollection->mRsData = 0;
-        }
+        VkPipelineStageFlags retVal = 0u;
+        if( ogreStageMask & ( 1u << VertexShader ) )
+            retVal |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+        if( ogreStageMask & ( 1u << GeometryShader ) )
+            retVal |= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+        if( ogreStageMask & ( 1u << HullShader ) )
+            retVal |= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT;
+        if( ogreStageMask & ( 1u << DomainShader ) )
+            retVal |= VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+        if( ogreStageMask & ( 1u << GPT_COMPUTE_PROGRAM ) )
+            retVal |= VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+
+        return retVal;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_executeResourceTransition( ResourceTransitionCollection *rstCollection )
@@ -2230,14 +2153,14 @@ namespace Ogre
         if( rstCollection->resourceTransitions.empty() )
             return;
 
-        VulkanResourceTransition *rsData =
-            reinterpret_cast<VulkanResourceTransition *>( rstCollection->mRsData );
+        VkPipelineStageFlags srcStage = 0u;
+        VkPipelineStageFlags dstStage = 0u;
 
-        uint32 numMemBarriers = 0u;
-        if( rsData->memBarrier.sType == VK_STRUCTURE_TYPE_MEMORY_BARRIER )
-            numMemBarriers = 1u;
+        VkMemoryBarrier memBarrier;
 
-        size_t numTextures = 0u;
+        uint32 bufferSrcBarrierBits = 0u;
+        uint32 bufferDstBarrierBits = 0u;
+
         ResourceTransitionArray::const_iterator itor = rstCollection->resourceTransitions.begin();
         ResourceTransitionArray::const_iterator endt = rstCollection->resourceTransitions.end();
 
@@ -2246,19 +2169,77 @@ namespace Ogre
             if( itor->resource && itor->resource->isTextureGpu() )
             {
                 VulkanTextureGpu *texture = static_cast<VulkanTextureGpu *>( itor->resource );
-                rsData->imageBarriers[numTextures].image = texture->getFinalTextureName();
-                texture->mCurrLayout = rsData->imageBarriers[numTextures].newLayout;
-                ++numTextures;
+                VkImageMemoryBarrier imageBarrier = texture->getImageMemoryBarrier();
+                imageBarrier.oldLayout = VulkanMappings::get( itor->oldLayout, texture );
+                imageBarrier.newLayout = VulkanMappings::get( itor->newLayout, texture );
+
+                if( itor->oldAccess & ResourceAccess::Write )
+                {
+                    imageBarrier.srcAccessMask =
+                        VulkanMappings::getAccessFlags( itor->oldLayout, itor->oldAccess, texture );
+                }
+
+                imageBarrier.dstAccessMask =
+                    VulkanMappings::getAccessFlags( itor->newLayout, itor->newAccess, texture );
+
+                const bool bIsDepth = PixelFormatGpuUtils::isDepth( texture->getPixelFormat() );
+
+                if( itor->oldLayout != ResourceLayout::Texture &&
+                    itor->oldLayout != ResourceLayout::Uav )
+                {
+                    srcStage |= toVkPipelineStageFlags( itor->oldLayout, bIsDepth );
+                }
+                else
+                    srcStage |= ogreToVkStageFlags( itor->oldStageMask );
+
+                if( itor->newLayout != ResourceLayout::Texture &&
+                    itor->newLayout != ResourceLayout::Uav )
+                {
+                    dstStage |= toVkPipelineStageFlags( itor->newLayout, bIsDepth );
+                }
+                else
+                    dstStage |= ogreToVkStageFlags( itor->newStageMask );
+
+                texture->mCurrLayout = imageBarrier.newLayout;
+
+                mImageBarriers.push_back( imageBarrier );
+            }
+            else
+            {
+                srcStage |= ogreToVkStageFlags( itor->oldStageMask );
+                dstStage |= ogreToVkStageFlags( itor->newStageMask );
+
+                if( itor->oldAccess & ResourceAccess::Write )
+                    bufferSrcBarrierBits |= VK_ACCESS_SHADER_WRITE_BIT;
+
+                if( itor->newAccess & ResourceAccess::Read )
+                    bufferDstBarrierBits |= VK_ACCESS_SHADER_READ_BIT;
+                if( itor->newAccess & ResourceAccess::Write )
+                    bufferDstBarrierBits |= VK_ACCESS_SHADER_WRITE_BIT;
             }
             ++itor;
         }
 
+        uint32 numMemBarriers = 0u;
+        if( bufferSrcBarrierBits || bufferDstBarrierBits )
+        {
+            makeVkStruct( memBarrier, VK_STRUCTURE_TYPE_MEMORY_BARRIER );
+            memBarrier.srcAccessMask = bufferSrcBarrierBits;
+            memBarrier.dstAccessMask = bufferDstBarrierBits;
+            numMemBarriers = 1u;
+        }
+
+        if( srcStage == 0 )
+            srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+
+        OGRE_ASSERT_LOW( dstStage );
+
         mActiveDevice->mGraphicsQueue.endAllEncoders();
 
-        vkCmdPipelineBarrier( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, rsData->srcStage,
-                              rsData->dstStage, 0, numMemBarriers, &rsData->memBarrier, 0u, 0,
-                              static_cast<uint32>( rsData->imageBarriers.size() ),
-                              rsData->imageBarriers.begin() );
+        vkCmdPipelineBarrier( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, srcStage, dstStage, 0,
+                              numMemBarriers, &memBarrier, 0u, 0,
+                              static_cast<uint32>( mImageBarriers.size() ), mImageBarriers.begin() );
+        mImageBarriers.clear();
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso )
@@ -2922,5 +2903,11 @@ namespace Ogre
         delete metalSet;
 
         set->mRsData = 0;
+    }
+    //-------------------------------------------------------------------------
+    bool VulkanRenderSystem::isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
+                                           const TextureGpu *texture ) const
+    {
+        return VulkanMappings::get( a, texture ) == VulkanMappings::get( b, texture );
     }
 }  // namespace Ogre

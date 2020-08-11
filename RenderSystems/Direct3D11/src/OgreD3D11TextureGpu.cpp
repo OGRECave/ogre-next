@@ -439,9 +439,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                                   const TextureBox &srcBox, uint8 srcMipLevel,
-                                  bool keepResolvedTexSynced )
+								  bool keepResolvedTexSynced, bool barrierLess )
     {
-        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
+		TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, barrierLess );
 
         assert( dynamic_cast<D3D11TextureGpu*>( dst ) );
         D3D11TextureGpu *dstD3d = static_cast<D3D11TextureGpu*>( dst );

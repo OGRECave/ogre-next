@@ -156,12 +156,8 @@ namespace Demo
             workspaceDef->connectExternal( 0, cubemapRendererNode, 0 );
         }
 
-        ResourceLayoutMap initialCubemapLayouts;
-        ResourceAccessMap initialCubemapUavAccess;
-        mDynamicCubemapWorkspace =
-                compositorManager->addWorkspace( sceneManager, cubemapExternalChannels, mCubeCamera,
-                                                 workspaceName, true, -1, (UavBufferPackedVec*)0,
-                                                 &initialCubemapLayouts, &initialCubemapUavAccess );
+        mDynamicCubemapWorkspace = compositorManager->addWorkspace(
+            sceneManager, cubemapExternalChannels, mCubeCamera, workspaceName, true );
 
         //Now setup the regular renderer
         CompositorChannelVec externalChannels( 2 );
@@ -170,9 +166,7 @@ namespace Demo
         externalChannels[1] = mDynamicCubemap;
 
         return compositorManager->addWorkspace( sceneManager, externalChannels, camera,
-                                                "Tutorial_DynamicCubemapWorkspace",
-                                                true, -1, (UavBufferPackedVec*)0,
-                                                &initialCubemapLayouts, &initialCubemapUavAccess );
+                                                "Tutorial_DynamicCubemapWorkspace", true );
     }
     //-----------------------------------------------------------------------------------
     void DynamicCubemapGameState::createScene01(void)

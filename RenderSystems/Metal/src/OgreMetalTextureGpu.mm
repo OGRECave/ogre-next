@@ -241,9 +241,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                                   const TextureBox &srcBox, uint8 srcMipLevel,
-                                  bool keepResolvedTexSynced )
+                                  bool keepResolvedTexSynced, bool barrierLess )
     {
-        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
+        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, barrierLess );
 
         assert( dynamic_cast<MetalTextureGpu*>( dst ) );
 

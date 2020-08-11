@@ -612,7 +612,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel, bool keepResolvedTexSynced )
+                             const TextureBox &srcBox, uint8 srcMipLevel, bool keepResolvedTexSynced,
+                             bool barrierLess )
     {
         assert( srcBox.equalSize( dstBox ) );
         assert( this != dst || !srcBox.overlaps( dstBox ) );
@@ -783,9 +784,35 @@ namespace Ogre
         return (mTextureFlags & TextureFlags::PoolOwner) != 0;
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpu::isDiscardableContent(void) const
+    {
+        return (mTextureFlags & TextureFlags::DiscardableContent) != 0;
+    }
+    //-----------------------------------------------------------------------------------
     bool TextureGpu::isOpenGLRenderWindow(void) const
     {
         return false;
+    }
+    //-----------------------------------------------------------------------------------
+    ResourceLayout::Layout TextureGpu::getInitialLayout( void ) const
+    {
+        if( isDiscardableContent() )
+            return ResourceLayout::Undefined;
+        else if( isPoolOwner() )
+            return ResourceLayout::Texture;
+        else if( isRenderToTexture() )
+            return ResourceLayout::RenderTarget;
+        else if( isUav() )
+            return ResourceLayout::Uav;
+
+        return ResourceLayout::Undefined;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::_setNextLayout( ResourceLayout::Layout layout )
+    {
+        OGRE_ASSERT_LOW( ( layout != ResourceLayout::CopySrc && layout != ResourceLayout::CopyDst ) &&
+                         "CopySrc/Dst layouts are automanaged. "
+                         "Cannot explicitly transition to these layouts" );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )

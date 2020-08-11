@@ -83,9 +83,7 @@ namespace Ogre
         void destroyShadowMap(void);
         void updateShadowMap( const Vector3 &lightDir, const Vector2 &xzDimensions, float heightScale );
 
-        void fillUavDataForCompositorChannel( TextureGpu **outChannel,
-                                              ResourceLayoutMap &outInitialLayouts,
-                                              ResourceAccessMap &outInitialUavAccess ) const;
+        void fillUavDataForCompositorChannel( TextureGpu **outChannel ) const;
 
         Ogre::TextureGpu* getShadowMapTex(void) const           { return m_shadowMapTex; }
     };

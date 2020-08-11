@@ -257,6 +257,7 @@ namespace Ogre
             mFsRect->setNormals( cameraDirs[0], cameraDirs[1], cameraDirs[2], cameraDirs[3] );
         }
 
+        analyzeBarriers();
         executeResourceTransitions();
 
         setRenderPassDescToCurrent();

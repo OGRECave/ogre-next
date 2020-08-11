@@ -278,11 +278,11 @@ namespace Ogre
         mDownsampleWorkspace2DArray =
                 mCompositorManager->addWorkspace(
                     sceneManager, mDownsampleTex, dummyCamera, "VctTexDownsampleWorkspace", false,
-                    -1, 0, 0, 0, Vector4::ZERO, 0x00, 0x01 );
+                    -1, 0, 0, Vector4::ZERO, 0x00, 0x01 );
         mDownsampleWorkspace2D =
                 mCompositorManager->addWorkspace(
                     sceneManager, mDownsampleTex, dummyCamera, "VctTexDownsampleWorkspace", false,
-                    -1, 0, 0, 0, Vector4::ZERO, 0x00, 0x02 );
+                    -1, 0, 0, Vector4::ZERO, 0x00, 0x02 );
     }
     //-------------------------------------------------------------------------
     void VctMaterial::destroyTempResources(void)

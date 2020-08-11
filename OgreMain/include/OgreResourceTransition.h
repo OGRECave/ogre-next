@@ -30,6 +30,9 @@ THE SOFTWARE.
 #define _OgreResourceTransition_H_
 
 #include "OgrePrerequisites.h"
+
+#include "ogrestd/map.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -47,13 +50,13 @@ namespace Ogre
     {
         Undefined,
         Texture,
-        TextureDepth,
         RenderTarget,
-        RenderDepth,
+        RenderTargetReadOnly,
         Clear,
         Uav,
         CopySrc,
         CopyDst,
+        MipmapGen,
         PresentReady,
 
         NumResourceLayouts
@@ -126,6 +129,13 @@ namespace Ogre
         ResourceLayout::Layout      oldLayout;
         ResourceLayout::Layout      newLayout;
 
+        ResourceAccess::ResourceAccess oldAccess;
+        ResourceAccess::ResourceAccess newAccess;
+
+        uint8 oldStageMask;
+        uint8 newStageMask;
+
+        // Deprecated
         uint32 writeBarrierBits;    /// @see WriteBarrier::WriteBarrier
         uint32 readBarrierBits;     /// @see ReadBarrier::ReadBarrier
 
@@ -136,9 +146,7 @@ namespace Ogre
     struct ResourceTransitionCollection
     {
         ResourceTransitionArray resourceTransitions;
-        void *mRsData;  /// Render-System specific data
-
-        ResourceTransitionCollection() : mRsData( 0 ) {}
+        ResourceTransitionCollection() {}
     };
 
     struct GpuTrackedResource
@@ -147,8 +155,70 @@ namespace Ogre
         virtual bool isTextureGpu( void ) const { return false; }
     };
 
-    typedef StdMap<GpuTrackedResource*, ResourceLayout::Layout> ResourceLayoutMap;
-    typedef StdMap<GpuTrackedResource*, ResourceAccess::ResourceAccess> ResourceAccessMap;
+    struct ResourceStatus
+    {
+        ResourceLayout::Layout layout;
+        ResourceAccess::ResourceAccess access;
+        // Accumulates a bitmaks of shader stages currently using this resource
+        uint8 stageMask;
+        ResourceStatus() :
+            layout( ResourceLayout::Undefined ),
+            access( ResourceAccess::Undefined ),
+            stageMask( 0u )
+        {
+        }
+    };
+
+    typedef StdMap<GpuTrackedResource*, ResourceStatus> ResourceStatusMap;
+
+    class _OgreExport BarrierSolver
+    {
+        /// Contains previous state
+        ResourceStatusMap mResourceStatus;
+
+    public:
+        const ResourceStatusMap &getResourceStatus( void );
+
+        void reset( void );
+
+        /** By specifying how a texture will be used next, this function figures out
+            the necessary barriers that may be required and outputs to resourceTransitions
+            while storing the current state in mResourceStatus so the next calls to
+            resolveTransition know what was the last usage
+        @param resourceTransitions [in/out]
+            Barriers created so far that will be executed as a single sync point.
+            This variable may or may not be modified depending of whether a barrier is needed
+        @param texture
+            The texture you want to use
+        @param newLayout
+            How the texture will be used next
+        @param access
+            The kind of access: Read, Write, R/W.
+        @param stageMask
+            Bitmask of the shader stages that will be using this texture after this transition.
+            Only useful when transitioning to ResourceLayout::Texture and ResourceLayout::Uav.
+            Must be 0 otherwise.
+        */
+        void resolveTransition( ResourceTransitionCollection &resourceTransitions, TextureGpu *texture,
+                                ResourceLayout::Layout newLayout, ResourceAccess::ResourceAccess access,
+                                uint8 stageMask );
+
+        /// Same as the other overload, but meant for buffers
+        void resolveTransition( ResourceTransitionCollection &resourceTransitions,
+                                GpuTrackedResource *bufferRes, ResourceAccess::ResourceAccess access,
+                                uint8 stageMask );
+
+        /** Tell the solver the texture has been transitioned to a different layout, externally
+        @param newLayout
+        @param access
+        @param stageMask
+        */
+        void assumeTransition( TextureGpu *texture, ResourceLayout::Layout newLayout,
+                               ResourceAccess::ResourceAccess access, uint8 stageMask );
+
+        /// Tell the solver all these resources have been transitioned to a different layout, externally
+        void assumeTransitions( ResourceStatusMap &resourceStatus );
+    };
 
     /** @} */
     /** @} */

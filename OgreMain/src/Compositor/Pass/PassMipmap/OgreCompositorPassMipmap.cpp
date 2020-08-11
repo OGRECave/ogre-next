@@ -401,6 +401,7 @@ namespace Ogre
 
         notifyPassEarlyPreExecuteListeners();
 
+        analyzeBarriers();
         executeResourceTransitions();
 
         //Fire the listener in case it wants to change anything
@@ -459,51 +460,28 @@ namespace Ogre
         profilingEnd();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassMipmap::_placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                                     ResourceAccessMap &uavsAccess,
-                                                                     ResourceLayoutMap &resourcesLayout )
+    void CompositorPassMipmap::analyzeBarriers( void )
     {
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-        const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
+        mResourceTransitions.resourceTransitions.clear();
+
+        // Do not use base class'
+        // CompositorPass::analyzeBarriers();
 
         const bool usesCompute = !mJobs.empty();
 
-        //Check <anything> -> RT for every RTT in the textures we'll be generating mipmaps.
+        const ResourceLayout::Layout targetLayout =
+            usesCompute ? ResourceLayout::Uav : ResourceLayout::MipmapGen;
+        const uint32 stage = usesCompute ? ( 1u << GPT_COMPUTE_PROGRAM ) : 0u;
+
+        // Check <anything> -> RT for every RTT in the textures we'll be generating mipmaps.
         TextureGpuVec::const_iterator itTex = mTextures.begin();
         TextureGpuVec::const_iterator enTex = mTextures.end();
 
         while( itTex != enTex )
         {
-            TextureGpu *tex = *itTex;
-
-            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( tex );
-            if( (currentLayout->second != ResourceLayout::RenderTarget && explicitApi) ||
-                (currentLayout->second == ResourceLayout::Uav && !usesCompute) ||
-                usesCompute )
-            {
-                if( !usesCompute )
-                {
-                    addResourceTransition( currentLayout,
-                                           ResourceLayout::RenderTarget,
-                                           ReadBarrier::RenderTarget );
-                }
-                else
-                {
-                    //The RTT will be first used as a texture, then
-                    //as an UAV, then as texture again, then UAV, etc.
-                    //So we need to set to Texture first.
-                    addResourceTransition( currentLayout,
-                                           ResourceLayout::Texture,
-                                           ReadBarrier::Texture );
-                }
-            }
-
+            resolveTransition( *itTex, targetLayout, ResourceAccess::ReadWrite, stage );
             ++itTex;
         }
-
-        //Do not use base class functionality at all.
-        //CompositorPass::_placeBarriersAndEmulateUavExecution();
     }
     //-----------------------------------------------------------------------------------
     bool CompositorPassMipmap::notifyRecreated( const TextureGpu *channel )

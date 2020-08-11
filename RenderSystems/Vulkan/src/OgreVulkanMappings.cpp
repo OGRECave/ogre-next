@@ -480,6 +480,55 @@ namespace Ogre
         return 0;
     }
     //-----------------------------------------------------------------------------------
+    VkAccessFlags VulkanMappings::getAccessFlags( ResourceLayout::Layout layout,
+                                                  ResourceAccess::ResourceAccess access,
+                                                  const TextureGpu *texture )
+    {
+        VkAccessFlags texAccessFlags = 0;
+
+        switch( layout )
+        {
+        case ResourceLayout::Texture:
+            texAccessFlags |= VK_ACCESS_SHADER_READ_BIT;
+            break;
+        case ResourceLayout::RenderTarget:
+            if( !PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
+            {
+                texAccessFlags |=
+                    VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            }
+            else
+            {
+                texAccessFlags |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
+                                  VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+            }
+            break;
+        case ResourceLayout::RenderTargetReadOnly:
+            if( !PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
+                texAccessFlags |= VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+            else
+                texAccessFlags |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+            break;
+        case ResourceLayout::Uav:
+            if( access & ResourceAccess::Read )
+                texAccessFlags |= VK_ACCESS_SHADER_READ_BIT;
+            if( access & ResourceAccess::Write )
+                texAccessFlags |= VK_ACCESS_SHADER_WRITE_BIT;
+            break;
+        case ResourceLayout::CopySrc:
+            texAccessFlags |= VK_ACCESS_TRANSFER_READ_BIT;
+            break;
+        case ResourceLayout::CopyDst:
+            texAccessFlags |= VK_ACCESS_TRANSFER_WRITE_BIT;
+            break;
+        case ResourceLayout::PresentReady:
+            texAccessFlags = 0u;
+            break;
+        }
+
+        return texAccessFlags;
+    }
+    //-----------------------------------------------------------------------------------
     VkImageLayout VulkanMappings::get( ResourceLayout::Layout layout, const TextureGpu *texture )
     {
         switch( layout )
@@ -489,12 +538,14 @@ namespace Ogre
             return VK_IMAGE_LAYOUT_UNDEFINED;
         case ResourceLayout::Texture:
             return VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        case ResourceLayout::TextureDepth:
-            return VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         case ResourceLayout::RenderTarget:
-            return VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-        case ResourceLayout::RenderDepth:
-            return VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            return PixelFormatGpuUtils::isDepth( texture->getPixelFormat() )
+                       ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+                       : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        case ResourceLayout::RenderTargetReadOnly:
+            return PixelFormatGpuUtils::isDepth( texture->getPixelFormat() )
+                       ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
+                       : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         case ResourceLayout::Clear:
             return PixelFormatGpuUtils::isDepth( texture->getPixelFormat() )
                        ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL

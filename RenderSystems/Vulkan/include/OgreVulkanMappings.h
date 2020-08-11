@@ -68,6 +68,10 @@ namespace Ogre
         static VkAccessFlags get( const TextureGpu *texture );
         static VkAccessFlags get( BufferPackedTypes bufferPackedTypes );
 
+        static VkAccessFlags getAccessFlags( ResourceLayout::Layout layout,
+                                             ResourceAccess::ResourceAccess access,
+                                             const TextureGpu *texture );
+
         static VkImageLayout get( ResourceLayout::Layout layout, const TextureGpu *texture );
 
         static uint32_t getFormatSize( VkFormat format );

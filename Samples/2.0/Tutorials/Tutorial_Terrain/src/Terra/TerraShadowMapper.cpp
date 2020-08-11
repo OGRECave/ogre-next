@@ -337,15 +337,9 @@ namespace Ogre
         m_shadowWorkspace->_update();
     }
     //-----------------------------------------------------------------------------------
-    void ShadowMapper::fillUavDataForCompositorChannel( TextureGpu **outChannel,
-                                                        ResourceLayoutMap &outInitialLayouts,
-                                                        ResourceAccessMap &outInitialUavAccess ) const
+    void ShadowMapper::fillUavDataForCompositorChannel( TextureGpu **outChannel ) const
     {
         *outChannel = m_shadowMapTex;
-        outInitialLayouts.insert( m_shadowWorkspace->getResourcesLayout().begin(),
-                                  m_shadowWorkspace->getResourcesLayout().end() );
-        outInitialUavAccess.insert( m_shadowWorkspace->getUavsAccess().begin(),
-                                    m_shadowWorkspace->getUavsAccess().end() );
     }
     //-----------------------------------------------------------------------------------
     void ShadowMapper::setGaussianFilterParams( uint8 kernelRadius, float gaussianDeviationFactor )

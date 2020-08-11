@@ -319,7 +319,8 @@ namespace Ogre
                                                 TextureFlags::NotTexture |           //
                                                     TextureFlags::RenderToTexture |  //
                                                     TextureFlags::RenderWindowSpecific |
-                                                    TextureFlags::RequiresTextureFlipping,
+                                                    TextureFlags::RequiresTextureFlipping |
+                                                    TextureFlags::DiscardableContent,
                                                 TextureTypes::Type2D, this, window );
     }
     //-----------------------------------------------------------------------------------
@@ -329,7 +330,8 @@ namespace Ogre
                                                       "RenderWindow DepthBuffer",          //
                                                       TextureFlags::NotTexture |           //
                                                           TextureFlags::RenderToTexture |  //
-                                                          TextureFlags::RenderWindowSpecific,
+                                                          TextureFlags::RenderWindowSpecific |
+                                                          TextureFlags::DiscardableContent,
                                                       TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------

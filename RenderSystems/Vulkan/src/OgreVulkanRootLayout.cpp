@@ -48,9 +48,6 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    static const uint8 c_allGraphicStagesMask = ( 1u << VertexShader ) | ( 1u << PixelShader ) |
-                                                ( 1u << GeometryShader ) | ( 1u << HullShader ) |
-                                                ( 1u << DomainShader );
     static const char c_bufferTypes[] = "PBTtsuU";
     static const char c_HLSLBufferTypesMap[] = "ccttsuu";
     //-------------------------------------------------------------------------

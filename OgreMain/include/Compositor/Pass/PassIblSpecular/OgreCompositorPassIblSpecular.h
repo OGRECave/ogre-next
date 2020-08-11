@@ -72,16 +72,14 @@ namespace Ogre
         void setupComputeShaders( void );
         void destroyComputeShaders( void );
 
+        void analyzeBarriers( void );
+
     public:
         CompositorPassIblSpecular( const CompositorPassIblSpecularDef *definition,
                                    const RenderTargetViewDef *rtv, CompositorNode *parentNode );
         virtual ~CompositorPassIblSpecular();
 
         virtual void execute( const Camera *lodCamera );
-
-        virtual void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                           ResourceAccessMap &uavsAccess,
-                                                           ResourceLayoutMap &resourcesLayout );
 
         virtual bool notifyRecreated( const TextureGpu *channel );
 

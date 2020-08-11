@@ -359,6 +359,12 @@ namespace Ogre {
         NumShaderTypes
     };
 
+    static const uint8 c_allGraphicStagesMask = ( 1u << VertexShader ) | ( 1u << PixelShader ) |
+                                                ( 1u << GeometryShader ) | ( 1u << HullShader ) |
+                                                ( 1u << DomainShader );
+    // NumShaderTypes == GPT_COMPUTE_PROGRAM
+    static const uint8 c_computeStageMask = 1u << NumShaderTypes;
+
     /** Flags for the Instance Manager when calculating ideal number of instances per batch */
     enum InstanceManagerFlags
     {

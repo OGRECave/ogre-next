@@ -112,11 +112,7 @@ namespace Ogre
 
         UavBufferPackedVec      mExternalBuffers;
 
-        bool                    mBarriersDirty;
-        ResourceLayoutMap       mInitialResourcesLayout;
-        ResourceAccessMap       mInitialUavsAccess;
-        ResourceLayoutMap       mResourcesLayout;
-        ResourceAccessMap       mUavsAccess;
+        ResourceStatusMap       mInitialLayouts;
 
         /// Creates all the node instances from our definition
         void createAllNodes(void);
@@ -144,8 +140,6 @@ namespace Ogre
         */
         void setupPassesShadowNodes(void);
 
-        void analyzeHazardsAndPlaceBarriers(void);
-
         CompositorNode* getLastEnabledNode(void);
 
     public:
@@ -156,8 +150,7 @@ namespace Ogre
                              uint8 executionMask, uint8 viewportModifierMask,
                              const Vector4 &vpOffsetScale,
                              const UavBufferPackedVec *uavBuffers,
-                             const ResourceLayoutMap* initialLayouts,
-                             const ResourceAccessMap* initialUavAccess );
+                             const ResourceStatusMap* initialLayouts );
         virtual ~CompositorWorkspace();
 
         const CompositorChannel& getGlobalTexture( IdString name ) const;
@@ -192,9 +185,6 @@ namespace Ogre
 
         const CompositorWorkspaceListenerVec& getListeners(void) const { return mListeners; }
 
-        const ResourceLayoutMap& getResourcesLayout(void) const     { return mResourcesLayout; }
-        const ResourceAccessMap& getUavsAccess(void) const          { return mUavsAccess; }
-
         /** Fills the input map + vector with all the passes that use a window,
             classified per window.
         @remarks
@@ -202,42 +192,6 @@ namespace Ogre
             (this should not be supported by APIs anyway)
         */
         void fillPassesUsingRenderWindows( PassesByRenderWindowMap &passesUsingRenderWindows );
-
-        /** When two workspaces work on the same channels/textures, to avoid race conditions
-            in Compute Shaders each workspace needs to know what the the previous workspace did;
-            and that information must be supplied during workspace creation.
-
-            This function fills outInitialLayouts & outInitialUavAccess with the state in
-            which the UAVs will be when 'this' is done executing; and can be used
-            by the next workspace.
-
-            In code:
-            @code
-                CompositorWorkspace *first, *next;
-                first = compositorManager->addWorkspace( sceneManager, channels,
-                                                         camera, "CompoName_A", true );
-
-                ResourceLayoutMap initialLayouts;
-                ResourceAccessMap initialAccess;
-                first->fillUavDependenciesForNextWorkspace( initialLayouts, initialAccess );
-                after = compositorManager->addWorkspace( sceneManager, channels,
-                                                         camera, "CompoName_B", true, 0,
-                                                         &initialLayouts, &initialAccess );
-            @endcode
-
-        @remarks
-            Compute shaders are guaranteed to start in order; but they're not guaranteed to
-            be processed in sequence nor finish in order unless explicitly requested.
-            This is why this function exists.
-        @param outInitialLayouts [in/out]
-            Fills outInitialLayouts. Previous content is not removed; but we may
-            overwrite some entries.
-        @param outInitialUavAccess [in/out]
-            Fills outInitialUavAccess. Previous content is not removed; but we may
-            overwrite some entries.
-        */
-        void fillUavDependenciesForNextWorkspace( ResourceLayoutMap &outInitialLayouts,
-                                                  ResourceAccessMap &outInitialUavAccess ) const;
 
         /** Finds a node instance with the given aliased name
         @remarks

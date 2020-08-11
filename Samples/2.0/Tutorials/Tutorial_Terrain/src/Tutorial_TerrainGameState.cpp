@@ -86,14 +86,11 @@ namespace Demo
         externalChannels[0] = renderWindow->getTexture();
 
         //Terra's Shadow texture
-        ResourceLayoutMap initialLayouts;
-        ResourceAccessMap initialUavAccess;
         if( mTerra )
         {
             //Terra is initialized
             const ShadowMapper *shadowMapper = mTerra->getShadowMapper();
-            shadowMapper->fillUavDataForCompositorChannel( &externalChannels[1], initialLayouts,
-                                                           initialUavAccess );
+            shadowMapper->fillUavDataForCompositorChannel( &externalChannels[1] );
         }
         else
         {
@@ -110,9 +107,7 @@ namespace Demo
         }
 
         return compositorManager->addWorkspace( sceneManager, externalChannels, camera,
-                                                "Tutorial_TerrainWorkspace", true, -1,
-                                                (UavBufferPackedVec*)0, &initialLayouts,
-                                                &initialUavAccess );
+                                                "Tutorial_TerrainWorkspace", true );
     }
     //-----------------------------------------------------------------------------------
     void Tutorial_TerrainGameState::createScene01(void)

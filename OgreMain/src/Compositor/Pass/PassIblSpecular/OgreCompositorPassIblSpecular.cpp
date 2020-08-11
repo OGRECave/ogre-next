@@ -328,6 +328,7 @@ namespace Ogre
 
         notifyPassEarlyPreExecuteListeners();
 
+        analyzeBarriers();
         executeResourceTransitions();
 
         // Fire the listener in case it wants to change anything
@@ -348,7 +349,7 @@ namespace Ogre
                 for( uint8 mip = 0u; mip < outNumMips; ++mip )
                 {
                     TextureBox emptyBox = mOutputTexture->getEmptyBox( mip );
-                    mInputTexture->copyTo( mOutputTexture, emptyBox, mip, emptyBox, mip );
+                    mInputTexture->copyTo( mOutputTexture, emptyBox, mip, emptyBox, mip, true, true );
                 }
             }
         }
@@ -381,61 +382,48 @@ namespace Ogre
         profilingEnd();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassIblSpecular::_placeBarriersAndEmulateUavExecution(
-        BoundUav boundUavs[64], ResourceAccessMap &uavsAccess, ResourceLayoutMap &resourcesLayout )
+    void CompositorPassIblSpecular::analyzeBarriers( void )
     {
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-        const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
+        mResourceTransitions.resourceTransitions.clear();
+
+        // Do not use base class'
+        // CompositorPass::analyzeBarriers();
 
         const bool usesCompute = !mJobs.empty();
 
         if( usesCompute )
         {
-            // Check <anything> -> RT for mInputTexture (we need to generate mipmaps).
-            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( mInputTexture );
-            if( currentLayout->second != ResourceLayout::RenderTarget )
-            {
-                addResourceTransition( currentLayout, ResourceLayout::RenderTarget,
-                                       ReadBarrier::Texture );
-            }
+            // Check <anything> -> MipmapGen for mInputTexture
+            resolveTransition( mInputTexture, ResourceLayout::MipmapGen,
+                               ResourceAccess::ReadWrite, 0u );
+
+            // This texture will leave from here as ResourceLayout::Texture, as it is manually
+            // transitioned into that for our compute shader to read
+            mBarrierSolver.assumeTransition( mInputTexture, ResourceLayout::Texture,
+                                             ResourceAccess::Read, 1u << GPT_COMPUTE_PROGRAM );
 
             // Check <anything> -> UAV for mOutputTexture (we need to write to it).
-            currentLayout = resourcesLayout.find( mOutputTexture );
-            if( currentLayout->second != ResourceLayout::Uav )
-            {
-                addResourceTransition( currentLayout, ResourceLayout::Uav, ReadBarrier::Texture );
-            }
+            resolveTransition( mOutputTexture, ResourceLayout::Uav, ResourceAccess::Write,
+                               1u << GPT_COMPUTE_PROGRAM );
         }
         else
         {
             if( mInputTexture != mOutputTexture )
             {
-                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( mInputTexture );
-
                 if( mOutputTexture->getNumMipmaps() > 1u )
                 {
-                    // Check <anything> -> RT for mInputTexture (we need to generate mipmaps).
-                    if( currentLayout->second != ResourceLayout::RenderTarget )
-                    {
-                        addResourceTransition( currentLayout, ResourceLayout::RenderTarget,
-                                               ReadBarrier::Texture );
-                    }
+                    // Check <anything> -> MipmapGen for mInputTexture
+                    resolveTransition( mInputTexture, ResourceLayout::MipmapGen,
+                                       ResourceAccess::ReadWrite, 0u );
                 }
 
-                // mInputTexture will leave from us as CopySrc, subsequent passes need to see this
-                // Don't insert that transition here though (that's done at runtime)
-                currentLayout->second = ResourceLayout::CopySrc;
+                // mInputTexture will leave from us as CopySrc (manually transitioned)
+                mBarrierSolver.assumeTransition( mInputTexture, ResourceLayout::CopySrc,
+                                                 ResourceAccess::Read, 0u );
 
-                // mInputTexture will leave from us as CopyDst, subsequent passes need to see this
-                // Don't insert that transition here though (that's done at runtime)
-                currentLayout = resourcesLayout.find( mOutputTexture );
-                currentLayout->second = ResourceLayout::CopyDst;
+                resolveTransition( mOutputTexture, ResourceLayout::CopyDst, ResourceAccess::Write, 0u );
             }
         }
-
-        // Do not use base class functionality at all.
-        // CompositorPass::_placeBarriersAndEmulateUavExecution();
     }
     //-----------------------------------------------------------------------------------
     bool CompositorPassIblSpecular::notifyRecreated( const TextureGpu *channel )

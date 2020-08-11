@@ -86,16 +86,14 @@ namespace Ogre
         Camera          *mCamera;
 
         void setResourcesToJob(void);
+
+        void analyzeBarriers( void );
     public:
         CompositorPassCompute( const CompositorPassComputeDef *definition, Camera *defaultCamera,
                                CompositorNode *parentNode, const RenderTargetViewDef *rtv );
         virtual ~CompositorPassCompute();
 
         virtual void execute( const Camera *lodCamera );
-
-        virtual void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                           ResourceAccessMap &uavsAccess,
-                                                           ResourceLayoutMap &resourcesLayout );
     };
 
     /** @} */

@@ -154,7 +154,16 @@ namespace Ogre
             /// For internal use. Indicates whether this texture is the owner
             /// of a TextureGpuManager::TexturePool, which are used
             /// to hold regular textures using AutomaticBatching
-            PoolOwner           = 1u << 13u
+            PoolOwner           = 1u << 13u,
+            /// When this flag is present, the contents of a RenderToTexture or Uav
+            /// may not be preserved between frames. Useful for RenderToTexture which are written or
+            /// cleared first.
+            ///
+            /// Must not be used on textures whose contents need to be preserved between
+            /// frames (e.g. HDR luminance change over time)
+            ///
+            /// If this flag is present, either RenderToTexture or Uav must be present
+            DiscardableContent  = 1u << 14u
         };
     }
 
@@ -426,10 +435,13 @@ namespace Ogre
 
             Typically the reason to set this to false is if you plane on rendering more
             stuff to dst texture and then resolve.
+        @param barrierLess
+            Leave this set to false.
+            The compositor sets this to true to manually manage the barriers
         */
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel,
-                             bool keepResolvedTexSynced = true );
+                             bool keepResolvedTexSynced = true, bool barrierLess = false );
 
         /** These 3 values  are used as defaults for the compositor to use, but they may be
             explicitly overriden by a RenderPassDescriptor.
@@ -496,11 +508,22 @@ namespace Ogre
         bool _isManualTextureFlagPresent(void) const;
         bool isManualTexture(void) const;
         bool isPoolOwner(void) const;
+        bool isDiscardableContent(void) const;
 
         /// OpenGL RenderWindows are a bit specific:
         ///     * Their origins are upside down. Which means we need to flip Y.
         ///     * They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true
         virtual bool isOpenGLRenderWindow(void) const;
+
+        /// Gets the initial layout we can assume a texture is in after becoming resident
+        /// or at the beginning of a frame (for RenderTextures and UAVs)
+        ResourceLayout::Layout getInitialLayout( void ) const;
+
+        /// Sets the layout the texture should be transitioned to after the next copy operation
+        /// (once the copy encoder gets closed)
+        ///
+        /// This is specific to Vulkan & D3D12
+        virtual void _setNextLayout( ResourceLayout::Layout layout );
 
         virtual void _setToDisplayDummyTexture(void) = 0;
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );

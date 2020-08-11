@@ -76,6 +76,7 @@ namespace Ogre
 
         notifyPassEarlyPreExecuteListeners();
 
+        analyzeBarriers();
         executeResourceTransitions();
 
         //Fire the listener in case it wants to change anything

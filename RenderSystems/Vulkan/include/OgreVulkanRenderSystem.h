@@ -132,6 +132,9 @@ namespace Ogre
 #endif
         VulkanDescriptorSetTexture *mCurrentDescriptorSetTexture;
 
+        /// Declared here to avoid constant reallocations
+        FastArray<VkImageMemoryBarrier> mImageBarriers;
+
         void addInstanceDebugCallback( void );
 
         /// Creates a dummy VkRenderPass for use in PSO creation
@@ -291,8 +294,6 @@ namespace Ogre
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );
 
-        virtual void _resourceTransitionCreated( ResourceTransitionCollection *rstCollection );
-        virtual void _resourceTransitionDestroyed( ResourceTransitionCollection *rstCollection );
         virtual void _executeResourceTransition( ResourceTransitionCollection *rstCollection );
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) override;
@@ -316,6 +317,9 @@ namespace Ogre
         void _notifyDeviceStalled();
 
         void _notifyActiveEncoderEnded( bool callEndRenderPassDesc );
+
+        virtual bool isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
+                                   const TextureGpu *texture ) const;
 
     protected:
         template <typename TDescriptorSetTexture, typename TTexSlot, typename TBufferPacked>

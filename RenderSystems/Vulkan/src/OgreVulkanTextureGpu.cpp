@@ -162,6 +162,37 @@ namespace Ogre
         {
             mCurrLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             mNextLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+            if( isRenderToTexture() || isUav() )
+            {
+                if( isRenderToTexture() )
+                {
+                    // Assume render textures always start ready to render
+                    if( PixelFormatGpuUtils::isDepth( mPixelFormat ) )
+                    {
+                        mCurrLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                        mNextLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                    }
+                    else
+                    {
+                        mCurrLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                        mNextLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                    }
+                }
+                else if( isUav() )
+                {
+                    // Non-RenderToTextures UAVs are assumed to start in R/W mode
+                    mCurrLayout = VK_IMAGE_LAYOUT_GENERAL;
+                    mNextLayout = VK_IMAGE_LAYOUT_GENERAL;
+                }
+
+                VkImageMemoryBarrier imageBarrier = this->getImageMemoryBarrier();
+                imageBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                imageBarrier.newLayout = mCurrLayout;
+                vkCmdPipelineBarrier(
+                    device->mGraphicsQueue.mCurrentCmdBuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                    VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0, 0u, 0, 0u, 0, 1u, &imageBarrier );
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -324,7 +355,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                                    const TextureBox &srcBox, uint8 srcMipLevel,
-                                   bool keepResolvedTexSynced )
+                                   bool keepResolvedTexSynced, bool barrierLess )
     {
         TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
 
@@ -335,8 +366,17 @@ namespace Ogre
             static_cast<VulkanTextureGpuManager *>( mTextureManager );
         VulkanDevice *device = textureManager->getDevice();
 
-        device->mGraphicsQueue.getCopyEncoder( 0, this, true );
-        device->mGraphicsQueue.getCopyEncoder( 0, dstTexture, false );
+        if( !barrierLess )
+        {
+            device->mGraphicsQueue.getCopyEncoder( 0, this, true );
+            device->mGraphicsQueue.getCopyEncoder( 0, dstTexture, false );
+        }
+        else
+        {
+            // This won't generate barriers, but it will close all other encoders
+            // and open the copy one
+            device->mGraphicsQueue.getCopyEncoder( 0, 0, true );
+        }
 
         VkImageCopy region;
 
@@ -376,6 +416,14 @@ namespace Ogre
         {
             dst->_syncGpuResidentToSystemRam();
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::_setNextLayout( ResourceLayout::Layout layout )
+    {
+        OGRE_ASSERT_LOW( ( layout != ResourceLayout::CopySrc && layout != ResourceLayout::CopyDst ) &&
+                         "CopySrc/Dst layouts are automanaged. "
+                         "Cannot explicitly transition to these layouts" );
+        mNextLayout = VulkanMappings::get( layout, this );
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::_autogenerateMipmaps( void ) {}

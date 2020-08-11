@@ -44,10 +44,12 @@ THE SOFTWARE.
 #include "OgreHardwareOcclusionQuery.h"
 #include "OgreHlmsPso.h"
 #include "OgreTextureGpuManager.h"
+#include "OgreDescriptorSetUav.h"
 #include "OgreWindow.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
+#include "Vao/OgreUavBufferPacked.h"
 #include "OgreProfiler.h"
 
 #include "OgreLwString.h"
@@ -688,6 +690,30 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
+    BoundUav RenderSystem::getBoundUav( size_t slot ) const
+    {
+        BoundUav retVal;
+        memset( &retVal, 0, sizeof( retVal ) );
+        if( mUavRenderingDescSet )
+        {
+            if( slot < mUavRenderingDescSet->mUavs.size() )
+            {
+                if( mUavRenderingDescSet->mUavs[slot].isTexture() )
+                {
+                    retVal.rttOrBuffer = mUavRenderingDescSet->mUavs[slot].getTexture().texture;
+                    retVal.boundAccess = mUavRenderingDescSet->mUavs[slot].getTexture().access;
+                }
+                else
+                {
+                    retVal.rttOrBuffer = mUavRenderingDescSet->mUavs[slot].getBuffer().buffer;
+                    retVal.boundAccess = mUavRenderingDescSet->mUavs[slot].getBuffer().access;
+                }
+            }
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------
     void RenderSystem::_beginFrameOnce(void)
     {
         mVaoManager->_beginFrame();
@@ -1311,6 +1337,14 @@ namespace Ogre {
     void RenderSystem::setDebugShaders( bool bDebugShaders )
     {
         mDebugShaders = bDebugShaders;
+    }
+    //---------------------------------------------------------------------
+    bool RenderSystem::isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
+                                     const TextureGpu *texture ) const
+    {
+        if( a != ResourceLayout::Uav && b != ResourceLayout::Uav )
+            return true;
+        return a == b;
     }
     //---------------------------------------------------------------------
     void RenderSystem::_clearStateAndFlushCommandBuffer(void)

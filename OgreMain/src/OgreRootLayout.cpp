@@ -51,9 +51,6 @@ namespace Ogre
         "uav_textures",   //
         "uav_buffers",    //
     };
-    static const uint8 c_allGraphicStagesMask = ( 1u << VertexShader ) | ( 1u << PixelShader ) |
-                                                ( 1u << GeometryShader ) | ( 1u << HullShader ) |
-                                                ( 1u << DomainShader );
     //-------------------------------------------------------------------------
     DescBindingRange::DescBindingRange() : start( 0u ), end( 0u ) {}
     //-------------------------------------------------------------------------
