@@ -203,6 +203,7 @@ namespace Ogre
             HlmsTextureManager::TEXTURE_TYPE_NORMALS,
             HlmsTextureManager::TEXTURE_TYPE_NORMALS,
 #endif
+            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
             HlmsTextureManager::TEXTURE_TYPE_ENV_MAP
         };
 
