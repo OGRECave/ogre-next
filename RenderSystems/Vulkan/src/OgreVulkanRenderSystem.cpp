@@ -2136,6 +2136,8 @@ namespace Ogre
         VkPipelineStageFlags retVal = 0u;
         if( ogreStageMask & ( 1u << VertexShader ) )
             retVal |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+        if( ogreStageMask & ( 1u << PixelShader ) )
+            retVal |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
         if( ogreStageMask & ( 1u << GeometryShader ) )
             retVal |= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
         if( ogreStageMask & ( 1u << HullShader ) )
