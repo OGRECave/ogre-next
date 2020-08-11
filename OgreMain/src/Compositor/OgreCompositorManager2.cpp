@@ -683,6 +683,13 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void CompositorManager2::flushTextureCopyOperations( void )
+    {
+        mBarrierSolver.resetCopyLayoutsOnly( mLastResourceTransition );
+        mRenderSystem->_executeResourceTransition( &mLastResourceTransition );
+        mLastResourceTransition.resourceTransitions.clear();
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorManager2::_update( void )
     {
         //The Apple render systems need to run the update in a special way.

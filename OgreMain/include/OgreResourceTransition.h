@@ -180,6 +180,8 @@ namespace Ogre
     public:
         const ResourceStatusMap &getResourceStatus( void );
 
+        void resetCopyLayoutsOnly( ResourceTransitionCollection &resourceTransitions );
+
         void reset( ResourceTransitionCollection &resourceTransitions );
 
         /** By specifying how a texture will be used next, this function figures out

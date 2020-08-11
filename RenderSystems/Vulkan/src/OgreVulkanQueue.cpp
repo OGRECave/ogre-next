@@ -449,6 +449,16 @@ namespace Ogre
             }
             else if( it == mCopyDownloadTextures.end() )
             {
+                if( vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ||
+                    vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                                 "Texture " + vkTexture->getNameStr() +
+                                     " is already in CopySrc or CopyDst layout, externally set. Perhaps "
+                                     "you need to call CompositorManager2::flushTextureCopyOperations",
+                                 "VulkanQueue::prepareForUpload" );
+                }
+
                 texAccessFlags = VulkanMappings::get( texture );
             }
             else
@@ -598,6 +608,16 @@ namespace Ogre
 
             if( it == mCopyDownloadTextures.end() )
             {
+                if( vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ||
+                    vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                                 "Texture " + vkTexture->getNameStr() +
+                                     " is already in CopySrc or CopyDst layout, externally set. Perhaps "
+                                     "you need to call CompositorManager2::flushTextureCopyOperations",
+                                 "VulkanQueue::prepareForDownload" );
+                }
+
                 if( texture->isUav() )
                 {
                     texAccessFlags |= VK_ACCESS_SHADER_WRITE_BIT;
@@ -750,8 +770,7 @@ namespace Ogre
 
                 // GPU must stop using this buffer before we can write into it
                 vkCmdPipelineBarrier( mCurrentCmdBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
-                                      VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 1u, &memBarrier, 0u, 0, 0u,
-                                      0 );
+                                      VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 1u, &memBarrier, 0u, 0, 0u, 0 );
             }
 
             mCopyEndReadDstBufferFlags |= bufferAccessFlags;

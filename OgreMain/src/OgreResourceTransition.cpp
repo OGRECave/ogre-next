@@ -57,6 +57,27 @@ namespace Ogre
     //-------------------------------------------------------------------------
     const ResourceStatusMap &BarrierSolver::getResourceStatus( void ) { return mResourceStatus; }
     //-------------------------------------------------------------------------
+    void BarrierSolver::resetCopyLayoutsOnly( ResourceTransitionCollection &resourceTransitions )
+    {
+        FastArray<TextureGpu *>::const_iterator itor = mCopyStateTextures.begin();
+        FastArray<TextureGpu *>::const_iterator endt = mCopyStateTextures.end();
+
+        while( itor != endt )
+        {
+            TextureGpu *texture = *itor;
+            ResourceLayout::Layout currLayout = texture->getCurrentLayout();
+            if( currLayout == ResourceLayout::CopySrc || currLayout == ResourceLayout::CopyDst )
+            {
+                // It's still in copy layout. Transition the texture out of that.
+                resolveTransition( resourceTransitions, texture, texture->getDefaultLayout(),
+                                   ResourceAccess::Read, 0u );
+            }
+            ++itor;
+        }
+
+        mCopyStateTextures.clear();
+    }
+    //-------------------------------------------------------------------------
     void BarrierSolver::reset( ResourceTransitionCollection &resourceTransitions )
     {
         FastArray<TextureGpu *>::const_iterator itor = mCopyStateTextures.begin();
