@@ -2131,11 +2131,7 @@ namespace Ogre
                     debugDumpFile.open( debugFilenameOutput.c_str(), std::ios::out | std::ios::binary );
 
                     if( mDebugOutputProperties )
-                    {
-                        mSetProperties.swap( codeCache.mergedCache.setProperties );
                         dumpProperties( debugDumpFile );
-                        mSetProperties.swap( codeCache.mergedCache.setProperties );
-                    }
                 }
 
                 codeCache.shaders[i] = compileShaderCode( source[i], "", finalHash,
