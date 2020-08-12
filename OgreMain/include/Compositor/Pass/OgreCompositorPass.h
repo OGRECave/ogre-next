@@ -96,7 +96,7 @@ namespace Ogre
         CompositorTextureVec    mTextureDependencies;
 
         BarrierSolver &mBarrierSolver;
-        ResourceTransitionCollection mResourceTransitions;
+        ResourceTransitionArray mResourceTransitions;
 
         /// MUST be called by derived class.
         void initialize( const RenderTargetViewDef *rtv, bool supportsNoRtv=false );

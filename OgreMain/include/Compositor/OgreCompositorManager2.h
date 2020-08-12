@@ -152,8 +152,8 @@ namespace Ogre
         /// For custom passes.
         CompositorPassProvider  *mCompositorPassProvider;
 
-        BarrierSolver mBarrierSolver;
-        ResourceTransitionCollection mLastResourceTransition;
+        BarrierSolver &mBarrierSolver;
+        ResourceTransitionArray mFinalResourceTransition;
 
         bool mRenderWindowsPresentBarrierDirty;
 
@@ -384,13 +384,6 @@ namespace Ogre
 
         /// Calls @see CompositorNode::_validateAndFinish on all objects who aren't yet validated
         void validateAllNodes();
-
-        /// Call this function if you need to call texture->copyTo or create an AsyncTextureTicket
-        /// on a Texture which is currently in either ResourceLayout::CopySrc or CopyDst layout.
-        ///
-        /// For performance reasons though it is recommended that you wait until
-        /// CompositorManager::_update() is returns
-        void flushTextureCopyOperations( void );
 
         BarrierSolver &getBarrierSolver( void ) { return mBarrierSolver; }
 

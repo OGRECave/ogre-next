@@ -152,11 +152,6 @@ namespace Ogre
     };
 
     typedef FastArray<ResourceTransition> ResourceTransitionArray;
-    struct ResourceTransitionCollection
-    {
-        ResourceTransitionArray resourceTransitions;
-        ResourceTransitionCollection() {}
-    };
 
     struct GpuTrackedResource
     {
@@ -189,9 +184,9 @@ namespace Ogre
     public:
         const ResourceStatusMap &getResourceStatus( void );
 
-        void resetCopyLayoutsOnly( ResourceTransitionCollection &resourceTransitions );
+        void resetCopyLayoutsOnly( ResourceTransitionArray &resourceTransitions );
 
-        void reset( ResourceTransitionCollection &resourceTransitions );
+        void reset( ResourceTransitionArray &resourceTransitions );
 
         /** By specifying how a texture will be used next, this function figures out
             the necessary barriers that may be required and outputs to resourceTransitions
@@ -211,12 +206,12 @@ namespace Ogre
             Only useful when transitioning to ResourceLayout::Texture and ResourceLayout::Uav.
             Must be 0 otherwise.
         */
-        void resolveTransition( ResourceTransitionCollection &resourceTransitions, TextureGpu *texture,
+        void resolveTransition( ResourceTransitionArray &resourceTransitions, TextureGpu *texture,
                                 ResourceLayout::Layout newLayout, ResourceAccess::ResourceAccess access,
                                 uint8 stageMask );
 
         /// Same as the other overload, but meant for buffers
-        void resolveTransition( ResourceTransitionCollection &resourceTransitions,
+        void resolveTransition( ResourceTransitionArray &resourceTransitions,
                                 GpuTrackedResource *bufferRes, ResourceAccess::ResourceAccess access,
                                 uint8 stageMask );
 

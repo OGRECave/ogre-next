@@ -814,6 +814,13 @@ namespace Ogre
         /// You don't need to call this if you're going to set the render target next.
         virtual void flushUAVs(void) = 0;
 
+        /// Call this function if you need to call texture->copyTo or create an AsyncTextureTicket
+        /// on a Texture which is currently in either ResourceLayout::CopySrc or CopyDst layout.
+        ///
+        /// For performance reasons though it is recommended that you wait until
+        /// CompositorManager::_update() is returns
+        void flushTextureCopyOperations( void );
+
         /**
         @param slotStart
         @param set
@@ -834,7 +841,7 @@ namespace Ogre
         virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition )  {}
         virtual void _executeResourceTransition( ResourceTransition *resTransition )    {}
 
-        virtual void _executeResourceTransition( ResourceTransitionCollection *rstCollection ) {}
+        virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection ) {}
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) {}
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso ) {}
@@ -1414,10 +1421,15 @@ namespace Ogre
         virtual void flushCommands(void) = 0;
 
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const = 0;
+
+        BarrierSolver &getBarrierSolver( void ) { return mBarrierSolver; }
    
     protected:
 
         void destroyAllRenderPassDescriptors(void);
+
+        BarrierSolver mBarrierSolver;
+        ResourceTransitionArray mFinalResourceTransition;
 
         DepthBufferMap2 mDepthBufferPool2;
         DepthBufferRefMap mSharedDepthBufferRefs;

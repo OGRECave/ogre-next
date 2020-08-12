@@ -134,7 +134,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPassClear::analyzeBarriers( void )
     {
-        mResourceTransitions.resourceTransitions.clear();
+        mResourceTransitions.clear();
 
         // Do not use base class'
         // CompositorPass::analyzeBarriers();

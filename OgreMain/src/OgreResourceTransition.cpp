@@ -57,7 +57,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     const ResourceStatusMap &BarrierSolver::getResourceStatus( void ) { return mResourceStatus; }
     //-------------------------------------------------------------------------
-    void BarrierSolver::resetCopyLayoutsOnly( ResourceTransitionCollection &resourceTransitions )
+    void BarrierSolver::resetCopyLayoutsOnly( ResourceTransitionArray &resourceTransitions )
     {
         FastArray<TextureGpu *>::const_iterator itor = mCopyStateTextures.begin();
         FastArray<TextureGpu *>::const_iterator endt = mCopyStateTextures.end();
@@ -78,7 +78,7 @@ namespace Ogre
         mCopyStateTextures.clear();
     }
     //-------------------------------------------------------------------------
-    void BarrierSolver::reset( ResourceTransitionCollection &resourceTransitions )
+    void BarrierSolver::reset( ResourceTransitionArray &resourceTransitions )
     {
         FastArray<TextureGpu *>::const_iterator itor = mCopyStateTextures.begin();
         FastArray<TextureGpu *>::const_iterator endt = mCopyStateTextures.end();
@@ -100,7 +100,7 @@ namespace Ogre
         mResourceStatus.clear();
     }
     //-------------------------------------------------------------------------
-    void BarrierSolver::resolveTransition( ResourceTransitionCollection &resourceTransitions,
+    void BarrierSolver::resolveTransition( ResourceTransitionArray &resourceTransitions,
                                            TextureGpu *texture, ResourceLayout::Layout newLayout,
                                            ResourceAccess::ResourceAccess access, uint8 stageMask )
     {
@@ -173,7 +173,7 @@ namespace Ogre
             resTrans.newAccess = access;
             resTrans.oldStageMask = 0;
             resTrans.newStageMask = stageMask;
-            resourceTransitions.resourceTransitions.push_back( resTrans );
+            resourceTransitions.push_back( resTrans );
         }
         else
         {
@@ -197,7 +197,7 @@ namespace Ogre
                 resTrans.oldStageMask = itor->second.stageMask;
                 resTrans.newStageMask = stageMask;
 
-                resourceTransitions.resourceTransitions.push_back( resTrans );
+                resourceTransitions.push_back( resTrans );
 
                 // After a barrier, the stageMask should be reset
                 itor->second.stageMask = 0u;
@@ -209,7 +209,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void BarrierSolver::resolveTransition( ResourceTransitionCollection &resourceTransitions,
+    void BarrierSolver::resolveTransition( ResourceTransitionArray &resourceTransitions,
                                            GpuTrackedResource *bufferRes,
                                            ResourceAccess::ResourceAccess access, uint8 stageMask )
     {
@@ -241,7 +241,7 @@ namespace Ogre
                 resTrans.oldStageMask = itor->second.stageMask;
                 resTrans.newStageMask = stageMask;
 
-                resourceTransitions.resourceTransitions.push_back( resTrans );
+                resourceTransitions.push_back( resTrans );
 
                 // After a barrier, the stageMask should be reset
                 itor->second.stageMask = 0u;

@@ -714,6 +714,13 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------
+    void RenderSystem::flushTextureCopyOperations( void )
+    {
+        mBarrierSolver.resetCopyLayoutsOnly( mFinalResourceTransition );
+        executeResourceTransition( mFinalResourceTransition );
+        mFinalResourceTransition.clear();
+    }
+    //-----------------------------------------------------------------------
     void RenderSystem::_beginFrameOnce(void)
     {
         mVaoManager->_beginFrame();
@@ -1268,6 +1275,11 @@ namespace Ogre {
     void RenderSystem::_update(void)
     {
         OgreProfile( "RenderSystem::_update" );
+
+        mBarrierSolver.reset( mFinalResourceTransition );
+        executeResourceTransition( mFinalResourceTransition );
+        mFinalResourceTransition.clear();
+
         mTextureGpuManager->_update( false );
         mVaoManager->_update();
     }

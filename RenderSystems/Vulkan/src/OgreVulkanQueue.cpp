@@ -455,7 +455,7 @@ namespace Ogre
                     OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                                  "Texture " + vkTexture->getNameStr() +
                                      " is already in CopySrc or CopyDst layout, externally set. Perhaps "
-                                     "you need to call CompositorManager2::flushTextureCopyOperations",
+                                     "you need to call RenderSystem::flushTextureCopyOperations",
                                  "VulkanQueue::prepareForUpload" );
                 }
 
@@ -614,7 +614,7 @@ namespace Ogre
                     OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                                  "Texture " + vkTexture->getNameStr() +
                                      " is already in CopySrc or CopyDst layout, externally set. Perhaps "
-                                     "you need to call CompositorManager2::flushTextureCopyOperations",
+                                     "you need to call RenderSystem::flushTextureCopyOperations",
                                  "VulkanQueue::prepareForDownload" );
                 }
 

@@ -301,7 +301,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPassCompute::analyzeBarriers( void )
     {
-        mResourceTransitions.resourceTransitions.clear();
+        mResourceTransitions.clear();
 
         // Do not use base class'. We can't reuse mTextureDependencies because
         // the barriers are the same except for the stage flags

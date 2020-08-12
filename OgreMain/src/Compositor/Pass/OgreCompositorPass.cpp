@@ -475,8 +475,7 @@ namespace Ogre
     void CompositorPass::executeResourceTransitions( void )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-
-        renderSystem->_executeResourceTransition( &mResourceTransitions );
+        renderSystem->executeResourceTransition( mResourceTransitions );
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::notifyPassEarlyPreExecuteListeners( void )
@@ -576,7 +575,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPass::analyzeBarriers( void )
     {
-        mResourceTransitions.resourceTransitions.clear();
+        mResourceTransitions.clear();
 
         if( mRenderPassDesc )
         {

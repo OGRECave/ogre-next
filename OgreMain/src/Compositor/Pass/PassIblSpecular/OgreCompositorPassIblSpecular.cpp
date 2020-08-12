@@ -347,11 +347,11 @@ namespace Ogre
                 {
                     // Prepare mInputTexture for copying. We have to do it here because analyzeBarriers
                     // prepared mInputTexture for generating mipmaps
-                    ResourceTransitionCollection copyBarrier;
+                    ResourceTransitionArray copyBarrier;
                     mBarrierSolver.resolveTransition(
                         copyBarrier, mInputTexture, ResourceLayout::CopySrc, ResourceAccess::Read, 0u );
                     RenderSystem *renderSystem = mParentNode->getRenderSystem();
-                    renderSystem->_executeResourceTransition( &copyBarrier );
+                    renderSystem->executeResourceTransition( copyBarrier );
                 }
 
                 const uint8 outNumMips = mOutputTexture->getNumMipmaps();
@@ -394,7 +394,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPassIblSpecular::analyzeBarriers( void )
     {
-        mResourceTransitions.resourceTransitions.clear();
+        mResourceTransitions.clear();
 
         // Do not use base class'
         // CompositorPass::analyzeBarriers();

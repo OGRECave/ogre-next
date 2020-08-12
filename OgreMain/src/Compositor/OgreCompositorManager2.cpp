@@ -83,6 +83,7 @@ namespace Ogre
         mSharedQuadFS( 0 ),
         mDummyObjectMemoryManager( 0 ),
         mCompositorPassProvider( 0 ),
+        mBarrierSolver( renderSystem->getBarrierSolver() ),
         mRenderWindowsPresentBarrierDirty( false )
     {
         mDummyObjectMemoryManager = new ObjectMemoryManager();
@@ -683,13 +684,6 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::flushTextureCopyOperations( void )
-    {
-        mBarrierSolver.resetCopyLayoutsOnly( mLastResourceTransition );
-        mRenderSystem->_executeResourceTransition( &mLastResourceTransition );
-        mLastResourceTransition.resourceTransitions.clear();
-    }
-    //-----------------------------------------------------------------------------------
     void CompositorManager2::_update( void )
     {
         //The Apple render systems need to run the update in a special way.
@@ -789,10 +783,6 @@ namespace Ogre
         }
 
         mRenderSystem->endRenderPassDescriptor();
-
-        mBarrierSolver.reset( mLastResourceTransition );
-        mRenderSystem->_executeResourceTransition( &mLastResourceTransition );
-        mLastResourceTransition.resourceTransitions.clear();
 
         mRenderSystem->_update();
 

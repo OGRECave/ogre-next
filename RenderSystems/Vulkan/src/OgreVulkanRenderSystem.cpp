@@ -2167,9 +2167,9 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_executeResourceTransition( ResourceTransitionCollection *rstCollection )
+    void VulkanRenderSystem::executeResourceTransition( const ResourceTransitionArray &rstCollection )
     {
-        if( rstCollection->resourceTransitions.empty() )
+        if( rstCollection.empty() )
             return;
 
         VkPipelineStageFlags srcStage = 0u;
@@ -2180,8 +2180,8 @@ namespace Ogre
         uint32 bufferSrcBarrierBits = 0u;
         uint32 bufferDstBarrierBits = 0u;
 
-        ResourceTransitionArray::const_iterator itor = rstCollection->resourceTransitions.begin();
-        ResourceTransitionArray::const_iterator endt = rstCollection->resourceTransitions.end();
+        ResourceTransitionArray::const_iterator itor = rstCollection.begin();
+        ResourceTransitionArray::const_iterator endt = rstCollection.end();
 
         while( itor != endt )
         {
