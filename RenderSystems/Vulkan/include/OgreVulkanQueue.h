@@ -257,6 +257,8 @@ namespace Ogre
 
         void endAllEncoders( bool endRenderPassDesc = true );
 
+        void notifyTextureDestroyed( VulkanTextureGpu *texture );
+
         VkFence acquireCurrentFence( void );
         void releaseFence( VkFence fence );
 

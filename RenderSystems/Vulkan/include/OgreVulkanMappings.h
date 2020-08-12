@@ -70,7 +70,7 @@ namespace Ogre
 
         static VkAccessFlags getAccessFlags( ResourceLayout::Layout layout,
                                              ResourceAccess::ResourceAccess access,
-                                             const TextureGpu *texture );
+                                             const TextureGpu *texture, bool bIsDst );
 
         static VkImageLayout get( ResourceLayout::Layout layout, const TextureGpu *texture );
 

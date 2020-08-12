@@ -2124,6 +2124,8 @@ namespace Ogre
                      VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT |
                      VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
         }
+        if( layout == ResourceLayout::MipmapGen )
+            stage |= VK_PIPELINE_STAGE_TRANSFER_BIT;
 
         if( layout == ResourceLayout::Uav )
             stage |= VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;  // TODO (compute vs graphics)
@@ -2177,12 +2179,12 @@ namespace Ogre
 
                 if( itor->oldAccess & ResourceAccess::Write )
                 {
-                    imageBarrier.srcAccessMask =
-                        VulkanMappings::getAccessFlags( itor->oldLayout, itor->oldAccess, texture );
+                    imageBarrier.srcAccessMask = VulkanMappings::getAccessFlags(
+                        itor->oldLayout, itor->oldAccess, texture, false );
                 }
 
                 imageBarrier.dstAccessMask =
-                    VulkanMappings::getAccessFlags( itor->newLayout, itor->newAccess, texture );
+                    VulkanMappings::getAccessFlags( itor->newLayout, itor->newAccess, texture, true );
 
                 const bool bIsDepth = PixelFormatGpuUtils::isDepth( texture->getPixelFormat() );
 

@@ -63,7 +63,15 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    VulkanTextureGpu::~VulkanTextureGpu() { destroyInternalResourcesImpl(); }
+    VulkanTextureGpu::~VulkanTextureGpu()
+    {
+        VulkanTextureGpuManager *textureManager =
+            static_cast<VulkanTextureGpuManager *>( mTextureManager );
+        VulkanDevice *device = textureManager->getDevice();
+        device->mGraphicsQueue.notifyTextureDestroyed( this );
+
+        destroyInternalResourcesImpl();
+    }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::createInternalResourcesImpl( void )
     {
@@ -461,7 +469,95 @@ namespace Ogre
         mNextLayout = VulkanMappings::get( layout, this );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::_autogenerateMipmaps( void ) {}
+    void VulkanTextureGpu::_autogenerateMipmaps( void )
+    {
+        OGRE_ASSERT_LOW( allowsAutoMipmaps() );
+
+        // TODO: Integrate FidelityFX Single Pass Downsampler - SPD
+        //
+        // https://gpuopen.com/fidelityfx-spd/
+        // https://github.com/GPUOpen-Effects/FidelityFX-SPD
+        VulkanTextureGpuManager *textureManager =
+            static_cast<VulkanTextureGpuManager *>( mTextureManager );
+        VulkanDevice *device = textureManager->getDevice();
+
+        const bool callerIsCompositor = mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+
+        if( callerIsCompositor )
+            device->mGraphicsQueue.getCopyEncoder( 0, 0, true );
+        else
+        {
+            // We must transition to VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+            // By the time we exit _autogenerateMipmaps, the texture will
+            // still be in VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, thus
+            // endCopyEncoder will perform as expected
+            device->mGraphicsQueue.getCopyEncoder( 0, this, true );
+        }
+
+        const size_t numMipmaps = mNumMipmaps;
+        const uint32 numSlices = getNumSlices();
+
+        VkImageMemoryBarrier imageBarrier = getImageMemoryBarrier();
+
+        imageBarrier.subresourceRange.levelCount = 1u;
+
+        for( size_t i = 1u; i < numMipmaps; ++i )
+        {
+            // Convert the dst mipmap 'i' to TRANSFER_DST_OPTIMAL. Does not have to wait
+            // on anything because previous barriers (compositor or getCopyEncoder)
+            // have already waited
+            imageBarrier.subresourceRange.baseMipLevel = static_cast<uint32_t>( i );
+            imageBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+            imageBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+            imageBarrier.srcAccessMask = 0;
+            imageBarrier.dstAccessMask = 0;
+            vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
+                                  VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                                  0, 0u, 0, 0u, 0, 1u, &imageBarrier );
+
+            VkImageBlit region;
+
+            region.srcSubresource.aspectMask = VulkanMappings::getImageAspect( this->getPixelFormat() );
+            region.srcSubresource.mipLevel = static_cast<uint32_t>( i - 1u );
+            region.srcSubresource.baseArrayLayer = 0u;
+            region.srcSubresource.layerCount = numSlices;
+
+            region.srcOffsets[0].x = 0;
+            region.srcOffsets[0].y = 0;
+            region.srcOffsets[0].z = 0;
+
+            region.srcOffsets[1].x = static_cast<int32_t>( std::max( mWidth >> ( i - 1u ), 1u ) );
+            region.srcOffsets[1].y = static_cast<int32_t>( std::max( mHeight >> ( i - 1u ), 1u ) );
+            region.srcOffsets[1].z = static_cast<int32_t>( std::max( getDepth() >> ( i - 1u ), 1u ) );
+
+            region.dstSubresource.aspectMask = region.srcSubresource.aspectMask;
+            region.dstSubresource.mipLevel = static_cast<uint32_t>( i );
+            region.dstSubresource.baseArrayLayer = 0u;
+            region.dstSubresource.layerCount = numSlices;
+
+            region.dstOffsets[0].x = 0;
+            region.dstOffsets[0].y = 0;
+            region.dstOffsets[0].z = 0;
+
+            region.dstOffsets[1].x = static_cast<int32_t>( std::max( mWidth >> i, 1u ) );
+            region.dstOffsets[1].y = static_cast<int32_t>( std::max( mHeight >> i, 1u ) );
+            region.dstOffsets[1].z = static_cast<int32_t>( std::max( getDepth() >> i, 1u ) );
+
+            vkCmdBlitImage( device->mGraphicsQueue.mCurrentCmdBuffer, mFinalTextureName, mCurrLayout,
+                            mFinalTextureName, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1u, &region,
+                            VK_FILTER_LINEAR );
+
+            // Wait for vkCmdBlitImage on mip i to finish before advancing to mip i+1
+            // Also transition src mip 'i' to TRANSFER_SRC_OPTIMAL
+            imageBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+            imageBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+            imageBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+            imageBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+            vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
+                                  VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0u,
+                                  0, 0u, 0, 1u, &imageBarrier );
+        }
+    }
     //-----------------------------------------------------------------------------------
     VkImageSubresourceRange VulkanTextureGpu::getFullSubresourceRange( void ) const
     {

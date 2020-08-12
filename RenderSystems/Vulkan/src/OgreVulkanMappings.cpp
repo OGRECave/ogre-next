@@ -482,7 +482,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VkAccessFlags VulkanMappings::getAccessFlags( ResourceLayout::Layout layout,
                                                   ResourceAccess::ResourceAccess access,
-                                                  const TextureGpu *texture )
+                                                  const TextureGpu *texture, bool bIsDst )
     {
         VkAccessFlags texAccessFlags = 0;
 
@@ -492,6 +492,7 @@ namespace Ogre
             texAccessFlags |= VK_ACCESS_SHADER_READ_BIT;
             break;
         case ResourceLayout::RenderTarget:
+        case ResourceLayout::Clear:
             if( !PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
             {
                 texAccessFlags |=
@@ -523,6 +524,15 @@ namespace Ogre
             break;
         case ResourceLayout::PresentReady:
             texAccessFlags = 0u;
+            break;
+        case ResourceLayout::MipmapGen:
+            if( bIsDst )
+                texAccessFlags |= VK_ACCESS_TRANSFER_READ_BIT;
+            else
+                texAccessFlags |= VK_ACCESS_TRANSFER_WRITE_BIT;
+            break;
+        case ResourceLayout::Undefined:
+        case ResourceLayout::NumResourceLayouts:
             break;
         }
 
@@ -556,6 +566,8 @@ namespace Ogre
             return VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
         case ResourceLayout::CopyDst:
             return VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        case ResourceLayout::MipmapGen:
+            return VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
         case ResourceLayout::PresentReady:
             return VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
         }

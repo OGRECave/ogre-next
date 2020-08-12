@@ -859,6 +859,36 @@ namespace Ogre
         endComputeEncoder();
     }
     //-------------------------------------------------------------------------
+    void VulkanQueue::notifyTextureDestroyed( VulkanTextureGpu *texture )
+    {
+        if( mEncoderState == EncoderCopyOpen )
+        {
+            bool needsToFlush = false;
+            TextureGpuDownloadMap::const_iterator itor = mCopyDownloadTextures.find( texture );
+
+            if( itor != mCopyDownloadTextures.end() )
+                needsToFlush = true;
+            else
+            {
+                FastArray<TextureGpu *>::const_iterator it2 =
+                    std::find( mImageMemBarrierPtrs.begin(), mImageMemBarrierPtrs.end(), texture );
+                if( it2 != mImageMemBarrierPtrs.end() )
+                    needsToFlush = true;
+            }
+
+            if( needsToFlush )
+            {
+                // If this asserts triggers, then the texture is probably being referenced
+                // by something else doing anything on the texture and was interrupted
+                // midway (since Ogre must ensure the texture ends in TRANSFER_SRC/DST_OPTIMAL
+                // if the copy encoder is holding a reference.
+                OGRE_ASSERT_LOW( texture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ||
+                                 texture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
+                endCopyEncoder();
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
     VkFence VulkanQueue::acquireCurrentFence( void )
     {
         VkFence retVal = getCurrentFence();
