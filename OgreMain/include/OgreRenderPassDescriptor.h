@@ -234,6 +234,10 @@ namespace Ogre
         /// Returns true if either Stencil is set, or if Depth is set with depth-stencil attachment.
         bool hasStencilFormat(void) const;
 
+        /// Finds the first non-null texture and outputs it
+        /// May return nullptr if nothing is bound
+        void findAnyTexture( TextureGpu **outAnyTargetTexture, uint8 &outAnyMipLevel );
+
         /**
         @param name
             When it's set to "ID3D11RenderTargetView", extraParam must be in range

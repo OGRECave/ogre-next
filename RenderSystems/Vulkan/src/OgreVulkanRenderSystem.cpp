@@ -695,10 +695,15 @@ namespace Ogre
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
             if( tex->isDataReady() && tex->mCurrLayout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
             {
+                TextureGpu *targetTex;
+                uint8 targetMip;
+                mCurrentRenderPassDescriptor->findAnyTexture( &targetTex, targetMip );
+                String texName = targetTex ? targetTex->getNameStr() : "";
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "Texture " + tex->getNameStr() +
                                  " is not in ResourceLayout::Texture. Did you forget to expose it to "
-                                 "compositor?",
+                                 "compositor? Currently rendering to target: " +
+                                 texName,
                              "VulkanRenderSystem::_setTexture" );
             }
 #endif

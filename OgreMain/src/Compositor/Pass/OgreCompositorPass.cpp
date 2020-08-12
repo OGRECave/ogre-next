@@ -97,21 +97,7 @@ namespace Ogre
             mRenderPassDesc = renderSystem->createRenderPassDescriptor();
             setupRenderPassDesc( rtv );
 
-            for( int i = 0; i < mRenderPassDesc->getNumColourEntries() && !mAnyTargetTexture; ++i )
-            {
-                mAnyTargetTexture = mRenderPassDesc->mColour[i].texture;
-                mAnyMipLevel = mRenderPassDesc->mColour[i].mipLevel;
-            }
-            if( !mAnyTargetTexture )
-            {
-                mAnyTargetTexture = mRenderPassDesc->mDepth.texture;
-                mAnyMipLevel = mRenderPassDesc->mDepth.mipLevel;
-            }
-            if( !mAnyTargetTexture )
-            {
-                mAnyTargetTexture = mRenderPassDesc->mStencil.texture;
-                mAnyMipLevel = mRenderPassDesc->mStencil.mipLevel;
-            }
+            mRenderPassDesc->findAnyTexture( &mAnyTargetTexture, mAnyMipLevel );
         }
 
         populateTextureDependenciesFromExposedTextures();

@@ -381,6 +381,31 @@ namespace Ogre
                                     PixelFormatGpuUtils::isStencil( mDepth.texture->getPixelFormat() ));
     }
     //-----------------------------------------------------------------------------------
+    void RenderPassDescriptor::findAnyTexture( TextureGpu **outAnyTargetTexture, uint8 &outAnyMipLevel )
+    {
+        TextureGpu *anyTargetTexture = 0;
+        uint8 anyMipLevel = 0u;
+
+        for( int i = 0; i < mNumColourEntries && !anyTargetTexture; ++i )
+        {
+            anyTargetTexture = mColour[i].texture;
+            anyMipLevel = mColour[i].mipLevel;
+        }
+        if( !anyTargetTexture )
+        {
+            anyTargetTexture = mDepth.texture;
+            anyMipLevel = mDepth.mipLevel;
+        }
+        if( !anyTargetTexture )
+        {
+            anyTargetTexture = mStencil.texture;
+            anyMipLevel = mStencil.mipLevel;
+        }
+
+        *outAnyTargetTexture = anyTargetTexture;
+        outAnyMipLevel = anyMipLevel;
+    }
+    //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     FrameBufferDescKey::FrameBufferDescKey()
