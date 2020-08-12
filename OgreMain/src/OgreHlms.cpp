@@ -2141,6 +2141,7 @@ namespace Ogre
 
         codeCache.mergedCache.setProperties.swap( mSetProperties );
 
+        // Ensure code didn't accidentally modify mSetProperties
         OGRE_ASSERT_HIGH( codeCache.mergedCache.setProperties == mergedCache.setProperties );
 
         mShaderCodeCache.push_back( codeCache );
