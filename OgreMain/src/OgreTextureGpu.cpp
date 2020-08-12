@@ -789,14 +789,11 @@ namespace Ogre
         return (mTextureFlags & TextureFlags::DiscardableContent) != 0;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpu::isOpenGLRenderWindow(void) const
-    {
-        return false;
-    }
+    bool TextureGpu::isOpenGLRenderWindow( void ) const { return false; }
     //-----------------------------------------------------------------------------------
-    ResourceLayout::Layout TextureGpu::getDefaultLayout( void ) const
+    ResourceLayout::Layout TextureGpu::getDefaultLayout( bool bIgnoreDiscardableFlag ) const
     {
-        if( isDiscardableContent() )
+        if( isDiscardableContent() && !bIgnoreDiscardableFlag )
             return ResourceLayout::Undefined;
         else if( isPoolOwner() )
             return ResourceLayout::Texture;
@@ -812,7 +809,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::_setNextLayout( ResourceLayout::Layout layout )
     {
-        OGRE_ASSERT_LOW( ( layout != ResourceLayout::CopySrc && layout != ResourceLayout::CopyDst ) &&
+        OGRE_ASSERT_LOW( ( layout != ResourceLayout::CopySrc && layout != ResourceLayout::CopyDst &&
+                           ResourceLayout::CopyEnd ) &&
                          "CopySrc/Dst layouts are automanaged. "
                          "Cannot explicitly transition to these layouts" );
     }

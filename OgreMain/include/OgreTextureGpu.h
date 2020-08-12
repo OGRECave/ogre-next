@@ -513,9 +513,9 @@ namespace Ogre
         /// OpenGL RenderWindows are a bit specific:
         ///     * Their origins are upside down. Which means we need to flip Y.
         ///     * They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true
-        virtual bool isOpenGLRenderWindow(void) const;
+        virtual bool isOpenGLRenderWindow( void ) const;
 
-        ResourceLayout::Layout getDefaultLayout( void ) const;
+        ResourceLayout::Layout getDefaultLayout( bool bIgnoreDiscardableFlag = false ) const;
         virtual ResourceLayout::Layout getCurrentLayout( void ) const;
 
         /// Sets the layout the texture should be transitioned to after the next copy operation

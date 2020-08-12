@@ -2099,38 +2099,36 @@ namespace Ogre
     static VkPipelineStageFlags toVkPipelineStageFlags( ResourceLayout::Layout layout,
                                                         const bool bIsDepth )
     {
-        VkPipelineStageFlags stage = 0;
-        if( layout == ResourceLayout::PresentReady )
+        switch( layout )
         {
-            stage |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        }
-        if( layout == ResourceLayout::RenderTarget || layout == ResourceLayout::RenderTargetReadOnly ||
-            layout == ResourceLayout::Clear )
-        {
+        case ResourceLayout::PresentReady:
+            return VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        case ResourceLayout::RenderTarget:
+        case ResourceLayout::RenderTargetReadOnly:
+        case ResourceLayout::Clear:
             if( bIsDepth )
-            {
-                stage |= VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
-                         VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-            }
+                return VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
+                       VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
             else
-            {
-                stage |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            }
+                return VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        case ResourceLayout::Texture:
+        case ResourceLayout::Uav:
+            return VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
+                   VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
+                   VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT |
+                   VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
+                   VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+        case ResourceLayout::MipmapGen:
+            return VK_PIPELINE_STAGE_TRANSFER_BIT;
+        case ResourceLayout::CopySrc:
+        case ResourceLayout::CopyDst:
+            return VK_PIPELINE_STAGE_TRANSFER_BIT;
+        case ResourceLayout::CopyEnd:
+            return 0;
+        case ResourceLayout::Undefined:
+        case ResourceLayout::NumResourceLayouts:
+            return 0;
         }
-        if( layout == ResourceLayout::Texture )
-        {
-            stage |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
-                     VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
-                     VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT |
-                     VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-        }
-        if( layout == ResourceLayout::MipmapGen )
-            stage |= VK_PIPELINE_STAGE_TRANSFER_BIT;
-
-        if( layout == ResourceLayout::Uav )
-            stage |= VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;  // TODO (compute vs graphics)
-
-        return stage;
     }
     //-------------------------------------------------------------------------
     static VkPipelineStageFlags ogreToVkStageFlags( uint8 ogreStageMask )
@@ -2172,37 +2170,51 @@ namespace Ogre
         {
             if( itor->resource && itor->resource->isTextureGpu() )
             {
+                OGRE_ASSERT_MEDIUM( itor->oldLayout != ResourceLayout::CopyEnd &&
+                                    "ResourceLayout::CopyEnd is never in oldLayout" );
+
                 VulkanTextureGpu *texture = static_cast<VulkanTextureGpu *>( itor->resource );
                 VkImageMemoryBarrier imageBarrier = texture->getImageMemoryBarrier();
                 imageBarrier.oldLayout = VulkanMappings::get( itor->oldLayout, texture );
                 imageBarrier.newLayout = VulkanMappings::get( itor->newLayout, texture );
 
-                if( itor->oldAccess & ResourceAccess::Write )
-                {
-                    imageBarrier.srcAccessMask = VulkanMappings::getAccessFlags(
-                        itor->oldLayout, itor->oldAccess, texture, false );
-                }
-
-                imageBarrier.dstAccessMask =
-                    VulkanMappings::getAccessFlags( itor->newLayout, itor->newAccess, texture, true );
-
                 const bool bIsDepth = PixelFormatGpuUtils::isDepth( texture->getPixelFormat() );
 
-                if( itor->oldLayout != ResourceLayout::Texture &&
-                    itor->oldLayout != ResourceLayout::Uav )
+                // If oldAccess == ResourceAccess::Undefined then this texture is used for
+                // the first time on a new frame (but not necessarily the first time ever)
+                // thus there are no caches needed to flush.
+                //
+                // dstStage only needs to wait for the transition to happen though
+                if( itor->oldAccess != ResourceAccess::Undefined )
                 {
-                    srcStage |= toVkPipelineStageFlags( itor->oldLayout, bIsDepth );
-                }
-                else
-                    srcStage |= ogreToVkStageFlags( itor->oldStageMask );
+                    if( itor->oldAccess & ResourceAccess::Write )
+                    {
+                        imageBarrier.srcAccessMask = VulkanMappings::getAccessFlags(
+                            itor->oldLayout, itor->oldAccess, texture, false );
+                    }
 
-                if( itor->newLayout != ResourceLayout::Texture &&
-                    itor->newLayout != ResourceLayout::Uav )
-                {
-                    dstStage |= toVkPipelineStageFlags( itor->newLayout, bIsDepth );
+                    imageBarrier.dstAccessMask = VulkanMappings::getAccessFlags(
+                        itor->newLayout, itor->newAccess, texture, true );
+
+                    if( itor->oldLayout != ResourceLayout::Texture &&
+                        itor->oldLayout != ResourceLayout::Uav )
+                    {
+                        srcStage |= toVkPipelineStageFlags( itor->oldLayout, bIsDepth );
+                    }
+                    else
+                        srcStage |= ogreToVkStageFlags( itor->oldStageMask );
                 }
-                else
-                    dstStage |= ogreToVkStageFlags( itor->newStageMask );
+
+                if( itor->newLayout != ResourceLayout::CopyEnd )
+                {
+                    if( itor->newLayout != ResourceLayout::Texture &&
+                        itor->newLayout != ResourceLayout::Uav )
+                    {
+                        dstStage |= toVkPipelineStageFlags( itor->newLayout, bIsDepth );
+                    }
+                    else
+                        dstStage |= ogreToVkStageFlags( itor->newStageMask );
+                }
 
                 texture->mCurrLayout = imageBarrier.newLayout;
 
@@ -2235,8 +2247,8 @@ namespace Ogre
 
         if( srcStage == 0 )
             srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-
-        OGRE_ASSERT_LOW( dstStage );
+        if( dstStage == 0 )
+            dstStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
 
         mActiveDevice->mGraphicsQueue.endAllEncoders();
 

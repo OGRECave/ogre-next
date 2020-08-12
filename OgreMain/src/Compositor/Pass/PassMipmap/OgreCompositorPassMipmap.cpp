@@ -471,7 +471,7 @@ namespace Ogre
 
         const ResourceLayout::Layout targetLayout =
             usesCompute ? ResourceLayout::Uav : ResourceLayout::MipmapGen;
-        const uint32 stage = usesCompute ? ( 1u << GPT_COMPUTE_PROGRAM ) : 0u;
+        const uint8 stage = usesCompute ? ( 1u << GPT_COMPUTE_PROGRAM ) : 0u;
 
         // Check <anything> -> RT for every RTT in the textures we'll be generating mipmaps.
         TextureGpuVec::const_iterator itTex = mTextures.begin();
@@ -479,7 +479,11 @@ namespace Ogre
 
         while( itTex != enTex )
         {
-            resolveTransition( *itTex, targetLayout, ResourceAccess::ReadWrite, stage );
+            if( ( *itTex )->getNumMipmaps() > 1u )
+            {
+                if( ( *itTex )->allowsAutoMipmaps() )
+                    resolveTransition( *itTex, targetLayout, ResourceAccess::ReadWrite, stage );
+            }
             ++itTex;
         }
     }

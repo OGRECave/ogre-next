@@ -522,6 +522,9 @@ namespace Ogre
         case ResourceLayout::CopyDst:
             texAccessFlags |= VK_ACCESS_TRANSFER_WRITE_BIT;
             break;
+        case ResourceLayout::CopyEnd:
+            texAccessFlags = 0u;
+            break;
         case ResourceLayout::PresentReady:
             texAccessFlags = 0u;
             break;
@@ -566,6 +569,8 @@ namespace Ogre
             return VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
         case ResourceLayout::CopyDst:
             return VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        case ResourceLayout::CopyEnd:
+            return get( texture->getDefaultLayout( true ), texture );
         case ResourceLayout::MipmapGen:
             return VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
         case ResourceLayout::PresentReady:

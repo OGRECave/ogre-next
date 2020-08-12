@@ -69,7 +69,7 @@ namespace Ogre
             if( currLayout == ResourceLayout::CopySrc || currLayout == ResourceLayout::CopyDst )
             {
                 // It's still in copy layout. Transition the texture out of that.
-                resolveTransition( resourceTransitions, texture, texture->getDefaultLayout(),
+                resolveTransition( resourceTransitions, texture, ResourceLayout::CopyEnd,
                                    ResourceAccess::Read, 0u );
             }
             ++itor;
@@ -90,7 +90,7 @@ namespace Ogre
             if( currLayout == ResourceLayout::CopySrc || currLayout == ResourceLayout::CopyDst )
             {
                 // It's still in copy layout. Transition the texture out of that.
-                resolveTransition( resourceTransitions, texture, texture->getDefaultLayout(),
+                resolveTransition( resourceTransitions, texture, ResourceLayout::CopyEnd,
                                    ResourceAccess::Read, 0u );
             }
             ++itor;
@@ -104,9 +104,19 @@ namespace Ogre
                                            TextureGpu *texture, ResourceLayout::Layout newLayout,
                                            ResourceAccess::ResourceAccess access, uint8 stageMask )
     {
+        OGRE_ASSERT_MEDIUM( newLayout != ResourceLayout::Undefined );
+        OGRE_ASSERT_MEDIUM( access != ResourceAccess::Undefined );
+
         OGRE_ASSERT_MEDIUM( ( newLayout == ResourceLayout::Texture || newLayout == ResourceLayout::Uav ||
                               stageMask == 0u ) &&
                             "stageMask must be 0 when layouts aren't Texture or Uav" );
+
+        OGRE_ASSERT_MEDIUM(
+            ( ( newLayout != ResourceLayout::Texture && newLayout != ResourceLayout::Uav ) ||
+              ( newLayout == ResourceLayout::Texture && stageMask != 0u ) ||
+              ( newLayout == ResourceLayout::Uav && stageMask != 0u ) ) &&
+            "stageMask can't be 0 when layouts are Texture or Uav" );
+
         OGRE_ASSERT_MEDIUM(
             ( ( newLayout != ResourceLayout::Texture &&
                 newLayout != ResourceLayout::RenderTargetReadOnly &&
@@ -162,7 +172,7 @@ namespace Ogre
             resTrans.newLayout = newLayout;
             resTrans.newAccess = access;
             resTrans.oldStageMask = 0;
-            resTrans.newStageMask = 0;
+            resTrans.newStageMask = stageMask;
             resourceTransitions.resourceTransitions.push_back( resTrans );
         }
         else
@@ -203,6 +213,8 @@ namespace Ogre
                                            GpuTrackedResource *bufferRes,
                                            ResourceAccess::ResourceAccess access, uint8 stageMask )
     {
+        OGRE_ASSERT_MEDIUM( access != ResourceAccess::Undefined );
+
         ResourceStatusMap::iterator itor = mResourceStatus.find( bufferRes );
 
         if( itor == mResourceStatus.end() )

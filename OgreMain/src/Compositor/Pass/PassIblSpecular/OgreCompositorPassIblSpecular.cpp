@@ -344,6 +344,16 @@ namespace Ogre
                 if( mOutputTexture->getNumMipmaps() > 1u )
                     mInputTexture->_autogenerateMipmaps();
 
+                {
+                    // Prepare mInputTexture for copying. We have to do it here because analyzeBarriers
+                    // prepared mInputTexture for generating mipmaps
+                    ResourceTransitionCollection copyBarrier;
+                    mBarrierSolver.resolveTransition(
+                        copyBarrier, mInputTexture, ResourceLayout::CopySrc, ResourceAccess::Read, 0u );
+                    RenderSystem *renderSystem = mParentNode->getRenderSystem();
+                    renderSystem->_executeResourceTransition( &copyBarrier );
+                }
+
                 const uint8 outNumMips = mOutputTexture->getNumMipmaps();
 
                 for( uint8 mip = 0u; mip < outNumMips; ++mip )
@@ -394,8 +404,7 @@ namespace Ogre
         if( usesCompute )
         {
             // Check <anything> -> MipmapGen for mInputTexture
-            resolveTransition( mInputTexture, ResourceLayout::MipmapGen,
-                               ResourceAccess::ReadWrite, 0u );
+            resolveTransition( mInputTexture, ResourceLayout::MipmapGen, ResourceAccess::ReadWrite, 0u );
 
             // This texture will leave from here as ResourceLayout::Texture, as it is manually
             // transitioned into that for our compute shader to read
@@ -416,10 +425,6 @@ namespace Ogre
                     resolveTransition( mInputTexture, ResourceLayout::MipmapGen,
                                        ResourceAccess::ReadWrite, 0u );
                 }
-
-                // mInputTexture will leave from us as CopySrc (manually transitioned)
-                mBarrierSolver.assumeTransition( mInputTexture, ResourceLayout::CopySrc,
-                                                 ResourceAccess::Read, 0u );
 
                 resolveTransition( mOutputTexture, ResourceLayout::CopyDst, ResourceAccess::Write, 0u );
             }

@@ -14,6 +14,8 @@ abstract target cubemap_target
 			stencil			dont_care
 		}
 
+		expose cubemap
+
 		//Filter stuff that shouldn't be reflected (vampires?)
 		visibility_mask		0x00000005
 		overlays			off

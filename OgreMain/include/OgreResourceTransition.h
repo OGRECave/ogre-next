@@ -56,6 +56,9 @@ namespace Ogre
         Uav,
         CopySrc,
         CopyDst,
+        /// Special layout only used in flushTextureCopyOperations to prevent
+        /// conflicts with automatically managed copy encoders
+        CopyEnd,
         MipmapGen,
         PresentReady,
 
@@ -129,10 +132,16 @@ namespace Ogre
         ResourceLayout::Layout      oldLayout;
         ResourceLayout::Layout      newLayout;
 
+        /// If oldAccess == Undefined, it means there are no previous stage dependencies
+        /// AND there is no guarantee previous contents will be preserved.
         ResourceAccess::ResourceAccess oldAccess;
+        /// newAccess == Undefined is invalid
         ResourceAccess::ResourceAccess newAccess;
 
+        /// If oldStageMask == Undefined, it means there are no previous
+        /// stage dependencies (e.g. beginning of the frame)
         uint8 oldStageMask;
+        /// If newStageMask == Undefined is invalid
         uint8 newStageMask;
 
         // Deprecated

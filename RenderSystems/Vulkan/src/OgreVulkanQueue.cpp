@@ -733,9 +733,6 @@ namespace Ogre
             // Which Ogre does not do (too complex to get right).
         }
 
-        OGRE_ASSERT_MEDIUM( ( buffer || texture ) &&
-                            "Buffer or Texture at least one must be a valid ptr" );
-
         if( bDownload )
             prepareForDownload( buffer, texture );
         else
