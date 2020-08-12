@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "Cubemaps/OgreParallaxCorrectedCubemapAuto.h"
 
 #include "OgreAsyncTextureTicket.h"
+#include "OgreRenderSystem.h"
 #include "OgreTextureGpuManager.h"
 
 namespace Ogre
@@ -373,7 +374,10 @@ namespace Ogre
     void PccPerPixelGridPlacement::preCopyRenderTargetToCubemap( TextureGpu *renderTarget,
                                                                  uint32 cubemapArrayIdx )
     {
+
         TextureGpuManager *textureManager = renderTarget->getTextureManager();
+        textureManager->getRenderSystem()->flushTextureCopyOperations();
+
         AsyncTextureTicket *asyncTicket = textureManager->createAsyncTextureTicket(
             1u, 1u, 6u, TextureTypes::TypeCube, renderTarget->getPixelFormat() );
         asyncTicket->download( renderTarget, renderTarget->getNumMipmaps() - 1u, false );
