@@ -2115,6 +2115,8 @@ namespace Ogre
         ShaderCodeCache codeCache( mergedCache.pieces );
         codeCache.mergedCache.setProperties = mergedCache.setProperties;
 
+        codeCache.mergedCache.setProperties.swap( mSetProperties );
+
         for( size_t i=0; i<NumShaderTypes; ++i )
         {
             if( !source[i].empty() )
@@ -2140,6 +2142,10 @@ namespace Ogre
                                                           static_cast<ShaderType>( i ) );
             }
         }
+
+        codeCache.mergedCache.setProperties.swap( mSetProperties );
+
+        OGRE_ASSERT_HIGH( codeCache.mergedCache.setProperties == mergedCache.setProperties );
 
         mShaderCodeCache.push_back( codeCache );
     }
