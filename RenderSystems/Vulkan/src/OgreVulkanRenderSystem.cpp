@@ -691,6 +691,18 @@ namespace Ogre
         if( texPtr )
         {
             VulkanTextureGpu *tex = static_cast<VulkanTextureGpu *>( texPtr );
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+            if( tex->isDataReady() && tex->mCurrLayout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "Texture " + tex->getNameStr() +
+                                 " is not in ResourceLayout::Texture. Did you forget to expose it to "
+                                 "compositor?",
+                             "VulkanRenderSystem::_setTexture" );
+            }
+#endif
+
             if( mGlobalTable.textures[unit].imageView != tex->getDefaultDisplaySrv() )
             {
                 mGlobalTable.textures[unit].imageView = tex->getDefaultDisplaySrv();
