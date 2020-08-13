@@ -47,7 +47,7 @@ namespace Ogre
         class HardwareBufferManager;
     }
 
-    class VulkanHlmsPso;
+    struct VulkanHlmsPso;
 
     class _OgreVulkanExport VulkanPixelFormatToShaderType : public PixelFormatToShaderType
     {
@@ -102,7 +102,8 @@ namespace Ogre
 
         VulkanCache *mCache;
 
-        VulkanHlmsPso *mPso;
+        HlmsPso const *mPso;
+        HlmsComputePso const *mComputePso;
 
         bool mTableDirty;
         VulkanGlobalBindingTable mGlobalTable;
@@ -142,7 +143,7 @@ namespace Ogre
 
         void bindDescriptorSet() const;
 
-        void flushRootLayout( void );
+        void flushRootLayout( VulkanHlmsPso *pso );
 
     public:
         VulkanRenderSystem();
@@ -210,6 +211,9 @@ namespace Ogre
 
         virtual VulkanFrameBufferDescMap &_getFrameBufferDescMap( void ) { return mFrameBufferDescMap; }
         virtual RenderPassDescriptor *createRenderPassDescriptor( void );
+
+        virtual void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso );
+        virtual void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *newPso );
 
         virtual void _beginFrame( void );
         virtual void _endFrame( void );
@@ -317,6 +321,7 @@ namespace Ogre
         void _notifyDeviceStalled();
 
         void _notifyActiveEncoderEnded( bool callEndRenderPassDesc );
+        void _notifyActiveComputeEnded( void );
 
         virtual bool isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
                                    const TextureGpu *texture ) const;

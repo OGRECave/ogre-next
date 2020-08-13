@@ -56,6 +56,7 @@ typedef struct VkDescriptorPool_T *VkDescriptorPool;
 typedef struct VkDescriptorSet_T *VkDescriptorSet;
 
 typedef struct VkPipelineLayout_T *VkPipelineLayout;
+typedef struct VkPipeline_T *VkPipeline;
 
 struct VkPipelineShaderStageCreateInfo;
 

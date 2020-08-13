@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2016 Torus Knot Software Ltd
+Copyright (c) 2000-present Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,8 +28,6 @@ THE SOFTWARE.
 #ifndef _OgreVulkanHlmsPso_H_
 #define _OgreVulkanHlmsPso_H_
 
-#include <vulkan/vulkan.h>
-
 #include "OgreVulkanPrerequisites.h"
 
 #include "OgreHeaderPrefix.h"
@@ -43,23 +41,12 @@ namespace Ogre
      *  @{
      */
 
-    /// @See HlmsPso
-    class _OgreVulkanExport VulkanHlmsPso
+    /// @see HlmsPso
+    struct VulkanHlmsPso
     {
-    public:
         VkPipeline pso;
-        // id<MTLDepthStencilState> depthStencilState;
-        // MTLCullMode cullMode;
-
-        VulkanProgram *vertexShader;
-        VulkanProgram *pixelShader;
-
         VulkanRootLayout *rootLayout;
-
-        VulkanHlmsPso( VkPipeline pso, VulkanProgram *vertexShader, VulkanProgram *pixelShader,
-                       VulkanRootLayout *_rootLayout );
-
-        ~VulkanHlmsPso();
+        VulkanHlmsPso( VkPipeline _pso, VulkanRootLayout *_rootLayout );
     };
 
     /** @} */

@@ -164,6 +164,7 @@ namespace Ogre
         mDevice( 0 ),
         mCache( 0 ),
         mPso( 0 ),
+        mComputePso( 0 ),
         mTableDirty( false ),
         mDummyBuffer( 0 ),
         mDummyTexBuffer( 0 ),
@@ -924,6 +925,36 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso )
+    {
+        VkComputePipelineCreateInfo computeInfo;
+        makeVkStruct( computeInfo, VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO );
+
+        VulkanProgram *computeShader =
+            static_cast<VulkanProgram *>( newPso->computeShader->_getBindingDelegate() );
+        computeShader->fillPipelineShaderStageCi( computeInfo.stage );
+
+        VulkanRootLayout *rootLayout = computeShader->getRootLayout();
+        computeInfo.layout = rootLayout->createVulkanHandles();
+
+        VkPipeline vulkanPso = 0u;
+        VkResult result = vkCreateComputePipelines( mActiveDevice->mDevice, VK_NULL_HANDLE, 1u,
+                                                    &computeInfo, 0, &vulkanPso );
+        checkVkResult( result, "vkCreateComputePipelines" );
+
+        VulkanHlmsPso *pso = new VulkanHlmsPso( vulkanPso, rootLayout );
+        newPso->rsData = pso;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *pso )
+    {
+        OGRE_ASSERT_LOW( pso->rsData );
+        VulkanHlmsPso *vulkanPso = static_cast<VulkanHlmsPso *>( pso->rsData );
+        delayed_vkDestroyPipeline( mVaoManager, mActiveDevice->mDevice, vulkanPso->pso, 0 );
+        delete vulkanPso;
+        pso->rsData = 0;
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_beginFrame( void ) {}
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_endFrame( void ) {}
@@ -942,6 +973,8 @@ namespace Ogre
         mTableDirty = true;
         mPso = 0;
     }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_notifyActiveComputeEnded( void ) { mComputePso = 0; }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_endFrameOnce( void )
     {
@@ -974,10 +1007,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setPipelineStateObject( const HlmsPso *pso )
     {
-        VulkanRootLayout *oldRootLayout = 0;
-        if( mPso )
-            oldRootLayout = mPso->rootLayout;
-
         if( pso && mActiveDevice->mGraphicsQueue.getEncoderState() != VulkanQueue::EncoderGraphicsOpen )
         {
             OGRE_ASSERT_LOW(
@@ -987,17 +1016,45 @@ namespace Ogre
             executeRenderPassDescriptorDelayedActions( false );
         }
 
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
-        assert( pso->rsData );
-        VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
-        vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPso->pso );
-        mPso = vulkanPso;
+        if( mPso != pso )
+        {
+            VulkanRootLayout *oldRootLayout = 0;
+            if( mPso )
+                oldRootLayout = reinterpret_cast<VulkanHlmsPso *>( mPso->rsData )->rootLayout;
 
-        if( vulkanPso && vulkanPso->rootLayout != oldRootLayout )
-            mTableDirty = true;
+            VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+            OGRE_ASSERT_LOW( pso->rsData );
+            VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
+            vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkanPso->pso );
+            mPso = pso;
+
+            if( vulkanPso && vulkanPso->rootLayout != oldRootLayout )
+                mTableDirty = true;
+        }
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setComputePso( const HlmsComputePso *pso ) {}
+    void VulkanRenderSystem::_setComputePso( const HlmsComputePso *pso )
+    {
+        VulkanRootLayout *oldRootLayout = 0;
+        if( mComputePso )
+            oldRootLayout = reinterpret_cast<VulkanHlmsPso *>( mComputePso->rsData )->rootLayout;
+
+        mActiveDevice->mGraphicsQueue.getComputeEncoder();
+
+        if( mComputePso != pso )
+        {
+            OGRE_ASSERT_LOW( pso->rsData );
+            VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
+
+            VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+            vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vulkanPso->pso );
+
+            mComputePso = pso;
+
+            if( vulkanPso && vulkanPso->rootLayout != oldRootLayout )
+                mTableDirty = true;
+        }
+    }
     //-------------------------------------------------------------------------
     VertexElementType VulkanRenderSystem::getColourVertexElementType( void ) const
     {
@@ -1431,20 +1488,20 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::flushRootLayout( void )
+    void VulkanRenderSystem::flushRootLayout( VulkanHlmsPso *pso )
     {
         if( !mTableDirty )
             return;
 
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-        VulkanRootLayout *rootLayout = mPso->rootLayout;
+        VulkanRootLayout *rootLayout = pso->rootLayout;
         rootLayout->bind( mDevice, vaoManager, mGlobalTable );
         mTableDirty = false;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const CbDrawCallIndexed *cmd )
     {
-        flushRootLayout();
+        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         vkCmdDrawIndexedIndirect( cmdBuffer, mIndirectBuffer,
@@ -1454,7 +1511,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const CbDrawCallStrip *cmd )
     {
-        flushRootLayout();
+        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         vkCmdDrawIndirect( cmdBuffer, mIndirectBuffer,
@@ -1464,7 +1521,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_renderEmulated( const CbDrawCallIndexed *cmd )
     {
-        flushRootLayout();
+        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
 
         CbDrawIndexed *drawCmd = reinterpret_cast<CbDrawIndexed *>( mSwIndirectBufferPtr +
                                                                     (size_t)cmd->indirectBufferOffset );
@@ -1482,7 +1539,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_renderEmulated( const CbDrawCallStrip *cmd )
     {
-        flushRootLayout();
+        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
 
         CbDrawStrip *drawCmd =
             reinterpret_cast<CbDrawStrip *>( mSwIndirectBufferPtr + (size_t)cmd->indirectBufferOffset );
@@ -1560,7 +1617,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const v1::CbDrawCallIndexed *cmd )
     {
-        flushRootLayout();
+        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         vkCmdDrawIndexed( cmdBuffer, cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
@@ -1569,7 +1626,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const v1::CbDrawCallStrip *cmd )
     {
-        flushRootLayout();
+        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         vkCmdDraw( cmdBuffer, cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
@@ -1578,7 +1635,7 @@ namespace Ogre
 
     void VulkanRenderSystem::_render( const v1::RenderOperation &op )
     {
-        flushRootLayout();
+        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
 
         // Call super class.
         RenderSystem::_render( op );
@@ -1645,36 +1702,32 @@ namespace Ogre
         {
         case GPT_VERTEX_PROGRAM:
             mActiveVertexGpuProgramParameters = params;
-            shader = mPso->vertexShader;
+            shader = static_cast<VulkanProgram *>( mPso->vertexShader->_getBindingDelegate() );
             break;
         case GPT_FRAGMENT_PROGRAM:
             mActiveFragmentGpuProgramParameters = params;
-            shader = mPso->pixelShader;
+            shader = static_cast<VulkanProgram *>( mPso->pixelShader->_getBindingDelegate() );
             break;
         case GPT_GEOMETRY_PROGRAM:
             mActiveGeometryGpuProgramParameters = params;
-            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Geometry Shaders are not supported in Vulkan.",
-                         "VulkanRenderSystem::bindGpuProgramParameters" );
+            shader = static_cast<VulkanProgram *>( mPso->geometryShader->_getBindingDelegate() );
             break;
         case GPT_HULL_PROGRAM:
             mActiveTessellationHullGpuProgramParameters = params;
-            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Tesselation is different in Vulkan.",
-                         "VulkanRenderSystem::bindGpuProgramParameters" );
+            shader = static_cast<VulkanProgram *>( mPso->tesselationHullShader->_getBindingDelegate() );
             break;
         case GPT_DOMAIN_PROGRAM:
             mActiveTessellationDomainGpuProgramParameters = params;
-            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Tesselation is different in Vulkan.",
-                         "VulkanRenderSystem::bindGpuProgramParameters" );
+            shader =
+                static_cast<VulkanProgram *>( mPso->tesselationDomainShader->_getBindingDelegate() );
             break;
         case GPT_COMPUTE_PROGRAM:
-            // mActiveComputeGpuProgramParameters = params;
-            // shader = static_cast<VulkanProgram *>( mComputePso->computeShader->_getBindingDelegate()
-            // );
+            mActiveComputeGpuProgramParameters = params;
+            shader = static_cast<VulkanProgram *>( mComputePso->computeShader->_getBindingDelegate() );
             break;
         }
 
-        size_t bytesToWrite =
-            shader->getBufferRequiredSize();  // + mPso->pixelShader->getBufferRequiredSize();
+        size_t bytesToWrite = shader->getBufferRequiredSize();
         if( shader && bytesToWrite > 0 )
         {
             if( mCurrentAutoParamsBufferSpaceLeft < bytesToWrite )
@@ -2278,7 +2331,7 @@ namespace Ogre
     void VulkanRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso )
     {
         size_t numShaderStages = 0u;
-        VkPipelineShaderStageCreateInfo shaderStages[GPT_COMPUTE_PROGRAM];
+        VkPipelineShaderStageCreateInfo shaderStages[NumShaderTypes];
 
         VulkanRootLayout *rootLayout = 0;
 
@@ -2557,25 +2610,15 @@ namespace Ogre
                                                      &pipeline, 0, &vulkanPso );
         checkVkResult( result, "vkCreateGraphicsPipelines" );
 
-        VulkanHlmsPso *pso = new VulkanHlmsPso( vulkanPso, vertexShader, pixelShader, rootLayout );
-        // pso->pso = vulkanPso;
-        // pso->vertexShader = vertexShader;
-        // pso->pixelShader = pixelShader;
-        // pso->descriptorLayoutBindingSets = descriptorLayoutBindingSets;
-        // pso->descriptorSets = sets;
-
+        VulkanHlmsPso *pso = new VulkanHlmsPso( vulkanPso, rootLayout );
         newPso->rsData = pso;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )
     {
-        assert( pso->rsData );
-
+        OGRE_ASSERT_LOW( pso->rsData );
         VulkanHlmsPso *vulkanPso = static_cast<VulkanHlmsPso *>( pso->rsData );
-
-        delayed_vkDestroyPipeline( mVaoManager, mActiveDevice->mDevice,
-                                   reinterpret_cast<VkPipeline>( vulkanPso->pso ), 0 );
-
+        delayed_vkDestroyPipeline( mVaoManager, mActiveDevice->mDevice, vulkanPso->pso, 0 );
         delete vulkanPso;
         pso->rsData = 0;
     }
