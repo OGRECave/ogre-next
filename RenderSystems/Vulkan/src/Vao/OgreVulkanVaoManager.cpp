@@ -560,7 +560,7 @@ namespace Ogre
         TextureMemoryVec::iterator itor = mTextureMemory.begin();
         TextureMemoryVec::iterator endt = mTextureMemory.end();
 
-        while( itor != endt && ( 1u << itor->vkMemoryTypeIndex ) & memReq.memoryTypeBits )
+        while( itor != endt && !( ( 1u << itor->vkMemoryTypeIndex ) & memReq.memoryTypeBits ) )
             ++itor;
 
         if( itor == mTextureMemory.end() )
@@ -576,7 +576,7 @@ namespace Ogre
 
         outTexMemIdx = static_cast<uint16>( itor - mTextureMemory.begin() );
 
-        const bool isTextureOnly = itor->vkMemoryTypeIndex == mBestVkMemoryTypeIndex[CPU_INACCESSIBLE];
+        const bool isTextureOnly = itor->vkMemoryTypeIndex != mBestVkMemoryTypeIndex[CPU_INACCESSIBLE];
         VboVec &vboVec = isTextureOnly ? itor->vbos : mVbos[CPU_INACCESSIBLE];
 
         allocateVbo( memReq.size, memReq.alignment, vboVec, itor->vkMemoryTypeIndex,
