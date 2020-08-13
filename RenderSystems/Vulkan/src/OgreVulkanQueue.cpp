@@ -1007,7 +1007,6 @@ namespace Ogre
         //        }
 
         vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
-        vkQueueWaitIdle( mQueue );
 
         if( mCurrentFence && mCurrentFenceRefCount > 0 )
         {
