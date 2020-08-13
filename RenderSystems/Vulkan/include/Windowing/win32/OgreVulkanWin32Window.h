@@ -2,9 +2,7 @@
 
 #include "OgreVulkanWindow.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-
-#    include <windows.h>
+#include <windows.h>
 
 namespace Ogre
 {
@@ -54,5 +52,3 @@ namespace Ogre
     };
 
 }  // namespace Ogre
-
-#endif

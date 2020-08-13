@@ -1,4 +1,4 @@
-#include "OgreVulkanWin32Window.h"
+#include "Windowing/win32/OgreVulkanWin32Window.h"
 
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanTextureGpu.h"

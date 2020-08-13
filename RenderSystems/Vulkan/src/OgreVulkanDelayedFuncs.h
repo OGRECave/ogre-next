@@ -1,4 +1,8 @@
 // FILE AUTOMATICALLY GENERATED. Run python3 OgreVulkanDelayedFuncs.py
+
+// Fix for UNITY builds
+#pragma once
+
 namespace Ogre
 {
     class VulkanDelayedFuncBase
