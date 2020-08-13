@@ -72,6 +72,7 @@ namespace Ogre
 
     protected:
         virtual HRESULT _createSwapChainImpl();
+        virtual void _destroySwapChain();
         HRESULT _compensateSwapChainCompositionScale();
 
     public:
