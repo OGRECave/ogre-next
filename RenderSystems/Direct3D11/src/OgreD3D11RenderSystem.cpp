@@ -1671,6 +1671,8 @@ namespace Ogre
 
         Root::getSingleton().getHlmsManager()->_changeRenderSystem((RenderSystem*)0);
 
+        MeshManager::getSingleton().unloadAll(Resource::LF_MARKED_FOR_RELOAD);
+
         static_cast<D3D11TextureGpuManager*>(mTextureGpuManager)->_destroyD3DResources();
         static_cast<D3D11VaoManager*>(mVaoManager)->_destroyD3DResources();
 
@@ -1693,7 +1695,7 @@ namespace Ogre
         Root::getSingleton().getHlmsManager()->_changeRenderSystem(this);
 
         v1::MeshManager::getSingleton().reloadAll(Resource::LF_PRESERVE_STATE);
-        MeshManager::getSingleton().reloadAll(Resource::LF_PRESERVE_STATE);
+        MeshManager::getSingleton().reloadAll(Resource::LF_MARKED_FOR_RELOAD);
 
         scnIt = SceneManagerEnumerator::getSingleton().getSceneManagerIterator();
         while(scnIt.hasMoreElements())

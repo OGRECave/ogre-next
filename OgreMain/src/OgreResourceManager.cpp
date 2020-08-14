@@ -271,7 +271,10 @@ namespace Ogre {
                 Resource* res = i->second.get();
                 if (!reloadableOnly || res->isReloadable())
                 {
+                    bool markForReload = (flags & Resource::LF_MARKED_FOR_RELOAD) != 0 && res->isLoaded();
                     res->unload();
+                    if (markForReload)
+                        res->markForReload();
                 }
             }
         }

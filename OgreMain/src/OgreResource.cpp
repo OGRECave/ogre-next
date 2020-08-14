@@ -348,7 +348,8 @@ namespace Ogre
     void Resource::reload(LoadingFlags flags)
     { 
             OGRE_LOCK_AUTO_MUTEX;
-        if (mLoadingState.get() == LOADSTATE_LOADED)
+        if (mLoadingState.get() == (flags & Resource::LF_MARKED_FOR_RELOAD ?
+            LOADSTATE_UNLOADED_MARKED_FOR_RELOAD : LOADSTATE_LOADED))
         {
             unload();
             load();
