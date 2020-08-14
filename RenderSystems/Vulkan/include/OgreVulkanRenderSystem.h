@@ -300,22 +300,22 @@ namespace Ogre
 
         virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection );
 
-        virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) override;
-        virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pos ) override;
-        virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock ) override;
-        virtual void _hlmsMacroblockDestroyed( HlmsMacroblock *block ) override;
-        virtual void _hlmsBlendblockCreated( HlmsBlendblock *newBlock ) override;
-        virtual void _hlmsBlendblockDestroyed( HlmsBlendblock *block ) override;
-        virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock ) override;
-        virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block ) override;
-        virtual void _descriptorSetTextureCreated( DescriptorSetTexture *newSet ) override;
-        virtual void _descriptorSetTextureDestroyed( DescriptorSetTexture *set ) override;
-        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet ) override;
-        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set ) override;
-        virtual void _descriptorSetSamplerCreated( DescriptorSetSampler *newSet ) override;
-        virtual void _descriptorSetSamplerDestroyed( DescriptorSetSampler *set ) override;
-        virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet ) override;
-        virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set ) override;
+        virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
+        virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pos );
+        virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock );
+        virtual void _hlmsMacroblockDestroyed( HlmsMacroblock *block );
+        virtual void _hlmsBlendblockCreated( HlmsBlendblock *newBlock );
+        virtual void _hlmsBlendblockDestroyed( HlmsBlendblock *block );
+        virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock );
+        virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block );
+        virtual void _descriptorSetTextureCreated( DescriptorSetTexture *newSet );
+        virtual void _descriptorSetTextureDestroyed( DescriptorSetTexture *set );
+        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet );
+        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set );
+        virtual void _descriptorSetSamplerCreated( DescriptorSetSampler *newSet );
+        virtual void _descriptorSetSamplerDestroyed( DescriptorSetSampler *set );
+        virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet );
+        virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set );
 
         VulkanDevice *getVulkanDevice() const { return mDevice; }
         void _notifyDeviceStalled();
