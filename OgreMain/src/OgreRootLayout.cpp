@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include "OgreException.h"
 #include "OgreGpuProgram.h"
+#include "OgreLogManager.h"
 #include "OgreLwString.h"
 #include "OgreStringConverter.h"
 
@@ -48,16 +49,23 @@ namespace Ogre
         "tex_buffers",    //
         "textures",       //
         "samplers",       //
-        "uav_textures",   //
         "uav_buffers",    //
+        "uav_textures",   //
     };
     //-------------------------------------------------------------------------
     DescBindingRange::DescBindingRange() : start( 0u ), end( 0u ) {}
     //-------------------------------------------------------------------------
-    RootLayout::RootLayout() : mCompute( false ), mParamsBuffStages( 0u ) {}
+    RootLayout::RootLayout() : mCompute( false ), mParamsBuffStages( 0u )
+    {
+        memset( mBaked, 0, sizeof( mBaked ) );
+    }
     //-------------------------------------------------------------------------
     void RootLayout::validate( const String &filename ) const
     {
+        bool bakedSetsSeenTexTypes = false;
+        bool bakedSetsSeenSamplerTypes = false;
+        bool bakedSetsSeenUavTypes = false;
+
         // Check start <= end
         for( size_t i = 0u; i < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
         {
@@ -96,7 +104,8 @@ namespace Ogre
                                    bufferRange.start >= texRange.end ) )
                             {
                                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                             "Error at file " + filename + ":\n" +
+                                             "Error at file " + filename +
+                                                 ":\n"
                                                  "TexBuffer and Texture slots cannot overlap for "
                                                  "compatibility with other APIs",
                                              "RootLayout::validate" );
@@ -120,12 +129,79 @@ namespace Ogre
                                    bufferRange.start >= texRange.end ) )
                             {
                                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                             "Error at file " + filename + ":\n" +
+                                             "Error at file " + filename +
+                                                 ":\n"
                                                  "UavBuffer and UavTexture slots cannot overlap for "
                                                  "compatibility with other APIs",
                                              "RootLayout::validate" );
                             }
                         }
+                    }
+                }
+            }
+
+            if( mBaked[i] )
+            {
+                for( size_t j = DescBindingTypes::ParamBuffer; j <= DescBindingTypes::ConstBuffer; ++j )
+                {
+                    if( mDescBindingRanges[i][j].isInUse() )
+                    {
+                        // This restriction is imposed by Ogre, not by Vulkan. Might be improved
+                        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                     "Error at file " + filename +
+                                         ":\n"
+                                         "ParamBuffer and ConstBuffer can't be in a baked set",
+                                     "RootLayout::validate" );
+                    }
+                }
+
+                const bool texTypesInUse = mDescBindingRanges[i][DescBindingTypes::TexBuffer].isInUse() |
+                                           mDescBindingRanges[i][DescBindingTypes::Texture].isInUse();
+                if( texTypesInUse )
+                {
+                    if( !bakedSetsSeenTexTypes )
+                        bakedSetsSeenTexTypes = true;
+                    else
+                    {
+                        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                     "Error at file " + filename +
+                                         ":\n"
+                                         "All baked Textures and TexBuffers must be together "
+                                         "in the same baked set and in only one of them",
+                                     "RootLayout::validate" );
+                    }
+                }
+
+                const bool samplerTypesInUse =
+                    mDescBindingRanges[i][DescBindingTypes::Sampler].isInUse();
+                if( samplerTypesInUse )
+                {
+                    if( !bakedSetsSeenSamplerTypes )
+                        bakedSetsSeenSamplerTypes = true;
+                    else
+                    {
+                        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                     "Error at file " + filename +
+                                         ":\n"
+                                         "All baked Samplers be together in one baked set",
+                                     "RootLayout::validate" );
+                    }
+                }
+
+                const bool uavTypesInUse = mDescBindingRanges[i][DescBindingTypes::UavBuffer].isInUse() |
+                                           mDescBindingRanges[i][DescBindingTypes::UavTexture].isInUse();
+                if( uavTypesInUse )
+                {
+                    if( !bakedSetsSeenUavTypes )
+                        bakedSetsSeenUavTypes = true;
+                    else
+                    {
+                        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                     "Error at file " + filename +
+                                         ":\n"
+                                         "All baked UavTextures and UavBuffers must be together "
+                                         "in the same baked set and in only one of them",
+                                     "RootLayout::validate" );
                     }
                 }
             }
@@ -163,6 +239,10 @@ namespace Ogre
                                const String &filename )
     {
         rapidjson::Value::ConstMemberIterator itor;
+
+        itor = jsonValue.FindMember( "baked" );
+        if( itor != jsonValue.MemberEnd() && itor->value.IsBool() )
+            mBaked[setIdx] = itor->value.GetBool();
 
         for( size_t i = 0u; i < DescBindingTypes::NumDescBindingTypes; ++i )
         {
@@ -258,6 +338,7 @@ namespace Ogre
         this->mParamsBuffStages = other.mParamsBuffStages;
         for( size_t i = 0u; i < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
         {
+            this->mBaked[i] = other.mBaked[i];
             for( size_t j = 0u; j < DescBindingTypes::NumDescBindingTypes; ++j )
                 this->mDescBindingRanges[i][j] = other.mDescBindingRanges[i][j];
         }
@@ -299,7 +380,18 @@ namespace Ogre
                 parseSet( itor->value, i, filename );
         }
 
-        validate( filename );
+        try
+        {
+            validate( filename );
+        }
+        catch( Exception & )
+        {
+            String dumpStr;
+            dumpStr = "Error in " + filename + " with its Root Layout:\n";
+            dump( dumpStr );
+            LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
+            throw;
+        }
     }
     //-----------------------------------------------------------------------------------
     inline void RootLayout::flushLwString( LwString &jsonStr, String &outJson )
@@ -332,6 +424,7 @@ namespace Ogre
             bool firstEntryWritten = false;
 
             jsonStr.a( "\n\t\"", (uint32)i, "\" :\n\t{" );
+
             if( mDescBindingRanges[i][DescBindingTypes::ParamBuffer].isInUse() )
             {
                 jsonStr.a( "\n\t\t\"has_params\" : [" );
@@ -349,6 +442,16 @@ namespace Ogre
                         firstShaderWritten = true;
                     }
                 }
+
+                firstEntryWritten = true;
+            }
+
+            if( mBaked[i] )
+            {
+                if( firstEntryWritten )
+                    jsonStr.a( "," );
+                jsonStr.a( "\n\t\t\"baked\" : true" );
+                firstEntryWritten = true;
             }
 
             for( size_t j = DescBindingTypes::ParamBuffer + 1u;

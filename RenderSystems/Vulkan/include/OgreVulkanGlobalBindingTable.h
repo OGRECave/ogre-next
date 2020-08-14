@@ -41,6 +41,18 @@ namespace Ogre
 #define NUM_BIND_TEXTURES 32u
 #define NUM_BIND_SAMPLERS 32u
 
+    namespace BakedDescriptorSets
+    {
+        enum BakedDescriptorSets
+        {
+            Textures,
+            Samplers,
+            UavBuffers,
+            UavTextures,
+            NumBakedDescriptorSets
+        };
+    }
+
     /// This table holds an emulation of D3D11/Metal style of resource binding
     /// @see    VulkanRootLayout::bind
     struct VulkanGlobalBindingTable
@@ -51,6 +63,37 @@ namespace Ogre
 
         VkDescriptorImageInfo textures[NUM_BIND_TEXTURES];
         VkDescriptorImageInfo samplers[NUM_BIND_SAMPLERS];
+
+        VkWriteDescriptorSet *bakedDescriptorSets[BakedDescriptorSets::NumBakedDescriptorSets];
+
+        bool dirtyParamsBuffer;
+        uint8 minDirtySlotConst;
+        uint8 minDirtySlotTexBuffer;
+        uint8 minDirtySlotTextures;
+        uint8 minDirtySlotSamplers;
+        bool dirtyBaked[BakedDescriptorSets::NumBakedDescriptorSets];
+
+        void reset( void )
+        {
+            dirtyParamsBuffer = false;
+            minDirtySlotConst = 255u;
+            minDirtySlotTexBuffer = 255u;
+            minDirtySlotTextures = 255u;
+            minDirtySlotSamplers = 255u;
+            for( size_t i = 0u; i < BakedDescriptorSets::NumBakedDescriptorSets; ++i )
+                dirtyBaked[i] = false;
+        }
+
+        void setAllDirty( void )
+        {
+            dirtyParamsBuffer = true;
+            minDirtySlotConst = 0u;
+            minDirtySlotTexBuffer = 0u;
+            minDirtySlotTextures = 0u;
+            minDirtySlotSamplers = 0u;
+            for( size_t i = 0u; i < BakedDescriptorSets::NumBakedDescriptorSets; ++i )
+                dirtyBaked[i] = true;
+        }
     };
 }  // namespace Ogre
 

@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanBufferInterface.h"
 #include "Vao/OgreVulkanTexBufferPacked.h"
 
+#include "OgreException.h"
+
 namespace Ogre
 {
     VulkanUavBufferPacked::VulkanUavBufferPacked( size_t internalBufStartBytes, size_t numElements,
@@ -61,5 +63,29 @@ namespace Ogre
         mTexBufferViews.push_back( retVal );
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanUavBufferPacked::bindBufferCS( uint16 slot, size_t offset, size_t sizeBytes )
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "Use DescriptorSetUav instead",
+                     "VulkanUavBufferPacked::bindBufferCS" );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanUavBufferPacked::setupBufferInfo( VkDescriptorBufferInfo &outBufferInfo, size_t offset,
+                                                 size_t sizeBytes )
+    {
+        OGRE_ASSERT_LOW( offset <= getTotalSizeBytes() );
+        OGRE_ASSERT_LOW( sizeBytes <= getTotalSizeBytes() );
+        OGRE_ASSERT_LOW( ( offset + sizeBytes ) <= getTotalSizeBytes() );
+
+        sizeBytes = !sizeBytes ? ( mNumElements * mBytesPerElement - offset ) : sizeBytes;
+
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( mBufferInterface );
+
+        outBufferInfo.buffer = bufferInterface->getVboName();
+        outBufferInfo.offset = mFinalBufferStart * mBytesPerElement + offset;
+        outBufferInfo.range = sizeBytes;
     }
 }  // namespace Ogre

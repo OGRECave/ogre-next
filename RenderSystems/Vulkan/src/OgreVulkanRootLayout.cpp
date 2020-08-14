@@ -48,7 +48,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    static const char c_bufferTypes[] = "PBTtsuU";
+    static const char c_bufferTypes[] = "PBTtsUu";
     static const char c_HLSLBufferTypesMap[] = "ccttsuu";
     //-------------------------------------------------------------------------
     uint32 toVkDescriptorType( DescBindingTypes::DescBindingTypes type )
@@ -154,7 +154,6 @@ namespace Ogre
                                 textStr.a( numStagesWithParams, "\n" );
                             }
 
-                            
                             macroStr += textStr.c_str();
                         }
 
@@ -182,7 +181,7 @@ namespace Ogre
                             textStr.aChar( c_HLSLBufferTypesMap[j] );
                             textStr.a( bindingIdx, "\n" );
                         }
-                        
+
                         ++bindingIdx;
                         ++emulatedSlot;
 
@@ -389,6 +388,32 @@ namespace Ogre
         writeDescSet.pImageInfo = &table.samplers[bindRanges.start];
     }
     //-------------------------------------------------------------------------
+    uint32 VulkanRootLayout::calculateFirstDirtySet( const VulkanGlobalBindingTable &table ) const
+    {
+        uint32 firstDirtySet = 0u;
+        const size_t numSets = mSets.size();
+        for( size_t i = 0u; i < numSets; ++i )
+        {
+            bool bDirty = false;
+
+            const DescBindingRange *descBindingRanges = mDescBindingRanges[i];
+
+            bDirty |=
+                table.dirtyParamsBuffer & descBindingRanges[DescBindingTypes::ParamBuffer].isInUse();
+            bDirty |= table.minDirtySlotConst < descBindingRanges[DescBindingTypes::ConstBuffer].start;
+            bDirty |= table.minDirtySlotTexBuffer < descBindingRanges[DescBindingTypes::TexBuffer].start;
+            bDirty |= table.minDirtySlotTextures < descBindingRanges[DescBindingTypes::Texture].start;
+            bDirty |= table.minDirtySlotSamplers < descBindingRanges[DescBindingTypes::Texture].start;
+
+            if( bDirty )
+                return firstDirtySet;
+
+            ++firstDirtySet;
+        }
+
+        return firstDirtySet;
+    }
+    //-------------------------------------------------------------------------
     void VulkanRootLayout::bind( VulkanDevice *device, VulkanVaoManager *vaoManager,
                                  const VulkanGlobalBindingTable &table )
     {
@@ -396,7 +421,9 @@ namespace Ogre
 
         const size_t numSets = mSets.size();
 
-        for( size_t i = 0u; i < numSets; ++i )
+        const uint32 firstDirtySet = calculateFirstDirtySet( table );
+
+        for( size_t i = firstDirtySet; i < numSets; ++i )
         {
             if( !mPools[i] || !mPools[i]->isAvailableInCurrentFrame() )
                 mPools[i] = vaoManager->getDescriptorPool( this, i, mSets[i] );
@@ -429,8 +456,8 @@ namespace Ogre
 
         vkCmdBindDescriptorSets(
             device->mGraphicsQueue.mCurrentCmdBuffer,
-            mCompute ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS, mRootLayout, 0u,
-            static_cast<uint32_t>( mSets.size() ), descSets, 0u, 0 );
+            mCompute ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS, mRootLayout,
+            firstDirtySet, static_cast<uint32_t>( mSets.size() ) - firstDirtySet, descSets, 0u, 0 );
     }
     //-------------------------------------------------------------------------
     VulkanRootLayout *VulkanRootLayout::findBest( VulkanRootLayout *a, VulkanRootLayout *b )
@@ -514,6 +541,9 @@ namespace Ogre
 
         for( size_t i = 0u; i < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
         {
+            if( this->mBaked[i] != other.mBaked[i] )
+                return this->mBaked[i] < other.mBaked[i];
+
             for( size_t j = 0u; j < DescBindingTypes::NumDescBindingTypes; ++j )
             {
                 if( this->mDescBindingRanges[i][j].start != other.mDescBindingRanges[i][j].start )

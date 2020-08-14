@@ -4,7 +4,7 @@
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
-Copyright (c) 2000-2014 Torus Knot Software Ltd
+Copyright (c) 2000-present Torus Knot Software Ltd
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -33,8 +33,21 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include "OgreHeaderPrefix.h"
 
+#include "vulkan/vulkan_core.h"
+
 namespace Ogre
 {
+    struct VulkanDescriptorSetUav
+    {
+        FastArray<VkDescriptorImageInfo> mTextures;
+        FastArray<VkDescriptorBufferInfo> mBuffers;
+        VkWriteDescriptorSet mWriteDescSets[2];
+
+        VulkanDescriptorSetUav( const DescriptorSetUav &descSetUav );
+
+        void destroy( const DescriptorSetUav &descSetUav );
+    };
+
     struct Range
     {
         uint32 location;

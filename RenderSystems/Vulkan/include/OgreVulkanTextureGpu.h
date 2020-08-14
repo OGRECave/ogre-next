@@ -140,12 +140,15 @@ namespace Ogre
                                  uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav,
                                  uint32 numSlices = 0u, VkImage imageOverride = 0 ) const;
 
-        VkImageView createView( const DescriptorSetTexture2::TextureSlot &texSlot ) const;
-        VkImageView createView( DescriptorSetUav::TextureSlot texSlot );
+        VkImageView createView( const DescriptorSetTexture2::TextureSlot &texSlot,
+                                bool bUseCache = true ) const;
+        VkImageView createView( DescriptorSetUav::TextureSlot texSlot, bool bUseCache = true );
         VkImageView createView( void ) const;
         VkImageView getDefaultDisplaySrv( void ) const { return mDefaultDisplaySrv; }
 
         void destroyView( VkImageView imageView );
+        void destroyView( DescriptorSetTexture2::TextureSlot texSlot, VkImageView imageView );
+        void destroyView( DescriptorSetUav::TextureSlot texSlot, VkImageView imageView );
 
         /// Returns a fresh VkImageMemoryBarrier filled with common data.
         /// srcAccessMask, dstAccessMask, oldLayout and newLayout must be filled by caller

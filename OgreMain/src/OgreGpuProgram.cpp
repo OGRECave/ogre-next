@@ -85,7 +85,11 @@ namespace Ogre
                          "GpuProgram::setRootLayout" );
         }
 
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
+        // In OGRE_DEBUG_NONE we assume programmatically generated
+        // root layouts are well formed to speed up compilation
         rootLayout.validate( mName );
+#endif
     }
     //-----------------------------------------------------------------------------
     void GpuProgram::setPrefabRootLayout( const PrefabRootLayout::PrefabRootLayout &prefab )

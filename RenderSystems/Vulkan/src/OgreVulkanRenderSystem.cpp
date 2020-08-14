@@ -58,7 +58,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanHardwareIndexBuffer.h"
 #include "OgreVulkanHardwareVertexBuffer.h"
 
-#include "OgreVulkanDescriptorSetTexture.h"
+#include "OgreVulkanDescriptorSets.h"
 
 #include "OgreVulkanHardwareIndexBuffer.h"
 #include "OgreVulkanHardwareVertexBuffer.h"
@@ -179,6 +179,7 @@ namespace Ogre
         mCurrentDescriptorSetTexture( 0 )
     {
         memset( &mGlobalTable, 0, sizeof( mGlobalTable ) );
+        mGlobalTable.reset();
 
         for( size_t i = 0u; i < NUM_BIND_TEXTURES; ++i )
             mGlobalTable.textures[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -658,6 +659,7 @@ namespace Ogre
             mGlobalTable.paramsBuffer[shaderStage].range != bufferInfo.range )
         {
             mGlobalTable.paramsBuffer[shaderStage] = bufferInfo;
+            mGlobalTable.dirtyParamsBuffer = true;
             mTableDirty = true;
         }
     }
@@ -670,6 +672,7 @@ namespace Ogre
             mGlobalTable.constBuffers[slot].range != bufferInfo.range )
         {
             mGlobalTable.constBuffers[slot] = bufferInfo;
+            mGlobalTable.minDirtySlotConst = std::min( mGlobalTable.minDirtySlotConst, (uint8)slot );
             mTableDirty = true;
         }
     }
@@ -680,6 +683,8 @@ namespace Ogre
         if( mGlobalTable.texBuffers[slot] != bufferView )
         {
             mGlobalTable.texBuffers[slot] = bufferView;
+            mGlobalTable.minDirtySlotTexBuffer =
+                std::min( mGlobalTable.minDirtySlotTexBuffer, (uint8)slot );
             mTableDirty = true;
         }
     }
@@ -712,6 +717,8 @@ namespace Ogre
             if( mGlobalTable.textures[unit].imageView != tex->getDefaultDisplaySrv() )
             {
                 mGlobalTable.textures[unit].imageView = tex->getDefaultDisplaySrv();
+                mGlobalTable.minDirtySlotTextures =
+                    std::min( mGlobalTable.minDirtySlotTextures, (uint8)unit );
                 mTableDirty = true;
             }
         }
@@ -720,6 +727,8 @@ namespace Ogre
             if( mGlobalTable.textures[unit].imageView != mDummyTextureView )
             {
                 mGlobalTable.textures[unit].imageView = mDummyTextureView;
+                mGlobalTable.minDirtySlotTextures =
+                    std::min( mGlobalTable.minDirtySlotTextures, (uint8)unit );
                 mTableDirty = true;
             }
         }
@@ -970,6 +979,7 @@ namespace Ogre
             endRenderPassDescriptor( true );
 
         mUavRenderingDirty = true;
+        mGlobalTable.setAllDirty();
         mTableDirty = true;
         mPso = 0;
     }
@@ -991,6 +1001,8 @@ namespace Ogre
             if( mGlobalTable.samplers[texUnit].sampler != mDummySampler )
             {
                 mGlobalTable.samplers[texUnit].sampler = mDummySampler;
+                mGlobalTable.minDirtySlotSamplers =
+                    std::min( mGlobalTable.minDirtySlotSamplers, texUnit );
                 mTableDirty = true;
             }
         }
@@ -1000,6 +1012,8 @@ namespace Ogre
             if( mGlobalTable.samplers[texUnit].sampler != textureSampler )
             {
                 mGlobalTable.samplers[texUnit].sampler = textureSampler;
+                mGlobalTable.minDirtySlotSamplers =
+                    std::min( mGlobalTable.minDirtySlotSamplers, texUnit );
                 mTableDirty = true;
             }
         }
@@ -1029,7 +1043,10 @@ namespace Ogre
             mPso = pso;
 
             if( vulkanPso && vulkanPso->rootLayout != oldRootLayout )
+            {
+                mGlobalTable.setAllDirty();
                 mTableDirty = true;
+            }
         }
     }
     //-------------------------------------------------------------------------
@@ -1052,7 +1069,10 @@ namespace Ogre
             mComputePso = pso;
 
             if( vulkanPso && vulkanPso->rootLayout != oldRootLayout )
+            {
+                mGlobalTable.setAllDirty();
                 mTableDirty = true;
+            }
         }
     }
     //-------------------------------------------------------------------------
@@ -1063,11 +1083,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_dispatch( const HlmsComputePso &pso )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( " * _dispatch: pso " );
-        }
+        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mComputePso->rsData ) );
+
+        vkCmdDispatch( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, pso.mNumThreadGroups[0],
+                       pso.mNumThreadGroups[1], pso.mNumThreadGroups[2] );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setVertexArrayObject( const VertexArrayObject *vao )
@@ -2927,9 +2946,9 @@ namespace Ogre
             defaultLog->logMessage( String( " _descriptorSetTexture2Created " ) );
         }
 
-        _descriptorSetTextureCreated<DescriptorSetTexture2, DescriptorSetTexture2::Slot,
+        /*_descriptorSetTextureCreated<DescriptorSetTexture2, DescriptorSetTexture2::Slot,
                                      VulkanTexBufferPacked>( newSet, newSet->mTextures,
-                                                             newSet->mShaderTypeTexCount );
+                                                             newSet->mShaderTypeTexCount );*/
     }
 
     void VulkanRenderSystem::_descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set )
@@ -2955,28 +2974,20 @@ namespace Ogre
     }
 
     void VulkanRenderSystem::_descriptorSetSamplerDestroyed( DescriptorSetSampler *set ) {}
-
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_descriptorSetUavCreated( DescriptorSetUav *newSet )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " _descriptorSetUavCreated " ) );
-        }
-
-        _descriptorSetTextureCreated<DescriptorSetUav, DescriptorSetUav::Slot, VulkanUavBufferPacked>(
-            newSet, newSet->mUavs, 0 );
+        VulkanDescriptorSetUav *vulkanSet = new VulkanDescriptorSetUav( *newSet );
+        newSet->mRsData = vulkanSet;
     }
-
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_descriptorSetUavDestroyed( DescriptorSetUav *set )
     {
-        assert( set->mRsData );
+        OGRE_ASSERT_LOW( set->mRsData );
 
-        VulkanDescriptorSetTexture *metalSet =
-            reinterpret_cast<VulkanDescriptorSetTexture *>( set->mRsData );
-
-        destroyVulkanDescriptorSetTexture( metalSet );
-        delete metalSet;
+        VulkanDescriptorSetUav *vulkanSet = reinterpret_cast<VulkanDescriptorSetUav *>( set->mRsData );
+        vulkanSet->destroy( *set );
+        delete vulkanSet;
 
         set->mRsData = 0;
     }

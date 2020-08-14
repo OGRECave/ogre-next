@@ -76,8 +76,8 @@ namespace Ogre
             TexBuffer,
             Texture,
             Sampler,
-            UavTexture,
             UavBuffer,
+            UavTexture,
             NumDescBindingTypes
         };
     }  // namespace DescBindingTypes
@@ -87,6 +87,7 @@ namespace Ogre
     public:
         bool mCompute;
         uint8 mParamsBuffStages;
+        bool mBaked[OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS];
         DescBindingRange mDescBindingRanges[OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS]
                                            [DescBindingTypes::NumDescBindingTypes];
 
@@ -122,7 +123,8 @@ namespace Ogre
                         "textures" : [0, 1],
                         "samplers" : [0, 1],
                         "uav_buffers" : [0, 16]
-                        "uav_textures" : [16, 32]
+                        "uav_textures" : [16, 32],
+                        "baked" : false
                     }
                 }
             @endcode

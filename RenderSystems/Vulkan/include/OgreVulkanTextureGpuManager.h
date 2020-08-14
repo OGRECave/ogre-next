@@ -33,12 +33,14 @@ THE SOFTWARE.
 
 #include "OgreTextureGpuManager.h"
 
+#include "OgreVulkanDevice.h"
+#include "OgreVulkanRenderSystem.h"
+
+#include "OgreDescriptorSetTexture.h"
+#include "OgreDescriptorSetUav.h"
 #include "OgreTextureGpu.h"
 
 #include "OgreHeaderPrefix.h"
-
-#include "OgreVulkanDevice.h"
-#include "OgreVulkanRenderSystem.h"
 
 namespace Ogre
 {
@@ -59,6 +61,19 @@ namespace Ogre
             size_t vboPoolIdx;
             size_t internalBufferStart;
         };
+
+        struct CachedView
+        {
+            uint32 refCount;
+            VkImageView imageView;
+        };
+
+        typedef map<DescriptorSetTexture2::TextureSlot, CachedView>::type CachedTex2ImageViewMap;
+        typedef map<DescriptorSetUav::TextureSlot, CachedView>::type CachedUavImageViewMap;
+
+        CachedTex2ImageViewMap mCachedTex;
+        CachedUavImageViewMap mCachedUavs;
+
         /// 4x4 texture for when we have nothing to display.
         BlankTexture mBlankTexture[TextureTypes::Type3D + 1u];
 
@@ -86,6 +101,12 @@ namespace Ogre
 
         VkImage getBlankTextureVulkanName( TextureTypes::TextureTypes textureType ) const;
         VkImageView getBlankTextureView( TextureTypes::TextureTypes textureType ) const;
+
+        VkImageView createView( const DescriptorSetTexture2::TextureSlot &texSlot );
+        void destroyView( DescriptorSetTexture2::TextureSlot texSlot, VkImageView imageView );
+
+        VkImageView createView( const DescriptorSetUav::TextureSlot &texSlot );
+        void destroyView( DescriptorSetUav::TextureSlot texSlot, VkImageView imageView );
 
         VulkanDevice *getDevice() const { return mDevice; }
     };

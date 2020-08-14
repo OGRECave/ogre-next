@@ -96,6 +96,8 @@ namespace Ogre
                                   const DescBindingRange *descBindingRanges,
                                   const VulkanGlobalBindingTable &table );
 
+        uint32 calculateFirstDirtySet( const VulkanGlobalBindingTable &table ) const;
+
     public:
         VulkanRootLayout( VulkanGpuProgramManager *programManager );
         ~VulkanRootLayout();
@@ -144,7 +146,8 @@ namespace Ogre
         @param inOutString [in/out]
             String to output our macros
         */
-        void generateRootLayoutMacros( uint32 shaderStage, ShaderSyntax shaderType, String &inOutString ) const;
+        void generateRootLayoutMacros( uint32 shaderStage, ShaderSyntax shaderType,
+                                       String &inOutString ) const;
 
         /** Creates most of our Vulkan handles required to build a PSO.
 

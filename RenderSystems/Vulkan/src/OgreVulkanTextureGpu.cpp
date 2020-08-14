@@ -280,7 +280,7 @@ namespace Ogre
             }
             else
             {
-                mDefaultDisplaySrv = createView( texSlot );
+                mDefaultDisplaySrv = createView( texSlot, false );
                 mOwnsSrv = true;
             }
         }
@@ -684,6 +684,21 @@ namespace Ogre
         delayed_vkDestroyImageView( textureManager->getVaoManager(), device->mDevice, imageView, 0 );
     }
     //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::destroyView( DescriptorSetTexture2::TextureSlot texSlot,
+                                        VkImageView imageView )
+    {
+        VulkanTextureGpuManager *textureManager =
+            static_cast<VulkanTextureGpuManager *>( mTextureManager );
+        textureManager->destroyView( texSlot, imageView );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpu::destroyView( DescriptorSetUav::TextureSlot texSlot, VkImageView imageView )
+    {
+        VulkanTextureGpuManager *textureManager =
+            static_cast<VulkanTextureGpuManager *>( mTextureManager );
+        textureManager->destroyView( texSlot, imageView );
+    }
+    //-----------------------------------------------------------------------------------
     VkImageView VulkanTextureGpu::createView( void ) const
     {
         OGRE_ASSERT_MEDIUM( isTexture() &&
@@ -695,16 +710,35 @@ namespace Ogre
         return mDefaultDisplaySrv;
     }
     //-----------------------------------------------------------------------------------
-    VkImageView VulkanTextureGpu::createView( const DescriptorSetTexture2::TextureSlot &texSlot ) const
+    VkImageView VulkanTextureGpu::createView( const DescriptorSetTexture2::TextureSlot &texSlot,
+                                              bool bUseCache ) const
     {
-        return _createView( texSlot.pixelFormat, texSlot.mipmapLevel, texSlot.numMipmaps,
-                            texSlot.textureArrayIndex, texSlot.cubemapsAs2DArrays, false );
+        if( bUseCache )
+        {
+            VulkanTextureGpuManager *textureManager =
+                static_cast<VulkanTextureGpuManager *>( mTextureManager );
+            return textureManager->createView( texSlot );
+        }
+        else
+        {
+            return _createView( texSlot.pixelFormat, texSlot.mipmapLevel, texSlot.numMipmaps,
+                                texSlot.textureArrayIndex, texSlot.cubemapsAs2DArrays, false );
+        }
     }
     //-----------------------------------------------------------------------------------
-    VkImageView VulkanTextureGpu::createView( DescriptorSetUav::TextureSlot texSlot )
+    VkImageView VulkanTextureGpu::createView( DescriptorSetUav::TextureSlot texSlot, bool bUseCache )
     {
-        return _createView( texSlot.pixelFormat, texSlot.mipmapLevel, 1u, texSlot.textureArrayIndex,
-                            false, true );
+        if( bUseCache )
+        {
+            VulkanTextureGpuManager *textureManager =
+                static_cast<VulkanTextureGpuManager *>( mTextureManager );
+            return textureManager->createView( texSlot );
+        }
+        else
+        {
+            return _createView( texSlot.pixelFormat, texSlot.mipmapLevel, 1u, texSlot.textureArrayIndex,
+                                false, true );
+        }
     }
     //-----------------------------------------------------------------------------------
     VkImageMemoryBarrier VulkanTextureGpu::getImageMemoryBarrier( void ) const

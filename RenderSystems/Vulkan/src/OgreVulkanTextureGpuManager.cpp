@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreVulkanTextureGpuManager.h"
 
 #include "OgreVulkanAsyncTextureTicket.h"
+#include "OgreVulkanDelayedFuncs.h"
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanStagingTexture.h"
 #include "OgreVulkanTextureGpu.h"
@@ -391,5 +392,97 @@ namespace Ogre
         TextureTypes::TextureTypes textureType ) const
     {
         return mBlankTexture[textureType].defaultView;
+    }
+    //-----------------------------------------------------------------------------------
+    VkImageView VulkanTextureGpuManager::createView( const DescriptorSetTexture2::TextureSlot &texSlot )
+    {
+        VkImageView retVal = 0;
+
+        CachedTex2ImageViewMap::iterator itor = mCachedTex.find( texSlot );
+        if( itor == mCachedTex.end() )
+        {
+            VulkanTextureGpu *vulkanTexture = static_cast<VulkanTextureGpu *>( texSlot.texture );
+            retVal = vulkanTexture->createView( texSlot, false );
+            CachedView cachedView;
+            cachedView.refCount = 1u;
+            cachedView.imageView = retVal;
+            mCachedTex.insert( CachedTex2ImageViewMap::value_type( texSlot, cachedView ) );
+        }
+        else
+        {
+            ++itor->second.refCount;
+            retVal = itor->second.imageView;
+        }
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpuManager::destroyView( DescriptorSetTexture2::TextureSlot texSlot,
+                                               VkImageView imageView )
+    {
+        CachedTex2ImageViewMap::iterator itor = mCachedTex.find( texSlot );
+
+        OGRE_ASSERT_MEDIUM(
+            itor != mCachedTex.end() &&
+            "Did you const_cast DescriptorSetUav, modify it, and destroy it? Double free perhaps?" );
+        OGRE_ASSERT_MEDIUM(
+            itor->second.imageView == imageView &&
+            "Did you const_cast DescriptorSetUav, modify it, and destroy it? Double free perhaps?" );
+
+        if( itor != mCachedTex.end() )
+        {
+            OGRE_ASSERT_MEDIUM( itor->second.refCount > 0u );
+            --itor->second.refCount;
+            if( itor->second.refCount == 0u )
+            {
+                mCachedTex.erase( itor );
+                delayed_vkDestroyImageView( mVaoManager, mDevice->mDevice, imageView, 0 );
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    VkImageView VulkanTextureGpuManager::createView( const DescriptorSetUav::TextureSlot &texSlot )
+    {
+        VkImageView retVal = 0;
+
+        CachedUavImageViewMap::iterator itor = mCachedUavs.find( texSlot );
+        if( itor == mCachedUavs.end() )
+        {
+            VulkanTextureGpu *vulkanTexture = static_cast<VulkanTextureGpu *>( texSlot.texture );
+            retVal = vulkanTexture->createView( texSlot, false );
+            CachedView cachedView;
+            cachedView.refCount = 1u;
+            cachedView.imageView = retVal;
+            mCachedUavs.insert( CachedUavImageViewMap::value_type( texSlot, cachedView ) );
+        }
+        else
+        {
+            ++itor->second.refCount;
+            retVal = itor->second.imageView;
+        }
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpuManager::destroyView( DescriptorSetUav::TextureSlot texSlot,
+                                               VkImageView imageView )
+    {
+        CachedUavImageViewMap::iterator itor = mCachedUavs.find( texSlot );
+
+        OGRE_ASSERT_MEDIUM(
+            itor != mCachedUavs.end() &&
+            "Did you const_cast DescriptorSetUav, modify it, and destroy it? Double free perhaps?" );
+        OGRE_ASSERT_MEDIUM(
+            itor->second.imageView == imageView &&
+            "Did you const_cast DescriptorSetUav, modify it, and destroy it? Double free perhaps?" );
+
+        if( itor != mCachedUavs.end() )
+        {
+            OGRE_ASSERT_MEDIUM( itor->second.refCount > 0u );
+            --itor->second.refCount;
+            if( itor->second.refCount == 0u )
+            {
+                mCachedUavs.erase( itor );
+                delayed_vkDestroyImageView( mVaoManager, mDevice->mDevice, imageView, 0 );
+            }
+        }
     }
 }  // namespace Ogre

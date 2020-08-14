@@ -50,14 +50,9 @@ namespace Ogre
                                VaoManager *vaoManager, VulkanBufferInterface *bufferInterface );
         ~VulkanUavBufferPacked();
 
-        //        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        //        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        //        virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        //        virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        //        virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
 
-        void bindBufferForDescriptor( VkBuffer *buffers, VkDeviceSize *offsets, size_t offset );
+        void setupBufferInfo( VkDescriptorBufferInfo &outBufferInfo, size_t offset, size_t sizeBytes );
     };
 }  // namespace Ogre
 
