@@ -45,6 +45,7 @@ namespace Ogre
     {
         enum BakedDescriptorSets
         {
+            TexBuffers,
             Textures,
             Samplers,
             UavBuffers,
@@ -71,7 +72,9 @@ namespace Ogre
         uint8 minDirtySlotTexBuffer;
         uint8 minDirtySlotTextures;
         uint8 minDirtySlotSamplers;
-        bool dirtyBaked[BakedDescriptorSets::NumBakedDescriptorSets];
+        bool dirtyBakedTextures;
+        bool dirtyBakedSamplers;
+        bool dirtyBakedUavs;
 
         void reset( void )
         {
@@ -80,8 +83,10 @@ namespace Ogre
             minDirtySlotTexBuffer = 255u;
             minDirtySlotTextures = 255u;
             minDirtySlotSamplers = 255u;
-            for( size_t i = 0u; i < BakedDescriptorSets::NumBakedDescriptorSets; ++i )
-                dirtyBaked[i] = false;
+
+            dirtyBakedTextures = false;
+            dirtyBakedSamplers = false;
+            dirtyBakedUavs = false;
         }
 
         void setAllDirty( void )
@@ -91,8 +96,10 @@ namespace Ogre
             minDirtySlotTexBuffer = 0u;
             minDirtySlotTextures = 0u;
             minDirtySlotSamplers = 0u;
-            for( size_t i = 0u; i < BakedDescriptorSets::NumBakedDescriptorSets; ++i )
-                dirtyBaked[i] = true;
+
+            dirtyBakedTextures = true;
+            dirtyBakedSamplers = true;
+            dirtyBakedUavs = true;
         }
     };
 }  // namespace Ogre

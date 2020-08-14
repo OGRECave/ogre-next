@@ -45,19 +45,17 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanConstBufferPacked::~VulkanConstBufferPacked() {}
     //-------------------------------------------------------------------------
-    void VulkanConstBufferPacked::bindBufferVS( uint16 slot ) { bindBuffer( slot, 0 ); }
+    void VulkanConstBufferPacked::bindBufferVS( uint16 slot ) { bindBuffer( slot ); }
     //-------------------------------------------------------------------------
-    void VulkanConstBufferPacked::bindBufferPS( uint16 slot ) { bindBuffer( slot, 0 ); }
+    void VulkanConstBufferPacked::bindBufferPS( uint16 slot ) { bindBuffer( slot ); }
     //-------------------------------------------------------------------------
-    void VulkanConstBufferPacked::bindBufferGS( uint16 slot ) { bindBuffer( slot, 0 ); }
+    void VulkanConstBufferPacked::bindBufferGS( uint16 slot ) { bindBuffer( slot ); }
     //-------------------------------------------------------------------------
-    void VulkanConstBufferPacked::bindBufferHS( uint16 slot ) { bindBuffer( slot, 0 ); }
+    void VulkanConstBufferPacked::bindBufferHS( uint16 slot ) { bindBuffer( slot ); }
     //-------------------------------------------------------------------------
-    void VulkanConstBufferPacked::bindBufferDS( uint16 slot ) { bindBuffer( slot, 0 ); }
+    void VulkanConstBufferPacked::bindBufferDS( uint16 slot ) { bindBuffer( slot ); }
     //-------------------------------------------------------------------------
-    void VulkanConstBufferPacked::bindBufferCS( uint16 slot ) { bindBuffer( slot, 0 ); }
-    //-------------------------------------------------------------------------
-    void VulkanConstBufferPacked::bindBuffer( uint16 slot, uint32 offsetBytes )
+    void VulkanConstBufferPacked::bindBufferCS( uint16 slot )
     {
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
         VulkanBufferInterface *bufferInterface =
@@ -65,7 +63,20 @@ namespace Ogre
 
         VkDescriptorBufferInfo bufferInfo;
         bufferInfo.buffer = bufferInterface->getVboName();
-        bufferInfo.offset = mFinalBufferStart * mBytesPerElement + offsetBytes;
+        bufferInfo.offset = mFinalBufferStart * mBytesPerElement;
+        bufferInfo.range = mNumElements * mBytesPerElement;
+        mRenderSystem->_setConstBufferCS( slot, bufferInfo );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanConstBufferPacked::bindBuffer( uint16 slot )
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( mBufferInterface );
+
+        VkDescriptorBufferInfo bufferInfo;
+        bufferInfo.buffer = bufferInterface->getVboName();
+        bufferInfo.offset = mFinalBufferStart * mBytesPerElement;
         bufferInfo.range = mNumElements * mBytesPerElement;
         mRenderSystem->_setConstBuffer( slot, bufferInfo );
     }

@@ -396,14 +396,24 @@ namespace Ogre
         {
             bool bDirty = false;
 
-            const DescBindingRange *descBindingRanges = mDescBindingRanges[i];
+            const DescBindingRange *ranges = mDescBindingRanges[i];
 
-            bDirty |=
-                table.dirtyParamsBuffer & descBindingRanges[DescBindingTypes::ParamBuffer].isInUse();
-            bDirty |= table.minDirtySlotConst < descBindingRanges[DescBindingTypes::ConstBuffer].start;
-            bDirty |= table.minDirtySlotTexBuffer < descBindingRanges[DescBindingTypes::TexBuffer].start;
-            bDirty |= table.minDirtySlotTextures < descBindingRanges[DescBindingTypes::Texture].start;
-            bDirty |= table.minDirtySlotSamplers < descBindingRanges[DescBindingTypes::Texture].start;
+            if( !mBaked[i] )
+            {
+                bDirty |= table.dirtyParamsBuffer & ranges[DescBindingTypes::ParamBuffer].isInUse();
+                bDirty |= table.minDirtySlotConst < ranges[DescBindingTypes::ConstBuffer].start;
+                bDirty |= table.minDirtySlotTexBuffer < ranges[DescBindingTypes::TexBuffer].start;
+                bDirty |= table.minDirtySlotTextures < ranges[DescBindingTypes::Texture].start;
+                bDirty |= table.minDirtySlotSamplers < ranges[DescBindingTypes::Texture].start;
+            }
+            else
+            {
+                bDirty |= table.dirtyBakedTextures & ( ranges[DescBindingTypes::TexBuffer].isInUse() |
+                                                       ranges[DescBindingTypes::Texture].isInUse() );
+                bDirty |= table.dirtyBakedSamplers & ranges[DescBindingTypes::Sampler].isInUse();
+                bDirty |= table.dirtyBakedUavs & ( ranges[DescBindingTypes::UavBuffer].isInUse() |
+                                                   ranges[DescBindingTypes::UavTexture].isInUse() );
+            }
 
             if( bDirty )
                 return firstDirtySet;
@@ -438,16 +448,43 @@ namespace Ogre
             VkWriteDescriptorSet writeDescSets[DescBindingTypes::Sampler + NumShaderTypes];
 
             // Note: We must bind in the same order as DescBindingTypes
-            bindParamsBuffer( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
+            if( mBaked[i] )
+            {
+                bindParamsBuffer( writeDescSets, numWriteDescSets, currBinding, descSet,
+                                  descBindingRanges, table );
+                bindConstBuffers( writeDescSets, numWriteDescSets, currBinding, descSet,
+                                  descBindingRanges, table );
+                bindTexBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
+                                table );
+                bindTextures( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
                               table );
-            bindConstBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
+                bindSamplers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
                               table );
-            bindTexBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
-                            table );
-            bindTextures( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
-                          table );
-            bindSamplers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
-                          table );
+            }
+            else
+            {
+                for( size_t i = 0u; i < BakedDescriptorSets::NumBakedDescriptorSets; ++i )
+                {
+                    const DescBindingRange &bindRanges =
+                        descBindingRanges[i + DescBindingTypes::TexBuffer];
+                    if( bindRanges.isInUse() )
+                    {
+                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[i] &&
+                                            "No DescriptorSetTexture/Sampler/Uav bound when expected!" );
+                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[i]->descriptorCount ==
+                                                bindRanges.getNumUsedSlots() &&
+                                            "DescriptorSetTexture/Sampler/Uav provided is incompatible "
+                                            "with active RootLayout" );
+
+                        VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
+                        writeDescSet = *table.bakedDescriptorSets[i];
+                        writeDescSet.dstSet = descSet;
+                        writeDescSet.dstBinding = currBinding;
+                        currBinding += writeDescSet.descriptorCount;
+                        ++numWriteDescSets;
+                    }
+                }
+            }
 
             vkUpdateDescriptorSets( device->mDevice, static_cast<uint32_t>( numWriteDescSets ),
                                     writeDescSets, 0u, 0 );

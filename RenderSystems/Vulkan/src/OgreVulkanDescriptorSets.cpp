@@ -94,31 +94,26 @@ namespace Ogre
             ++itor;
         }
 
-        size_t numWriteDescs = 0u;
         if( numBuffers != 0u )
         {
-            VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[numWriteDescs];
+            VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[0];
             makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
 
             writeDescSet->dstArrayElement = 1u;
             writeDescSet->descriptorCount = static_cast<uint32>( numBuffers );
             writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
             writeDescSet->pBufferInfo = mBuffers.begin();
-
-            ++numWriteDescs;
         }
 
         if( numTextures != 0u )
         {
-            VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[numWriteDescs];
+            VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[1];
             makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
 
             writeDescSet->dstArrayElement = 1u;
             writeDescSet->descriptorCount = static_cast<uint32>( numTextures );
             writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
             writeDescSet->pImageInfo = mTextures.begin();
-
-            ++numWriteDescs;
         }
     }
     //-------------------------------------------------------------------------

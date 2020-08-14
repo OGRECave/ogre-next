@@ -40,7 +40,7 @@ namespace Ogre
     {
         VulkanRenderSystem *mRenderSystem;
 
-        void bindBuffer( uint16 slot, uint32 offsetBytes );
+        void bindBuffer( uint16 slot );
 
     public:
         VulkanConstBufferPacked( size_t internalBufferStartBytes, size_t numElements,

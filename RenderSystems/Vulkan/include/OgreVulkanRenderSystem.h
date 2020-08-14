@@ -106,7 +106,9 @@ namespace Ogre
         HlmsComputePso const *mComputePso;
 
         bool mTableDirty;
+        bool mComputeTableDirty;
         VulkanGlobalBindingTable mGlobalTable;
+        VulkanGlobalBindingTable mComputeTable;
         // Vulkan requires a valid handle when updating descriptors unless nullDescriptor is present
         // So we just use a dummy. The dummy texture we get it from TextureGpuManager which needs
         // to create some anyway for different reasons
@@ -143,7 +145,8 @@ namespace Ogre
 
         void bindDescriptorSet() const;
 
-        void flushRootLayout( VulkanHlmsPso *pso );
+        void flushRootLayout( void );
+        void flushRootLayoutCS( void );
 
     public:
         VulkanRenderSystem();
@@ -189,7 +192,9 @@ namespace Ogre
 
         void _setParamBuffer( GpuProgramType shaderStage, const VkDescriptorBufferInfo &bufferInfo );
         void _setConstBuffer( size_t slot, const VkDescriptorBufferInfo &bufferInfo );
+        void _setConstBufferCS( size_t slot, const VkDescriptorBufferInfo &bufferInfo );
         void _setTexBuffer( size_t slot, VkBufferView bufferView );
+        void _setTexBufferCS( size_t slot, VkBufferView bufferView );
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
         virtual void _setTexture( size_t unit, TextureGpu *texPtr );

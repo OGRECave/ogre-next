@@ -166,6 +166,7 @@ namespace Ogre
         mPso( 0 ),
         mComputePso( 0 ),
         mTableDirty( false ),
+        mComputeTableDirty( false ),
         mDummyBuffer( 0 ),
         mDummyTexBuffer( 0 ),
         mDummyTextureView( 0 ),
@@ -181,8 +182,14 @@ namespace Ogre
         memset( &mGlobalTable, 0, sizeof( mGlobalTable ) );
         mGlobalTable.reset();
 
+        memset( &mComputeTable, 0, sizeof( mComputeTable ) );
+        mComputeTable.reset();
+
         for( size_t i = 0u; i < NUM_BIND_TEXTURES; ++i )
+        {
             mGlobalTable.textures[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            mComputeTable.textures[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::shutdown( void )
@@ -677,6 +684,19 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_setConstBufferCS( size_t slot, const VkDescriptorBufferInfo &bufferInfo )
+    {
+        OGRE_ASSERT_MEDIUM( slot < NUM_BIND_CONST_BUFFERS );
+        if( mComputeTable.constBuffers[slot].buffer != bufferInfo.buffer ||
+            mComputeTable.constBuffers[slot].offset != bufferInfo.offset ||
+            mComputeTable.constBuffers[slot].range != bufferInfo.range )
+        {
+            mComputeTable.constBuffers[slot] = bufferInfo;
+            mComputeTable.minDirtySlotConst = std::min( mComputeTable.minDirtySlotConst, (uint8)slot );
+            mComputeTableDirty = true;
+        }
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTexBuffer( size_t slot, VkBufferView bufferView )
     {
         OGRE_ASSERT_MEDIUM( slot < NUM_BIND_TEX_BUFFERS );
@@ -686,6 +706,18 @@ namespace Ogre
             mGlobalTable.minDirtySlotTexBuffer =
                 std::min( mGlobalTable.minDirtySlotTexBuffer, (uint8)slot );
             mTableDirty = true;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_setTexBufferCS( size_t slot, VkBufferView bufferView )
+    {
+        OGRE_ASSERT_MEDIUM( slot < NUM_BIND_TEX_BUFFERS );
+        if( mComputeTable.texBuffers[slot] != bufferView )
+        {
+            mComputeTable.texBuffers[slot] = bufferView;
+            mComputeTable.minDirtySlotTexBuffer =
+                std::min( mComputeTable.minDirtySlotTexBuffer, (uint8)slot );
+            mComputeTableDirty = true;
         }
     }
     //-------------------------------------------------------------------------
@@ -891,7 +923,22 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set ) {}
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setUavCS( uint32 slotStart, const DescriptorSetUav *set ) {}
+    void VulkanRenderSystem::_setUavCS( uint32 slotStart, const DescriptorSetUav *set )
+    {
+        VulkanDescriptorSetUav *vulkanSet = reinterpret_cast<VulkanDescriptorSetUav *>( set->mRsData );
+
+        mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] !=
+            &vulkanSet->mWriteDescSets[0] )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] =
+                &vulkanSet->mWriteDescSets[0];
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavTextures] =
+                &vulkanSet->mWriteDescSets[1];
+            mComputeTable.dirtyBakedUavs = true;
+            mComputeTableDirty = true;
+        }
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,
                                                           const Frustum *frustum )
@@ -984,7 +1031,12 @@ namespace Ogre
         mPso = 0;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_notifyActiveComputeEnded( void ) { mComputePso = 0; }
+    void VulkanRenderSystem::_notifyActiveComputeEnded( void )
+    {
+        mComputePso = 0;
+        mComputeTable.setAllDirty();
+        mComputeTableDirty = true;
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_endFrameOnce( void )
     {
@@ -1070,8 +1122,8 @@ namespace Ogre
 
             if( vulkanPso && vulkanPso->rootLayout != oldRootLayout )
             {
-                mGlobalTable.setAllDirty();
-                mTableDirty = true;
+                mComputeTable.setAllDirty();
+                mComputeTableDirty = true;
             }
         }
     }
@@ -1083,7 +1135,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_dispatch( const HlmsComputePso &pso )
     {
-        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mComputePso->rsData ) );
+        flushRootLayoutCS();
 
         vkCmdDispatch( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, pso.mNumThreadGroups[0],
                        pso.mNumThreadGroups[1], pso.mNumThreadGroups[2] );
@@ -1507,20 +1559,32 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::flushRootLayout( VulkanHlmsPso *pso )
+    void VulkanRenderSystem::flushRootLayout( void )
     {
         if( !mTableDirty )
             return;
 
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-        VulkanRootLayout *rootLayout = pso->rootLayout;
+        VulkanRootLayout *rootLayout = reinterpret_cast<VulkanHlmsPso *>( mPso->rsData )->rootLayout;
         rootLayout->bind( mDevice, vaoManager, mGlobalTable );
         mTableDirty = false;
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::flushRootLayoutCS( void )
+    {
+        if( !mComputeTableDirty )
+            return;
+
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        VulkanRootLayout *rootLayout =
+            reinterpret_cast<VulkanHlmsPso *>( mComputePso->rsData )->rootLayout;
+        rootLayout->bind( mDevice, vaoManager, mComputeTable );
+        mComputeTableDirty = false;
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const CbDrawCallIndexed *cmd )
     {
-        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
+        flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         vkCmdDrawIndexedIndirect( cmdBuffer, mIndirectBuffer,
@@ -1530,7 +1594,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const CbDrawCallStrip *cmd )
     {
-        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
+        flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         vkCmdDrawIndirect( cmdBuffer, mIndirectBuffer,
@@ -1540,7 +1604,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_renderEmulated( const CbDrawCallIndexed *cmd )
     {
-        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
+        flushRootLayout();
 
         CbDrawIndexed *drawCmd = reinterpret_cast<CbDrawIndexed *>( mSwIndirectBufferPtr +
                                                                     (size_t)cmd->indirectBufferOffset );
@@ -1558,7 +1622,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_renderEmulated( const CbDrawCallStrip *cmd )
     {
-        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
+        flushRootLayout();
 
         CbDrawStrip *drawCmd =
             reinterpret_cast<CbDrawStrip *>( mSwIndirectBufferPtr + (size_t)cmd->indirectBufferOffset );
@@ -1636,7 +1700,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const v1::CbDrawCallIndexed *cmd )
     {
-        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
+        flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         vkCmdDrawIndexed( cmdBuffer, cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
@@ -1645,7 +1709,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_render( const v1::CbDrawCallStrip *cmd )
     {
-        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
+        flushRootLayout();
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         vkCmdDraw( cmdBuffer, cmd->primCount, cmd->instanceCount, cmd->firstVertexIndex,
@@ -1654,7 +1718,7 @@ namespace Ogre
 
     void VulkanRenderSystem::_render( const v1::RenderOperation &op )
     {
-        flushRootLayout( reinterpret_cast<VulkanHlmsPso *>( mPso->rsData ) );
+        flushRootLayout();
 
         // Call super class.
         RenderSystem::_render( op );
