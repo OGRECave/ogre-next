@@ -43,7 +43,8 @@ namespace Ogre
     @see HlmsPbsDatablock::setCubemapProbe
     */
     class _OgreHlmsPbsExport ParallaxCorrectedCubemap : public ParallaxCorrectedCubemapBase,
-                                                        public FrameListener
+                                                        public FrameListener,
+                                                        protected ManualResourceLoader
     {
         CubemapProbe    *mCollectedProbes[OGRE_MAX_CUBE_PROBES];
         uint32          mNumCollectedProbes;
@@ -103,6 +104,7 @@ namespace Ogre
         TempRttVec  mTmpRtt;
         TempRttVec  mIblRtt;
 
+        virtual void loadResource(Resource* resource);
         void createProxyGeometry(void);
         void destroyProxyGeometry(void);
         void createCubemapBlendWorkspaceDefinition(void);
