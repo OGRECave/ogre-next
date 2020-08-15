@@ -29,8 +29,10 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsComputeJob.h"
-#include "OgreHlmsManager.h"
+
 #include "OgreHlmsCompute.h"
+#include "OgreHlmsManager.h"
+#include "OgreRootLayout.h"
 
 #include "OgreRenderSystem.h"
 
@@ -312,6 +314,77 @@ namespace Ogre
             retVal = mName.getFriendlyText();
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::setupRootLayout( RootLayout &rootLayout )
+    {
+        ShaderParams *shaderParams0 = HlmsComputeJob::_getShaderParams( "default" );
+        ShaderParams *shaderParams1 = HlmsComputeJob::_getShaderParams( "glslvk" );
+
+        bool hasParams = false;
+        if( shaderParams0 )
+            hasParams|=!shaderParams0->mParams.empty();
+        if( shaderParams1 )
+            hasParams|=!shaderParams1->mParams.empty();
+
+        size_t currSet = 0u;
+        if( hasParams || mConstBuffers.empty() )
+        {
+            rootLayout.mBaked[currSet] = false;
+
+            DescBindingRange *bindRanges = rootLayout.mDescBindingRanges[currSet];
+            if( hasParams )
+            {
+                rootLayout.mParamsBuffStages = 1u << GPT_COMPUTE_PROGRAM;
+                bindRanges[DescBindingTypes::ParamBuffer].end = 1u;
+            }
+            bindRanges[DescBindingTypes::ConstBuffer].end = static_cast<uint16>( mConstBuffers.size() );
+
+            ++currSet;
+        }
+
+        rootLayout.mBaked[currSet] = true;
+        DescBindingRange *bindRanges = rootLayout.mDescBindingRanges[currSet];
+
+        bindRanges[DescBindingTypes::Sampler].end = static_cast<uint16>( mSamplerSlots.size() );
+
+        {
+            uint16 numTextures = 0u;
+            uint16 numTexBuffers = 0u;
+            DescriptorSetTexSlotArray::const_iterator itor = mTexSlots.begin();
+            DescriptorSetTexSlotArray::const_iterator endt = mTexSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isBuffer() )
+                    ++numTexBuffers;
+                else
+                    ++numTextures;
+                ++itor;
+            }
+
+            bindRanges[DescBindingTypes::TexBuffer].end = numTexBuffers;
+            bindRanges[DescBindingTypes::Texture].end = numTextures;
+        }
+
+        {
+            uint16 numTextures = 0u;
+            uint16 numTexBuffers = 0u;
+            DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
+            DescriptorSetUavSlotArray::const_iterator endt = mUavSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isBuffer() )
+                    ++numTexBuffers;
+                else
+                    ++numTextures;
+                ++itor;
+            }
+
+            bindRanges[DescBindingTypes::UavBuffer].end = numTexBuffers;
+            bindRanges[DescBindingTypes::UavTexture].end = numTextures;
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::_updateAutoProperties(void)

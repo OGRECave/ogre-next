@@ -1,6 +1,11 @@
-#version 430
+@property( syntax != glslvk )
+	#version 430
+@else
+	#version 450
+	@piece( ogre_u0 )ogre_u0,@end
+@end
 
-layout (rgba8) uniform restrict writeonly image2D testTexture;
+layout( @insertpiece( ogre_u0 ) rgba8 ) uniform restrict writeonly image2D testTexture;
 
 layout( local_size_x = @value( threads_per_group_x ),
         local_size_y = @value( threads_per_group_y ),

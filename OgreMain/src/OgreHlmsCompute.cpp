@@ -29,10 +29,12 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsCompute.h"
+
 #include "OgreHlmsComputeJob.h"
 
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
+#include "OgreRootLayout.h"
 
 #include "OgreSceneManager.h"
 #include "Compositor/OgreCompositorShadowNode.h"
@@ -197,6 +199,8 @@ namespace Ogre
         setProperty( HlmsBaseProp::Syntax,  mShaderSyntax.mHash );
         setProperty( HlmsBaseProp::Hlsl,    HlmsBaseProp::Hlsl.mHash );
         setProperty( HlmsBaseProp::Glsl,    HlmsBaseProp::Glsl.mHash );
+        setProperty( HlmsBaseProp::Glslvk,  HlmsBaseProp::Glslvk.mHash );
+        setProperty( HlmsBaseProp::Hlslvk,  HlmsBaseProp::Hlslvk.mHash );
         setProperty( HlmsBaseProp::Glsles,  HlmsBaseProp::Glsles.mHash );
         setProperty( HlmsBaseProp::Metal,   HlmsBaseProp::Metal.mHash );
 
@@ -284,6 +288,13 @@ namespace Ogre
                             ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
                             mShaderProfile, GPT_COMPUTE_PROGRAM );
                 gp->setSource( outString, debugFilenameOutput );
+
+                {
+                    RootLayout rootLayout;
+                    rootLayout.mCompute = true;
+                    job->setupRootLayout( rootLayout );
+                    gp->setRootLayout( gp->getType(), rootLayout );
+                }
 
                 if( mComputeShaderTarget )
                 {

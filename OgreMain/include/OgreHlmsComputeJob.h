@@ -144,6 +144,8 @@ namespace Ogre
         IdString getName(void) const                { return mName; }
         String getNameStr(void) const;
 
+        void setupRootLayout( RootLayout &rootLayout );
+
         void _updateAutoProperties(void);
 
         /** The Hlms has the ability to pass data to the shader source

@@ -594,7 +594,10 @@ namespace Ogre
                 constBuffer->bindAsParamBuffer( static_cast<GpuProgramType>( i ), 0 );
             }
             for( uint16 i = 0u; i < NUM_BIND_CONST_BUFFERS; ++i )
+            {
                 mDummyBuffer->bindBufferVS( i );
+                mDummyBuffer->bindBufferCS( i );
+            }
             for( uint16 i = 0u; i < NUM_BIND_TEX_BUFFERS; ++i )
                 mDummyTexBuffer->bindBufferVS( i );
             for( size_t i = 0u; i < NUM_BIND_TEXTURES; ++i )
@@ -660,13 +663,27 @@ namespace Ogre
     void VulkanRenderSystem::_setParamBuffer( GpuProgramType shaderStage,
                                               const VkDescriptorBufferInfo &bufferInfo )
     {
-        if( mGlobalTable.paramsBuffer[shaderStage].buffer != bufferInfo.buffer ||
-            mGlobalTable.paramsBuffer[shaderStage].offset != bufferInfo.offset ||
-            mGlobalTable.paramsBuffer[shaderStage].range != bufferInfo.range )
+        if( shaderStage != GPT_COMPUTE_PROGRAM )
         {
-            mGlobalTable.paramsBuffer[shaderStage] = bufferInfo;
-            mGlobalTable.dirtyParamsBuffer = true;
-            mTableDirty = true;
+            if( mGlobalTable.paramsBuffer[shaderStage].buffer != bufferInfo.buffer ||
+                mGlobalTable.paramsBuffer[shaderStage].offset != bufferInfo.offset ||
+                mGlobalTable.paramsBuffer[shaderStage].range != bufferInfo.range )
+            {
+                mGlobalTable.paramsBuffer[shaderStage] = bufferInfo;
+                mGlobalTable.dirtyParamsBuffer = true;
+                mTableDirty = true;
+            }
+        }
+        else
+        {
+            if( mComputeTable.paramsBuffer[shaderStage].buffer != bufferInfo.buffer ||
+                mComputeTable.paramsBuffer[shaderStage].offset != bufferInfo.offset ||
+                mComputeTable.paramsBuffer[shaderStage].range != bufferInfo.range )
+            {
+                mComputeTable.paramsBuffer[shaderStage] = bufferInfo;
+                mComputeTable.dirtyParamsBuffer = true;
+                mComputeTableDirty = true;
+            }
         }
     }
     //-------------------------------------------------------------------------

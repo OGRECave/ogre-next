@@ -585,20 +585,23 @@ namespace Ogre
                 {
                     const RenderPassDescriptor *renderPassDesc = ( *itPass )->getRenderPassDesc();
 
-                    const size_t numColourEntries = renderPassDesc->getNumColourEntries();
-                    for( size_t i = 0u; i < numColourEntries; ++i )
+                    if( renderPassDesc )
                     {
-                        TextureGpu *texture;
-
-                        // Add the pass only once
-                        texture = renderPassDesc->mColour[i].texture;
-                        if( texture && texture->isRenderWindowSpecific() )
-                            passesUsingRenderWindows[texture].push_back( *itPass );
-                        else
+                        const size_t numColourEntries = renderPassDesc->getNumColourEntries();
+                        for( size_t i = 0u; i < numColourEntries; ++i )
                         {
-                            texture = renderPassDesc->mColour[i].resolveTexture;
+                            TextureGpu *texture;
+
+                            // Add the pass only once
+                            texture = renderPassDesc->mColour[i].texture;
                             if( texture && texture->isRenderWindowSpecific() )
                                 passesUsingRenderWindows[texture].push_back( *itPass );
+                            else
+                            {
+                                texture = renderPassDesc->mColour[i].resolveTexture;
+                                if( texture && texture->isRenderWindowSpecific() )
+                                    passesUsingRenderWindows[texture].push_back( *itPass );
+                            }
                         }
                     }
 
