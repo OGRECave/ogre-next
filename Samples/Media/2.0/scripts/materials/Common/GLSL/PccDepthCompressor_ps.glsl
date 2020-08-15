@@ -19,11 +19,11 @@ vulkan_layout( ogre_t0 ) uniform texture2D depthTexture;
 vulkan( layout( ogre_s0 ) uniform sampler pointSampler );
 
 vulkan( layout( ogre_P0 ) uniform Params { )
-	gl_uniform float2 projectionParams;
-	gl_uniform float3 probeShapeHalfSize;
-	gl_uniform float3 cameraPosLS;
+	uniform float2 projectionParams;
+	uniform float3 probeShapeHalfSize;
+	uniform float3 cameraPosLS;
 
-	gl_uniform float3x3 viewSpaceToProbeLocalSpace;
+	uniform float3x3 viewSpaceToProbeLocalSpace;
 vulkan( }; )
 
 #define p_projectionParams				projectionParams

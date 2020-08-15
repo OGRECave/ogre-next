@@ -467,7 +467,8 @@ namespace Ogre
                 preamble =
                     "#define vulkan_layout layout\n"
                     "#define vulkan( x ) x\n"
-                    "#define gl_uniform\n"
+                    "#define vkSampler2D sampler2D\n"
+                    "#define vkSampler2DArray sampler2DArray\n"
                     "#define vkSamplerCube samplerCube\n";
             }
             else

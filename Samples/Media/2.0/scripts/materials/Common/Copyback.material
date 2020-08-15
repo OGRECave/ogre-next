@@ -11,6 +11,11 @@ fragment_program Ogre/Copy/4xFP32_ps_GLSL glsl
 	default_params { param_named tex int 0 }
 }
 
+fragment_program Ogre/Copy/4xFP32_ps_VK glslvk
+{
+	source Copyback_4xFP32_ps.glsl
+}
+
 fragment_program Ogre/Copy/4xFP32_ps_Metal metal
 {
 	source Copyback_4xFP32_ps.metal
@@ -20,6 +25,7 @@ fragment_program Ogre/Copy/4xFP32_ps_Metal metal
 fragment_program Ogre/Copy/4xFP32_ps unified
 {
 	delegate Ogre/Copy/4xFP32_ps_GLSL
+	delegate Ogre/Copy/4xFP32_ps_VK
 	delegate Ogre/Copy/4xFP32_ps_HLSL
 	delegate Ogre/Copy/4xFP32_ps_Metal
 }
@@ -65,6 +71,11 @@ fragment_program Ogre/Copy/4xFP32_2DArray_ps_GLSL glsl
 	default_params { param_named tex int 0 }
 }
 
+fragment_program Ogre/Copy/4xFP32_2DArray_ps_VK glslvk
+{
+	source Copyback_4xFP32_2DArray_ps.glsl
+}
+
 fragment_program Ogre/Copy/4xFP32_2DArray_ps_Metal metal
 {
 	source Copyback_4xFP32_2DArray_ps.metal
@@ -74,6 +85,7 @@ fragment_program Ogre/Copy/4xFP32_2DArray_ps_Metal metal
 fragment_program Ogre/Copy/4xFP32_2DArray_ps unified
 {
 	delegate Ogre/Copy/4xFP32_2DArray_ps_GLSL
+	delegate Ogre/Copy/4xFP32_2DArray_ps_VK
 	delegate Ogre/Copy/4xFP32_2DArray_ps_HLSL
 	delegate Ogre/Copy/4xFP32_2DArray_ps_Metal
 }

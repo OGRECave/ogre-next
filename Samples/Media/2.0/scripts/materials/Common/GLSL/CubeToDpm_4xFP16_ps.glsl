@@ -1,7 +1,7 @@
 #version ogre_glsl_ver_330
 
 vulkan( layout( ogre_P0 ) uniform Params { )
-	gl_uniform float lodLevel;
+	uniform float lodLevel;
 vulkan( }; )
 
 vulkan_layout( ogre_t0 ) uniform textureCube cubeTexture;

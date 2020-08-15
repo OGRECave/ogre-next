@@ -4,7 +4,7 @@ vulkan_layout( OGRE_POSITION ) in vec3 vertex;
 vulkan_layout( OGRE_TEXCOORD0 ) in vec2 uv0;
 
 vulkan( layout( ogre_P0 ) uniform Params { )
-	gl_uniform mat4 worldViewProj;
+	uniform mat4 worldViewProj;
 vulkan( }; )
 
 out gl_PerVertex

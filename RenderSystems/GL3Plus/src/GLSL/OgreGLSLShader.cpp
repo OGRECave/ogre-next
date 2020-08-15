@@ -158,8 +158,11 @@ namespace Ogre {
         const String preamble =
             "#define vulkan_layout(x)\n"
             "#define vulkan( x )\n"
-            "#define gl_uniform uniform\n"
+            "#define texture2D sampler2D\n"
+            "#define texture2DArray sampler2DArray\n"
             "#define textureCube samplerCube\n"
+            "#define vkSampler2D( a, b ) a\n"
+            "#define vkSampler2DArray( a, b ) a\n"
             "#define vkSamplerCube( a, b ) a\n";
         cpp.Parse( preamble.c_str(), preamble.size(), unusedVal );
 
