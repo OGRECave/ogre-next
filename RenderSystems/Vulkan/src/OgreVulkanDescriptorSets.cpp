@@ -32,10 +32,40 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 #include "OgreVulkanUtils.h"
 #include "Vao/OgreVulkanUavBufferPacked.h"
 
+#include "OgreDescriptorSetSampler.h"
 #include "OgreDescriptorSetUav.h"
+#include "OgreHlmsSamplerblock.h"
 
 namespace Ogre
 {
+    VulkanDescriptorSetSampler::VulkanDescriptorSetSampler( const DescriptorSetSampler &descSet )
+    {
+        mSamplers.reserve( descSet.mSamplers.size() );
+
+        FastArray<const HlmsSamplerblock *>::const_iterator itor = descSet.mSamplers.begin();
+        FastArray<const HlmsSamplerblock *>::const_iterator endt = descSet.mSamplers.end();
+
+        while( itor != endt )
+        {
+            const HlmsSamplerblock *samplerblock = *itor;
+            VkSampler sampler = reinterpret_cast<VkSampler>( samplerblock->mRsData );
+            VkDescriptorImageInfo imageInfo;
+            imageInfo.sampler = sampler;
+            imageInfo.imageView = 0;
+            imageInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            mSamplers.push_back( imageInfo );
+            ++itor;
+        }
+
+        makeVkStruct( mWriteDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
+        mWriteDescSet.dstArrayElement = 1u;
+        mWriteDescSet.descriptorCount = static_cast<uint32>( mSamplers.size() );
+        mWriteDescSet.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
+        mWriteDescSet.pImageInfo = mSamplers.begin();
+    }
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     VulkanDescriptorSetUav::VulkanDescriptorSetUav( const DescriptorSetUav &descSetUav )
     {
         if( descSetUav.mUavs.empty() )

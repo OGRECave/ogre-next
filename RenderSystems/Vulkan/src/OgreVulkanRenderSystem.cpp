@@ -921,13 +921,24 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set ) {}
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set ) {}
+    void VulkanRenderSystem::_setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set )
+    {
+        VulkanDescriptorSetSampler *vulkanSet =
+            reinterpret_cast<VulkanDescriptorSetSampler *>( set->mRsData );
+
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] !=
+            &vulkanSet->mWriteDescSet )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] = &vulkanSet->mWriteDescSet;
+            mComputeTable.dirtyBakedSamplers = true;
+            mComputeTableDirty = true;
+        }
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setUavCS( uint32 slotStart, const DescriptorSetUav *set )
     {
         VulkanDescriptorSetUav *vulkanSet = reinterpret_cast<VulkanDescriptorSetUav *>( set->mRsData );
 
-        mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
         if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] !=
             &vulkanSet->mWriteDescSets[0] )
         {
@@ -3027,17 +3038,21 @@ namespace Ogre
 
         set->mRsData = 0;
     }
-
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_descriptorSetSamplerCreated( DescriptorSetSampler *newSet )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " _descriptorSetSamplerCreated " ) );
-        }
+        VulkanDescriptorSetSampler *vulkanSet = new VulkanDescriptorSetSampler( *newSet );
+        newSet->mRsData = vulkanSet;
     }
-
-    void VulkanRenderSystem::_descriptorSetSamplerDestroyed( DescriptorSetSampler *set ) {}
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_descriptorSetSamplerDestroyed( DescriptorSetSampler *set )
+    {
+        OGRE_ASSERT_LOW( set->mRsData );
+        VulkanDescriptorSetSampler *vulkanSet =
+            static_cast<VulkanDescriptorSetSampler *>( set->mRsData );
+        delete vulkanSet;
+        set->mRsData = 0;
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_descriptorSetUavCreated( DescriptorSetUav *newSet )
     {

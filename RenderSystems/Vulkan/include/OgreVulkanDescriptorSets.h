@@ -37,6 +37,13 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 namespace Ogre
 {
+    struct VulkanDescriptorSetSampler
+    {
+        FastArray<VkDescriptorImageInfo> mSamplers;
+        VkWriteDescriptorSet mWriteDescSet;
+        VulkanDescriptorSetSampler( const DescriptorSetSampler &descSet );
+    };
+
     struct VulkanDescriptorSetUav
     {
         FastArray<VkDescriptorImageInfo> mTextures;
