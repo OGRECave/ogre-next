@@ -5,6 +5,12 @@ fragment_program DrawFromUavBuffer_ps_GLSL glsl
 	source DrawFromUavBuffer_ps.glsl
 }
 
+fragment_program DrawFromUavBuffer_ps_VK glslvk
+{
+	source DrawFromUavBuffer_ps.glsl
+	root_layout none
+}
+
 // HLSL shaders
 fragment_program DrawFromUavBuffer_ps_HLSL hlsl
 {
@@ -25,6 +31,7 @@ fragment_program DrawFromUavBuffer_ps unified
 {
 	delegate DrawFromUavBuffer_ps_HLSL
 	delegate DrawFromUavBuffer_ps_GLSL
+	delegate DrawFromUavBuffer_ps_VK
 	delegate DrawFromUavBuffer_ps_Metal
 	
 	default_params

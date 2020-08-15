@@ -92,8 +92,16 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------
+    void GpuProgram::unsetRootLayout( void ) {}
+    //-----------------------------------------------------------------------------
     void GpuProgram::setPrefabRootLayout( const PrefabRootLayout::PrefabRootLayout &prefab )
     {
+        if( prefab == PrefabRootLayout::None )
+        {
+            unsetRootLayout();
+            return;
+        }
+
         RootLayout rootLayout;
 
         DescBindingRange *descBindingRange = rootLayout.mDescBindingRanges[0];
@@ -437,7 +445,7 @@ namespace Ogre
             &msComputeGroupDimsCmd);
         dict->addParameter(
             ParameterDef("root_layout",
-                         "Accepted values are standard, high, max. See PrefabRootLayout", PT_STRING),
+                         "Accepted values are standard, high, max & none. See PrefabRootLayout", PT_STRING),
             &msRootLayout);
             
     }
@@ -631,6 +639,8 @@ namespace Ogre
             t->setPrefabRootLayout( PrefabRootLayout::Max );
         else if( val == "standard" )
             t->setPrefabRootLayout( PrefabRootLayout::Standard );
+        else if( val == "none" )
+            t->setPrefabRootLayout( PrefabRootLayout::None );
     }
 }
 

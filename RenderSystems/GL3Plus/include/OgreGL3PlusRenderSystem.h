@@ -359,7 +359,7 @@ namespace Ogre {
         */
         void _setTextureMatrix(size_t stage, const Matrix4& xform) { };   // Not supported
 
-        virtual void flushUAVs(void);
+        void flushUAVs( void );
 
         virtual void _resourceTransitionCreated( ResourceTransition *resTransition );
         virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition );

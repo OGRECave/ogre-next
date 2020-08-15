@@ -503,17 +503,13 @@ namespace Ogre
         if( !( mParamsBuffStages & ( 1u << shaderStage ) ) )
             return false;  // There is no param buffer in this stage
 
-        size_t numStagesWithParams = 0u;
-        if( mCompute )
-        {
-            numStagesWithParams = 1u;
-        }
-        else
+        size_t numPrevStagesWithParams = 0u;
+        if( !mCompute )
         {
             for( size_t i = 0u; i < shaderStage; ++i )
             {
                 if( mParamsBuffStages & ( 1u << i ) )
-                    ++numStagesWithParams;
+                    ++numPrevStagesWithParams;
             }
         }
 
@@ -522,7 +518,7 @@ namespace Ogre
             if( mDescBindingRanges[i][DescBindingTypes::ParamBuffer].isInUse() )
             {
                 outSetIdx = i;
-                outBindingIdx = numStagesWithParams;
+                outBindingIdx = numPrevStagesWithParams;
                 return true;
             }
         }

@@ -91,6 +91,7 @@ namespace Ogre
         bool getPassFogStates( void ) const;
 
         virtual void setRootLayout( GpuProgramType type, const RootLayout &rootLayout );
+        virtual void unsetRootLayout( void );
 
         /// Sets the preprocessor defines use to compile the program.
         void setPreprocessorDefines( const String &defines ) { mPreprocessorDefines = defines; }
@@ -127,7 +128,6 @@ namespace Ogre
         void getLayoutForPso( const VertexElement2VecVec &vertexElements,
                               FastArray<VkVertexInputBindingDescription> &outBufferBindingDescs,
                               FastArray<VkVertexInputAttributeDescription> &outVertexInputs );
-
 
         uint32 getDrawIdLocation() const { return mDrawIdLocation; }
 

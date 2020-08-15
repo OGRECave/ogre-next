@@ -1,6 +1,14 @@
-#version 430
+@property( syntax != glslvk )
+	#version 430
+@else
+	#version 450
+@end
 
+@property( syntax != glslvk )
 layout(std430, binding = 0) buffer PixelBuffer
+@else
+layout(std430, ogre_U0) buffer PixelBuffer
+@end
 {
     writeonly uint data[];
 } pixelBuffer;
@@ -15,8 +23,10 @@ layout( local_size_x = @value( threads_per_group_x ),
 //in uvec3 gl_GlobalInvocationID;
 //in uint  gl_LocalInvocationIndex;
 
+vulkan( layout( ogre_P0 ) uniform Params { )
 //uniform vec3 cameraPos;
 uniform uvec2 texResolution;
+vulkan( }; )
 
 void main()
 {

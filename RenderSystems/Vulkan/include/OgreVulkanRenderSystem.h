@@ -179,7 +179,7 @@ namespace Ogre
         virtual void _setPointParameters( Real size, bool attenuationEnabled, Real constant, Real linear,
                                           Real quadratic, Real minSize, Real maxSize );
 
-        virtual void flushUAVs( void );
+        void flushUAVs( void );
 
         void _setParamBuffer( GpuProgramType shaderStage, const VkDescriptorBufferInfo &bufferInfo );
         void _setConstBuffer( size_t slot, const VkDescriptorBufferInfo &bufferInfo );

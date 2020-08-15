@@ -188,7 +188,7 @@ namespace Ogre
         virtual void _setPointParameters(Real size, bool attenuationEnabled,
             Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
 
-        virtual void flushUAVs(void);
+        void flushUAVs( void );
 
         virtual void _setTexture( size_t unit, TextureGpu *texPtr );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,

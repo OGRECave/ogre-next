@@ -128,15 +128,13 @@ namespace Ogre
                         if( mParamsBuffStages & ( 1u << shaderStage ) )
                         {
                             textStr.resize( prefixSize1 );  // #define ogre_P
-                            uint32 numStagesWithParams = 0u;
-                            if( mCompute )
-                                numStagesWithParams = 1u;
-                            else
+                            uint32 numPrevStagesWithParams = 0u;
+                            if( !mCompute )
                             {
                                 for( size_t k = 0u; k < shaderStage; ++k )
                                 {
                                     if( mParamsBuffStages & ( 1u << k ) )
-                                        ++numStagesWithParams;
+                                        ++numPrevStagesWithParams;
                                 }
                             }
 
@@ -144,14 +142,14 @@ namespace Ogre
                             {
                                 // #define ogre_P0 set = 1, binding = 6
                                 textStr.a( "0", " set = ", (uint32)i,
-                                           ", binding = ", numStagesWithParams, "\n" );
+                                           ", binding = ", numPrevStagesWithParams, "\n" );
                             }
                             else
                             {
                                 // #define ogre_B3 c3
                                 textStr.a( "0 " );
                                 textStr.aChar( c_HLSLBufferTypesMap[j] );
-                                textStr.a( numStagesWithParams, "\n" );
+                                textStr.a( numPrevStagesWithParams, "\n" );
                             }
 
                             macroStr += textStr.c_str();
@@ -547,6 +545,7 @@ namespace Ogre
                             return 0;
                         }
 
+                        best = newBest;
                         bDiverged = true;
                     }
                 }

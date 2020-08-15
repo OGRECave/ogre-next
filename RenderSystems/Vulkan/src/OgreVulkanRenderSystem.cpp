@@ -653,11 +653,36 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::flushUAVs( void )
     {
-        /*Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
+        if( mUavRenderingDirty )
         {
-            defaultLog->logMessage( String( " flushUAVs " ) );
-        }*/
+            if( !mUavRenderingDescSet )
+            {
+                if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] )
+                {
+                    mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
+                    mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavTextures] = 0;
+                    mGlobalTable.dirtyBakedUavs = true;
+                    mTableDirty = true;
+                }
+            }
+            else
+            {
+                VulkanDescriptorSetUav *vulkanSet =
+                    reinterpret_cast<VulkanDescriptorSetUav *>( mUavRenderingDescSet->mRsData );
+                if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] !=
+                    &vulkanSet->mWriteDescSets[0] )
+                {
+                    mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] =
+                        &vulkanSet->mWriteDescSets[0];
+                    mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavTextures] =
+                        &vulkanSet->mWriteDescSets[1];
+                    mGlobalTable.dirtyBakedUavs = true;
+                    mTableDirty = true;
+                }
+            }
+
+            mUavRenderingDirty = false;
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setParamBuffer( GpuProgramType shaderStage,

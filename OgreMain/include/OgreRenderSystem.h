@@ -810,10 +810,6 @@ namespace Ogre
 
         BoundUav getBoundUav( size_t slot ) const;
 
-        /// Forces to take effect all the queued UAV binding requests. @see _queueBindUAV.
-        /// You don't need to call this if you're going to set the render target next.
-        virtual void flushUAVs(void) = 0;
-
         /// Call this function if you need to call texture->copyTo or create an AsyncTextureTicket
         /// on a Texture which is currently in either ResourceLayout::CopySrc or CopyDst layout.
         ///

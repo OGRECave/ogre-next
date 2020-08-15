@@ -61,6 +61,8 @@ namespace Ogre
     {
         enum PrefabRootLayout
         {
+            /// Defined in shader source or externally via C++
+            None,
             /// 4 textures per material, VS and PS only
             Standard,
             /// 8 textures per material, VS and PS only
@@ -308,6 +310,8 @@ namespace Ogre
         ///
         /// This setting will be cleared if the program gets unloaded
         virtual void setRootLayout( GpuProgramType t, const RootLayout &rootLayout );
+
+        virtual void unsetRootLayout( void );
 
         /// Sets a prefab root layout, **mostly meant for low level materials** (e.g. postprocessing)
         /// so that users don't have to deal with Root Layouts unless they exceed defaults

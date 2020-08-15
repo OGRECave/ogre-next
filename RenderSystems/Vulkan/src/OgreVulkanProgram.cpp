@@ -424,6 +424,8 @@ namespace Ogre
         mRootLayout = vulkanProgramManager->getRootLayout( rootLayout );
     }
     //-----------------------------------------------------------------------
+    void VulkanProgram::unsetRootLayout( void ) { mRootLayout = 0; }
+    //-----------------------------------------------------------------------
     void VulkanProgram::setReplaceVersionMacro( bool bReplace ) { mReplaceVersionMacro = bReplace; }
     //-----------------------------------------------------------------------
     bool VulkanProgram::compile( const bool checkErrors )
@@ -810,7 +812,8 @@ namespace Ogre
                                      "VulkanProgram::buildConstantDefinitions" );
                     }
                 }
-                else if( blockVariable.type_description->type_flags & SPV_REFLECT_TYPE_FLAG_INT )
+                else if( blockVariable.type_description->type_flags & SPV_REFLECT_TYPE_FLAG_INT &&
+                         blockVariable.numeric.scalar.signedness )
                 {
                     switch( componentCount )
                     {
@@ -829,6 +832,29 @@ namespace Ogre
                     default:
                         OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                                      "invalid component count for int vector",
+                                     "VulkanProgram::buildConstantDefinitions" );
+                    }
+                }
+                else if( blockVariable.type_description->type_flags & SPV_REFLECT_TYPE_FLAG_INT &&
+                         !blockVariable.numeric.scalar.signedness )
+                {
+                    switch( componentCount )
+                    {
+                    case 1:
+                        constantType = GCT_UINT1;
+                        break;
+                    case 2:
+                        constantType = GCT_UINT2;
+                        break;
+                    case 3:
+                        constantType = GCT_UINT3;
+                        break;
+                    case 4:
+                        constantType = GCT_UINT4;
+                        break;
+                    default:
+                        OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                                     "invalid component count for uint vector",
                                      "VulkanProgram::buildConstantDefinitions" );
                     }
                 }

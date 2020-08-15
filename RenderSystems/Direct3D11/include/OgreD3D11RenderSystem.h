@@ -260,8 +260,6 @@ namespace Ogre
         void _setTextureBlendMode( size_t unit, const LayerBlendModeEx& bm );
         void _setTextureMatrix( size_t unit, const Matrix4 &xform );
 
-        virtual void flushUAVs(void) {}
-
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );
         virtual void _hlmsMacroblockCreated( HlmsMacroblock *newBlock );

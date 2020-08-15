@@ -911,10 +911,6 @@ namespace Ogre {
     {
     }
 
-    void GLES2RenderSystem::flushUAVs(void)
-    {
-    }
-
     void GLES2RenderSystem::_bindTextureUavCS( uint32 slot, Texture *texture,
                                                ResourceAccess::ResourceAccess _access,
                                                int32 mipmapLevel, int32 textureArrayIndex,
