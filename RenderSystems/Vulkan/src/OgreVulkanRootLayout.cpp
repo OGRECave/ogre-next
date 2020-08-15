@@ -448,7 +448,7 @@ namespace Ogre
             VkWriteDescriptorSet writeDescSets[DescBindingTypes::Sampler + NumShaderTypes];
 
             // Note: We must bind in the same order as DescBindingTypes
-            if( mBaked[i] )
+            if( !mBaked[i] )
             {
                 bindParamsBuffer( writeDescSets, numWriteDescSets, currBinding, descSet,
                                   descBindingRanges, table );
