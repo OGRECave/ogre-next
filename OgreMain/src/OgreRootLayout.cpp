@@ -66,11 +66,11 @@ namespace Ogre
         bool bakedSetsSeenSamplerTypes = false;
         bool bakedSetsSeenUavTypes = false;
 
-        // Check start <= end
         for( size_t i = 0u; i < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
         {
             for( size_t j = 0u; j < DescBindingTypes::NumDescBindingTypes; ++j )
             {
+                // Check start <= end
                 if( !mDescBindingRanges[i][j].isValid() )
                 {
                     char tmpBuffer[512];
@@ -87,8 +87,21 @@ namespace Ogre
                 }
             }
 
+            if( !mBaked[i] )
+            {
+                if( mDescBindingRanges[i][DescBindingTypes::UavBuffer].isInUse() ||
+                    mDescBindingRanges[i][DescBindingTypes::UavTexture].isInUse() )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Error at file " + filename +
+                                     ":\n"
+                                     "UAVs can only be used in baked sets",
+                                 "RootLayout::validate" );
+                }
+            }
+
             // Ensure texture and texture buffer ranges don't overlap for compatibility with
-            // other APIs (we support it in , but explicitly forbid it)
+            // other APIs (we support it in Vulkan, but explicitly forbid it)
             {
                 const DescBindingRange &bufferRange = mDescBindingRanges[i][DescBindingTypes::TexBuffer];
                 if( bufferRange.isInUse() )
