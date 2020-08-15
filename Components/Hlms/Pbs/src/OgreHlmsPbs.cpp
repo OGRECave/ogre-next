@@ -93,6 +93,7 @@ namespace Ogre
     const IdString PbsProperty::HasPlanarReflections=IdString( "has_planar_reflections" );
 
     const IdString PbsProperty::Set0TextureSlotEnd  = IdString( "set0_texture_slot_end" );
+    const IdString PbsProperty::Set1TextureSlotEnd  = IdString( "set1_texture_slot_end" );
     const IdString PbsProperty::NumTextures     = IdString( "num_textures" );
     const IdString PbsProperty::NumSamplers     = IdString( "num_samplers" );
     const IdString PbsProperty::DiffuseMapGrayscale = IdString( "diffuse_map_grayscale" );
@@ -501,7 +502,13 @@ namespace Ogre
         descBindingRanges[DescBindingTypes::Sampler].end =
             ( uint16 )( getProperty( "samplerStateStart" ) );
 
+        rootLayout.mBaked[1] = true;
         DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
+
+        bakedRanges[DescBindingTypes::Texture].start =
+            descBindingRanges[DescBindingTypes::Texture].end;
+        bakedRanges[DescBindingTypes::Texture].end =
+            (uint16)getProperty( PbsProperty::Set1TextureSlotEnd );
 
         bakedRanges[DescBindingTypes::Sampler].start = descBindingRanges[DescBindingTypes::Sampler].end;
         bakedRanges[DescBindingTypes::Sampler].end = bakedRanges[DescBindingTypes::Sampler].start +
@@ -1222,6 +1229,8 @@ namespace Ogre
             ++texUnit;
         }
 
+        setProperty( PbsProperty::Set0TextureSlotEnd, texUnit );
+
         const int32 samplerStateStart = texUnit;
         {
             char tmpData[32];
@@ -1249,10 +1258,10 @@ namespace Ogre
                 setTextureReg( PixelShader, "texEnvProbeMap", texUnit++ );
         }
 
+        setProperty( PbsProperty::Set1TextureSlotEnd, texUnit );
+
         if( getProperty( HlmsBaseProp::Pose ) )
             setTextureReg( VertexShader, "poseBuf", texUnit++ );
-
-        setProperty( PbsProperty::Set0TextureSlotEnd, texUnit );
 
         //This is a regular property!
         setProperty( "samplerStateStart", samplerStateStart );

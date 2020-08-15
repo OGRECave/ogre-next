@@ -167,14 +167,15 @@ namespace Ogre
         else
             descBindingRanges[DescBindingTypes::TexBuffer].end = 2u;
 
-        descBindingRanges[DescBindingTypes::Texture].start = (uint16)mTexUnitSlotStart;
-        descBindingRanges[DescBindingTypes::Texture].end =
-            (uint16)mTexUnitSlotStart + (uint16)getProperty( UnlitProperty::NumTextures );
-
+        rootLayout.mBaked[1] = true;
         DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
         bakedRanges[DescBindingTypes::Sampler].start = (uint16)mSamplerUnitSlotStart;
         bakedRanges[DescBindingTypes::Sampler].end =
             (uint16)mSamplerUnitSlotStart + (uint16)getProperty( UnlitProperty::NumSamplers );
+
+        bakedRanges[DescBindingTypes::Texture].start = (uint16)mTexUnitSlotStart;
+        bakedRanges[DescBindingTypes::Texture].end =
+            (uint16)mTexUnitSlotStart + (uint16)getProperty( UnlitProperty::NumTextures );
 
         mListener->setupRootLayout( rootLayout, mSetProperties );
     }

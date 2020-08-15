@@ -72,7 +72,9 @@ namespace Ogre
         virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
         virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
 
-        void bindBufferForDescriptor( VkBuffer *buffers, VkDeviceSize *offsets, size_t offset );
+        /// Return result is not cached. Calling multiple times
+        /// with the same values will create new VkBufferView
+        VkBufferView createBufferView( size_t offset, size_t sizeBytes );
     };
 }  // namespace Ogre
 

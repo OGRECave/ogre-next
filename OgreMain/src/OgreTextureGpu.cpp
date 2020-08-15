@@ -1003,7 +1003,7 @@ namespace Ogre
                 mPendingResidencyChanges == 0;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpu::isDataReady(void)
+    bool TextureGpu::isDataReady(void) const
     {
         return _isDataReadyImpl() && mPendingResidencyChanges == 0u;
     }

@@ -28,8 +28,11 @@ THE SOFTWARE.
 
 #include "OgreVulkanDescriptorSets.h"
 
+#include "OgreVulkanDelayedFuncs.h"
 #include "OgreVulkanTextureGpu.h"
+#include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
+#include "Vao/OgreVulkanTexBufferPacked.h"
 #include "Vao/OgreVulkanUavBufferPacked.h"
 
 #include "OgreDescriptorSetSampler.h"
@@ -58,10 +61,176 @@ namespace Ogre
         }
 
         makeVkStruct( mWriteDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
-        mWriteDescSet.dstArrayElement = 1u;
         mWriteDescSet.descriptorCount = static_cast<uint32>( mSamplers.size() );
         mWriteDescSet.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
         mWriteDescSet.pImageInfo = mSamplers.begin();
+    }
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    VulkanDescriptorSetTexture::VulkanDescriptorSetTexture( const DescriptorSetTexture &descSet ) :
+        mLastHazardousTex( std::numeric_limits<uint32>::max() )
+    {
+        if( descSet.mTextures.empty() )
+        {
+            memset( &mWriteDescSet, 0, sizeof( mWriteDescSet ) );
+            return;
+        }
+
+        FastArray<const TextureGpu *>::const_iterator itor = descSet.mTextures.begin();
+        FastArray<const TextureGpu *>::const_iterator endt = descSet.mTextures.end();
+
+        mTextures.reserve( descSet.mTextures.size() );
+
+        while( itor != endt )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<const VulkanTextureGpu *>( *itor ) );
+            const VulkanTextureGpu *vulkanTexture = static_cast<const VulkanTextureGpu *>( *itor );
+
+            VkDescriptorImageInfo imageInfo;
+            imageInfo.sampler = 0;
+            imageInfo.imageView = vulkanTexture->getDefaultDisplaySrv();
+            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            mTextures.push_back( imageInfo );
+
+            ++itor;
+        }
+
+        makeVkStruct( mWriteDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
+
+        mWriteDescSet.descriptorCount = static_cast<uint32>( mTextures.size() );
+        mWriteDescSet.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
+        mWriteDescSet.pImageInfo = mTextures.begin();
+
+        mWriteDescSetHazardous = mWriteDescSet;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDescriptorSetTexture::setHazardousTex( const DescriptorSetTexture &descSet,
+                                                      const uint32 hazardousTexIdx,
+                                                      VulkanTextureGpuManager *textureManager )
+    {
+        if( mLastHazardousTex != hazardousTexIdx )
+        {
+            const size_t realNumTextures = descSet.mTextures.size();
+            mTextures.resize( realNumTextures );
+            mTextures.appendPOD( mTextures.begin(), mTextures.end() );
+            mWriteDescSetHazardous.pImageInfo = mTextures.begin() + realNumTextures;
+            mTextures[realNumTextures + hazardousTexIdx].imageView = textureManager->getBlankTextureView(
+                descSet.mTextures[hazardousTexIdx]->getInternalTextureType() );
+            mLastHazardousTex = hazardousTexIdx;
+        }
+    }
+    //-------------------------------------------------------------------------
+    VulkanDescriptorSetTexture2::VulkanDescriptorSetTexture2( const DescriptorSetTexture2 &descSet )
+    {
+        if( descSet.mTextures.empty() )
+        {
+            memset( mWriteDescSets, 0, sizeof( mWriteDescSets ) );
+            return;
+        }
+
+        size_t numTextures = 0u;
+        size_t numBuffers = 0u;
+
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = descSet.mTextures.begin();
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator endt = descSet.mTextures.end();
+
+        while( itor != endt )
+        {
+            if( itor->isBuffer() )
+                ++numBuffers;
+            else
+                ++numTextures;
+            ++itor;
+        }
+
+        mTextures.reserve( numTextures );
+        mBuffers.resize( numBuffers );
+        numBuffers = 0u;
+
+        itor = descSet.mTextures.begin();
+
+        while( itor != endt )
+        {
+            if( itor->isBuffer() )
+            {
+                const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
+                OGRE_ASSERT_HIGH( dynamic_cast<VulkanTexBufferPacked *>( bufferSlot.buffer ) );
+                VulkanTexBufferPacked *vulkanBuffer =
+                    static_cast<VulkanTexBufferPacked *>( bufferSlot.buffer );
+
+                // No caching of VkBufferView. Unlike VkImageViews, setting lots of TexBuffers
+                // via DescriptorSetTextureN is not common enough to warrant it.
+                mBuffers[numBuffers] =
+                    vulkanBuffer->createBufferView( bufferSlot.offset, bufferSlot.sizeBytes );
+                ++numBuffers;
+            }
+            else
+            {
+                const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( texSlot.texture ) );
+                VulkanTextureGpu *vulkanTexture = static_cast<VulkanTextureGpu *>( texSlot.texture );
+
+                VkDescriptorImageInfo imageInfo;
+                imageInfo.sampler = 0;
+                imageInfo.imageView = vulkanTexture->createView( texSlot );
+                imageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+                mTextures.push_back( imageInfo );
+            }
+
+            ++itor;
+        }
+
+        if( numBuffers != 0u )
+        {
+            VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[0];
+            makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
+
+            writeDescSet->descriptorCount = static_cast<uint32>( numBuffers );
+            writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
+            writeDescSet->pTexelBufferView = mBuffers.begin();
+        }
+
+        if( numTextures != 0u )
+        {
+            VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[1];
+            makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
+
+            writeDescSet->descriptorCount = static_cast<uint32>( numTextures );
+            writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
+            writeDescSet->pImageInfo = mTextures.begin();
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDescriptorSetTexture2::destroy( VaoManager *vaoManager, VkDevice device,
+                                               const DescriptorSetTexture2 &descSet )
+    {
+        {
+            FastArray<VkBufferView>::const_iterator itor = mBuffers.begin();
+            FastArray<VkBufferView>::const_iterator endt = mBuffers.end();
+
+            while( itor != endt )
+            {
+                delayed_vkDestroyBufferView( vaoManager, device, *itor, 0 );
+                ++itor;
+            }
+        }
+        FastArray<VkDescriptorImageInfo>::const_iterator imgInfoIt = mTextures.begin();
+
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = descSet.mTextures.begin();
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator endt = descSet.mTextures.end();
+
+        while( itor != endt )
+        {
+            if( itor->isTexture() )
+            {
+                const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( texSlot.texture ) );
+                VulkanTextureGpu *vulkanTexture = static_cast<VulkanTextureGpu *>( texSlot.texture );
+                vulkanTexture->destroyView( texSlot, imgInfoIt->imageView );
+            }
+            ++itor;
+        }
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -129,7 +298,6 @@ namespace Ogre
             VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[0];
             makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
 
-            writeDescSet->dstArrayElement = 1u;
             writeDescSet->descriptorCount = static_cast<uint32>( numBuffers );
             writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
             writeDescSet->pBufferInfo = mBuffers.begin();
@@ -140,7 +308,6 @@ namespace Ogre
             VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[1];
             makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
 
-            writeDescSet->dstArrayElement = 1u;
             writeDescSet->descriptorCount = static_cast<uint32>( numTextures );
             writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
             writeDescSet->pImageInfo = mTextures.begin();

@@ -162,15 +162,32 @@ namespace Ogre
         mRenderSystem->_setTexBuffer( slot, resourceView );
     }
     //-------------------------------------------------------------------------
-    void VulkanTexBufferPacked::bindBufferForDescriptor( VkBuffer *buffers, VkDeviceSize *offsets,
-                                                         size_t offset )
-    {
+    VkBufferView VulkanTexBufferPacked::createBufferView( size_t offset, size_t sizeBytes )
+    {        
+        OGRE_ASSERT_LOW( offset <= getTotalSizeBytes() );
+        OGRE_ASSERT_LOW( sizeBytes <= getTotalSizeBytes() );
+        OGRE_ASSERT_LOW( ( offset + sizeBytes ) <= getTotalSizeBytes() );
+
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
         VulkanBufferInterface *bufferInterface =
             static_cast<VulkanBufferInterface *>( mBufferInterface );
 
-        *buffers = bufferInterface->getVboName();
-        *offsets = mFinalBufferStart * mBytesPerElement + offset;
+        sizeBytes = !sizeBytes ? ( mNumElements * mBytesPerElement - offset ) : sizeBytes;
+
+        VulkanVaoManager *vulkanVaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+
+        VkBufferViewCreateInfo bufferCreateInfo;
+        makeVkStruct( bufferCreateInfo, VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO );
+        bufferCreateInfo.buffer = bufferInterface->getVboName();
+        bufferCreateInfo.format = VulkanMappings::get( mPixelFormat );
+        bufferCreateInfo.offset = ( mFinalBufferStart + offset ) * mBytesPerElement;
+        bufferCreateInfo.range = sizeBytes;
+
+        VkBufferView retVal;
+        VkResult result =
+            vkCreateBufferView( vulkanVaoManager->getDevice()->mDevice, &bufferCreateInfo, 0, &retVal );
+        checkVkResult( result, "vkCreateBufferView" );
+
+        return retVal;
     }
-    //-------------------------------------------------------------------------
 }  // namespace Ogre

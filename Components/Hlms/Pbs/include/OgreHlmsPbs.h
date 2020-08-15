@@ -461,6 +461,7 @@ namespace Ogre
         static const IdString HasPlanarReflections;
 
         static const IdString Set0TextureSlotEnd;
+        static const IdString Set1TextureSlotEnd;
         static const IdString NumTextures;
         static const IdString NumSamplers;
         static const IdString DiffuseMapGrayscale;

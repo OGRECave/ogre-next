@@ -44,44 +44,41 @@ namespace Ogre
         VulkanDescriptorSetSampler( const DescriptorSetSampler &descSet );
     };
 
+    struct VulkanDescriptorSetTexture
+    {
+        // Note: mTextures.size() may be twice its real size
+        // due to an extra copy for hazardous-free version
+        FastArray<VkDescriptorImageInfo> mTextures;
+        VkWriteDescriptorSet mWriteDescSet;
+        VkWriteDescriptorSet mWriteDescSetHazardous;
+        uint32 mLastHazardousTex;
+
+        VulkanDescriptorSetTexture( const DescriptorSetTexture &descSet );
+
+        void setHazardousTex( const DescriptorSetTexture &descSet, const uint32 hazardousTexIdx,
+                              VulkanTextureGpuManager *textureManager );
+    };
+
+    struct VulkanDescriptorSetTexture2
+    {
+        FastArray<VkBufferView> mBuffers;
+        FastArray<VkDescriptorImageInfo> mTextures;
+        VkWriteDescriptorSet mWriteDescSets[2];
+
+        VulkanDescriptorSetTexture2( const DescriptorSetTexture2 &descSet );
+
+        void destroy( VaoManager *vaoManager, VkDevice device, const DescriptorSetTexture2 &descSetUav );
+    };
+
     struct VulkanDescriptorSetUav
     {
-        FastArray<VkDescriptorImageInfo> mTextures;
         FastArray<VkDescriptorBufferInfo> mBuffers;
+        FastArray<VkDescriptorImageInfo> mTextures;
         VkWriteDescriptorSet mWriteDescSets[2];
 
         VulkanDescriptorSetUav( const DescriptorSetUav &descSetUav );
 
         void destroy( const DescriptorSetUav &descSetUav );
-    };
-
-    struct Range
-    {
-        uint32 location;
-        uint32 length;
-    };
-    struct VulkanTexRegion
-    {
-        VkImageView *textures;
-        Range range;
-        ShaderType shaderType;
-    };
-    struct VulkanBufferRegion
-    {
-        VkBuffer *buffers;
-        VkDeviceSize *offsets;
-        Range range;
-        ShaderType shaderType;
-    };
-
-    struct VulkanDescriptorSetTexture
-    {
-        FastArray<VulkanTexRegion> textures;
-        FastArray<VulkanBufferRegion> buffers;
-
-        VkImageView *textureViews;
-        VkSampler *textureSamplers;
-        size_t numTextureViews;
     };
 }  // namespace Ogre
 

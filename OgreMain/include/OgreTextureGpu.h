@@ -624,7 +624,7 @@ namespace Ogre
         ///
         /// If this is true, then isMetadataReady is also true.
         /// See isMetadataReady.
-        bool isDataReady(void);
+        bool isDataReady( void ) const;
 
         /// Blocks main thread until metadata is ready. Afterwards isMetadataReady
         /// should return true. If it doesn't, then there was a problem loading

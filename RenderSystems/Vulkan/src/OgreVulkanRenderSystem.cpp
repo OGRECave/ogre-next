@@ -176,8 +176,7 @@ namespace Ogre
         mInterruptedRenderCommandEncoder( false ),
         CreateDebugReportCallback( 0 ),
         DestroyDebugReportCallback( 0 ),
-        mDebugReportCallback( 0 ),
-        mCurrentDescriptorSetTexture( 0 )
+        mDebugReportCallback( 0 )
     {
         memset( &mGlobalTable, 0, sizeof( mGlobalTable ) );
         mGlobalTable.reset();
@@ -723,6 +722,29 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setCurrentDeviceFromTexture( TextureGpu *texture ) {}
     //-------------------------------------------------------------------------
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+    static void checkTextureLayout( const TextureGpu *texture,
+                                    RenderPassDescriptor *currentRenderPassDescriptor )
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<const VulkanTextureGpu *>( texture ) );
+        const VulkanTextureGpu *tex = static_cast<const VulkanTextureGpu *>( texture );
+
+        if( tex->isDataReady() && tex->mCurrLayout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+        {
+            TextureGpu *targetTex;
+            uint8 targetMip;
+            currentRenderPassDescriptor->findAnyTexture( &targetTex, targetMip );
+            String texName = targetTex ? targetTex->getNameStr() : "";
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "Texture " + tex->getNameStr() +
+                             " is not in ResourceLayout::Texture. Did you forget to expose it to "
+                             "compositor? Currently rendering to target: " +
+                             texName,
+                         "VulkanRenderSystem::checkTextureLayout" );
+        }
+    }
+#endif
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )
     {
         OGRE_ASSERT_MEDIUM( unit < NUM_BIND_TEXTURES );
@@ -731,19 +753,7 @@ namespace Ogre
             VulkanTextureGpu *tex = static_cast<VulkanTextureGpu *>( texPtr );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-            if( tex->isDataReady() && tex->mCurrLayout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
-            {
-                TextureGpu *targetTex;
-                uint8 targetMip;
-                mCurrentRenderPassDescriptor->findAnyTexture( &targetTex, targetMip );
-                String texName = targetTex ? targetTex->getNameStr() : "";
-                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                             "Texture " + tex->getNameStr() +
-                                 " is not in ResourceLayout::Texture. Did you forget to expose it to "
-                                 "compositor? Currently rendering to target: " +
-                                 texName,
-                             "VulkanRenderSystem::_setTexture" );
-            }
+            checkTextureLayout( tex, mCurrentRenderPassDescriptor );
 #endif
 
             if( mGlobalTable.textures[unit].imageView != tex->getDefaultDisplaySrv() )
@@ -769,134 +779,66 @@ namespace Ogre
     void VulkanRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set,
                                            uint32 hazardousTexIdx )
     {
-        uint32 texUnit = slotStart;
-        FastArray<const TextureGpu *>::const_iterator itor = set->mTextures.begin();
-
-        for( size_t i = 0u; i < NumShaderTypes; ++i )
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         {
-            const size_t numTexturesUsed = set->mShaderTypeTexCount[i];
-            for( size_t j = 0u; j < numTexturesUsed; ++j )
+            FastArray<const TextureGpu *>::const_iterator itor = set->mTextures.begin();
+            FastArray<const TextureGpu *>::const_iterator endt = set->mTextures.end();
+
+            while( itor != endt )
             {
-                if( ( texUnit - slotStart ) == hazardousTexIdx &&
-                    mCurrentRenderPassDescriptor->hasAttachment( set->mTextures[hazardousTexIdx] ) )
-                {
-                    // Hazardous textures can't be in two layouts at the same time
-                    _setTexture( texUnit, 0 );
-                }
-                else
-                {
-                    _setTexture( texUnit, const_cast<TextureGpu *>( *itor ) );
-                }
-                ++texUnit;
+                checkTextureLayout( *itor, mCurrentRenderPassDescriptor );
                 ++itor;
             }
+        }
+#endif
+        VulkanDescriptorSetTexture *vulkanSet =
+            reinterpret_cast<VulkanDescriptorSetTexture *>( set->mRsData );
+
+        VkWriteDescriptorSet *writeDescSet = &vulkanSet->mWriteDescSet;
+        if( hazardousTexIdx < set->mTextures.size() &&
+            mCurrentRenderPassDescriptor->hasAttachment( set->mTextures[hazardousTexIdx] ) )
+        {
+            vulkanSet->setHazardousTex( *set, hazardousTexIdx,
+                                        static_cast<VulkanTextureGpuManager *>( mTextureGpuManager ) );
+            writeDescSet = &vulkanSet->mWriteDescSetHazardous;
+        }
+
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] != writeDescSet )
+        {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = writeDescSet;
+            mGlobalTable.dirtyBakedTextures = true;
+            mTableDirty = true;
         }
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         {
-            defaultLog->logMessage( String( " _setTextures DescriptorSetTexture2 " ) );
-        }
+            FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = set->mTextures.begin();
+            FastArray<DescriptorSetTexture2::Slot>::const_iterator endt = set->mTextures.end();
 
-        VulkanDescriptorSetTexture *vulkanSet =
-            reinterpret_cast<VulkanDescriptorSetTexture *>( set->mRsData );
-
-        mCurrentDescriptorSetTexture = vulkanSet;
-
-        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
-
-        // Bind textures
-        {
-            uint32 pos = OGRE_VULKAN_TEX_SLOT_START;
-            FastArray<VulkanTexRegion>::const_iterator itor = vulkanSet->textures.begin();
-            FastArray<VulkanTexRegion>::const_iterator end = vulkanSet->textures.end();
-
-            while( itor != end )
+            while( itor != endt )
             {
-                Range range = itor->range;
-                range.location += slotStart;
-
-                uint32 lastPos = range.location + range.length;
-
-                VkDescriptorImageInfo imageInfo;
-                imageInfo.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                imageInfo.imageView = *itor->textures;
-                imageInfo.sampler = 0;
-#if VULKAN_HOTSHOT_DISABLED
-                mImageInfo[pos++][0] = imageInfo;
-#endif
-                // uint32 i = 0;
-                // for( uint32 texUnit = range.location; texUnit < lastPos; ++texUnit)
-                // {
-                //     VkDescriptorImageInfo imageInfo;
-                //     imageInfo.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                //     imageInfo.imageView = itor->textures[i++];
-                //     imageInfo.sampler = 0;
-                //     mImageInfo[texUnit][0] = imageInfo;
-                // }
+                if( itor->isTexture() )
+                    checkTextureLayout( itor->getTexture().texture, mCurrentRenderPassDescriptor );
                 ++itor;
             }
         }
-
-        // Bind buffers
-        {
-            uint32 pos = 0;
-            FastArray<VulkanBufferRegion>::const_iterator itor = vulkanSet->buffers.begin();
-            FastArray<VulkanBufferRegion>::const_iterator end = vulkanSet->buffers.end();
-
-            VkDeviceSize offsets[15];
-            memset( offsets, 0, sizeof( offsets ) );
-
-            while( itor != end )
-            {
-                Range range = itor->range;
-                // range.location += slotStart + OGRE_VULKAN_TEX_SLOT_START;
-
-                VkDescriptorBufferInfo bufferInfo;
-                bufferInfo.buffer = *itor->buffers;
-                bufferInfo.offset = range.location;
-                bufferInfo.range = range.length;
-#if VULKAN_HOTSHOT_DISABLED
-                mBufferInfo[pos++][0] = bufferInfo;
 #endif
+        VulkanDescriptorSetTexture2 *vulkanSet =
+            reinterpret_cast<VulkanDescriptorSetTexture2 *>( set->mRsData );
 
-                // for( uint32 texUnit = 0; texUnit < itor->b; ++texUnit )
-                // {
-                //     VkDescriptorBufferInfo bufferInfo;
-                //     bufferInfo.buffer = itor->buffers[texUnit];
-                //     bufferInfo.offset = range.location;
-                //     bufferInfo.range = range.length;
-                //     mBufferInfo[texUnit][0] = bufferInfo;
-                // }
-
-                // switch( itor->shaderType )
-                // {
-                // case VertexShader:
-                //     vkCmdBindVertexBuffers( cmdBuffer, range.location, range.length, itor->buffers,
-                //                             itor->offsets );
-                //     // [mActiveRenderEncoder setVertexBuffers:itor->buffers
-                //     //                                offsets:itor->offsets
-                //     //                              withRange:range];
-                //     break;
-                // case PixelShader:
-                //     vkCmdBindVertexBuffers( cmdBuffer, range.location, range.length, itor->buffers,
-                //                             itor->offsets );
-                //     // [mActiveRenderEncoder setFragmentBuffers:itor->buffers
-                //     //                                  offsets:itor->offsets
-                //     //                                withRange:range];
-                //     break;
-                // case GeometryShader:
-                // case HullShader:
-                // case DomainShader:
-                // case NumShaderTypes:
-                //     break;
-                // }
-
-                ++itor;
-            }
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] !=
+            &vulkanSet->mWriteDescSets[0] )
+        {
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] =
+                &vulkanSet->mWriteDescSets[0];
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] =
+                &vulkanSet->mWriteDescSets[1];
+            mGlobalTable.dirtyBakedTextures = true;
+            mTableDirty = true;
         }
     }
     //-------------------------------------------------------------------------
@@ -905,12 +847,12 @@ namespace Ogre
         VulkanDescriptorSetSampler *vulkanSet =
             reinterpret_cast<VulkanDescriptorSetSampler *>( set->mRsData );
 
-        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] !=
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] !=
             &vulkanSet->mWriteDescSet )
         {
-            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] = &vulkanSet->mWriteDescSet;
-            mComputeTable.dirtyBakedSamplers = true;
-            mComputeTableDirty = true;
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] = &vulkanSet->mWriteDescSet;
+            mGlobalTable.dirtyBakedSamplers = true;
+            mTableDirty = true;
         }
     }
     //-------------------------------------------------------------------------
@@ -1185,388 +1127,6 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::flushDescriptorState(
-        VkPipelineBindPoint pipeline_bind_point, const VulkanConstBufferPacked &constBuffer,
-        const size_t bindOffset, const size_t bytesToWrite,
-        const unordered_map<unsigned, VulkanConstantDefinitionBindingParam>::type &shaderBindings )
-    {
-#if VULKAN_HOTSHOT_DISABLED
-        VulkanHlmsPso *pso = mPso;
-
-        // std::unordered_set<uint32_t> update_descriptor_sets;
-        //
-        // DescriptorSetLayoutArray::iterator itor = pso->descriptorSets.begin();
-        // DescriptorSetLayoutArray::iterator end = pso->descriptorSets.end();
-        //
-        // while( itor != end )
-        // {
-        //     VkDescriptorSetLayout &descSet = *itor;
-        //
-        //     update_descriptor_sets.emplace( descSet );
-        //     ++itor;
-        // }
-        //
-        // if( update_descriptor_sets.empty() )
-        //     return;
-
-        const VulkanBufferInterface *bufferInterface =
-            static_cast<const VulkanBufferInterface *>( constBuffer.getBufferInterface() );
-
-        BindingMap<VkDescriptorBufferInfo> buffer_infos;
-        BindingMap<VkDescriptorImageInfo> image_infos;
-
-        DescriptorSetLayoutBindingArray::const_iterator bindingArraySetItor =
-            pso->descriptorLayoutBindingSets.begin();
-        DescriptorSetLayoutBindingArray::const_iterator bindingArraySetEnd =
-            pso->descriptorLayoutBindingSets.end();
-
-        // uint32 set = 0;
-
-        // size_t currentOffset = bindOffset;
-
-        while( bindingArraySetItor != bindingArraySetEnd )
-        {
-            const FastArray<struct VkDescriptorSetLayoutBinding> bindings = *bindingArraySetItor;
-
-            FastArray<struct VkDescriptorSetLayoutBinding>::const_iterator bindingsItor =
-                bindings.begin();
-            FastArray<struct VkDescriptorSetLayoutBinding>::const_iterator bindingsItorEnd =
-                bindings.end();
-
-            // uint32 arrayElement = 0;
-
-            while( bindingsItor != bindingsItorEnd )
-            {
-                const VkDescriptorSetLayoutBinding &binding = *bindingsItor;
-
-                if( is_buffer_descriptor_type( binding.descriptorType ) )
-                {
-                    VkDescriptorBufferInfo buffer_info;
-
-                    VulkanConstantDefinitionBindingParam bindingParam;
-                    unordered_map<unsigned, VulkanConstantDefinitionBindingParam>::type::const_iterator
-                        constantDefinitionBinding = shaderBindings.find( binding.binding );
-                    if( constantDefinitionBinding == shaderBindings.end() )
-                    {
-                        ++bindingsItor;
-                        continue;
-                    }
-                    else
-                    {
-                        bindingParam = ( *constantDefinitionBinding ).second;
-                    }
-
-                    buffer_info.buffer = bufferInterface->getVboName();
-                    buffer_info.offset = bindingParam.offset;
-                    buffer_info.range = bindingParam.size;
-
-                    // currentOffset += bytesToWrite;
-
-                    // if( is_dynamic_buffer_descriptor_type( binding_info->descriptorType ) )
-                    // {
-                    //     dynamic_offsets.push_back( to_u32( buffer_info.offset ) );
-                    //
-                    //     buffer_info.offset = 0;
-                    // }
-
-                    buffer_infos[binding.binding][0] = buffer_info;
-                }
-                // else if( image_view != nullptr || sampler != VK_NULL_HANDLE )
-                // {
-                //     // Can be null for input attachments
-                //     VkDescriptorImageInfo image_info{};
-                //     image_info.sampler = sampler ? sampler->get_handle() : VK_NULL_HANDLE;
-                //     image_info.imageView = image_view->get_handle();
-                //
-                //     if( image_view != nullptr )
-                //     {
-                //         // Add image layout info based on descriptor type
-                //         switch( binding.descriptorType )
-                //         {
-                //         case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
-                //         case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
-                //             if( is_depth_stencil_format( image_view->get_format() ) )
-                //             {
-                //                 image_info.imageLayout =
-                //                 VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-                //             }
-                //             else
-                //             {
-                //                 image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-                //             }
-                //             break;
-                //         case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
-                //             image_info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
-                //             break;
-                //
-                //         default:
-                //             continue;
-                //         }
-                //     }
-                //
-                //     image_infos[binding.binding][0] = std::move( image_info );
-                // }
-
-                ++bindingsItor;
-                // ++arrayElement;
-            }
-
-            ++bindingArraySetItor;
-            // ++set;
-        }
-
-        VulkanDescriptorPool *descriptorPool =
-            new VulkanDescriptorPool( mDevice->mDevice, pso->descriptorLayoutSets[0] );
-
-        VulkanDescriptorSet *descriptorSet = new VulkanDescriptorSet(
-            mDevice->mDevice, pso->descriptorLayoutSets[0], *descriptorPool, buffer_infos, image_infos );
-
-        VkDescriptorSet descriptorSetHandle = descriptorSet->get_handle();
-
-        // Bind descriptor set
-        vkCmdBindDescriptorSets( mDevice->mGraphicsQueue.mCurrentCmdBuffer, pipeline_bind_point,
-                                 pso->pipelineLayout, 0, 1, &descriptorSetHandle, 0, 0 );
-
-        // const auto &pipeline_layout = pipeline_state.get_pipeline_layout();
-        //
-        //
-        //
-        // // Iterate over the shader sets to check if they have already been bound
-        // // If they have, add the set so that the command buffer later updates it
-        // for( auto &set_it : pipeline_layout.get_shader_sets() )
-        // {
-        //     uint32_t descriptor_set_id = set_it.first;
-        //
-        //     auto descriptor_set_layout_it =
-        //         descriptor_set_layout_binding_state.find( descriptor_set_id );
-        //
-        //     if( descriptor_set_layout_it != descriptor_set_layout_binding_state.end() )
-        //     {
-        //         if( descriptor_set_layout_it->second->get_handle() !=
-        //             pipeline_layout.get_descriptor_set_layout( descriptor_set_id ).get_handle() )
-        //         {
-        //             update_descriptor_sets.emplace( descriptor_set_id );
-        //         }
-        //     }
-        // }
-        //
-        // // Validate that the bound descriptor set layouts exist in the pipeline layout
-        // for( auto set_it = descriptor_set_layout_binding_state.begin();
-        //      set_it != descriptor_set_layout_binding_state.end(); )
-        // {
-        //     if( !pipeline_layout.has_descriptor_set_layout( set_it->first ) )
-        //     {
-        //         set_it = descriptor_set_layout_binding_state.erase( set_it );
-        //     }
-        //     else
-        //     {
-        //         ++set_it;
-        //     }
-        // }
-        //
-        // // Check if a descriptor set needs to be created
-        // if( resource_binding_state.is_dirty() || !update_descriptor_sets.empty() )
-        // {
-        //     resource_binding_state.clear_dirty();
-        //
-        //     // Iterate over all of the resource sets bound by the command buffer
-        //     for( auto &resource_set_it : resource_binding_state.get_resource_sets() )
-        //     {
-        //         uint32_t descriptor_set_id = resource_set_it.first;
-        //         auto &resource_set = resource_set_it.second;
-        //
-        //         // Don't update resource set if it's not in the update list OR its state hasn't
-        //         changed if( !resource_set.is_dirty() && ( update_descriptor_sets.find(
-        //         descriptor_set_id ) ==
-        //                                           update_descriptor_sets.end() ) )
-        //         {
-        //             continue;
-        //         }
-        //
-        //         // Clear dirty flag for resource set
-        //         resource_binding_state.clear_dirty( descriptor_set_id );
-        //
-        //         // Skip resource set if a descriptor set layout doesn't exist for it
-        //         if( !pipeline_layout.has_descriptor_set_layout( descriptor_set_id ) )
-        //         {
-        //             continue;
-        //         }
-        //
-        //         auto &descriptor_set_layout =
-        //             pipeline_layout.get_descriptor_set_layout( descriptor_set_id );
-        //
-        //         // Make descriptor set layout bound for current set
-        //         descriptor_set_layout_binding_state[descriptor_set_id] = &descriptor_set_layout;
-        //
-        //         BindingMap<VkDescriptorBufferInfo> buffer_infos;
-        //         BindingMap<VkDescriptorImageInfo> image_infos;
-        //
-        //         std::vector<uint32_t> dynamic_offsets;
-        //
-        //         // Iterate over all resource bindings
-        //         for( auto &binding_it : resource_set.get_resource_bindings() )
-        //         {
-        //             auto binding_index = binding_it.first;
-        //             auto &binding_resources = binding_it.second;
-        //
-        //             // Check if binding exists in the pipeline layout
-        //             if( auto binding_info = descriptor_set_layout.get_layout_binding( binding_index )
-        //             )
-        //             {
-        //                 // Iterate over all binding resources
-        //                 for( auto &element_it : binding_resources )
-        //                 {
-        //                     auto array_element = element_it.first;
-        //                     auto &resource_info = element_it.second;
-        //
-        //                     // Pointer references
-        //                     auto &buffer = resource_info.buffer;
-        //                     auto &sampler = resource_info.sampler;
-        //                     auto &image_view = resource_info.image_view;
-        //
-        //                     // Get buffer info
-        //                     if( buffer != nullptr &&
-        //                         is_buffer_descriptor_type( binding_info->descriptorType ) )
-        //                     {
-        //                         VkDescriptorBufferInfo buffer_info{};
-        //
-        //                         buffer_info.buffer = resource_info.buffer->get_handle();
-        //                         buffer_info.offset = resource_info.offset;
-        //                         buffer_info.range = resource_info.range;
-        //
-        //                         if( is_dynamic_buffer_descriptor_type( binding_info->descriptorType )
-        //                         )
-        //                         {
-        //                             dynamic_offsets.push_back( to_u32( buffer_info.offset ) );
-        //
-        //                             buffer_info.offset = 0;
-        //                         }
-        //
-        //                         buffer_infos[binding_index][array_element] = buffer_info;
-        //                     }
-        //
-        //                     // Get image info
-        //                     else if( image_view != nullptr || sampler != VK_NULL_HANDLE )
-        //                     {
-        //                         // Can be null for input attachments
-        //                         VkDescriptorImageInfo image_info{};
-        //                         image_info.sampler = sampler ? sampler->get_handle() : VK_NULL_HANDLE;
-        //                         image_info.imageView = image_view->get_handle();
-        //
-        //                         if( image_view != nullptr )
-        //                         {
-        //                             // Add image layout info based on descriptor type
-        //                             switch( binding_info->descriptorType )
-        //                             {
-        //                             case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER:
-        //                             case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
-        //                                 if( is_depth_stencil_format( image_view->get_format() ) )
-        //                                 {
-        //                                     image_info.imageLayout =
-        //                                         VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-        //                                 }
-        //                                 else
-        //                                 {
-        //                                     image_info.imageLayout =
-        //                                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        //                                 }
-        //                                 break;
-        //                             case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
-        //                                 image_info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
-        //                                 break;
-        //
-        //                             default:
-        //                                 continue;
-        //                             }
-        //                         }
-        //
-        //                         image_infos[binding_index][array_element] = std::move( image_info );
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //
-        //         auto &descriptor_set = command_pool.get_render_frame()->request_descriptor_set(
-        //             descriptor_set_layout, buffer_infos, image_infos, command_pool.get_thread_index()
-        //             );
-        //
-        //         VkDescriptorSet descriptor_set_handle = descriptor_set.get_handle();
-        //
-        //         // Bind descriptor set
-        //         vkCmdBindDescriptorSets( get_handle(), pipeline_bind_point,
-        //         pipeline_layout.get_handle(),
-        //                                  descriptor_set_id, 1, &descriptor_set_handle,
-        //                                  to_u32( dynamic_offsets.size() ), dynamic_offsets.data() );
-        //     }
-        // }
-#endif
-    }
-    //-------------------------------------------------------------------------
-    VulkanHlmsPso *lastPso = 0;
-    void VulkanRenderSystem::bindDescriptorSet() const
-    {
-#if VULKAN_HOTSHOT_DISABLED
-        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
-
-        BindingMap<VkDescriptorBufferInfo> buffer_infos;
-        BindingMap<VkBufferView> buffer_views;
-        const BindingMap<VkDescriptorImageInfo> &image_infos = mImageInfo;
-
-        const vector<VulkanConstBufferPacked *>::type &constBuffers = vaoManager->getConstBuffers();
-        vector<VulkanConstBufferPacked *>::type::const_iterator constBuffersIt = constBuffers.begin();
-        vector<VulkanConstBufferPacked *>::type::const_iterator constBuffersEnd = constBuffers.end();
-
-        while( constBuffersIt != constBuffersEnd )
-        {
-            VulkanConstBufferPacked *const constBuffer = *constBuffersIt;
-            if( constBuffer->isDirty() )
-            {
-                const VkDescriptorBufferInfo &bufferInfo = constBuffer->getBufferInfo();
-                uint16 binding = constBuffer->getCurrentBinding();
-                buffer_infos[binding][0] = bufferInfo;
-                constBuffer->resetDirty();
-            }
-            ++constBuffersIt;
-        }
-
-        const vector<VulkanTexBufferPacked *>::type &texBuffers = vaoManager->getTexBuffersPacked();
-        vector<VulkanTexBufferPacked *>::type::const_iterator texBuffersIt = texBuffers.begin();
-        vector<VulkanTexBufferPacked *>::type::const_iterator texBuffersEnd = texBuffers.end();
-
-        while( texBuffersIt != texBuffersEnd )
-        {
-            VulkanTexBufferPacked *const texBuffer = *texBuffersIt;
-            if( texBuffer->isDirty() )
-            {
-                VkBufferView bufferView = texBuffer->getBufferView();
-                uint16 binding = texBuffer->getCurrentBinding();
-                buffer_views[binding][0] = bufferView;
-                texBuffer->resetDirty();
-            }
-            ++texBuffersIt;
-        }
-        if( lastPso == mPso )
-            return;
-
-        VulkanHlmsPso *pso = mPso;
-        lastPso = mPso;
-
-        VulkanDescriptorPool *descriptorPool =
-            new VulkanDescriptorPool( mDevice->mDevice, pso->descriptorLayoutSets[0] );
-
-        VulkanDescriptorSet *descriptorSet =
-            new VulkanDescriptorSet( mDevice->mDevice, pso->descriptorLayoutSets[0], *descriptorPool,
-                                     buffer_infos, image_infos, buffer_views );
-
-        VkDescriptorSet descriptorSetHandle = descriptorSet->get_handle();
-
-        // Bind descriptor set
-        vkCmdBindDescriptorSets( mDevice->mGraphicsQueue.mCurrentCmdBuffer,
-                                 VK_PIPELINE_BIND_POINT_GRAPHICS, pso->pipelineLayout, 0, 1,
-                                 &descriptorSetHandle, 0, 0 );
-#endif
-    }
-    //-------------------------------------------------------------------------
     void VulkanRenderSystem::flushRootLayout( void )
     {
         if( !mTableDirty )
@@ -1575,6 +1135,7 @@ namespace Ogre
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
         VulkanRootLayout *rootLayout = reinterpret_cast<VulkanHlmsPso *>( mPso->rsData )->rootLayout;
         rootLayout->bind( mDevice, vaoManager, mGlobalTable );
+        mGlobalTable.reset();
         mTableDirty = false;
     }
     //-------------------------------------------------------------------------
@@ -1587,6 +1148,7 @@ namespace Ogre
         VulkanRootLayout *rootLayout =
             reinterpret_cast<VulkanHlmsPso *>( mComputePso->rsData )->rootLayout;
         rootLayout->bind( mDevice, vaoManager, mComputeTable );
+        mComputeTable.reset();
         mComputeTableDirty = false;
     }
     //-------------------------------------------------------------------------
@@ -2783,256 +2345,34 @@ namespace Ogre
         delayed_vkDestroySampler( mVaoManager, mActiveDevice->mDevice, textureSampler, 0 );
     }
     //-------------------------------------------------------------------------
-    template <typename TDescriptorSetTexture, typename TTexSlot, typename TBufferPacked>
-    void VulkanRenderSystem::_descriptorSetTextureCreated( TDescriptorSetTexture *newSet,
-                                                           const FastArray<TTexSlot> &texContainer,
-                                                           uint16 *shaderTypeTexCount )
+    void VulkanRenderSystem::_descriptorSetTextureCreated( DescriptorSetTexture *newSet )
     {
-        VulkanDescriptorSetTexture *vulkanSet = new VulkanDescriptorSetTexture();
-
-        vulkanSet->numTextureViews = 0;
-
-        size_t numBuffers = 0;
-        size_t numTextures = 0;
-
-        size_t numBufferRanges = 0;
-        size_t numTextureRanges = 0;
-
-        bool needsNewTexRange = true;
-        bool needsNewBufferRange = true;
-
-        ShaderType shaderType = VertexShader;
-        size_t numProcessedSlots = 0;
-
-        typename FastArray<TTexSlot>::const_iterator itor = texContainer.begin();
-        typename FastArray<TTexSlot>::const_iterator end = texContainer.end();
-
-        while( itor != end )
-        {
-            if( shaderTypeTexCount )
-            {
-                // We need to break the ranges if we crossed stages
-                while( shaderType <= PixelShader && numProcessedSlots >= shaderTypeTexCount[shaderType] )
-                {
-                    numProcessedSlots = 0;
-                    shaderType = static_cast<ShaderType>( shaderType + 1u );
-                    needsNewTexRange = true;
-                    needsNewBufferRange = true;
-                }
-            }
-
-            if( itor->isTexture() )
-            {
-                needsNewBufferRange = true;
-                if( needsNewTexRange )
-                {
-                    ++numTextureRanges;
-                    needsNewTexRange = false;
-                }
-
-                const typename TDescriptorSetTexture::TextureSlot &texSlot = itor->getTexture();
-                if( texSlot.needsDifferentView() )
-                    ++vulkanSet->numTextureViews;
-                ++numTextures;
-            }
-            else
-            {
-                needsNewTexRange = true;
-                if( needsNewBufferRange )
-                {
-                    ++numBufferRanges;
-                    needsNewBufferRange = false;
-                }
-
-                ++numBuffers;
-            }
-            ++numProcessedSlots;
-            ++itor;
-        }
-
-        // Create two contiguous arrays of texture and buffers, but we'll split
-        // it into regions as a buffer could be in the middle of two textures.
-        VkImageView *srvList = 0;
-        VkBuffer *buffers = 0;
-        VkDeviceSize *offsets = 0;
-
-        if( vulkanSet->numTextureViews > 0 )
-        {
-            // Create a third array to hold the strong reference
-            // to the reinterpreted versions of textures.
-            // Must be init to 0 before ARC sees it.
-            void *textureViews = OGRE_MALLOC_SIMD( sizeof( VkImageView * ) * vulkanSet->numTextureViews,
-                                                   MEMCATEGORY_RENDERSYS );
-            memset( textureViews, 0, sizeof( VkImageView * ) * vulkanSet->numTextureViews );
-            vulkanSet->textureViews = (VkImageView *)textureViews;
-        }
-        if( numTextures > 0 )
-        {
-            srvList = (VkImageView *)OGRE_MALLOC_SIMD( sizeof( VkImageView * ) * numTextures,
-                                                       MEMCATEGORY_RENDERSYS );
-        }
-        if( numBuffers > 0 )
-        {
-            buffers =
-                (VkBuffer *)OGRE_MALLOC_SIMD( sizeof( VkBuffer * ) * numBuffers, MEMCATEGORY_RENDERSYS );
-            offsets = (VkDeviceSize *)OGRE_MALLOC_SIMD( sizeof( VkDeviceSize ) * numBuffers,
-                                                        MEMCATEGORY_RENDERSYS );
-        }
-
-        vulkanSet->textures.reserve( numTextureRanges );
-        vulkanSet->buffers.reserve( numBufferRanges );
-
-        needsNewTexRange = true;
-        needsNewBufferRange = true;
-
-        shaderType = VertexShader;
-        numProcessedSlots = 0;
-
-        size_t texViewIndex = 0;
-
-        itor = texContainer.begin();
-        end = texContainer.end();
-
-        while( itor != end )
-        {
-            if( shaderTypeTexCount )
-            {
-                // We need to break the ranges if we crossed stages
-                while( shaderType <= PixelShader && numProcessedSlots >= shaderTypeTexCount[shaderType] )
-                {
-                    numProcessedSlots = 0;
-                    shaderType = static_cast<ShaderType>( shaderType + 1u );
-                    needsNewTexRange = true;
-                    needsNewBufferRange = true;
-                }
-            }
-
-            if( itor->isTexture() )
-            {
-                needsNewBufferRange = true;
-                if( needsNewTexRange )
-                {
-                    vulkanSet->textures.push_back( VulkanTexRegion() );
-                    VulkanTexRegion &texRegion = vulkanSet->textures.back();
-                    texRegion.textures = srvList;
-                    texRegion.shaderType = shaderType;
-                    texRegion.range.location = itor - texContainer.begin();
-                    texRegion.range.length = 0;
-                    needsNewTexRange = false;
-                }
-
-                const typename TDescriptorSetTexture::TextureSlot &texSlot = itor->getTexture();
-
-                assert( dynamic_cast<VulkanTextureGpu *>( texSlot.texture ) );
-                VulkanTextureGpu *vulkanTex = static_cast<VulkanTextureGpu *>( texSlot.texture );
-                VkImageView srv = vulkanTex->getDefaultDisplaySrv();
-
-                if( texSlot.needsDifferentView() )
-                {
-                    vulkanSet->textureViews[texViewIndex] = vulkanTex->createView( texSlot );
-                    srv = vulkanSet->textureViews[texViewIndex];
-                    ++texViewIndex;
-                }
-
-                VulkanTexRegion &texRegion = vulkanSet->textures.back();
-                *srvList = srv;
-                ++texRegion.range.length;
-
-                ++srvList;
-            }
-            else
-            {
-                needsNewTexRange = true;
-                if( needsNewBufferRange )
-                {
-                    vulkanSet->buffers.push_back( VulkanBufferRegion() );
-                    VulkanBufferRegion &bufferRegion = vulkanSet->buffers.back();
-                    bufferRegion.buffers = buffers;
-                    bufferRegion.offsets = offsets;
-                    bufferRegion.shaderType = shaderType;
-                    bufferRegion.range.location = itor - texContainer.begin();
-                    bufferRegion.range.length = VK_WHOLE_SIZE;
-                    needsNewBufferRange = false;
-                }
-
-                const typename TDescriptorSetTexture::BufferSlot &bufferSlot = itor->getBuffer();
-
-                assert( dynamic_cast<TBufferPacked *>( bufferSlot.buffer ) );
-                TBufferPacked *vulkanBuf = static_cast<TBufferPacked *>( bufferSlot.buffer );
-
-                VulkanBufferRegion &bufferRegion = vulkanSet->buffers.back();
-                vulkanBuf->bindBufferForDescriptor( buffers, offsets, bufferSlot.offset );
-                ++bufferRegion.range.length;
-
-                ++buffers;
-                ++offsets;
-            }
-            ++numProcessedSlots;
-            ++itor;
-        }
-
+        VulkanDescriptorSetTexture *vulkanSet = new VulkanDescriptorSetTexture( *newSet );
         newSet->mRsData = vulkanSet;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::destroyVulkanDescriptorSetTexture( VulkanDescriptorSetTexture *vulkanSet )
+    void VulkanRenderSystem::_descriptorSetTextureDestroyed( DescriptorSetTexture *set )
     {
-        const size_t numTextureViews = vulkanSet->numTextureViews;
-        for( size_t i = 0; i < numTextureViews; ++i )
-            vulkanSet->textureViews[i] = 0;  // Let ARC free these pointers
-
-        if( numTextureViews )
-        {
-            OGRE_FREE_SIMD( vulkanSet->textureViews, MEMCATEGORY_RENDERSYS );
-            vulkanSet->textureViews = 0;
-        }
-
-        if( !vulkanSet->textures.empty() )
-        {
-            VulkanTexRegion &texRegion = vulkanSet->textures.front();
-            OGRE_FREE_SIMD( texRegion.textures, MEMCATEGORY_RENDERSYS );
-        }
-
-        if( !vulkanSet->buffers.empty() )
-        {
-            VulkanBufferRegion &bufferRegion = vulkanSet->buffers.front();
-            OGRE_FREE_SIMD( bufferRegion.buffers, MEMCATEGORY_RENDERSYS );
-        }
+        OGRE_ASSERT_LOW( set->mRsData );
+        VulkanDescriptorSetTexture *vulkanSet =
+            static_cast<VulkanDescriptorSetTexture *>( set->mRsData );
+        delete vulkanSet;
+        set->mRsData = 0;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_descriptorSetTextureCreated( DescriptorSetTexture *newSet )
-    {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " _descriptorSetTextureCreated " ) );
-        }
-    }
-
-    void VulkanRenderSystem::_descriptorSetTextureDestroyed( DescriptorSetTexture *set ) {}
-
     void VulkanRenderSystem::_descriptorSetTexture2Created( DescriptorSetTexture2 *newSet )
     {
-        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        if( defaultLog )
-        {
-            defaultLog->logMessage( String( " _descriptorSetTexture2Created " ) );
-        }
-
-        /*_descriptorSetTextureCreated<DescriptorSetTexture2, DescriptorSetTexture2::Slot,
-                                     VulkanTexBufferPacked>( newSet, newSet->mTextures,
-                                                             newSet->mShaderTypeTexCount );*/
+        VulkanDescriptorSetTexture2 *vulkanSet = new VulkanDescriptorSetTexture2( *newSet );
+        newSet->mRsData = vulkanSet;
     }
-
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set )
     {
-        assert( set->mRsData );
-
-        VulkanDescriptorSetTexture *metalSet =
-            reinterpret_cast<VulkanDescriptorSetTexture *>( set->mRsData );
-
-        destroyVulkanDescriptorSetTexture( metalSet );
-        delete metalSet;
-
+        OGRE_ASSERT_LOW( set->mRsData );
+        VulkanDescriptorSetTexture2 *vulkanSet =
+            static_cast<VulkanDescriptorSetTexture2 *>( set->mRsData );
+        vulkanSet->destroy( mVaoManager, mActiveDevice->mDevice, *set );
+        delete vulkanSet;
         set->mRsData = 0;
     }
     //-------------------------------------------------------------------------

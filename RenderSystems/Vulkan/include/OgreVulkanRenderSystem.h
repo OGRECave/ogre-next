@@ -40,8 +40,6 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    struct VulkanDescriptorSetTexture;
-
     namespace v1
     {
         class HardwareBufferManager;
@@ -127,13 +125,6 @@ namespace Ogre
         PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback;
         PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;
         VkDebugReportCallbackEXT mDebugReportCallback;
-
-#if VULKAN_HOTSHOT_DISABLED
-        BindingMap<VkDescriptorImageInfo> mImageInfo;
-        BindingMap<VkDescriptorBufferInfo> mBufferInfo;
-        BindingMap<VkDescriptorImageInfo> mSamplerInfo;
-#endif
-        VulkanDescriptorSetTexture *mCurrentDescriptorSetTexture;
 
         /// Declared here to avoid constant reallocations
         FastArray<VkImageMemoryBarrier> mImageBarriers;
@@ -330,13 +321,6 @@ namespace Ogre
 
         virtual bool isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
                                    const TextureGpu *texture ) const;
-
-    protected:
-        template <typename TDescriptorSetTexture, typename TTexSlot, typename TBufferPacked>
-        void _descriptorSetTextureCreated( TDescriptorSetTexture *newSet,
-                                           const FastArray<TTexSlot> &texContainer,
-                                           uint16 *shaderTypeTexCount );
-        void destroyVulkanDescriptorSetTexture( VulkanDescriptorSetTexture *metalSet );
     };
 }  // namespace Ogre
 

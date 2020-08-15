@@ -401,10 +401,10 @@ namespace Ogre
             if( !mBaked[i] )
             {
                 bDirty |= table.dirtyParamsBuffer & ranges[DescBindingTypes::ParamBuffer].isInUse();
-                bDirty |= table.minDirtySlotConst < ranges[DescBindingTypes::ConstBuffer].start;
-                bDirty |= table.minDirtySlotTexBuffer < ranges[DescBindingTypes::TexBuffer].start;
-                bDirty |= table.minDirtySlotTextures < ranges[DescBindingTypes::Texture].start;
-                bDirty |= table.minDirtySlotSamplers < ranges[DescBindingTypes::Texture].start;
+                bDirty |= table.minDirtySlotConst <= ranges[DescBindingTypes::ConstBuffer].start;
+                bDirty |= table.minDirtySlotTexBuffer <= ranges[DescBindingTypes::TexBuffer].start;
+                bDirty |= table.minDirtySlotTextures <= ranges[DescBindingTypes::Texture].start;
+                bDirty |= table.minDirtySlotSamplers <= ranges[DescBindingTypes::Texture].start;
             }
             else
             {
@@ -494,7 +494,8 @@ namespace Ogre
         vkCmdBindDescriptorSets(
             device->mGraphicsQueue.mCurrentCmdBuffer,
             mCompute ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS, mRootLayout,
-            firstDirtySet, static_cast<uint32_t>( mSets.size() ) - firstDirtySet, descSets, 0u, 0 );
+            firstDirtySet, static_cast<uint32_t>( mSets.size() ) - firstDirtySet,
+            &descSets[firstDirtySet], 0u, 0 );
     }
     //-------------------------------------------------------------------------
     VulkanRootLayout *VulkanRootLayout::findBest( VulkanRootLayout *a, VulkanRootLayout *b )
