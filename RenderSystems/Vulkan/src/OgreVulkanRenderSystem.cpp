@@ -902,18 +902,15 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
     {
-        FastArray<const HlmsSamplerblock *>::const_iterator itor = set->mSamplers.begin();
+        VulkanDescriptorSetSampler *vulkanSet =
+            reinterpret_cast<VulkanDescriptorSetSampler *>( set->mRsData );
 
-        for( size_t i = 0u; i < NumShaderTypes; ++i )
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] !=
+            &vulkanSet->mWriteDescSet )
         {
-            const uint32 numSamplersUsed = set->mShaderTypeSamplerCount[i];
-
-            for( size_t j = 0; j < numSamplersUsed; ++j )
-            {
-                _setHlmsSamplerblock( static_cast<uint8>( slotStart ), *itor );
-                ++slotStart;
-                ++itor;
-            }
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Samplers] = &vulkanSet->mWriteDescSet;
+            mComputeTable.dirtyBakedSamplers = true;
+            mComputeTableDirty = true;
         }
     }
     //-------------------------------------------------------------------------

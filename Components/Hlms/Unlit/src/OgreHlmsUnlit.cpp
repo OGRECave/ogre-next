@@ -171,8 +171,9 @@ namespace Ogre
         descBindingRanges[DescBindingTypes::Texture].end =
             (uint16)mTexUnitSlotStart + (uint16)getProperty( UnlitProperty::NumTextures );
 
-        descBindingRanges[DescBindingTypes::Sampler].start = (uint16)mSamplerUnitSlotStart;
-        descBindingRanges[DescBindingTypes::Sampler].end =
+        DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
+        bakedRanges[DescBindingTypes::Sampler].start = (uint16)mSamplerUnitSlotStart;
+        bakedRanges[DescBindingTypes::Sampler].end =
             (uint16)mSamplerUnitSlotStart + (uint16)getProperty( UnlitProperty::NumSamplers );
 
         mListener->setupRootLayout( rootLayout, mSetProperties );

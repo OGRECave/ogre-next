@@ -499,7 +499,13 @@ namespace Ogre
         descBindingRanges[DescBindingTypes::Sampler].start =
             descBindingRanges[DescBindingTypes::Texture].start;
         descBindingRanges[DescBindingTypes::Sampler].end =
-            ( uint16 )( getProperty( "samplerStateStart" ) + getProperty( PbsProperty::NumSamplers ) );
+            ( uint16 )( getProperty( "samplerStateStart" ) );
+
+        DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
+
+        bakedRanges[DescBindingTypes::Sampler].start = descBindingRanges[DescBindingTypes::Sampler].end;
+        bakedRanges[DescBindingTypes::Sampler].end = bakedRanges[DescBindingTypes::Sampler].start +
+                                                     (uint16)getProperty( PbsProperty::NumSamplers );
 
         mListener->setupRootLayout( rootLayout, mSetProperties );
     }
