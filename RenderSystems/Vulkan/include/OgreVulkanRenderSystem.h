@@ -33,6 +33,7 @@ THE SOFTWARE.
 
 #include "OgreRenderSystem.h"
 #include "OgreVulkanGlobalBindingTable.h"
+#include "OgreVulkanPixelFormatToShaderType.h"
 #include "OgreVulkanProgram.h"
 
 #include "OgreVulkanRenderPassDescriptor.h"
@@ -46,17 +47,6 @@ namespace Ogre
     }
 
     struct VulkanHlmsPso;
-
-    class _OgreVulkanExport VulkanPixelFormatToShaderType : public PixelFormatToShaderType
-    {
-    public:
-        virtual const char *getPixelFormatType( PixelFormatGpu pixelFormat ) const { return 0; }
-        virtual const char *getDataType( PixelFormatGpu pixelFormat, uint32 textureType, bool isMsaa,
-                                         ResourceAccess::ResourceAccess access ) const
-        {
-            return 0;
-        }
-    };
 
     /**
        Implementation of Vulkan as a rendering system.
