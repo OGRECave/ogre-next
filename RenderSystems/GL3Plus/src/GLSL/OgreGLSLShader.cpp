@@ -158,7 +158,7 @@ namespace Ogre {
         const String preamble =
             "#define vulkan_layout(x)\n"
             "#define vulkan( x )\n"
-            "#define vk_comma ,\n"
+            "#define vk_comma\n"
             "#define texture2D sampler2D\n"
             "#define texture2DArray sampler2DArray\n"
             "#define textureCube samplerCube\n"
