@@ -457,6 +457,10 @@ namespace Ogre
             shader.setEntryPoint( "main" );
         }
 
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        messages = ( EShMessages )( messages | EShMsgDebugInfo );
+#endif
+
         const char *sourceCString = mSource.c_str();
         shader.setStrings( &sourceCString, 1 );
 
@@ -544,7 +548,16 @@ namespace Ogre
         if( !mCompileError )
         {
             spv::SpvBuildLogger logger;
-            glslang::GlslangToSpv( *intermediate, mSpirv, &logger );
+            glslang::SpvOptions opts;
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+            opts.disableOptimizer = true;
+            opts.generateDebugInfo = true;
+#else
+            opts.disableOptimizer = false;
+            opts.optimizeSize = true;
+            opts.generateDebugInfo = false;
+#endif
+            glslang::GlslangToSpv( *intermediate, mSpirv, &logger, &opts );
 
             LogManager::getSingleton().logMessage(
                 "Vulkan GLSL to SPIRV " + mName + ":\n" + logger.getAllMessages(), LML_TRIVIAL );
