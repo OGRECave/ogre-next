@@ -29,10 +29,14 @@ THE SOFTWARE.
 #define _OgreParallaxCorrectedCubemap_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
+
 #include "Cubemaps/OgreParallaxCorrectedCubemapBase.h"
+
+#include "OgreResource.h"
 #include "OgreFrameListener.h"
 #include "OgreGpuProgramParams.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
