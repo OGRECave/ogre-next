@@ -190,6 +190,10 @@ namespace Ogre
             writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
             writeDescSet->pTexelBufferView = mBuffers.begin();
         }
+        else
+        {
+            memset( &mWriteDescSets[0], 0, sizeof( mWriteDescSets[0] ) );
+        }
 
         if( numTextures != 0u )
         {
@@ -199,6 +203,10 @@ namespace Ogre
             writeDescSet->descriptorCount = static_cast<uint32>( numTextures );
             writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
             writeDescSet->pImageInfo = mTextures.begin();
+        }
+        else
+        {
+            memset( &mWriteDescSets[1], 0, sizeof( mWriteDescSets[1] ) );
         }
     }
     //-------------------------------------------------------------------------
@@ -302,6 +310,10 @@ namespace Ogre
             writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
             writeDescSet->pBufferInfo = mBuffers.begin();
         }
+        else
+        {
+            memset( &mWriteDescSets[0], 0, sizeof( mWriteDescSets[0] ) );
+        }
 
         if( numTextures != 0u )
         {
@@ -311,6 +323,10 @@ namespace Ogre
             writeDescSet->descriptorCount = static_cast<uint32>( numTextures );
             writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
             writeDescSet->pImageInfo = mTextures.begin();
+        }
+        else
+        {
+            memset( &mWriteDescSets[1], 0, sizeof( mWriteDescSets[1] ) );
         }
     }
     //-------------------------------------------------------------------------

@@ -900,9 +900,37 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set ) {}
+    void VulkanRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set )
+    {
+        VulkanDescriptorSetTexture *vulkanSet =
+            reinterpret_cast<VulkanDescriptorSetTexture *>( set->mRsData );
+
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] !=
+            &vulkanSet->mWriteDescSet )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = &vulkanSet->mWriteDescSet;
+            mComputeTable.dirtyBakedSamplers = true;
+            mComputeTableDirty = true;
+        }
+    }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set ) {}
+    void VulkanRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set )
+    {
+        VulkanDescriptorSetTexture2 *vulkanSet =
+            reinterpret_cast<VulkanDescriptorSetTexture2 *>( set->mRsData );
+
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] !=
+            &vulkanSet->mWriteDescSets[0] )
+        {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] =
+                &vulkanSet->mWriteDescSets[0];
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] =
+                &vulkanSet->mWriteDescSets[1];
+            mComputeTable.dirtyBakedSamplers = true;
+            mComputeTableDirty = true;
+        }
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set )
     {
