@@ -57,6 +57,9 @@ namespace Ogre
         mTexMemIdx( 0u ),
         mVboPoolIdx( 0u ),
         mInternalBufferStart( 0u ),
+        mMsaaTexMemIdx( 0u ),
+        mMsaaVboPoolIdx( 0u ),
+        mMsaaInternalBufferStart( 0u ),
         mCurrLayout( VK_IMAGE_LAYOUT_UNDEFINED ),
         mNextLayout( VK_IMAGE_LAYOUT_UNDEFINED )
     {
@@ -143,10 +146,6 @@ namespace Ogre
             vkBindImageMemory( device->mDevice, mFinalTextureName, deviceMemory, mInternalBufferStart );
         checkVkResult( result, "vkBindImageMemory" );
 
-        if( mSampleDescription.isMultisample() && !hasMsaaExplicitResolves() )
-        {
-        }
-
         if( isPoolOwner() )
         {
             device->mGraphicsQueue.endAllEncoders();
@@ -206,6 +205,39 @@ namespace Ogre
                     VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0, 0u, 0, 0u, 0, 1u, &imageBarrier );
             }
         }
+
+        if( mSampleDescription.isMultisample() && !hasMsaaExplicitResolves() )
+        {
+            makeVkStruct( imageInfo, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO );
+            imageInfo.imageType = getVulkanTextureType();
+            imageInfo.extent.width = mWidth;
+            imageInfo.extent.height = mHeight;
+            imageInfo.extent.depth = getDepth();
+            imageInfo.mipLevels = mNumMipmaps;
+            imageInfo.arrayLayers = getNumSlices();
+            imageInfo.format = VulkanMappings::get( mPixelFormat );
+            imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+            imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+            imageInfo.usage |= PixelFormatGpuUtils::isDepth( mPixelFormat )
+                                   ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+                                   : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+            imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            imageInfo.samples =
+                static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
+            imageResult = vkCreateImage( device->mDevice, &imageInfo, 0, &mMsaaFramebufferName );
+            checkVkResult( imageResult, "vkCreateImage" );
+
+            setObjectName( device->mDevice, (uint64_t)mMsaaFramebufferName,
+                           VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, (textureName + "/MsaaImplicit").c_str() );
+
+            deviceMemory = vaoManager->allocateTexture( memRequirements, mMsaaTexMemIdx, mMsaaVboPoolIdx,
+                                                        mMsaaInternalBufferStart );
+
+            result = vkBindImageMemory( device->mDevice, mMsaaFramebufferName, deviceMemory,
+                                        mMsaaInternalBufferStart );
+            checkVkResult( result, "vkBindImageMemory" );
+        }
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::destroyInternalResourcesImpl( void )
@@ -235,6 +267,21 @@ namespace Ogre
                 mFinalTextureName = 0;
 
                 vaoManager->deallocateTexture( mTexMemIdx, mVboPoolIdx, mInternalBufferStart,
+                                               memRequirements.size );
+            }
+            if( mMsaaFramebufferName )
+            {
+                VkMemoryRequirements memRequirements;
+                vkGetImageMemoryRequirements( device->mDevice, mMsaaFramebufferName, &memRequirements );
+
+                TODO_delay_everything_that_starts_with_vkDestroy;
+                VulkanVaoManager *vaoManager =
+                    static_cast<VulkanVaoManager *>( textureManager->getVaoManager() );
+
+                delayed_vkDestroyImage( vaoManager, device->mDevice, mMsaaFramebufferName, 0 );
+                mMsaaFramebufferName = 0;
+
+                vaoManager->deallocateTexture( mMsaaTexMemIdx, mMsaaVboPoolIdx, mMsaaInternalBufferStart,
                                                memRequirements.size );
             }
         }

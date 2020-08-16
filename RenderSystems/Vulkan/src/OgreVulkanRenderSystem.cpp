@@ -65,6 +65,8 @@ THE SOFTWARE.
 #include "OgreVulkanTextureGpu.h"
 #include "Vao/OgreVulkanUavBufferPacked.h"
 
+#include "OgreVulkanUtil.h"
+
 #include "OgreDepthBuffer.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -191,6 +193,10 @@ namespace Ogre
             mGlobalTable.textures[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             mComputeTable.textures[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
+
+        mVulkanSupport = Ogre::getVulkanSupport();
+
+        initConfigOptions();
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::shutdown( void )
@@ -254,6 +260,12 @@ namespace Ogre
             vkDestroyInstance( mVkInstance, 0 );
             mVkInstance = 0;
         }
+
+        if( mVulkanSupport )
+        {
+            OGRE_DELETE mVulkanSupport;
+            mVulkanSupport = 0;
+        }
     }
     //-------------------------------------------------------------------------
     const String &VulkanRenderSystem::getName( void ) const
@@ -266,6 +278,17 @@ namespace Ogre
     {
         static String strName( "Vulkan_RS" );
         return strName;
+    }
+    void VulkanRenderSystem::initConfigOptions( void ) { mVulkanSupport->addConfig(); }
+    //-------------------------------------------------------------------------
+    ConfigOptionMap &VulkanRenderSystem::getConfigOptions( void )
+    {
+        return mVulkanSupport->getConfigOptions();
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::setConfigOption( const String &name, const String &value )
+    {
+        mVulkanSupport->setConfigOption( name, value );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::debugCallback( void ) { mValidationError = true; }
@@ -1882,11 +1905,11 @@ namespace Ogre
                         VulkanMappings::get( passPso.resolveColourFormat[i] );
                     attachments[attachmentIdx].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                     attachments[attachmentIdx].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                    ++attachmentIdx;
 
                     resolveAttachRefs[numColourAttachments].attachment = attachmentIdx;
                     resolveAttachRefs[numColourAttachments].layout =
                         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                    ++attachmentIdx;
                     ++numColourAttachments;
                 }
             }
@@ -2546,6 +2569,14 @@ namespace Ogre
         delete vulkanSet;
 
         set->mRsData = 0;
+    }
+
+    SampleDescription VulkanRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
+        PixelFormatGpu format )
+    {
+        SampleDescription retVal( getMaxUsableSampleCount( mDevice->mDeviceProperties, sampleDesc.getMaxSamples() ),
+                                  sampleDesc.getMsaaPattern() );
+        return retVal;
     }
     //-------------------------------------------------------------------------
     bool VulkanRenderSystem::isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,

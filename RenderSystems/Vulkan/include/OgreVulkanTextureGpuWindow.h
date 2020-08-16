@@ -75,6 +75,7 @@ namespace Ogre
 
         virtual void _setToDisplayDummyTexture( void );
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+        void _setMsaaBackbuffer( VkImage msaaTex, uint16 texMemIdx = 0, size_t vboPoolIdx = 0, uint64 internalBufferStart = 0 );
     };
 }  // namespace Ogre
 

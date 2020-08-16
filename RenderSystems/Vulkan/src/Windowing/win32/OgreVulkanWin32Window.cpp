@@ -495,8 +495,6 @@ namespace Ogre
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
 
-        mHwGamma = true;
-
         // if( mColourDepth == 16u )
         //     mTexture->setPixelFormat( PFG_B5G5R5A1_UNORM );
         // else
@@ -504,6 +502,9 @@ namespace Ogre
 		mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
         if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
             mStencilBuffer = mDepthBuffer;
+        
+        mTexture->setSampleDescription( mRequestedSampleDescription );
+        mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
 
         // mTexture->setMsaa( mMsaaCount );
         // mDepthBuffer->setMsaa( mMsaaCount );
@@ -517,6 +518,10 @@ namespace Ogre
         {
             mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
         }
+
+        mSampleDescription = mRequestedSampleDescription;
+
+        setMsaaBackbuffer();
 
         mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
         if( mDepthBuffer )

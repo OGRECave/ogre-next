@@ -281,9 +281,9 @@ namespace Ogre
 
         VkAttachmentDescription &attachment = attachments[currAttachmIdx];
         attachment.format = VulkanMappings::get( texture->getPixelFormat() );
-        attachment.samples =
-            static_cast<VkSampleCountFlagBits>( texture->getSampleDescription().getColourSamples() );
-        attachment.loadOp = get( colour.loadAction );
+        attachment.samples = resolveTex ? VK_SAMPLE_COUNT_1_BIT : static_cast<VkSampleCountFlagBits>(
+                                              texture->getSampleDescription().getColourSamples() );
+        attachment.loadOp = resolveTex ? VK_ATTACHMENT_LOAD_OP_DONT_CARE : get( colour.loadAction );
         attachment.storeOp = get( colour.storeAction );
         attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -295,13 +295,14 @@ namespace Ogre
         else
         {
             attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            attachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            attachment.finalLayout =
+                resolveTex ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         }
 
         const uint8 mipLevel = resolveTex ? colour.resolveMipLevel : colour.mipLevel;
         const uint16 slice = resolveTex ? colour.resolveSlice : colour.slice;
 
-        if( !texture->isRenderWindowSpecific() )
+        if( !texture->isRenderWindowSpecific() || resolveTex )
         {
             fboDesc.mImageViews[currAttachmIdx] = texture->_createView(
                 texture->getPixelFormat(), mipLevel, 1u, slice, false, false, 1u, texName );
@@ -319,7 +320,8 @@ namespace Ogre
             fboDesc.mWindowImageViews.resize( numSurfaces );
             for( size_t surfIdx = 0u; surfIdx < numSurfaces; ++surfIdx )
             {
-                texName = textureVulkan->getWindowFinalTextureName( surfIdx );
+                if( !colour.texture->getSampleDescription().isMultisample() )
+                    texName = textureVulkan->getWindowFinalTextureName( surfIdx );
                 fboDesc.mWindowImageViews[surfIdx] = texture->_createView(
                     texture->getPixelFormat(), mipLevel, 1u, slice, false, false, 1u, texName );
             }

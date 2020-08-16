@@ -89,6 +89,10 @@ namespace Ogre
         size_t mVboPoolIdx;
         size_t mInternalBufferStart;
 
+        uint16 mMsaaTexMemIdx;
+        size_t mMsaaVboPoolIdx;
+        size_t mMsaaInternalBufferStart;
+
     public:
         /// The current layout we're in. Including any internal stuff.
         VkImageLayout mCurrLayout;
