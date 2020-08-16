@@ -87,6 +87,11 @@ vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs_GLSL glsl
 	source QuadCameraDirNoUV_vs.glsl
 }
 
+vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs_VK glslvk
+{
+	source QuadCameraDirNoUV_vs.glsl
+}
+
 vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs_HLSL hlsl
 {
 	source QuadCameraDirNoUV_vs.hlsl
@@ -103,6 +108,7 @@ vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs_Metal metal
 vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs unified
 {
 	delegate Ogre/Compositor/QuadCameraDirNoUV_vs_GLSL
+	delegate Ogre/Compositor/QuadCameraDirNoUV_vs_VK
 	delegate Ogre/Compositor/QuadCameraDirNoUV_vs_HLSL
 	delegate Ogre/Compositor/QuadCameraDirNoUV_vs_Metal
 

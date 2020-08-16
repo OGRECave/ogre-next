@@ -1,24 +1,27 @@
-#version 330
+#version ogre_glsl_ver_330
 
-uniform sampler2D sceneTexture;
-uniform sampler2D distortionTexture;
+vulkan_layout( ogre_t0 ) uniform texture2D sceneTexture;
+vulkan_layout( ogre_t1 ) uniform texture2D distortionTexture;
 
+vulkan( layout( ogre_s0 ) uniform sampler samplerState0 );
 
-
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
 } inPs;
 
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform float u_DistortionStrenght;
+vulkan( }; )
 
-uniform float u_DistortionStrenght;
-
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
 void main()
 {
 	//Sample vector from distortion pass
-	vec4 dVec = texture( distortionTexture, inPs.uv0 );
+	vec4 dVec = texture( vkSampler2D( distortionTexture, samplerState0 ), inPs.uv0 );
     
 	// Distortion texture is in range [0-1] so we will make it to range [-1.0 - 1.0] so we will get left-right vector and up-down vector
     dVec.xy = (dVec.xy - 0.5)*2.0;
@@ -35,9 +38,9 @@ void main()
     
 	//We have to sample three times to get each color channel.
 	// Distortion is made by offsetting UV coordinates with each channel offset value.
-    float cR = texture( sceneTexture, inPs.uv0 + ofR).r;
-    float cG = texture( sceneTexture, inPs.uv0 + ofG).g;
-    float cB = texture( sceneTexture, inPs.uv0 + ofB).b;
+	float cR = texture( vkSampler2D( sceneTexture, samplerState0 ), inPs.uv0 + ofR ).r;
+	float cG = texture( vkSampler2D( sceneTexture, samplerState0 ), inPs.uv0 + ofG ).g;
+	float cB = texture( vkSampler2D( sceneTexture, samplerState0 ), inPs.uv0 + ofB ).b;
     
 	// Combine colors to result
     fragColour = vec4(cR, cG, cB, 1.0);

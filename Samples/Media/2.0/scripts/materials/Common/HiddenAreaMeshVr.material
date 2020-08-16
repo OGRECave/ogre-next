@@ -3,6 +3,11 @@ vertex_program Ogre/VR/HiddenAreaMeshVr_vs_GLSL glsl
 	source HiddenAreaMeshVr_vs.glsl
 }
 
+vertex_program Ogre/VR/HiddenAreaMeshVr_vs_VK glslvk
+{
+	source HiddenAreaMeshVr_vs.glsl
+}
+
 vertex_program Ogre/VR/HiddenAreaMeshVr_vs_HLSL hlsl
 {
 	source HiddenAreaMeshVr_vs.hlsl
@@ -20,6 +25,7 @@ vertex_program Ogre/VR/HiddenAreaMeshVr_vs_Metal metal
 vertex_program Ogre/VR/HiddenAreaMeshVr_vs unified
 {
 	delegate Ogre/VR/HiddenAreaMeshVr_vs_GLSL
+	delegate Ogre/VR/HiddenAreaMeshVr_vs_VK
 	delegate Ogre/VR/HiddenAreaMeshVr_vs_HLSL
 	delegate Ogre/VR/HiddenAreaMeshVr_vs_Metal
 
@@ -31,6 +37,11 @@ vertex_program Ogre/VR/HiddenAreaMeshVr_vs unified
 }
 
 fragment_program Ogre/VR/HiddenAreaMeshVr_ps_GLSL glsl
+{
+	source HiddenAreaMeshVr_ps.glsl
+}
+
+fragment_program Ogre/VR/HiddenAreaMeshVr_ps_VK glslvk
 {
 	source HiddenAreaMeshVr_ps.glsl
 }
@@ -51,6 +62,7 @@ fragment_program Ogre/VR/HiddenAreaMeshVr_ps_Metal metal
 fragment_program Ogre/VR/HiddenAreaMeshVr_ps unified
 {
 	delegate Ogre/VR/HiddenAreaMeshVr_ps_GLSL
+	delegate Ogre/VR/HiddenAreaMeshVr_ps_VK
 	delegate Ogre/VR/HiddenAreaMeshVr_ps_HLSL
 	delegate Ogre/VR/HiddenAreaMeshVr_ps_Metal
 }

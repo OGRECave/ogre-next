@@ -13,6 +13,7 @@ in block
 	vec2 uv0;
 } inPs;
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
 void main()

@@ -389,7 +389,8 @@ namespace Ogre
                         }
                         preamble += "#define " +
                                     mPreprocessorDefines.substr( macro_name_start, macro_name_len ) +
-                                    " " + mPreprocessorDefines.substr( macro_val_start, macro_val_len );
+                                    " " + mPreprocessorDefines.substr( macro_val_start, macro_val_len ) +
+                                    "\n";
                     }
                     else
                     {
@@ -397,7 +398,7 @@ namespace Ogre
                         ++pos;
                         preamble += "#define " +
                                     mPreprocessorDefines.substr( macro_name_start, macro_name_len ) +
-                                    " 1";
+                                    " 1\n";
                     }
                 }
                 else
@@ -406,7 +407,8 @@ namespace Ogre
                     {
                         preamble +=
                             "#define " +
-                            mPreprocessorDefines.substr( pos, mPreprocessorDefines.size() - pos ) + " 1";
+                            mPreprocessorDefines.substr( pos, mPreprocessorDefines.size() - pos ) +
+                            " 1\n";
                     }
                     pos = endPos;
                 }
@@ -787,13 +789,15 @@ namespace Ogre
                 else if( rowCount == 4 && columnCount == 4 )
                     constantType = GCT_MATRIX_4X4;
             }
-            else if( blockVariable.type_description->type_flags & SPV_REFLECT_TYPE_FLAG_VECTOR )
+            else if( blockVariable.type_description->type_flags &
+                     ( SPV_REFLECT_TYPE_FLAG_VECTOR | SPV_REFLECT_TYPE_FLAG_ARRAY ) )
             {
                 const uint32 componentCount = blockVariable.numeric.vector.component_count;
                 if( blockVariable.type_description->type_flags & SPV_REFLECT_TYPE_FLAG_FLOAT )
                 {
                     switch( componentCount )
                     {
+                    case 0:  // float myArray[5] returns componentCount = 0; vecN myArray[5] is fine
                     case 1:
                         constantType = GCT_FLOAT1;
                         break;
@@ -817,6 +821,7 @@ namespace Ogre
                 {
                     switch( componentCount )
                     {
+                    case 0:
                     case 1:
                         constantType = GCT_INT1;
                         break;
@@ -840,6 +845,7 @@ namespace Ogre
                 {
                     switch( componentCount )
                     {
+                    case 0:
                     case 1:
                         constantType = GCT_UINT1;
                         break;
@@ -871,7 +877,9 @@ namespace Ogre
             if( blockVariable.type_description->type_flags & SPV_REFLECT_TYPE_FLAG_ARRAY )
             {
                 def.elementSize = blockVariable.array.stride / sizeof( float );
-                def.arraySize = blockVariable.array.dims_count;
+                // I have no idea why blockVariable.array.dims_count != 1u
+                OGRE_ASSERT_LOW( blockVariable.array.dims_count == 1u );
+                def.arraySize = blockVariable.array.dims[0];
             }
             else
             {

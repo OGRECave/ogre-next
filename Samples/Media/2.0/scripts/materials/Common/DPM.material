@@ -9,6 +9,11 @@ fragment_program Ogre/DPM/CubeToDpm_4xFP16_ps_GLSL glsl
 	}
 }
 
+fragment_program Ogre/DPM/CubeToDpm_4xFP16_ps_VK glslvk
+{
+	source CubeToDpm_4xFP16_ps.glsl
+}
+
 fragment_program Ogre/DPM/CubeToDpm_4xFP16_ps_HLSL hlsl
 {
 	source CubeToDpm_4xFP16_ps.hlsl
@@ -25,6 +30,7 @@ fragment_program Ogre/DPM/CubeToDpm_4xFP16_ps_Metal metal
 fragment_program Ogre/DPM/CubeToDpm_4xFP16_ps unified
 {
 	delegate Ogre/DPM/CubeToDpm_4xFP16_ps_GLSL
+	delegate Ogre/DPM/CubeToDpm_4xFP16_ps_VK
 	delegate Ogre/DPM/CubeToDpm_4xFP16_ps_HLSL
 	delegate Ogre/DPM/CubeToDpm_4xFP16_ps_Metal
 }

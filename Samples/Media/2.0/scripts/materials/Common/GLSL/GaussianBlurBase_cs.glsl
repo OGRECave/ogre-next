@@ -1,4 +1,8 @@
-#version 430
+@property( syntax != glslvk )
+	#version 430
+@else
+	#version 450
+@end
 
 //Based on GPUOpen's samples SeparableFilter11
 //https://github.com/GPUOpen-LibrariesAndSDKs/SeparableFilter11
@@ -22,16 +26,18 @@
 // The script uses the template syntax to automatically set the num. of threadgroups
 // based on the bound input texture.
 
+vulkan( layout( ogre_s0 ) uniform sampler inputSampler );
 @property( texture0_texture_type == TextureTypes_Type2DArray )
-	uniform sampler2DArray inputImage;
+	vulkan_layout( ogre_t0 ) uniform texture2DArray inputImage;
 @else
-	uniform sampler2D inputImage;
+	vulkan_layout( ogre_t0 ) uniform texture2D inputImage;
 @end
 
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
 @property( uav0_texture_type == TextureTypes_Type2DArray )
-	layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image2DArray outputImage;
+	uniform restrict writeonly image2DArray outputImage;
 @else
-	layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image2D outputImage;
+	uniform restrict writeonly image2D outputImage;
 @end
 
 // 32 = 128 / 4
@@ -80,9 +86,11 @@ layout( local_size_x = 32,
 /// shared vec3 g_f3LDS[ 2 ] [ @value( samples_per_threadgroup ) ];
 @insertpiece( lds_definition )
 
-uniform vec4 g_f4OutputSize;
-
-uniform float c_weights[@value( kernel_radius_plus1 )];
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform vec4 g_f4OutputSize;
+	uniform float c_weights[@value( kernel_radius_plus1 )];
+	@insertpiece( extra_params )
+vulkan( }; )
 
 @insertpiece( lds_data_type ) sampleTex( ivec2 i2Position , vec2 f2Offset )
 {

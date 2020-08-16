@@ -13,6 +13,17 @@ fragment_program ESM/GaussianLogFilterV_ps_GLSL glsl : ESM/GaussianLogFilterH_ps
 	preprocessor_defines NUM_WEIGHTS=9,K=80,HORIZONTAL_STEP=0,VERTICAL_STEP=1
 }
 
+fragment_program ESM/GaussianLogFilterH_ps_VK glslvk
+{
+	source GaussianBlurLogFilter_ps.glsl
+	preprocessor_defines NUM_WEIGHTS=9,K=80,K=80,HORIZONTAL_STEP=1,VERTICAL_STEP=0
+}
+
+fragment_program ESM/GaussianLogFilterV_ps_VK glslvk : ESM/GaussianLogFilterH_ps_VK
+{
+	preprocessor_defines NUM_WEIGHTS=9,K=80,HORIZONTAL_STEP=0,VERTICAL_STEP=1
+}
+
 fragment_program ESM/GaussianLogFilterH_ps_HLSL hlsl
 {
 	source GaussianBlurLogFilter_ps.hlsl
@@ -41,6 +52,7 @@ fragment_program ESM/GaussianLogFilterV_ps_Metal metal : ESM/GaussianLogFilterH_
 fragment_program ESM/GaussianLogFilterH_ps unified
 {
 	delegate ESM/GaussianLogFilterH_ps_GLSL
+	delegate ESM/GaussianLogFilterH_ps_VK
 	delegate ESM/GaussianLogFilterH_ps_HLSL
 	delegate ESM/GaussianLogFilterH_ps_Metal
 
@@ -53,6 +65,7 @@ fragment_program ESM/GaussianLogFilterH_ps unified
 fragment_program ESM/GaussianLogFilterV_ps unified
 {
 	delegate ESM/GaussianLogFilterV_ps_GLSL
+	delegate ESM/GaussianLogFilterV_ps_VK
 	delegate ESM/GaussianLogFilterV_ps_HLSL
 	delegate ESM/GaussianLogFilterV_ps_Metal
 

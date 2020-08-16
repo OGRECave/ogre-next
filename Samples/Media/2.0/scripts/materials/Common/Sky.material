@@ -9,6 +9,11 @@ fragment_program Ogre/Sky/Cubemap_ps_GLSL glsl
 	}
 }
 
+fragment_program Ogre/Sky/Cubemap_ps_VK glslvk
+{
+	source SkyCubemap_ps.glsl
+}
+
 // HLSL shaders
 fragment_program Ogre/Sky/Cubemap_ps_HLSL hlsl
 {
@@ -28,6 +33,7 @@ fragment_program Ogre/Sky/Cubemap_ps_Metal metal
 fragment_program Ogre/Sky/Cubemap_ps unified
 {
 	delegate Ogre/Sky/Cubemap_ps_HLSL
+	delegate Ogre/Sky/Cubemap_ps_VK
 	delegate Ogre/Sky/Cubemap_ps_GLSL
 	delegate Ogre/Sky/Cubemap_ps_Metal
 }
@@ -71,6 +77,11 @@ fragment_program Ogre/Sky/Equirectangular_ps_GLSL glsl
 	}
 }
 
+fragment_program Ogre/Sky/Equirectangular_ps_VK glslvk
+{
+	source SkyEquirectangular_ps.glsl
+}
+
 // HLSL shaders
 fragment_program Ogre/Sky/Equirectangular_ps_HLSL hlsl
 {
@@ -90,6 +101,7 @@ fragment_program Ogre/Sky/Equirectangular_ps_Metal metal
 fragment_program Ogre/Sky/Equirectangular_ps unified
 {
 	delegate Ogre/Sky/Equirectangular_ps_HLSL
+	delegate Ogre/Sky/Equirectangular_ps_VK
 	delegate Ogre/Sky/Equirectangular_ps_GLSL
 	delegate Ogre/Sky/Equirectangular_ps_Metal
 }

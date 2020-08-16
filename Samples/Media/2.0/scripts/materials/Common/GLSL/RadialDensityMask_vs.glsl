@@ -1,12 +1,18 @@
-#version 330
+#version ogre_glsl_ver_330
 
 #extension GL_ARB_shader_viewport_layer_array : require
 
-in vec2 vertex;
+#ifdef VULKAN
+	#define gl_VertexID gl_VertexIndex
+#endif
 
-uniform float ogreBaseVertex;
-uniform vec2 rsDepthRange;
-uniform mat4 worldViewProj;
+vulkan_layout( OGRE_POSITION ) in vec2 vertex;
+
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform float ogreBaseVertex;
+	uniform vec2 rsDepthRange;
+	uniform mat4 worldViewProj;
+vulkan( }; )
 
 out gl_PerVertex
 {

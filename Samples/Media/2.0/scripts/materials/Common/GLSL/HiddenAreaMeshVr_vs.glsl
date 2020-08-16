@@ -1,4 +1,4 @@
-#version 330
+#version ogre_glsl_ver_330
 
 #extension GL_ARB_shader_viewport_layer_array : require
 
@@ -9,11 +9,14 @@
 #define float4x4 mat4
 #define mul( x, y ) ((x) * (y))
 
-uniform float4x4 projectionMatrix;
-uniform float2 rsDepthRange;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform float4x4 projectionMatrix;
+	uniform float2 rsDepthRange;
+vulkan( }; )
 
-in vec4 vertex;
+vulkan_layout( OGRE_POSITION ) in vec4 vertex;
 
+vulkan_layout( location = 0 )
 out gl_PerVertex
 {
 	vec4 gl_Position;

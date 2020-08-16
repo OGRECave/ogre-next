@@ -1,4 +1,8 @@
-#version 430
+@property( syntax != glslvk )
+	#version 430
+@else
+	#version 450
+@end
 
 //See GaussianBlurBase_cs for the original.
 //This is a derived version which is used for filtering ESM (Exponential Shadow Maps).
@@ -40,8 +44,11 @@
 // The script uses the template syntax to automatically set the num. of threadgroups
 // based on the bound input texture.
 
-uniform sampler2D inputImage;
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image2D outputImage;
+vulkan( layout( ogre_s0 ) uniform sampler inputSampler );
+vulkan_layout( ogre_t0 ) uniform texture2D inputImage;
+
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
+uniform restrict writeonly image2D outputImage;
 
 // 32 = 128 / 4
 layout( local_size_x = 32,
@@ -89,9 +96,11 @@ layout( local_size_x = 32,
 /// shared vec3 g_f3LDS[ 2 ] [ @value( samples_per_threadgroup ) ];
 @insertpiece( lds_definition )
 
-uniform vec4 g_f4OutputSize;
-
-uniform float c_weights[@value( kernel_radius_plus1 )];
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform vec4 g_f4OutputSize;
+	uniform float c_weights[@value( kernel_radius_plus1 )];
+	@insertpiece( extra_params )
+vulkan( }; )
 
 @insertpiece( lds_data_type ) sampleTex( ivec2 i2Position , vec2 f2Offset )
 {

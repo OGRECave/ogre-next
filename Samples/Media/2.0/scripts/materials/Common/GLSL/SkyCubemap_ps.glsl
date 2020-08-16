@@ -1,16 +1,20 @@
-#version 330
+#version ogre_glsl_ver_330
 
-uniform samplerCube skyCubemap;
+vulkan_layout( ogre_t0 ) uniform textureCube skyCubemap;
+vulkan( layout( ogre_s0 ) uniform sampler samplerState );
 
+vulkan_layout( location = 0 )
 in block
 {
     vec3 cameraDir;
 } inPs;
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
 void main()
 {
 	//Cubemaps are left-handed
-	fragColour = texture( skyCubemap, vec3( inPs.cameraDir.xy, -inPs.cameraDir.z ) );
+	fragColour = texture( vkSamplerCube( skyCubemap, samplerState ),
+						  vec3( inPs.cameraDir.xy, -inPs.cameraDir.z ) );
 }

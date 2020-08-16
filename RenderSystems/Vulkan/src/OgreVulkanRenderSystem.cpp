@@ -391,6 +391,8 @@ namespace Ogre
         if( mActiveDevice->mDeviceFeatures.depthClamp )
             rsc->setCapability( RSC_DEPTH_CLAMP );
 
+        rsc->setCapability( RSC_COMPUTE_PROGRAM );
+
         rsc->setCapability( RSC_HWSTENCIL );
         rsc->setStencilBufferBitDepth( 8 );
         rsc->setNumTextureUnits( 16 );

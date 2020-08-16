@@ -12,11 +12,14 @@
 @piece( lds_data_type )vec3@end
 @piece( lds_definition )
 	shared vec3 g_f3LDS[ 2 ] [ @value( samples_per_threadgroup ) ];
+@end
+
+@piece( extra_params )
 	uniform float srcLodIdx;
 @end
 
 @piece( image_sample )
-	return textureLod( inputImage, f2SamplePosition, srcLodIdx ).xyz;
+	return textureLod( vkSampler2D( inputImage, inputSampler ), f2SamplePosition, srcLodIdx ).xyz;
 @end
 
 //Overwrite these so that num_thread_groups gets correctly calculated by accounting LOD.
