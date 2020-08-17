@@ -48,6 +48,9 @@ namespace Ogre
         ManualObject( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
         virtual ~ManualObject();
 
+        /** @copydoc MovableObject::_releaseManualHardwareResources */
+        void _releaseManualHardwareResources() { clear(); }
+
         /** Completely clear the contents of the object.
         @remarks
             Clearing the contents of this object and rebuilding from scratch
