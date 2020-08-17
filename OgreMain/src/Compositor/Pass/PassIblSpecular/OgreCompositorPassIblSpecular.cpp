@@ -347,11 +347,12 @@ namespace Ogre
                 {
                     // Prepare mInputTexture for copying. We have to do it here because analyzeBarriers
                     // prepared mInputTexture for generating mipmaps
-                    ResourceTransitionArray copyBarrier;
-                    mBarrierSolver.resolveTransition(
-                        copyBarrier, mInputTexture, ResourceLayout::CopySrc, ResourceAccess::Read, 0u );
+                    mResourceTransitions.clear();
+                    mBarrierSolver.resolveTransition( mResourceTransitions, mInputTexture,
+                                                      ResourceLayout::CopySrc, ResourceAccess::Read,
+                                                      0u );
                     RenderSystem *renderSystem = mParentNode->getRenderSystem();
-                    renderSystem->executeResourceTransition( copyBarrier );
+                    renderSystem->executeResourceTransition( mResourceTransitions );
                 }
 
                 const uint8 outNumMips = mOutputTexture->getNumMipmaps();
@@ -374,11 +375,11 @@ namespace Ogre
             mInputTexture->_autogenerateMipmaps();
 
             {
-                ResourceTransitionArray texFetchBarrier;
-                mBarrierSolver.resolveTransition( texFetchBarrier, mInputTexture,
+                mResourceTransitions.clear();
+                mBarrierSolver.resolveTransition( mResourceTransitions, mInputTexture,
                                                   ResourceLayout::Texture, ResourceAccess::Read,
                                                   1u << GPT_COMPUTE_PROGRAM );
-                renderSystem->executeResourceTransition( texFetchBarrier );
+                renderSystem->executeResourceTransition( mResourceTransitions );
             }
 
             vector<HlmsComputeJob *>::type::iterator itor = mJobs.begin();
