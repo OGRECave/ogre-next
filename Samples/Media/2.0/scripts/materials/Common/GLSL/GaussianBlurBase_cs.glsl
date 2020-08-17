@@ -88,9 +88,13 @@ layout( local_size_x = 32,
 
 #define C_WEIGHTS( x ) c_weights[(x) >> 2u][(x) & 3u]
 
+// weights_array_count = ( kernel_radius + 1u + 3u ) / 4u
+@padd( weights_array_count, kernel_radius, 4 )
+@pdiv( weights_array_count,  4 )
+
 vulkan( layout( ogre_P0 ) uniform Params { )
 	uniform vec4 g_f4OutputSize;
-	uniform vec4 c_weights[(@value( kernel_radius_plus1 ) + 3u) / 4u];
+	uniform vec4 c_weights[@value( weights_array_count )];
 	@insertpiece( extra_params )
 vulkan( }; )
 
