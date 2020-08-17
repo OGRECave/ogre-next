@@ -446,6 +446,7 @@ namespace Ogre
                         materialName.a( cSuffixes[i] );
                         passQuad->mIdentifier = 10u + i;
                         passQuad->mMaterialName = materialName.c_str();
+                        passQuad->mAnalyzeAllTextureLayouts = true;
 
                         passQuad->mLoadActionColour[0]  = LoadAction::Clear;
                         passQuad->mClearColour[0]       = ColourValue::Black;
@@ -905,6 +906,7 @@ namespace Ogre
                         if( j == 0 )
                             mCollectedProbes[i]->_clearCubemap();
                         mCopyWorkspace->_update();
+                        transitionBlendResultToTexture();
                         mCollectedProbes[i]->_updateRender();
                     mCopyWorkspace->_endUpdate( true );
 
@@ -918,6 +920,8 @@ namespace Ogre
                 mBlendedProbeNeedsUpdate = true;
             }
         }
+
+        transitionCollectedProbesToTexture();
 
         mSceneManager->setVisibilityMask( oldVisibilityMask );
     }
@@ -938,6 +942,7 @@ namespace Ogre
                 for( int j=0; j<mCollectedProbes[i]->mNumIterations; ++j )
                 {
                     mCopyWorkspace->_update();
+                    transitionBlendResultToTexture();
                     mCollectedProbes[i]->_updateRender();
                     mCurrentMip = 0;
                 }
@@ -946,6 +951,8 @@ namespace Ogre
                 mBlendedProbeNeedsUpdate = true;
             }
         }
+
+        transitionCollectedProbesToTexture();
 
         setFinalProbeTo( 0 );
 
@@ -985,9 +992,38 @@ namespace Ogre
                 mCopyWorkspace->_update();
             else if( mNumCollectedProbes > 1u )
                 mBlendWorkspace->_update();
+            transitionBlendResultToTexture();
         }
 
         mSceneManager->setVisibilityMask( oldVisibilityMask );
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemap::transitionBlendResultToTexture( void )
+    {
+        RenderSystem *renderSystem = mSceneManager->getDestinationRenderSystem();
+        BarrierSolver &solver = renderSystem->getBarrierSolver();
+
+        ResourceTransitionArray barrier;
+        solver.resolveTransition( barrier, mBindTexture, ResourceLayout::Texture, ResourceAccess::Read,
+                                  1u << GPT_FRAGMENT_PROGRAM );
+        renderSystem->executeResourceTransition( barrier );
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemap::transitionCollectedProbesToTexture( void )
+    {
+        RenderSystem *renderSystem = mSceneManager->getDestinationRenderSystem();
+        BarrierSolver &solver = renderSystem->getBarrierSolver();
+
+        ResourceTransitionArray barrier;
+
+        const size_t numCollectedProbes = mNumCollectedProbes;
+        for( size_t i = 0u; i < numCollectedProbes; ++i )
+        {
+            solver.resolveTransition( barrier, mCollectedProbes[i]->mTexture, ResourceLayout::Texture,
+                                      ResourceAccess::Read, 1u << GPT_FRAGMENT_PROGRAM );
+        }
+
+        renderSystem->executeResourceTransition( barrier );
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::updateAllDirtyProbes(void)

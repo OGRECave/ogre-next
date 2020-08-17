@@ -296,4 +296,25 @@ namespace Ogre
 
         profilingEnd();
     }
-}
+    //-----------------------------------------------------------------------------------
+    void CompositorPassQuad::analyzeBarriers( void )
+    {
+        CompositorPass::analyzeBarriers();
+
+        if( mDefinition->mAnalyzeAllTextureLayouts && mMaterial )
+        {
+            const size_t numTexUnits = mPass->getNumTextureUnitStates();
+            for( size_t i = 0u; i < numTexUnits; ++i )
+            {
+                TextureUnitState *tuState = mPass->getTextureUnitState( i );
+                TextureGpu *texture = tuState->_getTexturePtr();
+
+                if( texture->isRenderToTexture() || texture->isUav() )
+                {
+                    resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
+                                       c_allGraphicStagesMask );
+                }
+            }
+        }
+    }
+}  // namespace Ogre

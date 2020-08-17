@@ -1,4 +1,4 @@
-#version 330
+#version ogre_glsl_ver_330
 
 #define FACE_POS_X 0
 #define FACE_NEG_X 1
@@ -7,16 +7,21 @@
 #define FACE_POS_Z 4
 #define FACE_NEG_Z 5
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
 } inPs;
 
-uniform samplerCube cubeTexture;
+vulkan_layout( ogre_t0 ) uniform textureCube cubeTexture;
+vulkan( layout( ogre_s0 ) uniform sampler samplerState );
 
-uniform float lodLevel;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform float lodLevel;
+vulkan( }; )
 
 // Get direction from cube texel for a given face. x and y are in the [-1, 1] range.
 vec3 getCubeDir( vec2 uv )
@@ -44,5 +49,5 @@ vec3 getCubeDir( vec2 uv )
 void main()
 {
 	vec3 vDir = getCubeDir( inPs.uv0.xy * 2.0 - 1.0 );
-	fragColour = textureLod( cubeTexture, vDir, lodLevel ).xyzw;
+	fragColour = textureLod( vkSamplerCube( cubeTexture, samplerState ), vDir, lodLevel ).xyzw;
 }

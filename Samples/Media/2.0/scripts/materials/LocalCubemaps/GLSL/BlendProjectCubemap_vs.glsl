@@ -1,16 +1,19 @@
-#version 330
+#version ogre_glsl_ver_330
 
-in vec3 vertex;
+vulkan_layout( OGRE_POSITION ) in vec3 vertex;
 
-uniform mat4 worldViewProj;
-uniform vec4 worldScaledMatrix[3];
-uniform vec3 probeCameraPosScaled;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform mat4 worldViewProj;
+	uniform vec4 worldScaledMatrix[3];
+	uniform vec3 probeCameraPosScaled;
+vulkan( }; )
 
 out gl_PerVertex
 {
 	vec4 gl_Position;
 };
 
+vulkan_layout( location = 0 )
 out block
 {
 	vec3 posLS;
