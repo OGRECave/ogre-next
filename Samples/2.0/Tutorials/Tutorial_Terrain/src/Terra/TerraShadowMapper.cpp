@@ -409,7 +409,7 @@ namespace Ogre
             }
         }
 
-        const bool bIsHlsl = job->getCreator()->getShaderProfile() == "hlsl";
+        const bool bIsMetal = job->getCreator()->getShaderProfile() == "metal";
 
         //Set the shader constants, 16 at a time (since that's the limit of what ManualParam can hold)
         char tmp[32];
@@ -418,7 +418,7 @@ namespace Ogre
         for( uint32 i=0; i<kernelRadius + 1u; i += floatsPerParam )
         {
             weightsString.clear();
-            if( !bIsHlsl )
+            if( bIsMetal )
                 weightsString.a( "c_weights[", i, "]" );
             else
                 weightsString.a( "c_weights[", ( i >> 2u ), "]" );
