@@ -1,9 +1,5 @@
 #version ogre_glsl_ver_330
 
-#ifdef VULKAN
-	#extension GL_EXT_samplerless_texture_functions : require
-#endif
-
 vulkan_layout( ogre_t0 ) uniform texture2D tex;
 
 vulkan_layout( location = 0 )

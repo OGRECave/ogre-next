@@ -473,6 +473,7 @@ namespace Ogre
             if( mShaderSyntax == GLSL )
             {
                 preamble =
+                    "#extension GL_EXT_samplerless_texture_functions : require\n"
                     "#define vulkan_layout layout\n"
                     "#define vulkan( x ) x\n"
                     "#define vk_comma ,\n"
