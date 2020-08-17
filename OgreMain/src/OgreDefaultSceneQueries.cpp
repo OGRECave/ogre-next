@@ -294,10 +294,11 @@ namespace Ogre {
 				//but often is slightly beyond it, causing the test to fail)
                 hitPoint.mChunkBase[j] = objData.mWorldAabb->mCenter.mChunkBase[j];
 
-                //hitMaskR |= t >= 0 && mWorldAabb->contains( hitPoint );
-                //distance = t >= 0 ? min( distance, t ) : t;
-                hitMaskR = Mathlib::Or( hitMaskR, Mathlib::And( mask,
-                                                    objData.mWorldAabb->contains( hitPoint ) ) );
+                //mask = t >= 0 && mWorldAabb->contains( hitPoint ) /* == this hit is correct*/
+                //hitMaskR |= mask;
+                //distance = mask ? min( distance, t ) : distance;
+                mask = Mathlib::And( mask, objData.mWorldAabb->contains( hitPoint ) );
+                hitMaskR = Mathlib::Or( hitMaskR, mask );
                 distance = Mathlib::CmovRobust( Mathlib::Min( distance, t ), distance, mask );
             }
 
@@ -314,10 +315,11 @@ namespace Ogre {
 				//but often is slightly beyond it, causing the test to fail)
                 hitPoint.mChunkBase[j] = objData.mWorldAabb->mCenter.mChunkBase[j];
 
-                //hitMaskR |= t >= 0 && mWorldAabb->contains( hitPoint );
-                //distance = t >= 0 ? min( distance, t ) : t;
-                hitMaskR = Mathlib::Or( hitMaskR, Mathlib::And( mask,
-                                                    objData.mWorldAabb->contains( hitPoint ) ) );
+                //mask = t >= 0 && mWorldAabb->contains( hitPoint ) /* == this hit is correct*/
+                //hitMaskR |= mask;
+                //distance = mask ? min( distance, t ) : distance;
+                mask = Mathlib::And( mask, objData.mWorldAabb->contains( hitPoint ) );
+                hitMaskR = Mathlib::Or( hitMaskR, mask );
                 distance = Mathlib::CmovRobust( Mathlib::Min( distance, t ), distance, mask );
             }
 
