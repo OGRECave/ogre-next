@@ -158,7 +158,7 @@ namespace Ogre {
     ///@see HlmsPso regarding padding.
     struct StencilParams
     {
-        bool            enabled;
+        uint8           enabled;
         uint8           readMask;
         uint8           writeMask;
         uint8           padding;
@@ -945,14 +945,16 @@ namespace Ogre {
     protected:
         uint8 mColourSamples;
         uint8 mCoverageSamples;
-        MsaaPatterns::MsaaPatterns mPattern;
+        uint8 mPattern; /// See MsaaPatterns::MsaaPatterns
+        uint8 mPadding;
 
     public:
         SampleDescription( uint8 msaa = 1u,
-                           MsaaPatterns::MsaaPatterns _mPattern = MsaaPatterns::Undefined ) :
+                           MsaaPatterns::MsaaPatterns pattern = MsaaPatterns::Undefined ) :
             mColourSamples( msaa ),
             mCoverageSamples( 0 ),
-            mPattern( _mPattern )
+            mPattern( pattern ),
+            mPadding( 0u )
         {
         }
         explicit SampleDescription( const String &fsaaSetting )
@@ -974,7 +976,10 @@ namespace Ogre {
         uint8 getColourSamples( void ) const { return mColourSamples; }
         uint8 getCoverageSamples( void ) const { return mCoverageSamples; }
         uint8 getMaxSamples( void ) const { return std::max( mCoverageSamples, mColourSamples ); }
-        MsaaPatterns::MsaaPatterns getMsaaPattern( void ) const { return mPattern; }
+        MsaaPatterns::MsaaPatterns getMsaaPattern( void ) const
+        {
+            return static_cast<MsaaPatterns::MsaaPatterns>( mPattern );
+        }
 
         void setMsaa( uint8 msaa, MsaaPatterns::MsaaPatterns pattern = MsaaPatterns::Undefined );
 

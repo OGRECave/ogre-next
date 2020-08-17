@@ -113,6 +113,14 @@ namespace Ogre
 
         uint8 strongMacroblockBits;
 
+        HlmsPassPso() {}
+
+        HlmsPassPso( const HlmsPassPso &otherPso )
+        {
+            // Copy padding bytes too.
+            memcpy( this, &otherPso, sizeof(HlmsPassPso) );
+        }
+
         HlmsPassPso& operator = ( const HlmsPassPso &_r )
         {
             // Copy padding bytes too.
