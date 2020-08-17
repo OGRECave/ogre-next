@@ -513,7 +513,24 @@ namespace Ogre
 
             mNativeShadingLanguageVersion = 450;
 
+            bool bCanRestrictImageViewUsage = false;
+
             FastArray<const char *> deviceExtensions;
+
+            const bool bHasKhrMaintenance2 = true;  // TODO
+
+            if( bHasKhrMaintenance2 )
+            {
+                deviceExtensions.push_back( VK_KHR_MAINTENANCE2_EXTENSION_NAME );
+                bCanRestrictImageViewUsage = true;
+            }
+            else
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: " VK_KHR_MAINTENANCE2_EXTENSION_NAME
+                    " not present. We may have to force the driver to do UAV + SRGB operations "
+                    "the GPU should support, but it's not guaranteed to work" );
+            }
             mDevice->createDevice( deviceExtensions, 0u, 0u );
 
             VulkanVaoManager *vaoManager =
@@ -547,8 +564,8 @@ namespace Ogre
                 mDevice->mPhysicalDevice, depthFormatCandidates, VK_IMAGE_TILING_OPTIMAL,
                 VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
 
-            VulkanTextureGpuManager *textureGpuManager =
-                OGRE_NEW VulkanTextureGpuManager( vaoManager, this, mDevice );
+            VulkanTextureGpuManager *textureGpuManager = OGRE_NEW VulkanTextureGpuManager(
+                vaoManager, this, mDevice, bCanRestrictImageViewUsage );
             mTextureGpuManager = textureGpuManager;
 
             uint32 dummyData = 0u;

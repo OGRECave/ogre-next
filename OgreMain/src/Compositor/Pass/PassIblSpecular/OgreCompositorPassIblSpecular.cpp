@@ -373,6 +373,14 @@ namespace Ogre
 
             mInputTexture->_autogenerateMipmaps();
 
+            {
+                ResourceTransitionArray texFetchBarrier;
+                mBarrierSolver.resolveTransition( texFetchBarrier, mInputTexture,
+                                                  ResourceLayout::Texture, ResourceAccess::Read,
+                                                  1u << GPT_COMPUTE_PROGRAM );
+                renderSystem->executeResourceTransition( texFetchBarrier );
+            }
+
             vector<HlmsComputeJob *>::type::iterator itor = mJobs.begin();
             vector<HlmsComputeJob *>::type::iterator endt = mJobs.end();
 
@@ -405,11 +413,6 @@ namespace Ogre
         {
             // Check <anything> -> MipmapGen for mInputTexture
             resolveTransition( mInputTexture, ResourceLayout::MipmapGen, ResourceAccess::ReadWrite, 0u );
-
-            // This texture will leave from here as ResourceLayout::Texture, as it is manually
-            // transitioned into that for our compute shader to read
-            mBarrierSolver.assumeTransition( mInputTexture, ResourceLayout::Texture,
-                                             ResourceAccess::Read, 1u << GPT_COMPUTE_PROGRAM );
 
             // Check <anything> -> UAV for mOutputTexture (we need to write to it).
             resolveTransition( mOutputTexture, ResourceLayout::Uav, ResourceAccess::Write,

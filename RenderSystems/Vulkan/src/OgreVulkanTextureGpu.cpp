@@ -86,7 +86,14 @@ namespace Ogre
         imageInfo.extent.depth = getDepth();
         imageInfo.mipLevels = mNumMipmaps;
         imageInfo.arrayLayers = getNumSlices();
-        imageInfo.format = VulkanMappings::get( mPixelFormat );
+        imageInfo.flags = 0;
+        if( !isReinterpretable() )
+            imageInfo.format = VulkanMappings::get( mPixelFormat );
+        else
+        {
+            imageInfo.format = VulkanMappings::get( PixelFormatGpuUtils::getFamily( mPixelFormat ) );
+            imageInfo.flags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+        }
         imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
@@ -99,7 +106,6 @@ namespace Ogre
         }
         else
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-        imageInfo.flags = 0;
 
         if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
             imageInfo.flags |= VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
@@ -111,9 +117,7 @@ namespace Ogre
                                    : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
         }
         if( isUav() )
-        {
             imageInfo.usage |= VK_IMAGE_USAGE_STORAGE_BIT;
-        }
 
         String textureName = getNameStr();
 
@@ -637,7 +641,7 @@ namespace Ogre
         if( mSampleDescription.isMultisample() && hasMsaaExplicitResolves() )
             texType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
 
-        if( cubemapsAs2DArrays &&
+        if( ( cubemapsAs2DArrays || forUav ) &&
             ( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray ) )
         {
             texType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
@@ -667,6 +671,28 @@ namespace Ogre
             imageViewCi.subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
         else
             imageViewCi.subresourceRange.layerCount = numSlices;
+
+        VkImageViewUsageCreateInfo flagRestriction;
+        if( textureManager->canRestrictImageViewUsage() && isUav() && !forUav )
+        {
+            // Some formats (e.g. *_SRGB formats) do not support USAGE_STORAGE_BIT at all
+            // Thus we need to mark when this view won't be using that bit.
+            //
+            // If VK_KHR_maintenance2 is not available then we cross our fingers
+            // and hope the driver doesn't stop us from doing it (it should work)
+            //
+            // The validation layers will complain though. This was a major Vulkan oversight.
+            makeVkStruct( flagRestriction, VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO );
+            imageViewCi.pNext = &flagRestriction;
+            flagRestriction.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+                                    VK_IMAGE_USAGE_SAMPLED_BIT;
+            if( isRenderToTexture() )
+            {
+                flagRestriction.usage |= PixelFormatGpuUtils::isDepth( mPixelFormat )
+                                             ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+                                             : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+            }
+        }
 
         VkImageView imageView;
         VkResult result = vkCreateImageView( device->mDevice, &imageViewCi, 0, &imageView );

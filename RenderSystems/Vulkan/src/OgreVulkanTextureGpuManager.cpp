@@ -47,10 +47,11 @@ namespace Ogre
     static const bool c_bSkipAliasable = true;
 
     VulkanTextureGpuManager::VulkanTextureGpuManager( VulkanVaoManager *vaoManager,
-                                                      RenderSystem *renderSystem,
-                                                      VulkanDevice *device ) :
+                                                      RenderSystem *renderSystem, VulkanDevice *device,
+                                                      bool bCanRestrictImageViewUsage ) :
         TextureGpuManager( vaoManager, renderSystem ),
-        mDevice( device )
+        mDevice( device ),
+        mCanRestrictImageViewUsage( bCanRestrictImageViewUsage )
     {
         VkImageCreateInfo imageInfo;
         makeVkStruct( imageInfo, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO );

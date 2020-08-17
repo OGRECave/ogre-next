@@ -79,6 +79,8 @@ namespace Ogre
 
         VulkanDevice *mDevice;
 
+        bool mCanRestrictImageViewUsage;
+
         virtual TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                IdString name, uint32 textureFlags,
                                                TextureTypes::TextureTypes initialType );
@@ -93,7 +95,7 @@ namespace Ogre
 
     public:
         VulkanTextureGpuManager( VulkanVaoManager *vaoManager, RenderSystem *renderSystem,
-                                 VulkanDevice *device );
+                                 VulkanDevice *device, bool bCanRestrictImageViewUsage );
         virtual ~VulkanTextureGpuManager();
 
         TextureGpu *createTextureGpuWindow( VulkanWindow *window );
@@ -109,6 +111,8 @@ namespace Ogre
         void destroyView( DescriptorSetUav::TextureSlot texSlot, VkImageView imageView );
 
         VulkanDevice *getDevice() const { return mDevice; }
+
+        bool canRestrictImageViewUsage( void ) const { return mCanRestrictImageViewUsage; }
     };
 
     /** @} */
