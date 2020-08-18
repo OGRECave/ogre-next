@@ -115,25 +115,49 @@ namespace Ogre
 
         uint8 strongMacroblockBits;
 
-        HlmsPassPso& operator = ( const HlmsPassPso &_r )
+        bool operator==( const HlmsPassPso &_r ) const
         {
-            // Copy padding bytes too.
-            memcpy( this, &_r, sizeof(HlmsPassPso) );
-            return *this;
-        }
-
-        bool operator == ( const HlmsPassPso &_r ) const
-        {
-            //This will work correctly, because padded bytes are initialized.
-            return !memcmp( this, &_r, sizeof(HlmsPassPso) );
+            for( size_t i = 0u; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            {
+                if( this->colourFormat[i] != _r.colourFormat[i] )
+                    return false;
+            }
+            return !( this->stencilParams != _r.stencilParams ) &&     //
+                   this->depthFormat == _r.depthFormat &&              //
+                   this->sampleDescription == _r.sampleDescription &&  //
+                   this->adapterId == _r.adapterId &&                  //
+                   this->strongMacroblockBits == _r.strongMacroblockBits;
         }
         bool operator != ( const HlmsPassPso &_r ) const
         {
             return !(*this == _r);
         }
-        bool operator < ( const HlmsPassPso &_r ) const
+        bool operator < ( const HlmsPassPso &other ) const
         {
-            return memcmp( this, &_r, sizeof(HlmsPassPso) ) < 0;
+            // clang-format off
+            if( this->stencilParams < other.stencilParams ) return true;
+            if( other.stencilParams < this->stencilParams ) return false;
+
+            for( size_t i = 0u; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            {
+                if( this->colourFormat[i] < other.colourFormat[i] ) return true;
+                if( other.colourFormat[i] < this->colourFormat[i] ) return false;
+            }
+
+            if( this->depthFormat < other.depthFormat ) return true;
+            if( other.depthFormat < this->depthFormat ) return false;
+
+            if( this->sampleDescription < other.sampleDescription ) return true;
+            if( other.sampleDescription < this->sampleDescription ) return false;
+
+            if( this->adapterId < other.adapterId ) return true;
+            if( other.adapterId < this->adapterId ) return false;
+
+            if( this->strongMacroblockBits < other.strongMacroblockBits ) return true;
+            // if( other.strongMacroblockBits < this->strongMacroblockBits ) return false;
+            // clang-format on
+
+            return false;
         }
 
         bool hasStrongMacroblock(void) const    { return strongMacroblockBits != 0u; }
@@ -272,38 +296,6 @@ namespace Ogre
                            (const uint8*)&this->sampleMask -
                            (const uint8*)&this->operationType ) < 0;
         }
-
-        /* Disabled because it's not used.
-        /// IMPORTANT: rsData is not considered.
-        bool operator < ( const HlmsPso &_r ) const
-        {
-            //Non-POD datatypes.
-            int nonPodResult = lessNonPod( _r );
-            if( nonPodResult != 0 )
-                return nonPodResult < 0;
-
-            //POD datatypes
-            return memcmp( &this->operationType, &_r.operationType,
-                           (uint8*)&this->rsData -
-                           (uint8*)&this->operationType ) < 0;
-        }
-        /// IMPORTANT: rsData is not considered.
-        bool operator == ( const HlmsPso &_r ) const
-        {
-            //Non-POD datatypes.
-            return
-            equalNonPod( _r ) &&
-            //POD datatypes
-            memcmp( &this->operationType, &_r.operationType,
-                    (uint8*)&this->rsData -
-                    (uint8*)&this->operationType ) == 0;
-        }
-        /// IMPORTANT: rsData is not considered.
-        bool operator != ( const HlmsPso &_r ) const
-        {
-            //Non-POD datatypes.
-            return  !(*this == _r);
-        }*/
     };
 
     struct HlmsComputePso

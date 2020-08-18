@@ -898,21 +898,24 @@ namespace v1 {
     //-----------------------------------------------------------------------
     void BillboardSet::setDatablock( HlmsDatablock *datablock )
     {
-        mMaterialName.clear();
-        mMaterialGroup.clear();
+        if( datablock->getCreator()->getType() != HLMS_LOW_LEVEL )
+        {
+            mMaterialName.clear();
+            mMaterialGroup.clear();
 
-        const String *fullDatablockName = datablock->getNameStr();
-        if( fullDatablockName )
-        {
-            mMaterialName = *fullDatablockName;
-        }
-        else
-        {
-            LogManager::getSingleton().logMessage(
-                        "Couldn't retrieve full material name of datablock '" +
-                        datablock->getName().getFriendlyText() +
-                        "' Billboard may not render as expected. "
-                        "May be the datablock is scheduled for deletion?" );
+            const String *fullDatablockName = datablock->getNameStr();
+            if( fullDatablockName )
+            {
+                mMaterialName = *fullDatablockName;
+            }
+            else
+            {
+                LogManager::getSingleton().logMessage(
+                            "Couldn't retrieve full material name of datablock '" +
+                            datablock->getName().getFriendlyText() +
+                            "' Billboard may not render as expected. "
+                            "May be the datablock is scheduled for deletion?" );
+            }
         }
 
         if( mBuffersCreated )

@@ -311,6 +311,16 @@ namespace Ogre
         return hr;
     }
     //---------------------------------------------------------------------
+    void D3D11WindowSwapChainPanel::_destroySwapChain()
+    {
+        // Broke association between SwapChainPanel and swap chain to avoid reporting it as leaked on device lost event
+        ComPtr<ISwapChainPanelNative> panelNative;
+        if (SUCCEEDED(reinterpret_cast<IUnknown*>(mSwapChainPanel)->QueryInterface(IID_PPV_ARGS(panelNative.ReleaseAndGetAddressOf()))))
+            panelNative->SetSwapChain(0);
+
+        D3D11WindowSwapChainBased::_destroySwapChain();
+    }
+    //---------------------------------------------------------------------
     HRESULT D3D11WindowSwapChainPanel::_compensateSwapChainCompositionScale()
     {
         // Setup inverse scale on the swap chain

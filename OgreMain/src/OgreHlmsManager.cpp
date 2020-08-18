@@ -730,6 +730,17 @@ namespace Ogre
                     ++itor;
                 }
             }
+            {
+                DescriptorSetUavSet::iterator itor = mDescriptorSetUavs.begin();
+                DescriptorSetUavSet::iterator end  = mDescriptorSetUavs.end();
+                while( itor != end )
+                {
+                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetUav *descSetPtr = const_cast<DescriptorSetUav*>( &(*itor) );
+                    mRenderSystem->_descriptorSetUavDestroyed( descSetPtr );
+                    ++itor;
+                }
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -796,6 +807,17 @@ namespace Ogre
                     //const_cast see HlmsManager::destroyDescriptorSetSampler comments
                     DescriptorSetSampler *descSetPtr = const_cast<DescriptorSetSampler*>( &(*itor) );
                     mRenderSystem->_descriptorSetSamplerCreated( descSetPtr );
+                    ++itor;
+                }
+            }
+            {
+                DescriptorSetUavSet::iterator itor = mDescriptorSetUavs.begin();
+                DescriptorSetUavSet::iterator end  = mDescriptorSetUavs.end();
+                while( itor != end )
+                {
+                    //const_cast see HlmsManager::destroyDescriptorSetSampler comments
+                    DescriptorSetUav *descSetPtr = const_cast<DescriptorSetUav*>( &(*itor) );
+                    mRenderSystem->_descriptorSetUavCreated( descSetPtr );
                     ++itor;
                 }
             }
