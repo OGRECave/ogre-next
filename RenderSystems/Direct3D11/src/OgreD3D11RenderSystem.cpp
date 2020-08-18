@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
 #include "OgreSceneManagerEnumerator.h"
+#include "Compositor/OgreCompositorManager2.h"
 #include "OgreD3D11HardwareBufferManager.h"
 #include "OgreD3D11HardwareIndexBuffer.h"
 #include "OgreD3D11HardwareVertexBuffer.h"
@@ -1665,6 +1666,7 @@ namespace Ogre
         // release device depended resources
         fireDeviceEvent(&mDevice, "DeviceLost");
 
+        Root::getSingleton().getCompositorManager2()->_releaseManualHardwareResources();
         SceneManagerEnumerator::SceneManagerIterator scnIt = SceneManagerEnumerator::getSingleton().getSceneManagerIterator();
         while(scnIt.hasMoreElements())
             scnIt.getNext()->_releaseManualHardwareResources();
@@ -1697,6 +1699,7 @@ namespace Ogre
         v1::MeshManager::getSingleton().reloadAll(Resource::LF_PRESERVE_STATE);
         MeshManager::getSingleton().reloadAll(Resource::LF_MARKED_FOR_RELOAD);
 
+        Root::getSingleton().getCompositorManager2()->_restoreManualHardwareResources();
         scnIt = SceneManagerEnumerator::getSingleton().getSceneManagerIterator();
         while(scnIt.hasMoreElements())
             scnIt.getNext()->_restoreManualHardwareResources();

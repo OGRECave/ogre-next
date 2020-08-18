@@ -158,6 +158,9 @@ namespace Ogre
         CompositorManager2( RenderSystem *renderSystem );
         ~CompositorManager2();
 
+        void _releaseManualHardwareResources();
+        void _restoreManualHardwareResources();
+
         /** The final rendering is done by passing the RenderWindow to one of the input
             channels. This functions does exactly that.
         */

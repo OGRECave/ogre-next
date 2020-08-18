@@ -206,6 +206,18 @@ namespace Ogre
         mDummyObjectMemoryManager = 0;
     }
     //-----------------------------------------------------------------------------------
+    void CompositorManager2::_releaseManualHardwareResources()
+    {
+        mSharedTriangleFS->_releaseManualHardwareResources();
+        mSharedQuadFS->_releaseManualHardwareResources();
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorManager2::_restoreManualHardwareResources()
+    {
+        mSharedTriangleFS->_restoreManualHardwareResources();
+        mSharedQuadFS->_restoreManualHardwareResources();
+    }
+    //-----------------------------------------------------------------------------------
     bool CompositorManager2::hasNodeDefinition( IdString nodeDefName ) const
     {
         return mNodeDefinitions.find( nodeDefName ) != mNodeDefinitions.end();

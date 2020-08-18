@@ -46,14 +46,16 @@ namespace v1
             mScale( Vector3::UNIT_SCALE ),
             mQuad( bQuad )
     {
-        initRectangle2D();
+        _restoreManualHardwareResources();
 
         //By default we want Rectangle2Ds to still work in wireframe mode
         setPolygonModeOverrideable( false );
     }
     //-----------------------------------------------------------------------------------
-    void Rectangle2D::initRectangle2D(void)
+    void Rectangle2D::_restoreManualHardwareResources()
     {
+        assert(!mRenderOp.vertexData);
+
         // use identity projection and view matrices
         mUseIdentityProjection  = true;
         mUseIdentityView        = true;
@@ -183,7 +185,13 @@ namespace v1
     //-----------------------------------------------------------------------------------
     Rectangle2D::~Rectangle2D()
     {
+        _releaseManualHardwareResources();
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::_releaseManualHardwareResources()
+    {
         OGRE_DELETE mRenderOp.vertexData;
+        mRenderOp.vertexData = 0;
     }
     //-----------------------------------------------------------------------------------
     void Rectangle2D::setCorners( Real left, Real top, Real width, Real height )
