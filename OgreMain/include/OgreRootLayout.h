@@ -58,6 +58,11 @@ namespace Ogre
         size_t getNumUsedSlots( void ) const { return end - start; }
         bool isInUse( void ) const { return start < end; }
         bool isValid( void ) const { return start <= end; }
+
+        bool isDirty( uint8 minDirtySlot ) const
+        {
+            return ( minDirtySlot >= start ) & ( minDirtySlot < end );
+        }
     };
 
     namespace DescBindingTypes

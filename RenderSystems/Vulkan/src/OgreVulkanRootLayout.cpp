@@ -399,10 +399,10 @@ namespace Ogre
             if( !mBaked[i] )
             {
                 bDirty |= table.dirtyParamsBuffer & ranges[DescBindingTypes::ParamBuffer].isInUse();
-                bDirty |= table.minDirtySlotConst <= ranges[DescBindingTypes::ConstBuffer].start;
-                bDirty |= table.minDirtySlotTexBuffer <= ranges[DescBindingTypes::TexBuffer].start;
-                bDirty |= table.minDirtySlotTextures <= ranges[DescBindingTypes::Texture].start;
-                bDirty |= table.minDirtySlotSamplers <= ranges[DescBindingTypes::Texture].start;
+                bDirty |= ranges[DescBindingTypes::ConstBuffer].isDirty( table.minDirtySlotConst );
+                bDirty |= ranges[DescBindingTypes::TexBuffer].isDirty( table.minDirtySlotTexBuffer );
+                bDirty |= ranges[DescBindingTypes::Texture].isDirty( table.minDirtySlotTextures );
+                bDirty |= ranges[DescBindingTypes::Sampler].isDirty( table.minDirtySlotSamplers );
             }
             else
             {
