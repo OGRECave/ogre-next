@@ -37,17 +37,38 @@ namespace Ogre
     class VulkanXcbWindow;
     class _OgreVulkanExport VulkanXcbSupport : public VulkanSupport
     {
-        // Allowed video modes
-        // vector<DEVMODE>::type mDevModes;
-        // vector<int>::type mFSAALevels;
-        struct VideoModes
+        struct Frequency
+        {
+            uint32 numerator;
+            uint32 denominator;
+
+            double toFreq( void ) const
+            {
+                if( !denominator )
+                    return 0;
+                else
+                    return (double)numerator / double( denominator );
+            }
+        };
+
+        struct Resolution
         {
             uint16 width;
             uint16 height;
-            FastArray<uint16> frequency;
+            bool operator<( const Resolution &other ) const
+            {
+                // clang-format off
+                if( this->width < other.width ) return true;
+                if( other.width < this->width ) return false;
+                if( this->height < other.height ) return true;
+                if( other.height < this->height ) return false;
+                // clang-format on
+                return false;
+            }
         };
 
-        FastArray<VideoModes> mVideoModes;
+        typedef map<Resolution, FastArray<Frequency> >::type VideoModesMap;
+        VideoModesMap mVideoModes;
 
         void queryXcb( void );
         void refreshConfig( void );

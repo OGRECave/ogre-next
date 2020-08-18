@@ -29,6 +29,7 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 #include "Windowing/X11/OgreVulkanXcbSupport.h"
 
 #include "OgreLogManager.h"
+#include "OgreString.h"
 
 #include <xcb/randr.h>
 #include <xcb/xcb.h>
@@ -47,8 +48,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------
     void VulkanXcbSupport::queryXcb( void )
     {
-        VideoModes videMode;
-
         int scr = 0;
         xcb_connection_t *connection = xcb_connect( 0, &scr );
         if( !connection || xcb_connection_has_error( connection ) )
@@ -81,19 +80,7 @@ namespace Ogre
         xcb_randr_get_screen_resources_reply_t *screenResReply = 0;
         screenResReply = xcb_randr_get_screen_resources_reply( connection, screenResCookie, 0 );
 
-        size_t numCrtcs = 0;
-        xcb_randr_crtc_t *firstCRTC;
-
-        // Get a pointer to the first CRTC and number of CRTCs
-        // It is crucial to notice that you are in fact getting
-        // an array with firstCRTC being the first element of
-        // this array and crtcs_length - length of this array
-        if( screenResReply )
-        {
-            numCrtcs = (size_t)xcb_randr_get_screen_resources_crtcs_length( screenResReply );
-            firstCRTC = xcb_randr_get_screen_resources_crtcs( screenResReply );
-        }
-        else
+        if( !screenResReply )
         {
             LogManager::getSingleton().logMessage(
                 "XCB: failed to get a reply from RANDR to get display resolution", LML_CRITICAL );
@@ -103,23 +90,26 @@ namespace Ogre
             return;
         }
 
-        // Array of requests to the X server for CRTC info
-        FastArray<xcb_randr_get_crtc_info_cookie_t> crtcResCookie;
-        crtcResCookie.resize( numCrtcs );
-        for( size_t i = 0u; i < numCrtcs; ++i )
-            crtcResCookie[i] = xcb_randr_get_crtc_info( connection, *( firstCRTC + i ), 0 );
+        size_t numModes = (size_t)xcb_randr_get_screen_resources_modes_length( screenResReply );
+        xcb_randr_mode_info_t *modes = xcb_randr_get_screen_resources_modes( screenResReply );
 
-        // Array of replies from X server
-        FastArray<xcb_randr_get_crtc_info_reply_t *> crtcResReply;
-        crtcResReply.resize( numCrtcs );
-        for( size_t i = 0u; i < numCrtcs; ++i )
+        for( size_t i = 0u; i < numModes; ++i )
         {
-            crtcResReply[i] = xcb_randr_get_crtc_info_reply( connection, crtcResCookie[i], 0 );
+            Resolution res;
+            res.width = modes[i].width;
+            res.height = modes[i].height;
 
-            VideoModes videoMode;
-            videoMode.width = crtcResReply[i]->width;
-            videoMode.height = crtcResReply[i]->height;
-            mVideoModes.push_back( videoMode );
+            Frequency freq;
+            freq.numerator = modes[i].dot_clock;
+
+            uint16 vtotal = modes[i].vtotal;
+            if( modes[i].mode_flags & XCB_RANDR_MODE_FLAG_DOUBLE_SCAN )
+                vtotal *= 2u;
+            if( modes[i].mode_flags & XCB_RANDR_MODE_FLAG_INTERLACE )
+                vtotal /= 2u;
+            freq.denominator = modes[i].htotal * vtotal;
+
+            mVideoModes[res].push_back( freq );
         }
 
         xcb_destroy_window( connection, windowDummy );
@@ -129,15 +119,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------
     void VulkanXcbSupport::addConfig()
     {
-        // TODO: EnumDisplayDevices http://msdn.microsoft.com/library/en-us/gdi/devcons_2303.asp
-        /*vector<string> DisplayDevices;
-        DISPLAY_DEVICE DisplayDevice;
-        DisplayDevice.cb = sizeof(DISPLAY_DEVICE);
-        DWORD i=0;
-        while (EnumDisplayDevices(NULL, i++, &DisplayDevice, 0) {
-            DisplayDevices.push_back(DisplayDevice.DeviceName);
-        }*/
-
         ConfigOption optFullScreen;
         ConfigOption optVideoMode;
         ConfigOption optColourDepth;
@@ -147,9 +128,6 @@ namespace Ogre
         ConfigOption optFSAA;
         ConfigOption optRTTMode;
         ConfigOption optSRGB;
-#if OGRE_NO_QUAD_BUFFER_STEREO == 0
-        ConfigOption optStereoMode;
-#endif
 
         // FS setting possibilities
         optFullScreen.name = "Full Screen";
@@ -162,23 +140,18 @@ namespace Ogre
         optVideoMode.name = "Video Mode";
         optVideoMode.immutable = false;
 
-        FastArray<VideoModes>::const_iterator itor = mVideoModes.begin();
-        FastArray<VideoModes>::const_iterator endt = mVideoModes.end();
+        VideoModesMap::const_reverse_iterator itor = mVideoModes.rbegin();
+        VideoModesMap::const_reverse_iterator endt = mVideoModes.rend();
 
         while( itor != endt )
         {
             char tmpBuffer[128];
             LwString resolutionStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
-            resolutionStr.a( itor->width, " x ", itor->height );
+            resolutionStr.a( itor->first.width, " x ", itor->first.height );
             optVideoMode.possibleValues.push_back( resolutionStr.c_str() );
             ++itor;
         }
-        remove_duplicates( optVideoMode.possibleValues );
         optVideoMode.currentValue = optVideoMode.possibleValues.front();
-
-        optColourDepth.name = "Colour Depth";
-        optColourDepth.immutable = false;
-        optColourDepth.currentValue.clear();
 
         optDisplayFrequency.name = "Display Frequency";
         optDisplayFrequency.immutable = false;
@@ -239,15 +212,61 @@ namespace Ogre
     //-----------------------------------------------------------------------------
     void VulkanXcbSupport::refreshConfig()
     {
+        ConfigOptionMap::iterator optFullScreen = mOptions.find( "Full Screen" );
         ConfigOptionMap::iterator optVideoMode = mOptions.find( "Video Mode" );
-        ConfigOptionMap::iterator moptColourDepth = mOptions.find( "Colour Depth" );
-        ConfigOptionMap::iterator moptDisplayFrequency = mOptions.find( "Display Frequency" );
+        ConfigOptionMap::iterator optDisplayFrequency = mOptions.find( "Display Frequency" );
 
-        if( optVideoMode == mOptions.end() || moptColourDepth == mOptions.end() ||
-            moptDisplayFrequency == mOptions.end() )
+        bool bIsFullscreen = false;
+        if( optFullScreen != mOptions.end() && optFullScreen->second.currentValue == "Yes" )
+            bIsFullscreen = true;
+
+        if( optVideoMode != mOptions.end() && optDisplayFrequency != mOptions.end() )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Can't find mOptions!",
-                         "VulkanXcbSupport::refreshConfig" );
+            optDisplayFrequency->second.possibleValues.clear();
+            if( !bIsFullscreen )
+            {
+                optDisplayFrequency->second.possibleValues.push_back( "N/A" );
+            }
+            else
+            {
+                StringVector resStr = StringUtil::split( optVideoMode->second.currentValue, "x" );
+
+                if( resStr.size() != 2u )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Malformed resolution string: " + optVideoMode->second.currentValue,
+                                 "VulkanXcbSupport::refreshConfig" );
+                }
+
+                Resolution res;
+                res.width = static_cast<uint16>( atoi( resStr[0].c_str() ) );
+                res.height = static_cast<uint16>( atoi( resStr[1].c_str() ) );
+
+                VideoModesMap::const_iterator itor = mVideoModes.find( res );
+                if( itor != mVideoModes.end() )
+                {
+                    FastArray<Frequency>::const_iterator itFreq = itor->second.begin();
+                    FastArray<Frequency>::const_iterator enFreq = itor->second.end();
+                    while( itFreq != enFreq )
+                    {
+                        char tmpBuffer[128];
+                        LwString freqStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+                        freqStr.a( LwString::Float( (float)itFreq->toFreq(), 2 ) );
+                        optDisplayFrequency->second.possibleValues.push_back( freqStr.c_str() );
+                        ++itFreq;
+                    }
+                }
+                else
+                {
+                    optDisplayFrequency->second.possibleValues.push_back( "N/A" );
+                }
+
+                if( !optDisplayFrequency->second.possibleValues.empty() )
+                {
+                    optDisplayFrequency->second.currentValue =
+                        optDisplayFrequency->second.possibleValues.back();
+                }
+            }
         }
     }
     //-----------------------------------------------------------------------------
