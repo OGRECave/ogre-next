@@ -464,7 +464,7 @@ namespace Ogre
             // However we don't need to test them all. It's ok to have false positives
             // (it just wastes a little bit more memory)
             if( getProperty( PbsProperty::UseParallaxCorrectCubemaps ) &&
-                getProperty( PbsProperty::EnableCubemapsAuto ) )
+                !getProperty( PbsProperty::EnableCubemapsAuto ) )
             {
                 descBindingRanges[DescBindingTypes::ConstBuffer].end = 4u;
             }
