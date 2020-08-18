@@ -4,7 +4,7 @@
   (Object-oriented Graphics Rendering Engine)
   For the latest info, see http://www.ogre3d.org
 
-Copyright (c) 2000-2014 Torus Knot Software Ltd
+Copyright (c) 2000-present Torus Knot Software Ltd
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,11 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
   -----------------------------------------------------------------------------
 */
 
-#ifndef __VulkanSupport_H__
-#define __VulkanSupport_H__
+#ifndef _OgreVulkanSupport_H_
+#define _OgreVulkanSupport_H_
 
 #include "OgreVulkanPrerequisites.h"
+
 #include "OgreConfigOptionMap.h"
 #include "OgreRenderSystemCapabilities.h"
 
@@ -65,6 +66,22 @@ namespace Ogre
         // Stored options
         ConfigOptionMap mOptions;
     };
-}
+}  // namespace Ogre
+
+#ifndef DEFINING_VK_SUPPORT_IMPL
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#    include "Windowing/win32/OgreVulkanWin32Support.h"
+namespace Ogre
+{
+    inline VulkanSupport *getVulkanSupport() { return new VulkanWin32Support(); }
+}  // namespace Ogre
+#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#    include "Windowing/X11/OgreVulkanXcbSupport.h"
+namespace Ogre
+{
+    inline VulkanSupport *getVulkanSupport() { return new VulkanXcbSupport(); }
+}  // namespace Ogre
+#endif
+#endif
 
 #endif

@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "OgreVulkanRenderPassDescriptor.h"
 #include "OgreVulkanResourceTransition.h"
 #include "OgreVulkanRootLayout.h"
+#include "OgreVulkanSupport.h"
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
 #include "OgreVulkanWindow.h"
@@ -65,8 +66,6 @@ THE SOFTWARE.
 #include "OgreVulkanTextureGpu.h"
 #include "Vao/OgreVulkanUavBufferPacked.h"
 
-#include "OgreVulkanUtil.h"
-
 #include "OgreDepthBuffer.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -80,7 +79,6 @@ THE SOFTWARE.
 #define TODO_check_layers_exist
 
 #define TODO_addVpCount_to_passpso
-#define TODO_depth_readOnly_passes_dont_need_flushing
 
 namespace Ogre
 {
@@ -2572,10 +2570,11 @@ namespace Ogre
     }
 
     SampleDescription VulkanRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
-        PixelFormatGpu format )
+                                                                     PixelFormatGpu format )
     {
-        SampleDescription retVal( getMaxUsableSampleCount( mDevice->mDeviceProperties, sampleDesc.getMaxSamples() ),
-                                  sampleDesc.getMsaaPattern() );
+        SampleDescription retVal(
+            getMaxUsableSampleCount( mDevice->mDeviceProperties, sampleDesc.getMaxSamples() ),
+            sampleDesc.getMsaaPattern() );
         return retVal;
     }
     //-------------------------------------------------------------------------

@@ -26,9 +26,12 @@ Copyright (c) 2000-present Torus Knot Software Ltd
   -----------------------------------------------------------------------------
 */
 
-#include "Windowing/win32/OgreVulkanWin32Support.h"
+#include "Windowing/X11/OgreVulkanXcbSupport.h"
 
-#include <sstream>
+#include "OgreLogManager.h"
+
+#include <xcb/randr.h>
+#include <xcb/xcb.h>
 
 namespace Ogre
 {
@@ -39,10 +42,92 @@ namespace Ogre
         typename C::iterator p = std::unique( c.begin(), c.end() );
         c.erase( p, c.end() );
     }
+    //-----------------------------------------------------------------------------
+    VulkanXcbSupport::VulkanXcbSupport() { queryXcb(); }
+    //-----------------------------------------------------------------------------
+    void VulkanXcbSupport::queryXcb( void )
+    {
+        VideoModes videMode;
 
-	VulkanWin32Support::VulkanWin32Support() {}
+        int scr = 0;
+        xcb_connection_t *connection = xcb_connect( 0, &scr );
+        if( !connection || xcb_connection_has_error( connection ) )
+        {
+            xcb_disconnect( connection );
+            LogManager::getSingleton().logMessage( "XCB: failed to connect to the display server",
+                                                   LML_CRITICAL );
+            return;
+        }
 
-    void VulkanWin32Support::addConfig()
+        // Get the screen
+        const xcb_setup_t *setup = xcb_get_setup( connection );
+        xcb_screen_iterator_t iter = xcb_setup_roots_iterator( setup );
+        while( scr-- > 0 )
+            xcb_screen_next( &iter );
+        xcb_screen_t *screen = iter.data;
+
+        // Create a dummy window
+        xcb_window_t windowDummy = xcb_generate_id( connection );
+        xcb_create_window( connection, 0, windowDummy, screen->root, 0, 0, 1, 1, 0, 0, 0, 0, 0 );
+
+        xcb_flush( connection );
+
+        // Send a request for screen resources to the X server
+        xcb_randr_get_screen_resources_cookie_t screenResCookie;
+        memset( &screenResCookie, 0, sizeof( screenResCookie ) );
+        screenResCookie = xcb_randr_get_screen_resources( connection, windowDummy );
+
+        // Receive reply from X server
+        xcb_randr_get_screen_resources_reply_t *screenResReply = 0;
+        screenResReply = xcb_randr_get_screen_resources_reply( connection, screenResCookie, 0 );
+
+        size_t numCrtcs = 0;
+        xcb_randr_crtc_t *firstCRTC;
+
+        // Get a pointer to the first CRTC and number of CRTCs
+        // It is crucial to notice that you are in fact getting
+        // an array with firstCRTC being the first element of
+        // this array and crtcs_length - length of this array
+        if( screenResReply )
+        {
+            numCrtcs = (size_t)xcb_randr_get_screen_resources_crtcs_length( screenResReply );
+            firstCRTC = xcb_randr_get_screen_resources_crtcs( screenResReply );
+        }
+        else
+        {
+            LogManager::getSingleton().logMessage(
+                "XCB: failed to get a reply from RANDR to get display resolution", LML_CRITICAL );
+            xcb_destroy_window( connection, windowDummy );
+            xcb_flush( connection );
+            xcb_disconnect( connection );
+            return;
+        }
+
+        // Array of requests to the X server for CRTC info
+        FastArray<xcb_randr_get_crtc_info_cookie_t> crtcResCookie;
+        crtcResCookie.resize( numCrtcs );
+        for( size_t i = 0u; i < numCrtcs; ++i )
+            crtcResCookie[i] = xcb_randr_get_crtc_info( connection, *( firstCRTC + i ), 0 );
+
+        // Array of replies from X server
+        FastArray<xcb_randr_get_crtc_info_reply_t *> crtcResReply;
+        crtcResReply.resize( numCrtcs );
+        for( size_t i = 0u; i < numCrtcs; ++i )
+        {
+            crtcResReply[i] = xcb_randr_get_crtc_info_reply( connection, crtcResCookie[i], 0 );
+
+            VideoModes videoMode;
+            videoMode.width = crtcResReply[i]->width;
+            videoMode.height = crtcResReply[i]->height;
+            mVideoModes.push_back( videoMode );
+        }
+
+        xcb_destroy_window( connection, windowDummy );
+        xcb_flush( connection );
+        xcb_disconnect( connection );
+    }
+    //-----------------------------------------------------------------------------
+    void VulkanXcbSupport::addConfig()
     {
         // TODO: EnumDisplayDevices http://msdn.microsoft.com/library/en-us/gdi/devcons_2303.asp
         /*vector<string> DisplayDevices;
@@ -74,18 +159,19 @@ namespace Ogre
         optFullScreen.immutable = false;
 
         // Video mode possibilities
-        DEVMODE DevMode;
-        DevMode.dmSize = sizeof( DEVMODE );
         optVideoMode.name = "Video Mode";
         optVideoMode.immutable = false;
-        for( DWORD i = 0; EnumDisplaySettings( NULL, i, &DevMode ); ++i )
+
+        FastArray<VideoModes>::const_iterator itor = mVideoModes.begin();
+        FastArray<VideoModes>::const_iterator endt = mVideoModes.end();
+
+        while( itor != endt )
         {
-            if( DevMode.dmBitsPerPel < 16 || DevMode.dmPelsHeight < 480 )
-                continue;
-            mDevModes.push_back( DevMode );
-            StringStream str;
-            str << DevMode.dmPelsWidth << " x " << DevMode.dmPelsHeight;
-            optVideoMode.possibleValues.push_back( str.str() );
+            char tmpBuffer[128];
+            LwString resolutionStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+            resolutionStr.a( itor->width, " x ", itor->height );
+            optVideoMode.possibleValues.push_back( resolutionStr.c_str() );
+            ++itor;
         }
         remove_duplicates( optVideoMode.possibleValues );
         optVideoMode.currentValue = optVideoMode.possibleValues.front();
@@ -119,23 +205,17 @@ namespace Ogre
         optFSAA.possibleValues.push_back( "4" );
         optFSAA.possibleValues.push_back( "8" );
         optFSAA.possibleValues.push_back( "16" );
-        for( vector<int>::type::iterator it = mFSAALevels.begin(); it != mFSAALevels.end(); ++it )
-        {
-            String val = StringConverter::toString( *it );
-            optFSAA.possibleValues.push_back( val );
-            /* not implementing CSAA in GL for now
-            if (*it >= 8)
-                optFSAA.possibleValues.push_back(val + " [Quality]");
-            */
-        }
+        //        for( vector<int>::type::iterator it = mFSAALevels.begin(); it != mFSAALevels.end();
+        //        ++it )
+        //        {
+        //            String val = StringConverter::toString( *it );
+        //            optFSAA.possibleValues.push_back( val );
+        //            /* not implementing CSAA in GL for now
+        //            if (*it >= 8)
+        //                optFSAA.possibleValues.push_back(val + " [Quality]");
+        //            */
+        //        }
         optFSAA.currentValue = "1";
-
-        optRTTMode.name = "RTT Preferred Mode";
-        optRTTMode.possibleValues.push_back( "FBO" );
-        optRTTMode.possibleValues.push_back( "PBuffer" );
-        optRTTMode.possibleValues.push_back( "Copy" );
-        optRTTMode.currentValue = "FBO";
-        optRTTMode.immutable = false;
 
         // SRGB on auto window
         optSRGB.name = "sRGB Gamma Conversion";
@@ -143,16 +223,6 @@ namespace Ogre
         optSRGB.possibleValues.push_back( "No" );
         optSRGB.currentValue = "Yes";
         optSRGB.immutable = false;
-
-#if OGRE_NO_QUAD_BUFFER_STEREO == 0
-        optStereoMode.name = "Stereo Mode";
-        optStereoMode.possibleValues.push_back( StringConverter::toString( SMT_NONE ) );
-        optStereoMode.possibleValues.push_back( StringConverter::toString( SMT_FRAME_SEQUENTIAL ) );
-        optStereoMode.currentValue = optStereoMode.possibleValues[0];
-        optStereoMode.immutable = false;
-
-        mOptions[optStereoMode.name] = optStereoMode;
-#endif
 
         mOptions[optFullScreen.name] = optFullScreen;
         mOptions[optVideoMode.name] = optVideoMode;
@@ -166,49 +236,22 @@ namespace Ogre
 
         refreshConfig();
     }
-
-    void VulkanWin32Support::refreshConfig()
+    //-----------------------------------------------------------------------------
+    void VulkanXcbSupport::refreshConfig()
     {
         ConfigOptionMap::iterator optVideoMode = mOptions.find( "Video Mode" );
         ConfigOptionMap::iterator moptColourDepth = mOptions.find( "Colour Depth" );
         ConfigOptionMap::iterator moptDisplayFrequency = mOptions.find( "Display Frequency" );
+
         if( optVideoMode == mOptions.end() || moptColourDepth == mOptions.end() ||
             moptDisplayFrequency == mOptions.end() )
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Can't find mOptions!",
-                         "Win32GLSupport::refreshConfig" );
-        ConfigOption *optColourDepth = &moptColourDepth->second;
-        ConfigOption *optDisplayFrequency = &moptDisplayFrequency->second;
-
-        const String &val = optVideoMode->second.currentValue;
-        String::size_type pos = val.find( 'x' );
-        if( pos == String::npos )
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid Video Mode provided",
-                         "Win32GLSupport::refreshConfig" );
-        DWORD width = StringConverter::parseUnsignedInt( val.substr( 0, pos ) );
-        DWORD height = StringConverter::parseUnsignedInt( val.substr( pos + 1, String::npos ) );
-
-        for( vector<DEVMODE>::type::const_iterator i = mDevModes.begin(); i != mDevModes.end(); ++i )
         {
-            if( i->dmPelsWidth != width || i->dmPelsHeight != height )
-                continue;
-            optColourDepth->possibleValues.push_back(
-                StringConverter::toString( (unsigned int)i->dmBitsPerPel ) );
-            optDisplayFrequency->possibleValues.push_back(
-                StringConverter::toString( (unsigned int)i->dmDisplayFrequency ) );
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Can't find mOptions!",
+                         "VulkanXcbSupport::refreshConfig" );
         }
-        remove_duplicates( optColourDepth->possibleValues );
-        remove_duplicates( optDisplayFrequency->possibleValues );
-        optColourDepth->currentValue = optColourDepth->possibleValues.back();
-        bool freqValid =
-            std::find( optDisplayFrequency->possibleValues.begin(),
-                       optDisplayFrequency->possibleValues.end(),
-                       optDisplayFrequency->currentValue ) != optDisplayFrequency->possibleValues.end();
-
-        if( ( optDisplayFrequency->currentValue != "N/A" ) && !freqValid )
-            optDisplayFrequency->currentValue = optDisplayFrequency->possibleValues.front();
     }
-
-    void VulkanWin32Support::setConfigOption( const String &name, const String &value )
+    //-----------------------------------------------------------------------------
+    void VulkanXcbSupport::setConfigOption( const String &name, const String &value )
     {
         ConfigOptionMap::iterator it = mOptions.find( name );
 
@@ -217,9 +260,8 @@ namespace Ogre
             it->second.currentValue = value;
         else
         {
-            StringStream str;
-            str << "Option named '" << name << "' does not exist.";
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, str.str(), "Win32GLSupport::setConfigOption" );
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Option named '" + name + "' does not exist.",
+                         "VulkanXcbSupport::setConfigOption" );
         }
 
         if( name == "Video Mode" )
@@ -241,8 +283,8 @@ namespace Ogre
             }
         }
     }
-
-    String VulkanWin32Support::validateConfig()
+    //-----------------------------------------------------------------------------
+    String VulkanXcbSupport::validateConfig()
     {
         // TODO, DX9
         return BLANKSTRING;

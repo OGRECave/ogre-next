@@ -59,6 +59,8 @@ else()
 		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libHLSL.a
 		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libSPIRV.a
 		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libshaderc_combined.a )
+
+	target_link_libraries(RenderSystem_Vulkan xcb-randr)
 endif()
 
 if (OGRE_CONFIG_THREADS)

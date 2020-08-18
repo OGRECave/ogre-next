@@ -26,29 +26,40 @@ Copyright (c) 2000-present Torus Knot Software Ltd
   -----------------------------------------------------------------------------
 */
 
-#ifndef _OgreVulkanWin32Support_H_
-#define _OgreVulkanWin32Support_H_
+#ifndef _OgreVulkanXcbSupport_H_
+#define _OgreVulkanXcbSupport_H_
 
 #define DEFINING_VK_SUPPORT_IMPL
 #include "OgreVulkanSupport.h"
 
-#define WIN32_LEAN_AND_MEAN
-#define VC_EXTRALEAN
-#include <windows.h>
-
 namespace Ogre
 {
-    class VulkanWin32Window;
-    class _OgreVulkanExport VulkanWin32Support : public VulkanSupport
+    class VulkanXcbWindow;
+    class _OgreVulkanExport VulkanXcbSupport : public VulkanSupport
     {
+        // Allowed video modes
+        // vector<DEVMODE>::type mDevModes;
+        // vector<int>::type mFSAALevels;
+        struct VideoModes
+        {
+            uint16 width;
+            uint16 height;
+            FastArray<uint16> frequency;
+        };
+
+        FastArray<VideoModes> mVideoModes;
+
+        void queryXcb( void );
+        void refreshConfig( void );
+
     public:
-        VulkanWin32Support();
+        VulkanXcbSupport();
         /**
          * Add any special config values to the system.
          * Must have a "Full Screen" value that is a bool and a "Video Mode" value
          * that is a string in the form of wxhxb
          */
-        void addConfig();
+        void addConfig( void );
 
         void setConfigOption( const String &name, const String &value );
 
@@ -56,13 +67,6 @@ namespace Ogre
          * Make sure all the extra options are valid
          */
         String validateConfig();
-
-    private:
-        // Allowed video modes
-        vector<DEVMODE>::type mDevModes;
-        vector<int>::type mFSAALevels;
-
-        void refreshConfig();
     };
 
 }  // namespace Ogre
