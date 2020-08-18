@@ -489,11 +489,15 @@ namespace Ogre
             descSets[i] = descSet;
         }
 
-        vkCmdBindDescriptorSets(
-            device->mGraphicsQueue.mCurrentCmdBuffer,
-            mCompute ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS, mRootLayout,
-            firstDirtySet, static_cast<uint32_t>( mSets.size() ) - firstDirtySet,
-            &descSets[firstDirtySet], 0u, 0 );
+        // The table may have been dirty, but nothing the root layout actually uses was dirty
+        if( firstDirtySet < mSets.size() )
+        {
+            vkCmdBindDescriptorSets(
+                device->mGraphicsQueue.mCurrentCmdBuffer,
+                mCompute ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS, mRootLayout,
+                firstDirtySet, static_cast<uint32_t>( mSets.size() ) - firstDirtySet,
+                &descSets[firstDirtySet], 0u, 0 );
+        }
     }
     //-------------------------------------------------------------------------
     VulkanRootLayout *VulkanRootLayout::findBest( VulkanRootLayout *a, VulkanRootLayout *b )
