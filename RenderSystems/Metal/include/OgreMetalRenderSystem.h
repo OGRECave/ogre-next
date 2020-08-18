@@ -64,14 +64,14 @@ namespace Ogre
 
             bool operator < ( const CachedDepthStencilState &other ) const
             {
-                if(   this->depthWrite < other.depthWrite  ) return true;
-                if( !(this->depthWrite < other.depthWrite) ) return false;
+                if( this->depthWrite < other.depthWrite ) return true;
+                if( other.depthWrite < this->depthWrite ) return false;
 
-                if(   this->depthFunc < other.depthFunc  ) return true;
-                if( !(this->depthFunc < other.depthFunc) ) return false;
+                if( this->depthFunc < other.depthFunc ) return true;
+                if( other.depthFunc < this->depthFunc ) return false;
 
-                if(   this->stencilParams < other.stencilParams  ) return true;
-                //if( !(this->stencilParams < other.stencilParams) ) return false;
+                if( this->stencilParams < other.stencilParams ) return true;
+                //if( other.stencilParams < this->stencilParams ) return false;
 
                 return false;
             }
