@@ -131,19 +131,21 @@ namespace Ogre {
 
         bool operator < ( const StencilStateOp &other ) const
         {
-            if(   this->stencilFailOp < other.stencilFailOp  ) return true;
-            if( !(this->stencilFailOp < other.stencilFailOp) ) return false;
+            // clang-format off
+            if( this->stencilFailOp < other.stencilFailOp ) return true;
+            if( other.stencilFailOp < this->stencilFailOp ) return false;
 
-            if(   this->stencilPassOp < other.stencilPassOp  ) return true;
-            if( !(this->stencilPassOp < other.stencilPassOp) ) return false;
+            if( this->stencilPassOp < other.stencilPassOp ) return true;
+            if( other.stencilPassOp < this->stencilPassOp ) return false;
 
-            if(   this->stencilDepthFailOp < other.stencilDepthFailOp  ) return true;
-            if( !(this->stencilDepthFailOp < other.stencilDepthFailOp) ) return false;
+            if( this->stencilDepthFailOp < other.stencilDepthFailOp ) return true;
+            if( other.stencilDepthFailOp < this->stencilDepthFailOp ) return false;
 
-            if(   this->compareOp < other.compareOp  ) return true;
-            //if( !(this->compareOp < other.compareOp) ) return false;
+            if( this->compareOp < other.compareOp ) return true;
+            //if( other.compareOp < this->compareOp ) return false;
 
             return false;
+            // clang-format on
         }
 
         bool operator != ( const StencilStateOp &other ) const
@@ -173,19 +175,21 @@ namespace Ogre {
 
         bool operator < ( const StencilParams &other ) const
         {
-            if(   this->enabled < other.enabled  ) return true;
-            if( !(this->enabled < other.enabled) ) return false;
+            // clang-format off
+            if( this->enabled < other.enabled ) return true;
+            if( other.enabled < this->enabled ) return false;
 
-            if(   this->readMask < other.readMask  ) return true;
-            if( !(this->readMask < other.readMask) ) return false;
+            if( this->readMask < other.readMask ) return true;
+            if( other.readMask < this->readMask ) return false;
 
-            if(   this->stencilFront < other.stencilFront  ) return true;
-            if( !(this->stencilFront < other.stencilFront) ) return false;
+            if( this->stencilFront < other.stencilFront ) return true;
+            if( other.stencilFront < this->stencilFront ) return false;
 
-            if(   this->stencilBack < other.stencilBack  ) return true;
-            //if( !(this->stencilBack < other.stencilBack) ) return false;
+            if( this->stencilBack < other.stencilBack ) return true;
+            // if( other.stencilBack < this->stencilBack ) return false;
 
             return false;
+            // clang-format on
         }
 
         bool operator != ( const StencilParams &other ) const
@@ -966,6 +970,22 @@ namespace Ogre {
         {
             return mColourSamples == rhs.mColourSamples && mCoverageSamples == rhs.mCoverageSamples &&
                    mPattern == rhs.mPattern;
+        }
+
+        bool operator<( const SampleDescription &other ) const
+        {
+            // clang-format off
+            if( this->mColourSamples < other.mColourSamples ) return true;
+            if( other.mColourSamples < this->mColourSamples ) return false;
+
+            if( this->mCoverageSamples < other.mCoverageSamples ) return true;
+            if( other.mCoverageSamples < this->mCoverageSamples ) return false;
+
+            if( this->mPattern < other.mPattern ) return true;
+            // if( other.mPattern < this->mPattern ) return false;
+            // clang-format on
+
+            return false;
         }
 
         bool isMultisample( void ) const { return mColourSamples > 1u; }
