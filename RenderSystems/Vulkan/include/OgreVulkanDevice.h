@@ -87,12 +87,13 @@ namespace Ogre
 
     protected:
         static VkDebugReportCallbackCreateInfoEXT addDebugCallback(
-            PFN_vkDebugReportCallbackEXT debugCallback );
+            PFN_vkDebugReportCallbackEXT debugCallback, RenderSystem *renderSystem );
 
     public:
         static VkInstance createInstance( const String &appName, FastArray<const char *> &extensions,
                                           FastArray<const char *> &layers,
-                                          PFN_vkDebugReportCallbackEXT debugCallback );
+                                          PFN_vkDebugReportCallbackEXT debugCallback,
+                                          RenderSystem *renderSystem );
 
         void createPhysicalDevice( uint32 deviceIdx );
 

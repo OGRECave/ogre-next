@@ -122,6 +122,7 @@ namespace Ogre
             sprintf(message, "PERFORMANCE WARNING: [%s] Code %d : %s", pLayerPrefix, msgCode, pMsg);
         } else if (msgFlags & VK_DEBUG_REPORT_ERROR_BIT_EXT) {
             sprintf(message, "ERROR: [%s] Code %d : %s", pLayerPrefix, msgCode, pMsg);
+            static_cast<VulkanRenderSystem*>( pUserData )->debugCallback();
         } else if (msgFlags & VK_DEBUG_REPORT_DEBUG_BIT_EXT) {
             sprintf(message, "DEBUG: [%s] Code %d : %s", pLayerPrefix, msgCode, pMsg);
         } else {
@@ -174,6 +175,7 @@ namespace Ogre
         mEntriesToFlush( 0u ),
         mVpChanged( false ),
         mInterruptedRenderCommandEncoder( false ),
+        mValidationError( false ),
         CreateDebugReportCallback( 0 ),
         DestroyDebugReportCallback( 0 ),
         mDebugReportCallback( 0 )
@@ -266,6 +268,8 @@ namespace Ogre
         return strName;
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::debugCallback( void ) { mValidationError = true; }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::addInstanceDebugCallback( void )
     {
         CreateDebugReportCallback = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(
@@ -303,6 +307,7 @@ namespace Ogre
         dbgCreateInfo.pfnCallback = callback;
         dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT |
                               VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+        dbgCreateInfo.pUserData = this;
         VkResult result =
             CreateDebugReportCallback( mVkInstance, &dbgCreateInfo, 0, &mDebugReportCallback );
         switch( result )
@@ -499,8 +504,8 @@ namespace Ogre
 #endif
             const uint8 dynBufferMultiplier = 3u;
 
-            mVkInstance =
-                VulkanDevice::createInstance( name, reqInstanceExtensions, instanceLayers, dbgFunc );
+            mVkInstance = VulkanDevice::createInstance( name, reqInstanceExtensions, instanceLayers,
+                                                        dbgFunc, this );
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
             addInstanceDebugCallback();
 #endif
@@ -1044,6 +1049,13 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *pso )
     {
+        if( pso == mComputePso )
+        {
+            mComputePso = 0;
+            mComputeTable.setAllDirty();
+            mComputeTableDirty = true;
+        }
+
         OGRE_ASSERT_LOW( pso->rsData );
         VulkanHlmsPso *vulkanPso = static_cast<VulkanHlmsPso *>( pso->rsData );
         delayed_vkDestroyPipeline( mVaoManager, mActiveDevice->mDevice, vulkanPso->pso, 0 );
@@ -1144,27 +1156,31 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setComputePso( const HlmsComputePso *pso )
     {
-        VulkanRootLayout *oldRootLayout = 0;
-        if( mComputePso )
-            oldRootLayout = reinterpret_cast<VulkanHlmsPso *>( mComputePso->rsData )->rootLayout;
-
         mActiveDevice->mGraphicsQueue.getComputeEncoder();
 
         if( mComputePso != pso )
         {
-            OGRE_ASSERT_LOW( pso->rsData );
-            VulkanHlmsPso *vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
+            VulkanRootLayout *oldRootLayout = 0;
+            if( mComputePso )
+                oldRootLayout = reinterpret_cast<VulkanHlmsPso *>( mComputePso->rsData )->rootLayout;
 
-            VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
-            vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vulkanPso->pso );
+            VulkanHlmsPso *vulkanPso = 0;
+
+            if( pso )
+            {
+                OGRE_ASSERT_LOW( pso->rsData );
+                vulkanPso = reinterpret_cast<VulkanHlmsPso *>( pso->rsData );
+                VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+                vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vulkanPso->pso );
+
+                if( vulkanPso->rootLayout != oldRootLayout )
+                {
+                    mComputeTable.setAllDirty();
+                    mComputeTableDirty = true;
+                }
+            }
 
             mComputePso = pso;
-
-            if( vulkanPso && vulkanPso->rootLayout != oldRootLayout )
-            {
-                mComputeTable.setAllDirty();
-                mComputeTableDirty = true;
-            }
         }
     }
     //-------------------------------------------------------------------------
@@ -2348,10 +2364,36 @@ namespace Ogre
         pipeline.pDynamicState = &dynamicStateCi;
         pipeline.renderPass = renderPass;
 
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        mValidationError = false;
+#endif
+
         VkPipeline vulkanPso = 0;
         VkResult result = vkCreateGraphicsPipelines( mActiveDevice->mDevice, VK_NULL_HANDLE, 1u,
                                                      &pipeline, 0, &vulkanPso );
         checkVkResult( result, "vkCreateGraphicsPipelines" );
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( mValidationError )
+        {
+            LogManager::getSingleton().logMessage( "Validation error:" );
+
+            // This isn't legal C++ but it's a debug function not intended for production
+            GpuProgramPtr *shaders = &newPso->vertexShader;
+            for( size_t i = 0u; i < NumShaderTypes; ++i )
+            {
+                if( !shaders[i] )
+                    continue;
+
+                VulkanProgram *shader =
+                    static_cast<VulkanProgram *>( shaders[i]->_getBindingDelegate() );
+
+                String debugDump;
+                shader->debugDump( debugDump );
+                LogManager::getSingleton().logMessage( debugDump );
+            }
+        }
+#endif
 
         VulkanHlmsPso *pso = new VulkanHlmsPso( vulkanPso, rootLayout );
         newPso->rsData = pso;
@@ -2359,6 +2401,14 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )
     {
+        if( pso == mPso )
+        {
+            mUavRenderingDirty = true;
+            mGlobalTable.setAllDirty();
+            mTableDirty = true;
+            mPso = 0;
+        }
+
         OGRE_ASSERT_LOW( pso->rsData );
         VulkanHlmsPso *vulkanPso = static_cast<VulkanHlmsPso *>( pso->rsData );
         delayed_vkDestroyPipeline( mVaoManager, mActiveDevice->mDevice, vulkanPso->pso, 0 );

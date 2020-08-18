@@ -2068,15 +2068,17 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setComputePso( const HlmsComputePso *pso )
     {
-        __unsafe_unretained id<MTLComputePipelineState> metalPso =
-                (__bridge id<MTLComputePipelineState>)pso->rsData;
-
         __unsafe_unretained id<MTLComputeCommandEncoder> computeEncoder =
                 mActiveDevice->getComputeEncoder();
 
         if( mComputePso != pso )
         {
-            [computeEncoder setComputePipelineState:metalPso];
+            if( pso )
+            {
+                __unsafe_unretained id<MTLComputePipelineState> metalPso =
+                    (__bridge id<MTLComputePipelineState>)pso->rsData;
+                [computeEncoder setComputePipelineState:metalPso];
+            }
             mComputePso = pso;
         }
     }

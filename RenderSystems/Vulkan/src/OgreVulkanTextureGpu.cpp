@@ -385,7 +385,6 @@ namespace Ogre
         case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
         case VK_IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV:
         case VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT:
-        case VK_IMAGE_LAYOUT_RANGE_SIZE:
         case VK_IMAGE_LAYOUT_MAX_ENUM:
             return ResourceLayout::Undefined;
         }
@@ -641,7 +640,7 @@ namespace Ogre
         if( mSampleDescription.isMultisample() && hasMsaaExplicitResolves() )
             texType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
 
-        if( ( cubemapsAs2DArrays || forUav ) &&
+        if( ( cubemapsAs2DArrays || forUav || numSlices == 1u ) &&
             ( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray ) )
         {
             texType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;

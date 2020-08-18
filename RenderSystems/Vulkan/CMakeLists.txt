@@ -36,7 +36,7 @@ if( WIN32 )
 	)
 else()
 	include_directories(
-		/home/matias/Projects/vulkan/1.1.121.1/x86_64/include
+		/home/matias/Projects/vulkan/1.2.148.1/x86_64/include
 	)
 endif()
 
@@ -51,13 +51,14 @@ if( WIN32 )
 		C:/VulkanSDK/1.2.131.2/Lib/vulkan-1.lib
 	)
 else()
-	link_directories( /home/matias/Projects/vulkan/1.1.121.1/x86_64/lib )
+	link_directories( /home/matias/Projects/vulkan/1.2.148.1/x86_64/lib )
 	target_link_libraries(RenderSystem_Vulkan vulkan
-		/home/matias/Projects/vulkan/1.1.121.1/x86_64/lib/libglslang.a
-		/home/matias/Projects/vulkan/1.1.121.1/x86_64/lib/libOSDependent.a
-		/home/matias/Projects/vulkan/1.1.121.1/x86_64/lib/libOGLCompiler.a
-		/home/matias/Projects/vulkan/1.1.121.1/x86_64/lib/libHLSL.a
-		/home/matias/Projects/vulkan/1.1.121.1/x86_64/lib/libSPIRV.a )
+		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libglslang.a
+		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libOSDependent.a
+		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libOGLCompiler.a
+		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libHLSL.a
+		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libSPIRV.a
+		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libshaderc_combined.a )
 endif()
 
 if (OGRE_CONFIG_THREADS)

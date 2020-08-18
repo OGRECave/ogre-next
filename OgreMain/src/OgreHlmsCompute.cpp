@@ -382,6 +382,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsCompute::clearShaderCache(void)
     {
+        if( mRenderSystem )
+            mRenderSystem->_setComputePso( 0 );
+
         ComputePsoCacheVec::iterator itor = mComputeShaderCache.begin();
         ComputePsoCacheVec::iterator end  = mComputeShaderCache.end();
 
@@ -431,6 +434,9 @@ namespace Ogre
                 if( shaderParams )
                     psoCache.paramsProfileUpdateCounter = shaderParams->getUpdateCounter();
 
+                // Uset the HlmsComputePso, as the ptr may be cached by the RenderSystem
+                // and this could be invalidated
+                mRenderSystem->_setComputePso( 0 );
                 mComputeShaderCache.push_back( psoCache );
 
                 //The PSO in the cache doesn't have the properties. Make a hard copy.

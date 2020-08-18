@@ -86,7 +86,7 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     VkDebugReportCallbackCreateInfoEXT VulkanDevice::addDebugCallback(
-        PFN_vkDebugReportCallbackEXT debugCallback )
+        PFN_vkDebugReportCallbackEXT debugCallback, RenderSystem *renderSystem )
     {
         // This is info for a temp callback to use during CreateInstance.
         // After the instance is created, we use the instance-based
@@ -95,12 +95,14 @@ namespace Ogre
         makeVkStruct( dbgCreateInfoTemp, VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT );
         dbgCreateInfoTemp.pfnCallback = debugCallback;
         dbgCreateInfoTemp.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
+        dbgCreateInfoTemp.pUserData = renderSystem;
         return dbgCreateInfoTemp;
     }
     //-------------------------------------------------------------------------
     VkInstance VulkanDevice::createInstance( const String &appName, FastArray<const char *> &extensions,
                                              FastArray<const char *> &layers,
-                                             PFN_vkDebugReportCallbackEXT debugCallback )
+                                             PFN_vkDebugReportCallbackEXT debugCallback,
+                                             RenderSystem *renderSystem )
     {
         VkInstanceCreateInfo createInfo;
         VkApplicationInfo appInfo;
@@ -125,7 +127,7 @@ namespace Ogre
         createInfo.ppEnabledExtensionNames = extensions.begin();
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-        VkDebugReportCallbackCreateInfoEXT debugCb = addDebugCallback( debugCallback );
+        VkDebugReportCallbackCreateInfoEXT debugCb = addDebugCallback( debugCallback, renderSystem );
         createInfo.pNext = &debugCb;
 #endif
 

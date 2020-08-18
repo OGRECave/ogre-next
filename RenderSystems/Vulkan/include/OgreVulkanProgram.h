@@ -105,6 +105,8 @@ namespace Ogre
         /// Overridden from GpuProgram
         GpuProgramParametersSharedPtr createParameters( void );
 
+        void debugDump( String &outString );
+
         /// Compile source into shader object
         bool compile( const bool checkErrors = false );
 
@@ -145,6 +147,7 @@ namespace Ogre
         void loadFromSource( void );
 
         void replaceVersionMacros( void );
+        void getPreamble( String &preamble ) const;
         void addVertexSemanticsToPreamble( String &inOutPreamble ) const;
         void addPreprocessorToPreamble( String &inOutPreamble ) const;
 

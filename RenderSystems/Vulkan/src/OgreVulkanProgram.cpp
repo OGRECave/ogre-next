@@ -40,7 +40,7 @@ THE SOFTWARE.
 #include "OgreVulkanUtils.h"
 #include "SPIRV-Reflect/spirv_reflect.h"
 
-#include "SPIRV/Logger.h"
+#include "glslang/SPIRV/Logger.h"
 
 // Inclusion of SPIRV headers triggers lots of C++11 errors we don't care
 namespace glslang
@@ -49,6 +49,7 @@ namespace glslang
     {
         SpvOptions() :
             generateDebugInfo( false ),
+            stripDebugInfo( false ),
             disableOptimizer( true ),
             optimizeSize( false ),
             disassemble( false ),
@@ -56,6 +57,7 @@ namespace glslang
         {
         }
         bool generateDebugInfo;
+        bool stripDebugInfo;
         bool disableOptimizer;
         bool optimizeSize;
         bool disassemble;
@@ -430,6 +432,41 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void VulkanProgram::setReplaceVersionMacro( bool bReplace ) { mReplaceVersionMacro = bReplace; }
     //-----------------------------------------------------------------------
+    void VulkanProgram::getPreamble( String &preamble ) const
+    {
+        if( mShaderSyntax == GLSL )
+        {
+            preamble +=
+                "#extension GL_EXT_samplerless_texture_functions : require\n"
+                "#define vulkan_layout layout\n"
+                "#define vulkan( x ) x\n"
+                "#define vk_comma ,\n"
+                "#define vkSampler2D sampler2D\n"
+                "#define vkSampler2DArray sampler2DArray\n"
+                "#define vkSamplerCube samplerCube\n";
+        }
+        else
+        {
+            preamble += "#define vulkan( x ) x\n";
+        }
+
+        mRootLayout->generateRootLayoutMacros( mType, mShaderSyntax, preamble );
+        if( mType == GPT_VERTEX_PROGRAM )
+            addVertexSemanticsToPreamble( preamble );
+        addPreprocessorToPreamble( preamble );
+    }
+    //-----------------------------------------------------------------------
+    void VulkanProgram::debugDump( String &outString )
+    {
+        outString += mName;
+        outString += "\n";
+        mRootLayout->dump( outString );
+        outString += "\n";
+        getPreamble( outString );
+        outString += "\n";
+        outString += mSource;
+    }
+    //-----------------------------------------------------------------------
     bool VulkanProgram::compile( const bool checkErrors )
     {
         mCompiled = false;
@@ -470,27 +507,7 @@ namespace Ogre
                 replaceVersionMacros();
 
             String preamble;
-            if( mShaderSyntax == GLSL )
-            {
-                preamble =
-                    "#extension GL_EXT_samplerless_texture_functions : require\n"
-                    "#define vulkan_layout layout\n"
-                    "#define vulkan( x ) x\n"
-                    "#define vk_comma ,\n"
-                    "#define vkSampler2D sampler2D\n"
-                    "#define vkSampler2DArray sampler2DArray\n"
-                    "#define vkSamplerCube samplerCube\n";
-            }
-            else
-            {
-                preamble = "#define vulkan( x ) x\n";
-            }
-
-            mRootLayout->generateRootLayoutMacros( mType, mShaderSyntax, preamble );
-            if( mType == GPT_VERTEX_PROGRAM )
-                addVertexSemanticsToPreamble( preamble );
-            addPreprocessorToPreamble( preamble );
-
+            getPreamble( preamble );
             shader.setPreamble( preamble.c_str() );
 
             if( !shader.parse( &resources, 450, false, messages ) )

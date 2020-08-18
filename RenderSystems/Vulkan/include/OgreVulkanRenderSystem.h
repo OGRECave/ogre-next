@@ -112,6 +112,8 @@ namespace Ogre
         bool                        mInterruptedRenderCommandEncoder;
         // clang-format on
 
+        bool mValidationError;
+
         PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback;
         PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;
         VkDebugReportCallbackEXT mDebugReportCallback;
@@ -308,6 +310,8 @@ namespace Ogre
 
         void _notifyActiveEncoderEnded( bool callEndRenderPassDesc );
         void _notifyActiveComputeEnded( void );
+
+        void debugCallback( void );
 
         virtual bool isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
                                    const TextureGpu *texture ) const;
