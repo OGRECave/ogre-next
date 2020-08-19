@@ -1,7 +1,9 @@
-#version 330
+#version ogre_glsl_ver_330
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
@@ -39,18 +41,22 @@ vec3 fromSRGB( vec3 x )
 	return x * x;
 }
 
-uniform sampler2D rt0;
-uniform sampler2D lumRt;
-uniform sampler2D bloomRt;
+vulkan_layout( ogre_t0 ) uniform texture2D rt0;
+vulkan_layout( ogre_t1 ) uniform texture2D lumRt;
+vulkan_layout( ogre_t2 ) uniform texture2D bloomRt;
+
+vulkan( layout( ogre_s0 ) uniform sampler samplerPoint );
+vulkan( layout( ogre_s2 ) uniform sampler samplerBilinear );
 
 void main()
 {
-	float fInvLumAvg = texture( lumRt, vec2( 0.0, 0.0 ) ).x;
+	float fInvLumAvg = texture( vkSampler2D( lumRt, samplerPoint ), vec2( 0.0, 0.0 ) ).x;
 
-	vec4 vSample = texture( rt0, inPs.uv0 );
+	vec4 vSample = texture( vkSampler2D( rt0, samplerPoint ), inPs.uv0 );
 
 	vSample.xyz *= fInvLumAvg;
-	vSample.xyz	+= fromSRGB( texture( bloomRt, inPs.uv0 ).xyz ) * 16.0;
+	vSample.xyz	+= fromSRGB( texture( vkSampler2D( bloomRt, samplerBilinear ),
+									  inPs.uv0 ).xyz ) * 16.0;
 	vSample.xyz  = FilmicTonemap( vSample.xyz ) / FilmicTonemap( W );
 	//vSample.xyz  = vSample.xyz / (1 + vSample.xyz); //Reinhard Simple
 	vSample.xyz  = ( vSample.xyz - 0.5 ) * 1.25 + 0.5 + 0.11;

@@ -1,4 +1,4 @@
-#version 330
+#version ogre_glsl_ver_330
 
 #ifdef GL_AMD_shader_trinary_minmax
 	#extension GL_AMD_shader_trinary_minmax : enable
@@ -36,7 +36,7 @@ vec3 tonemapInvert( float invLum, vec3 c )
 	return val * rcp( invLum );
 }
 
-vec4 loadWithToneMapAndWeight( float invLum, sampler2DMS tex, ivec2 iCoord, int subsample )
+vec4 loadWithToneMapAndWeight( float invLum, texture2DMS tex, ivec2 iCoord, int subsample )
 {
 	vec4 value = texelFetch( tex, iCoord, subsample ).xyzw;
 	value.xyz = tonemapWithWeight( invLum, value.xyz, MSAA_SUBSAMPLE_WEIGHT );
@@ -45,14 +45,16 @@ vec4 loadWithToneMapAndWeight( float invLum, sampler2DMS tex, ivec2 iCoord, int 
 	return value;
 }
 
-uniform sampler2DMS rt0;
-uniform sampler2D oldLumRt;
+vulkan_layout( ogre_t0 ) uniform texture2DMS rt0;
+vulkan_layout( ogre_t1 ) uniform texture2D oldLumRt;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
 } inPs;
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
 in vec4 gl_FragCoord;

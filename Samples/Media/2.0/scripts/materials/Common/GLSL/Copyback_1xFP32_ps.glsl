@@ -10,7 +10,7 @@ in block
 } inPs;
 
 vulkan_layout( location = 0 )
-out vec4 fragColour;
+out float fragColour;
 
 void main()
 {

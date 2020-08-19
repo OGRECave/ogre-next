@@ -8,6 +8,11 @@ fragment_program HDR/Resolve_4xFP32_HDR_Box_ps_GLSL glsl
 	}
 }
 
+fragment_program HDR/Resolve_4xFP32_HDR_Box_ps_VK glslvk
+{
+	source Resolve_4xFP32_HDR_Box_ps.glsl
+}
+
 fragment_program HDR/Resolve_4xFP32_HDR_Box_ps_HLSL hlsl
 {
 	source Resolve_4xFP32_HDR_Box_ps.hlsl
@@ -24,6 +29,7 @@ fragment_program HDR/Resolve_4xFP32_HDR_Box_ps_Metal metal
 fragment_program HDR/Resolve_4xFP32_HDR_Box_ps unified
 {
 	delegate HDR/Resolve_4xFP32_HDR_Box_ps_GLSL
+	delegate HDR/Resolve_4xFP32_HDR_Box_ps_VK
 	delegate HDR/Resolve_4xFP32_HDR_Box_ps_HLSL
 	delegate HDR/Resolve_4xFP32_HDR_Box_ps_Metal
 }

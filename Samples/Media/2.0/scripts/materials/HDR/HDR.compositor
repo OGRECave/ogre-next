@@ -2,7 +2,7 @@
 compositor_node HdrRenderingNode
 {
 	texture rt0			target_width target_height PFG_RGBA16_FLOAT msaa_auto explicit_resolve
-	texture oldLumRt	           1             1 PFG_R16_FLOAT depth_pool 0
+	texture oldLumRt	           1             1 PFG_R16_FLOAT depth_pool 0 keep_content
 
 	target rt0
 	{

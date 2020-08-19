@@ -70,6 +70,44 @@ fragment_program HDR/BoxBlurV_ps_GLSL glsl
 }
 
 //------------------------
+//Vulkan GLSL Definitions
+//------------------------
+fragment_program HDR/DownScale01_SumLumStart_ps_VK glslvk
+{
+	source DownScale01_SumLumStart_ps.glsl
+}
+
+fragment_program HDR/DownScale02_SumLumIterative_ps_VK glslvk
+{
+	source DownScale02_SumLumIterative_ps.glsl
+}
+
+fragment_program HDR/DownScale03_SumLumEnd_ps_VK glslvk
+{
+	source DownScale03_SumLumEnd_ps.glsl
+}
+
+fragment_program HDR/FinalToneMapping_ps_VK glslvk
+{
+	source FinalToneMapping_ps.glsl
+}
+
+fragment_program HDR/BrightPass_Start_ps_VK glslvk
+{
+	source BrightPass_Start_ps.glsl
+}
+
+fragment_program HDR/BoxBlurH_ps_VK glslvk
+{
+	source BoxBlurH_ps.glsl
+}
+
+fragment_program HDR/BoxBlurV_ps_VK glslvk
+{
+	source BoxBlurV_ps.glsl
+}
+
+//------------------------
 //DirectX 11 HLSL Definitions
 //------------------------
 
@@ -170,6 +208,7 @@ fragment_program HDR/BoxBlurV_ps_Metal metal
 fragment_program HDR/DownScale01_SumLumStart_ps unified
 {
 	delegate HDR/DownScale01_SumLumStart_ps_GLSL
+	delegate HDR/DownScale01_SumLumStart_ps_VK
 	delegate HDR/DownScale01_SumLumStart_ps_HLSL
 	delegate HDR/DownScale01_SumLumStart_ps_Metal
 	
@@ -183,6 +222,7 @@ fragment_program HDR/DownScale01_SumLumStart_ps unified
 fragment_program HDR/DownScale02_SumLumIterative_ps unified
 {
 	delegate HDR/DownScale02_SumLumIterative_ps_GLSL
+	delegate HDR/DownScale02_SumLumIterative_ps_VK
 	delegate HDR/DownScale02_SumLumIterative_ps_HLSL
 	delegate HDR/DownScale02_SumLumIterative_ps_Metal
 	
@@ -195,6 +235,7 @@ fragment_program HDR/DownScale02_SumLumIterative_ps unified
 fragment_program HDR/DownScale03_SumLumEnd_ps unified
 {
 	delegate HDR/DownScale03_SumLumEnd_ps_GLSL
+	delegate HDR/DownScale03_SumLumEnd_ps_VK
 	delegate HDR/DownScale03_SumLumEnd_ps_HLSL
 	delegate HDR/DownScale03_SumLumEnd_ps_Metal
 	
@@ -209,6 +250,7 @@ fragment_program HDR/DownScale03_SumLumEnd_ps unified
 fragment_program HDR/FinalToneMapping_ps unified
 {
 	delegate HDR/FinalToneMapping_ps_GLSL
+	delegate HDR/FinalToneMapping_ps_VK
 	delegate HDR/FinalToneMapping_ps_HLSL
 	delegate HDR/FinalToneMapping_ps_Metal
 }
@@ -216,6 +258,7 @@ fragment_program HDR/FinalToneMapping_ps unified
 fragment_program HDR/BrightPass_Start_ps unified
 {
 	delegate HDR/BrightPass_Start_ps_GLSL
+	delegate HDR/BrightPass_Start_ps_VK
 	delegate HDR/BrightPass_Start_ps_HLSL
 	delegate HDR/BrightPass_Start_ps_Metal
 	
@@ -228,6 +271,7 @@ fragment_program HDR/BrightPass_Start_ps unified
 fragment_program HDR/BoxBlurH_ps unified
 {
 	delegate HDR/BoxBlurH_ps_GLSL
+	delegate HDR/BoxBlurH_ps_VK
 	delegate HDR/BoxBlurH_ps_HLSL
 	delegate HDR/BoxBlurH_ps_Metal
 	
@@ -240,6 +284,7 @@ fragment_program HDR/BoxBlurH_ps unified
 fragment_program HDR/BoxBlurV_ps unified
 {
 	delegate HDR/BoxBlurV_ps_GLSL
+	delegate HDR/BoxBlurV_ps_VK
 	delegate HDR/BoxBlurV_ps_HLSL
 	delegate HDR/BoxBlurV_ps_Metal
 	
