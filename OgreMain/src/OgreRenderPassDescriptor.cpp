@@ -180,12 +180,6 @@ namespace Ogre
                     colourEntryRW.resolveTexture = 0;
                     colourEntryRW.storeAction = StoreAction::Store;
                 }
-                else if( colourEntry.texture->isMultisample() && !colourEntry.resolveTexture
-                    && !colourEntry.texture->hasMsaaExplicitResolves() )
-                {
-                    colourEntryRW.resolveTexture = colourEntryRW.texture;
-                    colourEntryRW.storeAction = StoreAction::MultisampleResolve;
-                }
 
                 hasRenderWindow = true;
             }

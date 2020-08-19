@@ -12,6 +12,14 @@ compositor_node StereoRenderingNode
 			viewport_modifier_mask	0x00
 
 			colour_value			0.2 0.4 0.6 1
+
+			// Only write to the MSAA surface (don't resolve!)
+			store
+			{
+				colour	store
+				depth	store
+				stencil	store
+			}
 		}
 
 		//Eye render
@@ -23,6 +31,14 @@ compositor_node StereoRenderingNode
 			viewport_modifier_mask	0xff
 
 			overlays	off
+
+			// Only write to the MSAA surface (don't resolve!)
+			store
+			{
+				colour	store
+				depth	store
+				stencil	store
+			}
 		}
 
 		//Render overlays last on the entire screen

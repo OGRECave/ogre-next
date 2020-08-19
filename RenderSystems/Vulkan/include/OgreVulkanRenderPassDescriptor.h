@@ -111,7 +111,7 @@ namespace Ogre
         void calculateSharedKey( void );
 
         static VkAttachmentLoadOp get( LoadAction::LoadAction action );
-        static VkAttachmentStoreOp get( StoreAction::StoreAction action );
+        static VkAttachmentStoreOp get( StoreAction::StoreAction action, bool bResolveTarget );
         static VkClearColorValue getClearColour( const ColourValue &clearColour,
                                                  PixelFormatGpu pixelFormat );
 

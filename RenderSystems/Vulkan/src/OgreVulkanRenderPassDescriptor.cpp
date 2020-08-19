@@ -135,16 +135,19 @@ namespace Ogre
         return VK_ATTACHMENT_LOAD_OP_LOAD;
     }
     //-----------------------------------------------------------------------------------
-    VkAttachmentStoreOp VulkanRenderPassDescriptor::get( StoreAction::StoreAction action )
+    VkAttachmentStoreOp VulkanRenderPassDescriptor::get( StoreAction::StoreAction action,
+                                                         bool bResolveTarget )
     {
         switch( action )
         {
         case StoreAction::DontCare:
             return VK_ATTACHMENT_STORE_OP_DONT_CARE;
         case StoreAction::Store:
+            OGRE_ASSERT_LOW( !bResolveTarget &&
+                             "We shouldn't add a resolve attachment if we aren't resolving" );
             return VK_ATTACHMENT_STORE_OP_STORE;
         case StoreAction::MultisampleResolve:
-            return VK_ATTACHMENT_STORE_OP_STORE;
+            return bResolveTarget ? VK_ATTACHMENT_STORE_OP_STORE : VK_ATTACHMENT_STORE_OP_DONT_CARE;
         case StoreAction::StoreAndMultisampleResolve:
             return VK_ATTACHMENT_STORE_OP_STORE;
         case StoreAction::StoreOrResolve:
@@ -246,7 +249,9 @@ namespace Ogre
     {
         const RenderPassColourTarget &colour = mColour[idx];
 
-        if( ( !colour.texture->getSampleDescription().isMultisample() || !colour.resolveTexture ) &&
+        if( ( !colour.texture->getSampleDescription().isMultisample() || !colour.resolveTexture ||
+              ( colour.storeAction != StoreAction::MultisampleResolve &&
+                colour.storeAction != StoreAction::StoreAndMultisampleResolve ) ) &&
             bResolveTex )
         {
             // There's no resolve texture to setup
@@ -285,7 +290,7 @@ namespace Ogre
                                          : static_cast<VkSampleCountFlagBits>(
                                                texture->getSampleDescription().getColourSamples() );
         attachment.loadOp = bResolveTex ? VK_ATTACHMENT_LOAD_OP_DONT_CARE : get( colour.loadAction );
-        attachment.storeOp = get( colour.storeAction );
+        attachment.storeOp = get( colour.storeAction, bResolveTex );
         attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         if( !bResolveTex )
@@ -362,11 +367,11 @@ namespace Ogre
         attachment.samples = static_cast<VkSampleCountFlagBits>(
             mDepth.texture->getSampleDescription().getColourSamples() );
         attachment.loadOp = get( mDepth.loadAction );
-        attachment.storeOp = get( mDepth.storeAction );
+        attachment.storeOp = get( mDepth.storeAction, false );
         if( mStencil.texture )
         {
             attachment.stencilLoadOp = get( mStencil.loadAction );
-            attachment.stencilStoreOp = get( mStencil.storeAction );
+            attachment.stencilStoreOp = get( mStencil.storeAction, false );
         }
         else
         {
