@@ -52,6 +52,7 @@ namespace Ogre
         Texture,
         RenderTarget,
         RenderTargetReadOnly,
+        ResolveDest,
         Clear,
         Uav,
         CopySrc,

@@ -242,12 +242,12 @@ namespace Ogre
     void VulkanRenderPassDescriptor::setupColourAttachment(
         const size_t idx, VulkanFrameBufferDescValue &fboDesc, VkAttachmentDescription *attachments,
         uint32 &currAttachmIdx, VkAttachmentReference *colourAttachRefs,
-        VkAttachmentReference *resolveAttachRefs, const size_t vkIdx, const bool resolveTex )
+        VkAttachmentReference *resolveAttachRefs, const size_t vkIdx, const bool bResolveTex )
     {
         const RenderPassColourTarget &colour = mColour[idx];
 
         if( ( !colour.texture->getSampleDescription().isMultisample() || !colour.resolveTexture ) &&
-            resolveTex )
+            bResolveTex )
         {
             // There's no resolve texture to setup
             resolveAttachRefs[vkIdx].attachment = VK_ATTACHMENT_UNUSED;
@@ -258,7 +258,7 @@ namespace Ogre
         VkImage texName = 0;
         VulkanTextureGpu *texture = 0;
 
-        if( !resolveTex )
+        if( !bResolveTex )
         {
             OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( colour.texture ) );
             texture = static_cast<VulkanTextureGpu *>( colour.texture );
@@ -281,28 +281,40 @@ namespace Ogre
 
         VkAttachmentDescription &attachment = attachments[currAttachmIdx];
         attachment.format = VulkanMappings::get( texture->getPixelFormat() );
-        attachment.samples = resolveTex ? VK_SAMPLE_COUNT_1_BIT : static_cast<VkSampleCountFlagBits>(
-                                              texture->getSampleDescription().getColourSamples() );
-        attachment.loadOp = resolveTex ? VK_ATTACHMENT_LOAD_OP_DONT_CARE : get( colour.loadAction );
+        attachment.samples = bResolveTex ? VK_SAMPLE_COUNT_1_BIT
+                                         : static_cast<VkSampleCountFlagBits>(
+                                               texture->getSampleDescription().getColourSamples() );
+        attachment.loadOp = bResolveTex ? VK_ATTACHMENT_LOAD_OP_DONT_CARE : get( colour.loadAction );
         attachment.storeOp = get( colour.storeAction );
         attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        if( texture->isRenderWindowSpecific() && mReadyWindowForPresent )
+        if( !bResolveTex )
         {
-            attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            if( texture->isRenderWindowSpecific() && !texture->isMultisample() &&
+                mReadyWindowForPresent )
+            {
+                attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            }
+            else
+            {
+                attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                attachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            }
         }
         else
         {
-            attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            attachment.finalLayout =
-                resolveTex ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            if( texture->isRenderWindowSpecific() && mReadyWindowForPresent )
+                attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            else
+                attachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         }
 
-        const uint8 mipLevel = resolveTex ? colour.resolveMipLevel : colour.mipLevel;
-        const uint16 slice = resolveTex ? colour.resolveSlice : colour.slice;
+        const uint8 mipLevel = bResolveTex ? colour.resolveMipLevel : colour.mipLevel;
+        const uint16 slice = bResolveTex ? colour.resolveSlice : colour.slice;
 
-        if( !texture->isRenderWindowSpecific() || resolveTex )
+        if( !texture->isRenderWindowSpecific() || ( texture->isMultisample() && !bResolveTex ) )
         {
             fboDesc.mImageViews[currAttachmIdx] = texture->_createView(
                 texture->getPixelFormat(), mipLevel, 1u, slice, false, false, 1u, texName );
@@ -320,14 +332,13 @@ namespace Ogre
             fboDesc.mWindowImageViews.resize( numSurfaces );
             for( size_t surfIdx = 0u; surfIdx < numSurfaces; ++surfIdx )
             {
-                if( !colour.texture->getSampleDescription().isMultisample() )
-                    texName = textureVulkan->getWindowFinalTextureName( surfIdx );
+                texName = textureVulkan->getWindowFinalTextureName( surfIdx );
                 fboDesc.mWindowImageViews[surfIdx] = texture->_createView(
                     texture->getPixelFormat(), mipLevel, 1u, slice, false, false, 1u, texName );
             }
         }
 
-        if( resolveTex )
+        if( bResolveTex )
         {
             resolveAttachRefs[vkIdx].attachment = currAttachmIdx;
             resolveAttachRefs[vkIdx].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -447,7 +458,14 @@ namespace Ogre
             VulkanTextureGpu *textureVulkan = static_cast<VulkanTextureGpu *>( mColour[i].texture );
 
             if( textureVulkan->isRenderWindowSpecific() )
-                windowAttachmentIdx = attachmentIdx;
+            {
+                // If the window is MSAA but not being resolved,
+                // then just behave like a regular RenderTexture
+                if( !textureVulkan->isMultisample() )
+                    windowAttachmentIdx = attachmentIdx;
+                else if( textureVulkan == mColour[i].resolveTexture )
+                    windowAttachmentIdx = attachmentIdx + 1u;
+            }
 
             mClearValues[attachmentIdx].color =
                 getClearColour( mColour[i].clearColour, mColour[i].texture->getPixelFormat() );

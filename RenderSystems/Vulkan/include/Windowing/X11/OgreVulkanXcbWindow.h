@@ -58,6 +58,8 @@ namespace Ogre
         bool mIsTopLevel;
         bool mIsExternal;
 
+        bool mHwGamma;
+
         void initConnection( void );
 
         void createWindow( const String &windowName, uint32 width, uint32 height,

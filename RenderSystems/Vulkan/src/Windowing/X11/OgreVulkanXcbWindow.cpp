@@ -76,7 +76,8 @@ namespace Ogre
         mVisible( true ),
         mHidden( false ),
         mIsTopLevel( true ),
-        mIsExternal( false )
+        mIsExternal( false ),
+        mHwGamma( true )
     {
         inOutRequiredInstanceExts.push_back( VK_KHR_XCB_SURFACE_EXTENSION_NAME );
     }
@@ -167,6 +168,13 @@ namespace Ogre
 
                 mScreen = iter.data;
             }
+
+            opt = miscParams->find( "FSAA" );
+            if( opt != end )
+                mRequestedSampleDescription.parseString( opt->second );
+            opt = miscParams->find( "gamma" );
+            if( opt != end )
+                mHwGamma = StringConverter::parseBool( opt->second );
         }
 
         if( !mXcbWindow )
@@ -203,13 +211,25 @@ namespace Ogre
         mDepthBuffer = textureManager->createWindowDepthBuffer();
         mStencilBuffer = 0;
 
-        bool hwGamma = true;
-
         setFinalResolution( mRequestedWidth, mRequestedHeight );
-        mTexture->setPixelFormat( chooseSurfaceFormat( hwGamma ) );
+        mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
         mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
         if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
             mStencilBuffer = mDepthBuffer;
+
+        mTexture->setSampleDescription( mRequestedSampleDescription );
+        mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
+        mSampleDescription = mRequestedSampleDescription;
+
+        if( mDepthBuffer )
+        {
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
+                                               mDepthBuffer->getPixelFormat() );
+        }
+        else
+        {
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
+        }
 
         mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
         mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );

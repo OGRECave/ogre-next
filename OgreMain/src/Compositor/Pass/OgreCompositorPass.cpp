@@ -520,47 +520,6 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    /*void CompositorPass::calculateAccessBits( const TextureGpu *texture,
-                                              ResourceLayout::Layout oldLayout,
-                                              ResourceLayout::Layout newLayout,
-                                              ResourceAccess::ResourceAccess oldAccess,
-                                              ResourceAccess::ResourceAccess newAccess,
-                                              uint32 &outWriteBarrierBits, uint32 &outReadBarrierBits )
-    {
-        uint32 writeBarrierBits = 0u;
-        uint32 readBarrierBits = 0u;
-
-        switch( oldLayout )
-        {
-        case ResourceLayout::RenderTarget:
-            if( oldAccess & ResourceAccess::Write )
-                writeBarrierBits |= WriteBarrier::RenderTarget;
-            break;
-        case ResourceLayout::RenderDepth:
-            if( oldAccess & ResourceAccess::Write )
-                writeBarrierBits |= WriteBarrier::DepthStencil;
-            break;
-        case ResourceLayout::Clear:
-            if( PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
-                writeBarrierBits |= WriteBarrier::DepthStencil;
-            else
-                writeBarrierBits |= WriteBarrier::RenderTarget;
-            break;
-        case ResourceLayout::Uav:
-            writeBarrierBits |= WriteBarrier::Uav;
-            break;
-        default: ;
-        }
-
-        switch( newLayout )
-        {
-        case ResourceLayout::RenderTarget:
-        }
-
-        outWriteBarrierBits = writeBarrierBits;
-        outReadBarrierBits = readBarrierBits;
-    }*/
-    //-----------------------------------------------------------------------------------
     void CompositorPass::resolveTransition( TextureGpu *texture, ResourceLayout::Layout newLayout,
                                             ResourceAccess::ResourceAccess access, uint8 stageMask )
     {
@@ -582,8 +541,23 @@ namespace Ogre
             // Check <anything> -> RT
             for( int i = 0; i < mRenderPassDesc->getNumColourEntries(); ++i )
             {
-                resolveTransition( mRenderPassDesc->mColour[i].texture, ResourceLayout::RenderTarget,
-                                   ResourceAccess::ReadWrite, 0u );
+                RenderPassColourTarget &colourRenderPass = mRenderPassDesc->mColour[i];
+                if( !colourRenderPass.resolveTexture )
+                {
+                    resolveTransition( colourRenderPass.texture, ResourceLayout::RenderTarget,
+                                       ResourceAccess::ReadWrite, 0u );
+                }
+                else
+
+                {
+                    resolveTransition( colourRenderPass.resolveTexture, ResourceLayout::ResolveDest,
+                                       ResourceAccess::Write, 0u );
+                    if( colourRenderPass.resolveTexture != colourRenderPass.texture )
+                    {
+                        resolveTransition( colourRenderPass.texture, ResourceLayout::RenderTarget,
+                                           ResourceAccess::ReadWrite, 0u );
+                    }
+                }
             }
             if( mRenderPassDesc->mDepth.texture )
             {

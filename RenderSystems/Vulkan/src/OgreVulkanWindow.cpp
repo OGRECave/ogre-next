@@ -305,69 +305,6 @@ namespace Ogre
                      "VulkanWindow::_initialize" );
     }
     //-------------------------------------------------------------------------
-    void VulkanWindow::setMsaaBackbuffer()
-    {
-        if( mTexture )
-        {
-            OGRE_ASSERT_LOW( dynamic_cast<VulkanTextureGpuWindow *>( mTexture ) );
-            VulkanTextureGpuWindow *texWindow = static_cast<VulkanTextureGpuWindow *>( mTexture );
-            texWindow->_setMsaaBackbuffer( 0 );
-
-            if( isMultisample() )
-            {
-                VkImageCreateInfo imageInfo;
-                makeVkStruct( imageInfo, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO );
-                imageInfo.imageType = texWindow->getVulkanTextureType();
-                imageInfo.extent.width = texWindow->getWidth();
-                imageInfo.extent.height = texWindow->getHeight();
-                imageInfo.extent.depth = texWindow->getDepth();
-                imageInfo.mipLevels = 1;
-                imageInfo.arrayLayers = 1;
-                imageInfo.format = VulkanMappings::get( texWindow->getPixelFormat() );
-                imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-                imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-                imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-                imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-                imageInfo.samples =
-                    static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
-                imageInfo.flags = 0;
-                imageInfo.usage |= PixelFormatGpuUtils::isDepth( texWindow->getPixelFormat() )
-                                       ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
-                                       : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-
-                String textureName = texWindow->getNameStr();
-
-                VulkanTextureGpuManager *textureManager =
-                    static_cast<VulkanTextureGpuManager *>( texWindow->getTextureManager() );
-                VulkanDevice *device = textureManager->getDevice();
-
-                VkImage msaaTexture = 0;
-                VkResult imageResult = vkCreateImage( device->mDevice, &imageInfo, 0, &msaaTexture );
-                checkVkResult( imageResult, "vkCreateImage" );
-
-                setObjectName( device->mDevice, (uint64_t)msaaTexture,
-                               VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, textureName.c_str() );
-
-                VkMemoryRequirements memRequirements;
-                vkGetImageMemoryRequirements( device->mDevice, msaaTexture, &memRequirements );
-
-                VulkanVaoManager *vaoManager =
-                    static_cast<VulkanVaoManager *>( textureManager->getVaoManager() );
-                uint16 texMemIdx = 0;
-                size_t vboPoolIdx = 0;
-                VkDeviceSize internalBufferStart = 0;
-                VkDeviceMemory deviceMemory = vaoManager->allocateTexture(
-                    memRequirements, texMemIdx, vboPoolIdx, internalBufferStart );
-
-                VkResult result = vkBindImageMemory( device->mDevice, msaaTexture, deviceMemory,
-                                                     internalBufferStart );
-                checkVkResult( result, "vkBindImageMemory" );
-
-                texWindow->_setMsaaBackbuffer( msaaTexture, texMemIdx, vboPoolIdx, internalBufferStart );
-            }
-        }
-    }
-    //-------------------------------------------------------------------------
     VkSemaphore VulkanWindow::getImageAcquiredSemaphore( void )
     {
         OGRE_ASSERT_LOW( mSwapchainStatus != SwapchainReleased );

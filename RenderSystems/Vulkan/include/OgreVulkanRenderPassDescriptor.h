@@ -120,7 +120,7 @@ namespace Ogre
                                     VkAttachmentDescription *attachments, uint32 &currAttachmIdx,
                                     VkAttachmentReference *colourAttachRefs,
                                     VkAttachmentReference *resolveAttachRefs, const size_t vkIdx,
-                                    const bool resolveTex );
+                                    const bool bResolveTex );
         VkImageView setupDepthAttachment( VkAttachmentDescription &attachment );
 
         void setupFbo( VulkanFrameBufferDescValue &fboDesc );

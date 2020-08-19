@@ -89,10 +89,6 @@ namespace Ogre
         size_t mVboPoolIdx;
         size_t mInternalBufferStart;
 
-        uint16 mMsaaTexMemIdx;
-        size_t mMsaaVboPoolIdx;
-        size_t mMsaaInternalBufferStart;
-
     public:
         /// The current layout we're in. Including any internal stuff.
         VkImageLayout mCurrLayout;
@@ -107,6 +103,9 @@ namespace Ogre
     protected:
         virtual void createInternalResourcesImpl( void );
         virtual void destroyInternalResourcesImpl( void );
+
+        virtual void createMsaaSurface( void );
+        virtual void destroyMsaaSurface( void );
 
     public:
         VulkanTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,
@@ -166,9 +165,17 @@ namespace Ogre
     class _OgreVulkanExport VulkanTextureGpuRenderTarget : public VulkanTextureGpu
     {
     protected:
+        size_t mMsaaVboPoolIdx;
+        size_t mMsaaInternalBufferStart;
+        uint16 mMsaaTexMemIdx;
+
         uint16 mDepthBufferPoolId;
         bool mPreferDepthTexture;
         PixelFormatGpu mDesiredDepthBufferFormat;
+
+
+        virtual void createMsaaSurface( void );
+        virtual void destroyMsaaSurface( void );
 
     public:
         VulkanTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,

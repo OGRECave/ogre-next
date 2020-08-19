@@ -1885,7 +1885,6 @@ namespace Ogre
             {
                 colourAttachRefs[numColourAttachments].attachment = attachmentIdx;
                 colourAttachRefs[numColourAttachments].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                ++numColourAttachments;
 
                 attachments[attachmentIdx].samples =
                     static_cast<VkSampleCountFlagBits>( passPso.sampleDescription.getColourSamples() );
@@ -1908,8 +1907,8 @@ namespace Ogre
                     resolveAttachRefs[numColourAttachments].layout =
                         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                     ++attachmentIdx;
-                    ++numColourAttachments;
                 }
+                ++numColourAttachments;
             }
         }
 
@@ -1974,7 +1973,8 @@ namespace Ogre
         case ResourceLayout::CopyDst:
             return VK_PIPELINE_STAGE_TRANSFER_BIT;
         case ResourceLayout::CopyEnd:
-            return 0;
+        case ResourceLayout::ResolveDest:
+            return VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
         case ResourceLayout::Undefined:
         case ResourceLayout::NumResourceLayouts:
             return 0;
@@ -2027,6 +2027,13 @@ namespace Ogre
                 VkImageMemoryBarrier imageBarrier = texture->getImageMemoryBarrier();
                 imageBarrier.oldLayout = VulkanMappings::get( itor->oldLayout, texture );
                 imageBarrier.newLayout = VulkanMappings::get( itor->newLayout, texture );
+
+                if( texture->isMultisample() && !texture->hasMsaaExplicitResolves() )
+                {
+                    // Rare case where we render to an implicit resolve without resolving
+                    if( itor->newLayout == ResourceLayout::RenderTarget )
+                        imageBarrier.image = texture->getMsaaFramebufferName();
+                }
 
                 const bool bIsDepth = PixelFormatGpuUtils::isDepth( texture->getPixelFormat() );
 

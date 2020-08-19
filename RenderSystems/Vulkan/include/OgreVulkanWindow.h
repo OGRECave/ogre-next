@@ -92,8 +92,6 @@ namespace Ogre
         virtual void _initialize( TextureGpuManager *textureGpuManager,
                                   const NameValuePairList *miscParams ) = 0;
 
-        void setMsaaBackbuffer( void );
-
         /// Returns null if getImageAcquiredSemaphore has already been called during this frame
         VkSemaphore getImageAcquiredSemaphore( void );
 

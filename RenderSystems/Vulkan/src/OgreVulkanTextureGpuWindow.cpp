@@ -79,9 +79,13 @@ namespace Ogre
         return mWindow->getNumSwapchains();
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuWindow::createInternalResourcesImpl( void ) {}
+    void VulkanTextureGpuWindow::createInternalResourcesImpl( void ) { createMsaaSurface(); }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuWindow::destroyInternalResourcesImpl( void ) { mFinalTextureName = 0; }
+    void VulkanTextureGpuWindow::destroyInternalResourcesImpl( void )
+    {
+        mFinalTextureName = 0;
+        destroyMsaaSurface();
+    }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::notifyDataIsReady( void )
     {
@@ -110,15 +114,6 @@ namespace Ogre
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "",
                      "VulkanTextureGpuWindow::_notifyTextureSlotChanged" );
-    }
-    //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuWindow::_setMsaaBackbuffer( VkImage msaaTex, uint16 texMemIdx, size_t vboPoolIdx,
-                                                     uint64 internalBufferStart )
-    {
-        mMsaaFramebufferName = msaaTex;
-        mMsaaTexMemIdx = texMemIdx;
-        mMsaaVboPoolIdx = vboPoolIdx;
-        mMsaaInternalBufferStart = internalBufferStart;
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::setTextureType( TextureTypes::TextureTypes textureType )

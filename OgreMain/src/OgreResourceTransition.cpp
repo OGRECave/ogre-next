@@ -107,13 +107,14 @@ namespace Ogre
         OGRE_ASSERT_MEDIUM(
             ( ( newLayout != ResourceLayout::Texture &&
                 newLayout != ResourceLayout::RenderTargetReadOnly &&
-                newLayout != ResourceLayout::CopySrc &&  //
-                newLayout != ResourceLayout::CopyDst &&  //
+                newLayout != ResourceLayout::ResolveDest && newLayout != ResourceLayout::CopySrc &&  //
+                newLayout != ResourceLayout::CopyDst &&                                              //
                 newLayout != ResourceLayout::MipmapGen ) ||
               ( newLayout == ResourceLayout::Texture && access == ResourceAccess::Read ) ||
               ( newLayout == ResourceLayout::CopySrc && access == ResourceAccess::Read ) ||
               ( newLayout == ResourceLayout::CopyDst && access == ResourceAccess::Write ) ||
               ( newLayout == ResourceLayout::MipmapGen && access == ResourceAccess::ReadWrite ) ||
+              ( newLayout == ResourceLayout::ResolveDest && access == ResourceAccess::Write ) ||
               ( newLayout == ResourceLayout::RenderTargetReadOnly &&
                 access == ResourceAccess::Read ) ) &&
             "Invalid Layout-access pair" );

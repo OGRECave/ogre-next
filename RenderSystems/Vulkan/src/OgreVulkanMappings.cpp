@@ -525,6 +525,9 @@ namespace Ogre
         case ResourceLayout::CopyEnd:
             texAccessFlags = 0u;
             break;
+        case ResourceLayout::ResolveDest:
+            texAccessFlags = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            break;
         case ResourceLayout::PresentReady:
             texAccessFlags = 0u;
             break;
@@ -559,6 +562,8 @@ namespace Ogre
             return PixelFormatGpuUtils::isDepth( texture->getPixelFormat() )
                        ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
                        : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        case ResourceLayout::ResolveDest:
+            return VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         case ResourceLayout::Clear:
             return PixelFormatGpuUtils::isDepth( texture->getPixelFormat() )
                        ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
