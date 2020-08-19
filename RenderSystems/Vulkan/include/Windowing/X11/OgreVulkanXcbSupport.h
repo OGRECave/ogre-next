@@ -57,12 +57,10 @@ namespace Ogre
             uint16 height;
             bool operator<( const Resolution &other ) const
             {
-                // clang-format off
-                if( this->width < other.width ) return true;
-                if( other.width < this->width ) return false;
-                if( this->height < other.height ) return true;
-                if( other.height < this->height ) return false;
-                // clang-format on
+                if( this->width != other.width )
+                    return this->width < other.width;
+                if( this->height != other.height )
+                    return this->height < other.height;
                 return false;
             }
         };
