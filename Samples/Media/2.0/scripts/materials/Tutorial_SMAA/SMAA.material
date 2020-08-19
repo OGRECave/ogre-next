@@ -7,6 +7,12 @@ vertex_program SMAA/EdgeDetection_vs_GLSL glsl
 	enable_include_header true
 }
 
+vertex_program SMAA/EdgeDetection_vs_VK glslvk
+{
+	source SMAA_EdgeDetection_vs.vulkan.glsl
+	enable_include_header true
+}
+
 vertex_program SMAA/EdgeDetection_vs_HLSL hlsl
 {
 	source SMAA_EdgeDetection_vs.hlsl
@@ -23,6 +29,7 @@ vertex_program SMAA/EdgeDetection_vs_Metal metal
 vertex_program SMAA/EdgeDetection_vs unified
 {
 	delegate SMAA/EdgeDetection_vs_GLSL
+	delegate SMAA/EdgeDetection_vs_VK
 	delegate SMAA/EdgeDetection_vs_HLSL
 	delegate SMAA/EdgeDetection_vs_Metal
 
@@ -44,6 +51,12 @@ fragment_program SMAA/EdgeDetection_ps_GLSL glsl
 	}
 }
 
+fragment_program SMAA/EdgeDetection_ps_VK glslvk
+{
+	source SMAA_EdgeDetection_ps.vulkan.glsl
+	enable_include_header true
+}
+
 fragment_program SMAA/EdgeDetection_ps_HLSL hlsl
 {
 	source SMAA_EdgeDetection_ps.hlsl
@@ -61,6 +74,7 @@ fragment_program SMAA/EdgeDetection_ps_Metal metal
 fragment_program SMAA/EdgeDetection_ps unified
 {
 	delegate SMAA/EdgeDetection_ps_GLSL
+	delegate SMAA/EdgeDetection_ps_VK
 	delegate SMAA/EdgeDetection_ps_HLSL
 	delegate SMAA/EdgeDetection_ps_Metal
 
@@ -113,6 +127,12 @@ vertex_program SMAA/BlendingWeightCalculation_vs_GLSL glsl
 	enable_include_header true
 }
 
+vertex_program SMAA/BlendingWeightCalculation_vs_VK glslvk
+{
+	source SMAA_BlendingWeightCalculation_vs.vulkan.glsl
+	enable_include_header true
+}
+
 vertex_program SMAA/BlendingWeightCalculation_vs_HLSL hlsl
 {
 	source SMAA_BlendingWeightCalculation_vs.hlsl
@@ -129,6 +149,7 @@ vertex_program SMAA/BlendingWeightCalculation_vs_Metal metal
 vertex_program SMAA/BlendingWeightCalculation_vs unified
 {
 	delegate SMAA/BlendingWeightCalculation_vs_GLSL
+	delegate SMAA/BlendingWeightCalculation_vs_VK
 	delegate SMAA/BlendingWeightCalculation_vs_HLSL
 	delegate SMAA/BlendingWeightCalculation_vs_Metal
 
@@ -151,6 +172,12 @@ fragment_program SMAA/BlendingWeightCalculation_ps_GLSL glsl
 	}
 }
 
+fragment_program SMAA/BlendingWeightCalculation_ps_VK glslvk
+{
+	source SMAA_BlendingWeightCalculation_ps.vulkan.glsl
+	enable_include_header true
+}
+
 fragment_program SMAA/BlendingWeightCalculation_ps_HLSL hlsl
 {
 	source SMAA_BlendingWeightCalculation_ps.hlsl
@@ -168,6 +195,7 @@ fragment_program SMAA/BlendingWeightCalculation_ps_Metal metal
 fragment_program SMAA/BlendingWeightCalculation_ps unified
 {
 	delegate SMAA/BlendingWeightCalculation_ps_GLSL
+	delegate SMAA/BlendingWeightCalculation_ps_VK
 	delegate SMAA/BlendingWeightCalculation_ps_HLSL
 	delegate SMAA/BlendingWeightCalculation_ps_Metal
 
@@ -229,6 +257,12 @@ vertex_program SMAA/NeighborhoodBlending_vs_GLSL glsl
 	enable_include_header true
 }
 
+vertex_program SMAA/NeighborhoodBlending_vs_VK glslvk
+{
+	source SMAA_NeighborhoodBlending_vs.vulkan.glsl
+	enable_include_header true
+}
+
 vertex_program SMAA/NeighborhoodBlending_vs_HLSL hlsl
 {
 	source SMAA_NeighborhoodBlending_vs.hlsl
@@ -245,6 +279,7 @@ vertex_program SMAA/NeighborhoodBlending_vs_Metal metal
 vertex_program SMAA/NeighborhoodBlending_vs unified
 {
 	delegate SMAA/NeighborhoodBlending_vs_GLSL
+	delegate SMAA/NeighborhoodBlending_vs_VK
 	delegate SMAA/NeighborhoodBlending_vs_HLSL
 	delegate SMAA/NeighborhoodBlending_vs_Metal
 
@@ -267,6 +302,12 @@ fragment_program SMAA/NeighborhoodBlending_ps_GLSL glsl
 	}
 }
 
+fragment_program SMAA/NeighborhoodBlending_ps_VK glslvk
+{
+	source SMAA_NeighborhoodBlending_ps.vulkan.glsl
+	enable_include_header true
+}
+
 fragment_program SMAA/NeighborhoodBlending_ps_HLSL hlsl
 {
 	source SMAA_NeighborhoodBlending_ps.hlsl
@@ -284,6 +325,7 @@ fragment_program SMAA/NeighborhoodBlending_ps_Metal metal
 fragment_program SMAA/NeighborhoodBlending_ps unified
 {
 	delegate SMAA/NeighborhoodBlending_ps_GLSL
+	delegate SMAA/NeighborhoodBlending_ps_VK
 	delegate SMAA/NeighborhoodBlending_ps_HLSL
 	delegate SMAA/NeighborhoodBlending_ps_Metal
 

@@ -157,7 +157,7 @@
  *         #define SMAA_RT_METRICS float4(1.0 / 1280.0, 1.0 / 720.0, 1280.0, 720.0)
  *         #define SMAA_HLSL_4
  *         #define SMAA_PRESET_HIGH
- *         #include "SMAA.h"
+ *         #//include "SMAA.h"
  *
  *     Note that SMAA_RT_METRICS doesn't need to be a macro, it can be a
  *     uniform variable. The code is designed to minimize the impact of not
@@ -578,21 +578,21 @@ SamplerState PointSampler { Filter = MIN_MAG_MIP_POINT; AddressU = Clamp; Addres
 #define SMAA_OUT(type, varname) out type varname
 #endif
 #if defined(SMAA_GLSL_3) || defined(SMAA_GLSL_4)
-#define SMAATexture2D(tex) sampler2D tex
+#define SMAATexture2D(tex) texture2D tex
 #define SMAATexturePass2D(tex) tex
-#define SMAASampleLevelZero(tex, coord) textureLod(tex, coord, 0.0)
-#define SMAASampleLevelZeroPoint(tex, coord) textureLod(tex, coord, 0.0)
-#define SMAASampleLevelZeroOffset(tex, coord, offset) textureLodOffset(tex, coord, 0.0, offset)
-#define SMAASample(tex, coord) texture(tex, coord)
-#define SMAASamplePoint(tex, coord) toSRGB( texture(tex, coord) )
-#define SMAASampleOffset(tex, coord, offset) texture(tex, coord, offset)
+#define SMAASampleLevelZero(tex, coord) textureLod(vkSampler2D(tex, LinearSampler), coord, 0.0)
+#define SMAASampleLevelZeroPoint(tex, coord) textureLod(vkSampler2D(tex, PointSampler), coord, 0.0)
+#define SMAASampleLevelZeroOffset(tex, coord, offset) textureLodOffset(vkSampler2D(tex, LinearSampler), coord, 0.0, offset)
+#define SMAASample(tex, coord) texture(vkSampler2D(tex, LinearSampler), coord)
+#define SMAASamplePoint(tex, coord) toSRGB( texture(vkSampler2D(tex, PointSampler), coord) )
+#define SMAASampleOffset(tex, coord, offset) texture(vkSampler2D(tex, LinearSampler), coord, offset)
 #define SMAA_FLATTEN
 #define SMAA_BRANCH
 #define lerp(a, b, t) mix(a, b, t)
 #define saturate(a) clamp(a, 0.0, 1.0)
 #if defined(SMAA_GLSL_4)
 #define mad(a, b, c) fma(a, b, c)
-#define SMAAGather(tex, coord) textureGather(tex, coord)
+#define SMAAGather(tex, coord) textureGather(vkSampler2D(tex, LinearSampler), coord)
 #else
 #define mad(a, b, c) (a * b + c)
 #endif
