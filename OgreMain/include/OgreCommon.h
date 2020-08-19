@@ -131,21 +131,14 @@ namespace Ogre {
 
         bool operator < ( const StencilStateOp &other ) const
         {
-            // clang-format off
-            if( this->stencilFailOp < other.stencilFailOp ) return true;
-            if( other.stencilFailOp < this->stencilFailOp ) return false;
+            if( this->stencilFailOp != other.stencilFailOp )
+                return this->stencilFailOp < other.stencilFailOp;
+            if( this->stencilPassOp != other.stencilPassOp )
+                return this->stencilPassOp < other.stencilPassOp;
+            if( this->stencilDepthFailOp != other.stencilDepthFailOp )
+                return this->stencilDepthFailOp < other.stencilDepthFailOp;
 
-            if( this->stencilPassOp < other.stencilPassOp ) return true;
-            if( other.stencilPassOp < this->stencilPassOp ) return false;
-
-            if( this->stencilDepthFailOp < other.stencilDepthFailOp ) return true;
-            if( other.stencilDepthFailOp < this->stencilDepthFailOp ) return false;
-
-            if( this->compareOp < other.compareOp ) return true;
-            //if( other.compareOp < this->compareOp ) return false;
-
-            return false;
-            // clang-format on
+            return this->compareOp < other.compareOp;
         }
 
         bool operator != ( const StencilStateOp &other ) const
@@ -175,21 +168,14 @@ namespace Ogre {
 
         bool operator < ( const StencilParams &other ) const
         {
-            // clang-format off
-            if( this->enabled < other.enabled ) return true;
-            if( other.enabled < this->enabled ) return false;
+            if( this->enabled != other.enabled )
+                return this->enabled < other.enabled;
+            if( this->readMask != other.readMask )
+                return this->readMask < other.readMask;
+            if( this->stencilFront != other.stencilFront )
+                return this->stencilFront < other.stencilFront;
 
-            if( this->readMask < other.readMask ) return true;
-            if( other.readMask < this->readMask ) return false;
-
-            if( this->stencilFront < other.stencilFront ) return true;
-            if( other.stencilFront < this->stencilFront ) return false;
-
-            if( this->stencilBack < other.stencilBack ) return true;
-            // if( other.stencilBack < this->stencilBack ) return false;
-
-            return false;
-            // clang-format on
+            return this->stencilBack < other.stencilBack;
         }
 
         bool operator != ( const StencilParams &other ) const
@@ -976,6 +962,12 @@ namespace Ogre {
         {
             return mColourSamples == rhs.mColourSamples && mCoverageSamples == rhs.mCoverageSamples &&
                    mPattern == rhs.mPattern;
+        }
+
+        bool operator!=( const SampleDescription &rhs ) const
+        {
+            return mColourSamples != rhs.mColourSamples || mCoverageSamples != rhs.mCoverageSamples ||
+                   mPattern != rhs.mPattern;
         }
 
         bool operator<( const SampleDescription &other ) const
