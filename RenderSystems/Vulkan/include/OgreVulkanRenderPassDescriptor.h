@@ -56,6 +56,12 @@ namespace Ogre
         bool operator<( const VulkanFrameBufferDescKey &other ) const;
     };
 
+    struct VulkanFlushOnlyDescValue
+    {
+        uint16 refCount;
+        VulkanFlushOnlyDescValue();
+    };
+
     struct VulkanFrameBufferDescValue
     {
         uint16 refCount;
@@ -80,6 +86,7 @@ namespace Ogre
     };
 
     typedef map<VulkanFrameBufferDescKey, VulkanFrameBufferDescValue>::type VulkanFrameBufferDescMap;
+    typedef map<FrameBufferDescKey, VulkanFlushOnlyDescValue>::type VulkanFlushOnlyDescMap;
 
     class _OgreVulkanExport VulkanRenderPassDescriptor : public RenderPassDescriptor
     {
@@ -91,6 +98,14 @@ namespace Ogre
         VkClearValue mClearValues[OGRE_MAX_MULTIPLE_RENDER_TARGETS * 2u + 2u];
 
         VulkanFrameBufferDescMap::iterator mSharedFboItor;
+        /// We need mSharedFboItor & mSharedFboFlushItor because:
+        ///     - In Vulkan FrameBufferObjects include load/store actions embedded,
+        ///       so we want to share them. That's mSharedFboItor for
+        ///     - But a clear pass followed by the same pass that performs a load can be
+        ///       merged together as if they were one pass. That's what mSharedFboFlushItor
+        ///       is for. Metal only has mSharedFboItor because load/store actions are not
+        ///       embedded into API objects
+        VulkanFlushOnlyDescMap::iterator mSharedFboFlushItor;
 
         /// This value MUST be set to the resolution of any of the textures.
         /// If it's changed arbitrarily then FrameBufferDescKey will not take
@@ -109,6 +124,7 @@ namespace Ogre
 
         void checkRenderWindowStatus( void );
         void calculateSharedKey( void );
+        void calculateSharedFlushOnlyKey( void );
 
         static VkAttachmentLoadOp get( LoadAction::LoadAction action );
         static VkAttachmentStoreOp get( StoreAction::StoreAction action, bool bResolveTarget );

@@ -14,6 +14,8 @@ compositor_node StereoRenderingNode
 			colour_value			0.2 0.4 0.6 1
 
 			// Only write to the MSAA surface (don't resolve!)
+			// because overlays due to a legacy problem break the pass
+			// thus if we resolve now, we'll resolve twice
 			store
 			{
 				colour	store
@@ -32,7 +34,7 @@ compositor_node StereoRenderingNode
 
 			overlays	off
 
-			// Only write to the MSAA surface (don't resolve!)
+			// Only write to the MSAA surface (don't resolve!) (see clear pass)
 			store
 			{
 				colour	store

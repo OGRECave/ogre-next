@@ -52,6 +52,7 @@ namespace Ogre
     VulkanRenderPassDescriptor::VulkanRenderPassDescriptor( VulkanQueue *graphicsQueue,
                                                             VulkanRenderSystem *renderSystem ) :
         mSharedFboItor( renderSystem->_getFrameBufferDescMap().end() ),
+        mSharedFboFlushItor( renderSystem->_getFlushOnlyDescMap().end() ),
         mTargetWidth( 0u ),
         mTargetHeight( 0u ),
         mQueue( graphicsQueue ),
@@ -111,6 +112,26 @@ namespace Ogre
         releaseFbo();
 
         mSharedFboItor = newItor;
+        calculateSharedFlushOnlyKey();
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanRenderPassDescriptor::calculateSharedFlushOnlyKey( void )
+    {
+        FrameBufferDescKey key( *this );
+        VulkanFlushOnlyDescMap &frameBufferDescMap = mRenderSystem->_getFlushOnlyDescMap();
+        VulkanFlushOnlyDescMap::iterator newItor = frameBufferDescMap.find( key );
+
+        if( newItor == frameBufferDescMap.end() )
+        {
+            VulkanFlushOnlyDescValue value;
+            value.refCount = 0;
+            frameBufferDescMap[key] = value;
+            newItor = frameBufferDescMap.find( key );
+        }
+
+        ++newItor->second.refCount;
+
+        mSharedFboFlushItor = newItor;
     }
     //-----------------------------------------------------------------------------------
     VkAttachmentLoadOp VulkanRenderPassDescriptor::get( LoadAction::LoadAction action )
@@ -546,16 +567,28 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::releaseFbo( void )
     {
-        VulkanFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
-        if( mSharedFboItor != frameBufferDescMap.end() )
         {
-            --mSharedFboItor->second.refCount;
-            if( !mSharedFboItor->second.refCount )
+            VulkanFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
+            if( mSharedFboItor != frameBufferDescMap.end() )
             {
-                destroyFbo( mQueue, mSharedFboItor->second );
-                frameBufferDescMap.erase( mSharedFboItor );
+                --mSharedFboItor->second.refCount;
+                if( !mSharedFboItor->second.refCount )
+                {
+                    destroyFbo( mQueue, mSharedFboItor->second );
+                    frameBufferDescMap.erase( mSharedFboItor );
+                }
+                mSharedFboItor = frameBufferDescMap.end();
             }
-            mSharedFboItor = frameBufferDescMap.end();
+        }
+        {
+            VulkanFlushOnlyDescMap &frameBufferDescMap = mRenderSystem->_getFlushOnlyDescMap();
+            if( mSharedFboFlushItor != frameBufferDescMap.end() )
+            {
+                --mSharedFboFlushItor->second.refCount;
+                if( !mSharedFboFlushItor->second.refCount )
+                    frameBufferDescMap.erase( mSharedFboFlushItor );
+                mSharedFboFlushItor = frameBufferDescMap.end();
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -699,7 +732,7 @@ namespace Ogre
     {
         uint32 entriesToFlush = 0;
 
-        assert( this->mSharedFboItor == other->mSharedFboItor );
+        assert( this->mSharedFboFlushItor == other->mSharedFboFlushItor );
         assert( this->mNumColourEntries == other->mNumColourEntries );
 
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
@@ -737,7 +770,7 @@ namespace Ogre
         uint32 entriesToFlush = 0;
 
         if( !newDesc ||                                         //
-            this->mSharedFboItor != newDesc->mSharedFboItor ||  //
+            this->mSharedFboFlushItor != newDesc->mSharedFboFlushItor ||  //
             this->mInformationOnly || newDesc->mInformationOnly )
         {
             entriesToFlush = RenderPassDescriptor::All;
@@ -916,6 +949,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    VulkanFlushOnlyDescValue::VulkanFlushOnlyDescValue() : refCount( 0 ) {}
     //-----------------------------------------------------------------------------------
     VulkanFrameBufferDescValue::VulkanFrameBufferDescValue() :
         refCount( 0u ),

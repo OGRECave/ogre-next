@@ -107,6 +107,7 @@ namespace Ogre
 
         // clang-format off
         VulkanFrameBufferDescMap    mFrameBufferDescMap;
+        VulkanFlushOnlyDescMap      mFlushOnlyDescMap;
         uint32                      mEntriesToFlush;
         bool                        mVpChanged;
         bool                        mInterruptedRenderCommandEncoder;
@@ -200,6 +201,7 @@ namespace Ogre
         virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer );
 
         virtual VulkanFrameBufferDescMap &_getFrameBufferDescMap( void ) { return mFrameBufferDescMap; }
+        virtual VulkanFlushOnlyDescMap &_getFlushOnlyDescMap( void ) { return mFlushOnlyDescMap; }
         virtual RenderPassDescriptor *createRenderPassDescriptor( void );
 
         virtual void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso );
