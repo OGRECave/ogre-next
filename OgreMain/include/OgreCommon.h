@@ -966,18 +966,12 @@ namespace Ogre {
 
         bool operator<( const SampleDescription &other ) const
         {
-            // clang-format off
-            if( this->mColourSamples < other.mColourSamples ) return true;
-            if( other.mColourSamples < this->mColourSamples ) return false;
+            if( this->mColourSamples != other.mColourSamples )
+                return this->mColourSamples < other.mColourSamples;
+            if( this->mCoverageSamples != other.mCoverageSamples )
+                return this->mCoverageSamples < other.mCoverageSamples;
 
-            if( this->mCoverageSamples < other.mCoverageSamples ) return true;
-            if( other.mCoverageSamples < this->mCoverageSamples ) return false;
-
-            if( this->mPattern < other.mPattern ) return true;
-            // if( other.mPattern < this->mPattern ) return false;
-            // clang-format on
-
-            return false;
+            return this->mPattern < other.mPattern;
         }
 
         bool isMultisample( void ) const { return mColourSamples > 1u; }
