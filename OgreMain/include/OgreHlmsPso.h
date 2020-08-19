@@ -132,30 +132,23 @@ namespace Ogre
         }
         bool operator < ( const HlmsPassPso &other ) const
         {
-            // clang-format off
-            if( this->stencilParams < other.stencilParams ) return true;
-            if( other.stencilParams < this->stencilParams ) return false;
+            if( this->stencilParams != other.stencilParams )
+                return this->stencilParams < other.stencilParams;
 
             for( size_t i = 0u; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
             {
-                if( this->colourFormat[i] < other.colourFormat[i] ) return true;
-                if( other.colourFormat[i] < this->colourFormat[i] ) return false;
+                if( this->colourFormat[i] != other.colourFormat[i] )
+                    return this->colourFormat[i] < other.colourFormat[i];
             }
 
-            if( this->depthFormat < other.depthFormat ) return true;
-            if( other.depthFormat < this->depthFormat ) return false;
+            if( this->depthFormat != other.depthFormat )
+                return this->depthFormat < other.depthFormat;
+            if( this->sampleDescription != other.sampleDescription )
+                return this->sampleDescription < other.sampleDescription;
+            if( this->adapterId != other.adapterId )
+                return this->adapterId < other.adapterId;
 
-            if( this->sampleDescription < other.sampleDescription ) return true;
-            if( other.sampleDescription < this->sampleDescription ) return false;
-
-            if( this->adapterId < other.adapterId ) return true;
-            if( other.adapterId < this->adapterId ) return false;
-
-            if( this->strongMacroblockBits < other.strongMacroblockBits ) return true;
-            // if( other.strongMacroblockBits < this->strongMacroblockBits ) return false;
-            // clang-format on
-
-            return false;
+            return this->strongMacroblockBits < other.strongMacroblockBits;
         }
 
         bool hasStrongMacroblock(void) const    { return strongMacroblockBits != 0u; }
