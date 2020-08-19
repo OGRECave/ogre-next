@@ -59,12 +59,10 @@ namespace Ogre
         ConfigOption optDisplayFrequency;
         ConfigOption optVSync;
         ConfigOption optVSyncInterval;
+        ConfigOption optVSyncMethod;
         ConfigOption optFSAA;
         ConfigOption optRTTMode;
         ConfigOption optSRGB;
-#if OGRE_NO_QUAD_BUFFER_STEREO == 0
-        ConfigOption optStereoMode;
-#endif
 
         // FS setting possibilities
         optFullScreen.name = "Full Screen";
@@ -112,6 +110,12 @@ namespace Ogre
         optVSyncInterval.possibleValues.push_back( "4" );
         optVSyncInterval.currentValue = "1";
 
+        optVSyncMethod.name = "VSync Method";
+        optVSyncMethod.immutable = false;
+        optVSyncMethod.possibleValues.push_back( "Render Ahead / FIFO" );
+        optVSyncMethod.possibleValues.push_back( "Lowest Latency" );
+        optVSyncMethod.currentValue = optVSyncMethod.possibleValues.front();
+
         optFSAA.name = "FSAA";
         optFSAA.immutable = false;
         optFSAA.possibleValues.push_back( "1" );
@@ -144,22 +148,13 @@ namespace Ogre
         optSRGB.currentValue = "Yes";
         optSRGB.immutable = false;
 
-#if OGRE_NO_QUAD_BUFFER_STEREO == 0
-        optStereoMode.name = "Stereo Mode";
-        optStereoMode.possibleValues.push_back( StringConverter::toString( SMT_NONE ) );
-        optStereoMode.possibleValues.push_back( StringConverter::toString( SMT_FRAME_SEQUENTIAL ) );
-        optStereoMode.currentValue = optStereoMode.possibleValues[0];
-        optStereoMode.immutable = false;
-
-        mOptions[optStereoMode.name] = optStereoMode;
-#endif
-
         mOptions[optFullScreen.name] = optFullScreen;
         mOptions[optVideoMode.name] = optVideoMode;
         mOptions[optColourDepth.name] = optColourDepth;
         mOptions[optDisplayFrequency.name] = optDisplayFrequency;
         mOptions[optVSync.name] = optVSync;
         mOptions[optVSyncInterval.name] = optVSyncInterval;
+        mOptions[optVSyncMethod.name] = optVSyncMethod;
         mOptions[optFSAA.name] = optFSAA;
         mOptions[optRTTMode.name] = optRTTMode;
         mOptions[optSRGB.name] = optSRGB;
@@ -237,6 +232,21 @@ namespace Ogre
             {
                 if( it->second.currentValue.empty() || it->second.currentValue == "N/A" )
                     it->second.currentValue = it->second.possibleValues.front();
+                it->second.immutable = false;
+            }
+        }
+
+        if( name == "VSync" )
+        {
+            it = mOptions.find( "VSync Method" );
+            if( !StringConverter::parseBool( value ) )
+            {
+                it->second.currentValue = "N/A";
+                it->second.immutable = true;
+            }
+            else
+            {
+                it->second.currentValue = it->second.possibleValues.front();
                 it->second.immutable = false;
             }
         }

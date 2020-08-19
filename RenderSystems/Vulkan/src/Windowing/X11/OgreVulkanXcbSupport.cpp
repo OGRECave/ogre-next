@@ -36,13 +36,6 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 namespace Ogre
 {
-    template <class C>
-    void remove_duplicates( C &c )
-    {
-        std::sort( c.begin(), c.end() );
-        typename C::iterator p = std::unique( c.begin(), c.end() );
-        c.erase( p, c.end() );
-    }
     //-----------------------------------------------------------------------------
     VulkanXcbSupport::VulkanXcbSupport() { queryXcb(); }
     //-----------------------------------------------------------------------------
@@ -125,6 +118,7 @@ namespace Ogre
         ConfigOption optDisplayFrequency;
         ConfigOption optVSync;
         ConfigOption optVSyncInterval;
+        ConfigOption optVSyncMethod;
         ConfigOption optFSAA;
         ConfigOption optRTTMode;
         ConfigOption optSRGB;
@@ -171,6 +165,12 @@ namespace Ogre
         optVSyncInterval.possibleValues.push_back( "4" );
         optVSyncInterval.currentValue = "1";
 
+        optVSyncMethod.name = "VSync Method";
+        optVSyncMethod.immutable = false;
+        optVSyncMethod.possibleValues.push_back( "Render Ahead / FIFO" );
+        optVSyncMethod.possibleValues.push_back( "Lowest Latency" );
+        optVSyncMethod.currentValue = optVSyncMethod.possibleValues.front();
+
         optFSAA.name = "FSAA";
         optFSAA.immutable = false;
         optFSAA.possibleValues.push_back( "1" );
@@ -203,6 +203,7 @@ namespace Ogre
         mOptions[optDisplayFrequency.name] = optDisplayFrequency;
         mOptions[optVSync.name] = optVSync;
         mOptions[optVSyncInterval.name] = optVSyncInterval;
+        mOptions[optVSyncMethod.name] = optVSyncMethod;
         mOptions[optFSAA.name] = optFSAA;
         mOptions[optRTTMode.name] = optRTTMode;
         mOptions[optSRGB.name] = optSRGB;
@@ -298,6 +299,21 @@ namespace Ogre
             {
                 if( it->second.currentValue.empty() || it->second.currentValue == "N/A" )
                     it->second.currentValue = it->second.possibleValues.front();
+                it->second.immutable = false;
+            }
+        }
+
+        if( name == "VSync" )
+        {
+            it = mOptions.find( "VSync Method" );
+            if( !StringConverter::parseBool( value ) )
+            {
+                it->second.currentValue = "N/A";
+                it->second.immutable = true;
+            }
+            else
+            {
+                it->second.currentValue = it->second.possibleValues.front();
                 it->second.immutable = false;
             }
         }

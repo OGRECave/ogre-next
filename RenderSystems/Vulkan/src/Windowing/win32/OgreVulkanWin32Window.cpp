@@ -38,9 +38,7 @@ namespace Ogre
         mClosed( false ),
         mHidden( false ),
         mVisible( true ),
-        mHwGamma( false ),
         mIsTopLevel( true ),
-        mMsaaCount( 1u ),
         mWindowedWinStyle( 0 ),
         mFullscreenWinStyle( 0 )
     {
@@ -103,11 +101,12 @@ namespace Ogre
         bool enableDoubleClick = false;
         int monitorIndex = -1;
         HMONITOR hMonitor = NULL;
-        mMsaaCount = 1u;
         //        uint8 msaaQuality = 0;
         HINSTANCE hInstance = NULL;
         uint32 windowWidth = width;
         uint32 windowHeight = height;
+
+        mFrequencyDenominator = 1u;
 
         if( miscParams )
         {
@@ -115,40 +114,18 @@ namespace Ogre
             NameValuePairList::const_iterator opt;
             NameValuePairList::const_iterator end = miscParams->end();
 
-            opt = miscParams->find( "title" );
-            if( opt != end )
-                mTitle = opt->second;
             opt = miscParams->find( "left" );
             if( opt != end )
                 left = StringConverter::parseInt( opt->second );
             opt = miscParams->find( "top" );
             if( opt != end )
                 top = StringConverter::parseInt( opt->second );
-            opt = miscParams->find( "vsync" );
-            if( opt != end )
-                mVSync = StringConverter::parseBool( opt->second );
             opt = miscParams->find( "hidden" );
             if( opt != end )
                 hidden = StringConverter::parseBool( opt->second );
-            opt = miscParams->find( "vsyncInterval" );
-            if( opt != end )
-                mVSyncInterval = StringConverter::parseUnsignedInt( opt->second );
-            opt = miscParams->find( "FSAA" );
-            if( opt != end )
-                mRequestedSampleDescription.parseString( opt->second );
-            opt = miscParams->find( "gamma" );
-            if( opt != end )
-                mHwGamma = StringConverter::parseBool( opt->second );
 
-#if OGRE_NO_QUAD_BUFFER_STEREO == 0
-            opt = miscParams->find( "stereoMode" );
-            if( opt != end )
-            {
-                StereoModeType stereoMode = StringConverter::parseStereoMode( opt->second );
-                if( SMT_NONE != stereoMode )
-                    mStereoEnabled = true;
-            }
-#endif
+            parseSharedParams( miscParams );
+
             opt = miscParams->find( "externalWindowHandle" );
             if( opt != end )
             {

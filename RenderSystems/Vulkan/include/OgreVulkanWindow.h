@@ -62,6 +62,8 @@ namespace Ogre
             SwapchainReleased
         };
 
+        bool mLowestLatencyVSync;
+        bool mHwGamma;
         bool mClosed;
 
         VulkanDevice *mDevice;
@@ -75,6 +77,8 @@ namespace Ogre
         VkSemaphore mSwapchainSemaphore;
         SwapchainStatus mSwapchainStatus;
         bool mRebuildingSwapchain;
+
+        void parseSharedParams( const NameValuePairList *miscParams );
 
         PixelFormatGpu chooseSurfaceFormat( bool hwGamma );
         void createSwapchain( void );

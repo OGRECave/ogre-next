@@ -48,6 +48,8 @@ namespace Ogre
 {
     VulkanWindow::VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode ) :
         Window( title, width, height, fullscreenMode ),
+        mLowestLatencyVSync( false ),
+        mHwGamma( false ),
         mClosed( false ),
         mDevice( 0 ),
         mSurfaceKHR( 0 ),
@@ -60,6 +62,31 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     VulkanWindow::~VulkanWindow() {}
+    //-------------------------------------------------------------------------
+    void VulkanWindow::parseSharedParams( const NameValuePairList *miscParams )
+    {
+        NameValuePairList::const_iterator opt;
+        NameValuePairList::const_iterator end = miscParams->end();
+
+        opt = miscParams->find( "title" );
+        if( opt != end )
+            mTitle = opt->second;
+        opt = miscParams->find( "vsync" );
+        if( opt != end )
+            mVSync = StringConverter::parseBool( opt->second );
+        opt = miscParams->find( "vsyncInterval" );
+        if( opt != end )
+            mVSyncInterval = StringConverter::parseUnsignedInt( opt->second );
+        opt = miscParams->find( "FSAA" );
+        if( opt != end )
+            mRequestedSampleDescription.parseString( opt->second );
+        opt = miscParams->find( "gamma" );
+        if( opt != end )
+            mHwGamma = StringConverter::parseBool( opt->second );
+        opt = miscParams->find( "vsync_method" );
+        if( opt != end )
+            mLowestLatencyVSync = opt->second == "Lowest Latency";
+    }
     //-------------------------------------------------------------------------
     PixelFormatGpu VulkanWindow::chooseSurfaceFormat( bool hwGamma )
     {
@@ -142,15 +169,54 @@ namespace Ogre
         presentModes.resize( numPresentModes );
         vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
                                                    &numPresentModes, presentModes.begin() );
-        VkPresentModeKHR presentMode = VK_PRESENT_MODE_MAILBOX_KHR;
+
+        // targetPresentModes[0] is the target, targetPresentModes[1] is the fallback
+        bool presentModesFound[2] = { false, false };
+        VkPresentModeKHR targetPresentModes[2];
+        targetPresentModes[0] = VK_PRESENT_MODE_IMMEDIATE_KHR;
+        targetPresentModes[1] = VK_PRESENT_MODE_FIFO_KHR;
+        if( mVSync )
+        {
+            targetPresentModes[0] =
+                mLowestLatencyVSync ? VK_PRESENT_MODE_MAILBOX_KHR : VK_PRESENT_MODE_FIFO_KHR;
+            targetPresentModes[1] =
+                mLowestLatencyVSync ? VK_PRESENT_MODE_FIFO_KHR : VK_PRESENT_MODE_MAILBOX_KHR;
+        }
+
+        // FIFO is guaranteed to be present
+        VkPresentModeKHR presentMode = VK_PRESENT_MODE_FIFO_KHR;
         for( size_t i = 0u; i < numPresentModes; ++i )
         {
-            if( presentModes[i] == VK_PRESENT_MODE_FIFO_KHR )
+            if( presentModes[i] == targetPresentModes[0] )
+                presentModesFound[0] = true;
+            if( presentModes[i] == targetPresentModes[1] )
+                presentModesFound[1] = true;
+        }
+
+        const String c_presentModeStrs[] = { "IMMEDIATE_KHR",
+                                             "MAILBOX_KHR",
+                                             "FIFO_KHR",
+                                             "FIFO_RELAXED_KHR",
+                                             "SHARED_DEMAND_REFRESH_KHR",
+                                             "SHARED_CONTINUOUS_REFRESH_KHR" };
+
+        for( size_t i = 0u; i < 2u; ++i )
+        {
+            LogManager::getSingleton().logMessage( "Trying presentMode = " +
+                                                   c_presentModeStrs[targetPresentModes[i]] );
+            if( presentModesFound[i] )
             {
-                presentMode = VK_PRESENT_MODE_FIFO_KHR;
+                presentMode = targetPresentModes[i];
                 break;
             }
+            else
+            {
+                LogManager::getSingleton().logMessage( "PresentMode not available" );
+            }
         }
+
+        LogManager::getSingleton().logMessage( "Chosen presentMode = " +
+                                               c_presentModeStrs[presentMode] );
 
         //-----------------------------
         // Create swapchain

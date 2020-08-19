@@ -76,8 +76,7 @@ namespace Ogre
         mVisible( true ),
         mHidden( false ),
         mIsTopLevel( true ),
-        mIsExternal( false ),
-        mHwGamma( true )
+        mIsExternal( false )
     {
         inOutRequiredInstanceExts.push_back( VK_KHR_XCB_SURFACE_EXTENSION_NAME );
     }
@@ -136,6 +135,7 @@ namespace Ogre
 
         mFocused = true;
         mClosed = false;
+        mHwGamma = false;
 
         if( miscParams )
         {
@@ -169,12 +169,7 @@ namespace Ogre
                 mScreen = iter.data;
             }
 
-            opt = miscParams->find( "FSAA" );
-            if( opt != end )
-                mRequestedSampleDescription.parseString( opt->second );
-            opt = miscParams->find( "gamma" );
-            if( opt != end )
-                mHwGamma = StringConverter::parseBool( opt->second );
+            parseSharedParams( miscParams );
         }
 
         if( !mXcbWindow )
