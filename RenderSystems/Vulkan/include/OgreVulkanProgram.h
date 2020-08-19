@@ -184,6 +184,7 @@ namespace Ogre
         VertexInputByLocationIdxMap mVertexInputs;
         uint8 mNumSystemGenVertexInputs;  // System-generated inputs like gl_VertexIndex
 
+        bool mCustomRootLayout;
         bool mReplaceVersionMacro;
 
         /// Flag indicating if shader object successfully compiled

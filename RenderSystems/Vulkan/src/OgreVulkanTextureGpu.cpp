@@ -639,9 +639,6 @@ namespace Ogre
         }
         VkImageViewType texType = this->getInternalVulkanTextureViewType();
 
-        if( mSampleDescription.isMultisample() && hasMsaaExplicitResolves() )
-            texType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
-
         if( ( cubemapsAs2DArrays || forUav || numSlices == 1u ) &&
             ( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray ) )
         {

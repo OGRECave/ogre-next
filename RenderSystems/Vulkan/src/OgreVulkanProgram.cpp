@@ -90,6 +90,7 @@ namespace Ogre
         mRootLayout( 0 ),
         mShaderModule( 0 ),
         mNumSystemGenVertexInputs( 0u ),
+        mCustomRootLayout( false ),
         mReplaceVersionMacro( false ),
         mCompiled( false ),
         mConstantsBytesToWrite( 0 )
@@ -421,6 +422,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void VulkanProgram::setRootLayout( GpuProgramType type, const RootLayout &rootLayout )
     {
+        mCustomRootLayout = true;
         HighLevelGpuProgram::setRootLayout( type, rootLayout );
 
         VulkanGpuProgramManager *vulkanProgramManager =
@@ -428,7 +430,11 @@ namespace Ogre
         mRootLayout = vulkanProgramManager->getRootLayout( rootLayout );
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::unsetRootLayout( void ) { mRootLayout = 0; }
+    void VulkanProgram::unsetRootLayout( void )
+    {
+        mRootLayout = 0;
+        mCustomRootLayout = false;
+    }
     //-----------------------------------------------------------------------
     void VulkanProgram::setReplaceVersionMacro( bool bReplace ) { mReplaceVersionMacro = bReplace; }
     //-----------------------------------------------------------------------
@@ -644,7 +650,8 @@ namespace Ogre
 
         unloadHighLevel();
 
-        mRootLayout = 0;
+        if( !mCustomRootLayout )
+            mRootLayout = 0;
     }
     //-----------------------------------------------------------------------
     void VulkanProgram::unloadHighLevelImpl( void )
