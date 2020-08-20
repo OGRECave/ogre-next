@@ -4,8 +4,9 @@
 @property( light_profiles_texture )
 
 @piece( DeclLightProfilesTexture )
-	@property( syntax == glsl || syntax == glsles )
-		uniform sampler2D lightProfiles;
+	@property( syntax == glsl || syntax == glsles || syntax == glslvk )
+		vulkan_layout( ogre_t@value(lightProfiles) ) uniform texture2D lightProfiles;
+		vulkan( layout( ogre_s@value(lightProfiles) ) uniform sampler lightProfilesSampler );
 	@end
 	@property( syntax == hlsl )
 		Texture2D lightProfiles					: register(t@value(lightProfiles));
