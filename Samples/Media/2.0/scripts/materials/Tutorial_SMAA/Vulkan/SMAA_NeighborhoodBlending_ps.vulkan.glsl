@@ -19,10 +19,10 @@ in block
 	vec4 offset;
 } inPs;
 
-layout( ogre_t1 ) uniform texture2D rt_input; //Can be sRGB
+layout( ogre_t0 ) uniform texture2D rt_input; //Can be sRGB
 layout( ogre_t1 ) uniform texture2D blendTex;
 #if SMAA_REPROJECTION
-	layout( ogre_t1 ) uniform texture2D velocityTex;
+	layout( ogre_t2 ) uniform texture2D velocityTex;
 #endif
 
 layout( location = 0 )

@@ -79,6 +79,8 @@ namespace Ogre
         mSwIndirectBufferPtr( 0 ),
         mPso( 0 ),
         mComputePso( 0 ),
+        mStencilEnabled( false ),
+        mStencilRefValue( 0u ),
         mCurrentIndexBuffer( 0 ),
         mCurrentVertexBuffer( 0 ),
         mCurrentPrimType( MTLPrimitiveTypePoint ),

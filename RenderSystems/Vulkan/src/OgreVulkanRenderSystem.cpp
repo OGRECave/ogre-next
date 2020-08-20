@@ -166,6 +166,8 @@ namespace Ogre
         mCache( 0 ),
         mPso( 0 ),
         mComputePso( 0 ),
+        mStencilRefValue( 0u ),
+        mStencilEnabled( false ),
         mTableDirty( false ),
         mComputeTableDirty( false ),
         mDummyBuffer( 0 ),
@@ -1735,12 +1737,12 @@ namespace Ogre
             VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
             vaoManager->bindDrawIdVertexBuffer( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer );
 
-#if VULKAN_DISABLED
-            [mActiveRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
-
             if( mStencilEnabled )
-                [mActiveRenderEncoder setStencilReferenceValue:mStencilRefValue];
-#endif
+            {
+                vkCmdSetStencilReference( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer,
+                                          VK_STENCIL_FACE_FRONT_AND_BACK, mStencilRefValue );
+            }
+
             mVpChanged = true;
             mInterruptedRenderCommandEncoder = false;
         }
@@ -2576,7 +2578,34 @@ namespace Ogre
 
         set->mRsData = 0;
     }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::setStencilBufferParams( uint32 refValue,
+                                                     const StencilParams &stencilParams )
+    {
+        RenderSystem::setStencilBufferParams( refValue, stencilParams );
 
+        // There are two main cases:
+        // 1. The active render encoder is valid and will be subsequently used for drawing.
+        //      We need to set the stencil reference value on this encoder. We do this below.
+        // 2. The active render is invalid or is about to go away.
+        //      In this case, we need to set the stencil reference value on the new encoder when it is
+        //      created (In this case, the setStencilReferenceValue below in this wasted,
+        //      but it is inexpensive).
+
+        // Save this info so we can transfer it into a new encoder if necessary
+        mStencilEnabled = stencilParams.enabled;
+        if( mStencilEnabled )
+        {
+            mStencilRefValue = refValue;
+
+            if( mActiveDevice->mGraphicsQueue.getEncoderState() == VulkanQueue::EncoderGraphicsOpen )
+            {
+                vkCmdSetStencilReference( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer,
+                                          VK_STENCIL_FACE_FRONT_AND_BACK, mStencilRefValue );
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
     SampleDescription VulkanRenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
                                                                      PixelFormatGpu format )
     {

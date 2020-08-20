@@ -93,6 +93,9 @@ namespace Ogre
         HlmsPso const *mPso;
         HlmsComputePso const *mComputePso;
 
+        uint32_t mStencilRefValue;
+        bool mStencilEnabled;
+
         bool mTableDirty;
         bool mComputeTableDirty;
         VulkanGlobalBindingTable mGlobalTable;
@@ -207,6 +210,8 @@ namespace Ogre
         virtual void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso );
         virtual void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *newPso );
 
+        virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
+
         virtual void _beginFrame( void );
         virtual void _endFrame( void );
         virtual void _endFrameOnce( void );
@@ -309,9 +314,8 @@ namespace Ogre
         virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet );
         virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set );
 
-
         SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-            PixelFormatGpu format ) override;
+                                                     PixelFormatGpu format ) override;
         VulkanDevice *getVulkanDevice() const { return mDevice; }
         void _notifyDeviceStalled();
 
