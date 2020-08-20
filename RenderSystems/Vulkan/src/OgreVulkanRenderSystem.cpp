@@ -820,7 +820,8 @@ namespace Ogre
         OGRE_ASSERT_HIGH( dynamic_cast<const VulkanTextureGpu *>( texture ) );
         const VulkanTextureGpu *tex = static_cast<const VulkanTextureGpu *>( texture );
 
-        if( tex->isDataReady() && tex->mCurrLayout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+        if( tex->isDataReady() && tex->mCurrLayout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
+            tex->mCurrLayout != VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL )
         {
             TextureGpu *targetTex;
             uint8 targetMip;
@@ -828,15 +829,16 @@ namespace Ogre
             String texName = targetTex ? targetTex->getNameStr() : "";
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                          "Texture " + tex->getNameStr() +
-                             " is not in ResourceLayout::Texture. Did you forget to expose it to "
-                             "compositor? Currently rendering to target: " +
+                             " is not in ResourceLayout::Texture nor RenderTargetReadOnly."
+                             " Did you forget to expose it to  compositor? "
+                             "Currently rendering to target: " +
                              texName,
                          "VulkanRenderSystem::checkTextureLayout" );
         }
     }
 #endif
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )
+    void VulkanRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly )
     {
         OGRE_ASSERT_MEDIUM( unit < NUM_BIND_TEXTURES );
         if( texPtr )
@@ -846,10 +848,16 @@ namespace Ogre
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
             checkTextureLayout( tex, mCurrentRenderPassDescriptor );
 #endif
+            const VkImageLayout targetLayout = bDepthReadOnly
+                                                   ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
+                                                   : VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-            if( mGlobalTable.textures[unit].imageView != tex->getDefaultDisplaySrv() )
+            if( mGlobalTable.textures[unit].imageView != tex->getDefaultDisplaySrv() ||
+                mGlobalTable.textures[unit].imageLayout != targetLayout )
             {
                 mGlobalTable.textures[unit].imageView = tex->getDefaultDisplaySrv();
+                mGlobalTable.textures[unit].imageLayout = targetLayout;
+
                 mGlobalTable.minDirtySlotTextures =
                     std::min( mGlobalTable.minDirtySlotTextures, (uint8)unit );
                 mTableDirty = true;
@@ -860,6 +868,7 @@ namespace Ogre
             if( mGlobalTable.textures[unit].imageView != mDummyTextureView )
             {
                 mGlobalTable.textures[unit].imageView = mDummyTextureView;
+                mGlobalTable.textures[unit].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
                 mGlobalTable.minDirtySlotTextures =
                     std::min( mGlobalTable.minDirtySlotTextures, (uint8)unit );
                 mTableDirty = true;
@@ -2061,7 +2070,8 @@ namespace Ogre
                     {
                         srcStage |= toVkPipelineStageFlags( itor->oldLayout, bIsDepth );
                     }
-                    else
+
+                    if( itor->oldStageMask != 0u )
                         srcStage |= ogreToVkStageFlags( itor->oldStageMask );
                 }
 
@@ -2072,7 +2082,8 @@ namespace Ogre
                     {
                         dstStage |= toVkPipelineStageFlags( itor->newLayout, bIsDepth );
                     }
-                    else
+
+                    if( itor->newStageMask != 0u )
                         dstStage |= ogreToVkStageFlags( itor->newStageMask );
                 }
 

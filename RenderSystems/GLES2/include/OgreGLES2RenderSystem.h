@@ -282,7 +282,7 @@ namespace Ogre {
             /** See
              RenderSystem
              */
-            void _setTexture(size_t unit, bool enabled, Texture *tex);
+            void _setTexture(size_t unit, bool enabled, Texture *tex, bool bDepthReadOnly);
             /** See
              RenderSystem
              */

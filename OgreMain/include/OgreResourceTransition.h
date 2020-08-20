@@ -182,6 +182,10 @@ namespace Ogre
         ResourceStatusMap mResourceStatus;
         FastArray<TextureGpu*> mCopyStateTextures;
 
+        static bool checkDivergingTransition( const ResourceTransitionArray &resourceTransitions,
+                                              const TextureGpu *texture,
+                                              ResourceLayout::Layout newLayout );
+
     public:
         const ResourceStatusMap &getResourceStatus( void );
 

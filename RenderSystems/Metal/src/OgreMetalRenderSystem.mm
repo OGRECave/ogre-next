@@ -633,7 +633,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )
+    void MetalRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly )
     {
         if( texPtr )
         {

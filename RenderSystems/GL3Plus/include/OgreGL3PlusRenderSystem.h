@@ -330,7 +330,7 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void _setTexture( size_t unit, TextureGpu *tex );
+        void _setTexture( size_t unit, TextureGpu *tex, bool bDepthReadOnly );
         /// See RenderSystem
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
                                    uint32 hazardousTexIdx );

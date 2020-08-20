@@ -400,8 +400,16 @@ namespace Ogre
             attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         }
 
-        attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-        attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        if( mDepth.readOnly )
+        {
+            attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+            attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+        }
+        else
+        {
+            attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        }
 
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( mDepth.texture ) );
         VulkanTextureGpu *texture = static_cast<VulkanTextureGpu *>( mDepth.texture );
@@ -518,7 +526,10 @@ namespace Ogre
 
             fboDesc.mImageViews[attachmentIdx] = setupDepthAttachment( attachments[attachmentIdx] );
             depthAttachRef.attachment = attachmentIdx;
-            depthAttachRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            if( mDepth.readOnly )
+                depthAttachRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+            else
+                depthAttachRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
             ++attachmentIdx;
         }
 
@@ -769,7 +780,7 @@ namespace Ogre
     {
         uint32 entriesToFlush = 0;
 
-        if( !newDesc ||                                         //
+        if( !newDesc ||                                                   //
             this->mSharedFboFlushItor != newDesc->mSharedFboFlushItor ||  //
             this->mInformationOnly || newDesc->mInformationOnly )
         {
@@ -825,48 +836,6 @@ namespace Ogre
             if( semaphore )
             {
                 // We cannot start executing color attachment commands until the semaphore says so
-                /*
-                VkImageMemoryBarrier imageBarrier[2];
-                makeVkStruct( imageBarrier[0], VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER );
-                imageBarrier[0].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-                imageBarrier[0].dstAccessMask =
-                    VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
-                imageBarrier[0].newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                imageBarrier[0].image = textureVulkan->getFinalTextureName();
-
-                // Undefined means we don't care, which means existing contents may not be preserved
-                // Backbuffers always start with undefined layout
-                imageBarrier[0].oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-
-                imageBarrier[0].subresourceRange = textureVulkan->getFullSubresourceRange();
-
-                uint32 numBarriers = 1u;
-                VkPipelineStageFlags stageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-
-                if( mDepth.texture )
-                {
-                    VulkanTextureGpuWindow *depthTextureVulkan =
-                        static_cast<VulkanTextureGpuWindow *>( mDepth.texture );
-                    makeVkStruct( imageBarrier[1], VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER );
-                    imageBarrier[1].srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-                    imageBarrier[1].dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
-                                                    VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-                    imageBarrier[1].newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-                    imageBarrier[1].image = depthTextureVulkan->getFinalTextureName();
-
-                    // Undefined means we don't care, which means existing contents may not be preserved
-                    // Backbuffers always start with undefined layout
-                    imageBarrier[1].oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-
-                    imageBarrier[1].subresourceRange = depthTextureVulkan->getFullSubresourceRange();
-
-                    stageMask |= VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
-                                 VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-                    ++numBarriers;
-                }
-
-                vkCmdPipelineBarrier( mQueue->mCurrentCmdBuffer, stageMask, stageMask, 0u, 0u, 0, 0u, 0,
-                                      numBarriers, imageBarrier );*/
                 mQueue->addWindowToWaitFor( semaphore );
             }
         }

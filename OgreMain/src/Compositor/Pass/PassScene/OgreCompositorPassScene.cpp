@@ -334,9 +334,9 @@ namespace Ogre
         // Check <anything> -> Texture (GBuffers)
         {
             TextureGpuVec::const_iterator itor = mPrePassTextures.begin();
-            TextureGpuVec::const_iterator end = mPrePassTextures.end();
+            TextureGpuVec::const_iterator endt = mPrePassTextures.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 TextureGpu *texture = *itor;
                 resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
@@ -349,7 +349,7 @@ namespace Ogre
         if( mPrePassDepthTexture )
         {
             TextureGpu *texture = mPrePassDepthTexture;
-            resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
+            resolveTransition( texture, ResourceLayout::RenderTargetReadOnly, ResourceAccess::Read,
                                1u << PixelShader );
         }
 
@@ -357,6 +357,14 @@ namespace Ogre
         if( mDepthTextureNoMsaa && mDepthTextureNoMsaa != mPrePassDepthTexture )
         {
             TextureGpu *texture = mDepthTextureNoMsaa;
+            resolveTransition( texture, ResourceLayout::RenderTargetReadOnly, ResourceAccess::Read,
+                               1u << PixelShader );
+        }
+
+        // Check <anything> -> Texture
+        if( mRefractionsTexture )
+        {
+            TextureGpu *texture = mRefractionsTexture;
             resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
                                1u << PixelShader );
         }

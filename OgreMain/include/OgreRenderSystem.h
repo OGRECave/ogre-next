@@ -697,8 +697,10 @@ namespace Ogre
         RenderSystemCapabilites::getNumTextureUnits)
         @param enabled Boolean to turn the unit on/off
         @param texPtr Pointer to the texture to use.
+        @param bDepthReadOnly
+            true if the texture is also attached as a depth buffer but is read only
         */
-        virtual void _setTexture( size_t unit, TextureGpu *texPtr ) = 0;
+        virtual void _setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly ) = 0;
 
         /** Because Ogre doesn't (yet) have the notion of a 'device' or 'GL context',
             this function lets Ogre know which device should be used by providing

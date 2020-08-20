@@ -198,7 +198,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )
+    void NULLRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly )
     {
     }
     //-------------------------------------------------------------------------

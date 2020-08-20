@@ -87,6 +87,36 @@ namespace Ogre
         mResourceStatus.clear();
     }
     //-------------------------------------------------------------------------
+    /**
+    @brief BarrierSolver::checkDivergingTransition
+        Checks if there's already a transition for this texture and whether
+        we're trying to transition to two different layouts (which is impossible)
+    @param resourceTransitions
+    @param texture
+    @param newLayout
+    @return
+        True if there is already an entry barrier in the barrier to transition this texture
+        False otherwise
+    */
+    bool BarrierSolver::checkDivergingTransition( const ResourceTransitionArray &resourceTransitions,
+                                                  const TextureGpu *texture,
+                                                  ResourceLayout::Layout newLayout )
+    {
+        ResourceTransitionArray::const_iterator itor = resourceTransitions.begin();
+        ResourceTransitionArray::const_iterator endt = resourceTransitions.end();
+
+        while( itor != endt && itor->resource != texture )
+            ++itor;
+
+        if( itor != endt )
+        {
+            OGRE_ASSERT( itor->newLayout == newLayout &&
+                         "Trying to transition a texture to 2 different layouts at the same time" );
+        }
+
+        return itor != endt;
+    }
+    //-------------------------------------------------------------------------
     void BarrierSolver::resolveTransition( ResourceTransitionArray &resourceTransitions,
                                            TextureGpu *texture, ResourceLayout::Layout newLayout,
                                            ResourceAccess::ResourceAccess access, uint8 stageMask )
@@ -94,15 +124,15 @@ namespace Ogre
         OGRE_ASSERT_MEDIUM( newLayout != ResourceLayout::Undefined );
         OGRE_ASSERT_MEDIUM( access != ResourceAccess::Undefined );
 
-        OGRE_ASSERT_MEDIUM( ( newLayout == ResourceLayout::Texture || newLayout == ResourceLayout::Uav ||
-                              stageMask == 0u ) &&
-                            "stageMask must be 0 when layouts aren't Texture or Uav" );
+        OGRE_ASSERT_MEDIUM(
+            ( newLayout == ResourceLayout::Texture || newLayout == ResourceLayout::Uav ||
+              newLayout == ResourceLayout::RenderTargetReadOnly || stageMask == 0u ) &&
+            "stageMask must be 0 when layouts aren't Texture, Uav or RenderTargetReadOnly" );
 
         OGRE_ASSERT_MEDIUM(
             ( ( newLayout != ResourceLayout::Texture && newLayout != ResourceLayout::Uav ) ||
-              ( newLayout == ResourceLayout::Texture && stageMask != 0u ) ||
-              ( newLayout == ResourceLayout::Uav && stageMask != 0u ) ) &&
-            "stageMask can't be 0 when layouts are Texture or Uav" );
+              stageMask != 0u ) &&
+            "stageMask can't be 0 when layouts are Texture, Uav or RenderTargetReadOnly" );
 
         OGRE_ASSERT_MEDIUM(
             ( ( newLayout != ResourceLayout::Texture &&
@@ -167,9 +197,10 @@ namespace Ogre
         {
             RenderSystem *renderSystem = texture->getTextureManager()->getRenderSystem();
 
-            OGRE_ASSERT_LOW( renderSystem->isSameLayout( itor->second.layout,
-                                                         texture->getCurrentLayout(), texture ) &&
-                             "Layout was altered outside BarrierSolver!" );
+            OGRE_ASSERT_MEDIUM( ( checkDivergingTransition( resourceTransitions, texture, newLayout ) ||
+                                  renderSystem->isSameLayout( itor->second.layout,
+                                                              texture->getCurrentLayout(), texture ) ) &&
+                                "Layout was altered outside BarrierSolver!" );
 
             if( !renderSystem->isSameLayout( itor->second.layout, newLayout, texture ) ||
                 ( newLayout == ResourceLayout::Uav &&  //

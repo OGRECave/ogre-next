@@ -1787,7 +1787,7 @@ namespace Ogre
     {
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setTexture( size_t stage, TextureGpu *texPtr )
+    void D3D11RenderSystem::_setTexture( size_t stage, TextureGpu *texPtr, bool bDepthReadOnly )
     {
         if( texPtr )
         {

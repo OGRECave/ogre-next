@@ -82,11 +82,14 @@ namespace Ogre
 
         notifyPassEarlyPreExecuteListeners();
 
-        //Fire the listener in case it wants to change anything
-        notifyPassPreExecuteListeners();
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        renderSystem->endRenderPassDescriptor();
 
         analyzeBarriers();
         executeResourceTransitions();
+
+        //Fire the listener in case it wants to change anything
+        notifyPassPreExecuteListeners();
 
         //Should we retrieve every update, or cache the return values
         //and listen to notifyRecreated and family of funtions?

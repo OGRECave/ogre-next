@@ -231,11 +231,8 @@ namespace Ogre
         {
             mPrePassMode = PrePassUse;
             mPrePassTexture = textureName;
-            mExposedTextures.insert( mExposedTextures.end(), textureName.begin(), textureName.end() );
             mPrePassDepthTexture = depthTextureName;
-            mExposedTextures.push_back( depthTextureName );
             mPrePassSsrTexture = ssrTexture;
-            mExposedTextures.push_back( ssrTexture );
 
             mReadOnlyDepth = true;
             mReadOnlyStencil = true;
@@ -244,9 +241,7 @@ namespace Ogre
         void setUseRefractions( IdString depthTextureName, IdString refractionsTexture )
         {
             mDepthTextureNoMsaa = depthTextureName;
-            mExposedTextures.push_back( depthTextureName );
             mRefractionsTexture = refractionsTexture;
-            mExposedTextures.push_back( refractionsTexture );
 
             mReadOnlyDepth = true;
             mReadOnlyStencil = true;

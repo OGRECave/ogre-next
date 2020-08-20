@@ -1088,7 +1088,7 @@ namespace Ogre {
         // Point sprites are always on in OpenGL 3.2 and up.
     }
 
-    void GL3PlusRenderSystem::_setTexture( size_t stage, TextureGpu *texPtr )
+    void GL3PlusRenderSystem::_setTexture( size_t stage, TextureGpu *texPtr, bool bDepthReadOnly )
     {
         if( !activateGLTextureUnit( stage ) )
             return;
@@ -1328,22 +1328,22 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_setVertexTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, tex);
+        _setTexture(unit, tex, false);
     }
 
     void GL3PlusRenderSystem::_setGeometryTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, tex);
+        _setTexture(unit, tex, false);
     }
 
     void GL3PlusRenderSystem::_setTessellationHullTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, tex);
+        _setTexture(unit, tex, false);
     }
 
     void GL3PlusRenderSystem::_setTessellationDomainTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, tex);
+        _setTexture(unit, tex, false);
     }
 
     void GL3PlusRenderSystem::flushUAVs(void)
