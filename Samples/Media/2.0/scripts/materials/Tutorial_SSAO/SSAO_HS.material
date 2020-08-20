@@ -16,6 +16,17 @@ fragment_program SSAO_HS_ps_GLSL glsl
 	}
 }
 
+// GLSL Vulkan shaders
+vertex_program SSAO_HS_vs_VK glslvk
+{
+	source SSAO_HS_vs.glsl
+}
+
+fragment_program SSAO_HS_ps_VK glslvk
+{
+	source SSAO_HS_ps.glsl
+}
+
 // HLSL shaders
 vertex_program SSAO_HS_vs_HLSL hlsl
 {
@@ -47,6 +58,7 @@ fragment_program SSAO_HS_ps_Metal metal
 vertex_program SSAO_HS_vs unified
 {
 	delegate SSAO_HS_vs_GLSL
+	delegate SSAO_HS_vs_VK
 	delegate SSAO_HS_vs_HLSL
 	delegate SSAO_HS_vs_Metal
 	
@@ -59,6 +71,7 @@ vertex_program SSAO_HS_vs unified
 fragment_program SSAO_HS_ps unified
 {
 	delegate SSAO_HS_ps_GLSL
+	delegate SSAO_HS_ps_VK
 	delegate SSAO_HS_ps_HLSL
 	delegate SSAO_HS_ps_Metal
 }
@@ -116,6 +129,12 @@ fragment_program SSAO_BlurH_ps_GLSL glsl
 	}
 }
 
+// GLSL Vulkan shaders
+fragment_program SSAO_BlurH_ps_VK glslvk
+{
+	source SSAO_BlurH_ps.glsl
+}
+
 // HLSL shaders
 fragment_program SSAO_BlurH_ps_HLSL hlsl
 {
@@ -134,6 +153,7 @@ fragment_program SSAO_BlurH_ps_Metal metal
 fragment_program SSAO_BlurH_ps unified
 {
 	delegate SSAO_BlurH_ps_GLSL
+	delegate SSAO_BlurH_ps_VK
 	delegate SSAO_BlurH_ps_HLSL
 	delegate SSAO_BlurH_ps_Metal
 
@@ -192,6 +212,12 @@ fragment_program SSAO_BlurV_ps_GLSL glsl
 	}
 }
 
+// GLSL Vulkan shaders
+fragment_program SSAO_BlurV_ps_VK glslvk
+{
+	source SSAO_BlurV_ps.glsl
+}
+
 // HLSL shaders
 fragment_program SSAO_BlurV_ps_HLSL hlsl
 {
@@ -210,6 +236,7 @@ fragment_program SSAO_BlurV_ps_Metal metal
 fragment_program SSAO_BlurV_ps unified
 {
 	delegate SSAO_BlurV_ps_GLSL
+	delegate SSAO_BlurV_ps_VK
 	delegate SSAO_BlurV_ps_HLSL
 	delegate SSAO_BlurV_ps_Metal
 
@@ -267,6 +294,12 @@ fragment_program SSAO_Apply_ps_GLSL glsl
 	}
 }
 
+// GLSL Vulkan shaders
+fragment_program SSAO_Apply_ps_VK glslvk
+{
+	source SSAO_Apply_ps.glsl
+}
+
 // HLSL shaders
 fragment_program SSAO_Apply_ps_HLSL hlsl
 {
@@ -285,6 +318,7 @@ fragment_program SSAO_Apply_ps_Metal metal
 fragment_program SSAO_Apply_ps unified
 {
 	delegate SSAO_Apply_ps_GLSL
+	delegate SSAO_Apply_ps_VK
 	delegate SSAO_Apply_ps_HLSL
 	delegate SSAO_Apply_ps_Metal
 }

@@ -913,8 +913,7 @@ namespace Ogre
 
             GpuConstantDefinition def;
             def.constType = constantType;
-            def.logicalIndex = vp->mConstantsBytesToWrite;
-            // def.physicalIndex = blockVariable.offset;
+            def.logicalIndex = blockVariable.offset;
             if( blockVariable.type_description->type_flags & SPV_REFLECT_TYPE_FLAG_ARRAY )
             {
                 def.elementSize = blockVariable.array.stride / sizeof( float );
@@ -924,7 +923,8 @@ namespace Ogre
             }
             else
             {
-                def.elementSize = GpuConstantDefinition::getElementSize( def.constType, false );
+                // def.elementSize = GpuConstantDefinition::getElementSize( def.constType, false );
+                def.elementSize = blockVariable.padded_size / sizeof( float );
                 def.arraySize = 1;
             }
             def.variability = GPV_GLOBAL;

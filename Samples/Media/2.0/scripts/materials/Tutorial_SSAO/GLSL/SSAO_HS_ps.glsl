@@ -1,29 +1,35 @@
-#version 330
+#version ogre_glsl_ver_330
 
-uniform sampler2D depthTexture;
-uniform sampler2D gBuf_normals;
-uniform sampler2D noiseTexture;
+vulkan_layout( ogre_t0 ) uniform texture2D depthTexture;
+vulkan_layout( ogre_t1 ) uniform texture2D gBuf_normals;
+vulkan_layout( ogre_t2 ) uniform texture2D noiseTexture;
 
+vulkan( layout( ogre_s0 ) uniform sampler samplerState0 );
+vulkan( layout( ogre_s2 ) uniform sampler samplerState2 );
+
+vulkan_layout( location = 0 )
 in block
 {
    vec2 uv0;
    vec3 cameraDir;
 } inPs;
 
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform vec2 projectionParams;
+	uniform float invKernelSize;
+	uniform float kernelRadius;
+	uniform vec2 noiseScale;
+	uniform mat4 projection;
 
-uniform vec2 projectionParams;
-uniform float invKernelSize;
-uniform float kernelRadius;
-uniform vec2 noiseScale;
-uniform mat4 projection;
+	uniform vec4 sampleDirs[64];
+vulkan( }; )
 
-uniform vec4 sampleDirs[64];
-
+vulkan_layout( location = 0 )
 out float fragColour;
 
 vec3 getScreenSpacePos(vec2 uv, vec3 cameraNormal)
 {
-	float fDepth = texture( depthTexture, uv).x;
+	float fDepth = texture( vkSampler2D( depthTexture, samplerState0 ), uv ).x;
 	float linearDepth = projectionParams.y / (fDepth - projectionParams.x);
 	return (cameraNormal * linearDepth);
 }
@@ -36,7 +42,7 @@ vec3 reconstructNormal(vec3 posInView)
 
 vec3 getRandomVec(vec2 uv)
 {
-	vec3 randomVec = texture(noiseTexture, uv * noiseScale).xyz;
+	vec3 randomVec = texture( vkSampler2D( noiseTexture, samplerState2 ), uv * noiseScale ).xyz;
 	return randomVec;
 }
 
@@ -44,7 +50,7 @@ void main()
 {
     vec3 viewPosition = getScreenSpacePos(inPs.uv0, inPs.cameraDir);
     //vec3 viewNormal = reconstructNormal(viewPosition);
-    vec3 viewNormal = normalize( texture( gBuf_normals, inPs.uv0 ).xyz * 2.0 - 1.0 );
+	vec3 viewNormal = normalize( texture( vkSampler2D( gBuf_normals, samplerState0 ),inPs.uv0 ).xyz * 2.0 - 1.0 );
     vec3 randomVec = getRandomVec(inPs.uv0);
    
     vec3 tangent = normalize(randomVec - viewNormal * dot(randomVec, viewNormal));
