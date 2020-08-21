@@ -199,6 +199,15 @@ namespace Ogre
         initConfigOptions();
     }
     //-------------------------------------------------------------------------
+    VulkanRenderSystem::~VulkanRenderSystem()
+    {
+        if( mVulkanSupport )
+        {
+            OGRE_DELETE mVulkanSupport;
+            mVulkanSupport = 0;
+        }
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::shutdown( void )
     {
         if( mActiveDevice )
@@ -259,12 +268,6 @@ namespace Ogre
         {
             vkDestroyInstance( mVkInstance, 0 );
             mVkInstance = 0;
-        }
-
-        if( mVulkanSupport )
-        {
-            OGRE_DELETE mVulkanSupport;
-            mVulkanSupport = 0;
         }
     }
     //-------------------------------------------------------------------------
@@ -2081,7 +2084,6 @@ namespace Ogre
                 }
 
                 texture->mCurrLayout = imageBarrier.newLayout;
-
 
                 mImageBarriers.push_back( imageBarrier );
 

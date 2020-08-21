@@ -137,6 +137,7 @@ namespace Ogre
 
     public:
         VulkanRenderSystem();
+        ~VulkanRenderSystem();
 
         virtual void shutdown( void );
 
