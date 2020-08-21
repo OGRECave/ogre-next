@@ -103,7 +103,7 @@ namespace Ogre
 
     typedef FastArray<ResourceTransition> ResourceTransitionArray;
 
-    struct GpuTrackedResource
+    struct _OgreExport GpuTrackedResource
     {
         virtual ~GpuTrackedResource();
         virtual bool isTextureGpu( void ) const { return false; }
