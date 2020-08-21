@@ -1063,6 +1063,63 @@ namespace Ogre
             destroyDescriptorUavs();
     }
     //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::analyzeBarriers( ResourceTransitionArray &resourceTransitions )
+    {
+        RenderSystem *renderSystem = mCreator->getRenderSystem();
+        BarrierSolver &solver = renderSystem->getBarrierSolver();
+
+        {
+            DescriptorSetTexSlotArray::const_iterator itor = mTexSlots.begin();
+            DescriptorSetTexSlotArray::const_iterator endt = mTexSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isTexture() )
+                {
+                    TextureGpu *tex = itor->getTexture().texture;
+                    if( tex->isRenderToTexture() || tex->isUav() )
+                    {
+                        solver.resolveTransition( resourceTransitions, tex, ResourceLayout::Texture,
+                                                  ResourceAccess::Read, 1u << GPT_COMPUTE_PROGRAM );
+                    }
+                }
+                else
+                {
+                    const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
+                    UavBufferPacked *uavBuffer = bufferSlot.buffer->getOriginalBufferType();
+                    if( uavBuffer )
+                    {
+                        solver.resolveTransition( resourceTransitions, uavBuffer, ResourceAccess::Read,
+                                                  1u << GPT_COMPUTE_PROGRAM );
+                    }
+                }
+                ++itor;
+            }
+        }
+
+        {
+            DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
+            DescriptorSetUavSlotArray::const_iterator endt = mUavSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isTexture() )
+                {
+                    TextureGpu *tex = itor->getTexture().texture;
+                    solver.resolveTransition( resourceTransitions, tex, ResourceLayout::Uav,
+                                              itor->getTexture().access, 1u << GPT_COMPUTE_PROGRAM );
+                }
+                else
+                {
+                    const DescriptorSetUav::BufferSlot &bufferSlot = itor->getBuffer();
+                    solver.resolveTransition( resourceTransitions, bufferSlot.buffer, bufferSlot.access,
+                                              1u << GPT_COMPUTE_PROGRAM );
+                }
+                ++itor;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     HlmsComputeJob* HlmsComputeJob::clone( const String &cloneName )
     {
         HlmsCompute *compute = static_cast<HlmsCompute*>( mCreator );

@@ -411,6 +411,12 @@ namespace Ogre
         /// Sets all UAV buffers to nullptr
         void clearUavBuffers(void);
 
+        /** Checks every regular texture and every UAV (texture and buffers)
+            bound and resolves transitions
+        @param resourceTransitions
+        */
+        void analyzeBarriers( ResourceTransitionArray &resourceTransitions );
+
         HlmsComputeJob *clone( const String &cloneName );
         void cloneTo( HlmsComputeJob *dstJob );
 

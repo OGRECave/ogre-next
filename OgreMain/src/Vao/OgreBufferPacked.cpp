@@ -111,6 +111,8 @@ namespace Ogre
         mBufferInterface = bufferInterface;
     }
     //-----------------------------------------------------------------------------------
+    UavBufferPacked *BufferPacked::getOriginalBufferType( void ) { return 0; }
+    //-----------------------------------------------------------------------------------
     AsyncTicketPtr BufferPacked::readRequest( size_t elementStart, size_t elementCount )
     {
         StagingBuffer *stagingBuffer = mVaoManager->getStagingBuffer( elementCount * mBytesPerElement,

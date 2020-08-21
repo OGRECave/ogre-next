@@ -206,6 +206,10 @@ namespace Ogre
         BufferType getBufferType(void) const                    { return mBufferType; }
         BufferInterface* getBufferInterface(void) const         { return mBufferInterface; }
 
+        /// If this buffer has been reinterpreted from an UavBufferPacked,
+        /// returns the original version
+        virtual UavBufferPacked *getOriginalBufferType( void );
+
         /// Async data read request. A ticket will be returned. Once the async transfer finishes,
         /// you can use the ticket to read the data from CPU. @See AsyncTicket
         AsyncTicketPtr readRequest( size_t elementStart, size_t elementCount );
