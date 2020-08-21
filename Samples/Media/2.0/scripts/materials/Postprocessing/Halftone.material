@@ -9,6 +9,11 @@ fragment_program Postprocess/Halftone_ps_GLSL glsl
 	}
 }
 
+fragment_program Postprocess/Halftone_ps_VK glslvk
+{
+	source Halftone_ps.glsl
+}
+
 fragment_program Postprocess/Halftone_ps_HLSL hlsl
 {
 	source Halftone_ps.hlsl
@@ -25,6 +30,7 @@ fragment_program Postprocess/Halftone_ps_Metal metal
 fragment_program Postprocess/Halftone_ps unified
 {
 	delegate Postprocess/Halftone_ps_GLSL
+	delegate Postprocess/Halftone_ps_VK
 	delegate Postprocess/Halftone_ps_HLSL
 	delegate Postprocess/Halftone_ps_Metal
 
