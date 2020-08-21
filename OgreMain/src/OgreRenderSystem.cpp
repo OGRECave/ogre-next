@@ -1362,9 +1362,9 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
     bool RenderSystem::isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
-                                     const TextureGpu *texture ) const
+                                     const TextureGpu *texture, bool bIsDebugCheck ) const
     {
-        if( a != ResourceLayout::Uav && b != ResourceLayout::Uav )
+        if( ( a != ResourceLayout::Uav && b != ResourceLayout::Uav ) || bIsDebugCheck )
             return true;
         return a == b;
     }

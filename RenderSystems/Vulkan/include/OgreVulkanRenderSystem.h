@@ -326,7 +326,7 @@ namespace Ogre
         void debugCallback( void );
 
         virtual bool isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
-                                   const TextureGpu *texture ) const;
+                                   const TextureGpu *texture, bool bIsDebugCheck ) const;
     };
 }  // namespace Ogre
 

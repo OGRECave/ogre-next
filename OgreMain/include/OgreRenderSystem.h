@@ -1404,10 +1404,16 @@ namespace Ogre
 
         bool isReverseDepth(void) const                         { return mReverseDepth; }
 
-        /// Returns true if 'a' and 'b' internally map to the same layout and should be
-        /// considered equivalent for a given texture
+        /** Returns true if 'a' and 'b' internally map to the same layout and should be
+            considered equivalent for a given texture
+        @param bIsDebugCheck
+            When true, we're calling this as a consistency check (e.g. asserts if
+            layouts changed externally outside the BarrierSolver).
+            Non-explicit APIs may return too many false negatives triggering the
+            assert, thus this flag prevents false crashes
+        */
         virtual bool isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
-                                   const TextureGpu *texture ) const;
+                                   const TextureGpu *texture, bool bIsDebugCheck ) const;
 
         /// On D3D11 calls ClearState followed by Flush().
         /// On GL3+ it calls glFlush

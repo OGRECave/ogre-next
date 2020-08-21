@@ -197,12 +197,13 @@ namespace Ogre
         {
             RenderSystem *renderSystem = texture->getTextureManager()->getRenderSystem();
 
-            OGRE_ASSERT_MEDIUM( ( checkDivergingTransition( resourceTransitions, texture, newLayout ) ||
-                                  renderSystem->isSameLayout( itor->second.layout,
-                                                              texture->getCurrentLayout(), texture ) ) &&
-                                "Layout was altered outside BarrierSolver!" );
+            OGRE_ASSERT_MEDIUM(
+                ( checkDivergingTransition( resourceTransitions, texture, newLayout ) ||
+                  renderSystem->isSameLayout( itor->second.layout, texture->getCurrentLayout(), texture,
+                                              true ) ) &&
+                "Layout was altered outside BarrierSolver!" );
 
-            if( !renderSystem->isSameLayout( itor->second.layout, newLayout, texture ) ||
+            if( !renderSystem->isSameLayout( itor->second.layout, newLayout, texture, false ) ||
                 ( newLayout == ResourceLayout::Uav &&  //
                   ( access != ResourceAccess::Read ||  //
                     itor->second.access != ResourceAccess::Read ) ) )

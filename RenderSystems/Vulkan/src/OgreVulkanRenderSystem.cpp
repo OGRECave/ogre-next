@@ -2642,7 +2642,7 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     bool VulkanRenderSystem::isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
-                                           const TextureGpu *texture ) const
+                                           const TextureGpu *texture, bool bIsDebugCheck ) const
     {
         return VulkanMappings::get( a, texture ) == VulkanMappings::get( b, texture );
     }
