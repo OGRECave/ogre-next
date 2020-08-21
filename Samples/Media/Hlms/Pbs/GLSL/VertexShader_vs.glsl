@@ -49,7 +49,7 @@ vulkan_layout( OGRE_POSITION ) in vec4 vertex;
 vulkan_layout( ogre_T0 ) uniform samplerBuffer worldMatBuf;
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
 @property( hlms_pose )
-	vulkan_layout( ogre_T4 ) uniform samplerBuffer poseBuf;
+	vulkan_layout( ogre_T@value(poseBuf) ) uniform samplerBuffer poseBuf;
 @end
 // END UNIFORM GL DECLARATION
 

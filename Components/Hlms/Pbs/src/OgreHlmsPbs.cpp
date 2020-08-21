@@ -514,6 +514,20 @@ namespace Ogre
         bakedRanges[DescBindingTypes::Sampler].end = bakedRanges[DescBindingTypes::Sampler].start +
                                                      (uint16)getProperty( PbsProperty::NumSamplers );
 
+        int32 poseBufReg = getProperty( "poseBuf", -1 );
+        if( poseBufReg >= 0 )
+        {
+            DescBindingRange *poseRanges = rootLayout.mDescBindingRanges[2];
+            if( !bakedRanges[DescBindingTypes::Texture].isInUse() &&
+                !bakedRanges[DescBindingTypes::Sampler].isInUse() )
+            {
+                poseRanges = rootLayout.mDescBindingRanges[1];
+                rootLayout.mBaked[1] = false;
+            }
+            poseRanges[DescBindingTypes::TexBuffer].start = static_cast<uint16>( poseBufReg );
+            poseRanges[DescBindingTypes::TexBuffer].end = static_cast<uint16>( poseBufReg + 1 );
+        }
+
         mListener->setupRootLayout( rootLayout, mSetProperties );
     }
     //-----------------------------------------------------------------------------------
