@@ -194,6 +194,8 @@ namespace Ogre
             mComputeTable.textures[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
 
+        mInvertedClipSpaceY = true;
+
         mVulkanSupport = Ogre::getVulkanSupport();
 
         initConfigOptions();

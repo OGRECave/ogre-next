@@ -1404,6 +1404,9 @@ namespace Ogre
 
         bool isReverseDepth(void) const                         { return mReverseDepth; }
 
+        /// +Y is downwards in NDC (Normalized Device Coordinates). Only Vulkan has this problem.
+        bool getInvertedClipSpaceY( void ) const { return mInvertedClipSpaceY; }
+
         /** Returns true if 'a' and 'b' internally map to the same layout and should be
             considered equivalent for a given texture
         @param bIsDebugCheck
@@ -1544,6 +1547,7 @@ namespace Ogre
         Vector3 mTexProjRelativeOrigin;
 
         bool mReverseDepth;
+        bool mInvertedClipSpaceY;
 
     };
     /** @} */

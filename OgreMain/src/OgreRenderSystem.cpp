@@ -96,6 +96,7 @@ namespace Ogre {
         , mTexProjRelative(false)
         , mTexProjRelativeOrigin(Vector3::ZERO)
         , mReverseDepth(true)
+        , mInvertedClipSpaceY(false)
     {
         mEventNames.push_back("RenderSystemCapabilitiesCreated");
     }

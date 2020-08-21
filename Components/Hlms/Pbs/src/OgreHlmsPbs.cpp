@@ -1929,6 +1929,14 @@ namespace Ogre
             }
         }
 
+        if( mRenderSystem->getInvertedClipSpaceY() )
+        {
+            projectionMatrix[1][0] = -projectionMatrix[1][0];
+            projectionMatrix[1][1] = -projectionMatrix[1][1];
+            projectionMatrix[1][2] = -projectionMatrix[1][2];
+            projectionMatrix[1][3] = -projectionMatrix[1][3];
+        }
+
         //vec4 clipPlane0
         if( isCameraReflected )
         {
