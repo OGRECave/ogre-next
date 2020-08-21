@@ -2846,14 +2846,16 @@ namespace Ogre
 
                 if( mPrePassMsaaDepthTexture )
                 {
-                    *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, mPrePassMsaaDepthTexture, 0, true );
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture(
+                        texUnit++, mPrePassMsaaDepthTexture, 0,
+                        PixelFormatGpuUtils::isDepth( mPrePassMsaaDepthTexture->getPixelFormat() ) );
                 }
 
                 if( mDepthTexture )
                 {
-                    *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, mDepthTexture, mDecalsSamplerblock, true );
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture(
+                        texUnit++, mDepthTexture, mDecalsSamplerblock,
+                        PixelFormatGpuUtils::isDepth( mDepthTexture->getPixelFormat() ) );
                 }
 
                 if( mSsrTexture )
@@ -2864,8 +2866,9 @@ namespace Ogre
 
                 if( mDepthTextureNoMsaa && mDepthTextureNoMsaa != mPrePassMsaaDepthTexture )
                 {
-                    *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, mDepthTextureNoMsaa, mDecalsSamplerblock, true );
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture(
+                        texUnit++, mDepthTextureNoMsaa, mDecalsSamplerblock,
+                        PixelFormatGpuUtils::isDepth( mDepthTextureNoMsaa->getPixelFormat() ) );
                 }
 
                 if( mRefractionsTexture )

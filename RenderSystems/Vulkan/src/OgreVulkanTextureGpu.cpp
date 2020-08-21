@@ -40,6 +40,8 @@ THE SOFTWARE.
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
 
+#define TODO_add_resource_transitions
+
 namespace Ogre
 {
     VulkanTextureGpu::VulkanTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -454,8 +456,36 @@ namespace Ogre
         region.extent.height = srcBox.height;
         region.extent.depth = srcBox.depth;
 
-        vkCmdCopyImage( device->mGraphicsQueue.mCurrentCmdBuffer, mFinalTextureName, mCurrLayout,
-                        dstTexture->getFinalTextureName(), dstTexture->mCurrLayout, 1, &region );
+        VkImage srcTextureName = this->mFinalTextureName;
+        VkImage dstTextureName = dstTexture->mFinalTextureName;
+
+        if( this->isMultisample() && !this->hasMsaaExplicitResolves() )
+            srcTextureName = this->mMsaaFramebufferName;
+        if( dstTexture->isMultisample() && !dstTexture->hasMsaaExplicitResolves() )
+            dstTextureName = dstTexture->mMsaaFramebufferName;
+
+        vkCmdCopyImage( device->mGraphicsQueue.mCurrentCmdBuffer, srcTextureName, mCurrLayout,
+                        dstTextureName, dstTexture->mCurrLayout, 1u, &region );
+
+        if( dstTexture->isMultisample() && !dstTexture->hasMsaaExplicitResolves() &&
+            keepResolvedTexSynced )
+        {
+            TODO_add_resource_transitions;  // We must add res. transitions and then restore them
+
+            // Must keep the resolved texture up to date.
+            VkImageResolve resolve;
+            memset( &resolve, 0, sizeof( resolve ) );
+            resolve.srcSubresource = region.dstSubresource;
+            resolve.dstSubresource = region.dstSubresource;
+            resolve.extent.width = mWidth;
+            resolve.extent.height = mWidth;
+            resolve.extent.depth = getDepth();
+
+            vkCmdResolveImage( device->mGraphicsQueue.mCurrentCmdBuffer,
+                               dstTexture->mMsaaFramebufferName, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                               dstTexture->mFinalTextureName, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1u,
+                               &resolve );
+        }
 
         // Do not perform the sync if notifyDataIsReady hasn't been called yet (i.e. we're
         // still building the HW mipmaps, and the texture will never be ready)

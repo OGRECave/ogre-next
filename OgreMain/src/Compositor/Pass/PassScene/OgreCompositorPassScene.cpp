@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "OgreViewport.h"
 #include "OgreSceneManager.h"
 
+#include "OgrePixelFormatGpuUtils.h"
+
 namespace Ogre
 {
     CompositorPassScene::CompositorPassScene( const CompositorPassSceneDef *definition,
@@ -349,16 +351,32 @@ namespace Ogre
         if( mPrePassDepthTexture )
         {
             TextureGpu *texture = mPrePassDepthTexture;
-            resolveTransition( texture, ResourceLayout::RenderTargetReadOnly, ResourceAccess::Read,
-                               1u << PixelShader );
+            if( PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
+            {
+                resolveTransition( texture, ResourceLayout::RenderTargetReadOnly, ResourceAccess::Read,
+                                   1u << PixelShader );
+            }
+            else
+            {
+                resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
+                                   1u << PixelShader );
+            }
         }
 
         // Check <anything> -> DepthTexture (Depth Texture)
         if( mDepthTextureNoMsaa && mDepthTextureNoMsaa != mPrePassDepthTexture )
         {
             TextureGpu *texture = mDepthTextureNoMsaa;
-            resolveTransition( texture, ResourceLayout::RenderTargetReadOnly, ResourceAccess::Read,
-                               1u << PixelShader );
+            if( PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
+            {
+                resolveTransition( texture, ResourceLayout::RenderTargetReadOnly, ResourceAccess::Read,
+                                   1u << PixelShader );
+            }
+            else
+            {
+                resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
+                                   1u << PixelShader );
+            }
         }
 
         // Check <anything> -> Texture

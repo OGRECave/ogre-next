@@ -2040,13 +2040,6 @@ namespace Ogre
                 imageBarrier.oldLayout = VulkanMappings::get( itor->oldLayout, texture );
                 imageBarrier.newLayout = VulkanMappings::get( itor->newLayout, texture );
 
-                if( texture->isMultisample() && !texture->hasMsaaExplicitResolves() )
-                {
-                    // Rare case where we render to an implicit resolve without resolving
-                    if( itor->newLayout == ResourceLayout::RenderTarget )
-                        imageBarrier.image = texture->getMsaaFramebufferName();
-                }
-
                 const bool bIsDepth = PixelFormatGpuUtils::isDepth( texture->getPixelFormat() );
 
                 // If oldAccess == ResourceAccess::Undefined then this texture is used for
@@ -2089,7 +2082,27 @@ namespace Ogre
 
                 texture->mCurrLayout = imageBarrier.newLayout;
 
+
                 mImageBarriers.push_back( imageBarrier );
+
+                if( texture->isMultisample() && !texture->hasMsaaExplicitResolves() )
+                {
+                    // Rare case where we render to an implicit resolve without resolving
+                    // (otherwise newLayout = ResolveDest)
+                    //
+                    // Or more common case if we need to copy to/from an MSAA texture
+                    //
+                    // This cannot catch all use cases, but if you fall into something this
+                    // doesn't catch, then you should probably be using explicit resolves
+                    if( itor->newLayout == ResourceLayout::RenderTarget ||
+                        itor->newLayout == ResourceLayout::ResolveDest ||
+                        itor->newLayout == ResourceLayout::CopySrc ||
+                        itor->newLayout == ResourceLayout::CopyDst )
+                    {
+                        imageBarrier.image = texture->getMsaaFramebufferName();
+                        mImageBarriers.push_back( imageBarrier );
+                    }
+                }
             }
             else
             {
