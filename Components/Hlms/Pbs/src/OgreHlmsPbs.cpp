@@ -1329,6 +1329,7 @@ namespace Ogre
                                    ResourceTransitionArray &resourceTransitions,
                                    Camera *renderingCamera )
     {
+#ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         if( mPlanarReflections && mPlanarReflections->cameraMatches( renderingCamera ) )
         {
             const size_t maxActiveActors = mPlanarReflections->getMaxActiveActors();
@@ -1340,6 +1341,7 @@ namespace Ogre
                     ResourceAccess::Read, 1u << PixelShader );
             }
         }
+#endif
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsPbs::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
