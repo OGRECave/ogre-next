@@ -2577,6 +2577,11 @@ namespace Ogre
         outCasterHash   = renderableCasterHash;
     }
     //-----------------------------------------------------------------------------------
+    void Hlms::analyzeBarriers( BarrierSolver &barrierSolver,
+                                ResourceTransitionArray &resourceTransitions, Camera *renderingCamera )
+    {
+    }
+    //-----------------------------------------------------------------------------------
     HlmsCache Hlms::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
                                      bool dualParaboloid, SceneManager *sceneManager )
     {

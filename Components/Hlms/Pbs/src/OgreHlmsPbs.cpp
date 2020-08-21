@@ -1325,6 +1325,23 @@ namespace Ogre
     }
 #endif
     //-----------------------------------------------------------------------------------
+    void HlmsPbs::analyzeBarriers( BarrierSolver &barrierSolver,
+                                   ResourceTransitionArray &resourceTransitions,
+                                   Camera *renderingCamera )
+    {
+        if( mPlanarReflections && mPlanarReflections->cameraMatches( renderingCamera ) )
+        {
+            const size_t maxActiveActors = mPlanarReflections->getMaxActiveActors();
+
+            for( size_t i = 0u; i < maxActiveActors; ++i )
+            {
+                barrierSolver.resolveTransition(
+                    resourceTransitions, mPlanarReflections->getTexture( i ), ResourceLayout::Texture,
+                    ResourceAccess::Read, 1u << PixelShader );
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     HlmsCache HlmsPbs::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
                                         bool dualParaboloid, SceneManager *sceneManager )
     {

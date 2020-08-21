@@ -248,6 +248,10 @@ namespace Ogre
 
         virtual void _changeRenderSystem( RenderSystem *newRs );
 
+        virtual void analyzeBarriers( BarrierSolver &barrierSolver,
+                                      ResourceTransitionArray &resourceTransitions,
+                                      Camera *renderingCamera );
+
         virtual HlmsCache preparePassHash( const Ogre::CompositorShadowNode *shadowNode,
                                            bool casterPass, bool dualParaboloid,
                                            SceneManager *sceneManager );

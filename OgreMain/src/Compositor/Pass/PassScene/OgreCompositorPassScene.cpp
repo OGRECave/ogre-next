@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "OgreViewport.h"
 #include "OgreSceneManager.h"
 
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre
@@ -55,7 +57,8 @@ namespace Ogre
                 mPrePassDepthTexture( 0 ),
                 mSsrTexture( 0 ),
                 mDepthTextureNoMsaa( 0 ),
-                mRefractionsTexture( 0 )
+                mRefractionsTexture( 0 ),
+                mHlmsManager( Root::getSingleton().getHlmsManager() )
     {
         initialize( rtv );
 
@@ -393,6 +396,13 @@ namespace Ogre
             TextureGpu *texture = mSsrTexture;
             resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
                                1u << PixelShader );
+        }
+
+        for( size_t i = HLMS_LOW_LEVEL + 1u; i < HLMS_MAX; ++i )
+        {
+            Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
+            if( hlms )
+                hlms->analyzeBarriers( mBarrierSolver, mResourceTransitions, mCamera );
         }
     }
     //-----------------------------------------------------------------------------------

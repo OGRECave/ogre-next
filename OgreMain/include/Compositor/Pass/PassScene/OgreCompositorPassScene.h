@@ -74,6 +74,8 @@ namespace Ogre
         TextureGpu      *mDepthTextureNoMsaa;
         TextureGpu      *mRefractionsTexture;
 
+        HlmsManager *mHlmsManager;
+
         void notifyPassSceneAfterShadowMapsListeners(void);
         void notifyPassSceneAfterFrustumCullingListeners(void);
 
