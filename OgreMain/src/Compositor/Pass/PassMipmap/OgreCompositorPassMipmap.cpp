@@ -427,7 +427,6 @@ namespace Ogre
 
             while( itor != endt )
             {
-                mResourceTransitions.clear();
                 ( *itor )->analyzeBarriers( mResourceTransitions );
                 renderSystem->executeResourceTransition( mResourceTransitions );
                 hlmsCompute->dispatch( *itor, 0, 0 );

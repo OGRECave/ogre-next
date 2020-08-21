@@ -361,9 +361,7 @@ namespace Ogre {
 
         void flushUAVs( void );
 
-        virtual void _resourceTransitionCreated( ResourceTransition *resTransition );
-        virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition );
-        virtual void _executeResourceTransition( ResourceTransition *resTransition );
+        virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection );
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );

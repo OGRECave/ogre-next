@@ -67,51 +67,6 @@ namespace Ogre
     };
     }
 
-    namespace WriteBarrier
-    {
-    enum WriteBarrier
-    {
-        /// Notifies we've been writing from CPU to resource.
-        CpuWrite        = 0x00000001,
-        /// Waits until writes from shaders to resource are finished.
-        Uav             = 0x00000002,
-        /// Waits until rendering to colour buffers are finished.
-        RenderTarget    = 0x00000004,
-        /// Waits until rendering to depth/stencil buffers are finished.
-        DepthStencil    = 0x00000008,
-
-        /// Full write barrier
-        All             = 0xffffffff
-    };
-    }
-
-    namespace ReadBarrier
-    {
-    enum ReadBarrier
-    {
-        /// Finishes writing to & flushes all caches to VRAM so CPU can read it
-        CpuRead         = 0x00000001,
-        /// After the barrier, data can be used as an indirect buffer
-        Indirect        = 0x00000002,
-        /// After the barrier, data can be used as a vertex buffer
-        VertexBuffer    = 0x00000004,
-        /// After the barrier, data can be used as an index buffer
-        IndexBuffer     = 0x00000008,
-        /// After the barrier, data can be used as a const buffer
-        ConstBuffer     = 0x00000010,
-        /// After the barrier, data can be used as a texture or as a tex. buffer
-        Texture         = 0x00000020,
-        /// After the barrier, data can be used as an UAV
-        Uav             = 0x00000040,
-        /// After the barrier, data can be used as a RenderTarget
-        RenderTarget    = 0x00000080,
-        /// After the barrier, data can be used as a Depth/Stencil buffer
-        DepthStencil    = 0x00000100,
-
-        All             = 0xffffffff
-    };
-    }
-
     namespace ResourceAccess
     {
     /// Enum identifying the texture access privilege
@@ -144,12 +99,6 @@ namespace Ogre
         uint8 oldStageMask;
         /// If newStageMask == Undefined is invalid
         uint8 newStageMask;
-
-        // Deprecated
-        uint32 writeBarrierBits;    /// @see WriteBarrier::WriteBarrier
-        uint32 readBarrierBits;     /// @see ReadBarrier::ReadBarrier
-
-        void    *mRsData;       /// Render-System specific data
     };
 
     typedef FastArray<ResourceTransition> ResourceTransitionArray;

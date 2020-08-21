@@ -835,10 +835,6 @@ namespace Ogre
         virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set ) = 0;
         virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set ) = 0;
 
-        virtual void _resourceTransitionCreated( ResourceTransition *resTransition )    {}
-        virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition )  {}
-        virtual void _executeResourceTransition( ResourceTransition *resTransition )    {}
-
         virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection ) {}
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso ) {}

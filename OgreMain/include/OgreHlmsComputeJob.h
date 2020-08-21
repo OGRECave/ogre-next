@@ -415,7 +415,7 @@ namespace Ogre
             bound and resolves transitions
         @param resourceTransitions
         */
-        void analyzeBarriers( ResourceTransitionArray &resourceTransitions );
+        void analyzeBarriers( ResourceTransitionArray &resourceTransitions, bool clearBarriers = true );
 
         HlmsComputeJob *clone( const String &cloneName );
         void cloneTo( HlmsComputeJob *dstJob );

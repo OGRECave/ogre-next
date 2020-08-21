@@ -1063,8 +1063,12 @@ namespace Ogre
             destroyDescriptorUavs();
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::analyzeBarriers( ResourceTransitionArray &resourceTransitions )
+    void HlmsComputeJob::analyzeBarriers( ResourceTransitionArray &resourceTransitions,
+                                          bool clearBarriers )
     {
+        if( clearBarriers )
+            resourceTransitions.clear();
+
         RenderSystem *renderSystem = mCreator->getRenderSystem();
         BarrierSolver &solver = renderSystem->getBarrierSolver();
 

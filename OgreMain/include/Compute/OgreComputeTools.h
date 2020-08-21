@@ -29,6 +29,9 @@ THE SOFTWARE.
 #define _OgreComputeTools_H_
 
 #include "OgrePrerequisites.h"
+
+#include "OgreResourceTransition.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -39,6 +42,9 @@ namespace Ogre
 
     public:
         ComputeTools( HlmsCompute *hlmsCompute );
+
+        /// Note: It does NOT clear resourceTransitions
+        void prepareForUavClear( ResourceTransitionArray &resourceTransitions, TextureGpu *texture );
 
         /** Clears the whole texture to the given bit pattern
         @remarks
