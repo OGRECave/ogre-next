@@ -446,7 +446,7 @@ namespace Ogre
         }
         if( texture->isRenderToTexture() )
         {
-            texAccessFlags |= VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+            // texAccessFlags |= VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
             if( !PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
             {
                 texAccessFlags |=

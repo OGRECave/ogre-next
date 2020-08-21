@@ -349,6 +349,8 @@ namespace Ogre
         {
             stage |= VK_PIPELINE_STAGE_TRANSFER_BIT;
         }
+        if( accessFlags & VK_ACCESS_INPUT_ATTACHMENT_READ_BIT )
+            stage |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
 
         return stage;
     }
@@ -398,6 +400,14 @@ namespace Ogre
             VkImageMemoryBarrier imageMemBarrier = vkTexture->getImageMemoryBarrier();
             imageMemBarrier.srcAccessMask = accessFlags;
             imageMemBarrier.dstAccessMask = VulkanMappings::get( vkTexture );
+            if( newTransferLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+            {
+                // We need to block subsequent stages from writing to this texture
+                // until we're done copying from it (but they can read)
+                imageMemBarrier.dstAccessMask &= (VkAccessFlags)~VK_ACCESS_SHADER_READ_BIT;
+                mCopyEndReadDstTextureFlags |= imageMemBarrier.dstAccessMask;
+            }
+
             imageMemBarrier.oldLayout = newTransferLayout;
             imageMemBarrier.newLayout = vkTexture->mNextLayout;
             mImageMemBarriers.push_back( imageMemBarrier );
@@ -478,6 +488,8 @@ namespace Ogre
                 }
             }
 
+            // We need to block subsequent stages from accessing this texture at all
+            // until we're done copying into it
             mCopyEndReadDstTextureFlags |= VulkanMappings::get( texture );
             mCopyDownloadTextures[vkTexture] = false;
         }
@@ -802,6 +814,26 @@ namespace Ogre
             }
 
             dstStage |= deriveStageFromTextureAccessFlags( mCopyEndReadDstTextureFlags );
+
+            if( dstStage == 0u )
+            {
+                // Nothing needs to wait for us. Can happen if all we're
+                // doing is copying from read-only textures (rare)
+                dstStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+                FastArray<TextureGpu *>::const_iterator itor = mImageMemBarrierPtrs.begin();
+                FastArray<TextureGpu *>::const_iterator endt = mImageMemBarrierPtrs.end();
+
+                while( itor != endt )
+                {
+                    OGRE_ASSERT_MEDIUM( !( *itor )->isRenderToTexture() && !( *itor )->isUav() &&
+                                        "endCopyEncoder says nothing will wait on this texture(s) but "
+                                        "we don't know if a subsequent stage will write to it" );
+                    ++itor;
+                }
+#endif
+            }
 
             // Wait until earlier render, compute and transfers are done
             // Block render, compute and transfers until we're done
