@@ -1,20 +1,27 @@
-#version 330
+#version ogre_glsl_ver_330
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
 } inPs;
 
-uniform sampler2D RT;
-uniform sampler3D chars;
+vulkan_layout( ogre_t0 ) uniform texture2D RT;
+vulkan_layout( ogre_t1 ) uniform texture3D chars;
 
-uniform vec2 numTiles;
-uniform vec2 iNumTiles;
-uniform vec2 iNumTiles2;
-uniform vec4 lum;
-uniform float charBias;
+vulkan( layout( ogre_s0 ) uniform sampler samplerState0 );
+vulkan( layout( ogre_s1 ) uniform sampler samplerState1 );
+
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform vec2 numTiles;
+	uniform vec2 iNumTiles;
+	uniform vec2 iNumTiles2;
+	uniform vec4 lum;
+	uniform float charBias;
+vulkan( }; )
 
 void main()
 {
@@ -27,7 +34,7 @@ void main()
 	
 	//iNumTiles2 = iNumTiles / 2
 	middle = middle + iNumTiles2;
-	vec4 c = texture(RT, middle);
+	vec4 c = texture( vkSampler2D( RT, samplerState0 ), middle );
 	
 	//multiply luminance by charbias , beacause not all slices of the ascii
 	//volume texture are used
@@ -36,6 +43,6 @@ void main()
 	//fix to brighten the dark pixels with small characters
 	//c *= lerp(2.0,1.0, local.z);
 	
-	c *= texture(chars, local);
+	c *= texture( vkSampler3D( chars, samplerState1 ), local );
 	fragColour = c;
 }

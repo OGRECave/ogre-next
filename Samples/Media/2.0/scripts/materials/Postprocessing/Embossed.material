@@ -11,6 +11,11 @@ fragment_program Embossed_ps_GLSL glsl
 	source Embossed_ps.glsl
 }
 
+fragment_program Embossed_ps_VK glslvk
+{
+	source Embossed_ps.glsl
+}
+
 fragment_program Embossed_ps_Metal metal
 {
 	source Embossed_ps.metal
@@ -20,6 +25,7 @@ fragment_program Embossed_ps_Metal metal
 fragment_program Embossed_ps unified
 {
 	delegate Embossed_ps_GLSL
+	delegate Embossed_ps_VK
 	delegate Embossed_ps_HLSL
 	delegate Embossed_ps_Metal
 }

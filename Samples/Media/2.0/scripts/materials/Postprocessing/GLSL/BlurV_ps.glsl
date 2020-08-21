@@ -1,12 +1,16 @@
-#version 330
+#version ogre_glsl_ver_330
 
 //-------------------------------
 // Vertical Gaussian-Blur pass
 //-------------------------------
 
-uniform sampler2D Blur0;
+vulkan_layout( ogre_t0 ) uniform texture2D Blur0;
+vulkan( layout( ogre_s0 ) uniform sampler samplerState );
+
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
@@ -44,13 +48,13 @@ void main()
 
 	vec2 uv = inPs.uv0.xy;
 	uv.y += offsets[0] * 0.01;
-	vec4 sum = texture( Blur0, uv ) * samples[0];
+	vec4 sum = texture( vkSampler2D( Blur0, samplerState ), uv ) * samples[0];
 
 	for( int i=1; i<11; ++i )
     {
 		uv = inPs.uv0.xy;
 		uv.y += offsets[i] * 0.01;
-		sum += texture( Blur0, uv ) * samples[i];
+		sum += texture( vkSampler2D( Blur0, samplerState ), uv ) * samples[i];
     }
 
     fragColour = sum;

@@ -1,12 +1,17 @@
 fragment_program OldTV_ps_GLSL glsl
 {
 	source OldTV_ps.glsl
-    default_params
+	default_params
 	{
-   		param_named Image int 0
-   		param_named Rand int 1
-   		param_named Noise int 2
+		param_named Image int 0
+		param_named Rand int 1
+		param_named Noise int 2
 	}
+}
+
+fragment_program OldTV_ps_VK glslvk
+{
+	source OldTV_ps.glsl
 }
 
 fragment_program OldTV_ps_HLSL hlsl
@@ -25,6 +30,7 @@ fragment_program OldTV_ps_Metal metal
 fragment_program OldTV_ps unified
 {
 	delegate OldTV_ps_GLSL
+	delegate OldTV_ps_VK
 	delegate OldTV_ps_HLSL
 	delegate OldTV_ps_Metal
 }

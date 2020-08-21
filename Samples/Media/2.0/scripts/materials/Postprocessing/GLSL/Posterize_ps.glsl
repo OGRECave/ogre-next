@@ -1,9 +1,12 @@
-#version 330
+#version ogre_glsl_ver_330
 
-uniform sampler2D RT;
+vulkan_layout( ogre_t0 ) uniform texture2D RT;
+vulkan( layout( ogre_s0 ) uniform sampler samplerState );
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
@@ -14,7 +17,7 @@ void main()
     float nColors = 8.0;
     float gamma = 0.6;
 
-	vec4 texCol = texture(RT, inPs.uv0);
+	vec4 texCol = texture( vkSampler2D( RT, samplerState ), inPs.uv0 );
     vec3 tc = texCol.xyz;
     tc = pow(tc, vec3(gamma));
     tc = tc * nColors;

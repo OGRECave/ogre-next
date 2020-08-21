@@ -447,8 +447,10 @@ namespace Ogre
                 "#define vulkan_layout layout\n"
                 "#define vulkan( x ) x\n"
                 "#define vk_comma ,\n"
+                "#define vkSampler1D sampler1D\n"
                 "#define vkSampler2D sampler2D\n"
                 "#define vkSampler2DArray sampler2DArray\n"
+                "#define vkSampler3D sampler3D\n"
                 "#define vkSamplerCube samplerCube\n";
         }
         else

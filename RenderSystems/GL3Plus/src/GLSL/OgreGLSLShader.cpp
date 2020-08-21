@@ -159,12 +159,16 @@ namespace Ogre {
             "#define vulkan_layout(x)\n"
             "#define vulkan( x )\n"
             "#define vk_comma\n"
+            "#define texture1D sampler1D\n"
             "#define texture2D sampler2D\n"
             "#define texture2DArray sampler2DArray\n"
+            "#define texture3D sampler3D\n"
             "#define textureCube samplerCube\n"
             "#define texture2DMS sampler2DMS\n"
+            "#define vkSampler1D( a, b ) a\n"
             "#define vkSampler2D( a, b ) a\n"
             "#define vkSampler2DArray( a, b ) a\n"
+            "#define vkSampler3D( a, b ) a\n"
             "#define vkSamplerCube( a, b ) a\n";
         cpp.Parse( preamble.c_str(), preamble.size(), unusedVal );
 

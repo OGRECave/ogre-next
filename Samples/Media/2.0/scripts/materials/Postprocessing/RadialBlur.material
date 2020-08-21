@@ -3,6 +3,11 @@ fragment_program Postprocess/RadialBlur_ps_GLSL glsl
 	source RadialBlur_ps.glsl
 }
 
+fragment_program Postprocess/RadialBlur_ps_VK glslvk
+{
+	source RadialBlur_ps.glsl
+}
+
 fragment_program Postprocess/RadialBlur_ps_HLSL hlsl
 {
 	source RadialBlur_ps.hlsl
@@ -19,6 +24,7 @@ fragment_program Postprocess/RadialBlur_ps_Metal metal
 fragment_program Postprocess/RadialBlur_ps unified
 {
 	delegate Postprocess/RadialBlur_ps_GLSL
+	delegate Postprocess/RadialBlur_ps_VK
 	delegate Postprocess/RadialBlur_ps_HLSL
 	delegate Postprocess/RadialBlur_ps_Metal
 }

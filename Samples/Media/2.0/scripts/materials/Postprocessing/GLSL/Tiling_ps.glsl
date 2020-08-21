@@ -1,11 +1,17 @@
-#version 330
+#version ogre_glsl_ver_330
 
-uniform sampler2D RT;
-uniform float NumTiles;
-uniform float Threshold;
+vulkan_layout( ogre_t0 ) uniform texture2D RT;
+vulkan( layout( ogre_s0 ) uniform sampler samplerState );
 
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform float NumTiles;
+	uniform float Threshold;
+vulkan( }; )
+
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
@@ -33,7 +39,7 @@ void main()
     if (st.x < Threshold) { c2 = c1; }
     if (st.y < Threshold) { c2 = c1; }
     vec4 cTop = c2;
-	vec4 tileColor = texture(RT, PCenter);
+	vec4 tileColor = texture( vkSampler2D( RT, samplerState ), PCenter );
     vec4 result = tileColor + cTop - cBottom;
     fragColour = result;
 }

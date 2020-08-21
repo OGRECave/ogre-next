@@ -39,6 +39,26 @@ fragment_program Bloom_ps_GLSL glsl
 }
 
 //------------------------
+//Vulkan GLSL Definitions
+//------------------------
+fragment_program BlurV_ps_VK glslvk
+{
+	source BlurV_ps.glsl
+}
+fragment_program BlurH_ps_VK glslvk
+{
+	source BlurH_ps.glsl
+}
+fragment_program BrightBloom_ps_VK glslvk
+{
+	source BrightBloom_ps.glsl
+}
+fragment_program Bloom_ps_VK glslvk
+{
+	source Bloom_ps.glsl
+}
+
+//------------------------
 //DirectX 11 HLSL Definitions
 //------------------------	
 //DirectX 11 HLSL Pixel Shader ps_4_0
@@ -102,24 +122,28 @@ fragment_program Bloom_ps unified
 {
 	delegate Bloom_ps_HLSL
 	delegate Bloom_ps_GLSL
+	delegate Bloom_ps_VK
 	delegate Bloom_ps_Metal
 }
 fragment_program BlurV_ps unified
 {
 	delegate BlurV_ps_HLSL
 	delegate BlurV_ps_GLSL
+	delegate BlurV_ps_VK
 	delegate BlurV_ps_Metal
 }
 fragment_program BlurH_ps unified
 {
 	delegate BlurH_ps_HLSL
 	delegate BlurH_ps_GLSL
+	delegate BlurH_ps_VK
 	delegate BlurH_ps_Metal
 }
 fragment_program BrightBloom_ps unified
 {
 	delegate BrightBloom_ps_HLSL
 	delegate BrightBloom_ps_GLSL
+	delegate BrightBloom_ps_VK
 	delegate BrightBloom_ps_Metal
 }
 
