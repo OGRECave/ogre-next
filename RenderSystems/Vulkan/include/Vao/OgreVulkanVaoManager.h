@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreVaoManager.h"
 
-struct VkMemoryRequirements;
+#include "vulkan/vulkan_core.h"
 
 namespace Ogre
 {
@@ -113,6 +113,7 @@ namespace Ogre
             VkDeviceMemory      vboName;
             VkBuffer            vkBuffer;
             size_t              sizeBytes;
+            uint32              vkMemoryTypeIdx;
             VulkanDynamicBuffer *dynamicBuffer; //Null for CPU_INACCESSIBLE BOs.
 
             BlockVec            freeBlocks;
@@ -156,22 +157,18 @@ namespace Ogre
         typedef vector<Vao>::type VaoVec;
         typedef map<VertexElement2Vec, Vbo>::type VboMap;
 
-        struct TextureMemory
-        {
-            /// If vkMemoryTypeIndex == mBestVkMemoryTypeIndex[CPU_INACCESSIBLE] then
-            /// TextureMemory::vbos is not used and mVbos[CPU_INACCESSIBLE] is used instead
-            uint32 vkMemoryTypeIndex;
-            VboVec vbos;
-        };
+        FastArray<uint32> mBestVkMemoryTypeIndex[MAX_VBO_FLAG];
+        uint32 mMemoryTypesInUse[MAX_VBO_FLAG];
 
-        typedef vector<TextureMemory>::type TextureMemoryVec;
-
-        uint32 mBestVkMemoryTypeIndex[MAX_VBO_FLAG];
-
+        /// Note: mVbos[CPU_INACCESIBLE] may contain some Vbos from memory types which are not
+        /// mBestVkMemoryTypeIndex.
+        ///
+        /// This can happen if a texture request couldn't be fullfilled but other memory
+        /// types were available. If that's the case, then
+        /// Vbo::vkMemoryTypeIdx & mBestVkMemoryTypeIndex[CPU_INACCESIBLE] will be 0
         VboVec mVbos[MAX_VBO_FLAG];
         size_t mDefaultPoolSize[MAX_VBO_FLAG];
-
-        TextureMemoryVec mTextureMemory;
+        size_t mUsedHeapMemory[VK_MAX_MEMORY_HEAPS];
 
         VaoVec mVaos;
         uint32 mVaoNames;
@@ -213,6 +210,8 @@ namespace Ogre
         static const uint32 VERTEX_ATTRIBUTE_INDEX[VES_COUNT];
 
     protected:
+        void addMemoryType( VboFlag vboFlag, const VkPhysicalDeviceMemoryProperties &memProperties,
+                            const uint32 memoryTypeIdx );
         void determineBestMemoryTypes( void );
 
         /** Asks for allocating buffer space in a memory pool.
@@ -239,8 +238,7 @@ namespace Ogre
         void allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType, bool readCapable,
                           size_t &outVboIdx, size_t &outBufferOffset );
 
-        void allocateVbo( size_t sizeBytes, size_t alignment, VboVec &vboVec, uint32 vkMemoryTypeIndex,
-                          size_t defaultPoolSize, bool textureOnly, bool cpuAccessible, bool isCoherent,
+        void allocateVbo( size_t sizeBytes, size_t alignment, VboFlag vboFlag, uint32 textureMemTypeBits,
                           size_t &outVboIdx, size_t &outBufferOffset );
 
         /** Deallocates a buffer allocated with VulkanVaoManager::allocateVbo.
@@ -324,9 +322,9 @@ namespace Ogre
         void initDrawIdVertexBuffer();
         void bindDrawIdVertexBuffer( VkCommandBuffer cmdBuffer, uint32 binding = 15 );
 
-        VkDeviceMemory allocateTexture( const VkMemoryRequirements &memReq, uint16 &outTexMemIdx,
-                                        size_t &outVboIdx, size_t &outBufferOffset );
-        void deallocateTexture( uint16 texMemIdx, size_t vboIdx, size_t bufferOffset, size_t sizeBytes );
+        VkDeviceMemory allocateTexture( const VkMemoryRequirements &memReq, size_t &outVboIdx,
+                                        size_t &outBufferOffset );
+        void deallocateTexture( size_t vboIdx, size_t bufferOffset, size_t sizeBytes );
 
         VulkanRawBuffer allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes, size_t alignment = 4u );
         void deallocateRawBuffer( VulkanRawBuffer &rawBuffer );
@@ -405,8 +403,6 @@ namespace Ogre
         static void mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks );
 
         VertexBufferPacked *getDrawId() const { return mDrawId; }
-
-        const uint32 *getBestVkMemoryTypeIndex() { return mBestVkMemoryTypeIndex; }
 
         static uint32 getAttributeIndexFor( VertexElementSemantic semantic );
     };

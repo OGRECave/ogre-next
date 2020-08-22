@@ -85,7 +85,6 @@ namespace Ogre
 
         bool mOwnsSrv;
 
-        uint16 mTexMemIdx;
         size_t mVboPoolIdx;
         size_t mInternalBufferStart;
 
@@ -167,7 +166,6 @@ namespace Ogre
     protected:
         size_t mMsaaVboPoolIdx;
         size_t mMsaaInternalBufferStart;
-        uint16 mMsaaTexMemIdx;
 
         uint16 mDepthBufferPoolId;
         bool mPreferDepthTexture;

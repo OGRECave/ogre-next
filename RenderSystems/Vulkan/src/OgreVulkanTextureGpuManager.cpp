@@ -159,8 +159,7 @@ namespace Ogre
             vkGetImageMemoryRequirements( device->mDevice, mBlankTexture[i].vkImage, &memRequirements );
 
             VkDeviceMemory deviceMemory = vaoManager->allocateTexture(
-                memRequirements, mBlankTexture[i].texMemIdx, mBlankTexture[i].vboPoolIdx,
-                mBlankTexture[i].internalBufferStart );
+                memRequirements, mBlankTexture[i].vboPoolIdx, mBlankTexture[i].internalBufferStart );
 
             VkResult result = vkBindImageMemory( device->mDevice, mBlankTexture[i].vkImage, deviceMemory,
                                                  mBlankTexture[i].internalBufferStart );

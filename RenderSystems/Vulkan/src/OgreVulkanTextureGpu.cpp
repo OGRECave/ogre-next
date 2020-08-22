@@ -54,7 +54,6 @@ namespace Ogre
         mFinalTextureName( 0 ),
         mMsaaFramebufferName( 0 ),
         mOwnsSrv( false ),
-        mTexMemIdx( 0u ),
         mVboPoolIdx( 0u ),
         mInternalBufferStart( 0u ),
         mCurrLayout( VK_IMAGE_LAYOUT_UNDEFINED ),
@@ -136,8 +135,8 @@ namespace Ogre
 
         VulkanVaoManager *vaoManager =
             static_cast<VulkanVaoManager *>( textureManager->getVaoManager() );
-        VkDeviceMemory deviceMemory = vaoManager->allocateTexture( memRequirements, mTexMemIdx,
-                                                                   mVboPoolIdx, mInternalBufferStart );
+        VkDeviceMemory deviceMemory =
+            vaoManager->allocateTexture( memRequirements, mVboPoolIdx, mInternalBufferStart );
 
         VkResult result =
             vkBindImageMemory( device->mDevice, mFinalTextureName, deviceMemory, mInternalBufferStart );
@@ -232,8 +231,7 @@ namespace Ogre
                 delayed_vkDestroyImage( vaoManager, device->mDevice, mFinalTextureName, 0 );
                 mFinalTextureName = 0;
 
-                vaoManager->deallocateTexture( mTexMemIdx, mVboPoolIdx, mInternalBufferStart,
-                                               memRequirements.size );
+                vaoManager->deallocateTexture( mVboPoolIdx, mInternalBufferStart, memRequirements.size );
             }
 
             destroyMsaaSurface();
@@ -817,7 +815,6 @@ namespace Ogre
         VulkanTextureGpu( pageOutStrategy, vaoManager, name, textureFlags, initialType, textureManager ),
         mMsaaVboPoolIdx( 0u ),
         mMsaaInternalBufferStart( 0u ),
-        mMsaaTexMemIdx( 0u ),
         mDepthBufferPoolId( 1u ),
         mPreferDepthTexture( false ),
         mDesiredDepthBufferFormat( PFG_UNKNOWN )
@@ -887,8 +884,8 @@ namespace Ogre
 
         VulkanVaoManager *vaoManager =
             static_cast<VulkanVaoManager *>( textureManager->getVaoManager() );
-        VkDeviceMemory deviceMemory = vaoManager->allocateTexture(
-            memRequirements, mMsaaTexMemIdx, mMsaaVboPoolIdx, mMsaaInternalBufferStart );
+        VkDeviceMemory deviceMemory =
+            vaoManager->allocateTexture( memRequirements, mMsaaVboPoolIdx, mMsaaInternalBufferStart );
 
         VkResult result = vkBindImageMemory( device->mDevice, mMsaaFramebufferName, deviceMemory,
                                              mMsaaInternalBufferStart );
@@ -921,7 +918,7 @@ namespace Ogre
             delayed_vkDestroyImage( vaoManager, device->mDevice, mMsaaFramebufferName, 0 );
             mMsaaFramebufferName = 0;
 
-            vaoManager->deallocateTexture( mMsaaTexMemIdx, mMsaaVboPoolIdx, mMsaaInternalBufferStart,
+            vaoManager->deallocateTexture( mMsaaVboPoolIdx, mMsaaInternalBufferStart,
                                            memRequirements.size );
         }
     }

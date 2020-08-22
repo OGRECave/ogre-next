@@ -57,7 +57,6 @@ namespace Ogre
         {
             VkImage vkImage;
             VkImageView defaultView;
-            uint16 texMemIdx;
             size_t vboPoolIdx;
             size_t internalBufferStart;
         };

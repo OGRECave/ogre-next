@@ -105,7 +105,10 @@ namespace Ogre
         mSupportsIndirectBuffers = mDevice->mDeviceFeatures.multiDrawIndirect &&
                                    mDevice->mDeviceFeatures.drawIndirectFirstInstance;
 
-        // Keep pools of 64MB each for static meshes
+        memset( mUsedHeapMemory, 0, sizeof( mUsedHeapMemory ) );
+        memset( mMemoryTypesInUse, 0, sizeof( mMemoryTypesInUse ) );
+
+        // Keep pools of 64MB each for static meshes & most textures
         mDefaultPoolSize[CPU_INACCESSIBLE] = 64u * 1024u * 1024u;
 
         // Keep pools of 16MB each for write buffers, 4MB for read ones.
@@ -249,10 +252,105 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool VulkanVaoManager::supportsNonCoherentMapping() const { return mSupportsNonCoherentMemory; }
     //-----------------------------------------------------------------------------------
+    // Higher score means more preferred
+    static int calculateMemoryTypeScore( VulkanVaoManager::VboFlag vboFlag,
+                                         const VkPhysicalDeviceMemoryProperties &memProperties,
+                                         const size_t memoryTypeIdx, const size_t otherMemoryTypeIdx )
+    {
+        int score = 0;
+
+        const VkMemoryType memType = memProperties.memoryTypes[memoryTypeIdx];
+        const VkMemoryType otherMemType = memProperties.memoryTypes[otherMemoryTypeIdx];
+        switch( vboFlag )
+        {
+        case VulkanVaoManager::CPU_INACCESSIBLE:
+            if( memType.propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT )
+                score += 1000;
+
+            for( uint32 bitFlag = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+                 bitFlag <= VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD; bitFlag = bitFlag << 1u )
+            {
+                // Fewer flags set means better
+                if( !( memType.propertyFlags & bitFlag ) )
+                {
+                    score += 5;
+                    if( bitFlag == VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT )
+                        score += 100;  // Super extra score for not having this one
+                    if( bitFlag == VK_MEMORY_PROPERTY_HOST_CACHED_BIT )
+                        score += 5;  // Extra score for not having this one
+                }
+            }
+            break;
+        case VulkanVaoManager::CPU_WRITE_PERSISTENT:
+        case VulkanVaoManager::CPU_WRITE_PERSISTENT_COHERENT:
+            OGRE_ASSERT_LOW( memType.propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+
+            // Prefer write combined (aka uncached)
+            if( !( memType.propertyFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) )
+                score += 2;
+            // Prefer host-local (rather than device-local)
+            if( !( memType.propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) )
+                score += 1;
+
+            // Prefer heaps which are significantly bigger. Particularly RADV on iGPUs reports two
+            // *identical* heaps except for its size; where heap 0 is 256 MB and heap 1 is 3GB
+            if( memProperties.memoryHeaps[memType.heapIndex].size >
+                ( memProperties.memoryHeaps[otherMemType.heapIndex].size << 1u ) )
+            {
+                score += 3;
+            }
+            break;
+        case VulkanVaoManager::CPU_READ_WRITE:
+            OGRE_ASSERT_LOW( memType.propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+
+            // Prefer cached memory
+            if( memType.propertyFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT )
+                score += 2;
+            break;
+        case VulkanVaoManager::MAX_VBO_FLAG:
+            OGRE_ASSERT_LOW( false && "Internal Error this path should not be reached" );
+            break;
+        }
+
+        return score;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::addMemoryType( VboFlag vboFlag,
+                                          const VkPhysicalDeviceMemoryProperties &memProperties,
+                                          const uint32 memoryTypeIdx )
+    {
+        FastArray<uint32>::iterator itor = mBestVkMemoryTypeIndex[vboFlag].begin();
+        FastArray<uint32>::iterator endt = mBestVkMemoryTypeIndex[vboFlag].end();
+
+        const uint32_t newHeapIdx = memProperties.memoryTypes[memoryTypeIdx].heapIndex;
+        while( itor != endt && memProperties.memoryTypes[*itor].heapIndex != newHeapIdx )
+            ++itor;
+
+        if( itor == endt )
+        {
+            // This is the first time we see this heap
+            mBestVkMemoryTypeIndex[vboFlag].push_back( memoryTypeIdx );
+        }
+        else
+        {
+            // We already added this heap.
+            // Check if this memory type is preferred over the one we already added
+            const int oldScore =
+                calculateMemoryTypeScore( vboFlag, memProperties, *itor, memoryTypeIdx );
+            const int newScore =
+                calculateMemoryTypeScore( vboFlag, memProperties, memoryTypeIdx, *itor );
+
+            // If the scores are equal, prefer the one we found first
+            // (by spec, lower memory heap idxs must have greater performance)
+            if( newScore > oldScore )
+                *itor = memoryTypeIdx;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void VulkanVaoManager::determineBestMemoryTypes( void )
     {
         for( size_t i = 0u; i < MAX_VBO_FLAG; ++i )
-            mBestVkMemoryTypeIndex[i] = std::numeric_limits<uint32>::max();
+            mBestVkMemoryTypeIndex[i].clear();
 
         const VkPhysicalDeviceMemoryProperties &memProperties = mDevice->mDeviceMemoryProperties;
         const uint32 numMemoryTypes = memProperties.memoryTypeCount;
@@ -260,73 +358,59 @@ namespace Ogre
         for( uint32 i = 0u; i < numMemoryTypes; ++i )
         {
             if( memProperties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT )
-            {
-                uint32 newValue = i;
-                const uint32 oldValue = mBestVkMemoryTypeIndex[CPU_INACCESSIBLE];
-                if( oldValue < numMemoryTypes )
-                {
-                    if( !( memProperties.memoryTypes[oldValue].propertyFlags &
-                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) )
-                    {
-                        // We had already found our best match
-                        newValue = oldValue;
-                    }
-                }
-                mBestVkMemoryTypeIndex[CPU_INACCESSIBLE] = newValue;
-            }
+                addMemoryType( CPU_INACCESSIBLE, memProperties, i );
 
-            // Find memory that isn't coherent (many desktop GPUs don't provide this)
+            // Find non-coherent memory (many desktop GPUs don't provide this)
             // Prefer memory local to CPU
             if( ( memProperties.memoryTypes[i].propertyFlags &
                   ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) ) ==
-                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT &&
-                mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT] >= numMemoryTypes )
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT )
             {
-                uint32 newValue = i;
-                const uint32 oldValue = mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT];
-                if( oldValue < numMemoryTypes )
-                {
-                    if( !( memProperties.memoryTypes[oldValue].propertyFlags &
-                           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) )
-                    {
-                        // We already had found our best match
-                        newValue = oldValue;
-                    }
-                }
-                mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT] = newValue;
+                addMemoryType( CPU_WRITE_PERSISTENT, memProperties, i );
             }
 
-            // Find memory that is coherent, prefer write-combined (aka uncached)
+            // Find coherent memory (many desktop GPUs don't provide this)
             // Prefer memory local to CPU
             if( ( memProperties.memoryTypes[i].propertyFlags &
                   ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) ) ==
                 ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) )
             {
-                if( mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT] >= numMemoryTypes ||
-                    ( !( memProperties.memoryTypes[i].propertyFlags &
-                         VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) &&
-                      !( memProperties.memoryTypes[i].propertyFlags &
-                         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) ) )
-                {
-                    mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT] = i;
-                }
+                addMemoryType( CPU_WRITE_PERSISTENT_COHERENT, memProperties, i );
             }
 
             // Find the best memory that is cached for reading
             if( ( memProperties.memoryTypes[i].propertyFlags &
                   ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) ) ==
-                    ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) &&
-                mBestVkMemoryTypeIndex[CPU_READ_WRITE] >= numMemoryTypes )
+                ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) )
             {
-                mBestVkMemoryTypeIndex[CPU_READ_WRITE] = i;
+                addMemoryType( CPU_READ_WRITE, memProperties, i );
             }
         }
 
-        if( mBestVkMemoryTypeIndex[CPU_READ_WRITE] >= numMemoryTypes )
+        if( mBestVkMemoryTypeIndex[CPU_INACCESSIBLE].empty() )
+        {
+            // This is BS. No heap is device-local. Sigh, just pick any and try to get the best score
+            LogManager::getSingleton().logMessage(
+                "VkDevice: No heap found with DEVICE_LOCAL bit set. This should be impossible",
+                LML_CRITICAL );
+            for( uint32 i = 0u; i < numMemoryTypes; ++i )
+                addMemoryType( CPU_INACCESSIBLE, memProperties, i );
+        }
+
+        mSupportsNonCoherentMemory = !mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT].empty();
+        mSupportsCoherentMemory = !mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT].empty();
+
+        LogManager::getSingleton().logMessage( "VkDevice supports coherent memory: " +
+                                               StringConverter::toString( mSupportsCoherentMemory ) );
+        LogManager::getSingleton().logMessage( "VkDevice supports non-coherent memory: " +
+                                               StringConverter::toString( mSupportsNonCoherentMemory ) );
+
+        if( mBestVkMemoryTypeIndex[CPU_READ_WRITE].empty() )
         {
             LogManager::getSingleton().logMessage(
                 "VkDevice: could not find cached host-visible memory. GPU -> CPU transfers could be "
-                "slow" );
+                "slow",
+                LML_CRITICAL );
 
             if( mSupportsCoherentMemory )
             {
@@ -339,14 +423,6 @@ namespace Ogre
             }
         }
 
-        mSupportsNonCoherentMemory = mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT] < numMemoryTypes;
-        mSupportsCoherentMemory = mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT] < numMemoryTypes;
-
-        LogManager::getSingleton().logMessage( "VkDevice supports coherent memory: " +
-                                               StringConverter::toString( mSupportsCoherentMemory ) );
-        LogManager::getSingleton().logMessage( "VkDevice supports non-coherent memory: " +
-                                               StringConverter::toString( mSupportsNonCoherentMemory ) );
-
         if( !mSupportsNonCoherentMemory && !mSupportsCoherentMemory )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
@@ -356,8 +432,23 @@ namespace Ogre
         }
 
         mReadMemoryIsCoherent =
-            ( memProperties.memoryTypes[mBestVkMemoryTypeIndex[CPU_READ_WRITE]].propertyFlags &
+            ( memProperties.memoryTypes[mBestVkMemoryTypeIndex[CPU_READ_WRITE].back()].propertyFlags &
               VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) != 0;
+
+        // Fill mMemoryTypesInUse
+        for( size_t i = 0u; i < MAX_VBO_FLAG; ++i )
+        {
+            mMemoryTypesInUse[i] = 0u;
+
+            FastArray<uint32>::const_iterator itor = mBestVkMemoryTypeIndex[i].begin();
+            FastArray<uint32>::const_iterator endt = mBestVkMemoryTypeIndex[i].end();
+
+            while( itor != endt )
+            {
+                mMemoryTypesInUse[i] |= 1u << *itor;
+                ++itor;
+            }
+        }
 
         LogManager::getSingleton().logMessage( "VkDevice read memory is coherent: " +
                                                StringConverter::toString( mReadMemoryIsCoherent ) );
@@ -375,16 +466,16 @@ namespace Ogre
         if( bufferType >= BT_DYNAMIC_DEFAULT && !readCapable )
             sizeBytes *= mDynamicBufferMultiplier;
 
-        allocateVbo( sizeBytes, alignment, mVbos[vboFlag], mBestVkMemoryTypeIndex[vboFlag],
-                     mDefaultPoolSize[vboFlag], false, vboFlag != CPU_INACCESSIBLE,
-                     isVboFlagCoherent( vboFlag ), outVboIdx, outBufferOffset );
+        allocateVbo( sizeBytes, alignment, vboFlag, mMemoryTypesInUse[vboFlag], outVboIdx,
+                     outBufferOffset );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::allocateVbo( size_t sizeBytes, size_t alignment, VboVec &vboVec,
-                                        uint32 vkMemoryTypeIndex, size_t defaultPoolSize,
-                                        bool textureOnly, bool cpuAccessible, bool isCoherent,
-                                        size_t &outVboIdx, size_t &outBufferOffset )
+    void VulkanVaoManager::allocateVbo( size_t sizeBytes, size_t alignment, VboFlag vboFlag,
+                                        uint32 textureMemTypeBits, size_t &outVboIdx,
+                                        size_t &outBufferOffset )
     {
+        VboVec &vboVec = mVbos[vboFlag];
+
         VboVec::const_iterator itor = vboVec.begin();
         VboVec::const_iterator endt = vboVec.end();
 
@@ -399,29 +490,33 @@ namespace Ogre
 
         while( itor != endt && !foundMatchingStride )
         {
-            BlockVec::const_iterator blockIt = itor->freeBlocks.begin();
-            BlockVec::const_iterator blockEn = itor->freeBlocks.end();
-
-            while( blockIt != blockEn && !foundMatchingStride )
+            // First check the allocation can be done inside this Vbo
+            if( ( 1u << itor->vkMemoryTypeIdx ) & textureMemTypeBits )
             {
-                const Block &block = *blockIt;
+                BlockVec::const_iterator blockIt = itor->freeBlocks.begin();
+                BlockVec::const_iterator blockEn = itor->freeBlocks.end();
 
-                // Round to next multiple of alignment
-                size_t newOffset = ( ( block.offset + alignment - 1 ) / alignment ) * alignment;
-                size_t padding = newOffset - block.offset;
-
-                if( sizeBytes + padding <= block.size )
+                while( blockIt != blockEn && !foundMatchingStride )
                 {
-                    // clang-format off
-                    bestVboIdx      = static_cast<size_t>( itor - vboVec.begin());
-                    bestBlockIdx    = static_cast<size_t>( blockIt - itor->freeBlocks.begin() );
-                    // clang-format on
+                    const Block &block = *blockIt;
 
-                    if( newOffset == block.offset )
-                        foundMatchingStride = true;
+                    // Round to next multiple of alignment
+                    size_t newOffset = ( ( block.offset + alignment - 1 ) / alignment ) * alignment;
+                    size_t padding = newOffset - block.offset;
+
+                    if( sizeBytes + padding <= block.size )
+                    {
+                        // clang-format off
+                        bestVboIdx      = static_cast<size_t>( itor - vboVec.begin());
+                        bestBlockIdx    = static_cast<size_t>( blockIt - itor->freeBlocks.begin() );
+                        // clang-format on
+
+                        if( newOffset == block.offset )
+                            foundMatchingStride = true;
+                    }
+
+                    ++blockIt;
                 }
-
-                ++blockIt;
             }
 
             ++itor;
@@ -437,21 +532,107 @@ namespace Ogre
 
             Vbo newVbo;
 
-            size_t poolSize = std::max( defaultPoolSize, sizeBytes );
+            const VkMemoryHeap *memHeaps = mDevice->mDeviceMemoryProperties.memoryHeaps;
+            const VkMemoryType *memTypes = mDevice->mDeviceMemoryProperties.memoryTypes;
+
+            const FastArray<uint32> &vkMemoryTypeIndex = mBestVkMemoryTypeIndex[vboFlag];
+
+            size_t poolSize = std::numeric_limits<size_t>::max();
 
             // No luck, allocate a new buffer.
-            OGRE_ASSERT_LOW( vkMemoryTypeIndex < mDevice->mDeviceMemoryProperties.memoryTypeCount );
+            uint32 chosenMemoryTypeIdx = std::numeric_limits<uint32>::max();
+            bool bIsTextureOnly = false;
+            {
+                // Find the first heap that can satisfy this request
+                // (vkMemoryTypeIndex is sorted by preference)
+                FastArray<uint32>::const_iterator itMemTypeIdx = vkMemoryTypeIndex.begin();
+                FastArray<uint32>::const_iterator enMemTypeIdx = vkMemoryTypeIndex.end();
+
+                while( itMemTypeIdx != enMemTypeIdx )
+                {
+                    if( textureMemTypeBits & ( 1u << *itMemTypeIdx ) )
+                    {
+                        const size_t heapIdx = memTypes[*itMemTypeIdx].heapIndex;
+                        // Technically this is wrong. memHeaps[heapIdx].size is that max size of a
+                        // single allocation, not the total consumption. We should compare against
+                        // VkPhysicalDeviceMemoryBudgetPropertiesEXT::heapBudget
+                        // if the extension is available.
+                        //
+                        // However it should be a safe bet that memHeaps[heapIdx].size is roughly
+                        // the max size of all allocations combined too.
+                        if( mUsedHeapMemory[heapIdx] + sizeBytes < memHeaps[heapIdx].size )
+                        {
+                            // Found one!
+                            size_t defaultPoolSize =
+                                std::min( mDefaultPoolSize[vboFlag],
+                                          memHeaps[memTypes[*itMemTypeIdx].heapIndex].size -
+                                              mUsedHeapMemory[heapIdx] );
+                            poolSize = std::max( defaultPoolSize, sizeBytes );
+                            break;
+                        }
+                    }
+                    ++itMemTypeIdx;
+                }
+
+                if( itMemTypeIdx == enMemTypeIdx )
+                {
+                    // Failed to find a suitable heap that can allocate our request
+                    if( ( textureMemTypeBits & mMemoryTypesInUse[vboFlag] ) != textureMemTypeBits )
+                    {
+                        // There were some memory types we ignored because they weren't in
+                        // mBestVkMemoryTypeIndex
+                        //
+                        // However these other memory types may satisfy the allocation. Try once again
+                        bIsTextureOnly = true;
+                        const size_t numMemoryTypes = mDevice->mDeviceMemoryProperties.memoryTypeCount;
+                        for( size_t i = 0u; i < numMemoryTypes; ++i )
+                        {
+                            if( !( ( 1u << i ) & mMemoryTypesInUse[vboFlag] ) &&
+                                ( ( 1u << i ) & textureMemTypeBits ) )
+                            {
+                                // We didn't try this memory type. Let's check if we can use it
+                                // TODO: See comment above about memHeaps[heapIdx].size
+                                const size_t heapIdx = memTypes[memTypes[i].heapIndex].heapIndex;
+                                if( mUsedHeapMemory[heapIdx] + poolSize < memHeaps[heapIdx].size )
+                                {
+                                    // Found one!
+                                    size_t defaultPoolSize =
+                                        std::min( mDefaultPoolSize[vboFlag],
+                                                  memHeaps[memTypes[*itMemTypeIdx].heapIndex].size -
+                                                      mUsedHeapMemory[heapIdx] );
+                                    chosenMemoryTypeIdx = static_cast<uint32>( i );
+                                    poolSize = std::max( defaultPoolSize, sizeBytes );
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if( chosenMemoryTypeIdx == std::numeric_limits<uint32>::max() )
+                    {
+                        OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                                     "Out of Memory trying to allocate " +
+                                         StringConverter::toString( sizeBytes ) + " bytes",
+                                     "VulkanVaoManager::allocateVbo" );
+                    }
+                }
+                else
+                    chosenMemoryTypeIdx = *itMemTypeIdx;
+            }
 
             VkMemoryAllocateInfo memAllocInfo;
             makeVkStruct( memAllocInfo, VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO );
             memAllocInfo.allocationSize = poolSize;
-            memAllocInfo.memoryTypeIndex = vkMemoryTypeIndex;
+            memAllocInfo.memoryTypeIndex = chosenMemoryTypeIdx;
 
             VkResult result = vkAllocateMemory( mDevice->mDevice, &memAllocInfo, NULL, &newVbo.vboName );
             checkVkResult( result, "vkAllocateMemory" );
 
+            mUsedHeapMemory[memTypes[chosenMemoryTypeIdx].heapIndex] += poolSize;
+
             newVbo.vkBuffer = 0;
-            if( !textureOnly )
+            newVbo.vkMemoryTypeIdx = chosenMemoryTypeIdx;
+            if( !bIsTextureOnly )
             {
                 VkBufferCreateInfo bufferCi;
                 makeVkStruct( bufferCi, VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO );
@@ -479,8 +660,9 @@ namespace Ogre
             newVbo.freeBlocks.push_back( Block( 0, poolSize ) );
             newVbo.dynamicBuffer = 0;
 
-            if( cpuAccessible )
+            if( vboFlag != CPU_INACCESSIBLE )
             {
+                const bool isCoherent = isVboFlagCoherent( vboFlag );
                 newVbo.dynamicBuffer = new VulkanDynamicBuffer( newVbo.vboName, newVbo.sizeBytes,
                                                                 isCoherent, false, mDevice );
             }
@@ -554,46 +736,17 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     VkDeviceMemory VulkanVaoManager::allocateTexture( const VkMemoryRequirements &memReq,
-                                                      uint16 &outTexMemIdx, size_t &outVboIdx,
-                                                      size_t &outBufferOffset )
+                                                      size_t &outVboIdx, size_t &outBufferOffset )
     {
-        TextureMemoryVec::iterator itor = mTextureMemory.begin();
-        TextureMemoryVec::iterator endt = mTextureMemory.end();
-
-        while( itor != endt && !( ( 1u << itor->vkMemoryTypeIndex ) & memReq.memoryTypeBits ) )
-            ++itor;
-
-        if( itor == mTextureMemory.end() )
-        {
-            // No memory pool is capable of holding this texture. Create a new entry
-            TextureMemory texMemory;
-            texMemory.vkMemoryTypeIndex =
-                findMemoryType( mDevice->mDeviceMemoryProperties, memReq.memoryTypeBits,
-                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-            mTextureMemory.push_back( texMemory );
-            itor = mTextureMemory.end() - 1u;
-        }
-
-        outTexMemIdx = static_cast<uint16>( itor - mTextureMemory.begin() );
-
-        const bool isTextureOnly = itor->vkMemoryTypeIndex != mBestVkMemoryTypeIndex[CPU_INACCESSIBLE];
-        VboVec &vboVec = isTextureOnly ? itor->vbos : mVbos[CPU_INACCESSIBLE];
-
-        allocateVbo( memReq.size, memReq.alignment, vboVec, itor->vkMemoryTypeIndex,
-                     mDefaultPoolSize[CPU_INACCESSIBLE], isTextureOnly, false, false, outVboIdx,
+        allocateVbo( memReq.size, memReq.alignment, CPU_INACCESSIBLE, memReq.memoryTypeBits, outVboIdx,
                      outBufferOffset );
 
-        return vboVec[outVboIdx].vboName;
+        return mVbos[CPU_INACCESSIBLE][outVboIdx].vboName;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::deallocateTexture( uint16 texMemIdx, size_t vboIdx, size_t bufferOffset,
-                                              size_t sizeBytes )
+    void VulkanVaoManager::deallocateTexture( size_t vboIdx, size_t bufferOffset, size_t sizeBytes )
     {
-        VboVec &vboVec =
-            mTextureMemory[texMemIdx].vkMemoryTypeIndex == mBestVkMemoryTypeIndex[CPU_INACCESSIBLE]
-                ? mVbos[CPU_INACCESSIBLE]
-                : mTextureMemory[texMemIdx].vbos;
-        deallocateVbo( vboIdx, bufferOffset, sizeBytes, vboVec );
+        deallocateVbo( vboIdx, bufferOffset, sizeBytes, mVbos[CPU_INACCESSIBLE] );
     }
     //-----------------------------------------------------------------------------------
     VulkanRawBuffer VulkanVaoManager::allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes,
@@ -606,9 +759,8 @@ namespace Ogre
             vboFlag = CPU_WRITE_PERSISTENT;
 
         VulkanRawBuffer retVal;
-        allocateVbo( sizeBytes, alignment, mVbos[vboFlag], mBestVkMemoryTypeIndex[vboFlag],
-                     mDefaultPoolSize[vboFlag], false, vboFlag != CPU_INACCESSIBLE,
-                     isVboFlagCoherent( vboFlag ), retVal.mVboPoolIdx, retVal.mInternalBufferStart );
+        allocateVbo( sizeBytes, alignment, vboFlag, mMemoryTypesInUse[vboFlag], retVal.mVboPoolIdx,
+                     retVal.mInternalBufferStart );
         Vbo &vbo = mVbos[vboFlag][retVal.mVboPoolIdx];
         retVal.mVboFlag = vboFlag;
         retVal.mVboName = vbo.vkBuffer;
