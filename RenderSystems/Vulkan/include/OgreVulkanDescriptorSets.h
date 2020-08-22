@@ -41,7 +41,7 @@ namespace Ogre
     {
         FastArray<VkDescriptorImageInfo> mSamplers;
         VkWriteDescriptorSet mWriteDescSet;
-        VulkanDescriptorSetSampler( const DescriptorSetSampler &descSet );
+        VulkanDescriptorSetSampler( const DescriptorSetSampler &descSet, VkSampler dummySampler );
     };
 
     struct VulkanDescriptorSetTexture

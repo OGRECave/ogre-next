@@ -41,7 +41,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    VulkanDescriptorSetSampler::VulkanDescriptorSetSampler( const DescriptorSetSampler &descSet )
+    VulkanDescriptorSetSampler::VulkanDescriptorSetSampler( const DescriptorSetSampler &descSet,
+                                                            VkSampler dummySampler )
     {
         mSamplers.reserve( descSet.mSamplers.size() );
 
@@ -51,7 +52,9 @@ namespace Ogre
         while( itor != endt )
         {
             const HlmsSamplerblock *samplerblock = *itor;
-            VkSampler sampler = reinterpret_cast<VkSampler>( samplerblock->mRsData );
+            VkSampler sampler = dummySampler;
+            if( samplerblock )
+                sampler = reinterpret_cast<VkSampler>( samplerblock->mRsData );
             VkDescriptorImageInfo imageInfo;
             imageInfo.sampler = sampler;
             imageInfo.imageView = 0;

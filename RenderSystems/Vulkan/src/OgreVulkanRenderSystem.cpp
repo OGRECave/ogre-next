@@ -2578,7 +2578,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_descriptorSetSamplerCreated( DescriptorSetSampler *newSet )
     {
-        VulkanDescriptorSetSampler *vulkanSet = new VulkanDescriptorSetSampler( *newSet );
+        VulkanDescriptorSetSampler *vulkanSet = new VulkanDescriptorSetSampler( *newSet, mDummySampler );
         newSet->mRsData = vulkanSet;
     }
     //-------------------------------------------------------------------------

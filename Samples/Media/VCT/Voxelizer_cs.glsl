@@ -57,7 +57,7 @@ layout( local_size_x = @value( threads_per_group_x ),
 //		local_size_z = 4 ) in;
 
 
-vulkan_layout( ogre_t0 ) uniform samplerBuffer instanceBuffer;
+vulkan_layout( ogre_T0 ) uniform samplerBuffer instanceBuffer;
 
 @property( has_diffuse_tex || has_emissive_tex )
 	vulkan_layout( ogre_t1 ) uniform texture2DArray texturePool;

@@ -27,7 +27,7 @@ layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),
 		local_size_z = @value( threads_per_group_z ) ) in;
 
-vulkan_layout( ogre_t0 ) uniform usamplerBuffer inMeshBuffer;
+vulkan_layout( ogre_T0 ) uniform usamplerBuffer inMeshBuffer;
 
 shared float3 g_minAabb[@value( threads_per_group_x )];
 shared float3 g_maxAabb[@value( threads_per_group_x )];
