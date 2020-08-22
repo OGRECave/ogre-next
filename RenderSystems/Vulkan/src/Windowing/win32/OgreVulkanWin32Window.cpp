@@ -498,8 +498,6 @@ namespace Ogre
 
         mSampleDescription = mRequestedSampleDescription;
 
-        setMsaaBackbuffer();
-
         mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
         if( mDepthBuffer )
             mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
