@@ -413,7 +413,7 @@ namespace Ogre
         jsonStr.clear();
     }
     //-------------------------------------------------------------------------
-    void RootLayout::dump( String &outJson )
+    void RootLayout::dump( String &outJson ) const
     {
         char tmpBuffer[4096];
         LwString jsonStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );

@@ -86,9 +86,20 @@ namespace Ogre
         }
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
-        // In OGRE_DEBUG_NONE we assume programmatically generated
-        // root layouts are well formed to speed up compilation
-        rootLayout.validate( mName );
+        try
+        {
+            // In OGRE_DEBUG_NONE we assume programmatically generated
+            // root layouts are well formed to speed up compilation
+            rootLayout.validate( mName );
+        }
+        catch( Exception & )
+        {
+            String dumpStr;
+            dumpStr = "Error in " + mName + " with its Root Layout:\n";
+            rootLayout.dump( dumpStr );
+            LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
+            throw;
+        }
 #endif
     }
     //-----------------------------------------------------------------------------

@@ -396,7 +396,7 @@ namespace Ogre
         void parseRootLayout( const char *rootLayout, const bool bCompute, const String &filename );
 
         /// Dumps the current RootLayout to a JSON string
-        void dump( String &outJson );
+        void dump( String &outJson ) const;
 
         /** Retrieves the set and binding idx of the params buffer
         @param shaderStage
