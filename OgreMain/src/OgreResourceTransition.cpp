@@ -149,6 +149,8 @@ namespace Ogre
                 access == ResourceAccess::Read ) ) &&
             "Invalid Layout-access pair" );
 
+        OGRE_ASSERT_MEDIUM( access != ResourceAccess::Undefined );
+
         if( newLayout == ResourceLayout::CopySrc || newLayout == ResourceLayout::CopyDst )
         {
             // Keep track of textures which have been transitioned to Copy layouts, since

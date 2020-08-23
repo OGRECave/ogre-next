@@ -71,6 +71,7 @@ namespace Ogre
                                                  int32 textureArrayIndex, int32 mipmapLevel,
                                                  PixelFormatGpu pixelFormat, bool allowWriteAfterWrite )
     {
+        assert( access != ResourceAccess::Undefined );
         if( textureName.find( "global_" ) == 0 )
         {
             mParentNodeDef->addTextureSourceName( textureName, 0,

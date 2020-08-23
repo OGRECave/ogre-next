@@ -1378,8 +1378,10 @@ namespace Ogre
 
             DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
             bufferSlot.buffer = compressedVf ? mVertexBufferCompressed : mVertexBufferUncompressed;
+            bufferSlot.access = ResourceAccess::Read;
             mComputeJobs[i]->_setUavBuffer( 0, bufferSlot );
             bufferSlot.buffer = hasIndices32 ? mIndexBuffer32 : mIndexBuffer16;
+            bufferSlot.access = ResourceAccess::Read;
             mComputeJobs[i]->_setUavBuffer( 1, bufferSlot );
 
             DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
@@ -1390,6 +1392,7 @@ namespace Ogre
                 uavSlot.pixelFormat = mAlbedoVox->getPixelFormat();
             else
                 uavSlot.pixelFormat = PFG_R32_UINT;
+            uavSlot.access = ResourceAccess::ReadWrite;
             mComputeJobs[i]->_setUavTexture( 2, uavSlot );
 
             uavSlot.texture     = mNormalVox;
@@ -1397,6 +1400,7 @@ namespace Ogre
                 uavSlot.pixelFormat = mNormalVox->getPixelFormat();
             else
                 uavSlot.pixelFormat = PFG_R32_UINT;
+            uavSlot.access = ResourceAccess::ReadWrite;
             mComputeJobs[i]->_setUavTexture( 3, uavSlot );
 
             uavSlot.texture     = mEmissiveVox;
@@ -1404,10 +1408,12 @@ namespace Ogre
                 uavSlot.pixelFormat = mEmissiveVox->getPixelFormat();
             else
                 uavSlot.pixelFormat = PFG_R32_UINT;
+            uavSlot.access = ResourceAccess::ReadWrite;
             mComputeJobs[i]->_setUavTexture( 4, uavSlot );
 
             uavSlot.texture     = mAccumValVox;
             uavSlot.pixelFormat = mAccumValVox->getPixelFormat();
+            uavSlot.access = ResourceAccess::ReadWrite;
             mComputeJobs[i]->_setUavTexture( 5, uavSlot );
 
             DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
