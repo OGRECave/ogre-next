@@ -11,6 +11,8 @@ vulkan_layout( ogre_t0 ) uniform texture3D voxelAlbedoTex;
 vulkan_layout( ogre_t1 ) uniform texture3D voxelNormalTex;
 vulkan_layout( ogre_t2 ) uniform texture3D voxelEmissiveTex;
 
+vulkan( layout( ogre_s0 ) uniform sampler voxelAlbedoSampler );
+
 layout( ogre_u0 vk_comma @insertpiece(uav0_pf_type) )
 uniform restrict writeonly image3D lightVoxel;
 
