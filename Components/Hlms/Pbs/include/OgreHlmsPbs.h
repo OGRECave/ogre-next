@@ -250,7 +250,7 @@ namespace Ogre
 
         virtual void analyzeBarriers( BarrierSolver &barrierSolver,
                                       ResourceTransitionArray &resourceTransitions,
-                                      Camera *renderingCamera );
+                                      Camera *renderingCamera, const bool bCasterPass );
 
         virtual HlmsCache preparePassHash( const Ogre::CompositorShadowNode *shadowNode,
                                            bool casterPass, bool dualParaboloid,

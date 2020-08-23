@@ -1340,9 +1340,12 @@ namespace Ogre
 #endif
     //-----------------------------------------------------------------------------------
     void HlmsPbs::analyzeBarriers( BarrierSolver &barrierSolver,
-                                   ResourceTransitionArray &resourceTransitions,
-                                   Camera *renderingCamera )
+                                   ResourceTransitionArray &resourceTransitions, Camera *renderingCamera,
+                                   const bool bCasterPass )
     {
+        if( bCasterPass )
+            return;
+
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         if( mPlanarReflections && mPlanarReflections->cameraMatches( renderingCamera ) )
         {
@@ -1356,6 +1359,27 @@ namespace Ogre
             }
         }
 #endif
+        if( mVctLighting )
+        {
+            TextureGpu **lightVoxelTexs = mVctLighting->getLightVoxelTextures();
+            const size_t numVctTextures = mVctLighting->getNumVoxelTextures();
+            for( size_t i = 0; i < numVctTextures; ++i )
+            {
+                barrierSolver.resolveTransition( resourceTransitions, lightVoxelTexs[i],
+                                                 ResourceLayout::Texture, ResourceAccess::Read,
+                                                 1u << PixelShader );
+            }
+        }
+
+        if( mIrradianceField )
+        {
+            barrierSolver.resolveTransition(  //
+                resourceTransitions, mIrradianceField->getIrradianceTex(), ResourceLayout::Texture,
+                ResourceAccess::Read, 1u << PixelShader );
+            barrierSolver.resolveTransition(
+                resourceTransitions, mIrradianceField->getDepthVarianceTex(), ResourceLayout::Texture,
+                ResourceAccess::Read, 1u << PixelShader );
+        }
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsPbs::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,

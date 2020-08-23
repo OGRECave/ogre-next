@@ -402,7 +402,11 @@ namespace Ogre
         {
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
             if( hlms )
-                hlms->analyzeBarriers( mBarrierSolver, mResourceTransitions, mCamera );
+            {
+                hlms->analyzeBarriers(
+                    mBarrierSolver, mResourceTransitions, mCamera,
+                    mDefinition->mShadowNodeRecalculation == SHADOW_NODE_CASTER_PASS );
+            }
         }
     }
     //-----------------------------------------------------------------------------------

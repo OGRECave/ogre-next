@@ -682,7 +682,7 @@ namespace Ogre
 
         virtual void analyzeBarriers( BarrierSolver &barrierSolver,
                                       ResourceTransitionArray &resourceTransitions,
-                                      Camera *renderingCamera );
+                                      Camera *renderingCamera, const bool bCasterPass );
 
         /** Called every frame by the Render Queue to cache the properties needed by this
             pass. i.e. Number of PSSM splits, number of shadow casting lights, etc

@@ -2578,7 +2578,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void Hlms::analyzeBarriers( BarrierSolver &barrierSolver,
-                                ResourceTransitionArray &resourceTransitions, Camera *renderingCamera )
+                                ResourceTransitionArray &resourceTransitions, Camera *renderingCamera,
+                                const bool bCasterPass )
     {
     }
     //-----------------------------------------------------------------------------------
