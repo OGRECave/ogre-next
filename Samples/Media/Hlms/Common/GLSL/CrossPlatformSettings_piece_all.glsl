@@ -150,10 +150,15 @@
 
 #define bufferFetch1( buffer, idx ) texelFetch( buffer, idx ).x
 
-#define OGRE_SAMPLER_ARG_DECL( samplerName )
-#define OGRE_SAMPLER_ARG( samplerName )
+@property( syntax != glslvk )
+	#define OGRE_SAMPLER_ARG_DECL( samplerName )
+	#define OGRE_SAMPLER_ARG( samplerName )
+@else
+	#define OGRE_SAMPLER_ARG_DECL( samplerName ) , sampler samplerName
+	#define OGRE_SAMPLER_ARG( samplerName ) , samplerName
+@end
 
-#define OGRE_Texture3D_float4 sampler3D
+#define OGRE_Texture3D_float4 texture3D
 
 #define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform bufferName
 #define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform structName

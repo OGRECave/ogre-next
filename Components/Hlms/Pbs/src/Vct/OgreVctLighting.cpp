@@ -507,9 +507,9 @@ namespace Ogre
         hlmsCompute->dispatch( mAnisoGeneratorStep0, 0, 0 );
 
         FastArray<HlmsComputeJob *>::const_iterator itor = mAnisoGeneratorStep1.begin();
-        FastArray<HlmsComputeJob *>::const_iterator end = mAnisoGeneratorStep1.end();
+        FastArray<HlmsComputeJob *>::const_iterator endt = mAnisoGeneratorStep1.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             ( *itor )->analyzeBarriers( mResourceTransitions );
             renderSystem->executeResourceTransition( mResourceTransitions );

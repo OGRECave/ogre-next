@@ -5,18 +5,23 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-uniform samplerBuffer directionsBuffer;
+vulkan_layout( ogre_T0 ) uniform samplerBuffer directionsBuffer;
 
-uniform sampler3D vctProbe;
+vulkan( layout( ogre_s1 ) uniform sampler probeSampler );
+
+vulkan_layout( ogre_t1 ) uniform texture3D vctProbe;
 
 @property( vct_anisotropic )
-	uniform sampler3D vctProbeX;
-	uniform sampler3D vctProbeY;
-	uniform sampler3D vctProbeZ;
+	vulkan_layout( ogre_t2 ) uniform texture3D vctProbeX;
+	vulkan_layout( ogre_t3 ) uniform texture3D vctProbeY;
+	vulkan_layout( ogre_t4 ) uniform texture3D vctProbeZ;
 @end
 
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image2D irradianceField;
-layout (@insertpiece(uav1_pf_type)) uniform restrict writeonly image2D irradianceFieldDepth;
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
+uniform restrict writeonly image2D irradianceField;
+
+layout( vulkan( ogre_u1 ) vk_comma @insertpiece(uav1_pf_type) )
+uniform restrict writeonly image2D irradianceFieldDepth;
 
 shared float4 g_diffuseDepth[@value( threads_per_group_x ) * @value( threads_per_group_y ) * @value( threads_per_group_z )];
 

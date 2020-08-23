@@ -1102,6 +1102,33 @@ namespace Ogre
         RenderSystem *renderSystem = mCreator->getRenderSystem();
         BarrierSolver &solver = renderSystem->getBarrierSolver();
 
+        // UAV layout is a more general R/W access than texture.
+        // If a texture is bound as both Tex and Uav, we should only transition to Uav
+        TextureGpuSet uavTexs;
+
+        {
+            DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
+            DescriptorSetUavSlotArray::const_iterator endt = mUavSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isTexture() )
+                {
+                    TextureGpu *tex = itor->getTexture().texture;
+                    solver.resolveTransition( resourceTransitions, tex, ResourceLayout::Uav,
+                                              itor->getTexture().access, 1u << GPT_COMPUTE_PROGRAM );
+                    uavTexs.insert( tex );
+                }
+                else
+                {
+                    const DescriptorSetUav::BufferSlot &bufferSlot = itor->getBuffer();
+                    solver.resolveTransition( resourceTransitions, bufferSlot.buffer, bufferSlot.access,
+                                              1u << GPT_COMPUTE_PROGRAM );
+                }
+                ++itor;
+            }
+        }
+
         {
             DescriptorSetTexSlotArray::const_iterator itor = mTexSlots.begin();
             DescriptorSetTexSlotArray::const_iterator endt = mTexSlots.end();
@@ -1111,7 +1138,8 @@ namespace Ogre
                 if( itor->isTexture() )
                 {
                     TextureGpu *tex = itor->getTexture().texture;
-                    if( tex->isRenderToTexture() || tex->isUav() )
+                    if( ( tex->isRenderToTexture() || tex->isUav() ) &&
+                        uavTexs.find( tex ) == uavTexs.end() )
                     {
                         solver.resolveTransition( resourceTransitions, tex, ResourceLayout::Texture,
                                                   ResourceAccess::Read, 1u << GPT_COMPUTE_PROGRAM );
@@ -1128,28 +1156,6 @@ namespace Ogre
                         solver.resolveTransition( resourceTransitions, uavBuffer, ResourceAccess::Read,
                                                   1u << GPT_COMPUTE_PROGRAM );
                     }
-                }
-                ++itor;
-            }
-        }
-
-        {
-            DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
-            DescriptorSetUavSlotArray::const_iterator endt = mUavSlots.end();
-
-            while( itor != endt )
-            {
-                if( itor->isTexture() )
-                {
-                    TextureGpu *tex = itor->getTexture().texture;
-                    solver.resolveTransition( resourceTransitions, tex, ResourceLayout::Uav,
-                                              itor->getTexture().access, 1u << GPT_COMPUTE_PROGRAM );
-                }
-                else
-                {
-                    const DescriptorSetUav::BufferSlot &bufferSlot = itor->getBuffer();
-                    solver.resolveTransition( resourceTransitions, bufferSlot.buffer, bufferSlot.access,
-                                              1u << GPT_COMPUTE_PROGRAM );
                 }
                 ++itor;
             }

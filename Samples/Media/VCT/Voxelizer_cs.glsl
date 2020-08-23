@@ -35,13 +35,13 @@ layout( std430, ogre_U1 ) readonly restrict buffer indexBufferLayout
 	uint indexBuffer[];
 };
 
-layout( ogre_u2 vk_comma @insertpiece(uav2_pf_type) )
+layout( vulkan( ogre_u2 ) vk_comma @insertpiece(uav2_pf_type) )
 uniform restrict image3D voxelAlbedoTex;
-layout( ogre_u3 vk_comma @insertpiece(uav3_pf_type) )
+layout( vulkan( ogre_u3 ) vk_comma @insertpiece(uav3_pf_type) )
 uniform restrict image3D voxelNormalTex;
-layout( ogre_u4 vk_comma @insertpiece(uav4_pf_type) )
+layout( vulkan( ogre_u4 ) vk_comma @insertpiece(uav4_pf_type) )
 uniform restrict image3D voxelEmissiveTex;
-layout( ogre_u5 vk_comma @insertpiece(uav5_pf_type) )
+layout( vulkan( ogre_u5 ) vk_comma @insertpiece(uav5_pf_type) )
 uniform restrict uimage3D voxelAccumVal;
 
 layout( local_size_x = @value( threads_per_group_x ),

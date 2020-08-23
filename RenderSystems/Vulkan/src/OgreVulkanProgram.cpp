@@ -832,8 +832,10 @@ namespace Ogre
                 else if( rowCount == 4 && columnCount == 4 )
                     constantType = GCT_MATRIX_4X4;
             }
-            else if( blockVariable.type_description->type_flags &
-                     ( SPV_REFLECT_TYPE_FLAG_VECTOR | SPV_REFLECT_TYPE_FLAG_ARRAY ) )
+            else if( ( blockVariable.type_description->type_flags &
+                       ( SPV_REFLECT_TYPE_FLAG_VECTOR | SPV_REFLECT_TYPE_FLAG_ARRAY ) ) ||
+                     blockVariable.type_description->op == SpvOpTypeInt ||
+                     blockVariable.type_description->op == SpvOpTypeFloat )
             {
                 const uint32 componentCount = blockVariable.numeric.vector.component_count;
                 if( blockVariable.type_description->type_flags & SPV_REFLECT_TYPE_FLAG_FLOAT )
