@@ -1635,8 +1635,9 @@ namespace Ogre {
             ++itor;
         }
 
-        OGRE_ASSERT_LOW( barriers && "A zero-bit memory barrier is invalid" );
-        glMemoryBarrier( barriers );
+        // It is possible that barriers != 0 if none of the entries had UAV transitions
+        if( barriers )
+            glMemoryBarrier( barriers );
     }
 
     void GL3PlusRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newBlock )

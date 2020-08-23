@@ -17,7 +17,7 @@ vulkan_layout( ogre_t2 ) uniform texture3D vctProbe;
 
 vulkan( layout( ogre_s2 ) uniform sampler vctProbeSampler );
 
-layout( ogre_u0 vk_comma @insertpiece(uav0_pf_type) )
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
 uniform restrict writeonly image3D lightVoxel;
 
 layout( local_size_x = @value( threads_per_group_x ),

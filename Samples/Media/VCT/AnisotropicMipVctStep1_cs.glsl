@@ -6,13 +6,13 @@ vulkan_layout( ogre_t0 ) uniform texture3D inLightLowerMip0;
 vulkan_layout( ogre_t1 ) uniform texture3D inLightLowerMip1;
 vulkan_layout( ogre_t2 ) uniform texture3D inLightLowerMip2;
 
-layout( ogre_u0 vk_comma @insertpiece(uav0_pf_type) )
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
 uniform restrict writeonly image3D outLightHigherMip0;
 
-layout( ogre_u1 vk_comma @insertpiece(uav1_pf_type) )
+layout( vulkan( ogre_u1 ) vk_comma @insertpiece(uav1_pf_type) )
 uniform restrict writeonly image3D outLightHigherMip1;
 
-layout( ogre_u2 vk_comma @insertpiece(uav2_pf_type) )
+layout( vulkan( ogre_u2 ) vk_comma @insertpiece(uav2_pf_type) )
 uniform restrict writeonly image3D outLightHigherMip2;
 
 layout( local_size_x = @value( threads_per_group_x ),
