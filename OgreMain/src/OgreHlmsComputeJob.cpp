@@ -349,6 +349,7 @@ namespace Ogre
         bindRanges[DescBindingTypes::Sampler].end = static_cast<uint16>( mSamplerSlots.size() );
 
         {
+            bool bBuffersFirst = false;
             uint16 numTextures = 0u;
             uint16 numTexBuffers = 0u;
             DescriptorSetTexSlotArray::const_iterator itor = mTexSlots.begin();
@@ -357,14 +358,28 @@ namespace Ogre
             while( itor != endt )
             {
                 if( itor->isBuffer() )
+                {
+                    if( numTextures == 0u )
+                        bBuffersFirst = true;
                     ++numTexBuffers;
+                }
                 else
                     ++numTextures;
                 ++itor;
             }
 
-            bindRanges[DescBindingTypes::TexBuffer].end = numTexBuffers;
-            bindRanges[DescBindingTypes::Texture].end = numTextures;
+            if( bBuffersFirst )
+            {
+                bindRanges[DescBindingTypes::TexBuffer].end = numTexBuffers;
+                bindRanges[DescBindingTypes::Texture].start = numTexBuffers;
+                bindRanges[DescBindingTypes::Texture].end = numTexBuffers + numTextures;
+            }
+            else
+            {
+                bindRanges[DescBindingTypes::Texture].end = numTextures;
+                bindRanges[DescBindingTypes::TexBuffer].start = numTextures;
+                bindRanges[DescBindingTypes::TexBuffer].end = numTextures + numTexBuffers;
+            }
         }
 
         {
