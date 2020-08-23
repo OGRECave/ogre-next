@@ -503,7 +503,7 @@ namespace Ogre
         mNextLayout = VulkanMappings::get( layout, this );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::_autogenerateMipmaps( void )
+    void VulkanTextureGpu::_autogenerateMipmaps( bool bUseBarrierSolver )
     {
         OGRE_ASSERT_LOW( allowsAutoMipmaps() );
 
@@ -515,17 +515,28 @@ namespace Ogre
             static_cast<VulkanTextureGpuManager *>( mTextureManager );
         VulkanDevice *device = textureManager->getDevice();
 
-        const bool callerIsCompositor = mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-
-        if( callerIsCompositor )
-            device->mGraphicsQueue.getCopyEncoder( 0, 0, true );
+        if( bUseBarrierSolver )
+        {
+            RenderSystem *renderSystem = textureManager->getRenderSystem();
+            ResourceTransitionArray resourceTransitions;
+            renderSystem->getBarrierSolver().resolveTransition(
+                resourceTransitions, this, ResourceLayout::MipmapGen, ResourceAccess::ReadWrite, 0u );
+            renderSystem->executeResourceTransition( resourceTransitions );
+        }
         else
         {
-            // We must transition to VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-            // By the time we exit _autogenerateMipmaps, the texture will
-            // still be in VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, thus
-            // endCopyEncoder will perform as expected
-            device->mGraphicsQueue.getCopyEncoder( 0, this, true );
+            const bool callerIsCompositor = mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+
+            if( callerIsCompositor )
+                device->mGraphicsQueue.getCopyEncoder( 0, 0, true );
+            else
+            {
+                // We must transition to VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+                // By the time we exit _autogenerateMipmaps, the texture will
+                // still be in VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, thus
+                // endCopyEncoder will perform as expected
+                device->mGraphicsQueue.getCopyEncoder( 0, this, true );
+            }
         }
 
         const size_t numMipmaps = mNumMipmaps;

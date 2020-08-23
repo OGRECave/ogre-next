@@ -689,7 +689,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpu::_autogenerateMipmaps(void)
+    void GL3PlusTextureGpu::_autogenerateMipmaps( bool bUseBarrierSolver )
     {
         if( !mFinalTextureName )
             return;

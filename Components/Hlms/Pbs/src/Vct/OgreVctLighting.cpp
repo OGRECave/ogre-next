@@ -562,7 +562,7 @@ namespace Ogre
         }
 
         if( mLightVoxel[0]->getNumMipmaps() > 1u )
-            mLightVoxel[0]->_autogenerateMipmaps();
+            mLightVoxel[0]->_autogenerateMipmaps( true );
     }
     //-------------------------------------------------------------------------
     void VctLighting::setAllowMultipleBounces( bool bAllowMultipleBounces )
@@ -762,7 +762,7 @@ namespace Ogre
             generateAnisotropicMips();
 
         if( mLightVoxel[0]->getNumMipmaps() > 1u )
-            mLightVoxel[0]->_autogenerateMipmaps();
+            mLightVoxel[0]->_autogenerateMipmaps( true );
 
         if( numBounces > 0u )
         {

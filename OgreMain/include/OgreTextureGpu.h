@@ -487,9 +487,31 @@ namespace Ogre
         */
         void _resolveTo( TextureGpu *resolveTexture );
 
-        /// Tells the API to let the HW autogenerate mipmaps. Assumes the
-        /// allowsAutoMipmaps() == true and isRenderToTexture() == true
-        virtual void _autogenerateMipmaps(void) = 0;
+        /** Tells the API to let the HW autogenerate mipmaps. Assumes the
+            allowsAutoMipmaps() == true and isRenderToTexture() == true
+        @param bUseBarrierSolver
+            When false, Vulkan will use an heuristic to detect whether this texture
+            is already in MipmapGen (note: MipmapGen may alias to CopySrc).
+                - If it is in MipmapGen/CopySrc, we assume the texture has been already
+                  transitioned externally by a barrier or the copy encoder; thus
+                  no barrier will be issued
+                - If it is not, then we open the copy encoder to take care
+                  of resource transitions; which is desirable if you wish
+                  to use 'this' only as a texture or for copying data around,
+                  but probably undesirable if you wish to do more transitions using
+                  the BarrierSolver for RenderTexture and/or Uav.
+
+            When true, we force a resource transition using the barrier solver.
+            Calling texture->_autogenerateMipmaps( true ) is exactly the same as doing:
+            @code
+                barrierSolver.resolveTransition( resourceTransitions, texture,
+                                                 ResourceLayout::MipmapGen,
+                                                 ResourceAccess::ReadWrite, 0u );
+                renderSystem->executeResourceTransition( resourceTransitions );
+                texture->_autogenerateMipmaps( false );
+            @endcode
+        */
+        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false ) = 0;
         /// Only valid for TextureGpu classes.
         /// TODO: This may be moved to a different class.
         virtual void swapBuffers(void) {}

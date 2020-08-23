@@ -122,7 +122,7 @@ namespace Ogre
 
         virtual void _setNextLayout( ResourceLayout::Layout layout );
 
-        virtual void _autogenerateMipmaps( void );
+        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false );
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
@@ -170,7 +170,6 @@ namespace Ogre
         uint16 mDepthBufferPoolId;
         bool mPreferDepthTexture;
         PixelFormatGpu mDesiredDepthBufferFormat;
-
 
         virtual void createMsaaSurface( void );
         virtual void destroyMsaaSurface( void );

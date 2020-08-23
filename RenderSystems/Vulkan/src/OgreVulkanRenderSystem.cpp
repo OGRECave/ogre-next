@@ -2024,6 +2024,9 @@ namespace Ogre
         if( rstCollection.empty() )
             return;
 
+        // Needs to be done now, as it may change layouts of textures we're about to change
+        mActiveDevice->mGraphicsQueue.endAllEncoders();
+
         VkPipelineStageFlags srcStage = 0u;
         VkPipelineStageFlags dstStage = 0u;
 
@@ -2139,8 +2142,6 @@ namespace Ogre
             srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
         if( dstStage == 0 )
             dstStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-
-        mActiveDevice->mGraphicsQueue.endAllEncoders();
 
         vkCmdPipelineBarrier( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, srcStage, dstStage, 0,
                               numMemBarriers, &memBarrier, 0u, 0,

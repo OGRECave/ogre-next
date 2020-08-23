@@ -91,7 +91,7 @@ namespace Ogre
                              const TextureBox &srcBox, uint8 srcMipLevel,
                              bool keepResolvedTexSynced = true, bool barrierLess = false );
 
-        virtual void _autogenerateMipmaps(void);
+        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false );
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 

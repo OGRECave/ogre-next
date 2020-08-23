@@ -104,7 +104,7 @@ namespace Ogre
         virtual void _setToDisplayDummyTexture(void);
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
-        virtual void _autogenerateMipmaps(void);
+        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false );
 
         //The returned pointer has its ref. count incremented! Caller must decrease it!
         ComPtr<ID3D11ShaderResourceView> createSrv( const DescriptorSetTexture2::TextureSlot &texSlot ) const;

@@ -311,7 +311,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpu::_autogenerateMipmaps(void)
+    void MetalTextureGpu::_autogenerateMipmaps( bool bUseBarrierSolver )
     {
         MetalTextureGpuManager *textureManagerMetal =
                 static_cast<MetalTextureGpuManager*>( mTextureManager );

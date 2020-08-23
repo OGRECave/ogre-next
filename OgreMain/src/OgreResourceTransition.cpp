@@ -151,7 +151,8 @@ namespace Ogre
 
         OGRE_ASSERT_MEDIUM( access != ResourceAccess::Undefined );
 
-        if( newLayout == ResourceLayout::CopySrc || newLayout == ResourceLayout::CopyDst )
+        if( newLayout == ResourceLayout::CopySrc || newLayout == ResourceLayout::CopyDst ||
+            newLayout == ResourceLayout::MipmapGen )
         {
             // Keep track of textures which have been transitioned to Copy layouts, since
             // we can't finish the frame with textures in that stage as they're automatically
@@ -203,7 +204,8 @@ namespace Ogre
                 ( checkDivergingTransition( resourceTransitions, texture, newLayout ) ||
                   renderSystem->isSameLayout( itor->second.layout, texture->getCurrentLayout(), texture,
                                               true ) ) &&
-                "Layout was altered outside BarrierSolver!" );
+                "Layout was altered outside BarrierSolver! "
+                "Common reasons are copyTo and _autogenerateMipmaps(false)" );
 
             if( !renderSystem->isSameLayout( itor->second.layout, newLayout, texture, false ) ||
                 ( newLayout == ResourceLayout::Uav &&  //

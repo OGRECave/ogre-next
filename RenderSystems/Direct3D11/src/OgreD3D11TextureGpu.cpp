@@ -516,7 +516,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::_autogenerateMipmaps(void)
+    void D3D11TextureGpu::_autogenerateMipmaps( bool bUseBarrierSolver )
     {
         if( !mFinalTextureName || !isDataReady() )
             return;
