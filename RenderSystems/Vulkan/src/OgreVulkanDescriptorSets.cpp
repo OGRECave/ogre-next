@@ -239,6 +239,7 @@ namespace Ogre
                 OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( texSlot.texture ) );
                 VulkanTextureGpu *vulkanTexture = static_cast<VulkanTextureGpu *>( texSlot.texture );
                 vulkanTexture->destroyView( texSlot, imgInfoIt->imageView );
+                ++imgInfoIt;
             }
             ++itor;
         }
@@ -348,6 +349,7 @@ namespace Ogre
                 OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( texSlot.texture ) );
                 VulkanTextureGpu *vulkanTexture = static_cast<VulkanTextureGpu *>( texSlot.texture );
                 vulkanTexture->destroyView( texSlot, imgInfoIt->imageView );
+                ++imgInfoIt;
             }
             ++itor;
         }
