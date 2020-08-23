@@ -277,7 +277,7 @@ namespace Ogre
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->endRenderPassDescriptor();
 
-        analyzeBarriers();
+        mComputeJob->analyzeBarriers( mResourceTransitions );
         executeResourceTransitions();
 
         // Set textures/uavs every frame
@@ -298,59 +298,5 @@ namespace Ogre
         notifyPassPosExecuteListeners();
 
         profilingEnd();
-    }
-    //-----------------------------------------------------------------------------------
-    void CompositorPassCompute::analyzeBarriers( void )
-    {
-        mResourceTransitions.clear();
-
-        // Do not use base class'. We can't reuse mTextureDependencies because
-        // the barriers are the same except for the stage flags
-        // CompositorPass::analyzeBarriers();
-
-        {
-            // <anything> -> Texture
-            CompositorTextureVec::const_iterator itDep = mTextureDependencies.begin();
-            CompositorTextureVec::const_iterator enDep = mTextureDependencies.end();
-
-            while( itDep != enDep )
-            {
-                TextureGpu *renderTarget = itDep->texture;
-
-                resolveTransition( renderTarget, ResourceLayout::Texture, ResourceAccess::Read,
-                                   1u << GPT_COMPUTE_PROGRAM );
-                ++itDep;
-            }
-        }
-
-        {
-            // <anything> -> Texture UAVs
-            const CompositorPassComputeDef::TextureSources &uavSources = mDefinition->getUavSources();
-            CompositorPassComputeDef::TextureSources::const_iterator itor = uavSources.begin();
-            CompositorPassComputeDef::TextureSources::const_iterator endt = uavSources.end();
-
-            while( itor != endt )
-            {
-                TextureGpu *uavTex = mParentNode->getDefinedTexture( itor->textureName );
-                resolveTransition( uavTex, ResourceLayout::Uav, itor->access,
-                                   1u << GPT_COMPUTE_PROGRAM );
-                ++itor;
-            }
-        }
-
-        {
-            //<anything> -> Buffer UAVs
-            const CompositorPassComputeDef::BufferSourceVec &bufferSources =
-                mDefinition->getBufferSources();
-            CompositorPassComputeDef::BufferSourceVec::const_iterator itor = bufferSources.begin();
-            CompositorPassComputeDef::BufferSourceVec::const_iterator endt = bufferSources.end();
-
-            while( itor != endt )
-            {
-                UavBufferPacked *uavBuffer = mParentNode->getDefinedBuffer( itor->bufferName );
-                resolveTransition( uavBuffer, itor->access, 1u << GPT_COMPUTE_PROGRAM );
-                ++itor;
-            }
-        }
     }
 }  // namespace Ogre

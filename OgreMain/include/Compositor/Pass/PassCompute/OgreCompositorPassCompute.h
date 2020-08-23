@@ -87,7 +87,6 @@ namespace Ogre
 
         void setResourcesToJob(void);
 
-        void analyzeBarriers( void );
     public:
         CompositorPassCompute( const CompositorPassComputeDef *definition, Camera *defaultCamera,
                                CompositorNode *parentNode, const RenderTargetViewDef *rtv );
