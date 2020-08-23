@@ -153,16 +153,20 @@
 @property( syntax != glslvk )
 	#define OGRE_SAMPLER_ARG_DECL( samplerName )
 	#define OGRE_SAMPLER_ARG( samplerName )
+
+	#define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform bufferName
+	#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform structName
+	#define CONST_BUFFER_STRUCT_END( variableName ) variableName
 @else
 	#define OGRE_SAMPLER_ARG_DECL( samplerName ) , sampler samplerName
 	#define OGRE_SAMPLER_ARG( samplerName ) , samplerName
+
+	#define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(ogre_B##bindingPoint) uniform bufferName
+	#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(ogre_B##bindingPoint) uniform structName
+	#define CONST_BUFFER_STRUCT_END( variableName ) variableName
 @end
 
 #define OGRE_Texture3D_float4 texture3D
-
-#define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform bufferName
-#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform structName
-#define CONST_BUFFER_STRUCT_END( variableName ) variableName
 
 #define FLAT_INTERPOLANT( decl, bindingPoint ) flat decl
 #define INTERPOLANT( decl, bindingPoint ) decl
