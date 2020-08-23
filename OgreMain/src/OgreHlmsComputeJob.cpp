@@ -368,6 +368,7 @@ namespace Ogre
         }
 
         {
+            bool bBuffersFirst = false;
             uint16 numTextures = 0u;
             uint16 numTexBuffers = 0u;
             DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
@@ -376,14 +377,28 @@ namespace Ogre
             while( itor != endt )
             {
                 if( itor->isBuffer() )
+                {
+                    if( numTextures == 0u )
+                        bBuffersFirst = true;
                     ++numTexBuffers;
+                }
                 else
                     ++numTextures;
                 ++itor;
             }
 
-            bindRanges[DescBindingTypes::UavBuffer].end = numTexBuffers;
-            bindRanges[DescBindingTypes::UavTexture].end = numTextures;
+            if( bBuffersFirst )
+            {
+                bindRanges[DescBindingTypes::UavBuffer].end = numTexBuffers;
+                bindRanges[DescBindingTypes::UavTexture].start = numTexBuffers;
+                bindRanges[DescBindingTypes::UavTexture].end = numTexBuffers + numTextures;
+            }
+            else
+            {
+                bindRanges[DescBindingTypes::UavTexture].end = numTextures;
+                bindRanges[DescBindingTypes::UavBuffer].start = numTextures;
+                bindRanges[DescBindingTypes::UavBuffer].end = numTextures + numTexBuffers;
+            }
         }
     }
     //-----------------------------------------------------------------------------------
