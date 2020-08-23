@@ -495,6 +495,7 @@ namespace Ogre
         uint32              mTryLockMutexFailureCount;
         uint32              mTryLockMutexFailureLimit;
         bool                mAddedNewLoadRequests;
+        bool                mAddedNewLoadRequestsSinceWaitingForStreamingCompletion;
         ThreadData          mThreadData[2];
         StreamingData       mStreamingData;
 
@@ -692,8 +693,14 @@ namespace Ogre
         */
         bool _update( bool syncWithWorkerThread );
 
-        /// Blocks main thread until are pending textures are fully loaded.
+        /// Blocks main thread until all pending textures are fully loaded.
         void waitForStreamingCompletion(void);
+
+        /// It is not enough to call waitForStreamingCompletion to render
+        /// single frame with all textures loaded, as new loading requests
+        /// could be added during frame rendering. In this case waiting 
+        /// and rendering could be repeated to avoid the problem.
+        bool hasNewLoadRequests() const { return mAddedNewLoadRequestsSinceWaitingForStreamingCompletion; }
 
         /// Do not use directly. See TextureGpu::waitForMetadata & TextureGpu::waitForDataReady
         void _waitFor( TextureGpu *texture, bool metadataOnly );
