@@ -596,6 +596,13 @@ namespace Ogre
 
         if( !mCompiled && checkErrors )
         {
+            String dumpStr;
+            mRootLayout->dump( dumpStr );
+            dumpStr += "\n";
+            getPreamble( dumpStr );
+
+            LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
+
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          ( ( mType == GPT_VERTEX_PROGRAM ) ? "Vertex Program " : "Fragment Program " ) +
                              mName + " failed to compile. See compile log above for details.",

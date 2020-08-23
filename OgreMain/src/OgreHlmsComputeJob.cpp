@@ -374,7 +374,7 @@ namespace Ogre
             hasParams|=!shaderParams1->mParams.empty();
 
         size_t currSet = 0u;
-        if( hasParams || mConstBuffers.empty() )
+        if( hasParams || !mConstBuffers.empty() )
         {
             rootLayout.mBaked[currSet] = false;
 
