@@ -111,7 +111,10 @@ namespace Ogre
         mBufferInterface = bufferInterface;
     }
     //-----------------------------------------------------------------------------------
-    UavBufferPacked *BufferPacked::getOriginalBufferType( void ) { return 0; }
+    BufferPacked *BufferPacked::getOriginalBufferType( void )
+    {
+        return mBufferInterface->getBufferPacked();
+    }
     //-----------------------------------------------------------------------------------
     AsyncTicketPtr BufferPacked::readRequest( size_t elementStart, size_t elementCount )
     {

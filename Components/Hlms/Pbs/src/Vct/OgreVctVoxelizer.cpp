@@ -1223,10 +1223,13 @@ namespace Ogre
 
             DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
             bufferSlot.buffer = compressedVf ? mVertexBufferCompressed : mVertexBufferUncompressed;
+            bufferSlot.access = ResourceAccess::Read;
             mAabbCalculator[i]->_setUavBuffer( 0, bufferSlot );
             bufferSlot.buffer = hasIndices32 ? mIndexBuffer32 : mIndexBuffer16;
+            bufferSlot.access = ResourceAccess::Read;
             mAabbCalculator[i]->_setUavBuffer( 1, bufferSlot );
             bufferSlot.buffer = mMeshAabb;
+            bufferSlot.access = ResourceAccess::Write;
             mAabbCalculator[i]->_setUavBuffer( 2, bufferSlot );
 
             DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
@@ -1242,6 +1245,8 @@ namespace Ogre
             shaderParams.mParams.push_back( paramMeshRange );
             shaderParams.setDirty();
 
+            mAabbCalculator[i]->analyzeBarriers( mResourceTransitions );
+            mRenderSystem->executeResourceTransition( mResourceTransitions );
             hlmsCompute->dispatch( mAabbCalculator[i], 0, 0 );
             meshStart += numMeshes[i];
         }
@@ -1250,6 +1255,7 @@ namespace Ogre
 
         DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
         bufferSlot.buffer = mInstanceBuffer;
+        bufferSlot.access = ResourceAccess::ReadWrite;
         mAabbWorldSpaceJob->_setUavBuffer( 0, bufferSlot );
 
         DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());

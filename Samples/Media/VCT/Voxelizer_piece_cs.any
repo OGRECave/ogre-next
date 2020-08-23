@@ -23,7 +23,7 @@
 		};
 	@end
 
-	@property( syntax != glsl )
+	@property( syntax != glsl && syntax != glslvk )
 		struct InstanceBuffer
 		{
 			float4 worldTransformRow0;
@@ -97,7 +97,7 @@
 	{
 		Instance retVal;
 
-	@property( syntax == glsl )
+	@property( syntax == glsl || syntax == glslvk )
 		retVal.worldTransform = loadOgreFloat4x3( instanceBuffer, instanceIdx * 6u );
 
 		float4 aabb0 = bufferFetch( instanceBuffer, int( instanceIdx * 6u + 3u ) );

@@ -1090,9 +1090,11 @@ namespace Ogre
                 else
                 {
                     const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
-                    UavBufferPacked *uavBuffer = bufferSlot.buffer->getOriginalBufferType();
-                    if( uavBuffer )
+                    BufferPacked *origBuffer = bufferSlot.buffer->getOriginalBufferType();
+                    if( origBuffer != bufferSlot.buffer )
                     {
+                        OGRE_ASSERT_HIGH( dynamic_cast<UavBufferPacked *>( origBuffer ) );
+                        UavBufferPacked *uavBuffer = static_cast<UavBufferPacked *>( origBuffer );
                         solver.resolveTransition( resourceTransitions, uavBuffer, ResourceAccess::Read,
                                                   1u << GPT_COMPUTE_PROGRAM );
                     }
