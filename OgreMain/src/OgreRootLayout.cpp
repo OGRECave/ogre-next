@@ -456,6 +456,8 @@ namespace Ogre
                     }
                 }
 
+                jsonStr.a( "]" );
+
                 firstEntryWritten = true;
             }
 
