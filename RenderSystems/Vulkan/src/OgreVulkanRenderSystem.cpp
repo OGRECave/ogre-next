@@ -426,6 +426,7 @@ namespace Ogre
 
         rsc->setCapability( RSC_COMPUTE_PROGRAM );
         rsc->setCapability( RSC_UAV );
+        rsc->setCapability( RSC_TYPED_UAV_LOADS );
         rsc->setCapability( RSC_EXPLICIT_FSAA_RESOLVE );
         rsc->setCapability( RSC_TEXTURE_1D );
 
