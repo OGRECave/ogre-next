@@ -624,7 +624,7 @@ namespace Ogre
         mGenerationJob->setConstBuffer( 0, mIfGenParamsBuffer );
 
         const bool bIsAnisotropic = mVctLighting->isAnisotropic();
-        mGenerationJob->setProperty( "vct_anisotropic", 1 );
+        mGenerationJob->setProperty( "vct_anisotropic", bIsAnisotropic ? 1 : 0 );
         mGenerationJob->setNumTexUnits( 1u + ( bIsAnisotropic ? 4u : 1u ) );
 
         DescriptorSetTexture2::BufferSlot bufferSlot( DescriptorSetTexture2::BufferSlot::makeEmpty() );
