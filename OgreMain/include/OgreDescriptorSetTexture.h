@@ -178,6 +178,7 @@ namespace Ogre
         struct _OgreExport TextureSlot
         {
             TextureGpu      *texture;
+            bool            generalReadWrite;
             bool            cubemapsAs2DArrays;
             uint8           mipmapLevel;
             /// When this value is 0, it means all mipmaps from mipmapLevel until the end.
@@ -189,6 +190,7 @@ namespace Ogre
             bool operator != ( const TextureSlot &other ) const
             {
                 return  this->texture != other.texture ||
+                        this->generalReadWrite != other.generalReadWrite ||
                         this->mipmapLevel != other.mipmapLevel ||
                         this->numMipmaps != other.numMipmaps ||
                         this->textureArrayIndex != other.textureArrayIndex ||
@@ -199,6 +201,8 @@ namespace Ogre
             {
                 if( this->texture != other.texture )
                     return this->texture < other.texture;
+                if( this->generalReadWrite != other.generalReadWrite )
+                    return this->generalReadWrite < other.generalReadWrite;
                 if( this->mipmapLevel != other.mipmapLevel )
                     return this->mipmapLevel < other.mipmapLevel;
                 if( this->numMipmaps != other.numMipmaps )

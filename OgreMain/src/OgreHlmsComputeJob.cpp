@@ -108,6 +108,52 @@ namespace Ogre
         mSamplerSlots.clear();
     }
     //-----------------------------------------------------------------------------------
+    /**
+    @brief HlmsComputeJob::discoverGeneralTextures
+        UAV layout is a more general R/W access than texture.
+
+        If a texture is bound as both Tex and Uav, we should only transition to Uav,
+        and tell the descriptor that this texture will be bound using the GENERAL layout
+    */
+    void HlmsComputeJob::discoverGeneralTextures( void )
+    {
+        TextureGpuSet uavTexs;
+
+        {
+            DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
+            DescriptorSetUavSlotArray::const_iterator endt = mUavSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isTexture() )
+                    uavTexs.insert( itor->getTexture().texture );
+                ++itor;
+            }
+        }
+
+        {
+            DescriptorSetTexSlotArray::iterator itor = mTexSlots.begin();
+            DescriptorSetTexSlotArray::iterator endt = mTexSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isTexture() )
+                {
+                    DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                    TextureGpu *tex = texSlot.texture;
+                    if( !tex->isRenderToTexture() && !tex->isUav() )
+                        texSlot.generalReadWrite = false;
+                    else if( uavTexs.find( tex ) == uavTexs.end() )
+                        texSlot.generalReadWrite = false;
+                    else
+                        texSlot.generalReadWrite = true;
+                }
+
+                ++itor;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     template <typename T>
     void HlmsComputeJob::removeListenerFromTextures( T &container, size_t first, size_t lastPlusOne )
     {
@@ -674,6 +720,8 @@ namespace Ogre
         if( !mTexturesDescSet && !mTexSlots.empty() )
         {
             //Texture desc set is dirty. Time to calculate it again.
+            discoverGeneralTextures();
+
             HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
             DescriptorSetTexture2 baseParams;
@@ -1099,12 +1147,11 @@ namespace Ogre
         if( clearBarriers )
             resourceTransitions.clear();
 
+        if( !mTexturesDescSet )
+            discoverGeneralTextures();
+
         RenderSystem *renderSystem = mCreator->getRenderSystem();
         BarrierSolver &solver = renderSystem->getBarrierSolver();
-
-        // UAV layout is a more general R/W access than texture.
-        // If a texture is bound as both Tex and Uav, we should only transition to Uav
-        TextureGpuSet uavTexs;
 
         {
             DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
@@ -1117,7 +1164,6 @@ namespace Ogre
                     TextureGpu *tex = itor->getTexture().texture;
                     solver.resolveTransition( resourceTransitions, tex, ResourceLayout::Uav,
                                               itor->getTexture().access, 1u << GPT_COMPUTE_PROGRAM );
-                    uavTexs.insert( tex );
                 }
                 else
                 {
@@ -1137,9 +1183,9 @@ namespace Ogre
             {
                 if( itor->isTexture() )
                 {
-                    TextureGpu *tex = itor->getTexture().texture;
-                    if( ( tex->isRenderToTexture() || tex->isUav() ) &&
-                        uavTexs.find( tex ) == uavTexs.end() )
+                    const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                    TextureGpu *tex = texSlot.texture;
+                    if( ( tex->isRenderToTexture() || tex->isUav() ) && !texSlot.generalReadWrite )
                     {
                         solver.resolveTransition( resourceTransitions, tex, ResourceLayout::Texture,
                                                   ResourceAccess::Read, 1u << GPT_COMPUTE_PROGRAM );

@@ -120,6 +120,8 @@ namespace Ogre
 
         map<IdString, ShaderParams>::type mShaderParams;
 
+        void discoverGeneralTextures( void );
+
         template <typename T>
         void removeListenerFromTextures( T &container, size_t first, size_t lastPlusOne );
 

@@ -177,7 +177,9 @@ namespace Ogre
                 VkDescriptorImageInfo imageInfo;
                 imageInfo.sampler = 0;
                 imageInfo.imageView = vulkanTexture->createView( texSlot );
-                imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                imageInfo.imageLayout = texSlot.generalReadWrite
+                                            ? VK_IMAGE_LAYOUT_GENERAL
+                                            : VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
                 mTextures.push_back( imageInfo );
             }
 
