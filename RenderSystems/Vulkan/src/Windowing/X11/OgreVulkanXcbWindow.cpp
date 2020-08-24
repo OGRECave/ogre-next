@@ -336,10 +336,26 @@ namespace Ogre
             mTop = geom->y;
         }
 
-        mDevice->stall();
+        // We are forced to use vkDeviceWaitIdle rather than mDevice->stall() because the former
+        // will call commitAndNextCommandBuffer while we are inside commitAndNextCommandBuffer
+        // thus forcing the window to swap while we are still acquiring a new swapchain
+        vkDeviceWaitIdle( mDevice->mDevice );
 
         destroySwapchain();
+
+        // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
+        if( mDepthBuffer )
+            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
+            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+
         setFinalResolution( geom->width, geom->height );
+
+        if( mDepthBuffer )
+            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
+            mStencilBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+
         createSwapchain();
 
         free( geom );

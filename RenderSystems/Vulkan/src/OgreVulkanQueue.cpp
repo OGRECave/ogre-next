@@ -1067,7 +1067,6 @@ namespace Ogre
             mWindowsPendingSwap[windowIdx]->_swapBuffers( semaphore );
             mVaoManager->notifyWaitSemaphoreSubmitted( semaphore );
         }
-        mWindowsPendingSwap.clear();
 
         mVaoManager->notifyWaitSemaphoresSubmitted( mGpuWaitSemaphForCurrCmdBuff );
 
@@ -1078,6 +1077,11 @@ namespace Ogre
         }
 
         newCommandBuffer();
+
+        // acquireNextSwapchain must be called after newCommandBuffer()
+        for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
+            mWindowsPendingSwap[windowIdx]->acquireNextSwapchain();
+        mWindowsPendingSwap.clear();
 
         mGpuWaitSemaphForCurrCmdBuff.clear();
         mGpuSignalSemaphForCurrCmdBuff.clear();

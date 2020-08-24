@@ -83,6 +83,8 @@ namespace Ogre
         PixelFormatGpu chooseSurfaceFormat( bool hwGamma );
         void createSwapchain( void );
         void destroySwapchain( void );
+
+    public:
         void acquireNextSwapchain( void );
 
     public:

@@ -457,7 +457,5 @@ namespace Ogre
         }
 
         mSwapchainStatus = SwapchainReleased;
-
-        acquireNextSwapchain();
     }
 }  // namespace Ogre
