@@ -435,13 +435,31 @@ namespace Ogre
 
             Typically the reason to set this to false is if you plane on rendering more
             stuff to dst texture and then resolve.
-        @param barrierLess
-            Leave this set to false.
-            The compositor sets this to true to manually manage the barriers
+        @param issueBarriers
+                - If issueBarriers & ResourceAccess::Read, then
+                  the copy encoder will issue a barrier for 'this'
+                - If issueBarriers & ResourceAccess::Write, then
+                  the copy encoder will issue a barrier for 'dst'
+
+            Defaults to ResourceAccess::ReadWrite to automatically manage barriers on both src & dst.
+
+            The compositor sets this to ResourceAccess::Undefined to manually manage the barriers
+
+            Some users may have to apply a barrier to individual textures
+            e.g. if src is a RenderTexture but the dst is a regular texture then perform:
+
+            @code
+                solver.resolveTransition( resourceTransitions, src, ResourceLayout::CopySrc,
+                                          ResourceAccess::Read, 0u );
+                renderSystem->executeResourceTransition( resourceTransitions );
+                src->copyTo( dst, dstBox, 0u, src->getEmptyBox( 0u ), 0u, keepResolvedTexSynced,
+                             ResourceAccess::Write );
+            @endcode
         */
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel,
-                             bool keepResolvedTexSynced = true, bool barrierLess = false );
+                             bool keepResolvedTexSynced = true,
+                             ResourceAccess::ResourceAccess issueBarriers = ResourceAccess::ReadWrite );
 
         /** These 3 values  are used as defaults for the compositor to use, but they may be
             explicitly overriden by a RenderPassDescriptor.

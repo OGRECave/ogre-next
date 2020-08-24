@@ -360,7 +360,8 @@ namespace Ogre
                 for( uint8 mip = 0u; mip < outNumMips; ++mip )
                 {
                     TextureBox emptyBox = mOutputTexture->getEmptyBox( mip );
-                    mInputTexture->copyTo( mOutputTexture, emptyBox, mip, emptyBox, mip, true, true );
+                    mInputTexture->copyTo( mOutputTexture, emptyBox, mip, emptyBox, mip, true,
+                                           ResourceAccess::Undefined );
                 }
             }
         }

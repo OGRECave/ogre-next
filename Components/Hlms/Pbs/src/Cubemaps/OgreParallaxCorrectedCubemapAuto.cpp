@@ -177,7 +177,7 @@ namespace Ogre
         RenderSystem *renderSystem = mSceneManager->getDestinationRenderSystem();
         BarrierSolver &solver = renderSystem->getBarrierSolver();
 
-        ResourceTransitionArray barrier;
+        ResourceTransitionArray &barrier = solver.getNewResourceTransitionsArrayTmp();
         solver.resolveTransition( barrier, mIblTarget, ResourceLayout::CopySrc, ResourceAccess::Read,
                                   0u );
         solver.resolveTransition( barrier, mBindTexture, ResourceLayout::CopyDst, ResourceAccess::Write,
@@ -196,7 +196,7 @@ namespace Ogre
             TextureBox dstBox = srcBox;
             srcBox.sliceStart = 0;
             dstBox.sliceStart = cubemapArrayIdx;
-            ibl->copyTo( mBindTexture, dstBox, mip, srcBox, mip, true, true );
+            ibl->copyTo( mBindTexture, dstBox, mip, srcBox, mip, true, ResourceAccess::Undefined );
         }
     }
     //-----------------------------------------------------------------------------------

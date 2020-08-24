@@ -98,7 +98,7 @@ namespace Ogre
 
         TextureBox srcBox = srcChannel->getEmptyBox( 0 );
         TextureBox dstBox = dstChannel->getEmptyBox( 0 );
-        srcChannel->copyTo( dstChannel, dstBox, 0, srcBox, 0, false, true );
+        srcChannel->copyTo( dstChannel, dstBox, 0, srcBox, 0, false, ResourceAccess::Undefined );
 
         notifyPassPosExecuteListeners();
     }

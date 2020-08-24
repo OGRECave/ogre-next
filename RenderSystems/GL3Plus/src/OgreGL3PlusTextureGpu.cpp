@@ -613,9 +613,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                                     const TextureBox &srcBox, uint8 srcMipLevel,
-                                    bool keepResolvedTexSynced, bool barrierLess )
+                                    bool keepResolvedTexSynced,
+                                    ResourceAccess::ResourceAccess issueBarriers )
     {
-        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, barrierLess );
+        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, issueBarriers );
 
         assert( dynamic_cast<GL3PlusTextureGpu*>( dst ) );
 

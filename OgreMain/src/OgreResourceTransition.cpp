@@ -75,6 +75,9 @@ namespace Ogre
                                        ResourceAccess::Read, 0u );
                 }
             }
+
+            texture->removeListener( this );
+
             ++itor;
         }
 
@@ -159,7 +162,10 @@ namespace Ogre
             // managed by the Copy Encoder.
             // Duplicate entries are harmless but we try to avoid it.
             if( mCopyStateTextures.empty() || mCopyStateTextures.back() != texture )
+            {
+                texture->addListener( this );
                 mCopyStateTextures.push_back( texture );
+            }
         }
 
         ResourceStatusMap::iterator itor = mResourceStatus.find( texture );
@@ -303,4 +309,18 @@ namespace Ogre
     {
         mResourceStatus.insert( resourceStatus.begin(), resourceStatus.end() );
     }
+    //-------------------------------------------------------------------------
+    void BarrierSolver::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                              void *extraData )
+    {
+        if( reason == TextureGpuListener::Deleted )
+        {
+            FastArray<TextureGpu *>::iterator itor =
+                std::find( mCopyStateTextures.begin(), mCopyStateTextures.end(), texture );
+            efficientVectorRemove( mCopyStateTextures, itor );
+            texture->removeListener( this );
+        }
+    }
+    //-------------------------------------------------------------------------
+    bool BarrierSolver::shouldStayLoaded( TextureGpu *texture ) { return false; }
 }  // namespace Ogre

@@ -613,7 +613,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel, bool keepResolvedTexSynced,
-                             bool barrierLess )
+                             ResourceAccess::ResourceAccess issueBarriers )
     {
         assert( srcBox.equalSize( dstBox ) );
         assert( this != dst || !srcBox.overlaps( dstBox ) );

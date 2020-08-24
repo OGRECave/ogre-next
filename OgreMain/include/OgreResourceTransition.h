@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
+#include "OgreTextureGpuListener.h"
+
 #include "ogrestd/map.h"
 
 #include "OgreHeaderPrefix.h"
@@ -125,11 +127,14 @@ namespace Ogre
 
     typedef StdMap<GpuTrackedResource*, ResourceStatus> ResourceStatusMap;
 
-    class _OgreExport BarrierSolver
+    class _OgreExport BarrierSolver : public TextureGpuListener
     {
         /// Contains previous state
         ResourceStatusMap mResourceStatus;
         FastArray<TextureGpu*> mCopyStateTextures;
+
+        /// Temporary variable that can be reused to avoid needless reallocations
+        ResourceTransitionArray mTmpResourceTransitions;
 
         static bool checkDivergingTransition( const ResourceTransitionArray &resourceTransitions,
                                               const TextureGpu *texture,
@@ -137,6 +142,16 @@ namespace Ogre
 
     public:
         const ResourceStatusMap &getResourceStatus( void );
+
+        /// Returns a temporary array variable that can be reused to avoid needless reallocations
+        /// You're not forced to use it, but it will increase performance.
+        ///
+        /// Beware not to have it in use in two places at the same time! Use it as soon as possible
+        ResourceTransitionArray &getNewResourceTransitionsArrayTmp( void )
+        {
+            mTmpResourceTransitions.clear();
+            return mTmpResourceTransitions;
+        }
 
         void resetCopyLayoutsOnly( ResourceTransitionArray &resourceTransitions );
 
@@ -179,6 +194,12 @@ namespace Ogre
 
         /// Tell the solver all these resources have been transitioned to a different layout, externally
         void assumeTransitions( ResourceStatusMap &resourceStatus );
+
+        /// @see TextureGpuListener::notifyTextureChanged
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                           void *extraData );
+        /// @see TextureGpuListener::shouldStayLoaded
+        virtual bool shouldStayLoaded( TextureGpu *texture );
     };
 
     /** @} */

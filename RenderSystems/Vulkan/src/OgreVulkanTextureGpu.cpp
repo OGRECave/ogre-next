@@ -403,9 +403,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                                    const TextureBox &srcBox, uint8 srcMipLevel,
-                                   bool keepResolvedTexSynced, bool barrierLess )
+                                   bool keepResolvedTexSynced,
+                                   ResourceAccess::ResourceAccess issueBarriers )
     {
-        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
+        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, issueBarriers );
 
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( dst ) );
 
@@ -414,17 +415,17 @@ namespace Ogre
             static_cast<VulkanTextureGpuManager *>( mTextureManager );
         VulkanDevice *device = textureManager->getDevice();
 
-        if( !barrierLess )
-        {
+        if( issueBarriers & ResourceAccess::Read )
             device->mGraphicsQueue.getCopyEncoder( 0, this, true );
-            device->mGraphicsQueue.getCopyEncoder( 0, dstTexture, false );
-        }
         else
         {
             // This won't generate barriers, but it will close all other encoders
             // and open the copy one
             device->mGraphicsQueue.getCopyEncoder( 0, 0, true );
         }
+
+        if( issueBarriers & ResourceAccess::Write )
+            device->mGraphicsQueue.getCopyEncoder( 0, dstTexture, false );
 
         VkImageCopy region;
 
