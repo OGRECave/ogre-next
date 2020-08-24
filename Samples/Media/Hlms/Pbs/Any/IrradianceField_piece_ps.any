@@ -6,7 +6,7 @@
 @piece( DeclIrradianceFieldTextures )
 	@property( syntax == glsl || syntax == glslvk )
 		vulkan_layout( ogre_t@value(ifdColour) ) uniform texture2D ifdColour;
-		vulkan_layout( ogre_t@value(ifdColour) ) uniform texture2D ifdDepth;
+		vulkan_layout( ogre_t@value(ifdDepth) ) uniform texture2D ifdDepth;
 		vulkan( layout( ogre_s@value(ifdColour) ) uniform sampler ifdSampler );
 	@end
 	@property( syntax == hlsl )
