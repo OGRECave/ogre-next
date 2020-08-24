@@ -53,7 +53,6 @@ namespace Ogre
         uint8 mCurrentCacheCursor;
 
         VkBufferView createResourceView( int cacheIdx, size_t offset, size_t sizeBytes );
-        VkBufferView bindBufferCommon( size_t offset, size_t sizeBytes );
 
         // VkBufferView createSrv( const DescriptorSetTexture2::BufferSlot &bufferSlot ) const;
 
@@ -64,6 +63,8 @@ namespace Ogre
                                VaoManager *vaoManager, VulkanBufferInterface *bufferInterface,
                                PixelFormatGpu pf );
         ~VulkanTexBufferPacked();
+
+        VkBufferView _bindBufferCommon( size_t offset, size_t sizeBytes );
 
         virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
         virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );

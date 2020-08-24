@@ -45,6 +45,17 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanConstBufferPacked::~VulkanConstBufferPacked() {}
     //-------------------------------------------------------------------------
+    void VulkanConstBufferPacked::getBufferInfo( VkDescriptorBufferInfo &outBufferInfo ) const
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( mBufferInterface );
+
+        outBufferInfo.buffer = bufferInterface->getVboName();
+        outBufferInfo.offset = mFinalBufferStart * mBytesPerElement;
+        outBufferInfo.range = mNumElements * mBytesPerElement;
+    }
+    //-------------------------------------------------------------------------
     void VulkanConstBufferPacked::bindBufferVS( uint16 slot ) { bindBuffer( slot ); }
     //-------------------------------------------------------------------------
     void VulkanConstBufferPacked::bindBufferPS( uint16 slot ) { bindBuffer( slot ); }

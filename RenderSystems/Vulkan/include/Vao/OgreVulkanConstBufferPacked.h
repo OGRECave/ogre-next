@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include "OgreGpuProgram.h"
 #include "Vao/OgreConstBufferPacked.h"
 
+struct VkDescriptorBufferInfo;
+
 namespace Ogre
 {
     class _OgreVulkanExport VulkanConstBufferPacked : public ConstBufferPacked
@@ -49,6 +51,8 @@ namespace Ogre
                                  VulkanRenderSystem *renderSystem, VaoManager *vaoManager,
                                  BufferInterface *bufferInterface );
         ~VulkanConstBufferPacked();
+
+        void getBufferInfo( VkDescriptorBufferInfo &outBufferInfo ) const;
 
         virtual void bindBufferVS( uint16 slot );
         virtual void bindBufferPS( uint16 slot );

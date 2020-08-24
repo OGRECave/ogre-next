@@ -345,6 +345,14 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanDevice::stall( void )
     {
+        // We must flush the cmd buffer and our bindings because we take the
+        // moment to delete all delayed buffers and API handles after a stall.
+        //
+        // We can't have potentially dangling API handles in a cmd buffer.
+        // We must submit our current pending work so far and wait until that's done.
+        commitAndNextCommandBuffer( false );
+        mRenderSystem->resetAllBindings();
+
         vkDeviceWaitIdle( mDevice );
 
         mRenderSystem->_notifyDeviceStalled();

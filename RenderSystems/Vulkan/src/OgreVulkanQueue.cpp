@@ -1007,6 +1007,12 @@ namespace Ogre
 
         endCommandBuffer();
 
+        // We must reset all bindings or else after 3 (mDynamicBufferCurrentFrame) frames
+        // there could be dangling API handles left hanging around indefinitely that
+        // may be collected by RootLayouts that use more slots than they need
+        if( endingFrame )
+            mRenderSystem->resetAllBindings();
+
         if( mPendingCmds.empty() )
             return;
 

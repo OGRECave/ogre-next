@@ -154,6 +154,8 @@ namespace Ogre
 
         virtual RenderSystemCapabilities *createRenderSystemCapabilities( void ) const;
 
+        void resetAllBindings( void );
+
         virtual void reinitialise( void );
 
         VkInstance getVkInstance( void ) const { return mVkInstance; }
@@ -316,7 +318,7 @@ namespace Ogre
         virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set );
 
         SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                     PixelFormatGpu format ) override;
+                                                     PixelFormatGpu format );
         VulkanDevice *getVulkanDevice() const { return mDevice; }
         void _notifyDeviceStalled();
 

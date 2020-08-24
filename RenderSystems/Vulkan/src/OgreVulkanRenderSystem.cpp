@@ -488,6 +488,56 @@ namespace Ogre
         return rsc;
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::resetAllBindings( void )
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanConstBufferPacked *>( mDummyBuffer ) );
+        VulkanConstBufferPacked *constBuffer = static_cast<VulkanConstBufferPacked *>( mDummyBuffer );
+
+        VkDescriptorBufferInfo dummyBufferInfo;
+        constBuffer->getBufferInfo( dummyBufferInfo );
+
+        for( size_t i = 0u; i < NumShaderTypes + 1u; ++i )
+        {
+            mGlobalTable.paramsBuffer[i] = dummyBufferInfo;
+            mComputeTable.paramsBuffer[i] = dummyBufferInfo;
+        }
+
+        for( size_t i = 0u; i < NUM_BIND_CONST_BUFFERS; ++i )
+        {
+            mGlobalTable.constBuffers[i] = dummyBufferInfo;
+            mComputeTable.constBuffers[i] = dummyBufferInfo;
+        }
+
+        // Compute (mComputeTable) only uses baked descriptors for Textures and TexBuffers
+        // hence no need to clean the emulated bindings
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanTexBufferPacked *>( mDummyTexBuffer ) );
+        VulkanTexBufferPacked *texBuffer = static_cast<VulkanTexBufferPacked *>( mDummyTexBuffer );
+
+        VkBufferView texBufferView = texBuffer->_bindBufferCommon( 0u, 0u );
+        for( size_t i = 0u; i < NUM_BIND_TEX_BUFFERS; ++i )
+            mGlobalTable.texBuffers[i] = texBufferView;
+
+        for( size_t i = 0u; i < NUM_BIND_TEXTURES; ++i )
+        {
+            mGlobalTable.textures[i].imageView = mDummyTextureView;
+            mGlobalTable.textures[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        }
+
+        for( size_t i = 0u; i < NUM_BIND_SAMPLERS; ++i )
+            mGlobalTable.samplers[i].sampler = mDummySampler;
+
+        for( size_t i = 0u; i < BakedDescriptorSets::NumBakedDescriptorSets; ++i )
+        {
+            mGlobalTable.bakedDescriptorSets[i] = 0;
+            mComputeTable.bakedDescriptorSets[i] = 0;
+        }
+
+        mGlobalTable.setAllDirty();
+        mComputeTable.setAllDirty();
+        mTableDirty = true;
+        mComputeTableDirty = true;
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::reinitialise( void )
     {
         this->shutdown();
@@ -641,28 +691,7 @@ namespace Ogre
                 checkVkResult( result, "vkCreateSampler" );
             }
 
-            OGRE_ASSERT_HIGH( dynamic_cast<VulkanConstBufferPacked *>( mDummyBuffer ) );
-
-            for( uint16 i = 0u; i < NumShaderTypes + 1u; ++i )
-            {
-                VulkanConstBufferPacked *constBuffer =
-                    static_cast<VulkanConstBufferPacked *>( mDummyBuffer );
-                constBuffer->bindAsParamBuffer( static_cast<GpuProgramType>( i ), 0 );
-            }
-            for( uint16 i = 0u; i < NUM_BIND_CONST_BUFFERS; ++i )
-            {
-                mDummyBuffer->bindBufferVS( i );
-                mDummyBuffer->bindBufferCS( i );
-            }
-            for( uint16 i = 0u; i < NUM_BIND_TEX_BUFFERS; ++i )
-                mDummyTexBuffer->bindBufferVS( i );
-            for( size_t i = 0u; i < NUM_BIND_TEXTURES; ++i )
-            {
-                mGlobalTable.textures[i].imageView = mDummyTextureView;
-                mGlobalTable.textures[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-            }
-            for( size_t i = 0u; i < NUM_BIND_SAMPLERS; ++i )
-                mGlobalTable.samplers[i].sampler = mDummySampler;
+            resetAllBindings();
 
             mInitialized = true;
         }

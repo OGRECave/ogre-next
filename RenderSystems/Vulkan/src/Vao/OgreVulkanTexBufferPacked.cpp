@@ -91,7 +91,7 @@ namespace Ogre
         return mCachedResourceViews[cacheIdx].mResourceView;
     }
     //-------------------------------------------------------------------------
-    VkBufferView VulkanTexBufferPacked::bindBufferCommon( size_t offset, size_t sizeBytes )
+    VkBufferView VulkanTexBufferPacked::_bindBufferCommon( size_t offset, size_t sizeBytes )
     {
         OGRE_ASSERT_LOW( offset <= getTotalSizeBytes() );
         OGRE_ASSERT_LOW( sizeBytes <= getTotalSizeBytes() );
@@ -128,42 +128,42 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanTexBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        VkBufferView resourceView = _bindBufferCommon( offset, sizeBytes );
         mRenderSystem->_setTexBuffer( slot, resourceView );
     }
     //-------------------------------------------------------------------------
     void VulkanTexBufferPacked::bindBufferPS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        VkBufferView resourceView = _bindBufferCommon( offset, sizeBytes );
         mRenderSystem->_setTexBuffer( slot, resourceView );
     }
     //-------------------------------------------------------------------------
     void VulkanTexBufferPacked::bindBufferGS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        VkBufferView resourceView = _bindBufferCommon( offset, sizeBytes );
         mRenderSystem->_setTexBuffer( slot, resourceView );
     }
     //-------------------------------------------------------------------------
     void VulkanTexBufferPacked::bindBufferDS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        VkBufferView resourceView = _bindBufferCommon( offset, sizeBytes );
         mRenderSystem->_setTexBuffer( slot, resourceView );
     }
     //-------------------------------------------------------------------------
     void VulkanTexBufferPacked::bindBufferHS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        VkBufferView resourceView = _bindBufferCommon( offset, sizeBytes );
         mRenderSystem->_setTexBuffer( slot, resourceView );
     }
     //-------------------------------------------------------------------------
     void VulkanTexBufferPacked::bindBufferCS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        VkBufferView resourceView = bindBufferCommon( offset, sizeBytes );
+        VkBufferView resourceView = _bindBufferCommon( offset, sizeBytes );
         mRenderSystem->_setTexBuffer( slot, resourceView );
     }
     //-------------------------------------------------------------------------
     VkBufferView VulkanTexBufferPacked::createBufferView( size_t offset, size_t sizeBytes )
-    {        
+    {
         OGRE_ASSERT_LOW( offset <= getTotalSizeBytes() );
         OGRE_ASSERT_LOW( sizeBytes <= getTotalSizeBytes() );
         OGRE_ASSERT_LOW( ( offset + sizeBytes ) <= getTotalSizeBytes() );
