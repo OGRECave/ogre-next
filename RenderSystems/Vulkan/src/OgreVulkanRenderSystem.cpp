@@ -1896,7 +1896,7 @@ namespace Ogre
                 static_cast<VulkanRenderPassDescriptor *>( *itor );
             renderPassDesc->notifySwapchainDestroyed( window );
             ++itor;
-        };
+        }
     }
     //-------------------------------------------------------------------------
     VkRenderPass VulkanRenderSystem::getVkRenderPass( HlmsPassPso passPso, uint8 &outMrtCount )

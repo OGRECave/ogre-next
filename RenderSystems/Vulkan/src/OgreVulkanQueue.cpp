@@ -1020,17 +1020,21 @@ namespace Ogre
         const size_t numWindowsPendingSwap = mWindowsPendingSwap.size();
         mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff, numWindowsPendingSwap );
 
-        if( !mGpuWaitSemaphForCurrCmdBuff.empty() )
+        if( endingFrame )
         {
-            submitInfo.waitSemaphoreCount = static_cast<uint32>( mGpuWaitSemaphForCurrCmdBuff.size() );
-            submitInfo.pWaitSemaphores = mGpuWaitSemaphForCurrCmdBuff.begin();
-            submitInfo.pWaitDstStageMask = mGpuWaitFlags.begin();
-        }
-        if( !mGpuSignalSemaphForCurrCmdBuff.empty() )
-        {
-            submitInfo.signalSemaphoreCount =
-                static_cast<uint32>( mGpuSignalSemaphForCurrCmdBuff.size() );
-            submitInfo.pSignalSemaphores = mGpuSignalSemaphForCurrCmdBuff.begin();
+            if( !mGpuWaitSemaphForCurrCmdBuff.empty() )
+            {
+                submitInfo.waitSemaphoreCount =
+                    static_cast<uint32>( mGpuWaitSemaphForCurrCmdBuff.size() );
+                submitInfo.pWaitSemaphores = mGpuWaitSemaphForCurrCmdBuff.begin();
+                submitInfo.pWaitDstStageMask = mGpuWaitFlags.begin();
+            }
+            if( !mGpuSignalSemaphForCurrCmdBuff.empty() )
+            {
+                submitInfo.signalSemaphoreCount =
+                    static_cast<uint32>( mGpuSignalSemaphForCurrCmdBuff.size() );
+                submitInfo.pSignalSemaphores = mGpuSignalSemaphForCurrCmdBuff.begin();
+            }
         }
         // clang-format off
         submitInfo.commandBufferCount   = static_cast<uint32>( mPendingCmds.size() );
@@ -1061,29 +1065,30 @@ namespace Ogre
 
         mPendingCmds.clear();
 
-        for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
-        {
-            VkSemaphore semaphore = mGpuSignalSemaphForCurrCmdBuff[windowsSemaphStart + windowIdx];
-            mWindowsPendingSwap[windowIdx]->_swapBuffers( semaphore );
-            mVaoManager->notifyWaitSemaphoreSubmitted( semaphore );
-        }
-
-        mVaoManager->notifyWaitSemaphoresSubmitted( mGpuWaitSemaphForCurrCmdBuff );
-
         if( endingFrame )
         {
+            for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
+            {
+                VkSemaphore semaphore = mGpuSignalSemaphForCurrCmdBuff[windowsSemaphStart + windowIdx];
+                mWindowsPendingSwap[windowIdx]->_swapBuffers( semaphore );
+                mVaoManager->notifyWaitSemaphoreSubmitted( semaphore );
+            }
+
             mPerFrameData[dynBufferFrame].mCurrentCmdIdx = 0u;
             mVaoManager->_notifyNewCommandBuffer();
         }
 
         newCommandBuffer();
 
-        // acquireNextSwapchain must be called after newCommandBuffer()
-        for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
-            mWindowsPendingSwap[windowIdx]->acquireNextSwapchain();
-        mWindowsPendingSwap.clear();
+        if( endingFrame )
+        {
+            // acquireNextSwapchain must be called after newCommandBuffer()
+            for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
+                mWindowsPendingSwap[windowIdx]->acquireNextSwapchain();
+            mWindowsPendingSwap.clear();
 
-        mGpuWaitSemaphForCurrCmdBuff.clear();
-        mGpuSignalSemaphForCurrCmdBuff.clear();
+            mGpuWaitSemaphForCurrCmdBuff.clear();
+            mGpuSignalSemaphForCurrCmdBuff.clear();
+        }
     }
 }  // namespace Ogre

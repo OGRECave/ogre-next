@@ -336,10 +336,7 @@ namespace Ogre
             mTop = geom->y;
         }
 
-        // We are forced to use vkDeviceWaitIdle rather than mDevice->stall() because the former
-        // will call commitAndNextCommandBuffer while we are inside commitAndNextCommandBuffer
-        // thus forcing the window to swap while we are still acquiring a new swapchain
-        vkDeviceWaitIdle( mDevice->mDevice );
+        mDevice->stall();
 
         destroySwapchain();
 
