@@ -354,7 +354,7 @@ namespace Ogre
         */
         static inline ArrayReal InvSqrt4( ArrayReal f )
         {
-            return 1.0f / sqrt( f );
+            return 1.0f / std::sqrt( f );
         }
 
         /** Returns the squared root of the reciprocal of x
@@ -363,7 +363,7 @@ namespace Ogre
         */
         static inline ArrayReal InvSqrtNonZero4( ArrayReal f )
         {
-            return 1.0f / sqrt( f );
+            return 1.0f / std::sqrt( f );
         }
 
         /** Break x into fractional and integral parts

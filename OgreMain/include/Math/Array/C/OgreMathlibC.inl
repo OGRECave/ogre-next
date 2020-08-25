@@ -49,22 +49,22 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibC::ACos4( ArrayReal x)
     {
-        return acos( x );
+        return std::acos( x );
     }
     //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibC::Sin4( ArrayReal x )
     {
-        return sin( x );
+        return std::sin( x );
     }
     //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibC::Cos4( ArrayReal x )
     {
-        return cos( x );
+        return std::cos( x );
     }
     //-----------------------------------------------------------------------------------
     inline void MathlibC::SinCos4( ArrayReal x, ArrayReal &outSin, ArrayReal &outCos )
     {
-        outSin = sin( x );
-        outCos = cos( x );
+        outSin = std::sin( x );
+        outCos = std::cos( x );
     }
 }

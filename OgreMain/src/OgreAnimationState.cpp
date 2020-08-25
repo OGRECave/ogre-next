@@ -86,7 +86,7 @@ namespace v1
             if (mLoop)
             {
                 // Wrap
-                mTimePos = fmod(mTimePos, mLength);
+                mTimePos = std::fmod(mTimePos, mLength);
                 if(mTimePos < 0)
                     mTimePos += mLength;     
             }

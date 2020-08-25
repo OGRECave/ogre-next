@@ -720,7 +720,7 @@ namespace v1 {
         Real totalAnimationLength = mLength;
 
         if( timePos > totalAnimationLength && totalAnimationLength > 0.0f )
-            timePos = fmod( timePos, totalAnimationLength );
+            timePos = std::fmod( timePos, totalAnimationLength );
 
         // Search for global index
         KeyFrameTimeList::iterator it =

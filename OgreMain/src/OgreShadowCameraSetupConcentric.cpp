@@ -182,8 +182,8 @@ namespace Ogre
         const Real worldTexelSizeY = ( texCam->getOrthoWindowHeight() ) / viewportRealSize.y;
 
         // snap to nearest texel
-        shadowCameraPos.x -= fmod( shadowCameraPos.x, worldTexelSizeX );
-        shadowCameraPos.y -= fmod( shadowCameraPos.y, worldTexelSizeY );
+        shadowCameraPos.x -= std::fmod( shadowCameraPos.x, worldTexelSizeX );
+        shadowCameraPos.y -= std::fmod( shadowCameraPos.y, worldTexelSizeY );
 
         // Go back from light space to world space
         shadowCameraPos = scalarLightSpaceToWorld * shadowCameraPos;

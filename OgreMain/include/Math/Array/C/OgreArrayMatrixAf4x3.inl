@@ -233,7 +233,7 @@ namespace Ogre
         ArrayReal m10 = mChunkBase[4], m11 = mChunkBase[5], m12 = mChunkBase[6];
         ArrayReal m20 = mChunkBase[8], m21 = mChunkBase[9], m22 = mChunkBase[10];
 
-        ArrayReal fInvLength = 1.0f / sqrt( m00 * m00 + m10 * m10 + m20 * m20 );
+        ArrayReal fInvLength = 1.0f / std::sqrt( m00 * m00 + m10 * m10 + m20 * m20 );
 
         ArrayReal q00, q01, q02,
                   q10, q11, q12,
@@ -247,7 +247,7 @@ namespace Ogre
         q11 = m11 - fDot * q10;
         q21 = m21 - fDot * q20;
 
-        fInvLength = 1.0f / sqrt( q01 * q01 + q11 * q11 + q21 * q21 );
+        fInvLength = 1.0f / std::sqrt( q01 * q01 + q11 * q11 + q21 * q21 );
 
         q01 *= fInvLength;
         q11 *= fInvLength;
@@ -263,7 +263,7 @@ namespace Ogre
         q12 = q12 - fDot * q11;
         q22 = q22 - fDot * q21;
 
-        fInvLength = 1.0f / sqrt( q02 * q02 + q12 * q12 + q22 * q22 );
+        fInvLength = 1.0f / std::sqrt( q02 * q02 + q12 * q12 + q22 * q22 );
 
         q02 *= fInvLength;
         q12 *= fInvLength;

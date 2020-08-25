@@ -96,8 +96,8 @@ namespace Ogre
         for (int i = 0; i < mTrigTableSize; ++i)
         {
             angle = Math::TWO_PI * i / mTrigTableSize;
-            mSinTable[i] = sin(angle);
-            mTanTable[i] = tan(angle);
+            mSinTable[i] = std::sin(angle);
+            mTanTable[i] = std::tan(angle);
         }
     }
     //-----------------------------------------------------------------------   

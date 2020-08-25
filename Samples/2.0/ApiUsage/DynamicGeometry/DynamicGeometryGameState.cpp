@@ -295,7 +295,7 @@ namespace Demo
     void DynamicGeometryGameState::update( float timeSinceLast )
     {
         mRotationTime += timeSinceLast;
-        mRotationTime = fmod( mRotationTime, Ogre::Math::PI * 2.0f );
+        mRotationTime = std::fmod( mRotationTime, Ogre::Math::PI * 2.0f );
 
         const float cosAlpha = cosf( mRotationTime );
         const float sinAlpha = sinf( mRotationTime );

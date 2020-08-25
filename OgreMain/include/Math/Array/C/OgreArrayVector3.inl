@@ -213,7 +213,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline ArrayReal ArrayVector3::length() const
     {
-        return sqrt( (mChunkBase[0] * mChunkBase[0]) +
+        return std::sqrt( (mChunkBase[0] * mChunkBase[0]) +
                         (mChunkBase[1] * mChunkBase[1]) +
                         (mChunkBase[2] * mChunkBase[2]) );
     }

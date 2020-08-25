@@ -242,8 +242,8 @@ namespace Ogre
                 interpUV.x = interpUV.x * texWidth/* - 0.5f*/;
                 interpUV.y = interpUV.y * texHeight/* - 0.5f*/;
 
-                interpUV.x = fmod( interpUV.x, texWidth );
-                interpUV.y = fmod( interpUV.y, texHeight );
+                interpUV.x = std::fmod( interpUV.x, texWidth );
+                interpUV.y = std::fmod( interpUV.y, texHeight );
                 if( interpUV.x < 0 )
                     interpUV.x += texWidth;
                 if( interpUV.y < 0 )
@@ -1349,7 +1349,7 @@ namespace Ogre
                     intensity = Ogre::max( intensity, (double)colour.b );
                     if( mVplQuadAtten != 0 )
                         intensity *= 1e-6 / mVplQuadAtten;
-                    double rangeInMeters = sqrt( intensity );
+                    double rangeInMeters = std::sqrt( intensity );
                     range = (float)(rangeInMeters * mVplIntensityRangeMultiplier);
                 }
 
@@ -1713,7 +1713,7 @@ namespace Ogre
                 intensity = Ogre::max( intensity, (double)diffuseColForRange.z );
                 /*if( mVplQuadAtten != 0 )
                     intensity *= 1e-6 / mVplQuadAtten;*/
-                double rangeInMeters = sqrt( intensity );
+                double rangeInMeters = std::sqrt( intensity );
                 range = (float)(rangeInMeters * mVplIntensityRangeMultiplier);
             }
 
@@ -1812,7 +1812,7 @@ namespace Ogre
                 intensity = Ogre::max( intensity, (double)diffuseColForRange.z );
                 /*if( mVplQuadAtten != 0 )
                     intensity *= 1e-6 / mVplQuadAtten;*/
-                double rangeInMeters = sqrt( intensity );
+                double rangeInMeters = std::sqrt( intensity );
                 range = (float)(rangeInMeters * mVplIntensityRangeMultiplier);
             }
 

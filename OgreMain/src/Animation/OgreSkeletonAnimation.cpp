@@ -104,7 +104,7 @@ namespace Ogre
         }
         else
         {
-            mCurrentFrame = fmod( mCurrentFrame, maxFrame );
+            mCurrentFrame = std::fmod( mCurrentFrame, maxFrame );
             if( mCurrentFrame < 0 )
                 mCurrentFrame = maxFrame + mCurrentFrame;
         }
@@ -122,7 +122,7 @@ namespace Ogre
         }
         else
         {
-            mCurrentFrame = fmod( mCurrentFrame, maxFrame );
+            mCurrentFrame = std::fmod( mCurrentFrame, maxFrame );
             if( mCurrentFrame < 0 )
                 mCurrentFrame = maxFrame + mCurrentFrame;
         }

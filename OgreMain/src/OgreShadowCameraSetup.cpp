@@ -98,9 +98,9 @@ namespace Ogre
             // jittering caused by the projection moving with the camera
             // Viewport is 2 * near clip distance across (90 degree fov)
             //~ Real worldTexelSize = (texCam->getNearClipDistance() * 20) / vp->getActualWidth();
-            //~ pos.x -= fmod(pos.x, worldTexelSize);
-            //~ pos.y -= fmod(pos.y, worldTexelSize);
-            //~ pos.z -= fmod(pos.z, worldTexelSize);
+            //~ pos.x -= std::fmod(pos.x, worldTexelSize);
+            //~ pos.y -= std::fmod(pos.y, worldTexelSize);
+            //~ pos.z -= std::fmod(pos.z, worldTexelSize);
             Vector2 worldTexelSize = (shadowDist * 2) / viewportRealSize;
 
              //get texCam orientation
@@ -125,8 +125,8 @@ namespace Ogre
              Vector3 lightSpacePos = q.Inverse() * pos;
              
              //snap to nearest texel
-             lightSpacePos.x -= fmod(lightSpacePos.x, worldTexelSize.x);
-             lightSpacePos.y -= fmod(lightSpacePos.y, worldTexelSize.y);
+             lightSpacePos.x -= std::fmod(lightSpacePos.x, worldTexelSize.x);
+             lightSpacePos.y -= std::fmod(lightSpacePos.y, worldTexelSize.y);
 
              //convert back to world space
              pos = q * lightSpacePos;

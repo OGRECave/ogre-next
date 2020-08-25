@@ -108,7 +108,7 @@ namespace v1 {
             assert(totalAnimationLength > 0.0f && "Invalid animation length!");
 
             if( timePos > totalAnimationLength && totalAnimationLength > 0.0f )
-                timePos = fmod( timePos, totalAnimationLength );
+                timePos = std::fmod( timePos, totalAnimationLength );
 
             // No global keyframe index, need to search with local keyframes.
             KeyFrame timeKey(0, timePos);

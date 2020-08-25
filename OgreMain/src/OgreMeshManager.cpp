@@ -687,8 +687,8 @@ namespace v1
                 // Here's where curved plane is different from standard plane.  Amazing, I know.
                 diff_x = (x - ((params.xsegments) / 2)) / static_cast<Real>((params.xsegments));
                 diff_y = (y - ((params.ysegments) / 2)) / static_cast<Real>((params.ysegments));
-                dist = sqrt(diff_x*diff_x + diff_y * diff_y );
-                vec.z = (-sin((1-dist) * (Math::PI/2)) * params.curvature) + params.curvature;
+                dist = std::sqrt(diff_x*diff_x + diff_y * diff_y );
+                vec.z = (-std::sin((1-dist) * (Math::PI/2)) * params.curvature) + params.curvature;
 
                 // Transform by orientation and distance
                 Vector3 pos = xform.transformAffine(vec);
