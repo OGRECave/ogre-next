@@ -66,7 +66,8 @@ namespace Ogre
             destroyQueues( mComputeQueues );
             destroyQueues( mTransferQueues );
 
-            vkDestroyDevice( mDevice, 0 );
+            // Must be done externally (this' destructor has yet to free more Vulkan stuff)
+            // vkDestroyDevice( mDevice, 0 );
             mDevice = 0;
             mPhysicalDevice = 0;
         }

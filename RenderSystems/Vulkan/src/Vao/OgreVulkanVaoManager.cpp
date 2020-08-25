@@ -128,8 +128,6 @@ namespace Ogre
         destroyAllVertexArrayObjects();
         deleteAllBuffers();
 
-        mDevice->stall();
-
         {
             VkSemaphoreArray::const_iterator itor = mAvailableSemaphores.begin();
             VkSemaphoreArray::const_iterator endt = mAvailableSemaphores.end();

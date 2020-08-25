@@ -203,6 +203,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanRenderSystem::~VulkanRenderSystem()
     {
+        shutdown();
+
         if( mVulkanSupport )
         {
             OGRE_DELETE mVulkanSupport;
@@ -212,8 +214,35 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::shutdown( void )
     {
-        if( mActiveDevice )
-            mActiveDevice->mGraphicsQueue.endAllEncoders();
+        mDevice->stall();
+
+        {
+            // Remove all windows.
+            // (destroy primary window last since others may depend on it)
+            Window *primary = 0;
+            WindowSet::const_iterator itor = mWindows.begin();
+            WindowSet::const_iterator endt = mWindows.end();
+
+            while( itor != endt )
+            {
+                if( !primary && ( *itor )->isPrimary() )
+                    primary = *itor;
+                else
+                    OGRE_DELETE *itor;
+
+                ++itor;
+            }
+
+            OGRE_DELETE primary;
+            mWindows.clear();
+        }
+
+        destroyAllRenderPassDescriptors();
+        _cleanupDepthBuffers();
+        OGRE_ASSERT_LOW( mSharedDepthBufferRefs.empty() &&
+                         "destroyAllRenderPassDescriptors followed by _cleanupDepthBuffers should've "
+                         "emptied mSharedDepthBufferRefs. Please report this bug to "
+                         "https://github.com/OGRECave/ogre-next/issues/" );
 
         if( mDummySampler )
         {
@@ -239,11 +268,19 @@ namespace Ogre
             mDummyBuffer = 0;
         }
 
+        OGRE_DELETE mHardwareBufferManager;
+        mHardwareBufferManager = 0;
+
         OGRE_DELETE mCache;
         mCache = 0;
 
         OGRE_DELETE mShaderManager;
         mShaderManager = 0;
+
+        OGRE_DELETE mTextureGpuManager;
+        mTextureGpuManager = 0;
+        OGRE_DELETE mVaoManager;
+        mVaoManager = 0;
 
         OGRE_DELETE mVulkanProgramFactory3;  // LIFO destruction order
         mVulkanProgramFactory3 = 0;
@@ -254,11 +291,10 @@ namespace Ogre
         OGRE_DELETE mVulkanProgramFactory0;
         mVulkanProgramFactory0 = 0;
 
-        OGRE_DELETE mHardwareBufferManager;
-        mHardwareBufferManager = 0;
-
+        VkDevice vkDevice = mDevice->mDevice;
         delete mDevice;
         mDevice = 0;
+        vkDestroyDevice( vkDevice, 0 );
 
         if( mDebugReportCallback )
         {

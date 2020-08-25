@@ -79,7 +79,11 @@ namespace Ogre
         return mWindow->getNumSwapchains();
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuWindow::createInternalResourcesImpl( void ) { createMsaaSurface(); }
+    void VulkanTextureGpuWindow::createInternalResourcesImpl( void )
+    {
+        if( mSampleDescription.isMultisample() )
+            createMsaaSurface();
+    }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::destroyInternalResourcesImpl( void )
     {

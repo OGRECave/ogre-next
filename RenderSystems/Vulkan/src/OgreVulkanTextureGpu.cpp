@@ -498,7 +498,7 @@ namespace Ogre
     void VulkanTextureGpu::_setNextLayout( ResourceLayout::Layout layout )
     {
         OGRE_ASSERT_LOW( ( layout != ResourceLayout::CopySrc && layout != ResourceLayout::CopyDst &&
-                           ResourceLayout::CopyEnd ) &&
+                           layout != ResourceLayout::CopyEnd ) &&
                          "CopySrc/Dst layouts are automanaged. "
                          "Cannot explicitly transition to these layouts" );
         mNextLayout = VulkanMappings::get( layout, this );

@@ -101,10 +101,17 @@ namespace Ogre
         // OGRE_DELETE mStencilBuffer;
         mStencilBuffer = 0;
 
-        xcb_destroy_window( mConnection, mXcbWindow );
-        xcb_flush( mConnection );
+        if( !mIsExternal )
+        {
+            xcb_destroy_window( mConnection, mXcbWindow );
+            xcb_flush( mConnection );
+            xcb_disconnect( mConnection );
+        }
+        else
+        {
+            xcb_flush( mConnection );
+        }
 
-        xcb_disconnect( mConnection );
         mConnection = 0;
     }
     //-----------------------------------------------------------------------------------
@@ -153,6 +160,7 @@ namespace Ogre
 
                 SDLx11 *sdlHandles =
                     reinterpret_cast<SDLx11 *>( StringConverter::parseUnsignedLong( opt->second ) );
+                mIsExternal = true;
                 mConnection = XGetXCBConnection( sdlHandles->display );
                 mXcbWindow = (xcb_window_t)sdlHandles->window;
 

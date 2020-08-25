@@ -87,6 +87,7 @@ namespace Ogre
                         vkDestroyFence( mDevice, *itFence++, 0 );
 
                     itor->mProtectingFences.clear();
+                    ++itor;
                 }
             }
             {
