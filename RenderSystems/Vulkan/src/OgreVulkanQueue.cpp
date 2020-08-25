@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "OgreVulkanQueue.h"
 
+#include "OgreVulkanDevice.h"
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanRenderSystem.h"
 #include "OgreVulkanTextureGpu.h"
@@ -560,9 +561,9 @@ namespace Ogre
 
             // Wait until earlier render, compute and transfers are done so we can copy what
             // they wrote (unless we're only here for a texture transition)
-            vkCmdPipelineBarrier( mCurrentCmdBuffer, srcStage, VK_PIPELINE_STAGE_TRANSFER_BIT, 0,
-                                  numMemBarriers, &memBarrier, 0u, 0, numImageMemBarriers,
-                                  &imageMemBarrier );
+            vkCmdPipelineBarrier( mCurrentCmdBuffer, srcStage & mOwnerDevice->mSupportedStages,
+                                  VK_PIPELINE_STAGE_TRANSFER_BIT, 0, numMemBarriers, &memBarrier, 0u, 0,
+                                  numImageMemBarriers, &imageMemBarrier );
         }
     }
     //-------------------------------------------------------------------------
@@ -720,9 +721,9 @@ namespace Ogre
 
             // Wait until earlier render, compute and transfers are done so we can copy what
             // they wrote (unless we're only here for a texture transition)
-            vkCmdPipelineBarrier( mCurrentCmdBuffer, srcStage, VK_PIPELINE_STAGE_TRANSFER_BIT, 0,
-                                  numMemBarriers, &memBarrier, 0u, 0, numImageMemBarriers,
-                                  &imageMemBarrier );
+            vkCmdPipelineBarrier( mCurrentCmdBuffer, srcStage & mOwnerDevice->mSupportedStages,
+                                  VK_PIPELINE_STAGE_TRANSFER_BIT, 0, numMemBarriers, &memBarrier, 0u, 0,
+                                  numImageMemBarriers, &imageMemBarrier );
         }
     }
     //-------------------------------------------------------------------------
@@ -838,9 +839,9 @@ namespace Ogre
 
             // Wait until earlier render, compute and transfers are done
             // Block render, compute and transfers until we're done
-            vkCmdPipelineBarrier( mCurrentCmdBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, dstStage, 0,
-                                  numMemBarriers, &memBarrier, 0u, 0,
-                                  static_cast<uint32_t>( mImageMemBarriers.size() ),
+            vkCmdPipelineBarrier( mCurrentCmdBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                  dstStage & mOwnerDevice->mSupportedStages, 0, numMemBarriers,
+                                  &memBarrier, 0u, 0, static_cast<uint32_t>( mImageMemBarriers.size() ),
                                   mImageMemBarriers.begin() );
 
             mImageMemBarriers.clear();

@@ -2261,9 +2261,10 @@ namespace Ogre
         if( dstStage == 0 )
             dstStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
 
-        vkCmdPipelineBarrier( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, srcStage, dstStage, 0,
-                              numMemBarriers, &memBarrier, 0u, 0,
-                              static_cast<uint32>( mImageBarriers.size() ), mImageBarriers.begin() );
+        vkCmdPipelineBarrier(
+            mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, srcStage & mActiveDevice->mSupportedStages,
+            dstStage & mActiveDevice->mSupportedStages, 0, numMemBarriers, &memBarrier, 0u, 0,
+            static_cast<uint32>( mImageBarriers.size() ), mImageBarriers.begin() );
         mImageBarriers.clear();
     }
     //-------------------------------------------------------------------------

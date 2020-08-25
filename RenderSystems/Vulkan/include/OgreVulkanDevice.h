@@ -72,6 +72,8 @@ namespace Ogre
         VulkanVaoManager *mVaoManager;
         VulkanRenderSystem *mRenderSystem;
 
+        uint32 mSupportedStages;
+
         static void destroyQueues( FastArray<VulkanQueue> &queueArray );
 
         void findGraphicsQueue( FastArray<uint32> &inOutUsedQueueCount );

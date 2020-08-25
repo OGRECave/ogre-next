@@ -50,7 +50,8 @@ namespace Ogre
         mDevice( 0 ),
         mPresentQueue( 0 ),
         mVaoManager( 0 ),
-        mRenderSystem( renderSystem )
+        mRenderSystem( renderSystem ),
+        mSupportedStages( 0xFFFFFFFF )
     {
         memset( &mDeviceMemoryProperties, 0, sizeof( mDeviceMemoryProperties ) );
         createPhysicalDevice( deviceIdx );
@@ -181,6 +182,15 @@ namespace Ogre
 
         vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
         vkGetPhysicalDeviceFeatures( mPhysicalDevice, &mDeviceFeatures );
+
+        mSupportedStages = 0xFFFFFFFF;
+        if( mDeviceFeatures.geometryShader )
+            mSupportedStages ^= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+        if( mDeviceFeatures.tessellationShader )
+        {
+            mSupportedStages ^= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
+                                VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::findGraphicsQueue( FastArray<uint32> &inOutUsedQueueCount )
