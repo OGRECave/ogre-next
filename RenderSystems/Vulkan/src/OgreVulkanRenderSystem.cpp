@@ -1325,8 +1325,11 @@ namespace Ogre
         OGRE_ASSERT_LOW( numVertexBuffers < 15u );
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
-        vkCmdBindVertexBuffers( cmdBuffer, 0, static_cast<uint32>( numVertexBuffers ),
-                                vulkanVertexBuffers, offsets );
+        if( numVertexBuffers > 0u )
+        {
+            vkCmdBindVertexBuffers( cmdBuffer, 0, static_cast<uint32>( numVertexBuffers ),
+                                    vulkanVertexBuffers, offsets );
+        }
 
         IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
         if( indexBuffer )

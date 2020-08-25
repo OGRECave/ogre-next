@@ -7,8 +7,14 @@ vertex_program IFD/ProbeVisualizer_vs_HLSL hlsl
 
 vertex_program IFD/ProbeVisualizer_vs_GLSL glsl
 {
-	source IfdVisualizer_vs.glsl
-	enable_include_header true
+    source IfdVisualizer_vs.glsl
+    enable_include_header true
+}
+
+vertex_program IFD/ProbeVisualizer_vs_VK glslvk
+{
+    source IfdVisualizer_vs.glsl
+    enable_include_header true
 }
 
 vertex_program IFD/ProbeVisualizer_vs_Metal metal
@@ -19,7 +25,8 @@ vertex_program IFD/ProbeVisualizer_vs_Metal metal
 
 vertex_program IFD/ProbeVisualizer_vs unified
 {
-	delegate IFD/ProbeVisualizer_vs_GLSL
+    delegate IFD/ProbeVisualizer_vs_GLSL
+    delegate IFD/ProbeVisualizer_vs_VK
 	delegate IFD/ProbeVisualizer_vs_HLSL
 	delegate IFD/ProbeVisualizer_vs_Metal
 
@@ -38,9 +45,15 @@ fragment_program IFD/ProbeVisualizer_ps_HLSL hlsl
 
 fragment_program IFD/ProbeVisualizer_ps_GLSL glsl
 {
-	source IfdVisualizer_ps.glsl
-	enable_include_header true
-	default_params { param_named ifdTex int 0 }
+    source IfdVisualizer_ps.glsl
+    enable_include_header true
+    default_params { param_named ifdTex int 0 }
+}
+
+fragment_program IFD/ProbeVisualizer_ps_VK glslvk
+{
+    source IfdVisualizer_ps.glsl
+    enable_include_header true
 }
 
 fragment_program IFD/ProbeVisualizer_ps_Metal metal
@@ -52,7 +65,8 @@ fragment_program IFD/ProbeVisualizer_ps_Metal metal
 
 fragment_program IFD/ProbeVisualizer_ps unified
 {
-	delegate IFD/ProbeVisualizer_ps_GLSL
+    delegate IFD/ProbeVisualizer_ps_GLSL
+    delegate IFD/ProbeVisualizer_ps_VK
 	delegate IFD/ProbeVisualizer_ps_HLSL
 	delegate IFD/ProbeVisualizer_ps_Metal
 }

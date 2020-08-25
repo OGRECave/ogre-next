@@ -7,9 +7,15 @@ vertex_program VCT/VoxelVisualizer_vs_HLSL hlsl
 
 vertex_program VCT/VoxelVisualizer_vs_GLSL glsl
 {
-	source VoxelVisualizer_vs.glsl
-	enable_include_header true
-	default_params { param_named voxelTex int 0 }
+    source VoxelVisualizer_vs.glsl
+    enable_include_header true
+    default_params { param_named voxelTex int 0 }
+}
+
+vertex_program VCT/VoxelVisualizer_vs_VK glslvk
+{
+    source VoxelVisualizer_vs.glsl
+    enable_include_header true
 }
 
 vertex_program VCT/VoxelVisualizer_vs_Metal metal
@@ -21,6 +27,7 @@ vertex_program VCT/VoxelVisualizer_vs_Metal metal
 vertex_program VCT/VoxelVisualizer_vs unified
 {
 	delegate VCT/VoxelVisualizer_vs_GLSL
+    delegate VCT/VoxelVisualizer_vs_VK
 	delegate VCT/VoxelVisualizer_vs_HLSL
 	delegate VCT/VoxelVisualizer_vs_Metal
 
@@ -39,7 +46,12 @@ fragment_program VCT/VoxelVisualizer_ps_HLSL hlsl
 
 fragment_program VCT/VoxelVisualizer_ps_GLSL glsl
 {
-	source VoxelVisualizer_ps.glsl
+    source VoxelVisualizer_ps.glsl
+}
+
+fragment_program VCT/VoxelVisualizer_ps_VK glslvk
+{
+    source VoxelVisualizer_ps.glsl
 }
 
 fragment_program VCT/VoxelVisualizer_ps_Metal metal
@@ -50,7 +62,8 @@ fragment_program VCT/VoxelVisualizer_ps_Metal metal
 
 fragment_program VCT/VoxelVisualizer_ps unified
 {
-	delegate VCT/VoxelVisualizer_ps_GLSL
+    delegate VCT/VoxelVisualizer_ps_GLSL
+    delegate VCT/VoxelVisualizer_ps_VK
 	delegate VCT/VoxelVisualizer_ps_HLSL
 	delegate VCT/VoxelVisualizer_ps_Metal
 }
@@ -94,14 +107,21 @@ vertex_program VCT/VoxelVisualizerSeparateOpacity_vs_HLSL hlsl
 
 vertex_program VCT/VoxelVisualizerSeparateOpacity_vs_GLSL glsl
 {
-	source VoxelVisualizer_vs.glsl
-	enable_include_header true
-	default_params
-	{
-		param_named voxelTex int 0
-		param_named otherTex int 1
-	}
-	preprocessor_defines SEPARATE_OPACITY
+    source VoxelVisualizer_vs.glsl
+    enable_include_header true
+    default_params
+    {
+        param_named voxelTex int 0
+        param_named otherTex int 1
+    }
+    preprocessor_defines SEPARATE_OPACITY
+}
+
+vertex_program VCT/VoxelVisualizerSeparateOpacity_vs_VK glslvk
+{
+    source VoxelVisualizer_vs.glsl
+    enable_include_header true
+    preprocessor_defines SEPARATE_OPACITY
 }
 
 vertex_program VCT/VoxelVisualizerSeparateOpacity_vs_Metal metal
@@ -113,7 +133,8 @@ vertex_program VCT/VoxelVisualizerSeparateOpacity_vs_Metal metal
 
 vertex_program VCT/VoxelVisualizerSeparateOpacity_vs unified
 {
-	delegate VCT/VoxelVisualizerSeparateOpacity_vs_GLSL
+    delegate VCT/VoxelVisualizerSeparateOpacity_vs_GLSL
+    delegate VCT/VoxelVisualizerSeparateOpacity_vs_VK
 	delegate VCT/VoxelVisualizerSeparateOpacity_vs_HLSL
 	delegate VCT/VoxelVisualizerSeparateOpacity_vs_Metal
 
@@ -167,13 +188,20 @@ vertex_program VCT/VoxelVisualizerOpacityAnyColour_vs_HLSL hlsl
 
 vertex_program VCT/VoxelVisualizerOpacityAnyColour_vs_GLSL glsl
 {
-	source VoxelVisualizer_vs.glsl
-	enable_include_header true
-	default_params
-	{
-		param_named voxelTex int 0
-	}
-	preprocessor_defines OPACITY_ANY_COLOUR
+    source VoxelVisualizer_vs.glsl
+    enable_include_header true
+    default_params
+    {
+        param_named voxelTex int 0
+    }
+    preprocessor_defines OPACITY_ANY_COLOUR
+}
+
+vertex_program VCT/VoxelVisualizerOpacityAnyColour_vs_VK glslvk
+{
+    source VoxelVisualizer_vs.glsl
+    enable_include_header true
+    preprocessor_defines OPACITY_ANY_COLOUR
 }
 
 vertex_program VCT/VoxelVisualizerOpacityAnyColour_vs_Metal metal
@@ -185,7 +213,8 @@ vertex_program VCT/VoxelVisualizerOpacityAnyColour_vs_Metal metal
 
 vertex_program VCT/VoxelVisualizerOpacityAnyColour_vs unified
 {
-	delegate VCT/VoxelVisualizerOpacityAnyColour_vs_GLSL
+    delegate VCT/VoxelVisualizerOpacityAnyColour_vs_GLSL
+    delegate VCT/VoxelVisualizerOpacityAnyColour_vs_VK
 	delegate VCT/VoxelVisualizerOpacityAnyColour_vs_HLSL
 	delegate VCT/VoxelVisualizerOpacityAnyColour_vs_Metal
 

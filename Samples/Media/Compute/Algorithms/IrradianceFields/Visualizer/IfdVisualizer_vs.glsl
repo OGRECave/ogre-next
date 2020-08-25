@@ -1,4 +1,4 @@
-#version 330
+#version ogre_glsl_ver_330
 
 #define float2 vec2
 #define float3 vec3
@@ -13,19 +13,25 @@
 #define mul( x, y ) ((x) * (y))
 #define INLINE
 
-#define inVs_vertexId gl_VertexID
+#ifdef VULKAN
+    #define inVs_vertexId gl_VertexIndex
+#else
+    #define inVs_vertexId gl_VertexID
+#endif
 #define outVs_Position gl_Position
 
 #define PARAMS_ARG_DECL
 #define PARAMS_ARG
 
-uniform float4x4 worldViewProjMatrix;
-uniform uint vertexBase;
-uniform uint3 bandMaskPower;
-uniform float2 sectionsBandArc;
+vulkan( layout( ogre_P0 ) uniform Params { )
+    uniform float4x4 worldViewProjMatrix;
+    uniform uint vertexBase;
+    uniform uint3 bandMaskPower;
+    uniform float2 sectionsBandArc;
 
-uniform uint3 numProbes;
-uniform float3 aspectRatioFixer;
+    uniform uint3 numProbes;
+    uniform float3 aspectRatioFixer;
+vulkan( }; )
 
 #define p_worldViewProjMatrix worldViewProjMatrix
 #define p_vertexBase vertexBase
@@ -44,6 +50,7 @@ out gl_PerVertex
 	vec4 gl_Position;
 };
 
+vulkan_layout( location = 0 )
 out block
 {
 	flat uint probeIdx;
