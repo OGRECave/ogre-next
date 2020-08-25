@@ -214,6 +214,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::shutdown( void )
     {
+        if( !mDevice )
+            return;
+
         mDevice->stall();
 
         {
