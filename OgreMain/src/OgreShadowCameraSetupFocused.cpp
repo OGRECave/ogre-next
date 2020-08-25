@@ -195,7 +195,7 @@ namespace Ogre
             texCam->setProjectionType( PT_ORTHOGRAPHIC );
             //Anything will do, there are no casters. But we must ensure depth of the receiver
             //doesn't become negative else a shadow square will appear (i.e. "the sun is below the floor")
-            const Real farDistance = Ogre::min( cam->getFarClipDistance(),
+            const Real farDistance = std::min( cam->getFarClipDistance(),
                                                 light->getShadowFarDistance() );
             texCam->setPosition( cam->getDerivedPosition() -
                                  light->getDerivedDirection() * farDistance );
@@ -211,7 +211,7 @@ namespace Ogre
         }
 
         const Node *lightNode = light->getParentNode();
-        const Real farDistance= Ogre::min( cam->getFarClipDistance(), light->getShadowFarDistance() );
+        const Real farDistance= std::min( cam->getFarClipDistance(), light->getShadowFarDistance() );
         const Quaternion scalarLightSpaceToWorld( lightNode->_getDerivedOrientation() );
         const Quaternion scalarWorldToLightSpace( scalarLightSpaceToWorld.Inverse() );
         ArrayQuaternion worldToLightSpace;
@@ -288,13 +288,13 @@ namespace Ogre
             vMax.z += 5.0f; // Backwards is towards +Z!
         }
 
-        vMin.z = Ogre::min( vMin.z, vMinCamFrustumLS.z );
+        vMin.z = std::min( vMin.z, vMinCamFrustumLS.z );
 
         const RenderSystemCapabilities *caps = Root::getSingleton().getRenderSystem()->getCapabilities();
         if( caps->hasCapability( RSC_DEPTH_CLAMP ) )
         {
             // We can only do shadow pancaking (increasing precision) if depth clamp is supported
-            vMax.z = Ogre::max( vMax.z, vMaxCamFrustumLS.z );
+            vMax.z = std::max( vMax.z, vMaxCamFrustumLS.z );
         }
 
         //Some padding

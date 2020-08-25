@@ -679,7 +679,7 @@ namespace Ogre
                 {
                     Vector4 transformedVert( probe->mOrientation * corners[i] );
                     transformedVert = viewProjMatrix * transformedVert;
-                    transformedVert.w = Ogre::max( transformedVert.w, Real(1e-6f) );
+                    transformedVert.w = std::max( transformedVert.w, Real(1e-6f) );
                     transformedVert /= transformedVert.w;
 
                     Vector3 psVertex( transformedVert.ptr() );
@@ -831,8 +831,8 @@ namespace Ogre
             mProxyItems[i]->setVisible( i < mNumCollectedProbes );
 
             //Divide by maxComponent to get better precision in the GPU.
-            const Real maxComponent = Ogre::max( mCollectedProbes[i]->mProbeShape.mHalfSize.x,
-                                                 Ogre::max(
+            const Real maxComponent = std::max( mCollectedProbes[i]->mProbeShape.mHalfSize.x,
+                                                 std::max(
                                                      mCollectedProbes[i]->mProbeShape.mHalfSize.y,
                                                      mCollectedProbes[i]->mProbeShape.mHalfSize.z ) );
             Matrix4 worldScaledMatrix;

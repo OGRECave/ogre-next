@@ -815,13 +815,13 @@ namespace Ogre {
                 ActiveParticleList::iterator p;
                 Vector3 halfScale = Vector3::UNIT_SCALE * 0.5;
                 Vector3 defaultPadding = 
-                    halfScale * Ogre::max(mDefaultHeight, mDefaultWidth);
+                    halfScale * std::max(mDefaultHeight, mDefaultWidth);
                 for (p = mActiveParticles.begin(); p != mActiveParticles.end(); ++p)
                 {
                     if ((*p)->mOwnDimensions)
                     {
                         Vector3 padding = 
-                            halfScale * Ogre::max((*p)->mWidth, (*p)->mHeight);
+                            halfScale * std::max((*p)->mWidth, (*p)->mHeight);
                         min.makeFloor((*p)->mPosition - padding);
                         max.makeCeil((*p)->mPosition + padding);
                     }

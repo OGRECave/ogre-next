@@ -292,13 +292,13 @@ namespace Ogre
         /// Returns the maximum value between a and b
         static inline ArrayReal Max( ArrayReal a, ArrayReal b )
         {
-            return Ogre::max( a, b );
+            return std::max( a, b );
         }
 
         /// Returns the minimum value between a and b
         static inline ArrayReal Min( ArrayReal a, ArrayReal b )
         {
-            return Ogre::min( a, b );
+            return std::min( a, b );
         }
         
         /** Returns the minimum value of all elements in a

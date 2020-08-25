@@ -178,7 +178,7 @@ void recalcBounds(const v1::VertexData* vdata, AxisAlignedBox& aabb, Real& radiu
 
         Vector3 pos(pFloat[0], pFloat[1], pFloat[2]);
         aabb.merge(pos);
-        radius = Ogre::max( radius, pos.length() );
+        radius = std::max( radius, pos.length() );
 
         pBase = static_cast<void*>(static_cast<char*>(pBase) + buf->getVertexSize());
     }
@@ -204,7 +204,7 @@ void recalcBounds( const VertexArrayObject *vao, AxisAlignedBox& aabb, Real& rad
             const float *fpData = reinterpret_cast<const float*>( data + elemOffset );
             Vector3 pos( fpData[0], fpData[1], fpData[2] );
             aabb.merge( pos );
-            radius = Ogre::max( radius, pos.length() );
+            radius = std::max( radius, pos.length() );
 
             data += bytesPerVertex;
         }

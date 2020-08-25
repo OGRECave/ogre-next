@@ -2915,7 +2915,7 @@ namespace Ogre
                     // of the world scaling to deal with scaled objects
                     source->getWorldMatrix().extract3x3Matrix(m3);
                     _writeRawConstant(i->physicalIndex, source->getShadowExtrusionDistance() /
-                                      Math::Sqrt(Ogre::max(Ogre::max(m3.GetColumn(0).squaredLength(), m3.GetColumn(1).squaredLength()), m3.GetColumn(2).squaredLength())));
+                                      Math::Sqrt(std::max(std::max(m3.GetColumn(0).squaredLength(), m3.GetColumn(1).squaredLength()), m3.GetColumn(2).squaredLength())));
                     break;
                 case ACT_SHADOW_SCENE_DEPTH_RANGE:
                     _writeRawConstant(i->physicalIndex, source->getShadowSceneDepthRange(i->data));

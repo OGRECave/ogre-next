@@ -136,7 +136,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline int32 ShadowMapper::getXStepsNeededToReachY( uint32 y, float fStep )
     {
-        return static_cast<int32>( ceilf( Ogre::max( ( (y << 1u) - 1u ) * fStep, 0.0f ) ) );
+        return static_cast<int32>( ceilf( std::max( ( (y << 1u) - 1u ) * fStep, 0.0f ) ) );
     }
     //-----------------------------------------------------------------------------------
     inline float ShadowMapper::getErrorAfterXsteps( uint32 xIterationsToSkip, float dx, float dy )
@@ -251,7 +251,7 @@ namespace Ogre
         heightDelta = ( -heightDelta * (xzDimensions.x / width) ) / heightScale;
         //Avoid sending +/- inf (which causes NaNs inside the shader).
         //Values greater than 1.0 (or less than -1.0) are pointless anyway.
-        heightDelta = Ogre::max( -1.0f, Ogre::min( 1.0f, heightDelta ) );
+        heightDelta = std::max( -1.0f, std::min( 1.0f, heightDelta ) );
         m_jobParamHeightDelta->setManualValue( heightDelta );
 
         //y0 is not needed anymore, and we need it to be either 0 or heightOrWidth for the
@@ -264,7 +264,7 @@ namespace Ogre
         const float fStep = (dx * 0.5f) / dy;
         //TODO numExtraIterations correct? -1? +1?
         uint32 numExtraIterations = static_cast<uint32>(
-                    Ogre::min( ceilf( dy ), ceilf( ((heightOrWidth - 1u) / fStep - 1u) * 0.5f ) ) );
+                    std::min( ceilf( dy ), ceilf( ((heightOrWidth - 1u) / fStep - 1u) * 0.5f ) ) );
 
         const uint32 threadsPerGroup = m_shadowJob->getThreadsPerGroupX();
         const uint32 firstThreadGroups = alignToNextMultiple( heightOrWidth,

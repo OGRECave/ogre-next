@@ -31,11 +31,6 @@ THE SOFTWARE.
 
 #include "OgrePlatformInformation.h"
 
-#if OGRE_CPU == OGRE_CPU_X86
-    #include <xmmintrin.h>
-    #include <emmintrin.h>
-#endif
-
 #include "OgreHeaderPrefix.h"
 #include "Hash/MurmurHash3.h"
 
@@ -1078,57 +1073,6 @@ namespace Ogre {
     {
         return (offset / alignment) * alignment;
     }
-
-#if OGRE_CPU == OGRE_CPU_X86
-    //VS 2012 translates this to a single maxss/maxpd instruction! :)
-    //(plus some memory loading if arguments weren't loaded)
-    inline float min( const float &left, const float &right )
-    {
-        float retVal;
-        _mm_store_ss( &retVal, _mm_min_ss( _mm_set_ss( left ), _mm_set_ss( right ) ) );
-        return retVal;
-    }
-    inline float max( const float &left, const float &right )
-    {
-        float retVal;
-        _mm_store_ss( &retVal, _mm_max_ss( _mm_set_ss( left ), _mm_set_ss( right ) ) );
-        return retVal;
-    }
-    inline double min( const double &left, const double &right )
-    {
-        double retVal;
-        _mm_store_sd( &retVal, _mm_min_sd( _mm_set_sd( left ), _mm_set_sd( right ) ) );
-        return retVal;
-    }
-    inline double max( const double &left, const double &right )
-    {
-        double retVal;
-        _mm_store_sd( &retVal, _mm_max_sd( _mm_set_sd( left ), _mm_set_sd( right ) ) );
-        return retVal;
-    }
-#else
-    //At least VS 2012 translates this to conditional moves. Using
-    //"const float" instead of "const float&" and becomes a jump
-    inline const float& min( const float &a, const float &b )
-    {
-        return a < b ? a : b;
-    }
-
-    inline const float& max( const float &a, const float &b )
-    {
-        return a > b ? a : b;
-    }
-
-    inline const double& min( const double &a, const double &b )
-    {
-        return a < b ? a : b;
-    }
-
-    inline const double& max( const double &a, const double &b )
-    {
-        return a > b ? a : b;
-    }
-#endif
 }
 
 #include "OgreHeaderSuffix.h"

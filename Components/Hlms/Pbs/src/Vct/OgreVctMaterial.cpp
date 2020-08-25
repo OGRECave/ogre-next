@@ -131,7 +131,7 @@ namespace Ogre
                 shaderMaterial.emissive[i] = emissiveCol[i];
             }
 
-            shaderMaterial.diffuse[3] = Ogre::max( diffuseCol.a, emissiveCol.a );
+            shaderMaterial.diffuse[3] = std::max( diffuseCol.a, emissiveCol.a );
         }
 
         if( datablock->getCreator()->getType() == HLMS_PBS )

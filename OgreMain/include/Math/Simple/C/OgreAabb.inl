@@ -155,7 +155,7 @@ namespace Ogre
         dist.y = Math::Abs( dist.y ) - mHalfSize.y;
         dist.z = Math::Abs( dist.z ) - mHalfSize.z;
 
-        return Ogre::max( Ogre::min( Ogre::min( dist.x, dist.y ), dist.z ), Real(1.0) );
+        return std::max( std::min( std::min( dist.x, dist.y ), dist.z ), Real(1.0) );
     }
     //-----------------------------------------------------------------------------------
     inline void Aabb::transformAffine( const Matrix4 &m )

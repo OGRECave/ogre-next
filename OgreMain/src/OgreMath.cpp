@@ -371,15 +371,6 @@ namespace Ogre
         return true;
     }
     //-----------------------------------------------------------------------
-    bool Math::RealEqual( Real a, Real b, Real tolerance )
-    {
-        if (fabs(b-a) <= tolerance)
-            return true;
-        else
-            return false;
-    }
-
-    //-----------------------------------------------------------------------
     std::pair<bool, Real> Math::intersects(const Ray& ray, const Plane& plane)
     {
 

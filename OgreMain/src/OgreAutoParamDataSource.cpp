@@ -566,8 +566,8 @@ namespace Ogre {
             }
         }
 
-        size.w = Ogre::max( size.x, size.y );
-        size.w = Ogre::max( size.w, size.z );
+        size.w = std::max( size.x, size.y );
+        size.w = std::max( size.w, size.z );
 
         return size;
     }
@@ -610,8 +610,8 @@ namespace Ogre {
             }
         }
 
-        size.w = Ogre::max( size.x, size.y );
-        size.w = Ogre::max( size.w, size.z );
+        size.w = std::max( size.x, size.y );
+        size.w = std::max( size.w, size.z );
 
         return size;
     }

@@ -733,7 +733,7 @@ namespace v1 {
         for (ushort lod = 1; lod < lodLevels; ++lod)
         {
             const MeshLodUsage& meshLod = qmesh->submesh->parent->getLodLevel(lod);
-            mLodValues[lod] = Ogre::max(mLodValues[lod], meshLod.value);
+            mLodValues[lod] = std::max(mLodValues[lod], meshLod.value);
         }
 
         // update bounds

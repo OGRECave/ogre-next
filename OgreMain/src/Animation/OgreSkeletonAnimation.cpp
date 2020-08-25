@@ -99,8 +99,8 @@ namespace Ogre
 
         if( !mLoop )
         {
-            mCurrentFrame = Ogre::max( mCurrentFrame, 0 );
-            mCurrentFrame = Ogre::min( mCurrentFrame, maxFrame );
+            mCurrentFrame = std::max( mCurrentFrame, Real( 0.0f ) );
+            mCurrentFrame = std::min( mCurrentFrame, maxFrame );
         }
         else
         {
@@ -117,8 +117,8 @@ namespace Ogre
 
         if( !mLoop )
         {
-            mCurrentFrame = Ogre::max( mCurrentFrame, 0 );
-            mCurrentFrame = Ogre::min( mCurrentFrame, maxFrame );
+            mCurrentFrame = std::max( mCurrentFrame, Real( 0.0f ) );
+            mCurrentFrame = std::min( mCurrentFrame, maxFrame );
         }
         else
         {

@@ -356,14 +356,14 @@ namespace Ogre
         //Simulate the shader function saturate that clamps a parameter value between 0 and 1
         static inline float saturate(float t)
         {
-            float tmp = Ogre::max( t, 0.0f );
-            tmp = Ogre::min( tmp, 1.0f );
+            float tmp = std::max( t, 0.0f );
+            tmp = std::min( tmp, 1.0f );
             return tmp;
         }
         static inline double saturate(double t)
         {
-            double tmp = Ogre::max( t, 0.0 );
-            tmp = Ogre::min( tmp, 1.0 );
+            double tmp = std::max( t, 0.0 );
+            tmp = std::min( tmp, 1.0 );
             return tmp;
         }
         
@@ -693,7 +693,9 @@ namespace Ogre
         /** Compare 2 reals, using tolerance for inaccuracies.
         */
         static bool RealEqual(Real a, Real b,
-            Real tolerance = std::numeric_limits<Real>::epsilon());
+            Real tolerance = std::numeric_limits<Real>::epsilon()) {
+            return std::abs( b - a ) <= tolerance;
+        }
 
         /** Calculates the tangent space vector for a given set of positions / texture coords. */
         static Vector3 calculateTangentSpaceVector(
@@ -718,7 +720,7 @@ namespace Ogre
 
         /** Clamp a value within an inclusive range. */
         template <typename T>
-        inline static T Clamp(T val, T minval, T maxval)
+        static T Clamp(T val, T minval, T maxval)
         {
             assert (minval <= maxval && "Invalid clamp range");
             return std::max(std::min(val, maxval), minval);
@@ -752,19 +754,6 @@ namespace Ogre
         static const Real fRad2Deg;
 
     };
-
-    template <>
-    inline float Math::Clamp<float>(float val, float minval, float maxval)
-    {
-        assert (minval <= maxval && "Invalid clamp range");
-        return Ogre::max( Ogre::min(val, maxval), minval );
-    }
-    template <>
-    inline double Math::Clamp<double>(double val, double minval, double maxval)
-    {
-        assert (minval <= maxval && "Invalid clamp range");
-        return Ogre::max( Ogre::min(val, maxval), minval );
-    }
 
     // these functions must be defined down here, because they rely on the
     // angle unit conversion functions in class Math:

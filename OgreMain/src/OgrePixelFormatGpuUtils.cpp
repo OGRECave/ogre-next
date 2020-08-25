@@ -569,7 +569,7 @@ namespace Ogre
                 else
                 {
                     // -128 & -127 and -32768 & -32767 both map to -1 according to D3D10 rules.
-                    rgbaPtr[i] = Ogre::max( rawValue, -1.0f );
+                    rgbaPtr[i] = std::max( rawValue, -1.0f );
                 }
             }
             else

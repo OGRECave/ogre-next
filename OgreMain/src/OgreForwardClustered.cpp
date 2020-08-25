@@ -134,7 +134,7 @@ namespace Ogre
     inline uint32 ForwardClustered::getSliceAtDepth( Real depth ) const
     {
         return static_cast<uint32>(
-                    floorf( Math::Log2( Ogre::max( -depth - mMinDistance, 1 ) ) * mInvExponentK ) );
+                    floorf( Math::Log2( std::max( -depth - mMinDistance, Real( 1 ) ) ) * mInvExponentK ) );
     }
     //-----------------------------------------------------------------------------------
     void ForwardClustered::execute( size_t threadId, size_t numThreads )
@@ -317,7 +317,7 @@ namespace Ogre
             nearDepthAtSlice = mCurrentCamera->getNearClipDistance();
 
         if( slice == mNumSlices - 1u )
-            farDepthAtSlice = Ogre::max( mCurrentCamera->getFarClipDistance(), farDepthAtSlice );
+            farDepthAtSlice = std::max( mCurrentCamera->getFarClipDistance(), farDepthAtSlice );
 
         Camera *camera = mThreadCameras[threadId];
 

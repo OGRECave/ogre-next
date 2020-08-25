@@ -278,7 +278,7 @@ namespace v1 {
         mObjectData.mLocalAabb->getAsAabb( aabb, mObjectData.mIndex );
         aabb.merge( mTempVertex.position );
         mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
-        mObjectData.mLocalRadius[mObjectData.mIndex] = Ogre::max(
+        mObjectData.mLocalRadius[mObjectData.mIndex] = std::max(
                                                             mObjectData.mLocalRadius[mObjectData.mIndex],
                                                             mTempVertex.position.length());
 

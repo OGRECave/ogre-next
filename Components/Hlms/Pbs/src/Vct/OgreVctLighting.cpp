@@ -315,8 +315,8 @@ namespace Ogre
         vctLight->points[3][3u] = static_cast<float>( lightDir.z );
 
         float maxValue;
-        maxValue = Ogre::max( diffuseColour.r, diffuseColour.g );
-        maxValue = Ogre::max( maxValue, diffuseColour.b );
+        maxValue = std::max( diffuseColour.r, diffuseColour.g );
+        maxValue = std::max( maxValue, diffuseColour.b );
         return maxValue;
     }
     //-------------------------------------------------------------------------
@@ -797,7 +797,7 @@ namespace Ogre
                             light->getType() == Light::LT_AREA_LTC )
                         {
                             const float maxVal = addLight( vctLight, light, voxelOrigin, invVoxelSize );
-                            autoMultiplierValue = Ogre::max( autoMultiplierValue, maxVal );
+                            autoMultiplierValue = std::max( autoMultiplierValue, maxVal );
                             ++vctLight;
                             ++numCollectedLights;
                         }
@@ -821,7 +821,7 @@ namespace Ogre
         const Vector3 voxelCellSize( mVoxelizer->getVoxelCellSize() );
 
         Vector3 dirCorrection( 1.0f / voxelCellSize );
-        dirCorrection /= Ogre::max( Ogre::max( fabsf( dirCorrection.x ),
+        dirCorrection /= std::max( std::max( fabsf( dirCorrection.x ),
                                                fabsf( dirCorrection.y ) ),
                                     fabsf( dirCorrection.z ) );
 

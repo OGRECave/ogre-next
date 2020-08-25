@@ -352,7 +352,7 @@ namespace Ogre {
         const Vector3 derivedScale = mParentNode->_getDerivedScaleUpdated();
 
         float retVal = mObjectData.mLocalRadius[mObjectData.mIndex] *
-                        max( max( derivedScale.x, derivedScale.y ), derivedScale.z );
+                        std::max(std::max( derivedScale.x, derivedScale.y ), derivedScale.z );
         mObjectData.mWorldRadius[mObjectData.mIndex] = retVal;
 
         return retVal;
