@@ -393,14 +393,14 @@ namespace Ogre
 
             const size_t idx = ( size_t )( itor - mImageMemBarrierPtrs.begin() );
             VkImageMemoryBarrier &imageMemBarrier = *( mImageMemBarriers.begin() + idx );
-            imageMemBarrier.srcAccessMask = accessFlags;
+            imageMemBarrier.srcAccessMask = accessFlags & c_srcValidAccessFlags;
             imageMemBarrier.oldLayout = newTransferLayout;
         }
         else
         {
             // First time we see this texture
             VkImageMemoryBarrier imageMemBarrier = vkTexture->getImageMemoryBarrier();
-            imageMemBarrier.srcAccessMask = accessFlags;
+            imageMemBarrier.srcAccessMask = accessFlags & c_srcValidAccessFlags;
             imageMemBarrier.dstAccessMask = VulkanMappings::get( vkTexture );
             if( newTransferLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
             {
@@ -520,7 +520,7 @@ namespace Ogre
             {
                 // GPU must stop using this buffer before we can write into it
                 makeVkStruct( memBarrier, VK_STRUCTURE_TYPE_MEMORY_BARRIER );
-                memBarrier.srcAccessMask = bufferAccessFlags;
+                memBarrier.srcAccessMask = bufferAccessFlags & c_srcValidAccessFlags;
                 memBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 
                 srcStage |= deriveStageFromBufferAccessFlags( bufferAccessFlags );
@@ -534,7 +534,7 @@ namespace Ogre
                 // GPU must stop using this texture before we can write into it
                 // Also we need to do a transition
                 imageMemBarrier = vkTexture->getImageMemoryBarrier();
-                imageMemBarrier.srcAccessMask = texAccessFlags;
+                imageMemBarrier.srcAccessMask = texAccessFlags & c_srcValidAccessFlags;
                 imageMemBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
                 imageMemBarrier.oldLayout = vkTexture->mCurrLayout;
                 imageMemBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
@@ -698,7 +698,7 @@ namespace Ogre
             if( bNeedsBufferBarrier )
             {
                 makeVkStruct( memBarrier, VK_STRUCTURE_TYPE_MEMORY_BARRIER );
-                memBarrier.srcAccessMask = bufferAccessFlags;
+                memBarrier.srcAccessMask = bufferAccessFlags & c_srcValidAccessFlags;
                 memBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
                 numMemBarriers = 1u;
             }
@@ -708,7 +708,7 @@ namespace Ogre
             if( bNeedsTexTransition )
             {
                 imageMemBarrier = vkTexture->getImageMemoryBarrier();
-                imageMemBarrier.srcAccessMask = texAccessFlags;
+                imageMemBarrier.srcAccessMask = texAccessFlags & c_srcValidAccessFlags;
                 imageMemBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
                 imageMemBarrier.oldLayout = vkTexture->mCurrLayout;
                 imageMemBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
@@ -775,7 +775,7 @@ namespace Ogre
                 uint32 numMemBarriers = 0u;
                 VkMemoryBarrier memBarrier;
                 makeVkStruct( memBarrier, VK_STRUCTURE_TYPE_MEMORY_BARRIER );
-                memBarrier.srcAccessMask = bufferAccessFlags;
+                memBarrier.srcAccessMask = bufferAccessFlags & c_srcValidAccessFlags;
                 memBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
                 numMemBarriers = 1u;
 
@@ -807,7 +807,7 @@ namespace Ogre
             if( mCopyEndReadDstBufferFlags )
             {
                 makeVkStruct( memBarrier, VK_STRUCTURE_TYPE_MEMORY_BARRIER );
-                memBarrier.srcAccessMask = mCopyEndReadSrcBufferFlags;
+                memBarrier.srcAccessMask = mCopyEndReadSrcBufferFlags & c_srcValidAccessFlags;
                 memBarrier.dstAccessMask = mCopyEndReadDstBufferFlags;
 
                 // Evaluate the stages we can unblock when our transfers are done

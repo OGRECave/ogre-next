@@ -2179,8 +2179,10 @@ namespace Ogre
                 {
                     if( itor->oldAccess & ResourceAccess::Write )
                     {
-                        imageBarrier.srcAccessMask = VulkanMappings::getAccessFlags(
-                            itor->oldLayout, itor->oldAccess, texture, false );
+                        imageBarrier.srcAccessMask =
+                            VulkanMappings::getAccessFlags( itor->oldLayout, itor->oldAccess, texture,
+                                                            false ) &
+                            c_srcValidAccessFlags;
                     }
 
                     imageBarrier.dstAccessMask = VulkanMappings::getAccessFlags(
@@ -2251,7 +2253,7 @@ namespace Ogre
         if( bufferSrcBarrierBits || bufferDstBarrierBits )
         {
             makeVkStruct( memBarrier, VK_STRUCTURE_TYPE_MEMORY_BARRIER );
-            memBarrier.srcAccessMask = bufferSrcBarrierBits;
+            memBarrier.srcAccessMask = bufferSrcBarrierBits & c_srcValidAccessFlags;
             memBarrier.dstAccessMask = bufferDstBarrierBits;
             numMemBarriers = 1u;
         }
