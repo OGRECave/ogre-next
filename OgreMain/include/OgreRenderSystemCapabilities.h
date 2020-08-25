@@ -387,11 +387,11 @@ namespace Ogre
         /// The number of simultaneous render targets supported
         ushort mNumMultiRenderTargets;
         /// Maximum texture width/height for 2D textures
-        ushort mMaxTextureResolution2D;
+        uint32 mMaxTextureResolution2D;
         /// Maximum texture width/height for 3D (volume) textures
-        ushort mMaxTextureResolution3D;
+        uint32 mMaxTextureResolution3D;
         /// Maximum texture width/height for cube maps
-        ushort mMaxTextureResolutionCubemap;
+        uint32 mMaxTextureResolutionCubemap;
         /// The maximum point size
         Real mMaxPointSize;
         /// Are non-POW2 textures feature-limited?
@@ -758,7 +758,7 @@ namespace Ogre
             mFragmentProgramConstantBoolCount = c;           
         }
         /// Maximum resolution (width or height)
-        void setMaximumResolutions( ushort res2d, ushort res3d, ushort resCube )
+        void setMaximumResolutions( uint32 res2d, uint32 res3d, uint32 resCube )
         {
             mMaxTextureResolution2D = res2d;
             mMaxTextureResolution3D = res3d;

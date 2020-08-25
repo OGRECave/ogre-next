@@ -460,6 +460,53 @@ namespace Ogre
         if( mActiveDevice->mDeviceFeatures.depthClamp )
             rsc->setCapability( RSC_DEPTH_CLAMP );
 
+        {
+            VkFormatProperties props;
+
+            vkGetPhysicalDeviceFormatProperties( mDevice->mPhysicalDevice,
+                                                 VulkanMappings::get( PFG_BC1_UNORM ), &props );
+            if( props.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT )
+                rsc->setCapability( RSC_TEXTURE_COMPRESSION_DXT );
+
+            vkGetPhysicalDeviceFormatProperties( mDevice->mPhysicalDevice,
+                                                 VulkanMappings::get( PFG_BC4_UNORM ), &props );
+            if( props.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT )
+                rsc->setCapability( RSC_TEXTURE_COMPRESSION_BC4_BC5 );
+
+            vkGetPhysicalDeviceFormatProperties( mDevice->mPhysicalDevice,
+                                                 VulkanMappings::get( PFG_BC6H_UF16 ), &props );
+            if( props.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT )
+                rsc->setCapability( RSC_TEXTURE_COMPRESSION_BC6H_BC7 );
+
+            // Vulkan doesn't allow supporting ETC1 without ETC2
+            vkGetPhysicalDeviceFormatProperties( mDevice->mPhysicalDevice,
+                                                 VulkanMappings::get( PFG_ETC2_RGB8_UNORM ), &props );
+            if( props.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT )
+            {
+                rsc->setCapability( RSC_TEXTURE_COMPRESSION_ETC1 );
+                rsc->setCapability( RSC_TEXTURE_COMPRESSION_ETC2 );
+            }
+
+            vkGetPhysicalDeviceFormatProperties( mDevice->mPhysicalDevice,
+                                                 VulkanMappings::get( PFG_PVRTC_RGB2 ), &props );
+            if( props.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT )
+                rsc->setCapability( RSC_TEXTURE_COMPRESSION_PVRTC );
+
+            vkGetPhysicalDeviceFormatProperties(
+                mDevice->mPhysicalDevice, VulkanMappings::get( PFG_ASTC_RGBA_UNORM_4X4_LDR ), &props );
+            if( props.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT )
+                rsc->setCapability( RSC_TEXTURE_COMPRESSION_ASTC );
+        }
+
+        const VkPhysicalDeviceLimits &deviceLimits = mDevice->mDeviceProperties.limits;
+        rsc->setMaximumResolutions( deviceLimits.maxImageDimension2D, deviceLimits.maxImageDimension3D,
+                                    deviceLimits.maxImageDimensionCube );
+        rsc->setMaxThreadsPerThreadgroupAxis( deviceLimits.maxComputeWorkGroupSize );
+        rsc->setMaxThreadsPerThreadgroup( deviceLimits.maxComputeWorkGroupInvocations );
+
+        rsc->setCapability( RSC_STORE_AND_MULTISAMPLE_RESOLVE );
+        rsc->setCapability( RSC_TEXTURE_GATHER );
+
         rsc->setCapability( RSC_COMPUTE_PROGRAM );
         rsc->setCapability( RSC_UAV );
         rsc->setCapability( RSC_TYPED_UAV_LOADS );
@@ -492,6 +539,9 @@ namespace Ogre
         rsc->setCapability( RSC_TEXTURE_2D_ARRAY );
         rsc->setCapability( RSC_CONST_BUFFER_SLOTS_IN_SHADER );
         rsc->setCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
+        rsc->setCapability( RSC_ALPHA_TO_COVERAGE );
+        rsc->setCapability( RSC_HW_GAMMA );
+        rsc->setCapability( RSC_VERTEX_BUFFER_INSTANCE_DATA );
         rsc->setCapability( RSC_EXPLICIT_API );
         rsc->setMaxPointSize( 256 );
 
