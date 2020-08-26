@@ -787,7 +787,6 @@ namespace Ogre
             mNativeShadingLanguageVersion = 450;
 
             bool bCanRestrictImageViewUsage = false;
-            bool bValidationLayersPresent = false;
 
             FastArray<const char *> deviceExtensions;
             {
