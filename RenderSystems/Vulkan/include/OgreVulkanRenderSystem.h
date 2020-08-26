@@ -123,6 +123,9 @@ namespace Ogre
 #else
         bool mHasXcbSupport;
 #endif
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        bool mHasValidationLayers;
+#endif
 
         PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback;
         PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;

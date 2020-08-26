@@ -181,6 +181,9 @@ namespace Ogre
 #else
         mHasXcbSupport( false ),
 #endif
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        mHasValidationLayers( false ),
+#endif
         CreateDebugReportCallback( 0 ),
         DestroyDebugReportCallback( 0 ),
         mDebugReportCallback( 0 )
@@ -714,9 +717,22 @@ namespace Ogre
             LogManager::getSingleton().logMessage( "Found instance layer: " + layerName );
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
             if( layerName == "VK_LAYER_KHRONOS_validation" )
+            {
+                mHasValidationLayers = true;
                 instanceLayers.push_back( "VK_LAYER_KHRONOS_validation" );
+            }
 #endif
         }
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        if( !mHasValidationLayers )
+        {
+            LogManager::getSingleton().logMessage(
+                "WARNING: VK_LAYER_KHRONOS_validation layer not present. "
+                "Extension " VK_EXT_DEBUG_MARKER_EXTENSION_NAME " not found",
+                LML_CRITICAL );
+        }
+#endif
 
         mVkInstance = VulkanDevice::createInstance( "Ogre App TODO ME", reqInstanceExtensions,
                                                     instanceLayers, dbgFunc, this );
@@ -771,6 +787,7 @@ namespace Ogre
             mNativeShadingLanguageVersion = 450;
 
             bool bCanRestrictImageViewUsage = false;
+            bool bValidationLayersPresent = false;
 
             FastArray<const char *> deviceExtensions;
             {
@@ -791,10 +808,24 @@ namespace Ogre
                         deviceExtensions.push_back( VK_KHR_MAINTENANCE2_EXTENSION_NAME );
                         bCanRestrictImageViewUsage = true;
                     }
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-                    else if( extensionName == VK_EXT_DEBUG_MARKER_EXTENSION_NAME )
-                        deviceExtensions.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
-#endif
+                    else if( extensionName == VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME )
+                        deviceExtensions.push_back( VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME );
+                }
+            }
+
+            if( mHasValidationLayers )
+            {
+                uint32 numLayers = 0;
+                vkEnumerateDeviceLayerProperties( mDevice->mPhysicalDevice, &numLayers, 0 );
+
+                FastArray<VkLayerProperties> availableLayers;
+                availableLayers.resize( numLayers );
+                vkEnumerateDeviceLayerProperties( mDevice->mPhysicalDevice, &numLayers,
+                                                  availableLayers.begin() );
+                for( size_t i = 0u; i < numLayers; ++i )
+                {
+                    const String extensionName = availableLayers[i].layerName;
+                    LogManager::getSingleton().logMessage( "Found device layer: " + extensionName );
                 }
             }
 
@@ -805,6 +836,11 @@ namespace Ogre
                     " not present. We may have to force the driver to do UAV + SRGB operations "
                     "the GPU should support, but it's not guaranteed to work" );
             }
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+            if( mHasValidationLayers )
+                deviceExtensions.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
+#endif
 
             mDevice->createDevice( deviceExtensions, 0u, 0u );
 
