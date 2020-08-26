@@ -2068,22 +2068,22 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setVertexTexture(size_t stage, TextureGpu *tex)
     {
-        _setTexture(stage, tex);
+        _setTexture(stage, tex, false);
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setGeometryTexture(size_t stage, TextureGpu *tex)
     {
-        _setTexture(stage, tex);
+        _setTexture(stage, tex, false);
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTessellationHullTexture(size_t stage, TextureGpu *tex)
     {
-        _setTexture(stage, tex);
+        _setTexture(stage, tex, false);
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTessellationDomainTexture(size_t stage, TextureGpu *tex)
     {
-        _setTexture(stage, tex);
+        _setTexture(stage, tex, false);
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTextureCoordCalculation( size_t stage, TexCoordCalcMethod m,
