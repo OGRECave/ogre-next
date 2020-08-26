@@ -132,7 +132,7 @@ namespace Ogre
         distance.mChunkBase[1] = Math::Abs( distance.mChunkBase[1] ) - mHalfSize.mChunkBase[1];
         distance.mChunkBase[2] = Math::Abs( distance.mChunkBase[2] ) - mHalfSize.mChunkBase[2];
 
-        return Ogre::max( Ogre::min( Ogre::min(
+        return std::max( std::min( std::min(
                 distance.mChunkBase[0], distance.mChunkBase[1] ), distance.mChunkBase[2] ), Real(0.0) );
     }
     //-----------------------------------------------------------------------------------

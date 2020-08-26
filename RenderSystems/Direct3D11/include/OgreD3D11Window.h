@@ -103,7 +103,7 @@ namespace Ogre
         uint8 _getSwapChainBufferCount(void) const;
         void _createSwapChain();
         virtual HRESULT _createSwapChainImpl() = 0;
-        void _destroySwapChain();
+        virtual void _destroySwapChain();
         void _createSizeDependedD3DResources();
         void _destroySizeDependedD3DResources();
         void resizeSwapChainBuffers( uint32 width, uint32 height );

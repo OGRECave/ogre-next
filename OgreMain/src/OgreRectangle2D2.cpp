@@ -129,6 +129,8 @@ namespace Ogre
         // Vertex declaration
         VertexElement2Vec vertexElements;
         vertexElements.push_back( VertexElement2( VET_FLOAT2, VES_POSITION ) );
+        if( !isHollowFullscreenRect() )
+            vertexElements.push_back( VertexElement2( VET_FLOAT2, VES_TEXTURE_COORDINATES ) );
         if( isQuad() )
             vertexElements.push_back( VertexElement2( VET_FLOAT3, VES_NORMAL ) );
 
@@ -232,6 +234,8 @@ namespace Ogre
             // Bottom left
             *vertexData++ = static_cast<float>( mPosition.x );
             *vertexData++ = static_cast<float>( mPosition.y );
+            *vertexData++ = 0.0f;
+            *vertexData++ = isQuad() ? 1.0f : 2.0f;
             if( bHasNormals )
             {
                 for( size_t j = 0u; j < 3u; ++j )
@@ -241,6 +245,8 @@ namespace Ogre
             // Top left
             *vertexData++ = static_cast<float>( mPosition.x );
             *vertexData++ = static_cast<float>( mPosition.y + mSize.y );
+            *vertexData++ = 0.0f;
+            *vertexData++ = 0.0f;
             if( bHasNormals )
             {
                 for( size_t j = 0u; j < 3u; ++j )
@@ -250,6 +256,8 @@ namespace Ogre
             // Bottom right
             *vertexData++ = static_cast<float>( mPosition.x + mSize.x );
             *vertexData++ = static_cast<float>( mPosition.y );
+            *vertexData++ = isQuad() ? 1.0f : 2.0f;
+            *vertexData++ = isQuad() ? 1.0f : 2.0f;
             if( bHasNormals )
             {
                 for( size_t j = 0u; j < 3u; ++j )
@@ -261,6 +269,8 @@ namespace Ogre
                 // Top right
                 *vertexData++ = static_cast<float>( mPosition.x + mSize.x );
                 *vertexData++ = static_cast<float>( mPosition.y + mSize.y );
+                *vertexData++ = 1.0f;
+                *vertexData++ = 0.0f;
                 if( bHasNormals )
                 {
                     for( size_t j = 0u; j < 3u; ++j )
@@ -270,7 +280,7 @@ namespace Ogre
         }
 
         OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) ==
-                         maxElements * ( hasNormals() ? 5u : 2u ) );
+                         maxElements * ( hasNormals() ? 7u : 4u ) );
     }
     //-----------------------------------------------------------------------------------
     void Rectangle2D::setGeometry( const Vector2 &pos, const Vector2 &size )

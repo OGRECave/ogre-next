@@ -313,8 +313,10 @@ namespace Ogre
         return mBlendWorkspace != 0;
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::createProxyGeometry(void)
+    void ParallaxCorrectedCubemap::loadResource( Resource *resource )
     {
+        Mesh *mesh = static_cast<Mesh*>( resource );
+
         //Create the mesh geometry
         const Vector3 c_vertices[8] =
         {
@@ -345,19 +347,21 @@ namespace Ogre
         IndexBufferPacked *indexBuffer = vaoManager->createIndexBuffer( IndexBufferPacked::IT_16BIT,
                                                                         3 * 2 * 6, BT_IMMUTABLE,
                                                                         (void*)c_indexData, false );
-
         VertexBufferPackedVec vertexBuffers( 1, vertexBuffer );
         VertexArrayObject *vao = vaoManager->createVertexArrayObject( vertexBuffers, indexBuffer,
                                                                       OT_TRIANGLE_LIST );
-        mProxyMesh = MeshManager::getSingleton().createManual(
-                    "AutoGen_ParallaxCorrectedCubemap_" + StringConverter::toString( getId() ) +
-                    "_Proxy", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-        mProxyMesh->_setBounds( Aabb( Vector3::ZERO, Vector3::UNIT_SCALE ) );
-
         SubMesh *subMesh = mProxyMesh->createSubMesh();
         for( int i=0; i<NumVertexPass; ++i )
             subMesh->mVao[i].push_back( vao );
         subMesh->mMaterialName = "Cubemap/BlendProjectCubemap0";
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemap::createProxyGeometry(void)
+    {
+        mProxyMesh = MeshManager::getSingleton().createManual(
+                    "AutoGen_ParallaxCorrectedCubemap_" + StringConverter::toString( getId() ) +
+                    "_Proxy", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, this );
+        mProxyMesh->_setBounds( Aabb( Vector3::ZERO, Vector3::UNIT_SCALE ) );
 
         RenderQueue *renderQueue = mSceneManager->getRenderQueue();
         renderQueue->setRenderQueueMode( mReservedRqId, RenderQueue::FAST );
@@ -675,7 +679,7 @@ namespace Ogre
                 {
                     Vector4 transformedVert( probe->mOrientation * corners[i] );
                     transformedVert = viewProjMatrix * transformedVert;
-                    transformedVert.w = Ogre::max( transformedVert.w, Real(1e-6f) );
+                    transformedVert.w = std::max( transformedVert.w, Real(1e-6f) );
                     transformedVert /= transformedVert.w;
 
                     Vector3 psVertex( transformedVert.ptr() );
@@ -827,8 +831,8 @@ namespace Ogre
             mProxyItems[i]->setVisible( i < mNumCollectedProbes );
 
             //Divide by maxComponent to get better precision in the GPU.
-            const Real maxComponent = Ogre::max( mCollectedProbes[i]->mProbeShape.mHalfSize.x,
-                                                 Ogre::max(
+            const Real maxComponent = std::max( mCollectedProbes[i]->mProbeShape.mHalfSize.x,
+                                                 std::max(
                                                      mCollectedProbes[i]->mProbeShape.mHalfSize.y,
                                                      mCollectedProbes[i]->mProbeShape.mHalfSize.z ) );
             Matrix4 worldScaledMatrix;

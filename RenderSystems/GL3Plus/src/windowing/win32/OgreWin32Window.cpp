@@ -671,7 +671,9 @@ namespace Ogre
         mTexture->setSampleDescription( mSampleDescription );
         mDepthBuffer->setSampleDescription( mSampleDescription );
 
-        setFinalResolution( mRequestedWidth, mRequestedHeight );
+        RECT rc;
+        GetClientRect( mHwnd, &rc );  // width and height represent interior drawable area
+        setFinalResolution( rc.right - rc.left, rc.bottom - rc.top );
 
         if( mDepthBuffer )
         {

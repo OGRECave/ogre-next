@@ -239,27 +239,27 @@ namespace Ogre
         ~Math();
 
         static inline int IAbs (int iValue) { return ( iValue >= 0 ? iValue : -iValue ); }
-        static inline int ICeil (float fValue) { return int(ceil(fValue)); }
-        static inline int IFloor (float fValue) { return int(floor(fValue)); }
+        static inline int ICeil (float fValue) { return int(std::ceil(fValue)); }
+        static inline int IFloor (float fValue) { return int(std::floor(fValue)); }
         static int ISign (int iValue);
 
         /** Absolute value function
             @param
                 fValue The value whose absolute value will be returned.
         */
-        static inline Real Abs (Real fValue) { return Real(fabs(fValue)); }
+        static inline Real Abs (Real fValue) { return std::abs(fValue); }
 
         /** Absolute value function
             @param dValue
                 The value, in degrees, whose absolute value will be returned.
          */
-        static inline Degree Abs (const Degree& dValue) { return Degree(fabs(dValue.valueDegrees())); }
+        static inline Degree Abs (const Degree& dValue) { return Degree(std::abs(dValue.valueDegrees())); }
 
         /** Absolute value function
             @param rValue
                 The value, in radians, whose absolute value will be returned.
          */
-        static inline Radian Abs (const Radian& rValue) { return Radian(fabs(rValue.valueRadians())); }
+        static inline Radian Abs (const Radian& rValue) { return Radian(std::abs(rValue.valueRadians())); }
 
         /** Arc cosine function
             @param fValue
@@ -277,7 +277,7 @@ namespace Ogre
             @param fValue
                 The value whose arc tangent will be returned.
          */
-        static inline Radian ATan (Real fValue) { return Radian(atan(fValue)); }
+        static inline Radian ATan (Real fValue) { return Radian(std::atan(fValue)); }
 
         /** Arc tangent between two values function
             @param fY
@@ -285,7 +285,7 @@ namespace Ogre
             @param fX
                 The second value to calculate the arc tangent with.
          */
-        static inline Radian ATan2 (Real fY, Real fX) { return Radian(atan2(fY,fX)); }
+        static inline Radian ATan2 (Real fY, Real fX) { return Radian(std::atan2(fY,fX)); }
 
         /** Ceiling function
             Returns the smallest following integer. (example: Ceil(1.1) = 2)
@@ -293,7 +293,7 @@ namespace Ogre
             @param fValue
                 The value to round up to the nearest integer.
          */
-        static inline Real Ceil (Real fValue) { return Real(ceil(fValue)); }
+        static inline Real Ceil (Real fValue) { return std::ceil(fValue); }
         static inline bool isNaN(Real f)
         {
             // std::isnan() is C99, not supported by all compilers
@@ -309,7 +309,7 @@ namespace Ogre
                 calculation - faster but less accurate.
         */
         static inline Real Cos (const Radian& fValue, bool useTables = false) {
-            return (!useTables) ? Real(cos(fValue.valueRadians())) : SinTable(fValue.valueRadians() + HALF_PI);
+            return (!useTables) ? std::cos(fValue.valueRadians()) : SinTable(fValue.valueRadians() + HALF_PI);
         }
         /** Cosine function.
             @param fValue
@@ -319,10 +319,10 @@ namespace Ogre
                 calculation - faster but less accurate.
         */
         static inline Real Cos (Real fValue, bool useTables = false) {
-            return (!useTables) ? Real(cos(fValue)) : SinTable(fValue + HALF_PI);
+            return (!useTables) ? std::cos(fValue) : SinTable(fValue + HALF_PI);
         }
 
-        static inline Real Exp (Real fValue) { return Real(exp(fValue)); }
+        static inline Real Exp (Real fValue) { return std::exp(fValue); }
 
         /** Floor function
             Returns the largest previous integer. (example: Floor(1.9) = 1)
@@ -330,18 +330,18 @@ namespace Ogre
             @param fValue
                 The value to round down to the nearest integer.
          */
-        static inline Real Floor (Real fValue) { return Real(floor(fValue)); }
+        static inline Real Floor (Real fValue) { return std::floor(fValue); }
 
-        static inline Real Log (Real fValue) { return Real(log(fValue)); }
+        static inline Real Log (Real fValue) { return std::log(fValue); }
 
         /// Stored value of log(2) for frequent use
         static const Real LOG2;
 
-        static inline Real Log2 (Real fValue) { return Real(log(fValue)/LOG2); }
+        static inline Real Log2 (Real fValue) { return std::log(fValue)/LOG2; }
 
-        static inline Real LogN (Real base, Real fValue) { return Real(log(fValue)/log(base)); }
+        static inline Real LogN (Real base, Real fValue) { return std::log(fValue)/std::log(base); }
 
-        static inline Real Pow (Real fBase, Real fExponent) { return Real(pow(fBase,fExponent)); }
+        static inline Real Pow (Real fBase, Real fExponent) { return std::pow(fBase,fExponent); }
 
         static Real Sign (Real fValue);
         static inline Radian Sign ( const Radian& rValue )
@@ -356,14 +356,14 @@ namespace Ogre
         //Simulate the shader function saturate that clamps a parameter value between 0 and 1
         static inline float saturate(float t)
         {
-            float tmp = Ogre::max( t, 0.0f );
-            tmp = Ogre::min( tmp, 1.0f );
+            float tmp = std::max( t, 0.0f );
+            tmp = std::min( tmp, 1.0f );
             return tmp;
         }
         static inline double saturate(double t)
         {
-            double tmp = Ogre::max( t, 0.0 );
-            tmp = Ogre::min( tmp, 1.0 );
+            double tmp = std::max( t, 0.0 );
+            tmp = std::min( tmp, 1.0 );
             return tmp;
         }
         
@@ -387,7 +387,7 @@ namespace Ogre
                 calculation - faster but less accurate.
         */
         static inline Real Sin (const Radian& fValue, bool useTables = false) {
-            return (!useTables) ? Real(sin(fValue.valueRadians())) : SinTable(fValue.valueRadians());
+            return (!useTables) ? std::sin(fValue.valueRadians()) : SinTable(fValue.valueRadians());
         }
         /** Sine function.
             @param fValue
@@ -397,7 +397,7 @@ namespace Ogre
                 calculation - faster but less accurate.
         */
         static inline Real Sin (Real fValue, bool useTables = false) {
-            return (!useTables) ? Real(sin(fValue)) : SinTable(fValue);
+            return (!useTables) ? std::sin(fValue) : SinTable(fValue);
         }
 
         /** Squared function.
@@ -410,7 +410,7 @@ namespace Ogre
             @param fValue
                 The value whose square root will be calculated.
          */
-        static inline Real Sqrt (Real fValue) { return Real(sqrt(fValue)); }
+        static inline Real Sqrt (Real fValue) { return std::sqrt(fValue); }
 
         /** Square root function.
             @param fValue
@@ -418,7 +418,7 @@ namespace Ogre
             @return
                 The square root of the angle in radians.
          */
-        static inline Radian Sqrt (const Radian& fValue) { return Radian(sqrt(fValue.valueRadians())); }
+        static inline Radian Sqrt (const Radian& fValue) { return Radian(std::sqrt(fValue.valueRadians())); }
 
         /** Square root function.
             @param fValue
@@ -426,7 +426,7 @@ namespace Ogre
             @return
                 The square root of the angle in degrees.
          */
-        static inline Degree Sqrt (const Degree& fValue) { return Degree(sqrt(fValue.valueDegrees())); }
+        static inline Degree Sqrt (const Degree& fValue) { return Degree(std::sqrt(fValue.valueDegrees())); }
 
         /** Inverse square root i.e. 1 / Sqrt(x), good for vector
             normalisation.
@@ -467,7 +467,7 @@ namespace Ogre
                 calculation - faster but less accurate.
         */
         static inline Real Tan (const Radian& fValue, bool useTables = false) {
-            return (!useTables) ? Real(tan(fValue.valueRadians())) : TanTable(fValue.valueRadians());
+            return (!useTables) ? std::tan(fValue.valueRadians()) : TanTable(fValue.valueRadians());
         }
         /** Tangent function.
             @param fValue
@@ -477,7 +477,7 @@ namespace Ogre
                 calculation - faster but less accurate.
         */
         static inline Real Tan (Real fValue, bool useTables = false) {
-            return (!useTables) ? Real(tan(fValue)) : TanTable(fValue);
+            return (!useTables) ? std::tan(fValue) : TanTable(fValue);
         }
 
         static inline Real DegreesToRadians(Real degrees) { return degrees * fDeg2Rad; }
@@ -693,7 +693,9 @@ namespace Ogre
         /** Compare 2 reals, using tolerance for inaccuracies.
         */
         static bool RealEqual(Real a, Real b,
-            Real tolerance = std::numeric_limits<Real>::epsilon());
+            Real tolerance = std::numeric_limits<Real>::epsilon()) {
+            return std::abs( b - a ) <= tolerance;
+        }
 
         /** Calculates the tangent space vector for a given set of positions / texture coords. */
         static Vector3 calculateTangentSpaceVector(
@@ -718,7 +720,7 @@ namespace Ogre
 
         /** Clamp a value within an inclusive range. */
         template <typename T>
-        inline static T Clamp(T val, T minval, T maxval)
+        static T Clamp(T val, T minval, T maxval)
         {
             assert (minval <= maxval && "Invalid clamp range");
             return std::max(std::min(val, maxval), minval);
@@ -752,19 +754,6 @@ namespace Ogre
         static const Real fRad2Deg;
 
     };
-
-    template <>
-    inline float Math::Clamp<float>(float val, float minval, float maxval)
-    {
-        assert (minval <= maxval && "Invalid clamp range");
-        return Ogre::max( Ogre::min(val, maxval), minval );
-    }
-    template <>
-    inline double Math::Clamp<double>(double val, double minval, double maxval)
-    {
-        assert (minval <= maxval && "Invalid clamp range");
-        return Ogre::max( Ogre::min(val, maxval), minval );
-    }
 
     // these functions must be defined down here, because they rely on the
     // angle unit conversion functions in class Math:

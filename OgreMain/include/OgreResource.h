@@ -128,7 +128,9 @@ namespace Ogre {
             /// Fully prepared
             LOADSTATE_PREPARED,
             /// Preparing is in progress
-            LOADSTATE_PREPARING
+            LOADSTATE_PREPARING,
+            /// Unloaded and marked for reload
+            LOADSTATE_UNLOADED_MARKED_FOR_RELOAD,
         };
 
         /// Enum that allow to choose subset of unloaded/reloaded resources and to adjust reloading behavior
@@ -144,6 +146,8 @@ namespace Ogre {
             LF_ONLY_UNREFERENCED_INCLUDE_NON_RELOADABLE = 3,
             /// Preserve some states during reloading, for example stencil shadows prepareness for Meshes
             LF_PRESERVE_STATE = 4,
+            /// Resources are marked for reload on unloading, and only marked ones are processed on reloading
+            LF_MARKED_FOR_RELOAD = 8,
         };
 
     protected:
@@ -310,6 +314,11 @@ namespace Ogre {
             reloaded later if required.
         */
         virtual void unload(void);
+
+        bool markForReload(void)
+        {
+            return mLoadingState.cas(LOADSTATE_UNLOADED, LOADSTATE_UNLOADED_MARKED_FOR_RELOAD);
+        }
 
         /** Retrieves info about the size of the resource.
         */

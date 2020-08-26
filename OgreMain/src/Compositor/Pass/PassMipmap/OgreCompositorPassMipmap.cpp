@@ -328,7 +328,7 @@ namespace Ogre
         for( uint32 i=0; i<kernelRadius + 1u; ++i )
         {
             const float val = i - fKernelRadius + ( 1.0f - 1.0f / stepSize );
-            float fWeight = 1.0f / sqrt ( 2.0f * Math::PI * gaussianDeviation * gaussianDeviation );
+            float fWeight = 1.0f / std::sqrt ( 2.0f * Math::PI * gaussianDeviation * gaussianDeviation );
             fWeight *= exp( - ( val * val ) / ( 2.0f * gaussianDeviation * gaussianDeviation ) );
 
             fWeightSum += fWeight;

@@ -242,8 +242,8 @@ namespace Ogre
                 interpUV.x = interpUV.x * texWidth/* - 0.5f*/;
                 interpUV.y = interpUV.y * texHeight/* - 0.5f*/;
 
-                interpUV.x = fmod( interpUV.x, texWidth );
-                interpUV.y = fmod( interpUV.y, texHeight );
+                interpUV.x = std::fmod( interpUV.x, texWidth );
+                interpUV.y = std::fmod( interpUV.y, texHeight );
                 if( interpUV.x < 0 )
                     interpUV.x += texWidth;
                 if( interpUV.y < 0 )
@@ -302,7 +302,7 @@ namespace Ogre
 
             Real atten = Real(1.0f) /
                     (attenConst + (attenLinear + attenQuad * accumDistance) * accumDistance);
-            atten = Ogre::min( Real(1.0f), atten );
+            atten = std::min( Real(1.0f), atten );
 
             const Vector3 pointOnTri = hit.ray.getPoint( hit.distance * bias );
 
@@ -336,7 +336,7 @@ namespace Ogre
                 Real alikeAtten = Real(1.0f) /
                         (attenConst + (attenLinear +
                                        attenQuad * alikeAccumDistance) * alikeAccumDistance);
-                alikeAtten = Ogre::min( Real(1.0f), alikeAtten );
+                alikeAtten = std::min( Real(1.0f), alikeAtten );
 
                 const Vector3 pointOnTri02 = alikeHit.ray.getPoint( alikeHit.distance * bias );
 
@@ -449,7 +449,7 @@ namespace Ogre
             {
                 Real NdotL = 0;
                 for( int j=0; j<9; ++j )
-                    NdotL += Ogre::max( lightDir.dotProduct( vDirs[i][j] ), 0 );
+                    NdotL += std::max( lightDir.dotProduct( vDirs[i][j] ), Real( 0.0f ) );
                 NdotL /= 9.0f;
 
                 const Vector3 diffuseCol = NdotL * itor->diffuse;
@@ -658,7 +658,7 @@ namespace Ogre
                 Vector3 randomPos;
                 randomPos.x = rng.boxRand() * rotatedAoI.mHalfSize.x;
                 randomPos.y = rng.boxRand() * rotatedAoI.mHalfSize.y;
-                randomPos.z = Ogre::max( rotatedAoI.mHalfSize.z, areaOfInterest.sphereRadius ) + 1.0f;
+                randomPos.z = std::max( rotatedAoI.mHalfSize.z, areaOfInterest.sphereRadius ) + 1.0f;
                 randomPos = lightRot * randomPos + areaOfInterest.aabb.mCenter;
 
                 mRayHits[i].ray.setOrigin( randomPos );
@@ -1345,17 +1345,17 @@ namespace Ogre
                 if( mVplUseIntensityForMaxRange )
                 {
                     double intensity;
-                    intensity = Ogre::max( colour.r, colour.g );
-                    intensity = Ogre::max( intensity, (double)colour.b );
+                    intensity = std::max( colour.r, colour.g );
+                    intensity = std::max( intensity, (double)colour.b );
                     if( mVplQuadAtten != 0 )
                         intensity *= 1e-6 / mVplQuadAtten;
-                    double rangeInMeters = sqrt( intensity );
+                    double rangeInMeters = std::sqrt( intensity );
                     range = (float)(rangeInMeters * mVplIntensityRangeMultiplier);
                 }
 
                 vpl.light->setDiffuseColour( colour );
                 vpl.light->setSpecularColour( ColourValue::Black );
-                vpl.light->setAttenuation( Ogre::min( range, mVplMaxRange ), mVplConstAtten,
+                vpl.light->setAttenuation( std::min( range, mVplMaxRange ), mVplConstAtten,
                                            mVplLinearAtten, mVplQuadAtten );
             }
             else if( vpl.light )
@@ -1575,7 +1575,7 @@ namespace Ogre
         };
 
         for( int i=0; i<6; ++i )
-            inOutDirDiffuse[i] += Ogre::max( lightDir.dotProduct( directions[i] ), 0 ) * diffuse;
+            inOutDirDiffuse[i] += std::max( lightDir.dotProduct( directions[i] ), Real( 0.0f ) ) * diffuse;
     }
     //-----------------------------------------------------------------------------------
     void InstantRadiosity::createDebugMarkers(void)
@@ -1709,15 +1709,15 @@ namespace Ogre
             if( mVplUseIntensityForMaxRange )
             {
                 double intensity;
-                intensity = Ogre::max( diffuseColForRange.x, diffuseColForRange.y );
-                intensity = Ogre::max( intensity, (double)diffuseColForRange.z );
+                intensity = std::max( diffuseColForRange.x, diffuseColForRange.y );
+                intensity = std::max( intensity, (double)diffuseColForRange.z );
                 /*if( mVplQuadAtten != 0 )
                     intensity *= 1e-6 / mVplQuadAtten;*/
-                double rangeInMeters = sqrt( intensity );
+                double rangeInMeters = std::sqrt( intensity );
                 range = (float)(rangeInMeters * mVplIntensityRangeMultiplier);
             }
 
-            range = Ogre::min( range, mVplMaxRange );
+            range = std::min( range, mVplMaxRange );
             const int32 xRange = static_cast<int32>( Math::Floor( range * invCellSize.x ) );
             const int32 yRange = static_cast<int32>( Math::Floor( range * invCellSize.y ) );
             const int32 zRange = static_cast<int32>( Math::Floor( range * invCellSize.z ) );
@@ -1736,9 +1736,9 @@ namespace Ogre
 
             for( int i=0; i<6; ++i )
             {
-                lightMaxPower = Ogre::max( lightMaxPower, vpl.dirDiffuse[i].x );
-                lightMaxPower = Ogre::max( lightMaxPower, vpl.dirDiffuse[i].y );
-                lightMaxPower = Ogre::max( lightMaxPower, vpl.dirDiffuse[i].z );
+                lightMaxPower = std::max( lightMaxPower, vpl.dirDiffuse[i].x );
+                lightMaxPower = std::max( lightMaxPower, vpl.dirDiffuse[i].y );
+                lightMaxPower = std::max( lightMaxPower, vpl.dirDiffuse[i].z );
             }
 
             ++itor;
@@ -1808,15 +1808,15 @@ namespace Ogre
             if( mVplUseIntensityForMaxRange )
             {
                 double intensity;
-                intensity = Ogre::max( diffuseColForRange.x, diffuseColForRange.y );
-                intensity = Ogre::max( intensity, (double)diffuseColForRange.z );
+                intensity = std::max( diffuseColForRange.x, diffuseColForRange.y );
+                intensity = std::max( intensity, (double)diffuseColForRange.z );
                 /*if( mVplQuadAtten != 0 )
                     intensity *= 1e-6 / mVplQuadAtten;*/
-                double rangeInMeters = sqrt( intensity );
+                double rangeInMeters = std::sqrt( intensity );
                 range = (float)(rangeInMeters * mVplIntensityRangeMultiplier);
             }
 
-            range = Ogre::min( range, mVplMaxRange );
+            range = std::min( range, mVplMaxRange );
 
             const int32 xRange = static_cast<int32>( Math::Floor( range * invCellSize.x ) );
             const int32 yRange = static_cast<int32>( Math::Floor( range * invCellSize.y ) );
@@ -1857,18 +1857,18 @@ namespace Ogre
                             Real atten = Real(1.0f) /
                                     (mVplConstAtten + (mVplLinearAtten +
                                                        mVplQuadAtten * distance) * distance);
-                            atten = Ogre::min( Real(1.0f), atten );
+                            atten = std::min( Real(1.0f), atten );
                             if( fadeAttenuationOverDistance )
-                                atten *= Ogre::max( (range - distance) / range, Ogre::Real( 0.0f ) );
+                                atten *= std::max( (range - distance) / range, Ogre::Real( 0.0f ) );
 
                             const Vector3 diffuseCol = vpl.diffuse * invMaxPower * atten;
                             for( int i=0; i<6; ++i )
                             {
                                 if( x != blockX || y != blockY || z != blockZ )
                                 {
-                                    Vector3 finalCol = Ogre::max(
+                                    Vector3 finalCol = std::max(
                                                 -vplToCell.dotProduct( c_directions[i] ),
-                                                0 ) * diffuseCol;
+                                                Real( 0.0f ) ) * diffuseCol;
                                     volume->changeVolumeData( x, y, z, i, finalCol );
                                 }
                                 else

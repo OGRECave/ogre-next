@@ -553,17 +553,21 @@ namespace Ogre {
                 supportedFormat = PFG_RGBA8_UNORM;
 #else
                 origFormat = PFG_BGR8_UNORM;
-                supportedFormat = PFG_BGRA8_UNORM;
+                // Do NOT use PFG_BGRA8_UNORM. That format MUST be avoided
+                supportedFormat = PFG_RGBA8_UNORM;
 #endif
                 break;
             case 32:
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_RGB
+                origFormat = PFG_RGBA8_UNORM;
                 supportedFormat = PFG_RGBA8_UNORM;
 #else
-                supportedFormat = PFG_BGRA8_UNORM;
+                origFormat = PFG_BGRA8_UNORM;
+                // Do NOT use PFG_BGRA8_UNORM. That format MUST be avoided
+                supportedFormat = PFG_RGBA8_UNORM;
 #endif
                 break;
-            };
+            }
             break;
         case FIT_UINT16:
             // 16-bit greyscale

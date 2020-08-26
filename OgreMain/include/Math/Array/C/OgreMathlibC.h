@@ -292,13 +292,13 @@ namespace Ogre
         /// Returns the maximum value between a and b
         static inline ArrayReal Max( ArrayReal a, ArrayReal b )
         {
-            return Ogre::max( a, b );
+            return std::max( a, b );
         }
 
         /// Returns the minimum value between a and b
         static inline ArrayReal Min( ArrayReal a, ArrayReal b )
         {
-            return Ogre::min( a, b );
+            return std::min( a, b );
         }
         
         /** Returns the minimum value of all elements in a
@@ -354,7 +354,7 @@ namespace Ogre
         */
         static inline ArrayReal InvSqrt4( ArrayReal f )
         {
-            return 1.0f / sqrt( f );
+            return 1.0f / std::sqrt( f );
         }
 
         /** Returns the squared root of the reciprocal of x
@@ -363,7 +363,7 @@ namespace Ogre
         */
         static inline ArrayReal InvSqrtNonZero4( ArrayReal f )
         {
-            return 1.0f / sqrt( f );
+            return 1.0f / std::sqrt( f );
         }
 
         /** Break x into fractional and integral parts

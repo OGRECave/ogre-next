@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
 #include "OgreSceneManagerEnumerator.h"
+#include "Compositor/OgreCompositorManager2.h"
 #include "OgreD3D11HardwareBufferManager.h"
 #include "OgreD3D11HardwareIndexBuffer.h"
 #include "OgreD3D11HardwareVertexBuffer.h"
@@ -1665,11 +1666,14 @@ namespace Ogre
         // release device depended resources
         fireDeviceEvent(&mDevice, "DeviceLost");
 
+        Root::getSingleton().getCompositorManager2()->_releaseManualHardwareResources();
         SceneManagerEnumerator::SceneManagerIterator scnIt = SceneManagerEnumerator::getSingleton().getSceneManagerIterator();
         while(scnIt.hasMoreElements())
             scnIt.getNext()->_releaseManualHardwareResources();
 
         Root::getSingleton().getHlmsManager()->_changeRenderSystem((RenderSystem*)0);
+
+        MeshManager::getSingleton().unloadAll(Resource::LF_MARKED_FOR_RELOAD);
 
         static_cast<D3D11TextureGpuManager*>(mTextureGpuManager)->_destroyD3DResources();
         static_cast<D3D11VaoManager*>(mVaoManager)->_destroyD3DResources();
@@ -1693,8 +1697,9 @@ namespace Ogre
         Root::getSingleton().getHlmsManager()->_changeRenderSystem(this);
 
         v1::MeshManager::getSingleton().reloadAll(Resource::LF_PRESERVE_STATE);
-        MeshManager::getSingleton().reloadAll(Resource::LF_PRESERVE_STATE);
+        MeshManager::getSingleton().reloadAll(Resource::LF_MARKED_FOR_RELOAD);
 
+        Root::getSingleton().getCompositorManager2()->_restoreManualHardwareResources();
         scnIt = SceneManagerEnumerator::getSingleton().getSceneManagerIterator();
         while(scnIt.hasMoreElements())
             scnIt.getNext()->_restoreManualHardwareResources();

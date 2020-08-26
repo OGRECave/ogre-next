@@ -57,7 +57,7 @@ namespace Demo
         Ogre::Vector2 d = Ogre::Vector2( abs(p.x), abs(p.y) ) - halfSize;
         Ogre::Vector2 dCeil( d );
         dCeil.makeCeil( Ogre::Vector2::ZERO );
-        return dCeil.length() + Ogre::min( Ogre::max( d.x, d.y ), 0.0f );
+        return dCeil.length() + std::min( std::max( d.x, d.y ), 0.0f );
     }
     inline float sdAnnularBox( const Ogre::Vector2 &point, const Ogre::Vector2 &center,
                                const Ogre::Vector2 &halfSize, float r )

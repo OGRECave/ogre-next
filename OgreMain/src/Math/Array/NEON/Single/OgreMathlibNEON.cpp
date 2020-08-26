@@ -54,7 +54,7 @@ namespace Ogre
     const ArrayReal MathlibNEON::MAX_POS    = vdupq_n_f32( std::numeric_limits<Real>::max() );
     const ArrayReal MathlibNEON::LAST_AFFINE_COLUMN = (ArrayReal) { 0, 0, 0, 1 };
 
-    static const Real _PI = Real( 4.0 * atan( 1.0 ) );
+    static const Real _PI = Real( 4.0 * std::atan( 1.0 ) );
     //We can't use Math::fDeg2Rad & Math::fRad2Deg directly because
     //it's not guaranteed to have been initialized first
     const ArrayReal MathlibNEON::PI         = vdupq_n_f32( _PI );

@@ -122,14 +122,14 @@ namespace Ogre
     {
         ArrayReal fCos = rkP.Dot( rkQ );
         /* Clamp fCos to [-1; 1] range */
-        fCos = Ogre::min( Real(1.0), Ogre::max( Real(-1.0), fCos ) );
+        fCos = std::min( Real(1.0), std::max( Real(-1.0), fCos ) );
         
         /* Invert the rotation for shortest path? */
         /* m = fCos < 0.0f ? -1.0f : 1.0f; */
         ArrayReal m = MathlibC::Cmov4( -1.0f, 1.0f, fCos < 0 /*&& shortestPath*/ );
         ArrayQuaternion rkT( rkQ.w * m, rkQ.x * m, rkQ.y * m, rkQ.z * m );
         
-        ArrayReal fSin = sqrt( 1.0f - ( fCos * fCos ) );
+        ArrayReal fSin = std::sqrt( 1.0f - ( fCos * fCos ) );
         
         /* ATan2 in original Quaternion is slightly absurd, because fSin was derived from
            fCos (hence never negative) which makes ACos a better replacement. ACos is much
@@ -248,10 +248,10 @@ namespace Ogre
         //y = _copysign( y, m02 - m20 );
         //z = _copysign( z, m10 - m01 );
 
-        w = sqrt( Ogre::max( Real(0.0), (1 + m00) + (m11 + m22) ) ) * Real(0.5);
-        x = sqrt( Ogre::max( Real(0.0), (1 + m00) - (m11 + m22) ) ) * Real(0.5);
-        y = sqrt( Ogre::max( Real(0.0), (1 - m00) + (m11 - m22) ) ) * Real(0.5);
-        z = sqrt( Ogre::max( Real(0.0), (1 - m00) - (m11 - m22) ) ) * Real(0.5);
+        w = std::sqrt( std::max( Real(0.0), (1 + m00) + (m11 + m22) ) ) * Real(0.5);
+        x = std::sqrt( std::max( Real(0.0), (1 + m00) - (m11 + m22) ) ) * Real(0.5);
+        y = std::sqrt( std::max( Real(0.0), (1 - m00) + (m11 - m22) ) ) * Real(0.5);
+        z = std::sqrt( std::max( Real(0.0), (1 - m00) - (m11 - m22) ) ) * Real(0.5);
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
 		x = _copysign( x, m21 - m12 );
@@ -403,7 +403,7 @@ namespace Ogre
         // exp(q) = cos(A)+sin(A)*(x*i+y*j+z*k).  If sin(A) is near zero,
         // use exp(q) = cos(A)+A*(x*i+y*j+z*k) since A/sin(A) has limit 1.
 
-        ArrayReal fAngle = sqrt( x * x + y * y + z * z );
+        ArrayReal fAngle = std::sqrt( x * x + y * y + z * z );
 
         ArrayReal localW, fSin;
         MathlibC::SinCos4( fAngle, fSin, localW );

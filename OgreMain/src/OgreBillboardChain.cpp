@@ -467,7 +467,7 @@ namespace v1 {
             else
             {
                 mRadius = Math::Sqrt(
-                    max( mAABB.getMinimum().squaredLength(),
+                    std::max( mAABB.getMinimum().squaredLength(),
                         mAABB.getMaximum().squaredLength() ) );
             }
 

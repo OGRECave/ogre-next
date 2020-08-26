@@ -235,7 +235,7 @@ namespace Demo
             if( keySym.scancode == SDL_SCANCODE_H )
             {
                 mInstantRadiosity->mCellSize += modPerFrame;
-                mInstantRadiosity->mCellSize = Ogre::max( mInstantRadiosity->mCellSize,
+                mInstantRadiosity->mCellSize = std::max( mInstantRadiosity->mCellSize,
                                                           Ogre::Real(0.001f) );
                 needsRebuild = true;
             }
@@ -267,7 +267,7 @@ namespace Demo
             {
                 mInstantRadiosity->mVplIntensityRangeMultiplier += modPerFrame * 10.0;
                 mInstantRadiosity->mVplIntensityRangeMultiplier =
-                        Ogre::max( mInstantRadiosity->mVplIntensityRangeMultiplier, 0.01 );
+                        std::max( mInstantRadiosity->mVplIntensityRangeMultiplier, 0.01 );
                 changedVplSetting = true;
                 needsIrradianceVolumeRebuild = true;
             }

@@ -189,7 +189,7 @@ namespace Demo
             if( arg.keysym.mod & KMOD_LSHIFT )
             {
                 tmpValue -= 20;
-                tmpValue = Ogre::max( tmpValue, 0 );
+                tmpValue = std::max( tmpValue, 0.0f );
             }
             else
                 tmpValue += 20;

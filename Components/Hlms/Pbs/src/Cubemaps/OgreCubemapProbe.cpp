@@ -532,7 +532,7 @@ namespace Ogre
         //1e-6f avoids division by zero.
         Vector3 ndf = (dist - innerRange) / (outerRange - innerRange + Real(1e-6f));
 
-        return Ogre::max( Ogre::max( ndf.x, ndf.y ), ndf.z );
+        return std::max( std::max( ndf.x, ndf.y ), ndf.z );
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::_prepareForRendering(void)

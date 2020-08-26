@@ -126,7 +126,7 @@ namespace Ogre
         const Vector2 sectionsBandArc( static_cast<float>( sectionsInBand ), sectionArc );
 
         Vector3 sphereSize( fieldSize / ifSettings.getNumProbes3f() );
-        Real minRatio = Ogre::min( Ogre::min( sphereSize.x, sphereSize.y ), sphereSize.z );
+        Real minRatio = std::min( std::min( sphereSize.x, sphereSize.y ), sphereSize.z );
         Vector3 aspectRatio = minRatio / sphereSize;
 
         vsParams->setNamedConstant( "bandMaskPower", bandMaskPower, 1u, 3u );

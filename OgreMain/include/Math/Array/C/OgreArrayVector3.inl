@@ -213,7 +213,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline ArrayReal ArrayVector3::length() const
     {
-        return sqrt( (mChunkBase[0] * mChunkBase[0]) +
+        return std::sqrt( (mChunkBase[0] * mChunkBase[0]) +
                         (mChunkBase[1] * mChunkBase[1]) +
                         (mChunkBase[2] * mChunkBase[2]) );
     }
@@ -288,28 +288,28 @@ namespace Ogre
     {
         ArrayReal * RESTRICT_ALIAS aChunkBase = &mChunkBase[0];
         const ArrayReal * RESTRICT_ALIAS bChunkBase = &cmp.mChunkBase[0];
-        aChunkBase[0] = Ogre::min( aChunkBase[0], bChunkBase[0] );
-        aChunkBase[1] = Ogre::min( aChunkBase[1], bChunkBase[1] );
-        aChunkBase[2] = Ogre::min( aChunkBase[2], bChunkBase[2] );
+        aChunkBase[0] = std::min( aChunkBase[0], bChunkBase[0] );
+        aChunkBase[1] = std::min( aChunkBase[1], bChunkBase[1] );
+        aChunkBase[2] = std::min( aChunkBase[2], bChunkBase[2] );
     }
     //-----------------------------------------------------------------------------------
     inline void ArrayVector3::makeCeil( const ArrayVector3& cmp )
     {
         ArrayReal * RESTRICT_ALIAS aChunkBase = &mChunkBase[0];
         const ArrayReal * RESTRICT_ALIAS bChunkBase = &cmp.mChunkBase[0];
-        aChunkBase[0] = Ogre::max( aChunkBase[0], bChunkBase[0] );
-        aChunkBase[1] = Ogre::max( aChunkBase[1], bChunkBase[1] );
-        aChunkBase[2] = Ogre::max( aChunkBase[2], bChunkBase[2] );
+        aChunkBase[0] = std::max( aChunkBase[0], bChunkBase[0] );
+        aChunkBase[1] = std::max( aChunkBase[1], bChunkBase[1] );
+        aChunkBase[2] = std::max( aChunkBase[2], bChunkBase[2] );
     }
     //-----------------------------------------------------------------------------------
     inline ArrayReal ArrayVector3::getMinComponent() const
     {
-        return Ogre::min( mChunkBase[0], Ogre::min( mChunkBase[1], mChunkBase[2] ) );
+        return std::min( mChunkBase[0], std::min( mChunkBase[1], mChunkBase[2] ) );
     }
     //-----------------------------------------------------------------------------------
     inline ArrayReal ArrayVector3::getMaxComponent() const
     {
-        return Ogre::max( mChunkBase[0], Ogre::max( mChunkBase[1], mChunkBase[2] ) );
+        return std::max( mChunkBase[0], std::max( mChunkBase[1], mChunkBase[2] ) );
     }
     //-----------------------------------------------------------------------------------
     inline void ArrayVector3::setToSign()

@@ -82,7 +82,7 @@ namespace Ogre
             // doesn't become negative else a shadow square will appear (i.e. "the sun is below the
             // floor")
             const Real farDistance =
-                Ogre::min( cam->getFarClipDistance(), light->getShadowFarDistance() );
+                std::min( cam->getFarClipDistance(), light->getShadowFarDistance() );
             texCam->setPosition( cam->getDerivedPosition() -
                                  light->getDerivedDirection() * farDistance );
             texCam->setOrthoWindow( 1, 1 );
@@ -97,7 +97,7 @@ namespace Ogre
         }
 
         const Node *lightNode = light->getParentNode();
-        const Real farDistance = Ogre::min( cam->getFarClipDistance(), light->getShadowFarDistance() );
+        const Real farDistance = std::min( cam->getFarClipDistance(), light->getShadowFarDistance() );
         const Quaternion scalarLightSpaceToWorld( lightNode->_getDerivedOrientation() );
         const Quaternion scalarWorldToLightSpace( scalarLightSpaceToWorld.Inverse() );
         ArrayQuaternion worldToLightSpace;
@@ -182,8 +182,8 @@ namespace Ogre
         const Real worldTexelSizeY = ( texCam->getOrthoWindowHeight() ) / viewportRealSize.y;
 
         // snap to nearest texel
-        shadowCameraPos.x -= fmod( shadowCameraPos.x, worldTexelSizeX );
-        shadowCameraPos.y -= fmod( shadowCameraPos.y, worldTexelSizeY );
+        shadowCameraPos.x -= std::fmod( shadowCameraPos.x, worldTexelSizeX );
+        shadowCameraPos.y -= std::fmod( shadowCameraPos.y, worldTexelSizeY );
 
         // Go back from light space to world space
         shadowCameraPos = scalarLightSpaceToWorld * shadowCameraPos;

@@ -180,7 +180,7 @@ namespace Demo
                                                      Ogre::SCENE_STATIC );
         Ogre::Vector3 objPos( 3.5f, 4.5f, -2.0f );
         mTerra->getHeightAt( objPos );
-        objPos.y += -Ogre::min( item->getLocalAabb().getMinimum().y, Ogre::Real(0.0f) ) * 0.01f - 0.5f;
+        objPos.y += -std::min( item->getLocalAabb().getMinimum().y, Ogre::Real(0.0f) ) * 0.01f - 0.5f;
         sceneNode = rootNode->createChildSceneNode( Ogre::SCENE_STATIC, objPos );
         sceneNode->scale( 0.01f, 0.01f, 0.01f );
         sceneNode->attachObject( item );
@@ -190,7 +190,7 @@ namespace Demo
                                          Ogre::SCENE_STATIC );
         objPos = Ogre::Vector3( -3.5f, 4.5f, -2.0f );
         mTerra->getHeightAt( objPos );
-        objPos.y += -Ogre::min( item->getLocalAabb().getMinimum().y, Ogre::Real(0.0f) ) * 0.01f - 0.5f;
+        objPos.y += -std::min( item->getLocalAabb().getMinimum().y, Ogre::Real(0.0f) ) * 0.01f - 0.5f;
         sceneNode = rootNode->createChildSceneNode( Ogre::SCENE_STATIC, objPos );
         sceneNode->scale( 0.01f, 0.01f, 0.01f );
         sceneNode->attachObject( item );
@@ -304,13 +304,13 @@ namespace Demo
         if( arg.keysym.scancode == SDL_SCANCODE_KP_PLUS )
         {
             mTimeOfDay += 0.1f;
-            mTimeOfDay = Ogre::min( mTimeOfDay, (float)Ogre::Math::PI );
+            mTimeOfDay = std::min( mTimeOfDay, (float)Ogre::Math::PI );
         }
         else if( arg.keysym.scancode == SDL_SCANCODE_MINUS ||
                  arg.keysym.scancode == SDL_SCANCODE_KP_MINUS )
         {
             mTimeOfDay -= 0.1f;
-            mTimeOfDay = Ogre::max( mTimeOfDay, 0 );
+            mTimeOfDay = std::max( mTimeOfDay, 0.0f );
         }
 
         if( arg.keysym.scancode == SDL_SCANCODE_KP_9 )

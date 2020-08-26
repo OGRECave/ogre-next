@@ -164,8 +164,8 @@ namespace Demo
                     datablock->setTexture( Ogre::PBSM_REFLECTION, texture );
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
-                    datablock->setRoughness( std::max( 0.02f, x / Ogre::max( 1, (float)(numX-1) ) ) );
-                    datablock->setFresnel( Ogre::Vector3( z / Ogre::max( 1, (float)(numZ-1) ) ), false );
+                    datablock->setRoughness( std::max( 0.02f, x / std::max( 1.0f, (float)(numX-1) ) ) );
+                    datablock->setFresnel( Ogre::Vector3( z / std::max( 1.0f, (float)(numZ-1) ) ), false );
 
                     Ogre::Item *item = sceneManager->createItem( "Sphere1000.mesh",
                                                                  Ogre::ResourceGroupManager::
@@ -389,8 +389,8 @@ namespace Demo
 
         HdrUtils::setSkyColour( preset.skyColour, 1.0f, mGraphicsSystem->getCompositorWorkspace() );
         HdrUtils::setExposure( mExposure, mMinAutoExposure, mMaxAutoExposure );
-        HdrUtils::setBloomThreshold( Ogre::max( mBloomFullThreshold - 2.0f, 0.0f ),
-                                     Ogre::max( mBloomFullThreshold, 0.01f ) );
+        HdrUtils::setBloomThreshold( std::max( mBloomFullThreshold - 2.0f, 0.0f ),
+                                     std::max( mBloomFullThreshold, 0.01f ) );
         for( int i=0; i<3; ++i )
         {
             assert( dynamic_cast<Ogre::Light*>( mLightNodes[i]->getAttachedObject( 0 ) ) );
@@ -493,8 +493,8 @@ namespace Demo
                 mBloomFullThreshold *= 2.0f;
             }
 
-            HdrUtils::setBloomThreshold( Ogre::max( mBloomFullThreshold - 2.0f, 0.0f ),
-                                         Ogre::max( mBloomFullThreshold, 0.01f ) );
+            HdrUtils::setBloomThreshold( std::max( mBloomFullThreshold - 2.0f, 0.0f ),
+                                         std::max( mBloomFullThreshold, 0.01f ) );
         }
         else if( arg.keysym.sym == SDLK_SPACE )
         {

@@ -61,12 +61,15 @@ namespace v1 {
 
         RenderOperation mRenderOp;
 
-        void initRectangle2D(void);
-
     public:
         Rectangle2D( bool bQuad, IdType id, ObjectMemoryManager *objectMemoryManager,
                      SceneManager *manager );
         ~Rectangle2D();
+
+        /** @copydoc MovableObject::_releaseManualHardwareResources */
+        void _releaseManualHardwareResources();
+        /** @copydoc MovableObject::_restoreManualHardwareResources */
+        void _restoreManualHardwareResources();
 
         /** Sets the corners of the rectangle, in relative coordinates.
         @param

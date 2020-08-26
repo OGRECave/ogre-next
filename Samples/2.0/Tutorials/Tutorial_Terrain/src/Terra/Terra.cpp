@@ -293,14 +293,14 @@ namespace Ogre
             float minHeight = m_heightMap[y * m_width];
             for( size_t x=0; x<m_width; ++x )
             {
-                const float minValue = Ogre::min( m_heightMap[y * m_width + x],
+                const float minValue = std::min( m_heightMap[y * m_width + x],
                                                   m_heightMap[ny * m_width + x] );
-                minHeight = Ogre::min( minValue, minHeight );
+                minHeight = std::min( minValue, minHeight );
                 allEqualInLine &= m_heightMap[y * m_width + x] == m_heightMap[ny * m_width + x];
             }
 
             if( !allEqualInLine )
-                m_skirtSize = Ogre::min( minHeight, m_skirtSize );
+                m_skirtSize = std::min( minHeight, m_skirtSize );
         }
 
         for( size_t x=basePixelDimension-1u; x<m_width-1u; x += basePixelDimension )
@@ -311,14 +311,14 @@ namespace Ogre
             float minHeight = m_heightMap[x];
             for( size_t y=0; y<m_depth; ++y )
             {
-                const float minValue = Ogre::min( m_heightMap[y * m_width + x],
+                const float minValue = std::min( m_heightMap[y * m_width + x],
                                                   m_heightMap[y * m_width + nx] );
-                minHeight = Ogre::min( minValue, minHeight );
+                minHeight = std::min( minValue, minHeight );
                 allEqualInLine &= m_heightMap[y * m_width + x] == m_heightMap[y * m_width + nx];
             }
 
             if( !allEqualInLine )
-                m_skirtSize = Ogre::min( minHeight, m_skirtSize );
+                m_skirtSize = std::min( minHeight, m_skirtSize );
         }
 
         m_skirtSize /= m_height;

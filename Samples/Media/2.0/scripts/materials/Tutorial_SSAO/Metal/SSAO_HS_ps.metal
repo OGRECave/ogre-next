@@ -33,9 +33,9 @@ inline float3 reconstructNormal( float3 posInView )
 }
 
 inline float3 getNoiseVec( float2 uv, constant const Params &p,
-						   texture2d<float> noiseTexture, sampler samplerState1 )
+						   texture2d<float> noiseTexture, sampler samplerState2 )
 {
-	float3 randomVec = noiseTexture.sample( samplerState1, uv * p.noiseScale ).xyz;
+	float3 randomVec = noiseTexture.sample( samplerState2, uv * p.noiseScale ).xyz;
 	return randomVec;
 }
 
@@ -48,7 +48,7 @@ fragment float main_metal
 	texture2d<float>	noiseTexture	[[texture(2)]],
 
 	sampler				samplerState0	[[sampler(0)]],
-	sampler				samplerState1	[[sampler(1)]],
+	sampler				samplerState2	[[sampler(2)]],
 
 	constant Params &p					[[buffer(PARAMETER_SLOT)]]
 )
@@ -56,7 +56,7 @@ fragment float main_metal
 	float3 viewPosition = getScreenSpacePos( inPs.uv0, inPs.cameraDir, p, depthTexture, samplerState0 );
 	//float3 viewNormal = reconstructNormal( viewPosition );
 	float3 viewNormal = normalize( gBuf_normals.sample( samplerState0, inPs.uv0 ).xyz * 2.0 - 1.0 );
-	float3 randomVec = getNoiseVec( inPs.uv0, p, noiseTexture, samplerState1 );
+	float3 randomVec = getNoiseVec( inPs.uv0, p, noiseTexture, samplerState2 );
 
 	float3 tangent = normalize( randomVec - viewNormal * dot(randomVec, viewNormal) );
 	float3 bitangent = cross( viewNormal, tangent );

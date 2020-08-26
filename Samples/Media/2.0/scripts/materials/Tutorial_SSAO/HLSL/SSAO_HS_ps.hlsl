@@ -9,7 +9,7 @@ Texture2D<float3> gBuf_normals  : register(t1);
 Texture2D<float3> noiseTexture  : register(t2);
 
 SamplerState samplerState0		: register(s0);
-SamplerState samplerState1		: register(s1);
+SamplerState samplerState2		: register(s2);
 
 uniform float2 projectionParams;
 uniform float invKernelSize;
@@ -35,7 +35,7 @@ float3 reconstructNormal(float3 posInView)
 
 float3 getNoiseVec(float2 uv)
 {
-	float3 randomVec = noiseTexture.Sample(samplerState1, uv*noiseScale).xyz;
+	float3 randomVec = noiseTexture.Sample(samplerState2, uv*noiseScale).xyz;
 	return randomVec;
 }
 

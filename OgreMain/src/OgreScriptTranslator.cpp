@@ -9872,8 +9872,14 @@ namespace Ogre{
                         compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
                         return;
                     }
-                    if(!getBoolean(prop->values.front(), &passStencil->mStencilParams.enabled))
-                        compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
+                    bool bEnabled;
+                    if( getBoolean( prop->values.front(), &bEnabled ) )
+                        passStencil->mStencilParams.enabled = bEnabled;
+                    else
+                    {
+                        compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, prop->file,
+                                            prop->line );
+                    }
                     break;
                 case ID_REF_VALUE:
                     if(prop->values.empty())

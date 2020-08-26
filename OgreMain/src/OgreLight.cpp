@@ -208,7 +208,7 @@ namespace Ogre {
             -l +- sqrt( l² - 4qh ) / 2a = d
         */
         Real h = mAttenuationConst - 1.0f / lumThreshold;
-        Real rootPart = sqrt( mAttenuationLinear * mAttenuationLinear - 4.0f * mAttenuationQuad * h );
+        Real rootPart = std::sqrt( mAttenuationLinear * mAttenuationLinear - 4.0f * mAttenuationQuad * h );
         mRange = (-mAttenuationLinear + rootPart) / (2.0f * mAttenuationQuad);
 
         updateLightBounds();

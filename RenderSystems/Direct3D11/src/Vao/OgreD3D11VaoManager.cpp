@@ -170,6 +170,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11VaoManager::_createD3DResources()
     {
+        // After device lost event we need to ensure that all VBOs without D3D resources are destroyed
+        // To trace allocations in VS you can add conditional breakpoint at the end of D3D11VaoManager::allocateVbo
+        cleanupEmptyPools();
+        for( size_t i=0; i<NumInternalBufferTypes; ++i )
+            for( size_t j=0; j<BT_DYNAMIC_DEFAULT+1; ++j )
+                assert( mVbos[i][j].empty() );
+
         //4096u is a sensible default because most Hlms implementations need 16 bytes per
         //instance in a const buffer. HlmsBufferManager::mapNextConstBuffer purposedly clamps
         //its const buffers to 64kb, so that 64kb / 16 = 4096 and thus it can never exceed
@@ -213,15 +220,6 @@ namespace Ogre
             for( size_t i = 0; i < 16; ++i )
                 it->sharedData->mVertexBuffers[i].Reset();
             it->sharedData->mIndexBuffer.Reset();
-        }
-
-        for( size_t i=0; i<NumInternalBufferTypes; ++i )
-        {
-            for( size_t j=0; j<BT_DYNAMIC_DEFAULT+1; ++j )
-            {
-                for( VboVec::iterator it = mVbos[i][j].begin(), it_end = mVbos[i][j].end(); it != it_end; ++it )
-                    it->vboName.Reset();
-            }
         }
 
         for( size_t i=0; i<NumInternalBufferTypes; ++i )
@@ -530,6 +528,8 @@ namespace Ogre
         if( bestBlock.size == 0 )
             bestVbo.freeBlocks.erase( bestVbo.freeBlocks.begin() + bestBlockIdx );
 
+        // To trace allocations in VS you can add conditional breakpoint with following action:
+        // allocateVbo[{(int)internalType}][{(int)bufferType}][{bestVboIdx}] => bufferOffset = {newOffset}, sizeBytes = {sizeBytes}+{padding} at $CALLSTACK
         outVboIdx       = bestVboIdx;
         outBufferOffset = newOffset;
     }

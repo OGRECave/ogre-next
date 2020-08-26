@@ -15,7 +15,7 @@ namespace Ogre
 /*=============================================================================
  ASM math routines posted by davepermen et al on flipcode forums
 =============================================================================*/
-const float pi = 4.0f * atan( 1.0f );
+const float pi = 4.0f * std::atan( 1.0f );
 const float half_pi = 0.5f * pi;
 
 /*=============================================================================
@@ -48,7 +48,7 @@ float asm_arccos( float r ) {
 
 #else
 
-    return float( acos( r ) );
+    return std::acos( r );
 
 #endif
 }
@@ -72,7 +72,7 @@ float asm_arcsin( float r ) {
 
 #else
 
-    return float( asin( r ) );
+    return std::asin( r );
 
 #endif
 
@@ -90,7 +90,7 @@ float asm_arctan( float r ) {
 
 #else
 
-    return float( atan( r ) );
+    return std::atan( r );
 
 #endif
 
@@ -107,7 +107,7 @@ float asm_sin( float r ) {
 
 #else
 
-    return sin( r );
+    return std::sin( r );
 
 #endif
 
@@ -124,7 +124,7 @@ float asm_cos( float r ) {
 
 #else
     
-    return cos( r );
+    return std::cos( r );
 
 #endif
 }
@@ -144,7 +144,7 @@ float asm_tan( float r ) {
 
 #else
     
-    return tan( r );
+    return std::tan( r );
 
 #endif
 }
@@ -161,7 +161,7 @@ float asm_sqrt( float r )
 
 #else
 
-    return sqrt( r );
+    return std::sqrt( r );
 
 #endif
 }
@@ -181,7 +181,7 @@ float asm_rsq( float r )
 
 #else
 
-    return 1. / sqrt( r );
+    return 1. / std::sqrt( r );
 
 #endif
 }
@@ -211,7 +211,7 @@ float apx_rsq( float r ) {
 
 #else
 
-    return 1. / sqrt( r );
+    return 1. / std::sqrt( r );
 
 #endif
 }
@@ -360,7 +360,7 @@ float asm_ln( float r ) {
 
 #else
 
-    return log( r );
+    return std::log( r );
 
 #endif
 }

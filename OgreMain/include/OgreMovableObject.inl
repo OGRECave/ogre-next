@@ -112,7 +112,7 @@ namespace Ogre
         if (dist > 0.0f)
         {
             mObjectData.mUpperDistance[0][mObjectData.mIndex] = dist;
-            mObjectData.mUpperDistance[1][mObjectData.mIndex] = min(dist, mObjectData.mUpperDistance[1][mObjectData.mIndex]);
+            mObjectData.mUpperDistance[1][mObjectData.mIndex] = std::min(dist, mObjectData.mUpperDistance[1][mObjectData.mIndex]);
         }
     }
     //-----------------------------------------------------------------------------------
@@ -126,7 +126,7 @@ namespace Ogre
         assert(dist > 0.0f);
         if (dist > 0.0f)
         {
-            mObjectData.mUpperDistance[1][mObjectData.mIndex] = min(dist, mObjectData.mUpperDistance[0][mObjectData.mIndex]);
+            mObjectData.mUpperDistance[1][mObjectData.mIndex] = std::min(dist, mObjectData.mUpperDistance[0][mObjectData.mIndex]);
         }
     }
     //-----------------------------------------------------------------------------------

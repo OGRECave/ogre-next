@@ -49,7 +49,7 @@ namespace Ogre
 
     const Real Math::POS_INFINITY = std::numeric_limits<Real>::infinity();
     const Real Math::NEG_INFINITY = -std::numeric_limits<Real>::infinity();
-    const Real Math::PI = Real( 4.0 * atan( 1.0 ) );
+    const Real Math::PI = Real( 4.0 * std::atan( 1.0 ) );
     const Real Math::TWO_PI = Real( 2.0 * PI );
     const Real Math::HALF_PI = Real( 0.5 * PI );
     const Real Math::fDeg2Rad = PI / Real(180.0);
@@ -96,8 +96,8 @@ namespace Ogre
         for (int i = 0; i < mTrigTableSize; ++i)
         {
             angle = Math::TWO_PI * i / mTrigTableSize;
-            mSinTable[i] = sin(angle);
-            mTanTable[i] = tan(angle);
+            mSinTable[i] = std::sin(angle);
+            mTanTable[i] = std::tan(angle);
         }
     }
     //-----------------------------------------------------------------------   
@@ -134,7 +134,7 @@ namespace Ogre
         if ( -1.0 < fValue )
         {
             if ( fValue < 1.0 )
-                return Radian(acos(fValue));
+                return Radian(std::acos(fValue));
             else
                 return Radian(0.0);
         }
@@ -149,7 +149,7 @@ namespace Ogre
         if ( -1.0 < fValue )
         {
             if ( fValue < 1.0 )
-                return Radian(asin(fValue));
+                return Radian(std::asin(fValue));
             else
                 return Radian(HALF_PI);
         }
@@ -370,15 +370,6 @@ namespace Ogre
 
         return true;
     }
-    //-----------------------------------------------------------------------
-    bool Math::RealEqual( Real a, Real b, Real tolerance )
-    {
-        if (fabs(b-a) <= tolerance)
-            return true;
-        else
-            return false;
-    }
-
     //-----------------------------------------------------------------------
     std::pair<bool, Real> Math::intersects(const Ray& ray, const Plane& plane)
     {

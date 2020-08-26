@@ -172,6 +172,8 @@ namespace Ogre
 
         virtual ForwardPlusMethods getForwardPlusMethod(void) const = 0;
 
+        void _releaseManualHardwareResources();
+
         void _changeRenderSystem( RenderSystem *newRs );
 
         virtual void collectLights( Camera *camera ) = 0;
