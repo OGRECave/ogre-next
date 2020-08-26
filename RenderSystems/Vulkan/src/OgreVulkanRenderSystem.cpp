@@ -773,21 +773,39 @@ namespace Ogre
             bool bCanRestrictImageViewUsage = false;
 
             FastArray<const char *> deviceExtensions;
-
-            const bool bHasKhrMaintenance2 = true;  // TODO
-
-            if( bHasKhrMaintenance2 )
             {
-                deviceExtensions.push_back( VK_KHR_MAINTENANCE2_EXTENSION_NAME );
-                bCanRestrictImageViewUsage = true;
+                uint32 numExtensions = 0;
+                vkEnumerateDeviceExtensionProperties( mDevice->mPhysicalDevice, 0, &numExtensions, 0 );
+
+                FastArray<VkExtensionProperties> availableExtensions;
+                availableExtensions.resize( numExtensions );
+                vkEnumerateDeviceExtensionProperties( mDevice->mPhysicalDevice, 0, &numExtensions,
+                                                      availableExtensions.begin() );
+                for( size_t i = 0u; i < numExtensions; ++i )
+                {
+                    const String extensionName = availableExtensions[i].extensionName;
+                    LogManager::getSingleton().logMessage( "Found device extension: " + extensionName );
+
+                    if( extensionName == VK_KHR_MAINTENANCE2_EXTENSION_NAME )
+                    {
+                        deviceExtensions.push_back( VK_KHR_MAINTENANCE2_EXTENSION_NAME );
+                        bCanRestrictImageViewUsage = true;
+                    }
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+                    else if( extensionName == VK_EXT_DEBUG_MARKER_EXTENSION_NAME )
+                        deviceExtensions.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
+#endif
+                }
             }
-            else
+
+            if( !bCanRestrictImageViewUsage )
             {
                 LogManager::getSingleton().logMessage(
                     "WARNING: " VK_KHR_MAINTENANCE2_EXTENSION_NAME
                     " not present. We may have to force the driver to do UAV + SRGB operations "
                     "the GPU should support, but it's not guaranteed to work" );
             }
+
             mDevice->createDevice( deviceExtensions, 0u, 0u );
 
             VulkanVaoManager *vaoManager =
