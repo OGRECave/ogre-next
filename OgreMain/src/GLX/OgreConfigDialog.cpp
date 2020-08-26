@@ -90,12 +90,12 @@ namespace Ogre {
  */
 class GLXConfigurator {
     /* GUI constants */
-    static const int wWidth = 400;      // Width of window
-    static const int wHeight = 340;     // Height of window
+    static const int wWidth = 600;      // Width of window
+    static const int wHeight = 380;     // Height of window
     static const int col1x = 20;        // Starting x of column 1 (labels)
-    static const int col2x = 180;       // Starting x of column 2 (options)
-    static const int col1w = 150;       // Width of column 1 (labels)
-    static const int col2w = 200;       // Width of column 2 (options)
+    static const int col2x = 220;       // Starting x of column 2 (options)
+    static const int col1w = 180;       // Width of column 1 (labels)
+    static const int col2w = 360;       // Width of column 2 (options)
     static const int ystart = 105;      // Starting y of option table rows
     static const int rowh = 20;     // Height of one row in the option table
 
@@ -411,18 +411,49 @@ Pixmap GLXConfigurator::CreateBackdrop(::Window rootWindow, int depth) {
 
         TextureBox srcBox = img.getData( 0 );
 
-        // Convert and copy image
-        data = (unsigned char*)malloc( mWidth * mHeight * bpl ); // Must be allocated with malloc
-
-        const PixelFormatGpu dstFormat = bpl == 2 ? PFG_B5G6R5_UNORM : PFG_BGRA8_UNORM;
-        TextureBox dstBox( mWidth, mHeight, 1u, 1u,
-                           PixelFormatGpuUtils::getBytesPerPixel( dstFormat ),
-                           PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, dstFormat, 1u ),
-                           PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, dstFormat, 1u ) );
-        dstBox.data = data;
+        // Center the logo in the X axis
+        const PixelFormatGpu intermediateFormat = PFG_BGRA8_UNORM;
+        TextureBox dstBox(
+            srcBox.width, srcBox.height, 1u, 1u,
+            PixelFormatGpuUtils::getBytesPerPixel( intermediateFormat ),
+            PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, intermediateFormat, 1u ),
+            PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, intermediateFormat, 1u ) );
+        dstBox.x = ( mWidth - srcBox.width ) >> 1u;
+        dstBox.y = 12u;
+        dstBox.data = (unsigned char*)malloc( mWidth * mHeight * 4u );
 
         PixelFormatGpuUtils::bulkPixelConversion( srcBox, img.getPixelFormat(),
-                                                  dstBox, dstFormat );
+                                                  dstBox, intermediateFormat );
+
+        dstBox.x = 0u;
+        dstBox.y = 0u;
+        dstBox.width = mWidth;
+        dstBox.height = mHeight;
+
+        // Blend a gradient into the final image (and use alpha blending)
+        data = (unsigned char*)malloc( mWidth * mHeight * bpl ); // Must be allocated with malloc
+        const PixelFormatGpu dstFormat = bpl == 2 ? PFG_B5G6R5_UNORM : PFG_BGRA8_UNORM;
+        TextureBox finalBox(
+            mWidth, mHeight, 1u, 1u, PixelFormatGpuUtils::getBytesPerPixel( dstFormat ),
+            PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, dstFormat, 1u ),
+            PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, dstFormat, 1u ) );
+        finalBox.data = data;
+
+        const size_t height = (size_t)mHeight;
+        const size_t width = (size_t)mWidth;
+        for( size_t y = 0u; y < height; ++y )
+        {
+            const float yGradient = sqrtf(y / (float)height);
+            for( size_t x = 0u; x < width; ++x )
+            {
+                ColourValue colour = dstBox.getColourAt( x, y, 0u, intermediateFormat );
+                colour =
+                    Math::lerp( ColourValue( 0.40f, 0.439f, 0.345f ) * yGradient, colour, colour.a );
+                finalBox.setColourAt( colour, x, y, 0u, dstFormat );
+            }
+        }
+
+        free( dstBox.data );
     }
     catch( Exception &e )
     {
