@@ -171,6 +171,7 @@ namespace Ogre
     void D3D11VaoManager::_createD3DResources()
     {
         // After device lost event we need to ensure that all VBOs without D3D resources are destroyed
+        // To trace allocations in VS you can add conditional breakpoint at the end of D3D11VaoManager::allocateVbo
         cleanupEmptyPools();
         for( size_t i=0; i<NumInternalBufferTypes; ++i )
             for( size_t j=0; j<BT_DYNAMIC_DEFAULT+1; ++j )
@@ -527,6 +528,8 @@ namespace Ogre
         if( bestBlock.size == 0 )
             bestVbo.freeBlocks.erase( bestVbo.freeBlocks.begin() + bestBlockIdx );
 
+        // To trace allocations in VS you can add conditional breakpoint with following action:
+        // allocateVbo[{(int)internalType}][{(int)bufferType}][{bestVboIdx}] => bufferOffset = {newOffset}, sizeBytes = {sizeBytes}+{padding} at $CALLSTACK
         outVboIdx       = bestVboIdx;
         outBufferOffset = newOffset;
     }
