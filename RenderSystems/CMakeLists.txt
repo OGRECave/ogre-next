@@ -43,6 +43,8 @@ if (OGRE_BUILD_RENDERSYSTEM_METAL)
     add_subdirectory(Metal)
 endif()
 
-add_subdirectory(Vulkan)
+if (OGRE_BUILD_RENDERSYSTEM_VULKAN)
+    add_subdirectory(Vulkan)
+endif()
 
 add_subdirectory(NULL)

@@ -27,39 +27,12 @@ include_directories(
   BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# TODO These paths are hardcoded
-if( WIN32 )
-	include_directories(
-		C:/VulkanSDK/1.2.131.2/Include
-		C:/VulkanSDK/1.2.131.2/glslang
-		C:/VulkanSDK/1.2.131.2/Include/glslang
-	)
-else()
-	include_directories(
-		/home/matias/Projects/vulkan/1.2.148.1/x86_64/include
-	)
-endif()
+include_directories( ${Vulkan_INCLUDE_DIRS} )
 
 ogre_add_library(RenderSystem_Vulkan ${OGRE_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
-target_link_libraries(RenderSystem_Vulkan OgreMain)
+target_link_libraries(RenderSystem_Vulkan OgreMain ${Vulkan_LIBRARIES})
 
-if( WIN32 )
-	link_directories( C:/VulkanSDK/1.2.131.2/lib )
-	target_link_libraries(RenderSystem_Vulkan vulkan
-		C:/VulkanSDK/1.2.131.2/Lib/shaderc_combined.lib
-		C:/VulkanSDK/1.2.131.2/Lib/VkLayer_utils.lib
-		C:/VulkanSDK/1.2.131.2/Lib/vulkan-1.lib
-	)
-else()
-	link_directories( /home/matias/Projects/vulkan/1.2.148.1/x86_64/lib )
-	target_link_libraries(RenderSystem_Vulkan vulkan
-		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libglslang.a
-		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libOSDependent.a
-		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libOGLCompiler.a
-		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libHLSL.a
-		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libSPIRV.a
-		/home/matias/Projects/vulkan/1.2.148.1/x86_64/lib/libshaderc_combined.a )
-
+if( UNIX )
 	target_link_libraries(RenderSystem_Vulkan xcb-randr)
 endif()
 

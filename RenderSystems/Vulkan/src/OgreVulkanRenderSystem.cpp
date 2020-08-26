@@ -669,10 +669,10 @@ namespace Ogre
             LogManager::getSingleton().logMessage( "Found instance extension: " + extensionName );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-            if( extensionName == VulkanWin32Window:: ::getRequiredExtensionName() )
+            if( extensionName == VulkanWin32Window::getRequiredExtensionName() )
             {
                 mHasWin32Support = true;
-                reqInstanceExtensions.push_back( VulkanWin32Window:: ::getRequiredExtensionName() );
+                reqInstanceExtensions.push_back( VulkanWin32Window::getRequiredExtensionName() );
             }
 #else
             if( extensionName == VulkanXcbWindow::getRequiredExtensionName() )
@@ -809,22 +809,6 @@ namespace Ogre
                     }
                     else if( extensionName == VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME )
                         deviceExtensions.push_back( VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME );
-                }
-            }
-
-            if( mHasValidationLayers )
-            {
-                uint32 numLayers = 0;
-                vkEnumerateDeviceLayerProperties( mDevice->mPhysicalDevice, &numLayers, 0 );
-
-                FastArray<VkLayerProperties> availableLayers;
-                availableLayers.resize( numLayers );
-                vkEnumerateDeviceLayerProperties( mDevice->mPhysicalDevice, &numLayers,
-                                                  availableLayers.begin() );
-                for( size_t i = 0u; i < numLayers; ++i )
-                {
-                    const String extensionName = availableLayers[i].layerName;
-                    LogManager::getSingleton().logMessage( "Found device layer: " + extensionName );
                 }
             }
 

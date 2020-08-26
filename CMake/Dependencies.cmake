@@ -91,6 +91,9 @@ macro_log_feature(FreeImage_FOUND "freeimage" "Support for commonly used graphic
 find_package(Freetype)
 macro_log_feature(FREETYPE_FOUND "freetype" "Portable font engine" "http://www.freetype.org" FALSE "" "")
 
+find_package(Vulkan)
+macro_log_feature(Vulkan_FOUND "vulkan-sdk" "Vulkan SDK" "https://vulkan.lunarg.com/" FALSE "" "")
+
 # Find X11
 if (UNIX AND NOT APPLE AND NOT ANDROID AND NOT EMSCRIPTEN)
   find_package(X11)
