@@ -40,6 +40,12 @@ namespace Ogre
 
     class _OgreVulkanExport VulkanSupport
     {
+        FastArray<String> mDevices;
+
+        void enumerateDevices( VulkanRenderSystem *renderSystem );
+
+        void initialize( VulkanRenderSystem *renderSystem );
+
     public:
         VulkanSupport() {}
         virtual ~VulkanSupport() {}
@@ -49,15 +55,14 @@ namespace Ogre
          * Must have a "Full Screen" value that is a bool and a "Video Mode" value
          * that is a string in the form of wxh
          */
-        virtual void addConfig() = 0;
+        virtual void addConfig( VulkanRenderSystem *renderSystem );
         virtual void setConfigOption( const String &name, const String &value );
 
-        /**
-         * Make sure all the extra options are valid
-         * @return string with error message
-         */
-        virtual String validateConfig() = 0;
-        virtual ConfigOptionMap &getConfigOptions( void );
+        virtual String validateConfigOptions( void );
+
+        uint32 getSelectedDeviceIdx( void ) const;
+
+        ConfigOptionMap &getConfigOptions( VulkanRenderSystem *renderSystem );
 
         /// @copydoc RenderSystem::getDisplayMonitorCount
         virtual unsigned int getDisplayMonitorCount() const { return 1; }
@@ -69,19 +74,19 @@ namespace Ogre
 }  // namespace Ogre
 
 #ifndef DEFINING_VK_SUPPORT_IMPL
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#    include "Windowing/win32/OgreVulkanWin32Support.h"
+#    if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#        include "Windowing/win32/OgreVulkanWin32Support.h"
 namespace Ogre
 {
     inline VulkanSupport *getVulkanSupport() { return new VulkanWin32Support(); }
 }  // namespace Ogre
-#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-#    include "Windowing/X11/OgreVulkanXcbSupport.h"
+#    elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#        include "Windowing/X11/OgreVulkanXcbSupport.h"
 namespace Ogre
 {
     inline VulkanSupport *getVulkanSupport() { return new VulkanXcbSupport(); }
 }  // namespace Ogre
-#endif
+#    endif
 #endif
 
 #endif

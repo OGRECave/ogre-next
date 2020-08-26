@@ -6,7 +6,7 @@
 
 namespace Ogre
 {
-    class OgreVulkanWin32Window : public VulkanWindow
+    class VulkanWin32Window : public VulkanWindow
     {
     private:
         HWND mHwnd;  // Win32 Window handle
@@ -33,10 +33,10 @@ namespace Ogre
                            const NameValuePairList *miscParams );
 
     public:
-        OgreVulkanWin32Window( FastArray<const char *> &inOutRequiredInstanceExts, const String &title,
+        VulkanWin32Window( const String &title,
                                uint32 width, uint32 height, bool fullscreenMode );
 
-        virtual ~OgreVulkanWin32Window();
+        virtual ~VulkanWin32Window();
 
         virtual void reposition( int32 left, int32 top ) override;
         virtual void _setVisible( bool visible ) override;

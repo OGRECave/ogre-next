@@ -110,8 +110,10 @@ namespace Ogre
         xcb_disconnect( connection );
     }
     //-----------------------------------------------------------------------------
-    void VulkanXcbSupport::addConfig()
+    void VulkanXcbSupport::addConfig( VulkanRenderSystem *renderSystem )
     {
+        VulkanSupport::addConfig( renderSystem );
+
         ConfigOption optFullScreen;
         ConfigOption optVideoMode;
         ConfigOption optColourDepth;
@@ -317,11 +319,5 @@ namespace Ogre
                 it->second.immutable = false;
             }
         }
-    }
-    //-----------------------------------------------------------------------------
-    String VulkanXcbSupport::validateConfig()
-    {
-        // TODO, DX9
-        return BLANKSTRING;
     }
 }  // namespace Ogre

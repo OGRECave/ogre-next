@@ -42,8 +42,10 @@ namespace Ogre
 
 	VulkanWin32Support::VulkanWin32Support() {}
 
-    void VulkanWin32Support::addConfig()
+    void VulkanWin32Support::addConfig( VulkanRenderSystem *renderSystem )
     {
+        VulkanSupport::addConfig( renderSystem );
+
         // TODO: EnumDisplayDevices http://msdn.microsoft.com/library/en-us/gdi/devcons_2303.asp
         /*vector<string> DisplayDevices;
         DISPLAY_DEVICE DisplayDevice;
@@ -250,11 +252,5 @@ namespace Ogre
                 it->second.immutable = false;
             }
         }
-    }
-
-    String VulkanWin32Support::validateConfig()
-    {
-        // TODO, DX9
-        return BLANKSTRING;
     }
 }  // namespace Ogre

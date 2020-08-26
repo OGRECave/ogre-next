@@ -1,4 +1,4 @@
-#include "Windowing/win32/OgreVulkanWin32Window.h"
+#include "Windowing/win32/VulkanWin32Window.h"
 
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanTextureGpu.h"
@@ -21,11 +21,10 @@
 namespace Ogre
 {
 #define _MAX_CLASS_NAME_ 128
-    bool OgreVulkanWin32Window::mClassRegistered = false;
+    bool VulkanWin32Window::mClassRegistered = false;
 
-    OgreVulkanWin32Window::OgreVulkanWin32Window( FastArray<const char *> &inOutRequiredInstanceExts,
-                                                  const String &title, uint32 width, uint32 height,
-                                                  bool fullscreenMode ) :
+    VulkanWin32Window::VulkanWin32Window( const String &title, uint32 width, uint32 height,
+                                          bool fullscreenMode ) :
         VulkanWindow( title, width, height, fullscreenMode ),
         mHwnd( 0 ),
         mHDC( 0 ),
@@ -42,10 +41,9 @@ namespace Ogre
         mWindowedWinStyle( 0 ),
         mFullscreenWinStyle( 0 )
     {
-        inOutRequiredInstanceExts.push_back( VK_KHR_WIN32_SURFACE_EXTENSION_NAME );
     }
 
-    OgreVulkanWin32Window::~OgreVulkanWin32Window()
+    VulkanWin32Window::~VulkanWin32Window()
     {
         destroy();
 
@@ -65,8 +63,13 @@ namespace Ogre
         // OGRE_DELETE mStencilBuffer;
         mStencilBuffer = 0;
     }
+    //-----------------------------------------------------------------------------------
+    const char *VulkanWin32Window::getRequiredExtensionName( void )
+    {
+        return VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
+    }
 
-    void OgreVulkanWin32Window::destroy()
+    void VulkanWin32Window::destroy()
     {
         VulkanWindow::destroy();
 
@@ -86,8 +89,8 @@ namespace Ogre
         }
     }
 
-    void OgreVulkanWin32Window::createWindow( const String &windowName, uint32 width, uint32 height,
-                                              const NameValuePairList *miscParams )
+    void VulkanWin32Window::createWindow( const String &windowName, uint32 width, uint32 height,
+                                          const NameValuePairList *miscParams )
     {
         mClosed = false;
         mColourDepth = mRequestedFullscreenMode ? 32 : GetDeviceCaps( GetDC( 0 ), BITSPIXEL );
@@ -399,7 +402,7 @@ namespace Ogre
         // {
         //     OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Vulkan not supported on given X11
         //     window",
-        //                  "OgreVulkanWin32Window::_initialize" );
+        //                  "VulkanWin32Window::_initialize" );
         // }
 
         VkSurfaceKHR surface;
@@ -414,12 +417,12 @@ namespace Ogre
         mSurfaceKHR = surface;
     }
 
-    DWORD OgreVulkanWin32Window::getWindowStyle( bool fullScreen ) const
+    DWORD VulkanWin32Window::getWindowStyle( bool fullScreen ) const
     {
         return fullScreen ? mFullscreenWinStyle : mWindowedWinStyle;
     }
 
-    void OgreVulkanWin32Window::reposition( int32 left, int32 top )
+    void VulkanWin32Window::reposition( int32 left, int32 top )
     {
         if( mClosed || !mIsTopLevel )
             return;
@@ -430,11 +433,11 @@ namespace Ogre
         }
     }
 
-    void OgreVulkanWin32Window::_setVisible( bool visible ) { mVisible = visible; }
+    void VulkanWin32Window::_setVisible( bool visible ) { mVisible = visible; }
 
-    bool OgreVulkanWin32Window::isVisible() const { return mVisible; }
+    bool VulkanWin32Window::isVisible() const { return mVisible; }
 
-    void OgreVulkanWin32Window::setHidden( bool hidden )
+    void VulkanWin32Window::setHidden( bool hidden )
     {
         mHidden = hidden;
 
@@ -452,10 +455,10 @@ namespace Ogre
         }
     }
 
-    bool OgreVulkanWin32Window::isHidden() const { return false; }
+    bool VulkanWin32Window::isHidden() const { return false; }
 
-    void OgreVulkanWin32Window::_initialize( TextureGpuManager *textureGpuManager,
-                                             const NameValuePairList *miscParams )
+    void VulkanWin32Window::_initialize( TextureGpuManager *textureGpuManager,
+                                         const NameValuePairList *miscParams )
     {
         destroy();
 
@@ -476,10 +479,10 @@ namespace Ogre
         //     mTexture->setPixelFormat( PFG_B5G5R5A1_UNORM );
         // else
         mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
-		mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
+        mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
         if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
             mStencilBuffer = mDepthBuffer;
-        
+
         mTexture->setSampleDescription( mRequestedSampleDescription );
         mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
 

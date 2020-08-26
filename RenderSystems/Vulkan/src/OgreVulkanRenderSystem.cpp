@@ -76,8 +76,6 @@ THE SOFTWARE.
 
 #include "OgrePixelFormatGpuUtils.h"
 
-#define TODO_check_layers_exist
-
 #define TODO_addVpCount_to_passpso
 
 namespace Ogre
@@ -178,6 +176,11 @@ namespace Ogre
         mVpChanged( false ),
         mInterruptedRenderCommandEncoder( false ),
         mValidationError( false ),
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+        mHasWin32Support( false ),
+#else
+        mHasXcbSupport( false ),
+#endif
         CreateDebugReportCallback( 0 ),
         DestroyDebugReportCallback( 0 ),
         mDebugReportCallback( 0 )
@@ -323,16 +326,21 @@ namespace Ogre
         static String strName( "Vulkan_RS" );
         return strName;
     }
-    void VulkanRenderSystem::initConfigOptions( void ) { mVulkanSupport->addConfig(); }
+    void VulkanRenderSystem::initConfigOptions( void ) { mVulkanSupport->addConfig( this ); }
     //-------------------------------------------------------------------------
     ConfigOptionMap &VulkanRenderSystem::getConfigOptions( void )
     {
-        return mVulkanSupport->getConfigOptions();
+        return mVulkanSupport->getConfigOptions( this );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::setConfigOption( const String &name, const String &value )
     {
         mVulkanSupport->setConfigOption( name, value );
+    }
+    //-------------------------------------------------------------------------
+    String VulkanRenderSystem::validateConfigOptions( void )
+    {
+        return mVulkanSupport->validateConfigOptions();
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::debugCallback( void ) { mValidationError = true; }
@@ -633,6 +641,91 @@ namespace Ogre
         this->_initialise( true );
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::initializeVkInstance( void )
+    {
+        if( mVkInstance )
+            return;
+
+        LogManager::getSingleton().logMessage( "[Vulkan] Initializing VkInstance" );
+
+        uint32 numExtensions = 0u;
+        VkResult result = vkEnumerateInstanceExtensionProperties( 0, &numExtensions, 0 );
+        checkVkResult( result, "vkEnumerateInstanceExtensionProperties" );
+
+        FastArray<VkExtensionProperties> availableExtensions;
+        availableExtensions.resize( numExtensions );
+        result =
+            vkEnumerateInstanceExtensionProperties( 0, &numExtensions, availableExtensions.begin() );
+        checkVkResult( result, "vkEnumerateInstanceExtensionProperties" );
+
+        // Check supported extensions we may want
+        FastArray<const char *> reqInstanceExtensions;
+        for( size_t i = 0u; i < numExtensions; ++i )
+        {
+            const String extensionName = availableExtensions[i].extensionName;
+            LogManager::getSingleton().logMessage( "Found instance extension: " + extensionName );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+            if( extensionName == VulkanWin32Window:: ::getRequiredExtensionName() )
+            {
+                mHasWin32Support = true;
+                reqInstanceExtensions.push_back( VulkanWin32Window:: ::getRequiredExtensionName() );
+            }
+#else
+            if( extensionName == VulkanXcbWindow::getRequiredExtensionName() )
+            {
+                mHasXcbSupport = true;
+                reqInstanceExtensions.push_back( VulkanXcbWindow::getRequiredExtensionName() );
+            }
+#endif
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+            if( extensionName == VK_EXT_DEBUG_REPORT_EXTENSION_NAME )
+                reqInstanceExtensions.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
+#endif
+        }
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+        if( !mHasWin32Support )
+#else
+        if( !mHasXcbSupport )
+#endif
+        {
+            LogManager::getSingleton().logMessage(
+                "Vulkan support found but instance is uncapable of "
+                "drawing to the screen! Cannot continue",
+                LML_CRITICAL );
+            return;
+        }
+
+        // Check supported layers we may want
+        uint32 numInstanceLayers = 0u;
+        result = vkEnumerateInstanceLayerProperties( &numInstanceLayers, 0 );
+        checkVkResult( result, "vkEnumerateInstanceLayerProperties" );
+
+        FastArray<VkLayerProperties> instanceLayerProps;
+        instanceLayerProps.resize( numInstanceLayers );
+        result = vkEnumerateInstanceLayerProperties( &numInstanceLayers, instanceLayerProps.begin() );
+        checkVkResult( result, "vkEnumerateInstanceLayerProperties" );
+
+        FastArray<const char *> instanceLayers;
+        for( size_t i = 0u; i < numInstanceLayers; ++i )
+        {
+            const String layerName = instanceLayerProps[i].layerName;
+            LogManager::getSingleton().logMessage( "Found instance layer: " + layerName );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+            if( layerName == "VK_LAYER_KHRONOS_validation" )
+                instanceLayers.push_back( "VK_LAYER_KHRONOS_validation" );
+#endif
+        }
+
+        mVkInstance = VulkanDevice::createInstance( "Ogre App TODO ME", reqInstanceExtensions,
+                                                    instanceLayers, dbgFunc, this );
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        addInstanceDebugCallback();
+#endif
+    }
+    //-------------------------------------------------------------------------
     Window *VulkanRenderSystem::_initialise( bool autoCreateWindow, const String &windowTitle )
     {
         Window *autoWindow = 0;
@@ -647,13 +740,10 @@ namespace Ogre
                                                      bool fullScreen,
                                                      const NameValuePairList *miscParams )
     {
-        FastArray<const char *> reqInstanceExtensions;
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        VulkanWindow *win =
-            OGRE_NEW OgreVulkanWin32Window( reqInstanceExtensions, name, width, height, fullScreen );
+        VulkanWindow *win = OGRE_NEW VulkanWin32Window( name, width, height, fullScreen );
 #else
-        VulkanWindow *win =
-            OGRE_NEW VulkanXcbWindow( reqInstanceExtensions, name, width, height, fullScreen );
+        VulkanWindow *win = OGRE_NEW VulkanXcbWindow( name, width, height, fullScreen );
 #endif
         mWindows.insert( win );
 
@@ -666,20 +756,11 @@ namespace Ogre
                     mReverseDepth = StringConverter::parseBool( itOption->second, true );
             }
 
-            TODO_check_layers_exist;
-            FastArray<const char *> instanceLayers;
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-            instanceLayers.push_back( "VK_LAYER_KHRONOS_validation" );
-            reqInstanceExtensions.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
-#endif
             const uint8 dynBufferMultiplier = 3u;
 
-            mVkInstance = VulkanDevice::createInstance( name, reqInstanceExtensions, instanceLayers,
-                                                        dbgFunc, this );
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-            addInstanceDebugCallback();
-#endif
-            mDevice = new VulkanDevice( mVkInstance, 0u, this );
+            initializeVkInstance();
+
+            mDevice = new VulkanDevice( mVkInstance, mVulkanSupport->getSelectedDeviceIdx(), this );
             mActiveDevice = mDevice;
 
             mRealCapabilities = createRenderSystemCapabilities();

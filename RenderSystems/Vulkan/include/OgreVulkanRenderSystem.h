@@ -118,6 +118,12 @@ namespace Ogre
 
         bool mValidationError;
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+        bool mHasWin32Support;
+#else
+        bool mHasXcbSupport;
+#endif
+
         PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback;
         PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;
         VkDebugReportCallbackEXT mDebugReportCallback;
@@ -150,13 +156,15 @@ namespace Ogre
 
         virtual HardwareOcclusionQuery *createHardwareOcclusionQuery( void );
 
-        virtual String validateConfigOptions( void ) { return BLANKSTRING; }
+        virtual String validateConfigOptions( void );
 
         virtual RenderSystemCapabilities *createRenderSystemCapabilities( void ) const;
 
         void resetAllBindings( void );
 
         virtual void reinitialise( void );
+
+        void initializeVkInstance( void );
 
         VkInstance getVkInstance( void ) const { return mVkInstance; }
 

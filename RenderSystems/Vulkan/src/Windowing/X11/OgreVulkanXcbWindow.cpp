@@ -64,8 +64,7 @@ namespace Ogre
         return atom;
     }
 
-    VulkanXcbWindow::VulkanXcbWindow( FastArray<const char *> &inOutRequiredInstanceExts,
-                                      const String &title, uint32 width, uint32 height,
+    VulkanXcbWindow::VulkanXcbWindow( const String &title, uint32 width, uint32 height,
                                       bool fullscreenMode ) :
         VulkanWindow( title, width, height, fullscreenMode ),
         mConnection( 0 ),
@@ -78,7 +77,6 @@ namespace Ogre
         mIsTopLevel( true ),
         mIsExternal( false )
     {
-        inOutRequiredInstanceExts.push_back( VK_KHR_XCB_SURFACE_EXTENSION_NAME );
     }
     //-------------------------------------------------------------------------
     VulkanXcbWindow::~VulkanXcbWindow()
@@ -113,6 +111,11 @@ namespace Ogre
         }
 
         mConnection = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    const char *VulkanXcbWindow::getRequiredExtensionName( void )
+    {
+        return VK_KHR_XCB_SURFACE_EXTENSION_NAME;
     }
     //-----------------------------------------------------------------------------------
     void VulkanXcbWindow::destroy( void )

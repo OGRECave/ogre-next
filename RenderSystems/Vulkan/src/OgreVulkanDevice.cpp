@@ -144,9 +144,6 @@ namespace Ogre
     {
         VkResult result = VK_SUCCESS;
 
-        // Note multiple GPUs may be present, and there may be multiple drivers for
-        // each GPU hence the number of devices can theoretically get really high
-        const uint32_t c_maxDevices = 64u;
         uint32 numDevices = 0u;
         result = vkEnumeratePhysicalDevices( mInstance, &numDevices, NULL );
         checkVkResult( result, "vkEnumeratePhysicalDevices" );
@@ -156,8 +153,6 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "No Vulkan devices found.",
                          "VulkanDevice::createPhysicalDevice" );
         }
-
-        numDevices = std::min( numDevices, c_maxDevices );
 
         const String numDevicesStr = StringConverter::toString( numDevices );
         String deviceIdsStr = StringConverter::toString( deviceIdx );
@@ -175,10 +170,11 @@ namespace Ogre
 
         LogManager::getSingleton().logMessage( "[Vulkan] Selecting device " + deviceIdsStr );
 
-        VkPhysicalDevice pd[c_maxDevices];
-        result = vkEnumeratePhysicalDevices( mInstance, &numDevices, pd );
+        FastArray<VkPhysicalDevice> pd;
+        pd.resize( numDevices );
+        result = vkEnumeratePhysicalDevices( mInstance, &numDevices, pd.begin() );
         checkVkResult( result, "vkEnumeratePhysicalDevices" );
-        mPhysicalDevice = pd[0];
+        mPhysicalDevice = pd[deviceIdx];
 
         vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
         vkGetPhysicalDeviceFeatures( mPhysicalDevice, &mDeviceFeatures );

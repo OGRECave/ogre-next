@@ -64,9 +64,10 @@ namespace Ogre
                            const NameValuePairList *miscParams );
 
     public:
-        VulkanXcbWindow( FastArray<const char *> &inOutRequiredInstanceExts, const String &title,
-                         uint32 width, uint32 height, bool fullscreenMode );
+        VulkanXcbWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
         ~VulkanXcbWindow();
+
+        static const char *getRequiredExtensionName( void );
 
         virtual void destroy( void );
         virtual void _initialize( TextureGpuManager *textureGpuManager,

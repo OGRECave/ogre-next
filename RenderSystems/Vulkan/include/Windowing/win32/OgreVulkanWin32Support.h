@@ -48,14 +48,9 @@ namespace Ogre
          * Must have a "Full Screen" value that is a bool and a "Video Mode" value
          * that is a string in the form of wxhxb
          */
-        void addConfig();
+        virtual void addConfig( VulkanRenderSystem *renderSystem );
 
-        void setConfigOption( const String &name, const String &value );
-
-        /**
-         * Make sure all the extra options are valid
-         */
-        String validateConfig();
+        virtual void setConfigOption( const String &name, const String &value );
 
     private:
         // Allowed video modes
