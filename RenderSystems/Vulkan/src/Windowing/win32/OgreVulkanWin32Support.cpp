@@ -63,7 +63,6 @@ namespace Ogre
         ConfigOption optVSyncInterval;
         ConfigOption optVSyncMethod;
         ConfigOption optFSAA;
-        ConfigOption optRTTMode;
         ConfigOption optSRGB;
 
         // FS setting possibilities
@@ -136,13 +135,6 @@ namespace Ogre
         }
         optFSAA.currentValue = "1";
 
-        optRTTMode.name = "RTT Preferred Mode";
-        optRTTMode.possibleValues.push_back( "FBO" );
-        optRTTMode.possibleValues.push_back( "PBuffer" );
-        optRTTMode.possibleValues.push_back( "Copy" );
-        optRTTMode.currentValue = "FBO";
-        optRTTMode.immutable = false;
-
         // SRGB on auto window
         optSRGB.name = "sRGB Gamma Conversion";
         optSRGB.possibleValues.push_back( "Yes" );
@@ -158,7 +150,6 @@ namespace Ogre
         mOptions[optVSyncInterval.name] = optVSyncInterval;
         mOptions[optVSyncMethod.name] = optVSyncMethod;
         mOptions[optFSAA.name] = optFSAA;
-        mOptions[optRTTMode.name] = optRTTMode;
         mOptions[optSRGB.name] = optSRGB;
 
         refreshConfig();
