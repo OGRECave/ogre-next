@@ -73,7 +73,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalDiscardBufferManager::growToFit( size_t extraBytes, MetalDiscardBuffer *forDiscardBuffer )
     {
-        assert( !(extraBytes & 0x04) && "extraBytes must be multiple of 4!" );
+        assert( !(extraBytes & 0x03) && "extraBytes must be multiple of 4!" );
 
         const size_t oldCapacity = [mBuffer length];
         const size_t newCapacity = std::max( oldCapacity + extraBytes,
