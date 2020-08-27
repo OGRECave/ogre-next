@@ -51,8 +51,8 @@ if(WIN32)
 	find_path(Vulkan_INCLUDE_DIR
 		NAMES vulkan/vulkan.h
 		HINTS
-			${OGRE_DEPENDENCIES_DIR}/include ${ENV_OGRE_DEPENDENCIES_DIR}/include
-			${OGRE_SOURCE}/Dependencies/include
+			"${OGRE_DEPENDENCIES_DIR}/include" "${ENV_OGRE_DEPENDENCIES_DIR}/include"
+			"${OGRE_SOURCE}/Dependencies/include"
 			"${OGRE_VULKAN_SDK}/Include"
 			"$ENV{VULKAN_SDK}/Include"
 		)
@@ -68,22 +68,31 @@ if(WIN32)
 	find_library(Vulkan_LIBRARY
 		NAMES vulkan-1
 		HINTS
-			${OGRE_DEPENDENCIES_DIR}/lib ${ENV_OGRE_DEPENDENCIES_DIR}/lib
-			${OGRE_SOURCE}/Dependencies/lib
+			"${OGRE_DEPENDENCIES_DIR}/lib" "${ENV_OGRE_DEPENDENCIES_DIR}/lib"
+			"${OGRE_SOURCE}/Dependencies/lib"
 			"${OGRE_VULKAN_SDK}/${VK_LIB}"
 			"${OGRE_VULKAN_SDK}/${VK_BIN}"
 			"$ENV{VULKAN_SDK}/${VK_LIB}"
 			"$ENV{VULKAN_SDK}/${VK_BIN}"
+		PATH_SUFFIXES "" Release RelWithDebInfo MinSizeRel Debug
 		)
-	find_library(Vulkan_SHADERC_LIB
+	find_library(Vulkan_SHADERC_LIB_REL
 		NAMES shaderc_combined
 		HINTS
-			${OGRE_DEPENDENCIES_DIR}/lib ${ENV_OGRE_DEPENDENCIES_DIR}/lib
-			${OGRE_SOURCE}/Dependencies/lib
+			"${OGRE_DEPENDENCIES_DIR}/lib" "${ENV_OGRE_DEPENDENCIES_DIR}/lib"
+			"${OGRE_SOURCE}/Dependencies/lib"
 			"${OGRE_VULKAN_SDK}/${VK_LIB}"
 			"${OGRE_VULKAN_SDK}/${VK_BIN}"
 			"$ENV{VULKAN_SDK}/${VK_LIB}"
 			"$ENV{VULKAN_SDK}/${VK_BIN}"
+		PATH_SUFFIXES "" Release RelWithDebInfo MinSizeRel
+		)
+	find_library(Vulkan_SHADERC_LIB_DBG
+		NAMES shaderc_combined
+		HINTS
+			"${OGRE_DEPENDENCIES_DIR}/lib" "${ENV_OGRE_DEPENDENCIES_DIR}/lib"
+			"${OGRE_SOURCE}/Dependencies/lib"
+		PATH_SUFFIXES "" Debug
 		)
 	find_program(Vulkan_GLSLC_EXECUTABLE
 		NAMES glslc
@@ -96,27 +105,28 @@ else()
 	find_path(Vulkan_INCLUDE_DIR
 		NAMES vulkan/vulkan.h
 		HINTS
-			${OGRE_DEPENDENCIES_DIR}/lib ${ENV_OGRE_DEPENDENCIES_DIR}/lib
-			${OGRE_SOURCE}/Dependencies/lib
+			"${OGRE_DEPENDENCIES_DIR}/lib" "${ENV_OGRE_DEPENDENCIES_DIR}/lib"
+			"${OGRE_SOURCE}/Dependencies/lib"
 			"${OGRE_VULKAN_SDK}/${VK_ARCH}/include"
 			"$ENV{VULKAN_SDK}/include"
 		)
 	find_library(Vulkan_LIBRARY
 		NAMES vulkan
 		HINTS
-			${OGRE_DEPENDENCIES_DIR}/lib ${ENV_OGRE_DEPENDENCIES_DIR}/lib
-			${OGRE_SOURCE}/Dependencies/lib
+			"${OGRE_DEPENDENCIES_DIR}/lib" "${ENV_OGRE_DEPENDENCIES_DIR}/lib"
+			"${OGRE_SOURCE}/Dependencies/lib"
 			"${OGRE_VULKAN_SDK}/${VK_ARCH}/lib"
 			"$ENV{VULKAN_SDK}/lib"
 		)
-	find_library(Vulkan_SHADERC_LIB
+	find_library(Vulkan_SHADERC_LIB_REL
 		NAMES shaderc_combined
 		HINTS
-			${OGRE_DEPENDENCIES_DIR}/lib ${ENV_OGRE_DEPENDENCIES_DIR}/lib
-			${OGRE_SOURCE}/Dependencies/lib
+			"${OGRE_DEPENDENCIES_DIR}/lib" "${ENV_OGRE_DEPENDENCIES_DIR}/lib"
+			"${OGRE_SOURCE}/Dependencies/lib"
 			"${OGRE_VULKAN_SDK}/${VK_ARCH}/lib"
 			"$ENV{VULKAN_SDK}/lib"
 		)
+	set( Vulkan_SHADERC_LIB_DBG ${Vulkan_SHADERC_LIB_REL} )
 	find_program(Vulkan_GLSLC_EXECUTABLE
 		NAMES glslc
 		HINTS
@@ -125,15 +135,15 @@ else()
 		)
 endif()
 
-set(Vulkan_LIBRARIES ${Vulkan_LIBRARY} ${Vulkan_SHADERC_LIB})
+set(Vulkan_LIBRARIES ${Vulkan_LIBRARY} optimized ${Vulkan_SHADERC_LIB_REL} debug ${Vulkan_SHADERC_LIB_DBG})
 set(Vulkan_INCLUDE_DIRS ${Vulkan_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Vulkan
   DEFAULT_MSG
-  Vulkan_LIBRARY Vulkan_SHADERC_LIB Vulkan_INCLUDE_DIR)
+  Vulkan_LIBRARY Vulkan_SHADERC_LIB_REL Vulkan_SHADERC_LIB_DBG Vulkan_INCLUDE_DIR)
 
-mark_as_advanced(Vulkan_INCLUDE_DIR Vulkan_LIBRARY Vulkan_SHADERC_LIB Vulkan_GLSLC_EXECUTABLE)
+mark_as_advanced(Vulkan_INCLUDE_DIR Vulkan_LIBRARY Vulkan_SHADERC_LIB_REL Vulkan_SHADERC_LIB_DBG Vulkan_GLSLC_EXECUTABLE)
 
 if(Vulkan_FOUND AND NOT TARGET Vulkan::Vulkan)
   add_library(Vulkan::Vulkan UNKNOWN IMPORTED)
