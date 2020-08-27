@@ -433,7 +433,7 @@ namespace Ogre
             @param fValue
                 The value whose inverse square root will be calculated.
         */
-        static Real InvSqrt (Real fValue);
+        static Real InvSqrt (Real fValue) { return 1.0f / std::sqrt(fValue); }
 
         /** Generate a random number of unit length.
             @return

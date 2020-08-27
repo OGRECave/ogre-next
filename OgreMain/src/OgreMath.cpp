@@ -28,7 +28,6 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreMath.h"
-#include "asm_math.h"
 #include "OgreVector2.h"
 #include "OgreVector3.h"
 #include "OgreVector4.h"
@@ -54,7 +53,7 @@ namespace Ogre
     const Real Math::HALF_PI = Real( 0.5 * PI );
     const Real Math::fDeg2Rad = PI / Real(180.0);
     const Real Math::fRad2Deg = Real(180.0) / PI;
-    const Real Math::LOG2 = log(Real(2.0));
+    const Real Math::LOG2 = std::log(Real(2.0));
 
     int Math::mTrigTableSize;
    Math::AngleUnit Math::msAngleUnit;
@@ -170,16 +169,11 @@ namespace Ogre
         return 0.0;
     }
     //-----------------------------------------------------------------------
-    Real Math::InvSqrt(Real fValue)
-    {
-        return Real(asm_rsq(fValue));
-    }
-    //-----------------------------------------------------------------------
     Real Math::UnitRandom ()
     {
         if (mRandProvider)
             return mRandProvider->getRandomUnit();
-        else return asm_rand() / asm_rand_max();
+        else return Real(rand()) / RAND_MAX;
     }
     
     //-----------------------------------------------------------------------
