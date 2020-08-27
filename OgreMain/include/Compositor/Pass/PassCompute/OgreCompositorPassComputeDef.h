@@ -68,12 +68,12 @@ namespace Ogre
                 bool        usesAllFields;
             };
 
-            ComputeTextureSource( size_t _texUnitIdx, IdString _textureName ) :
+            ComputeTextureSource( uint32 _texUnitIdx, IdString _textureName ) :
                 texUnitIdx( _texUnitIdx ), textureName( _textureName ),
                 access( ResourceAccess::Undefined ), mipmapLevel( 0 ), textureArrayIndex( 0 ),
                 pixelFormat( PFG_UNKNOWN ), allowWriteAfterWrite( false ) {}
 
-            ComputeTextureSource( size_t _texUnitIdx, IdString _textureName,
+            ComputeTextureSource( uint32 _texUnitIdx, IdString _textureName,
                                   ResourceAccess::ResourceAccess _access, int32 _mipmapLevel,
                                   int32 _textureArrayIndex, PixelFormatGpu _pixelFormat,
                                   bool _allowWriteAfterWrite ) :

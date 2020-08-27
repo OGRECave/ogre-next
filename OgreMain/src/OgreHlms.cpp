@@ -1073,7 +1073,7 @@ namespace Ogre
                 if( subString.startWith( counterVar ) )
                 {
                     char tmp[16];
-                    sprintf( tmp, "%lu", passNum );
+                    sprintf( tmp, "%lu", (unsigned long)passNum );
                     outBuffer += tmp;
                     itor += counterVar.size() + 1;
                 }

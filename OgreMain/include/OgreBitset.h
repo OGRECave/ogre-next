@@ -39,7 +39,7 @@ namespace Ogre
     template <size_t _N, typename _internalDataType, size_t _bits, size_t _mask>
     class cbitsetN
     {
-        _internalDataType mValues[( _N + ( 1u << _bits ) - 1u ) >> _bits];
+        _internalDataType mValues[( _N + ( (size_t)1u << _bits ) - 1u ) >> _bits];
 
     public:
         cbitsetN() { clear(); }
@@ -62,7 +62,7 @@ namespace Ogre
         {
             OGRE_ASSERT_MEDIUM( position < _N );
             const size_t idx = position >> _bits;
-            const size_t mask = 1u << ( position & _mask );
+            const _internalDataType mask = (_internalDataType)1u << ( position & _mask );
             if( bValue )
                 mValues[idx] |= mask;
             else
@@ -77,7 +77,7 @@ namespace Ogre
         {
             OGRE_ASSERT_MEDIUM( position < _N );
             const size_t idx = position >> _bits;
-            const size_t mask = 1u << ( position & _mask );
+            const _internalDataType mask = (_internalDataType)1u << ( position & _mask );
             mValues[idx] |= mask;
         }
         /** Sets bit at 'position' to 0
@@ -88,7 +88,7 @@ namespace Ogre
         {
             OGRE_ASSERT_MEDIUM( position < _N );
             const size_t idx = position >> _bits;
-            const size_t mask = 1u << ( position & _mask );
+            const _internalDataType mask = (_internalDataType)1u << ( position & _mask );
             mValues[idx] &= ~mask;
         }
         /** Returns true if bit at 'position' is 1
@@ -99,15 +99,15 @@ namespace Ogre
         {
             OGRE_ASSERT_MEDIUM( position < _N );
             const size_t idx = position >> _bits;
-            const size_t mask = 1u << ( position & _mask );
+            const _internalDataType mask = (_internalDataType)1u << ( position & _mask );
             return ( mValues[idx] & mask ) != 0u;
         }
 
         /// Returns the number of bits that are set between range [0; positionEnd).
-        uint32 numBitsSet( size_t positionEnd ) const
+        size_t numBitsSet( size_t positionEnd ) const
         {
             OGRE_ASSERT_MEDIUM( positionEnd < _N );
-            uint32 retVal = 0u;
+            size_t retVal = 0u;
             for( size_t i = 0u; i < positionEnd; )
             {
                 if( ( positionEnd - i ) >= _mask )
@@ -120,7 +120,7 @@ namespace Ogre
                     else if( value != 0u )
                     {
                         for( size_t j = 0u; j <= _mask; ++j )
-                            retVal += ( value & ( 1u << j ) ) != 0u ? 1u : 0u;
+                            retVal += ( value & ( (_internalDataType)1u << j ) ) != 0u ? 1u : 0u;
                     }
 
                     i += _mask + 1u;
