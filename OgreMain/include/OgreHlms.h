@@ -322,8 +322,8 @@ namespace Ogre
         static void evaluateParamArgs( SubStringRef &outSubString, StringVector &outArgs,
                                        bool &outSyntaxError );
 
-        static size_t calculateLineCount(const String &buffer, size_t idx );
-        static size_t calculateLineCount( const SubStringRef &subString );
+        static unsigned long calculateLineCount(const String &buffer, size_t idx );
+        static unsigned long calculateLineCount( const SubStringRef &subString );
 
         /** Caches a set of properties (i.e. key-value pairs) & snippets of shaders. If an
             exact entry exists in the cache, its index is returned. Otherwise a new entry

@@ -1184,7 +1184,7 @@ namespace Ogre
             }
             else
             {
-                size_t lineCount = calculateLineCount( subString );
+                unsigned long lineCount = calculateLineCount( subString );
                 if( keyword <= 1 )
                 {
                     printf( "Syntax Error at line %lu: @%s expects one parameter\n",
@@ -1587,7 +1587,7 @@ namespace Ogre
             }
             else
             {
-                size_t lineCount = calculateLineCount( subString );
+                unsigned long lineCount = calculateLineCount( subString );
                 if( keyword <= 1 )
                 {
                     printf( "Syntax Error at line %lu: @%s expects one parameter\n",
@@ -3376,12 +3376,12 @@ namespace Ogre
         outFile.write( &outString[0], outString.size() );
     }*/
     //-----------------------------------------------------------------------------------
-    size_t Hlms::calculateLineCount( const String &buffer, size_t idx )
+    unsigned long Hlms::calculateLineCount( const String &buffer, size_t idx )
     {
         String::const_iterator itor = buffer.begin();
         String::const_iterator end  = buffer.begin() + idx;
 
-        size_t lineCount = 0;
+        unsigned long lineCount = 0;
 
         while( itor != end )
         {
@@ -3393,7 +3393,7 @@ namespace Ogre
         return lineCount + 1;
     }
     //-----------------------------------------------------------------------------------
-    size_t Hlms::calculateLineCount( const SubStringRef &subString )
+    unsigned long Hlms::calculateLineCount( const SubStringRef &subString )
     {
         return calculateLineCount( subString.getOriginalBuffer(), subString.getStart() );
     }
