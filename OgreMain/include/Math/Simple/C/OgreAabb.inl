@@ -146,9 +146,9 @@ namespace Ogre
     {
         Vector3 dist( mCenter - v );
 
-        dist.x = std::max( Math::Abs( dist.x ) - mHalfSize.x, 0.0 );
-        dist.y = std::max( Math::Abs( dist.y ) - mHalfSize.y, 0.0 );
-        dist.z = std::max( Math::Abs( dist.z ) - mHalfSize.z, 0.0 );
+        dist.x = std::max( Math::Abs( dist.x ) - mHalfSize.x, static_cast<Ogre::Real>( 0.0 ) );
+        dist.y = std::max( Math::Abs( dist.y ) - mHalfSize.y, static_cast<Ogre::Real>( 0.0 ) );
+        dist.z = std::max( Math::Abs( dist.z ) - mHalfSize.z, static_cast<Ogre::Real>( 0.0 ) );
 
         return dist.squaredLength();
     }
