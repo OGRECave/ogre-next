@@ -40,7 +40,7 @@ namespace Ogre
         c.erase( p, c.end() );
     }
 
-	VulkanWin32Support::VulkanWin32Support() {}
+    VulkanWin32Support::VulkanWin32Support() {}
 
     void VulkanWin32Support::addConfig( VulkanRenderSystem *renderSystem )
     {
@@ -128,7 +128,7 @@ namespace Ogre
         {
             String val = StringConverter::toString( *it );
             optFSAA.possibleValues.push_back( val );
-            /* not implementing CSAA in GL for now
+            /* not implementing CSAA in Vulkan for now
             if (*it >= 8)
                 optFSAA.possibleValues.push_back(val + " [Quality]");
             */
@@ -163,7 +163,7 @@ namespace Ogre
         if( optVideoMode == mOptions.end() || moptColourDepth == mOptions.end() ||
             moptDisplayFrequency == mOptions.end() )
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Can't find mOptions!",
-                         "Win32GLSupport::refreshConfig" );
+                         "VulkanWin32Support::refreshConfig" );
         ConfigOption *optColourDepth = &moptColourDepth->second;
         ConfigOption *optDisplayFrequency = &moptDisplayFrequency->second;
 
@@ -171,7 +171,7 @@ namespace Ogre
         String::size_type pos = val.find( 'x' );
         if( pos == String::npos )
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid Video Mode provided",
-                         "Win32GLSupport::refreshConfig" );
+                         "VulkanWin32Support::refreshConfig" );
         DWORD width = StringConverter::parseUnsignedInt( val.substr( 0, pos ) );
         DWORD height = StringConverter::parseUnsignedInt( val.substr( pos + 1, String::npos ) );
 
@@ -207,7 +207,8 @@ namespace Ogre
         {
             StringStream str;
             str << "Option named '" << name << "' does not exist.";
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, str.str(), "Win32GLSupport::setConfigOption" );
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, str.str(),
+                         "VulkanWin32Support::setConfigOption" );
         }
 
         if( name == "Video Mode" )
