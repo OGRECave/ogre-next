@@ -85,6 +85,13 @@ namespace Ogre
         static CommandBufferExecuteFunc execute_setTextureBufferDS;
         static CommandBufferExecuteFunc execute_setTextureBufferCS;
         static CommandBufferExecuteFunc execute_setTextureBufferInvalid;
+        static CommandBufferExecuteFunc execute_setReadOnlyBufferVS;
+        static CommandBufferExecuteFunc execute_setReadOnlyBufferPS;
+        static CommandBufferExecuteFunc execute_setReadOnlyBufferGS;
+        static CommandBufferExecuteFunc execute_setReadOnlyBufferHS;
+        static CommandBufferExecuteFunc execute_setReadOnlyBufferDS;
+        static CommandBufferExecuteFunc execute_setReadOnlyBufferCS;
+        static CommandBufferExecuteFunc execute_setReadOnlyBufferInvalid;
         static CommandBufferExecuteFunc execute_setPso;
         static CommandBufferExecuteFunc execute_setTexture;
         static CommandBufferExecuteFunc execute_setTextures;

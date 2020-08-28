@@ -95,6 +95,10 @@ namespace Ogre
                                   uint32 &currBinding, VkDescriptorSet descSet,
                                   const DescBindingRange *descBindingRanges,
                                   const VulkanGlobalBindingTable &table );
+        inline void bindUavBuffers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
+                                    uint32 &currBinding, VkDescriptorSet descSet,
+                                    const DescBindingRange *descBindingRanges,
+                                    const VulkanGlobalBindingTable &table );
 
         uint32 calculateFirstDirtySet( const VulkanGlobalBindingTable &table ) const;
 

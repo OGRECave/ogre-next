@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreVulkanTextureGpu.h"
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
+#include "Vao/OgreVulkanReadOnlyBufferPacked.h"
 #include "Vao/OgreVulkanTexBufferPacked.h"
 #include "Vao/OgreVulkanUavBufferPacked.h"
 
@@ -133,7 +134,8 @@ namespace Ogre
         }
 
         size_t numTextures = 0u;
-        size_t numBuffers = 0u;
+        size_t numTexBuffers = 0u;
+        size_t numROBuffers = 0u;
 
         FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = descSet.mTextures.begin();
         FastArray<DescriptorSetTexture2::Slot>::const_iterator endt = descSet.mTextures.end();
@@ -141,15 +143,21 @@ namespace Ogre
         while( itor != endt )
         {
             if( itor->isBuffer() )
-                ++numBuffers;
+            {
+                if( itor->getBuffer().buffer->getBufferPackedType() == BP_TYPE_TEX )
+                    ++numTexBuffers;
+                else
+                    ++numROBuffers;
+            }
             else
                 ++numTextures;
             ++itor;
         }
 
         mTextures.reserve( numTextures );
-        mBuffers.resize( numBuffers );
-        numBuffers = 0u;
+        mBuffers.resize( numTexBuffers );
+        numTexBuffers = 0u;
+        numROBuffers = 0u;
 
         itor = descSet.mTextures.begin();
 
@@ -158,15 +166,29 @@ namespace Ogre
             if( itor->isBuffer() )
             {
                 const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
-                OGRE_ASSERT_HIGH( dynamic_cast<VulkanTexBufferPacked *>( bufferSlot.buffer ) );
-                VulkanTexBufferPacked *vulkanBuffer =
-                    static_cast<VulkanTexBufferPacked *>( bufferSlot.buffer );
 
-                // No caching of VkBufferView. Unlike VkImageViews, setting lots of TexBuffers
-                // via DescriptorSetTextureN is not common enough to warrant it.
-                mBuffers[numBuffers] =
-                    vulkanBuffer->createBufferView( bufferSlot.offset, bufferSlot.sizeBytes );
-                ++numBuffers;
+                if( itor->getBuffer().buffer->getBufferPackedType() == BP_TYPE_TEX )
+                {
+                    OGRE_ASSERT_HIGH( dynamic_cast<VulkanTexBufferPacked *>( bufferSlot.buffer ) );
+                    VulkanTexBufferPacked *vulkanBuffer =
+                        static_cast<VulkanTexBufferPacked *>( bufferSlot.buffer );
+
+                    // No caching of VkBufferView. Unlike VkImageViews, setting lots of TexBuffers
+                    // via DescriptorSetTextureN is not common enough to warrant it.
+                    mBuffers[numTexBuffers] =
+                        vulkanBuffer->createBufferView( bufferSlot.offset, bufferSlot.sizeBytes );
+                    ++numTexBuffers;
+                }
+                else
+                {
+                    OGRE_ASSERT_HIGH( dynamic_cast<VulkanReadOnlyBufferPacked *>( bufferSlot.buffer ) );
+                    VulkanReadOnlyBufferPacked *vulkanBuffer =
+                        static_cast<VulkanReadOnlyBufferPacked *>( bufferSlot.buffer );
+
+                    vulkanBuffer->setupBufferInfo( mReadOnlyBuffers[numROBuffers], bufferSlot.offset,
+                                                   bufferSlot.sizeBytes );
+                    ++numROBuffers;
+                }
             }
             else
             {
@@ -186,12 +208,12 @@ namespace Ogre
             ++itor;
         }
 
-        if( numBuffers != 0u )
+        if( numTexBuffers != 0u )
         {
             VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[0];
             makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
 
-            writeDescSet->descriptorCount = static_cast<uint32>( numBuffers );
+            writeDescSet->descriptorCount = static_cast<uint32>( numTexBuffers );
             writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
             writeDescSet->pTexelBufferView = mBuffers.begin();
         }
@@ -212,6 +234,20 @@ namespace Ogre
         else
         {
             memset( &mWriteDescSets[1], 0, sizeof( mWriteDescSets[1] ) );
+        }
+
+        if( numROBuffers != 0u )
+        {
+            VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[2];
+            makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
+
+            writeDescSet->descriptorCount = static_cast<uint32>( numROBuffers );
+            writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+            writeDescSet->pBufferInfo = mReadOnlyBuffers.begin();
+        }
+        else
+        {
+            memset( &mWriteDescSets[2], 0, sizeof( mWriteDescSets[2] ) );
         }
     }
     //-------------------------------------------------------------------------

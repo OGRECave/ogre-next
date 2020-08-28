@@ -204,6 +204,38 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    ReadOnlyBufferPacked *NULLVaoManager::createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
+                                                                    size_t sizeBytes,
+                                                                    BufferType bufferType,
+                                                                    void *initialData,
+                                                                    bool keepAsShadow )
+    {
+        uint32 alignment = mTexBufferAlignment;
+
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+
+        if( bufferType >= BT_DYNAMIC_DEFAULT )
+        {
+            // For dynamic buffers, the size will be 3x times larger
+            //(depending on mDynamicBufferMultiplier); we need the
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
+            sizeBytes = ( ( sizeBytes + alignment - 1 ) / alignment ) * alignment;
+        }
+
+        NULLBufferInterface *bufferInterface = new NULLBufferInterface( 0 );
+        ReadOnlyBufferPacked *retVal =
+            OGRE_NEW NULLReadOnlyBufferPacked( 0, sizeBytes, 1, 0, bufferType, initialData, keepAsShadow,
+                                               this, bufferInterface, pixelFormat );
+
+        if( initialData )
+            bufferInterface->_firstUpload( initialData, 0, sizeBytes );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void NULLVaoManager::destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer ) {}
+    //-----------------------------------------------------------------------------------
     UavBufferPacked* NULLVaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                           uint32 bindFlags,
                                                           void *initialData, bool keepAsShadow )

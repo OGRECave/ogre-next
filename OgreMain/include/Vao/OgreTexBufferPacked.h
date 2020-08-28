@@ -81,7 +81,7 @@ namespace Ogre
 
         /// To be overriden only by GL3+. Does the same as bindBufferXX but
         /// assumes the current GL_TEXTURE slot is already set.
-        virtual void _bindBufferDirectly( size_t offset, size_t sizeBytes ) {}
+        virtual void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes ) {}
 
         PixelFormatGpu getPixelFormat(void) const       { return mPixelFormat; }
     };

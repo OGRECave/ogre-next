@@ -85,6 +85,7 @@ namespace Ogre
         BP_TYPE_INDEX,
         BP_TYPE_CONST,
         BP_TYPE_TEX,
+        BP_TYPE_READONLY,
         BP_TYPE_UAV,
         BP_TYPE_INDIRECT,
         NUM_BUFFER_PACKED_TYPES
@@ -96,6 +97,7 @@ namespace Ogre
         BB_FLAG_INDEX       = 1u << BP_TYPE_INDEX,
         BB_FLAG_CONST       = 1u << BP_TYPE_CONST,
         BB_FLAG_TEX         = 1u << BP_TYPE_TEX,
+        BP_FLAG_READONLY    = 1u << BP_TYPE_READONLY,
         BB_FLAG_UAV         = 1u << BP_TYPE_UAV,
         BB_FLAG_INDIRECT    = 1u << BP_TYPE_INDIRECT
     };

@@ -138,7 +138,7 @@ namespace Ogre
         uint32                  mCurrentPassBuffer;     /// Resets to zero every new frame.
 
         TexBufferPacked         *mGridBuffer;
-        TexBufferPacked         *mGlobalLightListBuffer;
+        ReadOnlyBufferPacked    *mGlobalLightListBuffer;
 
 
         float                   mMaxSpecIblMipmap;

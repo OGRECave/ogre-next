@@ -66,6 +66,7 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11VaoManager.h"
 #include "Vao/OgreD3D11BufferInterface.h"
 #include "Vao/OgreD3D11VertexArrayObject.h"
+#include "Vao/OgreD3D11ReadOnlyBufferPacked.h"
 #include "Vao/OgreD3D11TexBufferPacked.h"
 #include "Vao/OgreD3D11UavBufferPacked.h"
 #include "Vao/OgreIndexBufferPacked.h"
@@ -2517,9 +2518,18 @@ namespace Ogre
             else
             {
                 const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
-                const D3D11TexBufferPacked *texBuffer =
-                        static_cast<const D3D11TexBufferPacked*>( bufferSlot.buffer );
-                srvList[i] = texBuffer->createSrv( bufferSlot );
+                if( bufferSlot.buffer->getBufferPackedType() == BP_TYPE_TEX )
+                {
+                    const D3D11TexBufferPacked *texBuffer =
+                            static_cast<const D3D11TexBufferPacked*>( bufferSlot.buffer );
+                    srvList[i] = texBuffer->createSrv( bufferSlot );
+                }
+                else
+                {
+                    const D3D11ReadOnlyBufferPacked *roBuffer =
+                        static_cast<const D3D11ReadOnlyBufferPacked *>( bufferSlot.buffer );
+                    srvList[i] = roBuffer->createSrv( bufferSlot );
+                }
             }
 
             ++itor;

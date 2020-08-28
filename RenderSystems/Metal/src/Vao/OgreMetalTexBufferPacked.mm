@@ -42,8 +42,8 @@ namespace Ogre
                 void *initialData, bool keepAsShadow,
                 VaoManager *vaoManager, MetalBufferInterface *bufferInterface, PixelFormatGpu pf,
                 MetalDevice *device ) :
-        TexBufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
-                         bufferType, initialData, keepAsShadow, vaoManager, bufferInterface, pf ),
+        ReadOnlyBufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
+                              bufferType, initialData, keepAsShadow, vaoManager, bufferInterface, pf ),
         mDevice( device )
     {
     }
@@ -95,5 +95,20 @@ namespace Ogre
 
         *buffers = bufferInterface->getVboName();
         *offsets = mFinalBufferStart * mBytesPerElement + offset;
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    MetalReadOnlyBufferPacked::MetalReadOnlyBufferPacked( size_t internalBufStartBytes,
+                                                          size_t numElements, uint32 bytesPerElement,
+                                                          uint32 numElementsPadding,
+                                                          BufferType bufferType, void *initialData,
+                                                          bool keepAsShadow, VaoManager *vaoManager,
+                                                          MetalBufferInterface *bufferInterface,
+                                                          PixelFormatGpu pf, MetalDevice *device ) :
+        MetalTexBufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
+                              bufferType, initialData, keepAsShadow, vaoManager, bufferInterface, pf,
+                              device )
+    {
     }
 }

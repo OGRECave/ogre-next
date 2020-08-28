@@ -30,13 +30,16 @@ THE SOFTWARE.
 #define _Ogre_MetalTexBufferPacked_H_
 
 #include "OgreMetalPrerequisites.h"
-#include "Vao/OgreTexBufferPacked.h"
+
+#include "Vao/OgreReadOnlyBufferPacked.h"
 
 namespace Ogre
 {
     class MetalBufferInterface;
 
-    class _OgreMetalExport MetalTexBufferPacked : public TexBufferPacked
+    /// In Metal, Tex and ReadOnly buffers are exactly the same, thus we derive from
+    /// ReadOnlyBufferPacked to cover both at once.
+    class _OgreMetalExport MetalTexBufferPacked : public ReadOnlyBufferPacked
     {
         MetalDevice *mDevice;
 
@@ -57,6 +60,20 @@ namespace Ogre
 
         void bindBufferForDescriptor( __unsafe_unretained id <MTLBuffer> *buffers,
                                       NSUInteger *offsets, size_t offset );
+
+        virtual BufferPackedTypes getBufferPackedType( void ) const { return BP_TYPE_TEX; }
+    };
+
+    class _OgreMetalExport MetalReadOnlyBufferPacked : public MetalTexBufferPacked
+    {
+    public:
+        MetalReadOnlyBufferPacked( size_t internalBufStartBytes, size_t numElements,
+                                   uint32 bytesPerElement, uint32 numElementsPadding,
+                                   BufferType bufferType, void *initialData, bool keepAsShadow,
+                                   VaoManager *vaoManager, MetalBufferInterface *bufferInterface,
+                                   PixelFormatGpu pf, MetalDevice *device );
+
+        virtual BufferPackedTypes getBufferPackedType( void ) const { return BP_TYPE_READONLY; }
     };
 }
 

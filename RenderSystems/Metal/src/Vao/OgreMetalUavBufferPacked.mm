@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreMetalUavBufferPacked.h"
+
 #include "Vao/OgreMetalBufferInterface.h"
 #include "Vao/OgreMetalTexBufferPacked.h"
 
@@ -54,7 +55,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TexBufferPacked* MetalUavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
     {
-        assert( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
+        OGRE_ASSERT_HIGH( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
 
         MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
 
@@ -68,7 +69,20 @@ namespace Ogre
         //We were overriden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
-        mTexBufferViews.push_back( retVal );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    ReadOnlyBufferPacked *MetalUavBufferPacked::getAsReadOnlyBufferImpl( void )
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
+
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface *>( mBufferInterface );
+
+        ReadOnlyBufferPacked *retVal = OGRE_NEW MetalReadOnlyBufferPacked(
+            mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
+            (void *)0, false, (VaoManager *)0, bufferInterface, pixelFormat, mDevice );
+        // We were overriden by the BufferPacked we just created. Restore this back!
+        bufferInterface->_notifyBuffer( this );
 
         return retVal;
     }

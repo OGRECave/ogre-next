@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanConstBufferPacked.h"
 #include "Vao/OgreVulkanDynamicBuffer.h"
 #include "Vao/OgreVulkanMultiSourceVertexBufferPool.h"
+#include "Vao/OgreVulkanReadOnlyBufferPacked.h"
 #include "Vao/OgreVulkanStagingBuffer.h"
 #include "Vao/OgreVulkanTexBufferPacked.h"
 #include "Vao/OgreVulkanUavBufferPacked.h"
@@ -101,9 +102,14 @@ namespace Ogre
             std::min<size_t>( mConstBufferMaxSize, 64u * 1024u );  // No bigger than 64kb
         mTexBufferMaxSize = mDevice->mDeviceProperties.limits.maxTexelBufferElements;
 
+        mUavBufferMaxSize = mDevice->mDeviceProperties.limits.maxStorageBufferRange;
+
         mSupportsPersistentMapping = true;
         mSupportsIndirectBuffers = mDevice->mDeviceFeatures.multiDrawIndirect &&
                                    mDevice->mDeviceFeatures.drawIndirectFirstInstance;
+
+        mReadOnlyIsTexBuffer = false;
+        mReadOnlyBufferMaxSize = mUavBufferMaxSize;
 
         memset( mUsedHeapMemory, 0, sizeof( mUsedHeapMemory ) );
         memset( mMemoryTypesInUse, 0, sizeof( mMemoryTypesInUse ) );
@@ -998,6 +1004,57 @@ namespace Ogre
         deallocateVbo( bufferInterface->getVboPoolIndex(),
                        texBuffer->_getInternalBufferStart() * texBuffer->getBytesPerElement(),
                        texBuffer->_getInternalTotalSizeBytes(), texBuffer->getBufferType(), false );
+    }
+    //-----------------------------------------------------------------------------------
+    ReadOnlyBufferPacked *VulkanVaoManager::createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
+                                                                      size_t sizeBytes,
+                                                                      BufferType bufferType,
+                                                                      void *initialData,
+                                                                      bool keepAsShadow )
+    {
+        size_t vboIdx;
+        size_t bufferOffset;
+
+        const size_t alignment =
+            Math::lcm( mUavBufferAlignment, PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
+        size_t requestedSize = sizeBytes;
+
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType, false );
+
+        if( bufferType >= BT_DYNAMIC_DEFAULT )
+        {
+            // For dynamic buffers, the size will be 3x times larger
+            //(depending on mDynamicBufferMultiplier); we need the
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
+            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
+        }
+
+        allocateVbo( sizeBytes, alignment, bufferType, false, vboIdx, bufferOffset );
+
+        Vbo &vbo = mVbos[vboFlag][vboIdx];
+        VulkanBufferInterface *bufferInterface =
+            new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
+
+        VulkanReadOnlyBufferPacked *retVal = OGRE_NEW VulkanReadOnlyBufferPacked(
+            bufferOffset, requestedSize, 1u, ( uint32 )( sizeBytes - requestedSize ), bufferType,
+            initialData, keepAsShadow, mVkRenderSystem, this, bufferInterface, pixelFormat );
+
+        if( initialData )
+            bufferInterface->_firstUpload( initialData, 0, requestedSize );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer )
+    {
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( readOnlyBuffer->getBufferInterface() );
+
+        deallocateVbo( bufferInterface->getVboPoolIndex(),
+                       readOnlyBuffer->_getInternalBufferStart() * readOnlyBuffer->getBytesPerElement(),
+                       readOnlyBuffer->_getInternalTotalSizeBytes(), readOnlyBuffer->getBufferType(),
+                       false );
     }
     //-----------------------------------------------------------------------------------
     UavBufferPacked *VulkanVaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,

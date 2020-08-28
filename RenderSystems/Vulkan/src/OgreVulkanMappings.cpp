@@ -471,6 +471,7 @@ namespace Ogre
         case BP_TYPE_INDEX:     return VK_ACCESS_INDEX_READ_BIT;
         case BP_TYPE_CONST:     return VK_ACCESS_UNIFORM_READ_BIT;
         case BP_TYPE_TEX:       return VK_ACCESS_SHADER_READ_BIT;
+        case BP_TYPE_READONLY:  return VK_ACCESS_SHADER_READ_BIT;
         case BP_TYPE_INDIRECT:  return VK_ACCESS_INDIRECT_COMMAND_READ_BIT;
         case BP_TYPE_UAV:       return VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT;
         case NUM_BUFFER_PACKED_TYPES: return 0;  // Keep compiler happy

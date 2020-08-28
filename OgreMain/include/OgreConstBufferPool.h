@@ -72,10 +72,10 @@ namespace Ogre
         {
             size_t      bytesPerSlot;
             BufferType  bufferType;
-            bool        useTextureBuffers;
+            bool        useReadOnlyBuffers;
 
             ExtraBufferParams( size_t _bytesPerSlot = 0, BufferType _bufferType = BT_DEFAULT,
-                               bool _useTextureBuffers = true );
+                               bool _useReadOnlyBuffers = true );
         };
 
         enum OptimizationStrategy

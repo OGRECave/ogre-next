@@ -1,4 +1,4 @@
-/*
+﻿/*
 -----------------------------------------------------------------------------
 This source file is part of OGRE
 (Object-oriented Graphics Rendering Engine)
@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanUavBufferPacked.h"
 
 #include "Vao/OgreVulkanBufferInterface.h"
+#include "Vao/OgreVulkanReadOnlyBufferPacked.h"
 #include "Vao/OgreVulkanTexBufferPacked.h"
 
 #include "OgreException.h"
@@ -49,7 +50,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TexBufferPacked *VulkanUavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
     {
-        assert( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
 
         VulkanBufferInterface *bufferInterface =
             static_cast<VulkanBufferInterface *>( mBufferInterface );
@@ -60,7 +61,21 @@ namespace Ogre
         // We were overriden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
-        mTexBufferViews.push_back( retVal );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    ReadOnlyBufferPacked *VulkanUavBufferPacked::getAsReadOnlyBufferImpl()
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( mBufferInterface ) );
+
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( mBufferInterface );
+
+        ReadOnlyBufferPacked *retVal = OGRE_NEW VulkanReadOnlyBufferPacked(
+            mInternalBufferStart, mNumElements, mBytesPerElement, 0, mBufferType, (void *)0, false,
+            (VulkanRenderSystem *)0, mVaoManager, bufferInterface, PFG_NULL );
+        // We were overriden by the BufferPacked we just created. Restore this back!
+        bufferInterface->_notifyBuffer( this );
 
         return retVal;
     }

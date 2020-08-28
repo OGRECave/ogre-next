@@ -26,31 +26,38 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef _Ogre_VulkanUavBufferPacked_H_
-#define _Ogre_VulkanUavBufferPacked_H_
-
-#include <vulkan/vulkan.h>
+#ifndef _Ogre_VulkanReadOnlyBufferPacked_H_
+#define _Ogre_VulkanReadOnlyBufferPacked_H_
 
 #include "OgreVulkanPrerequisites.h"
 
-#include "Vao/OgreUavBufferPacked.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
+
+#include <vulkan/vulkan.h>
 
 namespace Ogre
 {
     class VulkanBufferInterface;
 
-    class _OgreVulkanExport VulkanUavBufferPacked : public UavBufferPacked
+    class _OgreVulkanExport VulkanReadOnlyBufferPacked : public ReadOnlyBufferPacked
     {
-    protected:
-        virtual TexBufferPacked *getAsTexBufferImpl( PixelFormatGpu pixelFormat );
-        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl( void );
+        VulkanRenderSystem *mRenderSystem;
+
+        void bindBuffer( uint16 slot, size_t offset, size_t sizeBytes );
 
     public:
-        VulkanUavBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
-                               uint32 bindFlags, void *initialData, bool keepAsShadow,
-                               VaoManager *vaoManager, VulkanBufferInterface *bufferInterface );
-        ~VulkanUavBufferPacked();
+        VulkanReadOnlyBufferPacked( size_t internalBufStartBytes, size_t numElements,
+                                    uint32 bytesPerElement, uint32 numElementsPadding,
+                                    BufferType bufferType, void *initialData, bool keepAsShadow,
+                                    VulkanRenderSystem *renderSystem, VaoManager *vaoManager,
+                                    VulkanBufferInterface *bufferInterface, PixelFormatGpu pf );
+        ~VulkanReadOnlyBufferPacked();
 
+        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
         virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
 
         void setupBufferInfo( VkDescriptorBufferInfo &outBufferInfo, size_t offset, size_t sizeBytes );

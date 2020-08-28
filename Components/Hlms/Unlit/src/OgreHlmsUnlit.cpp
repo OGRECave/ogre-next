@@ -163,9 +163,9 @@ namespace Ogre
         descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
 
         if( getProperty( UnlitProperty::TextureMatrix ) == 0 )
-            descBindingRanges[DescBindingTypes::TexBuffer].end = 1u;
+            descBindingRanges[DescBindingTypes::UavBuffer].end = 1u;
         else
-            descBindingRanges[DescBindingTypes::TexBuffer].end = 2u;
+            descBindingRanges[DescBindingTypes::UavBuffer].end = 2u;
 
         rootLayout.mBaked[1] = true;
         DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
@@ -204,9 +204,12 @@ namespace Ogre
                                                 queuedRenderable.renderable->getDatablock() );*/
 
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
-        vsParams->setNamedConstant( "worldMatBuf", 0 );
-        if( getProperty( UnlitProperty::TextureMatrix ) )
-            vsParams->setNamedConstant( "animationMatrixBuf", 1 );
+        if( mVaoManager->readOnlyIsTexBuffer() )
+        {
+            vsParams->setNamedConstant( "worldMatBuf", 0 );
+            if( getProperty( UnlitProperty::TextureMatrix ) )
+                vsParams->setNamedConstant( "animationMatrixBuf", 1 );
+        }
 
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                             mSetProperties, queuedRenderable );
@@ -845,10 +848,10 @@ namespace Ogre
         //mTexBuffers must hold at least one buffer to prevent out of bound exceptions.
         if( mTexBuffers.empty() )
         {
-            size_t bufferSize = std::min<size_t>( mTextureBufferDefaultSize,
-                                                  mVaoManager->getTexBufferMaxSize() );
-            TexBufferPacked *newBuffer = mVaoManager->createTexBuffer( PFG_RGBA32_FLOAT, bufferSize,
-                                                                       BT_DYNAMIC_PERSISTENT, 0, false );
+            size_t bufferSize =
+                std::min<size_t>( mTextureBufferDefaultSize, mVaoManager->getReadOnlyBufferMaxSize() );
+            ReadOnlyBufferPacked *newBuffer = mVaoManager->createReadOnlyBuffer(
+                PFG_RGBA32_FLOAT, bufferSize, BT_DYNAMIC_PERSISTENT, 0, false );
             mTexBuffers.push_back( newBuffer );
         }
 

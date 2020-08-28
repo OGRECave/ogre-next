@@ -157,6 +157,20 @@
 	#define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform bufferName
 	#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform structName
 	#define CONST_BUFFER_STRUCT_END( variableName ) variableName
+
+	@property( hlms_readonly_is_tex )
+		#define ReadOnlyBufferF( slot, varType, varName ) uniform samplerBuffer varName
+		#define ReadOnlyBufferU( slot, varType, varName ) uniform usamplerBuffer varName
+		#define ReadOnlyBufferVarF( varType ) samplerBuffer
+		#define readOnlyFetch( buffer, idx ) texelFetch( buffer, idx )
+		#define readOnlyFetch1( buffer, idx ) texelFetch( buffer, idx ).x
+	@else
+		#define ReadOnlyBufferF( slot, varType, varName ) layout(std430, binding = slot) readonly restrict buffer _##varName { varType varName[]; }
+		#define ReadOnlyBufferU( slot, varType, varName ) layout(std430, binding = slot) readonly restrict buffer _##varName { varType varName[]; }
+		#define ReadOnlyBufferVarF( varType ) varType
+		#define readOnlyFetch( bufferVar, idx ) bufferVar[idx]
+		#define readOnlyFetch1( bufferVar, idx ) bufferVar[idx]
+	@end
 @else
 	#define OGRE_SAMPLER_ARG_DECL( samplerName ) , sampler samplerName
 	#define OGRE_SAMPLER_ARG( samplerName ) , samplerName
@@ -164,7 +178,13 @@
 	#define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(ogre_B##bindingPoint) uniform bufferName
 	#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(ogre_B##bindingPoint) uniform structName
 	#define CONST_BUFFER_STRUCT_END( variableName ) variableName
+
+	#define ReadOnlyBufferF( slot, varType, varName ) layout(std430, ogre_U##slot) readonly restrict buffer _##varName { varType varName[]; }
+	#define ReadOnlyBufferU ReadOnlyBufferF
+	#define readOnlyFetch( bufferVar, idx ) bufferVar[idx]
+	#define readOnlyFetch1( bufferVar, idx ) bufferVar[idx]
 @end
+
 
 #define OGRE_Texture3D_float4 texture3D
 
@@ -180,7 +200,7 @@
 
 @property( !GL_ARB_texture_buffer_range || !GL_ARB_shading_language_420pack )
 @piece( SetCompatibilityLayer )
-    @property( !GL_ARB_texture_buffer_range )
+	@property( !GL_ARB_texture_buffer_range )
         #define samplerBuffer sampler2D
         #define isamplerBuffer isampler2D
         #define usamplerBuffer usampler2D

@@ -1162,7 +1162,10 @@ namespace Ogre {
                 //Bind buffer
                 const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
                 if( bufferSlot.buffer )
-                    bufferSlot.buffer->_bindBufferDirectly( bufferSlot.offset, bufferSlot.sizeBytes );
+                {
+                    bufferSlot.buffer->_bindBufferDirectly( texUnit, bufferSlot.offset,
+                                                            bufferSlot.sizeBytes );
+                }
             }
             else
             {

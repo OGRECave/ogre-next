@@ -36,7 +36,7 @@ namespace Ogre
 {
     const size_t CommandBuffer::COMMAND_FIXED_SIZE = 32;
 
-    CommandBuffer::CommandBufferExecuteFunc* CbExecutionTable[MAX_COMMAND_BUFFER+1] =
+    static CommandBuffer::CommandBufferExecuteFunc* CbExecutionTable[MAX_COMMAND_BUFFER+1] =
     {
         &CommandBuffer::execute_invalidCommand,
         &CommandBuffer::execute_setVao,
@@ -61,6 +61,13 @@ namespace Ogre
         &CommandBuffer::execute_setTextureBufferDS,
         &CommandBuffer::execute_setTextureBufferCS,
         &CommandBuffer::execute_setTextureBufferInvalid,
+        &CommandBuffer::execute_setReadOnlyBufferVS,
+        &CommandBuffer::execute_setReadOnlyBufferPS,
+        &CommandBuffer::execute_setReadOnlyBufferGS,
+        &CommandBuffer::execute_setReadOnlyBufferHS,
+        &CommandBuffer::execute_setReadOnlyBufferDS,
+        &CommandBuffer::execute_setReadOnlyBufferCS,
+        &CommandBuffer::execute_setReadOnlyBufferInvalid,
         &CommandBuffer::execute_setPso,
         &CommandBuffer::execute_setTexture,
         &CommandBuffer::execute_setTextures,

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreStagingBuffer.h"
 #include "Vao/OgreConstBufferPacked.h"
-#include "Vao/OgreTexBufferPacked.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
 #include "OgreRenderSystem.h"
 #include "OgreProfiler.h"
 
@@ -75,11 +75,11 @@ namespace Ogre
 
                     if( (*it)->extraBuffer )
                     {
-                        if( mExtraBufferParams.useTextureBuffers )
+                        if( mExtraBufferParams.useReadOnlyBuffers )
                         {
-                            assert( dynamic_cast<TexBufferPacked*>( (*it)->extraBuffer ) );
-                            _mVaoManager->destroyTexBuffer( static_cast<TexBufferPacked*>(
-                                                                (*it)->extraBuffer ) );
+                            assert( dynamic_cast<ReadOnlyBufferPacked *>( ( *it )->extraBuffer ) );
+                            _mVaoManager->destroyReadOnlyBuffer(
+                                static_cast<ReadOnlyBufferPacked *>( ( *it )->extraBuffer ) );
                         }
                         else
                         {
@@ -267,13 +267,11 @@ namespace Ogre
 
             if( mExtraBufferParams.bytesPerSlot && wantsExtraBuffer )
             {
-                if( mExtraBufferParams.useTextureBuffers )
+                if( mExtraBufferParams.useReadOnlyBuffers )
                 {
-                    extraBuffer = _mVaoManager->createTexBuffer( PFG_RGBA32_FLOAT,
-                                                                 mExtraBufferParams.bytesPerSlot *
-                                                                                    mSlotsPerPool,
-                                                                 mExtraBufferParams.bufferType,
-                                                                 0, false );
+                    extraBuffer = _mVaoManager->createReadOnlyBuffer(
+                        PFG_RGBA32_FLOAT, mExtraBufferParams.bytesPerSlot * mSlotsPerPool,
+                        mExtraBufferParams.bufferType, 0, false );
                 }
                 else
                 {
@@ -469,10 +467,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     ConstBufferPool::ExtraBufferParams::ExtraBufferParams( size_t _bytesPerSlot, BufferType _bufferType,
-                                                           bool _useTextureBuffers ) :
+                                                           bool _useReadOnlyBuffers ) :
         bytesPerSlot( _bytesPerSlot ),
         bufferType( _bufferType ),
-        useTextureBuffers( _useTextureBuffers )
+        useReadOnlyBuffers( _useReadOnlyBuffers )
     {
     }
     //-----------------------------------------------------------------------------------

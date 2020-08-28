@@ -35,8 +35,8 @@ vulkan_layout( OGRE_POSITION ) in vec4 vertex;
 @end
 
 // START UNIFORM GL DECLARATION
-vulkan_layout( ogre_T0 ) uniform samplerBuffer worldMatBuf;
-@property( texture_matrix )vulkan_layout( ogre_T1 ) uniform samplerBuffer animationMatrixBuf;@end
+ReadOnlyBufferF( 0, float4, worldMatBuf );
+@property( texture_matrix )ReadOnlyBufferF( 1, float4, animationMatrixBuf );@end
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
 // END UNIFORM GL DECLARATION
 

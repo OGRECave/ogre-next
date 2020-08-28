@@ -54,7 +54,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreConstBufferPacked.h"
-#include "Vao/OgreTexBufferPacked.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
 #include "Vao/OgreVertexArrayObject.h"
 
 #include "CommandBuffer/OgreCommandBuffer.h"
@@ -78,7 +78,6 @@ THE SOFTWARE.
 #include "OgreProfiler.h"
 
 #define TODO_irradianceField_samplerblock
-#define TODO_deal_with_Poses
 
 namespace Ogre
 {
@@ -472,14 +471,13 @@ namespace Ogre
                 descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
         }
 
-        descBindingRanges[DescBindingTypes::TexBuffer].end = 1u;
+        descBindingRanges[DescBindingTypes::UavBuffer].end = 1u;
 
         if( mSetupWorldMatBuf )
-            descBindingRanges[DescBindingTypes::TexBuffer].start = 0u;
+            descBindingRanges[DescBindingTypes::UavBuffer].start = 0u;
         else
-            descBindingRanges[DescBindingTypes::TexBuffer].start = 1u;
+            descBindingRanges[DescBindingTypes::UavBuffer].start = 1u;
 
-        TODO_deal_with_Poses;
         //if( getProperty( HlmsBaseProp::Pose ) )
             //descBindingRanges[DescBindingTypes::TexBuffer].end = 4u;
 
@@ -487,13 +485,21 @@ namespace Ogre
         {
             if( getProperty( HlmsBaseProp::ForwardPlus ) )
             {
+                descBindingRanges[DescBindingTypes::TexBuffer].start = (uint16)getProperty( "f3dGrid" );
                 descBindingRanges[DescBindingTypes::TexBuffer].end =
+                    descBindingRanges[DescBindingTypes::TexBuffer].start + 1u;
+
+                descBindingRanges[DescBindingTypes::UavBuffer].end =
                     (uint16)getProperty( "f3dLightList" ) + 1u;
             }
         }
 
+        // It's not a typo: we start Texture where max( UavBuffer, TexBuffer ) left off
+        // because we treat ReadOnly buffers numbering as if they all were texbuffer slots
+        // (in terms of contiguity)
         descBindingRanges[DescBindingTypes::Texture].start =
-            descBindingRanges[DescBindingTypes::TexBuffer].end;
+            std::max( descBindingRanges[DescBindingTypes::UavBuffer].end,
+                      descBindingRanges[DescBindingTypes::TexBuffer].end );
         descBindingRanges[DescBindingTypes::Texture].end =
             (uint16)getProperty( PbsProperty::Set0TextureSlotEnd );
 
@@ -524,8 +530,8 @@ namespace Ogre
                 poseRanges = rootLayout.mDescBindingRanges[1];
                 rootLayout.mBaked[1] = false;
             }
-            poseRanges[DescBindingTypes::TexBuffer].start = static_cast<uint16>( poseBufReg );
-            poseRanges[DescBindingTypes::TexBuffer].end = static_cast<uint16>( poseBufReg + 1 );
+            poseRanges[DescBindingTypes::UavBuffer].start = static_cast<uint16>( poseBufReg );
+            poseRanges[DescBindingTypes::UavBuffer].end = static_cast<uint16>( poseBufReg + 1 );
         }
 
         mListener->setupRootLayout( rootLayout, mSetProperties );
@@ -549,7 +555,7 @@ namespace Ogre
         }
 
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
-        if( mSetupWorldMatBuf )
+        if( mSetupWorldMatBuf && mVaoManager->readOnlyIsTexBuffer() )
             vsParams->setNamedConstant( "worldMatBuf", 0 );
 
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
@@ -1106,7 +1112,11 @@ namespace Ogre
         if( getProperty( HlmsBaseProp::ForwardPlus ) )
         {
             setTextureReg( PixelShader, "f3dGrid", texUnit++ );
-            setTextureReg( PixelShader, "f3dLightList", texUnit++ );
+
+            if( mVaoManager->readOnlyIsTexBuffer() )
+                setTextureReg( PixelShader, "f3dLightList", texUnit++ );
+            else
+                setProperty( "f3dLightList", texUnit++ );
         }
 
         bool depthTextureDefined = false;
@@ -1692,7 +1702,7 @@ namespace Ogre
             {
                 mapSize += forwardPlus->getConstBufferSize();
                 mGridBuffer             = forwardPlus->getGridBuffer( cameras.cullingCamera );
-                mGlobalLightListBuffer = forwardPlus->getGlobalLightListBuffer( cameras.cullingCamera );
+                mGlobalLightListBuffer  = forwardPlus->getGlobalLightListBuffer( cameras.cullingCamera );
 
                 if( forwardPlus->getDecalsEnabled() )
                 {
@@ -2741,10 +2751,10 @@ namespace Ogre
         //mTexBuffers must hold at least one buffer to prevent out of bound exceptions.
         if( mTexBuffers.empty() )
         {
-            size_t bufferSize = std::min<size_t>( mTextureBufferDefaultSize,
-                                                  mVaoManager->getTexBufferMaxSize() );
-            TexBufferPacked *newBuffer = mVaoManager->createTexBuffer( PFG_RGBA32_FLOAT, bufferSize,
-                                                                       BT_DYNAMIC_PERSISTENT, 0, false );
+            size_t bufferSize =
+                std::min<size_t>( mTextureBufferDefaultSize, mVaoManager->getReadOnlyBufferMaxSize() );
+            ReadOnlyBufferPacked *newBuffer = mVaoManager->createReadOnlyBuffer(
+                PFG_RGBA32_FLOAT, bufferSize, BT_DYNAMIC_PERSISTENT, 0, false );
             mTexBuffers.push_back( newBuffer );
         }
 
@@ -3352,7 +3362,7 @@ namespace Ogre
                 if( datablock->mTexturesDescSet )
                     numTextures = datablock->mTexturesDescSet->mTextures.size();
 
-                TexBufferPacked *poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
+                ReadOnlyBufferPacked *poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
                 *commandBuffer->addCommand<CbShaderBuffer>() =
                     CbShaderBuffer( VertexShader, mTexUnitSlotStart + numTextures, poseBuf, 0,
                                     poseBuf->getTotalSizeBytes() );

@@ -118,17 +118,17 @@
 		uint idx = bufferFetch1( f3dGrid, int(sampleOffset + i + 3u) );
 
 		//Get the light
-		float4 posAndType = bufferFetch( f3dLightList, int(idx) );
+		float4 posAndType = readOnlyFetch( f3dLightList, int(idx) );
 
 	@property( !hlms_forwardplus_fine_light_mask )
-		float3 lightDiffuse	= bufferFetch( f3dLightList, int(idx + 1u) ).xyz;
+		float3 lightDiffuse	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyz;
 	@else
-		float4 lightDiffuse	= bufferFetch( f3dLightList, int(idx + 1u) ).xyzw;
+		float4 lightDiffuse	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyzw;
 	@end
-		float3 lightSpecular= bufferFetch( f3dLightList, int(idx + 2u) ).xyz;
-		float4 attenuation	= bufferFetch( f3dLightList, int(idx + 3u) ).xyzw;
+		float3 lightSpecular= readOnlyFetch( f3dLightList, int(idx + 2u) ).xyz;
+		float4 attenuation	= readOnlyFetch( f3dLightList, int(idx + 3u) ).xyzw;
 	@property( light_profiles_texture )
-		float4 spotDirection= bufferFetch( f3dLightList, int(idx + 4u) ).xyzw;
+		float4 spotDirection= readOnlyFetch( f3dLightList, int(idx + 4u) ).xyzw;
 	@end
 
 		float3 lightDir	= posAndType.xyz - inPs.pos;
@@ -165,21 +165,21 @@
 		uint idx = bufferFetch1( f3dGrid, int(sampleOffset + i + 3u) );
 
 		//Get the light
-		float4 posAndType = bufferFetch( f3dLightList, int(idx) );
+		float4 posAndType = readOnlyFetch( f3dLightList, int(idx) );
 
 	@property( !hlms_forwardplus_fine_light_mask )
-		float3 lightDiffuse	= bufferFetch( f3dLightList, int(idx + 1u) ).xyz;
+		float3 lightDiffuse	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyz;
 	@else
-		float4 lightDiffuse	= bufferFetch( f3dLightList, int(idx + 1u) ).xyzw;
+		float4 lightDiffuse	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyzw;
 	@end
-		float3 lightSpecular	= bufferFetch( f3dLightList, int(idx + 2u) ).xyz;
-		float4 attenuation      = bufferFetch( f3dLightList, int(idx + 3u) ).xyzw;
+		float3 lightSpecular	= readOnlyFetch( f3dLightList, int(idx + 2u) ).xyz;
+		float4 attenuation      = readOnlyFetch( f3dLightList, int(idx + 3u) ).xyzw;
 	@property( !light_profiles_texture )
-		float3 spotDirection	= bufferFetch( f3dLightList, int(idx + 4u) ).xyz;
+		float3 spotDirection	= readOnlyFetch( f3dLightList, int(idx + 4u) ).xyz;
 	@else
-		float4 spotDirection	= bufferFetch( f3dLightList, int(idx + 4u) ).xyzw;
+		float4 spotDirection	= readOnlyFetch( f3dLightList, int(idx + 4u) ).xyzw;
 	@end
-		float3 spotParams		= bufferFetch( f3dLightList, int(idx + 5u) ).xyz;
+		float3 spotParams		= readOnlyFetch( f3dLightList, int(idx + 5u) ).xyz;
 
 		float3 lightDir	= posAndType.xyz - inPs.pos;
 		float fDistance	= length( lightDir );
@@ -228,10 +228,10 @@
 		uint idx = bufferFetch1( f3dGrid, int(sampleOffset + i + 3u) );
 
 		//Get the light
-		float4 posAndType = bufferFetch( f3dLightList, int(idx) );
+		float4 posAndType = readOnlyFetch( f3dLightList, int(idx) );
 
-		float3 lightDiffuse	= bufferFetch( f3dLightList, int(idx + 1u) ).xyz;
-		float4 attenuation	= bufferFetch( f3dLightList, int(idx + 3u) ).xyzw;
+		float3 lightDiffuse	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyz;
+		float4 attenuation	= readOnlyFetch( f3dLightList, int(idx + 3u) ).xyzw;
 
 		float3 lightDir	= posAndType.xyz - inPs.pos;
 		float fDistance	= length( lightDir );

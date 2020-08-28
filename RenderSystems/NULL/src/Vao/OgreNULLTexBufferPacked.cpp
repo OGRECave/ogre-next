@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreNULLTexBufferPacked.h"
+
 #include "Vao/OgreNULLBufferInterface.h"
 
 namespace Ogre
@@ -42,5 +43,16 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     NULLTexBufferPacked::~NULLTexBufferPacked() {}
+    //-----------------------------------------------------------------------------------
+    NULLReadOnlyBufferPacked::NULLReadOnlyBufferPacked(
+        size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
+        uint32 numElementsPadding, BufferType bufferType, void *initialData, bool keepAsShadow,
+        VaoManager *vaoManager, NULLBufferInterface *bufferInterface, PixelFormatGpu pf ) :
+        ReadOnlyBufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
+                              bufferType, initialData, keepAsShadow, vaoManager, bufferInterface, pf )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    NULLReadOnlyBufferPacked::~NULLReadOnlyBufferPacked() {}
     //-----------------------------------------------------------------------------------
 }  // namespace Ogre

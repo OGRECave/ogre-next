@@ -198,6 +198,7 @@ namespace Ogre
         void _setConstBufferCS( size_t slot, const VkDescriptorBufferInfo &bufferInfo );
         void _setTexBuffer( size_t slot, VkBufferView bufferView );
         void _setTexBufferCS( size_t slot, VkBufferView bufferView );
+        void _setReadOnlyBuffer( size_t slot, const VkDescriptorBufferInfo &bufferInfo );
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
         virtual void _setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly );

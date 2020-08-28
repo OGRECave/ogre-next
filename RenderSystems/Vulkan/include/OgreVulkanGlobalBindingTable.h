@@ -40,6 +40,7 @@ namespace Ogre
 // reserved for DescriptorSetTextures kind of textures
 #define NUM_BIND_TEXTURES 32u
 #define NUM_BIND_SAMPLERS 32u
+#define NUM_BIND_UAV_BUFFERS 16u
 
     namespace BakedDescriptorSets
     {
@@ -65,6 +66,8 @@ namespace Ogre
         VkDescriptorImageInfo textures[NUM_BIND_TEXTURES];
         VkDescriptorImageInfo samplers[NUM_BIND_SAMPLERS];
 
+        VkDescriptorBufferInfo uavBuffers[NUM_BIND_UAV_BUFFERS];
+
         VkWriteDescriptorSet *bakedDescriptorSets[BakedDescriptorSets::NumBakedDescriptorSets];
 
         bool dirtyParamsBuffer;
@@ -72,6 +75,7 @@ namespace Ogre
         uint8 minDirtySlotTexBuffer;
         uint8 minDirtySlotTextures;
         uint8 minDirtySlotSamplers;
+        uint8 minDirtySlotUavBuffer;
         bool dirtyBakedTextures;
         bool dirtyBakedSamplers;
         bool dirtyBakedUavs;
@@ -83,6 +87,7 @@ namespace Ogre
             minDirtySlotTexBuffer = 255u;
             minDirtySlotTextures = 255u;
             minDirtySlotSamplers = 255u;
+            minDirtySlotUavBuffer = 255u;
 
             dirtyBakedTextures = false;
             dirtyBakedSamplers = false;
@@ -96,6 +101,7 @@ namespace Ogre
             minDirtySlotTexBuffer = 0u;
             minDirtySlotTextures = 0u;
             minDirtySlotSamplers = 0u;
+            minDirtySlotUavBuffer = 0u;
 
             dirtyBakedTextures = true;
             dirtyBakedSamplers = true;

@@ -608,6 +608,12 @@ namespace Ogre
             mComputeTable.constBuffers[i] = dummyBufferInfo;
         }
 
+        for( size_t i = 0u; i < NUM_BIND_UAV_BUFFERS; ++i )
+        {
+            mGlobalTable.uavBuffers[i] = dummyBufferInfo;
+            mComputeTable.uavBuffers[i] = dummyBufferInfo;
+        }
+
         // Compute (mComputeTable) only uses baked descriptors for Textures and TexBuffers
         // hence no need to clean the emulated bindings
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanTexBufferPacked *>( mDummyTexBuffer ) );
@@ -1054,6 +1060,20 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_setReadOnlyBuffer( size_t slot, const VkDescriptorBufferInfo &bufferInfo )
+    {
+        OGRE_ASSERT_MEDIUM( slot < NUM_BIND_UAV_BUFFERS );
+        if( mGlobalTable.uavBuffers[slot].buffer != bufferInfo.buffer ||
+            mGlobalTable.uavBuffers[slot].offset != bufferInfo.offset ||
+            mGlobalTable.uavBuffers[slot].range != bufferInfo.range )
+        {
+            mGlobalTable.uavBuffers[slot] = bufferInfo;
+            mGlobalTable.minDirtySlotUavBuffer =
+                std::min( mGlobalTable.minDirtySlotUavBuffer, (uint8)slot );
+            mTableDirty = true;
+        }
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setCurrentDeviceFromTexture( TextureGpu *texture ) {}
     //-------------------------------------------------------------------------
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
@@ -1150,6 +1170,7 @@ namespace Ogre
         {
             mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
             mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = writeDescSet;
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
             mGlobalTable.dirtyBakedTextures = true;
             mTableDirty = true;
         }
@@ -1180,6 +1201,8 @@ namespace Ogre
                 &vulkanSet->mWriteDescSets[0];
             mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] =
                 &vulkanSet->mWriteDescSets[1];
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] =
+                &vulkanSet->mWriteDescSets[2];
             mGlobalTable.dirtyBakedTextures = true;
             mTableDirty = true;
         }
@@ -1209,6 +1232,7 @@ namespace Ogre
         {
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = &vulkanSet->mWriteDescSet;
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
             mComputeTable.dirtyBakedSamplers = true;
             mComputeTableDirty = true;
         }
@@ -1226,6 +1250,8 @@ namespace Ogre
                 &vulkanSet->mWriteDescSets[0];
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] =
                 &vulkanSet->mWriteDescSets[1];
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] =
+                &vulkanSet->mWriteDescSets[2];
             mComputeTable.dirtyBakedSamplers = true;
             mComputeTableDirty = true;
         }

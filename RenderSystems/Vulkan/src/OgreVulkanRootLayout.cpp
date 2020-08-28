@@ -386,6 +386,23 @@ namespace Ogre
         writeDescSet.pImageInfo = &table.samplers[bindRanges.start];
     }
     //-------------------------------------------------------------------------
+    inline void VulkanRootLayout::bindUavBuffers( VkWriteDescriptorSet *writeDescSets,
+                                                  size_t &numWriteDescSets, uint32 &currBinding,
+                                                  VkDescriptorSet descSet,
+                                                  const DescBindingRange *descBindingRanges,
+                                                  const VulkanGlobalBindingTable &table )
+    {
+        const DescBindingRange &bindRanges = descBindingRanges[DescBindingTypes::UavBuffer];
+
+        if( !bindRanges.isInUse() )
+            return;
+
+        VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        writeDescSet.pBufferInfo = &table.uavBuffers[bindRanges.start];
+    }
+    //-------------------------------------------------------------------------
     uint32 VulkanRootLayout::calculateFirstDirtySet( const VulkanGlobalBindingTable &table ) const
     {
         uint32 firstDirtySet = 0u;
@@ -403,6 +420,7 @@ namespace Ogre
                 bDirty |= ranges[DescBindingTypes::TexBuffer].isDirty( table.minDirtySlotTexBuffer );
                 bDirty |= ranges[DescBindingTypes::Texture].isDirty( table.minDirtySlotTextures );
                 bDirty |= ranges[DescBindingTypes::Sampler].isDirty( table.minDirtySlotSamplers );
+                bDirty |= ranges[DescBindingTypes::UavBuffer].isDirty( table.minDirtySlotUavBuffer );
             }
             else
             {
@@ -458,6 +476,8 @@ namespace Ogre
                               table );
                 bindSamplers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
                               table );
+                bindUavBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
+                                table );
             }
             else
             {

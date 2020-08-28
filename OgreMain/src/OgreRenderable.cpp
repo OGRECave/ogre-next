@@ -263,7 +263,7 @@ namespace Ogre
         mPoseData->weights[index] += w;
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* Renderable::getPoseTexBuffer(void) const
+    ReadOnlyBufferPacked *Renderable::getPoseTexBuffer( void ) const
     {
         return mPoseData ? mPoseData->buffer : 0;
     }

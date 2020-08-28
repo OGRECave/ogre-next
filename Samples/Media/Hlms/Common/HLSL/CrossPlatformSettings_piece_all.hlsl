@@ -80,6 +80,16 @@
 
 #define structuredBufferFetch( buffer, idx ) buffer[idx]
 
+@property( hlms_readonly_is_tex )
+	#define ReadOnlyBuffer( slot, varType, varName ) Buffer<varType> varName : register(t##slot)
+	#define readOnlyFetch( buffer, idx ) buffer.Load( idx )
+	#define readOnlyFetch1( buffer, idx ) buffer.Load( idx ).x
+@else
+	#define ReadOnlyBuffer( slot, varType, varName ) StructuredBuffer<varType> varName : register(t##slot)
+	#define readOnlyFetch( bufferVar, idx ) bufferVar[idx]
+	#define readOnlyFetch1( bufferVar, idx ) bufferVar[idx].x
+@end
+
 #define OGRE_Texture3D_float4 Texture3D
 
 #define OGRE_SAMPLER_ARG_DECL( samplerName ) , SamplerState samplerName

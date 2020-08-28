@@ -62,8 +62,9 @@ namespace Ogre
     struct VulkanDescriptorSetTexture2
     {
         FastArray<VkBufferView> mBuffers;
+        FastArray<VkDescriptorBufferInfo> mReadOnlyBuffers;
         FastArray<VkDescriptorImageInfo> mTextures;
-        VkWriteDescriptorSet mWriteDescSets[2];
+        VkWriteDescriptorSet mWriteDescSets[3];
 
         VulkanDescriptorSetTexture2( const DescriptorSetTexture2 &descSet );
 

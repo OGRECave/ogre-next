@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreConstBufferPacked.h"
-#include "Vao/OgreTexBufferPacked.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
 
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
@@ -87,9 +87,9 @@ namespace Ogre
         if( mTexBuffers.empty() )
         {
             size_t bufferSize = std::min<size_t>( mTextureBufferDefaultSize,
-                                                  mVaoManager->getTexBufferMaxSize() );
-            TexBufferPacked *newBuffer = mVaoManager->createTexBuffer( PFG_RGBA32_FLOAT, bufferSize,
-                                                                       BT_DYNAMIC_PERSISTENT, 0, false );
+                                                  mVaoManager->getReadOnlyBufferMaxSize() );
+            ReadOnlyBufferPacked *newBuffer = mVaoManager->createReadOnlyBuffer(
+                PFG_RGBA32_FLOAT, bufferSize, BT_DYNAMIC_PERSISTENT, 0, false );
             mTexBuffers.push_back( newBuffer );
         }
 
@@ -178,7 +178,7 @@ namespace Ogre
     {
         unmapTexBuffer( commandBuffer );
 
-        TexBufferPacked *texBuffer = mTexBuffers[mCurrentTexBuffer];
+        ReadOnlyBufferPacked *texBuffer = mTexBuffers[mCurrentTexBuffer];
 
         mTexLastOffset = alignToNextMultiple( mTexLastOffset, mVaoManager->getTexBufferAlignment() );
 
@@ -191,10 +191,9 @@ namespace Ogre
             if( mCurrentTexBuffer >= mTexBuffers.size() )
             {
                 size_t bufferSize = std::min<size_t>( mTextureBufferDefaultSize,
-                                                      mVaoManager->getTexBufferMaxSize() );
-                TexBufferPacked *newBuffer = mVaoManager->createTexBuffer( PFG_RGBA32_FLOAT, bufferSize,
-                                                                           BT_DYNAMIC_PERSISTENT,
-                                                                           0, false );
+                                                      mVaoManager->getReadOnlyBufferMaxSize() );
+                ReadOnlyBufferPacked *newBuffer = mVaoManager->createReadOnlyBuffer(
+                    PFG_RGBA32_FLOAT, bufferSize, BT_DYNAMIC_PERSISTENT, 0, false );
                 mTexBuffers.push_back( newBuffer );
             }
 
@@ -277,14 +276,14 @@ namespace Ogre
         mTexLastOffset      = 0;
 
         {
-            TexBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-            TexBufferPackedVec::const_iterator end  = mTexBuffers.end();
+            ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
+            ReadOnlyBufferPackedVec::const_iterator end  = mTexBuffers.end();
 
             while( itor != end )
             {
                 if( (*itor)->getMappingState() != MS_UNMAPPED )
                     (*itor)->unmap( UO_UNMAP_ALL );
-                mVaoManager->destroyTexBuffer( *itor );
+                mVaoManager->destroyReadOnlyBuffer( *itor );
                 ++itor;
             }
 
@@ -312,8 +311,8 @@ namespace Ogre
         unmapConstBuffer();
         unmapTexBuffer( commandBuffer );
 
-        TexBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-        TexBufferPackedVec::const_iterator end  = mTexBuffers.end();
+        ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
+        ReadOnlyBufferPackedVec::const_iterator end  = mTexBuffers.end();
 
         while( itor != end )
         {
@@ -324,8 +323,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsBufferManager::postCommandBufferExecution( CommandBuffer *commandBuffer )
     {
-        TexBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-        TexBufferPackedVec::const_iterator end  = mTexBuffers.end();
+        ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
+        ReadOnlyBufferPackedVec::const_iterator end  = mTexBuffers.end();
 
         while( itor != end )
         {
@@ -340,8 +339,8 @@ namespace Ogre
         mCurrentTexBuffer   = 0;
         mTexLastOffset      = 0;
 
-        TexBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-        TexBufferPackedVec::const_iterator end  = mTexBuffers.end();
+        ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
+        ReadOnlyBufferPackedVec::const_iterator end  = mTexBuffers.end();
 
         while( itor != end )
         {

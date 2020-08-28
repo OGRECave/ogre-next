@@ -916,6 +916,7 @@ namespace Ogre
 
         //Standard depth range is being used instead of reverse Z.
         static const IdString NoReverseDepth;
+        static const IdString ReadOnlyIsTex;
 
         static const IdString Syntax;
         static const IdString Hlsl;

@@ -7,8 +7,8 @@
 @insertpiece( custom_vs_uniformDeclaration )
 
 // START UNIFORM D3D DECLARATION
-Buffer<float4> worldMatBuf : register(t0);
-@property( texture_matrix )Buffer<float4> animationMatrixBuf : register(t1);@end
+ReadOnlyBuffer( 0, float4, worldMatBuf );
+@property( texture_matrix )ReadOnlyBuffer( 1, float4, animationMatrixBuf );@end
 // END UNIFORM D3D DECLARATION
 
 struct VS_INPUT

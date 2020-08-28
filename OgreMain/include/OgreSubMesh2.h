@@ -113,7 +113,7 @@ namespace Ogre {
         bool mPoseHalfPrecision;
         bool mPoseNormals;
         std::map<Ogre::String, size_t> mPoseIndexMap;
-        TexBufferPacked *mPoseTexBuffer;
+        ReadOnlyBufferPacked *mPoseTexBuffer;
 
     public:
         SubMesh();
@@ -210,7 +210,7 @@ namespace Ogre {
         
         size_t getPoseIndex(const Ogre::String& name) { return mPoseIndexMap.count(name) ? mPoseIndexMap[name] : SIZE_MAX; }
         
-        TexBufferPacked* getPoseTexBuffer() { return mPoseTexBuffer; }
+        ReadOnlyBufferPacked* getPoseTexBuffer() { return mPoseTexBuffer; }
 
         /** Fills the pose animation buffer with the given poseData.
         @param positionData

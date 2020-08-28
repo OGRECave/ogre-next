@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreHighLevelGpuProgram.h"
 #include "OgreRootLayout.h"
 
+#include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
 
 #include "Compositor/OgreCompositorShadowNode.h"
@@ -186,6 +187,7 @@ namespace Ogre
     const IdString HlmsBaseProp::ScreenSpaceRefractions    = IdString( "hlms_screen_space_refractions" );
 
     const IdString HlmsBaseProp::NoReverseDepth = IdString( "hlms_no_reverse_depth" );
+    const IdString HlmsBaseProp::ReadOnlyIsTex  = IdString( "hlms_readonly_is_tex" );
 
     const IdString HlmsBaseProp::Syntax         = IdString( "syntax" );
     const IdString HlmsBaseProp::Hlsl           = IdString( "hlsl" );
@@ -2156,15 +2158,6 @@ namespace Ogre
 
         mSetProperties = codeCache.mergedCache.setProperties;
 
-        {
-            //Add RenderSystem-specific properties
-            IdStringVec::const_iterator itor = mRsSpecificExtensions.begin();
-            IdStringVec::const_iterator end  = mRsSpecificExtensions.end();
-
-            while( itor != end )
-                setProperty( *itor++, 1 );
-        }
-
         //Generate the shaders
         for( size_t i=0; i<NumShaderTypes; ++i )
         {
@@ -2319,6 +2312,15 @@ namespace Ogre
         mTextureNameStrings.clear();
         for( size_t i=0; i<NumShaderTypes; ++i )
             mTextureRegs[i].clear();
+
+        {
+            //Add RenderSystem-specific properties
+            IdStringVec::const_iterator itor = mRsSpecificExtensions.begin();
+            IdStringVec::const_iterator end  = mRsSpecificExtensions.end();
+
+            while( itor != end )
+                setProperty( *itor++, 1 );
+        }
 
         notifyPropertiesMergedPreGenerationStep();
         mListener->propertiesMergedPreGenerationStep( mShaderProfile, passCache,
@@ -3363,6 +3365,9 @@ namespace Ogre
                     }
                 }
             }
+
+            if( mRenderSystem->getVaoManager()->readOnlyIsTexBuffer() )
+                mRsSpecificExtensions.push_back( HlmsBaseProp::ReadOnlyIsTex );
 
             if( !mDefaultDatablock )
                 mDefaultDatablock = createDefaultDatablock();

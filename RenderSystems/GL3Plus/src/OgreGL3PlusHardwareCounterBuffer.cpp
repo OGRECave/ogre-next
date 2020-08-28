@@ -137,7 +137,7 @@ namespace v1 {
             OGRE_CHECK_GL_ERROR(glFlushMappedBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, mLockSize));
         }
         GLboolean mapped;
-        OGRE_CHECK_GL_ERROR(mapped = glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER))
+        OGRE_CHECK_GL_ERROR(mapped = glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER));
             if(!mapped)
             {
                 OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR,
