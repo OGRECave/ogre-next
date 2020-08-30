@@ -68,8 +68,6 @@ namespace Ogre
         //We were overriden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
-        mTexBufferViews.push_back( retVal );
-
         return retVal;
     }
     //-----------------------------------------------------------------------------------
