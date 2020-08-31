@@ -179,7 +179,7 @@
 	#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(ogre_B##bindingPoint) uniform structName
 	#define CONST_BUFFER_STRUCT_END( variableName ) variableName
 
-	#define ReadOnlyBufferF( slot, varType, varName ) layout(std430, ogre_U##slot) readonly restrict buffer _##varName { varType varName[]; }
+	#define ReadOnlyBufferF( slot, varType, varName ) layout(std430, ogre_R##slot) readonly restrict buffer _##varName { varType varName[]; }
 	#define ReadOnlyBufferU ReadOnlyBufferF
 	#define readOnlyFetch( bufferVar, idx ) bufferVar[idx]
 	#define readOnlyFetch1( bufferVar, idx ) bufferVar[idx]

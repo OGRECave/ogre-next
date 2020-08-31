@@ -48,8 +48,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    static const char c_bufferTypes[] = "PBTtsUu";
-    static const char c_HLSLBufferTypesMap[] = "ccttsuu";
+    static const char c_bufferTypes[] = "PBRTtsUu";
+    static const char c_HLSLBufferTypesMap[] = "ccuttsuu";
     //-------------------------------------------------------------------------
     uint32 toVkDescriptorType( DescBindingTypes::DescBindingTypes type )
     {
@@ -58,6 +58,7 @@ namespace Ogre
             // clang-format off
         case DescBindingTypes::ParamBuffer:       return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         case DescBindingTypes::ConstBuffer:       return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        case DescBindingTypes::ReadOnlyBuffer:    return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
         case DescBindingTypes::TexBuffer:         return VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
         case DescBindingTypes::Texture:           return VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
         case DescBindingTypes::Sampler:           return VK_DESCRIPTOR_TYPE_SAMPLER;
@@ -335,6 +336,23 @@ namespace Ogre
         writeDescSet.pBufferInfo = &table.constBuffers[bindRanges.start];
     }
     //-------------------------------------------------------------------------
+    inline void VulkanRootLayout::bindReadOnlyBuffers( VkWriteDescriptorSet *writeDescSets,
+                                                       size_t &numWriteDescSets, uint32 &currBinding,
+                                                       VkDescriptorSet descSet,
+                                                       const DescBindingRange *descBindingRanges,
+                                                       const VulkanGlobalBindingTable &table )
+    {
+        const DescBindingRange &bindRanges = descBindingRanges[DescBindingTypes::ReadOnlyBuffer];
+
+        if( !bindRanges.isInUse() )
+            return;
+
+        VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        writeDescSet.pBufferInfo = &table.readOnlyBuffers[bindRanges.start];
+    }
+    //-------------------------------------------------------------------------
     inline void VulkanRootLayout::bindTexBuffers( VkWriteDescriptorSet *writeDescSets,
                                                   size_t &numWriteDescSets, uint32 &currBinding,
                                                   VkDescriptorSet descSet,
@@ -386,23 +404,6 @@ namespace Ogre
         writeDescSet.pImageInfo = &table.samplers[bindRanges.start];
     }
     //-------------------------------------------------------------------------
-    inline void VulkanRootLayout::bindUavBuffers( VkWriteDescriptorSet *writeDescSets,
-                                                  size_t &numWriteDescSets, uint32 &currBinding,
-                                                  VkDescriptorSet descSet,
-                                                  const DescBindingRange *descBindingRanges,
-                                                  const VulkanGlobalBindingTable &table )
-    {
-        const DescBindingRange &bindRanges = descBindingRanges[DescBindingTypes::UavBuffer];
-
-        if( !bindRanges.isInUse() )
-            return;
-
-        VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
-        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
-        writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-        writeDescSet.pBufferInfo = &table.uavBuffers[bindRanges.start];
-    }
-    //-------------------------------------------------------------------------
     uint32 VulkanRootLayout::calculateFirstDirtySet( const VulkanGlobalBindingTable &table ) const
     {
         uint32 firstDirtySet = 0u;
@@ -420,12 +421,15 @@ namespace Ogre
                 bDirty |= ranges[DescBindingTypes::TexBuffer].isDirty( table.minDirtySlotTexBuffer );
                 bDirty |= ranges[DescBindingTypes::Texture].isDirty( table.minDirtySlotTextures );
                 bDirty |= ranges[DescBindingTypes::Sampler].isDirty( table.minDirtySlotSamplers );
-                bDirty |= ranges[DescBindingTypes::UavBuffer].isDirty( table.minDirtySlotUavBuffer );
+                bDirty |=
+                    ranges[DescBindingTypes::ReadOnlyBuffer].isDirty( table.minDirtySlotReadOnlyBuffer );
             }
             else
             {
-                bDirty |= table.dirtyBakedTextures & ( ranges[DescBindingTypes::TexBuffer].isInUse() |
-                                                       ranges[DescBindingTypes::Texture].isInUse() );
+                bDirty |=
+                    table.dirtyBakedTextures & ( ranges[DescBindingTypes::ReadOnlyBuffer].isInUse() |
+                                                 ranges[DescBindingTypes::TexBuffer].isInUse() |
+                                                 ranges[DescBindingTypes::Texture].isInUse() );
                 bDirty |= table.dirtyBakedSamplers & ranges[DescBindingTypes::Sampler].isInUse();
                 bDirty |= table.dirtyBakedUavs & ( ranges[DescBindingTypes::UavBuffer].isInUse() |
                                                    ranges[DescBindingTypes::UavTexture].isInUse() );
@@ -470,21 +474,21 @@ namespace Ogre
                                   descBindingRanges, table );
                 bindConstBuffers( writeDescSets, numWriteDescSets, currBinding, descSet,
                                   descBindingRanges, table );
+                bindReadOnlyBuffers( writeDescSets, numWriteDescSets, currBinding, descSet,
+                                     descBindingRanges, table );
                 bindTexBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
                                 table );
                 bindTextures( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
                               table );
                 bindSamplers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
                               table );
-                bindUavBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
-                                table );
             }
             else
             {
                 for( size_t i = 0u; i < BakedDescriptorSets::NumBakedDescriptorSets; ++i )
                 {
                     const DescBindingRange &bindRanges =
-                        descBindingRanges[i + DescBindingTypes::TexBuffer];
+                        descBindingRanges[i + DescBindingTypes::ReadOnlyBuffer];
                     if( bindRanges.isInUse() )
                     {
                         OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[i] &&

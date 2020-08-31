@@ -101,11 +101,11 @@ RWTexture3D<@insertpiece(uav3_pf_type)> voxelNormalTex		: register(u3);
 RWTexture3D<@insertpiece(uav4_pf_type)> voxelEmissiveTex	: register(u4);
 RWTexture3D<@insertpiece(uav5_pf_type)> voxelAccumVal		: register(u5);
 
-StructuredBuffer<InstanceBuffer> instanceBuffer : register(t0);
+StructuredBuffer<InstanceBuffer> instanceBuffer : register(t6);
 
 @property( has_diffuse_tex || has_emissive_tex )
-	SamplerState		poolSampler		: register(s1);
-	Texture2DArray		texturePool		: register(t1);
+	SamplerState		poolSampler		: register(s7);
+	Texture2DArray		texturePool		: register(t7);
 @end
 
 @insertpiece( HeaderCS )

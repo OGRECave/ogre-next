@@ -97,7 +97,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     ReadOnlyBufferPacked *UavBufferPacked::getAsReadOnlyBufferView( void )
     {
-        OGRE_ASSERT_LOW( mBindFlags & BP_FLAG_READONLY &&
+        OGRE_ASSERT_LOW( mBindFlags & BB_FLAG_READONLY &&
                          "Buffer must've been created with BB_FLAG_READONLY" );
 
         ReadOnlyBufferPacked *retVal = 0;

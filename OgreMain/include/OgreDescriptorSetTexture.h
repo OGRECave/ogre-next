@@ -138,7 +138,10 @@ namespace Ogre
         };
         struct _OgreExport BufferSlot
         {
-            /// Texture buffer to bind
+            /// Texture buffer to bind.
+            ///
+            /// ReadOnlyBufferPacked can be bound here. But please note in certain APIs
+            /// these type of buffers may end up being bound to UAV slots instead of texture slots.
             TexBufferPacked *buffer;
             /// 0-based offset. It is possible to bind a region of the buffer.
             /// Offset needs to be aligned. You can query the RS capabilities for

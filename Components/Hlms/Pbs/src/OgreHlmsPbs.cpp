@@ -471,12 +471,12 @@ namespace Ogre
                 descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
         }
 
-        descBindingRanges[DescBindingTypes::UavBuffer].end = 1u;
+        descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u;
 
         if( mSetupWorldMatBuf )
-            descBindingRanges[DescBindingTypes::UavBuffer].start = 0u;
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].start = 0u;
         else
-            descBindingRanges[DescBindingTypes::UavBuffer].start = 1u;
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].start = 1u;
 
         //if( getProperty( HlmsBaseProp::Pose ) )
             //descBindingRanges[DescBindingTypes::TexBuffer].end = 4u;
@@ -489,16 +489,16 @@ namespace Ogre
                 descBindingRanges[DescBindingTypes::TexBuffer].end =
                     descBindingRanges[DescBindingTypes::TexBuffer].start + 1u;
 
-                descBindingRanges[DescBindingTypes::UavBuffer].end =
+                descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end =
                     (uint16)getProperty( "f3dLightList" ) + 1u;
             }
         }
 
-        // It's not a typo: we start Texture where max( UavBuffer, TexBuffer ) left off
+        // It's not a typo: we start Texture where max( ReadOnlyBuffer, TexBuffer ) left off
         // because we treat ReadOnly buffers numbering as if they all were texbuffer slots
         // (in terms of contiguity)
         descBindingRanges[DescBindingTypes::Texture].start =
-            std::max( descBindingRanges[DescBindingTypes::UavBuffer].end,
+            std::max( descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end,
                       descBindingRanges[DescBindingTypes::TexBuffer].end );
         descBindingRanges[DescBindingTypes::Texture].end =
             (uint16)getProperty( PbsProperty::Set0TextureSlotEnd );
@@ -530,8 +530,8 @@ namespace Ogre
                 poseRanges = rootLayout.mDescBindingRanges[1];
                 rootLayout.mBaked[1] = false;
             }
-            poseRanges[DescBindingTypes::UavBuffer].start = static_cast<uint16>( poseBufReg );
-            poseRanges[DescBindingTypes::UavBuffer].end = static_cast<uint16>( poseBufReg + 1 );
+            poseRanges[DescBindingTypes::ReadOnlyBuffer].start = static_cast<uint16>( poseBufReg );
+            poseRanges[DescBindingTypes::ReadOnlyBuffer].end = static_cast<uint16>( poseBufReg + 1 );
         }
 
         mListener->setupRootLayout( rootLayout, mSetProperties );

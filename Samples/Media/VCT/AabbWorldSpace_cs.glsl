@@ -15,7 +15,7 @@ layout( local_size_x = @value( threads_per_group_x ),
         local_size_y = @value( threads_per_group_y ),
         local_size_z = @value( threads_per_group_z ) ) in;
 
-vulkan_layout( ogre_T0 ) uniform samplerBuffer inMeshAabb;
+ReadOnlyBufferF( 1, AabbBuffer, inMeshAabb );
 
 @insertpiece( HeaderCS )
 

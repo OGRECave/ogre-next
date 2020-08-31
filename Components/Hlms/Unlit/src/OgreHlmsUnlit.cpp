@@ -163,9 +163,9 @@ namespace Ogre
         descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
 
         if( getProperty( UnlitProperty::TextureMatrix ) == 0 )
-            descBindingRanges[DescBindingTypes::UavBuffer].end = 1u;
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u;
         else
-            descBindingRanges[DescBindingTypes::UavBuffer].end = 2u;
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 2u;
 
         rootLayout.mBaked[1] = true;
         DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];

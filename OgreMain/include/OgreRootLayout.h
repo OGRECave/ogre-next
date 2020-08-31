@@ -78,6 +78,7 @@ namespace Ogre
         {
             ParamBuffer,
             ConstBuffer,
+            ReadOnlyBuffer,
             TexBuffer,
             Texture,
             Sampler,

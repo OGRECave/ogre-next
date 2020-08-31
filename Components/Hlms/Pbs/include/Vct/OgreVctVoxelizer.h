@@ -193,7 +193,7 @@ namespace Ogre
         uint32			mTotalNumInstances;
         float           *mCpuInstanceBuffer;
         UavBufferPacked *mInstanceBuffer;
-        TexBufferPacked *mInstanceBufferAsTex;
+        ReadOnlyBufferPacked *mInstanceBufferAsTex;
         UavBufferPacked *mVertexBufferCompressed;
         UavBufferPacked *mVertexBufferUncompressed;
         UavBufferPacked *mIndexBuffer16;

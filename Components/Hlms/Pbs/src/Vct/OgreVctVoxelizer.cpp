@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "Vao/OgreVertexArrayObject.h"
 
 #include "Vao/OgreIndexBufferPacked.h"
-#include "Vao/OgreTexBufferPacked.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
 
 #include "Vao/OgreVaoManager.h"
@@ -405,7 +405,7 @@ namespace Ogre
                                       mNumCompressedPartSubMeshes16 +
                                       mNumCompressedPartSubMeshes32;
         mMeshAabb = mVaoManager->createUavBuffer( totalNumMeshes, sizeof(float) * 4u * 2u,
-                                                  BB_FLAG_TEX, 0, false );
+                                                  BB_FLAG_READONLY, 0, false );
 
         PartitionedSubMesh *partitionedSubMeshGpu =
                 reinterpret_cast<PartitionedSubMesh*>(
@@ -1077,10 +1077,10 @@ namespace Ogre
         {
             destroyInstanceBuffers();
             mInstanceBuffer = mVaoManager->createUavBuffer( elementCount, structStride,
-                                                            BB_FLAG_UAV|BB_FLAG_TEX, 0, false );
+                                                            BB_FLAG_UAV|BB_FLAG_READONLY, 0, false );
             mCpuInstanceBuffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD( elementCount * structStride,
                                                                              MEMCATEGORY_GENERAL ) );
-            mInstanceBufferAsTex = mInstanceBuffer->getAsTexBufferView( PFG_RGBA32_FLOAT );
+            mInstanceBufferAsTex = mInstanceBuffer->getAsReadOnlyBufferView();
         }
     }
     //-------------------------------------------------------------------------
@@ -1259,8 +1259,8 @@ namespace Ogre
         mAabbWorldSpaceJob->_setUavBuffer( 0, bufferSlot );
 
         DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
-        texBufSlot.buffer = mMeshAabb->getAsTexBufferView( PFG_RGBA32_FLOAT );
-        mAabbWorldSpaceJob->setTexBuffer( 0, texBufSlot );
+        texBufSlot.buffer = mMeshAabb->getAsReadOnlyBufferView();
+        mAabbWorldSpaceJob->setTexBuffer( 1, texBufSlot );
 
         const uint32 threadsPerGroupX = mAabbWorldSpaceJob->getThreadsPerGroupX();
         mAabbWorldSpaceJob->setNumThreadGroups( (mTotalNumInstances + threadsPerGroupX - 1u) /
@@ -1418,7 +1418,7 @@ namespace Ogre
 
             DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
             texBufSlot.buffer = mInstanceBufferAsTex;
-            mComputeJobs[i]->setTexBuffer( 0, texBufSlot );
+            mComputeJobs[i]->setTexBuffer( 6, texBufSlot );
         }
 
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
@@ -1460,7 +1460,7 @@ namespace Ogre
 
                 bucket.job->setConstBuffer( 0, bucket.materialBuffer );
 
-                uint8 texUnit = 1u;
+                uint8 texUnit = 7u;
 
                 DescriptorSetTexture2::TextureSlot
                         texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );

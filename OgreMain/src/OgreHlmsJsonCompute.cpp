@@ -491,6 +491,11 @@ namespace Ogre
             }
         }
 
+        // tex_slot_start must be set *after* textures so we can assume 0-based indexing
+        itor = json.FindMember( "tex_slot_start" );
+        if( itor != json.MemberEnd() && itor->value.IsUint() )
+            job->setTexSlotStart( static_cast<uint8>( itor->value.GetUint() ) );
+
         itor = json.FindMember( "uav_units" );
         if( itor != json.MemberEnd() && itor->value.IsUint() )
         {

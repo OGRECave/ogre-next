@@ -69,6 +69,7 @@ namespace Ogre
         mIncludedPieceFiles( includedPieceFiles ),
         mThreadGroupsBasedOnTexture( ThreadGroupsBasedOnNothing ),
         mThreadGroupsBasedOnTexSlot( 0 ),
+        mTexSlotStart( 0u ),
         mTexturesDescSet( 0 ),
         mSamplersDescSet( 0 ),
         mUavsDescSet( 0 ),
@@ -396,8 +397,10 @@ namespace Ogre
 
         {
             bool bBuffersFirst = false;
+            bool bTexBuffersFirst = false;
             uint16 numTextures = 0u;
             uint16 numTexBuffers = 0u;
+            uint16 numROBuffers = 0u;
             DescriptorSetTexSlotArray::const_iterator itor = mTexSlots.begin();
             DescriptorSetTexSlotArray::const_iterator endt = mTexSlots.end();
 
@@ -407,7 +410,15 @@ namespace Ogre
                 {
                     if( numTextures == 0u )
                         bBuffersFirst = true;
-                    ++numTexBuffers;
+
+                    if( itor->getBuffer().buffer->getBufferPackedType() == BP_TYPE_TEX )
+                    {
+                        if( numROBuffers == 0u )
+                            bTexBuffersFirst = true;
+                        ++numTexBuffers;
+                    }
+                    else
+                        ++numROBuffers;
                 }
                 else
                     ++numTextures;
@@ -416,16 +427,60 @@ namespace Ogre
 
             if( bBuffersFirst )
             {
-                bindRanges[DescBindingTypes::TexBuffer].end = numTexBuffers;
-                bindRanges[DescBindingTypes::Texture].start = numTexBuffers;
-                bindRanges[DescBindingTypes::Texture].end = numTexBuffers + numTextures;
+                uint16 nextValue;
+                if( bTexBuffersFirst )
+                {
+                    nextValue = numTexBuffers;
+                    bindRanges[DescBindingTypes::TexBuffer].end = nextValue;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].start = nextValue;
+                    nextValue += numROBuffers;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].end = nextValue;
+                }
+                else
+                {
+                    nextValue = numROBuffers;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].end = nextValue;
+                    bindRanges[DescBindingTypes::TexBuffer].start = nextValue;
+                    nextValue += numTexBuffers;
+                    bindRanges[DescBindingTypes::TexBuffer].end = nextValue;
+                }
+                bindRanges[DescBindingTypes::Texture].start = nextValue;
+                nextValue += numTextures;
+                bindRanges[DescBindingTypes::Texture].end = nextValue;
             }
             else
             {
                 bindRanges[DescBindingTypes::Texture].end = numTextures;
-                bindRanges[DescBindingTypes::TexBuffer].start = numTextures;
-                bindRanges[DescBindingTypes::TexBuffer].end = numTextures + numTexBuffers;
+
+                uint16 nextValue = numTextures;
+                if( bTexBuffersFirst )
+                {
+                    bindRanges[DescBindingTypes::TexBuffer].start = nextValue;
+                    nextValue += numTexBuffers;
+                    bindRanges[DescBindingTypes::TexBuffer].end = nextValue;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].start = nextValue;
+                    nextValue += numROBuffers;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].end = nextValue;
+                }
+                else
+                {
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].start = nextValue;
+                    nextValue += numROBuffers;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].end = nextValue;
+                    bindRanges[DescBindingTypes::TexBuffer].start = nextValue;
+                    nextValue += numTexBuffers;
+                    bindRanges[DescBindingTypes::TexBuffer].end = nextValue;
+                }
             }
+
+            bindRanges[DescBindingTypes::Texture].start += mTexSlotStart;
+            bindRanges[DescBindingTypes::Texture].end += mTexSlotStart;
+            bindRanges[DescBindingTypes::TexBuffer].start += mTexSlotStart;
+            bindRanges[DescBindingTypes::TexBuffer].end += mTexSlotStart;
+            bindRanges[DescBindingTypes::ReadOnlyBuffer].start += mTexSlotStart;
+            bindRanges[DescBindingTypes::ReadOnlyBuffer].end += mTexSlotStart;
+            bindRanges[DescBindingTypes::Sampler].start += mTexSlotStart;
+            bindRanges[DescBindingTypes::Sampler].end += mTexSlotStart;
         }
 
         {
@@ -515,7 +570,7 @@ namespace Ogre
 
                 while( itor != end )
                 {
-                    const size_t slotIdx = itor - begin;
+                    const size_t slotIdx = ( size_t )( itor - begin ) + mTexSlotStart;
                     propName.resize( texturePropNameSize );
                     propName.a( static_cast<uint32>(slotIdx) ); //texture0
                     const size_t texturePropSize = propName.size();
@@ -543,6 +598,7 @@ namespace Ogre
                 }
 
                 mMaxTexUnitReached = mTexSlots.size();
+                mMaxTexUnitReached += mTexSlotStart;
             }
 
             //Deal with UAVs
@@ -935,9 +991,14 @@ namespace Ogre
         return mUavSlots[slotIdx].getBuffer().buffer;
     }
     //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::setTexSlotStart( uint8 texSlotStart ) { mTexSlotStart = texSlotStart; }
+    //-----------------------------------------------------------------------------------
+    uint8 HlmsComputeJob::getTexSlotStart( void ) const { return mTexSlotStart; }
+    //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setTexBuffer( uint8 slotIdx, const DescriptorSetTexture2::BufferSlot &newSlot )
     {
-        assert( slotIdx < mTexSlots.size() );
+        OGRE_ASSERT_LOW( slotIdx - mTexSlotStart < mTexSlots.size() );
+        slotIdx -= mTexSlotStart;
 
         DescriptorSetTexture2::Slot &slot = mTexSlots[slotIdx];
         if( slot.slotType != DescriptorSetTexture2::SlotTypeBuffer ||
@@ -970,7 +1031,8 @@ namespace Ogre
     void HlmsComputeJob::setTexture( uint8 slotIdx, const DescriptorSetTexture2::TextureSlot &newSlot,
                                      const HlmsSamplerblock *refParams )
     {
-        assert( slotIdx < mTexSlots.size() );
+        OGRE_ASSERT_LOW( slotIdx - mTexSlotStart < mTexSlots.size() );
+        slotIdx -= mTexSlotStart;
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
@@ -1017,7 +1079,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setSamplerblock( uint8 slotIdx, const HlmsSamplerblock &refParams )
     {
-        assert( slotIdx < mSamplerSlots.size() );
+        OGRE_ASSERT_LOW( slotIdx - mTexSlotStart < mSamplerSlots.size() );
+        slotIdx -= mTexSlotStart;
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
@@ -1033,7 +1096,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::_setSamplerblock( uint8 slotIdx, const HlmsSamplerblock *refParams )
     {
-        assert( slotIdx < mSamplerSlots.size() );
+        OGRE_ASSERT_LOW( slotIdx - mTexSlotStart < mSamplerSlots.size() );
+        slotIdx -= mTexSlotStart;
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 

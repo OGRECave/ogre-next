@@ -608,11 +608,8 @@ namespace Ogre
             mComputeTable.constBuffers[i] = dummyBufferInfo;
         }
 
-        for( size_t i = 0u; i < NUM_BIND_UAV_BUFFERS; ++i )
-        {
-            mGlobalTable.uavBuffers[i] = dummyBufferInfo;
-            mComputeTable.uavBuffers[i] = dummyBufferInfo;
-        }
+        for( size_t i = 0u; i < NUM_BIND_READONLY_BUFFERS; ++i )
+            mGlobalTable.readOnlyBuffers[i] = dummyBufferInfo;
 
         // Compute (mComputeTable) only uses baked descriptors for Textures and TexBuffers
         // hence no need to clean the emulated bindings
@@ -1062,14 +1059,14 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setReadOnlyBuffer( size_t slot, const VkDescriptorBufferInfo &bufferInfo )
     {
-        OGRE_ASSERT_MEDIUM( slot < NUM_BIND_UAV_BUFFERS );
-        if( mGlobalTable.uavBuffers[slot].buffer != bufferInfo.buffer ||
-            mGlobalTable.uavBuffers[slot].offset != bufferInfo.offset ||
-            mGlobalTable.uavBuffers[slot].range != bufferInfo.range )
+        OGRE_ASSERT_MEDIUM( slot < NUM_BIND_READONLY_BUFFERS );
+        if( mGlobalTable.readOnlyBuffers[slot].buffer != bufferInfo.buffer ||
+            mGlobalTable.readOnlyBuffers[slot].offset != bufferInfo.offset ||
+            mGlobalTable.readOnlyBuffers[slot].range != bufferInfo.range )
         {
-            mGlobalTable.uavBuffers[slot] = bufferInfo;
-            mGlobalTable.minDirtySlotUavBuffer =
-                std::min( mGlobalTable.minDirtySlotUavBuffer, (uint8)slot );
+            mGlobalTable.readOnlyBuffers[slot] = bufferInfo;
+            mGlobalTable.minDirtySlotReadOnlyBuffer =
+                std::min( mGlobalTable.minDirtySlotReadOnlyBuffer, (uint8)slot );
             mTableDirty = true;
         }
     }
@@ -1194,14 +1191,14 @@ namespace Ogre
         VulkanDescriptorSetTexture2 *vulkanSet =
             reinterpret_cast<VulkanDescriptorSetTexture2 *>( set->mRsData );
 
-        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] !=
+        if( mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] !=
             &vulkanSet->mWriteDescSets[0] )
         {
-            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] =
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] =
                 &vulkanSet->mWriteDescSets[0];
-            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] =
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] =
                 &vulkanSet->mWriteDescSets[1];
-            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] =
+            mGlobalTable.bakedDescriptorSets[BakedDescriptorSets::Textures] =
                 &vulkanSet->mWriteDescSets[2];
             mGlobalTable.dirtyBakedTextures = true;
             mTableDirty = true;
@@ -1230,9 +1227,9 @@ namespace Ogre
         if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] !=
             &vulkanSet->mWriteDescSet )
         {
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] = 0;
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] = 0;
             mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] = &vulkanSet->mWriteDescSet;
-            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] = 0;
             mComputeTable.dirtyBakedSamplers = true;
             mComputeTableDirty = true;
         }
@@ -1243,14 +1240,14 @@ namespace Ogre
         VulkanDescriptorSetTexture2 *vulkanSet =
             reinterpret_cast<VulkanDescriptorSetTexture2 *>( set->mRsData );
 
-        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] !=
+        if( mComputeTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] !=
             &vulkanSet->mWriteDescSets[0] )
         {
-            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] =
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::ReadOnlyBuffers] =
                 &vulkanSet->mWriteDescSets[0];
-            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] =
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::TexBuffers] =
                 &vulkanSet->mWriteDescSets[1];
-            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::UavBuffers] =
+            mComputeTable.bakedDescriptorSets[BakedDescriptorSets::Textures] =
                 &vulkanSet->mWriteDescSets[2];
             mComputeTable.dirtyBakedSamplers = true;
             mComputeTableDirty = true;

@@ -44,13 +44,14 @@ THE SOFTWARE.
 namespace Ogre
 {
     static const char *c_rootLayoutVarNames[DescBindingTypes::NumDescBindingTypes] = {
-        "has_params",     //
-        "const_buffers",  //
-        "tex_buffers",    //
-        "textures",       //
-        "samplers",       //
-        "uav_buffers",    //
-        "uav_textures",   //
+        "has_params",        //
+        "const_buffers",     //
+        "readonly_buffers",  //
+        "tex_buffers",       //
+        "textures",          //
+        "samplers",          //
+        "uav_buffers",       //
+        "uav_textures",      //
     };
     //-------------------------------------------------------------------------
     DescBindingRange::DescBindingRange() : start( 0u ), end( 0u ) {}
@@ -89,12 +90,13 @@ namespace Ogre
 
             if( !mBaked[i] )
             {
-                if( mDescBindingRanges[i][DescBindingTypes::UavTexture].isInUse() )
+                if( mDescBindingRanges[i][DescBindingTypes::UavBuffer].isInUse() ||
+                    mDescBindingRanges[i][DescBindingTypes::UavTexture].isInUse() )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "Error at file " + filename +
                                      ":\n"
-                                     "UAV textures can only be used in baked sets",
+                                     "UAVs can only be used in baked sets",
                                  "RootLayout::validate" );
                 }
             }
@@ -200,7 +202,8 @@ namespace Ogre
                     }
                 }
 
-                const bool uavTypesInUse = mDescBindingRanges[i][DescBindingTypes::UavTexture].isInUse();
+                const bool uavTypesInUse = mDescBindingRanges[i][DescBindingTypes::UavBuffer].isInUse() |
+                                           mDescBindingRanges[i][DescBindingTypes::UavTexture].isInUse();
                 if( uavTypesInUse )
                 {
                     if( !bakedSetsSeenUavTypes )
@@ -210,8 +213,8 @@ namespace Ogre
                         OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                      "Error at file " + filename +
                                          ":\n"
-                                         "All baked UavTextures must be together in "
-                                         "the same baked set and in only one of them",
+                                         "All baked UavTextures and UavBuffers must be together "
+                                         "in the same baked set and in only one of them",
                                      "RootLayout::validate" );
                     }
                 }

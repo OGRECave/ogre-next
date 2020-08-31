@@ -1,4 +1,4 @@
-﻿/*
+/*
 -----------------------------------------------------------------------------
 This source file is part of OGRE
 (Object-oriented Graphics Rendering Engine)
@@ -72,8 +72,8 @@ namespace Ogre
             static_cast<VulkanBufferInterface *>( mBufferInterface );
 
         ReadOnlyBufferPacked *retVal = OGRE_NEW VulkanReadOnlyBufferPacked(
-            mInternalBufferStart, mNumElements, mBytesPerElement, 0, mBufferType, (void *)0, false,
-            (VulkanRenderSystem *)0, mVaoManager, bufferInterface, PFG_NULL );
+            mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
+            (void *)0, false, (VulkanRenderSystem *)0, mVaoManager, bufferInterface, PFG_NULL );
         // We were overriden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 

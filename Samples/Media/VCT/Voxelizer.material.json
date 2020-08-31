@@ -10,6 +10,8 @@
             "inform_shader_of_texture_data_change" : true,
 
             "uav_units" : 6,
+
+            "tex_slot_start" : 6,
 			
 			"params" :
             [
@@ -223,6 +225,8 @@
             "pieces" : ["CrossPlatformSettings_piece_all", "Matrix_piece_all", "AabbWorldSpace_piece_cs.any"],
 
             "uav_units" : 1,
+
+            "tex_slot_start" : 1,
 
             "textures" :
             [

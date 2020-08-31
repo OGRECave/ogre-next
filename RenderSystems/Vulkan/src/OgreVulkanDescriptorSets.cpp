@@ -155,7 +155,8 @@ namespace Ogre
         }
 
         mTextures.reserve( numTextures );
-        mBuffers.resize( numTexBuffers );
+        mBuffers.resizePOD( numTexBuffers );
+        mReadOnlyBuffers.resizePOD( numROBuffers );
         numTexBuffers = 0u;
         numROBuffers = 0u;
 
@@ -208,9 +209,23 @@ namespace Ogre
             ++itor;
         }
 
-        if( numTexBuffers != 0u )
+        if( numROBuffers != 0u )
         {
             VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[0];
+            makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
+
+            writeDescSet->descriptorCount = static_cast<uint32>( numROBuffers );
+            writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+            writeDescSet->pBufferInfo = mReadOnlyBuffers.begin();
+        }
+        else
+        {
+            memset( &mWriteDescSets[0], 0, sizeof( mWriteDescSets[0] ) );
+        }
+
+        if( numTexBuffers != 0u )
+        {
+            VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[1];
             makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
 
             writeDescSet->descriptorCount = static_cast<uint32>( numTexBuffers );
@@ -219,31 +234,17 @@ namespace Ogre
         }
         else
         {
-            memset( &mWriteDescSets[0], 0, sizeof( mWriteDescSets[0] ) );
+            memset( &mWriteDescSets[1], 0, sizeof( mWriteDescSets[1] ) );
         }
 
         if( numTextures != 0u )
         {
-            VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[1];
+            VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[2];
             makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
 
             writeDescSet->descriptorCount = static_cast<uint32>( numTextures );
             writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
             writeDescSet->pImageInfo = mTextures.begin();
-        }
-        else
-        {
-            memset( &mWriteDescSets[1], 0, sizeof( mWriteDescSets[1] ) );
-        }
-
-        if( numROBuffers != 0u )
-        {
-            VkWriteDescriptorSet *writeDescSet = &mWriteDescSets[2];
-            makeVkStruct( *writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
-
-            writeDescSet->descriptorCount = static_cast<uint32>( numROBuffers );
-            writeDescSet->descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-            writeDescSet->pBufferInfo = mReadOnlyBuffers.begin();
         }
         else
         {
