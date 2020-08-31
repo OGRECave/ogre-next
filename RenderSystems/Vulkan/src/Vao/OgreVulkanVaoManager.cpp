@@ -96,6 +96,7 @@ namespace Ogre
         mConstBufferAlignment =
             (uint32)mDevice->mDeviceProperties.limits.minUniformBufferOffsetAlignment;
         mTexBufferAlignment = (uint32)mDevice->mDeviceProperties.limits.minTexelBufferOffsetAlignment;
+        mUavBufferAlignment = (uint32)mDevice->mDeviceProperties.limits.minStorageBufferOffsetAlignment;
 
         mConstBufferMaxSize = mDevice->mDeviceProperties.limits.maxUniformBufferRange;
         mConstBufferMaxSize =
