@@ -40,7 +40,7 @@ namespace v1 {
     //---------------------------------------------------------------------
     OverlaySystem::OverlaySystem()
     {
-        RenderSystem::setSharedListener(this);
+        RenderSystem::addSharedListener(this);
 
         mOverlayManager = OGRE_NEW OverlayManager();
         mOverlayManager->addOverlayElementFactory(OGRE_NEW PanelOverlayElementFactory());
@@ -62,8 +62,7 @@ namespace v1 {
     //---------------------------------------------------------------------
     OverlaySystem::~OverlaySystem()
     {
-        if(RenderSystem::getSharedListener() == this)
-            RenderSystem::setSharedListener(0);
+        RenderSystem::removeSharedListener(this);
 
 #if OGRE_PROFILING
         Ogre::Profiler* prof = Ogre::Profiler::getSingletonPtr();
@@ -91,17 +90,17 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-	void OverlaySystem::eventOccurred(const String& eventName, const NameValuePairList* parameters)
-	{
-		if(eventName == "DeviceLost")
-		{
-			mOverlayManager->_releaseManualHardwareResources();
-		}
-		else if(eventName == "DeviceRestored")
-		{
-			mOverlayManager->_restoreManualHardwareResources();
-		}
-	}
-	//---------------------------------------------------------------------
+    void OverlaySystem::eventOccurred( const String &eventName, const NameValuePairList *parameters )
+    {
+        if( eventName == "DeviceLost" )
+        {
+            mOverlayManager->_releaseManualHardwareResources();
+        }
+        else if( eventName == "DeviceRestored" )
+        {
+            mOverlayManager->_restoreManualHardwareResources();
+        }
+    }
+    //---------------------------------------------------------------------
 }
 }

@@ -54,7 +54,7 @@ THE SOFTWARE.
 
 namespace Ogre {
 
-    RenderSystem::Listener* RenderSystem::msSharedEventListener = 0;
+    RenderSystem::ListenerList  RenderSystem::msSharedEventListeners;
     //-----------------------------------------------------------------------
     RenderSystem::RenderSystem()
         : mCurrentRenderPassDescriptor(0)
@@ -1155,15 +1155,14 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void RenderSystem::setSharedListener(Listener* listener)
+    void RenderSystem::addSharedListener(Listener* l)
     {
-        assert(msSharedEventListener == NULL || listener == NULL); // you can set or reset, but for safety not directly override
-        msSharedEventListener = listener;
+        msSharedEventListeners.push_back(l);
     }
     //-----------------------------------------------------------------------
-    RenderSystem::Listener* RenderSystem::getSharedListener(void)
+    void RenderSystem::removeSharedListener(Listener* l)
     {
-        return msSharedEventListener;
+        msSharedEventListeners.remove(l);
     }
     //-----------------------------------------------------------------------
     void RenderSystem::addListener(Listener* l)
@@ -1183,9 +1182,16 @@ namespace Ogre {
         {
             (*i)->eventOccurred(name, params);
         }
-
-        if(msSharedEventListener)
-            msSharedEventListener->eventOccurred(name, params);
+        fireSharedEvent(name, params);
+    }
+    //-----------------------------------------------------------------------
+    void RenderSystem::fireSharedEvent(const String& name, const NameValuePairList* params)
+    {
+        for(ListenerList::iterator i = msSharedEventListeners.begin(); 
+            i != msSharedEventListeners.end(); ++i)
+        {
+            (*i)->eventOccurred(name, params);
+        }
     }
     //-----------------------------------------------------------------------
     void RenderSystem::destroyHardwareOcclusionQuery( HardwareOcclusionQuery *hq)
