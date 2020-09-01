@@ -152,7 +152,7 @@ namespace Ogre {
         void setPoseWeight(size_t index, float w);
         void addPoseWeight(size_t index, float w);
 
-        ReadOnlyBufferPacked *getPoseTexBuffer( void ) const;
+        TexBufferPacked *getPoseTexBuffer( void ) const;
 
         /** Returns whether the world matrix is an identity matrix.
         @remarks
@@ -468,7 +468,7 @@ namespace Ogre {
         {
             unsigned short numPoses;
             float weights[OGRE_MAX_POSES];
-            ReadOnlyBufferPacked *buffer;
+            TexBufferPacked *buffer;
             bool halfPrecision;
             bool hasNormals;
 

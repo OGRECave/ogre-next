@@ -50,7 +50,7 @@ ReadOnlyBufferF( 0, float4, worldMatBuf );
 
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
 @property( hlms_pose )
-	ReadOnlyBufferF( @value(poseBuf), float4, poseBuf );
+	vulkan_layout( ogre_T@value(poseBuf) ) uniform samplerBuffer poseBuf;
 @end
 // END UNIFORM GL DECLARATION
 

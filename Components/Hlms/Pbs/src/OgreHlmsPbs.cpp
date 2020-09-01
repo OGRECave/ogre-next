@@ -530,8 +530,8 @@ namespace Ogre
                 poseRanges = rootLayout.mDescBindingRanges[1];
                 rootLayout.mBaked[1] = false;
             }
-            poseRanges[DescBindingTypes::ReadOnlyBuffer].start = static_cast<uint16>( poseBufReg );
-            poseRanges[DescBindingTypes::ReadOnlyBuffer].end = static_cast<uint16>( poseBufReg + 1 );
+            poseRanges[DescBindingTypes::TexBuffer].start = static_cast<uint16>( poseBufReg );
+            poseRanges[DescBindingTypes::TexBuffer].end = static_cast<uint16>( poseBufReg + 1 );
         }
 
         mListener->setupRootLayout( rootLayout, mSetProperties );
@@ -3362,7 +3362,7 @@ namespace Ogre
                 if( datablock->mTexturesDescSet )
                     numTextures = datablock->mTexturesDescSet->mTextures.size();
 
-                ReadOnlyBufferPacked *poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
+                TexBufferPacked *poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
                 *commandBuffer->addCommand<CbShaderBuffer>() =
                     CbShaderBuffer( VertexShader, mTexUnitSlotStart + numTextures, poseBuf, 0,
                                     poseBuf->getTotalSizeBytes() );
