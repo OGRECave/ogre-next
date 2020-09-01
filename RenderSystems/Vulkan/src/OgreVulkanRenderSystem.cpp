@@ -216,6 +216,18 @@ namespace Ogre
             OGRE_DELETE mVulkanSupport;
             mVulkanSupport = 0;
         }
+
+        if( mDebugReportCallback )
+        {
+            DestroyDebugReportCallback( mVkInstance, mDebugReportCallback, 0 );
+            mDebugReportCallback = 0;
+        }
+
+        if( mVkInstance )
+        {
+            vkDestroyInstance( mVkInstance, 0 );
+            mVkInstance = 0;
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::shutdown( void )
@@ -304,18 +316,6 @@ namespace Ogre
         delete mDevice;
         mDevice = 0;
         vkDestroyDevice( vkDevice, 0 );
-
-        if( mDebugReportCallback )
-        {
-            DestroyDebugReportCallback( mVkInstance, mDebugReportCallback, 0 );
-            mDebugReportCallback = 0;
-        }
-
-        if( mVkInstance )
-        {
-            vkDestroyInstance( mVkInstance, 0 );
-            mVkInstance = 0;
-        }
     }
     //-------------------------------------------------------------------------
     const String &VulkanRenderSystem::getName( void ) const

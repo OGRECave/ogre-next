@@ -283,6 +283,9 @@ namespace Ogre
                 vkCreateImageView( device->mDevice, &imageViewCi, 0, &mBlankTexture[i].defaultView );
             checkVkResult( result, "vkCreateImageView" );
         }
+
+        vaoManager->destroyStagingTexture( stagingTex );
+        delete stagingTex;
     }
     //-----------------------------------------------------------------------------------
     VulkanTextureGpuManager::~VulkanTextureGpuManager()

@@ -105,6 +105,8 @@ namespace Ogre
             mVideoModes[res].push_back( freq );
         }
 
+        free( screenResReply );
+
         xcb_destroy_window( connection, windowDummy );
         xcb_flush( connection );
         xcb_disconnect( connection );
