@@ -8,6 +8,7 @@ functions = \
 	["vkDestroyBufferView", "VkDevice", "device", "VkBufferView", "bufferView", "VkAllocationCallbacks const *", "pAllocator"],
 	["vkDestroyShaderModule", "VkDevice", "device", "VkShaderModule", "shaderModule", "VkAllocationCallbacks const *", "pAllocator"],
 	["vkDestroyFramebuffer", "VkDevice", "device", "VkFramebuffer", "framebuffer", "VkAllocationCallbacks const *", "pAllocator"],
+	["vkDestroyRenderPass", "VkDevice", "device", "VkRenderPass", "renderPass", "VkAllocationCallbacks const *", "pAllocator"],
 ]
 
 headerFileTemplate = \

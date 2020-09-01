@@ -136,9 +136,8 @@ namespace Ogre
 
         return CmpResultEqual;
     }
-    VulkanCache::VkRenderPassCreateInfoCmp::CmpResult
-    VulkanCache::VkRenderPassCreateInfoCmp::cmp( const VkSubpassDependency &a,
-                                                           const VkSubpassDependency &b ) const
+    VulkanCache::VkRenderPassCreateInfoCmp::CmpResult VulkanCache::VkRenderPassCreateInfoCmp::cmp(
+        const VkSubpassDependency &a, const VkSubpassDependency &b ) const
     {
         return CmpResult();
     }
@@ -184,7 +183,18 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VulkanCache::VulkanCache( VulkanDevice *device ) : mDevice( device ) {}
     //-------------------------------------------------------------------------
-    VulkanCache::~VulkanCache() {}
+    VulkanCache::~VulkanCache()
+    {
+        VkRenderPassMap::const_iterator itor = mRenderPassCache.begin();
+        VkRenderPassMap::const_iterator endt = mRenderPassCache.end();
+
+        while( itor != endt )
+        {
+            vkDestroyRenderPass( mDevice->mDevice, itor->second, 0 );
+            ++itor;
+        }
+        mRenderPassCache.clear();
+    }
     //-------------------------------------------------------------------------
     void VulkanCache::copySubpass( VkAttachmentReference const **dstStruct,
                                    const VkAttachmentReference *src, uint32_t attachmentCount,

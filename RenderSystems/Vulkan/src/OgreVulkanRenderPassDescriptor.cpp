@@ -634,6 +634,9 @@ namespace Ogre
             }
         }
         fboDesc.mNumImageViews = 0u;
+
+        delayed_vkDestroyRenderPass( vaoManager, queue->mDevice, fboDesc.mRenderPass, 0 );
+        fboDesc.mRenderPass = 0;
     }
     //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::notifySwapchainCreated( VulkanWindow *window )

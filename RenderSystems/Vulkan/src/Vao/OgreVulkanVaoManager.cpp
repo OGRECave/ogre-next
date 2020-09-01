@@ -155,6 +155,25 @@ namespace Ogre
 
         deleteStagingBuffers();
 
+        FastArray<VulkanDelayedFuncBaseArray>::iterator itFrame = mDelayedFuncs.begin();
+        FastArray<VulkanDelayedFuncBaseArray>::iterator enFrame = mDelayedFuncs.end();
+
+        while( itFrame != enFrame )
+        {
+            VulkanDelayedFuncBaseArray::const_iterator itor = itFrame->begin();
+            VulkanDelayedFuncBaseArray::const_iterator endt = itFrame->end();
+
+            while( itor != endt )
+            {
+                ( *itor )->execute();
+                delete *itor;
+                ++itor;
+            }
+
+            itFrame->clear();
+            ++itFrame;
+        }
+
         for( size_t i = 0; i < MAX_VBO_FLAG; ++i )
         {
             VboVec::iterator itor = mVbos[i].begin();

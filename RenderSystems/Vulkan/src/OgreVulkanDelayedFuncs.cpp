@@ -119,4 +119,21 @@ namespace Ogre
         vkVaoMgr->addDelayedFunc( cmd );
     }
 
+    void VulkanDelayed_vkDestroyRenderPass::execute()
+    {
+        vkDestroyRenderPass( device, renderPass, pAllocator );
+    }
+
+    void delayed_vkDestroyRenderPass( VaoManager *vaoMgr, VkDevice device, VkRenderPass renderPass,
+                                      VkAllocationCallbacks const *pAllocator )
+    {
+        VulkanVaoManager *vkVaoMgr = static_cast<VulkanVaoManager *>( vaoMgr );
+        VulkanDelayed_vkDestroyRenderPass *cmd = new VulkanDelayed_vkDestroyRenderPass();
+        cmd->device = device;
+        cmd->renderPass = renderPass;
+        cmd->pAllocator = pAllocator;
+
+        vkVaoMgr->addDelayedFunc( cmd );
+    }
+
 }  // namespace Ogre

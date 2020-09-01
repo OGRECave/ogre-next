@@ -96,4 +96,16 @@ namespace Ogre
     void delayed_vkDestroyFramebuffer( VaoManager *vaoMgr, VkDevice device, VkFramebuffer framebuffer,
                                        VkAllocationCallbacks const *pAllocator );
 
+    class VulkanDelayed_vkDestroyRenderPass : public VulkanDelayedFuncBase
+    {
+    public:
+        VkDevice device;
+        VkRenderPass renderPass;
+        VkAllocationCallbacks const *pAllocator;
+
+        virtual void execute();
+    };
+    void delayed_vkDestroyRenderPass( VaoManager *vaoMgr, VkDevice device, VkRenderPass renderPass,
+                                      VkAllocationCallbacks const *pAllocator );
+
 }  // namespace Ogre
