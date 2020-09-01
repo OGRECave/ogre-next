@@ -63,15 +63,18 @@ namespace Ogre
         }
 
         if( !retVal )
+        {
             retVal = getAsTexBufferImpl( pixelFormat );
+            mTexBufferViews.push_back( retVal );
+        }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
     void UavBufferPacked::destroyTexBufferView( PixelFormatGpu pixelFormat )
     {
-        vector<TexBufferPacked*>::type::const_iterator itor = mTexBufferViews.begin();
-        vector<TexBufferPacked*>::type::const_iterator end  = mTexBufferViews.end();
+        vector<TexBufferPacked*>::type::iterator itor = mTexBufferViews.begin();
+        vector<TexBufferPacked*>::type::iterator end  = mTexBufferViews.end();
 
         while( itor != end && (*itor)->getPixelFormat() != pixelFormat )
             ++itor;
@@ -80,7 +83,9 @@ namespace Ogre
         {
             (*itor)->_setBufferInterface( (BufferInterface*)0 );
             delete *itor;
+            efficientVectorRemove( mTexBufferViews, itor );
         }
+
     }
     //-----------------------------------------------------------------------------------
     void UavBufferPacked::destroyAllTexBufferViews(void)
@@ -94,5 +99,7 @@ namespace Ogre
             delete *itor;
             ++itor;
         }
+
+        mTexBufferViews.clear();
     }
 }
