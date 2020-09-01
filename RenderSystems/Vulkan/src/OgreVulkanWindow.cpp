@@ -312,6 +312,7 @@ namespace Ogre
     void VulkanWindow::acquireNextSwapchain( void )
     {
         OGRE_ASSERT_LOW( mSwapchainStatus == SwapchainReleased );
+        OGRE_ASSERT_MEDIUM( !mSwapchainSemaphore );
 
         VulkanVaoManager *vaoManager = mDevice->mVaoManager;
 
@@ -388,7 +389,6 @@ namespace Ogre
         {
             mSwapchainStatus = SwapchainUsedInRendering;
             retVal = mSwapchainSemaphore;
-            mSwapchainSemaphore = 0;
         }
         return retVal;
     }
@@ -406,6 +406,12 @@ namespace Ogre
         }
 
         OGRE_ASSERT_LOW( mSwapchainStatus == SwapchainUsedInRendering );
+
+        OGRE_ASSERT_MEDIUM( mSwapchainSemaphore );
+        VulkanVaoManager *vaoManager = mDevice->mVaoManager;
+        vaoManager->notifyWaitSemaphoreSubmitted( mSwapchainSemaphore );
+        mSwapchainSemaphore = 0;
+
         mDevice->mGraphicsQueue.mWindowsPendingSwap.push_back( this );
         mSwapchainStatus = SwapchainPendingSwap;
     }

@@ -89,15 +89,19 @@ namespace Ogre
             OGRE_DELETE mTexture;
             mTexture = 0;
         }
+        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
+        {
+            mStencilBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+            OGRE_DELETE mStencilBuffer;
+            mStencilBuffer = 0;
+        }
         if( mDepthBuffer )
         {
             mDepthBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
             OGRE_DELETE mDepthBuffer;
             mDepthBuffer = 0;
+            mStencilBuffer = 0;
         }
-        // Depth & Stencil buffers are the same pointer
-        // OGRE_DELETE mStencilBuffer;
-        mStencilBuffer = 0;
 
         if( !mIsExternal )
         {
