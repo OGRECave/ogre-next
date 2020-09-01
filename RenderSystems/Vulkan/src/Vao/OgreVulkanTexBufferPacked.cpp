@@ -53,7 +53,19 @@ namespace Ogre
         memset( mCachedResourceViews, 0, sizeof( mCachedResourceViews ) );
     }
     //-------------------------------------------------------------------------
-    VulkanTexBufferPacked::~VulkanTexBufferPacked() {}
+    VulkanTexBufferPacked::~VulkanTexBufferPacked()
+    {
+        VulkanVaoManager *vulkanVaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
+        for( size_t i = 0u; i < 16u; ++i )
+        {
+            if( mCachedResourceViews[i].mResourceView )
+            {
+                delayed_vkDestroyBufferView( mVaoManager, vulkanVaoManager->getDevice()->mDevice,
+                                             mCachedResourceViews[i].mResourceView, 0 );
+                mCachedResourceViews[i].mResourceView = 0;
+            }
+        }
+    }
     //-------------------------------------------------------------------------
     VkBufferView VulkanTexBufferPacked::createResourceView( int cacheIdx, size_t offset,
                                                             size_t sizeBytes )
