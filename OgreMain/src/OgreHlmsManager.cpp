@@ -672,6 +672,9 @@ namespace Ogre
                     mRegisteredHlms[i]->_clearShaderCache();
             }
 
+            if( mComputeHlms )
+                mComputeHlms->_clearShaderCache();
+
             {
                 BlockIdxVec::const_iterator itor = mActiveBlocks[BLOCK_MACRO].begin();
                 BlockIdxVec::const_iterator end  = mActiveBlocks[BLOCK_MACRO].end();
@@ -828,6 +831,9 @@ namespace Ogre
             if( mRegisteredHlms[i] )
                 mRegisteredHlms[i]->_changeRenderSystem( newRs );
         }
+
+        if( mComputeHlms )
+            mComputeHlms->_changeRenderSystem( newRs );
     }
 #if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------
