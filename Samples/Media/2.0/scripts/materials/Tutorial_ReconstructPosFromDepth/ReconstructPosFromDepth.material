@@ -14,6 +14,17 @@ fragment_program ReconstructPosFromDepth_ps_GLSL glsl
 	}
 }
 
+// Vulkan GLSL shaders
+vertex_program ReconstructPosFromDepth_vs_VK glslvk
+{
+	source ReconstructPosFromDepth_vs.glsl
+}
+
+fragment_program ReconstructPosFromDepth_ps_VK glslvk
+{
+	source ReconstructPosFromDepth_ps.glsl
+}
+
 // HLSL shaders
 vertex_program ReconstructPosFromDepth_vs_HLSL hlsl
 {
@@ -46,6 +57,7 @@ vertex_program ReconstructPosFromDepth_vs unified
 {
 	delegate ReconstructPosFromDepth_vs_HLSL
 	delegate ReconstructPosFromDepth_vs_GLSL
+	delegate ReconstructPosFromDepth_vs_VK
 	delegate ReconstructPosFromDepth_vs_Metal
 	
 	default_params
@@ -58,6 +70,7 @@ fragment_program ReconstructPosFromDepth_ps unified
 {
 	delegate ReconstructPosFromDepth_ps_HLSL
 	delegate ReconstructPosFromDepth_ps_GLSL
+	delegate ReconstructPosFromDepth_ps_VK
 	delegate ReconstructPosFromDepth_ps_Metal
 }
 
