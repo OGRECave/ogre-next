@@ -101,7 +101,7 @@ namespace Ogre
         uint8               mThreadGroupsBasedOnTexSlot;
         uint8               mThreadGroupsBasedDivisor[3];
 
-        uint8 mTexSlotStart;
+        uint8 mGlTexSlotStart;
 
         ConstBufferSlotVec          mConstBuffers;
         FastArray<const HlmsSamplerblock*>  mSamplerSlots;
@@ -313,13 +313,16 @@ namespace Ogre
 
             However this allows you to offset the range to [texSlotStart; texSlotStart + getNumTexUnits)
 
-            This is useful when ReadOnlyBuffers are bound via setTexBuffers, because on some
-            RenderSystems these will map to uav buffer slots, thus overlapping/conflicting with UAVs
+            This is useful when ReadOnlyBuffers are bound via setTexBuffers, because in OpenGL
+            these will map to uav buffer slots, thus overlapping/conflicting with UAVs
         @param texSlotStart
             The offset at which the textures/texbuffers should start being bound
         */
-        void setTexSlotStart( uint8 texSlotStart );
-        uint8 getTexSlotStart( void ) const;
+        void setGlTexSlotStart( uint8 texSlotStart );
+
+        uint8 getGlTexSlotStart( void ) const;
+
+        uint8 _getRawGlTexSlotStart( void ) const;
 
         /** Sets a texture buffer at the given slot ID.
         @remarks
@@ -344,7 +347,7 @@ namespace Ogre
             In OpenGL, a few cards support between to 16-18 texture units,
             while most cards support up to 32
 
-            Must be in range [getTexSlotStart; getTexSlotStart + getNumTexUnits)
+            Must be in range [0; getNumTexUnits) regardless of what getTexSlotStart is
         @param newSlot
         */
         void setTexBuffer( uint8 slotIdx, const DescriptorSetTexture2::BufferSlot &newSlot );
@@ -367,7 +370,7 @@ namespace Ogre
             In OpenGL, some cards support up to 16-18 texture units, while most
             cards support up to 32
 
-            Must be in range [getTexSlotStart; getTexSlotStart + getNumTexUnits)
+            Must be in range [0; getNumTexUnits) regardless of what getTexSlotStart is
         @param samplerblock
             Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
             When null, we leave the previously set samplerblock (if a texture is being set, and if no
@@ -380,7 +383,7 @@ namespace Ogre
         @param slotIdx
             See setNumTexUnits.
 
-            Must be in range [getTexSlotStart; getTexSlotStart + getNumTexUnits)
+            Must be in range [0; getNumTexUnits) regardless of what getTexSlotStart is
         @param refParams
             We'll create (or retrieve an existing) samplerblock based on the input parameters.
         */
@@ -390,7 +393,7 @@ namespace Ogre
         @param slotIdx
             See setNumTexUnits.
 
-            Must be in range [getTexSlotStart; getTexSlotStart + getNumTexUnits)
+            Must be in range [0; getNumTexUnits) regardless of what getTexSlotStart is
         @param refParams
             Direct samplerblock. Reference count is assumed to already have been increased.
             We won't increase it ourselves.

@@ -15,7 +15,11 @@ layout( local_size_x = @value( threads_per_group_x ),
         local_size_y = @value( threads_per_group_y ),
         local_size_z = @value( threads_per_group_z ) ) in;
 
-ReadOnlyBufferF( 1, AabbBuffer, inMeshAabb );
+@property( syntax == glsl )
+	ReadOnlyBufferF( 1, AabbBuffer, inMeshAabb );
+@else
+	ReadOnlyBufferF( 0, AabbBuffer, inMeshAabb );
+@end
 
 @insertpiece( HeaderCS )
 

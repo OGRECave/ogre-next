@@ -69,7 +69,7 @@ namespace Ogre
         mIncludedPieceFiles( includedPieceFiles ),
         mThreadGroupsBasedOnTexture( ThreadGroupsBasedOnNothing ),
         mThreadGroupsBasedOnTexSlot( 0 ),
-        mTexSlotStart( 0u ),
+        mGlTexSlotStart( 0u ),
         mTexturesDescSet( 0 ),
         mSamplersDescSet( 0 ),
         mUavsDescSet( 0 ),
@@ -370,9 +370,9 @@ namespace Ogre
 
         bool hasParams = false;
         if( shaderParams0 )
-            hasParams|=!shaderParams0->mParams.empty();
+            hasParams |= !shaderParams0->mParams.empty();
         if( shaderParams1 )
-            hasParams|=!shaderParams1->mParams.empty();
+            hasParams |= !shaderParams1->mParams.empty();
 
         size_t currSet = 0u;
         if( hasParams || !mConstBuffers.empty() )
@@ -472,15 +472,6 @@ namespace Ogre
                     bindRanges[DescBindingTypes::TexBuffer].end = nextValue;
                 }
             }
-
-            bindRanges[DescBindingTypes::Texture].start += mTexSlotStart;
-            bindRanges[DescBindingTypes::Texture].end += mTexSlotStart;
-            bindRanges[DescBindingTypes::TexBuffer].start += mTexSlotStart;
-            bindRanges[DescBindingTypes::TexBuffer].end += mTexSlotStart;
-            bindRanges[DescBindingTypes::ReadOnlyBuffer].start += mTexSlotStart;
-            bindRanges[DescBindingTypes::ReadOnlyBuffer].end += mTexSlotStart;
-            bindRanges[DescBindingTypes::Sampler].start += mTexSlotStart;
-            bindRanges[DescBindingTypes::Sampler].end += mTexSlotStart;
         }
 
         {
@@ -570,7 +561,7 @@ namespace Ogre
 
                 while( itor != end )
                 {
-                    const size_t slotIdx = ( size_t )( itor - begin ) + mTexSlotStart;
+                    const size_t slotIdx = ( size_t )( itor - begin );
                     propName.resize( texturePropNameSize );
                     propName.a( static_cast<uint32>(slotIdx) ); //texture0
                     const size_t texturePropSize = propName.size();
@@ -598,7 +589,6 @@ namespace Ogre
                 }
 
                 mMaxTexUnitReached = mTexSlots.size();
-                mMaxTexUnitReached += mTexSlotStart;
             }
 
             //Deal with UAVs
@@ -991,14 +981,20 @@ namespace Ogre
         return mUavSlots[slotIdx].getBuffer().buffer;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::setTexSlotStart( uint8 texSlotStart ) { mTexSlotStart = texSlotStart; }
+    void HlmsComputeJob::setGlTexSlotStart( uint8 texSlotStart ) { mGlTexSlotStart = texSlotStart; }
     //-----------------------------------------------------------------------------------
-    uint8 HlmsComputeJob::getTexSlotStart( void ) const { return mTexSlotStart; }
+    uint8 HlmsComputeJob::getGlTexSlotStart( void ) const
+    {
+        if( mCreator->getShaderSyntax() == HlmsBaseProp::Glsl )
+            return mGlTexSlotStart;
+        return 0u;
+    }
+    //-----------------------------------------------------------------------------------
+    uint8 HlmsComputeJob::_getRawGlTexSlotStart( void ) const { return mGlTexSlotStart; }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setTexBuffer( uint8 slotIdx, const DescriptorSetTexture2::BufferSlot &newSlot )
     {
-        OGRE_ASSERT_LOW( slotIdx - mTexSlotStart < mTexSlots.size() );
-        slotIdx -= mTexSlotStart;
+        OGRE_ASSERT_LOW( slotIdx < mTexSlots.size() );
 
         DescriptorSetTexture2::Slot &slot = mTexSlots[slotIdx];
         if( slot.slotType != DescriptorSetTexture2::SlotTypeBuffer ||
@@ -1031,8 +1027,7 @@ namespace Ogre
     void HlmsComputeJob::setTexture( uint8 slotIdx, const DescriptorSetTexture2::TextureSlot &newSlot,
                                      const HlmsSamplerblock *refParams )
     {
-        OGRE_ASSERT_LOW( slotIdx - mTexSlotStart < mTexSlots.size() );
-        slotIdx -= mTexSlotStart;
+        OGRE_ASSERT_LOW( slotIdx < mTexSlots.size() );
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
@@ -1079,8 +1074,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setSamplerblock( uint8 slotIdx, const HlmsSamplerblock &refParams )
     {
-        OGRE_ASSERT_LOW( slotIdx - mTexSlotStart < mSamplerSlots.size() );
-        slotIdx -= mTexSlotStart;
+        OGRE_ASSERT_LOW( slotIdx < mSamplerSlots.size() );
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
@@ -1096,8 +1090,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::_setSamplerblock( uint8 slotIdx, const HlmsSamplerblock *refParams )
     {
-        OGRE_ASSERT_LOW( slotIdx - mTexSlotStart < mSamplerSlots.size() );
-        slotIdx -= mTexSlotStart;
+        OGRE_ASSERT_LOW( slotIdx < mSamplerSlots.size() );
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 

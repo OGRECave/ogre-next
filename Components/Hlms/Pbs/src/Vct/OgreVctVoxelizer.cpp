@@ -218,7 +218,8 @@ namespace Ogre
                 {
                     ShaderParams::Param param;
                     param.name = "texturePool";
-                    param.setManualValue( static_cast<int32>( numTexUnits ) );
+                    param.setManualValue( static_cast<int32>(
+                        numTexUnits + mComputeJobs[variant]->_getRawGlTexSlotStart() ) );
                     glslShaderParams.mParams.push_back( param );
                     glslShaderParams.setDirty();
                     ++numTexUnits;
@@ -1260,7 +1261,7 @@ namespace Ogre
 
         DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
         texBufSlot.buffer = mMeshAabb->getAsReadOnlyBufferView();
-        mAabbWorldSpaceJob->setTexBuffer( 1, texBufSlot );
+        mAabbWorldSpaceJob->setTexBuffer( 0, texBufSlot );
 
         const uint32 threadsPerGroupX = mAabbWorldSpaceJob->getThreadsPerGroupX();
         mAabbWorldSpaceJob->setNumThreadGroups( (mTotalNumInstances + threadsPerGroupX - 1u) /
@@ -1418,7 +1419,7 @@ namespace Ogre
 
             DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
             texBufSlot.buffer = mInstanceBufferAsTex;
-            mComputeJobs[i]->setTexBuffer( 6, texBufSlot );
+            mComputeJobs[i]->setTexBuffer( 0, texBufSlot );
         }
 
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
@@ -1460,7 +1461,7 @@ namespace Ogre
 
                 bucket.job->setConstBuffer( 0, bucket.materialBuffer );
 
-                uint8 texUnit = 7u;
+                uint8 texUnit = 1u;
 
                 DescriptorSetTexture2::TextureSlot
                         texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );

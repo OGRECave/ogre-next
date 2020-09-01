@@ -129,6 +129,42 @@ namespace Ogre
                 }
             }
             {
+                const DescBindingRange &bufferRange =
+                    mDescBindingRanges[i][DescBindingTypes::ReadOnlyBuffer];
+                if( bufferRange.isInUse() )
+                {
+                    for( size_t j = i; j < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++j )
+                    {
+                        const size_t numIncompatTypes = 2u;
+                        DescBindingTypes::DescBindingTypes incompatTypes[numIncompatTypes] = {
+                            DescBindingTypes::TexBuffer, DescBindingTypes::Texture
+                            //DescBindingTypes::UavBuffer, DescBindingTypes::UavTexture
+                        };
+
+                        for( size_t k = 0u; k < numIncompatTypes; ++k )
+                        {
+                            const DescBindingRange &otherRange = mDescBindingRanges[j][incompatTypes[k]];
+
+                            if( otherRange.isInUse() )
+                            {
+                                if( !( bufferRange.end <= otherRange.start ||
+                                       bufferRange.start >= otherRange.end ) )
+                                {
+                                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                                 "Error at file " + filename +
+                                                     ":\n"
+                                                     "ReadOnlyBuffer and " +
+                                                     c_rootLayoutVarNames[incompatTypes[k]] +
+                                                     " slots cannot overlap for "
+                                                     "compatibility with other APIs",
+                                                 "RootLayout::validate" );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
                 const DescBindingRange &bufferRange = mDescBindingRanges[i][DescBindingTypes::UavBuffer];
                 if( bufferRange.isInUse() )
                 {

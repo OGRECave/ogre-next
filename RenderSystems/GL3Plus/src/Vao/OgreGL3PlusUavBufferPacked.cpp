@@ -74,8 +74,8 @@ namespace Ogre
             static_cast<GL3PlusBufferInterface *>( mBufferInterface );
 
         ReadOnlyBufferPacked *retVal = OGRE_NEW GL3PlusReadOnlyUavBufferPacked(
-            mInternalBufferStart, mNumElements, mBytesPerElement, 0, mBufferType, (void *)0, false,
-            (VaoManager *)0, bufferInterface, PFG_NULL );
+            mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
+            (void *)0, false, (VaoManager *)0, bufferInterface, PFG_NULL );
         // We were overriden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 

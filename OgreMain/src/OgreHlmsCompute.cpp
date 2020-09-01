@@ -486,9 +486,9 @@ namespace Ogre
         }
 
         if( job->mTexturesDescSet )
-            mRenderSystem->_setTexturesCS( job->getTexSlotStart(), job->mTexturesDescSet );
+            mRenderSystem->_setTexturesCS( job->getGlTexSlotStart(), job->mTexturesDescSet );
         if( job->mSamplersDescSet )
-            mRenderSystem->_setSamplersCS( job->getTexSlotStart(), job->mSamplersDescSet );
+            mRenderSystem->_setSamplersCS( job->getGlTexSlotStart(), job->mSamplersDescSet );
         if( job->mUavsDescSet )
             mRenderSystem->_setUavCS( 0u, job->mUavsDescSet );
 

@@ -459,6 +459,7 @@ namespace Ogre
         void _notifyManager( HlmsManager *manager )         { mHlmsManager = manager; }
         HlmsManager* getHlmsManager(void) const             { return mHlmsManager; }
         const String& getShaderProfile(void) const          { return mShaderProfile; }
+        IdString getShaderSyntax(void) const                { return mShaderSyntax; }
 
         void getTemplateChecksum( uint64 outHash[2] ) const;
 

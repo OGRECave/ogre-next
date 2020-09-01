@@ -36,6 +36,8 @@
 			"entry_point" : "main",
 			"profiles" : ["cs_5_0", "cs_4_1"],
 
+			"gl_tex_slot_start" : 0,
+
 			"properties" :
 			{
 				"ArbitraryName" : 1

@@ -1111,12 +1111,12 @@ namespace Ogre
 
         if( getProperty( HlmsBaseProp::ForwardPlus ) )
         {
-            setTextureReg( PixelShader, "f3dGrid", texUnit++ );
-
             if( mVaoManager->readOnlyIsTexBuffer() )
                 setTextureReg( PixelShader, "f3dLightList", texUnit++ );
             else
                 setProperty( "f3dLightList", texUnit++ );
+
+            setTextureReg( PixelShader, "f3dGrid", texUnit++ );
         }
 
         bool depthTextureDefined = false;
@@ -2906,9 +2906,9 @@ namespace Ogre
                 if( mGridBuffer )
                 {
                     *commandBuffer->addCommand<CbShaderBuffer>() =
-                            CbShaderBuffer( PixelShader, texUnit++, mGridBuffer, 0, 0 );
-                    *commandBuffer->addCommand<CbShaderBuffer>() =
                             CbShaderBuffer( PixelShader, texUnit++, mGlobalLightListBuffer, 0, 0 );
+                    *commandBuffer->addCommand<CbShaderBuffer>() =
+                            CbShaderBuffer( PixelShader, texUnit++, mGridBuffer, 0, 0 );
                 }
 
                 if( !mPrePassTextures->empty() )
