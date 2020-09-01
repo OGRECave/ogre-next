@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
+#include "OgreHlmsManager.h"
 
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
@@ -86,6 +87,8 @@ namespace Ogre
     HlmsCompute::~HlmsCompute()
     {
         destroyAllComputeJobs();
+        clearShaderCache();
+        mHlmsManager->unregisterComputeHlms();
     }
     //-----------------------------------------------------------------------------------
     void HlmsCompute::_changeRenderSystem( RenderSystem *newRs )
