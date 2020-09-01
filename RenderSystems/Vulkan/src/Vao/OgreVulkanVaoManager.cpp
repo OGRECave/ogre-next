@@ -154,6 +154,23 @@ namespace Ogre
         }
 
         deleteStagingBuffers();
+
+        for( size_t i = 0; i < MAX_VBO_FLAG; ++i )
+        {
+            VboVec::iterator itor = mVbos[i].begin();
+            VboVec::iterator endt = mVbos[i].end();
+
+            while( itor != endt )
+            {
+                vkDestroyBuffer( mDevice->mDevice, itor->vkBuffer, 0 );
+                vkFreeMemory( mDevice->mDevice, itor->vboName, 0 );
+
+                itor->vboName = 0;
+                delete itor->dynamicBuffer;
+                itor->dynamicBuffer = 0;
+                ++itor;
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::initDrawIdVertexBuffer()
