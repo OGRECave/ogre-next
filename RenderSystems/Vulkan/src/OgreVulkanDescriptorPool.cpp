@@ -82,6 +82,24 @@ namespace Ogre
         createNewPool( vaoManager->getDevice(), capacity );
     }
     //-------------------------------------------------------------------------
+    VulkanDescriptorPool::~VulkanDescriptorPool()
+    {
+        OGRE_ASSERT_LOW( mPools.empty() && "Call deinitialize first!" );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDescriptorPool::deinitialize( VulkanDevice *device )
+    {
+        FastArray<Pool>::const_iterator itor = mPools.begin();
+        FastArray<Pool>::const_iterator endt = mPools.end();
+
+        while( itor != endt )
+        {
+            vkDestroyDescriptorPool( device->mDevice, itor->pool, 0 );
+            ++itor;
+        }
+        mPools.clear();
+    }
+    //-------------------------------------------------------------------------
     void VulkanDescriptorPool::createNewPool( VulkanDevice *device )
     {
         const size_t newCapacity = mCurrentCapacity + ( mCurrentCapacity >> 1u ) + 1u;

@@ -73,6 +73,8 @@ namespace Ogre
                               size_t setIdx, const size_t capacity = 16u );
         ~VulkanDescriptorPool();
 
+        void deinitialize( VulkanDevice *device );
+
         VkDescriptorSet allocate( VulkanDevice *device, VkDescriptorSetLayout setLayout );
         void reset( VulkanDevice *device );
 
