@@ -113,7 +113,7 @@ namespace Ogre
         void destroyProxyGeometry(void);
         void createCubemapBlendWorkspaceDefinition(void);
         void createCubemapBlendWorkspace(void);
-        void destroyCompositorData(void);
+        void destroyCubemapBlendWorkspace(void);
 
         void calculateBlendFactors(void);
         void setFinalProbeTo( size_t probeIdx );

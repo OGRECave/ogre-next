@@ -299,7 +299,7 @@ namespace Ogre
         }
         else
         {
-            destroyCompositorData();
+            destroyCubemapBlendWorkspace();
 
             CompositorManager2 *compositorManager = mDefaultWorkspaceDef->getCompositorManager();
             compositorManager->removeListener( this );
@@ -523,10 +523,15 @@ namespace Ogre
         mCopyWorkspace->addListener( this );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::destroyCompositorData(void)
+    void ParallaxCorrectedCubemap::destroyCubemapBlendWorkspace(void)
     {
-        mBlendWorkspace->removeListener( this );
         CompositorManager2 *compositorManager = mDefaultWorkspaceDef->getCompositorManager();
+
+        mCopyWorkspace->removeListener( this );
+        compositorManager->removeWorkspace( mCopyWorkspace );
+        mCopyWorkspace = 0;
+
+        mBlendWorkspace->removeListener( this );
         compositorManager->removeWorkspace( mBlendWorkspace );
         mBlendWorkspace = 0;
 
