@@ -5,19 +5,25 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-uniform uint probeIdx;
-uniform float2 projectionParams;
-uniform float3 numProbes;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform uint probeIdx;
+	uniform float2 projectionParams;
+	uniform float3 numProbes;
+vulkan( }; )
 
 #define p_probeIdx			probeIdx
 #define p_projectionParams	projectionParams
 #define p_numProbes			numProbes
 
-uniform samplerCube colourCubemap;
-uniform samplerCube depthCubemap;
+vulkan( layout( ogre_s0 ) uniform sampler bilinearSampler );
 
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image2D irradianceField;
-layout (@insertpiece(uav1_pf_type)) uniform restrict writeonly image2D irradianceFieldDepth;
+vulkan_layout( ogre_t0 ) uniform textureCube colourCubemap;
+vulkan_layout( ogre_t1 ) uniform textureCube depthCubemap;
+
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
+uniform restrict writeonly image2D irradianceField;
+layout( vulkan( ogre_u1 ) vk_comma @insertpiece(uav1_pf_type) )
+uniform restrict writeonly image2D irradianceFieldDepth;
 
 layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),
