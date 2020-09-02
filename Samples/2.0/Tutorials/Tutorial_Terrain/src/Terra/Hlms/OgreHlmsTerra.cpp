@@ -377,9 +377,10 @@ namespace Ogre
     {
         HlmsPbs::notifyPropertiesMergedPreGenerationStep();
 
-        setTextureReg( VertexShader, "heightMap", 0 );
-        setTextureReg( PixelShader, "terrainNormals", 1 );
-        setTextureReg( PixelShader, "terrainShadows", 2 );
+        const int32 texSlotsStart = getProperty( "f3dGrid" ) + 1;
+        setTextureReg( VertexShader, "heightMap", texSlotsStart + 0 );
+        setTextureReg( PixelShader, "terrainNormals", texSlotsStart + 1 );
+        setTextureReg( PixelShader, "terrainShadows", texSlotsStart + 2 );
     }
     //-----------------------------------------------------------------------------------
     uint32 HlmsTerra::fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,

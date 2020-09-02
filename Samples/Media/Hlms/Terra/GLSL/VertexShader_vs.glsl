@@ -27,7 +27,7 @@ out block
 } outVs;
 
 // START UNIFORM GL DECLARATION
-vulkan_layout( ogre_t0 ) uniform texture2D heightMap;
+vulkan_layout( ogre_t@value(heightMap) ) uniform texture2D heightMap;
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
 // END UNIFORM GL DECLARATION
 

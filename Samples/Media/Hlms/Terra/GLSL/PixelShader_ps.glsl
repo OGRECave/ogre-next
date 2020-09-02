@@ -43,6 +43,8 @@ in block
 	@insertpiece( Terra_VStoPS_block )
 } inPs;
 
+@pset( currSampler, samplerStateStart )
+
 @property( !hlms_render_depth_only )
 	@property( !hlms_prepass )
 		layout(location = FRAG_COLOR, index = 0) out vec4 outColour;

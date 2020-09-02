@@ -487,12 +487,12 @@ namespace Ogre
         {
             if( getProperty( HlmsBaseProp::ForwardPlus ) )
             {
+                descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end =
+                    (uint16)getProperty( "f3dLightList" ) + 1u;
+
                 descBindingRanges[DescBindingTypes::TexBuffer].start = (uint16)getProperty( "f3dGrid" );
                 descBindingRanges[DescBindingTypes::TexBuffer].end =
                     descBindingRanges[DescBindingTypes::TexBuffer].start + 1u;
-
-                descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end =
-                    (uint16)getProperty( "f3dLightList" ) + 1u;
             }
         }
 

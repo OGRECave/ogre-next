@@ -17,16 +17,6 @@ struct PS_INPUT
 	@insertpiece( Terra_VStoPS_block )
 };
 
-@padd( roughness_map0_sampler,	samplerStateStart )
-@padd( roughness_map1_sampler,	samplerStateStart )
-@padd( roughness_map2_sampler,	samplerStateStart )
-@padd( roughness_map3_sampler,	samplerStateStart )
-
-@padd( metalness_map0_sampler,	samplerStateStart )
-@padd( metalness_map1_sampler,	samplerStateStart )
-@padd( metalness_map2_sampler,	samplerStateStart )
-@padd( metalness_map3_sampler,	samplerStateStart )
-
 @property( !hlms_render_depth_only )
 	@property( hlms_gen_normals_gbuffer )
 		#define outPs_normals outPs.normals
