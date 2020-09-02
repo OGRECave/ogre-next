@@ -342,8 +342,8 @@ namespace Ogre
             {
                 for( uint8 j = 0u; j < c_semanticMacros[i].count; ++j )
                 {
-                    preamble.a( "#define ", c_semanticMacros[i].nameStr, j, " ", "location = ", attrIdx,
-                                "\n" );
+                    preamble.a( "#define ", c_semanticMacros[i].nameStr, j, " ",
+                                "location = ", attrIdx + j, "\n" );
                 }
             }
         }
