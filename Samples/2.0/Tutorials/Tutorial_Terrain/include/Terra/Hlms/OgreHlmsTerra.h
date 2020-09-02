@@ -57,6 +57,8 @@ namespace Ogre
         MovableObject const *mLastMovableObject;
         DescriptorSetSampler const *mTerraDescSetSampler;
 
+        virtual void setupRootLayout( RootLayout &rootLayout );
+
         virtual HlmsDatablock* createDatablockImpl( IdString datablockName,
                                                     const HlmsMacroblock *macroblock,
                                                     const HlmsBlendblock *blendblock,

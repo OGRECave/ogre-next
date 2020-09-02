@@ -11,15 +11,19 @@
 // We need to calculate the normal of the vertex in
 // the center '+', which is shared by 6 triangles.
 
-#version 330
+#version ogre_glsl_ver_330
 
-uniform sampler2D heightMap;
+vulkan_layout( ogre_t0 ) uniform texture2D heightMap;
 
-uniform vec2 heightMapResolution;
-uniform vec3 vScale;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform vec2 heightMapResolution;
+	uniform vec3 vScale;
+vulkan( }; )
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;

@@ -1,9 +1,17 @@
-#version 430
+@property( syntax != glslvk )
+	#version 430
+	#define ogre_B0 binding = 0
+	#define ogre_B1 binding = 1
+@else
+	#version 450
+@end
 
 layout(std140) uniform;
 
-layout (rgb10_a2) uniform restrict writeonly image2D shadowMap;
-uniform sampler2D heightMap;
+layout( vulkan( ogre_u0 ) vk_comma rgb10_a2 )
+uniform restrict writeonly image2D shadowMap;
+
+vulkan_layout( ogre_t0 ) uniform texture2D heightMap;
 
 layout( local_size_x = @value( threads_per_group_x ),
         local_size_y = @value( threads_per_group_y ),
@@ -15,13 +23,18 @@ layout( local_size_x = @value( threads_per_group_x ),
 //in uvec3 gl_GlobalInvocationID;
 //in uint  gl_LocalInvocationIndex;
 
-//Bresenham algorithm uniforms
-uniform vec2 delta;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	//Bresenham algorithm uniforms
+	uniform vec2 delta;
 
-uniform ivec2 xyStep; //(y0 < y1) ? 1 : -1;
-uniform int isSteep;
+	uniform ivec2 xyStep; //(y0 < y1) ? 1 : -1;
+	uniform int isSteep;
 
-layout(binding = 0) uniform StartsBuffer
+	//Rendering uniforms
+	uniform float heightDelta;
+vulkan( }; )
+
+layout(ogre_B0) uniform StartsBuffer
 {
 	ivec4 startXY[4096];
 };
@@ -34,13 +47,10 @@ struct PerGroupData
 	float padding1;
 };
 
-layout(binding = 1) uniform PerGroupDataBuffer
+layout(ogre_B1) uniform PerGroupDataBuffer
 {
 	PerGroupData perGroupData[4096];
 };
-
-//Rendering uniforms
-uniform float heightDelta;
 
 vec2 calcShadow( ivec2 xyPos, vec2 prevHeight )
 {

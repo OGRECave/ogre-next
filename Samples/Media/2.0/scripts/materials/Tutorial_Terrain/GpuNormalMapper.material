@@ -8,6 +8,11 @@ fragment_program Terra/GpuNormalMapper_ps_GLSL glsl
 	}
 }
 
+fragment_program Terra/GpuNormalMapper_ps_VK glslvk
+{
+	source GpuNormalMapper_ps.glsl
+}
+
 fragment_program Terra/GpuNormalMapper_ps_HLSL hlsl
 {
 	source GpuNormalMapper_ps.hlsl
@@ -24,6 +29,7 @@ fragment_program Terra/GpuNormalMapper_ps_Metal metal
 fragment_program Terra/GpuNormalMapper_ps unified
 {
 	delegate Terra/GpuNormalMapper_ps_GLSL
+	delegate Terra/GpuNormalMapper_ps_VK
 	delegate Terra/GpuNormalMapper_ps_HLSL
 	delegate Terra/GpuNormalMapper_ps_Metal
 

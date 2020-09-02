@@ -142,6 +142,7 @@ namespace Ogre
 
 
         float                   mMaxSpecIblMipmap;
+        uint16                  mTexBufUnitSlotEnd;
         uint32                  mTexUnitSlotStart;
 
         TextureGpuVec const     *mPrePassTextures;
@@ -187,7 +188,8 @@ namespace Ogre
         bool mHasSeparateSamplers;
         DescriptorSetTexture const *mLastDescTexture;
         DescriptorSetSampler const *mLastDescSampler;
-        uint8 mReservedTexSlots;
+        uint8 mReservedTexBufferSlots;  // Includes ReadOnly
+        uint8 mReservedTexSlots;        // These get added to mReservedTexBufferSlots
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
         bool mFineLightMaskGranularity;
 #endif

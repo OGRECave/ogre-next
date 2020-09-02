@@ -85,9 +85,8 @@ namespace Ogre
         mBytesPerSlot = HlmsTerraDatablock::MaterialSizeInGpuAligned;
         mOptimizationStrategy = LowerGpuOverhead;
         mSetupWorldMatBuf = false;
-
-        //heightMap, terrainNormals & terrainShadows
-        mReservedTexSlots = 3u;
+        mReservedTexBufferSlots = 0u;
+        mReservedTexSlots = 3u; //heightMap, terrainNormals & terrainShadows
 
         mSkipRequestSlotInChangeRS = true;
     }
@@ -127,6 +126,12 @@ namespace Ogre
                 mTerraDescSetSampler = mHlmsManager->getDescriptorSetSampler( baseSet );
             }
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsTerra::setupRootLayout( RootLayout &rootLayout )
+    {
+        HlmsPbs::setupRootLayout( rootLayout );
+        //asd;
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::setDetailMapProperties( HlmsTerraDatablock *datablock, PiecesMap *inOutPieces )
@@ -428,7 +433,7 @@ namespace Ogre
 
             if( !casterPass )
             {
-                size_t texUnit = mReservedTexSlots;
+                size_t texUnit = mReservedTexBufferSlots;
 
                 *commandBuffer->addCommand<CbSamplers>() =
                         CbSamplers( 1, mTerraDescSetSampler );
@@ -440,6 +445,8 @@ namespace Ogre
                     *commandBuffer->addCommand<CbShaderBuffer>() =
                             CbShaderBuffer( PixelShader, texUnit++, mGlobalLightListBuffer, 0, 0 );
                 }
+
+                texUnit += mReservedTexSlots;
 
                 if( !mPrePassTextures->empty() )
                 {
@@ -565,7 +572,7 @@ namespace Ogre
             //Different Terra? Must change textures then.
             const Terra *terraObj = static_cast<const Terra*>( queuedRenderable.movableObject );
             *commandBuffer->addCommand<CbTextures>() =
-                    CbTextures( 0, std::numeric_limits<uint16>::max(),
+                    CbTextures( mTexBufUnitSlotEnd + 0u, std::numeric_limits<uint16>::max(),
                                 terraObj->getDescriptorSetTexture() );
 #if OGRE_DEBUG_MODE
 //          Commented: Hack to get a barrier without dealing with the Compositor while debugging.

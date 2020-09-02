@@ -13,7 +13,7 @@
 @piece( lds_definition )shared vec3 g_f3LDS[ 2 ] [ @value( samples_per_threadgroup ) ];@end
 
 @piece( image_sample )
-	return textureLod( inputImage, f2SamplePosition, 0 ).xyz;
+	return textureLod( vkSampler2D( inputImage, inputSampler ), f2SamplePosition, 0 ).xyz;
 @end
 
 @piece( image_store )
