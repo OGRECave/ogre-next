@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "OgrePagingPrerequisites.h"
 #include "Threading/OgreThreadHeaders.h"
 #include "OgreWorkQueue.h"
-
+#include "ogrestd/vector.h"
 
 namespace Ogre
 {

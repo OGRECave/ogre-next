@@ -127,16 +127,13 @@ namespace Ogre
         ser.read(&smType);
         ser.read(&smInstanceName);
         Root& root = Root::getSingleton();
-
-        InstancingThreadedCullingMethod threadedCullingMethod = INSTANCING_CULLING_SINGLETHREAD;
-        const size_t numThreads = std::max<size_t>( 1, PlatformInformation::getNumLogicalCores() );
-        if( numThreads > 1 )
-            threadedCullingMethod = Ogre::INSTANCING_CULLING_THREADED;
+		
+        const size_t numThreads = std::max<size_t>(1, PlatformInformation::getNumLogicalCores());
 
         if (root.hasSceneManager(smInstanceName))
             sm = root.getSceneManager(smInstanceName);
         else
-            sm = root.createSceneManager(smType, numThreads, threadedCullingMethod, smInstanceName);
+            sm = root.createSceneManager(smType, numThreads, smInstanceName);
         setSceneManager(sm);
         // Page Strategy Name
         String stratname;

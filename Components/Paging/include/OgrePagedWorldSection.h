@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePagingPrerequisites.h"
 #include "OgreAxisAlignedBox.h"
-
+#include "ogrestd/map.h"
 namespace Ogre
 {
     /** \addtogroup Optional Components

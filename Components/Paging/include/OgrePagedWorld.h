@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "OgrePagingPrerequisites.h"
 #include "OgreCommon.h"
 #include "OgreNameGenerator.h"
-
+#include "ogrestd/map.h"
 namespace Ogre
 {
     class PageManager;
