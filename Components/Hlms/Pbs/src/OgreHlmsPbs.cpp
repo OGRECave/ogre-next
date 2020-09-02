@@ -1164,11 +1164,10 @@ namespace Ogre
             "A material that uses refractions is used in a pass where refractions are unavailable! See "
             "Samples/2.0/ApiUsage/Refractions for which pass refractions must be rendered in" );
 
-        if( getProperty( PbsProperty::IrradianceVolumes ) &&
-            getProperty( HlmsBaseProp::ShadowCaster ) == 0 )
-        {
+        const bool casterPass = getProperty( HlmsBaseProp::ShadowCaster ) != 0;
+
+        if( !casterPass && getProperty( PbsProperty::IrradianceVolumes ) )
             setTextureReg( PixelShader, "irradianceVolume", texUnit++ );
-        }
 
         if( getProperty( PbsProperty::VctNumProbes ) > 0 )
         {
@@ -1256,6 +1255,8 @@ namespace Ogre
                 setTextureReg( PixelShader, "planarReflectionTex", texUnit );
             ++texUnit;
         }
+
+        texUnit += mListener->getNumExtraPassTextures( casterPass );
 
         setProperty( PbsProperty::Set0TextureSlotEnd, texUnit );
 
@@ -2774,8 +2775,8 @@ namespace Ogre
             mCurrentShadowmapSamplerblock = mShadowmapCmpSamplerblock;
 
         mTexBufUnitSlotEnd = mReservedTexBufferSlots;
-        mTexUnitSlotStart =
-            mPreparedPass.shadowMaps.size() + mReservedTexSlots + mReservedTexBufferSlots;
+        mTexUnitSlotStart = mPreparedPass.shadowMaps.size() + mReservedTexSlots +
+                            mReservedTexBufferSlots + mListener->getNumExtraPassTextures( casterPass );
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         if( mHasPlanarReflections )
             mTexUnitSlotStart += 1;
@@ -2908,10 +2909,10 @@ namespace Ogre
                     CbShaderBuffer( PixelShader, 6, light2Buffer, 0, light2Buffer->getTotalSizeBytes() );
             }
 
+            size_t texUnit = mReservedTexBufferSlots;
+
             if( !casterPass )
             {
-                size_t texUnit = mReservedTexBufferSlots;
-
                 if( mGridBuffer )
                 {
                     *commandBuffer->addCommand<CbShaderBuffer>() =
@@ -3076,7 +3077,7 @@ namespace Ogre
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             mLastBoundPlanarReflection = 0u;
 #endif
-            mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock );
+            mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock, texUnit );
         }
 
         //Don't bind the material buffer on caster passes (important to keep

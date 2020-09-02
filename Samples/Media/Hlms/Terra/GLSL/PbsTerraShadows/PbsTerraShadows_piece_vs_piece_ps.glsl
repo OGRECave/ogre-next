@@ -15,8 +15,8 @@
 
 /// Add the shadows' texture to the vertex shader
 @piece( custom_vs_uniformDeclaration )
-	vulkan_layout( ogre_t12 ) uniform texture2D terrainShadows;
-	vulkan( layout( ogre_s12 ) uniform sampler terrainShadowSampler );
+	vulkan_layout( ogre_t@value(terrainShadows) ) uniform texture2D terrainShadows;
+	vulkan( layout( ogre_s@value(terrainShadows) ) uniform sampler terrainShadowSampler );
 @end
 
 /// Evaluate the shadow based on world XZ position & height in the vertex shader.

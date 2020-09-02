@@ -931,7 +931,7 @@ namespace Ogre
 
             rebindTexBuffer( commandBuffer );
 
-            mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock );
+            mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock, 0u );
         }
 
         //Don't bind the material buffer on caster passes (important to keep

@@ -51,11 +51,12 @@ namespace Ogre
 
         void setTerra( Terra *terra );
 
-        virtual void shaderCacheEntryCreated( const String &shaderProfile,
-                                              const HlmsCache *hlmsCacheEntry,
-                                              const HlmsCache &passCache,
-                                              const HlmsPropertyVec &properties,
-                                              const QueuedRenderable &queuedRenderable );
+        virtual uint16 getNumExtraPassTextures( bool casterPass ) const;
+
+        virtual void propertiesMergedPreGenerationStep(
+            Hlms *hlms, const HlmsCache &passCache, const HlmsPropertyVec &renderableCacheProperties,
+            const PiecesMap renderableCachePieces[NumShaderTypes], const HlmsPropertyVec &properties,
+            const QueuedRenderable &queuedRenderable );
 
         virtual void preparePassHash( const CompositorShadowNode *shadowNode,
                                       bool casterPass, bool dualParaboloid,
@@ -69,7 +70,7 @@ namespace Ogre
                                           float *passBufferPtr );
 
         virtual void hlmsTypeChanged( bool casterPass, CommandBuffer *commandBuffer,
-                                      const HlmsDatablock *datablock );
+                                      const HlmsDatablock *datablock, size_t texUnit );
     };
 
     struct PbsTerraProperty

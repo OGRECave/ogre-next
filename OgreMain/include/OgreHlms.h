@@ -800,6 +800,11 @@ namespace Ogre
         int32 _getProperty( IdString key, int32 defaultVal=0 ) const
                                                 { return getProperty( key, defaultVal ); }
 
+        void _setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit )
+        {
+            setTextureReg( shaderType, texName, texUnit );
+        }
+
         /// Utility helper, mostly useful to HlmsListener implementations.
         static void setProperty( HlmsPropertyVec &properties, IdString key, int32 value );
         /// Utility helper, mostly useful to HlmsListener implementations.

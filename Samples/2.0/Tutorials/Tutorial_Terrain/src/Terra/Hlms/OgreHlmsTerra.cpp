@@ -431,10 +431,10 @@ namespace Ogre
                                                                            passBuffer->
                                                                            getTotalSizeBytes() );
 
+            size_t texUnit = mReservedTexBufferSlots;
+
             if( !casterPass )
             {
-                size_t texUnit = mReservedTexBufferSlots;
-
                 *commandBuffer->addCommand<CbSamplers>() =
                         CbSamplers( 1, mTerraDescSetSampler );
 
@@ -550,7 +550,7 @@ namespace Ogre
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             mLastBoundPlanarReflection = 0u;
 #endif
-            mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock );
+            mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock, 0u );
         }
 
         //Don't bind the material buffer on caster passes (important to keep

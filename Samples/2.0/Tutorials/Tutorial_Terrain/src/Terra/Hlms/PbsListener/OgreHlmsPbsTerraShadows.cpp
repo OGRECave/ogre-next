@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbTexture.h"
 
-#include "OgreHlms.h"
+#include "OgreHlmsPbs.h"
 #include "OgreHlmsManager.h"
 #include "OgreRoot.h"
 
@@ -69,27 +69,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbsTerraShadows::shaderCacheEntryCreated( const String &shaderProfile,
-                                                       const HlmsCache *hlmsCacheEntry,
-                                                       const HlmsCache &passCache,
-                                                       const HlmsPropertyVec &properties,
-                                                       const QueuedRenderable &queuedRenderable )
+    uint16 HlmsPbsTerraShadows::getNumExtraPassTextures( bool casterPass ) const
     {
-        if( shaderProfile != "hlsl" &&
-            shaderProfile != "metal" &&
-            Hlms::getProperty( passCache.setProperties, HlmsBaseProp::ShadowCaster ) == 0 )
+        return ( !casterPass && mTerra ) ? 1u : 0u;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbsTerraShadows::propertiesMergedPreGenerationStep(
+        Hlms *hlms, const HlmsCache &passCache, const HlmsPropertyVec &renderableCacheProperties,
+        const PiecesMap renderableCachePieces[NumShaderTypes], const HlmsPropertyVec &properties,
+        const QueuedRenderable &queuedRenderable )
+    {
+        if( hlms->_getProperty( HlmsBaseProp::ShadowCaster ) == 0 && mTerra )
         {
-            if( !hlmsCacheEntry->pso.vertexShader.isNull() )
-            {
-                GpuProgramParametersSharedPtr vsParams = hlmsCacheEntry->pso.vertexShader->
-                        getDefaultParameters();
-
-                //The slot 12 is arbitrary. Should be high enough enough to not mess
-                //with most materials (it could conflict if a material uses *A LOT* of
-                //textures and they're in different arrays).
-                //Note OpenGL has very low limits (usually 15-16)
-                vsParams->setNamedConstant( "terrainShadows", 12 );
-            }
+            int32 texUnit = hlms->_getProperty( PbsProperty::Set0TextureSlotEnd );
+            hlms->_setTextureReg( VertexShader, "terrainShadows", texUnit - 1 );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -147,7 +140,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbsTerraShadows::hlmsTypeChanged( bool casterPass, CommandBuffer *commandBuffer,
-                                               const HlmsDatablock *datablock )
+                                               const HlmsDatablock *datablock, size_t texUnit )
     {
         if( !casterPass && mTerra )
         {
@@ -155,7 +148,7 @@ namespace Ogre
 
             //Bind the shadows' texture. Tex. slot must match with
             //the one in HlmsPbsTerraShadows::shaderCacheEntryCreated
-            *commandBuffer->addCommand<CbTexture>() = CbTexture( 12u, terraShadowTex,
+            *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit++, terraShadowTex,
                                                                  mTerraSamplerblock );
 
 #if OGRE_DEBUG_MODE

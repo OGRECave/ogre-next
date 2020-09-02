@@ -15,8 +15,8 @@
 
 /// Add the shadows' texture to the vertex shader
 @piece( custom_vs_uniformDeclaration )
-	SamplerState terrainShadowSampler : register(s12);
-    Texture2D<unorm float4> terrainShadows : register(t12);
+	SamplerState terrainShadowSampler : register(s@value(terrainShadows));
+	Texture2D<unorm float4> terrainShadows : register(t@value(terrainShadows));
 @end
 
 /// Evaluate the shadow based on world XZ position & height in the vertex shader.

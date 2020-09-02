@@ -2323,7 +2323,7 @@ namespace Ogre
         }
 
         notifyPropertiesMergedPreGenerationStep();
-        mListener->propertiesMergedPreGenerationStep( mShaderProfile, passCache,
+        mListener->propertiesMergedPreGenerationStep( this, passCache,
                                                       renderableCache.setProperties,
                                                       renderableCache.pieces,
                                                       mSetProperties, queuedRenderable );
