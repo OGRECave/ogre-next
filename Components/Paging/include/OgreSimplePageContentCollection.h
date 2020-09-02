@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "OgrePagingPrerequisites.h"
 #include "OgrePageContentCollection.h"
 #include "OgrePageContentCollectionFactory.h"
-
+#include "ogrestd/vector.h"
 namespace Ogre
 {
     /** \addtogroup Optional Components

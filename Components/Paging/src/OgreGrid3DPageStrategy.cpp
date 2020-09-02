@@ -34,9 +34,10 @@ THE SOFTWARE.
 #include "OgreSceneNode.h"
 #include "OgreSceneManager.h"
 #include "OgreMaterialManager.h"
-#include "OgreManualObject.h"
+#include "OgreManualObject2.h"
 #include "OgrePageManager.h"
 #include "OgreTechnique.h"
+#include "OgreHlmsDatablock.h"
 
 namespace Ogre
 {
@@ -367,9 +368,9 @@ namespace Ogre
             {
                 mat = MaterialManager::getSingleton().create(matName, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
                 Pass* pass = mat->getTechnique(0)->getPass(0);
-                pass->setLightingEnabled(false);
+                HlmsMacroblock macroblock = *pass->getMacroblock();
+                pass->setMacroblock(macroblock);
                 pass->setVertexColourTracking(TVC_AMBIENT);
-                pass->setDepthWriteEnabled(false);
                 mat->load();
             }
 
@@ -383,7 +384,7 @@ namespace Ogre
             else
             {
                 mo = p->getParentSection()->getSceneManager()->createManualObject();
-                mo->begin(matName, RenderOperation::OT_LINE_STRIP);
+                mo->begin(matName, OT_LINE_STRIP);
             }
 
             ColourValue vcol = ColourValue::Green;
