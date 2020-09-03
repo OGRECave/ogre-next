@@ -74,8 +74,7 @@ namespace Ogre
 
     HlmsTerra::HlmsTerra( Archive *dataFolder, ArchiveVec *libraryFolders ) :
         HlmsPbs( dataFolder, libraryFolders ),
-        mLastMovableObject( 0 ),
-        mTerraDescSetSampler( 0 )
+        mLastMovableObject( 0 )
     {
         //Override defaults
         mType = HLMS_USER3;
@@ -143,17 +142,6 @@ namespace Ogre
 
                 requestSlot( datablock->mTextureHash, datablock, false );
                 ++itor;
-            }
-
-            if( !mTerraDescSetSampler )
-            {
-                //We need one for terrainNormals & terrainShadows. Reuse an existing samplerblock
-                DescriptorSetSampler baseSet;
-                baseSet.mSamplers.push_back( mAreaLightMasksSamplerblock );
-                if( !mHasSeparateSamplers )
-                    baseSet.mSamplers.push_back( mAreaLightMasksSamplerblock );
-                baseSet.mShaderTypeSamplerCount[PixelShader] = baseSet.mSamplers.size();
-                mTerraDescSetSampler = mHlmsManager->getDescriptorSetSampler( baseSet );
             }
         }
     }
@@ -497,9 +485,6 @@ namespace Ogre
 
             if( !casterPass )
             {
-                *commandBuffer->addCommand<CbSamplers>() =
-                        CbSamplers( 1, mTerraDescSetSampler );
-
                 if( mGridBuffer )
                 {
                     *commandBuffer->addCommand<CbShaderBuffer>() =
@@ -633,9 +618,13 @@ namespace Ogre
         {
             //Different Terra? Must change textures then.
             const Terra *terraObj = static_cast<const Terra*>( queuedRenderable.movableObject );
-            *commandBuffer->addCommand<CbTextures>() =
-                    CbTextures( mTexBufUnitSlotEnd + 0u, std::numeric_limits<uint16>::max(),
-                                terraObj->getDescriptorSetTexture() );
+            *commandBuffer->addCommand<CbTexture>() =
+                CbTexture( mTexBufUnitSlotEnd + 0u, terraObj->getHeightMapTex() );
+            // We need one for terrainNormals & terrainShadows. Reuse an existing samplerblock
+            *commandBuffer->addCommand<CbTexture>() = CbTexture(
+                mTexBufUnitSlotEnd + 1u, terraObj->getNormalMapTex(), mAreaLightMasksSamplerblock );
+            *commandBuffer->addCommand<CbTexture>() = CbTexture(
+                mTexBufUnitSlotEnd + 2u, terraObj->_getShadowMapTex(), mAreaLightMasksSamplerblock );
             mLastMovableObject = queuedRenderable.movableObject;
         }
 

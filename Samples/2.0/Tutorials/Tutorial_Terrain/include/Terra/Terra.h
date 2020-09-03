@@ -47,7 +47,6 @@ namespace Ogre
         std::vector<TerrainCell*>  m_collectedCells[2];
         size_t                     m_currentCell;
 
-        DescriptorSetTexture const  *m_descriptorSet;
         Ogre::TextureGpu*   m_heightMapTex;
         Ogre::TextureGpu*   m_normalMapTex;
 
@@ -62,8 +61,6 @@ namespace Ogre
         uint32 mHlmsTerraIndex;
 
     protected:
-        void createDescriptorSet(void);
-        void destroyDescriptorSet(void);
         void destroyHeightmapTexture(void);
 
         /// Creates the Ogre texture based on the image data.
@@ -141,8 +138,6 @@ namespace Ogre
         void setCamera( Camera *camera )                { m_camera = camera; }
 
         const ShadowMapper* getShadowMapper(void) const { return m_shadowMapper; }
-
-        const Ogre::DescriptorSetTexture* getDescriptorSetTexture(void) const { return m_descriptorSet; }
 
         Ogre::TextureGpu* getHeightMapTex(void) const   { return m_heightMapTex; }
         Ogre::TextureGpu* getNormalMapTex(void) const   { return m_normalMapTex; }

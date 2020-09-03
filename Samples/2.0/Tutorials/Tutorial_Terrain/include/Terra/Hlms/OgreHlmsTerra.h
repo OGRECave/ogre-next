@@ -57,7 +57,6 @@ namespace Ogre
     class HlmsTerra : public HlmsPbs
     {
         MovableObject const *mLastMovableObject;
-        DescriptorSetSampler const *mTerraDescSetSampler;
 
         FastArray<Terra *> mLinkedTerras;
 
