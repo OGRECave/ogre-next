@@ -1577,7 +1577,7 @@ namespace Ogre
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
         vkCmdDrawIndirect( cmdBuffer, mIndirectBuffer,
                            reinterpret_cast<VkDeviceSize>( cmd->indirectBufferOffset ), cmd->numDraws,
-                           sizeof( CbDrawIndexed ) );
+                           sizeof( CbDrawStrip ) );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_renderEmulated( const CbDrawCallIndexed *cmd )
