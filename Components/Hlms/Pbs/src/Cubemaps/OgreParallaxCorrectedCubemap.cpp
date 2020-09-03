@@ -153,11 +153,15 @@ namespace Ogre
         HlmsSamplerblock samplerblock;
         samplerblock.mMipFilter = FO_NONE;
         mSamplerblockPoint = hlmsManager->getSamplerblock( samplerblock );
+
+        RenderSystem::addSharedListener( this );
     }
     //-----------------------------------------------------------------------------------
     ParallaxCorrectedCubemap::~ParallaxCorrectedCubemap()
     {
         setEnabled( false, 0, 0, PFG_UNKNOWN );
+
+        RenderSystem::removeSharedListener( this );
 
         destroyAllProbes();
 
@@ -175,11 +179,20 @@ namespace Ogre
         hlmsManager->destroySamplerblock( mSamplerblockPoint );
         mSamplerblockPoint = 0;
 
+        _releaseManualHardwareResources();
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemap::_releaseManualHardwareResources()
+    {
         if( mStagingBuffer )
         {
             mStagingBuffer->removeReferenceCount();
             mStagingBuffer = 0;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemap::_restoreManualHardwareResources()
+    {
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::destroyAllProbes(void)
@@ -350,10 +363,12 @@ namespace Ogre
         VertexBufferPackedVec vertexBuffers( 1, vertexBuffer );
         VertexArrayObject *vao = vaoManager->createVertexArrayObject( vertexBuffers, indexBuffer,
                                                                       OT_TRIANGLE_LIST );
-        SubMesh *subMesh = mProxyMesh->createSubMesh();
+        SubMesh *subMesh = mesh->createSubMesh();
         for( int i=0; i<NumVertexPass; ++i )
             subMesh->mVao[i].push_back( vao );
         subMesh->mMaterialName = "Cubemap/BlendProjectCubemap0";
+
+        mesh->_setBounds( Aabb( Vector3::ZERO, Vector3::UNIT_SCALE ) );
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::createProxyGeometry(void)
@@ -361,7 +376,6 @@ namespace Ogre
         mProxyMesh = MeshManager::getSingleton().createManual(
                     "AutoGen_ParallaxCorrectedCubemap_" + StringConverter::toString( getId() ) +
                     "_Proxy", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, this );
-        mProxyMesh->_setBounds( Aabb( Vector3::ZERO, Vector3::UNIT_SCALE ) );
 
         RenderQueue *renderQueue = mSceneManager->getRenderQueue();
         renderQueue->setRenderQueueMode( mReservedRqId, RenderQueue::FAST );
@@ -1230,6 +1244,15 @@ namespace Ogre
         if( !mPaused )
             this->updateSceneGraph();
         return true;
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemap::eventOccurred( const String &eventName,
+                                                  const NameValuePairList *parameters )
+    {
+        if( eventName == "DeviceLost" )
+            _releaseManualHardwareResources();
+        else if( eventName == "DeviceRestored" )
+            _restoreManualHardwareResources();
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::allWorkspacesBeforeBeginUpdate(void)

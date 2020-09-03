@@ -34,6 +34,7 @@ THE SOFTWARE.
 
 #include "OgreResource.h"
 #include "OgreFrameListener.h"
+#include "OgreRenderSystem.h"
 #include "OgreGpuProgramParams.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 
@@ -48,6 +49,7 @@ namespace Ogre
     */
     class _OgreHlmsPbsExport ParallaxCorrectedCubemap : public ParallaxCorrectedCubemapBase,
                                                         public FrameListener,
+                                                        public RenderSystem::Listener,
                                                         protected ManualResourceLoader
     {
         CubemapProbe    *mCollectedProbes[OGRE_MAX_CUBE_PROBES];
@@ -138,6 +140,9 @@ namespace Ogre
                                   uint8 reservedRqId, uint32 proxyVisibilityMask );
         ~ParallaxCorrectedCubemap();
 
+        void _releaseManualHardwareResources();
+        void _restoreManualHardwareResources();
+
         virtual void destroyAllProbes(void);
 
         void createProxyItems(void);
@@ -227,6 +232,9 @@ namespace Ogre
 
         //FrameListener overloads
         virtual bool frameStarted( const FrameEvent& evt );
+
+        //RenderSystem::Listener overloads
+        virtual void eventOccurred( const String& eventName, const NameValuePairList* parameters );
     };
 
     /** @} */
