@@ -1,7 +1,6 @@
 compositor_node Tutorial_TerrainRenderingNode
 {
 	in 0 rt_renderwindow
-	in 1 TerraShadowTexture
 
 	target rt_renderwindow
 	{
@@ -23,8 +22,6 @@ compositor_node Tutorial_TerrainRenderingNode
 				depth	dont_care
 				stencil	dont_care
 			}
-
-			expose TerraShadowTexture
 
 			overlays	on
 			shadows		Tutorial_TerrainShadowNode
@@ -66,5 +63,4 @@ compositor_node_shadow Tutorial_TerrainShadowNode
 workspace Tutorial_TerrainWorkspace
 {
 	connect_external 0 Tutorial_TerrainRenderingNode 0
-	connect_external 1 Tutorial_TerrainRenderingNode 1
 }

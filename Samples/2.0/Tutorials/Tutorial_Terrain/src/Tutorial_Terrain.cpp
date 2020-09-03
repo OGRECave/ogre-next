@@ -5,6 +5,7 @@
 #include "OgreRoot.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "OgreConfigFile.h"
+#include "OgreWindow.h"
 
 #include "Terra/Hlms/OgreHlmsTerra.h"
 #include "OgreHlmsManager.h"
@@ -29,10 +30,9 @@ namespace Demo
     {
         virtual Ogre::CompositorWorkspace* setupCompositor()
         {
-            //Delegate compositor creation to the game state. We need terra's shadow texture
-            //to be passed to the compositor so Ogre can insert the proper barriers.
-            assert( dynamic_cast<Tutorial_TerrainGameState*>(mCurrentGameState) );
-            return static_cast<Tutorial_TerrainGameState*>(mCurrentGameState)->setupCompositor();
+            Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
+                                                    "Tutorial_TerrainWorkspace", true );
         }
 
         virtual void setupResources(void)

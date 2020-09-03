@@ -58,6 +58,10 @@ namespace Ogre
         CompositorManager2      *m_compositorManager;
         Camera                  *m_camera;
 
+    public:
+        uint32 mHlmsTerraIndex;
+
+    protected:
         void createDescriptorSet(void);
         void destroyDescriptorSet(void);
         void destroyHeightmapTexture(void);

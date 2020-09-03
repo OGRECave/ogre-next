@@ -96,6 +96,36 @@ namespace Ogre
         destroyAllBuffers();
     }
     //-----------------------------------------------------------------------------------
+    void HlmsTerra::_linkTerra( Terra *terra )
+    {
+        OGRE_ASSERT_LOW( terra->mHlmsTerraIndex == std::numeric_limits<uint32>::max() &&
+                         "Terra instance must be unlinked before being linked again!" );
+
+        terra->mHlmsTerraIndex = static_cast<uint32>( mLinkedTerras.size() );
+        mLinkedTerras.push_back( terra );
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsTerra::_unlinkTerra( Terra *terra )
+    {
+        if( terra->mHlmsTerraIndex >= mLinkedTerras.size() ||
+            terra != *( mLinkedTerras.begin() + terra->mHlmsTerraIndex ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
+                         "A Terra instance had it's mHlmsTerraIndex out of date!!! "
+                         "(or the instance wasn't being tracked by this HlmsTerra)",
+                         "HlmsTerra::_unlinkTerra" );
+        }
+
+        FastArray<Terra *>::iterator itor = mLinkedTerras.begin() + terra->mHlmsTerraIndex;
+        itor = efficientVectorRemove( mLinkedTerras, itor );
+
+        // The Renderable that was at the end got swapped and has now a different index
+        if( itor != mLinkedTerras.end() )
+            ( *itor )->mHlmsTerraIndex = static_cast<uint32>( itor - mLinkedTerras.begin() );
+
+        terra->mHlmsTerraIndex = std::numeric_limits<uint32>::max();
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsTerra::_changeRenderSystem( RenderSystem *newRs )
     {
         HlmsPbs::_changeRenderSystem( newRs );
@@ -126,12 +156,6 @@ namespace Ogre
                 mTerraDescSetSampler = mHlmsManager->getDescriptorSetSampler( baseSet );
             }
         }
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsTerra::setupRootLayout( RootLayout &rootLayout )
-    {
-        HlmsPbs::setupRootLayout( rootLayout );
-        //asd;
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::setDetailMapProperties( HlmsTerraDatablock *datablock, PiecesMap *inOutPieces )
@@ -383,6 +407,41 @@ namespace Ogre
         setTextureReg( PixelShader, "terrainShadows", texSlotsStart + 2 );
     }
     //-----------------------------------------------------------------------------------
+    void HlmsTerra::analyzeBarriers( BarrierSolver &barrierSolver,
+                                     ResourceTransitionArray &resourceTransitions,
+                                     Camera *renderingCamera, const bool bCasterPass )
+    {
+        HlmsPbs::analyzeBarriers( barrierSolver, resourceTransitions, renderingCamera, bCasterPass );
+
+        if( bCasterPass )
+            return;
+
+        FastArray<Terra *>::const_iterator itor = mLinkedTerras.begin();
+        FastArray<Terra *>::const_iterator endt = mLinkedTerras.end();
+
+        while( itor != endt )
+        {
+            const Terra *terraObj = static_cast<const Terra *>( *itor );
+
+            if( terraObj->getHeightMapTex()->isRenderToTexture() ||
+                terraObj->getHeightMapTex()->isUav() )
+            {
+                barrierSolver.resolveTransition( resourceTransitions, terraObj->getHeightMapTex(),
+                                                 ResourceLayout::Texture, ResourceAccess::Read,
+                                                 1u << VertexShader );
+            }
+            barrierSolver.resolveTransition( resourceTransitions, terraObj->getNormalMapTex(),
+                                             ResourceLayout::Texture, ResourceAccess::Read,
+                                             1u << PixelShader );
+            // Shadow map texture is used in the vertex shader in regular objects.
+            // Terra uses it in pixel shader.
+            barrierSolver.resolveTransition( resourceTransitions, terraObj->_getShadowMapTex(),
+                                             ResourceLayout::Texture, ResourceAccess::Read,
+                                             ( 1u << VertexShader ) | ( 1u << PixelShader ) );
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     uint32 HlmsTerra::fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
                                       bool casterPass, uint32 lastCacheHash,
                                       uint32 lastTextureHash )
@@ -575,30 +634,6 @@ namespace Ogre
             *commandBuffer->addCommand<CbTextures>() =
                     CbTextures( mTexBufUnitSlotEnd + 0u, std::numeric_limits<uint16>::max(),
                                 terraObj->getDescriptorSetTexture() );
-#if OGRE_DEBUG_MODE
-//          Commented: Hack to get a barrier without dealing with the Compositor while debugging.
-//            ResourceTransition resourceTransition;
-//            resourceTransition.readBarrierBits = ReadBarrier::Uav;
-//            resourceTransition.writeBarrierBits = WriteBarrier::Uav;
-//            mRenderSystem->_resourceTransitionCreated( &resourceTransition );
-//            mRenderSystem->_executeResourceTransition( &resourceTransition );
-//            mRenderSystem->_resourceTransitionDestroyed( &resourceTransition );
-            TextureGpu *terraShadowText = terraObj->_getShadowMapTex();
-            const CompositorTextureVec &compositorTextures = queuedRenderable.movableObject->
-                    _getManager()->getCompositorTextures();
-            CompositorTextureVec::const_iterator itor = compositorTextures.begin();
-            CompositorTextureVec::const_iterator end  = compositorTextures.end();
-
-            while( itor != end && itor->texture != terraShadowText )
-                ++itor;
-
-            if( itor == end )
-            {
-                assert( "Hazard Detected! You should expose this Terra's shadow map texture"
-                        " to the compositor pass so Ogre can place the proper Barriers" && false );
-            }
-#endif
-
             mLastMovableObject = queuedRenderable.movableObject;
         }
 

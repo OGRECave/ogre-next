@@ -29,8 +29,6 @@ namespace Demo
     public:
         Tutorial_TerrainGameState( const Ogre::String &helpDescription );
 
-        Ogre::CompositorWorkspace* setupCompositor();
-
         virtual void createScene01(void);
         virtual void destroyScene(void);
 

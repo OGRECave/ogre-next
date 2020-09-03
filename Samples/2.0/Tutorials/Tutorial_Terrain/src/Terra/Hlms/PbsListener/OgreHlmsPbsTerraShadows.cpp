@@ -147,24 +147,9 @@ namespace Ogre
             Ogre::TextureGpu *terraShadowTex = mTerra->_getShadowMapTex();
 
             //Bind the shadows' texture. Tex. slot must match with
-            //the one in HlmsPbsTerraShadows::shaderCacheEntryCreated
+            //the one in HlmsPbsTerraShadows::propertiesMergedPreGenerationStep
             *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit++, terraShadowTex,
                                                                  mTerraSamplerblock );
-
-#if OGRE_DEBUG_MODE
-            const CompositorTextureVec &compositorTextures = mSceneManager->getCompositorTextures();
-            CompositorTextureVec::const_iterator itor = compositorTextures.begin();
-            CompositorTextureVec::const_iterator end  = compositorTextures.end();
-
-            while( itor != end && itor->texture != terraShadowTex )
-                ++itor;
-
-            if( itor == end )
-            {
-                assert( "Hazard Detected! You should expose this Terra's shadow map texture"
-                        " to the compositor pass so Ogre can place the proper Barriers" && false );
-            }
-#endif
         }
     }
 }

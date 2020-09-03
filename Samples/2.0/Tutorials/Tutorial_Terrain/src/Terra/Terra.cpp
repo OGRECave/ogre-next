@@ -1,6 +1,8 @@
 
 #include "Terra/Terra.h"
+
 #include "Terra/TerraShadowMapper.h"
+#include "Terra/Hlms/OgreHlmsTerra.h"
 
 #include "OgreImage2.h"
 
@@ -43,12 +45,21 @@ namespace Ogre
         m_prevLightDir( Vector3::ZERO ),
         m_shadowMapper( 0 ),
         m_compositorManager( compositorManager ),
-        m_camera( camera )
+        m_camera( camera ),
+        mHlmsTerraIndex( std::numeric_limits<uint32>::max() )
     {
     }
     //-----------------------------------------------------------------------------------
     Terra::~Terra()
     {
+        if( !m_terrainCells.empty() && m_terrainCells.back().getDatablock() )
+        {
+            HlmsDatablock *datablock = m_terrainCells.back().getDatablock();
+            OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
+            HlmsTerra *hlms = static_cast<HlmsTerra *>( datablock->getCreator() );
+            hlms->_unlinkTerra( this );
+        }
+
         destroyDescriptorSet();
         if( m_shadowMapper )
         {
@@ -602,6 +613,14 @@ namespace Ogre
             accumDim += maxPixelDimension * (1u << iteration);
             ++iteration;
 
+            if( !m_terrainCells.empty() && m_terrainCells.back().getDatablock() )
+            {
+                HlmsDatablock *datablock = m_terrainCells.back().getDatablock();
+                OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
+                HlmsTerra *hlms = static_cast<HlmsTerra *>( datablock->getCreator() );
+                hlms->_unlinkTerra( this );
+            }
+
             m_terrainCells.clear();
             m_terrainCells.resize( numCells, TerrainCell( this ) );
         }
@@ -676,6 +695,10 @@ namespace Ogre
             itor->setDatablock( datablock );
             ++itor;
         }
+
+        OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
+        HlmsTerra *hlms = static_cast<HlmsTerra *>( datablock->getCreator() );
+        hlms->_linkTerra( this );
     }
     //-----------------------------------------------------------------------------------
     Ogre::TextureGpu* Terra::_getShadowMapTex(void) const

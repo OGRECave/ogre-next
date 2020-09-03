@@ -40,6 +40,8 @@ namespace Ogre
     class CompositorShadowNode;
     struct QueuedRenderable;
 
+    class Terra;
+
     /** \addtogroup Component
     *  @{
     */
@@ -57,7 +59,7 @@ namespace Ogre
         MovableObject const *mLastMovableObject;
         DescriptorSetSampler const *mTerraDescSetSampler;
 
-        virtual void setupRootLayout( RootLayout &rootLayout );
+        FastArray<Terra *> mLinkedTerras;
 
         virtual HlmsDatablock* createDatablockImpl( IdString datablockName,
                                                     const HlmsMacroblock *macroblock,
@@ -85,7 +87,14 @@ namespace Ogre
         HlmsTerra( Archive *dataFolder, ArchiveVec *libraryFolders );
         virtual ~HlmsTerra();
 
+        void _linkTerra( Terra *terra );
+        void _unlinkTerra( Terra *terra );
+
         virtual void _changeRenderSystem( RenderSystem *newRs );
+
+        virtual void analyzeBarriers( BarrierSolver &barrierSolver,
+                                      ResourceTransitionArray &resourceTransitions,
+                                      Camera *renderingCamera, const bool bCasterPass );
 
         virtual uint32 fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
                                        bool casterPass, uint32 lastCacheHash,
