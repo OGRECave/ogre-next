@@ -82,6 +82,11 @@ namespace Ogre
 
         assert( !mNumDatablockUsers &&
                 "There's still datablocks using this probe! Pointers will become dangling!" );
+        _releaseManualHardwareResources();
+    }
+    //-----------------------------------------------------------------------------------
+    void CubemapProbe::_releaseManualHardwareResources()
+    {
         if( mConstBufferForManualProbes )
         {
             SceneManager *sceneManager = mCreator->getSceneManager();
@@ -89,6 +94,21 @@ namespace Ogre
             vaoManager->destroyConstBuffer( mConstBufferForManualProbes );
             mConstBufferForManualProbes = 0;
             mCreator->_removeManuallyActiveProbe( this );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void CubemapProbe::_restoreManualHardwareResources()
+    {
+        if( mNumDatablockUsers && !mConstBufferForManualProbes )
+        {
+            OGRE_ASSERT_LOW(!mCreator->getAutomaticMode());
+
+            SceneManager *sceneManager = mCreator->getSceneManager();
+            VaoManager *vaoManager = sceneManager->getDestinationRenderSystem()->getVaoManager();
+            mConstBufferForManualProbes = vaoManager->createConstBuffer(
+                        ParallaxCorrectedCubemap::getConstBufferSizeStatic(),
+                        BT_DEFAULT, 0, false );
+            mCreator->_addManuallyActiveProbe( this );
         }
     }
     //-----------------------------------------------------------------------------------

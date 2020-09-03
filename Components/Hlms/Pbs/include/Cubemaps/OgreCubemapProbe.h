@@ -117,6 +117,9 @@ namespace Ogre
         CubemapProbe( ParallaxCorrectedCubemapBase *creator );
         ~CubemapProbe();
 
+        void _releaseManualHardwareResources();
+        void _restoreManualHardwareResources();
+
         /**
         @remarks
             When this CubemapProbe belongs to ParallaxCorrectedCubemapAuto,

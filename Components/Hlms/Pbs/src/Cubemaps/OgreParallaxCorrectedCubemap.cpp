@@ -189,10 +189,15 @@ namespace Ogre
             mStagingBuffer->removeReferenceCount();
             mStagingBuffer = 0;
         }
+
+        for( CubemapProbeVec::iterator it = mProbes.begin(), end = mProbes.end(); it != end; ++it )
+            (*it)->_releaseManualHardwareResources();
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::_restoreManualHardwareResources()
     {
+        for( CubemapProbeVec::iterator it = mProbes.begin(), end = mProbes.end(); it != end; ++it )
+            (*it)->_restoreManualHardwareResources();
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::destroyAllProbes(void)
