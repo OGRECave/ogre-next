@@ -284,6 +284,10 @@ namespace Ogre
             checkVkResult( result, "vkCreateImageView" );
         }
 
+        // We will be releasing the staging texture memory immediately. We must flush out manually
+        mDevice->commitAndNextCommandBuffer( false );
+        vkDeviceWaitIdle( mDevice->mDevice );
+
         vaoManager->destroyStagingTexture( stagingTex );
         delete stagingTex;
     }

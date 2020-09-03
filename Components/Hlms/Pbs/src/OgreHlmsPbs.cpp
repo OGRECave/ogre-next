@@ -499,9 +499,17 @@ namespace Ogre
         // It's not a typo: we start Texture where max( ReadOnlyBuffer, TexBuffer ) left off
         // because we treat ReadOnly buffers numbering as if they all were texbuffer slots
         // (in terms of contiguity)
-        descBindingRanges[DescBindingTypes::Texture].start =
-            std::max( descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end,
-                      descBindingRanges[DescBindingTypes::TexBuffer].end );
+        if( descBindingRanges[DescBindingTypes::ReadOnlyBuffer].isInUse() )
+        {
+            descBindingRanges[DescBindingTypes::Texture].start =
+                descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end;
+        }
+        if( descBindingRanges[DescBindingTypes::TexBuffer].isInUse() )
+        {
+            descBindingRanges[DescBindingTypes::Texture].start =
+                std::max( descBindingRanges[DescBindingTypes::Texture].end,
+                          descBindingRanges[DescBindingTypes::TexBuffer].end );
+        }
         descBindingRanges[DescBindingTypes::Texture].end =
             (uint16)getProperty( PbsProperty::Set0TextureSlotEnd );
 
