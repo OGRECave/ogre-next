@@ -641,7 +641,7 @@ namespace Ogre
         {
             it = mOptions.find("Video Mode");
             ComPtr<ID3D11Device> device;
-            createD3D11Device( mVendorExtension, "", driver, mDriverType,
+            createD3D11Device( mVendorExtension, Root::getSingleton().getAppName(), driver, mDriverType,
                                mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel,
                                NULL, device.GetAddressOf() );
             // 'videoMode' could be NULL if working over RDP/Simulator
@@ -759,7 +759,7 @@ namespace Ogre
 #endif
 
         // create the device for the selected adapter
-        createDevice( windowTitle );
+        createDevice();
 
         if( autoCreateWindow )
         {
@@ -1619,11 +1619,9 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::createDevice( const String &windowTitle )
+    void D3D11RenderSystem::createDevice( void )
     {
         mDevice.ReleaseAll();
-
-        mLastWindowTitlePassedToExtensions = windowTitle;
 
         D3D11Driver *d3dDriver = getDirect3DDrivers(true)->findByName( mDriverName );
         mActiveD3DDriver = *d3dDriver; // store copy of selected driver, so that it is not
@@ -1640,7 +1638,7 @@ namespace Ogre
         }
 
         ComPtr<ID3D11Device> device;
-        createD3D11Device( mVendorExtension, windowTitle, d3dDriver, mDriverType,
+        createD3D11Device( mVendorExtension, Root::getSingleton().getAppName(), d3dDriver, mDriverType,
                            mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, &mFeatureLevel,
                            device.GetAddressOf() );
         mDevice.TransferOwnership( device );
@@ -1687,7 +1685,7 @@ namespace Ogre
         v1::HardwareBufferManager::getSingleton()._releaseBufferCopies(true);
 
         // recreate device
-        createDevice( mLastWindowTitlePassedToExtensions );
+        createDevice();
 
         static_cast<D3D11VaoManager*>(mVaoManager)->_createD3DResources();
         static_cast<D3D11TextureGpuManager*>(mTextureGpuManager)->_createD3DResources();
@@ -3698,9 +3696,9 @@ namespace Ogre
         mVendorExtension = D3D11VendorExtension::initializeExtension( GPU_VENDOR_COUNT, 0 );
 
         ComPtr<ID3D11Device> device;
-        createD3D11Device( mVendorExtension, "", NULL, D3D_DRIVER_TYPE_HARDWARE,
-                           mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, 0,
-                           device.GetAddressOf() );
+        createD3D11Device( mVendorExtension, Root::getSingleton().getAppName(), NULL,
+                           D3D_DRIVER_TYPE_HARDWARE, mMinRequestedFeatureLevel,
+                           mMaxRequestedFeatureLevel, 0, device.GetAddressOf() );
         mDevice.TransferOwnership( device );
     }
     //---------------------------------------------------------------------

@@ -112,7 +112,8 @@ namespace Ogre
         memset( &appInfo, 0, sizeof( appInfo ) );
 
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        appInfo.pApplicationName = appName.c_str();
+        if( !appName.empty() )
+            appInfo.pApplicationName = appName.c_str();
         appInfo.pEngineName = "Ogre3D Vulkan Engine";
         appInfo.engineVersion = OGRE_VERSION;
         appInfo.apiVersion = VK_MAKE_VERSION( 1, 0, 2 );

@@ -67,6 +67,7 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanUavBufferPacked.h"
 
 #include "OgreDepthBuffer.h"
+#include "OgreRoot.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #    include "Windowing/win32/OgreVulkanWin32Window.h"
@@ -737,8 +738,8 @@ namespace Ogre
         }
 #endif
 
-        mVkInstance = VulkanDevice::createInstance( "Ogre App TODO ME", reqInstanceExtensions,
-                                                    instanceLayers, dbgFunc, this );
+        mVkInstance = VulkanDevice::createInstance(
+            Root::getSingleton().getAppName(), reqInstanceExtensions, instanceLayers, dbgFunc, this );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         addInstanceDebugCallback();

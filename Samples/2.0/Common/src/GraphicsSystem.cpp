@@ -144,7 +144,8 @@ namespace Demo
 
         mRoot = OGRE_NEW Ogre::Root( pluginsPath,
                                      mWriteAccessFolder + "ogre.cfg",
-                                     mWriteAccessFolder + "Ogre.log" );
+                                     mWriteAccessFolder + "Ogre.log",
+                                     windowTitle );
 
         mStaticPluginLoader.install( mRoot );
 
