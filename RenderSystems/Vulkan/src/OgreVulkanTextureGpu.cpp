@@ -64,11 +64,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VulkanTextureGpu::~VulkanTextureGpu()
     {
-        VulkanTextureGpuManager *textureManager =
-            static_cast<VulkanTextureGpuManager *>( mTextureManager );
-        VulkanDevice *device = textureManager->getDevice();
-        device->mGraphicsQueue.notifyTextureDestroyed( this );
-
         destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
@@ -208,6 +203,26 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::destroyInternalResourcesImpl( void )
     {
+        // If 'this' is being destroyed: We must call notifyTextureDestroyed
+        //
+        // If 'this' is only being transitioned to OnStorage:
+        // Our VkImage is being destroyed; and there may be pending image operations on it.
+        // This wouldn't be a problem because the vkDestroyImage call is delayed.
+        // However if the texture is later transitioned again to Resident, mCurrLayout & mNextLayout
+        // will get out of sync when endCopyEncoder gets called.
+        //
+        // e.g. if a texture performs:
+        //      OnStorage -> Resident -> <upload operation> -> OnStorage -> Resident ->
+        //      endCopyEncoder -> <upload operation> -> endCopyEncoder
+        //
+        // then the 1st endCopyEncoder will set mCurrLayout to SHADER_READ_ONLY_OPTIMAL because
+        // it thinks it changed the layout of the current mFinalTextureName, but it actually
+        // changed the layout of the previous mFinalTextureName which is scheduled to be destroyed
+        VulkanTextureGpuManager *textureManager =
+            static_cast<VulkanTextureGpuManager *>( mTextureManager );
+        VulkanDevice *device = textureManager->getDevice();
+        device->mGraphicsQueue.notifyTextureDestroyed( this );
+
         if( mDefaultDisplaySrv && mOwnsSrv )
         {
             destroyView( mDefaultDisplaySrv );
