@@ -342,10 +342,10 @@ namespace Ogre
         mPresentQueue = mGraphicsQueue.mQueue;
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::commitAndNextCommandBuffer( bool endingFrame )
+    void VulkanDevice::commitAndNextCommandBuffer( SubmissionType::SubmissionType submissionType )
     {
         mGraphicsQueue.endAllEncoders();
-        mGraphicsQueue.commitAndNextCommandBuffer( endingFrame );
+        mGraphicsQueue.commitAndNextCommandBuffer( submissionType );
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::stall( void )
@@ -355,7 +355,7 @@ namespace Ogre
         //
         // We can't have potentially dangling API handles in a cmd buffer.
         // We must submit our current pending work so far and wait until that's done.
-        commitAndNextCommandBuffer( false );
+        commitAndNextCommandBuffer( SubmissionType::FlushOnly );
         mRenderSystem->resetAllBindings();
 
         vkDeviceWaitIdle( mDevice );

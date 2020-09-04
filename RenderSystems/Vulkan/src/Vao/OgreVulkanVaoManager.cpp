@@ -1565,7 +1565,7 @@ namespace Ogre
             // We could only reach here if _update() was called
             // twice in a row without completing a full frame.
             // Without this, waitForTailFrameToFinish becomes unsafe.
-            mDevice->commitAndNextCommandBuffer( false );
+            mDevice->commitAndNextCommandBuffer( SubmissionType::NewFrameIdx );
         }
 
         mFenceFlushed = false;

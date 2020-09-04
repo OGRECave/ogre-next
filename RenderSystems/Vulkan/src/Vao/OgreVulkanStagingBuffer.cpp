@@ -116,7 +116,7 @@ namespace Ogre
             fence.fenceName = device->mGraphicsQueue.acquireCurrentFence();
 
             // Flush the device for accuracy in the fences.
-            device->commitAndNextCommandBuffer( false );
+            device->commitAndNextCommandBuffer();
             mFences.push_back( fence );
 
             mUnfencedHazards.clear();

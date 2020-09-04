@@ -273,7 +273,8 @@ namespace Ogre
         void _waitOnFrame( uint8 frameIdx );
         bool _isFrameFinished( uint8 frameIdx );
 
-        void commitAndNextCommandBuffer( bool endingFrame = false );
+        void commitAndNextCommandBuffer(
+            SubmissionType::SubmissionType submissionType = SubmissionType::FlushOnly );
 
         VulkanVaoManager *getVaoManager( void ) { return mVaoManager; }
     };

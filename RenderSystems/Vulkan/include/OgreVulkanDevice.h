@@ -104,7 +104,8 @@ namespace Ogre
 
         void initQueues( void );
 
-        void commitAndNextCommandBuffer( bool endingFrame );
+        void commitAndNextCommandBuffer(
+            SubmissionType::SubmissionType submissionType = SubmissionType::FlushOnly );
 
         /// Waits for the GPU to finish all pending commands.
         void stall( void );

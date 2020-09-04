@@ -102,6 +102,30 @@ namespace Ogre
         class VulkanHardwareIndexBuffer;
         class VulkanHardwareVertexBuffer;
     }  // namespace v1
+
+    namespace SubmissionType
+    {
+        enum SubmissionType
+        {
+            /// Send the work we have so far to the GPU, but there may be more under way
+            ///
+            /// A fence won't be generated automatically to protect this work, but
+            /// there may be one if getCurrentFence or acquireCurrentFence
+            /// was called
+            FlushOnly,
+            /// Same as FlushOnly + fences the data so that
+            /// VaoManager::mDynamicBufferCurrentFrame can be incremented and
+            /// waitForTailFrameToFinish works without stalling.
+            ///
+            /// It's like forcing the end of a frame without swapping windows, e.g.
+            /// when waiting for textures to finish streaming.
+            NewFrameIdx,
+            /// Same as NewFrameIdx + swaps windows (presents).
+            /// This is the real end of the frame.
+            EndFrameAndSwap
+        };
+    }
+
 }  // namespace Ogre
 
 #define OGRE_VK_EXCEPT( code, num, desc, src ) \

@@ -285,7 +285,7 @@ namespace Ogre
         }
 
         // We will be releasing the staging texture memory immediately. We must flush out manually
-        mDevice->commitAndNextCommandBuffer( false );
+        mDevice->commitAndNextCommandBuffer( SubmissionType::FlushOnly );
         vkDeviceWaitIdle( mDevice->mDevice );
 
         vaoManager->destroyStagingTexture( stagingTex );

@@ -1012,7 +1012,7 @@ namespace Ogre
         return bIsFinished;
     }
     //-------------------------------------------------------------------------
-    void VulkanQueue::commitAndNextCommandBuffer( bool endingFrame )
+    void VulkanQueue::commitAndNextCommandBuffer( SubmissionType::SubmissionType submissionType )
     {
         VkSubmitInfo submitInfo;
         makeVkStruct( submitInfo, VK_STRUCTURE_TYPE_SUBMIT_INFO );
@@ -1022,7 +1022,7 @@ namespace Ogre
         // We must reset all bindings or else after 3 (mDynamicBufferCurrentFrame) frames
         // there could be dangling API handles left hanging around indefinitely that
         // may be collected by RootLayouts that use more slots than they need
-        if( endingFrame )
+        if( submissionType >= SubmissionType::NewFrameIdx )
             mRenderSystem->resetAllBindings();
 
         if( mPendingCmds.empty() )
@@ -1032,7 +1032,7 @@ namespace Ogre
         const size_t numWindowsPendingSwap = mWindowsPendingSwap.size();
         mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff, numWindowsPendingSwap );
 
-        if( endingFrame )
+        if( submissionType >= SubmissionType::EndFrameAndSwap )
         {
             if( !mGpuWaitSemaphForCurrCmdBuff.empty() )
             {
@@ -1048,19 +1048,21 @@ namespace Ogre
                 submitInfo.pSignalSemaphores = mGpuSignalSemaphForCurrCmdBuff.begin();
             }
         }
+
+        if( submissionType >= SubmissionType::NewFrameIdx )
+        {
+            // Ensure mCurrentFence is not nullptr.
+            // We *must* have a fence if we're advancing the frameIdx
+            getCurrentFence();
+        }
+
         // clang-format off
         submitInfo.commandBufferCount   = static_cast<uint32>( mPendingCmds.size() );
         submitInfo.pCommandBuffers      = &mPendingCmds[0];
         // clang-format on
 
         const uint8 dynBufferFrame = mVaoManager->waitForTailFrameToFinish();
-        VkFence fence = getCurrentFence();
-
-        //        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
-        //        if( defaultLog )
-        //        {
-        //            defaultLog->logMessage( String( "VulkanQueue::commitAndNextCommandBuffer" ) );
-        //        }
+        VkFence fence = mCurrentFence;  // Note: mCurrentFence may be nullptr
 
         vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
 
@@ -1073,11 +1075,12 @@ namespace Ogre
 
         mCurrentFence = 0;
 
-        mPerFrameData[dynBufferFrame].mProtectingFences.push_back( fence );
+        if( fence )
+            mPerFrameData[dynBufferFrame].mProtectingFences.push_back( fence );
 
         mPendingCmds.clear();
 
-        if( endingFrame )
+        if( submissionType >= SubmissionType::EndFrameAndSwap )
         {
             for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
             {
@@ -1085,14 +1088,17 @@ namespace Ogre
                 mWindowsPendingSwap[windowIdx]->_swapBuffers( semaphore );
                 mVaoManager->notifyWaitSemaphoreSubmitted( semaphore );
             }
+        }
 
+        if( submissionType >= SubmissionType::NewFrameIdx )
+        {
             mPerFrameData[dynBufferFrame].mCurrentCmdIdx = 0u;
             mVaoManager->_notifyNewCommandBuffer();
         }
 
         newCommandBuffer();
 
-        if( endingFrame )
+        if( submissionType >= SubmissionType::EndFrameAndSwap )
         {
             // acquireNextSwapchain must be called after newCommandBuffer()
             for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
