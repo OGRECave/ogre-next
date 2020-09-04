@@ -34,25 +34,6 @@ namespace Demo
             return mWorkspace;
         }
 
-        virtual void setupResources(void)
-        {
-            GraphicsSystem::setupResources();
-
-            Ogre::ConfigFile cf;
-            cf.load(mResourcePath + "resources2.cfg");
-
-            Ogre::String dataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
-
-            if( dataFolder.empty() )
-                dataFolder = "./";
-            else if( *(dataFolder.end() - 1) != '/' )
-                dataFolder += "/";
-
-            dataFolder += "2.0/scripts/materials/Tutorial_SMAA";
-
-            addResourceLocation( dataFolder, "FileSystem", "General" );
-        }
-
     public:
         TextureResidencyGraphicsSystem( GameState *gameState ) :
             GraphicsSystem( gameState )

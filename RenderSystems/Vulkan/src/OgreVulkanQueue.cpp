@@ -720,6 +720,13 @@ namespace Ogre
 
                 vkTexture->mCurrLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
                 numImageMemBarriers = 1u;
+
+                if( !srcStage )
+                {
+                    // If we're here the texture is read-only and we only
+                    // need the barrier to perform a layout transition
+                    srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+                }
             }
 
             // Wait until earlier render, compute and transfers are done so we can copy what
