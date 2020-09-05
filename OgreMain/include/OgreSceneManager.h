@@ -2778,6 +2778,9 @@ namespace Ogre {
         /** See RayScenQuery. */
         virtual void execute(RaySceneQueryListener* listener);
         bool execute( ObjectData objData, size_t numNodes, RaySceneQueryListener* listener );
+
+    private:
+        using RaySceneQuery::execute;  // Shut up compiler warnings
     };
     /** Default implementation of SphereSceneQuery. */
     class _OgreExport DefaultSphereSceneQuery : public SphereSceneQuery
@@ -2789,6 +2792,9 @@ namespace Ogre {
         /** See SceneQuery. */
         virtual void execute(SceneQueryListener* listener);
         bool execute( ObjectData objData, size_t numNodes, SceneQueryListener* listener );
+
+    private:
+        using SphereSceneQuery::execute;  // Shut up compiler warnings
     };
     /** Default implementation of PlaneBoundedVolumeListSceneQuery. */
     class _OgreExport DefaultPlaneBoundedVolumeListSceneQuery : public PlaneBoundedVolumeListSceneQuery
@@ -2800,7 +2806,10 @@ namespace Ogre {
         /** See SceneQuery. */
         void execute(SceneQueryListener* listener);
         bool execute(ObjectData objData, size_t numNodes, SceneQueryListener* listener);
+
     private:
+        using PlaneBoundedVolumeListSceneQuery::execute;  // Shut up compiler warnings
+
         //SIMD friendly version of a plane
         struct ArrayPlane
         {
@@ -2822,6 +2831,9 @@ namespace Ogre {
         /** See RayScenQuery. */
         virtual void execute(SceneQueryListener* listener);
         bool execute( ObjectData objData, size_t numNodes, SceneQueryListener* listener );
+
+    private:
+        using AxisAlignedBoxSceneQuery::execute;  // Shut up compiler warnings
     };
     
 
