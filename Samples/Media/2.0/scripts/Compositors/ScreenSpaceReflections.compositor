@@ -72,9 +72,9 @@ compositor_node ScreenSpaceReflectionsPostprocessNode
 	in 4 rt_renderwindow
 
 	//TODO: Add sRGB support
-	texture prevFrame				target_width target_height PFG_RGBA8_UNORM mipmap -1 uav depth_pool 0
+	texture prevFrame				target_width target_height PFG_RGBA8_UNORM mipmap -1 uav depth_pool 0 keep_content
 	//Needed to calculate the difference in depths (if it's too high, then we can't use this result)
-	texture prevFrameDepthBuffer	target_width target_height PFG_R32_FLOAT uav
+	texture prevFrameDepthBuffer	target_width target_height PFG_R32_FLOAT uav keep_content
 	texture rtt						target_width target_height PFG_RGBA8_UNORM_SRGB msaa_auto
 
 	rtv rtt
