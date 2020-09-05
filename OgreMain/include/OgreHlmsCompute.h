@@ -108,6 +108,7 @@ namespace Ogre
         CompiledShaderMap   mCompiledShaderCache;
         /// Caches a full PSO.
         ComputePsoCacheVec  mComputeShaderCache;
+        FastArray<size_t>   mFreeShaderCacheEntries;
 
         HlmsComputeJobMap   mComputeJobs;
 
