@@ -109,7 +109,7 @@ endif ()
 
 # Set compiler specific build flags
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
-  if (EMSCRIPTEN)
+  if (EMSCRIPTEN OR (ANDROID AND NOT ANDROID_ABI MATCHES "x86") )
     set(OGRE_GCC_HAS_SSE FALSE)
   else()
     check_cxx_compiler_flag(-msse OGRE_GCC_HAS_SSE)
