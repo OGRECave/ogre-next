@@ -86,6 +86,12 @@ namespace Ogre
 {
     inline VulkanSupport *getVulkanSupport() { return new VulkanXcbSupport(); }
 }  // namespace Ogre
+#    elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+#        include "Windowing/Android/OgreVulkanAndroidSupport.h"
+namespace Ogre
+{
+    inline VulkanSupport *getVulkanSupport() { return new VulkanAndroidSupport(); }
+}  // namespace Ogre
 #    endif
 #endif
 
