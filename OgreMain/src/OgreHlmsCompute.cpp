@@ -361,13 +361,7 @@ namespace Ogre
 
         if( itor != mComputeJobs.end() )
         {
-            HlmsComputeJob *job = itor->second.computeJob;
-            if( job->mPsoCacheHash < mComputeShaderCache.size() )
-            {
-                OGRE_ASSERT_MEDIUM( mComputeShaderCache[job->mPsoCacheHash].job == job );
-                mComputeShaderCache[job->mPsoCacheHash].job = 0; // clear dangling ptr
-            }
-            OGRE_DELETE job;
+            OGRE_DELETE itor->second.computeJob;
             mComputeJobs.erase( itor );
         }
     }
@@ -379,13 +373,7 @@ namespace Ogre
 
         while( itor != end )
         {
-            HlmsComputeJob *job = itor->second.computeJob;
-            if( job->mPsoCacheHash < mComputeShaderCache.size() )
-            {
-                OGRE_ASSERT_MEDIUM( mComputeShaderCache[job->mPsoCacheHash].job == job );
-                mComputeShaderCache[job->mPsoCacheHash].job = 0; // clear dangling ptr
-            }
-            OGRE_DELETE job;
+            OGRE_DELETE itor->second.computeJob;
             ++itor;
         }
 
@@ -400,8 +388,7 @@ namespace Ogre
         while( itor != end )
         {
             mRenderSystem->_hlmsComputePipelineStateObjectDestroyed( &itor->pso );
-            if( itor->job )
-                itor->job->mPsoCacheHash = -1;
+            itor->job->mPsoCacheHash = -1;
             ++itor;
         }
 
