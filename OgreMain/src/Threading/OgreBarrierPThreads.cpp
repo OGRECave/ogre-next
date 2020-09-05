@@ -37,7 +37,8 @@ namespace Ogre
 #define __dmb() asm volatile ( "dmb sy\n" ::: "cc" );
 #endif
 
-#if defined(ANDROID) || OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#if( defined( ANDROID ) && __ANDROID_API__ < __ANDROID_API_N__ ) || \
+    OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
     typedef int pthread_barrierattr_t;
     //-----------------------------------------------------------------------------------
     int pthread_barrier_init(pthread_barrier_t *barrier, const pthread_barrierattr_t *attr, int count)
