@@ -1066,7 +1066,7 @@ namespace Ogre
             desc.BindFlags |= D3D11_BIND_CONSTANT_BUFFER;
         if( bindFlags & BB_FLAG_TEX )
             desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
-        if( bindFlags & BP_FLAG_READONLY )
+        if( bindFlags & BB_FLAG_READONLY )
         {
             desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
             if( !mReadOnlyIsTexBuffer )
@@ -1328,7 +1328,7 @@ namespace Ogre
         {
             // D3D11.0 and below doesn't support NO_OVERWRITE on shader buffers. Use the basic interface.
             bufferInterface =
-                createShaderBufferInterface( BP_FLAG_READONLY, sizeBytes, bufferType, initialData );
+                createShaderBufferInterface( BB_FLAG_READONLY, sizeBytes, bufferType, initialData );
         }
 
         D3D11ReadOnlyBufferPacked *retVal = OGRE_NEW D3D11ReadOnlyBufferPacked(
