@@ -65,7 +65,8 @@ namespace Ogre
             optVideoMode.possibleValues.push_back( resolutionStr.c_str() );
             ++itor;
         }
-        optVideoMode.currentValue = optVideoMode.possibleValues.front();
+        if( !optVideoMode.possibleValues.empty() )
+            optVideoMode.currentValue = optVideoMode.possibleValues.front();
 
         optDisplayFrequency.name = "Display Frequency";
         optDisplayFrequency.immutable = false;

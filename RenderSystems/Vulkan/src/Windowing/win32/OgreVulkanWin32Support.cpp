@@ -87,7 +87,8 @@ namespace Ogre
             optVideoMode.possibleValues.push_back( str.str() );
         }
         remove_duplicates( optVideoMode.possibleValues );
-        optVideoMode.currentValue = optVideoMode.possibleValues.front();
+        if( !optVideoMode.possibleValues.empty() )
+            optVideoMode.currentValue = optVideoMode.possibleValues.front();
 
         optColourDepth.name = "Colour Depth";
         optColourDepth.immutable = false;
@@ -192,8 +193,11 @@ namespace Ogre
                        optDisplayFrequency->possibleValues.end(),
                        optDisplayFrequency->currentValue ) != optDisplayFrequency->possibleValues.end();
 
-        if( ( optDisplayFrequency->currentValue != "N/A" ) && !freqValid )
+        if( ( optDisplayFrequency->currentValue != "N/A" ) && !freqValid &&
+            !optDisplayFrequency->possibleValues.empty() )
+        {
             optDisplayFrequency->currentValue = optDisplayFrequency->possibleValues.front();
+        }
     }
 
     void VulkanWin32Support::setConfigOption( const String &name, const String &value )
@@ -224,8 +228,11 @@ namespace Ogre
             }
             else
             {
-                if( it->second.currentValue.empty() || it->second.currentValue == "N/A" )
+                if( ( it->second.currentValue.empty() || it->second.currentValue == "N/A" ) &&
+                    !it->second.possibleValues.empty() )
+                {
                     it->second.currentValue = it->second.possibleValues.front();
+                }
                 it->second.immutable = false;
             }
         }
