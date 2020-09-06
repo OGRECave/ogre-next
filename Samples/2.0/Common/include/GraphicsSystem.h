@@ -147,6 +147,7 @@ namespace Demo
         const Ogre::String& getPluginsFolder(void) const        { return mPluginsFolder; }
         const Ogre::String& getWriteAccessFolder(void) const    { return mWriteAccessFolder; }
         const Ogre::String& getResourcePath(void) const         { return mResourcePath; }
+        const char *getMediaReadArchiveType( void ) const;
 
         virtual void stopCompositor(void);
         virtual void restartCompositor(void);

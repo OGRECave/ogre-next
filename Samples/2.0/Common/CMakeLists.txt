@@ -10,6 +10,7 @@ include_directories(  )
 file( GLOB SOURCE_FILES
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/System/*.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/System/Android/*.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/Threading/*.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/Utils/*.cpp" )
 

@@ -61,7 +61,7 @@ namespace Demo
             for( size_t i=0; i<5; ++i )
             {
                 Ogre::String dataFolder = originalDataFolder + c_locations[i];
-                addResourceLocation( dataFolder, "FileSystem", "General" );
+                addResourceLocation( dataFolder, getMediaReadArchiveType(), "General" );
             }
         }
 
@@ -109,15 +109,14 @@ namespace Demo
                 //Get the path to all the subdirectories used by HlmsTerra
                 Ogre::HlmsTerra::getDefaultPaths( mainFolderPath, libraryFoldersPaths );
                 Ogre::Archive *archiveTerra = archiveManager.load( rootHlmsFolder + mainFolderPath,
-                                                                   "FileSystem", true );
+                                                                   getMediaReadArchiveType(), true );
                 Ogre::ArchiveVec archiveTerraLibraryFolders;
                 libraryFolderPathIt = libraryFoldersPaths.begin();
                 libraryFolderPathEn = libraryFoldersPaths.end();
                 while( libraryFolderPathIt != libraryFolderPathEn )
                 {
-                    Ogre::Archive *archiveLibrary = archiveManager.load( rootHlmsFolder +
-                                                                         *libraryFolderPathIt,
-                                                                         "FileSystem", true );
+                    Ogre::Archive *archiveLibrary = archiveManager.load(
+                        rootHlmsFolder + *libraryFolderPathIt, getMediaReadArchiveType(), true );
                     archiveTerraLibraryFolders.push_back( archiveLibrary );
                     ++libraryFolderPathIt;
                 }
@@ -136,7 +135,7 @@ namespace Demo
             Ogre::ArchiveVec libraryPbs = hlmsPbs->getPiecesLibraryAsArchiveVec();
             libraryPbs.push_back( Ogre::ArchiveManager::getSingletonPtr()->load(
                                       rootHlmsFolder + "Hlms/Terra/" + shaderSyntax + "/PbsTerraShadows",
-                                      "FileSystem", true ) );
+                                      getMediaReadArchiveType(), true ) );
             hlmsPbs->reloadFrom( archivePbs, &libraryPbs );
         }
 

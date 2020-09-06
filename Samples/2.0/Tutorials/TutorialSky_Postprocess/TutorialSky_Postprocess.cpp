@@ -48,7 +48,7 @@ namespace Demo
 
             dataFolder += "2.0/scripts/materials/TutorialSky_Postprocess";
 
-            addResourceLocation( dataFolder, "FileSystem", "General" );
+            addResourceLocation( dataFolder, getMediaReadArchiveType(), "General" );
         }
 
     public:
