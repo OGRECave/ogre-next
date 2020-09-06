@@ -58,6 +58,11 @@ namespace v1 {
     class _OgreExport MeshManager: public ResourceManager, public Singleton<MeshManager>, 
         public ManualResourceLoader
     {
+    private:
+        using ResourceManager::createOrRetrieve;
+        using ResourceManager::prepare;
+        using ResourceManager::load;
+
     public:
         MeshManager();
         ~MeshManager();

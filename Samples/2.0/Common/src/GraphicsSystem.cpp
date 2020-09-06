@@ -288,7 +288,8 @@ namespace Demo
     #endif
 
     #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        params.insert( std::make_pair( "ANativeWindow", AndroidSystems::getNativeWindow() ) );
+        params.insert( std::make_pair( "ANativeWindow", Ogre::StringConverter::toString(
+                                                            AndroidSystems::getNativeWindow() ) ) );
     #endif
 
         params.insert( std::make_pair("title", windowTitle) );

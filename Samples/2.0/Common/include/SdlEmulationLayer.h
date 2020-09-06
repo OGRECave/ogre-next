@@ -4,7 +4,7 @@
 
 #include "OgrePrerequisites.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS || OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
     #define OGRE_USE_SDL2 0
 
     typedef Ogre::int32 SDL_Keycode;

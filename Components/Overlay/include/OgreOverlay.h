@@ -69,6 +69,8 @@ namespace v1 {
     */
     class _OgreOverlayExport Overlay : public MovableObject
     {
+    protected:
+        using MovableObject::_updateRenderQueue;
 
     public:
               typedef list<OverlayContainer*>::type OverlayContainerList;

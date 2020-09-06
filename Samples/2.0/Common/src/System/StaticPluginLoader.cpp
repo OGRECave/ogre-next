@@ -64,6 +64,7 @@ namespace Demo
     #endif
 #endif
     {
+        OGRE_UNUSED( mDummy );
     }
     //-----------------------------------------------------------------------------------
     StaticPluginLoader::~StaticPluginLoader()

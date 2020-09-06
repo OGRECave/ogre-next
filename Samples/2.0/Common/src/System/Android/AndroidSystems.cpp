@@ -33,6 +33,8 @@ THE SOFTWARE.
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
 #    include "Android/OgreAPKFileSystemArchive.h"
 #    include "Android/OgreAPKZipArchive.h"
+
+#    include <android_native_app_glue.h>
 #endif
 
 namespace Demo

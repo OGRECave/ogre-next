@@ -23,6 +23,9 @@ namespace Demo
 
     class GraphicsSystem : public BaseSystem, public Ogre::UniformScalableTask
     {
+    private:
+        using BaseSystem::initialize;
+
     protected:
         BaseSystem          *mLogicSystem;
 
