@@ -120,6 +120,19 @@ namespace Ogre
             NameValuePairList::const_iterator opt;
             NameValuePairList::const_iterator end = miscParams->end();
             parseSharedParams( miscParams );
+
+            opt = miscParams->find( "ANativeWindow" );
+            if( opt != end )
+            {
+                mNativeWindow = reinterpret_cast<ANativeWindow *>(
+                    StringConverter::parseUnsignedLong( opt->second ) );
+            }
+        }
+
+        if( !mNativeWindow )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "App must provide ANativeWindow via Misc Params!",
+                         "VulkanAndroidWindow::_initialize" );
         }
 
         setHidden( false );

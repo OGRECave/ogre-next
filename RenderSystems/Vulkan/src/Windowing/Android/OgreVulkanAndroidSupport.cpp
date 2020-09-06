@@ -133,6 +133,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------
     void VulkanAndroidSupport::refreshConfig()
     {
+#if 0
         ConfigOptionMap::iterator optVideoMode = mOptions.find( "Video Mode" );
         ConfigOptionMap::iterator optDisplayFrequency = mOptions.find( "Display Frequency" );
 
@@ -186,6 +187,7 @@ namespace Ogre
                 }
             }
         }
+#endif
     }
     //-----------------------------------------------------------------------------
     void VulkanAndroidSupport::setConfigOption( const String &name, const String &value )
