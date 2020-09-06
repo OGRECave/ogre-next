@@ -40,6 +40,8 @@ THE SOFTWARE.
 #include "OgreVulkanUtils.h"
 #include "SPIRV-Reflect/spirv_reflect.h"
 
+#include "OgreVulkanGlslangHeader.h"
+
 #include "glslang/SPIRV/Logger.h"
 
 // Inclusion of SPIRV headers triggers lots of C++11 errors we don't care
@@ -126,7 +128,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    EShLanguage VulkanProgram::getEshLanguage( void ) const
+    uint32 VulkanProgram::getEshLanguage( void ) const
     {
         switch( mType )
         {
@@ -482,7 +484,7 @@ namespace Ogre
 
         extractRootLayoutFromSource();
 
-        const EShLanguage stage = getEshLanguage();
+        const EShLanguage stage = static_cast<EShLanguage>( getEshLanguage() );
         glslang::TShader shader( stage );
 
         TBuiltInResource resources;

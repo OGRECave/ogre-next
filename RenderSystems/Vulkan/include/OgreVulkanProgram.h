@@ -33,13 +33,13 @@ THE SOFTWARE.
 #include "OgreHardwareVertexBuffer.h"
 #include "OgreHighLevelGpuProgram.h"
 
-#include "OgreVulkanGlslangHeader.h"
-
 struct VkVertexInputBindingDescription;
 struct VkVertexInputAttributeDescription;
 struct SpvReflectDescriptorBinding;
 struct SpvReflectDescriptorSet;
 struct SpvReflectShaderModule;
+
+struct TBuiltInResource;
 
 namespace Ogre
 {
@@ -136,7 +136,7 @@ namespace Ogre
     protected:
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
 
-        EShLanguage getEshLanguage( void ) const;
+        uint32 getEshLanguage( void ) const;
 
         void extractRootLayoutFromSource( void );
 
