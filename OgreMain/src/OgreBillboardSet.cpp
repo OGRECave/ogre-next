@@ -879,9 +879,9 @@ namespace v1 {
 
         if( mHlmsDatablock && getMaterial().isNull() )
         {
+            _setHlmsHashes( 0u, 0u );
             mHlmsDatablock->_unlinkRenderable( this );
             mHlmsDatablock = 0;
-            _setHlmsHashes( 0u, 0u );
         }
 
         mBuffersCreated = false;
