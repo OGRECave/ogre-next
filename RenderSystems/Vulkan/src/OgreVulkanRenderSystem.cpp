@@ -71,6 +71,8 @@ THE SOFTWARE.
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #    include "Windowing/win32/OgreVulkanWin32Window.h"
+#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+#    include "Windowing/Android/OgreVulkanAndroidWindow.h"
 #else
 #    include "Windowing/X11/OgreVulkanXcbWindow.h"
 #endif
@@ -179,6 +181,8 @@ namespace Ogre
         mValidationError( false ),
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         mHasWin32Support( false ),
+#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+        mHasAndroidSupport( false ),
 #else
         mHasXcbSupport( false ),
 #endif
@@ -678,6 +682,12 @@ namespace Ogre
                 mHasWin32Support = true;
                 reqInstanceExtensions.push_back( VulkanWin32Window::getRequiredExtensionName() );
             }
+#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+            if( extensionName == VulkanAndroidWindow::getRequiredExtensionName() )
+            {
+                mHasAndroidSupport = true;
+                reqInstanceExtensions.push_back( VulkanAndroidWindow::getRequiredExtensionName() );
+            }
 #else
             if( extensionName == VulkanXcbWindow::getRequiredExtensionName() )
             {
@@ -693,6 +703,8 @@ namespace Ogre
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         if( !mHasWin32Support )
+#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+        if( !mHasAndroidSupport )
 #else
         if( !mHasXcbSupport )
 #endif
@@ -762,6 +774,8 @@ namespace Ogre
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         VulkanWindow *win = OGRE_NEW VulkanWin32Window( name, width, height, fullScreen );
+#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+        VulkanWindow *win = OGRE_NEW VulkanAndroidWindow( name, width, height, fullScreen );
 #else
         VulkanWindow *win = OGRE_NEW VulkanXcbWindow( name, width, height, fullScreen );
 #endif

@@ -120,6 +120,8 @@ namespace Ogre
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         bool mHasWin32Support;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+        bool mHasAndroidSupport;
 #else
         bool mHasXcbSupport;
 #endif
