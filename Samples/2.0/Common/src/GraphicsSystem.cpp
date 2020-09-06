@@ -144,8 +144,13 @@ namespace Demo
     #endif
     #endif
 
-        mRoot = OGRE_NEW Ogre::Root( pluginsPath,
-                                     mWriteAccessFolder + "ogre.cfg",
+    #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
+        const Ogre::String cfgPath = mWriteAccessFolder + "ogre.cfg";
+    #else
+        const Ogre::String cfgPath = "";
+    #endif
+
+        mRoot = OGRE_NEW Ogre::Root( pluginsPath, cfgPath,
                                      mWriteAccessFolder + "Ogre.log",
                                      windowTitle );
 
@@ -182,6 +187,14 @@ namespace Demo
             mRoot->setRenderSystem( renderSystem );
         }
     #endif
+    #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+        if( !mRoot->getRenderSystem() )
+        {
+            Ogre::RenderSystem *renderSystem =
+                mRoot->getRenderSystemByName( "Vulkan Rendering Subsystem" );
+            mRoot->setRenderSystem( renderSystem );
+        }
+    #endif
 
         mRoot->initialise( false, windowTitle );
 
@@ -199,7 +212,7 @@ namespace Demo
     #endif
 
         Ogre::ConfigOptionMap::iterator opt = cfgOpts.find( "Video Mode" );
-        if( opt != cfgOpts.end() )
+        if( opt != cfgOpts.end() && !opt->second.currentValue.empty() )
         {
             //Ignore leading space
             const Ogre::String::size_type start = opt->second.currentValue.find_first_of("012356789");
@@ -288,8 +301,9 @@ namespace Demo
     #endif
 
     #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        params.insert( std::make_pair( "ANativeWindow", Ogre::StringConverter::toString(
-                                                            AndroidSystems::getNativeWindow() ) ) );
+            params.insert( std::make_pair(
+                "ANativeWindow",
+                Ogre::StringConverter::toString( (uintptr_t)AndroidSystems::getNativeWindow() ) ) );
     #endif
 
         params.insert( std::make_pair("title", windowTitle) );
@@ -702,7 +716,7 @@ namespace Demo
 #endif
 
         if( rootHlmsFolder.empty() )
-            rootHlmsFolder = "./";
+            rootHlmsFolder = AndroidSystems::isAndroid() ? "/" : "./";
         else if( *(rootHlmsFolder.end() - 1) != '/' )
             rootHlmsFolder += "/";
 

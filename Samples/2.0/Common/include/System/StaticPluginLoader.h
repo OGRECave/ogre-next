@@ -37,11 +37,17 @@ namespace Ogre
     #ifdef OGRE_BUILD_RENDERSYSTEM_METAL
         class MetalPlugin;
     #endif
+    #ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
+        class D3D11Plugin;
+    #endif
     #ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
         class GL3PlusPlugin;
     #endif
     #ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
         class GLES2Plugin;
+    #endif
+    #ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+        class VulkanPlugin;
     #endif
 #endif
     class Root;
@@ -65,6 +71,9 @@ namespace Demo
     #endif
     #ifdef OGRE_BUILD_RENDERSYSTEM_METAL
         Ogre::MetalPlugin           *mMetalPlugin;
+    #endif
+    #ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+        Ogre::VulkanPlugin			*mVulkanPlugin;
     #endif
 #endif
     public:

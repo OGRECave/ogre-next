@@ -63,6 +63,8 @@ namespace Demo
         static const Ogre::String &openFile( const Ogre::String &filename ) { return filename; }
 #endif
 
+        static bool isAndroid();
+
         static void registerArchiveFactories( void );
     };
 }  // namespace Demo

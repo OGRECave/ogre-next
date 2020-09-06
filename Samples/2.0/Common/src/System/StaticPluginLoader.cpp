@@ -41,6 +41,9 @@ THE SOFTWARE.
     #ifdef OGRE_BUILD_RENDERSYSTEM_METAL
         #include "OgreMetalPlugin.h"
     #endif
+    #ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+        #include "OgreVulkanPlugin.h"
+    #endif
 #endif
 #include "OgreRoot.h"
 
@@ -61,6 +64,9 @@ namespace Demo
     #endif
     #ifdef OGRE_BUILD_RENDERSYSTEM_METAL
     ,   mMetalPlugin( 0 )
+    #endif
+    #ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+    ,   mVulkanPlugin( 0 )
     #endif
 #endif
     {
@@ -88,6 +94,10 @@ namespace Demo
         OGRE_DELETE mMetalPlugin;
         mMetalPlugin = 0;
     #endif
+    #ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+        OGRE_DELETE mVulkanPlugin;
+        mVulkanPlugin = 0;
+    #endif
 #endif
     }
     //-----------------------------------------------------------------------------------
@@ -113,6 +123,11 @@ namespace Demo
         if( !mMetalPlugin )
             mMetalPlugin = OGRE_NEW Ogre::MetalPlugin();
         root->installPlugin( mMetalPlugin );
+    #endif
+    #ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+        if( !mVulkanPlugin )
+            mVulkanPlugin = OGRE_NEW Ogre::VulkanPlugin();
+        root->installPlugin( mVulkanPlugin );
     #endif
 #endif
     }

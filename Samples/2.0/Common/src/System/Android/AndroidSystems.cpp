@@ -83,11 +83,14 @@ namespace Demo
         }
         return stream;
     }
+    //-------------------------------------------------------------------------
+    bool AndroidSystems::isAndroid() { return true; }
 #else
     //-------------------------------------------------------------------------
     void AndroidSystems::setAndroidApp( android_app *androidApp ) {}
     void AndroidSystems::setNativeWindow( ANativeWindow *nativeWindow ) {}
     ANativeWindow *AndroidSystems::getNativeWindow( void ) { return 0; }
+    bool AndroidSystems::isAndroid() { return false; }
     void AndroidSystems::registerArchiveFactories( void ) {}
 #endif
 }  // namespace Demo
