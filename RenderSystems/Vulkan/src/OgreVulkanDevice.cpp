@@ -181,9 +181,9 @@ namespace Ogre
         vkGetPhysicalDeviceFeatures( mPhysicalDevice, &mDeviceFeatures );
 
         mSupportedStages = 0xFFFFFFFF;
-        if( mDeviceFeatures.geometryShader )
+        if( !mDeviceFeatures.geometryShader )
             mSupportedStages ^= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
-        if( mDeviceFeatures.tessellationShader )
+        if( !mDeviceFeatures.tessellationShader )
         {
             mSupportedStages ^= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
                                 VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;

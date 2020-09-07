@@ -263,7 +263,6 @@ namespace Ogre
                 break;
             }
         }
-        swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
         swapchainCreateInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
         swapchainCreateInfo.presentMode = presentMode;
 

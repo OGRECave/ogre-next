@@ -45,18 +45,14 @@ namespace Ogre
         mDevice( device ),
         mGlslLangInitializer( glslLangInitializer )
     {
-#if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
         if( mGlslLangInitializer )
             glslang::InitializeProcess();
-#endif
     }
     //-----------------------------------------------------------------------
     VulkanProgramFactory::~VulkanProgramFactory( void )
     {
-#if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
         if( mGlslLangInitializer )
             glslang::FinalizeProcess();
-#endif
     }
     //-----------------------------------------------------------------------
     const String &VulkanProgramFactory::getLanguage( void ) const { return mLanguageName; }

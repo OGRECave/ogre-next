@@ -577,7 +577,7 @@ namespace Ogre
         {
             spv::SpvBuildLogger logger;
             glslang::SpvOptions opts;
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH && OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
             opts.disableOptimizer = true;
             opts.generateDebugInfo = true;
 #else
