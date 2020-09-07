@@ -92,15 +92,33 @@ namespace Ogre
             depthCompressor->load();
             mPccCompressorPass = depthCompressor->getTechnique( 0 )->getPass( 0 );
         }
+
+        RenderSystem::addSharedListener( this );
     }
     //-----------------------------------------------------------------------------------
     ParallaxCorrectedCubemapBase::~ParallaxCorrectedCubemapBase()
     {
+        RenderSystem::removeSharedListener( this );
+
         destroyAllProbes();
 
         HlmsManager *hlmsManager = mRoot->getHlmsManager();
         hlmsManager->destroySamplerblock( mSamplerblockTrilinear );
         mSamplerblockTrilinear = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapBase::_releaseManualHardwareResources()
+    {
+        for( CubemapProbeVec::iterator it = mProbes.begin(), end = mProbes.end(); it != end; ++it )
+            (*it)->_releaseManualHardwareResources();
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapBase::_restoreManualHardwareResources()
+    {
+        for( CubemapProbeVec::iterator it = mProbes.begin(), end = mProbes.end(); it != end; ++it )
+            (*it)->_restoreManualHardwareResources();
+
+        updateAllDirtyProbes();
     }
     //-----------------------------------------------------------------------------------
     uint32 ParallaxCorrectedCubemapBase::getIblTargetTextureFlags( PixelFormatGpu pixelFormat ) const
@@ -334,5 +352,14 @@ namespace Ogre
             psParams->setNamedConstant( "cameraPosLS", cameraPosLS );
             psParams->setNamedConstant( "viewSpaceToProbeLocalSpace", viewSpaceToProbeLocalSpace );
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapBase::eventOccurred( const String &eventName,
+                                                  const NameValuePairList *parameters )
+    {
+        if( eventName == "DeviceLost" )
+            _releaseManualHardwareResources();
+        else if( eventName == "DeviceRestored" )
+            _restoreManualHardwareResources();
     }
 }

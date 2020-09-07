@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define _OgreParallaxCorrectedCubemapBase_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
+#include "OgreRenderSystem.h"
 #include "Cubemaps/OgreCubemapProbe.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "OgreIdString.h"
@@ -44,6 +45,7 @@ namespace Ogre
     @see HlmsPbsDatablock::setCubemapProbe
     */
     class _OgreHlmsPbsExport ParallaxCorrectedCubemapBase : public IdObject,
+                                                            public RenderSystem::Listener,
                                                             public CompositorWorkspaceListener
     {
     protected:
@@ -71,6 +73,9 @@ namespace Ogre
                                       bool automaticMode );
         virtual ~ParallaxCorrectedCubemapBase();
 
+        virtual void _releaseManualHardwareResources();
+        virtual void _restoreManualHardwareResources();
+
         uint32 getIblTargetTextureFlags( PixelFormatGpu pixelFormat ) const;
         static uint8 getIblNumMipmaps( uint32 width, uint32 height );
 
@@ -97,6 +102,11 @@ namespace Ogre
         TextureGpu* getBindTexture(void) const          { return mBindTexture; }
         const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
                                                         { return mSamplerblockTrilinear; }
+
+        /// By default the probes will be constructed when the user enters its vecinity.
+        /// This can cause noticeable stalls. Use this function to regenerate them all
+        /// at once (i.e. at loading time)
+        virtual void updateAllDirtyProbes(void) = 0;
 
         virtual void _notifyPreparePassHash( const Matrix4 &viewMatrix );
         virtual size_t getConstBufferSize(void);
@@ -141,6 +151,9 @@ namespace Ogre
         const CompositorWorkspaceDef* getDefaultWorkspaceDef(void) const;
 
         virtual void passPreExecute( CompositorPass *pass );
+
+        //RenderSystem::Listener overloads
+        virtual void eventOccurred( const String& eventName, const NameValuePairList* parameters );
     };
 
     /** @} */

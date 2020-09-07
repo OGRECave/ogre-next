@@ -110,6 +110,7 @@ namespace Ogre
                         BT_DEFAULT, 0, false );
             mCreator->_addManuallyActiveProbe( this );
         }
+        mDirty = true;
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::destroyWorkspace(void)

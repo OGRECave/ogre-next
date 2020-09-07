@@ -153,15 +153,11 @@ namespace Ogre
         HlmsSamplerblock samplerblock;
         samplerblock.mMipFilter = FO_NONE;
         mSamplerblockPoint = hlmsManager->getSamplerblock( samplerblock );
-
-        RenderSystem::addSharedListener( this );
     }
     //-----------------------------------------------------------------------------------
     ParallaxCorrectedCubemap::~ParallaxCorrectedCubemap()
     {
         setEnabled( false, 0, 0, PFG_UNKNOWN );
-
-        RenderSystem::removeSharedListener( this );
 
         destroyAllProbes();
 
@@ -190,14 +186,12 @@ namespace Ogre
             mStagingBuffer = 0;
         }
 
-        for( CubemapProbeVec::iterator it = mProbes.begin(), end = mProbes.end(); it != end; ++it )
-            (*it)->_releaseManualHardwareResources();
+        ParallaxCorrectedCubemapBase::_releaseManualHardwareResources();
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::_restoreManualHardwareResources()
     {
-        for( CubemapProbeVec::iterator it = mProbes.begin(), end = mProbes.end(); it != end; ++it )
-            (*it)->_restoreManualHardwareResources();
+        ParallaxCorrectedCubemapBase::_restoreManualHardwareResources();
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::destroyAllProbes(void)
@@ -1249,15 +1243,6 @@ namespace Ogre
         if( !mPaused )
             this->updateSceneGraph();
         return true;
-    }
-    //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::eventOccurred( const String &eventName,
-                                                  const NameValuePairList *parameters )
-    {
-        if( eventName == "DeviceLost" )
-            _releaseManualHardwareResources();
-        else if( eventName == "DeviceRestored" )
-            _restoreManualHardwareResources();
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::allWorkspacesBeforeBeginUpdate(void)
