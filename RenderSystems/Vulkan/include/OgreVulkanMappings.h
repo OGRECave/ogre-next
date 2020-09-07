@@ -63,7 +63,8 @@ namespace Ogre
 
         static VkImageViewType get( TextureTypes::TextureTypes textureType );
         static VkFormat get( PixelFormatGpu pf );
-        static VkImageAspectFlags getImageAspect( PixelFormatGpu pf );
+        static VkImageAspectFlags getImageAspect( PixelFormatGpu pf,
+                                                  const bool bPreferDepthOverStencil = false );
 
         static VkAccessFlags get( const TextureGpu *texture );
         static VkAccessFlags get( BufferPackedTypes bufferPackedTypes );

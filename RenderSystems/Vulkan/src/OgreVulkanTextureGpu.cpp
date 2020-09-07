@@ -62,10 +62,7 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    VulkanTextureGpu::~VulkanTextureGpu()
-    {
-        destroyInternalResourcesImpl();
-    }
+    VulkanTextureGpu::~VulkanTextureGpu() { destroyInternalResourcesImpl(); }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::createInternalResourcesImpl( void )
     {
@@ -716,7 +713,10 @@ namespace Ogre
         imageViewCi.viewType = texType;
         imageViewCi.format = VulkanMappings::get( pixelFormat );
 
-        imageViewCi.subresourceRange.aspectMask = VulkanMappings::getImageAspect( pixelFormat );
+        // Using both depth & stencil aspects in an image view for texture sampling is illegal
+        // Thus prefer depth over stencil. We only use both flags for FBOs
+        imageViewCi.subresourceRange.aspectMask =
+            VulkanMappings::getImageAspect( pixelFormat, imageOverride == 0 );
         imageViewCi.subresourceRange.baseMipLevel = mipLevel;
         imageViewCi.subresourceRange.levelCount = numMipmaps;
         imageViewCi.subresourceRange.baseArrayLayer = arraySlice;

@@ -444,7 +444,8 @@ namespace Ogre
         // clang-format on
     }
     //-----------------------------------------------------------------------------------
-    VkImageAspectFlags VulkanMappings::getImageAspect( PixelFormatGpu pf )
+    VkImageAspectFlags VulkanMappings::getImageAspect( PixelFormatGpu pf,
+                                                       const bool bPreferDepthOverStencil )
     {
         const uint32 pfFlags = PixelFormatGpuUtils::getFlags( pf );
 
@@ -454,7 +455,10 @@ namespace Ogre
             if( pfFlags & PixelFormatGpuUtils::PFF_DEPTH )
                 retVal = VK_IMAGE_ASPECT_DEPTH_BIT;
             if( pfFlags & PixelFormatGpuUtils::PFF_STENCIL )
-                retVal |= VK_IMAGE_ASPECT_STENCIL_BIT;
+            {
+                if( !bPreferDepthOverStencil || !( pfFlags & PixelFormatGpuUtils::PFF_DEPTH ) )
+                    retVal |= VK_IMAGE_ASPECT_STENCIL_BIT;
+            }
         }
         else
         {
