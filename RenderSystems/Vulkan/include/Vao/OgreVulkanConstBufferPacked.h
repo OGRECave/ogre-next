@@ -61,7 +61,7 @@ namespace Ogre
         virtual void bindBufferDS( uint16 slot );
         virtual void bindBufferCS( uint16 slot );
 
-        void bindAsParamBuffer( GpuProgramType shaderStage, size_t offsetBytes );
+        void bindAsParamBuffer( GpuProgramType shaderStage, size_t offsetBytes, size_t sizeBytes );
     };
 }  // namespace Ogre
 

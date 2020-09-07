@@ -1833,7 +1833,7 @@ namespace Ogre
             const size_t bindOffset =
                 constBuffer->getTotalSizeBytes() - mCurrentAutoParamsBufferSpaceLeft;
 
-            constBuffer->bindAsParamBuffer( gptype, bindOffset );
+            constBuffer->bindAsParamBuffer( gptype, bindOffset, bytesToWrite );
 
             mCurrentAutoParamsBufferPtr += bytesToWrite;
 
