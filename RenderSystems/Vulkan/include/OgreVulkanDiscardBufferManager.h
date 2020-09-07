@@ -132,7 +132,6 @@ namespace Ogre
 
         VkBuffer mBuffer;
         VulkanDevice *mDevice;
-        VkDeviceMemory mDeviceMemory;
         size_t mBlockPrePadding;
         size_t mBufferOffset;
         size_t mBufferSize;

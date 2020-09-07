@@ -212,6 +212,7 @@ namespace Ogre
     protected:
         void addMemoryType( VboFlag vboFlag, const VkPhysicalDeviceMemoryProperties &memProperties,
                             const uint32 memoryTypeIdx );
+        uint32 determineSupportedMemoryTypes( VkBufferUsageFlags usageFlags ) const;
         void determineBestMemoryTypes( void );
 
         /** Asks for allocating buffer space in a memory pool.

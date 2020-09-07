@@ -411,16 +411,64 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    uint32 VulkanVaoManager::determineSupportedMemoryTypes( VkBufferUsageFlags usageFlags ) const
+    {
+        VkBuffer tmpBuffer;
+        VkBufferCreateInfo bufferCi;
+        makeVkStruct( bufferCi, VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO );
+        bufferCi.size = 64;
+        bufferCi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                         VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT |
+                         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
+                         VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
+        VkResult result = vkCreateBuffer( mDevice->mDevice, &bufferCi, 0, &tmpBuffer );
+        checkVkResult( result, "vkCreateBuffer" );
+
+        VkMemoryRequirements memRequirements;
+        vkGetBufferMemoryRequirements( mDevice->mDevice, tmpBuffer, &memRequirements );
+        vkDestroyBuffer( mDevice->mDevice, tmpBuffer, 0 );
+
+        return memRequirements.memoryTypeBits;
+    }
+    //-----------------------------------------------------------------------------------
     void VulkanVaoManager::determineBestMemoryTypes( void )
     {
         for( size_t i = 0u; i < MAX_VBO_FLAG; ++i )
             mBestVkMemoryTypeIndex[i].clear();
+
+        // Not all buffers usage can be bound to all memory types. Filter out those we cannot use
+        const uint32 supportedMemoryTypesBuffer = determineSupportedMemoryTypes(
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+            VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT |
+            VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
+            VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT );
+
+        const uint32 supportedMemoryTypesRead = determineSupportedMemoryTypes(
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT );
+
+        LogManager &logManager = LogManager::getSingleton();
+        logManager.logMessage( "Supported memory types for general buffer usage: " +
+                               StringConverter::toString( supportedMemoryTypesBuffer ) );
+        logManager.logMessage( "Supported memory types for reading: " +
+                               StringConverter::toString( supportedMemoryTypesRead ) );
 
         const VkPhysicalDeviceMemoryProperties &memProperties = mDevice->mDeviceMemoryProperties;
         const uint32 numMemoryTypes = memProperties.memoryTypeCount;
 
         for( uint32 i = 0u; i < numMemoryTypes; ++i )
         {
+            // Find the best memory that is cached for reading
+            if( ( ( 1u << i ) & supportedMemoryTypesRead ) &&
+                ( memProperties.memoryTypes[i].propertyFlags &
+                  ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) ) ==
+                    ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) )
+            {
+                addMemoryType( CPU_READ_WRITE, memProperties, i );
+            }
+
+            if( !( ( 1u << i ) & supportedMemoryTypesBuffer ) )
+                continue;
+
             if( memProperties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT )
                 addMemoryType( CPU_INACCESSIBLE, memProperties, i );
 
@@ -430,7 +478,7 @@ namespace Ogre
                   ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) ) ==
                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT )
             {
-                addMemoryType( CPU_WRITE_PERSISTENT, memProperties, i );
+                // addMemoryType( CPU_WRITE_PERSISTENT, memProperties, i );
             }
 
             // Find coherent memory (many desktop GPUs don't provide this)
@@ -441,20 +489,12 @@ namespace Ogre
             {
                 addMemoryType( CPU_WRITE_PERSISTENT_COHERENT, memProperties, i );
             }
-
-            // Find the best memory that is cached for reading
-            if( ( memProperties.memoryTypes[i].propertyFlags &
-                  ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) ) ==
-                ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) )
-            {
-                addMemoryType( CPU_READ_WRITE, memProperties, i );
-            }
         }
 
         if( mBestVkMemoryTypeIndex[CPU_INACCESSIBLE].empty() )
         {
             // This is BS. No heap is device-local. Sigh, just pick any and try to get the best score
-            LogManager::getSingleton().logMessage(
+            logManager.logMessage(
                 "VkDevice: No heap found with DEVICE_LOCAL bit set. This should be impossible",
                 LML_CRITICAL );
             for( uint32 i = 0u; i < numMemoryTypes; ++i )
@@ -464,14 +504,14 @@ namespace Ogre
         mSupportsNonCoherentMemory = !mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT].empty();
         mSupportsCoherentMemory = !mBestVkMemoryTypeIndex[CPU_WRITE_PERSISTENT_COHERENT].empty();
 
-        LogManager::getSingleton().logMessage( "VkDevice supports coherent memory: " +
-                                               StringConverter::toString( mSupportsCoherentMemory ) );
-        LogManager::getSingleton().logMessage( "VkDevice supports non-coherent memory: " +
-                                               StringConverter::toString( mSupportsNonCoherentMemory ) );
+        logManager.logMessage( "VkDevice will use coherent memory buffers: " +
+                               StringConverter::toString( mSupportsCoherentMemory ) );
+        logManager.logMessage( "VkDevice will use non-coherent memory buffers: " +
+                               StringConverter::toString( mSupportsNonCoherentMemory ) );
 
         if( mBestVkMemoryTypeIndex[CPU_READ_WRITE].empty() )
         {
-            LogManager::getSingleton().logMessage(
+            logManager.logMessage(
                 "VkDevice: could not find cached host-visible memory. GPU -> CPU transfers could be "
                 "slow",
                 LML_CRITICAL );
@@ -491,13 +531,17 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Device does not expose coherent nor non-coherent CPU-accessible "
-                         "memory! This is a driver error",
+                         "memory that can use all the buffer types we need! "
+                         "This app cannot be used with this GPU. Try updating your drivers",
                          "VulkanVaoManager::determineBestMemoryTypes" );
         }
 
         mReadMemoryIsCoherent =
             ( memProperties.memoryTypes[mBestVkMemoryTypeIndex[CPU_READ_WRITE].back()].propertyFlags &
               VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) != 0;
+
+        logManager.logMessage( "VkDevice will use coherent memory for reading: " +
+                               StringConverter::toString( mReadMemoryIsCoherent ) );
 
         // Fill mMemoryTypesInUse
         for( size_t i = 0u; i < MAX_VBO_FLAG; ++i )
@@ -514,8 +558,8 @@ namespace Ogre
             }
         }
 
-        LogManager::getSingleton().logMessage( "VkDevice read memory is coherent: " +
-                                               StringConverter::toString( mReadMemoryIsCoherent ) );
+        logManager.logMessage( "VkDevice read memory is coherent: " +
+                               StringConverter::toString( mReadMemoryIsCoherent ) );
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,
@@ -703,10 +747,12 @@ namespace Ogre
                 bufferCi.size = poolSize;
                 bufferCi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
                                  VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
-                                 VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
+
                                  VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT |
                                  VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
                                  VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
+                if( vboFlag == CPU_READ_WRITE )
+                    bufferCi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
                 result = vkCreateBuffer( mDevice->mDevice, &bufferCi, 0, &newVbo.vkBuffer );
                 checkVkResult( result, "vkCreateBuffer" );
 
