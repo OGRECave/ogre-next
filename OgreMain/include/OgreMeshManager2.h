@@ -54,11 +54,6 @@ namespace Ogre
     class _OgreExport MeshManager: public ResourceManager, public Singleton<MeshManager>, 
         public ManualResourceLoader
     {
-    private:
-        using ResourceManager::createOrRetrieve;
-        using ResourceManager::prepare;
-        using ResourceManager::load;
-
     protected:
         /// @copydoc ResourceManager::createImpl
         Resource* createImpl(const String& name, ResourceHandle handle,
@@ -91,6 +86,11 @@ namespace Ogre
         MeshPtr create (const String& name, const String& group,
                             bool isManual = false, ManualResourceLoader* loader = 0,
                             const NameValuePairList* createParams = 0);
+
+#if OGRE_COMPILER == OGRE_COMPILER_CLANG
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Woverloaded-virtual"
+#endif
 
         /** Create a new mesh, or retrieve an existing one with the same
             name if it already exists.
@@ -164,6 +164,9 @@ namespace Ogre
                       BufferType indexBufferType = BT_IMMUTABLE,
                       bool vertexBufferShadowed = true, bool indexBufferShadowed = true );
 
+#if OGRE_COMPILER == OGRE_COMPILER_CLANG
+#pragma clang diagnostic pop
+#endif
 
         /** Creates a new Mesh specifically for manual definition rather
             than loading from an object file. 

@@ -50,7 +50,6 @@ namespace Ogre {
     private:
         using ResourceManager::createImpl;
         using ResourceManager::load;
-        using ResourceManager::getResourceByName;
 
     public:
 
@@ -183,6 +182,11 @@ namespace Ogre {
             GpuProgramType gptype, const String& syntaxCode, bool isManual = false, 
             ManualResourceLoader* loader = 0);
 
+#if OGRE_COMPILER == OGRE_COMPILER_CLANG
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Woverloaded-virtual"
+#endif
+
         /** Overrides the standard ResourceManager getResourceByName method.
         @param name The name of the program to retrieve
         @param preferHighLevelPrograms If set to true (the default), high level programs will be
@@ -190,6 +194,9 @@ namespace Ogre {
         */
         ResourcePtr getResourceByName(const String& name, bool preferHighLevelPrograms = true);
 
+#if OGRE_COMPILER == OGRE_COMPILER_CLANG
+#pragma clang diagnostic pop
+#endif
 
         /** Create a new set of shared parameters, which can be used across many 
             GpuProgramParameters objects of different structures.
