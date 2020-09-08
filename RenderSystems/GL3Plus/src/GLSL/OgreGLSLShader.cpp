@@ -165,6 +165,7 @@ namespace Ogre {
             "#define texture3D sampler3D\n"
             "#define textureCube samplerCube\n"
             "#define texture2DMS sampler2DMS\n"
+            "#define utexture2D usampler2D\n"
             "#define vkSampler1D( a, b ) a\n"
             "#define vkSampler2D( a, b ) a\n"
             "#define vkSampler2DArray( a, b ) a\n"

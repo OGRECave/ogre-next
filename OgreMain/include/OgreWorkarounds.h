@@ -50,4 +50,22 @@ THE SOFTWARE.
 
 #endif
 
+#ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+// Adreno 505, 506 and many others expose 64kb of UBO memory.
+// However binding exactly 65536 bytes of UBO memory causes the GPU to read all 0s.
+// We limit const buffer memory to 65472 bytes instead.
+//
+// Qualcomm claims to have patched this bug.
+// As of driver 512.472.0 (Android 10), this bug is still present
+//
+// First seen: Since the very first driver version
+// Last seen: 2020-09-08
+#define OGRE_VK_WORKAROUND_ADRENO_UBO64K
+
+#endif
+
+#endif
+
 #endif

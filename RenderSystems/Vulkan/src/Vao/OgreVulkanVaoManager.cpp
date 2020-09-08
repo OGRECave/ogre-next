@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreVulkanDescriptorPool.h"
 #include "OgreVulkanDevice.h"
+#include "OgreVulkanRenderSystem.h"
 #include "OgreVulkanRootLayout.h"
 #include "OgreVulkanUtils.h"
 #include "Vao/OgreVertexArrayObject.h"
@@ -104,6 +105,14 @@ namespace Ogre
         mTexBufferMaxSize = mDevice->mDeviceProperties.limits.maxTexelBufferElements;
 
         mUavBufferMaxSize = mDevice->mDeviceProperties.limits.maxStorageBufferRange;
+
+#ifdef OGRE_VK_WORKAROUND_ADRENO_UBO64K
+        if( renderSystem->getCapabilities()->getVendor() == GPU_QUALCOMM )
+        {
+            mConstBufferMaxSize =
+                std::min<size_t>( mConstBufferMaxSize, 64u * 1024u - mConstBufferAlignment );
+        }
+#endif
 
         mSupportsPersistentMapping = true;
         mSupportsIndirectBuffers = mDevice->mDeviceFeatures.multiDrawIndirect &&

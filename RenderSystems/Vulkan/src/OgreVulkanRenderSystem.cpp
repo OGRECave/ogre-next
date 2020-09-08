@@ -2274,6 +2274,8 @@ namespace Ogre
         case ResourceLayout::NumResourceLayouts:
             return 0;
         }
+
+        return 0;
     }
     //-------------------------------------------------------------------------
     static VkPipelineStageFlags ogreToVkStageFlags( uint8 ogreStageMask )
