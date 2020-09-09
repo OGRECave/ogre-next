@@ -112,6 +112,8 @@ namespace Ogre
         VulkanDevice *getDevice() const { return mDevice; }
 
         bool canRestrictImageViewUsage( void ) const { return mCanRestrictImageViewUsage; }
+
+        virtual bool checkSupport( PixelFormatGpu format, uint32 textureFlags ) const;
     };
 
     /** @} */

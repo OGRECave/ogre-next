@@ -884,6 +884,25 @@ namespace Ogre
                           bool saveOitd, bool saveOriginal,
                           HlmsTextureExportListener *listener );
 
+        /** Checks if the given format with the texture flags combination is supported
+
+        @param format
+        @param textureFlags
+            See TextureFlags::TextureFlags
+            Supported flags are:
+                NotTexture
+                RenderToTexture
+                Uav
+                AllowAutomipmaps
+
+            When NotTexture is set, we don't check whether it's possible to sample from
+            this texture. Note that some buggy Android drivers may report that it's not
+            possible to sample from that texture when it actually is.
+        @return
+            True if supported. False otherwise
+        */
+        virtual bool checkSupport( PixelFormatGpu format, uint32 textureFlags ) const;
+
     protected:
         /// Returns false if the entry was not found in the cache
         bool applyMetadataCacheTo( TextureGpu *texture );

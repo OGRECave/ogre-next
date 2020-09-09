@@ -8,7 +8,7 @@
 
 layout(std140) uniform;
 
-layout( vulkan( ogre_u0 ) vk_comma rgb10_a2 )
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
 uniform restrict writeonly image2D shadowMap;
 
 @property( !terra_use_uint )

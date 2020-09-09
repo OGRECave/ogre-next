@@ -215,7 +215,15 @@ namespace Ogre
         m_normalMapTex->setNumMipmaps(
                     PixelFormatGpuUtils::getMaxMipmapCount( m_normalMapTex->getWidth(),
                                                             m_normalMapTex->getHeight() ) );
-        m_normalMapTex->setPixelFormat( PFG_RGBA8_UNORM );
+        if( textureManager->checkSupport(
+                PFG_R10G10B10A2_UNORM, TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps ) )
+        {
+            m_normalMapTex->setPixelFormat( PFG_R10G10B10A2_UNORM );
+        }
+        else
+        {
+            m_normalMapTex->setPixelFormat( PFG_RGBA8_UNORM );
+        }
         m_normalMapTex->scheduleTransitionTo( GpuResidency::Resident );
         m_normalMapTex->notifyDataIsReady();
 

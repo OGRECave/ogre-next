@@ -29,6 +29,12 @@ THE SOFTWARE.
 #ifndef _OgreWorkarounds_H_
 #define _OgreWorkarounds_H_
 
+#include <stddef.h>
+
+namespace Ogre
+{
+    struct _OgreExport Workarounds
+    {
 #ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
 
 //PowerVR SGX 540 does not correctly transpose matrices in glProgramUniformMatrix4fvEXT,
@@ -63,9 +69,14 @@ THE SOFTWARE.
 // First seen: Since the very first driver version
 // Last seen: 2020-09-08
 #define OGRE_VK_WORKAROUND_ADRENO_UBO64K
-
+        static bool mAdrenoUbo64kLimitTriggered;
+        /// If > 0, then the workaround is active
+        /// The value contains the maximum range we will bind
+        static size_t mAdrenoUbo64kLimit;
 #endif
 
 #endif
+    };
+}
 
 #endif

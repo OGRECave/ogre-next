@@ -492,4 +492,42 @@ namespace Ogre
             }
         }
     }
+    //-----------------------------------------------------------------------------------
+    bool VulkanTextureGpuManager::checkSupport( PixelFormatGpu format, uint32 textureFlags ) const
+    {
+        OGRE_ASSERT_LOW(
+            textureFlags != TextureFlags::NotTexture &&
+            "Invalid textureFlags combination. Asking to check if format is supported to do nothing" );
+
+        const VkFormat vkFormat = VulkanMappings::get( format );
+
+        VkFormatProperties props;
+        vkGetPhysicalDeviceFormatProperties( mDevice->mPhysicalDevice, vkFormat, &props );
+
+        uint32 features = 0;
+
+        if( !( textureFlags & TextureFlags::NotTexture ) )
+            features |= VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT;
+
+        if( textureFlags & TextureFlags::Uav )
+            features |= VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT;
+
+        if( textureFlags & TextureFlags::RenderToTexture )
+        {
+            if( PixelFormatGpuUtils::isDepth( format ) )
+            {
+                features |= VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
+            }
+            else
+            {
+                features |= VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT |
+                            VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT;
+            }
+        }
+
+        if( ( props.optimalTilingFeatures & features ) == features )
+            return true;
+
+        return false;
+    }
 }  // namespace Ogre

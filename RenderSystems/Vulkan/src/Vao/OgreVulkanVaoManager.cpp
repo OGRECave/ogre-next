@@ -107,10 +107,13 @@ namespace Ogre
         mUavBufferMaxSize = mDevice->mDeviceProperties.limits.maxStorageBufferRange;
 
 #ifdef OGRE_VK_WORKAROUND_ADRENO_UBO64K
+        Workarounds::mAdrenoUbo64kLimitTriggered = false;
+        Workarounds::mAdrenoUbo64kLimit = 0u;
         if( renderSystem->getCapabilities()->getVendor() == GPU_QUALCOMM )
         {
             mConstBufferMaxSize =
                 std::min<size_t>( mConstBufferMaxSize, 64u * 1024u - mConstBufferAlignment );
+            Workarounds::mAdrenoUbo64kLimit = mConstBufferMaxSize;
         }
 #endif
 

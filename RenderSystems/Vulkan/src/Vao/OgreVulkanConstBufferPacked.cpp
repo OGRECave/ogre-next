@@ -76,6 +76,19 @@ namespace Ogre
         bufferInfo.buffer = bufferInterface->getVboName();
         bufferInfo.offset = mFinalBufferStart * mBytesPerElement;
         bufferInfo.range = mNumElements * mBytesPerElement;
+#ifdef OGRE_VK_WORKAROUND_ADRENO_UBO64K
+        if( Workarounds::mAdrenoUbo64kLimit && bufferInfo.range == 65536 )
+        {
+            bufferInfo.range = Workarounds::mAdrenoUbo64kLimit;
+            if( !Workarounds::mAdrenoUbo64kLimitTriggered )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Triggering mAdrenoUbo64kLimit workaround. There could be glitches.",
+                    LML_CRITICAL );
+                Workarounds::mAdrenoUbo64kLimitTriggered = true;
+            }
+        }
+#endif
         mRenderSystem->_setConstBufferCS( slot, bufferInfo );
     }
     //-------------------------------------------------------------------------
@@ -89,6 +102,19 @@ namespace Ogre
         bufferInfo.buffer = bufferInterface->getVboName();
         bufferInfo.offset = mFinalBufferStart * mBytesPerElement;
         bufferInfo.range = mNumElements * mBytesPerElement;
+#ifdef OGRE_VK_WORKAROUND_ADRENO_UBO64K
+        if( Workarounds::mAdrenoUbo64kLimit && bufferInfo.range == 65536 )
+        {
+            bufferInfo.range = Workarounds::mAdrenoUbo64kLimit;
+            if( !Workarounds::mAdrenoUbo64kLimitTriggered )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Triggering mAdrenoUbo64kLimit workaround. There could be glitches.",
+                    LML_CRITICAL );
+                Workarounds::mAdrenoUbo64kLimitTriggered = true;
+            }
+        }
+#endif
         mRenderSystem->_setConstBuffer( slot, bufferInfo );
     }
     //-------------------------------------------------------------------------
@@ -103,6 +129,19 @@ namespace Ogre
         bufferInfo.buffer = bufferInterface->getVboName();
         bufferInfo.offset = mFinalBufferStart * mBytesPerElement + offsetBytes;
         bufferInfo.range = sizeBytes;
+#ifdef OGRE_VK_WORKAROUND_ADRENO_UBO64K
+        if( Workarounds::mAdrenoUbo64kLimit && bufferInfo.range == 65536 )
+        {
+            bufferInfo.range = Workarounds::mAdrenoUbo64kLimit;
+            if( !Workarounds::mAdrenoUbo64kLimitTriggered )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Triggering mAdrenoUbo64kLimit workaround. There could be glitches.",
+                    LML_CRITICAL );
+                Workarounds::mAdrenoUbo64kLimitTriggered = true;
+            }
+        }
+#endif
         mRenderSystem->_setParamBuffer( shaderStage, bufferInfo );
     }
 }  // namespace Ogre
