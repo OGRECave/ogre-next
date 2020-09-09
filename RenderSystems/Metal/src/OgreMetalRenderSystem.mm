@@ -2083,7 +2083,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VertexElementType MetalRenderSystem::getColourVertexElementType(void) const
     {
-        return VET_COLOUR_ARGB;
+        return VET_COLOUR_ABGR; // MTLVertexFormatUChar4Normalized
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_dispatch( const HlmsComputePso &pso )

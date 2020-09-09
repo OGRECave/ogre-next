@@ -194,8 +194,10 @@ namespace Ogre
         case VET_HALF2:                 return MTLVertexFormatHalf2;
         case VET_HALF4:                 return MTLVertexFormatHalf4;
 
-        case VET_COLOUR:
         case VET_COLOUR_ARGB:
+            if( @available(macos 10.13, ios 11.0, *) )
+                return MTLVertexFormatUChar4Normalized_BGRA;
+        case VET_COLOUR:
         case VET_COLOUR_ABGR:
             return MTLVertexFormatUChar4Normalized;
 
