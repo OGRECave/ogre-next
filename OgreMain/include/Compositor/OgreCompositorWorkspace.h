@@ -368,6 +368,8 @@ namespace Ogre
         /// Gets the compositor manager (const version)
         const CompositorManager2* getCompositorManager() const;
 
+        const CompositorWorkspaceDef *getDefinition( void ) { return mDefinition; }
+
         size_t getFrameCount(void) const;
     };
 
