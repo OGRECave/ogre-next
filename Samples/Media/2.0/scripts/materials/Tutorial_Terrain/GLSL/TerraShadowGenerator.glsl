@@ -11,7 +11,11 @@ layout(std140) uniform;
 layout( vulkan( ogre_u0 ) vk_comma rgb10_a2 )
 uniform restrict writeonly image2D shadowMap;
 
-vulkan_layout( ogre_t0 ) uniform texture2D heightMap;
+@property( !terra_use_uint )
+	vulkan_layout( ogre_t0 ) uniform texture2D heightMap;
+@else
+	vulkan_layout( ogre_t0 ) uniform utexture2D heightMap;
+@end
 
 layout( local_size_x = @value( threads_per_group_x ),
         local_size_y = @value( threads_per_group_y ),
@@ -57,7 +61,11 @@ vec2 calcShadow( ivec2 xyPos, vec2 prevHeight )
 	prevHeight.x -= heightDelta;
 	prevHeight.y = prevHeight.y * 0.985 - heightDelta; //Used for the penumbra region
 
-	float currHeight = texelFetch( heightMap, xyPos, 0 ).x;
+	float currHeight = float( texelFetch( heightMap, xyPos, 0 ).x );
+
+	//@property( terra_use_uint )
+		currHeight /= 65535.0f;
+	//@end
 
 	//float shadowValue = smoothstep( prevHeight.y, prevHeight.x, clamp( currHeight, prevHeight.y, prevHeight.x ) );
 	float shadowValue = smoothstep( prevHeight.y, prevHeight.x, currHeight + 0.001 );

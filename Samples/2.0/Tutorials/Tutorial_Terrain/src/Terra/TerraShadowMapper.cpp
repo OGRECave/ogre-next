@@ -61,6 +61,16 @@ namespace Ogre
         HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
         HlmsCompute *hlmsCompute = hlmsManager->getComputeHlms();
         m_shadowJob = hlmsCompute->findComputeJob( "Terra/ShadowGenerator" );
+        if( heightMapTex->getPixelFormat() == PFG_R16_UINT )
+        {
+            HlmsComputeJob *jobU16 = hlmsCompute->findComputeJobNoThrow( "Terra/ShadowGeneratorU16" );
+            if( !jobU16 )
+            {
+                jobU16 = m_shadowJob->clone( "Terra/ShadowGeneratorU16" );
+                jobU16->setProperty( "terra_use_uint", 1 );
+            }
+            m_shadowJob = jobU16;
+        }
 
         //TODO: Mipmaps
         TextureGpuManager *textureManager =

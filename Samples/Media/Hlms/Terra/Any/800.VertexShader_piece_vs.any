@@ -88,7 +88,7 @@
 						   int2( 0, 0 ), cellData.xzTexPosBounds.zw ) );
 
 	float3 worldPos;
-	worldPos.y = OGRE_Load2D( heightMap, rshort2( uVertexPos.xy ), 0 ).x;
+	worldPos.y = float( OGRE_Load2D( heightMap, rshort2( uVertexPos.xy ), 0 ).x );
 @property( use_skirts )
 	worldPos.y = isSkirt ? uintBitsToFloat(cellData.numVertsPerLine.w) : worldPos.y;
 @end

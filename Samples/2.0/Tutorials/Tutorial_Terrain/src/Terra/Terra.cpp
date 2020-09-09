@@ -33,6 +33,7 @@ namespace Ogre
         m_xzInvDimensions( Vector2::UNIT_SCALE ),
         m_xzRelativeSize( Vector2::UNIT_SCALE ),
         m_height( 1.0f ),
+        m_heightUnormScaled( 1.0f ),
         m_terrainOrigin( Vector3::ZERO ),
         m_basePixelDimension( 256u ),
         m_currentCell( 0u ),
@@ -93,6 +94,17 @@ namespace Ogre
 
         //const uint8 numMipmaps = image.getNumMipmaps();
 
+        m_heightUnormScaled = m_height;
+        PixelFormatGpu pixelFormat = image.getPixelFormat();
+#if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+        // Many Android GPUs don't support PFG_R16_UNORM so we scale it by hand
+        if( pixelFormat == PFG_R16_UNORM )
+        {
+            pixelFormat = PFG_R16_UINT;
+            m_heightUnormScaled /= 65535.0f;
+        }
+#endif
+
         TextureGpuManager *textureManager =
                 mManager->getDestinationRenderSystem()->getTextureGpuManager();
         m_heightMapTex = textureManager->createTexture(
@@ -101,16 +113,16 @@ namespace Ogre
                              TextureFlags::ManualTexture,
                              TextureTypes::Type2D );
         m_heightMapTex->setResolution( image.getWidth(), image.getHeight() );
-        m_heightMapTex->setPixelFormat( image.getPixelFormat() );
+        m_heightMapTex->setPixelFormat( pixelFormat );
         m_heightMapTex->scheduleTransitionTo( GpuResidency::Resident );
 
         StagingTexture *stagingTexture = textureManager->getStagingTexture( image.getWidth(),
                                                                             image.getHeight(),
                                                                             1u, 1u,
-                                                                            image.getPixelFormat() );
+                                                                            pixelFormat );
         stagingTexture->startMapRegion();
         TextureBox texBox = stagingTexture->mapRegion( image.getWidth(), image.getHeight(), 1u, 1u,
-                                                       image.getPixelFormat() );
+                                                       pixelFormat );
 
         //for( uint8 mip=0; mip<numMipmaps; ++mip )
         texBox.copyFrom( image.getData( 0 ) );
@@ -203,7 +215,7 @@ namespace Ogre
         m_normalMapTex->setNumMipmaps(
                     PixelFormatGpuUtils::getMaxMipmapCount( m_normalMapTex->getWidth(),
                                                             m_normalMapTex->getHeight() ) );
-        m_normalMapTex->setPixelFormat( PFG_R10G10B10A2_UNORM );
+        m_normalMapTex->setPixelFormat( PFG_RGBA8_UNORM );
         m_normalMapTex->scheduleTransitionTo( GpuResidency::Resident );
         m_normalMapTex->notifyDataIsReady();
 
@@ -215,8 +227,9 @@ namespace Ogre
         TextureUnitState *texUnit = pass->getTextureUnitState(0);
         texUnit->setTexture( m_heightMapTex );
 
-        //Normalize vScale for better precision in the shader math
-        const Vector3 vScale = Vector3( m_xzRelativeSize.x, m_height, m_xzRelativeSize.y ).normalisedCopy();
+        // Normalize vScale for better precision in the shader math
+        const Vector3 vScale =
+            Vector3( m_xzRelativeSize.x, m_heightUnormScaled, m_xzRelativeSize.y ).normalisedCopy();
 
         GpuProgramParametersSharedPtr psParams = pass->getFragmentProgramParameters();
         psParams->setNamedConstant( "heightMapResolution", Vector4( static_cast<Real>( m_width ),
@@ -229,9 +242,11 @@ namespace Ogre
 
         Camera *dummyCamera = mManager->createCamera( "TerraDummyCamera" );
 
-        CompositorWorkspace *workspace =
-                m_compositorManager->addWorkspace( mManager, finalTargetChannels, dummyCamera,
-                                                   "Terra/GpuNormalMapperWorkspace", false );
+        const IdString workspaceName = m_heightMapTex->getPixelFormat() == PFG_R16_UINT
+                                           ? "Terra/GpuNormalMapperWorkspaceU16"
+                                           : "Terra/GpuNormalMapperWorkspace";
+        CompositorWorkspace *workspace = m_compositorManager->addWorkspace(
+            mManager, finalTargetChannels, dummyCamera, workspaceName, false );
         workspace->_beginUpdate( true );
         workspace->_update();
         workspace->_endUpdate( true );
@@ -295,6 +310,10 @@ namespace Ogre
         }
 
         m_skirtSize /= m_height;
+
+        // Many Android GPUs don't support PFG_R16_UNORM so we scale it by hand
+        if( m_heightMapTex->getPixelFormat() == PFG_R16_UINT )
+            m_skirtSize *= 65535.0f;
     }
     //-----------------------------------------------------------------------------------
     inline GridPoint Terra::worldToGrid( const Vector3 &vPos ) const

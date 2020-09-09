@@ -19,3 +19,25 @@ workspace Terra/GpuNormalMapperWorkspace
 {
 	connect_output Terra/GpuNormalMapper 0
 }
+
+compositor_node Terra/GpuNormalMapperU16
+{
+	in 0 rt_output
+
+	target rt_output
+	{
+		pass render_quad
+		{
+			material Terra/GpuNormalMapperU16
+		}
+
+		pass generate_mipmaps
+		{
+		}
+	}
+}
+
+workspace Terra/GpuNormalMapperWorkspaceU16
+{
+	connect_output Terra/GpuNormalMapperU16 0
+}

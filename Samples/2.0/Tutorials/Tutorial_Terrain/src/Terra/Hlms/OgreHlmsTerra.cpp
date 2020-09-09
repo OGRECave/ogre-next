@@ -319,6 +319,9 @@ namespace Ogre
         if( datablock->mSamplersDescSet )
             setProperty( PbsProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
 
+        if( terrainCell->getParentTerra()->getHeightMapTex()->getPixelFormat() == PFG_R16_UINT )
+            setProperty( "terra_use_uint", 1 );
+
         if( datablock->mTexturesDescSet )
         {
             bool envMap = datablock->getTexture( TERRA_REFLECTION ) != 0;
