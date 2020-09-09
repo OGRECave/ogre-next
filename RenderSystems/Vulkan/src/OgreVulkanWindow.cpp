@@ -41,7 +41,6 @@ THE SOFTWARE.
 
 #include "vulkan/vulkan_core.h"
 
-#define TODO_allow_users_to_choose_presentModes
 #define TODO_handleSeparatePresentQueue
 
 namespace Ogre
@@ -161,7 +160,6 @@ namespace Ogre
                          "VulkanWindow::createSwapchain" );
         }
 
-        TODO_allow_users_to_choose_presentModes;  // Also check which ones are the best
         uint32 numPresentModes = 0u;
         vkGetPhysicalDeviceSurfacePresentModesKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
                                                    &numPresentModes, 0 );

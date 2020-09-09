@@ -44,6 +44,8 @@ THE SOFTWARE.
 #include "vulkan/vulkan_android.h"
 #include "vulkan/vulkan_core.h"
 
+#include <android/native_window.h>
+
 namespace Ogre
 {
     VulkanAndroidWindow::VulkanAndroidWindow( const String &title, uint32 width, uint32 height,
@@ -97,7 +99,7 @@ namespace Ogre
         mClosed = true;
         mFocused = false;
 
-        WindowEventUtilities::_removeRenderWindow( this );
+        // WindowEventUtilities::_removeRenderWindow( this );
 
         if( mFullscreenMode )
         {
@@ -115,6 +117,8 @@ namespace Ogre
         mClosed = false;
         mHwGamma = false;
 
+        ANativeWindow *nativeWindow = 0;
+
         if( miscParams )
         {
             NameValuePairList::const_iterator opt;
@@ -124,12 +128,12 @@ namespace Ogre
             opt = miscParams->find( "ANativeWindow" );
             if( opt != end )
             {
-                mNativeWindow = reinterpret_cast<ANativeWindow *>(
+                nativeWindow = reinterpret_cast<ANativeWindow *>(
                     StringConverter::parseUnsignedLong( opt->second ) );
             }
         }
 
-        if( !mNativeWindow )
+        if( !nativeWindow )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "App must provide ANativeWindow via Misc Params!",
                          "VulkanAndroidWindow::_initialize" );
@@ -137,46 +141,13 @@ namespace Ogre
 
         setHidden( false );
 
-        WindowEventUtilities::_addRenderWindow( this );
-
-        VkAndroidSurfaceCreateInfoKHR andrSurfCreateInfo;
-        makeVkStruct( andrSurfCreateInfo, VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR );
-        andrSurfCreateInfo.window = mNativeWindow;
-        VkResult result =
-            vkCreateAndroidSurfaceKHR( mDevice->mInstance, &andrSurfCreateInfo, 0, &mSurfaceKHR );
-        checkVkResult( result, "vkCreateAndroidSurfaceKHR" );
-
         VulkanTextureGpuManager *textureManager =
             static_cast<VulkanTextureGpuManager *>( textureGpuManager );
-
         mTexture = textureManager->createTextureGpuWindow( this );
         mDepthBuffer = textureManager->createWindowDepthBuffer();
         mStencilBuffer = 0;
 
-        setFinalResolution( mRequestedWidth, mRequestedHeight );
-        mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
-        mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
-        if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
-            mStencilBuffer = mDepthBuffer;
-
-        mTexture->setSampleDescription( mRequestedSampleDescription );
-        mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
-        mSampleDescription = mRequestedSampleDescription;
-
-        if( mDepthBuffer )
-        {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
-                                               mDepthBuffer->getPixelFormat() );
-        }
-        else
-        {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
-        }
-
-        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
-        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
-
-        createSwapchain();
+        setNativeWindow( nativeWindow );
     }
     //-----------------------------------------------------------------------------------
     void VulkanAndroidWindow::reposition( int32 left, int32 top )
@@ -210,17 +181,18 @@ namespace Ogre
         destroySwapchain();
 
         // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
-        if( mDepthBuffer )
+        if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
             mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
+        if( mStencilBuffer && mStencilBuffer != mDepthBuffer &&
+            mStencilBuffer->getResidencyStatus() != GpuResidency::OnStorage )
+        {
             mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+        }
 
-        VkSurfaceCapabilitiesKHR surfaceCaps;
-        VkResult result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR( mDevice->mPhysicalDevice,
-                                                                     mSurfaceKHR, &surfaceCaps );
-        checkVkResult( result, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR" );
+        const uint32 newWidth = static_cast<uint32>( ANativeWindow_getWidth( mNativeWindow ) );
+        const uint32 newHeight = static_cast<uint32>( ANativeWindow_getHeight( mNativeWindow ) );
 
-        setFinalResolution( surfaceCaps.currentExtent.width, surfaceCaps.currentExtent.height );
+        setFinalResolution( newWidth, newHeight );
 
         if( mDepthBuffer )
             mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
@@ -245,6 +217,76 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     bool VulkanAndroidWindow::isHidden( void ) const { return false; }
+    //-------------------------------------------------------------------------
+    void VulkanAndroidWindow::setNativeWindow( ANativeWindow *nativeWindow )
+    {
+        destroy();
+
+        // Depth & Stencil buffer are normal textures; thus they need to be reeinitialized normally
+        if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
+            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+        if( mStencilBuffer && mStencilBuffer != mDepthBuffer &&
+            mStencilBuffer->getResidencyStatus() != GpuResidency::OnStorage )
+        {
+            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+        }
+
+        mNativeWindow = nativeWindow;
+
+        if( !mNativeWindow )
+            return;
+
+        mClosed = false;
+        mFocused = true;
+        // WindowEventUtilities::_addRenderWindow( this );
+
+        VkAndroidSurfaceCreateInfoKHR andrSurfCreateInfo;
+        makeVkStruct( andrSurfCreateInfo, VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR );
+        andrSurfCreateInfo.window = mNativeWindow;
+        VkResult result =
+            vkCreateAndroidSurfaceKHR( mDevice->mInstance, &andrSurfCreateInfo, 0, &mSurfaceKHR );
+        checkVkResult( result, "vkCreateAndroidSurfaceKHR" );
+
+        const uint32 newWidth = static_cast<uint32>( ANativeWindow_getWidth( mNativeWindow ) );
+        const uint32 newHeight = static_cast<uint32>( ANativeWindow_getHeight( mNativeWindow ) );
+
+        mRequestedWidth = newWidth;
+        mRequestedHeight = newHeight;
+
+        setFinalResolution( mRequestedWidth, mRequestedHeight );
+
+        // mTexture is in OnStorage only once ever: at startup. Set these parameters once
+        if( mTexture->getResidencyStatus() == GpuResidency::OnStorage )
+        {
+            mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
+            mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
+            if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
+                mStencilBuffer = mDepthBuffer;
+
+            mTexture->setSampleDescription( mRequestedSampleDescription );
+            mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
+            mSampleDescription = mRequestedSampleDescription;
+
+            if( mDepthBuffer )
+            {
+                mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
+                                                   mDepthBuffer->getPixelFormat() );
+            }
+            else
+            {
+                mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
+            }
+
+            mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+        }
+
+        if( mDepthBuffer )
+            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
+            mStencilBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+
+        createSwapchain();
+    }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::getCustomAttribute( IdString name, void *pData )
     {

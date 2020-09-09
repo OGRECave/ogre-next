@@ -36,7 +36,8 @@ namespace Demo
             GraphicsSystem( gameState ) {}
     };
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS || \
+    OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
                                          GraphicsSystem **outGraphicsSystem,
                                          GameState **outLogicGameState,
@@ -57,9 +58,17 @@ namespace Demo
         delete graphicsSystem;
         delete graphicsGameState;
     }
+
+#    if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+    const char* MainEntryPoints::getWindowTitle(void)
+    {
+        return "Tutorial 01: Initialization";
+    }
+#    endif
 #endif
 }
 
+#if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
 #else
@@ -115,3 +124,4 @@ int mainApp( int argc, const char *argv[] )
 
     return 0;
 }
+#endif

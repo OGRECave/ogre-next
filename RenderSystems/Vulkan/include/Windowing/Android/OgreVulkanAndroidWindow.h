@@ -69,6 +69,9 @@ namespace Ogre
         virtual void setHidden( bool hidden );
         virtual bool isHidden( void ) const;
 
+        /// If the ANativeWindow changes, allows to set a new one.
+        void setNativeWindow( ANativeWindow *nativeWindow );
+
         virtual void getCustomAttribute( IdString name, void *pData );
     };
 
