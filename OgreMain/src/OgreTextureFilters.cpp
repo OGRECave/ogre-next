@@ -73,6 +73,15 @@ namespace TextureFilter
                 retVal = DefaultMipmapGen::HwMode;
             else
                 retVal = DefaultMipmapGen::SwMode;
+
+            if( retVal == DefaultMipmapGen::HwMode )
+            {
+                if( !textureManager->checkSupport( image.getPixelFormat(),
+                                                   TextureFlags::AllowAutomipmaps ) )
+                {
+                    retVal = DefaultMipmapGen::SwMode;
+                }
+            }
         }
 
         return retVal;
