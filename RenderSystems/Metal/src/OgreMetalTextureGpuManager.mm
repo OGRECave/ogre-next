@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "OgreMetalDevice.h"
 
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreRenderSystem.h"
 #include "OgreVector2.h"
 
 #include "OgreException.h"
@@ -226,5 +227,33 @@ namespace Ogre
         MetalVaoManager *vaoManager = static_cast<MetalVaoManager*>( mVaoManager );
         return OGRE_NEW MetalAsyncTextureTicket( width, height, depthOrSlices, textureType,
                                                  pixelFormatFamily, vaoManager, mDevice );
+    }
+    //-----------------------------------------------------------------------------------
+    bool MetalTextureGpuManager::checkSupport( PixelFormatGpu format, uint32 textureFlags ) const
+    {
+        OGRE_ASSERT_LOW(
+            textureFlags != TextureFlags::NotTexture &&
+            "Invalid textureFlags combination. Asking to check if format is supported to do nothing" );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        switch( format )
+        {
+        case PFG_R10G10B10A2_UNORM:
+        case PFG_R11G11B10_FLOAT:
+        case PFG_R9G9B9E5_SHAREDEXP:
+        {
+            const RenderSystemCapabilities *caps = mRenderSystem->getCapabilities();
+            if( caps->getDriverVersion().major <= 2 )
+            {
+                if( textureFlags & TextureFlags::Uav )
+                    return false;
+            }
+        }
+        break;
+        default:
+            break;
+        }
+#endif
+        return true;
     }
 }
