@@ -55,7 +55,8 @@ namespace Ogre
         mSwapchain( 0 ),
         mSwapchainSemaphore( 0 ),
         mSwapchainStatus( SwapchainReleased ),
-        mRebuildingSwapchain( false )
+        mRebuildingSwapchain( false ),
+        mSuboptimal( false )
     {
         mFocused = true;
     }
@@ -143,6 +144,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanWindow::createSwapchain( void )
     {
+        mSuboptimal = false;
+
         VkSurfaceCapabilitiesKHR surfaceCaps;
         VkResult result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR( mDevice->mPhysicalDevice,
                                                                      mSurfaceKHR, &surfaceCaps );
@@ -261,8 +264,62 @@ namespace Ogre
                 break;
             }
         }
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        if( surfaceCaps.currentTransform <= VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR )
+        {
+            // We will manually rotate by adapting our projection matrices (fastest)
+            // See https://arm-software.github.io/vulkan_best_practice_for_mobile_developers/samples/
+            // performance/surface_rotation/surface_rotation_tutorial.html
+            swapchainCreateInfo.preTransform = surfaceCaps.currentTransform;
+
+            OrientationMode orientationMode = OR_DEGREE_0;
+            switch( surfaceCaps.currentTransform )
+            {
+            case VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR:
+                orientationMode = OR_DEGREE_0;
+                break;
+            case VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR:
+                std::swap( swapchainCreateInfo.imageExtent.width,
+                           swapchainCreateInfo.imageExtent.height );
+                orientationMode = OR_DEGREE_270;
+                break;
+            case VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR:
+                orientationMode = OR_DEGREE_180;
+                break;
+            case VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR:
+                std::swap( swapchainCreateInfo.imageExtent.width,
+                           swapchainCreateInfo.imageExtent.height );
+                orientationMode = OR_DEGREE_90;
+                break;
+            default:
+                break;
+            }
+
+            mTexture->setOrientationMode( orientationMode );
+            if( mDepthBuffer )
+                mDepthBuffer->setOrientationMode( orientationMode );
+            if( mStencilBuffer )
+                mStencilBuffer->setOrientationMode( orientationMode );
+        }
+        else
+        {
+            // We do not support mirroring. Force Vulkan to do the flipping for us
+            // (could be slower if there is no dedicated HW for it on the phone)
+            swapchainCreateInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+            mTexture->setOrientationMode( OR_DEGREE_0 );
+            if( mDepthBuffer )
+                mDepthBuffer->setOrientationMode( OR_DEGREE_0 );
+            if( mStencilBuffer )
+                mStencilBuffer->setOrientationMode( OR_DEGREE_0 );
+        }
+#else
         swapchainCreateInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+#endif
         swapchainCreateInfo.presentMode = presentMode;
+
+        LogManager::getSingleton().logMessage(
+            "surfaceCaps.currentTransform = " +
+            StringConverter::toString( surfaceCaps.currentTransform ) );
 
         //-----------------------------
         // Create swapchain images
@@ -283,6 +340,11 @@ namespace Ogre
         checkVkResult( result, "vkGetSwapchainImagesKHR" );
 
         acquireNextSwapchain();
+
+        if( mDepthBuffer )
+            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
+            mStencilBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         mDevice->mRenderSystem->notifySwapchainCreated( this );
     }
@@ -318,11 +380,12 @@ namespace Ogre
         uint32 swapchainIdx = 0u;
         VkResult result = vkAcquireNextImageKHR( mDevice->mDevice, mSwapchain, UINT64_MAX,
                                                  mSwapchainSemaphore, VK_NULL_HANDLE, &swapchainIdx );
-        if( result != VK_SUCCESS )
+        if( result != VK_SUCCESS || mSuboptimal )
         {
             // Recreate the swapchain if it's no longer compatible with the surface (OUT_OF_DATE)
             // or no longer optimal for presentation (SUBOPTIMAL)
-            if( ( result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ) &&
+            if( ( mSuboptimal ||
+                  ( result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ) ) &&
                 !mRebuildingSwapchain )
             {
                 mRebuildingSwapchain = true;
@@ -458,6 +521,9 @@ namespace Ogre
                 "[VulkanWindow::swapBuffers] vkQueuePresentKHR: error presenting VkResult = " +
                 vkResultToString( result ) );
         }
+
+        if( result == VK_SUBOPTIMAL_KHR || result == VK_ERROR_OUT_OF_DATE_KHR )
+            mSuboptimal = true;
 
         mSwapchainStatus = SwapchainReleased;
     }

@@ -117,8 +117,8 @@ namespace Ogre
 #if OGRE_DEBUG_MODE
         mUserQueriedIfUploadWillStall = false;
 #endif
-        const TextureBox fullDstTextureBox( std::max( 1u, dstTexture->getWidth() >> mipLevel ),
-                                            std::max( 1u, dstTexture->getHeight() >> mipLevel ),
+        const TextureBox fullDstTextureBox( std::max( 1u, dstTexture->getInternalWidth() >> mipLevel ),
+                                            std::max( 1u, dstTexture->getInternalHeight() >> mipLevel ),
                                             std::max( 1u, dstTexture->getDepth() >> mipLevel ),
                                             dstTexture->getNumSlices(),
                                             PixelFormatGpuUtils::getBytesPerPixel(

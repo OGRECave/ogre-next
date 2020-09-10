@@ -194,11 +194,6 @@ namespace Ogre
 
         setFinalResolution( newWidth, newHeight );
 
-        if( mDepthBuffer )
-            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
-            mStencilBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
-
         createSwapchain();
     }
     //-------------------------------------------------------------------------
@@ -279,11 +274,6 @@ namespace Ogre
 
             mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
         }
-
-        if( mDepthBuffer )
-            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
-        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
-            mStencilBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         createSwapchain();
     }

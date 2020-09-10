@@ -800,7 +800,8 @@ namespace Ogre
                          textureFlags, initialType, textureManager ),
         mDepthBufferPoolId( 1u ),
         mPreferDepthTexture( false ),
-        mDesiredDepthBufferFormat( PFG_UNKNOWN )
+        mDesiredDepthBufferFormat( PFG_UNKNOWN ),
+        mOrientationMode( msDefaultOrientationMode )
     {
         if( mPixelFormat == PFG_NULL )
             mDepthBufferPoolId = 0;
@@ -831,4 +832,18 @@ namespace Ogre
     {
         return mDesiredDepthBufferFormat;
     }
+    //-----------------------------------------------------------------------------------
+    void D3D11TextureGpuRenderTarget::setOrientationMode( OrientationMode orientationMode )
+    {
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        mOrientationMode = orientationMode;
+#endif
+    }
+    //-----------------------------------------------------------------------------------
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+    OrientationMode D3D11TextureGpuRenderTarget::getOrientationMode( void ) const
+    {
+        return mOrientationMode;
+    }
+#endif
 }

@@ -57,8 +57,7 @@ namespace v1
     OverlayManager::OverlayManager() 
       : mDefaultRenderQueueId(254),
         mLastViewportWidth(0),
-        mLastViewportHeight(0), 
-        mLastViewportOrientationMode(OR_DEGREE_0),
+        mLastViewportHeight(0),
         mDummyNode(0),
         mNodeMemoryManager(0)
     {
@@ -303,18 +302,10 @@ namespace v1
     //---------------------------------------------------------------------
     void OverlayManager::_queueOverlaysForRendering( RenderQueue* pQueue, Viewport* vp )
     {
-        bool orientationModeChanged = false;
-#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-        orientationModeChanged = (mLastViewportOrientationMode != vp->getOrientationMode());
-#endif
         // Flag for update pixel-based GUIElements if viewport has changed dimensions
         if (mLastViewportWidth != vp->getActualWidth() || 
-            mLastViewportHeight != vp->getActualHeight() ||
-            orientationModeChanged)
+            mLastViewportHeight != vp->getActualHeight())
         {
-#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-            mLastViewportOrientationMode = vp->getOrientationMode();
-#endif
             mLastViewportWidth = vp->getActualWidth();
             mLastViewportHeight = vp->getActualHeight();
         }
@@ -324,13 +315,6 @@ namespace v1
         for (i = mOverlayMap.begin(); i != iend; ++i)
         {
             Overlay* o = i->second;
-#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-            if (orientationModeChanged)
-            {
-                // trick to trigger transform update of the overlay
-                o->scroll(0.f, 0.f);
-            }
-#endif
             o->_updateRenderQueue( pQueue, (Camera*)(0), (Camera*)(0), vp );
         }
     }
@@ -523,21 +507,10 @@ namespace v1
         return (Real)mLastViewportWidth / (Real)mLastViewportHeight;
     }
     //---------------------------------------------------------------------
-    OrientationMode OverlayManager::getViewportOrientationMode(void) const
-    {
-#if OGRE_NO_VIEWPORT_ORIENTATIONMODE != 0
-        OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED,
-                    "Getting ViewPort orientation mode is not supported",
-                    __FUNCTION__);
-#endif
-        return mLastViewportOrientationMode;
-    }
-    //---------------------------------------------------------------------
     OverlayManager::ElementMap& OverlayManager::getElementMap(bool isATemplate)
     {
         return (isATemplate)?mTemplates:mInstances;
     }
-
     //---------------------------------------------------------------------
     OverlayElement* OverlayManager::createOverlayElementFromTemplate(const String& templateName, const String& typeName, const String& instanceName, bool isATemplate)
     {

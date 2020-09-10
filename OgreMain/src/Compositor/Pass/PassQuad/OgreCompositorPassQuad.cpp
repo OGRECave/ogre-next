@@ -190,6 +190,13 @@ namespace Ogre
             mFsRect->setCorners( 0.0f + hOffset, 0.0f - vOffset, 1.0f, 1.0f );
         }
 
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        {
+            const OrientationMode orientationMode = mAnyTargetTexture->getOrientationMode();
+            mCamera->setOrientationMode( orientationMode );
+        }
+#endif
+
         const Quaternion oldCameraOrientation( mCamera->getOrientation() );
 
         if( mDefinition->mCameraCubemapReorient )

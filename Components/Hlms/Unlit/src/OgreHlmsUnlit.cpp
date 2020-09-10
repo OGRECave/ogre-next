@@ -673,6 +673,12 @@ namespace Ogre
             identityProjMat[1][3]   = -identityProjMat[1][3];
         }
 
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        identityProjMat =
+            identityProjMat * Quaternion( Degree( cameras.renderingCamera->getOrientationMode() * 90.f ),
+                                          Vector3::UNIT_Z );
+#endif
+
         if( !isInstancedStereo )
         {
             mPreparedPass.viewProjMatrix[0] = projectionMatrix * viewMatrix;

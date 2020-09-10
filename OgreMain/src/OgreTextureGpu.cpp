@@ -45,6 +45,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    OrientationMode TextureGpu::msDefaultOrientationMode = OR_DEGREE_0;
+
     const IdString TextureGpu::msFinalTextureBuffer = IdString( "msFinalTextureBuffer" );
     const IdString TextureGpu::msMsaaTextureBuffer  = IdString( "msMsaaTextureBuffer" );
 
@@ -208,6 +210,26 @@ namespace Ogre
     uint32 TextureGpu::getNumSlices(void) const
     {
         return (mTextureType != TextureTypes::Type3D) ? mDepthOrSlices : 1u;
+    }
+    //-----------------------------------------------------------------------------------
+    uint32 TextureGpu::getInternalWidth( void ) const
+    {
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        const OrientationMode orientationMode = getOrientationMode();
+        if( orientationMode == OR_DEGREE_90 || orientationMode == OR_DEGREE_270 )
+            return mHeight;
+#endif
+        return mWidth;
+    }
+    //-----------------------------------------------------------------------------------
+    uint32 TextureGpu::getInternalHeight( void ) const
+    {
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        const OrientationMode orientationMode = getOrientationMode();
+        if( orientationMode == OR_DEGREE_90 || orientationMode == OR_DEGREE_270 )
+            return mWidth;
+#endif
+        return mHeight;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::setNumMipmaps( uint8 numMipmaps )
@@ -618,6 +640,7 @@ namespace Ogre
         assert( srcBox.equalSize( dstBox ) );
         assert( this != dst || !srcBox.overlaps( dstBox ) );
         assert( srcMipLevel < this->getNumMipmaps() && dstMipLevel < dst->getNumMipmaps() );
+        OGRE_ASSERT_LOW( ( this->getOrientationMode() & 0x01 ) == ( dst->getOrientationMode() & 0x01 ) );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
@@ -790,6 +813,18 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isOpenGLRenderWindow( void ) const { return false; }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::setOrientationMode( OrientationMode orientationMode )
+    {
+        OGRE_ASSERT_LOW( mResidencyStatus == GpuResidency::OnStorage || isRenderWindowSpecific() );
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "setOrientationMode must be done on a RenderTexture!",
+                     "TextureGpu::setOrientationMode" );
+    }
+    //-----------------------------------------------------------------------------------
+    OrientationMode TextureGpu::getOrientationMode( void ) const
+    {
+        return OR_DEGREE_0;
+    }
     //-----------------------------------------------------------------------------------
     ResourceLayout::Layout TextureGpu::getDefaultLayout( bool bIgnoreDiscardableFlag ) const
     {

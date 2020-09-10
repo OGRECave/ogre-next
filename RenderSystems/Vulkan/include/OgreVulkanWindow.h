@@ -77,6 +77,7 @@ namespace Ogre
         VkSemaphore mSwapchainSemaphore;
         SwapchainStatus mSwapchainStatus;
         bool mRebuildingSwapchain;
+        bool mSuboptimal;
 
         void parseSharedParams( const NameValuePairList *miscParams );
 

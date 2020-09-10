@@ -1947,6 +1947,12 @@ namespace Ogre
         const int oldHeight = mCurrentRenderViewport[0].getActualHeight();
         const int oldX = mCurrentRenderViewport[0].getActualLeft();
         const int oldY = mCurrentRenderViewport[0].getActualTop();
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        const OrientationMode oldOrientationMode =
+            mCurrentRenderViewport[0].getCurrentTarget()
+                ? mCurrentRenderViewport[0].getCurrentTarget()->getOrientationMode()
+                : OR_DEGREE_0;
+#endif
 
         VulkanRenderPassDescriptor *currPassDesc =
             static_cast<VulkanRenderPassDescriptor *>( mCurrentRenderPassDescriptor );
@@ -1959,9 +1965,17 @@ namespace Ogre
         const int h = mCurrentRenderViewport[0].getActualHeight();
         const int x = mCurrentRenderViewport[0].getActualLeft();
         const int y = mCurrentRenderViewport[0].getActualTop();
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        const OrientationMode orientationMode =
+            mCurrentRenderViewport[0].getCurrentTarget()->getOrientationMode();
+#endif
 
-        const bool vpChanged =
-            oldX != x || oldY != y || oldWidth != w || oldHeight != h || numViewports > 1u;
+        const bool vpChanged = oldX != x || oldY != y || oldWidth != w || oldHeight != h ||
+                               numViewports > 1u
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+                               || oldOrientationMode != orientationMode
+#endif
+            ;
 
         VulkanRenderPassDescriptor *newPassDesc = static_cast<VulkanRenderPassDescriptor *>( desc );
 
@@ -2055,6 +2069,14 @@ namespace Ogre
                 vkVp[i].height = mCurrentRenderViewport[i].getActualHeight();
                 vkVp[i].minDepth = 0;
                 vkVp[i].maxDepth = 1;
+
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+                if( mCurrentRenderViewport[i].getCurrentTarget()->getOrientationMode() & 0x01 )
+                {
+                    std::swap( vkVp[i].x, vkVp[i].y );
+                    std::swap( vkVp[i].width, vkVp[i].height );
+                }
+#endif
             }
 
             vkCmdSetViewport( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, 0u, numViewports, vkVp );
@@ -2071,6 +2093,13 @@ namespace Ogre
                     static_cast<uint32>( mCurrentRenderViewport[i].getScissorActualWidth() );
                 scissorRect[i].extent.height =
                     static_cast<uint32>( mCurrentRenderViewport[i].getScissorActualHeight() );
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+                if( mCurrentRenderViewport[i].getCurrentTarget()->getOrientationMode() & 0x01 )
+                {
+                    std::swap( scissorRect[i].offset.x, scissorRect[i].offset.y );
+                    std::swap( scissorRect[i].extent.width, scissorRect[i].extent.height );
+                }
+#endif
             }
 
             vkCmdSetScissor( mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, 0u, numViewports,

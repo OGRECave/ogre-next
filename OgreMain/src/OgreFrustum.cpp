@@ -412,7 +412,7 @@ namespace Ogre {
         Real left, right, bottom, top;
 
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-        if (mOrientationMode != OR_PORTRAIT)
+        if (mOrientationMode != OR_PORTRAIT && mOrientationMode != OR_DEGREE_180)
             calcProjectionParameters(bottom, top, left, right);
         else
 #endif

@@ -72,8 +72,8 @@ namespace Ogre
         VkImageCreateInfo imageInfo;
         makeVkStruct( imageInfo, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO );
         imageInfo.imageType = getVulkanTextureType();
-        imageInfo.extent.width = mWidth;
-        imageInfo.extent.height = mHeight;
+        imageInfo.extent.width = getInternalWidth();
+        imageInfo.extent.height = getInternalHeight();
         imageInfo.extent.depth = getDepth();
         imageInfo.mipLevels = mNumMipmaps;
         imageInfo.arrayLayers = getNumSlices();
@@ -488,8 +488,8 @@ namespace Ogre
             memset( &resolve, 0, sizeof( resolve ) );
             resolve.srcSubresource = region.dstSubresource;
             resolve.dstSubresource = region.dstSubresource;
-            resolve.extent.width = mWidth;
-            resolve.extent.height = mWidth;
+            resolve.extent.width = getInternalWidth();
+            resolve.extent.height = getInternalHeight();
             resolve.extent.depth = getDepth();
 
             vkCmdResolveImage( device->mGraphicsQueue.mCurrentCmdBuffer,
@@ -559,6 +559,9 @@ namespace Ogre
 
         imageBarrier.subresourceRange.levelCount = 1u;
 
+        const uint32 internalWidth = getInternalWidth();
+        const uint32 internalHeight = getInternalHeight();
+
         for( size_t i = 1u; i < numMipmaps; ++i )
         {
             // Convert the dst mipmap 'i' to TRANSFER_DST_OPTIMAL. Does not have to wait
@@ -584,8 +587,9 @@ namespace Ogre
             region.srcOffsets[0].y = 0;
             region.srcOffsets[0].z = 0;
 
-            region.srcOffsets[1].x = static_cast<int32_t>( std::max( mWidth >> ( i - 1u ), 1u ) );
-            region.srcOffsets[1].y = static_cast<int32_t>( std::max( mHeight >> ( i - 1u ), 1u ) );
+            region.srcOffsets[1].x = static_cast<int32_t>( std::max( internalWidth >> ( i - 1u ), 1u ) );
+            region.srcOffsets[1].y =
+                static_cast<int32_t>( std::max( internalHeight >> ( i - 1u ), 1u ) );
             region.srcOffsets[1].z = static_cast<int32_t>( std::max( getDepth() >> ( i - 1u ), 1u ) );
 
             region.dstSubresource.aspectMask = region.srcSubresource.aspectMask;
@@ -597,8 +601,8 @@ namespace Ogre
             region.dstOffsets[0].y = 0;
             region.dstOffsets[0].z = 0;
 
-            region.dstOffsets[1].x = static_cast<int32_t>( std::max( mWidth >> i, 1u ) );
-            region.dstOffsets[1].y = static_cast<int32_t>( std::max( mHeight >> i, 1u ) );
+            region.dstOffsets[1].x = static_cast<int32_t>( std::max( internalWidth >> i, 1u ) );
+            region.dstOffsets[1].y = static_cast<int32_t>( std::max( internalHeight >> i, 1u ) );
             region.dstOffsets[1].z = static_cast<int32_t>( std::max( getDepth() >> i, 1u ) );
 
             vkCmdBlitImage( device->mGraphicsQueue.mCurrentCmdBuffer, mFinalTextureName, mCurrLayout,
@@ -845,6 +849,10 @@ namespace Ogre
         mDepthBufferPoolId( 1u ),
         mPreferDepthTexture( false ),
         mDesiredDepthBufferFormat( PFG_UNKNOWN )
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        ,
+        mOrientationMode( msDefaultOrientationMode )
+#endif
     {
     }
     //-----------------------------------------------------------------------------------
@@ -878,8 +886,8 @@ namespace Ogre
         VkImageCreateInfo imageInfo;
         makeVkStruct( imageInfo, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO );
         imageInfo.imageType = getVulkanTextureType();
-        imageInfo.extent.width = mWidth;
-        imageInfo.extent.height = mHeight;
+        imageInfo.extent.width = getInternalWidth();
+        imageInfo.extent.height = getInternalHeight();
         imageInfo.extent.depth = getDepth();
         imageInfo.mipLevels = 1u;
         imageInfo.arrayLayers = 1u;
@@ -949,4 +957,19 @@ namespace Ogre
                                            memRequirements.size );
         }
     }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpuRenderTarget::setOrientationMode( OrientationMode orientationMode )
+    {
+        OGRE_ASSERT_LOW( mResidencyStatus == GpuResidency::OnStorage || isRenderWindowSpecific() );
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        mOrientationMode = orientationMode;
+#endif
+    }
+    //-----------------------------------------------------------------------------------
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+    OrientationMode VulkanTextureGpuRenderTarget::getOrientationMode( void ) const
+    {
+        return mOrientationMode;
+    }
+#endif
 }  // namespace Ogre

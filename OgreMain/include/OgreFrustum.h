@@ -43,19 +43,6 @@ namespace Ogre
     /** \addtogroup Math
     *  @{
     */
-    /** Specifies orientation mode.
-    */
-    enum OrientationMode
-    {
-        OR_DEGREE_0       = 0,
-        OR_DEGREE_90      = 1,
-        OR_DEGREE_180     = 2,
-        OR_DEGREE_270     = 3,
-
-        OR_PORTRAIT       = OR_DEGREE_0,
-        OR_LANDSCAPERIGHT = OR_DEGREE_90,
-        OR_LANDSCAPELEFT  = OR_DEGREE_270
-    };
 
     /** Specifies perspective (realistic) or orthographic (architectural) projection.
     */

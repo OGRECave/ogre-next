@@ -327,6 +327,12 @@ namespace Ogre
         /// For TypeCube this value returns 6.
         /// For TypeCubeArray, value returns numSlices * 6u.
         uint32 getNumSlices(void) const;
+        /// Real API width accounting for TextureGpu::getOrientationMode
+        /// If orientation mode is 90° or 270° then getInternalWidth returns the height and
+        /// getInternalHeight returns the width
+        uint32 getInternalWidth(void) const;
+        /// Real API height accounting for TextureGpu::getOrientationMode. See getInternalWidth
+        uint32 getInternalHeight(void) const;
 
         void setNumMipmaps( uint8 numMipmaps );
         uint8 getNumMipmaps(void) const;
@@ -554,6 +560,33 @@ namespace Ogre
         ///     * Their origins are upside down. Which means we need to flip Y.
         ///     * They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true
         virtual bool isOpenGLRenderWindow( void ) const;
+
+        /// PUBLIC VARIABLE. This variable can be altered directly.
+        ///
+        /// Changes are reflected immediately for new TextureGpus.
+        /// Existing TextureGpus won't be affected
+        static OrientationMode msDefaultOrientationMode;
+
+        /** Sets the given orientation. 'this' must be a RenderTexture
+            If Ogre wasn't build with OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE,
+            calls to this function will not stick (i.e. getOrientationMode always
+            returns the same value)
+
+            @see    TextureGpu::msDefaultOrientationMode
+            @see    TextureGpu::getInternalWidth
+            @see    TextureGpu::getInternalHeight
+        @remarks
+            Must be OnStorage.
+
+            If OrientationMode == OR_DEGREE_90 or OR_DEGREE_270, the internal resolution
+            if flipped. i.e. swap( width, height ).
+            This is important if you need to perform copyTo operations or AsyncTextureTickets
+
+            This setting has only been tested with Vulkan and is likely to malfunction
+            with the other APIs if set to anything other than OR_DEGREE_0
+        */
+        virtual void setOrientationMode( OrientationMode orientationMode );
+        virtual OrientationMode getOrientationMode( void ) const;
 
         ResourceLayout::Layout getDefaultLayout( bool bIgnoreDiscardableFlag = false ) const;
         virtual ResourceLayout::Layout getCurrentLayout( void ) const;

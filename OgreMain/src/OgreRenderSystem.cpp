@@ -611,7 +611,7 @@ namespace Ogre {
         TextureGpu *retVal = mTextureGpuManager->createTexture( depthBufferName.c_str(),
                                                                 GpuPageOutStrategy::Discard,
                                                                 textureFlags, TextureTypes::Type2D );
-        retVal->setResolution( colourTexture->getWidth(), colourTexture->getHeight() );
+        retVal->setResolution( colourTexture->getInternalWidth(), colourTexture->getInternalHeight() );
         retVal->setPixelFormat( depthBufferFormat );
         retVal->_setDepthBufferDefaults( poolId, preferDepthTexture, depthBufferFormat );
         retVal->_setSourceType( TextureSourceType::SharedDepthBuffer );

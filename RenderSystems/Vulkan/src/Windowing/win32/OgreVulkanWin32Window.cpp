@@ -529,12 +529,10 @@ namespace Ogre
 
         mSampleDescription = mRequestedSampleDescription;
 
+        createSwapchain();
+
         mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
-        if( mDepthBuffer )
-            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         setHidden( mHidden );
-
-        createSwapchain();
     }
 }  // namespace Ogre

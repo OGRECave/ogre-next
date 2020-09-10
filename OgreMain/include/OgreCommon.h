@@ -910,6 +910,22 @@ namespace Ogre {
         CLIPPED_ALL = 2
     };
 
+    /** Specifies orientation mode.
+    */
+    enum OrientationMode
+    {
+        OR_DEGREE_0       = 0,
+        /// Causes internal resolution to swap width and height
+        OR_DEGREE_90      = 1,
+        OR_DEGREE_180     = 2,
+        /// Causes internal resolution to swap width and height
+        OR_DEGREE_270     = 3,
+
+        OR_PORTRAIT       = OR_DEGREE_0,
+        OR_LANDSCAPERIGHT = OR_DEGREE_90,
+        OR_LANDSCAPELEFT  = OR_DEGREE_270
+    };
+
     namespace MsaaPatterns
     {
         enum MsaaPatterns

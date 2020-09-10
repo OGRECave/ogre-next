@@ -399,6 +399,10 @@ namespace Ogre
         mDepthBufferPoolId( 1u ),
         mPreferDepthTexture( false ),
         mDesiredDepthBufferFormat( PFG_UNKNOWN )
+  #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        ,
+        mOrientationMode( msDefaultOrientationMode )
+  #endif
     {
         if( mPixelFormat == PFG_NULL )
             mDepthBufferPoolId = 0;
@@ -429,4 +433,18 @@ namespace Ogre
     {
         return mDesiredDepthBufferFormat;
     }
+    //-----------------------------------------------------------------------------------
+    void MetalTextureGpuRenderTarget::setOrientationMode( OrientationMode orientationMode )
+    {
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        mOrientationMode = orientationMode;
+#endif
+    }
+    //-----------------------------------------------------------------------------------
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+    OrientationMode MetalTextureGpuRenderTarget::getOrientationMode( void ) const
+    {
+        return mOrientationMode;
+    }
+#endif
 }

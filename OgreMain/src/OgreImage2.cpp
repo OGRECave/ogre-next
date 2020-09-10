@@ -281,7 +281,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     void Image2::loadDynamicImage( void *pData, bool autoDelete, const TextureGpu *texture )
     {
-        loadDynamicImage( pData, texture->getWidth(), texture->getHeight(),
+        loadDynamicImage( pData, texture->getInternalWidth(), texture->getInternalHeight(),
                           texture->getDepthOrSlices(), texture->getTextureType(),
                           texture->getPixelFormat(), autoDelete, texture->getNumMipmaps() );
     }
@@ -310,7 +310,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     void Image2::createEmptyImageLike( const TextureGpu *texture )
     {
-        createEmptyImage( texture->getWidth(), texture->getHeight(), texture->getDepthOrSlices(),
+        createEmptyImage( texture->getInternalWidth(), texture->getInternalHeight(), texture->getDepthOrSlices(),
                           texture->getTextureType(), texture->getPixelFormat(),
                           texture->getNumMipmaps() );
     }
@@ -338,8 +338,8 @@ namespace Ogre {
         minMip = std::min<uint8>( minMip, texture->getNumMipmaps() - 1u );
         maxMip = std::min<uint8>( maxMip, texture->getNumMipmaps() - 1u );
 
-        mWidth          = std::max( 1u, texture->getWidth() >> minMip );
-        mHeight         = std::max( 1u, texture->getHeight() >> minMip );
+        mWidth          = std::max( 1u, texture->getInternalWidth() >> minMip );
+        mHeight         = std::max( 1u, texture->getInternalHeight() >> minMip );
         mDepthOrSlices  = std::max( 1u, texture->getDepth() >> minMip );
         mDepthOrSlices  = std::max( mDepthOrSlices, texture->getNumSlices() );
         mTextureType    = texture->getTextureType();
@@ -375,8 +375,8 @@ namespace Ogre {
 
         for( uint8 mip=minMip; mip<=maxMip; ++mip )
         {
-            const uint32 width  = std::max( 1u, texture->getWidth() >> mip );
-            const uint32 height = std::max( 1u, texture->getHeight() >> mip );
+            const uint32 width  = std::max( 1u, texture->getInternalWidth() >> mip );
+            const uint32 height = std::max( 1u, texture->getInternalHeight() >> mip );
             const uint32 depth  = std::max( 1u, texture->getDepth() >> mip );
             const uint32 depthOrSlices = std::max( depth, texture->getNumSlices() );
 
@@ -496,8 +496,8 @@ namespace Ogre {
         if( srcDepthOrSlices == 0u )
             srcDepthOrSlices = mDepthOrSlices;
 
-        if( texture->getWidth() != mWidth ||
-            texture->getHeight() != mHeight ||
+        if( texture->getInternalWidth() != mWidth ||
+            texture->getInternalHeight() != mHeight ||
             srcDepthOrSlices > texture->getDepthOrSlices() ||
             dstZorSliceStart + srcDepthOrSlices > texture->getDepthOrSlices() ||
             PixelFormatGpuUtils::getFamily( texture->getPixelFormat() ) !=

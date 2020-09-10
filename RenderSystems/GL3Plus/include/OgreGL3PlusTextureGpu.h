@@ -139,7 +139,9 @@ namespace Ogre
         uint16          mDepthBufferPoolId;
         bool            mPreferDepthTexture;
         PixelFormatGpu  mDesiredDepthBufferFormat;
-
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        OrientationMode mOrientationMode;
+#endif
         virtual void createInternalResourcesImpl(void);
         virtual void destroyInternalResourcesImpl(void);
 
@@ -155,6 +157,11 @@ namespace Ogre
         virtual uint16 getDepthBufferPoolId(void) const;
         virtual bool getPreferDepthTexture(void) const;
         virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+
+        virtual void setOrientationMode( OrientationMode orientationMode );
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        virtual OrientationMode getOrientationMode( void ) const;
+#endif
     };
 }
 

@@ -676,8 +676,8 @@ namespace Ogre
         mTargetHeight = 0u;
         if( anyTargetTexture )
         {
-            mTargetWidth = anyTargetTexture->getWidth();
-            mTargetHeight = anyTargetTexture->getHeight();
+            mTargetWidth = anyTargetTexture->getInternalWidth();
+            mTargetHeight = anyTargetTexture->getInternalHeight();
         }
 
         if( entryTypes & RenderPassDescriptor::All )
