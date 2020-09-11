@@ -86,7 +86,8 @@ for sampleName in sampleNames:
 		srcPath = '../../../../../../../../Media/' + mediaFolder
 		dstPath = dstAssetsPath + mediaFolder
 		print( 'Generating symlink from ' + srcPath + ' to ' + dstPath )
-		os.remove( dstPath )
+		try: os.remove( dstPath )
+		except: pass
 		os.symlink( srcPath, dstPath )
 
 	# Copy template

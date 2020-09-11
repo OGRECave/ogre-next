@@ -10,8 +10,8 @@ set( ANDROID_CPU_FEATURES_DIR ${ANDROID_NDK}/sources/android/cpufeatures )
 include_directories( ${ANDROID_CPU_FEATURES_DIR} )
 add_library( cpufeatures STATIC ${ANDROID_CPU_FEATURES_DIR}/cpu-features.c )
 
-set( OGRE_BINARIES %%ogreBinaries%% )
-set( OGRE_SOURCE %%ogreSource%%/${CMAKE_BUILD_TYPE} )
+set( OGRE_SOURCE %%ogreSource%% )
+set( OGRE_BINARIES %%ogreBinaries%%/${CMAKE_BUILD_TYPE} )
 
 include_directories( ${OGRE_SOURCE}/OgreMain/include )
 include_directories( ${OGRE_SOURCE}/RenderSystems/Vulkan/include )
