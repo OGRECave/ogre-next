@@ -451,6 +451,10 @@ namespace Ogre
                 psoCache.setProperties.swap( job->mSetProperties );
                 this->mSetProperties = job->mSetProperties;
 
+                // Uset the HlmsComputePso, as the ptr may be cached by the
+                // RenderSystem and this could be invalidated
+                mRenderSystem->_setComputePso( 0 );
+
                 size_t newCacheEntryIdx = mComputeShaderCache.size();
                 if( mFreeShaderCacheEntries.empty() )
                     mComputeShaderCache.push_back( ComputePsoCache() );
@@ -468,10 +472,6 @@ namespace Ogre
                     psoCache.paramsUpdateCounter = shaderParams->getUpdateCounter();
                 if( shaderParams )
                     psoCache.paramsProfileUpdateCounter = shaderParams->getUpdateCounter();
-
-                // Uset the HlmsComputePso, as the ptr may be cached by the RenderSystem
-                // and this could be invalidated
-                mRenderSystem->_setComputePso( 0 );
 
                 mComputeShaderCache[newCacheEntryIdx] = psoCache;
 
