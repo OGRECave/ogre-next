@@ -11,7 +11,51 @@ import shutil
 ogreBinariesPath = os.path.abspath( '../../../build/Android/' )
 ogreSourcePath = os.path.abspath( '../../../' )
 
-sampleNames = ['PbsMaterials']
+sampleNames = [ \
+	"AnimationTagPoint",
+	"AreaApproxLights",
+	"CustomRenderable",
+	"Decals",
+	"DynamicGeometry",
+	"Forward3D",
+	"Hdr",
+	"HdrSmaa",
+	"IesProfiles",
+	"ImportAnimationsShareSkeletonInstance",
+	"InstancedStereo",
+	"InstantRadiosity",
+	"LocalCubemaps",
+	"LocalCubemapsManualProbes",
+	"MorphAnimations",
+	"PbsMaterials",
+	"PccPerPixelGridPlacement",
+	"Postprocessing",
+	"Refractions",
+	"SceneFormat",
+	"ScreenSpaceReflections",
+	"ShadowMapDebugging",
+	"ShadowMapFromCode",
+	"StaticShadowMaps",
+	"StencilTest",
+	"StereoRendering",
+	"TutorialCompute01_UavTexture",
+	"TutorialCompute02_UavBuffer",
+	"Tutorial_Distortion",
+	"Tutorial_DynamicCubemap",
+	"Tutorial_Memory",
+	"Tutorial_ReconstructPosFromDepth",
+	"TutorialSky_Postprocess",
+	"Tutorial_SMAA",
+	"Tutorial_SSAO",
+	"Tutorial_Terrain",
+	"Tutorial_TextureBaking",
+	"TutorialUav01_Setup",
+	"TutorialUav02_Setup",
+	"UpdatingDecalsAndAreaLightTex",
+	"V1Interfaces",
+	"V2ManualObject",
+	"V2Mesh",
+]
 
 templateFiles = list()
 for (dirpath, dirnames, filenames) in os.walk( './Template' ):
