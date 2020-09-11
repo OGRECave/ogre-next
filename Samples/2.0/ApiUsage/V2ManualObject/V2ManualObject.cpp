@@ -8,6 +8,7 @@
 
 //Declares WinMain / main
 #include "MainEntryPointHelper.h"
+#include "System/Android/AndroidSystems.h"
 #include "System/MainEntryPoints.h"
 
 namespace Demo
@@ -19,12 +20,12 @@ namespace Demo
             GraphicsSystem::setupResources();
 
             Ogre::ConfigFile cf;
-            cf.load(mResourcePath + "resources2.cfg");
+            cf.load( AndroidSystems::openFile( mResourcePath + "resources2.cfg" ) );
 
             Ogre::String dataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
 
             if( dataFolder.empty() )
-                dataFolder = "./";
+                dataFolder = AndroidSystems::isAndroid() ? "/" : "./";
             else if( *(dataFolder.end() - 1) != '/' )
                 dataFolder += "/";
 

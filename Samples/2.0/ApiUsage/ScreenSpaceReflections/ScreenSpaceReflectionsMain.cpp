@@ -11,6 +11,7 @@
 
 //Declares WinMain / main
 #include "MainEntryPointHelper.h"
+#include "System/Android/AndroidSystems.h"
 #include "System/MainEntryPoints.h"
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
@@ -48,12 +49,12 @@ namespace Demo
             GraphicsSystem::setupResources();
 
             Ogre::ConfigFile cf;
-            cf.load(mResourcePath + "resources2.cfg");
+            cf.load( AndroidSystems::openFile( mResourcePath + "resources2.cfg" ) );
 
             Ogre::String originalDataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
 
             if( originalDataFolder.empty() )
-                originalDataFolder = "./";
+                originalDataFolder = AndroidSystems::isAndroid() ? "/" : "./";
             else if( *(originalDataFolder.end() - 1) != '/' )
                 originalDataFolder += "/";
 
