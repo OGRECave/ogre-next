@@ -87,8 +87,7 @@ namespace Ogre
         }
         imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
-                          VK_IMAGE_USAGE_SAMPLED_BIT;
+        imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         if( hasMsaaExplicitResolves() )
         {
@@ -101,6 +100,8 @@ namespace Ogre
         if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
             imageInfo.flags |= VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
 
+        if( isTexture() )
+            imageInfo.usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
         if( isRenderToTexture() )
         {
             imageInfo.usage |= PixelFormatGpuUtils::isDepth( mPixelFormat )
@@ -741,8 +742,9 @@ namespace Ogre
             // The validation layers will complain though. This was a major Vulkan oversight.
             makeVkStruct( flagRestriction, VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO );
             imageViewCi.pNext = &flagRestriction;
-            flagRestriction.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
-                                    VK_IMAGE_USAGE_SAMPLED_BIT;
+            flagRestriction.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+            if( isTexture() )
+                flagRestriction.usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
             if( isRenderToTexture() )
             {
                 flagRestriction.usage |= PixelFormatGpuUtils::isDepth( mPixelFormat )
