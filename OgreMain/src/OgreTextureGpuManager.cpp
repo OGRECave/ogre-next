@@ -856,6 +856,13 @@ namespace Ogre
         OGRE_ASSERT_LOW(
             textureFlags != TextureFlags::NotTexture &&
             "Invalid textureFlags combination. Asking to check if format is supported to do nothing" );
+
+        if( textureFlags & TextureFlags::AllowAutomipmaps )
+        {
+            if( !PixelFormatGpuUtils::supportsHwMipmaps( format ) )
+                return false;
+        }
+
         return true;
     }
     //-----------------------------------------------------------------------------------

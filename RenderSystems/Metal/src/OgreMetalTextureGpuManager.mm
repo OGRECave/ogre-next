@@ -254,6 +254,13 @@ namespace Ogre
             break;
         }
 #endif
+
+        if( textureFlags & TextureFlags::AllowAutomipmaps )
+        {
+            if( !PixelFormatGpuUtils::supportsHwMipmaps( format ) )
+                return false;
+        }
+
         return true;
     }
 }
