@@ -116,7 +116,7 @@ namespace Demo
         void updateMainLoop()
         {
             const Ogre::uint64 endTime = mTimer.getMicroseconds();
-            double timeSinceLast = endTime - mStartTime;
+            double timeSinceLast = ( endTime - mStartTime ) / 1000000.0;
             timeSinceLast = std::min( 1.0, timeSinceLast );  // Prevent from going haywire.
             mStartTime = endTime;
 
