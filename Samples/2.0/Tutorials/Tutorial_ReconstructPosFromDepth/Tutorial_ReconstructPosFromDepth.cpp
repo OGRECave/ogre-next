@@ -51,7 +51,7 @@ namespace Demo
 
             dataFolder += "2.0/scripts/materials/Tutorial_ReconstructPosFromDepth";
 
-            addResourceLocation( dataFolder, "FileSystem", "General" );
+            addResourceLocation( dataFolder, getMediaReadArchiveType(), "General" );
         }
 
     public:

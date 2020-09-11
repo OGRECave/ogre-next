@@ -65,7 +65,11 @@ namespace Demo
 #else
             Ogre::String dataFolder = originalDataFolder + "cubemapsJS.zip";
 #endif
+#if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
             addResourceLocation( dataFolder, "Zip", "General" );
+#else
+            addResourceLocation( dataFolder, "APKZip", "General" );
+#endif
 
             for( size_t i=0; i<6; ++i )
             {

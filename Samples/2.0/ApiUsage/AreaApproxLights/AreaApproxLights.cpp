@@ -56,7 +56,7 @@ namespace Demo
 
             dataFolder += "2.0/scripts/materials/PbsMaterials";
 
-            addResourceLocation( dataFolder, "FileSystem", "General" );
+            addResourceLocation( dataFolder, getMediaReadArchiveType(), "General" );
         }
 
         virtual void loadResources(void)
