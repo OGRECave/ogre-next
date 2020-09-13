@@ -150,11 +150,53 @@ namespace Ogre
             }
         @endcode
 
-        Could you have used e.g. "const_buffers" : [0,7] instead of [4,7]?
+        That is, explicitly declare that you're using const buffer range [4; 7),
+        tex buffer range [1; 2) etc.
 
-        Yes. But you would be consuming more memory.<br/>
+        In Vulkan we will automatically generate macros for use in bindings
+        (buffers are uppercase letter, textures lowercase):
+
+        @code
+            // Const buffers
+            #define ogre_B4 set = 0, binding = 0
+            #define ogre_B5 set = 0, binding = 1
+            #define ogre_B6 set = 0, binding = 2
+
+            // Texture buffers
+            #define ogre_T1 set = 0, binding = 3
+
+            // Textures
+            #define ogre_t3 set = 0, binding = 4
+
+            // Samplers
+            #define ogre_s1 set = 0, binding = 5
+
+            // UAV buffers
+            #define ogre_U1 set = 0, binding = 6
+
+            // UAV textures
+            #define ogre_u0 set = 0, binding = 7
+        @endcode
+
+        Thus a GLSL shader can use it like this:
+        @code
+            layout( ogre_B4 ) uniform bufferName
+            {
+                uniform float myParam;
+                uniform float2 myParam2;
+            };
+
+            layout( ogre_t3 ) uniform texture2D myTexture;
+            // etc...
+        @endcode
+
+        Could you have used e.g. "const_buffers" : [0,7] instead of [4,7]?
+        i.e. declare slots in range [0;4) even though they won't be used?
+
+        Yes. But you would be consuming more memory.
+
         Note that if your vertex shader uses slots [0; 3) and pixel shader uses range
-        [4; 7) then you both shaders must use a RootLayout that at least consumes range [0; 7)
+        [4; 7) then BOTH shaders must use a RootLayout that at least declares range [0; 7)
         so they can be paired together
 
         RootLayouts have a memory vs performance trade off:
@@ -167,7 +209,7 @@ namespace Ogre
         See GpuProgram::setPrefabRootLayout
 
         Note that if two shaders were compiled with different RootLayouts, they may still
-        be able to be used together if their layouts are compatible; and the bigger RootLayout
+        be able to be used together if their layouts are compatible; and the 'bigger' RootLayout
         which can be used for both shaders will be selected.
 
         For example if vertex shader declared:
@@ -193,9 +235,11 @@ namespace Ogre
             }
         @endcode
 
-        Then they're compatible; and pixel shader's will be selected. That is because
-        both layouts declared 3 const buffers (perfect match); and textures ALWAYS go after
-        const buffers (THE ORDER is determined by DescBindingTypes::DescBindingTypes).
+        Then they're compatible; and pixel shader's will be selected to be used for both shaders.
+
+        That is because both layouts declared 3 const buffers (perfect match); and textures
+        ALWAYS go after const buffers (THE ORDER is important and determined by
+        DescBindingTypes::DescBindingTypes).
 
         Thus the pixel shader's RootLayout can be used for the vertex shader.
 
@@ -228,9 +272,11 @@ namespace Ogre
             5. texture
 
         The 4th slot is in conflict because the vertex shader uses it for a tex buffer,
-        and the pixel shader uses it for a texture.
+        and the pixel shader uses it for a texture. A slot can only be used for one type of resource.
 
-        In order to fix this incompatibility, the pixel shader needs to declare:
+        In order to fix this incompatibility, the pixel shader needs to declare a tex_buffer,
+        even if it won't ever use the tex_buffer slot (the vertex shader will):
+
         @code
             {
                 "0" :
@@ -241,8 +287,6 @@ namespace Ogre
                 }
             }
         @endcode
-
-        even if it doesn't use the tex_buffer slot.
 
         <b>Baked sets:</b>
 
