@@ -110,7 +110,7 @@ namespace Ogre
 
         remove_duplicates( optVideoMode.possibleValues );
         if( !optVideoMode.possibleValues.empty() )
-            optVideoMode.currentValue = optVideoMode.possibleValues.front();
+            optVideoMode.currentValue = optVideoMode.possibleValues.back();
 
         optColourDepth.name = "Colour Depth";
         optColourDepth.immutable = false;
