@@ -191,6 +191,37 @@ namespace Ogre
         while( itor != endt )
         {
             vkDestroyRenderPass( mDevice->mDevice, itor->second, 0 );
+            delete[] itor->first.pAttachments;
+
+            const size_t subpassCount = itor->first.subpassCount;
+            for( size_t i = 0u; i < subpassCount; ++i )
+            {
+                // Attachments are all contiguous, so we just have to delete the first
+                // entry we see, which points to the beginning of the array
+                if( itor->first.pSubpasses[i].pInputAttachments )
+                {
+                    delete[] itor->first.pSubpasses[i].pInputAttachments;
+                    break;
+                }
+                else if( itor->first.pSubpasses[i].pColorAttachments )
+                {
+                    delete[] itor->first.pSubpasses[i].pColorAttachments;
+                    break;
+                }
+                else if( itor->first.pSubpasses[i].pResolveAttachments )
+                {
+                    delete[] itor->first.pSubpasses[i].pResolveAttachments;
+                    break;
+                }
+                else if( itor->first.pSubpasses[i].pDepthStencilAttachment )
+                {
+                    delete[] itor->first.pSubpasses[i].pDepthStencilAttachment;
+                    break;
+                }
+            }
+            delete[] itor->first.pSubpasses;
+            delete[] itor->first.pDependencies;
+
             ++itor;
         }
         mRenderPassCache.clear();
@@ -205,6 +236,10 @@ namespace Ogre
             *dstStruct = &memoryBuffer[assignedIdx];
             memcpy( &memoryBuffer[assignedIdx], src, attachmentCount * sizeof( VkAttachmentReference ) );
             assignedIdx += attachmentCount;
+        }
+        else
+        {
+            *dstStruct = 0;
         }
     }
     //-------------------------------------------------------------------------
