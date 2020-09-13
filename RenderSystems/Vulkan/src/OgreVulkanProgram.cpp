@@ -40,6 +40,8 @@ THE SOFTWARE.
 #include "OgreVulkanUtils.h"
 #include "SPIRV-Reflect/spirv_reflect.h"
 
+#include "OgreRenderSystemCapabilities.h"
+#include "OgreRoot.h"
 #include "OgreVulkanGlslangHeader.h"
 
 #include "glslang/SPIRV/Logger.h"
@@ -179,6 +181,11 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void VulkanProgram::initGlslResources( TBuiltInResource &resources )
     {
+        const RenderSystem *rs = Root::getSingleton().getRenderSystem();
+        const RenderSystemCapabilities *caps = rs->getCapabilities();
+
+        const uint32 *maxThreadsPerThreadGroupAxis = caps->getMaxThreadsPerThreadgroupAxis();
+
         resources.maxLights = 32;
         resources.maxClipPlanes = 6;
         resources.maxTextureUnits = 32;
@@ -202,9 +209,9 @@ namespace Ogre
         resources.maxComputeWorkGroupCountX = 65535;
         resources.maxComputeWorkGroupCountY = 65535;
         resources.maxComputeWorkGroupCountZ = 65535;
-        resources.maxComputeWorkGroupSizeX = 1024;
-        resources.maxComputeWorkGroupSizeY = 1024;
-        resources.maxComputeWorkGroupSizeZ = 64;
+        resources.maxComputeWorkGroupSizeX = static_cast<int>( maxThreadsPerThreadGroupAxis[0] );
+        resources.maxComputeWorkGroupSizeY = static_cast<int>( maxThreadsPerThreadGroupAxis[1] );
+        resources.maxComputeWorkGroupSizeZ = static_cast<int>( maxThreadsPerThreadGroupAxis[2] );
         resources.maxComputeUniformComponents = 1024;
         resources.maxComputeTextureImageUnits = 16;
         resources.maxComputeImageUniforms = 8;
