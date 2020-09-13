@@ -800,8 +800,11 @@ namespace Ogre
                          textureFlags, initialType, textureManager ),
         mDepthBufferPoolId( 1u ),
         mPreferDepthTexture( false ),
-        mDesiredDepthBufferFormat( PFG_UNKNOWN ),
+        mDesiredDepthBufferFormat( PFG_UNKNOWN )
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        ,
         mOrientationMode( msDefaultOrientationMode )
+#endif
     {
         if( mPixelFormat == PFG_NULL )
             mDepthBufferPoolId = 0;
