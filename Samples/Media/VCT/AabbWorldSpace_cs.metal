@@ -17,7 +17,7 @@ kernel void main_metal
 (
 	device InstanceBuffer *instanceBuffer	[[buffer(UAV_SLOT_START+0)]],
 
-	device AabbBuffer *inMeshAabb			[[buffer(TEX_SLOT_START+1)]],
+	device AabbBuffer *inMeshAabb			[[buffer(TEX_SLOT_START+0)]],
 
 	ushort3 gl_GlobalInvocationID			[[thread_position_in_grid]]
 )

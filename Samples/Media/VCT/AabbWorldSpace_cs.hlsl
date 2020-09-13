@@ -4,7 +4,7 @@
 
 RWStructuredBuffer<InstanceBuffer> instanceBuffer	: register(u0);
 
-StructuredBuffer<AabbBuffer> inMeshAabb : register(t1);
+StructuredBuffer<AabbBuffer> inMeshAabb : register(t0);
 
 @insertpiece( HeaderCS )
 

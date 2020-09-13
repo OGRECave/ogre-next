@@ -2505,9 +2505,7 @@ namespace Ogre
 
         for( size_t i=0u; i<numElements; ++i )
         {
-            if( itor->empty() )
-                ;
-            else if( itor->isTexture() )
+            if( itor->isTexture() )
             {
                 const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
                 const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( texSlot.texture );
