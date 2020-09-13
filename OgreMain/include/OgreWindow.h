@@ -146,6 +146,19 @@ namespace Ogre
                                               uint32 widthPt, uint32 heightPt,
                                               uint32 frequencyNumerator, uint32 frequencyDenominator );
 
+        /** Turns VSync on/off
+        @param vSync
+        @param vSyncInterval
+            When true, specifies how often the screen should be updated.
+            e.g. at 60hz:
+                vSyncInterval = 1 then update at 60hz
+                vSyncInterval = 2 then update at 30hz
+                vSyncInterval = 3 then update at 15hz
+                vSyncInterval = 4 then update at 7.5hz
+
+            If the 31st bit is set, i.e. 0x80000000, then lowest latency mode, aka mailbox, will
+            be used (which doesn't limit the framerate)
+        */
         virtual void setVSync( bool vSync, uint32 vSyncInterval );
         bool getVSync(void) const;
         uint32 getVSyncInterval(void) const;

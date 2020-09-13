@@ -52,6 +52,8 @@ namespace Ogre
 
         xcb_atom_t mWmProtocols;
         xcb_atom_t mWmDeleteWindow;
+        xcb_atom_t mWmNetState;
+        xcb_atom_t mWmFullscreen;
 
         bool mVisible;
         bool mHidden;
@@ -64,6 +66,10 @@ namespace Ogre
                            const NameValuePairList *miscParams );
 
     public:
+        void switchMode( uint32 width, uint32 height, uint32 frequencyNum, uint32 frequencyDen );
+        void switchFullScreen( const bool bFullscreen );
+
+    public:
         VulkanXcbWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
         ~VulkanXcbWindow();
 
@@ -74,6 +80,9 @@ namespace Ogre
                                   const NameValuePairList *miscParams );
 
         virtual void reposition( int32 left, int32 top );
+        virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
+                                              uint32 width, uint32 height, uint32 frequencyNumerator,
+                                              uint32 frequencyDenominator );
         virtual void requestResolution( uint32 width, uint32 height );
         virtual void windowMovedOrResized( void );
 

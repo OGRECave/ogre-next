@@ -45,7 +45,6 @@ THE SOFTWARE.
 
 #define TODO_findRealPresentQueue
 #define TODO_we_assume_has_stencil
-#define TODO_endEncodersAreNeverCalled
 
 namespace Ogre
 {

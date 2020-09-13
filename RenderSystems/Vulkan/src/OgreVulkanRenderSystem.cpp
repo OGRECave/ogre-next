@@ -761,7 +761,40 @@ namespace Ogre
     {
         Window *autoWindow = 0;
         if( autoCreateWindow )
-            autoWindow = _createRenderWindow( windowTitle, 1280u, 720u, false );
+        {
+            NameValuePairList miscParams;
+
+            bool bFullscreen = false;
+            uint32 w = 800, h = 600;
+
+            const ConfigOptionMap &options = mVulkanSupport->getConfigOptions( this );
+            ConfigOptionMap::const_iterator opt;
+            ConfigOptionMap::const_iterator end = options.end();
+
+            if( ( opt = options.find( "Full Screen" ) ) != end )
+                bFullscreen = ( opt->second.currentValue == "Yes" );
+            if( ( opt = options.find( "Video Mode" ) ) != end )
+            {
+                String val = opt->second.currentValue;
+                String::size_type pos = val.find( 'x' );
+
+                if( pos != String::npos )
+                {
+                    w = StringConverter::parseUnsignedInt( val.substr( 0, pos ) );
+                    h = StringConverter::parseUnsignedInt( val.substr( pos + 1 ) );
+                }
+            }
+            if( ( opt = options.find( "FSAA" ) ) != end )
+                miscParams["FSAA"] = opt->second.currentValue;
+            if( ( opt = options.find( "VSync" ) ) != end )
+                miscParams["vsync"] = opt->second.currentValue;
+            if( ( opt = options.find( "sRGB Gamma Conversion" ) ) != end )
+                miscParams["gamma"] = opt->second.currentValue;
+            if( ( opt = options.find( "VSync Method" ) ) != end )
+                miscParams["vsync_method"] = opt->second.currentValue;
+
+            autoWindow = _createRenderWindow( windowTitle, w, h, bFullscreen, &miscParams );
+        }
         RenderSystem::_initialise( autoCreateWindow, windowTitle );
 
         return autoWindow;

@@ -151,6 +151,12 @@ namespace Ogre
                                                                      mSurfaceKHR, &surfaceCaps );
         checkVkResult( result, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR" );
 
+        // Swapchain may be smaller/bigger than requested
+        setFinalResolution( Math::Clamp( getWidth(), surfaceCaps.minImageExtent.width,
+                                         surfaceCaps.maxImageExtent.width ),
+                            Math::Clamp( getHeight(), surfaceCaps.minImageExtent.height,
+                                         surfaceCaps.maxImageExtent.height ) );
+
         VkBool32 supported;
         result = vkGetPhysicalDeviceSurfaceSupportKHR(
             mDevice->mPhysicalDevice, mDevice->mGraphicsQueue.mFamilyIdx, mSurfaceKHR, &supported );
@@ -454,6 +460,28 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     bool VulkanWindow::isClosed( void ) const { return mClosed; }
+    //-------------------------------------------------------------------------
+    void VulkanWindow::setVSync( bool vSync, uint32 vSyncInterval )
+    {
+        // mVSyncInterval is ignored at least for now
+        // (we'd need VK_GOOGLE_display_timing or VK_MESA_present_period)
+        mVSyncInterval = vSyncInterval & 0x7FFFFFFFu;
+        mLowestLatencyVSync = vSyncInterval & 0x80000000u;
+
+        if( mVSync == vSync )
+            return;
+
+        mVSync = vSync;
+
+        destroySwapchain();
+
+        if( mDepthBuffer )
+            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+        if( mStencilBuffer && mStencilBuffer != mDepthBuffer )
+            mStencilBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
+
+        createSwapchain();
+    }
     //-------------------------------------------------------------------------
     void VulkanWindow::swapBuffers( void )
     {

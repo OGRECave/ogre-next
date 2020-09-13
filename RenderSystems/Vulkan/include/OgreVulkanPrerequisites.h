@@ -32,6 +32,12 @@ THE SOFTWARE.
 
 #include "OgreLogManager.h"
 
+#ifdef __MINGW32__
+#    ifndef UINT64_MAX
+#        define UINT64_MAX 0xffffffffffffffffULL /* 18446744073709551615ULL */
+#    endif
+#endif
+
 typedef struct VkInstance_T *VkInstance;
 typedef struct VkPhysicalDevice_T *VkPhysicalDevice;
 typedef struct VkDevice_T *VkDevice;

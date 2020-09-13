@@ -42,10 +42,7 @@ namespace Ogre
         uint32 mColourDepth;
         bool mIsExternal;
         char *mDeviceName;
-        bool mIsExternalGLControl;
-        bool mOwnsGLContext;
         bool mSizing;
-        bool mClosed;
         bool mHidden;
         bool mVisible;
         bool mIsTopLevel;
@@ -54,28 +51,39 @@ namespace Ogre
 
         static bool mClassRegistered;
 
+        void updateWindowRect( void );
+        void adjustWindow( uint32 clientWidth, uint32 clientHeight,  //
+                           uint32 *outDrawableWidth, uint32 *outDrawableHeight );
+
         /// Return the target window style depending on the fullscreen parameter.
         DWORD getWindowStyle( bool fullScreen ) const;
 
-        void createWindow( const String &windowName, uint32 width, uint32 height,
-                           const NameValuePairList *miscParams );
+        void createWindow( const NameValuePairList *miscParams );
 
     public:
         VulkanWin32Window( const String &title, uint32 width, uint32 height, bool fullscreenMode );
-
         virtual ~VulkanWin32Window();
 
         static const char *getRequiredExtensionName( void );
 
-        virtual void reposition( int32 left, int32 top ) override;
-        virtual void _setVisible( bool visible ) override;
-        virtual bool isVisible() const override;
-        virtual void setHidden( bool hidden ) override;
-        virtual bool isHidden() const override;
-        virtual void _initialize( TextureGpuManager *textureGpuManager,
-                                  const NameValuePairList *miscParams ) override;
+        virtual void reposition( int32 left, int32 top );
+        virtual void requestResolution( uint32 width, uint32 height );
+        virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
+                                              uint32 width, uint32 height, uint32 frequencyNumerator,
+                                              uint32 frequencyDenominator );
+        virtual void windowMovedOrResized( void );
 
-        virtual void destroy() override;
+        virtual void _setVisible( bool visible );
+        virtual bool isVisible( void ) const;
+        virtual void setHidden( bool hidden );
+        virtual bool isHidden( void ) const;
+        virtual void setFocused( bool focused );
+        virtual void _initialize( TextureGpuManager *textureGpuManager,
+                                  const NameValuePairList *miscParams );
+
+        virtual void destroy( void );
+
+        void getCustomAttribute( IdString name, void *pData );
     };
 
 }  // namespace Ogre

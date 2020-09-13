@@ -41,9 +41,12 @@ THE SOFTWARE.
 #include "OgreWindowEventUtilities.h"
 
 #include <X11/Xlib-xcb.h>
+#include <xcb/randr.h>
 #include <xcb/xcb.h>
 #include "vulkan/vulkan_core.h"
 #include "vulkan/vulkan_xcb.h"
+
+#include <xcb/xcb_aux.h>
 
 namespace Ogre
 {
@@ -72,6 +75,8 @@ namespace Ogre
         mXcbWindow( 0 ),
         mWmProtocols( 0 ),
         mWmDeleteWindow( 0 ),
+        mWmNetState( 0 ),
+        mWmFullscreen( 0 ),
         mVisible( true ),
         mHidden( false ),
         mIsTopLevel( true ),
@@ -137,7 +142,7 @@ namespace Ogre
 
         if( mFullscreenMode )
         {
-            // switchFullScreen( false );
+            switchFullScreen( false );
             mRequestedFullscreenMode = false;
         }
     }
@@ -192,6 +197,12 @@ namespace Ogre
             initConnection();  // TODO: Connection must be shared by ALL windows
             createWindow( mTitle, mRequestedWidth, mRequestedHeight, miscParams );
             setHidden( false );
+        }
+
+        if( mRequestedFullscreenMode )
+        {
+            switchMode( mRequestedWidth, mRequestedHeight, mFrequencyNumerator, mFrequencyDenominator );
+            mFullscreenMode = true;
         }
 
         PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR get_xcb_presentation_support =
@@ -285,6 +296,9 @@ namespace Ogre
         xcb_intern_atom_cookie_t mWmProtocolscookie = intern_atom_cookie( mConnection, "WM_PROTOCOLS" );
         xcb_intern_atom_cookie_t mWmDeleteWindowcookie =
             intern_atom_cookie( mConnection, "WM_DELETE_WINDOW" );
+        xcb_intern_atom_cookie_t mWmNetStatecookie = intern_atom_cookie( mConnection, "_NET_WM_STATE" );
+        xcb_intern_atom_cookie_t mWmFullscreencookie =
+            intern_atom_cookie( mConnection, "_NET_WM_STATE_FULLSCREEN" );
 
         // set title
         xcb_atom_t utf8_string = intern_atom( mConnection, utf8_string_cookie );
@@ -298,7 +312,111 @@ namespace Ogre
         xcb_change_property( mConnection, XCB_PROP_MODE_REPLACE, mXcbWindow, mWmProtocols, XCB_ATOM_ATOM,
                              32u, 1u, &mWmDeleteWindow );
 
+        switchMode( mRequestedWidth, mRequestedHeight, mFrequencyNumerator, mFrequencyDenominator );
+
+        mWmNetState = intern_atom( mConnection, mWmNetStatecookie );
+        mWmFullscreen = intern_atom( mConnection, mWmFullscreencookie );
+        if( mWmNetState != XCB_ATOM_NONE && mWmFullscreen != XCB_ATOM_NONE && mRequestedFullscreenMode )
+        {
+            xcb_change_property( mConnection, XCB_PROP_MODE_REPLACE, mXcbWindow, mWmNetState,
+                                 XCB_ATOM_ATOM, 32u, 1u, &mWmFullscreen );
+            xcb_flush( mConnection );
+        }
+
         WindowEventUtilities::_addRenderWindow( this );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanXcbWindow::switchMode( uint32 width, uint32 height, uint32 frequencyNum,
+                                      uint32 frequencyDen )
+    {
+        // TODO: This ignores frequency and plays really bad with multimonitor setups
+        // (just like GL3's version). SDL2 gets this right
+        LogManager::getSingleton().logMessage( "xcb_randr: Requesting resolution change " +
+                                               StringConverter::toString( width ) + "x" +
+                                               StringConverter::toString( height ) );
+        {
+            xcb_randr_query_version_reply_t *replyRrandVersion = xcb_randr_query_version_reply(
+                mConnection, xcb_randr_query_version( mConnection, 1, 1 ), 0 );
+            if( !replyRrandVersion )
+            {
+                LogManager::getSingleton().logMessage(
+                    "RandR version 1.1 required to switch resolutions" );
+                return;
+            }
+            else
+            {
+                free( replyRrandVersion );
+                replyRrandVersion = 0;
+            }
+        }
+
+        xcb_randr_get_screen_info_reply_t *replyScreenInfoGet = xcb_randr_get_screen_info_reply(
+            mConnection, xcb_randr_get_screen_info( mConnection, mScreen->root ), NULL );
+        if( replyScreenInfoGet == NULL )
+        {
+            LogManager::getSingleton().logMessage(
+                "Cannot get screen sizes. Resolution change won't happen" );
+            return;
+        }
+
+        const xcb_randr_screen_size_t *screenSizes =
+            xcb_randr_get_screen_info_sizes( replyScreenInfoGet );
+        const size_t numScreenSizes = replyScreenInfoGet->nSizes;
+
+        uint32 chosenId = std::numeric_limits<uint32>::max();
+
+        for( size_t i = 0u; i < numScreenSizes; ++i )
+        {
+            if( width == screenSizes[i].width && height == screenSizes[i].height )
+            {
+                chosenId = static_cast<uint32>( i );
+                break;
+            }
+        }
+
+        if( chosenId == std::numeric_limits<uint32_t>::max() )
+        {
+            free( replyScreenInfoGet );
+            LogManager::getSingleton().logMessage( "Requested resolution is not provided by monitor." );
+            return;
+        }
+
+        xcb_randr_set_screen_config_cookie_t cookieConfigSet = xcb_randr_set_screen_config(
+            mConnection, mScreen->root, XCB_CURRENT_TIME, replyScreenInfoGet->config_timestamp,
+            static_cast<uint16>( chosenId ), replyScreenInfoGet->rotation, 0 );
+
+        xcb_generic_error_t *error = 0;
+        xcb_randr_set_screen_config_reply_t *replySetConfig =
+            xcb_randr_set_screen_config_reply( mConnection, cookieConfigSet, &error );
+
+        if( replySetConfig )
+            free( replySetConfig );
+        else
+            LogManager::getSingleton().logMessage( "Failed to set resolution" );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanXcbWindow::switchFullScreen( const bool bFullscreen )
+    {
+#define _NET_WM_STATE_REMOVE 0  // remove/unset property
+#define _NET_WM_STATE_ADD 1     // add/set property
+#define _NET_WM_STATE_TOGGLE 2  // toggle property
+
+        xcb_client_message_event_t event;
+        memset( &event, 0, sizeof( event ) );
+        event.response_type = XCB_CLIENT_MESSAGE;
+        event.format = 32;
+        event.sequence = 0;
+        event.window = mXcbWindow;
+        event.type = mWmNetState;
+        event.data.data32[0] = bFullscreen ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
+        event.data.data32[1] = mWmFullscreen;
+        event.data.data32[2] = 0;
+        event.data.data32[3] = 0;
+        event.data.data32[4] = 0;
+        xcb_send_event( mConnection, 0, mScreen->root,
+                        XCB_EVENT_MASK_STRUCTURE_NOTIFY | XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT,
+                        (const char *)&event );
+        xcb_flush( mConnection );
     }
     //-----------------------------------------------------------------------------------
     void VulkanXcbWindow::reposition( int32 left, int32 top )
@@ -306,9 +424,60 @@ namespace Ogre
         if( mClosed || !mIsTopLevel )
             return;
 
-        const int32 values[2] = { left, top };
-        xcb_configure_window( mConnection, mXcbWindow, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
-                              values );
+        if( !mRequestedFullscreenMode )
+        {
+            const int32 values[2] = { left, top };
+            xcb_configure_window( mConnection, mXcbWindow, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
+                                  values );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanXcbWindow::requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
+                                                   uint32 width, uint32 height,
+                                                   uint32 frequencyNumerator,
+                                                   uint32 frequencyDenominator )
+    {
+        if( mClosed || !mIsTopLevel )
+            return;
+
+        if( goFullscreen == mFullscreenMode && width == mRequestedWidth && height == mRequestedHeight &&
+            mTexture->getWidth() == width && mTexture->getHeight() == height &&
+            mFrequencyNumerator == frequencyNumerator )
+        {
+            mRequestedFullscreenMode = mFullscreenMode;
+            return;
+        }
+
+        if( goFullscreen && !mWmFullscreen )
+        {
+            // Without WM support it is best to give up.
+            LogManager::getSingleton().logMessage(
+                "GLXWindow::switchFullScreen: Your WM has no fullscreen support" );
+            mRequestedFullscreenMode = false;
+            mFullscreenMode = false;
+            return;
+        }
+
+        Window::requestFullscreenSwitch( goFullscreen, borderless, monitorIdx, width, height,
+                                         frequencyNumerator, frequencyDenominator );
+
+        if( goFullscreen )
+        {
+            switchMode( width, height, frequencyNumerator, frequencyDenominator );
+        }
+        else
+        {
+            // switchMode( width, height, frequencyNumerator, frequencyDenominator );
+        }
+
+        if( mFullscreenMode != goFullscreen )
+            switchFullScreen( goFullscreen );
+
+        if( !mFullscreenMode )
+        {
+            requestResolution( width, height );
+            reposition( mLeft, mTop );
+        }
     }
     //-----------------------------------------------------------------------------------
     void VulkanXcbWindow::requestResolution( uint32 width, uint32 height )
@@ -387,7 +556,7 @@ namespace Ogre
         xcb_flush( mConnection );
     }
     //-------------------------------------------------------------------------
-    bool VulkanXcbWindow::isHidden( void ) const { return false; }
+    bool VulkanXcbWindow::isHidden( void ) const { return mHidden; }
     //-------------------------------------------------------------------------
     void VulkanXcbWindow::getCustomAttribute( IdString name, void *pData )
     {

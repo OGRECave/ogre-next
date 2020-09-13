@@ -107,6 +107,8 @@ namespace Ogre
 
         virtual bool isClosed( void ) const;
 
+        virtual void setVSync( bool vSync, uint32 vSyncInterval );
+
         /// Tells our VulkanDevice that the next commitAndNextCommandBuffer call should present us
         /// Calling swapBuffers during the command buffer that is rendering to us is key for
         /// good performance; otherwise Ogre may split the commands that render to this window

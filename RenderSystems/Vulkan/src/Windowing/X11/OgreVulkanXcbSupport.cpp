@@ -34,6 +34,8 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 #include <xcb/randr.h>
 #include <xcb/xcb.h>
 
+#include "Windowing/X11/OgreVulkanXcbWindow.h"
+
 namespace Ogre
 {
     //-----------------------------------------------------------------------------
@@ -124,7 +126,6 @@ namespace Ogre
         ConfigOption optVSyncInterval;
         ConfigOption optVSyncMethod;
         ConfigOption optFSAA;
-        ConfigOption optRTTMode;
         ConfigOption optSRGB;
 
         // FS setting possibilities
@@ -210,7 +211,6 @@ namespace Ogre
         mOptions[optVSyncInterval.name] = optVSyncInterval;
         mOptions[optVSyncMethod.name] = optVSyncMethod;
         mOptions[optFSAA.name] = optFSAA;
-        mOptions[optRTTMode.name] = optRTTMode;
         mOptions[optSRGB.name] = optSRGB;
 
         refreshConfig();
