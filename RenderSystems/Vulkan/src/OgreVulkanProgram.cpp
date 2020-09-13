@@ -82,6 +82,26 @@ namespace glslang
 
 namespace Ogre
 {
+    struct FreeModuleOnDestructor
+    {
+        SpvReflectShaderModule *module;
+
+        FreeModuleOnDestructor( SpvReflectShaderModule *_module ) : module( _module ) {}
+        ~FreeModuleOnDestructor()
+        {
+            if( module )
+            {
+                spvReflectDestroyShaderModule( module );
+                module = 0;
+            }
+        }
+
+    private:
+        // Prevent being able to copy this object
+        FreeModuleOnDestructor( const FreeModuleOnDestructor & );
+        FreeModuleOnDestructor &operator=( const FreeModuleOnDestructor & );
+    };
+
     //-----------------------------------------------------------------------
     VulkanProgram::CmdPreprocessorDefines VulkanProgram::msCmdPreprocessorDefines;
     //-----------------------------------------------------------------------
@@ -646,6 +666,7 @@ namespace Ogre
                              "VulkanProgram::compile" );
             }
 
+            FreeModuleOnDestructor modulePtr( &module );
             gatherVertexInputs( module );
         }
 
@@ -722,26 +743,6 @@ namespace Ogre
 
         // if( !mBuildParametersFromReflection )
         //     return;
-        struct FreeModuleOnDestructor
-        {
-            SpvReflectShaderModule *module;
-
-            FreeModuleOnDestructor( SpvReflectShaderModule *_module ) : module( _module ) {}
-            ~FreeModuleOnDestructor()
-            {
-                if( module )
-                {
-                    spvReflectDestroyShaderModule( module );
-                    module = 0;
-                }
-            }
-
-        private:
-            // Prevent being able to copy this object
-            FreeModuleOnDestructor( const FreeModuleOnDestructor & );
-            FreeModuleOnDestructor &operator=( const FreeModuleOnDestructor & );
-        };
-
         if( mCompileError )
             return;
 
@@ -1005,8 +1006,6 @@ namespace Ogre
 
         // prevBindingParam.offset = bindingParam.offset;
         // prevBindingParam.size = bindingParam.size;
-
-        spvReflectDestroyShaderModule( &module );
     }
     //-----------------------------------------------------------------------
     void VulkanProgram::gatherVertexInputs( SpvReflectShaderModule &module )
