@@ -35,9 +35,15 @@ namespace Ogre
     template <class C>
     void remove_duplicates( C &c )
     {
-        std::sort( c.begin(), c.end() );
         typename C::iterator p = std::unique( c.begin(), c.end() );
         c.erase( p, c.end() );
+    }
+
+    static bool OrderByResolution( const DEVMODE &a, const DEVMODE &b )
+    {
+        if( a.dmPelsWidth != b.dmPelsWidth )
+            return a.dmPelsWidth < b.dmPelsWidth;
+        return a.dmPelsHeight < b.dmPelsHeight;
     }
 
     VulkanWin32Support::VulkanWin32Support() {}
@@ -73,19 +79,35 @@ namespace Ogre
         optFullScreen.immutable = false;
 
         // Video mode possibilities
-        DEVMODE DevMode;
-        DevMode.dmSize = sizeof( DEVMODE );
-        optVideoMode.name = "Video Mode";
-        optVideoMode.immutable = false;
-        for( DWORD i = 0; EnumDisplaySettings( NULL, i, &DevMode ); ++i )
         {
-            if( DevMode.dmBitsPerPel < 16 || DevMode.dmPelsHeight < 480 )
-                continue;
-            mDevModes.push_back( DevMode );
-            StringStream str;
-            str << DevMode.dmPelsWidth << " x " << DevMode.dmPelsHeight;
-            optVideoMode.possibleValues.push_back( str.str() );
+            DEVMODE DevMode;
+            DevMode.dmSize = sizeof( DEVMODE );
+            optVideoMode.name = "Video Mode";
+            optVideoMode.immutable = false;
+            for( DWORD i = 0; EnumDisplaySettings( NULL, i, &DevMode ); ++i )
+            {
+                if( DevMode.dmBitsPerPel < 16 || DevMode.dmPelsHeight < 480 )
+                    continue;
+                mDevModes.push_back( DevMode );
+            }
         }
+        std::sort( mDevModes.begin(), mDevModes.end(), OrderByResolution );
+        {
+            char tmpBuffer[64];
+            LwString resolutionStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+            FastArray<DEVMODE>::const_iterator itor = mDevModes.begin();
+            FastArray<DEVMODE>::const_iterator endt = mDevModes.end();
+
+            while( itor != endt )
+            {
+                resolutionStr.clear();
+                resolutionStr.a( (uint32)itor->dmPelsWidth, " x ", (uint32)itor->dmPelsHeight );
+                optVideoMode.possibleValues.push_back( resolutionStr.c_str() );
+                ++itor;
+            }
+        }
+
         remove_duplicates( optVideoMode.possibleValues );
         if( !optVideoMode.possibleValues.empty() )
             optVideoMode.currentValue = optVideoMode.possibleValues.front();
@@ -176,7 +198,7 @@ namespace Ogre
         DWORD width = StringConverter::parseUnsignedInt( val.substr( 0, pos ) );
         DWORD height = StringConverter::parseUnsignedInt( val.substr( pos + 1, String::npos ) );
 
-        for( vector<DEVMODE>::type::const_iterator i = mDevModes.begin(); i != mDevModes.end(); ++i )
+        for( FastArray<DEVMODE>::const_iterator i = mDevModes.begin(); i != mDevModes.end(); ++i )
         {
             if( i->dmPelsWidth != width || i->dmPelsHeight != height )
                 continue;
