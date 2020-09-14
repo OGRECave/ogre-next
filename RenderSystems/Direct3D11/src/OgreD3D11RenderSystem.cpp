@@ -2771,10 +2771,10 @@ namespace Ogre
         deviceContext->PSSetShader( 0, 0, 0 );
         deviceContext->CSSetShader( 0, 0, 0 );
 
+        mBoundComputeProgram = newComputeShader;
+
         if( !pso )
             return;
-
-        mBoundComputeProgram = newComputeShader;
 
         deviceContext->CSSetShader( mBoundComputeProgram->getComputeShader(), 0, 0 );
         mActiveComputeGpuProgramParameters = pso->computeParams;
