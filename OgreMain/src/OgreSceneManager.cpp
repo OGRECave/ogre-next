@@ -671,6 +671,11 @@ void SceneManager::destroySkeletonInstance( SkeletonInstance *skeletonInstance )
     mSkeletonAnimationManager.destroySkeletonInstance( skeletonInstance );
 }
 //-----------------------------------------------------------------------
+void SceneManager::_removeSkeletonDef( const SkeletonDef *skeletonDef )
+{
+    mSkeletonAnimationManager.removeSkeletonDef( skeletonDef );
+}
+//-----------------------------------------------------------------------
 void SceneManager::destroyAllBillboardSets(void)
 {
     destroyAllMovableObjectsByType(v1::BillboardSetFactory::FACTORY_TYPE_NAME);

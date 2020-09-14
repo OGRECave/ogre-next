@@ -110,6 +110,7 @@ namespace Ogre
         SkeletonInstance* createSkeletonInstance( const SkeletonDef *skeletonDef,
                                                     size_t numWorkerThreads );
         void destroySkeletonInstance( SkeletonInstance *skeletonInstance );
+        void removeSkeletonDef( const SkeletonDef *skeletonDef );
     };
 
     /** @} */
