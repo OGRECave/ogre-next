@@ -182,4 +182,30 @@ namespace Ogre
         //Update the thread starts, they have changed.
         bySkelDef.updateThreadStarts();
     }
+    //-----------------------------------------------------------------------
+    void SkeletonAnimManager::removeSkeletonDef( const SkeletonDef *skeletonDef )
+    {
+        IdString defName( skeletonDef->getNameStr() );
+        BySkeletonDefList::iterator itor = std::find( bySkeletonDefs.begin(), bySkeletonDefs.end(),
+                                                        defName );
+
+        if( itor == bySkeletonDefs.end() )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Trying to remove a SkeletonDef we don't have. Have you already removed it?",
+                         "SceneManager::destroySkeletonDef" );
+        }
+
+        BySkeletonDef &bySkelDef = *itor;
+        FastArray<SkeletonInstance*> &skeletonsArray = bySkelDef.skeletons;
+
+        if( !skeletonsArray.empty() )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "Trying to remove a SkeletonDef for which instances are still in use. Destroy all SkeletonInstances first.",
+                         "SceneManager::destroySkeletonDef" );
+        }
+
+        bySkeletonDefs.erase( itor );
+    }
 }
