@@ -155,7 +155,7 @@ namespace Ogre
                     }
                     else
                     {
-                        lods.back()->indexBuffer = v1::HardwareBufferManager::getSingleton().createIndexBuffer(
+                        lods.back()->indexBuffer = mMesh->getHardwareBufferManager()->createIndexBuffer(
                                                        buff.indexSize == 2 ?
                                                        v1::HardwareIndexBuffer::IT_16BIT : v1::HardwareIndexBuffer::IT_32BIT,
                                                        indexCount, mMesh->getIndexBufferUsage(), mMesh->isIndexBufferShadowed());

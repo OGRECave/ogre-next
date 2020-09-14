@@ -143,7 +143,7 @@ namespace Ogre
             indexCount = std::max<size_t>(indexCount, 3);
             prevLod->indexCount = std::max<size_t>(data->mIndexBufferInfoList[i].prevIndexCount, 3u);
 
-            prevLod->indexBuffer = v1::HardwareBufferManager::getSingleton().createIndexBuffer(
+            prevLod->indexBuffer = mMesh->getHardwareBufferManager()->createIndexBuffer(
                                        data->mIndexBufferInfoList[i].indexSize == 2 ?
                                        v1::HardwareIndexBuffer::IT_16BIT : v1::HardwareIndexBuffer::IT_32BIT,
                                        indexCount, mMesh->getIndexBufferUsage(), mMesh->isIndexBufferShadowed());
