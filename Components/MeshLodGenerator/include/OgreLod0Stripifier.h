@@ -309,6 +309,7 @@ namespace Ogre
 
         bool edgeListWasBuilt = mesh->isEdgeListBuilt();
         mesh->freeEdgeList();
+        mesh->destroyShadowMappingGeom();
 
         generateRemapInfo(mesh, stableVertexOrder);
 
@@ -360,6 +361,7 @@ namespace Ogre
             }
         }
 
+        mesh->prepareForShadowMapping(false);
         if(edgeListWasBuilt)
             mesh->buildEdgeList();
 

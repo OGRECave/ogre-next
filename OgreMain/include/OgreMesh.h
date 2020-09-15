@@ -211,8 +211,6 @@ namespace v1 {
         void mergeAdjacentTexcoords( unsigned short finalTexCoordSet,
                                      unsigned short texCoordSetToDestroy, VertexData *vertexData );
 
-        void destroyShadowMappingGeom(void);
-
     public:
         /** Default constructor - used by MeshManager
         @warning
@@ -695,6 +693,7 @@ namespace v1 {
         static bool msOptimizeForShadowMapping;
 
         void prepareForShadowMapping( bool forceSameBuffers );
+        void destroyShadowMappingGeom(void);
 
         /// Returns true if the mesh is ready for rendering with valid shadow mapping buffers
         /// Otherwise prepareForShadowMapping must be called on this mesh.
