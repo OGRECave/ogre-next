@@ -462,7 +462,7 @@ namespace v1 {
     //-----------------------------------------------------------------------
     void Entity::_updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera)
     {
-        /*// Do nothing if not initialised yet
+        // Do nothing if not initialised yet
         if (!mInitialised)
             return;
 
@@ -473,7 +473,7 @@ namespace v1 {
             _initialise(true);
         }
 
-        {
+        /*{
             FastArray<unsigned char>::const_iterator itCurrentMatLod = mCurrentMaterialLod.begin();
             SubEntityList::iterator itor = mSubEntityList.begin();
             SubEntityList::iterator end  = mSubEntityList.end();
