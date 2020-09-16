@@ -134,6 +134,11 @@ namespace Ogre
         for( size_t i = CPU_WRITE_PERSISTENT; i <= CPU_WRITE_PERSISTENT_COHERENT; ++i )
             mDefaultPoolSize[i] = 16u * 1024u * 1024u;
         mDefaultPoolSize[CPU_READ_WRITE] = 4u * 1024u * 1024u;
+        mDefaultPoolSize[TEXTURES_OPTIMAL] = 64u * 1024u * 1024u;
+
+        // Shrink the buffer pools a bit if textures and buffers can't live together
+        if( mDevice->mDeviceProperties.limits.bufferImageGranularity != 1u )
+            mDefaultPoolSize[CPU_INACCESSIBLE] = 32u * 1024u * 1024u;
 
         mDelayedFuncs.resize( dynBufferMultiplier );
 
