@@ -740,6 +740,32 @@ namespace Ogre
                     chosenMemoryTypeIdx = *itMemTypeIdx;
             }
 
+            const size_t usablePoolSize = poolSize;
+
+            VkDeviceSize buffOffset = 0;
+            if( !bIsTextureOnly )
+            {
+                // We must create the buffer before the heap, so we know the memory size requirements
+                VkBufferCreateInfo bufferCi;
+                makeVkStruct( bufferCi, VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO );
+                bufferCi.size = poolSize;
+                bufferCi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                                 VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
+                                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT |
+                                 VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
+                                 VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
+                if( vboFlag == CPU_READ_WRITE )
+                    bufferCi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+                VkResult result = vkCreateBuffer( mDevice->mDevice, &bufferCi, 0, &newVbo.vkBuffer );
+                checkVkResult( result, "vkCreateBuffer" );
+
+                VkMemoryRequirements buffMemRequirements;
+                vkGetBufferMemoryRequirements( mDevice->mDevice, newVbo.vkBuffer, &buffMemRequirements );
+
+                buffOffset = alignMemory( buffOffset, buffMemRequirements.alignment );
+                poolSize = buffMemRequirements.size + buffOffset;
+            }
+
             VkMemoryAllocateInfo memAllocInfo;
             makeVkStruct( memAllocInfo, VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO );
             memAllocInfo.allocationSize = poolSize;
@@ -754,32 +780,13 @@ namespace Ogre
             newVbo.vkMemoryTypeIdx = chosenMemoryTypeIdx;
             if( !bIsTextureOnly )
             {
-                VkBufferCreateInfo bufferCi;
-                makeVkStruct( bufferCi, VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO );
-                bufferCi.size = poolSize;
-                bufferCi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-                                 VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
-
-                                 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT |
-                                 VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
-                                 VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
-                if( vboFlag == CPU_READ_WRITE )
-                    bufferCi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
-                result = vkCreateBuffer( mDevice->mDevice, &bufferCi, 0, &newVbo.vkBuffer );
-                checkVkResult( result, "vkCreateBuffer" );
-
-                VkMemoryRequirements memRequirements;
-                vkGetBufferMemoryRequirements( mDevice->mDevice, newVbo.vkBuffer, &memRequirements );
-
-                VkDeviceSize offset = 0;
-                offset = alignMemory( offset, memRequirements.alignment );
-
-                result = vkBindBufferMemory( mDevice->mDevice, newVbo.vkBuffer, newVbo.vboName, offset );
+                result =
+                    vkBindBufferMemory( mDevice->mDevice, newVbo.vkBuffer, newVbo.vboName, buffOffset );
                 checkVkResult( result, "vkBindBufferMemory" );
             }
 
-            newVbo.sizeBytes = poolSize;
-            newVbo.freeBlocks.push_back( Block( 0, poolSize ) );
+            newVbo.sizeBytes = usablePoolSize;
+            newVbo.freeBlocks.push_back( Block( 0, usablePoolSize ) );
             newVbo.dynamicBuffer = 0;
 
             if( vboFlag != CPU_INACCESSIBLE )
@@ -860,15 +867,21 @@ namespace Ogre
     VkDeviceMemory VulkanVaoManager::allocateTexture( const VkMemoryRequirements &memReq,
                                                       size_t &outVboIdx, size_t &outBufferOffset )
     {
-        allocateVbo( memReq.size, memReq.alignment, CPU_INACCESSIBLE, memReq.memoryTypeBits, outVboIdx,
+        const VboFlag vboFlag = mDevice->mDeviceProperties.limits.bufferImageGranularity == 1u
+                                    ? CPU_INACCESSIBLE
+                                    : TEXTURES_OPTIMAL;
+        allocateVbo( memReq.size, memReq.alignment, vboFlag, memReq.memoryTypeBits, outVboIdx,
                      outBufferOffset );
 
-        return mVbos[CPU_INACCESSIBLE][outVboIdx].vboName;
+        return mVbos[vboFlag][outVboIdx].vboName;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::deallocateTexture( size_t vboIdx, size_t bufferOffset, size_t sizeBytes )
     {
-        deallocateVbo( vboIdx, bufferOffset, sizeBytes, mVbos[CPU_INACCESSIBLE] );
+        const VboFlag vboFlag = mDevice->mDeviceProperties.limits.bufferImageGranularity == 1u
+                                    ? CPU_INACCESSIBLE
+                                    : TEXTURES_OPTIMAL;
+        deallocateVbo( vboIdx, bufferOffset, sizeBytes, mVbos[vboFlag] );
     }
     //-----------------------------------------------------------------------------------
     VulkanRawBuffer VulkanVaoManager::allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes,

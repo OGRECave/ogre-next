@@ -66,6 +66,8 @@ namespace Ogre
             CPU_WRITE_PERSISTENT,
             CPU_WRITE_PERSISTENT_COHERENT,
             CPU_READ_WRITE,
+            /// Where textures go if bufferImageGranularity != 1
+            TEXTURES_OPTIMAL,
             MAX_VBO_FLAG
         };
 
