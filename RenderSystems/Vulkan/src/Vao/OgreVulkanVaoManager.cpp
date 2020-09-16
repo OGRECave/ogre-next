@@ -388,6 +388,8 @@ namespace Ogre
             if( memType.propertyFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT )
                 score += 2;
             break;
+        case VulkanVaoManager::TEXTURES_OPTIMAL:
+            break;
         case VulkanVaoManager::MAX_VBO_FLAG:
             OGRE_ASSERT_LOW( false && "Internal Error this path should not be reached" );
             break;
@@ -723,7 +725,7 @@ namespace Ogre
                                     // Found one!
                                     size_t defaultPoolSize =
                                         std::min( mDefaultPoolSize[vboFlag],
-                                                  memHeaps[memTypes[*itMemTypeIdx].heapIndex].size -
+                                                  memHeaps[memTypes[heapIdx].heapIndex].size -
                                                       mUsedHeapMemory[heapIdx] );
                                     chosenMemoryTypeIdx = static_cast<uint32>( i );
                                     poolSize = std::max( defaultPoolSize, sizeBytes );
@@ -748,6 +750,8 @@ namespace Ogre
             const size_t usablePoolSize = poolSize;
 
             VkDeviceSize buffOffset = 0;
+            newVbo.vkBuffer = 0;
+            newVbo.vkMemoryTypeIdx = chosenMemoryTypeIdx;
             if( !bIsTextureOnly )
             {
                 // We must create the buffer before the heap, so we know the memory size requirements
@@ -781,8 +785,6 @@ namespace Ogre
 
             mUsedHeapMemory[memTypes[chosenMemoryTypeIdx].heapIndex] += poolSize;
 
-            newVbo.vkBuffer = 0;
-            newVbo.vkMemoryTypeIdx = chosenMemoryTypeIdx;
             if( !bIsTextureOnly )
             {
                 result =
