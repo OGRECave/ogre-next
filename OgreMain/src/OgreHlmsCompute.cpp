@@ -91,7 +91,11 @@ namespace Ogre
     HlmsCompute::~HlmsCompute()
     {
         destroyAllComputeJobs();
-        mHlmsManager->unregisterComputeHlms();
+        if( mHlmsManager )
+        {
+            mHlmsManager->unregisterComputeHlms();
+            mHlmsManager = 0;
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsCompute::_changeRenderSystem( RenderSystem *newRs )
