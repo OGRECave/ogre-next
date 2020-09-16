@@ -84,9 +84,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline void GL3PlusUavBufferPacked::bindBuffer( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        assert( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
-        assert( offset < (mNumElements * mBytesPerElement - 1) );
-        assert( sizeBytes < mNumElements * mBytesPerElement );
+        OGRE_ASSERT_HIGH( dynamic_cast<GL3PlusBufferInterface *>( mBufferInterface ) );
+        OGRE_ASSERT_LOW( offset <= getTotalSizeBytes() );
+        OGRE_ASSERT_LOW( sizeBytes <= getTotalSizeBytes() );
+        OGRE_ASSERT_LOW( ( offset + sizeBytes ) <= getTotalSizeBytes() );
 
         sizeBytes = !sizeBytes ? (mNumElements * mBytesPerElement - offset) : sizeBytes;
 
