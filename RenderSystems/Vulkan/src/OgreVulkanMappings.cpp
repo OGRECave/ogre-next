@@ -171,9 +171,9 @@ namespace Ogre
         case VET_UBYTE4:
             return VK_FORMAT_R8G8B8A8_UINT;
         case VET_USHORT2:
-            return VK_FORMAT_R16G16_SINT;
+            return VK_FORMAT_R16G16_UINT;
         case VET_USHORT4:
-            return VK_FORMAT_R16G16B16A16_SINT;
+            return VK_FORMAT_R16G16B16A16_UINT;
         case VET_INT1:
             return VK_FORMAT_R32_SINT;
         case VET_INT2:
