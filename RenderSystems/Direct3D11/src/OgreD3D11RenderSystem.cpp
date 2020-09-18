@@ -1060,6 +1060,7 @@ namespace Ogre
 
         // Set number of texture units, always 16
         rsc->setNumTextureUnits(16);
+        rsc->setMaxSupportedAnisotropy(mFeatureLevel >= D3D_FEATURE_LEVEL_9_2 ? 16 : 2); // From http://msdn.microsoft.com/en-us/library/windows/desktop/ff476876.aspx
         rsc->setCapability(RSC_ANISOTROPY);
         rsc->setCapability(RSC_AUTOMIPMAP);
         rsc->setCapability(RSC_BLENDING);
@@ -2431,7 +2432,8 @@ namespace Ogre
         samplerDesc.AddressW = D3D11Mappings::get( newBlock->mW );
 
         samplerDesc.MipLODBias      = newBlock->mMipLodBias;
-        samplerDesc.MaxAnisotropy   = static_cast<UINT>( newBlock->mMaxAnisotropy );
+        samplerDesc.MaxAnisotropy   = std::min( (UINT)newBlock->mMaxAnisotropy,
+                                                (UINT)getCapabilities()->getMaxSupportedAnisotropy() );
         samplerDesc.BorderColor[0]  = newBlock->mBorderColour.r;
         samplerDesc.BorderColor[1]  = newBlock->mBorderColour.g;
         samplerDesc.BorderColor[2]  = newBlock->mBorderColour.b;

@@ -811,7 +811,7 @@ namespace Ogre
             mMaxSupportedAnisotropy = s;
         }
         /// Get the maximum supported anisotropic filtering
-        Real getMaxSupportedAnisotropy()
+        Real getMaxSupportedAnisotropy() const
         {
             return mMaxSupportedAnisotropy;
         }
