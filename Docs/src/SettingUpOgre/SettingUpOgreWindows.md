@@ -96,7 +96,7 @@ Most dependencies are conveniently stored in its own repository called "ogredeps
 **Command line**:
 ```sh
 git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps
-git clone --branch v2-1 https://github.com/OGRECave/ogre-next
+git clone --branch v2-2 https://github.com/OGRECave/ogre-next
 ```
 @}
 
