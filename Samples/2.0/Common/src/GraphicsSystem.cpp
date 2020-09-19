@@ -282,6 +282,8 @@ namespace Demo
         #if defined(SDL_VIDEO_DRIVER_X11)
         case SDL_SYSWM_X11:
             winHandle = Ogre::StringConverter::toString( (uintptr_t)wmInfo.info.x11.window );
+            params.insert( std::make_pair(
+                "SDL2x11", Ogre::StringConverter::toString( (uintptr_t)&wmInfo.info.x11 ) ) );
             break;
         #endif
         default:
@@ -295,8 +297,6 @@ namespace Demo
             params.insert( std::make_pair("externalWindowHandle",  winHandle) );
         #else
             params.insert( std::make_pair("parentWindowHandle",  winHandle) );
-            params.insert( std::make_pair(
-                "SDL2x11", Ogre::StringConverter::toString( (uintptr_t)&wmInfo.info.x11 ) ) );
         #endif
     #endif
 
