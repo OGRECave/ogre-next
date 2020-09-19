@@ -64,6 +64,7 @@ namespace Ogre
         bool    mAllClearColoursSetAndIdentical;
         bool    mAnyColourLoadActionsSetToClear;
         bool    mHasRenderWindow;
+        bool    mHasSRGB;
 
         GL3PlusFrameBufferDescMap::iterator mSharedFboItor;
 

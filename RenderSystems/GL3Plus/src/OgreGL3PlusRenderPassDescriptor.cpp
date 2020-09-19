@@ -44,6 +44,7 @@ namespace Ogre
         mAllClearColoursSetAndIdentical( false ),
         mAnyColourLoadActionsSetToClear( false ),
         mHasRenderWindow( false ),
+        mHasSRGB( false ),
         mSharedFboItor( renderSystem->_getFrameBufferDescMap().end() ),
         mRenderSystem( renderSystem )
     {
@@ -207,6 +208,7 @@ namespace Ogre
         }
 
         bool needsMsaaResolveFbo = false;
+        mHasSRGB = false;
 
         //Attach colour entries
         for( size_t i=0; i<mNumColourEntries; ++i )
@@ -217,6 +219,9 @@ namespace Ogre
                              mColour[i].texture->getNameStr() + "' must be resident!",
                              "GL3PlusRenderPassDescriptor::updateColourFbo" );
             }
+
+            if( PixelFormatGpuUtils::isSRgb( mColour[i].texture->getPixelFormat() ) )
+                mHasSRGB |= true;
 
             if( !mHasRenderWindow && mColour[i].texture->getPixelFormat() != PFG_NULL )
             {
@@ -487,7 +492,17 @@ namespace Ogre
             OCGE( glDrawBuffers( mNumColourEntries, colourBuffs ) );
         }
 
-        OCGE( glEnable( GL_FRAMEBUFFER_SRGB ) );
+        if( entriesToFlush & RenderPassDescriptor::Colour )
+        {
+            if( mHasSRGB )
+            {
+                OCGE( glEnable( GL_FRAMEBUFFER_SRGB ) );
+            }
+            else
+            {
+                OCGE( glDisable( GL_FRAMEBUFFER_SRGB ) );
+            }
+        }
 
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
         const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
