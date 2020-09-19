@@ -109,7 +109,8 @@ namespace Ogre
         srcBox.back     = 1u;
 
         if( (dstBufferPacked->getBufferPackedType() == BP_TYPE_UAV ||
-             dstBufferPacked->getBufferPackedType() == BP_TYPE_TEX) &&
+             dstBufferPacked->getBufferPackedType() == BP_TYPE_TEX ||
+             dstBufferPacked->getBufferPackedType() == BP_TYPE_READONLY) &&
             sizeBytes % dstBufferPacked->getBytesPerElement() )
         {
             //D3D11 wants the length of copies to/from structured buffers to be multiples of the stride.

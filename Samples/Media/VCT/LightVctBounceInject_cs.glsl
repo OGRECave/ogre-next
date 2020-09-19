@@ -5,26 +5,31 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-uniform sampler3D voxelAlbedoTex;
-uniform sampler3D voxelNormalTex;
-uniform sampler3D vctProbe;
+vulkan_layout( ogre_t0 ) uniform texture3D voxelAlbedoTex;
+vulkan_layout( ogre_t1 ) uniform texture3D voxelNormalTex;
+vulkan_layout( ogre_t2 ) uniform texture3D vctProbe;
 
 @property( vct_anisotropic )
-    uniform sampler3D vctProbeX;
-    uniform sampler3D vctProbeY;
-    uniform sampler3D vctProbeZ;
+	vulkan_layout( ogre_t3 ) uniform texture3D vctProbeX;
+	vulkan_layout( ogre_t4 ) uniform texture3D vctProbeY;
+	vulkan_layout( ogre_t5 ) uniform texture3D vctProbeZ;
 @end
 
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image3D lightVoxel;
+vulkan( layout( ogre_s2 ) uniform sampler vctProbeSampler );
+
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
+uniform restrict writeonly image3D lightVoxel;
 
 layout( local_size_x = @value( threads_per_group_x ),
         local_size_y = @value( threads_per_group_y ),
         local_size_z = @value( threads_per_group_z ) ) in;
 
-uniform float3 voxelCellSize;
-uniform float3 invVoxelResolution;
-uniform float iterationDampening;
-uniform float2 startBias_invStartBias;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform float3 voxelCellSize;
+	uniform float3 invVoxelResolution;
+	uniform float iterationDampening;
+	uniform float2 startBias_invStartBias;
+vulkan( }; )
 
 #define p_voxelCellSize voxelCellSize
 #define p_invVoxelResolution invVoxelResolution

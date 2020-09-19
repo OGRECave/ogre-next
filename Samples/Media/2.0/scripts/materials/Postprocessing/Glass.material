@@ -8,6 +8,11 @@ fragment_program Glass_ps_GLSL glsl
 	}
 }
 
+fragment_program Glass_ps_VK glslvk
+{
+	source Glass_ps.glsl
+}
+
 fragment_program Glass_ps_HLSL hlsl
 {
 	source Glass_ps.hlsl
@@ -24,6 +29,7 @@ fragment_program Glass_ps_Metal metal
 fragment_program Glass_ps unified
 {
 	delegate Glass_ps_GLSL
+	delegate Glass_ps_VK
 	delegate Glass_ps_HLSL
 	delegate Glass_ps_Metal
 }

@@ -29,8 +29,10 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsComputeJob.h"
-#include "OgreHlmsManager.h"
+
 #include "OgreHlmsCompute.h"
+#include "OgreHlmsManager.h"
+#include "OgreRootLayout.h"
 
 #include "OgreRenderSystem.h"
 
@@ -67,6 +69,7 @@ namespace Ogre
         mIncludedPieceFiles( includedPieceFiles ),
         mThreadGroupsBasedOnTexture( ThreadGroupsBasedOnNothing ),
         mThreadGroupsBasedOnTexSlot( 0 ),
+        mGlTexSlotStart( 0u ),
         mTexturesDescSet( 0 ),
         mSamplersDescSet( 0 ),
         mUavsDescSet( 0 ),
@@ -104,6 +107,52 @@ namespace Ogre
         }
 
         mSamplerSlots.clear();
+    }
+    //-----------------------------------------------------------------------------------
+    /**
+    @brief HlmsComputeJob::discoverGeneralTextures
+        UAV layout is a more general R/W access than texture.
+
+        If a texture is bound as both Tex and Uav, we should only transition to Uav,
+        and tell the descriptor that this texture will be bound using the GENERAL layout
+    */
+    void HlmsComputeJob::discoverGeneralTextures( void )
+    {
+        TextureGpuSet uavTexs;
+
+        {
+            DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
+            DescriptorSetUavSlotArray::const_iterator endt = mUavSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isTexture() )
+                    uavTexs.insert( itor->getTexture().texture );
+                ++itor;
+            }
+        }
+
+        {
+            DescriptorSetTexSlotArray::iterator itor = mTexSlots.begin();
+            DescriptorSetTexSlotArray::iterator endt = mTexSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isTexture() )
+                {
+                    DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                    TextureGpu *tex = texSlot.texture;
+                    if( !tex->isRenderToTexture() && !tex->isUav() )
+                        texSlot.generalReadWrite = false;
+                    else if( uavTexs.find( tex ) == uavTexs.end() )
+                        texSlot.generalReadWrite = false;
+                    else
+                        texSlot.generalReadWrite = true;
+                }
+
+                ++itor;
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     template <typename T>
@@ -314,6 +363,152 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::setupRootLayout( RootLayout &rootLayout )
+    {
+        ShaderParams *shaderParams0 = HlmsComputeJob::_getShaderParams( "default" );
+        ShaderParams *shaderParams1 = HlmsComputeJob::_getShaderParams( "glslvk" );
+
+        bool hasParams = false;
+        if( shaderParams0 )
+            hasParams |= !shaderParams0->mParams.empty();
+        if( shaderParams1 )
+            hasParams |= !shaderParams1->mParams.empty();
+
+        size_t currSet = 0u;
+        if( hasParams || !mConstBuffers.empty() )
+        {
+            rootLayout.mBaked[currSet] = false;
+
+            DescBindingRange *bindRanges = rootLayout.mDescBindingRanges[currSet];
+            if( hasParams )
+            {
+                rootLayout.mParamsBuffStages = 1u << GPT_COMPUTE_PROGRAM;
+                bindRanges[DescBindingTypes::ParamBuffer].end = 1u;
+            }
+            bindRanges[DescBindingTypes::ConstBuffer].end = static_cast<uint16>( mConstBuffers.size() );
+
+            ++currSet;
+        }
+
+        rootLayout.mBaked[currSet] = true;
+        DescBindingRange *bindRanges = rootLayout.mDescBindingRanges[currSet];
+
+        bindRanges[DescBindingTypes::Sampler].end = static_cast<uint16>( mSamplerSlots.size() );
+
+        {
+            bool bBuffersFirst = false;
+            bool bTexBuffersFirst = false;
+            uint16 numTextures = 0u;
+            uint16 numTexBuffers = 0u;
+            uint16 numROBuffers = 0u;
+            DescriptorSetTexSlotArray::const_iterator itor = mTexSlots.begin();
+            DescriptorSetTexSlotArray::const_iterator endt = mTexSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isBuffer() )
+                {
+                    if( numTextures == 0u )
+                        bBuffersFirst = true;
+
+                    if( itor->getBuffer().buffer->getBufferPackedType() == BP_TYPE_TEX )
+                    {
+                        if( numROBuffers == 0u )
+                            bTexBuffersFirst = true;
+                        ++numTexBuffers;
+                    }
+                    else
+                        ++numROBuffers;
+                }
+                else
+                    ++numTextures;
+                ++itor;
+            }
+
+            if( bBuffersFirst )
+            {
+                uint16 nextValue;
+                if( bTexBuffersFirst )
+                {
+                    nextValue = numTexBuffers;
+                    bindRanges[DescBindingTypes::TexBuffer].end = nextValue;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].start = nextValue;
+                    nextValue += numROBuffers;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].end = nextValue;
+                }
+                else
+                {
+                    nextValue = numROBuffers;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].end = nextValue;
+                    bindRanges[DescBindingTypes::TexBuffer].start = nextValue;
+                    nextValue += numTexBuffers;
+                    bindRanges[DescBindingTypes::TexBuffer].end = nextValue;
+                }
+                bindRanges[DescBindingTypes::Texture].start = nextValue;
+                nextValue += numTextures;
+                bindRanges[DescBindingTypes::Texture].end = nextValue;
+            }
+            else
+            {
+                bindRanges[DescBindingTypes::Texture].end = numTextures;
+
+                uint16 nextValue = numTextures;
+                if( bTexBuffersFirst )
+                {
+                    bindRanges[DescBindingTypes::TexBuffer].start = nextValue;
+                    nextValue += numTexBuffers;
+                    bindRanges[DescBindingTypes::TexBuffer].end = nextValue;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].start = nextValue;
+                    nextValue += numROBuffers;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].end = nextValue;
+                }
+                else
+                {
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].start = nextValue;
+                    nextValue += numROBuffers;
+                    bindRanges[DescBindingTypes::ReadOnlyBuffer].end = nextValue;
+                    bindRanges[DescBindingTypes::TexBuffer].start = nextValue;
+                    nextValue += numTexBuffers;
+                    bindRanges[DescBindingTypes::TexBuffer].end = nextValue;
+                }
+            }
+        }
+
+        {
+            bool bBuffersFirst = false;
+            uint16 numTextures = 0u;
+            uint16 numTexBuffers = 0u;
+            DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
+            DescriptorSetUavSlotArray::const_iterator endt = mUavSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isBuffer() )
+                {
+                    if( numTextures == 0u )
+                        bBuffersFirst = true;
+                    ++numTexBuffers;
+                }
+                else
+                    ++numTextures;
+                ++itor;
+            }
+
+            if( bBuffersFirst )
+            {
+                bindRanges[DescBindingTypes::UavBuffer].end = numTexBuffers;
+                bindRanges[DescBindingTypes::UavTexture].start = numTexBuffers;
+                bindRanges[DescBindingTypes::UavTexture].end = numTexBuffers + numTextures;
+            }
+            else
+            {
+                bindRanges[DescBindingTypes::UavTexture].end = numTextures;
+                bindRanges[DescBindingTypes::UavBuffer].start = numTextures;
+                bindRanges[DescBindingTypes::UavBuffer].end = numTextures + numTexBuffers;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsComputeJob::_updateAutoProperties(void)
     {
         setProperty( ComputeProperty::ThreadsPerGroupX, mThreadsPerGroup[0] );
@@ -366,7 +561,7 @@ namespace Ogre
 
                 while( itor != end )
                 {
-                    const size_t slotIdx = itor - begin;
+                    const size_t slotIdx = ( size_t )( itor - begin );
                     propName.resize( texturePropNameSize );
                     propName.a( static_cast<uint32>(slotIdx) ); //texture0
                     const size_t texturePropSize = propName.size();
@@ -571,6 +766,8 @@ namespace Ogre
         if( !mTexturesDescSet && !mTexSlots.empty() )
         {
             //Texture desc set is dirty. Time to calculate it again.
+            discoverGeneralTextures();
+
             HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
             DescriptorSetTexture2 baseParams;
@@ -784,9 +981,20 @@ namespace Ogre
         return mUavSlots[slotIdx].getBuffer().buffer;
     }
     //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::setGlTexSlotStart( uint8 texSlotStart ) { mGlTexSlotStart = texSlotStart; }
+    //-----------------------------------------------------------------------------------
+    uint8 HlmsComputeJob::getGlTexSlotStart( void ) const
+    {
+        if( mCreator->getShaderSyntax() == HlmsBaseProp::Glsl )
+            return mGlTexSlotStart;
+        return 0u;
+    }
+    //-----------------------------------------------------------------------------------
+    uint8 HlmsComputeJob::_getRawGlTexSlotStart( void ) const { return mGlTexSlotStart; }
+    //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setTexBuffer( uint8 slotIdx, const DescriptorSetTexture2::BufferSlot &newSlot )
     {
-        assert( slotIdx < mTexSlots.size() );
+        OGRE_ASSERT_LOW( slotIdx < mTexSlots.size() );
 
         DescriptorSetTexture2::Slot &slot = mTexSlots[slotIdx];
         if( slot.slotType != DescriptorSetTexture2::SlotTypeBuffer ||
@@ -819,7 +1027,7 @@ namespace Ogre
     void HlmsComputeJob::setTexture( uint8 slotIdx, const DescriptorSetTexture2::TextureSlot &newSlot,
                                      const HlmsSamplerblock *refParams )
     {
-        assert( slotIdx < mTexSlots.size() );
+        OGRE_ASSERT_LOW( slotIdx < mTexSlots.size() );
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
@@ -866,7 +1074,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setSamplerblock( uint8 slotIdx, const HlmsSamplerblock &refParams )
     {
-        assert( slotIdx < mSamplerSlots.size() );
+        OGRE_ASSERT_LOW( slotIdx < mSamplerSlots.size() );
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
@@ -882,7 +1090,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::_setSamplerblock( uint8 slotIdx, const HlmsSamplerblock *refParams )
     {
-        assert( slotIdx < mSamplerSlots.size() );
+        OGRE_ASSERT_LOW( slotIdx < mSamplerSlots.size() );
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
@@ -988,6 +1196,73 @@ namespace Ogre
 
         if( bChanged )
             destroyDescriptorUavs();
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::analyzeBarriers( ResourceTransitionArray &resourceTransitions,
+                                          bool clearBarriers )
+    {
+        if( clearBarriers )
+            resourceTransitions.clear();
+
+        if( !mTexturesDescSet )
+            discoverGeneralTextures();
+
+        RenderSystem *renderSystem = mCreator->getRenderSystem();
+        BarrierSolver &solver = renderSystem->getBarrierSolver();
+
+        {
+            DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
+            DescriptorSetUavSlotArray::const_iterator endt = mUavSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isTexture() )
+                {
+                    TextureGpu *tex = itor->getTexture().texture;
+                    solver.resolveTransition( resourceTransitions, tex, ResourceLayout::Uav,
+                                              itor->getTexture().access, 1u << GPT_COMPUTE_PROGRAM );
+                }
+                else
+                {
+                    const DescriptorSetUav::BufferSlot &bufferSlot = itor->getBuffer();
+                    solver.resolveTransition( resourceTransitions, bufferSlot.buffer, bufferSlot.access,
+                                              1u << GPT_COMPUTE_PROGRAM );
+                }
+                ++itor;
+            }
+        }
+
+        {
+            DescriptorSetTexSlotArray::const_iterator itor = mTexSlots.begin();
+            DescriptorSetTexSlotArray::const_iterator endt = mTexSlots.end();
+
+            while( itor != endt )
+            {
+                if( itor->isTexture() )
+                {
+                    const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                    TextureGpu *tex = texSlot.texture;
+                    if( ( tex->isRenderToTexture() || tex->isUav() ) && !texSlot.generalReadWrite )
+                    {
+                        solver.resolveTransition( resourceTransitions, tex, ResourceLayout::Texture,
+                                                  ResourceAccess::Read, 1u << GPT_COMPUTE_PROGRAM );
+                    }
+                }
+                else
+                {
+                    const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
+                    BufferPacked *origBuffer = bufferSlot.buffer->getOriginalBufferType();
+                    if( origBuffer != bufferSlot.buffer )
+                    {
+                        OGRE_ASSERT_HIGH( dynamic_cast<UavBufferPacked *>( origBuffer ) );
+                        UavBufferPacked *uavBuffer = static_cast<UavBufferPacked *>( origBuffer );
+                        solver.resolveTransition( resourceTransitions, uavBuffer, ResourceAccess::Read,
+                                                  1u << GPT_COMPUTE_PROGRAM );
+                    }
+                }
+                ++itor;
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     HlmsComputeJob* HlmsComputeJob::clone( const String &cloneName )

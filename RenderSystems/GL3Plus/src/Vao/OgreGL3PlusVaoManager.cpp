@@ -27,10 +27,12 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreGL3PlusVaoManager.h"
+
 #include "Vao/OgreGL3PlusStagingBuffer.h"
 #include "Vao/OgreGL3PlusVertexArrayObject.h"
 #include "Vao/OgreGL3PlusBufferInterface.h"
 #include "Vao/OgreGL3PlusConstBufferPacked.h"
+#include "Vao/OgreGL3PlusReadOnlyBufferPacked.h"
 #include "Vao/OgreGL3PlusTexBufferEmulatedPacked.h"
 #include "Vao/OgreGL3PlusTexBufferPacked.h"
 #include "Vao/OgreGL3PlusUavBufferPacked.h"
@@ -146,6 +148,7 @@ namespace Ogre
         }
         if( _supportsSsbo )
         {
+            mReadOnlyIsTexBuffer = false;
             alignment = 1; //initial value according to specs
             OCGE( glGetIntegerv( GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT, &alignment ) );
             mUavBufferAlignment = std::max<uint32>( alignment, 16u );
@@ -162,6 +165,11 @@ namespace Ogre
             OCGE( glGetIntegerv( GL_MAX_SHADER_STORAGE_BLOCK_SIZE, &maxBufferSize ) );
             mUavBufferMaxSize = static_cast<size_t>( maxBufferSize );
         }
+
+        if( mReadOnlyIsTexBuffer )
+            mReadOnlyBufferMaxSize = mTexBufferMaxSize;
+        else
+            mReadOnlyBufferMaxSize = mUavBufferMaxSize;
 
         mSupportsPersistentMapping  = mArbBufferStorage;
         mSupportsIndirectBuffers    = _supportsIndirectBuffers;
@@ -849,6 +857,82 @@ namespace Ogre
                        texBuffer->_getInternalBufferStart() * texBuffer->getBytesPerElement(),
                        texBuffer->_getInternalTotalSizeBytes(),
                        texBuffer->getBufferType() );
+    }
+    //-----------------------------------------------------------------------------------
+    ReadOnlyBufferPacked* GL3PlusVaoManager::createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
+                                                             size_t sizeBytes,
+                                                             BufferType bufferType,
+                                                             void *initialData, bool keepAsShadow )
+    {
+        size_t vboIdx;
+        size_t bufferOffset;
+
+        GLint alignment =
+            mReadOnlyIsTexBuffer
+                ? mTexBufferAlignment
+                : Math::lcm( mUavBufferAlignment, PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
+        size_t requestedSize = sizeBytes;
+
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+
+        if( mEmulateTexBuffers )
+        {
+            // Align to the texture size since we must copy the PBO to a texture.
+            ushort maxTexSizeBytes = 2048u * PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );
+            // We need another line of maxTexSizeBytes for uploading
+            //to create a rectangle when calling glTexSubImage2D().
+            sizeBytes = alignToNextMultiple( sizeBytes, maxTexSizeBytes );
+        }
+
+        if( bufferType >= BT_DYNAMIC_DEFAULT )
+        {
+            //For dynamic buffers, the size will be 3x times larger
+            //(depending on mDynamicBufferMultiplier); we need the
+            //offset after each map to be aligned; and for that, we
+            //sizeBytes to be multiple of alignment.
+            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
+        }
+
+        allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
+
+        Vbo &vbo = mVbos[vboFlag][vboIdx];
+        GL3PlusBufferInterface *bufferInterface = new GL3PlusBufferInterface( vboIdx, vbo.vboName,
+                                                                              vbo.dynamicBuffer );
+        ReadOnlyBufferPacked *retVal;
+
+        if( !mReadOnlyIsTexBuffer )
+        {
+            retVal = OGRE_NEW GL3PlusReadOnlyUavBufferPacked(
+                bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType,
+                initialData, keepAsShadow, this, bufferInterface, pixelFormat );
+        }
+        else if( !mEmulateTexBuffers )
+        {
+            retVal = OGRE_NEW GL3PlusReadOnlyTexBufferPacked(
+                bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType,
+                initialData, keepAsShadow, this, bufferInterface, pixelFormat );
+        }
+        else
+        {
+            retVal = OGRE_NEW GL3PlusReadOnlyBufferEmulatedPacked(
+                bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType,
+                initialData, keepAsShadow, this, bufferInterface, pixelFormat );
+        }
+
+        if( initialData )
+            bufferInterface->_firstUpload( initialData, 0, requestedSize );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusVaoManager::destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer )
+    {
+        GL3PlusBufferInterface *bufferInterface =
+            static_cast<GL3PlusBufferInterface *>( readOnlyBuffer->getBufferInterface() );
+
+        deallocateVbo( bufferInterface->getVboPoolIndex(),
+                       readOnlyBuffer->_getInternalBufferStart() * readOnlyBuffer->getBytesPerElement(),
+                       readOnlyBuffer->_getInternalTotalSizeBytes(), readOnlyBuffer->getBufferType() );
     }
     //-----------------------------------------------------------------------------------
     UavBufferPacked* GL3PlusVaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,

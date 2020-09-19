@@ -1,6 +1,6 @@
-#version 330
+#version ogre_glsl_ver_330
 
-uniform sampler2D depthTexture;
+vulkan_layout( ogre_t0 ) uniform texture2D depthTexture;
 
 in vec4 gl_FragCoord;
 //out float gl_FragDepth;

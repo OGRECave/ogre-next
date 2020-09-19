@@ -78,6 +78,8 @@ namespace Ogre
 
         id<MTLTexture> getBlankTextureMetalName( TextureTypes::TextureTypes textureType ) const;
 
+        virtual bool checkSupport( PixelFormatGpu format, uint32 textureFlags ) const;
+
         MetalDevice* getDevice(void) const          { return mDevice; }
     };
 

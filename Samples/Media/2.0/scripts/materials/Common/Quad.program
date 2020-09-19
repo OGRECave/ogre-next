@@ -1,19 +1,16 @@
 vertex_program Ogre/Compositor/Quad_vs_GLSL glsl
 {
 	source Quad_vs.glsl
-    default_params
-    {
-        param_named_auto worldViewProj worldviewproj_matrix
-    }
+}
+
+vertex_program Ogre/Compositor/Quad_vs_VK glslvk
+{
+	source Quad_vs.glsl
 }
 
 vertex_program Ogre/Compositor/Quad_vs_GLSLES glsles
 {
 	source Quad_vs.glsles
-    default_params
-    {
-        param_named_auto worldViewProj worldviewproj_matrix
-    }
 }
 
 vertex_program Ogre/Compositor/Quad_vs_HLSL hlsl
@@ -21,21 +18,11 @@ vertex_program Ogre/Compositor/Quad_vs_HLSL hlsl
 	source Quad_vs.hlsl
 	entry_point main
 	target vs_5_0 vs_4_0 vs_4_0_level_9_1 vs_4_0_level_9_3
-
-	default_params
-	{
-		param_named_auto worldViewProj worldviewproj_matrix
-	}
 }
 
 vertex_program Ogre/Compositor/Quad_vs_Metal metal
 {
 	source Quad_vs.metal
-
-	default_params
-	{
-		param_named_auto worldViewProj worldviewproj_matrix
-	}
 }
 
 // Unified definitions
@@ -43,26 +30,29 @@ vertex_program Ogre/Compositor/Quad_vs unified
 {
 	delegate Ogre/Compositor/Quad_vs_GLSL
 	delegate Ogre/Compositor/Quad_vs_GLSLES
+	delegate Ogre/Compositor/Quad_vs_VK
 	delegate Ogre/Compositor/Quad_vs_HLSL
 	delegate Ogre/Compositor/Quad_vs_Metal
+
+	default_params
+	{
+		param_named_auto worldViewProj worldviewproj_matrix
+	}
 }
 
 vertex_program Ogre/Compositor/QuadCameraDir_vs_GLSL glsl
 {
 	source QuadCameraDir_vs.glsl
-	default_params
-	{
-		param_named_auto worldViewProj worldviewproj_matrix
-	}
+}
+
+vertex_program Ogre/Compositor/QuadCameraDir_vs_VK glslvk
+{
+	source QuadCameraDir_vs.glsl
 }
 
 vertex_program Ogre/Compositor/QuadCameraDir_vs_GLSLES glsles
 {
 	source QuadCameraDir_vs.glsles
-	default_params
-	{
-		param_named_auto worldViewProj worldviewproj_matrix
-	}
 }
 
 vertex_program Ogre/Compositor/QuadCameraDir_vs_HLSL hlsl
@@ -70,21 +60,11 @@ vertex_program Ogre/Compositor/QuadCameraDir_vs_HLSL hlsl
 	source QuadCameraDir_vs.hlsl
 	entry_point main
 	target vs_5_0 vs_4_0 vs_4_0_level_9_1 vs_4_0_level_9_3
-
-	default_params
-	{
-		param_named_auto worldViewProj worldviewproj_matrix
-	}
 }
 
 vertex_program Ogre/Compositor/QuadCameraDir_vs_Metal metal
 {
 	source QuadCameraDir_vs.metal
-
-	default_params
-	{
-		param_named_auto worldViewProj worldviewproj_matrix
-	}
 }
 
 // Unified definitions
@@ -92,11 +72,22 @@ vertex_program Ogre/Compositor/QuadCameraDir_vs unified
 {
 	delegate Ogre/Compositor/QuadCameraDir_vs_GLSL
 	delegate Ogre/Compositor/QuadCameraDir_vs_GLSLES
+	delegate Ogre/Compositor/QuadCameraDir_vs_VK
 	delegate Ogre/Compositor/QuadCameraDir_vs_HLSL
 	delegate Ogre/Compositor/QuadCameraDir_vs_Metal
+
+	default_params
+	{
+		param_named_auto worldViewProj worldviewproj_matrix
+	}
 }
 
 vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs_GLSL glsl
+{
+	source QuadCameraDirNoUV_vs.glsl
+}
+
+vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs_VK glslvk
 {
 	source QuadCameraDirNoUV_vs.glsl
 }
@@ -117,6 +108,7 @@ vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs_Metal metal
 vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs unified
 {
 	delegate Ogre/Compositor/QuadCameraDirNoUV_vs_GLSL
+	delegate Ogre/Compositor/QuadCameraDirNoUV_vs_VK
 	delegate Ogre/Compositor/QuadCameraDirNoUV_vs_HLSL
 	delegate Ogre/Compositor/QuadCameraDirNoUV_vs_Metal
 

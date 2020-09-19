@@ -8,11 +8,16 @@ fragment_program Postprocess/Dither_ps_HLSL hlsl
 fragment_program Postprocess/Dither_ps_GLSL glsl
 {
 	source Dither_ps.glsl
-    default_params
-   	{
-   		param_named RT int 0
-   		param_named noise int 1
-   	}
+	default_params
+	{
+		param_named RT int 0
+		param_named noise int 1
+	}
+}
+
+fragment_program Postprocess/Dither_ps_VK glslvk
+{
+	source Dither_ps.glsl
 }
 
 fragment_program Postprocess/Dither_ps_Metal metal
@@ -24,6 +29,7 @@ fragment_program Postprocess/Dither_ps_Metal metal
 fragment_program Postprocess/Dither_ps unified
 {
 	delegate Postprocess/Dither_ps_GLSL
+	delegate Postprocess/Dither_ps_VK
 	delegate Postprocess/Dither_ps_HLSL
 	delegate Postprocess/Dither_ps_Metal
 }

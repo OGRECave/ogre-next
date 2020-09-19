@@ -29,11 +29,13 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsCompute.h"
+
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
 
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
+#include "OgreRootLayout.h"
 
 #include "OgreSceneManager.h"
 #include "Compositor/OgreCompositorShadowNode.h"
@@ -104,17 +106,9 @@ namespace Ogre
 
         if( mRenderSystem )
         {
-            //Prefer glsl over glsles
-            const String shaderProfiles[3] = { "hlsl", "glsles", "glsl" };
             const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
 
-            for( size_t i=0; i<3; ++i )
-            {
-                if( capabilities->isShaderProfileSupported( shaderProfiles[i] ) )
-                    mShaderProfile = shaderProfiles[i];
-            }
-
-            if( mShaderProfile == "hlsl" )
+            if( mShaderProfile == "hlsl" || mShaderProfile == "hlslvk" )
             {
                 for( size_t j=0; j<3 && !mComputeShaderTarget; ++j )
                 {
@@ -200,7 +194,7 @@ namespace Ogre
         ResourceGroupManager &resourceGroupMgr = ResourceGroupManager::getSingleton();
         DataStreamPtr inFile = resourceGroupMgr.openResource( sourceFilename );
 
-        if( mShaderProfile == "glsl" ) //TODO: String comparision
+        if( mShaderProfile == "glsl" || mShaderProfile == "glslvk" ) //TODO: String comparision
         {
             setProperty( HlmsBaseProp::GL3Plus,
                          mRenderSystem->getNativeShadingLanguageVersion() );
@@ -211,6 +205,8 @@ namespace Ogre
         setProperty( HlmsBaseProp::Syntax,  mShaderSyntax.mHash );
         setProperty( HlmsBaseProp::Hlsl,    HlmsBaseProp::Hlsl.mHash );
         setProperty( HlmsBaseProp::Glsl,    HlmsBaseProp::Glsl.mHash );
+        setProperty( HlmsBaseProp::Glslvk,  HlmsBaseProp::Glslvk.mHash );
+        setProperty( HlmsBaseProp::Hlslvk,  HlmsBaseProp::Hlslvk.mHash );
         setProperty( HlmsBaseProp::Glsles,  HlmsBaseProp::Glsles.mHash );
         setProperty( HlmsBaseProp::Metal,   HlmsBaseProp::Metal.mHash );
 
@@ -298,6 +294,13 @@ namespace Ogre
                             ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
                             mShaderProfile, GPT_COMPUTE_PROGRAM );
                 gp->setSource( outString, debugFilenameOutput );
+
+                {
+                    RootLayout rootLayout;
+                    rootLayout.mCompute = true;
+                    job->setupRootLayout( rootLayout );
+                    gp->setRootLayout( gp->getType(), rootLayout );
+                }
 
                 if( mComputeShaderTarget )
                 {
@@ -405,6 +408,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsCompute::clearShaderCache(void)
     {
+        if( mRenderSystem )
+            mRenderSystem->_setComputePso( 0 );
+
         ComputePsoCacheVec::iterator itor = mComputeShaderCache.begin();
         ComputePsoCacheVec::iterator end  = mComputeShaderCache.end();
 
@@ -448,6 +454,10 @@ namespace Ogre
                 //a hard copy for starting the compilation.
                 psoCache.setProperties.swap( job->mSetProperties );
                 this->mSetProperties = job->mSetProperties;
+
+                // Uset the HlmsComputePso, as the ptr may be cached by the
+                // RenderSystem and this could be invalidated
+                mRenderSystem->_setComputePso( 0 );
 
                 size_t newCacheEntryIdx = mComputeShaderCache.size();
                 if( mFreeShaderCacheEntries.empty() )
@@ -516,9 +526,9 @@ namespace Ogre
         }
 
         if( job->mTexturesDescSet )
-            mRenderSystem->_setTexturesCS( 0, job->mTexturesDescSet );
+            mRenderSystem->_setTexturesCS( job->getGlTexSlotStart(), job->mTexturesDescSet );
         if( job->mSamplersDescSet )
-            mRenderSystem->_setSamplersCS( 0, job->mSamplersDescSet );
+            mRenderSystem->_setSamplersCS( job->getGlTexSlotStart(), job->mSamplersDescSet );
         if( job->mUavsDescSet )
             mRenderSystem->_setUavCS( 0u, job->mUavsDescSet );
 
@@ -542,6 +552,8 @@ namespace Ogre
     {
         return 0;
     }
+    //----------------------------------------------------------------------------------
+    void HlmsCompute::setupRootLayout( RootLayout &rootLayout ) {}
     //----------------------------------------------------------------------------------
     void HlmsCompute::reloadFrom( Archive *newDataFolder, ArchiveVec *libraryFolders )
     {

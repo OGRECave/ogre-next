@@ -96,6 +96,8 @@ namespace Ogre
         Real        mHorizonalTexelOffset;
         Real        mVerticalTexelOffset;
 
+        void analyzeBarriers( void );
+
     public:
         CompositorPassQuad( const CompositorPassQuadDef *definition, Camera *defaultCamera,
                             CompositorNode *parentNode, const RenderTargetViewDef *rtv,

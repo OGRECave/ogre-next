@@ -194,15 +194,11 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::flushUAVs(void)
-    {
-    }
-    //-------------------------------------------------------------------------
     void NULLRenderSystem::_setCurrentDeviceFromTexture( TextureGpu *texture )
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )
+    void NULLRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly )
     {
     }
     //-------------------------------------------------------------------------

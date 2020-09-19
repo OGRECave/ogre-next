@@ -42,9 +42,9 @@
 	uint _idx = (inVs_blendIndices[0] << 1u) + inVs_blendIndices[0]; //inVs_blendIndices[0] * 3u; a 32-bit int multiply is 4 cycles on GCN! (and mul24 is not exposed to GLSL...)
 	uint matStart = worldMaterialIdx[inVs_drawId].x >> 9u;
 	float4 worldMat[3];
-	worldMat[0] = bufferFetch( worldMatBuf, int(matStart + _idx + 0u) );
-	worldMat[1] = bufferFetch( worldMatBuf, int(matStart + _idx + 1u) );
-	worldMat[2] = bufferFetch( worldMatBuf, int(matStart + _idx + 2u) );
+	worldMat[0] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 0u) );
+	worldMat[1] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 1u) );
+	worldMat[2] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 2u) );
 	float4 worldPos;
 	worldPos.x = dot( worldMat[0], inputPos );
 	worldPos.y = dot( worldMat[1], inputPos );
@@ -72,9 +72,9 @@
 	@end //!NeedsMoreThan1BonePerVertex
 	@foreach( hlms_bones_per_vertex, n, 1 )
 		_idx = (inVs_blendIndices[@n] << 1u) + inVs_blendIndices[@n]; //inVs_blendIndices[@n] * 3; a 32-bit int multiply is 4 cycles on GCN! (and mul24 is not exposed to GLSL...)
-		worldMat[0] = bufferFetch( worldMatBuf, int(matStart + _idx + 0u) );
-		worldMat[1] = bufferFetch( worldMatBuf, int(matStart + _idx + 1u) );
-		worldMat[2] = bufferFetch( worldMatBuf, int(matStart + _idx + 2u) );
+		worldMat[0] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 0u) );
+		worldMat[1] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 1u) );
+		worldMat[2] = readOnlyFetch( worldMatBuf, int(matStart + _idx + 2u) );
 		tmp.x = dot( worldMat[0], inputPos );
 		tmp.y = dot( worldMat[1], inputPos );
 		tmp.z = dot( worldMat[2], inputPos );
@@ -104,7 +104,7 @@
 	float4 inputPos = inVs_vertex;
 	@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )float3 inputNormal = normal;@end
 
-	float4 poseData = bufferFetch( worldMatBuf, int( poseDataStart ) );
+	float4 poseData = readOnlyFetch( worldMatBuf, int( poseDataStart ) );
 
 	@property( syntax != hlsl )
 		@property( syntax != metal )
@@ -117,7 +117,7 @@
 
 	@psub( MoreThanOnePose, hlms_pose, 1 )
 	@property( !MoreThanOnePose )
-		float4 poseWeights = bufferFetch( worldMatBuf, int(poseDataStart + 1u) );
+		float4 poseWeights = readOnlyFetch( worldMatBuf, int(poseDataStart + 1u) );
 		float4 posePos = bufferFetch( poseBuf, int( vertexID @property( hlms_pose_normals )<< 1u@end ) );
 		inputPos += posePos * poseWeights.x;
 		@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
@@ -135,7 +135,7 @@
 
 		@psub( MoreThanOnePoseWeightVector, NumPoseWeightVectors, 1 )
 		@property( !MoreThanOnePoseWeightVector )
-			float4 poseWeights = bufferFetch( worldMatBuf, int( poseDataStart + 1u ) );
+			float4 poseWeights = readOnlyFetch( worldMatBuf, int( poseDataStart + 1u ) );
 			@foreach( hlms_pose, n )
 				inputPos += bufferFetch( poseBuf, int( (vertexID + numVertices * @nu) @property( hlms_pose_normals )<< 1u@end ) ) * poseWeights[@n];
 				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
@@ -145,7 +145,7 @@
 		@else
 			float poseWeights[@value(NumPoseWeightVectors) * 4];
 			@foreach( NumPoseWeightVectors, n)
-				float4 weights@n = bufferFetch( worldMatBuf, int( poseDataStart + 1u + @nu ) );
+				float4 weights@n = readOnlyFetch( worldMatBuf, int( poseDataStart + 1u + @nu ) );
 				poseWeights[@n * 4 + 0] = weights@n[0];
 				poseWeights[@n * 4 + 1] = weights@n[1];
 				poseWeights[@n * 4 + 2] = weights@n[2];
@@ -164,9 +164,9 @@
 	// If hlms_pose is not combined with hlms_skeleton the object's worldMat and worldView have to be set.
 	@property( !hlms_skeleton )
 		float4 worldMat[3];
-		worldMat[0] = bufferFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 1u ) );
-		worldMat[1] = bufferFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 2u ) );
-		worldMat[2] = bufferFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 3u ) );
+		worldMat[0] = readOnlyFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 1u ) );
+		worldMat[1] = readOnlyFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 2u ) );
+		worldMat[2] = readOnlyFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 3u ) );
 		float4 worldPos;
 		worldPos.x = dot( worldMat[0], inputPos );
 		worldPos.y = dot( worldMat[1], inputPos );
@@ -175,7 +175,7 @@
 
 		@property( hlms_normal || hlms_qtangent )
 			@foreach( 4, n )
-				float4 row@n = bufferFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 4u + @nu ) );
+				float4 row@n = readOnlyFetch( worldMatBuf, int( poseDataStart + @value(NumPoseWeightVectors)u + 4u + @nu ) );
 			@end
 			float4x4 worldView = float4x4( row0, row1, row2, row3 );
 			@property( syntax == hlsl )

@@ -15,8 +15,8 @@
 
 /// Add the shadows' texture to the vertex shader
 @piece( custom_vs_uniformDeclaration )
-	, sampler terrainShadowSampler		[[sampler(12)]]
-	, texture2d<float> terrainShadows	[[texture(12)]]
+	, sampler terrainShadowSampler		[[sampler(@value(terrainShadows))]]
+	, texture2d<float> terrainShadows	[[texture(@value(terrainShadows))]]
 @end
 
 /// Evaluate the shadow based on world XZ position & height in the vertex shader.

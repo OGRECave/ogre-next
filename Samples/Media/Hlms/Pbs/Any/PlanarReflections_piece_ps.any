@@ -3,9 +3,10 @@
 
 @property( use_planar_reflections )
 
-@property( syntax == glsl || syntax == glsles )
+@property( syntax == glsl || syntax == glsles || syntax == glslvk )
 	@piece( DeclPlanarReflTextures )
-		uniform sampler2D planarReflectionTex;
+        vulkan_layout( ogre_t@value(planarReflectionTex) ) uniform texture2D planarReflectionTex;
+        vulkan( layout( ogre_s@value(planarReflectionTex) ) uniform sampler planarReflectionSampler );
 	@end
 @end
 @property( syntax == hlsl )

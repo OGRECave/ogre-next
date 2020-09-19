@@ -1,7 +1,9 @@
-#version 330
+#version ogre_glsl_ver_330
 
+vulkan_layout( location = 0 )
 out float fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
@@ -36,10 +38,13 @@ const vec3 c_luminanceCoeffs = vec3(0.2125f, 0.7154f, 0.0721f);
 //Luminance vector for RGB colour in linear space (the usual coeffs are for gamma space colours)
 //const vec3 c_luminanceCoeffs = vec3( 0.3086f, 0.6094f, 0.0820f );
 
-uniform sampler2D rt0;
+vulkan_layout( ogre_t0 ) uniform texture2D rt0;
+vulkan( layout( ogre_s0 ) uniform sampler samplerState );
 
-uniform vec4 tex0Size;
-uniform vec4 viewportSize;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform vec4 tex0Size;
+	uniform vec4 viewportSize;
+vulkan( }; )
 
 void main()
 {
@@ -50,7 +55,7 @@ void main()
 	//(ViewportResolution / TargetResolution) / 4
 	vec2 ratio = tex0Size.xy * viewportSize.zw * 0.25;
 
-	vec3 vSample	= texture( rt0, inPs.uv0 ).xyz;
+	vec3 vSample	= texture( vkSampler2D( rt0, samplerState ), inPs.uv0 ).xyz;
 	float sampleLum	= dot( vSample, c_luminanceCoeffs ) + 0.0001;
 	//float fLogLuminance = log( clamp( sampleLum, c_minLuminance, c_maxLuminance ) );
 	float fLogLuminance = log( sampleLum * 1024.0 );
@@ -58,7 +63,8 @@ void main()
 	for( int i=1; i<16; ++i )
 	{
 		//TODO: Precompute c_offsets[i] * ratio in CPU and upload it as c_offset, probably using a listener
-		vSample		= texture( rt0, inPs.uv0 + ((c_offsets[i] * ratio) * tex0Size.zw) ).xyz;
+		vSample		= texture( vkSampler2D( rt0, samplerState ),
+							   inPs.uv0 + ((c_offsets[i] * ratio) * tex0Size.zw) ).xyz;
 		sampleLum	= dot( vSample, c_luminanceCoeffs ) + 0.0001;
 		//fLogLuminance += log( clamp( sampleLum, c_minLuminance, c_maxLuminance ) );
 		fLogLuminance += log( sampleLum * 1024.0 );

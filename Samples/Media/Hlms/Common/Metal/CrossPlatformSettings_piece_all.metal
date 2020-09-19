@@ -100,6 +100,8 @@ inline float3x3 toMat3x3( float3x4 m )
 
 #define bufferFetch( buffer, idx ) buffer[idx]
 #define bufferFetch1( buffer, idx ) buffer[idx]
+#define readOnlyFetch( bufferVar, idx ) bufferVar[idx]
+#define readOnlyFetch1( bufferVar, idx ) bufferVar[idx]
 
 #define structuredBufferFetch( buffer, idx ) buffer[idx]
 

@@ -5,9 +5,10 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-uniform samplerBuffer integrationTapsBuffer;
+vulkan_layout( ogre_T0 ) uniform samplerBuffer integrationTapsBuffer;
 
-layout (@insertpiece(uav0_pf_type)) uniform restrict image2D irradianceField;
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
+uniform restrict image2D irradianceField;
 
 @property( integrate_depth )
 	shared float2 g_sharedValues[@value( threads_per_group_x ) * @value( threads_per_group_y )];

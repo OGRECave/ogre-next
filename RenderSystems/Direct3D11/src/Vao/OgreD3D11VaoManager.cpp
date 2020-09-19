@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11BufferInterface.h"
 #include "Vao/OgreD3D11CompatBufferInterface.h"
 #include "Vao/OgreD3D11ConstBufferPacked.h"
+#include "Vao/OgreD3D11ReadOnlyBufferPacked.h"
 #include "Vao/OgreD3D11TexBufferPacked.h"
 #include "Vao/OgreD3D11UavBufferPacked.h"
 //#include "Vao/OgreD3D11MultiSourceVertexBufferPool.h"
@@ -49,6 +50,7 @@ THE SOFTWARE.
 
 #include "OgreD3D11HardwareBufferManager.h" //D3D11HardwareBufferManager::getGLType
 
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreTimer.h"
 #include "OgreStringConverter.h"
 #include "OgreLwString.h"
@@ -127,6 +129,10 @@ namespace Ogre
         mConstBufferMaxSize = 4096 * 1024;
         //Umm... who knows? Just use GL3's minimum.
         mTexBufferMaxSize = 128 * 1024 * 1024;
+        mUavBufferMaxSize = mTexBufferMaxSize;
+
+        mReadOnlyIsTexBuffer = mD3D11RenderSystem->_getFeatureLevel() < D3D_FEATURE_LEVEL_11_0;
+        mReadOnlyBufferMaxSize = mReadOnlyIsTexBuffer ? mTexBufferMaxSize : mUavBufferMaxSize;
 
         mSupportsPersistentMapping  = false;
         mSupportsIndirectBuffers    = _supportsIndirectBuffers;
@@ -343,7 +349,7 @@ namespace Ogre
         const BufferPackedTypes bufferPackedType = buffer->getBufferPackedType();
         if( (mSupportsIndirectBuffers || bufferPackedType != BP_TYPE_INDIRECT) &&
             (mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 ||
-             bufferPackedType != BP_TYPE_TEX) &&
+             (bufferPackedType != BP_TYPE_TEX && bufferPackedType != BP_TYPE_READONLY)) &&
             bufferPackedType != BP_TYPE_CONST &&
             bufferPackedType != BP_TYPE_UAV )
         {
@@ -1063,6 +1069,12 @@ namespace Ogre
             desc.BindFlags |= D3D11_BIND_CONSTANT_BUFFER;
         if( bindFlags & BB_FLAG_TEX )
             desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
+        if( bindFlags & BB_FLAG_READONLY )
+        {
+            desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
+            if( !mReadOnlyIsTexBuffer )
+                desc.MiscFlags |= D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+        }
         if( bindFlags & BB_FLAG_UAV )
         {
             desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
@@ -1162,14 +1174,14 @@ namespace Ogre
 
             if( bufferType == BT_IMMUTABLE )
             {
-				bufferInterface = new D3D11BufferInterface( vboIdx, 0, 0 );
+                bufferInterface = new D3D11BufferInterface( vboIdx, 0, 0 );
             }
             else
             {
-				allocateVbo( sizeBytes, alignment, bufferType, SHADER_BUFFER, vboIdx, bufferOffset );
+                allocateVbo( sizeBytes, alignment, bufferType, SHADER_BUFFER, vboIdx, bufferOffset );
 
-				Vbo &vbo = mVbos[SHADER_BUFFER][vboFlag][vboIdx];
-				bufferInterface = new D3D11BufferInterface( vboIdx, vbo.vboName.Get(), vbo.dynamicBuffer );
+                Vbo &vbo = mVbos[SHADER_BUFFER][vboFlag][vboIdx];
+                bufferInterface = new D3D11BufferInterface( vboIdx, vbo.vboName.Get(), vbo.dynamicBuffer );
             }
         }
         else
@@ -1226,6 +1238,139 @@ namespace Ogre
 
             //bufferInterface->getVboNamePtr().Reset();
         }
+    }
+    //-----------------------------------------------------------------------------------
+    ReadOnlyBufferPacked *D3D11VaoManager::createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
+                                                                     size_t sizeBytes,
+                                                                     BufferType bufferType,
+                                                                     void *initialData,
+                                                                     bool keepAsShadow )
+    {
+        BufferInterface *bufferInterface = 0;
+
+        const size_t bytesPerElement =
+            mReadOnlyIsTexBuffer ? 1u : PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );
+
+        const uint32 alignment = mReadOnlyIsTexBuffer
+                                     ? mTexBufferAlignment
+                                     : (uint32)Math::lcm( mUavBufferAlignment, bytesPerElement );
+
+        if( bufferType >= BT_DYNAMIC_DEFAULT )
+        {
+            // For dynamic buffers, the size will be 3x times larger
+            //(depending on mDynamicBufferMultiplier); we need the
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
+            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
+        }
+
+        if( !mReadOnlyIsTexBuffer )
+        {
+            // D3D11.0 and above uses structured buffers.
+            // D3D11.1 and above can use NO_OVERWRITE
+            // D3D11.1 says the StructureByteStride MUST match what the shader expects.
+            //
+            // Thus we can't use a common pool (i.e. allocateVbo) because R32_FLOAT buffers need a
+            // different stride from e.g. RGBA32_FLOAT; but at least on D3D11.1
+            // we can still use NO_OVERWRITE
+
+            size_t internalSizeBytes = sizeBytes;
+            if( bufferType >= BT_DYNAMIC_DEFAULT )
+            {
+                bufferType = BT_DYNAMIC_DEFAULT;  // Persitent mapping not supported in D3D11.
+                internalSizeBytes *= mDynamicBufferMultiplier;
+            }
+
+            ID3D11DeviceN *d3dDevice = mDevice.get();
+
+            D3D11_BUFFER_DESC desc;
+            ZeroMemory( &desc, sizeof( D3D11_BUFFER_DESC ) );
+            desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
+            if( mD3D11RenderSystem->_getFeatureLevel() >= D3D_FEATURE_LEVEL_11_0 )
+                desc.MiscFlags |= D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+            desc.ByteWidth = static_cast<UINT>( internalSizeBytes );
+            desc.CPUAccessFlags = 0;
+            if( bufferType == BT_IMMUTABLE )
+                desc.Usage = D3D11_USAGE_IMMUTABLE;
+            else if( bufferType == BT_DEFAULT )
+                desc.Usage = D3D11_USAGE_DEFAULT;
+            else if( bufferType >= BT_DYNAMIC_DEFAULT )
+            {
+                desc.Usage = D3D11_USAGE_DYNAMIC;
+                desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+            }
+            desc.StructureByteStride = static_cast<UINT>( bytesPerElement );
+
+            D3D11_SUBRESOURCE_DATA subResData;
+            ZeroMemory( &subResData, sizeof( D3D11_SUBRESOURCE_DATA ) );
+            subResData.pSysMem = initialData;
+            ComPtr<ID3D11Buffer> vboName;
+
+            HRESULT hr =
+                d3dDevice->CreateBuffer( &desc, initialData ? &subResData : 0, vboName.GetAddressOf() );
+
+            if( FAILED( hr ) )
+            {
+                String errorDescription = mDevice.getErrorDescription( hr );
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "Failed to create buffer. ID3D11Device::CreateBuffer.\n"
+                             "Error code: " +
+                                 StringConverter::toString( hr ) + ".\n" + errorDescription +
+                                 "Requested: " + StringConverter::toString( internalSizeBytes ) +
+                                 " bytes.",
+                             "D3D11VaoManager::createShaderBufferInterface" );
+            }
+
+            D3D11DynamicBuffer *dynamicBuffer = 0;
+            if( bufferType >= BT_DYNAMIC_DEFAULT )
+                dynamicBuffer = new D3D11DynamicBuffer( vboName.Get(), internalSizeBytes, mDevice );
+
+            bufferInterface = new D3D11BufferInterface( 0, vboName.Get(), dynamicBuffer );
+        }
+        else
+        {
+            // D3D11.0 and below doesn't support NO_OVERWRITE on shader buffers. Use the basic interface.
+            bufferInterface =
+                createShaderBufferInterface( BB_FLAG_READONLY, sizeBytes, bufferType, initialData );
+        }
+
+        D3D11ReadOnlyBufferPacked *retVal = OGRE_NEW D3D11ReadOnlyBufferPacked(
+            0u, sizeBytes, 1u, 0u, bufferType, initialData, keepAsShadow, this, bufferInterface,
+            pixelFormat, !mReadOnlyIsTexBuffer, mDevice );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11VaoManager::destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer )
+    {
+        if( !mReadOnlyIsTexBuffer )
+        {
+            D3D11BufferInterface *bufferInterface =
+                static_cast<D3D11BufferInterface *>( readOnlyBuffer->getBufferInterface() );
+
+            // We must unmap now because D3D11DynamicBuffer is about to be deleted
+            if( readOnlyBuffer->getMappingState() != MS_UNMAPPED )
+            {
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Deleting mapped buffer without "
+                    "having it unmapped. This is often sign of"
+                    " a resource leak or a bad pattern. "
+                    "Umapping the buffer for you...",
+                    LML_CRITICAL );
+
+                readOnlyBuffer->unmap( UO_UNMAP_ALL );
+            }
+            delete bufferInterface->getDynamicBuffer();
+            bufferInterface->_setNullDynamicBuffer();
+        }
+        /*else
+        {
+            // Nothing to do. The D3D11 handle is owned by the buffer interface and it will
+            // be released when the buffer interface is destroyed.
+            D3D11CompatBufferInterface *bufferInterface =
+                static_cast<D3D11CompatBufferInterface *>( readOnlyBuffer->getBufferInterface() );
+            // bufferInterface->getVboNamePtr().Reset();
+        }*/
     }
     //-----------------------------------------------------------------------------------
     UavBufferPacked* D3D11VaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,

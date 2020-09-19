@@ -416,6 +416,7 @@ namespace Ogre {
             msGPUVendorStrings[GPU_QUALCOMM] = "qualcomm";
             msGPUVendorStrings[GPU_MOZILLA] = "mozilla";
             msGPUVendorStrings[GPU_WEBKIT] = "webkit";
+            msGPUVendorStrings[GPU_IMGTEC] = "powervr";
         }
     }
     //---------------------------------------------------------------------

@@ -1,4 +1,8 @@
-#version 430
+@property( syntax != glslvk )
+	#version 430
+@else
+	#version 450
+@end
 
 //See GaussianBlurBase_cs for the original.
 //This is a derived version which is used for filtering ESM (Exponential Shadow Maps).
@@ -40,8 +44,11 @@
 // The script uses the template syntax to automatically set the num. of threadgroups
 // based on the bound input texture.
 
-uniform sampler2D inputImage;
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image2D outputImage;
+vulkan( layout( ogre_s0 ) uniform sampler inputSampler );
+vulkan_layout( ogre_t0 ) uniform texture2D inputImage;
+
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
+uniform restrict writeonly image2D outputImage;
 
 // 32 = 128 / 4
 layout( local_size_x = 32,
@@ -89,9 +96,17 @@ layout( local_size_x = 32,
 /// shared vec3 g_f3LDS[ 2 ] [ @value( samples_per_threadgroup ) ];
 @insertpiece( lds_definition )
 
-uniform vec4 g_f4OutputSize;
+#define C_WEIGHTS( x ) c_weights[(x) >> 2u][(x) & 3u]
 
-uniform float c_weights[@value( kernel_radius_plus1 )];
+// weights_array_count = ( kernel_radius + 1u + 3u ) / 4u
+@padd( weights_array_count, kernel_radius, 4 )
+@pdiv( weights_array_count,  4 )
+
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform vec4 g_f4OutputSize;
+	uniform vec4 c_weights[@value( weights_array_count )];
+	@insertpiece( extra_params )
+vulkan( }; )
 
 @insertpiece( lds_data_type ) sampleTex( ivec2 i2Position , vec2 f2Offset )
 {
@@ -119,11 +134,11 @@ void ComputeFilterKernel( int iPixelOffset, int iLineOffset, ivec2 i2Center, ive
 	@property( !downscale_lq )
 		@foreach( 4, iPixel )
 			firstSmpl[ @iPixel ].x = RDI[ @iPixel ];
-			outColour[ @iPixel ].x = c_weights[ @value( kernel_radius ) ];@end
+			outColour[ @iPixel ].x = C_WEIGHTS( @value( kernel_radius ) );@end
 	@end @property( downscale_lq )
 		@foreach( 2, iPixel )
 			firstSmpl[ @iPixel ].x = RDI[ @iPixel * 2 ];
-			outColour[ @iPixel ].x = c_weights[ @value( kernel_radius ) ];@end
+			outColour[ @iPixel ].x = C_WEIGHTS( @value( kernel_radius ) );@end
 	@end
 
 	@foreach( 4, iPixel )
@@ -136,10 +151,10 @@ void ComputeFilterKernel( int iPixelOffset, int iLineOffset, ivec2 i2Center, ive
 	@foreach( kernel_radius, iIteration )
 		@property( !downscale_lq )
 			@foreach( 4, iPixel )
-				outColour[ @iPixel ].x += exp(@value(K)*(RDI[ @iPixel ] - firstSmpl[ @iPixel ].x)) * c_weights[ @iIteration ];@end
+				outColour[ @iPixel ].x += exp(@value(K)*(RDI[ @iPixel ] - firstSmpl[ @iPixel ].x)) * C_WEIGHTS( @iIteration );@end
 		@end @property( downscale_lq )
 			@foreach( 2, iPixel )
-				outColour[ @iPixel ].x += exp(@value(K)*(RDI[ @iPixel * 2 ] - firstSmpl[ @iPixel ].x)) * c_weights[ @iIteration ];@end
+				outColour[ @iPixel ].x += exp(@value(K)*(RDI[ @iPixel * 2 ] - firstSmpl[ @iPixel ].x)) * C_WEIGHTS( @iIteration );@end
 		@end
 		@foreach( 3, iPixel )
 			RDI[ @iPixel ] = RDI[ @iPixel + ( 1 ) ];@end
@@ -161,10 +176,10 @@ void ComputeFilterKernel( int iPixelOffset, int iLineOffset, ivec2 i2Center, ive
 	@foreach( kernel_radius2x_plus1, iIteration, kernel_radius_plus1 )
 		@property( !downscale_lq )
 			@foreach( 4, iPixel )
-				outColour[ @iPixel ].x += exp(@value(K)*(RDI[ @iPixel ] - firstSmpl[ @iPixel ].x)) * c_weights[ @value( kernel_radius2x ) - @iIteration ];@end
+				outColour[ @iPixel ].x += exp(@value(K)*(RDI[ @iPixel ] - firstSmpl[ @iPixel ].x)) * C_WEIGHTS( @value( kernel_radius2x ) - @iIteration );@end
 		@end @property( downscale_lq )
 			@foreach( 2, iPixel )
-				outColour[ @iPixel ].x += exp(@value(K)*(RDI[ @iPixel * 2 ] - firstSmpl[ @iPixel ].x)) * c_weights[ @value( kernel_radius2x ) - @iIteration ];@end
+				outColour[ @iPixel ].x += exp(@value(K)*(RDI[ @iPixel * 2 ] - firstSmpl[ @iPixel ].x)) * C_WEIGHTS( @value( kernel_radius2x ) - @iIteration );@end
 		@end
 		@foreach( 3, iPixel )
 			RDI[ @iPixel ] = RDI[ @iPixel + ( 1 ) ];@end

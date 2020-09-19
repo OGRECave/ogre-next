@@ -26,6 +26,7 @@
 			"thread_groups" : [32, 1, 1],
 
 			"source" : "TerraShadowGenerator",
+			"inform_shader_of_texture_data_change" : true,
 
 			"uav_units" : 1,
 

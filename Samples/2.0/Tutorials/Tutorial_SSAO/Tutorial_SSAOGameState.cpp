@@ -356,7 +356,13 @@ namespace Demo
 	{
 
 		Ogre::GpuProgramParametersSharedPtr psParams = mSSAOPass->getFragmentProgramParameters();
-		psParams->setNamedConstant("projection", mGraphicsSystem->getCamera()->getProjectionMatrix());
+		Ogre::Camera *camera = mGraphicsSystem->getCamera();
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+		// We don't render to render window directly, thus we need to get the projection
+		// matrix with phone orientation disable when calculating SSAO
+		camera->setOrientationMode( Ogre::OR_DEGREE_0 );
+#endif
+		psParams->setNamedConstant("projection", camera->getProjectionMatrix());
 		psParams->setNamedConstant("kernelRadius", mKernelRadius);
 
 		Ogre::GpuProgramParametersSharedPtr psParamsApply = mApplyPass->getFragmentProgramParameters();

@@ -87,6 +87,11 @@ namespace Ogre
                             bool isManual = false, ManualResourceLoader* loader = 0,
                             const NameValuePairList* createParams = 0);
 
+#if OGRE_COMPILER == OGRE_COMPILER_CLANG
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Woverloaded-virtual"
+#endif
+
         /** Create a new mesh, or retrieve an existing one with the same
             name if it already exists.
             @param vertexBufferUsage The usage flags with which the vertex buffer(s)
@@ -159,6 +164,9 @@ namespace Ogre
                       BufferType indexBufferType = BT_IMMUTABLE,
                       bool vertexBufferShadowed = true, bool indexBufferShadowed = true );
 
+#if OGRE_COMPILER == OGRE_COMPILER_CLANG
+#pragma clang diagnostic pop
+#endif
 
         /** Creates a new Mesh specifically for manual definition rather
             than loading from an object file. 

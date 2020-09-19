@@ -119,29 +119,24 @@ namespace Ogre
         mCamera->setFarClipDistance( rasterParams.mCameraFar );
 
         CompositorManager2 *compositorManager = mCreator->mRoot->getCompositorManager2();
-        ResourceLayoutMap initialLayouts;
-        ResourceAccessMap initialUavAccess;
 
         CompositorChannelVec channels;
         channels.reserve( 2u );
         channels.push_back( mCubemap );
         channels.push_back( mDepthCubemap );
         mRenderWorkspace = compositorManager->addWorkspace( sceneManager, channels, mCamera,
-                                                            rasterParams.mWorkspaceName, false, -1, 0,
-                                                            &initialLayouts, &initialUavAccess );
+                                                            rasterParams.mWorkspaceName, false, -1, 0 );
 
         channels.push_back( mCreator->mIrradianceTex );
         channels.push_back( mCreator->mDepthVarianceTex );
         mConvertToIfdWorkspace = compositorManager->addWorkspace(
-            sceneManager, channels, mCamera, "IrradianceField/CubemapToIfd/Workspace", false, -1, 0,
-            &initialLayouts, &initialUavAccess );
+            sceneManager, channels, mCamera, "IrradianceField/CubemapToIfd/Workspace", false, -1, 0 );
 
         channels.clear();
         channels.push_back( mCreator->mIrradianceTex );
         channels.push_back( mCreator->mDepthVarianceTex );
         mIfdIntegrationWorkspace = compositorManager->addWorkspace(
-            sceneManager, channels, mCamera, "IrradianceField/IntegrationOnly/Workspace", false, -1, 0,
-            &initialLayouts, &initialUavAccess );
+            sceneManager, channels, mCamera, "IrradianceField/IntegrationOnly/Workspace", false, -1, 0 );
 
         const IrradianceFieldSettings &settings = mCreator->mSettings;
         mConvertToIfdJob->setProperty( "colour_resolution", settings.mIrradianceResolution );

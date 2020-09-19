@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "OgreCamera.h"
 
 #include "Vao/OgreVaoManager.h"
-#include "Vao/OgreTexBufferPacked.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
 
 #include "OgreHlms.h"
 
@@ -101,7 +101,7 @@ namespace Ogre
                 {
                     if( itBuf->globalLightListBuffer->getMappingState() != MS_UNMAPPED )
                         itBuf->globalLightListBuffer->unmap( UO_UNMAP_ALL );
-                    mVaoManager->destroyTexBuffer( itBuf->globalLightListBuffer );
+                    mVaoManager->destroyReadOnlyBuffer( itBuf->globalLightListBuffer );
                     itBuf->globalLightListBuffer = 0;
                 }
 
@@ -516,7 +516,7 @@ namespace Ogre
                     {
                         if( itBuf->globalLightListBuffer->getMappingState() != MS_UNMAPPED )
                             itBuf->globalLightListBuffer->unmap( UO_UNMAP_ALL );
-                        mVaoManager->destroyTexBuffer( itBuf->globalLightListBuffer );
+                        mVaoManager->destroyReadOnlyBuffer( itBuf->globalLightListBuffer );
                         itBuf->globalLightListBuffer = 0;
                     }
 
@@ -553,7 +553,7 @@ namespace Ogre
         return cachedGrid->gridBuffers[cachedGrid->currentBufIdx].gridBuffer;
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* ForwardPlusBase::getGlobalLightListBuffer( const Camera *camera ) const
+    ReadOnlyBufferPacked* ForwardPlusBase::getGlobalLightListBuffer( const Camera *camera ) const
     {
         CachedGrid const *cachedGrid = 0;
 

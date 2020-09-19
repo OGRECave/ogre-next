@@ -8,6 +8,11 @@ fragment_program Terra/GpuNormalMapper_ps_GLSL glsl
 	}
 }
 
+fragment_program Terra/GpuNormalMapper_ps_VK glslvk
+{
+	source GpuNormalMapper_ps.glsl
+}
+
 fragment_program Terra/GpuNormalMapper_ps_HLSL hlsl
 {
 	source GpuNormalMapper_ps.hlsl
@@ -24,6 +29,7 @@ fragment_program Terra/GpuNormalMapper_ps_Metal metal
 fragment_program Terra/GpuNormalMapper_ps unified
 {
 	delegate Terra/GpuNormalMapper_ps_GLSL
+	delegate Terra/GpuNormalMapper_ps_VK
 	delegate Terra/GpuNormalMapper_ps_HLSL
 	delegate Terra/GpuNormalMapper_ps_Metal
 
@@ -38,7 +44,6 @@ material Terra/GpuNormalMapper
 {
     technique
     {
-
 		pass
 		{
 			depth_check off
@@ -63,3 +68,42 @@ material Terra/GpuNormalMapper
 	}
 }
 
+
+fragment_program Terra/GpuNormalMapperU16_ps unified : Terra/GpuNormalMapper_ps
+{
+	preprocessor_defines USE_UINT=1
+
+	default_params
+	{
+		param_named heightMapResolution float2 128 128
+		param_named vScale float3 1.0 1.0 1.0
+	}
+}
+
+material Terra/GpuNormalMapperU16
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			depth_write off
+
+			cull_hardware none
+
+			vertex_program_ref Ogre/Compositor/Quad_vs
+			{
+			}
+
+			fragment_program_ref Terra/GpuNormalMapperU16_ps
+			{
+			}
+
+			texture_unit heightMap
+			{
+				tex_address_mode clamp
+				filtering none
+			}
+		}
+	}
+}

@@ -113,13 +113,7 @@ namespace Ogre
         ShaderParams::Param *mBounceStartBiasInvBias;
         ShaderParams        *mBounceShaderParams;
 
-        bool mBarriersCreated;
-        //We create 2 of each, one for mLightVoxel[0], another for mLightBounce
-        //This actually only matters in explicit APIs like Vulkan or D3D12
-        ResourceTransition mStartupTrans[2];
-        ResourceTransition mPrepareForSamplingTrans[2];
-        ResourceTransition mAfterAnisoMip0Trans[2];
-        ResourceTransition mAfterAnisoMip1Trans[2];
+        ResourceTransitionArray mResourceTransitions;
 
     public:
         /** When roughness is close to 0.02, specular cone tracing becomes path tracing.
@@ -168,9 +162,6 @@ namespace Ogre
 
         VoxelVisualizer *mDebugVoxelVisualizer;
 
-        void createBarriers(void);
-        void destroyBarriers(void);
-
         float addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                         const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
 
@@ -182,8 +173,6 @@ namespace Ogre
         void generateAnisotropicMips(void);
 
         void runBounce( uint32 bounceIteration );
-
-        void setAllowMultipleBounces( bool bAllowMultipleBounces, bool bChangeBarriers );
 
     public:
         VctLighting( IdType id, VctVoxelizer *voxelizer, bool bAnisotropic );

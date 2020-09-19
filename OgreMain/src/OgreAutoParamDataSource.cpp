@@ -347,6 +347,11 @@ namespace Ogre {
                 // Use identity projection matrix, still need to take RS depth into account.
                 RenderSystem* rs = Root::getSingleton().getRenderSystem();
                 rs->_convertProjectionMatrix(Matrix4::IDENTITY, mProjectionMatrix);
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+                mProjectionMatrix =
+                    mProjectionMatrix *
+                    Quaternion( Degree( mCurrentCamera->getOrientationMode() * 90.f ), Vector3::UNIT_Z );
+#endif
             }
             else
             {

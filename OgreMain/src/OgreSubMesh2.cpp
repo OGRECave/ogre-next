@@ -802,8 +802,8 @@ namespace Ogre {
         }
         
         PixelFormatGpu pixelFormat = halfPrecision ? PFG_RGBA16_FLOAT : PFG_RGBA32_FLOAT;
-        mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize,
-                                                                BT_IMMUTABLE, buffer, false );
+        mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize, BT_IMMUTABLE,
+                                                                buffer, false );
     }
     //---------------------------------------------------------------------
     void SubMesh::arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents )

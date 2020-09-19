@@ -193,7 +193,7 @@ namespace Ogre
         uint32			mTotalNumInstances;
         float           *mCpuInstanceBuffer;
         UavBufferPacked *mInstanceBuffer;
-        TexBufferPacked *mInstanceBufferAsTex;
+        ReadOnlyBufferPacked *mInstanceBufferAsTex;
         UavBufferPacked *mVertexBufferCompressed;
         UavBufferPacked *mVertexBufferUncompressed;
         UavBufferPacked *mIndexBuffer16;
@@ -266,12 +266,7 @@ namespace Ogre
 
         FastArray<Octant> mOctants;
 
-        ResourceTransition mStartupTrans;
-        ResourceTransition mAfterClearTrans;
-        ResourceTransition mAfterAabbCalculatorTrans;
-        ResourceTransition mAfterAabbWorldUpdateTrans;
-        ResourceTransition mVoxelizerInterDispatchTrans;
-        ResourceTransition mVoxelizerPrepareForSamplingTrans;
+        ResourceTransitionArray mResourceTransitions;
 
         DebugVisualizationMode  mDebugVisualizationMode;
         VoxelVisualizer         *mDebugVoxelVisualizer;
@@ -307,9 +302,6 @@ namespace Ogre
         void fillInstanceBuffers(void);
 
         void computeMeshAabbs(void);
-
-        void createBarriers(void);
-        void destroyBarriers(void);
 
         void clearVoxels(void);
 

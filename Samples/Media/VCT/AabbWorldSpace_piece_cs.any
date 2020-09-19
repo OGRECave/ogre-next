@@ -50,13 +50,8 @@
 	INLINE Aabb getMeshAabb( uint localAabbIdx PARAMS_ARG_DECL )
 	{
 		Aabb retVal;
-	@property( syntax == glsl )
-		retVal.center	= structuredBufferFetch( inMeshAabb, rint(localAabbIdx << 1u) ).xyz;
-		retVal.halfSize	= structuredBufferFetch( inMeshAabb, rint((localAabbIdx << 1u) + 1u) ).xyz;
-	@else
 		retVal.center	= inMeshAabb[localAabbIdx].center.xyz;
 		retVal.halfSize	= inMeshAabb[localAabbIdx].halfSize.xyz;
-	@end
 		return retVal;
 	}
 @end

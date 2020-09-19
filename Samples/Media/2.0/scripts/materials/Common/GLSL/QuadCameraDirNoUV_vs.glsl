@@ -1,16 +1,19 @@
-#version 330
+#version ogre_glsl_ver_330
 
-in vec2 vertex;
-in vec3 normal;
+vulkan_layout( OGRE_POSITION )	in vec2 vertex;
+vulkan_layout( OGRE_NORMAL )	in vec3 normal;
 
-uniform vec2 rsDepthRange;
-uniform mat4 worldViewProj;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform vec2 rsDepthRange;
+	uniform mat4 worldViewProj;
+vulkan( }; )
 
 out gl_PerVertex
 {
 	vec4 gl_Position;
 };
 
+vulkan_layout( location = 0 )
 out block
 {
 	vec3 cameraDir;

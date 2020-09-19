@@ -224,6 +224,18 @@ namespace Ogre
             return mData + idx;
         }
 
+        void append( const_iterator otherBegin, const_iterator otherEnd )
+        {
+            const size_t otherSize = otherEnd - otherBegin;
+
+            growToFit( otherSize );
+
+            for( size_t i = mSize; i < mSize + otherSize; ++i )
+                new( &mData[i] ) T( *otherBegin++ );
+
+            mSize += otherSize;
+        }
+
         void appendPOD( const_iterator otherBegin, const_iterator otherEnd )
         {
             growToFit( otherEnd - otherBegin );
@@ -248,13 +260,16 @@ namespace Ogre
 
             size_t idx      = (first - mData);
             size_t idxNext  = (last - mData);
-            while( first != last )
+            if( first != last )
             {
-                first->~T();
-                ++first;
+                while( first != last )
+                {
+                    first->~T();
+                    ++first;
+                }
+                memmove( mData + idx, mData + idxNext, (mSize - idxNext) * sizeof(T) );
+                mSize -= idxNext - idx;
             }
-            memmove( mData + idx, mData + idxNext, (mSize - idxNext) * sizeof(T) );
-            mSize -= idxNext - idx;
 
             return mData + idx;
         }
@@ -265,8 +280,11 @@ namespace Ogre
 
             size_t idx      = (first - mData);
             size_t idxNext  = (last - mData);
-            memmove( mData + idx, mData + idxNext, (mSize - idxNext) * sizeof(T) );
-            mSize -= idxNext - idx;
+            if( first != last )
+            {
+                memmove( mData + idx, mData + idxNext, (mSize - idxNext) * sizeof(T) );
+                mSize -= idxNext - idx;
+            }
 
             return mData + idx;
         }

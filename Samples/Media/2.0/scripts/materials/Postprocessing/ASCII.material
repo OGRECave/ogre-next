@@ -9,6 +9,11 @@ fragment_program Postprocess/ASCII_ps_GLSL glsl
 	}
 }
 
+fragment_program Postprocess/ASCII_ps_VK glslvk
+{
+	source ASCII_ps.glsl
+}
+
 fragment_program Postprocess/ASCII_ps_HLSL hlsl
 {
 	source ASCII_ps.hlsl
@@ -25,6 +30,7 @@ fragment_program Postprocess/ASCII_ps_Metal metal
 fragment_program Postprocess/ASCII_ps unified
 {
 	delegate Postprocess/ASCII_ps_GLSL
+	delegate Postprocess/ASCII_ps_VK
 	delegate Postprocess/ASCII_ps_HLSL
 	delegate Postprocess/ASCII_ps_Metal
 

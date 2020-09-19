@@ -61,7 +61,13 @@ namespace Ogre
             any shader. The main difference is that there is no hlmsCacheEntry (because it hasn't been
             generated yet) and the properties are before they are transformed by the templates
         @brief propertiesMergedPreGenerationStep
-        @param shaderProfile
+        @param hlms
+            Pointer to caller.
+            WARNING: Note that any modified property WON'T BE CACHED. If you set a property based
+            on external information, it will break caches.
+
+            You can only set new properties that are derived from existing properties e.g. c = a + b,
+            which means caching a and b will always result in c being the same value
         @param passCache
             Properties used by this pass
         @param renderableCacheProperties
@@ -74,12 +80,33 @@ namespace Ogre
         @param queuedRenderable
         */
         virtual void propertiesMergedPreGenerationStep(
-                const String &shaderProfile,
+                Hlms *hlms,
                 const HlmsCache &passCache,
                 const HlmsPropertyVec &renderableCacheProperties,
                 const PiecesMap renderableCachePieces[NumShaderTypes],
                 const HlmsPropertyVec &properties,
                 const QueuedRenderable &queuedRenderable ) {}
+
+        /// If hlmsTypeChanged is going to be binding extra textures, override this function
+        /// to tell us how many textures you will use, so that we don't use those slots
+        virtual uint16 getNumExtraPassTextures( bool casterPass ) const { return 0u; }
+
+        /** Called right before compiling. If customizations require additional resources slots
+            (e.g. more textures) then this function should modify the root layout accordingly
+
+            To allow caches to work, the rootLayout must only be generated from values in 'properties'
+            (or via constant modifications) otherwise there is no guarantee a cached version can
+            recreate the same state.
+
+            This is why the function is marked const.
+        @param rootLayout
+            An already-filled rootLayout derived classes can modify
+        @param properties
+            The current contents of Hlms::mSetProperties
+        */
+        virtual void setupRootLayout( RootLayout &rootLayout, const HlmsPropertyVec &properties ) const
+        {
+        }
 
         /** Called after the shader was created/compiled, and right before
             bindGpuProgramParameters (relevant information for OpenGL programs).
@@ -129,7 +156,7 @@ namespace Ogre
         /// need to rebind certain buffers (like the pass buffer). You can use
         /// this moment to bind your own buffers.
         virtual void hlmsTypeChanged( bool casterPass, CommandBuffer *commandBuffer,
-                                      const HlmsDatablock *datablock ) {}
+                                      const HlmsDatablock *datablock, size_t texUnit ) {}
     };
 
     /** @} */

@@ -1,5 +1,6 @@
-#version 330
+#version ogre_glsl_ver_330
 
+vulkan_layout( location = 0 )
 in block
 {
 	flat vec4 voxelColour;

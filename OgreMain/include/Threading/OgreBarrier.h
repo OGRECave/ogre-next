@@ -37,7 +37,8 @@ THE SOFTWARE.
     typedef void* HANDLE;
 #else
     #include <pthread.h>
-    #if defined(ANDROID) || OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+    #if( defined( ANDROID ) && __ANDROID_API__ < __ANDROID_API_N__ ) || \
+        OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
     typedef struct
     {
         pthread_mutex_t mutex;
@@ -45,7 +46,7 @@ THE SOFTWARE.
         int count;
         int tripCount;
     } pthread_barrier_t;
-    #endif
+#endif
 #endif
 
 namespace Ogre

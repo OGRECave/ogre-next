@@ -2,6 +2,7 @@
 
 #include <OgreStringConverter.h>
 #include <OgreLogManager.h>
+#include <OgreString.h>
 
 namespace Ogre{
 

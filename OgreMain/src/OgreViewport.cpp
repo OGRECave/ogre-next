@@ -36,7 +36,6 @@ THE SOFTWARE.
 #include <iomanip>
 
 namespace Ogre {
-    OrientationMode Viewport::mDefaultOrientationMode = OR_DEGREE_0;
     //---------------------------------------------------------------------
     Viewport::Viewport(Real left, Real top, Real width, Real height)
         : mGlobalIndex( -1 )
@@ -66,10 +65,7 @@ namespace Ogre {
         , mVisibilityMask(0)
         , mMaterialSchemeName(MaterialManager::DEFAULT_SCHEME_NAME)
         , mColourBuffer(CBT_BACK)
-    {           
-        // Set the default orientation mode
-        mOrientationMode = mDefaultOrientationMode;
-            
+    {
         // Set the default material scheme
         //RenderSystem* rs = Root::getSingleton().getRenderSystem();
         //mMaterialSchemeName = rs->_getDefaultViewportMaterialScheme();
@@ -255,12 +251,15 @@ namespace Ogre {
         // Automatic AR cameras are useful for cameras that draw into multiple viewports
         const Real aspectRatio = (Real) mActWidth / (Real) std::max( 1, mActHeight );
         if( cullCamera->getAutoAspectRatio() && cullCamera->getAspectRatio() != aspectRatio )
-        {
             cullCamera->setAspectRatio( aspectRatio );
+
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-            cullCamera->setOrientationMode(mOrientationMode);
-#endif
+        {
+            const OrientationMode orientationMode = mCurrentTarget->getOrientationMode();
+            cullCamera->setOrientationMode( orientationMode );
+            renderCamera->setOrientationMode( orientationMode );
         }
+#endif
         // Tell Camera to render into me
         cullCamera->_notifyViewport(this);
 
@@ -271,62 +270,6 @@ namespace Ogre {
                                          uint8 firstRq, uint8 lastRq )
     {
         camera->_renderScenePhase02( lodCamera, firstRq, lastRq, mShowOverlays );
-    }
-    //---------------------------------------------------------------------
-    void Viewport::setOrientationMode(OrientationMode orientationMode, bool setDefault)
-    {
-#if OGRE_NO_VIEWPORT_ORIENTATIONMODE != 0
-        OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED,
-                    "Setting Viewport orientation mode is not supported",
-                    __FUNCTION__);
-#endif
-        mOrientationMode = orientationMode;
-
-        if (setDefault)
-        {
-            setDefaultOrientationMode(orientationMode);
-        }
-
-    // Update the render system config
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        RenderSystem* rs = Root::getSingleton().getRenderSystem();
-        if(mOrientationMode == OR_LANDSCAPELEFT)
-            rs->setConfigOption("Orientation", "Landscape Left");
-        else if(mOrientationMode == OR_LANDSCAPERIGHT)
-            rs->setConfigOption("Orientation", "Landscape Right");
-        else if(mOrientationMode == OR_PORTRAIT)
-            rs->setConfigOption("Orientation", "Portrait");
-#endif
-    }
-    //---------------------------------------------------------------------
-    OrientationMode Viewport::getOrientationMode() const
-    {
-#if OGRE_NO_VIEWPORT_ORIENTATIONMODE != 0
-        OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED,
-                    "Getting Viewport orientation mode is not supported",
-                    __FUNCTION__);
-#endif
-        return mOrientationMode;
-    }
-    //---------------------------------------------------------------------
-    void Viewport::setDefaultOrientationMode(OrientationMode orientationMode)
-    {
-#if OGRE_NO_VIEWPORT_ORIENTATIONMODE != 0
-        OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED,
-                    "Setting default Viewport orientation mode is not supported",
-                    __FUNCTION__);
-#endif
-        mDefaultOrientationMode = orientationMode;
-    }
-    //---------------------------------------------------------------------
-    OrientationMode Viewport::getDefaultOrientationMode()
-    {
-#if OGRE_NO_VIEWPORT_ORIENTATIONMODE != 0
-        OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED,
-                    "Getting default Viewport orientation mode is not supported",
-                    __FUNCTION__);
-#endif
-        return mDefaultOrientationMode;
     }
     //---------------------------------------------------------------------
     void Viewport::getActualDimensions(int &left, int&top, int &width, int &height) const

@@ -154,7 +154,16 @@ namespace Ogre
             /// For internal use. Indicates whether this texture is the owner
             /// of a TextureGpuManager::TexturePool, which are used
             /// to hold regular textures using AutomaticBatching
-            PoolOwner           = 1u << 13u
+            PoolOwner           = 1u << 13u,
+            /// When this flag is present, the contents of a RenderToTexture or Uav
+            /// may not be preserved between frames. Useful for RenderToTexture which are written or
+            /// cleared first.
+            ///
+            /// Must not be used on textures whose contents need to be preserved between
+            /// frames (e.g. HDR luminance change over time)
+            ///
+            /// If this flag is present, either RenderToTexture or Uav must be present
+            DiscardableContent  = 1u << 14u
         };
     }
 
@@ -318,6 +327,12 @@ namespace Ogre
         /// For TypeCube this value returns 6.
         /// For TypeCubeArray, value returns numSlices * 6u.
         uint32 getNumSlices(void) const;
+        /// Real API width accounting for TextureGpu::getOrientationMode
+        /// If orientation mode is 90° or 270° then getInternalWidth returns the height and
+        /// getInternalHeight returns the width
+        uint32 getInternalWidth(void) const;
+        /// Real API height accounting for TextureGpu::getOrientationMode. See getInternalWidth
+        uint32 getInternalHeight(void) const;
 
         void setNumMipmaps( uint8 numMipmaps );
         uint8 getNumMipmaps(void) const;
@@ -426,10 +441,31 @@ namespace Ogre
 
             Typically the reason to set this to false is if you plane on rendering more
             stuff to dst texture and then resolve.
+        @param issueBarriers
+                - If issueBarriers & ResourceAccess::Read, then
+                  the copy encoder will issue a barrier for 'this'
+                - If issueBarriers & ResourceAccess::Write, then
+                  the copy encoder will issue a barrier for 'dst'
+
+            Defaults to ResourceAccess::ReadWrite to automatically manage barriers on both src & dst.
+
+            The compositor sets this to ResourceAccess::Undefined to manually manage the barriers
+
+            Some users may have to apply a barrier to individual textures
+            e.g. if src is a RenderTexture but the dst is a regular texture then perform:
+
+            @code
+                solver.resolveTransition( resourceTransitions, src, ResourceLayout::CopySrc,
+                                          ResourceAccess::Read, 0u );
+                renderSystem->executeResourceTransition( resourceTransitions );
+                src->copyTo( dst, dstBox, 0u, src->getEmptyBox( 0u ), 0u, keepResolvedTexSynced,
+                             ResourceAccess::Write );
+            @endcode
         */
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel,
-                             bool keepResolvedTexSynced = true );
+                             bool keepResolvedTexSynced = true,
+                             ResourceAccess::ResourceAccess issueBarriers = ResourceAccess::ReadWrite );
 
         /** These 3 values  are used as defaults for the compositor to use, but they may be
             explicitly overriden by a RenderPassDescriptor.
@@ -475,9 +511,31 @@ namespace Ogre
         */
         void _resolveTo( TextureGpu *resolveTexture );
 
-        /// Tells the API to let the HW autogenerate mipmaps. Assumes the
-        /// allowsAutoMipmaps() == true and isRenderToTexture() == true
-        virtual void _autogenerateMipmaps(void) = 0;
+        /** Tells the API to let the HW autogenerate mipmaps. Assumes the
+            allowsAutoMipmaps() == true and isRenderToTexture() == true
+        @param bUseBarrierSolver
+            When false, Vulkan will use an heuristic to detect whether this texture
+            is already in MipmapGen (note: MipmapGen may alias to CopySrc).
+                - If it is in MipmapGen/CopySrc, we assume the texture has been already
+                  transitioned externally by a barrier or the copy encoder; thus
+                  no barrier will be issued
+                - If it is not, then we open the copy encoder to take care
+                  of resource transitions; which is desirable if you wish
+                  to use 'this' only as a texture or for copying data around,
+                  but probably undesirable if you wish to do more transitions using
+                  the BarrierSolver for RenderTexture and/or Uav.
+
+            When true, we force a resource transition using the barrier solver.
+            Calling texture->_autogenerateMipmaps( true ) is exactly the same as doing:
+            @code
+                barrierSolver.resolveTransition( resourceTransitions, texture,
+                                                 ResourceLayout::MipmapGen,
+                                                 ResourceAccess::ReadWrite, 0u );
+                renderSystem->executeResourceTransition( resourceTransitions );
+                texture->_autogenerateMipmaps( false );
+            @endcode
+        */
+        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false ) = 0;
         /// Only valid for TextureGpu classes.
         /// TODO: This may be moved to a different class.
         virtual void swapBuffers(void) {}
@@ -496,11 +554,48 @@ namespace Ogre
         bool _isManualTextureFlagPresent(void) const;
         bool isManualTexture(void) const;
         bool isPoolOwner(void) const;
+        bool isDiscardableContent(void) const;
 
         /// OpenGL RenderWindows are a bit specific:
         ///     * Their origins are upside down. Which means we need to flip Y.
         ///     * They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true
-        virtual bool isOpenGLRenderWindow(void) const;
+        virtual bool isOpenGLRenderWindow( void ) const;
+
+        /// PUBLIC VARIABLE. This variable can be altered directly.
+        ///
+        /// Changes are reflected immediately for new TextureGpus.
+        /// Existing TextureGpus won't be affected
+        static OrientationMode msDefaultOrientationMode;
+
+        /** Sets the given orientation. 'this' must be a RenderTexture
+            If Ogre wasn't build with OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE,
+            calls to this function will not stick (i.e. getOrientationMode always
+            returns the same value)
+
+            @see    TextureGpu::msDefaultOrientationMode
+            @see    TextureGpu::getInternalWidth
+            @see    TextureGpu::getInternalHeight
+        @remarks
+            Must be OnStorage.
+
+            If OrientationMode == OR_DEGREE_90 or OR_DEGREE_270, the internal resolution
+            if flipped. i.e. swap( width, height ).
+            This is important if you need to perform copyTo operations or AsyncTextureTickets
+
+            This setting has only been tested with Vulkan and is likely to malfunction
+            with the other APIs if set to anything other than OR_DEGREE_0
+        */
+        virtual void setOrientationMode( OrientationMode orientationMode );
+        virtual OrientationMode getOrientationMode( void ) const;
+
+        ResourceLayout::Layout getDefaultLayout( bool bIgnoreDiscardableFlag = false ) const;
+        virtual ResourceLayout::Layout getCurrentLayout( void ) const;
+
+        /// Sets the layout the texture should be transitioned to after the next copy operation
+        /// (once the copy encoder gets closed)
+        ///
+        /// This is specific to Vulkan & D3D12
+        virtual void _setNextLayout( ResourceLayout::Layout layout );
 
         virtual void _setToDisplayDummyTexture(void) = 0;
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
@@ -548,6 +643,8 @@ namespace Ogre
         static const IdString msFinalTextureBuffer;
         static const IdString msMsaaTextureBuffer;
         virtual void getCustomAttribute( IdString name, void *pData ) {}
+
+        virtual bool isTextureGpu( void ) const;
 
         TextureGpuManager* getTextureManager(void) const;
 
@@ -600,7 +697,7 @@ namespace Ogre
         ///
         /// If this is true, then isMetadataReady is also true.
         /// See isMetadataReady.
-        bool isDataReady(void);
+        bool isDataReady( void ) const;
 
         /// Blocks main thread until metadata is ready. Afterwards isMetadataReady
         /// should return true. If it doesn't, then there was a problem loading

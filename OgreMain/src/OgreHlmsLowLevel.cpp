@@ -125,7 +125,7 @@ namespace Ogre
                 pso.vertexElements = renderOp.vertexData->vertexDeclaration->convertToV2();
             }
 
-            pso.enablePrimitiveRestart = true;
+            pso.enablePrimitiveRestart = false;
         }
 
         applyStrongMacroblockRules( pso );
@@ -383,4 +383,6 @@ namespace Ogre
     {
         return OGRE_NEW HlmsLowLevelDatablock( datablockName, this, macroblock, blendblock, paramVec );
     }
+    //-----------------------------------------------------------------------------------
+    void HlmsLowLevel::setupRootLayout( RootLayout &rootLayout ) {}
 }

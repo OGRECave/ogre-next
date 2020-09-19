@@ -1,4 +1,4 @@
-#version 330
+#version ogre_glsl_ver_330
 
 //-------------------------------
 // High-pass filter for obtaining lumminance
@@ -7,10 +7,13 @@
 //   Color += Grayscale( f(Color) ) + 0.6
 //-------------------------------
 
-uniform sampler2D RT;
+vulkan_layout( ogre_t0 ) uniform texture2D RT;
+vulkan( layout( ogre_s0 ) uniform sampler samplerState );
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
@@ -18,7 +21,7 @@ in block
 
 void main()
 {
-	vec4 tex = texture( RT, inPs.uv0 );
+	vec4 tex = texture( vkSampler2D( RT, samplerState ), inPs.uv0 );
 	tex -= 1.0;
 	vec4 bright4 = -6.0 * tex * tex + 2.0; //vec4 bright4= ( -3 * tex * tex + 1 ) * 2;
 	float bright = dot( bright4.xyz, vec3( 0.333333, 0.333333, 0.333333 ) );

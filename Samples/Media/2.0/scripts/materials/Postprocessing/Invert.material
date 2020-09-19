@@ -3,6 +3,11 @@ fragment_program Postprocess/Invert_ps_GLSL glsl
 	source Invert_ps.glsl
 }
 
+fragment_program Postprocess/Invert_ps_VK glslvk
+{
+	source Invert_ps.glsl
+}
+
 fragment_program Postprocess/Invert_ps_HLSL hlsl
 {
 	source Invert_ps.hlsl
@@ -19,6 +24,7 @@ fragment_program Postprocess/Invert_ps_Metal metal
 fragment_program Postprocess/Invert_ps unified
 {
 	delegate Postprocess/Invert_ps_GLSL
+	delegate Postprocess/Invert_ps_VK
 	delegate Postprocess/Invert_ps_HLSL
 	delegate Postprocess/Invert_ps_Metal
 }

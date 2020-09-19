@@ -66,6 +66,7 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11VaoManager.h"
 #include "Vao/OgreD3D11BufferInterface.h"
 #include "Vao/OgreD3D11VertexArrayObject.h"
+#include "Vao/OgreD3D11ReadOnlyBufferPacked.h"
 #include "Vao/OgreD3D11TexBufferPacked.h"
 #include "Vao/OgreD3D11UavBufferPacked.h"
 #include "Vao/OgreIndexBufferPacked.h"
@@ -640,7 +641,7 @@ namespace Ogre
         {
             it = mOptions.find("Video Mode");
             ComPtr<ID3D11Device> device;
-            createD3D11Device( mVendorExtension, "", driver, mDriverType,
+            createD3D11Device( mVendorExtension, Root::getSingleton().getAppName(), driver, mDriverType,
                                mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel,
                                NULL, device.GetAddressOf() );
             // 'videoMode' could be NULL if working over RDP/Simulator
@@ -758,7 +759,7 @@ namespace Ogre
 #endif
 
         // create the device for the selected adapter
-        createDevice( windowTitle );
+        createDevice();
 
         if( autoCreateWindow )
         {
@@ -1619,11 +1620,9 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::createDevice( const String &windowTitle )
+    void D3D11RenderSystem::createDevice( void )
     {
         mDevice.ReleaseAll();
-
-        mLastWindowTitlePassedToExtensions = windowTitle;
 
         D3D11Driver *d3dDriver = getDirect3DDrivers(true)->findByName( mDriverName );
         mActiveD3DDriver = *d3dDriver; // store copy of selected driver, so that it is not
@@ -1640,7 +1639,7 @@ namespace Ogre
         }
 
         ComPtr<ID3D11Device> device;
-        createD3D11Device( mVendorExtension, windowTitle, d3dDriver, mDriverType,
+        createD3D11Device( mVendorExtension, Root::getSingleton().getAppName(), d3dDriver, mDriverType,
                            mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, &mFeatureLevel,
                            device.GetAddressOf() );
         mDevice.TransferOwnership( device );
@@ -1687,7 +1686,7 @@ namespace Ogre
         v1::HardwareBufferManager::getSingleton()._releaseBufferCopies(true);
 
         // recreate device
-        createDevice( mLastWindowTitlePassedToExtensions );
+        createDevice();
 
         static_cast<D3D11VaoManager*>(mVaoManager)->_createD3DResources();
         static_cast<D3D11TextureGpuManager*>(mTextureGpuManager)->_createD3DResources();
@@ -1788,7 +1787,7 @@ namespace Ogre
     {
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setTexture( size_t stage, TextureGpu *texPtr )
+    void D3D11RenderSystem::_setTexture( size_t stage, TextureGpu *texPtr, bool bDepthReadOnly )
     {
         if( texPtr )
         {
@@ -2069,22 +2068,22 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setVertexTexture(size_t stage, TextureGpu *tex)
     {
-        _setTexture(stage, tex);
+        _setTexture(stage, tex, false);
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setGeometryTexture(size_t stage, TextureGpu *tex)
     {
-        _setTexture(stage, tex);
+        _setTexture(stage, tex, false);
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTessellationHullTexture(size_t stage, TextureGpu *tex)
     {
-        _setTexture(stage, tex);
+        _setTexture(stage, tex, false);
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTessellationDomainTexture(size_t stage, TextureGpu *tex)
     {
-        _setTexture(stage, tex);
+        _setTexture(stage, tex, false);
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTextureCoordCalculation( size_t stage, TexCoordCalcMethod m,
@@ -2508,9 +2507,7 @@ namespace Ogre
 
         for( size_t i=0u; i<numElements; ++i )
         {
-            if( itor->empty() )
-                ;
-            else if( itor->isTexture() )
+            if( itor->isTexture() )
             {
                 const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
                 const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( texSlot.texture );
@@ -2519,9 +2516,18 @@ namespace Ogre
             else
             {
                 const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
-                const D3D11TexBufferPacked *texBuffer =
-                        static_cast<const D3D11TexBufferPacked*>( bufferSlot.buffer );
-                srvList[i] = texBuffer->createSrv( bufferSlot );
+                if( bufferSlot.buffer->getBufferPackedType() == BP_TYPE_TEX )
+                {
+                    const D3D11TexBufferPacked *texBuffer =
+                            static_cast<const D3D11TexBufferPacked*>( bufferSlot.buffer );
+                    srvList[i] = texBuffer->createSrv( bufferSlot );
+                }
+                else
+                {
+                    const D3D11ReadOnlyBufferPacked *roBuffer =
+                        static_cast<const D3D11ReadOnlyBufferPacked *>( bufferSlot.buffer );
+                    srvList[i] = roBuffer->createSrv( bufferSlot );
+                }
             }
 
             ++itor;
@@ -2767,10 +2773,10 @@ namespace Ogre
         deviceContext->PSSetShader( 0, 0, 0 );
         deviceContext->CSSetShader( 0, 0, 0 );
 
+        mBoundComputeProgram = newComputeShader;
+
         if( !pso )
             return;
-
-        mBoundComputeProgram = newComputeShader;
 
         deviceContext->CSSetShader( mBoundComputeProgram->getComputeShader(), 0, 0 );
         mActiveComputeGpuProgramParameters = pso->computeParams;
@@ -3690,9 +3696,9 @@ namespace Ogre
         mVendorExtension = D3D11VendorExtension::initializeExtension( GPU_VENDOR_COUNT, 0 );
 
         ComPtr<ID3D11Device> device;
-        createD3D11Device( mVendorExtension, "", NULL, D3D_DRIVER_TYPE_HARDWARE,
-                           mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, 0,
-                           device.GetAddressOf() );
+        createD3D11Device( mVendorExtension, Root::getSingleton().getAppName(), NULL,
+                           D3D_DRIVER_TYPE_HARDWARE, mMinRequestedFeatureLevel,
+                           mMaxRequestedFeatureLevel, 0, device.GetAddressOf() );
         mDevice.TransferOwnership( device );
     }
     //---------------------------------------------------------------------

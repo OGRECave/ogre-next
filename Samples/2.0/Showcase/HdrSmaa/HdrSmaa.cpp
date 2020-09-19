@@ -11,9 +11,10 @@
 
 //Declares WinMain / main
 #include "MainEntryPointHelper.h"
-
+#include "System/Android/AndroidSystems.h"
 #include "System/MainEntryPoints.h"
 
+#if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
 #else
@@ -22,6 +23,7 @@ int mainApp( int argc, const char *argv[] )
 {
     return Demo::MainEntryPoints::mainAppSingleThreaded( DEMO_MAIN_ENTRY_PARAMS );
 }
+#endif
 
 namespace Demo
 {
@@ -46,21 +48,22 @@ namespace Demo
             GraphicsSystem::setupResources();
 
             Ogre::ConfigFile cf;
-            cf.load(mResourcePath + "resources2.cfg");
+            cf.load( AndroidSystems::openFile( mResourcePath + "resources2.cfg" ) );
 
             Ogre::String originalDataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
 
             if( originalDataFolder.empty() )
-                originalDataFolder = "./";
+                originalDataFolder = AndroidSystems::isAndroid() ? "/" : "./";
             else if( *(originalDataFolder.end() - 1) != '/' )
                 originalDataFolder += "/";
 
-            const char *c_locations[10] =
+			const char *c_locations[11] =
             {
                 "2.0/scripts/materials/Tutorial_SMAA",
                 "2.0/scripts/materials/Tutorial_SMAA/GLSL",
                 "2.0/scripts/materials/Tutorial_SMAA/HLSL",
-                "2.0/scripts/materials/Tutorial_SMAA/Metal",
+				"2.0/scripts/materials/Tutorial_SMAA/Metal",
+				"2.0/scripts/materials/Tutorial_SMAA/Vulkan",
                 "2.0/scripts/materials/HDR",
                 "2.0/scripts/materials/HDR/GLSL",
                 "2.0/scripts/materials/HDR/HLSL",
@@ -69,10 +72,10 @@ namespace Demo
                 "2.0/scripts/materials/HDR_SMAA",
             };
 
-            for( size_t i=0; i<10; ++i )
+			for( size_t i=0; i<11; ++i )
             {
                 Ogre::String dataFolder = originalDataFolder + c_locations[i];
-                addResourceLocation( dataFolder, "FileSystem", "General" );
+                addResourceLocation( dataFolder, getMediaReadArchiveType(), "General" );
             }
         }
 

@@ -61,8 +61,21 @@ namespace Ogre
 
         struct CachedGridBuffer
         {
+            /// We use a TexBufferPacked instead of ReadOnlyBufferPacked because there is
+            /// a considerable slowdown when trying to address a R16_UNORM buffer using
+            /// bit unpacking, i.e. via:
+            ///     (idx & 0x01) != 0u ? (bufferVar[idx >> 1u] >> 16u) : (bufferVar[idx >> 1u] & 0xFFFFu)
+            ///
+            /// RenderSystems which natively support ushort in UAVs wouldn't be affected
+            /// but it's a lot of work maintaining so many paths and a major RenderSystem
+            /// doesn't support it.
+            ///
+            /// Alternatively R32_UNORM could be used w/ ReadOnlyBufferPacked,
+            /// but that's twice the memory (and less cache friendly).
+            /// Only Android really could use ReadOnlyBufferPacked, but if you need to
+            /// exceed the 65535 texel limit, it's likely too slow for phones anyway
             TexBufferPacked *gridBuffer;
-            TexBufferPacked *globalLightListBuffer;
+            ReadOnlyBufferPacked *globalLightListBuffer;
             CachedGridBuffer() : gridBuffer( 0 ), globalLightListBuffer( 0 ) {}
         };
 
@@ -183,7 +196,7 @@ namespace Ogre
         /// Cache the return value as internally we perform an O(N) search
         TexBufferPacked* getGridBuffer( const Camera *camera ) const;
         /// Cache the return value as internally we perform an O(N) search
-        TexBufferPacked* getGlobalLightListBuffer( const Camera *camera ) const;
+        ReadOnlyBufferPacked *getGlobalLightListBuffer( const Camera *camera ) const;
 
         /// Returns the amount of bytes that fillConstBufferData is going to fill.
         virtual size_t getConstBufferSize(void) const = 0;

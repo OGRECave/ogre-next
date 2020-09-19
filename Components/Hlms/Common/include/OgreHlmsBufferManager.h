@@ -72,14 +72,14 @@ namespace Ogre
     {
     protected:
         typedef vector<ConstBufferPacked*>::type ConstBufferPackedVec;
-        typedef vector<TexBufferPacked*>::type TexBufferPackedVec;
+        typedef vector<ReadOnlyBufferPacked*>::type ReadOnlyBufferPackedVec;
 
         VaoManager              *mVaoManager;
 
         uint32                  mCurrentConstBuffer;    /// Resets every to zero every new frame.
         uint32                  mCurrentTexBuffer;      /// Resets every to zero every new frame.
         ConstBufferPackedVec    mConstBuffers;
-        TexBufferPackedVec      mTexBuffers;
+        ReadOnlyBufferPackedVec mTexBuffers;
 
         uint32  *mStartMappedConstBuffer;
         uint32  *mCurrentMappedConstBuffer;

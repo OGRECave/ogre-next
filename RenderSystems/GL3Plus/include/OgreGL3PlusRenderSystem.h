@@ -330,7 +330,7 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void _setTexture( size_t unit, TextureGpu *tex );
+        void _setTexture( size_t unit, TextureGpu *tex, bool bDepthReadOnly );
         /// See RenderSystem
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
                                    uint32 hazardousTexIdx );
@@ -359,11 +359,9 @@ namespace Ogre {
         */
         void _setTextureMatrix(size_t stage, const Matrix4& xform) { };   // Not supported
 
-        virtual void flushUAVs(void);
+        void flushUAVs( void );
 
-        virtual void _resourceTransitionCreated( ResourceTransition *resTransition );
-        virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition );
-        virtual void _executeResourceTransition( ResourceTransition *resTransition );
+        virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection );
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );

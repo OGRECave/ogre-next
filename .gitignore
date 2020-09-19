@@ -15,6 +15,7 @@ iOSDependencies
 build/*
 SDK/OSX/sdk_contents
 SDK/iOS/sdk_contents
+Samples/2.0/AndroidAppTemplate/Autogen/
 Samples/Browser/WinRT/Debug
 Samples/Browser/WinRT/Release
 Samples/Browser/WinRT/Generated Files

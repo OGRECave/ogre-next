@@ -82,10 +82,14 @@ namespace Ogre
 
         notifyPassEarlyPreExecuteListeners();
 
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        renderSystem->endRenderPassDescriptor();
+
+        analyzeBarriers();
+        executeResourceTransitions();
+
         //Fire the listener in case it wants to change anything
         notifyPassPreExecuteListeners();
-
-        executeResourceTransitions();
 
         //Should we retrieve every update, or cache the return values
         //and listen to notifyRecreated and family of funtions?
@@ -94,53 +98,22 @@ namespace Ogre
 
         TextureBox srcBox = srcChannel->getEmptyBox( 0 );
         TextureBox dstBox = dstChannel->getEmptyBox( 0 );
-        srcChannel->copyTo( dstChannel, dstBox, 0, srcBox, 0, false );
+        srcChannel->copyTo( dstChannel, dstBox, 0, srcBox, 0, false, ResourceAccess::Undefined );
 
         notifyPassPosExecuteListeners();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassDepthCopy::_placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                                        ResourceAccessMap &uavsAccess,
-                                                                        ResourceLayoutMap &resourcesLayout )
+    void CompositorPassDepthCopy::analyzeBarriers( void )
     {
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-        const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
+        mResourceTransitions.clear();
 
-        if( !explicitApi )
-            return;
+        // Do not use base class'
+        // CompositorPass::analyzeBarriers();
 
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "D3D12/Vulkan/Mantle Stub",
-                     "CompositorPassDepthCopy::_placeBarriersAndEmulateUavExecution" );
+        TextureGpu *srcChannel = mParentNode->getDefinedTexture( mDefinition->mSrcDepthTextureName );
+        TextureGpu *dstChannel = mParentNode->getDefinedTexture( mDefinition->mDstDepthTextureName );
 
-        /*{
-            const CompositorChannel *srcChannel = mParentNode->_getDefinedTexture(
-                                                    mDefinition->mSrcDepthTextureName );
-
-            //Check <anything> -> CopySrc
-            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find(
-                        srcChannel->target->getDepthBuffer() );
-            if( currentLayout->second != ResourceLayout::CopySrc )
-            {
-                addResourceTransition( currentLayout,
-                                       ResourceLayout::CopySrc,
-                                       ReadBarrier::? ); //Likely 0
-            }
-
-            const CompositorChannel *dstChannel = mParentNode->_getDefinedTexture(
-                                                    mDefinition->mDstDepthTextureName );
-
-            //Check <anything> -> CopyDst
-            currentLayout = resourcesLayout.find( dstChannel->target->getDepthBuffer() );
-            if( currentLayout->second != ResourceLayout::CopyDst )
-            {
-                addResourceTransition( currentLayout,
-                                       ResourceLayout::CopyDst,
-                                       ReadBarrier::? ); //Likely 0
-            }
-        }*/
-
-        //Do not use base class functionality at all.
-        //CompositorPass::_placeBarriersAndEmulateUavExecution();
+        resolveTransition( srcChannel, ResourceLayout::CopySrc, ResourceAccess::Read, 0u );
+        resolveTransition( dstChannel, ResourceLayout::CopyDst, ResourceAccess::Write, 0u );
     }
 }

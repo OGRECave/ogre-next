@@ -53,8 +53,9 @@ namespace Ogre
     public:
         D3D11BufferInterface( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer,
                               D3D11DynamicBuffer *dynamicBuffer );
-        ~D3D11BufferInterface();
+        virtual ~D3D11BufferInterface();
 
+        void _setNullDynamicBuffer( void ) { mDynamicBuffer = 0; }
         D3D11DynamicBuffer* getDynamicBuffer(void) const    { return mDynamicBuffer; }
 
         void _setVboPoolIndex( size_t newVboPool )  { mVboPoolIdx = newVboPool; }

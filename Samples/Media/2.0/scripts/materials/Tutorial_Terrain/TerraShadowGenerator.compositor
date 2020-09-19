@@ -32,3 +32,38 @@ workspace Terra/ShadowGeneratorWorkspace
 {
 	connect_output Terra/ShadowGenerator 0
 }
+
+compositor_node Terra/ShadowGeneratorU16
+{
+	in 0 terrain_shadows
+
+	texture tmpGaussianFilter target_width target_height target_format depth_pool 0 uav
+
+	target terrain_shadows
+	{
+		pass compute
+		{
+			job Terra/ShadowGeneratorU16
+			uav 0 terrain_shadows write
+		}
+
+		pass compute
+		{
+			job Terra/GaussianBlurH
+			input 0 terrain_shadows
+			uav 0 tmpGaussianFilter write
+		}
+
+		pass compute
+		{
+			job Terra/GaussianBlurV
+			input 0 tmpGaussianFilter
+			uav 0 terrain_shadows write
+		}
+	}
+}
+
+workspace Terra/ShadowGeneratorWorkspaceU16
+{
+	connect_output Terra/ShadowGeneratorU16 0
+}

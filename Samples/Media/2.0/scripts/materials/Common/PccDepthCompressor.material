@@ -10,6 +10,12 @@ fragment_program PccDepthCompressor_ps_GLSL glsl
 	}
 }
 
+fragment_program PccDepthCompressor_ps_VK glslvk
+{
+	source PccDepthCompressor_ps.glsl
+	enable_include_header true
+}
+
 // HLSL shaders
 fragment_program PccDepthCompressor_ps_HLSL hlsl
 {
@@ -31,6 +37,7 @@ fragment_program PccDepthCompressor_ps unified
 {
 	delegate PccDepthCompressor_ps_HLSL
 	delegate PccDepthCompressor_ps_GLSL
+	delegate PccDepthCompressor_ps_VK
 	delegate PccDepthCompressor_ps_Metal
 }
 

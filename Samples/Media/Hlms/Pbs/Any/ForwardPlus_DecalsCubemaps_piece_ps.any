@@ -26,10 +26,10 @@
 		//Get the light index
 		uint idx = bufferFetch1( f3dGrid, int(sampleOffset + i + @value(hlms_forwardplus_decals_slot_offset)u + 1u) );
 
-		float4 invWorldView0	= bufferFetch( f3dLightList, int(idx) ).xyzw;
-		float4 invWorldView1	= bufferFetch( f3dLightList, int(idx + 1u) ).xyzw;
-		float4 invWorldView2	= bufferFetch( f3dLightList, int(idx + 2u) ).xyzw;
-		float4 texIndices		= bufferFetch( f3dLightList, int(idx + 3u) ).xyzw;
+		float4 invWorldView0	= readOnlyFetch( f3dLightList, int(idx) ).xyzw;
+		float4 invWorldView1	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyzw;
+		float4 invWorldView2	= readOnlyFetch( f3dLightList, int(idx + 2u) ).xyzw;
+		float4 texIndices		= readOnlyFetch( f3dLightList, int(idx + 3u) ).xyzw;
 
 		float3 localPos;
 		localPos.x = dot( invWorldView0.xyzw, float4( inPs.pos.xyz, 1.0f ) );
@@ -158,14 +158,14 @@
 
 		CubemapProbe probe;
 
-		probe.row0_centerX	= bufferFetch( f3dLightList, int(idx) ).xyzw;
-		probe.row1_centerY	= bufferFetch( f3dLightList, int(idx + 1u) ).xyzw;
-		probe.row2_centerZ	= bufferFetch( f3dLightList, int(idx + 2u) ).xyzw;
-		probe.halfSize		= bufferFetch( f3dLightList, int(idx + 3u) ).xyzw;
-		probe.cubemapPosLS	= bufferFetch( f3dLightList, int(idx + 4u) ).xyzw;
-		probe.cubemapPosVS	= bufferFetch( f3dLightList, int(idx + 5u) ).xyzw;
-		float4 probeInnerRange = bufferFetch( f3dLightList, int(idx + 6u) ).xyzw;
-		float4 probeOuterRange = bufferFetch( f3dLightList, int(idx + 7u) ).xyzw;
+		probe.row0_centerX	= readOnlyFetch( f3dLightList, int(idx) ).xyzw;
+		probe.row1_centerY	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyzw;
+		probe.row2_centerZ	= readOnlyFetch( f3dLightList, int(idx + 2u) ).xyzw;
+		probe.halfSize		= readOnlyFetch( f3dLightList, int(idx + 3u) ).xyzw;
+		probe.cubemapPosLS	= readOnlyFetch( f3dLightList, int(idx + 4u) ).xyzw;
+		probe.cubemapPosVS	= readOnlyFetch( f3dLightList, int(idx + 5u) ).xyzw;
+		float4 probeInnerRange = readOnlyFetch( f3dLightList, int(idx + 6u) ).xyzw;
+		float4 probeOuterRange = readOnlyFetch( f3dLightList, int(idx + 7u) ).xyzw;
 
 		float3 posInProbSpace = toProbeLocalSpace( inPs.pos, probe );
 		float probeFade = getProbeFade( posInProbSpace, probe );

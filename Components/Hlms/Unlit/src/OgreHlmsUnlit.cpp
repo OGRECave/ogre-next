@@ -43,6 +43,7 @@ THE SOFTWARE.
 #include "OgreCamera.h"
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
+#include "OgreRootLayout.h"
 
 #include "OgreDescriptorSetTexture.h"
 #include "OgreTextureGpu.h"
@@ -155,6 +156,30 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void HlmsUnlit::setupRootLayout( RootLayout &rootLayout )
+    {
+        DescBindingRange *descBindingRanges = rootLayout.mDescBindingRanges[0];
+
+        descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
+
+        if( getProperty( UnlitProperty::TextureMatrix ) == 0 )
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u;
+        else
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 2u;
+
+        rootLayout.mBaked[1] = true;
+        DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
+        bakedRanges[DescBindingTypes::Sampler].start = (uint16)mSamplerUnitSlotStart;
+        bakedRanges[DescBindingTypes::Sampler].end =
+            (uint16)mSamplerUnitSlotStart + (uint16)getProperty( UnlitProperty::NumSamplers );
+
+        bakedRanges[DescBindingTypes::Texture].start = (uint16)mTexUnitSlotStart;
+        bakedRanges[DescBindingTypes::Texture].end =
+            (uint16)mTexUnitSlotStart + (uint16)getProperty( UnlitProperty::NumTextures );
+
+        mListener->setupRootLayout( rootLayout, mSetProperties );
+    }
+    //-----------------------------------------------------------------------------------
     const HlmsCache* HlmsUnlit::createShaderCacheEntry( uint32 renderableHash,
                                                         const HlmsCache &passCache,
                                                         uint32 finalHash,
@@ -165,7 +190,7 @@ namespace Ogre
         const HlmsCache *retVal = Hlms::createShaderCacheEntry( renderableHash, passCache, finalHash,
                                                                 queuedRenderable );
 
-        if( mShaderProfile == "hlsl" || mShaderProfile == "metal" )
+        if( mShaderProfile != "glsl" )
         {
             mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                                 mSetProperties, queuedRenderable );
@@ -179,9 +204,12 @@ namespace Ogre
                                                 queuedRenderable.renderable->getDatablock() );*/
 
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
-        vsParams->setNamedConstant( "worldMatBuf", 0 );
-        if( getProperty( UnlitProperty::TextureMatrix ) )
-            vsParams->setNamedConstant( "animationMatrixBuf", 1 );
+        if( mVaoManager->readOnlyIsTexBuffer() )
+        {
+            vsParams->setNamedConstant( "worldMatBuf", 0 );
+            if( getProperty( UnlitProperty::TextureMatrix ) )
+                vsParams->setNamedConstant( "animationMatrixBuf", 1 );
+        }
 
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                             mSetProperties, queuedRenderable );
@@ -645,6 +673,12 @@ namespace Ogre
             identityProjMat[1][3]   = -identityProjMat[1][3];
         }
 
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        identityProjMat =
+            identityProjMat * Quaternion( Degree( cameras.renderingCamera->getOrientationMode() * 90.f ),
+                                          Vector3::UNIT_Z );
+#endif
+
         if( !isInstancedStereo )
         {
             mPreparedPass.viewProjMatrix[0] = projectionMatrix * viewMatrix;
@@ -820,10 +854,10 @@ namespace Ogre
         //mTexBuffers must hold at least one buffer to prevent out of bound exceptions.
         if( mTexBuffers.empty() )
         {
-            size_t bufferSize = std::min<size_t>( mTextureBufferDefaultSize,
-                                                  mVaoManager->getTexBufferMaxSize() );
-            TexBufferPacked *newBuffer = mVaoManager->createTexBuffer( PFG_RGBA32_FLOAT, bufferSize,
-                                                                       BT_DYNAMIC_PERSISTENT, 0, false );
+            size_t bufferSize =
+                std::min<size_t>( mTextureBufferDefaultSize, mVaoManager->getReadOnlyBufferMaxSize() );
+            ReadOnlyBufferPacked *newBuffer = mVaoManager->createReadOnlyBuffer(
+                PFG_RGBA32_FLOAT, bufferSize, BT_DYNAMIC_PERSISTENT, 0, false );
             mTexBuffers.push_back( newBuffer );
         }
 
@@ -903,7 +937,7 @@ namespace Ogre
 
             rebindTexBuffer( commandBuffer );
 
-            mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock );
+            mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock, 0u );
         }
 
         //Don't bind the material buffer on caster passes (important to keep

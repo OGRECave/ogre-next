@@ -101,6 +101,8 @@ namespace Ogre
         uint8               mThreadGroupsBasedOnTexSlot;
         uint8               mThreadGroupsBasedDivisor[3];
 
+        uint8 mGlTexSlotStart;
+
         ConstBufferSlotVec          mConstBuffers;
         FastArray<const HlmsSamplerblock*>  mSamplerSlots;
         DescriptorSetTexSlotArray           mTexSlots;
@@ -119,6 +121,8 @@ namespace Ogre
         size_t          mPsoCacheHash;
 
         map<IdString, ShaderParams>::type mShaderParams;
+
+        void discoverGeneralTextures( void );
 
         template <typename T>
         void removeListenerFromTextures( T &container, size_t first, size_t lastPlusOne );
@@ -143,6 +147,8 @@ namespace Ogre
 
         IdString getName(void) const                { return mName; }
         String getNameStr(void) const;
+
+        void setupRootLayout( RootLayout &rootLayout );
 
         void _updateAutoProperties(void);
 
@@ -302,6 +308,22 @@ namespace Ogre
         TextureGpu *getUavTexture( uint8 slotIdx ) const;
         UavBufferPacked* getUavBuffer( uint8 slotIdx ) const;
 
+        /** By default HlmsComputeJob::setTexture and HlmsComputeJob::setTexBuffer are in range
+            [0; getNumTexUnits)
+
+            However this allows you to offset the range to [texSlotStart; texSlotStart + getNumTexUnits)
+
+            This is useful when ReadOnlyBuffers are bound via setTexBuffers, because in OpenGL
+            these will map to uav buffer slots, thus overlapping/conflicting with UAVs
+        @param texSlotStart
+            The offset at which the textures/texbuffers should start being bound
+        */
+        void setGlTexSlotStart( uint8 texSlotStart );
+
+        uint8 getGlTexSlotStart( void ) const;
+
+        uint8 _getRawGlTexSlotStart( void ) const;
+
         /** Sets a texture buffer at the given slot ID.
         @remarks
             Texture buffer slots are shared with setTexture's. Calling this
@@ -313,14 +335,22 @@ namespace Ogre
         @par
             Setting a RenderTarget that could be used for writing is dangerous
             in explicit APIs (DX12, Vulkan). Use the CompositorPassComputeDef
+        @par
+            ReadOnlyBufferPacked can be bound using this function. But please
+            note in certain APIs these type of buffers may end up being bound
+            to UAV slots already taken by _setUav* functions.
+
+            See HlmsComputeJob::setTexSlotStart to workaround that
         @param slotIdx
             See setNumTexUnits.
             The slot index to bind this texture buffer
             In OpenGL, a few cards support between to 16-18 texture units,
             while most cards support up to 32
+
+            Must be in range [0; getNumTexUnits) regardless of what getTexSlotStart is
         @param newSlot
         */
-        void setTexBuffer( uint8 slotIdx, const DescriptorSetTexture2::BufferSlot &newSlot);
+        void setTexBuffer( uint8 slotIdx, const DescriptorSetTexture2::BufferSlot &newSlot );
 
         /** Sets a texture buffer at the given slot ID.
         @remarks
@@ -339,6 +369,8 @@ namespace Ogre
             The slot index to bind this texture
             In OpenGL, some cards support up to 16-18 texture units, while most
             cards support up to 32
+
+            Must be in range [0; getNumTexUnits) regardless of what getTexSlotStart is
         @param samplerblock
             Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
             When null, we leave the previously set samplerblock (if a texture is being set, and if no
@@ -350,6 +382,8 @@ namespace Ogre
         /** Sets a samplerblock based on reference parameters
         @param slotIdx
             See setNumTexUnits.
+
+            Must be in range [0; getNumTexUnits) regardless of what getTexSlotStart is
         @param refParams
             We'll create (or retrieve an existing) samplerblock based on the input parameters.
         */
@@ -358,6 +392,8 @@ namespace Ogre
         /** Sets a samplerblock directly. For internal use / advanced users.
         @param slotIdx
             See setNumTexUnits.
+
+            Must be in range [0; getNumTexUnits) regardless of what getTexSlotStart is
         @param refParams
             Direct samplerblock. Reference count is assumed to already have been increased.
             We won't increase it ourselves.
@@ -408,6 +444,12 @@ namespace Ogre
         void clearTexBuffers(void);
         /// Sets all UAV buffers to nullptr
         void clearUavBuffers(void);
+
+        /** Checks every regular texture and every UAV (texture and buffers)
+            bound and resolves transitions
+        @param resourceTransitions
+        */
+        void analyzeBarriers( ResourceTransitionArray &resourceTransitions, bool clearBarriers = true );
 
         HlmsComputeJob *clone( const String &cloneName );
         void cloneTo( HlmsComputeJob *dstJob );

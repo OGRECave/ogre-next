@@ -45,6 +45,7 @@ namespace TextureFilter
     }
     //-----------------------------------------------------------------------------------
     uint8 FilterBase::selectMipmapGen( uint32 filters, const Image2 &image,
+                                       PixelFormatGpu finalPixelFormat,
                                        const TextureGpuManager *textureManager )
     {
         DefaultMipmapGen::DefaultMipmapGen retVal = DefaultMipmapGen::NoMipmaps;
@@ -64,7 +65,7 @@ namespace TextureFilter
                                                       defaultMipmapGeneration :
                                                       defaultMipmapGenerationCubemaps;
 
-                if( PixelFormatGpuUtils::supportsHwMipmaps( image.getPixelFormat() ) )
+                if( textureManager->checkSupport( finalPixelFormat, TextureFlags::AllowAutomipmaps ) )
                     retVal = mipmapGen;
                 else
                     retVal = DefaultMipmapGen::SwMode;
@@ -84,15 +85,24 @@ namespace TextureFilter
         FilterBaseArray filtersVec;
         filtersVec.swap( outFilters );
 
+        PixelFormatGpu finalPixelFormat = image.getPixelFormat();
+
         if( filters & TextureFilter::TypePrepareForNormalMapping )
+        {
+            finalPixelFormat = PrepareForNormalMapping::getDestinationFormat( finalPixelFormat );
             filtersVec.push_back( OGRE_NEW TextureFilter::PrepareForNormalMapping() );
+        }
         if( filters & TextureFilter::TypeLeaveChannelR )
+        {
+            finalPixelFormat = LeaveChannelR::getDestinationFormat( finalPixelFormat );
             filtersVec.push_back( OGRE_NEW TextureFilter::LeaveChannelR() );
+        }
 
         //Add mipmap generation as one of the last steps
         if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
         {
-            const uint8 mipmapGen = selectMipmapGen( filters, image, texture->getTextureManager() );
+            const uint8 mipmapGen =
+                selectMipmapGen( filters, image, finalPixelFormat, texture->getTextureManager() );
             //If the user wants Mipmaps when loading OnStorage -> OnSystemRam
             //then he should either explicitly ask only for SW filters, or
             //load the texture to Resident first, then download to OnSystemRam.
@@ -132,16 +142,17 @@ namespace TextureFilter
         //Add mipmap generation as one of the last steps
         if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
         {
-            const uint8 mipmapGen = selectMipmapGen( filters, image, textureGpuManager );
+            const uint8 mipmapGen =
+                selectMipmapGen( filters, image, inOutPixelFormat, textureGpuManager );
 
             const bool canDoMipmaps =
-                    (mipmapGen == DefaultMipmapGen::HwMode &&
-                     PixelFormatGpuUtils::supportsHwMipmaps( image.getPixelFormat() )) ||
-                    (mipmapGen == DefaultMipmapGen::SwMode &&
-                     Image2::supportsSwMipmaps( image.getPixelFormat(), image.getDepthOrSlices(),
-                                                image.getTextureType(),
-                                                static_cast<Image2::Filter>(
-                                                    GenerateSwMipmaps::getFilter( image ) ) ) );
+                ( mipmapGen == DefaultMipmapGen::HwMode &&
+                  textureGpuManager->checkSupport( inOutPixelFormat,
+                                                   TextureFlags::AllowAutomipmaps ) ) ||
+                ( mipmapGen == DefaultMipmapGen::SwMode &&
+                  Image2::supportsSwMipmaps(
+                      inOutPixelFormat, image.getDepthOrSlices(), image.getTextureType(),
+                      static_cast<Image2::Filter>( GenerateSwMipmaps::getFilter( image ) ) ) );
 
             if( canDoMipmaps && inOutNumMipmaps <= 1u)
             {
@@ -199,7 +210,8 @@ namespace TextureFilter
         TextureGpu *tempTexture = textureManager->createTexture( "___tempMipmapTexture",
                                                                  GpuPageOutStrategy::Discard,
                                                                  TextureFlags::RenderToTexture |
-                                                                 TextureFlags::AllowAutomipmaps,
+                                                                 TextureFlags::AllowAutomipmaps |
+                                                                 TextureFlags::DiscardableContent,
                                                                  texture->getTextureType() );
         tempTexture->copyParametersFrom( texture );
         tempTexture->unsafeScheduleTransitionTo( GpuResidency::Resident );

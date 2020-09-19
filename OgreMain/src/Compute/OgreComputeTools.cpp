@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 
+#include "OgreRenderSystem.h"
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
 
@@ -41,6 +42,16 @@ namespace Ogre
     ComputeTools::ComputeTools( HlmsCompute *hlmsCompute ) :
         mHlmsCompute( hlmsCompute )
     {
+    }
+    //-------------------------------------------------------------------------
+    void ComputeTools::prepareForUavClear( ResourceTransitionArray &resourceTransitions,
+                                           TextureGpu *texture )
+    {
+        RenderSystem*renderSystem = mHlmsCompute->getRenderSystem();
+        BarrierSolver &barrierSolver=renderSystem->getBarrierSolver();
+
+        barrierSolver.resolveTransition( resourceTransitions, texture, ResourceLayout::Uav,
+                                         ResourceAccess::Write, 1u << GPT_COMPUTE_PROGRAM );
     }
     //-------------------------------------------------------------------------
     void ComputeTools::clearUav(TextureGpu *texture, uint32 clearValue[4] )

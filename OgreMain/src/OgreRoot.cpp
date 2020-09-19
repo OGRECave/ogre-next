@@ -134,9 +134,10 @@ namespace Ogre {
 #endif
 
     //-----------------------------------------------------------------------
-    Root::Root(const String& pluginFileName, const String& configFileName,
-        const String& logFileName)
-      : mQueuedEnd(false)
+    Root::Root( const String &pluginFileName, const String &configFileName, const String &logFileName,
+                const String &appName ) :
+        mAppName( appName )
+      , mQueuedEnd(false)
       , mLogManager(0)
       , mRenderSystemCapabilitiesManager(0)
       , mFrameStats(0)

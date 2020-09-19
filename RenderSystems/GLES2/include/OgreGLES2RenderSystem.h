@@ -282,7 +282,7 @@ namespace Ogre {
             /** See
              RenderSystem
              */
-            void _setTexture(size_t unit, bool enabled, Texture *tex);
+            void _setTexture(size_t unit, bool enabled, Texture *tex, bool bDepthReadOnly);
             /** See
              RenderSystem
              */
@@ -306,8 +306,6 @@ namespace Ogre {
                                        size_t offset = 0, size_t sizeBytes = 0 );
 
             virtual void clearUAVs(void);
-
-            virtual void flushUAVs(void);
  
             virtual void _bindTextureUavCS( uint32 slot, Texture *texture,
                                             ResourceAccess::ResourceAccess access,

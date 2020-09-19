@@ -14,29 +14,29 @@ layout(std140) uniform;
 @insertpiece( DefaultHeaderVS )
 @insertpiece( custom_vs_uniformDeclaration )
 
-in vec4 vertex;
-@property( hlms_colour )in vec4 colour;@end
+vulkan_layout( OGRE_POSITION ) in vec4 vertex;
+@property( hlms_colour )vulkan_layout( OGRE_DIFFUSE ) in vec4 colour;@end
 
 @foreach( hlms_uv_count, n )
-	in vec@value( hlms_uv_count@n ) uv@n;
+	vulkan_layout( OGRE_TEXCOORD@n ) in vec@value( hlms_uv_count@n ) uv@n;
 @end
 
 @property( GL_ARB_base_instance )
-	in uint drawId;
+	vulkan_layout( OGRE_DRAWID ) in uint drawId;
 @end
 
 @insertpiece( custom_vs_attributes )
 
 @property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || exponential_shadow_maps )
-	out block
+	vulkan_layout( location = 0 ) out block
 	{
 		@insertpiece( VStoPS_block )
 	} outVs;
 @end
 
 // START UNIFORM GL DECLARATION
-/*layout(binding = 0) */uniform samplerBuffer worldMatBuf;
-@property( texture_matrix )/*layout(binding = 1) */uniform samplerBuffer animationMatrixBuf;@end
+ReadOnlyBufferF( 0, float4, worldMatBuf );
+@property( texture_matrix )ReadOnlyBufferF( 1, float4, animationMatrixBuf );@end
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
 // END UNIFORM GL DECLARATION
 

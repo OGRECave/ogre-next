@@ -56,16 +56,15 @@ namespace Ogre
     class _OgreExport CompositorPassDepthCopy : public CompositorPass
     {
         CompositorPassDepthCopyDef const *mDefinition;
+
+        void analyzeBarriers( void );
+
     public:
         CompositorPassDepthCopy( const CompositorPassDepthCopyDef *definition,
                                  const RenderTargetViewDef *rtv,
                                  CompositorNode *parentNode );
 
         virtual void execute( const Camera *lodCamera );
-
-        virtual void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                           ResourceAccessMap &uavsAccess,
-                                                           ResourceLayoutMap &resourcesLayout );
     };
 
     /** @} */

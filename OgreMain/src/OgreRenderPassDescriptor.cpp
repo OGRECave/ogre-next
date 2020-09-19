@@ -95,6 +95,7 @@ namespace Ogre
     RenderPassDescriptor::RenderPassDescriptor() :
         mNumColourEntries( 0 ),
         mRequiresTextureFlipping( false ),
+        mReadyWindowForPresent( false ),
         mInformationOnly( false )
     {
     }
@@ -164,6 +165,8 @@ namespace Ogre
 
         mRequiresTextureFlipping = false;
 
+        bool hasRenderWindow = false;
+
         while( mNumColourEntries < OGRE_MAX_MULTIPLE_RENDER_TARGETS &&
                mColour[mNumColourEntries].texture )
         {
@@ -177,12 +180,8 @@ namespace Ogre
                     colourEntryRW.resolveTexture = 0;
                     colourEntryRW.storeAction = StoreAction::Store;
                 }
-                else if( colourEntry.texture->isMultisample() && !colourEntry.resolveTexture
-                    && !colourEntry.texture->hasMsaaExplicitResolves() )
-                {
-                    colourEntryRW.resolveTexture = colourEntryRW.texture;
-                    colourEntryRW.storeAction = StoreAction::MultisampleResolve;
-                }
+
+                hasRenderWindow = true;
             }
 
             if( colourEntry.storeAction == StoreAction::MultisampleResolve &&
@@ -213,6 +212,9 @@ namespace Ogre
                                  colourEntry.texture->getNameStr(),
                                  "RenderPassDescriptor::colourEntriesModified" );
                 }
+
+                if( colourEntry.resolveTexture->isRenderWindowSpecific() )
+                    hasRenderWindow = true;
             }
 
             if( colourEntry.allLayers && colourEntry.slice != 0 )
@@ -226,6 +228,9 @@ namespace Ogre
 
             ++mNumColourEntries;
         }
+
+        if( !hasRenderWindow )
+            mReadyWindowForPresent = false;
 
         checkRequiresTextureFlipping();
     }
@@ -370,6 +375,31 @@ namespace Ogre
                                     PixelFormatGpuUtils::isStencil( mDepth.texture->getPixelFormat() ));
     }
     //-----------------------------------------------------------------------------------
+    void RenderPassDescriptor::findAnyTexture( TextureGpu **outAnyTargetTexture, uint8 &outAnyMipLevel )
+    {
+        TextureGpu *anyTargetTexture = 0;
+        uint8 anyMipLevel = 0u;
+
+        for( int i = 0; i < mNumColourEntries && !anyTargetTexture; ++i )
+        {
+            anyTargetTexture = mColour[i].texture;
+            anyMipLevel = mColour[i].mipLevel;
+        }
+        if( !anyTargetTexture )
+        {
+            anyTargetTexture = mDepth.texture;
+            anyMipLevel = mDepth.mipLevel;
+        }
+        if( !anyTargetTexture )
+        {
+            anyTargetTexture = mStencil.texture;
+            anyMipLevel = mStencil.mipLevel;
+        }
+
+        *outAnyTargetTexture = anyTargetTexture;
+        outAnyMipLevel = anyMipLevel;
+    }
+    //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     FrameBufferDescKey::FrameBufferDescKey()
@@ -380,6 +410,7 @@ namespace Ogre
     FrameBufferDescKey::FrameBufferDescKey( const RenderPassDescriptor &desc )
     {
         memset( this, 0, sizeof( *this ) );
+        readyWindowForPresent = desc.mReadyWindowForPresent;
         numColourEntries = desc.getNumColourEntries();
 
         //Load & Store actions don't matter for generating different FBOs.
@@ -402,6 +433,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool FrameBufferDescKey::operator < ( const FrameBufferDescKey &other ) const
     {
+        if( this->readyWindowForPresent != other.readyWindowForPresent )
+            return this->readyWindowForPresent < other.readyWindowForPresent;
+
         if( this->numColourEntries != other.numColourEntries )
             return this->numColourEntries < other.numColourEntries;
 

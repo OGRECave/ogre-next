@@ -47,7 +47,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TexBufferPacked* NULLUavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
     {
-        assert( dynamic_cast<NULLBufferInterface*>( mBufferInterface ) );
+        OGRE_ASSERT_HIGH( dynamic_cast<NULLBufferInterface*>( mBufferInterface ) );
 
         NULLBufferInterface *bufferInterface = static_cast<NULLBufferInterface*>( mBufferInterface );
 
@@ -58,6 +58,21 @@ namespace Ogre
                                                         mBufferType, (void*)0, false,
                                                         (VaoManager*)0, bufferInterface, pixelFormat );
         //We were overriden by the BufferPacked we just created. Restore this back!
+        bufferInterface->_notifyBuffer( this );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    ReadOnlyBufferPacked *NULLUavBufferPacked::getAsReadOnlyBufferImpl( void )
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<NULLBufferInterface *>( mBufferInterface ) );
+
+        NULLBufferInterface *bufferInterface = static_cast<NULLBufferInterface *>( mBufferInterface );
+
+        ReadOnlyBufferPacked *retVal = OGRE_NEW NULLReadOnlyBufferPacked(
+            mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
+            (void *)0, false, (VaoManager *)0, bufferInterface, PFG_NULL );
+        // We were overriden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
         return retVal;

@@ -44,10 +44,12 @@ THE SOFTWARE.
 #include "OgreHardwareOcclusionQuery.h"
 #include "OgreHlmsPso.h"
 #include "OgreTextureGpuManager.h"
+#include "OgreDescriptorSetUav.h"
 #include "OgreWindow.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
+#include "Vao/OgreUavBufferPacked.h"
 #include "OgreProfiler.h"
 
 #include "OgreLwString.h"
@@ -94,6 +96,7 @@ namespace Ogre {
         , mTexProjRelative(false)
         , mTexProjRelativeOrigin(Vector3::ZERO)
         , mReverseDepth(true)
+        , mInvertedClipSpaceY(false)
     {
         mEventNames.push_back("RenderSystemCapabilitiesCreated");
     }
@@ -264,13 +267,15 @@ namespace Ogre {
                 _setVertexTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture( texUnit, 0 );
+                _setTexture( texUnit, 0, false );
             }
             else
             {
                 // vice versa
                 _setVertexTexture(texUnit, 0);
-                _setTexture( texUnit, tex );
+                _setTexture( texUnit, tex,
+                             mCurrentRenderPassDescriptor->mDepth.texture &&
+                                 mCurrentRenderPassDescriptor->mDepth.texture == tex );
             }
         }
 
@@ -283,13 +288,15 @@ namespace Ogre {
                 _setGeometryTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture(texUnit, 0);
+                _setTexture(texUnit, 0, false);
             }
             else
             {
                 // vice versa
                 _setGeometryTexture(texUnit, 0);
-                _setTexture(texUnit, tex);
+                _setTexture( texUnit, tex,
+                             mCurrentRenderPassDescriptor->mDepth.texture &&
+                                 mCurrentRenderPassDescriptor->mDepth.texture == tex );
             }
         }
 
@@ -302,13 +309,15 @@ namespace Ogre {
                 _setTessellationDomainTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture(texUnit, 0);
+                _setTexture(texUnit, 0, false);
             }
             else
             {
                 // vice versa
                 _setTessellationDomainTexture(texUnit, 0);
-                _setTexture(texUnit, tex);
+                _setTexture( texUnit, tex,
+                             mCurrentRenderPassDescriptor->mDepth.texture &&
+                                 mCurrentRenderPassDescriptor->mDepth.texture == tex );
             }
         }
 
@@ -321,13 +330,15 @@ namespace Ogre {
                 _setTessellationHullTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture(texUnit, 0);
+                _setTexture(texUnit, 0, false);
             }
             else
             {
                 // vice versa
                 _setTessellationHullTexture(texUnit, 0);
-                _setTexture(texUnit, tex);
+                _setTexture( texUnit, tex,
+                             mCurrentRenderPassDescriptor->mDepth.texture &&
+                                 mCurrentRenderPassDescriptor->mDepth.texture == tex );
             }
         }
 
@@ -335,7 +346,9 @@ namespace Ogre {
         {
             // Shared vertex / fragment textures or no vertex texture support
             // Bind texture (may be blank)
-            _setTexture(texUnit, tex);
+            _setTexture( texUnit, tex,
+                         mCurrentRenderPassDescriptor->mDepth.texture &&
+                             mCurrentRenderPassDescriptor->mDepth.texture == tex );
         }
 
         _setHlmsSamplerblock( texUnit, tl.getSamplerblock() );
@@ -589,7 +602,7 @@ namespace Ogre {
         uint32 textureFlags = TextureFlags::RenderToTexture;
 
         if( !preferDepthTexture )
-            textureFlags |= TextureFlags::NotTexture;
+            textureFlags |= TextureFlags::NotTexture | TextureFlags::DiscardableContent;
 
         char tmpBuffer[64];
         LwString depthBufferName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
@@ -598,7 +611,7 @@ namespace Ogre {
         TextureGpu *retVal = mTextureGpuManager->createTexture( depthBufferName.c_str(),
                                                                 GpuPageOutStrategy::Discard,
                                                                 textureFlags, TextureTypes::Type2D );
-        retVal->setResolution( colourTexture->getWidth(), colourTexture->getHeight() );
+        retVal->setResolution( colourTexture->getInternalWidth(), colourTexture->getInternalHeight() );
         retVal->setPixelFormat( depthBufferFormat );
         retVal->_setDepthBufferDefaults( poolId, preferDepthTexture, depthBufferFormat );
         retVal->_setSourceType( TextureSourceType::SharedDepthBuffer );
@@ -686,6 +699,37 @@ namespace Ogre {
             mUavRenderingDescSet = descSetUav;
             mUavRenderingDirty = true;
         }
+    }
+    //-----------------------------------------------------------------------
+    BoundUav RenderSystem::getBoundUav( size_t slot ) const
+    {
+        BoundUav retVal;
+        memset( &retVal, 0, sizeof( retVal ) );
+        if( mUavRenderingDescSet )
+        {
+            if( slot < mUavRenderingDescSet->mUavs.size() )
+            {
+                if( mUavRenderingDescSet->mUavs[slot].isTexture() )
+                {
+                    retVal.rttOrBuffer = mUavRenderingDescSet->mUavs[slot].getTexture().texture;
+                    retVal.boundAccess = mUavRenderingDescSet->mUavs[slot].getTexture().access;
+                }
+                else
+                {
+                    retVal.rttOrBuffer = mUavRenderingDescSet->mUavs[slot].getBuffer().buffer;
+                    retVal.boundAccess = mUavRenderingDescSet->mUavs[slot].getBuffer().access;
+                }
+            }
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------
+    void RenderSystem::flushTextureCopyOperations( void )
+    {
+        mBarrierSolver.resetCopyLayoutsOnly( mFinalResourceTransition );
+        executeResourceTransition( mFinalResourceTransition );
+        mFinalResourceTransition.clear();
     }
     //-----------------------------------------------------------------------
     void RenderSystem::_beginFrameOnce(void)
@@ -1248,6 +1292,11 @@ namespace Ogre {
     void RenderSystem::_update(void)
     {
         OgreProfile( "RenderSystem::_update" );
+
+        mBarrierSolver.reset( mFinalResourceTransition );
+        executeResourceTransition( mFinalResourceTransition );
+        mFinalResourceTransition.clear();
+
         mTextureGpuManager->_update( false );
         mVaoManager->_update();
     }
@@ -1317,6 +1366,14 @@ namespace Ogre {
     void RenderSystem::setDebugShaders( bool bDebugShaders )
     {
         mDebugShaders = bDebugShaders;
+    }
+    //---------------------------------------------------------------------
+    bool RenderSystem::isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
+                                     const TextureGpu *texture, bool bIsDebugCheck ) const
+    {
+        if( ( a != ResourceLayout::Uav && b != ResourceLayout::Uav ) || bIsDebugCheck )
+            return true;
+        return a == b;
     }
     //---------------------------------------------------------------------
     void RenderSystem::_clearStateAndFlushCommandBuffer(void)

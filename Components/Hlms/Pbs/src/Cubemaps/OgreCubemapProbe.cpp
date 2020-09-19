@@ -433,14 +433,9 @@ namespace Ogre
         channels.push_back( rtt );
         channels.push_back( ibl );
         channels.insert( channels.end(), additionalChannels.begin(), additionalChannels.end() );
-        mWorkspace =
-            compositorManager->addWorkspace( sceneManager, channels, mCamera, mWorkspaceDefName, false, -1,
-                                             (UavBufferPackedVec*)0,
-                                             (ResourceLayoutMap*)0,
-                                             (ResourceAccessMap*)0,
-                                             Vector4::ZERO,
-                                             0x00,
-                                             executionMask );
+        mWorkspace = compositorManager->addWorkspace(
+            sceneManager, channels, mCamera, mWorkspaceDefName, false, -1, (UavBufferPackedVec *)0,
+            (ResourceStatusMap *)0, Vector4::ZERO, 0x00, executionMask );
         mWorkspace->addListener( mCreator );
 
         if( !mStatic && !mCreator->getAutomaticMode() )

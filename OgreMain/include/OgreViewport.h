@@ -184,22 +184,6 @@ namespace Ogre {
         */
         void setScissors( Real left, Real top, Real width, Real height );
 
-        /** Set the orientation mode of the viewport.
-        */
-        void setOrientationMode(OrientationMode orientationMode, bool setDefault = true);
-
-        /** Get the orientation mode of the viewport.
-        */
-        OrientationMode getOrientationMode() const;
-
-        /** Set the initial orientation mode of viewports.
-        */
-        static void setDefaultOrientationMode(OrientationMode orientationMode);
-
-        /** Get the initial orientation mode of viewports.
-        */
-        static OrientationMode getDefaultOrientationMode();
-
         /** Set the material scheme which the viewport should use.
         @remarks
             This allows you to tell the system to use a particular
@@ -304,9 +288,6 @@ namespace Ogre {
         uint32 mLightVisibilityMask;
         /// Material scheme
         String mMaterialSchemeName;
-        /// Viewport orientation mode
-        OrientationMode mOrientationMode;
-        static OrientationMode mDefaultOrientationMode;
         ColourBufferType mColourBuffer;
     };
     /** @} */

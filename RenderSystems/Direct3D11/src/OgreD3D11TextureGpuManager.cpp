@@ -198,6 +198,7 @@ namespace Ogre
                                                TextureFlags::NotTexture|
                                                TextureFlags::RenderToTexture|
                                                TextureFlags::RenderWindowSpecific|
+                                               TextureFlags::DiscardableContent|
                                                (fromFlipModeSwapchain ? 0 : TextureFlags::MsaaExplicitResolve)|
                                                (fromFlipModeSwapchain ? TextureFlags::Reinterpretable : 0),
                                                TextureTypes::Type2D, this, window );
@@ -209,7 +210,8 @@ namespace Ogre
                                                      "RenderWindow DepthBuffer",
                                                      TextureFlags::NotTexture|
                                                      TextureFlags::RenderToTexture|
-                                                     TextureFlags::RenderWindowSpecific,
+                                                     TextureFlags::RenderWindowSpecific|
+                                                     TextureFlags::DiscardableContent,
                                                      TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------

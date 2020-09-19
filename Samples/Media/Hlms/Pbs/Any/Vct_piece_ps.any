@@ -2,12 +2,13 @@
 @property( vct_num_probes )
 
 @piece( DeclVctTextures )
-	@property( syntax == glsl )
-		uniform sampler3D vctProbe;
+	@property( syntax == glsl || syntax == glslvk )
+		vulkan_layout( ogre_t@value(vctProbe) ) uniform texture3D vctProbe;
+		vulkan( layout( ogre_s@value(vctProbe) ) uniform sampler vctProbeSampler );
 		@property( vct_anisotropic )
-			uniform sampler3D vctProbeX;
-			uniform sampler3D vctProbeY;
-			uniform sampler3D vctProbeZ;
+			vulkan_layout( ogre_t@value(vctProbeX) ) uniform texture3D vctProbeX;
+			vulkan_layout( ogre_t@value(vctProbeY) ) uniform texture3D vctProbeY;
+			vulkan_layout( ogre_t@value(vctProbeZ) ) uniform texture3D vctProbeZ;
 		@end
 	@end
 	@property( syntax == hlsl )

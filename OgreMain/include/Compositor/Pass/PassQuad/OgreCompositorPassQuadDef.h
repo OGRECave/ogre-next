@@ -97,6 +97,11 @@ namespace Ogre
         */
         bool    mCameraCubemapReorient;
 
+        /// When true, Ogre will check all bound textures in the material
+        /// to see if they were properly transitioned to ResourceLayout::Texture,
+        /// not just the textures referenced by the compositor
+        bool    mAnalyzeAllTextureLayouts;
+
         bool    mMaterialIsHlms;    /// If true, mMaterialName is an Hlms material
         String  mMaterialName;
 
@@ -112,6 +117,7 @@ namespace Ogre
             mUseQuad( false ),
             mIsResolve( false ),
             mCameraCubemapReorient( false ),
+            mAnalyzeAllTextureLayouts( false ),
             mMaterialIsHlms( false ),
             mFrustumCorners( NO_CORNERS )
         {

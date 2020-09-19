@@ -35,6 +35,8 @@
 
 #include "OgreLogManager.h"
 
+#include "System/Android/AndroidSystems.h"
+
 #include <fstream>
 
 #if OGRE_USE_SDL2
@@ -142,9 +144,17 @@ namespace Demo
     #endif
     #endif
 
-        mRoot = OGRE_NEW Ogre::Root( pluginsPath,
-                                     mWriteAccessFolder + "ogre.cfg",
-                                     mWriteAccessFolder + "Ogre.log" );
+    #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
+        const Ogre::String cfgPath = mWriteAccessFolder + "ogre.cfg";
+    #else
+        const Ogre::String cfgPath = "";
+    #endif
+
+        mRoot = OGRE_NEW Ogre::Root( pluginsPath, cfgPath,
+                                     mWriteAccessFolder + "Ogre.log",
+                                     windowTitle );
+
+        AndroidSystems::registerArchiveFactories();
 
         mStaticPluginLoader.install( mRoot );
 
@@ -177,6 +187,14 @@ namespace Demo
             mRoot->setRenderSystem( renderSystem );
         }
     #endif
+    #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+        if( !mRoot->getRenderSystem() )
+        {
+            Ogre::RenderSystem *renderSystem =
+                mRoot->getRenderSystemByName( "Vulkan Rendering Subsystem" );
+            mRoot->setRenderSystem( renderSystem );
+        }
+    #endif
 
         mRoot->initialise( false, windowTitle );
 
@@ -194,7 +212,7 @@ namespace Demo
     #endif
 
         Ogre::ConfigOptionMap::iterator opt = cfgOpts.find( "Video Mode" );
-        if( opt != cfgOpts.end() )
+        if( opt != cfgOpts.end() && !opt->second.currentValue.empty() )
         {
             //Ignore leading space
             const Ogre::String::size_type start = opt->second.currentValue.find_first_of("012356789");
@@ -264,6 +282,8 @@ namespace Demo
         #if defined(SDL_VIDEO_DRIVER_X11)
         case SDL_SYSWM_X11:
             winHandle = Ogre::StringConverter::toString( (uintptr_t)wmInfo.info.x11.window );
+            params.insert( std::make_pair(
+                "SDL2x11", Ogre::StringConverter::toString( (uintptr_t)&wmInfo.info.x11 ) ) );
             break;
         #endif
         default:
@@ -280,8 +300,16 @@ namespace Demo
         #endif
     #endif
 
+    #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+            params.insert( std::make_pair(
+                "ANativeWindow",
+                Ogre::StringConverter::toString( (uintptr_t)AndroidSystems::getNativeWindow() ) ) );
+    #endif
+
         params.insert( std::make_pair("title", windowTitle) );
         params.insert( std::make_pair("gamma", cfgOpts["sRGB Gamma Conversion"].currentValue) );
+        if( cfgOpts.find( "VSync Method" ) != cfgOpts.end() )
+            params.insert( std::make_pair( "vsync_method", cfgOpts["VSync Method"].currentValue ) );
         params.insert( std::make_pair("FSAA", cfgOpts["FSAA"].currentValue) );
         params.insert( std::make_pair("vsync", cfgOpts["VSync"].currentValue) );
         params.insert( std::make_pair("reverse_depth", "Yes" ) );
@@ -651,7 +679,7 @@ namespace Demo
     {
         // Load resource paths from config file
         Ogre::ConfigFile cf;
-        cf.load(mResourcePath + "resources2.cfg");
+        cf.load( AndroidSystems::openFile( mResourcePath + "resources2.cfg" ) );
 
         // Go through all sections & settings in the file
         Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
@@ -678,7 +706,7 @@ namespace Demo
     void GraphicsSystem::registerHlms(void)
     {
         Ogre::ConfigFile cf;
-        cf.load( mResourcePath + "resources2.cfg" );
+        cf.load( AndroidSystems::openFile( mResourcePath + "resources2.cfg" ) );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         Ogre::String rootHlmsFolder = Ogre::macBundlePath() + '/' +
@@ -688,7 +716,7 @@ namespace Demo
 #endif
 
         if( rootHlmsFolder.empty() )
-            rootHlmsFolder = "./";
+            rootHlmsFolder = AndroidSystems::isAndroid() ? "/" : "./";
         else if( *(rootHlmsFolder.end() - 1) != '/' )
             rootHlmsFolder += "/";
 
@@ -704,20 +732,22 @@ namespace Demo
         Ogre::StringVector::const_iterator libraryFolderPathEn;
 
         Ogre::ArchiveManager &archiveManager = Ogre::ArchiveManager::getSingleton();
+
+        const Ogre::String &archiveType = getMediaReadArchiveType();
         
         {
             //Create & Register HlmsUnlit
             //Get the path to all the subdirectories used by HlmsUnlit
             Ogre::HlmsUnlit::getDefaultPaths( mainFolderPath, libraryFoldersPaths );
             Ogre::Archive *archiveUnlit = archiveManager.load( rootHlmsFolder + mainFolderPath,
-                                                               "FileSystem", true );
+                                                               archiveType, true );
             Ogre::ArchiveVec archiveUnlitLibraryFolders;
             libraryFolderPathIt = libraryFoldersPaths.begin();
             libraryFolderPathEn = libraryFoldersPaths.end();
             while( libraryFolderPathIt != libraryFolderPathEn )
             {
                 Ogre::Archive *archiveLibrary =
-                        archiveManager.load( rootHlmsFolder + *libraryFolderPathIt, "FileSystem", true );
+                        archiveManager.load( rootHlmsFolder + *libraryFolderPathIt, archiveType, true );
                 archiveUnlitLibraryFolders.push_back( archiveLibrary );
                 ++libraryFolderPathIt;
             }
@@ -732,7 +762,7 @@ namespace Demo
             //Do the same for HlmsPbs:
             Ogre::HlmsPbs::getDefaultPaths( mainFolderPath, libraryFoldersPaths );
             Ogre::Archive *archivePbs = archiveManager.load( rootHlmsFolder + mainFolderPath,
-                                                             "FileSystem", true );
+                                                             archiveType, true );
 
             //Get the library archive(s)
             Ogre::ArchiveVec archivePbsLibraryFolders;
@@ -741,7 +771,7 @@ namespace Demo
             while( libraryFolderPathIt != libraryFolderPathEn )
             {
                 Ogre::Archive *archiveLibrary =
-                        archiveManager.load( rootHlmsFolder + *libraryFolderPathIt, "FileSystem", true );
+                        archiveManager.load( rootHlmsFolder + *libraryFolderPathIt, archiveType, true );
                 archivePbsLibraryFolders.push_back( archiveLibrary );
                 ++libraryFolderPathIt;
             }
@@ -857,6 +887,15 @@ namespace Demo
     void GraphicsSystem::setAlwaysAskForConfig( bool alwaysAskForConfig )
     {
         mAlwaysAskForConfig = alwaysAskForConfig;
+    }
+    //-----------------------------------------------------------------------------------
+    const char *GraphicsSystem::getMediaReadArchiveType( void ) const
+    {
+#if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
+        return "FileSystem";
+#else
+        return "APKFileSystem";
+#endif
     }
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::stopCompositor(void)

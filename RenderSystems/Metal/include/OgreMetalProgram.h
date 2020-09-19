@@ -129,8 +129,6 @@ namespace Ogre
         /// dstData must be able to hold at least getBufferRequiredSize
         void updateBuffers( const GpuProgramParametersSharedPtr &params,
                             uint8 * RESTRICT_ALIAS dstData );
-        NSUInteger getFunctionParamCount(void);
-        size_t getSharedParamCount(void);
 
     protected:
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
@@ -169,7 +167,6 @@ namespace Ogre
         /// Preprocessor options
         String mPreprocessorDefines;
         String mEntryPoint;
-        String mTargetBufferName;
 
         vector<GpuConstantDefinition>::type mConstantDefsSorted;
         uint32 mConstantsBytesToWrite;

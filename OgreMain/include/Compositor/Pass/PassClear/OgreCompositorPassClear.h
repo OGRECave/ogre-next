@@ -61,15 +61,13 @@ namespace Ogre
         virtual bool allowResolveStoreActionsWithoutResolveTexture(void) const;
         virtual void postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc );
 
+        void analyzeBarriers( void );
+
     public:
         CompositorPassClear( const CompositorPassClearDef *definition, SceneManager *sceneManager,
                              const RenderTargetViewDef *rtv, CompositorNode *parentNode );
 
         virtual void execute( const Camera *lodCamera );
-
-        virtual void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                           ResourceAccessMap &uavsAccess,
-                                                           ResourceLayoutMap &resourcesLayout );
 
     private:
         CompositorPassClearDef const *mDefinition;

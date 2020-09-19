@@ -33,7 +33,9 @@ THE SOFTWARE.
 
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
+#include "OgreRootLayout.h"
 
+#include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
 
 #include "Compositor/OgreCompositorShadowNode.h"
@@ -112,7 +114,7 @@ namespace Ogre
     const IdString HlmsBaseProp::UvCount5           = IdString( "hlms_uv_count5" );
     const IdString HlmsBaseProp::UvCount6           = IdString( "hlms_uv_count6" );
     const IdString HlmsBaseProp::UvCount7           = IdString( "hlms_uv_count7" );
-
+    
     //Change per frame (grouped together with scene pass)
     const IdString HlmsBaseProp::LightsDirectional  = IdString( "hlms_lights_directional" );
     const IdString HlmsBaseProp::LightsDirNonCaster = IdString( "hlms_lights_directional_non_caster" );
@@ -185,11 +187,14 @@ namespace Ogre
     const IdString HlmsBaseProp::ScreenSpaceRefractions    = IdString( "hlms_screen_space_refractions" );
 
     const IdString HlmsBaseProp::NoReverseDepth = IdString( "hlms_no_reverse_depth" );
+    const IdString HlmsBaseProp::ReadOnlyIsTex  = IdString( "hlms_readonly_is_tex" );
 
     const IdString HlmsBaseProp::Syntax         = IdString( "syntax" );
     const IdString HlmsBaseProp::Hlsl           = IdString( "hlsl" );
     const IdString HlmsBaseProp::Glsl           = IdString( "glsl" );
     const IdString HlmsBaseProp::Glsles         = IdString( "glsles" );
+    const IdString HlmsBaseProp::Glslvk         = IdString( "glslvk" );
+    const IdString HlmsBaseProp::Hlslvk         = IdString( "hlslvk" );
     const IdString HlmsBaseProp::Metal          = IdString( "metal" );
     const IdString HlmsBaseProp::GL3Plus        = IdString( "GL3+" );
     const IdString HlmsBaseProp::GLES           = IdString( "GLES" );
@@ -272,7 +277,7 @@ namespace Ogre
         mDebugOutput( false ),
     #endif
     #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-        mDebugOutputProperties( true ),
+        mDebugOutputProperties( false ),
     #else
         mDebugOutputProperties( false ),
     #endif
@@ -1253,7 +1258,7 @@ namespace Ogre
                 {
                     //This isn't a number. Let's try if it's a variable
                     //count = getProperty( argValues[0], -1 );
-                    count = getProperty( argValues[0], 0 );
+					count = getProperty( argValues[0], 0 );
                 }
 
                 /*if( count < 0 )
@@ -2075,6 +2080,12 @@ namespace Ogre
                     mShaderProfile, static_cast<GpuProgramType>(shaderType) );
         gp->setSource( source, debugFilenameOutput );
 
+        {
+            RootLayout rootLayout;
+            setupRootLayout( rootLayout );
+            gp->setRootLayout( gp->getType(), rootLayout );
+        }
+
         if( mShaderTargets[shaderType] )
         {
             //D3D-specific
@@ -2106,6 +2117,8 @@ namespace Ogre
         ShaderCodeCache codeCache( mergedCache.pieces );
         codeCache.mergedCache.setProperties = mergedCache.setProperties;
 
+        codeCache.mergedCache.setProperties.swap( mSetProperties );
+
         for( size_t i=0; i<NumShaderTypes; ++i )
         {
             if( !source[i].empty() )
@@ -2120,17 +2133,18 @@ namespace Ogre
                     debugDumpFile.open( debugFilenameOutput.c_str(), std::ios::out | std::ios::binary );
 
                     if( mDebugOutputProperties )
-                    {
-                        mSetProperties.swap( codeCache.mergedCache.setProperties );
                         dumpProperties( debugDumpFile );
-                        mSetProperties.swap( codeCache.mergedCache.setProperties );
-                    }
                 }
 
                 codeCache.shaders[i] = compileShaderCode( source[i], "", finalHash,
                                                           static_cast<ShaderType>( i ) );
             }
         }
+
+        codeCache.mergedCache.setProperties.swap( mSetProperties );
+
+        // Ensure code didn't accidentally modify mSetProperties
+        OGRE_ASSERT_HIGH( codeCache.mergedCache.setProperties == mergedCache.setProperties );
 
         mShaderCodeCache.push_back( codeCache );
     }
@@ -2144,15 +2158,6 @@ namespace Ogre
 
         mSetProperties = codeCache.mergedCache.setProperties;
 
-        {
-            //Add RenderSystem-specific properties
-            IdStringVec::const_iterator itor = mRsSpecificExtensions.begin();
-            IdStringVec::const_iterator end  = mRsSpecificExtensions.end();
-
-            while( itor != end )
-                setProperty( *itor++, 1 );
-        }
-
         //Generate the shaders
         for( size_t i=0; i<NumShaderTypes; ++i )
         {
@@ -2162,7 +2167,7 @@ namespace Ogre
             const String filename = ShaderFiles[i] + mShaderFileExt;
             if( mDataFolder->exists( filename ) )
             {
-                if( mShaderProfile == "glsl" ) //TODO: String comparision
+                if( mShaderProfile == "glsl" || mShaderProfile == "glslvk" ) //TODO: String comparision
                 {
                     setProperty( HlmsBaseProp::GL3Plus,
                                  mRenderSystem->getNativeShadingLanguageVersion() );
@@ -2177,6 +2182,8 @@ namespace Ogre
                 setProperty( HlmsBaseProp::Hlsl,    HlmsBaseProp::Hlsl.mHash );
                 setProperty( HlmsBaseProp::Glsl,    HlmsBaseProp::Glsl.mHash );
                 setProperty( HlmsBaseProp::Glsles,  HlmsBaseProp::Glsles.mHash );
+                setProperty( HlmsBaseProp::Glslvk,  HlmsBaseProp::Glslvk.mHash );
+                setProperty( HlmsBaseProp::Hlslvk,  HlmsBaseProp::Hlslvk.mHash );
                 setProperty( HlmsBaseProp::Metal,   HlmsBaseProp::Metal.mHash );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
@@ -2306,8 +2313,17 @@ namespace Ogre
         for( size_t i=0; i<NumShaderTypes; ++i )
             mTextureRegs[i].clear();
 
+        {
+            //Add RenderSystem-specific properties
+            IdStringVec::const_iterator itor = mRsSpecificExtensions.begin();
+            IdStringVec::const_iterator end  = mRsSpecificExtensions.end();
+
+            while( itor != end )
+                setProperty( *itor++, 1 );
+        }
+
         notifyPropertiesMergedPreGenerationStep();
-        mListener->propertiesMergedPreGenerationStep( mShaderProfile, passCache,
+        mListener->propertiesMergedPreGenerationStep( this, passCache,
                                                       renderableCache.setProperties,
                                                       renderableCache.pieces,
                                                       mSetProperties, queuedRenderable );
@@ -2374,7 +2390,7 @@ namespace Ogre
                 pso.vertexElements = renderOp.vertexData->vertexDeclaration->convertToV2();
             }
 
-            pso.enablePrimitiveRestart = true;
+            pso.enablePrimitiveRestart = false;
         }
 
         mRenderSystem->_hlmsPipelineStateObjectCreated( &pso );
@@ -2561,6 +2577,12 @@ namespace Ogre
 
         outHash         = renderableHash;
         outCasterHash   = renderableCasterHash;
+    }
+    //-----------------------------------------------------------------------------------
+    void Hlms::analyzeBarriers( BarrierSolver &barrierSolver,
+                                ResourceTransitionArray &resourceTransitions, Camera *renderingCamera,
+                                const bool bCasterPass )
+    {
     }
     //-----------------------------------------------------------------------------------
     HlmsCache Hlms::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
@@ -3113,13 +3135,20 @@ namespace Ogre
 
         for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
         {
-            if( renderPassDesc->mColour[i].texture )
+            RenderPassColourTarget passColourTarget = renderPassDesc->mColour[i];
+
+            if( passColourTarget.texture )
             {
                 passPso.colourFormat[i]     = renderPassDesc->mColour[i].texture->getPixelFormat();
                 passPso.sampleDescription   = renderPassDesc->mColour[i].texture->getSampleDescription();
             }
             else
                 passPso.colourFormat[i] = PFG_NULL;
+
+            if( passColourTarget.resolveTexture )
+                passPso.resolveColourFormat[i] = passColourTarget.resolveTexture->getPixelFormat();
+            else
+                passPso.resolveColourFormat[i] = PFG_NULL;
         }
 
         passPso.depthFormat = PFG_NULL;
@@ -3166,7 +3195,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Hlms::applyTextureRegisters( const HlmsCache *psoEntry )
     {
-        if( mShaderProfile == "hlsl" || mShaderProfile == "metal" )
+        if( mShaderProfile != "glsl" )
             return; //D3D embeds the texture slots in the shader.
 
         GpuProgramPtr shaders[NumShaderTypes];
@@ -3277,11 +3306,11 @@ namespace Ogre
                     mFastShaderBuildHack = StringConverter::parseBool( itor->second.currentValue );
             }
 
-            //Prefer glsl over glsles
-            const String shaderProfiles[4] = { "hlsl", "glsles", "glsl", "metal" };
+            //Prefer glslvk over hlslvk over glsl, and glsl over glsles
+            const String shaderProfiles[6] = { "hlsl", "glsles", "glsl", "hlslvk", "glslvk", "metal" };
             const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
 
-            for( size_t i=0; i<4; ++i )
+            for( size_t i=0; i<6; ++i )
             {
                 if( capabilities->isShaderProfileSupported( shaderProfiles[i] ) )
                 {
@@ -3290,7 +3319,7 @@ namespace Ogre
                 }
             }
 
-            if( mShaderProfile == "hlsl" )
+            if( mShaderProfile == "hlsl" || mShaderProfile == "hlslvk" )
             {
                 mShaderFileExt = ".hlsl";
 
@@ -3336,6 +3365,9 @@ namespace Ogre
                     }
                 }
             }
+
+            if( mRenderSystem->getVaoManager()->readOnlyIsTexBuffer() )
+                mRsSpecificExtensions.push_back( HlmsBaseProp::ReadOnlyIsTex );
 
             if( !mDefaultDatablock )
                 mDefaultDatablock = createDefaultDatablock();

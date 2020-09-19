@@ -138,7 +138,10 @@ namespace Ogre
         };
         struct _OgreExport BufferSlot
         {
-            /// Texture buffer to bind
+            /// Texture buffer to bind.
+            ///
+            /// ReadOnlyBufferPacked can be bound here. But please note in certain APIs
+            /// these type of buffers may end up being bound to UAV slots instead of texture slots.
             TexBufferPacked *buffer;
             /// 0-based offset. It is possible to bind a region of the buffer.
             /// Offset needs to be aligned. You can query the RS capabilities for
@@ -178,6 +181,7 @@ namespace Ogre
         struct _OgreExport TextureSlot
         {
             TextureGpu      *texture;
+            bool            generalReadWrite;
             bool            cubemapsAs2DArrays;
             uint8           mipmapLevel;
             /// When this value is 0, it means all mipmaps from mipmapLevel until the end.
@@ -189,6 +193,7 @@ namespace Ogre
             bool operator != ( const TextureSlot &other ) const
             {
                 return  this->texture != other.texture ||
+                        this->generalReadWrite != other.generalReadWrite ||
                         this->mipmapLevel != other.mipmapLevel ||
                         this->numMipmaps != other.numMipmaps ||
                         this->textureArrayIndex != other.textureArrayIndex ||
@@ -199,6 +204,8 @@ namespace Ogre
             {
                 if( this->texture != other.texture )
                     return this->texture < other.texture;
+                if( this->generalReadWrite != other.generalReadWrite )
+                    return this->generalReadWrite < other.generalReadWrite;
                 if( this->mipmapLevel != other.mipmapLevel )
                     return this->mipmapLevel < other.mipmapLevel;
                 if( this->numMipmaps != other.numMipmaps )

@@ -106,9 +106,9 @@ namespace Ogre
         }
 
         if( mInputTexture == mOutputTexture )
-            return; // Special case for PCC - IBL is not wanted. Nothing to do
+            return;  // Special case for PCC - IBL is not wanted. Nothing to do
         if( mOutputTexture->getNumMipmaps() == 1u )
-            return; // Fast copy / passthrough
+            return;  // Fast copy / passthrough
 
         if( mInputTexture->getTextureType() != TextureTypes::TypeCube )
         {
@@ -328,6 +328,7 @@ namespace Ogre
 
         notifyPassEarlyPreExecuteListeners();
 
+        analyzeBarriers();
         executeResourceTransitions();
 
         // Fire the listener in case it wants to change anything
@@ -343,12 +344,24 @@ namespace Ogre
                 if( mOutputTexture->getNumMipmaps() > 1u )
                     mInputTexture->_autogenerateMipmaps();
 
+                {
+                    // Prepare mInputTexture for copying. We have to do it here because analyzeBarriers
+                    // prepared mInputTexture for generating mipmaps
+                    mResourceTransitions.clear();
+                    mBarrierSolver.resolveTransition( mResourceTransitions, mInputTexture,
+                                                      ResourceLayout::CopySrc, ResourceAccess::Read,
+                                                      0u );
+                    RenderSystem *renderSystem = mParentNode->getRenderSystem();
+                    renderSystem->executeResourceTransition( mResourceTransitions );
+                }
+
                 const uint8 outNumMips = mOutputTexture->getNumMipmaps();
 
                 for( uint8 mip = 0u; mip < outNumMips; ++mip )
                 {
                     TextureBox emptyBox = mOutputTexture->getEmptyBox( mip );
-                    mInputTexture->copyTo( mOutputTexture, emptyBox, mip, emptyBox, mip );
+                    mInputTexture->copyTo( mOutputTexture, emptyBox, mip, emptyBox, mip, true,
+                                           ResourceAccess::Undefined );
                 }
             }
         }
@@ -361,6 +374,14 @@ namespace Ogre
             renderSystem->endRenderPassDescriptor();
 
             mInputTexture->_autogenerateMipmaps();
+
+            {
+                mResourceTransitions.clear();
+                mBarrierSolver.resolveTransition( mResourceTransitions, mInputTexture,
+                                                  ResourceLayout::Texture, ResourceAccess::Read,
+                                                  1u << GPT_COMPUTE_PROGRAM );
+                renderSystem->executeResourceTransition( mResourceTransitions );
+            }
 
             vector<HlmsComputeJob *>::type::iterator itor = mJobs.begin();
             vector<HlmsComputeJob *>::type::iterator endt = mJobs.end();
@@ -381,31 +402,38 @@ namespace Ogre
         profilingEnd();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassIblSpecular::_placeBarriersAndEmulateUavExecution(
-        BoundUav boundUavs[64], ResourceAccessMap &uavsAccess, ResourceLayoutMap &resourcesLayout )
+    void CompositorPassIblSpecular::analyzeBarriers( void )
     {
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-        const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
+        mResourceTransitions.clear();
+
+        // Do not use base class'
+        // CompositorPass::analyzeBarriers();
 
         const bool usesCompute = !mJobs.empty();
 
-        // Check <anything> -> RT for mInputTexture (we need to generate mipmaps).
-        ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( mOutputTexture );
-        if( currentLayout->second != ResourceLayout::RenderTarget )
+        if( usesCompute )
         {
-            addResourceTransition( currentLayout, ResourceLayout::RenderTarget, ReadBarrier::Texture );
-        }
+            // Check <anything> -> MipmapGen for mInputTexture
+            resolveTransition( mInputTexture, ResourceLayout::MipmapGen, ResourceAccess::ReadWrite, 0u );
 
-        // Check <anything> -> UAV for mOutputTexture (we need to write to it).
-        currentLayout = resourcesLayout.find( mOutputTexture );
-        if( currentLayout->second != ResourceLayout::Uav )
+            // Check <anything> -> UAV for mOutputTexture (we need to write to it).
+            resolveTransition( mOutputTexture, ResourceLayout::Uav, ResourceAccess::Write,
+                               1u << GPT_COMPUTE_PROGRAM );
+        }
+        else
         {
-            addResourceTransition( currentLayout, ResourceLayout::Uav, ReadBarrier::Texture );
-        }
+            if( mInputTexture != mOutputTexture )
+            {
+                if( mOutputTexture->getNumMipmaps() > 1u )
+                {
+                    // Check <anything> -> MipmapGen for mInputTexture
+                    resolveTransition( mInputTexture, ResourceLayout::MipmapGen,
+                                       ResourceAccess::ReadWrite, 0u );
+                }
 
-        // Do not use base class functionality at all.
-        // CompositorPass::_placeBarriersAndEmulateUavExecution();
+                resolveTransition( mOutputTexture, ResourceLayout::CopyDst, ResourceAccess::Write, 0u );
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     bool CompositorPassIblSpecular::notifyRecreated( const TextureGpu *channel )

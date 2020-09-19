@@ -7,11 +7,14 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-uniform sampler3D voxelAlbedoTex;
-uniform sampler3D voxelNormalTex;
-uniform sampler3D voxelEmissiveTex;
+vulkan_layout( ogre_t0 ) uniform texture3D voxelAlbedoTex;
+vulkan_layout( ogre_t1 ) uniform texture3D voxelNormalTex;
+vulkan_layout( ogre_t2 ) uniform texture3D voxelEmissiveTex;
 
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image3D lightVoxel;
+vulkan( layout( ogre_s0 ) uniform sampler voxelAlbedoSampler );
+
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
+uniform restrict writeonly image3D lightVoxel;
 
 layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),
@@ -24,12 +27,14 @@ layout( local_size_x = @value( threads_per_group_x ),
 
 @insertpiece( HeaderCS )
 
-uniform uint numLights;
-uniform float4 rayMarchStepSize_bakingMultiplier;
-//uniform float3 voxelOrigin;
-uniform float3 voxelCellSize;
-uniform float4 dirCorrectionRatio_thinWallCounter;
-uniform float3 invVoxelResolution;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform uint numLights;
+	uniform float4 rayMarchStepSize_bakingMultiplier;
+	//uniform float3 voxelOrigin;
+	uniform float3 voxelCellSize;
+	uniform float4 dirCorrectionRatio_thinWallCounter;
+	uniform float3 invVoxelResolution;
+vulkan( }; )
 
 #define p_numLights numLights
 #define p_rayMarchStepSize rayMarchStepSize_bakingMultiplier.xyz

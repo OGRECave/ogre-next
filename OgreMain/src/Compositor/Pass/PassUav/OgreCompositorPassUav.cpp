@@ -227,7 +227,7 @@ namespace Ogre
         //The transitions are made when the bindings are needed
         //(<sarcasm>we'll have fun with the validation layers later</sarcasm>).
         //executeResourceTransitions();
-        assert( mResourceTransitions.empty() );
+        OGRE_ASSERT_LOW( mResourceTransitions.empty() );
 
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
 
@@ -237,89 +237,6 @@ namespace Ogre
         renderSystem->queueBindUAVs( mDescriptorSetUav );
 
         notifyPassPosExecuteListeners();
-    }
-    //-----------------------------------------------------------------------------------
-    void CompositorPassUav::_placeBarriersAndEmulateUavExecution(
-                                            BoundUav boundUavs[64], ResourceAccessMap &uavsAccess,
-                                            ResourceLayoutMap &resourcesLayout )
-    {
-        {
-            const CompositorPassUavDef::TextureSources &textureSources =
-                    mDefinition->getTextureSources();
-            CompositorPassUavDef::TextureSources::const_iterator itor = textureSources.begin();
-            CompositorPassUavDef::TextureSources::const_iterator end  = textureSources.end();
-            while( itor != end )
-            {
-                TextureGpu *texture = 0;
-
-                if( !itor->isExternal )
-                {
-                    texture = mParentNode->getDefinedTexture( itor->textureName );
-                }
-                else if( itor->textureName != IdString() )
-                {
-                    RenderSystem *renderSystem = mParentNode->getRenderSystem();
-                    TextureGpuManager *textureManager = renderSystem->getTextureGpuManager();
-                    //TODO: Should we be using createOrRetrieve???
-                    texture = textureManager->findTextureNoThrow(
-                                itor->textureName/*,
-                                ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME*/ );
-                }
-
-                if( !texture )
-                {
-                    OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                                 "Texture with name: " +
-                                 itor->textureName.getFriendlyText() +
-                                 " does not exist. The texture must exist by the time the "
-                                 "workspace is executed. Are you trying to use a texture "
-                                 "defined by the compositor? If so you need to set it via "
-                                 "'uav' instead of 'uav_external'",
-                                 "CompositorPassUav::_placeBarriersAndEmulateUavExecution" );
-                }
-
-                if( !texture->isUav() )
-                {
-                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                 "Texture " + texture->getNameStr() +
-                                 " must have been created with TextureFlags:Uav to be bound as UAV",
-                                 "CompositorPassUav::_placeBarriersAndEmulateUavExecution" );
-                }
-
-                //Only "simulate the bind" of UAVs. We will evaluate the actual resource
-                //transition when the UAV is actually used in the subsequent passes.
-                boundUavs[itor->uavSlot].rttOrBuffer = texture;
-                boundUavs[itor->uavSlot].boundAccess = itor->access;
-
-                ++itor;
-            }
-        }
-
-        {
-            const CompositorPassUavDef::BufferSourceVec &bufferSources = mDefinition->getBufferSources();
-            CompositorPassUavDef::BufferSourceVec::const_iterator itor = bufferSources.begin();
-            CompositorPassUavDef::BufferSourceVec::const_iterator end  = bufferSources.end();
-            while( itor != end )
-            {
-                UavBufferPacked *uavBuffer = 0;
-
-                if( itor->bufferName != IdString() )
-                    uavBuffer = mParentNode->getDefinedBuffer( itor->bufferName );
-
-                //Only "simulate the bind" of UAVs. We will evaluate the actual resource
-                //transition when the UAV is actually used in the subsequent passes.
-                boundUavs[itor->uavSlot].rttOrBuffer = uavBuffer;
-                boundUavs[itor->uavSlot].boundAccess = itor->access;
-
-                ++itor;
-            }
-        }
-
-        //Take the chance to create all the mDescriptorSetUav
-        setupDescriptorSetUav();
-
-        //Do not use base class functionality at all.
-        //CompositorPass::_placeBarriersAndEmulateUavExecution();
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassUav::destroyDescriptorSetUav()

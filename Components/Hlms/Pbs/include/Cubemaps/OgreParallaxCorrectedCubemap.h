@@ -132,6 +132,9 @@ namespace Ogre
         void updateExpensiveCollectedDirtyProbes( uint16 iterationThreshold );
         void updateRender(void);
 
+        void transitionBlendResultToTexture( void );
+        void transitionCollectedProbesToTexture( void );
+
     public:
         ParallaxCorrectedCubemap( IdType id, Root *root, SceneManager *sceneManager,
                                   const CompositorWorkspaceDef *probeWorkspaceDef,

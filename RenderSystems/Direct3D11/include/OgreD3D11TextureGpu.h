@@ -99,12 +99,13 @@ namespace Ogre
 
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel,
-                             bool keepResolvedTexSynced = true );
+                             bool keepResolvedTexSynced = true,
+                             ResourceAccess::ResourceAccess issueBarriers = ResourceAccess::ReadWrite );
 
         virtual void _setToDisplayDummyTexture(void);
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
-        virtual void _autogenerateMipmaps(void);
+        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false );
 
         //The returned pointer has its ref. count incremented! Caller must decrease it!
         ComPtr<ID3D11ShaderResourceView> createSrv( const DescriptorSetTexture2::TextureSlot &texSlot ) const;
@@ -129,6 +130,9 @@ namespace Ogre
         uint16          mDepthBufferPoolId;
         bool            mPreferDepthTexture;
         PixelFormatGpu  mDesiredDepthBufferFormat;
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        OrientationMode mOrientationMode;
+#endif
 
     public:
         D3D11TextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -141,6 +145,11 @@ namespace Ogre
         virtual uint16 getDepthBufferPoolId(void) const;
         virtual bool getPreferDepthTexture(void) const;
         virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+
+        virtual void setOrientationMode( OrientationMode orientationMode );
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        virtual OrientationMode getOrientationMode( void ) const;
+#endif
     };
 }
 

@@ -3,6 +3,11 @@ fragment_program Postprocess/SharpenEdges_ps_GLSL glsl
 	source SharpenEdges_ps.glsl
 }
 
+fragment_program Postprocess/SharpenEdges_ps_VK glslvk
+{
+	source SharpenEdges_ps.glsl
+}
+
 fragment_program Postprocess/SharpenEdges_ps_HLSL hlsl
 {
 	source SharpenEdges_ps.hlsl
@@ -19,6 +24,7 @@ fragment_program Postprocess/SharpenEdges_ps_Metal metal
 fragment_program Postprocess/SharpenEdges_ps unified
 {
 	delegate Postprocess/SharpenEdges_ps_GLSL
+	delegate Postprocess/SharpenEdges_ps_VK
 	delegate Postprocess/SharpenEdges_ps_HLSL
 	delegate Postprocess/SharpenEdges_ps_Metal
 

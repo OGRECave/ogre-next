@@ -4,6 +4,7 @@
 PluginFolder=@OGRE_PLUGIN_DIR_DBG@
 
 # Define plugins
+@OGRE_COMMENT_RENDERSYSTEM_VULKAN@ Plugin=RenderSystem_Vulkan_d
 @OGRE_COMMENT_RENDERSYSTEM_D3D11@ Plugin=RenderSystem_Direct3D11_d
 @OGRE_COMMENT_RENDERSYSTEM_GL3PLUS@ Plugin=RenderSystem_GL3Plus_d
 @OGRE_COMMENT_RENDERSYSTEM_GLES@ Plugin=RenderSystem_GLES_d

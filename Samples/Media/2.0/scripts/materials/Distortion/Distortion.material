@@ -10,6 +10,11 @@ fragment_program Distortion_ps_GLSL glsl
 	}
 }
 
+fragment_program Distortion_ps_VK glslvk
+{
+	source Distortion_ps.glsl
+}
+
 // HLSL shaders
 fragment_program Distortion_ps_HLSL hlsl
 {
@@ -23,6 +28,7 @@ fragment_program Distortion_ps unified
 {
 	delegate Distortion_ps_HLSL
 	delegate Distortion_ps_GLSL
+	delegate Distortion_ps_VK
 }
 
 // Material definition

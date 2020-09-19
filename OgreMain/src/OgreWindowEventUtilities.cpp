@@ -31,8 +31,13 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 #include "OgreWindow.h"
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
+#include <xcb/xcb.h>
 #include <X11/Xlib.h>
-void GLXProc( Ogre::Window *win, const XEvent &event );
+static void GLXProc( Ogre::Window *win, const XEvent &event );
+static void XcbProc( xcb_connection_t *xcbConnection, xcb_generic_event_t *event );
+
+typedef Ogre::map<xcb_window_t, Ogre::Window*>::type XcbWindowMap;
+static XcbWindowMap gXcbWindowToOgre;
 #endif
 
 //using namespace Ogre;
@@ -54,30 +59,55 @@ void WindowEventUtilities::messagePump()
     }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
     //GLX Message Pump
-    WindowList::iterator win = _msWindows.begin();
-    WindowList::iterator end = _msWindows.end();
 
-    Display* xDisplay = 0; // same for all windows
-    
-    for (; win != end; win++)
+    xcb_connection_t *xcbConnection = 0;
+
+    if( !_msWindows.empty() )
+        _msWindows.front()->getCustomAttribute( "xcb_connection_t", &xcbConnection );
+
+    if( !xcbConnection )
     {
-        XID xid;
-        XEvent event;
+        // Uses the older Xlib
+        WindowList::iterator win = _msWindows.begin();
+        WindowList::iterator end = _msWindows.end();
 
-        if (!xDisplay)
-        (*win)->getCustomAttribute("XDISPLAY", &xDisplay);
+        Display *xDisplay = 0;  // same for all windows
+
+        for( ; win != end; win++ )
+        {
+            XID xid;
+            XEvent event;
+
+            if( !xDisplay )
+                ( *win )->getCustomAttribute( "XDISPLAY", &xDisplay );
 
         (*win)->getCustomAttribute("WINDOW", &xid);
 
-        while (XCheckWindowEvent (xDisplay, xid, StructureNotifyMask | VisibilityChangeMask | FocusChangeMask, &event))
-        {
-        GLXProc(*win, event);
-        }
+            while( XCheckWindowEvent(
+                       xDisplay, xid, StructureNotifyMask | VisibilityChangeMask | FocusChangeMask, &event ) )
+            {
+                GLXProc( *win, event );
+            }
 
-        // The ClientMessage event does not appear under any Event Mask
-        while (XCheckTypedWindowEvent (xDisplay, xid, ClientMessage, &event))
+            // The ClientMessage event does not appear under any Event Mask
+            while( XCheckTypedWindowEvent( xDisplay, xid, ClientMessage, &event ) )
+            {
+                GLXProc( *win, event );
+            }
+        }
+    }
+    else
+    {
+        // Uses the newer xcb
+        xcb_generic_event_t *nextEvent = 0;
+
+        nextEvent = xcb_poll_for_event( xcbConnection );
+
+        while( nextEvent )
         {
-        GLXProc(*win, event);
+            XcbProc( xcbConnection, nextEvent );
+            free( nextEvent );
+            nextEvent = xcb_poll_for_event( xcbConnection );
         }
     }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE && !defined __OBJC__ && !defined __LP64__
@@ -124,11 +154,25 @@ void WindowEventUtilities::removeWindowEventListener( Window* window, WindowEven
 void WindowEventUtilities::_addRenderWindow( Window *window )
 {
     _msWindows.push_back(window);
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+    xcb_window_t windowHandle = 0;
+    window->getCustomAttribute( "xcb_window_t", &windowHandle );
+    if( windowHandle )
+        gXcbWindowToOgre[windowHandle] = window;
+#endif
 }
 
 //--------------------------------------------------------------------------------//
 void WindowEventUtilities::_removeRenderWindow( Window *window )
 {
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+    xcb_window_t windowHandle = 0;
+    window->getCustomAttribute( "xcb_window_t", &windowHandle );
+    if( windowHandle )
+        gXcbWindowToOgre.erase( windowHandle );
+#endif
+
     WindowList::iterator i = std::find( _msWindows.begin(), _msWindows.end(), window );
     if( i != _msWindows.end() )
         _msWindows.erase( i );
@@ -360,6 +404,188 @@ void GLXProc( Ogre::Window *win, const XEvent &event )
     default:
         break;
     } //End switch event.type
+}
+//--------------------------------------------------------------------------------//
+void XcbProc( xcb_connection_t *xcbConnection, xcb_generic_event_t *e )
+{
+    XcbWindowMap::const_iterator itWindow;
+    Ogre::WindowEventUtilities::WindowEventListeners::iterator index, start, end;
+
+    const Ogre::uint8 responseType = e->response_type & ~0x80;
+    switch( responseType )
+    {
+    case XCB_CLIENT_MESSAGE:
+    {
+        xcb_client_message_event_t *event = reinterpret_cast<xcb_client_message_event_t *>( e );
+        itWindow = gXcbWindowToOgre.find( event->window );
+        if( itWindow != gXcbWindowToOgre.end() )
+        {
+            Ogre::Window *win = itWindow->second;
+            if( event->format == 32u )
+            {
+                xcb_atom_t wmProtocols;
+                xcb_atom_t wmDeleteWindow;
+                win->getCustomAttribute( "mWmProtocols", &wmProtocols );
+                win->getCustomAttribute( "mWmDeleteWindow", &wmDeleteWindow );
+
+                if( event->type == wmProtocols && event->data.data32[0] == wmDeleteWindow )
+                {
+                    start = Ogre::WindowEventUtilities::_msListeners.lower_bound( win );
+                    end = Ogre::WindowEventUtilities::_msListeners.upper_bound( win );
+
+                    // Window closed by window manager
+                    // Send message first, to allow app chance to unregister things that need done before
+                    // window is shutdown
+                    bool close = true;
+                    for( index = start; index != end; ++index )
+                    {
+                        if( !( index->second )->windowClosing( win ) )
+                            close = false;
+                    }
+                    if( !close )
+                        return;
+
+                    for( index = start; index != end; ++index )
+                        ( index->second )->windowClosed( win );
+                    win->destroy();
+                }
+            }
+        }
+    }
+    break;
+    case XCB_FOCUS_IN:   // Gained keyboard focus
+    case XCB_FOCUS_OUT:  // Lost keyboard focus
+    {
+        xcb_focus_in_event_t *event = reinterpret_cast<xcb_focus_in_event_t *>( e );
+        itWindow = gXcbWindowToOgre.find( event->event );
+        if( itWindow != gXcbWindowToOgre.end() )
+        {
+            Ogre::Window *win = itWindow->second;
+            win->setFocused( responseType == XCB_FOCUS_IN );
+
+            start = Ogre::WindowEventUtilities::_msListeners.lower_bound( win );
+            end = Ogre::WindowEventUtilities::_msListeners.upper_bound( win );
+            for( index = start; index != end; ++index )
+                ( index->second )->windowFocusChange( win );
+        }
+    }
+    break;
+    case XCB_MAP_NOTIFY:  // Restored
+    {
+        xcb_map_notify_event_t *event = reinterpret_cast<xcb_map_notify_event_t *>( e );
+        itWindow = gXcbWindowToOgre.find( event->window );
+        if( itWindow != gXcbWindowToOgre.end() )
+        {
+            Ogre::Window *win = itWindow->second;
+            win->setFocused( true );
+
+            start = Ogre::WindowEventUtilities::_msListeners.lower_bound( win );
+            end = Ogre::WindowEventUtilities::_msListeners.upper_bound( win );
+            for( index = start; index != end; ++index )
+                ( index->second )->windowFocusChange( win );
+        }
+    }
+    break;
+    case XCB_UNMAP_NOTIFY:  // Minimized
+    {
+        xcb_unmap_notify_event_t *event = reinterpret_cast<xcb_unmap_notify_event_t *>( e );
+        itWindow = gXcbWindowToOgre.find( event->window );
+        if( itWindow != gXcbWindowToOgre.end() )
+        {
+            Ogre::Window *win = itWindow->second;
+            win->setFocused( false );
+            win->_setVisible( false );
+
+            start = Ogre::WindowEventUtilities::_msListeners.lower_bound( win );
+            end = Ogre::WindowEventUtilities::_msListeners.upper_bound( win );
+            for( index = start; index != end; ++index )
+                ( index->second )->windowFocusChange( win );
+        }
+    }
+    break;
+    case XCB_VISIBILITY_NOTIFY:
+    {
+        xcb_visibility_notify_event_t *event = reinterpret_cast<xcb_visibility_notify_event_t *>( e );
+        itWindow = gXcbWindowToOgre.find( event->window );
+        if( itWindow != gXcbWindowToOgre.end() )
+        {
+            Ogre::Window *win = itWindow->second;
+            xcb_visibility_t visibility = static_cast<xcb_visibility_t>( event->state );
+            switch( visibility )
+            {
+            case XCB_VISIBILITY_UNOBSCURED:
+            case XCB_VISIBILITY_PARTIALLY_OBSCURED:
+                win->setFocused( true );
+                win->_setVisible( true );
+                break;
+            case XCB_VISIBILITY_FULLY_OBSCURED:
+                win->setFocused( false );
+                win->_setVisible( false );
+                break;
+            }
+
+            start = Ogre::WindowEventUtilities::_msListeners.lower_bound( win );
+            end = Ogre::WindowEventUtilities::_msListeners.upper_bound( win );
+            for( index = start; index != end; ++index )
+                ( index->second )->windowFocusChange( win );
+        }
+    }
+    break;
+    case XCB_CONFIGURE_NOTIFY:
+    {
+        xcb_configure_notify_event_t *event = reinterpret_cast<xcb_configure_notify_event_t *>( e );
+
+        itWindow = gXcbWindowToOgre.find( event->window );
+        if( itWindow != gXcbWindowToOgre.end() )
+        {
+            Ogre::Window *win = itWindow->second;
+
+            // This could be slightly more efficient if windowMovedOrResized took arguments:
+            Ogre::uint32 oldWidth, oldHeight;
+            Ogre::int32 oldLeft, oldTop;
+            win->getMetrics( oldWidth, oldHeight, oldLeft, oldTop );
+            win->windowMovedOrResized();
+
+            Ogre::uint32 newWidth, newHeight;
+            Ogre::int32 newLeft, newTop;
+            win->getMetrics( newWidth, newHeight, newLeft, newTop );
+
+            start = Ogre::WindowEventUtilities::_msListeners.lower_bound( win );
+            end = Ogre::WindowEventUtilities::_msListeners.upper_bound( win );
+
+            if( newLeft != oldLeft || newTop != oldTop )
+            {
+                for( index = start; index != end; ++index )
+                    ( index->second )->windowMoved( win );
+            }
+
+            if( newWidth != oldWidth || newHeight != oldHeight )
+            {
+                for( index = start; index != end; ++index )
+                    ( index->second )->windowResized( win );
+            }
+        }
+    }
+    break;
+    case XCB_DESTROY_NOTIFY:
+    {
+        xcb_visibility_notify_event_t *event = reinterpret_cast<xcb_visibility_notify_event_t *>( e );
+        itWindow = gXcbWindowToOgre.find( event->window );
+        if( itWindow != gXcbWindowToOgre.end() )
+        {
+            Ogre::Window *win = itWindow->second;
+            if( !win->isClosed() )
+            {
+                start = Ogre::WindowEventUtilities::_msListeners.lower_bound( win );
+                end = Ogre::WindowEventUtilities::_msListeners.upper_bound( win );
+                for( index = start; index != end; ++index )
+                    ( index->second )->windowClosed( win );
+                win->destroy();
+            }
+        }
+    }
+    break;
+    }
 }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE && !defined __OBJC__ && !defined __LP64__
 //--------------------------------------------------------------------------------//

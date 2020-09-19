@@ -77,7 +77,7 @@ namespace Ogre
         OCGE( glActiveTexture( GL_TEXTURE0 ) );
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTexBufferPacked::_bindBufferDirectly( size_t offset, size_t sizeBytes )
+    void GL3PlusTexBufferPacked::_bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes )
     {
         assert( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
         assert( offset < (mNumElements * mBytesPerElement - 1) );

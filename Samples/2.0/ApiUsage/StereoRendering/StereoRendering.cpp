@@ -12,6 +12,7 @@
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
+#if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
 #else
@@ -20,6 +21,7 @@ int mainApp( int argc, const char *argv[] )
 {
     return Demo::MainEntryPoints::mainAppSingleThreaded( DEMO_MAIN_ENTRY_PARAMS );
 }
+#endif
 
 namespace Demo
 {
@@ -82,8 +84,7 @@ namespace Demo
                                                                  mRenderWindow->getTexture(),
                                                                  mEyeCameras[0], workspaceName,
                                                                  true, -1, (Ogre::UavBufferPackedVec*)0,
-                                                                 (Ogre::ResourceLayoutMap*)0,
-                                                                 (Ogre::ResourceAccessMap*)0,
+                                                                 (Ogre::ResourceStatusMap*)0,
                                                                  vpOffsetScale,
                                                                  vpModifierMask,
                                                                  executionMask );
@@ -95,8 +96,7 @@ namespace Demo
                                                                  mRenderWindow->getTexture(),
                                                                  mEyeCameras[1], workspaceName,
                                                                  true, -1, (Ogre::UavBufferPackedVec*)0,
-                                                                 (Ogre::ResourceLayoutMap*)0,
-                                                                 (Ogre::ResourceAccessMap*)0,
+                                                                 (Ogre::ResourceStatusMap*)0,
                                                                  vpOffsetScale,
                                                                  vpModifierMask,
                                                                  executionMask);

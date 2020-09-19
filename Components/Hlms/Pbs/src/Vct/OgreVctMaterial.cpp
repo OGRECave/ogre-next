@@ -205,7 +205,15 @@ namespace Ogre
         TextureBox dstBox = mTexturePool->getEmptyBox( 0u );
         dstBox.sliceStart = sliceIdx;
         dstBox.numSlices = 1u;
-        mDownsampleTex->copyTo( mTexturePool, dstBox, 0u, mDownsampleTex->getEmptyBox( 0u ), 0u );
+
+        RenderSystem *renderSystem = mTextureGpuManager->getRenderSystem();
+        BarrierSolver &solver = renderSystem->getBarrierSolver();
+        ResourceTransitionArray &barrier = solver.getNewResourceTransitionsArrayTmp();
+        solver.resolveTransition( barrier, mDownsampleTex, ResourceLayout::CopySrc, ResourceAccess::Read,
+                                  0u );
+        renderSystem->executeResourceTransition( barrier );
+        mDownsampleTex->copyTo( mTexturePool, dstBox, 0u, mDownsampleTex->getEmptyBox( 0u ), 0u, true,
+                                ResourceAccess::Write );
 
         mTextureToPoolEntry[texture] = sliceIdx;
         return sliceIdx;
@@ -263,11 +271,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctMaterial::initTempResources( SceneManager *sceneManager )
     {
-        mDownsampleTex = mTextureGpuManager->createTexture( "VctMaterialDownsampleTex",
-                                                            "VctMaterialDownsampleTex",
-                                                            GpuPageOutStrategy::Discard,
-															TextureFlags::RenderToTexture,
-                                                            TextureTypes::Type2D );
+        mDownsampleTex = mTextureGpuManager->createTexture(
+            "VctMaterialDownsampleTex", "VctMaterialDownsampleTex", GpuPageOutStrategy::Discard,
+            TextureFlags::RenderToTexture | TextureFlags::DiscardableContent, TextureTypes::Type2D );
         mDownsampleTex->setResolution( 64u, 64u );
 		mDownsampleTex->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
 		mDownsampleTex->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_UNKNOWN );
@@ -278,11 +284,11 @@ namespace Ogre
         mDownsampleWorkspace2DArray =
                 mCompositorManager->addWorkspace(
                     sceneManager, mDownsampleTex, dummyCamera, "VctTexDownsampleWorkspace", false,
-                    -1, 0, 0, 0, Vector4::ZERO, 0x00, 0x01 );
+                    -1, 0, 0, Vector4::ZERO, 0x00, 0x01 );
         mDownsampleWorkspace2D =
                 mCompositorManager->addWorkspace(
                     sceneManager, mDownsampleTex, dummyCamera, "VctTexDownsampleWorkspace", false,
-                    -1, 0, 0, 0, Vector4::ZERO, 0x00, 0x02 );
+                    -1, 0, 0, Vector4::ZERO, 0x00, 0x02 );
     }
     //-------------------------------------------------------------------------
     void VctMaterial::destroyTempResources(void)

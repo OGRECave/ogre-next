@@ -37,11 +37,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation of CompositorPass
         This implementation will generate mipmaps for the specified texture
@@ -53,35 +53,26 @@ namespace Ogre
     class _OgreExport CompositorPassMipmap : public CompositorPass
     {
     protected:
-        struct JobWithBarrier
-        {
-            HlmsComputeJob      *job;
-            ResourceTransition  resourceTransition;
-        };
-
-        TextureGpuVec   mTextures;
+        TextureGpuVec mTextures;
 
         /// Compute
-        TextureGpuVec                   mTmpTextures;
-        vector<JobWithBarrier>::type    mJobs;
+        TextureGpuVec mTmpTextures;
+        FastArray<HlmsComputeJob *> mJobs;
 
         bool mWarnedNoAutomipmapsAlready;
 
-        void setupComputeShaders(void);
-        void destroyComputeShaders(void);
+        void setupComputeShaders( void );
+        void destroyComputeShaders( void );
         void setGaussianFilterParams( HlmsComputeJob *job, uint8 kernelRadius,
                                       float gaussianDeviationFactor );
+        void analyzeBarriers( void );
 
     public:
-        CompositorPassMipmap( const CompositorPassMipmapDef *definition,
+        CompositorPassMipmap( const CompositorPassMipmapDef *definition,  //
                               const RenderTargetViewDef *rtv, CompositorNode *parentNode );
         virtual ~CompositorPassMipmap();
 
         virtual void execute( const Camera *lodCamera );
-
-        virtual void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                           ResourceAccessMap &uavsAccess,
-                                                           ResourceLayoutMap &resourcesLayout );
 
         virtual bool notifyRecreated( const TextureGpu *channel );
 
@@ -91,7 +82,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

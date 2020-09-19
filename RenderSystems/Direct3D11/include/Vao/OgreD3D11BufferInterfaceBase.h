@@ -56,7 +56,7 @@ namespace Ogre
 
     public:
         D3D11BufferInterfaceBase( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer );
-        ~D3D11BufferInterfaceBase();
+        virtual ~D3D11BufferInterfaceBase();
 
         size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
         ID3D11Buffer* getVboName(void) const        { return mVboName.Get(); }

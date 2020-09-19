@@ -220,6 +220,11 @@ namespace Ogre
                                                       void *initialData, bool keepAsShadow );
         virtual void destroyTexBufferImpl( TexBufferPacked *texBuffer );
 
+        virtual ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
+                                                                size_t sizeBytes, BufferType bufferType,
+                                                                void *initialData, bool keepAsShadow );
+        virtual void destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer );
+
         virtual UavBufferPacked* createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                       uint32 bindFlags,
                                                       void *initialData, bool keepAsShadow );

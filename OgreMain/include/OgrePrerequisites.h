@@ -292,6 +292,7 @@ namespace Ogre {
     class Ray;
     class RaySceneQuery;
     class RaySceneQueryListener;
+    class ReadOnlyBufferPacked;
     class Rectangle2D;
     class Renderable;
     class RenderPriorityGroup;
@@ -308,6 +309,7 @@ namespace Ogre {
     class ResourceGroupManager;
     class ResourceManager;
     class Root;
+    class RootLayout;
     class SceneManager;
     class SceneManagerEnumerator;
     class SceneNode;

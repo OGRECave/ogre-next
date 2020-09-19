@@ -10,15 +10,15 @@
             "inform_shader_of_texture_data_change" : true,
 
             "uav_units" : 6,
+
+            "gl_tex_slot_start" : 6,
 			
 			"params" :
             [
 			],
 			
 			"params_glsl" :
-			[
-                ["instanceBuffer",          [0], "int"],
-
+            [
                 ["voxelAlbedoTex",      	[2], "int"],
                 ["voxelNormalTex",  		[3], "int"],
                 ["voxelEmissiveTex",		[4], "int"],
@@ -224,14 +224,11 @@
 
             "uav_units" : 1,
 
+            "gl_tex_slot_start" : 1,
+
             "textures" :
             [
                 {}
-            ],
-
-            "params_glsl" :
-            [
-                ["inMeshAabb",              [0], "int"]
             ]
         }
 	}

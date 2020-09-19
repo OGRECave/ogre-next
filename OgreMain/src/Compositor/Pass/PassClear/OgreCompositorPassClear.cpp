@@ -108,6 +108,7 @@ namespace Ogre
 
         notifyPassEarlyPreExecuteListeners();
 
+        analyzeBarriers();
         executeResourceTransitions();
 
         //Fire the listener in case it wants to change anything
@@ -131,67 +132,29 @@ namespace Ogre
         profilingEnd();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassClear::_placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                                    ResourceAccessMap &uavsAccess,
-                                                                    ResourceLayoutMap &resourcesLayout )
+    void CompositorPassClear::analyzeBarriers( void )
     {
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-        const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
+        mResourceTransitions.clear();
 
-        if( !explicitApi )
-            return;
+        // Do not use base class'
+        // CompositorPass::analyzeBarriers();
 
-        //Check <anything> -> Clear
-        ResourceLayoutMap::iterator currentLayout;
-        for( int i=0; i<mRenderPassDesc->getNumColourEntries(); ++i )
+        // Check <anything> -> Clear
+        for( int i = 0; i < mRenderPassDesc->getNumColourEntries(); ++i )
         {
-            currentLayout = resourcesLayout.find( mRenderPassDesc->mColour[i].texture );
-            if( (currentLayout->second != ResourceLayout::RenderTarget && explicitApi) ||
-                currentLayout->second == ResourceLayout::Uav )
-            {
-                addResourceTransition( currentLayout,
-                                       ResourceLayout::Clear,
-                                       ReadBarrier::RenderTarget );
-            }
+            resolveTransition( mRenderPassDesc->mColour[i].texture,  //
+                               ResourceLayout::Clear, ResourceAccess::Write, 0u );
         }
         if( mRenderPassDesc->mDepth.texture )
         {
-            currentLayout = resourcesLayout.find( mRenderPassDesc->mDepth.texture );
-            if( currentLayout == resourcesLayout.end() )
-            {
-                resourcesLayout[mRenderPassDesc->mDepth.texture] = ResourceLayout::Undefined;
-                currentLayout = resourcesLayout.find( mRenderPassDesc->mDepth.texture );
-            }
-
-            if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
-                currentLayout->second == ResourceLayout::Uav )
-            {
-                addResourceTransition( currentLayout,
-                                       ResourceLayout::Clear,
-                                       ReadBarrier::DepthStencil );
-            }
+            resolveTransition( mRenderPassDesc->mDepth.texture,  //
+                               ResourceLayout::Clear, ResourceAccess::Write, 0u );
         }
         if( mRenderPassDesc->mStencil.texture &&
             mRenderPassDesc->mStencil.texture != mRenderPassDesc->mDepth.texture )
         {
-            currentLayout = resourcesLayout.find( mRenderPassDesc->mStencil.texture );
-            if( currentLayout == resourcesLayout.end() )
-            {
-                resourcesLayout[mRenderPassDesc->mStencil.texture] = ResourceLayout::Undefined;
-                currentLayout = resourcesLayout.find( mRenderPassDesc->mStencil.texture );
-            }
-
-            if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
-                currentLayout->second == ResourceLayout::Uav )
-            {
-                addResourceTransition( currentLayout,
-                                       ResourceLayout::Clear,
-                                       ReadBarrier::DepthStencil );
-            }
+            resolveTransition( mRenderPassDesc->mStencil.texture,  //
+                               ResourceLayout::Clear, ResourceAccess::Write, 0u );
         }
-
-        //Do not use base class functionality at all.
-        //CompositorPass::_placeBarriersAndEmulateUavExecution();
     }
-}
+}  // namespace Ogre

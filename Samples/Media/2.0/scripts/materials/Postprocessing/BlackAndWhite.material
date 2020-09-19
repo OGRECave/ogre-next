@@ -3,6 +3,11 @@ fragment_program B&W_ps_GLSL glsl
 	source GrayScale_ps.glsl
 }
 
+fragment_program B&W_ps_VK glslvk
+{
+	source GrayScale_ps.glsl
+}
+
 fragment_program B&W_ps_HLSL hlsl
 {
 	source GrayScale_ps.hlsl
@@ -19,6 +24,7 @@ fragment_program B&W_ps_Metal metal
 fragment_program B&W_ps unified
 {
 	delegate B&W_ps_GLSL
+	delegate B&W_ps_VK
 	delegate B&W_ps_HLSL
 	delegate B&W_ps_Metal
 }

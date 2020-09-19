@@ -74,8 +74,12 @@ namespace Ogre
         TextureGpu      *mDepthTextureNoMsaa;
         TextureGpu      *mRefractionsTexture;
 
+        HlmsManager *mHlmsManager;
+
         void notifyPassSceneAfterShadowMapsListeners(void);
         void notifyPassSceneAfterFrustumCullingListeners(void);
+
+        void analyzeBarriers( void );
 
     public:
         /** Constructor
@@ -92,10 +96,6 @@ namespace Ogre
         ~CompositorPassScene();
 
         virtual void execute( const Camera *lodCamera );
-
-        virtual void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                           ResourceAccessMap &uavsAccess,
-                                                           ResourceLayoutMap &resourcesLayout );
 
         CompositorShadowNode* getShadowNode() const             { return mShadowNode; }
         Camera* getCamera() const                               { return mCamera; }

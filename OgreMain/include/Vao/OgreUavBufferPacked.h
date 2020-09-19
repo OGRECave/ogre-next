@@ -46,6 +46,7 @@ namespace Ogre
         vector<TexBufferPacked*>::type  mTexBufferViews;
 
         virtual TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat ) = 0;
+        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl( void ) = 0;
 
     public:
         UavBufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
@@ -65,9 +66,12 @@ namespace Ogre
         @par
             If this function was already called, it will return the same pointer as the
             last time (though performs an O(N) search), otherwise returns a new pointer
+        @param pixelFormat
+            Format to reinterpret as. Note some RenderSystems (D3D11, Metal) may severely restrict or
+            ignore this parameter.
         @return
             A TexBufferPacked to be used to bind to the different stages. Do not destroy
-            this buffer via VaoManager::destroyTexBuffer. @see destroyTexBufferView
+            this buffer via VaoManager::destroyTexBuffer. See UavBufferPacked::destroyTexBufferView
         */
         TexBufferPacked* getAsTexBufferView( PixelFormatGpu pixelFormat );
 
@@ -75,8 +79,31 @@ namespace Ogre
         /// Does nothing if a view of the given pixel format did not exist.
         void destroyTexBufferView( PixelFormatGpu pixelFormat );
 
-        /// @see destroyTexBufferView, this one does it on all the creates views.
-        void destroyAllTexBufferViews(void);
+        /** Returns a ReadOnlyBufferPacked for binding to the GPU as a texture w/ read-only access.
+            Buffer must've been created with BB_FLAG_READONLY.
+        @remarks
+            Don't try to use readRequest or map the returned pointer. All major operations
+            except binding to the shader should be done through the UavBufferPacked.
+        @par
+            If this function was already called, it will return the same pointer as the
+            last time, otherwise returns a new pointer
+        @par
+            Unlike getAsTexBufferView there is no pixelFormat because the returned pointer will always
+            be format-less (e.g. will use UBO in GL & Vullkan, Structure Buffer in D3D11, etc)
+        @return
+            A ReadOnlyBufferPacked to be used to bind to the different stages. Do not destroy
+            this buffer via VaoManager::destroyReadOnlyBuffer.
+            See UavBufferPacked::destroyReadOnlyBufferView
+        */
+        ReadOnlyBufferPacked *getAsReadOnlyBufferView( void );
+
+        /// Frees memory from the view created by getAsReadOnlyBufferView
+        /// Does nothing if the view wasn't created
+        void destroyReadOnlyBufferView( void );
+
+        /// See destroyTexBufferView and getAsReadOnlyBufferView,
+        /// this one does it on all the creates views.
+        void destroyAllBufferViews( void );
 
         /** Binds the texture buffer to the given slot in the
             Vertex/Pixel/Geometry/Hull/Domain/Compute Shader

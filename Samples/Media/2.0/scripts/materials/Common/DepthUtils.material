@@ -8,6 +8,11 @@ fragment_program Ogre/Depth/DownscaleMax_ps_GLSL glsl
 	}
 }
 
+fragment_program Ogre/Depth/DownscaleMax_ps_VK glslvk
+{
+	source DepthDownscaleMax_ps.glsl
+}
+
 fragment_program Ogre/Depth/DownscaleMax_ps_HLSL hlsl
 {
 	source DepthDownscaleMax_ps.hlsl
@@ -24,6 +29,7 @@ fragment_program Ogre/Depth/DownscaleMax_ps_Metal metal
 fragment_program Ogre/Depth/DownscaleMax_ps unified
 {
 	delegate Ogre/Depth/DownscaleMax_ps_GLSL
+	delegate Ogre/Depth/DownscaleMax_ps_VK
 	delegate Ogre/Depth/DownscaleMax_ps_HLSL
 	delegate Ogre/Depth/DownscaleMax_ps_Metal
 }

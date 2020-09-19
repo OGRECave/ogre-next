@@ -73,6 +73,8 @@ namespace Ogre
                                                     const HlmsBlendblock *blendblock,
                                                     const HlmsParamVec &paramVec );
 
+        virtual void setupRootLayout( RootLayout &rootLayout );
+
     public:
         HlmsLowLevel();
         ~HlmsLowLevel();

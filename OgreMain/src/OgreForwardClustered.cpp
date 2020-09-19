@@ -40,7 +40,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorShadowNode.h"
 
 #include "Vao/OgreVaoManager.h"
-#include "Vao/OgreTexBufferPacked.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
 
 #include "Math/Array/OgreObjectMemoryManager.h"
 
@@ -832,10 +832,9 @@ namespace Ogre
         CachedGridBuffer &gridBuffers = cachedGrid->gridBuffers[cachedGrid->currentBufIdx];
         if( !gridBuffers.gridBuffer )
         {
-            gridBuffers.gridBuffer = mVaoManager->createTexBuffer( PFG_R16_UINT,
-                                                                   mWidth * mHeight * mNumSlices *
-                                                                   mObjsPerCell * sizeof(uint16),
-                                                                   BT_DYNAMIC_PERSISTENT, 0, false );
+            gridBuffers.gridBuffer = mVaoManager->createTexBuffer(
+                PFG_R16_UINT, mWidth * mHeight * mNumSlices * mObjsPerCell * sizeof( uint16 ),
+                BT_DYNAMIC_PERSISTENT, 0, false );
         }
 
         const size_t bufferBytesNeeded = calculateBytesNeeded( std::max<size_t>( numLights, 96u ),
@@ -848,13 +847,11 @@ namespace Ogre
             {
                 if( gridBuffers.globalLightListBuffer->getMappingState() != MS_UNMAPPED )
                     gridBuffers.globalLightListBuffer->unmap( UO_UNMAP_ALL );
-                mVaoManager->destroyTexBuffer( gridBuffers.globalLightListBuffer );
+                mVaoManager->destroyReadOnlyBuffer( gridBuffers.globalLightListBuffer );
             }
 
-            gridBuffers.globalLightListBuffer = mVaoManager->createTexBuffer(
-                                                                    PFG_RGBA32_FLOAT,
-                                                                    bufferBytesNeeded,
-                                                                    BT_DYNAMIC_PERSISTENT, 0, false );
+            gridBuffers.globalLightListBuffer = mVaoManager->createReadOnlyBuffer(
+                PFG_RGBA32_FLOAT, bufferBytesNeeded, BT_DYNAMIC_PERSISTENT, 0, false );
         }
 
         //Fill the first buffer with the light. The other buffer contains indexes into this list.

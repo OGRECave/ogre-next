@@ -89,9 +89,10 @@ namespace Ogre
 
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel,
-                             bool keepResolvedTexSynced = true );
+                             bool keepResolvedTexSynced = true,
+                             ResourceAccess::ResourceAccess issueBarriers = ResourceAccess::ReadWrite );
 
-        virtual void _autogenerateMipmaps(void);
+        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false );
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
@@ -138,7 +139,9 @@ namespace Ogre
         uint16          mDepthBufferPoolId;
         bool            mPreferDepthTexture;
         PixelFormatGpu  mDesiredDepthBufferFormat;
-
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        OrientationMode mOrientationMode;
+#endif
         virtual void createInternalResourcesImpl(void);
         virtual void destroyInternalResourcesImpl(void);
 
@@ -154,6 +157,11 @@ namespace Ogre
         virtual uint16 getDepthBufferPoolId(void) const;
         virtual bool getPreferDepthTexture(void) const;
         virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+
+        virtual void setOrientationMode( OrientationMode orientationMode );
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        virtual OrientationMode getOrientationMode( void ) const;
+#endif
     };
 }
 

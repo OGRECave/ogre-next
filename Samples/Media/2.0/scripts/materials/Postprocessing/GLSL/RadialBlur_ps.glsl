@@ -1,12 +1,17 @@
-#version 330
+#version ogre_glsl_ver_330
 
-uniform sampler2D rt0;
+vulkan_layout( ogre_t0 ) uniform texture2D rt0;
+vulkan( layout( ogre_s0 ) uniform sampler samplerState );
 
-uniform vec4	centerUVPos; //z = min, w = 1 / (max - min)
-uniform float	exponent;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform vec4	centerUVPos; //z = min, w = 1 / (max - min)
+	uniform float	exponent;
+vulkan( }; )
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
@@ -31,14 +36,14 @@ void main()
 	atten = 1.0f - clamp( atten, 0.0, 1.0 );
 	atten = pow( atten, exponent );
 
-	vec4 originalColour = texture( rt0, (inPs.uv0 - centerUVPos.xy) *
-										c_multipliers[0] + centerUVPos.xy );
+	vec4 originalColour = texture( vkSampler2D( rt0, samplerState ),
+								   (inPs.uv0 - centerUVPos.xy) * c_multipliers[0] + centerUVPos.xy );
 
 	vec4 sumColours = vec4( 0.0, 0.0, 0.0, 0.0 );
 	for( int i=1; i<NUM_SAMPLES; ++i )
 	{
-		sumColours += texture( rt0, (inPs.uv0 - centerUVPos.xy) *
-									c_multipliers[i] + centerUVPos.xy );
+		sumColours += texture( vkSampler2D( rt0, samplerState ),
+							   (inPs.uv0 - centerUVPos.xy) * c_multipliers[i] + centerUVPos.xy );
 	}
 
 	//'originalColour' has always the same strength. 'sumColours' gets weaker over distance (past min distance).

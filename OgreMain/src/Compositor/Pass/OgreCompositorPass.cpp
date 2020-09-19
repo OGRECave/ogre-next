@@ -28,53 +28,52 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/OgreCompositorChannel.h"
+#include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
+#include "Compositor/Pass/OgreCompositorPass.h"
 
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreViewport.h"
 
-#include "OgreRenderSystem.h"
 #include "OgreProfiler.h"
+#include "OgreRenderSystem.h"
 
 #include "OgreStringConverter.h"
 
 namespace Ogre
 {
-//    const Quaternion CompositorPass::CubemapRotations[6] =
-//    {
-//        Quaternion( Degree(-90 ), Vector3::UNIT_Y ),          //+X
-//        Quaternion( Degree( 90 ), Vector3::UNIT_Y ),          //-X
-//        Quaternion( Degree( 90 ), Vector3::UNIT_X ),          //+Y
-//        Quaternion( Degree(-90 ), Vector3::UNIT_X ),          //-Y
-//        Quaternion::IDENTITY,                                 //+Z
-//        Quaternion( Degree(180 ), Vector3::UNIT_Y )           //-Z
-//    };
-    //Can NOT use UNIT_X/UNIT_Y and Degree here because on iOS C++ initialization
-    //order screws us and thus key global variables are still 0. Hardcode the values.
-    const Quaternion CompositorPass::CubemapRotations[6] =
-    {
-        Quaternion( Radian(-1.570796f ), Vector3( 0, 1, 0 ) ),  //+X
-        Quaternion( Radian( 1.570796f ), Vector3( 0, 1, 0 ) ),  //-X
-        Quaternion( Radian( 1.570796f ), Vector3( 1, 0, 0 ) ),  //+Y
-        Quaternion( Radian(-1.570796f ), Vector3( 1, 0, 0 ) ),  //-Y
-        Quaternion( 1, 0, 0, 0 ),                               //+Z
-        Quaternion( Radian( 3.1415927f), Vector3( 0, 1, 0 ) )   //-Z
+    //    const Quaternion CompositorPass::CubemapRotations[6] =
+    //    {
+    //        Quaternion( Degree(-90 ), Vector3::UNIT_Y ),          //+X
+    //        Quaternion( Degree( 90 ), Vector3::UNIT_Y ),          //-X
+    //        Quaternion( Degree( 90 ), Vector3::UNIT_X ),          //+Y
+    //        Quaternion( Degree(-90 ), Vector3::UNIT_X ),          //-Y
+    //        Quaternion::IDENTITY,                                 //+Z
+    //        Quaternion( Degree(180 ), Vector3::UNIT_Y )           //-Z
+    //    };
+    // Can NOT use UNIT_X/UNIT_Y and Degree here because on iOS C++ initialization
+    // order screws us and thus key global variables are still 0. Hardcode the values.
+    const Quaternion CompositorPass::CubemapRotations[6] = {
+        Quaternion( Radian( -1.570796f ), Vector3( 0, 1, 0 ) ),  //+X
+        Quaternion( Radian( 1.570796f ), Vector3( 0, 1, 0 ) ),   //-X
+        Quaternion( Radian( 1.570796f ), Vector3( 1, 0, 0 ) ),   //+Y
+        Quaternion( Radian( -1.570796f ), Vector3( 1, 0, 0 ) ),  //-Y
+        Quaternion( 1, 0, 0, 0 ),                                //+Z
+        Quaternion( Radian( 3.1415927f ), Vector3( 0, 1, 0 ) )   //-Z
     };
 
-    CompositorPass::CompositorPass( const CompositorPassDef *definition,
-                                    CompositorNode *parentNode ) :
-            mDefinition( definition ),
-            mRenderPassDesc( 0 ),
-            mAnyTargetTexture( 0 ),
-            mAnyMipLevel( 0u ),
-            mNumPassesLeft( definition->mNumInitialPasses ),
-            mParentNode( parentNode ),
-            mNumValidResourceTransitions( 0 )
+    CompositorPass::CompositorPass( const CompositorPassDef *definition, CompositorNode *parentNode ) :
+        mDefinition( definition ),
+        mRenderPassDesc( 0 ),
+        mAnyTargetTexture( 0 ),
+        mAnyMipLevel( 0u ),
+        mNumPassesLeft( definition->mNumInitialPasses ),
+        mParentNode( parentNode ),
+        mBarrierSolver( parentNode->getWorkspace()->getCompositorManager()->getBarrierSolver() )
     {
         assert( definition->mNumInitialPasses && "Definition is broken, pass will never execute!" );
     }
@@ -88,7 +87,7 @@ namespace Ogre
                          "(e.g. you wrote target {} instead of target myTexture {}.\n"
                          "Only a few compositor passes support this (e.g. Compute passes)\n"
                          "Node with error: " +
-                         mDefinition->getParentTargetDef()->getParentNodeDef()->getNameStr() + "\n",
+                             mDefinition->getParentTargetDef()->getParentNodeDef()->getNameStr() + "\n",
                          "CompositorPass::CompositorPass" );
         }
 
@@ -98,21 +97,7 @@ namespace Ogre
             mRenderPassDesc = renderSystem->createRenderPassDescriptor();
             setupRenderPassDesc( rtv );
 
-            for( int i=0; i<mRenderPassDesc->getNumColourEntries() && !mAnyTargetTexture; ++i )
-            {
-                mAnyTargetTexture = mRenderPassDesc->mColour[i].texture;
-                mAnyMipLevel = mRenderPassDesc->mColour[i].mipLevel;
-            }
-            if( !mAnyTargetTexture )
-            {
-                mAnyTargetTexture = mRenderPassDesc->mDepth.texture;
-                mAnyMipLevel = mRenderPassDesc->mDepth.mipLevel;
-            }
-            if( !mAnyTargetTexture )
-            {
-                mAnyTargetTexture = mRenderPassDesc->mStencil.texture;
-                mAnyMipLevel = mRenderPassDesc->mStencil.mipLevel;
-            }
+            mRenderPassDesc->findAnyTexture( &mAnyTargetTexture, mAnyMipLevel );
         }
 
         populateTextureDependenciesFromExposedTextures();
@@ -150,39 +135,38 @@ namespace Ogre
         outVp->setDimensions( mAnyTargetTexture, vpSize, scissors, mAnyMipLevel );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::setRenderPassDescToCurrent(void)
+    void CompositorPass::setRenderPassDescToCurrent( void )
     {
         CompositorWorkspace *workspace = mParentNode->getWorkspace();
         uint8 workspaceVpMask = workspace->getViewportModifierMask();
 
-        bool applyModifier = (workspaceVpMask & mDefinition->mViewportModifierMask) != 0;
+        bool applyModifier = ( workspaceVpMask & mDefinition->mViewportModifierMask ) != 0;
         Vector4 vpModifier = applyModifier ? workspace->getViewportModifier() : Vector4( 0, 0, 1, 1 );
 
         const uint32 numViewports = mDefinition->mNumViewports;
         Vector4 vpSize[16];
         Vector4 scissors[16];
 
-        for( size_t i=0; i<numViewports; ++i )
+        for( size_t i = 0; i < numViewports; ++i )
         {
-            Real left   = mDefinition->mVpRect[i].mVpLeft      + vpModifier.x;
-            Real top    = mDefinition->mVpRect[i].mVpTop       + vpModifier.y;
-            Real width  = mDefinition->mVpRect[i].mVpWidth     * vpModifier.z;
-            Real height = mDefinition->mVpRect[i].mVpHeight    * vpModifier.w;
+            Real left = mDefinition->mVpRect[i].mVpLeft + vpModifier.x;
+            Real top = mDefinition->mVpRect[i].mVpTop + vpModifier.y;
+            Real width = mDefinition->mVpRect[i].mVpWidth * vpModifier.z;
+            Real height = mDefinition->mVpRect[i].mVpHeight * vpModifier.w;
 
-            Real scLeft   = mDefinition->mVpRect[i].mVpScissorLeft     + vpModifier.x;
-            Real scTop    = mDefinition->mVpRect[i].mVpScissorTop      + vpModifier.y;
-            Real scWidth  = mDefinition->mVpRect[i].mVpScissorWidth    * vpModifier.z;
-            Real scHeight = mDefinition->mVpRect[i].mVpScissorHeight   * vpModifier.w;
+            Real scLeft = mDefinition->mVpRect[i].mVpScissorLeft + vpModifier.x;
+            Real scTop = mDefinition->mVpRect[i].mVpScissorTop + vpModifier.y;
+            Real scWidth = mDefinition->mVpRect[i].mVpScissorWidth * vpModifier.z;
+            Real scHeight = mDefinition->mVpRect[i].mVpScissorHeight * vpModifier.w;
 
             vpSize[i] = Vector4( left, top, width, height );
             scissors[i] = Vector4( scLeft, scTop, scWidth, scHeight );
         }
 
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        renderSystem->beginRenderPassDescriptor( mRenderPassDesc, mAnyTargetTexture, mAnyMipLevel,
-                                                 vpSize, scissors, numViewports,
-                                                 mDefinition->mIncludeOverlays,
-                                                 mDefinition->mWarnIfRtvWasFlushed );
+        renderSystem->beginRenderPassDescriptor(
+            mRenderPassDesc, mAnyTargetTexture, mAnyMipLevel, vpSize, scissors, numViewports,
+            mDefinition->mIncludeOverlays, mDefinition->mWarnIfRtvWasFlushed );
     }
     //-----------------------------------------------------------------------------------
     CompositorPass::~CompositorPass()
@@ -193,8 +177,6 @@ namespace Ogre
             renderSystem->destroyRenderPassDescriptor( mRenderPassDesc );
             mRenderPassDesc = 0;
         }
-
-        _removeAllBarriers();
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::setupRenderPassDesc( const RenderTargetViewDef *rtv )
@@ -202,7 +184,7 @@ namespace Ogre
         if( rtv->isRuntimeAnalyzed() )
         {
             TextureGpu *texture =
-                    mParentNode->getDefinedTexture( rtv->colourAttachments[0].textureName );
+                mParentNode->getDefinedTexture( rtv->colourAttachments[0].textureName );
             RenderTargetViewDef tmpRtv;
             if( PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
             {
@@ -214,9 +196,9 @@ namespace Ogre
             else
             {
                 tmpRtv.colourAttachments.push_back( rtv->colourAttachments[0] );
-                tmpRtv.depthBufferId        = texture->getDepthBufferPoolId();
-                tmpRtv.preferDepthTexture   = texture->getPreferDepthTexture();
-                tmpRtv.depthBufferFormat    = texture->getDesiredDepthBufferFormat();
+                tmpRtv.depthBufferId = texture->getDepthBufferPoolId();
+                tmpRtv.preferDepthTexture = texture->getPreferDepthTexture();
+                tmpRtv.depthBufferFormat = texture->getDesiredDepthBufferFormat();
             }
 
             setupRenderPassDesc( &tmpRtv );
@@ -231,40 +213,40 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Cannot have more than " +
-                         StringConverter::toString( OGRE_MAX_MULTIPLE_RENDER_TARGETS ) +
-                         " colour attachments for RTV in " + mParentNode->getName().getFriendlyText(),
+                             StringConverter::toString( OGRE_MAX_MULTIPLE_RENDER_TARGETS ) +
+                             " colour attachments for RTV in " +
+                             mParentNode->getName().getFriendlyText(),
                          "CompositorPass::createRenderPassDesc" );
         }
 
-        for( size_t i=0; i<numColourAttachments; ++i )
+        for( size_t i = 0; i < numColourAttachments; ++i )
         {
-            renderPassDesc->mColour[i].loadAction   = mDefinition->mLoadActionColour[i];
-            renderPassDesc->mColour[i].storeAction  = mDefinition->mStoreActionColour[i];
-            renderPassDesc->mColour[i].clearColour  = mDefinition->mClearColour[i];
-            renderPassDesc->mColour[i].allLayers    = rtv->colourAttachments[i].colourAllLayers;
+            renderPassDesc->mColour[i].loadAction = mDefinition->mLoadActionColour[i];
+            renderPassDesc->mColour[i].storeAction = mDefinition->mStoreActionColour[i];
+            renderPassDesc->mColour[i].clearColour = mDefinition->mClearColour[i];
+            renderPassDesc->mColour[i].allLayers = rtv->colourAttachments[i].colourAllLayers;
             setupRenderPassTarget( &renderPassDesc->mColour[i], rtv->colourAttachments[i], true );
         }
 
-        renderPassDesc->mDepth.loadAction       = mDefinition->mLoadActionDepth;
-        renderPassDesc->mDepth.storeAction      = mDefinition->mStoreActionDepth;
-        renderPassDesc->mDepth.clearDepth       = mDefinition->mClearDepth;
-        renderPassDesc->mDepth.readOnly         = rtv->depthReadOnly ||
-                                                  mDefinition->mReadOnlyDepth;
+        renderPassDesc->mDepth.loadAction = mDefinition->mLoadActionDepth;
+        renderPassDesc->mDepth.storeAction = mDefinition->mStoreActionDepth;
+        renderPassDesc->mDepth.clearDepth = mDefinition->mClearDepth;
+        renderPassDesc->mDepth.readOnly = rtv->depthReadOnly || mDefinition->mReadOnlyDepth;
         setupRenderPassTarget( &renderPassDesc->mDepth, rtv->depthAttachment, false,
                                renderPassDesc->mColour[0].texture, rtv->depthBufferId,
                                rtv->preferDepthTexture, rtv->depthBufferFormat );
 
-        //Check if stencil is required.
+        // Check if stencil is required.
         PixelFormatGpu stencilFormat = PFG_UNKNOWN;
         if( rtv->stencilAttachment.textureName != IdString() )
         {
             TextureGpu *stencilTexture =
-                    mParentNode->getDefinedTexture( rtv->stencilAttachment.textureName );
+                mParentNode->getDefinedTexture( rtv->stencilAttachment.textureName );
             if( !stencilTexture )
             {
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                              "Couldn't find texture for RTV with name " +
-                             rtv->stencilAttachment.textureName.getFriendlyText(),
+                                 rtv->stencilAttachment.textureName.getFriendlyText(),
                              "CompositorPass::setupRenderPassTarget" );
             }
             PixelFormatGpu preferredFormat = stencilTexture->getPixelFormat();
@@ -282,7 +264,7 @@ namespace Ogre
             else if( renderPassDesc->mColour[0].texture )
             {
                 PixelFormatGpu desiredFormat =
-                        renderPassDesc->mColour[0].texture->getDesiredDepthBufferFormat();
+                    renderPassDesc->mColour[0].texture->getDesiredDepthBufferFormat();
                 if( PixelFormatGpuUtils::isStencil( desiredFormat ) )
                     stencilFormat = desiredFormat;
             }
@@ -290,11 +272,10 @@ namespace Ogre
 
         if( stencilFormat != PFG_UNKNOWN )
         {
-            renderPassDesc->mStencil.loadAction     = mDefinition->mLoadActionStencil;
-            renderPassDesc->mStencil.storeAction    = mDefinition->mStoreActionStencil;
-            renderPassDesc->mStencil.clearStencil   = mDefinition->mClearStencil;
-            renderPassDesc->mStencil.readOnly       = rtv->stencilReadOnly ||
-                                                      mDefinition->mReadOnlyStencil;
+            renderPassDesc->mStencil.loadAction = mDefinition->mLoadActionStencil;
+            renderPassDesc->mStencil.storeAction = mDefinition->mStoreActionStencil;
+            renderPassDesc->mStencil.clearStencil = mDefinition->mClearStencil;
+            renderPassDesc->mStencil.readOnly = rtv->stencilReadOnly || mDefinition->mReadOnlyStencil;
             setupRenderPassTarget( &renderPassDesc->mStencil, rtv->stencilAttachment, false,
                                    renderPassDesc->mColour[0].texture, rtv->depthBufferId,
                                    rtv->preferDepthTexture, rtv->depthBufferFormat );
@@ -314,68 +295,69 @@ namespace Ogre
     {
         if( !isColourAttachment )
         {
-            //This is depth or stencil
+            // This is depth or stencil
             if( rtvEntry.textureName != IdString() )
             {
                 renderPassTargetAttachment->texture =
-                        mParentNode->getDefinedTexture( rtvEntry.textureName );
+                    mParentNode->getDefinedTexture( rtvEntry.textureName );
 
                 if( !renderPassTargetAttachment->texture )
                 {
                     OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                                  "Couldn't find texture for RTV with name " +
-                                 rtvEntry.textureName.getFriendlyText(),
+                                     rtvEntry.textureName.getFriendlyText(),
                                  "CompositorPass::setupRenderPassTarget" );
                 }
             }
             else if( linkedColourAttachment )
             {
                 RenderSystem *renderSystem = mParentNode->getRenderSystem();
-                renderPassTargetAttachment->texture =
-                        renderSystem->getDepthBufferFor( linkedColourAttachment, depthBufferId,
-                                                         preferDepthTexture, depthBufferFormat );
+                renderPassTargetAttachment->texture = renderSystem->getDepthBufferFor(
+                    linkedColourAttachment, depthBufferId, preferDepthTexture, depthBufferFormat );
             }
         }
         else if( rtvEntry.textureName != IdString() )
         {
-            //This is colour
-            renderPassTargetAttachment->texture =
-                    mParentNode->getDefinedTexture( rtvEntry.textureName );
+            // This is colour
+            renderPassTargetAttachment->texture = mParentNode->getDefinedTexture( rtvEntry.textureName );
 
             if( !renderPassTargetAttachment->texture )
             {
-                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                             "Couldn't find texture for RTV with name " +
-                             rtvEntry.textureName.getFriendlyText(),
-                             "CompositorPass::setupRenderPassTarget" );
+                OGRE_EXCEPT(
+                    Exception::ERR_ITEM_NOT_FOUND,
+                    "Couldn't find texture for RTV with name " + rtvEntry.textureName.getFriendlyText(),
+                    "CompositorPass::setupRenderPassTarget" );
             }
 
-            //Deal with MSAA resolve textures.
+            // Deal with MSAA resolve textures.
             if( renderPassTargetAttachment->texture->isMultisample() )
             {
                 if( renderPassTargetAttachment->storeAction == StoreAction::MultisampleResolve ||
                     renderPassTargetAttachment->storeAction == StoreAction::StoreAndMultisampleResolve ||
-                    (renderPassTargetAttachment->storeAction == StoreAction::StoreOrResolve &&
-                     (!renderPassTargetAttachment->texture->hasMsaaExplicitResolves() ||
-                      rtvEntry.resolveTextureName != IdString())) )
+                    ( renderPassTargetAttachment->storeAction == StoreAction::StoreOrResolve &&
+                      ( !renderPassTargetAttachment->texture->hasMsaaExplicitResolves() ||
+                        rtvEntry.resolveTextureName != IdString() ) ) )
                 {
-                    //If we're here, the texture is MSAA _AND_ we'll resolve it.
+                    // If we're here, the texture is MSAA _AND_ we'll resolve it.
                     if( rtvEntry.resolveTextureName == IdString() )
                     {
                         if( !allowResolveStoreActionsWithoutResolveTexture() )
                         {
                             if( renderPassTargetAttachment->texture->hasMsaaExplicitResolves() )
                             {
-                                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                             "Must specify resolveTextureName for RTV when using explicit "
-                                             "resolves and store action is either "
-                                             "StoreAction::MultisampleResolve, "
-                                             "StoreAction::StoreAndMultisampleResolve. "
-                                             "Texture: " + renderPassTargetAttachment->texture->getNameStr(),
-                                             "CompositorPass::setupRenderPassTarget" );
+                                OGRE_EXCEPT(
+                                    Exception::ERR_INVALIDPARAMS,
+                                    "Must specify resolveTextureName for RTV when using explicit "
+                                    "resolves and store action is either "
+                                    "StoreAction::MultisampleResolve, "
+                                    "StoreAction::StoreAndMultisampleResolve. "
+                                    "Texture: " +
+                                        renderPassTargetAttachment->texture->getNameStr(),
+                                    "CompositorPass::setupRenderPassTarget" );
                             }
 
-                            renderPassTargetAttachment->resolveTexture = renderPassTargetAttachment->texture;
+                            renderPassTargetAttachment->resolveTexture =
+                                renderPassTargetAttachment->texture;
                         }
                         else
                         {
@@ -384,16 +366,16 @@ namespace Ogre
                     }
                     else
                     {
-                        //Resolve texture is explicitly defined.
-                        //Allow this even if the texture has implicit resolves.
+                        // Resolve texture is explicitly defined.
+                        // Allow this even if the texture has implicit resolves.
                         renderPassTargetAttachment->resolveTexture =
-                                mParentNode->getDefinedTexture( rtvEntry.resolveTextureName );
+                            mParentNode->getDefinedTexture( rtvEntry.resolveTextureName );
 
                         if( !renderPassTargetAttachment->resolveTexture )
                         {
                             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                                          "Couldn't find resolve texture for RTV with name " +
-                                         rtvEntry.resolveTextureName.getFriendlyText(),
+                                             rtvEntry.resolveTextureName.getFriendlyText(),
                                          "CompositorPass::setupRenderPassTarget" );
                         }
 
@@ -403,9 +385,9 @@ namespace Ogre
                                          "Cannot specify a non-MSAA texture for resolving an "
                                          "MSAA texture."
                                          "\nMSAA Texture: " +
-                                         renderPassTargetAttachment->texture->getNameStr() +
-                                         "\nBroken Resolve Texture: " +
-                                         renderPassTargetAttachment->resolveTexture->getNameStr(),
+                                             renderPassTargetAttachment->texture->getNameStr() +
+                                             "\nBroken Resolve Texture: " +
+                                             renderPassTargetAttachment->resolveTexture->getNameStr(),
                                          "CompositorPass::setupRenderPassTarget" );
                         }
                     }
@@ -413,12 +395,12 @@ namespace Ogre
             }
         }
 
-        renderPassTargetAttachment->mipLevel        = rtvEntry.mipLevel;
+        renderPassTargetAttachment->mipLevel = rtvEntry.mipLevel;
         renderPassTargetAttachment->resolveMipLevel = rtvEntry.resolveMipLevel;
         if( !isColourAttachment || mDefinition->getRtIndex() == 0 )
         {
-            renderPassTargetAttachment->slice       = rtvEntry.slice;
-            renderPassTargetAttachment->resolveSlice= rtvEntry.resolveSlice;
+            renderPassTargetAttachment->slice = rtvEntry.slice;
+            renderPassTargetAttachment->resolveSlice = rtvEntry.resolveSlice;
         }
         else
         {
@@ -429,7 +411,7 @@ namespace Ogre
             {
                 renderPassTargetAttachment->slice = (uint16)mDefinition->getRtIndex();
             }
-            renderPassTargetAttachment->resolveSlice= (uint16)mDefinition->getRtIndex();
+            renderPassTargetAttachment->resolveSlice = (uint16)mDefinition->getRtIndex();
         }
 
         if( renderPassTargetAttachment->storeAction == StoreAction::StoreOrResolve )
@@ -449,7 +431,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::profilingBegin(void)
+    void CompositorPass::profilingBegin( void )
     {
 #if OGRE_PROFILING
         if( !mParentNode->getWorkspace()->getAmalgamatedProfiling() )
@@ -460,7 +442,7 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::profilingEnd(void)
+    void CompositorPass::profilingEnd( void )
     {
         if( mDefinition->mFlushCommandBuffers )
         {
@@ -476,12 +458,12 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::populateTextureDependenciesFromExposedTextures(void)
+    void CompositorPass::populateTextureDependenciesFromExposedTextures( void )
     {
         IdStringVec::const_iterator itor = mDefinition->mExposedTextures.begin();
-        IdStringVec::const_iterator end  = mDefinition->mExposedTextures.end();
+        IdStringVec::const_iterator endt = mDefinition->mExposedTextures.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             TextureGpu *channel = mParentNode->getDefinedTexture( *itor );
             mTextureDependencies.push_back( CompositorTexture( *itor, channel ) );
@@ -490,220 +472,124 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::executeResourceTransitions(void)
+    void CompositorPass::executeResourceTransitions( void )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-
-        assert( mNumValidResourceTransitions <= mResourceTransitions.size() );
-        ResourceTransitionVec::iterator itor = mResourceTransitions.begin();
-
-        for( size_t i=0; i<mNumValidResourceTransitions; ++i )
-        {
-            renderSystem->_executeResourceTransition( &(*itor) );
-            ++itor;
-        }
-    }
-    inline uint32 transitionWriteBarrierBits( ResourceLayout::Layout oldLayout )
-    {
-        uint32 retVal = 0;
-        switch( oldLayout )
-        {
-        case ResourceLayout::RenderTarget:
-            retVal = WriteBarrier::RenderTarget;
-            break;
-        case ResourceLayout::RenderDepth:
-            retVal = WriteBarrier::DepthStencil;
-            break;
-        case ResourceLayout::Uav:
-            retVal = WriteBarrier::Uav;
-            break;
-        }
-
-        return retVal;
+        renderSystem->executeResourceTransition( mResourceTransitions );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyPassEarlyPreExecuteListeners(void)
+    void CompositorPass::notifyPassEarlyPreExecuteListeners( void )
     {
-        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+        const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator end = listeners.end();
 
         while( itor != end )
         {
-            (*itor)->passEarlyPreExecute( this );
+            ( *itor )->passEarlyPreExecute( this );
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyPassPreExecuteListeners(void)
+    void CompositorPass::notifyPassPreExecuteListeners( void )
     {
-        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+        const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator end = listeners.end();
 
         while( itor != end )
         {
-            (*itor)->passPreExecute( this );
+            ( *itor )->passPreExecute( this );
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyPassPosExecuteListeners(void)
+    void CompositorPass::notifyPassPosExecuteListeners( void )
     {
-        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+        const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator end = listeners.end();
 
         while( itor != end )
         {
-            (*itor)->passPosExecute( this );
+            ( *itor )->passPosExecute( this );
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::addResourceTransition( ResourceLayoutMap::iterator currentLayout,
-                                                ResourceLayout::Layout newLayout,
-                                                uint32 readBarrierBits )
+    void CompositorPass::resolveTransition( TextureGpu *texture, ResourceLayout::Layout newLayout,
+                                            ResourceAccess::ResourceAccess access, uint8 stageMask )
     {
-        ResourceTransition transition;
-        //transition.resource = ; TODO
-        transition.oldLayout = currentLayout->second;
-        transition.newLayout = newLayout;
-        transition.writeBarrierBits = transitionWriteBarrierBits( transition.oldLayout );
-        transition.readBarrierBits  = readBarrierBits;
-
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-        if( !caps->hasCapability( RSC_EXPLICIT_API ) )
-        {
-            //OpenGL. Merge the bits and use only one global barrier.
-            //Keep the extra barriers uninitialized for debugging purposes,
-            //but we won't be really using them.
-            if( mResourceTransitions.empty() )
-            {
-                ResourceTransition globalBarrier;
-                globalBarrier.oldLayout = ResourceLayout::Undefined;
-                globalBarrier.newLayout = ResourceLayout::Undefined;
-                globalBarrier.writeBarrierBits  = transition.writeBarrierBits;
-                globalBarrier.readBarrierBits   = transition.readBarrierBits;
-                globalBarrier.mRsData = 0;
-                renderSystem->_resourceTransitionCreated( &globalBarrier );
-                mResourceTransitions.push_back( globalBarrier );
-            }
-            else
-            {
-                ResourceTransition &globalBarrier = mResourceTransitions.front();
-
-                renderSystem->_resourceTransitionDestroyed( &globalBarrier );
-
-                globalBarrier.writeBarrierBits  |= transition.writeBarrierBits;
-                globalBarrier.readBarrierBits   |= transition.readBarrierBits;
-
-                renderSystem->_resourceTransitionCreated( &globalBarrier );
-            }
-
-            mNumValidResourceTransitions = 1;
-        }
-        else
-        {
-            //D3D12, Vulkan, Mantle. Takes advantage of per-resource barriers
-            renderSystem->_resourceTransitionCreated( &transition );
-            ++mNumValidResourceTransitions;
-        }
-
-        mResourceTransitions.push_back( transition );
-
-        currentLayout->second = transition.newLayout;
+        mBarrierSolver.resolveTransition( mResourceTransitions, texture, newLayout, access, stageMask );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::_placeBarriersAndEmulateUavExecution(
-                                            BoundUav boundUavs[64], ResourceAccessMap &uavsAccess,
-                                            ResourceLayoutMap &resourcesLayout )
+    void CompositorPass::resolveTransition( GpuTrackedResource *bufferRes,
+                                            ResourceAccess::ResourceAccess access, uint8 stageMask )
     {
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-        const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
-
-        {
-            //mResourceTransitions will be non-empty if we call _placeBarriersAndEmulateUavExecution
-            //for a second time (i.e. 2nd pass to check frame-to-frame dependencies). We need
-            //to tell what is shielded. On the first time, it should be empty.
-            ResourceTransitionVec::const_iterator itor = mResourceTransitions.begin();
-            ResourceTransitionVec::const_iterator end  = mResourceTransitions.end();
-
-            while( itor != end )
-            {
-                if( itor->newLayout == ResourceLayout::Uav &&
-                    itor->writeBarrierBits & WriteBarrier::Uav &&
-                    itor->readBarrierBits & ReadBarrier::Uav )
-                {
-                    TextureGpu *renderTarget = 0;
-                    resourcesLayout[renderTarget] = ResourceLayout::Uav;
-                    //Set to undefined so that following passes
-                    //can see it's safe / shielded by a barrier
-                    uavsAccess[renderTarget] = ResourceAccess::Undefined;
-                }
-                ++itor;
-            }
-        }
+        mBarrierSolver.resolveTransition( mResourceTransitions, bufferRes, access, stageMask );
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPass::analyzeBarriers( void )
+    {
+        mResourceTransitions.clear();
 
         if( mRenderPassDesc )
         {
-            //Check <anything> -> RT
-            ResourceLayoutMap::iterator currentLayout;
-            for( int i=0; i<mRenderPassDesc->getNumColourEntries(); ++i )
+            // Check <anything> -> RT
+            for( int i = 0; i < mRenderPassDesc->getNumColourEntries(); ++i )
             {
-                currentLayout = resourcesLayout.find( mRenderPassDesc->mColour[i].texture );
-                if( (currentLayout->second != ResourceLayout::RenderTarget && explicitApi) ||
-                    currentLayout->second == ResourceLayout::Uav )
+                RenderPassColourTarget &colourRenderPass = mRenderPassDesc->mColour[i];
+                if( !colourRenderPass.resolveTexture )
                 {
-                    addResourceTransition( currentLayout,
-                                           ResourceLayout::RenderTarget,
-                                           ReadBarrier::RenderTarget );
+                    resolveTransition( colourRenderPass.texture, ResourceLayout::RenderTarget,
+                                       ResourceAccess::ReadWrite, 0u );
+                }
+                else
+
+                {
+                    resolveTransition( colourRenderPass.resolveTexture, ResourceLayout::ResolveDest,
+                                       ResourceAccess::Write, 0u );
+                    if( colourRenderPass.resolveTexture != colourRenderPass.texture )
+                    {
+                        resolveTransition( colourRenderPass.texture, ResourceLayout::RenderTarget,
+                                           ResourceAccess::ReadWrite, 0u );
+                    }
                 }
             }
             if( mRenderPassDesc->mDepth.texture )
             {
-                currentLayout = resourcesLayout.find( mRenderPassDesc->mDepth.texture );
-                if( currentLayout == resourcesLayout.end() )
+                if( !mRenderPassDesc->mDepth.readOnly )
                 {
-                    resourcesLayout[mRenderPassDesc->mDepth.texture] = ResourceLayout::Undefined;
-                    currentLayout = resourcesLayout.find( mRenderPassDesc->mDepth.texture );
+                    resolveTransition( mRenderPassDesc->mDepth.texture, ResourceLayout::RenderTarget,
+                                       ResourceAccess::ReadWrite, 0u );
                 }
-
-                if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
-                    currentLayout->second == ResourceLayout::Uav )
+                else
                 {
-                    addResourceTransition( currentLayout,
-                                           ResourceLayout::RenderDepth,
-                                           ReadBarrier::DepthStencil );
+                    resolveTransition( mRenderPassDesc->mDepth.texture,
+                                       ResourceLayout::RenderTargetReadOnly, ResourceAccess::Read, 0u );
                 }
             }
             if( mRenderPassDesc->mStencil.texture &&
                 mRenderPassDesc->mStencil.texture != mRenderPassDesc->mDepth.texture )
             {
-                currentLayout = resourcesLayout.find( mRenderPassDesc->mStencil.texture );
-                if( currentLayout == resourcesLayout.end() )
+                if( !mRenderPassDesc->mDepth.readOnly && !mRenderPassDesc->mStencil.readOnly )
                 {
-                    resourcesLayout[mRenderPassDesc->mStencil.texture] = ResourceLayout::Undefined;
-                    currentLayout = resourcesLayout.find( mRenderPassDesc->mStencil.texture );
+                    resolveTransition( mRenderPassDesc->mStencil.texture, ResourceLayout::RenderTarget,
+                                       ResourceAccess::ReadWrite, 0u );
                 }
-
-                if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
-                    currentLayout->second == ResourceLayout::Uav )
+                else
                 {
-                    addResourceTransition( currentLayout,
-                                           ResourceLayout::RenderDepth,
-                                           ReadBarrier::DepthStencil );
+                    resolveTransition( mRenderPassDesc->mStencil.texture,
+                                       ResourceLayout::RenderTargetReadOnly, ResourceAccess::Read, 0u );
                 }
             }
         }
 
         {
-            //Check <anything> -> Texture
+            // Check <anything> -> Texture
             CompositorTextureVec::const_iterator itDep = mTextureDependencies.begin();
             CompositorTextureVec::const_iterator enDep = mTextureDependencies.end();
 
@@ -711,98 +597,58 @@ namespace Ogre
             {
                 TextureGpu *renderTarget = itDep->texture;
 
-                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( renderTarget );
-
-                if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
-                     currentLayout->second == ResourceLayout::Uav )
-                {
-                    addResourceTransition( currentLayout,
-                                           ResourceLayout::Texture,
-                                           ReadBarrier::Texture );
-                }
-
+                resolveTransition( renderTarget, ResourceLayout::Texture, ResourceAccess::Read,
+                                   c_allGraphicStagesMask );
                 ++itDep;
             }
         }
 
-        //Check <anything> -> UAV; including UAV -> UAV
-        //Except for RaR (Read after Read) and some WaW (Write after Write),
-        //Uavs are always hazardous, an UAV->UAV 'transition' is just a memory barrier.
-        CompositorPassDef::UavDependencyVec::const_iterator itor = mDefinition->mUavDependencies.begin();
-        CompositorPassDef::UavDependencyVec::const_iterator end  = mDefinition->mUavDependencies.end();
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
 
-        while( itor != end )
+        // Check <anything> -> UAV
+        CompositorPassDef::UavDependencyVec::const_iterator itor = mDefinition->mUavDependencies.begin();
+        CompositorPassDef::UavDependencyVec::const_iterator endt = mDefinition->mUavDependencies.end();
+
+        while( itor != endt )
         {
-            GpuTrackedResource *uavRt = boundUavs[itor->uavSlot].rttOrBuffer;
+            BoundUav boundUav = renderSystem->getBoundUav( itor->uavSlot );
+            GpuTrackedResource *uavRt = boundUav.rttOrBuffer;
 
             if( !uavRt )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "No UAV is bound at slot " + StringConverter::toString( itor->uavSlot ) +
-                             " but it is marked as used by node " +
-                             mParentNode->getName().getFriendlyText() + "; pass #" +
-                             StringConverter::toString( mParentNode->getPassNumber( this ) ),
+                                 " but it is marked as used by node " +
+                                 mParentNode->getName().getFriendlyText() + "; pass #" +
+                                 StringConverter::toString( mParentNode->getPassNumber( this ) ),
                              "CompositorPass::emulateUavExecution" );
             }
 
-            if( !(itor->access & boundUavs[itor->uavSlot].boundAccess) )
+            if( !( itor->access & boundUav.boundAccess ) )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "Node " + mParentNode->getName().getFriendlyText() + "; pass #" +
-                             StringConverter::toString( mParentNode->getPassNumber( this ) ) +
-                             " marked " + ResourceAccess::toString( itor->access ) +
-                             " access to UAV at slot " +
-                             StringConverter::toString( itor->uavSlot ) + " but this UAV is bound for " +
-                             ResourceAccess::toString( boundUavs[itor->uavSlot].boundAccess ) +
-                             " access.", "CompositorPass::emulateUavExecution" );
+                                 StringConverter::toString( mParentNode->getPassNumber( this ) ) +
+                                 " marked " + ResourceAccess::toString( itor->access ) +
+                                 " access to UAV at slot " + StringConverter::toString( itor->uavSlot ) +
+                                 " but this UAV is bound for " +
+                                 ResourceAccess::toString( boundUav.boundAccess ) + " access.",
+                             "CompositorPass::emulateUavExecution" );
             }
 
-            ResourceAccessMap::iterator itResAccess = uavsAccess.find( uavRt );
-
-            if( itResAccess == uavsAccess.end() )
+            if( uavRt->isTextureGpu() )
             {
-                //First time accessing the UAV. If we need a barrier,
-                //we will see it in the second pass.
-                uavsAccess[uavRt] = ResourceAccess::Undefined;
-                itResAccess = uavsAccess.find( uavRt );
+                OGRE_ASSERT_HIGH( dynamic_cast<TextureGpu *>( uavRt ) );
+                resolveTransition( static_cast<TextureGpu *>( uavRt ), ResourceLayout::Uav, itor->access,
+                                   c_allGraphicStagesMask );
             }
-
-            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( uavRt );
-
-            if( currentLayout->second != ResourceLayout::Uav ||
-                !( (itor->access == ResourceAccess::Read &&
-                    itResAccess->second == ResourceAccess::Read) ||
-                   (itor->access == ResourceAccess::Write &&
-                    itResAccess->second == ResourceAccess::Write &&
-                    itor->allowWriteAfterWrite) ||
-                   itResAccess->second == ResourceAccess::Undefined ) )
+            else
             {
-                //Not RaR (or not WaW when they're explicitly allowed). Insert the barrier.
-                //We also may need the barrier if the resource wasn't an UAV.
-                addResourceTransition( currentLayout, ResourceLayout::Uav, ReadBarrier::Uav );
+                resolveTransition( uavRt, itor->access, c_allGraphicStagesMask );
             }
-
-            itResAccess->second = itor->access;
 
             ++itor;
         }
-    }
-    //-----------------------------------------------------------------------------------
-    void CompositorPass::_removeAllBarriers(void)
-    {
-        assert( mNumValidResourceTransitions <= mResourceTransitions.size() );
-
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        ResourceTransitionVec::iterator itor = mResourceTransitions.begin();
-
-        for( size_t i=0; i<mNumValidResourceTransitions; ++i )
-        {
-            renderSystem->_resourceTransitionDestroyed( &(*itor) );
-            ++itor;
-        }
-
-        mNumValidResourceTransitions = 0;
-        mResourceTransitions.clear();
     }
     //-----------------------------------------------------------------------------------
     bool CompositorPass::notifyRecreated( const TextureGpu *channel )
@@ -817,7 +663,7 @@ namespace Ogre
         if( mRenderPassDesc->mStencil.texture == channel )
             usedByUs = true;
 
-        for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS && !usedByUs; ++i )
+        for( int i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS && !usedByUs; ++i )
         {
             if( mRenderPassDesc->mColour[i].texture == channel ||
                 mRenderPassDesc->mColour[i].resolveTexture == channel )
@@ -830,8 +676,8 @@ namespace Ogre
         {
             mNumPassesLeft = mDefinition->mNumInitialPasses;
 
-            //Reset texture pointers and setup RenderPassDescriptor again
-			RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            // Reset texture pointers and setup RenderPassDescriptor again
+            RenderSystem *renderSystem = mParentNode->getRenderSystem();
             if( mRenderPassDesc->mDepth.texture )
             {
                 renderSystem->_dereferenceSharedDepthBuffer( mRenderPassDesc->mDepth.texture );
@@ -850,7 +696,7 @@ namespace Ogre
                 mRenderPassDesc->mStencil.texture = 0;
             }
 
-            for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            for( int i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
             {
                 mRenderPassDesc->mColour[i].texture = 0;
                 mRenderPassDesc->mColour[i].resolveTexture = 0;
@@ -859,7 +705,7 @@ namespace Ogre
             const CompositorNodeDef *nodeDef = mParentNode->getDefinition();
             const CompositorTargetDef *targetDef = mDefinition->getParentTargetDef();
             const RenderTargetViewDef *rtvDef =
-                    nodeDef->getRenderTargetViewDef( targetDef->getRenderTargetName() );
+                nodeDef->getRenderTargetViewDef( targetDef->getRenderTargetName() );
             setupRenderPassDesc( rtvDef );
         }
 
@@ -882,7 +728,7 @@ namespace Ogre
         if( mRenderPassDesc->mStencil.texture == channel )
             usedByUs = true;
 
-        for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS && !usedByUs; ++i )
+        for( int i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS && !usedByUs; ++i )
         {
             if( mRenderPassDesc->mColour[i].texture == channel ||
                 mRenderPassDesc->mColour[i].resolveTexture == channel )
@@ -899,11 +745,9 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyDestroyed( const UavBufferPacked *buffer )
-    {
-    }
+    void CompositorPass::notifyDestroyed( const UavBufferPacked *buffer ) {}
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyCleared(void)
+    void CompositorPass::notifyCleared( void )
     {
         if( mRenderPassDesc )
         {
@@ -913,16 +757,13 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::resetNumPassesLeft(void)
-    {
-        mNumPassesLeft = mDefinition->mNumInitialPasses;
-    }
+    void CompositorPass::resetNumPassesLeft( void ) { mNumPassesLeft = mDefinition->mNumInitialPasses; }
     //-----------------------------------------------------------------------------------
-    Vector2 CompositorPass::getActualDimensions(void) const
+    Vector2 CompositorPass::getActualDimensions( void ) const
     {
-        return Vector2( floorf( (mAnyTargetTexture->getWidth() >> mAnyMipLevel) *
+        return Vector2( floorf( ( mAnyTargetTexture->getWidth() >> mAnyMipLevel ) *
                                 mDefinition->mVpRect[0].mVpWidth ),
-                        floorf( (mAnyTargetTexture->getHeight() >> mAnyMipLevel) *
+                        floorf( ( mAnyTargetTexture->getHeight() >> mAnyMipLevel ) *
                                 mDefinition->mVpRect[0].mVpHeight ) );
     }
-}
+}  // namespace Ogre

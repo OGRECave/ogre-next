@@ -52,8 +52,7 @@ namespace Ogre
                                               uint8 executionMask, uint8 viewportModifierMask,
                                               const Vector4 &vpOffsetScale,
                                               const UavBufferPackedVec *uavBuffers,
-                                              const ResourceLayoutMap *initialLayouts,
-                                              const ResourceAccessMap *initialUavAccess ) :
+                                              const ResourceStatusMap *initialLayouts ) :
             IdObject( id ),
             mDefinition( definition ),
             mValid( false ),
@@ -65,22 +64,16 @@ namespace Ogre
             mExternalRenderTargets( externalRenderTargets ),
             mExecutionMask( executionMask ),
             mViewportModifierMask( viewportModifierMask ),
-            mViewportModifier( vpOffsetScale ),
-            mBarriersDirty( true )
+            mViewportModifier( vpOffsetScale )
     {
         assert( (!defaultCam || (defaultCam->getSceneManager() == sceneManager)) &&
                 "Camera was created with a different SceneManager than supplied" );
-
-        assert( ((initialLayouts && initialUavAccess) || (!initialLayouts && !initialUavAccess)) &&
-                "If initial layout is provided, initial UAV access must be provided as well" );
 
         if( uavBuffers )
             mExternalBuffers = *uavBuffers;
 
         if( initialLayouts )
-            mInitialResourcesLayout = *initialLayouts;
-        if( initialUavAccess )
-            mInitialUavsAccess = *initialUavAccess;
+            mInitialLayouts = *initialLayouts;
 
         TextureGpu *finalTarget = getFinalTarget();
 
@@ -354,7 +347,7 @@ namespace Ogre
 
             mValid = true;
 
-            analyzeHazardsAndPlaceBarriers();
+            _notifyBarriersDirty();
         }
 
 #if OGRE_PROFILING
@@ -481,73 +474,6 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::analyzeHazardsAndPlaceBarriers(void)
-    {
-        mResourcesLayout    = mInitialResourcesLayout;
-        mUavsAccess         = mInitialUavsAccess;
-
-        //Q: Include mListener in the constructor so that we can account for the listener?
-        //A: No. If the user overrides normal behavior, it's his responsability to clean
-        //   whatever he ends up doing.
-        BoundUav boundUavs[64];
-        memset( boundUavs, 0, sizeof(boundUavs) );
-
-        //Initialize to undefined state
-        CompositorNode::initResourcesLayout( mResourcesLayout, mExternalRenderTargets,
-                                             ResourceLayout::Undefined );
-        CompositorNode::fillResourcesLayout( mResourcesLayout, mGlobalTextures,
-                                             ResourceLayout::Undefined );
-        CompositorNode::initResourcesLayout( mResourcesLayout, mGlobalBuffers,
-                                             ResourceLayout::Undefined );
-
-        {
-            //Place the barriers
-            CompositorNodeVec::iterator itor = mNodeSequence.begin();
-            CompositorNodeVec::iterator end  = mNodeSequence.end();
-
-            while( itor != end )
-            {
-                if( (*itor)->getEnabled() )
-                {
-                    (*itor)->_placeBarriersAndEmulateUavExecution( boundUavs, mUavsAccess,
-                                                                   mResourcesLayout );
-                }
-                ++itor;
-            }
-        }
-
-        const RenderSystemCapabilities *caps = mRenderSys->getCapabilities();
-        const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
-
-        if( explicitApi )
-        {
-            //Check the output is still a RenderTarget at the end.
-            CompositorNode *node = getLastEnabledNode();
-
-            if( node )
-            {
-                CompositorChannelVec::const_iterator itor = mExternalRenderTargets.begin();
-                CompositorChannelVec::const_iterator end  = mExternalRenderTargets.end();
-                while( itor != end )
-                {
-                    TextureGpu *renderTarget = *itor;
-                    if( renderTarget->isRenderWindowSpecific() )
-                    {
-                        ResourceLayoutMap::iterator currentLayout =
-                                mResourcesLayout.find( renderTarget );
-
-                        if( currentLayout->second != ResourceLayout::RenderTarget )
-                            node->_setFinalTargetAsRenderTarget( currentLayout );
-                    }
-
-                    ++itor;
-                }
-            }
-        }
-
-        mBarriersDirty = false;
-    }
-    //-----------------------------------------------------------------------------------
     CompositorNode* CompositorWorkspace::getLastEnabledNode(void)
     {
         CompositorNode *retVal = 0;
@@ -639,11 +565,52 @@ namespace Ogre
             mListeners.erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::fillUavDependenciesForNextWorkspace(
-        ResourceLayoutMap &outInitialLayouts, ResourceAccessMap &outInitialUavAccess ) const
+    void CompositorWorkspace::fillPassesUsingRenderWindows(
+        PassesByRenderWindowMap &passesUsingRenderWindows )
     {
-        outInitialLayouts.insert( mResourcesLayout.begin(), mResourcesLayout.end() );
-        outInitialUavAccess.insert( mUavsAccess.begin(), mUavsAccess.end() );
+        CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
+        CompositorNodeVec::const_iterator endt = mNodeSequence.end();
+
+        while( itor != endt )
+        {
+            CompositorNode *node = *itor;
+            if( node->getEnabled() )
+            {
+                const CompositorPassVec &passes = node->_getPasses();
+
+                CompositorPassVec::const_iterator itPass = passes.begin();
+                CompositorPassVec::const_iterator enPass = passes.end();
+
+                while( itPass != enPass )
+                {
+                    const RenderPassDescriptor *renderPassDesc = ( *itPass )->getRenderPassDesc();
+
+                    if( renderPassDesc )
+                    {
+                        const size_t numColourEntries = renderPassDesc->getNumColourEntries();
+                        for( size_t i = 0u; i < numColourEntries; ++i )
+                        {
+                            TextureGpu *texture;
+
+                            // Add the pass only once
+                            texture = renderPassDesc->mColour[i].texture;
+                            if( texture && texture->isRenderWindowSpecific() )
+                                passesUsingRenderWindows[texture].push_back( *itPass );
+                            else
+                            {
+                                texture = renderPassDesc->mColour[i].resolveTexture;
+                                if( texture && texture->isRenderWindowSpecific() )
+                                    passesUsingRenderWindows[texture].push_back( *itPass );
+                            }
+                        }
+                    }
+
+                    ++itPass;
+                }
+            }
+
+            ++itor;
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorWorkspace::recreateAllNodes(void)
@@ -682,6 +649,11 @@ namespace Ogre
             finalTarget = mExternalRenderTargets.front();
 
         return finalTarget;
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorWorkspace::_notifyBarriersDirty( void )
+    {
+        getCompositorManager()->_notifyBarriersDirty();
     }
     //-----------------------------------------------------------------------------------
     CompositorManager2* CompositorWorkspace::getCompositorManager()
@@ -733,20 +705,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorWorkspace::_update(void)
     {
-        if( mBarriersDirty )
-        {
-            CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
-            CompositorNodeVec::const_iterator end  = mNodeSequence.end();
-
-            while( itor != end )
-            {
-                (*itor)->_removeAllBarriers();
-                ++itor;
-            }
-
-            analyzeHazardsAndPlaceBarriers();
-        }
-
         {
             CompositorWorkspaceListenerVec::const_iterator itor = mListeners.begin();
             CompositorWorkspaceListenerVec::const_iterator end  = mListeners.end();
@@ -822,6 +780,8 @@ namespace Ogre
                                                              mGlobalBuffers, finalTarget,
                                                              mRenderSys, allNodes, 0 );
         }
+
+        mDefinition->mCompositorManager->getBarrierSolver().assumeTransitions( mInitialLayouts );
 
         CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
         CompositorNodeVec::const_iterator end  = mNodeSequence.end();

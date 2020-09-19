@@ -641,8 +641,6 @@ namespace Ogre {
         {
             return msMovableType;
         }
-        virtual void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera,
-                                        RealAsUint depth) {}
     };
 
     /** @} */

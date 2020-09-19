@@ -35,10 +35,11 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    CbTexture::CbTexture( uint16 _texUnit, TextureGpu *_texture,
-                          const HlmsSamplerblock *_samplerBlock ) :
+    CbTexture::CbTexture( uint16 _texUnit, TextureGpu *_texture, const HlmsSamplerblock *_samplerBlock,
+                          bool bDepthReadOnly ) :
         CbBase( CB_SET_TEXTURE ),
         texUnit( _texUnit ),
+        bDepthReadOnly( bDepthReadOnly ),
         texture( _texture ),
         samplerBlock( _samplerBlock )
     {
@@ -47,7 +48,7 @@ namespace Ogre
     void CommandBuffer::execute_setTexture( CommandBuffer *_this, const CbBase * RESTRICT_ALIAS _cmd )
     {
         const CbTexture *cmd = static_cast<const CbTexture*>( _cmd );
-        _this->mRenderSystem->_setTexture( cmd->texUnit, cmd->texture );
+        _this->mRenderSystem->_setTexture( cmd->texUnit, cmd->texture, cmd->bDepthReadOnly );
 
         if( cmd->samplerBlock )
             _this->mRenderSystem->_setHlmsSamplerblock( cmd->texUnit, cmd->samplerBlock );

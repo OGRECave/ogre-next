@@ -67,12 +67,6 @@ namespace Ogre
 
     typedef vector<CompositorTexture>::type CompositorTextureVec;
 
-    struct BoundUav
-    {
-        GpuTrackedResource              *rttOrBuffer;
-        ResourceAccess::ResourceAccess  boundAccess;
-    };
-
     /** Abstract class for compositor passes. A pass can be a fullscreen quad, a scene
         rendering, a clear. etc.
         Derived classes are responsible for performing an actual job.
@@ -101,14 +95,8 @@ namespace Ogre
 
         CompositorTextureVec    mTextureDependencies;
 
-        typedef vector<ResourceTransition>::type ResourceTransitionVec;
-        ResourceTransitionVec   mResourceTransitions;
-        /// In OpenGL, only the first entry in mResourceTransitions contains a real
-        /// memory barrier. The rest is just kept for debugging purposes. So
-        /// mNumValidResourceTransitions is either 0 or 1.
-        /// In D3D12/Vulkan/Mantle however,
-        /// mNumValidResourceTransitions = mResourceTransitions.size()
-        uint32                  mNumValidResourceTransitions;
+        BarrierSolver &mBarrierSolver;
+        ResourceTransitionArray mResourceTransitions;
 
         /// MUST be called by derived class.
         void initialize( const RenderTargetViewDef *rtv, bool supportsNoRtv=false );
@@ -155,6 +143,30 @@ namespace Ogre
         void notifyPassPreExecuteListeners(void);
         void notifyPassPosExecuteListeners(void);
 
+        /// @see BarrierSolver::resolveTransition
+        void resolveTransition( TextureGpu *texture, ResourceLayout::Layout newLayout,
+                                ResourceAccess::ResourceAccess access, uint8 stageMask );
+        /// @see BarrierSolver::resolveTransition
+        void resolveTransition( GpuTrackedResource *bufferRes, ResourceAccess::ResourceAccess access,
+                                uint8 stageMask );
+
+        /** Bakes most of the memory barriers / resource transition that will be needed
+            during execution.
+
+            Some passes may still generate more barriers/transitions that need to be placed
+            dynamically. These passes must update resourceStatus without inserting a barrier
+            into mResourceTransitions
+        @param boundUavs [in/out]
+            An array of the currently bound UAVs by slot.
+            The derived class CompositorPassUav will write to them as part of the
+            emulation. The base implementation reads from this value.
+        @param resourceStatus [in/out]
+            A map with the last access flags used for each GpuTrackedResource.
+            We need it to identify how it was last used and thus what barrier
+            we need to insert
+        */
+        void analyzeBarriers( void );
+
     public:
         CompositorPass( const CompositorPassDef *definition, CompositorNode *parentNode );
         virtual ~CompositorPass();
@@ -163,35 +175,6 @@ namespace Ogre
         void profilingEnd(void);
 
         virtual void execute( const Camera *lodCameraconst ) = 0;
-
-        void addResourceTransition( ResourceLayoutMap::iterator currentLayout,
-                                    ResourceLayout::Layout newLayout,
-                                    uint32 readBarrierBits );
-
-        /** Emulates the execution of a UAV to understand memory dependencies,
-            and adds a memory barrier / resource transition if we need to.
-        @remarks
-            Note that an UAV->UAV resource transition is just a memory barrier.
-        @param boundUavs [in/out]
-            An array of the currently bound UAVs by slot.
-            The derived class CompositorPassUav will write to them as part of the
-            emulation. The base implementation reads from this value.
-        @param uavsAccess [in/out]
-            A map with the last access flag used for each RenderTarget. We need it
-            to identify RaR situations, which are the only ones that don't need
-            a barrier (and also WaW hazards, when explicitly allowed by the pass).
-            Note: We will set the access to ResourceAccess::Undefined to signal other
-            passes  that the UAV hazard already has a barrier (just in case there was
-            one already created).
-        @param resourcesLayout [in/out]
-            A map with the current layout of every RenderTarget used so far.
-            Needed to identify if we need to change the resource layout
-            to an UAV.
-        */
-        virtual void _placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                           ResourceAccessMap &uavsAccess,
-                                                           ResourceLayoutMap &resourcesLayout );
-        void _removeAllBarriers(void);
 
         /// @See CompositorNode::notifyRecreated
         virtual bool notifyRecreated( const TextureGpu *channel );

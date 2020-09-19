@@ -2,13 +2,18 @@
 
 #define OGRE_imageWrite3D4( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
 
-uniform sampler3D inLightLowerMip0;
-uniform sampler3D inLightLowerMip1;
-uniform sampler3D inLightLowerMip2;
+vulkan_layout( ogre_t0 ) uniform texture3D inLightLowerMip0;
+vulkan_layout( ogre_t1 ) uniform texture3D inLightLowerMip1;
+vulkan_layout( ogre_t2 ) uniform texture3D inLightLowerMip2;
 
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image3D outLightHigherMip0;
-layout (@insertpiece(uav1_pf_type)) uniform restrict writeonly image3D outLightHigherMip1;
-layout (@insertpiece(uav2_pf_type)) uniform restrict writeonly image3D outLightHigherMip2;
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
+uniform restrict writeonly image3D outLightHigherMip0;
+
+layout( vulkan( ogre_u1 ) vk_comma @insertpiece(uav1_pf_type) )
+uniform restrict writeonly image3D outLightHigherMip1;
+
+layout( vulkan( ogre_u2 ) vk_comma @insertpiece(uav2_pf_type) )
+uniform restrict writeonly image3D outLightHigherMip2;
 
 layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),
@@ -18,7 +23,9 @@ layout( local_size_x = @value( threads_per_group_x ),
 //		local_size_y = 4,
 //		local_size_z = 4 ) in;
 
-uniform int4 higherMipHalfRes_lowerMipHalfWidth;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform int4 higherMipHalfRes_lowerMipHalfWidth;
+vulkan( }; )
 
 #define p_higherMipHalfRes higherMipHalfRes_lowerMipHalfWidth.xyz
 #define p_lowerMipHalfWidth higherMipHalfRes_lowerMipHalfWidth.w

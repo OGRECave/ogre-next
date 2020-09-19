@@ -54,6 +54,8 @@ namespace Ogre
 
         void uploadToGpu( uint32 * RESTRICT_ALIAS gpuPtr ) const;
 
+        Terra *getParentTerra( void ) const { return m_parentTerra; }
+
         //Renderable overloads
         virtual const LightList& getLights(void) const;
         virtual void getRenderOperation( v1::RenderOperation& op, bool casterPass );

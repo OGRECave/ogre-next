@@ -1088,7 +1088,7 @@ namespace Ogre {
         // Point sprites are always on in OpenGL 3.2 and up.
     }
 
-    void GL3PlusRenderSystem::_setTexture( size_t stage, TextureGpu *texPtr )
+    void GL3PlusRenderSystem::_setTexture( size_t stage, TextureGpu *texPtr, bool bDepthReadOnly )
     {
         if( !activateGLTextureUnit( stage ) )
             return;
@@ -1162,7 +1162,10 @@ namespace Ogre {
                 //Bind buffer
                 const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
                 if( bufferSlot.buffer )
-                    bufferSlot.buffer->_bindBufferDirectly( bufferSlot.offset, bufferSlot.sizeBytes );
+                {
+                    bufferSlot.buffer->_bindBufferDirectly( texUnit, bufferSlot.offset,
+                                                            bufferSlot.sizeBytes );
+                }
             }
             else
             {
@@ -1328,22 +1331,22 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_setVertexTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, tex);
+        _setTexture(unit, tex, false);
     }
 
     void GL3PlusRenderSystem::_setGeometryTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, tex);
+        _setTexture(unit, tex, false);
     }
 
     void GL3PlusRenderSystem::_setTessellationHullTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, tex);
+        _setTexture(unit, tex, false);
     }
 
     void GL3PlusRenderSystem::_setTessellationDomainTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, tex);
+        _setTexture(unit, tex, false);
     }
 
     void GL3PlusRenderSystem::flushUAVs(void)
@@ -1554,82 +1557,90 @@ namespace Ogre {
         OGRE_CHECK_GL_ERROR(glBlendEquationSeparate(func, alphaFunc));
     }
 
-    void GL3PlusRenderSystem::_resourceTransitionCreated( ResourceTransition *resTransition )
-    {
-        assert( sizeof(void*) >= sizeof(GLbitfield) );
-
-        assert( (resTransition->readBarrierBits || resTransition->writeBarrierBits) &&
-                "A zero-bit memory barrier is invalid!" );
-
-        GLbitfield barriers = 0;
-
-        //TODO:
-        //GL_QUERY_BUFFER_BARRIER_BIT is nearly impossible to determine
-        //specifically
-        //Should be used in all barriers? Since we don't yet support them,
-        //we don't include it in case it brings performance down.
-        //Or should we use 'All' instead for these edge cases?
-
-        if( resTransition->readBarrierBits & ReadBarrier::CpuRead ||
-            resTransition->writeBarrierBits & WriteBarrier::CpuWrite )
-        {
-            barriers |= GL_PIXEL_BUFFER_BARRIER_BIT|GL_TEXTURE_UPDATE_BARRIER_BIT|
-                        GL_BUFFER_UPDATE_BARRIER_BIT|GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT;
-        }
-
-        if( resTransition->readBarrierBits & ReadBarrier::Indirect )
-            barriers |= GL_COMMAND_BARRIER_BIT;
-
-        if( resTransition->readBarrierBits & ReadBarrier::VertexBuffer )
-            barriers |= GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT|GL_TRANSFORM_FEEDBACK_BARRIER_BIT;
-
-        if( resTransition->readBarrierBits & ReadBarrier::IndexBuffer )
-            barriers |= GL_ELEMENT_ARRAY_BARRIER_BIT;
-
-        if( resTransition->readBarrierBits & ReadBarrier::ConstBuffer )
-            barriers |= GL_UNIFORM_BARRIER_BIT;
-
-        if( resTransition->readBarrierBits & ReadBarrier::Texture )
-            barriers |= GL_TEXTURE_FETCH_BARRIER_BIT;
-
-        if( resTransition->readBarrierBits & ReadBarrier::Uav ||
-            resTransition->writeBarrierBits & WriteBarrier::Uav )
-        {
-            barriers |= GL_SHADER_IMAGE_ACCESS_BARRIER_BIT|GL_SHADER_STORAGE_BARRIER_BIT|
-                        GL_ATOMIC_COUNTER_BARRIER_BIT;
-        }
-
-        if( resTransition->readBarrierBits & (ReadBarrier::RenderTarget|ReadBarrier::DepthStencil) ||
-            resTransition->writeBarrierBits & (WriteBarrier::RenderTarget|WriteBarrier::DepthStencil) )
-        {
-            barriers |= GL_FRAMEBUFFER_BARRIER_BIT;
-        }
-
-        if( resTransition->readBarrierBits == ReadBarrier::All ||
-            resTransition->writeBarrierBits == WriteBarrier::All )
-        {
-            barriers = GL_ALL_BARRIER_BITS;
-        }
-
-        resTransition->mRsData = reinterpret_cast<void*>( barriers );
-    }
-
-    void GL3PlusRenderSystem::_resourceTransitionDestroyed( ResourceTransition *resTransition )
-    {
-        assert( resTransition->mRsData ); //A zero-bit memory barrier is invalid
-        resTransition->mRsData = 0;
-    }
-
-    void GL3PlusRenderSystem::_executeResourceTransition( ResourceTransition *resTransition )
+    void GL3PlusRenderSystem::executeResourceTransition( const ResourceTransitionArray &rstCollection )
     {
         if( !glMemoryBarrier )
             return;
 
-        GLbitfield barriers = static_cast<GLbitfield>( reinterpret_cast<intptr_t>(
-                                                           resTransition->mRsData ) );
+        GLbitfield barriers = 0;
 
-        assert( barriers && "A zero-bit memory barrier is invalid" );
-        glMemoryBarrier( barriers );
+        ResourceTransitionArray::const_iterator itor = rstCollection.begin();
+        ResourceTransitionArray::const_iterator endt = rstCollection.end();
+
+        while( itor != endt )
+        {
+            if( itor->resource->isTextureGpu() )
+            {
+                // If previous stage wrote to an UAV, we must wait for sure
+                const bool oldStageWroteUnordered =
+                    itor->oldLayout == ResourceLayout::Uav && itor->oldAccess & ResourceAccess::Write;
+
+                // If previous stage wasn't UAV but new is, then we
+                // must wait unless both stages are read-only
+                const bool newStageUavNotReadOnly =
+                    itor->newLayout == ResourceLayout::Uav &&
+                    ( ( itor->oldAccess | itor->newAccess ) & ResourceAccess::Write );
+
+                if( oldStageWroteUnordered || newStageUavNotReadOnly )
+                {
+                    switch( itor->newLayout )
+                    {
+                    case ResourceLayout::Texture:
+                        barriers |= GL_TEXTURE_FETCH_BARRIER_BIT;
+                        break;
+                    case ResourceLayout::RenderTarget:
+                    case ResourceLayout::RenderTargetReadOnly:
+                    case ResourceLayout::ResolveDest:
+                    case ResourceLayout::Clear:
+                        barriers |= GL_FRAMEBUFFER_BARRIER_BIT;
+                        break;
+                    case ResourceLayout::Uav:
+                        barriers |= GL_SHADER_IMAGE_ACCESS_BARRIER_BIT|
+                                    GL_ATOMIC_COUNTER_BARRIER_BIT;
+                        break;
+                    case ResourceLayout::CopySrc:
+                    case ResourceLayout::CopyDst:
+                        barriers |= GL_TEXTURE_UPDATE_BARRIER_BIT;
+                        break;
+                    case ResourceLayout::MipmapGen:
+                        barriers |= GL_TEXTURE_FETCH_BARRIER_BIT | GL_FRAMEBUFFER_BARRIER_BIT;
+                        break;
+                    case ResourceLayout::PresentReady:
+                        barriers |= GL_TEXTURE_FETCH_BARRIER_BIT | GL_TEXTURE_UPDATE_BARRIER_BIT |
+                                    GL_FRAMEBUFFER_BARRIER_BIT;
+                        break;
+                    case ResourceLayout::Undefined:
+                    case ResourceLayout::CopyEnd:
+                    case ResourceLayout::NumResourceLayouts:
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if( ( itor->oldAccess | itor->newAccess ) & ResourceAccess::Write )
+                {
+                    barriers |= GL_SHADER_STORAGE_BARRIER_BIT | GL_ATOMIC_COUNTER_BARRIER_BIT;
+
+                    OGRE_ASSERT_HIGH( dynamic_cast<BufferPacked *>( itor->resource ) );
+                    BufferPacked *buffer = static_cast<BufferPacked *>( itor->resource );
+
+                    if( buffer->getBufferPackedType() != BP_TYPE_UAV )
+                    {
+                        OGRE_ASSERT_LOW( buffer->getOriginalBufferType() &&
+                                         "Buffer is not UAV at all!" );
+                        if( ( itor->oldAccess | itor->newAccess ) & ResourceAccess::Write )
+                            barriers |= GL_TEXTURE_FETCH_BARRIER_BIT;
+                    }
+                }
+            }
+
+            ++itor;
+        }
+
+        // It is possible that barriers != 0 if none of the entries had UAV transitions
+        if( barriers )
+            glMemoryBarrier( barriers );
     }
 
     void GL3PlusRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newBlock )

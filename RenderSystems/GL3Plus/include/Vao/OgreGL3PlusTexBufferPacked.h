@@ -58,7 +58,7 @@ namespace Ogre
         virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
         virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
 
-        virtual void _bindBufferDirectly( size_t offset, size_t sizeBytes );
+        virtual void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes );
     };
 }
 

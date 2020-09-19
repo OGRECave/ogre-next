@@ -82,7 +82,9 @@ namespace Ogre
         mSharedTriangleFS( 0 ),
         mSharedQuadFS( 0 ),
         mDummyObjectMemoryManager( 0 ),
-        mCompositorPassProvider( 0 )
+        mCompositorPassProvider( 0 ),
+        mBarrierSolver( renderSystem->getBarrierSolver() ),
+        mRenderWindowsPresentBarrierDirty( false )
     {
         mDummyObjectMemoryManager = new ObjectMemoryManager();
         mSharedTriangleFS   = OGRE_NEW v1::Rectangle2D( false, 0, mDummyObjectMemoryManager, 0 );
@@ -474,31 +476,23 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    CompositorWorkspace* CompositorManager2::addWorkspace( SceneManager *sceneManager,
-                                             TextureGpu *finalRenderTarget, Camera *defaultCam,
-                                             IdString definitionName, bool bEnabled, int position,
-                                             const UavBufferPackedVec *uavBuffers,
-                                             const ResourceLayoutMap* initialLayouts,
-                                             const ResourceAccessMap* initialUavAccess,
-                                             const Vector4 &vpOffsetScale,
-                                             uint8 vpModifierMask, uint8 executionMask )
+    CompositorWorkspace *CompositorManager2::addWorkspace(
+        SceneManager *sceneManager, TextureGpu *finalRenderTarget, Camera *defaultCam,
+        IdString definitionName, bool bEnabled, int position, const UavBufferPackedVec *uavBuffers,
+        const ResourceStatusMap *initialLayouts, const Vector4 &vpOffsetScale, uint8 vpModifierMask,
+        uint8 executionMask )
     {
         CompositorChannelVec channels;
         channels.push_back( finalRenderTarget );
         return addWorkspace( sceneManager, channels, defaultCam, definitionName, bEnabled, position,
-                             uavBuffers, initialLayouts, initialUavAccess,
-                             vpOffsetScale, vpModifierMask, executionMask );
+                             uavBuffers, initialLayouts, vpOffsetScale, vpModifierMask, executionMask );
     }
     //-----------------------------------------------------------------------------------
-    CompositorWorkspace* CompositorManager2::addWorkspace( SceneManager *sceneManager,
-                                             const CompositorChannelVec &externalRenderTargets,
-                                             Camera *defaultCam, IdString definitionName,
-                                             bool bEnabled, int position,
-                                             const UavBufferPackedVec *uavBuffers,
-                                             const ResourceLayoutMap* initialLayouts,
-                                             const ResourceAccessMap* initialUavAccess,
-                                             const Vector4 &vpOffsetScale,
-                                             uint8 vpModifierMask, uint8 executionMask )
+    CompositorWorkspace *CompositorManager2::addWorkspace(
+        SceneManager *sceneManager, const CompositorChannelVec &externalRenderTargets,
+        Camera *defaultCam, IdString definitionName, bool bEnabled, int position,
+        const UavBufferPackedVec *uavBuffers, const ResourceStatusMap *initialLayouts,
+        const Vector4 &vpOffsetScale, uint8 vpModifierMask, uint8 executionMask )
     {
         validateAllNodes();
 
@@ -514,13 +508,15 @@ namespace Ogre
         else
         {
             workspace = OGRE_NEW CompositorWorkspace(
-                                Id::generateNewId<CompositorWorkspace>(), itor->second,
-                                externalRenderTargets, sceneManager, defaultCam, mRenderSystem,
-                                bEnabled, executionMask, vpModifierMask, vpOffsetScale,
-                                uavBuffers, initialLayouts, initialUavAccess );
+                Id::generateNewId<CompositorWorkspace>(), itor->second, externalRenderTargets,
+                sceneManager, defaultCam, mRenderSystem, bEnabled, executionMask, vpModifierMask,
+                vpOffsetScale, uavBuffers, initialLayouts );
 
             mQueuedWorkspaces.push_back( QueuedWorkspace( workspace, position ) );
         }
+
+        if( bEnabled )
+            mRenderWindowsPresentBarrierDirty = true;
 
         return workspace;
     }
@@ -575,6 +571,8 @@ namespace Ogre
             OGRE_DELETE *itor;
             mWorkspaces.erase( itor ); //Preserve the order of workspace execution
         }
+
+        mRenderWindowsPresentBarrierDirty = true;
     }
     //-----------------------------------------------------------------------------------
     void CompositorManager2::removeAllWorkspaces(void)
@@ -655,6 +653,49 @@ namespace Ogre
         mUnfinishedShadowNodes.clear();
     }
     //-----------------------------------------------------------------------------------
+    void CompositorManager2::prepareRenderWindowsForPresent( void )
+    {
+        if( !mRenderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
+            return;
+
+        PassesByRenderWindowMap passesUsingRenderWindows;
+
+        {
+            WorkspaceVec::const_iterator itor = mWorkspaces.begin();
+            WorkspaceVec::const_iterator endt = mWorkspaces.end();
+
+            while( itor != endt )
+            {
+                CompositorWorkspace *workspace = *itor;
+                if( workspace->getEnabled() )
+                    workspace->fillPassesUsingRenderWindows( passesUsingRenderWindows );
+                ++itor;
+            }
+        }
+
+        {
+            PassesByRenderWindowMap::const_iterator itor = passesUsingRenderWindows.begin();
+            PassesByRenderWindowMap::const_iterator endt = passesUsingRenderWindows.end();
+
+            while( itor != endt )
+            {
+                const size_t numPasses = itor->second.size();
+                for( size_t i = 0u; i < numPasses; ++i )
+                {
+                    RenderPassDescriptor *renderPassDesc = itor->second[i]->getRenderPassDesc();
+                    const bool shouldReadyForPresent = ( i + 1u ) == numPasses;
+                    if( renderPassDesc->mReadyWindowForPresent != shouldReadyForPresent )
+                    {
+                        renderPassDesc->mReadyWindowForPresent = shouldReadyForPresent;
+                        renderPassDesc->entriesModified( RenderPassDescriptor::Colour );
+                    }
+                }
+
+                ++itor;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorManager2::_update( void )
     {
         //The Apple render systems need to run the update in a special way.
@@ -715,6 +756,12 @@ namespace Ogre
             ++itor;
         }
 
+        if( mRenderWindowsPresentBarrierDirty )
+        {
+            prepareRenderWindowsForPresent();
+            mRenderWindowsPresentBarrierDirty = false;
+        }
+
         {
             //Notify the listeners
             CompositorWorkspaceListenerVec::const_iterator itListener = mListeners.begin();
@@ -747,9 +794,9 @@ namespace Ogre
             ++itor;
         }
 
-        mRenderSystem->_update();
-
         mRenderSystem->endRenderPassDescriptor();
+
+        mRenderSystem->_update();
 
         ++mFrameCount;
     }
@@ -829,6 +876,11 @@ namespace Ogre
         //Preserve order.
         if( itor != mListeners.end() )
             mListeners.erase( itor );
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorManager2::_notifyBarriersDirty( void )
+    {
+        mRenderWindowsPresentBarrierDirty = true;
     }
     //-----------------------------------------------------------------------------------
     RenderSystem* CompositorManager2::getRenderSystem(void) const

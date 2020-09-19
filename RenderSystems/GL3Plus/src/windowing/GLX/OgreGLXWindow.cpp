@@ -26,8 +26,10 @@
   -----------------------------------------------------------------------------
 */
 
-#include "OgreGLXWindow.h"
 #include "OgreRoot.h"
+
+#include "OgreGLXWindow.h"
+
 #include "OgreGL3PlusRenderSystem.h"
 #include "OgreGL3PlusTextureGpuWindow.h"
 #include "OgreException.h"

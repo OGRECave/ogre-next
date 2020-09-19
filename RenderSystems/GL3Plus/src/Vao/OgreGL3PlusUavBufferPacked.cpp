@@ -27,7 +27,9 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreGL3PlusUavBufferPacked.h"
+
 #include "Vao/OgreGL3PlusBufferInterface.h"
+#include "Vao/OgreGL3PlusReadOnlyBufferPacked.h"
 #include "Vao/OgreGL3PlusTexBufferPacked.h"
 
 namespace Ogre
@@ -47,7 +49,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TexBufferPacked* GL3PlusUavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
     {
-        assert( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
+        OGRE_ASSERT_HIGH( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
 
         GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
                                                                       mBufferInterface );
@@ -64,11 +66,28 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    ReadOnlyBufferPacked *GL3PlusUavBufferPacked::getAsReadOnlyBufferImpl( void )
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<GL3PlusBufferInterface *>( mBufferInterface ) );
+
+        GL3PlusBufferInterface *bufferInterface =
+            static_cast<GL3PlusBufferInterface *>( mBufferInterface );
+
+        ReadOnlyBufferPacked *retVal = OGRE_NEW GL3PlusReadOnlyUavBufferPacked(
+            mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
+            (void *)0, false, (VaoManager *)0, bufferInterface, PFG_NULL );
+        // We were overriden by the BufferPacked we just created. Restore this back!
+        bufferInterface->_notifyBuffer( this );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     inline void GL3PlusUavBufferPacked::bindBuffer( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        assert( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
-        assert( offset < (mNumElements * mBytesPerElement - 1) );
-        assert( sizeBytes < mNumElements * mBytesPerElement );
+        OGRE_ASSERT_HIGH( dynamic_cast<GL3PlusBufferInterface *>( mBufferInterface ) );
+        OGRE_ASSERT_LOW( offset <= getTotalSizeBytes() );
+        OGRE_ASSERT_LOW( sizeBytes <= getTotalSizeBytes() );
+        OGRE_ASSERT_LOW( ( offset + sizeBytes ) <= getTotalSizeBytes() );
 
         sizeBytes = !sizeBytes ? (mNumElements * mBytesPerElement - offset) : sizeBytes;
 

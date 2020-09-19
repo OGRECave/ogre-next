@@ -5,6 +5,7 @@
 #include "OgreRoot.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "OgreConfigFile.h"
+#include "OgreWindow.h"
 
 #include "Terra/Hlms/OgreHlmsTerra.h"
 #include "OgreHlmsManager.h"
@@ -12,6 +13,7 @@
 
 //Declares WinMain / main
 #include "MainEntryPointHelper.h"
+#include "System/Android/AndroidSystems.h"
 #include "System/MainEntryPoints.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
@@ -29,10 +31,9 @@ namespace Demo
     {
         virtual Ogre::CompositorWorkspace* setupCompositor()
         {
-            //Delegate compositor creation to the game state. We need terra's shadow texture
-            //to be passed to the compositor so Ogre can insert the proper barriers.
-            assert( dynamic_cast<Tutorial_TerrainGameState*>(mCurrentGameState) );
-            return static_cast<Tutorial_TerrainGameState*>(mCurrentGameState)->setupCompositor();
+            Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
+                                                    "Tutorial_TerrainWorkspace", true );
         }
 
         virtual void setupResources(void)
@@ -40,12 +41,12 @@ namespace Demo
             GraphicsSystem::setupResources();
 
             Ogre::ConfigFile cf;
-            cf.load(mResourcePath + "resources2.cfg");
+            cf.load( AndroidSystems::openFile( mResourcePath + "resources2.cfg" ) );
 
             Ogre::String originalDataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
 
             if( originalDataFolder.empty() )
-                originalDataFolder = "./";
+                originalDataFolder = AndroidSystems::isAndroid() ? "/" : "./";
             else if( *(originalDataFolder.end() - 1) != '/' )
                 originalDataFolder += "/";
 
@@ -61,7 +62,7 @@ namespace Demo
             for( size_t i=0; i<5; ++i )
             {
                 Ogre::String dataFolder = originalDataFolder + c_locations[i];
-                addResourceLocation( dataFolder, "FileSystem", "General" );
+                addResourceLocation( dataFolder, getMediaReadArchiveType(), "General" );
             }
         }
 
@@ -70,7 +71,7 @@ namespace Demo
             GraphicsSystem::registerHlms();
 
             Ogre::ConfigFile cf;
-            cf.load(mResourcePath + "resources2.cfg");
+            cf.load( AndroidSystems::openFile( mResourcePath + "resources2.cfg" ) );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
             Ogre::String rootHlmsFolder = Ogre::macBundlePath() + '/' +
@@ -80,7 +81,7 @@ namespace Demo
                                           cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
 #endif
             if( rootHlmsFolder.empty() )
-                rootHlmsFolder = "./";
+                rootHlmsFolder = AndroidSystems::isAndroid() ? "/" : "./";
             else if( *(rootHlmsFolder.end() - 1) != '/' )
                 rootHlmsFolder += "/";
 
@@ -109,15 +110,14 @@ namespace Demo
                 //Get the path to all the subdirectories used by HlmsTerra
                 Ogre::HlmsTerra::getDefaultPaths( mainFolderPath, libraryFoldersPaths );
                 Ogre::Archive *archiveTerra = archiveManager.load( rootHlmsFolder + mainFolderPath,
-                                                                   "FileSystem", true );
+                                                                   getMediaReadArchiveType(), true );
                 Ogre::ArchiveVec archiveTerraLibraryFolders;
                 libraryFolderPathIt = libraryFoldersPaths.begin();
                 libraryFolderPathEn = libraryFoldersPaths.end();
                 while( libraryFolderPathIt != libraryFolderPathEn )
                 {
-                    Ogre::Archive *archiveLibrary = archiveManager.load( rootHlmsFolder +
-                                                                         *libraryFolderPathIt,
-                                                                         "FileSystem", true );
+                    Ogre::Archive *archiveLibrary = archiveManager.load(
+                        rootHlmsFolder + *libraryFolderPathIt, getMediaReadArchiveType(), true );
                     archiveTerraLibraryFolders.push_back( archiveLibrary );
                     ++libraryFolderPathIt;
                 }
@@ -136,7 +136,7 @@ namespace Demo
             Ogre::ArchiveVec libraryPbs = hlmsPbs->getPiecesLibraryAsArchiveVec();
             libraryPbs.push_back( Ogre::ArchiveManager::getSingletonPtr()->load(
                                       rootHlmsFolder + "Hlms/Terra/" + shaderSyntax + "/PbsTerraShadows",
-                                      "FileSystem", true ) );
+                                      getMediaReadArchiveType(), true ) );
             hlmsPbs->reloadFrom( archivePbs, &libraryPbs );
         }
 
@@ -144,14 +144,6 @@ namespace Demo
         Tutorial_TerrainGraphicsSystem( GameState *gameState ) :
             GraphicsSystem( gameState )
         {
-        }
-
-        virtual void createScene01()
-        {
-            GraphicsSystem::createScene01();
-            //The first time setupCompositor got called, Terra wasn't ready yet.
-            //Create the workspace again (will destroy previous workspace).
-            mWorkspace = setupCompositor();
         }
     };
 
@@ -205,6 +197,7 @@ namespace Demo
     }
 }
 
+#if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
 #else
@@ -213,3 +206,4 @@ int mainApp( int argc, const char *argv[] )
 {
     return Demo::MainEntryPoints::mainAppSingleThreaded( DEMO_MAIN_ENTRY_PARAMS );
 }
+#endif

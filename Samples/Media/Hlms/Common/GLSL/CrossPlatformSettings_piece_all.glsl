@@ -1,8 +1,12 @@
 @piece( SetCrossPlatformSettings )
-@property( GL3+ >= 430 )
-    #version 430 core
+@property( syntax == glslvk )
+	#version 450 core
 @else
-    #version 330 core
+	@property( GL3+ >= 430 )
+		#version 430 core
+	@else
+		#version 330 core
+	@end
 @end
 
 @insertpiece( CustomGlslExtensions )
@@ -73,7 +77,11 @@
 #define PARAMS_ARG_DECL
 #define PARAMS_ARG
 
-#define inVs_vertexId gl_VertexID
+@property( syntax != glslvk )
+	#define inVs_vertexId gl_VertexID
+@else
+	#define inVs_vertexId gl_VertexIndex
+@end
 #define inVs_vertex vertex
 #define inVs_blendWeights blendWeights
 #define inVs_blendIndices blendIndices
@@ -100,13 +108,38 @@
 #define reversebits bitfieldReverse
 
 #define outPs_colour0 outColour
-#define OGRE_Sample( tex, sampler, uv ) texture( tex, uv )
-#define OGRE_SampleLevel( tex, sampler, uv, lod ) textureLod( tex, uv, lod )
-#define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) texture( tex, vec3( uv, arrayIdx ) )
-#define OGRE_SampleArray2DLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( tex, vec3( uv, arrayIdx ), lod )
-#define OGRE_SampleArrayCubeLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( tex, vec4( uv, arrayIdx ), lod )
-#define OGRE_SampleGrad( tex, sampler, uv, ddx, ddy ) textureGrad( tex, uv, ddx, ddy )
-#define OGRE_SampleArray2DGrad( tex, sampler, uv, arrayIdx, ddx, ddy ) textureGrad( tex, vec3( uv, arrayIdx ), ddx, ddy )
+@property( syntax != glslvk )
+	#define OGRE_Sample( tex, sampler, uv ) texture( tex, uv )
+	#define OGRE_SampleLevel( tex, sampler, uv, lod ) textureLod( tex, uv, lod )
+	#define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) texture( tex, vec3( uv, arrayIdx ) )
+	#define OGRE_SampleArray2DLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( tex, vec3( uv, arrayIdx ), lod )
+	#define OGRE_SampleArrayCubeLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( tex, vec4( uv, arrayIdx ), lod )
+	#define OGRE_SampleGrad( tex, sampler, uv, ddx, ddy ) textureGrad( tex, uv, ddx, ddy )
+	#define OGRE_SampleArray2DGrad( tex, sampler, uv, arrayIdx, ddx, ddy ) textureGrad( tex, vec3( uv, arrayIdx ), ddx, ddy )
+
+	#define texture2D sampler2D
+	#define texture2DArray sampler2DArray
+	#define texture3D sampler3D
+	#define textureCube samplerCube
+	#define textureCubeArray samplerCubeArray
+@else
+	#define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) texture( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ) )
+	#define OGRE_SampleArray2DLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), lod )
+	#define OGRE_SampleArrayCubeLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( samplerCubeArray( tex, sampler ), vec4( uv, arrayIdx ), lod )
+	#define OGRE_SampleArray2DGrad( tex, sampler, uv, arrayIdx, ddx, ddy ) textureGrad( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), ddx, ddy )
+
+	float4 OGRE_Sample( texture2D t, sampler s, float2 uv ) { return texture( sampler2D( t, s ), uv ); }
+	float4 OGRE_Sample( texture3D t, sampler s, float3 uv ) { return texture( sampler3D( t, s ), uv ); }
+	float4 OGRE_Sample( textureCube t, sampler s, float3 uv ) { return texture( samplerCube( t, s ), uv ); }
+
+	float4 OGRE_SampleLevel( texture2D t, sampler s, float2 uv, float lod ) { return textureLod( sampler2D( t, s ), uv, lod ); }
+	float4 OGRE_SampleLevel( texture3D t, sampler s, float3 uv, float lod ) { return textureLod( sampler3D( t, s ), uv, lod ); }
+	float4 OGRE_SampleLevel( textureCube t, sampler s, float3 uv, float lod ) { return textureLod( samplerCube( t, s ), uv, lod ); }
+
+	float4 OGRE_SampleGrad( texture2D t, sampler s, float2 uv, float2 myDdx, float2 myDdy ) { return textureGrad( sampler2D( t, s ), uv, myDdx, myDdy ); }
+	float4 OGRE_SampleGrad( texture3D t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return textureGrad( sampler3D( t, s ), uv, myDdx, myDdy ); }
+	float4 OGRE_SampleGrad( textureCube t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return textureGrad( samplerCube( t, s ), uv, myDdx, myDdy ); }
+@end
 #define OGRE_ddx( val ) dFdx( val )
 #define OGRE_ddy( val ) dFdy( val )
 #define OGRE_Load2D( tex, iuv, lod ) texelFetch( tex, iuv, lod )
@@ -117,14 +150,43 @@
 
 #define bufferFetch1( buffer, idx ) texelFetch( buffer, idx ).x
 
-#define OGRE_SAMPLER_ARG_DECL( samplerName )
-#define OGRE_SAMPLER_ARG( samplerName )
+@property( syntax != glslvk )
+	#define OGRE_SAMPLER_ARG_DECL( samplerName )
+	#define OGRE_SAMPLER_ARG( samplerName )
 
-#define OGRE_Texture3D_float4 sampler3D
+	#define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform bufferName
+	#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform structName
+	#define CONST_BUFFER_STRUCT_END( variableName ) variableName
 
-#define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform bufferName
-#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform structName
-#define CONST_BUFFER_STRUCT_END( variableName ) variableName
+	@property( hlms_readonly_is_tex )
+		#define ReadOnlyBufferF( slot, varType, varName ) uniform samplerBuffer varName
+		#define ReadOnlyBufferU( slot, varType, varName ) uniform usamplerBuffer varName
+		#define ReadOnlyBufferVarF( varType ) samplerBuffer
+		#define readOnlyFetch( buffer, idx ) texelFetch( buffer, idx )
+		#define readOnlyFetch1( buffer, idx ) texelFetch( buffer, idx ).x
+	@else
+		#define ReadOnlyBufferF( slot, varType, varName ) layout(std430, binding = slot) readonly restrict buffer _##varName { varType varName[]; }
+		#define ReadOnlyBufferU( slot, varType, varName ) layout(std430, binding = slot) readonly restrict buffer _##varName { varType varName[]; }
+		#define ReadOnlyBufferVarF( varType ) varType
+		#define readOnlyFetch( bufferVar, idx ) bufferVar[idx]
+		#define readOnlyFetch1( bufferVar, idx ) bufferVar[idx]
+	@end
+@else
+	#define OGRE_SAMPLER_ARG_DECL( samplerName ) , sampler samplerName
+	#define OGRE_SAMPLER_ARG( samplerName ) , samplerName
+
+	#define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(ogre_B##bindingPoint) uniform bufferName
+	#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(ogre_B##bindingPoint) uniform structName
+	#define CONST_BUFFER_STRUCT_END( variableName ) variableName
+
+	#define ReadOnlyBufferF( slot, varType, varName ) layout(std430, ogre_R##slot) readonly restrict buffer _##varName { varType varName[]; }
+	#define ReadOnlyBufferU ReadOnlyBufferF
+	#define readOnlyFetch( bufferVar, idx ) bufferVar[idx]
+	#define readOnlyFetch1( bufferVar, idx ) bufferVar[idx]
+@end
+
+
+#define OGRE_Texture3D_float4 texture3D
 
 #define FLAT_INTERPOLANT( decl, bindingPoint ) flat decl
 #define INTERPOLANT( decl, bindingPoint ) decl
@@ -138,7 +200,7 @@
 
 @property( !GL_ARB_texture_buffer_range || !GL_ARB_shading_language_420pack )
 @piece( SetCompatibilityLayer )
-    @property( !GL_ARB_texture_buffer_range )
+	@property( !GL_ARB_texture_buffer_range )
         #define samplerBuffer sampler2D
         #define isamplerBuffer isampler2D
         #define usamplerBuffer usampler2D

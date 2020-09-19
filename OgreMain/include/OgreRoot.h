@@ -75,6 +75,7 @@ namespace Ogre
         RenderSystemList mRenderers;
         RenderSystem* mActiveRenderer;
         String mVersion;
+        String mAppName;
         String mConfigFileName;
         bool mQueuedEnd;
         /// In case multiple render windows are created, only once are the resources loaded.
@@ -226,10 +227,13 @@ namespace Ogre
             Defaults to "ogre.cfg", may be left blank to load nothing.
         @param logFileName The logfile to create, defaults to Ogre.log, may be 
             left blank if you've already set up LogManager & Log yourself
+        @param appName
+            Name for this app. Use this string so driver vendors can create custom driver profiles
+            (e.g. through NVIDIA's or AMD's control panel)
         */
-        Root(const String& pluginFileName = "plugins" OGRE_BUILD_SUFFIX ".cfg", 
-            const String& configFileName = "ogre.cfg", 
-            const String& logFileName = "Ogre.log");
+        Root( const String &pluginFileName = "plugins" OGRE_BUILD_SUFFIX ".cfg",
+              const String &configFileName = "ogre.cfg", const String &logFileName = "Ogre.log",
+              const String &appName = "" );
         ~Root();
 
         /** Saves the details of the current configuration
@@ -324,6 +328,8 @@ namespace Ogre
         /** Retrieve a pointer to the currently selected render system.
         */
         RenderSystem* getRenderSystem(void);
+
+        const String &getAppName( void ) const { return mAppName; }
 
         /// Gets the HlmsManager, which is needed to register generators at startup.
         HlmsManager* getHlmsManager(void) const                     { return mHlmsManager; }

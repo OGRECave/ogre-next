@@ -30,6 +30,8 @@ THE SOFTWARE.
 #define _Ogre_NULLTexBufferPacked_H_
 
 #include "OgreNULLPrerequisites.h"
+
+#include "Vao/OgreReadOnlyBufferPacked.h"
 #include "Vao/OgreTexBufferPacked.h"
 
 namespace Ogre
@@ -52,6 +54,24 @@ namespace Ogre
         virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
         virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
         virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
+    };
+
+    class _OgreNULLExport NULLReadOnlyBufferPacked : public ReadOnlyBufferPacked
+    {
+    public:
+        NULLReadOnlyBufferPacked( size_t internalBufStartBytes, size_t numElements,
+                                  uint32 bytesPerElement, uint32 numElementsPadding,
+                                  BufferType bufferType, void *initialData, bool keepAsShadow,
+                                  VaoManager *vaoManager, NULLBufferInterface *bufferInterface,
+                                  PixelFormatGpu pf );
+        virtual ~NULLReadOnlyBufferPacked();
+
+        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
     };
 }
 

@@ -88,7 +88,7 @@ namespace Ogre
         void refreshFSAAOptions(void);
 
         void freeDevice(void);
-        void createDevice( const String &windowTitle );
+        void createDevice( void );
 
         v1::D3D11HardwareBufferManager* mHardwareBufferManager;
         D3D11GpuProgramManager* mGpuProgramManager;
@@ -154,8 +154,6 @@ namespace Ogre
         ID3D11ShaderResourceView *mNullViews[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT];
         uint32 mMaxSrvCount[NumShaderTypes];
         uint32 mMaxComputeShaderSrvCount;
-
-        String mLastWindowTitlePassedToExtensions;
 		
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		D3D11StereoDriverBridge* mStereoDriver;
@@ -242,7 +240,7 @@ namespace Ogre
         void _setPointSpritesEnabled(bool enabled);
         void _setPointParameters(Real size, bool attenuationEnabled, 
             Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
-        virtual void _setTexture( size_t unit, TextureGpu *texPtr );
+        virtual void _setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
                                    uint32 hazardousTexIdx );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set );
@@ -259,8 +257,6 @@ namespace Ogre
         void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m, const Frustum* frustum = 0);
         void _setTextureBlendMode( size_t unit, const LayerBlendModeEx& bm );
         void _setTextureMatrix( size_t unit, const Matrix4 &xform );
-
-        virtual void flushUAVs(void) {}
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );

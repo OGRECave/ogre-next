@@ -5,11 +5,16 @@ macro( add_recursive dir retVal )
 	file( GLOB_RECURSE ${retVal} ${dir}/*.h ${dir}/*.cpp ${dir}/*.c )
 endmacro()
 
-include_directories(  )
+if( ANDROID )
+	# We depend on native_app_glue, but it is the appliaction which has to build it
+	set(APP_GLUE_DIR ${ANDROID_NDK}/sources/android/native_app_glue)
+	include_directories(${APP_GLUE_DIR})
+endif()
 
 file( GLOB SOURCE_FILES
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/System/*.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/System/Android/*.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/Threading/*.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/Utils/*.cpp" )
 
@@ -23,7 +28,7 @@ elseif( APPLE )
         "${CMAKE_CURRENT_SOURCE_DIR}/src/System/Desktop/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/System/OSX/*.mm" )
 	set( SOURCE_FILES ${SOURCE_FILES} ${OSX_SOURCE_FILES} )
-else()
+elseif( NOT ANDROID )
 	file( GLOB DESKTOP_SOURCE_FILES
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/System/Desktop/*.cpp" )
 	set( SOURCE_FILES ${SOURCE_FILES} ${DESKTOP_SOURCE_FILES} )
@@ -43,6 +48,7 @@ if( OGRE_STATIC )
 	include_directories( ${OGRE_SOURCE_DIR}/RenderSystems/GL3Plus/include/GLSL )
 	include_directories( ${OGRE_SOURCE_DIR}/RenderSystems/GLES2/include )
 	include_directories( ${OGRE_SOURCE_DIR}/RenderSystems/Metal/include )
+	include_directories( ${OGRE_SOURCE_DIR}/RenderSystems/Vulkan/include )
 endif()
 
 add_library(${OGRE_SAMPLES_COMMON_LIBRARY} STATIC ${SOURCE_FILES} ${HEADER_FILES})

@@ -83,7 +83,9 @@ namespace TextureFilter
             See DefaultMipmapGen::DefaultMipmapGen
         */
         static uint8 selectMipmapGen( uint32 filters, const Image2 &image,
+                                      PixelFormatGpu finalPixelFormat,
                                       const TextureGpuManager *textureManager );
+
     public:
         static void createFilters( uint32 filters, FilterBaseArray &outFilters,
                                    const TextureGpu *texture, const Image2 &image,

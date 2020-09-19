@@ -534,6 +534,7 @@ namespace Demo
                 texDef->width   = 0;
                 texDef->height  = 0;
                 texDef->format = Ogre::PFG_RGBA8_UNORM_SRGB;
+                texDef->textureFlags &= (uint32)~TextureFlags::DiscardableContent;
 
                 RenderTargetViewDef *rtv = motionBlurDef->addRenderTextureView( "sum" );
                 RenderTargetViewEntry attachment;

@@ -5,7 +5,8 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-layout (@insertpiece(uav0_pf_type)) uniform restrict image2D ifdTex;
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
+uniform restrict image2D ifdTex;
 
 layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),

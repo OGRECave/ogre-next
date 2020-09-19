@@ -11,15 +11,23 @@
 // We need to calculate the normal of the vertex in
 // the center '+', which is shared by 6 triangles.
 
-#version 330
+#version ogre_glsl_ver_330
 
-uniform sampler2D heightMap;
+#ifndef USE_UINT
+	vulkan_layout( ogre_t0 ) uniform texture2D heightMap;
+#else
+	vulkan_layout( ogre_t0 ) uniform utexture2D heightMap;
+#endif
 
-uniform vec2 heightMapResolution;
-uniform vec3 vScale;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform vec2 heightMapResolution;
+	uniform vec3 vScale;
+vulkan( }; )
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
@@ -39,17 +47,17 @@ void main()
 	yN01.z = min( iCoord.y + 1, int(heightMapResolution.y) );
 
 	//Watch out! It's heightXY, but texelFetch uses YX.
-	float heightNN = texelFetch( heightMap, ivec2( xN01.x, yN01.x ), 0 ).x * vScale.y;
-	float heightN0 = texelFetch( heightMap, ivec2( xN01.y, yN01.x ), 0 ).x * vScale.y;
-	//float heightN1 = texelFetch( heightMap, ivec2( xN01.z, yN01.x ), 0 ).x * vScale.y;
+	float heightNN = float( texelFetch( heightMap, ivec2( xN01.x, yN01.x ), 0 ).x ) * vScale.y;
+	float heightN0 = float( texelFetch( heightMap, ivec2( xN01.y, yN01.x ), 0 ).x ) * vScale.y;
+	//float heightN1 = float( texelFetch( heightMap, ivec2( xN01.z, yN01.x ), 0 ).x ) * vScale.y;
 
-	float height0N = texelFetch( heightMap, ivec2( xN01.x, yN01.y ), 0 ).x * vScale.y;
-	float height00 = texelFetch( heightMap, ivec2( xN01.y, yN01.y ), 0 ).x * vScale.y;
-	float height01 = texelFetch( heightMap, ivec2( xN01.z, yN01.y ), 0 ).x * vScale.y;
+	float height0N = float( texelFetch( heightMap, ivec2( xN01.x, yN01.y ), 0 ).x ) * vScale.y;
+	float height00 = float( texelFetch( heightMap, ivec2( xN01.y, yN01.y ), 0 ).x ) * vScale.y;
+	float height01 = float( texelFetch( heightMap, ivec2( xN01.z, yN01.y ), 0 ).x ) * vScale.y;
 
-	//float height1N = texelFetch( heightMap, ivec2( xN01.x, yN01.z ), 0 ).x * vScale.y;
-	float height10 = texelFetch( heightMap, ivec2( xN01.y, yN01.z ), 0 ).x * vScale.y;
-	float height11 = texelFetch( heightMap, ivec2( xN01.z, yN01.z ), 0 ).x * vScale.y;
+	//float height1N = float( texelFetch( heightMap, ivec2( xN01.x, yN01.z ), 0 ).x ) * vScale.y;
+	float height10 = float( texelFetch( heightMap, ivec2( xN01.y, yN01.z ), 0 ).x ) * vScale.y;
+	float height11 = float( texelFetch( heightMap, ivec2( xN01.z, yN01.z ), 0 ).x ) * vScale.y;
 
 	vec3 vNN = vec3( -vScale.x, heightNN, -vScale.z );
 	vec3 vN0 = vec3( -vScale.x, heightN0,  0 );

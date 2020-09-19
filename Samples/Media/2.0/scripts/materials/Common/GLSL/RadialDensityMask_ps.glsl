@@ -1,14 +1,17 @@
-#version 330
+#version ogre_glsl_ver_330
 
 #define float2 vec2
 #define float4 vec4
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 in vec4 gl_FragCoord;
 
-uniform float4 rightEyeStart_radius;
-uniform float4 leftEyeCenter_rightEyeCenter;
-uniform float2 invBlockResolution;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform float4 rightEyeStart_radius;
+	uniform float4 leftEyeCenter_rightEyeCenter;
+	uniform float2 invBlockResolution;
+vulkan( }; )
 
 #define p_leftEyeCenter			leftEyeCenter_rightEyeCenter.xy
 #define p_rightEyeCenter		leftEyeCenter_rightEyeCenter.zw

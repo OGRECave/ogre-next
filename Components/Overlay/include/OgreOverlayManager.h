@@ -72,7 +72,6 @@ namespace v1 {
 
     protected:
         int mLastViewportWidth, mLastViewportHeight;
-        OrientationMode mLastViewportOrientationMode;
 
         bool parseChildren( DataStreamPtr& chunk, const String& line,
             Overlay* pOverlay, bool isTemplate, OverlayContainer* parent = NULL);
@@ -144,9 +143,6 @@ namespace v1 {
         /** Gets the width of the destination viewport in pixels. */
         int getViewportWidth(void) const;
         Real getViewportAspectRatio(void) const;
-
-        /** Gets the orientation mode of the destination viewport. */
-        OrientationMode getViewportOrientationMode(void) const;
 
         /** Creates a new OverlayElement of the type requested.
         @remarks

@@ -1,20 +1,25 @@
-#version 330
+#version ogre_glsl_ver_330
 
-uniform sampler2D depthTexture;
+vulkan_layout( ogre_t0 ) uniform texture2D depthTexture;
+vulkan( layout( ogre_s0 ) uniform sampler samplerState );
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
     vec3 cameraDir;
 } inPs;
 
-uniform vec2 projectionParams;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform vec2 projectionParams;
+vulkan( }; )
 
+vulkan_layout( location = 0 )
 out vec3 fragColour;
 
 void main()
 {
-	float fDepth = texture( depthTexture, inPs.uv0 ).x;
+	float fDepth = texture( vkSampler2D( depthTexture, samplerState ), inPs.uv0 ).x;
 	
 	float linearDepth = projectionParams.y / (fDepth - projectionParams.x);
 	

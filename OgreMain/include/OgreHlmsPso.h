@@ -102,6 +102,8 @@ namespace Ogre
 
         /// PF_NULL if no colour attachment is used.
         PixelFormatGpu colourFormat[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        /// PF_NULL if it won't be resolved (MSAA)
+        PixelFormatGpu resolveColourFormat[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         /// PF_NULL if no depth buffer is used.
         PixelFormatGpu depthFormat;
 

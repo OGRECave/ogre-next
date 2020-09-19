@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "CommandBuffer/OgreCbShaderBuffer.h"
 
 #include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
 #include "Vao/OgreTexBufferPacked.h"
 
 #include "OgreRenderSystem.h"
@@ -179,6 +180,87 @@ namespace Ogre
         OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                      "'NumShaderTypes' is not a valid parameter for this command!!!",
                      "CommandBuffer::execute_setTextureBufferInvalid" );
+    }
+
+    CbShaderBuffer::CbShaderBuffer( ShaderType shaderType, uint16 _slot,
+                                    ReadOnlyBufferPacked *_bufferPacked, uint32 _bindOffset,
+                                    uint32 _bindSizeBytes ) :
+        CbBase( CB_SET_READONLY_BUFFER_VS + shaderType ),
+        slot( _slot ),
+        bufferPacked( _bufferPacked ),
+        bindOffset( _bindOffset ),
+        bindSizeBytes( _bindSizeBytes )
+    {
+        assert( shaderType != NumShaderTypes );
+        assert( !_bufferPacked || _bindOffset < _bufferPacked->getTotalSizeBytes() );
+    }
+
+    void CommandBuffer::execute_setReadOnlyBufferVS( CommandBuffer *_this,
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
+    {
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+
+        assert( dynamic_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked ) );
+
+        ReadOnlyBufferPacked *texBuffer = static_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked );
+        texBuffer->bindBufferVS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
+    }
+    void CommandBuffer::execute_setReadOnlyBufferPS( CommandBuffer *_this,
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
+    {
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+
+        assert( dynamic_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked ) );
+
+        ReadOnlyBufferPacked *texBuffer = static_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked );
+        texBuffer->bindBufferPS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
+    }
+    void CommandBuffer::execute_setReadOnlyBufferGS( CommandBuffer *_this,
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
+    {
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+
+        assert( dynamic_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked ) );
+
+        ReadOnlyBufferPacked *texBuffer = static_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked );
+        texBuffer->bindBufferGS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
+    }
+    void CommandBuffer::execute_setReadOnlyBufferHS( CommandBuffer *_this,
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
+    {
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+
+        assert( dynamic_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked ) );
+
+        ReadOnlyBufferPacked *texBuffer = static_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked );
+        texBuffer->bindBufferHS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
+    }
+    void CommandBuffer::execute_setReadOnlyBufferDS( CommandBuffer *_this,
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
+    {
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+
+        assert( dynamic_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked ) );
+
+        ReadOnlyBufferPacked *texBuffer = static_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked );
+        texBuffer->bindBufferDS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
+    }
+    void CommandBuffer::execute_setReadOnlyBufferCS( CommandBuffer *_this,
+                                                     const CbBase *RESTRICT_ALIAS _cmd )
+    {
+        const CbShaderBuffer *cmd = static_cast<const CbShaderBuffer *>( _cmd );
+
+        assert( dynamic_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked ) );
+
+        ReadOnlyBufferPacked *texBuffer = static_cast<ReadOnlyBufferPacked *>( cmd->bufferPacked );
+        texBuffer->bindBufferCS( cmd->slot, cmd->bindOffset, cmd->bindSizeBytes );
+    }
+    void CommandBuffer::execute_setReadOnlyBufferInvalid( CommandBuffer *_this,
+                                                          const CbBase *RESTRICT_ALIAS _cmd )
+    {
+        OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
+                     "'NumShaderTypes' is not a valid parameter for this command!!!",
+                     "CommandBuffer::execute_setReadOnlyBufferInvalid" );
     }
 
     CbIndirectBuffer::CbIndirectBuffer( IndirectBufferPacked *_indirectBuffer ) :

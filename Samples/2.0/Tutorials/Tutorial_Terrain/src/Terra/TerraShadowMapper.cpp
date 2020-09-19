@@ -61,6 +61,17 @@ namespace Ogre
         HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
         HlmsCompute *hlmsCompute = hlmsManager->getComputeHlms();
         m_shadowJob = hlmsCompute->findComputeJob( "Terra/ShadowGenerator" );
+        const bool bUseU16 = heightMapTex->getPixelFormat() == PFG_R16_UINT;
+        if( bUseU16 )
+        {
+            HlmsComputeJob *jobU16 = hlmsCompute->findComputeJobNoThrow( "Terra/ShadowGeneratorU16" );
+            if( !jobU16 )
+            {
+                jobU16 = m_shadowJob->clone( "Terra/ShadowGeneratorU16" );
+                jobU16->setProperty( "terra_use_uint", 1 );
+            }
+            m_shadowJob = jobU16;
+        }
 
         //TODO: Mipmaps
         TextureGpuManager *textureManager =
@@ -71,13 +82,30 @@ namespace Ogre
                              TextureFlags::Uav,
                              TextureTypes::Type2D );
         m_shadowMapTex->setResolution( m_heightMapTex->getWidth(), m_heightMapTex->getHeight() );
-        m_shadowMapTex->setPixelFormat( PFG_R10G10B10A2_UNORM );
+
+        {
+            // Check for something that is supported. If they all fail, we assume the driver
+            // is broken and at least PFG_RGBA8_UNORM must be supported
+            const size_t numFormats = 4u;
+            const PixelFormatGpu c_formats[numFormats] = { PFG_R10G10B10A2_UNORM, PFG_RGBA16_UNORM,
+                                                           PFG_RGBA16_FLOAT, PFG_RGBA8_UNORM };
+            for( size_t i = 0u; i < numFormats; ++i )
+            {
+                if( textureManager->checkSupport( c_formats[i], TextureFlags::Uav ) ||
+                    i == numFormats - 1u )
+                {
+                    m_shadowMapTex->setPixelFormat( c_formats[i] );
+                    break;
+                }
+            }
+        }
         m_shadowMapTex->scheduleTransitionTo( GpuResidency::Resident );
 
         CompositorChannelVec finalTarget( 1, CompositorChannel() );
         finalTarget[0] = m_shadowMapTex;
-        m_shadowWorkspace = m_compositorManager->addWorkspace( m_sceneManager, finalTarget, 0,
-                                                               "Terra/ShadowGeneratorWorkspace", false );
+        m_shadowWorkspace = m_compositorManager->addWorkspace(
+            m_sceneManager, finalTarget, 0,
+            bUseU16 ? "Terra/ShadowGeneratorWorkspaceU16" : "Terra/ShadowGeneratorWorkspace", false );
 
         ShaderParams &shaderParams = m_shadowJob->getShaderParams( "default" );
         m_jobParamDelta = shaderParams.findParameter( "delta" );
@@ -337,15 +365,9 @@ namespace Ogre
         m_shadowWorkspace->_update();
     }
     //-----------------------------------------------------------------------------------
-    void ShadowMapper::fillUavDataForCompositorChannel( TextureGpu **outChannel,
-                                                        ResourceLayoutMap &outInitialLayouts,
-                                                        ResourceAccessMap &outInitialUavAccess ) const
+    void ShadowMapper::fillUavDataForCompositorChannel( TextureGpu **outChannel ) const
     {
         *outChannel = m_shadowMapTex;
-        outInitialLayouts.insert( m_shadowWorkspace->getResourcesLayout().begin(),
-                                  m_shadowWorkspace->getResourcesLayout().end() );
-        outInitialUavAccess.insert( m_shadowWorkspace->getUavsAccess().begin(),
-                                    m_shadowWorkspace->getUavsAccess().end() );
     }
     //-----------------------------------------------------------------------------------
     void ShadowMapper::setGaussianFilterParams( uint8 kernelRadius, float gaussianDeviationFactor )
@@ -415,7 +437,7 @@ namespace Ogre
             }
         }
 
-        const bool bIsHlsl = job->getCreator()->getShaderProfile() == "hlsl";
+        const bool bIsMetal = job->getCreator()->getShaderProfile() == "metal";
 
         //Set the shader constants, 16 at a time (since that's the limit of what ManualParam can hold)
         char tmp[32];
@@ -424,7 +446,7 @@ namespace Ogre
         for( uint32 i=0; i<kernelRadius + 1u; i += floatsPerParam )
         {
             weightsString.clear();
-            if( !bIsHlsl )
+            if( bIsMetal )
                 weightsString.a( "c_weights[", i, "]" );
             else
                 weightsString.a( "c_weights[", ( i >> 2u ), "]" );

@@ -21,6 +21,7 @@
 
 //Declares WinMain / main
 #include "MainEntryPointHelper.h"
+#include "System/Android/AndroidSystems.h"
 #include "System/MainEntryPoints.h"
 
 namespace Demo
@@ -39,12 +40,12 @@ namespace Demo
             GraphicsSystem::setupResources();
 
             Ogre::ConfigFile cf;
-            cf.load(mResourcePath + "resources2.cfg");
+            cf.load( AndroidSystems::openFile( mResourcePath + "resources2.cfg" ) );
 
             Ogre::String dataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
 
             if( dataFolder.empty() )
-                dataFolder = "./";
+                dataFolder = AndroidSystems::isAndroid() ? "/" : "./";
             else if( *(dataFolder.end() - 1) != '/' )
                 dataFolder += "/";
 
@@ -60,7 +61,7 @@ namespace Demo
             for (size_t i = 0; i<5; ++i)
             {
                 Ogre::String dataFolderFull = dataFolder + c_locations[i];
-                addResourceLocation(dataFolderFull, "FileSystem", "General");
+                addResourceLocation(dataFolderFull, getMediaReadArchiveType(), "General");
             }
 
         }
@@ -112,6 +113,7 @@ namespace Demo
     }
 }
 
+#if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
 #else
@@ -120,3 +122,4 @@ int mainApp( int argc, const char *argv[] )
 {
     return Demo::MainEntryPoints::mainAppSingleThreaded( DEMO_MAIN_ENTRY_PARAMS );
 }
+#endif

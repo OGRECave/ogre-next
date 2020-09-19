@@ -151,9 +151,9 @@ namespace Ogre {
         float getPoseWeight(size_t index) const;
         void setPoseWeight(size_t index, float w);
         void addPoseWeight(size_t index, float w);
-        
-        TexBufferPacked* getPoseTexBuffer() const;
-        
+
+        TexBufferPacked *getPoseTexBuffer( void ) const;
+
         /** Returns whether the world matrix is an identity matrix.
         @remarks
             It is up to the Hlms implementation whether to honour this request. Take in mind
@@ -466,12 +466,12 @@ namespace Ogre {
         
         struct PoseData
         {
-            unsigned short   numPoses;
-            float            weights[OGRE_MAX_POSES];
-            TexBufferPacked* buffer;
-            bool             halfPrecision;
-            bool             hasNormals;
-            
+            unsigned short numPoses;
+            float weights[OGRE_MAX_POSES];
+            TexBufferPacked *buffer;
+            bool halfPrecision;
+            bool hasNormals;
+
             PoseData();
         };
         SharedPtr<PoseData> mPoseData;

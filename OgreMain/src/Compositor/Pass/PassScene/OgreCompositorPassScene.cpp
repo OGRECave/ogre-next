@@ -37,6 +37,10 @@ THE SOFTWARE.
 #include "OgreViewport.h"
 #include "OgreSceneManager.h"
 
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
+#include "OgrePixelFormatGpuUtils.h"
+
 namespace Ogre
 {
     CompositorPassScene::CompositorPassScene( const CompositorPassSceneDef *definition,
@@ -53,7 +57,8 @@ namespace Ogre
                 mPrePassDepthTexture( 0 ),
                 mSsrTexture( 0 ),
                 mDepthTextureNoMsaa( 0 ),
-                mRefractionsTexture( 0 )
+                mRefractionsTexture( 0 ),
+                mHlmsManager( Root::getSingleton().getHlmsManager() )
     {
         initialize( rtv );
 
@@ -264,6 +269,7 @@ namespace Ogre
 
         notifyPassSceneAfterShadowMapsListeners();
 
+        analyzeBarriers();
         executeResourceTransitions();
         setRenderPassDescToCurrent();
 
@@ -310,23 +316,13 @@ namespace Ogre
         profilingEnd();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassScene::_placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
-                                                                    ResourceAccessMap &uavsAccess,
-                                                                    ResourceLayoutMap &resourcesLayout )
+    void CompositorPassScene::analyzeBarriers( void )
     {
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-        const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
+        CompositorPass::analyzeBarriers();
 
-        if( mShadowNode )
+        if( mShadowNode && mShadowNode->getEnabled() )
         {
-            if( mUpdateShadowNode )
-            {
-                mShadowNode->_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess,
-                                                                   resourcesLayout );
-            }
-
-            //Check <anything> -> Texture (Shadow maps)
+            // Check <anything> -> Texture (Shadow maps)
             const TextureGpuVec &contiguousShadowMapTex = mShadowNode->getContiguousShadowMapTex();
             TextureGpuVec::const_iterator itShadowMap = contiguousShadowMapTex.begin();
             TextureGpuVec::const_iterator enShadowMap = contiguousShadowMapTex.end();
@@ -334,88 +330,84 @@ namespace Ogre
             while( itShadowMap != enShadowMap )
             {
                 TextureGpu *texture = *itShadowMap;
-                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
-                if( ( currentLayout->second != ResourceLayout::Texture && explicitApi ) ||
-                    currentLayout->second == ResourceLayout::Uav )
-                {
-                    addResourceTransition( currentLayout, ResourceLayout::Texture,
-                                           ReadBarrier::Texture );
-                }
+                resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
+                                   1u << PixelShader );
                 ++itShadowMap;
             }
         }
 
-        //Check <anything> -> Texture (GBuffers)
+        // Check <anything> -> Texture (GBuffers)
         {
             TextureGpuVec::const_iterator itor = mPrePassTextures.begin();
-            TextureGpuVec::const_iterator end  = mPrePassTextures.end();
+            TextureGpuVec::const_iterator endt = mPrePassTextures.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 TextureGpu *texture = *itor;
-                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
-
-                if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
-                    currentLayout->second == ResourceLayout::Uav )
-                {
-                    addResourceTransition( currentLayout,
-                                           ResourceLayout::Texture,
-                                           ReadBarrier::Texture );
-                }
-
+                resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
+                                   1u << PixelShader );
                 ++itor;
             }
         }
 
-        //Check <anything> -> DepthTexture (Depth Texture)
+        // Check <anything> -> DepthTexture (Depth Texture)
         if( mPrePassDepthTexture )
         {
             TextureGpu *texture = mPrePassDepthTexture;
-
-            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
-
-            if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
-                currentLayout->second == ResourceLayout::Uav )
+            if( PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
             {
-                addResourceTransition( currentLayout,
-                                       ResourceLayout::Texture,
-                                       ReadBarrier::Texture );
+                resolveTransition( texture, ResourceLayout::RenderTargetReadOnly, ResourceAccess::Read,
+                                   1u << PixelShader );
+            }
+            else
+            {
+                resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
+                                   1u << PixelShader );
             }
         }
 
-        //Check <anything> -> DepthTexture (Depth Texture)
+        // Check <anything> -> DepthTexture (Depth Texture)
         if( mDepthTextureNoMsaa && mDepthTextureNoMsaa != mPrePassDepthTexture )
         {
             TextureGpu *texture = mDepthTextureNoMsaa;
-
-            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
-
-            if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
-                currentLayout->second == ResourceLayout::Uav )
+            if( PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
             {
-                addResourceTransition( currentLayout,
-                                       ResourceLayout::Texture,
-                                       ReadBarrier::Texture );
+                resolveTransition( texture, ResourceLayout::RenderTargetReadOnly, ResourceAccess::Read,
+                                   1u << PixelShader );
+            }
+            else
+            {
+                resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
+                                   1u << PixelShader );
             }
         }
 
-        //Check <anything> -> Texture (SSR Texture)
+        // Check <anything> -> Texture
+        if( mRefractionsTexture )
+        {
+            TextureGpu *texture = mRefractionsTexture;
+            resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
+                               1u << PixelShader );
+        }
+
+        // Check <anything> -> Texture (SSR Texture)
         if( mSsrTexture )
         {
             TextureGpu *texture = mSsrTexture;
-
-            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
-
-            if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
-                currentLayout->second == ResourceLayout::Uav )
-            {
-                addResourceTransition( currentLayout,
-                                       ResourceLayout::Texture,
-                                       ReadBarrier::Texture );
-            }
+            resolveTransition( texture, ResourceLayout::Texture, ResourceAccess::Read,
+                               1u << PixelShader );
         }
 
-        CompositorPass::_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess, resourcesLayout );
+        for( size_t i = HLMS_LOW_LEVEL + 1u; i < HLMS_MAX; ++i )
+        {
+            Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
+            if( hlms )
+            {
+                hlms->analyzeBarriers(
+                    mBarrierSolver, mResourceTransitions, mCamera,
+                    mDefinition->mShadowNodeRecalculation == SHADOW_NODE_CASTER_PASS );
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassScene::notifyCleared(void)

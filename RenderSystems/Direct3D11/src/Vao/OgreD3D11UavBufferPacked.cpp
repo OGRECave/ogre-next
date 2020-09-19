@@ -27,9 +27,11 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreD3D11UavBufferPacked.h"
+
 #include "Vao/OgreD3D11BufferInterface.h"
 #include "Vao/OgreD3D11CompatBufferInterface.h"
 #include "Vao/OgreD3D11VaoManager.h"
+#include "Vao/OgreD3D11ReadOnlyBufferPacked.h"
 #include "Vao/OgreD3D11TexBufferPacked.h"
 
 #include "OgreD3D11Mappings.h"
@@ -70,7 +72,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TexBufferPacked* D3D11UavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
     {
-        assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
+        OGRE_ASSERT_HIGH( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
 
         D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
                                                                             mBufferInterface );
@@ -81,6 +83,22 @@ namespace Ogre
                     mBufferType, (void*)0, false, (VaoManager*)0, bufferInterface,
                     pixelFormat, true, mDevice );
         //We were overriden by the BufferPacked we just created. Restore this back!
+        bufferInterface->_notifyBuffer( this );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    ReadOnlyBufferPacked *D3D11UavBufferPacked::getAsReadOnlyBufferImpl( void )
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<D3D11CompatBufferInterface *>( mBufferInterface ) );
+
+        D3D11CompatBufferInterface *bufferInterface =
+            static_cast<D3D11CompatBufferInterface *>( mBufferInterface );
+
+        ReadOnlyBufferPacked *retVal = OGRE_NEW D3D11ReadOnlyBufferPacked(
+            mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
+            (void *)0, false, (VaoManager *)0, bufferInterface, PFG_NULL, true, mDevice );
+        // We were overriden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
         return retVal;

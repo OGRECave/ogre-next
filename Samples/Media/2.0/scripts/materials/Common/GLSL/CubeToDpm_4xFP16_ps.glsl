@@ -1,13 +1,19 @@
-#version 330
+#version ogre_glsl_ver_330
 
-uniform float lodLevel;
-uniform samplerCube cubeTexture;
+vulkan( layout( ogre_P0 ) uniform Params { )
+	uniform float lodLevel;
+vulkan( }; )
 
+vulkan_layout( ogre_t0 ) uniform textureCube cubeTexture;
+vulkan( layout( ogre_s0 ) uniform sampler cubeSampler );
+
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
 } inPs;
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
 void main()
@@ -18,5 +24,5 @@ void main()
 	cubeDir.z = 0.5 - 0.5 * (cubeDir.x * cubeDir.x + cubeDir.y * cubeDir.y);
 	cubeDir.z = inPs.uv0.x < 0.5 ? cubeDir.z : -cubeDir.z;
 
-	fragColour.xyzw = textureLod( cubeTexture, cubeDir.xyz, lodLevel ).xyzw;
+	fragColour.xyzw = textureLod( vkSamplerCube( cubeTexture, cubeSampler ), cubeDir.xyz, lodLevel ).xyzw;
 }

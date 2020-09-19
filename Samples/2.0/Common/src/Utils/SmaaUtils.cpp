@@ -61,8 +61,11 @@ namespace Demo
             preprocessorDefines += "SMAA_HLSL_4_1=1,";
         else if( caps->isShaderProfileSupported( "ps_4_0" ) )
             preprocessorDefines += "SMAA_HLSL_4=1,";
-        else if( caps->isShaderProfileSupported( "glsl410" ) )
+        else if( caps->isShaderProfileSupported( "glsl410" ) ||
+                 caps->isShaderProfileSupported( "glslvk" ) )
+        {
             preprocessorDefines += "SMAA_GLSL_4=1,";
+        }
         else if( caps->isShaderProfileSupported( "glsl330" ) )
             preprocessorDefines += "SMAA_GLSL_3=1,";
 

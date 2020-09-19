@@ -37,10 +37,13 @@ layout(std140) uniform;
 @insertpiece( TerraInstanceStructDecl )
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION
+vulkan_layout( location = 0 )
 in block
 {
 	@insertpiece( Terra_VStoPS_block )
 } inPs;
+
+@pset( currSampler, samplerStateStart )
 
 @property( !hlms_render_depth_only )
 	@property( !hlms_prepass )
@@ -78,29 +81,41 @@ in block
 in vec4 gl_FragCoord;
 @end
 
-uniform sampler2D terrainNormals;
-uniform sampler2D terrainShadows;
+vulkan_layout( ogre_t@value(terrainNormals) )	uniform texture2D terrainNormals;
+vulkan_layout( ogre_t@value(terrainShadows) )	uniform texture2D terrainShadows;
+vulkan( layout( ogre_s@value(terrainNormals) )	uniform sampler samplerStateTerra );
 
 @property( hlms_forwardplus )
-/*layout(binding = 1) */uniform usamplerBuffer f3dGrid;
-/*layout(binding = 2) */uniform samplerBuffer f3dLightList;
+	vulkan_layout( ogre_T@value(f3dGrid) ) uniform usamplerBuffer f3dGrid;
+	ReadOnlyBufferF( @value(f3dLightList), float4, f3dLightList );
 @end
 @property( irradiance_volumes )
-	uniform sampler3D irradianceVolume;
+	vulkan_layout( ogre_t@value(irradianceVolume) )	uniform texture3D	irradianceVolume;
+	vulkan( layout( ogre_s@value(irradianceVolume) )uniform sampler		irradianceVolumeSampler );
 @end
 
 @foreach( num_textures, n )
-	uniform sampler2DArray textureMaps@n;@end
+	vulkan_layout( ogre_t@value(textureMaps@n) ) uniform texture2DArray textureMaps@n;@end
 
-@property( !hlms_enable_cubemaps_auto )
-	@property( use_envprobe_map )uniform samplerCube		texEnvProbeMap;@end
-@else
-	@property( !hlms_cubemaps_use_dpm )
-		@property( use_envprobe_map )uniform samplerCubeArray	texEnvProbeMap;@end
+@property( use_envprobe_map )
+	@property( !hlms_enable_cubemaps_auto )
+		vulkan_layout( ogre_t@value(texEnvProbeMap) ) uniform textureCube texEnvProbeMap;
 	@else
-		@property( use_envprobe_map )uniform sampler2DArray	texEnvProbeMap;@end
-		@insertpiece( DeclDualParaboloidFunc )
+		@property( !hlms_cubemaps_use_dpm )
+			vulkan_layout( ogre_t@value(texEnvProbeMap) ) uniform textureCubeArray texEnvProbeMap;
+		@else
+			vulkan_layout( ogre_t@value(texEnvProbeMap) ) uniform texture2DArray texEnvProbeMap;
+			@insertpiece( DeclDualParaboloidFunc )
+		@end
 	@end
+	@property( envMapRegSampler < samplerStateStart && syntax == glslvk )
+		layout( ogre_s@value(envMapRegSampler) ) uniform sampler samplerState@value(envMapRegSampler);
+	@end
+@end
+
+@property( syntax == glslvk )
+	@foreach( num_samplers, n )
+		layout( ogre_s@value(currSampler) ) uniform sampler samplerState@counter(currSampler);@end
 @end
 
 @property( use_parallax_correct_cubemaps )
@@ -117,6 +132,7 @@ uniform sampler2D terrainShadows;
 @insertpiece( DeclAreaLtcLightFuncs )
 
 @insertpiece( DeclVctTextures )
+@insertpiece( DeclIrradianceFieldTextures )
 
 @insertpiece( custom_ps_functions )
 

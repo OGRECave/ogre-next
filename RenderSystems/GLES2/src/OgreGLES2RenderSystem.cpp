@@ -851,7 +851,7 @@ namespace Ogre {
             mClipPlanesDirty = true;
     }
 
-    void GLES2RenderSystem::_setTexture(size_t stage, bool enabled, Texture *texPtr)
+    void GLES2RenderSystem::_setTexture(size_t stage, bool enabled, Texture *texPtr, bool bDepthReadOnly)
     {
         GLES2Texture *tex = static_cast<GLES2Texture*>(texPtr);
 
@@ -911,10 +911,6 @@ namespace Ogre {
     {
     }
 
-    void GLES2RenderSystem::flushUAVs(void)
-    {
-    }
-
     void GLES2RenderSystem::_bindTextureUavCS( uint32 slot, Texture *texture,
                                                ResourceAccess::ResourceAccess _access,
                                                int32 mipmapLevel, int32 textureArrayIndex,
@@ -924,7 +920,7 @@ namespace Ogre {
 
     void GLES2RenderSystem::_setTextureCS( uint32 slot, bool enabled, Texture *texPtr )
     {
-        this->_setTexture( slot, enabled, texPtr );
+        this->_setTexture( slot, enabled, texPtr, false );
     }
 
     void GLES2RenderSystem::_setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock )

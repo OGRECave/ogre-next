@@ -185,6 +185,8 @@ namespace Ogre
 
         mConstBufferMaxSize = 64 * 1024;        //64kb
         mTexBufferMaxSize   = 128 * 1024 * 1024;//128MB
+        mReadOnlyIsTexBuffer = true;
+        mReadOnlyBufferMaxSize = mTexBufferMaxSize;
 
         mSupportsPersistentMapping  = true;
 
@@ -878,6 +880,56 @@ namespace Ogre
                        texBuffer->_getInternalBufferStart() * texBuffer->getBytesPerElement(),
                        texBuffer->_getInternalTotalSizeBytes(),
                        texBuffer->getBufferType() );
+    }
+    //-----------------------------------------------------------------------------------
+    ReadOnlyBufferPacked *MetalVaoManager::createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
+                                                                     size_t sizeBytes,
+                                                                     BufferType bufferType,
+                                                                     void *initialData,
+                                                                     bool keepAsShadow )
+    {
+        size_t vboIdx;
+        size_t bufferOffset;
+
+        size_t alignment = mTexBufferAlignment;
+
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+
+        const size_t requestedSize = sizeBytes;
+
+        if( bufferType >= BT_DYNAMIC_DEFAULT )
+        {
+            // For dynamic buffers, the size will be 3x times larger
+            //(depending on mDynamicBufferMultiplier); we need the
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
+            const uint32 alignment = Math::lcm( 1, c_minimumAlignment );
+            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
+        }
+
+        allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
+
+        Vbo &vbo = mVbos[vboFlag][vboIdx];
+        MetalBufferInterface *bufferInterface =
+            new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
+        ReadOnlyBufferPacked *retVal = OGRE_NEW MetalReadOnlyBufferPacked(
+            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType, initialData,
+            keepAsShadow, this, bufferInterface, pixelFormat, mDevice );
+
+        if( initialData )
+            bufferInterface->_firstUpload( initialData, 0, requestedSize );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalVaoManager::destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer )
+    {
+        MetalBufferInterface *bufferInterface =
+            static_cast<MetalBufferInterface *>( readOnlyBuffer->getBufferInterface() );
+
+        deallocateVbo( bufferInterface->getVboPoolIndex(),
+                       readOnlyBuffer->_getInternalBufferStart() * readOnlyBuffer->getBytesPerElement(),
+                       readOnlyBuffer->_getInternalTotalSizeBytes(), readOnlyBuffer->getBufferType() );
     }
     //-----------------------------------------------------------------------------------
     UavBufferPacked* MetalVaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,

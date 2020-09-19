@@ -1,7 +1,9 @@
 #version 430
 
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly @insertpiece(uav0_data_type) dstTex;
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
+uniform restrict writeonly @insertpiece(uav0_data_type) dstTex;
 
+vulkan( layout( ogre_P0 ) uniform Params { )
 @property( !uav0_is_integer )
     uniform vec4 fClearValue;
     #define clearValue fClearValue
@@ -14,6 +16,7 @@ layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly @insertpiece(uav0
         #define clearValue iClearValue
     @end
 @end
+vulkan( }; )
 
 layout( local_size_x = @value( threads_per_group_x ),
         local_size_y = @value( threads_per_group_y ),

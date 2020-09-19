@@ -1,9 +1,12 @@
-#version 330
+#version ogre_glsl_ver_330
 
-uniform sampler2D RT;
+vulkan_layout( ogre_t0 ) uniform texture2D RT;
+vulkan( layout( ogre_s0 ) uniform sampler samplerState );
 
+vulkan_layout( location = 0 )
 out vec4 fragColour;
 
+vulkan_layout( location = 0 )
 in block
 {
 	vec2 uv0;
@@ -11,5 +14,5 @@ in block
 
 void main()
 {
-	fragColour = 1.0 - texture(RT, inPs.uv0);
+	fragColour = 1.0 - texture( vkSampler2D( RT, samplerState ), inPs.uv0 );
 }

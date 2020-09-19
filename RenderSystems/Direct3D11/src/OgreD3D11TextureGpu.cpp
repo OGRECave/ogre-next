@@ -439,9 +439,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                                   const TextureBox &srcBox, uint8 srcMipLevel,
-                                  bool keepResolvedTexSynced )
+                                  bool keepResolvedTexSynced,
+                                  ResourceAccess::ResourceAccess issueBarriers )
     {
-        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
+        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, issueBarriers );
 
         assert( dynamic_cast<D3D11TextureGpu*>( dst ) );
         D3D11TextureGpu *dstD3d = static_cast<D3D11TextureGpu*>( dst );
@@ -516,7 +517,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::_autogenerateMipmaps(void)
+    void D3D11TextureGpu::_autogenerateMipmaps( bool bUseBarrierSolver )
     {
         if( !mFinalTextureName || !isDataReady() )
             return;
@@ -800,6 +801,10 @@ namespace Ogre
         mDepthBufferPoolId( 1u ),
         mPreferDepthTexture( false ),
         mDesiredDepthBufferFormat( PFG_UNKNOWN )
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        ,
+        mOrientationMode( msDefaultOrientationMode )
+#endif
     {
         if( mPixelFormat == PFG_NULL )
             mDepthBufferPoolId = 0;
@@ -830,4 +835,18 @@ namespace Ogre
     {
         return mDesiredDepthBufferFormat;
     }
+    //-----------------------------------------------------------------------------------
+    void D3D11TextureGpuRenderTarget::setOrientationMode( OrientationMode orientationMode )
+    {
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+        mOrientationMode = orientationMode;
+#endif
+    }
+    //-----------------------------------------------------------------------------------
+#if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
+    OrientationMode D3D11TextureGpuRenderTarget::getOrientationMode( void ) const
+    {
+        return mOrientationMode;
+    }
+#endif
 }

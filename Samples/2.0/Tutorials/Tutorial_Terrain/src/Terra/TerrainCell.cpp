@@ -147,7 +147,7 @@ namespace Ogre
         ((float*RESTRICT_ALIAS)gpuPtr)[11] = m_parentTerra->m_invWidth;
 
         ((float*RESTRICT_ALIAS)gpuPtr)[12] = m_parentTerra->m_xzRelativeSize.x;
-        ((float*RESTRICT_ALIAS)gpuPtr)[13] = m_parentTerra->m_height;
+        ((float*RESTRICT_ALIAS)gpuPtr)[13] = m_parentTerra->m_heightUnormScaled;
         ((float*RESTRICT_ALIAS)gpuPtr)[14] = m_parentTerra->m_xzRelativeSize.y;
         ((float*RESTRICT_ALIAS)gpuPtr)[15] = m_parentTerra->m_invDepth;
     }

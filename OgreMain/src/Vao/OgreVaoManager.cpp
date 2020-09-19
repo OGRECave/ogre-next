@@ -27,10 +27,13 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "Vao/OgreVaoManager.h"
+
 #include "Vao/OgreStagingBuffer.h"
 #include "Vao/OgreVertexArrayObject.h"
 #include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreReadOnlyBufferPacked.h"
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
 #include "Vao/OgreIndirectBufferPacked.h"
@@ -46,6 +49,7 @@ namespace Ogre
         mTimer( 0 ),
         mDefaultStagingBufferUnfencedTime( 300000 - 1000 ), //4 minutes, 59 seconds
         mDefaultStagingBufferLifetime( 300000 ), //5 minutes
+        mReadOnlyIsTexBuffer( true ),
         mSupportsPersistentMapping( false ),
         mSupportsIndirectBuffers( false ),
         mSupportsBaseInstance( true ),
@@ -59,6 +63,7 @@ namespace Ogre
         mUavBufferAlignment( 256 ),
         mConstBufferMaxSize( 16 * 1024 * 1024 ), //Minimum guaranteed by GL.
         mTexBufferMaxSize( 64 * 1024 * 1024 ),  //Minimum guaranteed by GL. Intel HD Graphics 3000-5000/Iris provide 64M only
+        mReadOnlyBufferMaxSize( 64 * 1024 * 1024 ),
         mUavBufferMaxSize( 16 * 1024 * 1024 )    //Minimum guaranteed by GL.
     {
         mTimer = OGRE_NEW Timer();
@@ -79,29 +84,40 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VaoManager::~VaoManager()
     {
-        for( size_t i=0; i<2; ++i )
-        {
-            StagingBufferVec::const_iterator itor = mRefedStagingBuffers[i].begin();
-            StagingBufferVec::const_iterator end  = mRefedStagingBuffers[i].end();
-
-            while( itor != end )
-            {
-                OGRE_DELETE *itor;
-                ++itor;
-            }
-
-            itor = mZeroRefStagingBuffers[i].begin();
-            end  = mZeroRefStagingBuffers[i].end();
-
-            while( itor != end )
-            {
-                OGRE_DELETE *itor;
-                ++itor;
-            }
-        }
+        deleteStagingBuffers();
 
         OGRE_DELETE mTimer;
         mTimer = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void VaoManager::deleteStagingBuffers()
+    {
+        for( size_t i = 0; i < 2; ++i )
+        {
+            StagingBufferVec::const_iterator itor = mRefedStagingBuffers[i].begin();
+            StagingBufferVec::const_iterator end = mRefedStagingBuffers[i].end();
+
+            while( itor != end )
+            {
+                OGRE_DELETE *itor;
+                ++itor;
+            }
+            // VulkanVaoManager also calls this so the array needs to be cleared so the
+            // base VaoManager destructor doesn't delete the same objects twice.
+            mRefedStagingBuffers[i].clear();
+
+            itor = mZeroRefStagingBuffers[i].begin();
+            end = mZeroRefStagingBuffers[i].end();
+
+            while( itor != end )
+            {
+                OGRE_DELETE *itor;
+                ++itor;
+            }
+            // VulkanVaoManager also calls this so the array needs to be cleared so the
+            // base VaoManager destructor doesn't delete the same objects twice.
+            mZeroRefStagingBuffers[i].clear();
+        }
     }
     //-----------------------------------------------------------------------------------
     uint32 VaoManager::calculateVertexSize( const VertexElement2Vec &vertexElements )
@@ -280,6 +296,45 @@ namespace Ogre
         }
 
         mBuffers[ BP_TYPE_TEX ].erase( itor );
+    }
+    //-----------------------------------------------------------------------------------
+    ReadOnlyBufferPacked *VaoManager::createReadOnlyBuffer( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                                            BufferType bufferType, void *initialData,
+                                                            bool keepAsShadow )
+    {
+        ReadOnlyBufferPacked *retVal;
+        retVal =
+            createReadOnlyBufferImpl( pixelFormat, sizeBytes, bufferType, initialData, keepAsShadow );
+        mBuffers[BP_TYPE_READONLY].insert( retVal );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void VaoManager::destroyReadOnlyBuffer( ReadOnlyBufferPacked *readOnlyBuffer )
+    {
+        BufferPackedSet::iterator itor = mBuffers[BP_TYPE_READONLY].find( readOnlyBuffer );
+
+        if( itor == mBuffers[BP_TYPE_READONLY].end() )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "Texture Buffer has already been destroyed or "
+                         "doesn't belong to this VaoManager.",
+                         "VaoManager::destroyTexBuffer" );
+        }
+
+        if( readOnlyBuffer->getBufferType() >= BT_DYNAMIC_DEFAULT )
+        {
+            // We need to delay the removal of this buffer until
+            // we're sure it's not in use by the GPU anymore
+            DelayedBuffer delayedBuffer( readOnlyBuffer, mFrameCount, mDynamicBufferCurrentFrame );
+            mDelayedDestroyBuffers.push_back( delayedBuffer );
+        }
+        else
+        {
+            destroyReadOnlyBufferImpl( readOnlyBuffer );
+            OGRE_DELETE *itor;
+        }
+
+        mBuffers[BP_TYPE_READONLY].erase( itor );
     }
     //-----------------------------------------------------------------------------------
     UavBufferPacked* VaoManager::createUavBuffer( size_t numElements, uint32 bytesPerElement,
@@ -568,6 +623,10 @@ namespace Ogre
         case BP_TYPE_TEX:
             assert( dynamic_cast<TexBufferPacked*>( bufferPacked ) );
             destroyTexBufferImpl( static_cast<TexBufferPacked*>( bufferPacked ) );
+            break;
+        case BP_TYPE_READONLY:
+            assert( dynamic_cast<ReadOnlyBufferPacked*>( bufferPacked ) );
+            destroyReadOnlyBufferImpl( static_cast<ReadOnlyBufferPacked*>( bufferPacked ) );
             break;
         case BP_TYPE_UAV:
             assert( dynamic_cast<UavBufferPacked*>( bufferPacked ) );

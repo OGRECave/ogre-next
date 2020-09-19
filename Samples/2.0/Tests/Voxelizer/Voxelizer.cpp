@@ -63,7 +63,7 @@ namespace Demo
             for( size_t i=0; i<sizeof(c_locations) / sizeof(c_locations[0]); ++i )
             {
                 Ogre::String dataFolder = originalDataFolder + c_locations[i];
-                addResourceLocation( dataFolder, "FileSystem", "General" );
+                addResourceLocation( dataFolder, getMediaReadArchiveType(), "General" );
             }
         }
 

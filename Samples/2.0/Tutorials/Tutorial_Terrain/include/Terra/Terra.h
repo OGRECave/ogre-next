@@ -32,7 +32,7 @@ namespace Ogre
         uint32                      m_width;
         uint32                      m_depth; //PNG's Height
         float                       m_depthWidthRatio;
-        float                       m_skirtSize;
+        float                       m_skirtSize; // Already unorm scaled
         float                       m_invWidth;
         float                       m_invDepth;
 
@@ -40,6 +40,7 @@ namespace Ogre
         Vector2     m_xzInvDimensions;
         Vector2     m_xzRelativeSize; // m_xzDimensions / [m_width, m_height]
         float       m_height;
+        float       m_heightUnormScaled; // m_height / 1 or m_height / 65535
         Vector3     m_terrainOrigin;
         uint32      m_basePixelDimension;
 
@@ -47,7 +48,6 @@ namespace Ogre
         std::vector<TerrainCell*>  m_collectedCells[2];
         size_t                     m_currentCell;
 
-        DescriptorSetTexture const  *m_descriptorSet;
         Ogre::TextureGpu*   m_heightMapTex;
         Ogre::TextureGpu*   m_normalMapTex;
 
@@ -58,8 +58,10 @@ namespace Ogre
         CompositorManager2      *m_compositorManager;
         Camera                  *m_camera;
 
-        void createDescriptorSet(void);
-        void destroyDescriptorSet(void);
+    public:
+        uint32 mHlmsTerraIndex;
+
+    protected:
         void destroyHeightmapTexture(void);
 
         /// Creates the Ogre texture based on the image data.
@@ -137,8 +139,6 @@ namespace Ogre
         void setCamera( Camera *camera )                { m_camera = camera; }
 
         const ShadowMapper* getShadowMapper(void) const { return m_shadowMapper; }
-
-        const Ogre::DescriptorSetTexture* getDescriptorSetTexture(void) const { return m_descriptorSet; }
 
         Ogre::TextureGpu* getHeightMapTex(void) const   { return m_heightMapTex; }
         Ogre::TextureGpu* getNormalMapTex(void) const   { return m_normalMapTex; }

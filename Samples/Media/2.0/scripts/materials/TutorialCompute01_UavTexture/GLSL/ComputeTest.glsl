@@ -1,6 +1,10 @@
-#version 430
+@property( syntax != glslvk )
+	#version 430
+@else
+	#version 450
+@end
 
-layout (rgba8) uniform restrict writeonly image2D testTexture;
+layout( vulkan( ogre_u0 ) vk_comma rgba8 ) uniform restrict writeonly image2D testTexture;
 
 layout( local_size_x = @value( threads_per_group_x ),
         local_size_y = @value( threads_per_group_y ),

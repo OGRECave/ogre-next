@@ -102,7 +102,7 @@ namespace Ogre
     void Window::setVSync( bool vSync, uint32 vSyncInterval )
     {
         mVSync = vSync;
-        mVSyncInterval = vSyncInterval;
+        mVSyncInterval = vSyncInterval & 0x7FFFFFFF;
     }
     //-----------------------------------------------------------------------------------
     bool Window::getVSync(void) const

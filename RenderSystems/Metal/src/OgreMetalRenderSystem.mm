@@ -79,6 +79,8 @@ namespace Ogre
         mSwIndirectBufferPtr( 0 ),
         mPso( 0 ),
         mComputePso( 0 ),
+        mStencilEnabled( false ),
+        mStencilRefValue( 0u ),
         mCurrentIndexBuffer( 0 ),
         mCurrentVertexBuffer( 0 ),
         mCurrentPrimType( MTLPrimitiveTypePoint ),
@@ -631,7 +633,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )
+    void MetalRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly )
     {
         if( texPtr )
         {
@@ -2068,15 +2070,17 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setComputePso( const HlmsComputePso *pso )
     {
-        __unsafe_unretained id<MTLComputePipelineState> metalPso =
-                (__bridge id<MTLComputePipelineState>)pso->rsData;
-
         __unsafe_unretained id<MTLComputeCommandEncoder> computeEncoder =
                 mActiveDevice->getComputeEncoder();
 
         if( mComputePso != pso )
         {
-            [computeEncoder setComputePipelineState:metalPso];
+            if( pso )
+            {
+                __unsafe_unretained id<MTLComputePipelineState> metalPso =
+                    (__bridge id<MTLComputePipelineState>)pso->rsData;
+                [computeEncoder setComputePipelineState:metalPso];
+            }
             mComputePso = pso;
         }
     }

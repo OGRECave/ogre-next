@@ -55,6 +55,7 @@ namespace Ogre
         StagingBufferVec mRefedStagingBuffers[2];
         StagingBufferVec mZeroRefStagingBuffers[2];
 
+        bool            mReadOnlyIsTexBuffer;
         bool            mSupportsPersistentMapping;
         bool            mSupportsIndirectBuffers;
         bool            mSupportsBaseInstance;
@@ -85,6 +86,7 @@ namespace Ogre
         uint32 mUavBufferAlignment;
         size_t mConstBufferMaxSize;
         size_t mTexBufferMaxSize;
+        size_t mReadOnlyBufferMaxSize;
         size_t mUavBufferMaxSize;
 
         virtual VertexBufferPacked* createVertexBufferImpl( size_t numElements,
@@ -116,6 +118,12 @@ namespace Ogre
                                                       BufferType bufferType,
                                                       void *initialData, bool keepAsShadow ) = 0;
         virtual void destroyTexBufferImpl( TexBufferPacked *texBuffer ) = 0;
+
+        virtual ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
+                                                                size_t sizeBytes, BufferType bufferType,
+                                                                void *initialData,
+                                                                bool keepAsShadow ) = 0;
+        virtual void destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *texBuffer ) = 0;
 
         virtual UavBufferPacked* createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                       uint32 bindFlags,
@@ -161,6 +169,8 @@ namespace Ogre
     public:
         VaoManager( const NameValuePairList *params );
         virtual ~VaoManager();
+
+        void deleteStagingBuffers();
 
         struct _OgreExport MemoryStatsEntry
         {
@@ -309,6 +319,28 @@ namespace Ogre
         */
         void destroyTexBuffer( TexBufferPacked *texBuffer );
 
+        /** Creates a read-only buffer based on the given parameters. Behind the scenes, the buffer
+            is actually part of much larger buffer, in order to reduce bindings at runtime.
+            (depends on the RenderSystem, on D3D11 we're forced to give its own buffer)
+        @remarks
+            See VaoManager::createVertexBuffer for the remaining parameters not documented here.
+        @param pixelFormat
+            The pixel format for the texture buffer.
+        @param sizeBytes
+            The size in bytes of the given constant buffer. API restrictions may apply.
+        @return
+            The desired read-only buffer pointer
+        */
+        ReadOnlyBufferPacked *createReadOnlyBuffer( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                                    BufferType bufferType, void *initialData,
+                                                    bool keepAsShadow );
+
+        /** Destroys the given texture buffer created with createReadOnlyBuffer.
+        @param readOnlyBuffer
+            ReadOnlyBufferPacked created with createReadOnlyBuffer
+        */
+        void destroyReadOnlyBuffer( ReadOnlyBufferPacked *readOnlyBuffer );
+
         /** Creates an UAV buffer based on the given parameters. Behind the scenes, the buffer
             is actually part of much larger buffer, in order to reduce bindings at runtime.
             (depends on the RenderSystem, on D3D11 we're forced to give its own buffer)
@@ -412,8 +444,17 @@ namespace Ogre
         uint32 getUavBufferAlignment(void) const        { return mUavBufferAlignment; }
         size_t getConstBufferMaxSize(void) const        { return mConstBufferMaxSize; }
         size_t getTexBufferMaxSize(void) const          { return mTexBufferMaxSize; }
+        size_t getReadOnlyBufferMaxSize(void) const     { return mReadOnlyBufferMaxSize; }
         size_t getUavBufferMaxSize(void) const          { return mUavBufferMaxSize; }
 
+        /// When true, ReadOnlyBufferPacked behaves like TexBufferPacked, i.e. assigned
+        /// to texture buffer slots.
+        ///
+        /// When false, ReadOnlyBufferPacked behaves like UavBufferPacked i.e. assigned
+        /// to UAV buffer slots.
+        /// Except D3D11, which still uses texture buffer slots when false but chooses
+        /// StructuredBuffer over Buffer
+        bool readOnlyIsTexBuffer(void) const			{ return mReadOnlyIsTexBuffer; }
         bool supportsPersistentMapping(void) const      { return mSupportsPersistentMapping; }
 
         /// When false, IndirectBufferPacked will emulate the mapping behavior,

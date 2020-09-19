@@ -85,6 +85,7 @@ namespace Ogre
         BP_TYPE_INDEX,
         BP_TYPE_CONST,
         BP_TYPE_TEX,
+        BP_TYPE_READONLY,
         BP_TYPE_UAV,
         BP_TYPE_INDIRECT,
         NUM_BUFFER_PACKED_TYPES
@@ -96,6 +97,7 @@ namespace Ogre
         BB_FLAG_INDEX       = 1u << BP_TYPE_INDEX,
         BB_FLAG_CONST       = 1u << BP_TYPE_CONST,
         BB_FLAG_TEX         = 1u << BP_TYPE_TEX,
+        BB_FLAG_READONLY    = 1u << BP_TYPE_READONLY,
         BB_FLAG_UAV         = 1u << BP_TYPE_UAV,
         BB_FLAG_INDIRECT    = 1u << BP_TYPE_INDIRECT
     };
@@ -141,6 +143,7 @@ namespace Ogre
         friend class GLES2BufferInterface;
         friend class MetalBufferInterface;
         friend class NULLBufferInterface;
+        friend class VulkanBufferInterface;
 
     protected:
         size_t mInternalBufferStart;  /// In elements
@@ -204,6 +207,10 @@ namespace Ogre
 
         BufferType getBufferType(void) const                    { return mBufferType; }
         BufferInterface* getBufferInterface(void) const         { return mBufferInterface; }
+
+        /// If this buffer has been reinterpreted from an UavBufferPacked,
+        /// returns the original version, otherwise returns 'this'
+        virtual BufferPacked *getOriginalBufferType( void );
 
         /// Async data read request. A ticket will be returned. Once the async transfer finishes,
         /// you can use the ticket to read the data from CPU. @See AsyncTicket
