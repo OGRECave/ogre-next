@@ -13,14 +13,16 @@
 	struct PS_OUTPUT
 	{
 		@property( !hlms_shadowcaster )
-			float4 colour0	[[ color(0) ]];
+			float4 colour0	[[ color(@counter(rtv_target)) ]];
 		@else
 			@property( !hlms_render_depth_only )
-				float colour0	[[ color(0) ]];
+				float colour0	[[ color(@counter(rtv_target)) ]];
 			@end
 			@property( hlms_render_depth_only )
 				float colour0	[[ depth(any) ]];
 			@end
 		@end
+
+		@insertpiece( ExtraOutputTypes )
 	};
 @end
