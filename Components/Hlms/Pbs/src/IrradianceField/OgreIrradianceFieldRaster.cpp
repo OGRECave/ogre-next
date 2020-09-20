@@ -48,8 +48,6 @@ THE SOFTWARE.
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 
-#define TODO_final_memoryBarrier
-
 namespace Ogre
 {
     IrradianceFieldRaster::IrradianceFieldRaster( IrradianceField *creator ) :
@@ -269,8 +267,6 @@ namespace Ogre
         mIfdIntegrationWorkspace->_beginUpdate( false );
         mIfdIntegrationWorkspace->_update();
         mIfdIntegrationWorkspace->_endUpdate( false );
-
-        TODO_final_memoryBarrier;
 
         if( mCreator->mDebugIfdProbeVisualizer )
             mCreator->mDebugIfdProbeVisualizer->setVisible( oldDebugIfdVisibility );
