@@ -1,4 +1,5 @@
 <map id="Ogre::CbDrawCallStrip" name="Ogre::CbDrawCallStrip">
-<area shape="rect" id="node2" href="$struct_ogre_1_1_cb_draw_call.html" title="Ogre::CbDrawCall" alt="" coords="19,80,148,107"/>
-<area shape="rect" id="node3" href="$struct_ogre_1_1_cb_base.html" title="Ogre::CbBase" alt="" coords="31,5,136,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,155,156,181"/>
+<area shape="rect" id="node2" href="$struct_ogre_1_1_cb_draw_call.html" title=" " alt="" coords="19,80,143,107"/>
+<area shape="rect" id="node3" href="$struct_ogre_1_1_cb_base.html" title=" " alt="" coords="29,5,132,32"/>
 </map>

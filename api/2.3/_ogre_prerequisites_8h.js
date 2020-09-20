@@ -1,10 +1,5 @@
 var _ogre_prerequisites_8h =
 [
-    [ "StdList", "class_ogre_1_1_std_list.html", null ],
-    [ "StdMap", "class_ogre_1_1_std_map.html", null ],
-    [ "StdMultiMap", "class_ogre_1_1_std_multi_map.html", null ],
-    [ "StdUnorderedSet", "class_ogre_1_1_std_unordered_set.html", null ],
-    [ "StdVector", "class_ogre_1_1_std_vector.html", null ],
     [ "OGRE_HASH_NAMESPACE", "_ogre_prerequisites_8h.html#a266997eb0cdd41a9e1b8adad4a6d7e98", null ],
     [ "OGRE_HASHMAP_NAME", "_ogre_prerequisites_8h.html#ac14a77500f5306fda1076bbdeda9f9c9", null ],
     [ "OGRE_HASHMULTIMAP_NAME", "_ogre_prerequisites_8h.html#a982e9d8afe37c311262e21c4b5d5d84f", null ],

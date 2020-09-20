@@ -1,0 +1,9 @@
+<map id="Ogre::PortalBase" name="Ogre::PortalBase">
+<area shape="rect" id="node1" title="PortalBase &#45; Base class to Portal and AntiPortal classes." alt="" coords="167,155,287,181"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_anti_portal.html" title="AntiPortal datastructure for occlusion culling." alt="" coords="108,229,221,256"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_portal.html" title="Portal datastructure for connecting zones." alt="" coords="246,229,337,256"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="156,80,299,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="177,5,277,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="301,5,407,32"/>
+</map>

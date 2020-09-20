@@ -67,11 +67,11 @@ var class_ogre_1_1_pixel_format_gpu_utils =
     [ "isSigned", "class_ogre_1_1_pixel_format_gpu_utils.html#afc52e34b8a210d4e73a1afcb2f149e49", null ],
     [ "isSRgb", "class_ogre_1_1_pixel_format_gpu_utils.html#a7a18f3c723dacbb166b9c630c435e744", null ],
     [ "isStencil", "class_ogre_1_1_pixel_format_gpu_utils.html#a59940baa0f4d13239065b830c13315e8", null ],
-    [ "packColour", "class_ogre_1_1_pixel_format_gpu_utils.html#a50ae04c63c0474a1a739fbec09c012c5", null ],
     [ "packColour", "class_ogre_1_1_pixel_format_gpu_utils.html#a82c236e90880224e86980d775a1516a0", null ],
+    [ "packColour", "class_ogre_1_1_pixel_format_gpu_utils.html#a50ae04c63c0474a1a739fbec09c012c5", null ],
     [ "supportsHwMipmaps", "class_ogre_1_1_pixel_format_gpu_utils.html#a03fb412b5d3d058f7de015eb50f29e40", null ],
     [ "toSRGB", "class_ogre_1_1_pixel_format_gpu_utils.html#a29255ccf10ce3f825a9f9ad1c31c5835", null ],
     [ "toString", "class_ogre_1_1_pixel_format_gpu_utils.html#a256a65b56f10850b502ae681de8a3fb8", null ],
-    [ "unpackColour", "class_ogre_1_1_pixel_format_gpu_utils.html#af3fd8cfad6b76b223061683fa5718044", null ],
-    [ "unpackColour", "class_ogre_1_1_pixel_format_gpu_utils.html#a3d9cbef8eda0e7842ed8a5e620b307e7", null ]
+    [ "unpackColour", "class_ogre_1_1_pixel_format_gpu_utils.html#a3d9cbef8eda0e7842ed8a5e620b307e7", null ],
+    [ "unpackColour", "class_ogre_1_1_pixel_format_gpu_utils.html#af3fd8cfad6b76b223061683fa5718044", null ]
 ];

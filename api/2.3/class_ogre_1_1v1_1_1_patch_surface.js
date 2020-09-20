@@ -1,6 +1,6 @@
 var class_ogre_1_1v1_1_1_patch_surface =
 [
-    [ "AUTO_LEVEL", "class_ogre_1_1v1_1_1_patch_surface.html#a2e0910e637aecf2310d6c095b03bc6e5a24a525e5b3c75a3a090e08cc944e837b", null ],
+    [ "AUTO_LEVEL", "class_ogre_1_1v1_1_1_patch_surface.html#a4b1025ed2cefcc86fab452a93ed573aaa24a525e5b3c75a3a090e08cc944e837b", null ],
     [ "PatchSurfaceType", "class_ogre_1_1v1_1_1_patch_surface.html#a45aa3fdf86a878209849e951b32783be", [
       [ "PST_BEZIER", "class_ogre_1_1v1_1_1_patch_surface.html#a45aa3fdf86a878209849e951b32783beac61f7b51936e54372f94591863a556d8", null ]
     ] ],
@@ -24,14 +24,14 @@ var class_ogre_1_1v1_1_1_patch_surface =
     [ "getVertexOffset", "class_ogre_1_1v1_1_1_patch_surface.html#a26dcce5bccb1b38c5eea74ec10a90664", null ],
     [ "notifyControlPointBufferDeallocated", "class_ogre_1_1v1_1_1_patch_surface.html#a368cf7ce3053094c7f4ca691c8d9206a", null ],
     [ "operator delete", "class_ogre_1_1v1_1_1_patch_surface.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
-    [ "operator delete", "class_ogre_1_1v1_1_1_patch_surface.html#a1c727e879a260c37b00ce5505fe8e144", null ],
     [ "operator delete", "class_ogre_1_1v1_1_1_patch_surface.html#acb46d4b0a597156d9ba5abc39d127792", null ],
+    [ "operator delete", "class_ogre_1_1v1_1_1_patch_surface.html#a1c727e879a260c37b00ce5505fe8e144", null ],
     [ "operator delete[]", "class_ogre_1_1v1_1_1_patch_surface.html#a93e6a86dde5483c053ca0f2a85bbfd6c", null ],
     [ "operator delete[]", "class_ogre_1_1v1_1_1_patch_surface.html#a595ea4c05da8aa987d3800e65d23355d", null ],
-    [ "operator new", "class_ogre_1_1v1_1_1_patch_surface.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
     [ "operator new", "class_ogre_1_1v1_1_1_patch_surface.html#ac4bdf968b7b9af8a5239a27da73d5711", null ],
+    [ "operator new", "class_ogre_1_1v1_1_1_patch_surface.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
     [ "operator new", "class_ogre_1_1v1_1_1_patch_surface.html#ab78a921e54419be677839cdf15d1f0b8", null ],
-    [ "operator new[]", "class_ogre_1_1v1_1_1_patch_surface.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "operator new[]", "class_ogre_1_1v1_1_1_patch_surface.html#afa2943846ba6a2b5824a12857139cf5e", null ],
+    [ "operator new[]", "class_ogre_1_1v1_1_1_patch_surface.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "setSubdivisionFactor", "class_ogre_1_1v1_1_1_patch_surface.html#abba3809c3ee2b1af6e1adc40e0da01f4", null ]
 ];

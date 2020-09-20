@@ -3,23 +3,23 @@ var group___memory =
     [ "OgreMemoryAllocatorConfig.h", "_ogre_memory_allocator_config_8h.html", null ],
     [ "Ogre", "namespace_ogre.html", null ],
     [ "AlignedMemory", "class_ogre_1_1_aligned_memory.html", [
-      [ "allocate", "class_ogre_1_1_aligned_memory.html#a63bd1c2f3f55b989331a04fccc07356a", null ],
       [ "allocate", "class_ogre_1_1_aligned_memory.html#ad13640994e404f2befc9b7eb72f8659c", null ],
+      [ "allocate", "class_ogre_1_1_aligned_memory.html#a63bd1c2f3f55b989331a04fccc07356a", null ],
       [ "deallocate", "class_ogre_1_1_aligned_memory.html#aec9665c128b282869284a6025520adee", null ]
     ] ],
     [ "AllocatedObject", "class_ogre_1_1_allocated_object.html", [
       [ "AllocatedObject", "class_ogre_1_1_allocated_object.html#a366445eb206e55a2199267b8b9089ebb", null ],
       [ "~AllocatedObject", "class_ogre_1_1_allocated_object.html#a499773d35ca98b2df7c2699fc8c1bea2", null ],
       [ "operator delete", "class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
-      [ "operator delete", "class_ogre_1_1_allocated_object.html#a1c727e879a260c37b00ce5505fe8e144", null ],
       [ "operator delete", "class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792", null ],
+      [ "operator delete", "class_ogre_1_1_allocated_object.html#a1c727e879a260c37b00ce5505fe8e144", null ],
       [ "operator delete[]", "class_ogre_1_1_allocated_object.html#a93e6a86dde5483c053ca0f2a85bbfd6c", null ],
       [ "operator delete[]", "class_ogre_1_1_allocated_object.html#a595ea4c05da8aa987d3800e65d23355d", null ],
-      [ "operator new", "class_ogre_1_1_allocated_object.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
       [ "operator new", "class_ogre_1_1_allocated_object.html#ac4bdf968b7b9af8a5239a27da73d5711", null ],
+      [ "operator new", "class_ogre_1_1_allocated_object.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
       [ "operator new", "class_ogre_1_1_allocated_object.html#ab78a921e54419be677839cdf15d1f0b8", null ],
-      [ "operator new[]", "class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd", null ],
-      [ "operator new[]", "class_ogre_1_1_allocated_object.html#afa2943846ba6a2b5824a12857139cf5e", null ]
+      [ "operator new[]", "class_ogre_1_1_allocated_object.html#afa2943846ba6a2b5824a12857139cf5e", null ],
+      [ "operator new[]", "class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd", null ]
     ] ],
     [ "ArrayMemoryManager", "class_ogre_1_1_array_memory_manager.html", [
       [ "RebaseListener", "class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html", [
@@ -221,8 +221,8 @@ var group___memory =
       [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#af85d3e2726cef7ec1f1d24f2ed3b0675", null ],
       [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#a3d97ea3f530a55614990908f19ccd533", null ],
       [ "STLAllocator", "class_ogre_1_1_s_t_l_allocator.html#ac80a6c2569f5812937287072c04d23ea", null ],
-      [ "address", "class_ogre_1_1_s_t_l_allocator.html#a6612f5f0613e94729e714bda4b8bec93", null ],
       [ "address", "class_ogre_1_1_s_t_l_allocator.html#abbf348ef209c5e0e1f00ca1a8645c969", null ],
+      [ "address", "class_ogre_1_1_s_t_l_allocator.html#a6612f5f0613e94729e714bda4b8bec93", null ],
       [ "allocate", "class_ogre_1_1_s_t_l_allocator.html#a219db3b3227be55452bf297cdb7bea89", null ],
       [ "construct", "class_ogre_1_1_s_t_l_allocator.html#a04d59556081dfe8d64d660b336b6fc28", null ],
       [ "construct", "class_ogre_1_1_s_t_l_allocator.html#ad6ebf2ce6e910595ef613fc955e6df10", null ],
@@ -277,8 +277,8 @@ var group___memory =
     [ "cleanerArrayVector3Zero", "group___memory.html#gad2b0e7fc66b983b62e60af2ae311e885", null ],
     [ "cleanerFlat", "group___memory.html#ga0a20a5515b4c6df35f99fabb37dad97b", null ],
     [ "constructN", "group___memory.html#gae542663b49eb68a74336d84e11ba0b9c", null ],
-    [ "operator!=", "group___memory.html#ga34a9308dc656f694883718bf8fa4f1c2", null ],
     [ "operator!=", "group___memory.html#ga0cec9339a4ab3eaf48c767087cd7f400", null ],
-    [ "operator==", "group___memory.html#gaa5b83b2ba3ce965e3d8dd129c93ee43b", null ],
-    [ "operator==", "group___memory.html#gaa34a630f2287087875d360c454a0fb48", null ]
+    [ "operator!=", "group___memory.html#ga34a9308dc656f694883718bf8fa4f1c2", null ],
+    [ "operator==", "group___memory.html#gaa34a630f2287087875d360c454a0fb48", null ],
+    [ "operator==", "group___memory.html#gaa5b83b2ba3ce965e3d8dd129c93ee43b", null ]
 ];

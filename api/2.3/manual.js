@@ -91,6 +91,14 @@ var manual =
         [ "Viewport modifier mask", "compositor.html#CompositorWorkspacesStereoViewportMask", null ],
         [ "Execution mask", "compositor.html#CompositorWorkspacesStereoExecutionMask", null ],
         [ "Default values", "compositor.html#CompositorWorkspacesStereoDefaultValues", null ]
+      ] ],
+      [ "Advanced MSAA", "compositor.html#autotoc_md9", [
+        [ "What is MSAA?", "compositor.html#autotoc_md10", [
+          [ "Supersampling Antialiasing (SSAA) vs MSAA", "compositor.html#autotoc_md11", null ],
+          [ "MSAA approach to the problem", "compositor.html#autotoc_md12", null ]
+        ] ],
+        [ "Ogre + MSAA with Implicit Resolves", "compositor.html#autotoc_md13", null ],
+        [ "Ogre + MSAA with Explicit Resolves", "compositor.html#autotoc_md14", null ]
       ] ]
     ] ],
     [ "Instancing", "instancing.html", [
@@ -142,7 +150,7 @@ var manual =
       [ "Hlms templates", "hlms.html#HlmsTemplates", null ],
       [ "The Hlms preprocessor", "hlms.html#HlmsPreprocessor", [
         [ "Preprocessor syntax", "hlms.html#HlmsPreprocessorSyntax", [
-          [ "\\@property( expression )", "hlms.html#HlmsPreprocessorSyntaxProperty", null ],
+          [ "@property( expression )", "hlms.html#HlmsPreprocessorSyntaxProperty", null ],
           [ "@foreach( count, scopedVar, [start] )", "hlms.html#HlmsPreprocessorSyntaxForeach", null ],
           [ "@counter( variable )", "hlms.html#HlmsPreprocessorSyntaxCounter", null ],
           [ "@value( variable )", "hlms.html#HlmsPreprocessorSyntaxValue", null ],
@@ -199,6 +207,36 @@ var manual =
       ] ],
       [ "Post-processing the command buffer", "commandbuffer.html#CommandBufferPostProcessing", null ]
     ] ],
-    [ "What's new in Ogre 2.2", "_ogre22_changes.html", null ],
-    [ "Behavor of StagingTexture in D3D11", "_behavor_staging_texture_d3_d11.html", null ]
+    [ "What's new in Ogre 2.2", "_ogre22_changes.html", [
+      [ "Load Store semantics", "_ogre22_changes.html#autotoc_md15", [
+        [ "Now that we’ve explained how TBDRs work, we can explain load and store actions", "_ogre22_changes.html#autotoc_md16", null ]
+      ] ],
+      [ "More control over MSAA", "_ogre22_changes.html#autotoc_md17", null ],
+      [ "Porting to Ogre 2.2 from 2.1", "_ogre22_changes.html#autotoc_md18", [
+        [ "PixelFormats", "_ogre22_changes.html#autotoc_md19", [
+          [ "Common pixel format equivalencies", "_ogre22_changes.html#autotoc_md20", null ]
+        ] ],
+        [ "Useful code snippets", "_ogre22_changes.html#autotoc_md21", [
+          [ "Create a TextureGpu based on a file", "_ogre22_changes.html#autotoc_md22", null ],
+          [ "Create a TextureGpu based that you manually fill", "_ogre22_changes.html#autotoc_md23", null ],
+          [ "Uploading data to a TextureGpu", "_ogre22_changes.html#autotoc_md24", null ],
+          [ "Upload streaming", "_ogre22_changes.html#autotoc_md25", null ],
+          [ "Downloading data from TextureGpu into CPU", "_ogre22_changes.html#autotoc_md26", null ],
+          [ "Downloading streaming", "_ogre22_changes.html#autotoc_md27", null ]
+        ] ]
+      ] ],
+      [ "Difference between depth, numSlices and depthOrSlices", "_ogre22_changes.html#autotoc_md28", null ],
+      [ "Memory layout of textures and images", "_ogre22_changes.html#autotoc_md29", null ],
+      [ "Troubleshooting errors", "_ogre22_changes.html#autotoc_md30", null ],
+      [ "RenderPassDescriptors", "_ogre22_changes.html#autotoc_md31", null ],
+      [ "DescriptorSetTexture & co.", "_ogre22_changes.html#autotoc_md32", null ],
+      [ "Does 2.2 interoperate well with the HLMS texture arrays?", "_ogre22_changes.html#autotoc_md33", null ],
+      [ "Hlms porting", "_ogre22_changes.html#autotoc_md34", null ],
+      [ "Things to watch out when porting", "_ogre22_changes.html#autotoc_md35", null ]
+    ] ],
+    [ "Behavor of StagingTexture in D3D11", "_behavor_staging_texture_d3_d11.html", [
+      [ "Attempting to be contiguous", "_behavor_staging_texture_d3_d11.html#autotoc_md6", null ],
+      [ "Slicing in 3", "_behavor_staging_texture_d3_d11.html#autotoc_md7", null ],
+      [ "Slicing in the middle", "_behavor_staging_texture_d3_d11.html#autotoc_md8", null ]
+    ] ]
 ];

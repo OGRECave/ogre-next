@@ -29,8 +29,8 @@ var class_ogre_1_1_d3_d11_device =
     [ "ReleaseAll", "class_ogre_1_1_d3_d11_device.html#a6e89492e289b7f9df377b5e47541d9ac", null ],
     [ "setExceptionsErrorLevel", "class_ogre_1_1_d3_d11_device.html#ace628751d629a8faf3ce557c16748959", null ],
     [ "setExceptionsErrorLevel", "class_ogre_1_1_d3_d11_device.html#a97e16c7283b57fc1c86076808160fee0", null ],
-    [ "throwIfFailed", "class_ogre_1_1_d3_d11_device.html#a23a2c2821e100a2330ece16e8b1a1791", null ],
     [ "throwIfFailed", "class_ogre_1_1_d3_d11_device.html#ab6fb0231f935116e97988b6d207941c6", null ],
+    [ "throwIfFailed", "class_ogre_1_1_d3_d11_device.html#a23a2c2821e100a2330ece16e8b1a1791", null ],
     [ "TransferOwnership", "class_ogre_1_1_d3_d11_device.html#abb987810a364b6606635922798e00c87", null ],
     [ "mExceptionsErrorLevel", "class_ogre_1_1_d3_d11_device.html#a7505d8623d4970003cbd597753b8c258", null ]
 ];

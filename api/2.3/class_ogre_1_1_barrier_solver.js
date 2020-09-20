@@ -21,7 +21,7 @@ var class_ogre_1_1_barrier_solver =
     [ "notifyTextureChanged", "class_ogre_1_1_barrier_solver.html#a8583626625d0cc16bec1b724d1079636", null ],
     [ "reset", "class_ogre_1_1_barrier_solver.html#a29b7ff67ed2c17f5f2be8d51d108fdae", null ],
     [ "resetCopyLayoutsOnly", "class_ogre_1_1_barrier_solver.html#aba81707c8c66fb36015413a52a6c51e7", null ],
-    [ "resolveTransition", "class_ogre_1_1_barrier_solver.html#a9584ab4268539ec0837eb79b5e7e0c4e", null ],
     [ "resolveTransition", "class_ogre_1_1_barrier_solver.html#a12439e6b49952e70b70ebdadf346126a", null ],
+    [ "resolveTransition", "class_ogre_1_1_barrier_solver.html#a9584ab4268539ec0837eb79b5e7e0c4e", null ],
     [ "shouldStayLoaded", "class_ogre_1_1_barrier_solver.html#a18fe2becf5150b6305efe2ead04c5a2b", null ]
 ];

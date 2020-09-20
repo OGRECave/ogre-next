@@ -8,6 +8,6 @@ var class_ogre_1_1_vct_material =
     [ "getId", "class_ogre_1_1_vct_material.html#ab152c8f646a835c2f88585ad4fe0413a", null ],
     [ "getTexturePool", "class_ogre_1_1_vct_material.html#ac25752a8bf8f3b48e6f66f8eedc8b455", null ],
     [ "initTempResources", "class_ogre_1_1_vct_material.html#ac1d874682cd4c2c753517922c8c97969", null ],
-    [ "operator()", "class_ogre_1_1_vct_material.html#a0ae22596b5bd2a3faf2958ab3d109d1f", null ],
-    [ "operator()", "class_ogre_1_1_vct_material.html#a57e0523432c6e5133ff4fc251111a60e", null ]
+    [ "operator()", "class_ogre_1_1_vct_material.html#a57e0523432c6e5133ff4fc251111a60e", null ],
+    [ "operator()", "class_ogre_1_1_vct_material.html#a0ae22596b5bd2a3faf2958ab3d109d1f", null ]
 ];

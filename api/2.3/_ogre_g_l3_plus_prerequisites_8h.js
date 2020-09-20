@@ -8,6 +8,6 @@ var _ogre_g_l3_plus_prerequisites_8h =
     [ "OCGE", "_ogre_g_l3_plus_prerequisites_8h.html#abfd865b3e7fad46b5e4e46ab17e04564", null ],
     [ "OGRE_CHECK_GL_ERROR", "_ogre_g_l3_plus_prerequisites_8h.html#a68ed09c6ada21ef994461cea24497286", null ],
     [ "GLSLShaderPtr", "_ogre_g_l3_plus_prerequisites_8h.html#ac8116c3dc700d050a60f0e580795a33a", null ],
-    [ "ogreGlObjectLabel", "_ogre_g_l3_plus_prerequisites_8h.html#a4b3ac5cd3c1499373bbb3ebc3904a418", null ],
-    [ "ogreGlObjectLabel", "_ogre_g_l3_plus_prerequisites_8h.html#a29d512504d93722a56ed474cd02d1b27", null ]
+    [ "ogreGlObjectLabel", "_ogre_g_l3_plus_prerequisites_8h.html#a29d512504d93722a56ed474cd02d1b27", null ],
+    [ "ogreGlObjectLabel", "_ogre_g_l3_plus_prerequisites_8h.html#a4b3ac5cd3c1499373bbb3ebc3904a418", null ]
 ];

@@ -18,7 +18,12 @@ var _setting_up_ogre =
       [ "Downloading Ogre", "_setting_up_ogre_i_o_s.html#DownloadingOgre_iOS", null ],
       [ "Building Ogre", "_setting_up_ogre_i_o_s.html#BuildingOgre_iOS", null ]
     ] ],
-    [ "macOS", "_setting_up_ogre_mac_o_s.html", null ],
+    [ "macOS", "_setting_up_ogre_mac_o_s.html", [
+      [ "Install cmake", "_setting_up_ogre_mac_o_s.html#autotoc_md36", null ],
+      [ "Install dependencies", "_setting_up_ogre_mac_o_s.html#autotoc_md37", null ],
+      [ "Build Ogre", "_setting_up_ogre_mac_o_s.html#autotoc_md38", null ],
+      [ "Build offline version of the docs", "_setting_up_ogre_mac_o_s.html#autotoc_md39", null ]
+    ] ],
     [ "Android", "_setting_up_ogre_android.html", [
       [ "Requirements", "_setting_up_ogre_android.html#RequirementsAndroid", null ],
       [ "Downloading and building Ogre", "_setting_up_ogre_android.html#DownloadingOgreAndroid", null ],

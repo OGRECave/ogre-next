@@ -1,14 +1,8 @@
 var searchData=
 [
-  ['nominmax',['NOMINMAX',['../_ogre_d3_d11_prerequisites_8h.html#a9f918755b601cf4bffca775992e6fb90',1,'OgreD3D11Prerequisites.h']]],
-  ['normalstate',['NormalState',['../_ogre_x11_e_g_l_support_8h.html#afc54547780a069f6a4d8c7279091e60f',1,'OgreX11EGLSupport.h']]],
-  ['not_5ffound_5fcustom_5fattributes_5findex',['NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX',['../_ogre_g_l_s_l_program_8h.html#afbaa9874550eb36340280f38ae146c22',1,'NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX():&#160;OgreGLSLProgram.h'],['../_ogre_g_l_s_l_e_s_program_common_8h.html#afbaa9874550eb36340280f38ae146c22',1,'NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX():&#160;OgreGLSLESProgramCommon.h']]],
-  ['notuseful',['NotUseful',['../_ogre_x11_e_g_l_support_8h.html#a747ddf61d3828a8bfb32176d647fabf1',1,'OgreX11EGLSupport.h']]],
-  ['null_5fcustom_5fattributes_5findex',['NULL_CUSTOM_ATTRIBUTES_INDEX',['../_ogre_g_l_s_l_program_8h.html#a80dc964d0705d8b2bf1c06874b523c65',1,'NULL_CUSTOM_ATTRIBUTES_INDEX():&#160;OgreGLSLProgram.h'],['../_ogre_g_l_s_l_e_s_program_common_8h.html#a80dc964d0705d8b2bf1c06874b523c65',1,'NULL_CUSTOM_ATTRIBUTES_INDEX():&#160;OgreGLSLESProgramCommon.h']]],
-  ['nullptr',['nullptr',['../_ogre_vulkan_glslang_header_8h.html#ab979d9d4b4923f7c54d6caa6e1a61936',1,'OgreVulkanGlslangHeader.h']]],
-  ['num_5fbind_5fconst_5fbuffers',['NUM_BIND_CONST_BUFFERS',['../_ogre_vulkan_global_binding_table_8h.html#a2203355bd205e3cd20447a8b0240ae65',1,'OgreVulkanGlobalBindingTable.h']]],
-  ['num_5fbind_5freadonly_5fbuffers',['NUM_BIND_READONLY_BUFFERS',['../_ogre_vulkan_global_binding_table_8h.html#a29bd5d0a5b4ee9a2e6607a21743b680a',1,'OgreVulkanGlobalBindingTable.h']]],
-  ['num_5fbind_5fsamplers',['NUM_BIND_SAMPLERS',['../_ogre_vulkan_global_binding_table_8h.html#aa36ee96afdc29b5d43f5f153e559cbf9',1,'OgreVulkanGlobalBindingTable.h']]],
-  ['num_5fbind_5ftex_5fbuffers',['NUM_BIND_TEX_BUFFERS',['../_ogre_vulkan_global_binding_table_8h.html#ae758764060a0da56e0abade2cade65fc',1,'OgreVulkanGlobalBindingTable.h']]],
-  ['num_5fbind_5ftextures',['NUM_BIND_TEXTURES',['../_ogre_vulkan_global_binding_table_8h.html#a3d583602b96bf00ede0043ee91bd8eac',1,'OgreVulkanGlobalBindingTable.h']]]
+  ['managed_5fresource_34776',['MANAGED_RESOURCE',['../_ogre_g_l_e_s2_managed_resource_8h.html#a26a443c8384afbcb408a45a7d2888e47',1,'OgreGLES2ManagedResource.h']]],
+  ['managed_5fresource_5fsingle_34777',['MANAGED_RESOURCE_SINGLE',['../_ogre_g_l_e_s2_managed_resource_8h.html#a2ba4ff6675c8ddf3dfd8dd8bbb7bd8b0',1,'OgreGLES2ManagedResource.h']]],
+  ['max_5fextra_5fculling_5fplanes_34778',['MAX_EXTRA_CULLING_PLANES',['../_ogre_p_c_z_camera_8h.html#af2200f97f28c856578a999b376ab4d16',1,'OgrePCZCamera.h']]],
+  ['max_5flights_34779',['MAX_LIGHTS',['../_ogre_d3_d9_render_system_8h.html#a737b417f16ea225cf15e8d4c23df53dc',1,'OgreD3D9RenderSystem.h']]],
+  ['meshlod_5fquality_34780',['MESHLOD_QUALITY',['../_ogre_lod_data_8h.html#a4ab13ea31c94ca532d07f7769f19c70c',1,'OgreLodData.h']]]
 ];
