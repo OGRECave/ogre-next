@@ -1,0 +1,7 @@
+<map id="Ogre::ScreenRatioPixelCountLodStrategy" name="Ogre::ScreenRatioPixelCountLodStrategy">
+<area shape="rect" id="node1" title="The ScreenRatioPixelCountLodStrategy class Implement a strategy which calculates LOD ratios based on ..." alt="" coords="568,27,757,69"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_pixel_count_lod_strategy_base.html" title="Abstract base class for level of detail strategy based on pixel count approximations from bounding sp..." alt="" coords="301,5,520,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="127,5,253,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,79,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="315,57,507,98"/>
+</map>

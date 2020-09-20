@@ -1,0 +1,5 @@
+<map id="Ogre::GL3PlusRenderPassDescriptor" name="Ogre::GL3PlusRenderPassDescriptor">
+<area shape="rect" id="node1" title="GL3+ will share FBO handles between all GL3PlusRenderPassDescriptor that share the same FBO setup." alt="" coords="5,155,243,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_render_pass_descriptor.html" title=" " alt="" coords="31,80,217,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="67,5,181,32"/>
+</map>

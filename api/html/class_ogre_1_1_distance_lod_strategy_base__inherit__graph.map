@@ -1,0 +1,7 @@
+<map id="Ogre::DistanceLodStrategyBase" name="Ogre::DistanceLodStrategyBase">
+<area shape="rect" id="node1" title="Level of detail strategy based on distance from camera." alt="" coords="117,155,324,181"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_distance_lod_box_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding box." alt="" coords="5,229,204,256"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_distance_lod_sphere_strategy.html" title="Level of detail strategy based on distance from camera to an object&#39;s bounding sphere." alt="" coords="229,229,447,256"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_lod_strategy.html" title="Strategy for determining level of detail." alt="" coords="157,80,284,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="184,5,257,32"/>
+</map>

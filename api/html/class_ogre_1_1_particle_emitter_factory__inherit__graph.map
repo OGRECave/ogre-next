@@ -1,0 +1,10 @@
+<map id="Ogre::ParticleEmitterFactory" name="Ogre::ParticleEmitterFactory">
+<area shape="rect" id="node1" title="Abstract class defining the interface to be implemented by creators of ParticleEmitter subclasses." alt="" coords="121,136,305,163"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_box_emitter_factory.html" title="Factory class for particle emitter of type &quot;Box&quot;." alt="" coords="366,5,529,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_cylinder_emitter_factory.html" title="Factory class for particle emitter of type &quot;Cylinder&quot;." alt="" coords="354,56,541,83"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_ellipsoid_emitter_factory.html" title="Factory class for particle emitter of type &quot;Ellipsoid&quot;." alt="" coords="353,107,541,133"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_hollow_ellipsoid_emitter_factory.html" title="Factory class for particle emitter of type &quot;HollowEllipsoid&quot;." alt="" coords="355,158,540,199"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_point_emitter_factory.html" title="Factory class for particle emitter of type &quot;Point&quot;." alt="" coords="362,224,533,251"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_ring_emitter_factory.html" title="Factory class for particle emitter of type &quot;Ring&quot;." alt="" coords="364,275,531,301"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,136,73,163"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="Ogre::v1::BillboardParticleRendererFactory" name="Ogre::v1::BillboardParticleRendererFactory">
+<area shape="rect" id="node1" title="Factory class for BillboardParticleRenderer." alt="" coords="79,184,250,225"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_particle_system_renderer_factory.html" title="Abstract class definition of a factory object for ParticleSystemRenderer." alt="" coords="67,95,263,136"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_factory_obj.html" title=" " alt="" coords="5,5,180,47"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="204,13,272,39"/>
+</map>

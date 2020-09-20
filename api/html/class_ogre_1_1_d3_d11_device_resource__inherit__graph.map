@@ -1,0 +1,10 @@
+<map id="Ogre::D3D11DeviceResource" name="Ogre::D3D11DeviceResource">
+<area shape="rect" id="node1" title="Represents a Direct3D rendering resource." alt="" coords="5,81,196,108"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_d3_d11_h_l_s_l_program.html" title="Specialization of HighLevelGpuProgram to provide support for D3D11 High&#45;Level Shader Language (HLSL)." alt="" coords="261,5,439,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_render_texture.html" title="RenderTexture implementation for D3D11." alt="" coords="261,56,439,83"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_render_window_base.html" title=" " alt="" coords="244,107,456,133"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_texture.html" title=" " alt="" coords="281,161,419,188"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_render_window_swap_chain_based.html" title=" " alt="" coords="504,95,719,137"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d11_depth_texture.html" title=" " alt="" coords="525,161,697,188"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_d3_d11_null_texture.html" title=" " alt="" coords="531,212,692,239"/>
+</map>

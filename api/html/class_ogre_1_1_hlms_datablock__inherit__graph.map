@@ -1,0 +1,8 @@
+<map id="Ogre::HlmsDatablock" name="Ogre::HlmsDatablock">
+<area shape="rect" id="node1" title="An hlms datablock contains individual information about a specific material." alt="" coords="135,81,280,108"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_hlms_low_level_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="332,5,535,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_hlms_pbs_mobile_datablock.html" title="Contains information needed by PBS (Physically Based Shading) for OpenGL ES 2.0." alt="" coords="330,56,537,83"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_hlms_unlit_mobile_datablock.html" title="Contains information needed by the UI (2D) for OpenGL ES 2.0." alt="" coords="328,107,539,133"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_o_g_r_e___h_l_m_s___t_e_x_t_u_r_e___b_a_s_e___c_l_a_s_s.html" title="This is not a regular header, therefore it has no include guards." alt="" coords="331,158,536,199"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,81,87,108"/>
+</map>

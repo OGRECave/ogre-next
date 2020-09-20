@@ -1,0 +1,12 @@
+<map id="Ogre::ScriptCompilerEvent" name="Ogre::ScriptCompilerEvent">
+<area shape="rect" id="node1" title="This struct is a base class for events which can be thrown by the compilers and caught by subscribers..." alt="" coords="5,274,180,301"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_create_compositor_script_compiler_event.html" title=" " alt="" coords="244,5,439,47"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_create_gpu_program_script_compiler_event.html" title=" " alt="" coords="241,71,442,112"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_create_gpu_shared_parameters_script_compiler_event.html" title=" " alt="" coords="228,136,455,177"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_create_high_level_gpu_program_script_compiler_event.html" title=" " alt="" coords="247,201,436,243"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_create_material_script_compiler_event.html" title=" " alt="" coords="254,267,429,308"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_create_particle_system_script_compiler_event.html" title=" " alt="" coords="250,332,433,373"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_pre_apply_texture_aliases_script_compiler_event.html" title=" " alt="" coords="244,397,439,439"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_process_name_exclusion_script_compiler_event.html" title=" " alt="" coords="244,463,439,504"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_process_resource_name_script_compiler_event.html" title=" " alt="" coords="244,528,439,569"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="Ogre::ConcentricShadowCamera" name="Ogre::ConcentricShadowCamera">
+<area shape="rect" id="node1" title="Implements the concentric shadow mapping algorithm." alt="" coords="5,244,216,271"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_default_shadow_camera_setup.html" title="Implements default shadow camera setup." alt="" coords="16,155,205,196"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_shadow_camera_setup.html" title="This class allows you to plug in new ways to define the camera setup when rendering and projecting sh..." alt="" coords="19,80,202,107"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="48,5,173,32"/>
+</map>

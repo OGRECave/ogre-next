@@ -1,0 +1,8 @@
+<map id="Ogre::GL3PlusRenderTexture" name="Ogre::GL3PlusRenderTexture">
+<area shape="rect" id="node1" title="Base class for GL Render Textures." alt="" coords="88,229,279,256"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_g_l3_plus_f_b_o_render_texture.html" title="RenderTexture for GL FBO." alt="" coords="74,304,293,331"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture." alt="" coords="113,155,253,181"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="116,80,251,107"/>
+<area shape="rect" id="node4" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,188,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="213,5,327,32"/>
+</map>

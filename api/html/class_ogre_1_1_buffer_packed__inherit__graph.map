@@ -1,0 +1,26 @@
+<map id="Ogre::BufferPacked" name="Ogre::BufferPacked">
+<area shape="rect" id="node1" title=" " alt="" coords="236,425,371,452"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_const_buffer_packed.html" title="Represents constant buffers (also known as Uniform Buffers in GL)" alt="" coords="423,148,591,175"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_index_buffer_packed.html" title=" " alt="" coords="425,349,590,376"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_indirect_buffer_packed.html" title="Represents Indirect buffers for storing draw call commands." alt="" coords="419,400,596,427"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_tex_buffer_packed.html" title="Represents Texture buffers (also known as tbuffers in D3D11)" alt="" coords="430,451,585,477"/>
+<area shape="rect" id="node19" href="$class_ogre_1_1_uav_buffer_packed.html" title="Represents UAV buffers (also known as SSBOs in OpenGL) Uav buffers are supported in DX10/DX10...." alt="" coords="428,636,587,663"/>
+<area shape="rect" id="node24" href="$class_ogre_1_1_vertex_buffer_packed.html" title=" " alt="" coords="422,687,593,713"/>
+<area shape="rect" id="node2" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,400,188,427"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="32,451,161,477"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_const_buffer_packed.html" title=" " alt="" coords="649,5,855,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_g_l3_plus_const_buffer_packed.html" title=" " alt="" coords="665,57,839,98"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_g_l_e_s2_const_buffer_packed.html" title=" " alt="" coords="647,123,857,149"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_metal_const_buffer_packed.html" title=" " alt="" coords="652,173,852,200"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_n_u_l_l_const_buffer_packed.html" title=" " alt="" coords="650,224,854,251"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_d3_d11_tex_buffer_packed.html" title=" " alt="" coords="655,275,849,301"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1_g_l3_plus_tex_buffer_emulated_packed.html" title=" " alt="" coords="644,326,860,367"/>
+<area shape="rect" id="node15" href="$class_ogre_1_1_g_l3_plus_tex_buffer_packed.html" title=" " alt="" coords="649,392,855,419"/>
+<area shape="rect" id="node16" href="$class_ogre_1_1_g_l_e_s2_tex_buffer_emulated_packed.html" title=" " alt="" coords="649,443,855,485"/>
+<area shape="rect" id="node17" href="$class_ogre_1_1_metal_tex_buffer_packed.html" title=" " alt="" coords="659,509,845,536"/>
+<area shape="rect" id="node18" href="$class_ogre_1_1_n_u_l_l_tex_buffer_packed.html" title=" " alt="" coords="657,560,847,587"/>
+<area shape="rect" id="node20" href="$class_ogre_1_1_d3_d11_uav_buffer_packed.html" title=" " alt="" coords="653,611,851,637"/>
+<area shape="rect" id="node21" href="$class_ogre_1_1_g_l3_plus_uav_buffer_packed.html" title=" " alt="" coords="647,661,857,688"/>
+<area shape="rect" id="node22" href="$class_ogre_1_1_metal_uav_buffer_packed.html" title=" " alt="" coords="657,712,847,739"/>
+<area shape="rect" id="node23" href="$class_ogre_1_1_n_u_l_l_uav_buffer_packed.html" title=" " alt="" coords="655,763,849,789"/>
+</map>

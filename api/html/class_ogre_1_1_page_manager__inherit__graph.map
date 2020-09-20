@@ -1,0 +1,4 @@
+<map id="Ogre::PageManager" name="Ogre::PageManager">
+<area shape="rect" id="node1" title="The PageManager is the entry point through which you load all PagedWorld instances,..." alt="" coords="5,80,141,107"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="33,5,114,32"/>
+</map>

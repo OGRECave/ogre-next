@@ -1,0 +1,7 @@
+<map id="Ogre::HlmsBufferManager" name="Ogre::HlmsBufferManager">
+<area shape="rect" id="node1" title="Managing constant and texture buffers for sending shader parameters is a very similar process to most..." alt="" coords="43,155,214,181"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="5,229,116,256"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_hlms_unlit.html" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="141,229,255,256"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="85,80,172,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="87,5,170,32"/>
+</map>

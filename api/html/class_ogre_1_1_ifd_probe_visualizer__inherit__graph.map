@@ -1,0 +1,8 @@
+<map id="Ogre::IfdProbeVisualizer" name="Ogre::IfdProbeVisualizer">
+<area shape="rect" id="node1" title=" " alt="" coords="224,155,385,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="156,80,299,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="177,5,277,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="301,5,407,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement." alt="" coords="323,80,444,107"/>
+</map>

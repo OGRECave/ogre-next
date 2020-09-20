@@ -1,0 +1,4 @@
+<map id="Ogre::GpuLogicalBufferStruct" name="Ogre::GpuLogicalBufferStruct">
+<area shape="rect" id="node1" title="Container struct to allow params to safely &amp; update shared list of logical buffer assignments." alt="" coords="5,80,196,107"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="41,5,161,32"/>
+</map>

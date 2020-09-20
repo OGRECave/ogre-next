@@ -1,0 +1,21 @@
+<map id="Ogre::RenderTexture" name="Ogre::RenderTexture">
+<area shape="rect" id="node1" title="This class represents a RenderTarget that renders to a Texture." alt="" coords="419,365,559,392"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_depth_texture_target.html" title=" " alt="" coords="608,5,817,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_null_texture_target.html" title=" " alt="" coords="613,56,812,83"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d11_render_texture.html" title="RenderTexture implementation for D3D11." alt="" coords="623,107,802,133"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_d3_d9_render_texture.html" title="RenderTexture implementation for D3D9." alt="" coords="627,157,799,184"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_g_l3_plus_depth_texture_target.html" title=" " alt="" coords="621,209,805,250"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_g_l3_plus_null_texture_target.html" title=" " alt="" coords="626,274,799,315"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_g_l3_plus_render_texture.html" title="Base class for GL Render Textures." alt="" coords="617,340,808,367"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_g_l_e_s2_depth_texture_target.html" title=" " alt="" coords="607,391,819,417"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1_g_l_e_s2_null_texture_target.html" title=" " alt="" coords="612,441,813,468"/>
+<area shape="rect" id="node15" href="$class_ogre_1_1_g_l_e_s2_render_texture.html" title="Base class for GL Render Textures." alt="" coords="621,492,804,519"/>
+<area shape="rect" id="node16" href="$class_ogre_1_1_metal_depth_texture_target.html" title=" " alt="" coords="611,543,814,569"/>
+<area shape="rect" id="node17" href="$class_ogre_1_1_metal_null_texture_target.html" title=" " alt="" coords="617,593,808,620"/>
+<area shape="rect" id="node18" href="$class_ogre_1_1_metal_render_texture.html" title=" " alt="" coords="627,644,799,671"/>
+<area shape="rect" id="node19" href="$class_ogre_1_1_n_u_l_l_render_texture.html" title=" " alt="" coords="625,695,801,721"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="236,365,371,392"/>
+<area shape="rect" id="node3" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,340,188,367"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="39,391,154,417"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_g_l3_plus_f_b_o_render_texture.html" title="RenderTexture for GL FBO." alt="" coords="867,340,1085,367"/>
+</map>

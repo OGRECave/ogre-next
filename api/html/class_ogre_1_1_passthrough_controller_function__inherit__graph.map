@@ -1,0 +1,5 @@
+<map id="Ogre::PassthroughControllerFunction" name="Ogre::PassthroughControllerFunction">
+<area shape="rect" id="node1" title="Predefined controller function which just passes through the original source directly to dest." alt="" coords="5,169,189,211"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_controller_function.html" title=" " alt="" coords="17,80,178,121"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="44,5,151,32"/>
+</map>

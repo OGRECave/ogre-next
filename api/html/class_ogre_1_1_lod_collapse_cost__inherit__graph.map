@@ -1,0 +1,7 @@
+<map id="Ogre::LodCollapseCost" name="Ogre::LodCollapseCost">
+<area shape="rect" id="node1" title=" " alt="" coords="5,81,160,108"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_lod_collapse_cost_curvature.html" title=" " alt="" coords="208,5,419,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_lod_collapse_cost_outside.html" title=" " alt="" coords="213,56,413,83"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_lod_collapse_cost_profiler.html" title=" " alt="" coords="216,107,411,133"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_lod_collapse_cost_quadric.html" title=" " alt="" coords="213,157,413,184"/>
+</map>

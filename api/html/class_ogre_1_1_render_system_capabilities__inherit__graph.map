@@ -1,0 +1,4 @@
+<map id="Ogre::RenderSystemCapabilities" name="Ogre::RenderSystemCapabilities">
+<area shape="rect" id="node1" title="singleton class for storing the capabilities of the graphics card." alt="" coords="5,80,213,107"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="52,5,167,32"/>
+</map>

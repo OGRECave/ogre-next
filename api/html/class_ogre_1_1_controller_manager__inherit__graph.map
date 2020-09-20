@@ -1,0 +1,5 @@
+<map id="Ogre::ControllerManager" name="Ogre::ControllerManager">
+<area shape="rect" id="node1" title="Class for managing Controller instances." alt="" coords="95,95,257,121"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,181,47"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="205,13,312,39"/>
+</map>

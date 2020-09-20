@@ -1,0 +1,9 @@
+<map id="Ogre::MetalTexture" name="Ogre::MetalTexture">
+<area shape="rect" id="node1" title=" " alt="" coords="115,229,245,256"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_metal_depth_texture.html" title=" " alt="" coords="5,304,171,331"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_metal_null_texture.html" title=" " alt="" coords="195,304,349,331"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource." alt="" coords="131,155,229,181"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="125,80,235,107"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="36,5,177,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="201,5,308,32"/>
+</map>

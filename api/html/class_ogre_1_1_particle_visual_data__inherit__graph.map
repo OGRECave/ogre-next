@@ -1,0 +1,4 @@
+<map id="Ogre::ParticleVisualData" name="Ogre::ParticleVisualData">
+<area shape="rect" id="node1" title="Abstract class containing any additional data required to be associated with a particle to perform th..." alt="" coords="5,80,168,107"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="53,5,121,32"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Ogre::TerrainMaterialGeneratorA" name="Ogre::TerrainMaterialGeneratorA">
+<area shape="rect" id="node1" title="A TerrainMaterialGenerator which can cope with normal mapped, specular mapped terrain." alt="" coords="5,155,213,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_terrain_material_generator.html" title="Class that provides functionality to generate materials for use with a terrain." alt="" coords="10,80,209,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="64,5,155,32"/>
+</map>
