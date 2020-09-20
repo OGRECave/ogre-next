@@ -14,8 +14,8 @@ env:
   CMAKE_DOXYGEN_INPUT_LIST: "Components Docs/src OgreMain PlugIns RenderSystems"
   OGRE_SOURCE_DIR: "./"
   OGRE_BINARY_DIR: "./"
-  OGRE_VERSION: "2.2"
-  DOXYGEN_HTML_OUTPUT_DIR: "./2.2"
+  OGRE_VERSION: "2.3"
+  DOXYGEN_HTML_OUTPUT_DIR: "./2.3"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
