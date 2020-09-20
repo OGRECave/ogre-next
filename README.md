@@ -32,15 +32,15 @@ differences have diverged long enough.
 
 ## Supported Platforms
 
- * Windows (XP*, 7, 8, 10)
+ * Windows (XP\*, 7, 8, 10)
  * Linux
- * macOS**
+ * macOS\*\*
  * iOS
- * Android***
+ * Android\*\*\*
 
-(*) XP support is through GL3+. Recent drivers are needed. Old GPUs do not have stable GL drivers capable of running Ogre 2.x.
-(**) Metal Backend is highly recommended. GL backend is supported in macOS, but the window subsystem hasn't been ported to 2.3 yet.
-(***) Device must be Vulkan-capable. Android 7.0+ is supported; but Android 8.0+ is strongly recommended due to lots of driver bugs in older versions.
+(\*) XP support is through GL3+. Recent drivers are needed. Old GPUs do not have stable GL drivers capable of running Ogre 2.x.<br/>
+(\*\*) Metal Backend is highly recommended. GL backend is supported in macOS, but the window subsystem hasn't been ported to 2.3 yet.<br/>
+(\*\*\*) Device must be Vulkan-capable. Android 7.0+ is supported; but Android 8.0+ is strongly recommended due to lots of driver bugs in older versions.<br/>
 
 ## Supported Compilers
 
