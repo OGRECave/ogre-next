@@ -1,0 +1,7 @@
+<map id="Ogre::PortalBaseFactory" name="Ogre::PortalBaseFactory">
+<area shape="rect" id="node1" title="Factory object for creating Portal instances." alt="" coords="86,155,249,181"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_anti_portal_factory.html" title="Factory object for creating AntiPortal instances." alt="" coords="5,229,161,256"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_portal_factory.html" title="Factory object for creating Portal instances." alt="" coords="186,229,319,256"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object_factory.html" title="Interface definition for a factory class which produces a certain kind of MovableObject,..." alt="" coords="74,80,261,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="117,5,217,32"/>
+</map>

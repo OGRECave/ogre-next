@@ -1,0 +1,5 @@
+<map id="Ogre::PCZSceneManager" name="Ogre::PCZSceneManager">
+<area shape="rect" id="node1" title="Specialized SceneManager that uses Portal&#45;Connected&#45;Zones to divide the scene spatially." alt="" coords="5,155,175,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="19,80,161,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="13,5,167,32"/>
+</map>

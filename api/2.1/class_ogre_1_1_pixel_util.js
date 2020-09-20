@@ -1,8 +1,8 @@
 var class_ogre_1_1_pixel_util =
 [
     [ "bulkCompressedSubregion", "class_ogre_1_1_pixel_util.html#a39f2867341e5d3ff964aaf2e5a02224c", null ],
-    [ "bulkPixelConversion", "class_ogre_1_1_pixel_util.html#a0cae4443af5f8feb1c2f4f0905277c34", null ],
     [ "bulkPixelConversion", "class_ogre_1_1_pixel_util.html#a9f6e459a0f92c0c8e6bf4f20ee3a771a", null ],
+    [ "bulkPixelConversion", "class_ogre_1_1_pixel_util.html#a0cae4443af5f8feb1c2f4f0905277c34", null ],
     [ "bulkPixelVerticalFlip", "class_ogre_1_1_pixel_util.html#a3d8f29c8c1181ba98e22e342169970fd", null ],
     [ "calculateSizeBytes", "class_ogre_1_1_pixel_util.html#ad27d6389824bcfe21185f6728af8974e", null ],
     [ "convertForNormalMapping", "class_ogre_1_1_pixel_util.html#acbe531d3eabd46c52a860a16a3b779a3", null ],
@@ -35,9 +35,9 @@ var class_ogre_1_1_pixel_util =
     [ "isSigned", "class_ogre_1_1_pixel_util.html#aca8f1f4de7db504bd9a6c781cca28a42", null ],
     [ "isValidExtent", "class_ogre_1_1_pixel_util.html#acb83c9058ba34602be4e07e4d7ce1d2d", null ],
     [ "packColour", "class_ogre_1_1_pixel_util.html#a793a7ae2bb8edec89ab520958ac33f40", null ],
-    [ "packColour", "class_ogre_1_1_pixel_util.html#af0658994fbf0337d455ac9aa74ee8084", null ],
     [ "packColour", "class_ogre_1_1_pixel_util.html#a29490454e6327a0429d19533880f6e2c", null ],
+    [ "packColour", "class_ogre_1_1_pixel_util.html#af0658994fbf0337d455ac9aa74ee8084", null ],
     [ "unpackColour", "class_ogre_1_1_pixel_util.html#a9b90b16c6c5c8a9fefd42e06a1bd99dc", null ],
-    [ "unpackColour", "class_ogre_1_1_pixel_util.html#a6599a03e4d51ef96f373f47253e2b9e3", null ],
-    [ "unpackColour", "class_ogre_1_1_pixel_util.html#ae1448ad9a222ed03918f2e94a057612c", null ]
+    [ "unpackColour", "class_ogre_1_1_pixel_util.html#ae1448ad9a222ed03918f2e94a057612c", null ],
+    [ "unpackColour", "class_ogre_1_1_pixel_util.html#a6599a03e4d51ef96f373f47253e2b9e3", null ]
 ];

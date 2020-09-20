@@ -142,7 +142,7 @@ var manual =
       [ "Hlms templates", "hlms.html#HlmsTemplates", null ],
       [ "The Hlms preprocessor", "hlms.html#HlmsPreprocessor", [
         [ "Preprocessor syntax", "hlms.html#HlmsPreprocessorSyntax", [
-          [ "\\@property( expression )", "hlms.html#HlmsPreprocessorSyntaxProperty", null ],
+          [ "@property( expression )", "hlms.html#HlmsPreprocessorSyntaxProperty", null ],
           [ "@foreach( count, scopedVar, [start] )", "hlms.html#HlmsPreprocessorSyntaxForeach", null ],
           [ "@counter( variable )", "hlms.html#HlmsPreprocessorSyntaxCounter", null ],
           [ "@value( variable )", "hlms.html#HlmsPreprocessorSyntaxValue", null ],

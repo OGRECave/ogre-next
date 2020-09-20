@@ -38,15 +38,15 @@ var class_ogre_1_1v1_1_1_overlay_manager =
     [ "hasOverlayElement", "class_ogre_1_1v1_1_1_overlay_manager.html#ad75795bd8a121a5ff2ef61aedefdb675", null ],
     [ "isTemplate", "class_ogre_1_1v1_1_1_overlay_manager.html#a318cf0e71a81a066c5a9fd1c8c475d33", null ],
     [ "operator delete", "class_ogre_1_1v1_1_1_overlay_manager.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
-    [ "operator delete", "class_ogre_1_1v1_1_1_overlay_manager.html#a1c727e879a260c37b00ce5505fe8e144", null ],
     [ "operator delete", "class_ogre_1_1v1_1_1_overlay_manager.html#acb46d4b0a597156d9ba5abc39d127792", null ],
+    [ "operator delete", "class_ogre_1_1v1_1_1_overlay_manager.html#a1c727e879a260c37b00ce5505fe8e144", null ],
     [ "operator delete[]", "class_ogre_1_1v1_1_1_overlay_manager.html#a93e6a86dde5483c053ca0f2a85bbfd6c", null ],
     [ "operator delete[]", "class_ogre_1_1v1_1_1_overlay_manager.html#a595ea4c05da8aa987d3800e65d23355d", null ],
-    [ "operator new", "class_ogre_1_1v1_1_1_overlay_manager.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
     [ "operator new", "class_ogre_1_1v1_1_1_overlay_manager.html#ac4bdf968b7b9af8a5239a27da73d5711", null ],
+    [ "operator new", "class_ogre_1_1v1_1_1_overlay_manager.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
     [ "operator new", "class_ogre_1_1v1_1_1_overlay_manager.html#ab78a921e54419be677839cdf15d1f0b8", null ],
-    [ "operator new[]", "class_ogre_1_1v1_1_1_overlay_manager.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "operator new[]", "class_ogre_1_1v1_1_1_overlay_manager.html#afa2943846ba6a2b5824a12857139cf5e", null ],
+    [ "operator new[]", "class_ogre_1_1v1_1_1_overlay_manager.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "parseScript", "class_ogre_1_1v1_1_1_overlay_manager.html#a65caf0c692f488703e9d65e4f7cf9b88", null ],
     [ "mDefaultRenderQueueId", "class_ogre_1_1v1_1_1_overlay_manager.html#a211908affb1fa364c80a35c69541b4e2", null ]
 ];

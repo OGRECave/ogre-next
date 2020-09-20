@@ -7,14 +7,14 @@ var class_ogre_1_1_g_l_e_s2_f_b_o_manager =
     [ "checkFormat", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a8b24c87902ab230912a41e82d49e9945", null ],
     [ "createMultiRenderTarget", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a0166d428e932b3e81082ffb00855c0dc", null ],
     [ "createRenderTexture", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#ac0f7efe952a3e7928af805d9ddf5ed16", null ],
-    [ "getBestDepthStencil", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#adfbaf8f85c2f75bf25ce026f6d3be225", null ],
     [ "getBestDepthStencil", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a270434b8c3c065d0abb8c27aa2a91885", null ],
+    [ "getBestDepthStencil", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#adfbaf8f85c2f75bf25ce026f6d3be225", null ],
     [ "getSingleton", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a7757bd7ac3702c144502e53ad6491888", null ],
     [ "getSingletonPtr", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a7ab51c46521b89723d6186a52a7e0d7b", null ],
     [ "getSupportedAlternative", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a4a16f5734f7f17716c693cae5078a29a", null ],
     [ "getTemporaryFBO", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#ae0ddd0c3d5f751a978c4b602d26a502c", null ],
     [ "releaseRenderBuffer", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#af7a872f18f376d1056980365d7aa58f9", null ],
-    [ "requestRenderBuffer", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a0a04fc57b373e36d09f64b7fb63bad21", null ],
     [ "requestRenderBuffer", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a01e2cfb126305dfc9cb97067d4ae1765", null ],
+    [ "requestRenderBuffer", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a0a04fc57b373e36d09f64b7fb63bad21", null ],
     [ "unbind", "class_ogre_1_1_g_l_e_s2_f_b_o_manager.html#a991a79a74f676ce7b02d1a6d828dcd3f", null ]
 ];

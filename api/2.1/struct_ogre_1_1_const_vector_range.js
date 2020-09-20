@@ -11,8 +11,8 @@ var struct_ogre_1_1_const_vector_range =
     [ "empty", "struct_ogre_1_1_const_vector_range.html#a8c398a5b6efefad642724307fb6a8733", null ],
     [ "end", "struct_ogre_1_1_const_vector_range.html#a32576369c7d450ad2f824da9e66fa12d", null ],
     [ "equal", "struct_ogre_1_1_const_vector_range.html#a130b2ab82901906a7b3de6fd3f1473c1", null ],
-    [ "operator!=", "struct_ogre_1_1_const_vector_range.html#ae1bed52e5d35b21905a80c3eb51af4c4", null ],
     [ "operator!=", "struct_ogre_1_1_const_vector_range.html#ad9b1e67af6e1f3c4f15c109afd440466", null ],
-    [ "operator==", "struct_ogre_1_1_const_vector_range.html#aaacadf5c0c2c908a7453a729c8d0eef4", null ],
-    [ "operator==", "struct_ogre_1_1_const_vector_range.html#a88a0786a2fb67b85eba66b36983aae15", null ]
+    [ "operator!=", "struct_ogre_1_1_const_vector_range.html#ae1bed52e5d35b21905a80c3eb51af4c4", null ],
+    [ "operator==", "struct_ogre_1_1_const_vector_range.html#a88a0786a2fb67b85eba66b36983aae15", null ],
+    [ "operator==", "struct_ogre_1_1_const_vector_range.html#aaacadf5c0c2c908a7453a729c8d0eef4", null ]
 ];

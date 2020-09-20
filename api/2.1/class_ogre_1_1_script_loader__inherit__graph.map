@@ -1,26 +1,30 @@
 <map id="Ogre::ScriptLoader" name="Ogre::ScriptLoader">
-<area shape="rect" id="node2" href="$class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;. " alt="" coords="213,183,352,209"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_particle_system_manager.html" title="Manages particle systems, particle system scripts (templates) and the available emitter &amp; affector fa..." alt="" coords="184,233,381,260"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler. " alt="" coords="201,284,365,311"/>
-<area shape="rect" id="node24" href="$class_ogre_1_1_script_compiler_manager.html" title="Manages threaded compilation of scripts. " alt="" coords="185,335,380,361"/>
-<area shape="rect" id="node25" href="$class_ogre_1_1v1_1_1_overlay_manager.html" title="Manages Overlay objects, parsing them from .overlay files and storing a lookup library of them..." alt="" coords="195,385,370,412"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_font_manager.html" title="Manages Font resources, parsing .fontdef files and generally organising them. " alt="" coords="463,91,597,117"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_gpu_program_manager.html" title="Ogre::GpuProgramManager" alt="" coords="439,141,621,168"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_high_level_gpu_program_manager.html" title="This ResourceManager manages high&#45;level vertex and fragment programs. " alt="" coords="435,193,625,234"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_material_manager.html" title="Class for managing Material settings for Ogre. " alt="" coords="453,259,607,285"/>
-<area shape="rect" id="node14" href="$class_ogre_1_1_mesh_manager.html" title="Handles the management of mesh resources. " alt="" coords="460,309,600,336"/>
-<area shape="rect" id="node15" href="$class_ogre_1_1_texture_manager.html" title="Class for loading &amp; managing textures. " alt="" coords="454,360,606,387"/>
-<area shape="rect" id="node22" href="$class_ogre_1_1v1_1_1_mesh_manager.html" title="Handles the management of mesh resources. " alt="" coords="449,411,611,437"/>
-<area shape="rect" id="node23" href="$class_ogre_1_1v1_1_1_old_skeleton_manager.html" title="Handles the management of skeleton resources. " alt="" coords="429,461,631,488"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title="Ogre::D3D11GpuProgramManager" alt="" coords="679,5,901,32"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_d3_d9_gpu_program_manager.html" title="Ogre::D3D9GpuProgramManager" alt="" coords="683,56,897,83"/>
-<area shape="rect" id="node9" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title="Ogre::GLES2GpuProgramManager" alt="" coords="679,107,901,133"/>
-<area shape="rect" id="node10" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title="Ogre::GLSLShaderManager" alt="" coords="699,157,881,184"/>
-<area shape="rect" id="node11" href="$class_ogre_1_1_metal_gpu_program_manager.html" title="Ogre::MetalGpuProgramManager" alt="" coords="683,208,897,235"/>
-<area shape="rect" id="node16" href="$class_ogre_1_1_d3_d11_texture_manager.html" title="Ogre::D3D11TextureManager" alt="" coords="693,259,887,285"/>
-<area shape="rect" id="node17" href="$class_ogre_1_1_d3_d9_texture_manager.html" title="Ogre::D3D9TextureManager" alt="" coords="697,309,883,336"/>
-<area shape="rect" id="node18" href="$class_ogre_1_1_g_l3_plus_texture_manager.html" title="GL3Plus&#45;specific implementation of a TextureManager. " alt="" coords="689,360,891,387"/>
-<area shape="rect" id="node19" href="$class_ogre_1_1_g_l_e_s2_texture_manager.html" title="GL ES&#45;specific implementation of a TextureManager. " alt="" coords="693,411,887,437"/>
-<area shape="rect" id="node20" href="$class_ogre_1_1_metal_texture_manager.html" title="Ogre::MetalTextureManager" alt="" coords="698,461,882,488"/>
-<area shape="rect" id="node21" href="$class_ogre_1_1_n_u_l_l_texture_manager.html" title="Ogre::NULLTextureManager" alt="" coords="697,512,883,539"/>
+<area shape="rect" id="node1" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,208,136,235"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_cg_fx_script_loader.html" title="Manages Overlay objects, parsing them from .overlay files and storing a lookup library of them." alt="" coords="201,56,361,83"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;." alt="" coords="213,107,350,133"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_particle_system_manager.html" title="Manages particle systems, particle system scripts (templates) and the available emitter &amp; affector fa..." alt="" coords="184,157,379,184"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_quake3_shader_manager.html" title="Class for managing Quake3 custom shaders." alt="" coords="185,208,377,235"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="201,259,362,285"/>
+<area shape="rect" id="node27" href="$class_ogre_1_1_script_compiler_manager.html" title="Manages threaded compilation of scripts." alt="" coords="186,309,377,336"/>
+<area shape="rect" id="node28" href="$class_ogre_1_1v1_1_1_overlay_manager.html" title="Manages Overlay objects, parsing them from .overlay files and storing a lookup library of them." alt="" coords="196,360,367,387"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_bsp_resource_manager.html" title="Manages the locating and loading of BSP&#45;based indoor levels." alt="" coords="433,40,617,67"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_font_manager.html" title="Manages Font resources, parsing .fontdef files and generally organising them." alt="" coords="459,91,591,117"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_gpu_program_manager.html" title=" " alt="" coords="436,141,615,168"/>
+<area shape="rect" id="node15" href="$class_ogre_1_1_high_level_gpu_program_manager.html" title="This ResourceManager manages high&#45;level vertex and fragment programs." alt="" coords="431,193,619,234"/>
+<area shape="rect" id="node16" href="$class_ogre_1_1_material_manager.html" title="Class for managing Material settings for Ogre." alt="" coords="449,259,601,285"/>
+<area shape="rect" id="node17" href="$class_ogre_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="456,309,595,336"/>
+<area shape="rect" id="node18" href="$class_ogre_1_1_texture_manager.html" title="Class for loading &amp; managing textures." alt="" coords="451,360,600,387"/>
+<area shape="rect" id="node25" href="$class_ogre_1_1v1_1_1_mesh_manager.html" title="Handles the management of mesh resources." alt="" coords="446,411,605,437"/>
+<area shape="rect" id="node26" href="$class_ogre_1_1v1_1_1_old_skeleton_manager.html" title="Handles the management of skeleton resources." alt="" coords="427,461,624,488"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title=" " alt="" coords="673,5,892,32"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_d3_d9_gpu_program_manager.html" title=" " alt="" coords="677,56,888,83"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title=" " alt="" coords="672,107,893,133"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title=" " alt="" coords="691,157,874,184"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1_metal_gpu_program_manager.html" title=" " alt="" coords="677,208,888,235"/>
+<area shape="rect" id="node19" href="$class_ogre_1_1_d3_d11_texture_manager.html" title=" " alt="" coords="689,259,877,285"/>
+<area shape="rect" id="node20" href="$class_ogre_1_1_d3_d9_texture_manager.html" title=" " alt="" coords="692,309,873,336"/>
+<area shape="rect" id="node21" href="$class_ogre_1_1_g_l3_plus_texture_manager.html" title="GL3Plus&#45;specific implementation of a TextureManager." alt="" coords="683,360,883,387"/>
+<area shape="rect" id="node22" href="$class_ogre_1_1_g_l_e_s2_texture_manager.html" title="GL ES&#45;specific implementation of a TextureManager." alt="" coords="687,411,878,437"/>
+<area shape="rect" id="node23" href="$class_ogre_1_1_metal_texture_manager.html" title=" " alt="" coords="692,461,873,488"/>
+<area shape="rect" id="node24" href="$class_ogre_1_1_n_u_l_l_texture_manager.html" title=" " alt="" coords="690,512,875,539"/>
 </map>

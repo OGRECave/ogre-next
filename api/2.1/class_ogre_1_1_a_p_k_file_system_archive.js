@@ -16,15 +16,15 @@ var class_ogre_1_1_a_p_k_file_system_archive =
     [ "load", "class_ogre_1_1_a_p_k_file_system_archive.html#adbc3d0a51af61ffeb3f330064d6c4d73", null ],
     [ "open", "class_ogre_1_1_a_p_k_file_system_archive.html#ae0182ce37e2f1e05799760ad7d997b41", null ],
     [ "operator delete", "class_ogre_1_1_a_p_k_file_system_archive.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
-    [ "operator delete", "class_ogre_1_1_a_p_k_file_system_archive.html#a1c727e879a260c37b00ce5505fe8e144", null ],
     [ "operator delete", "class_ogre_1_1_a_p_k_file_system_archive.html#acb46d4b0a597156d9ba5abc39d127792", null ],
+    [ "operator delete", "class_ogre_1_1_a_p_k_file_system_archive.html#a1c727e879a260c37b00ce5505fe8e144", null ],
     [ "operator delete[]", "class_ogre_1_1_a_p_k_file_system_archive.html#a93e6a86dde5483c053ca0f2a85bbfd6c", null ],
     [ "operator delete[]", "class_ogre_1_1_a_p_k_file_system_archive.html#a595ea4c05da8aa987d3800e65d23355d", null ],
-    [ "operator new", "class_ogre_1_1_a_p_k_file_system_archive.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
     [ "operator new", "class_ogre_1_1_a_p_k_file_system_archive.html#ac4bdf968b7b9af8a5239a27da73d5711", null ],
+    [ "operator new", "class_ogre_1_1_a_p_k_file_system_archive.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
     [ "operator new", "class_ogre_1_1_a_p_k_file_system_archive.html#ab78a921e54419be677839cdf15d1f0b8", null ],
-    [ "operator new[]", "class_ogre_1_1_a_p_k_file_system_archive.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "operator new[]", "class_ogre_1_1_a_p_k_file_system_archive.html#afa2943846ba6a2b5824a12857139cf5e", null ],
+    [ "operator new[]", "class_ogre_1_1_a_p_k_file_system_archive.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "remove", "class_ogre_1_1_a_p_k_file_system_archive.html#a0d8c6606a0574f6e0a1909c5cb4e0ba3", null ],
     [ "unload", "class_ogre_1_1_a_p_k_file_system_archive.html#aab0eeb38f3941f9aedd66c858d86fc8a", null ]
 ];
