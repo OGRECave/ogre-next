@@ -46,8 +46,6 @@ THE SOFTWARE.
 #include "vulkan/vulkan_core.h"
 #include "vulkan/vulkan_xcb.h"
 
-#include <xcb/xcb_aux.h>
-
 namespace Ogre
 {
     static xcb_intern_atom_cookie_t intern_atom_cookie( xcb_connection_t *c, const std::string &s )
