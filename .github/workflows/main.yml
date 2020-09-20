@@ -37,6 +37,10 @@ jobs:
         with:
           doxyfile-path: './Doxyfile'
 
+      - name: Remove files
+        working-directory: .github/workflows/
+        run: python3 doxygen_remove_files.py
+
       - name: Publish # Only on master branch
         if: github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v3
