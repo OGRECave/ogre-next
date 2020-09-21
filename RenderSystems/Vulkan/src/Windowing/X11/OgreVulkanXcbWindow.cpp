@@ -310,8 +310,6 @@ namespace Ogre
         xcb_change_property( mConnection, XCB_PROP_MODE_REPLACE, mXcbWindow, mWmProtocols, XCB_ATOM_ATOM,
                              32u, 1u, &mWmDeleteWindow );
 
-        switchMode( mRequestedWidth, mRequestedHeight, mFrequencyNumerator, mFrequencyDenominator );
-
         mWmNetState = intern_atom( mConnection, mWmNetStatecookie );
         mWmFullscreen = intern_atom( mConnection, mWmFullscreencookie );
         if( mWmNetState != XCB_ATOM_NONE && mWmFullscreen != XCB_ATOM_NONE && mRequestedFullscreenMode )
