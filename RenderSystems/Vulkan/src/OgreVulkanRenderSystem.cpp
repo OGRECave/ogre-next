@@ -523,6 +523,12 @@ namespace Ogre
         rsc->setMaxThreadsPerThreadgroupAxis( deviceLimits.maxComputeWorkGroupSize );
         rsc->setMaxThreadsPerThreadgroup( deviceLimits.maxComputeWorkGroupInvocations );
 
+        if( mActiveDevice->mDeviceFeatures.samplerAnisotropy && deviceLimits.maxSamplerAnisotropy > 1u )
+        {
+            rsc->setCapability( RSC_ANISOTROPY );
+            rsc->setMaxSupportedAnisotropy( deviceLimits.maxSamplerAnisotropy );
+        }
+
         rsc->setCapability( RSC_STORE_AND_MULTISAMPLE_RESOLVE );
         rsc->setCapability( RSC_TEXTURE_GATHER );
 
@@ -534,8 +540,7 @@ namespace Ogre
 
         rsc->setCapability( RSC_HWSTENCIL );
         rsc->setStencilBufferBitDepth( 8 );
-        rsc->setNumTextureUnits( 16 );
-        rsc->setCapability( RSC_ANISOTROPY );
+        rsc->setNumTextureUnits( NUM_BIND_TEXTURES );
         rsc->setCapability( RSC_AUTOMIPMAP );
         rsc->setCapability( RSC_BLENDING );
         rsc->setCapability( RSC_DOT3 );
@@ -941,6 +946,7 @@ namespace Ogre
                 float maxAllowedAnisotropy =
                     mActiveDevice->mDeviceProperties.limits.maxSamplerAnisotropy;
                 samplerDescriptor.maxAnisotropy = maxAllowedAnisotropy;
+                samplerDescriptor.anisotropyEnable = VK_FALSE;
                 samplerDescriptor.minLod = -std::numeric_limits<float>::max();
                 samplerDescriptor.maxLod = std::numeric_limits<float>::max();
                 VkResult result =
@@ -2857,11 +2863,13 @@ namespace Ogre
         samplerDescriptor.magFilter = VulkanMappings::get( newBlock->mMagFilter );
         samplerDescriptor.mipmapMode = VulkanMappings::getMipFilter( newBlock->mMipFilter );
         samplerDescriptor.mipLodBias = newBlock->mMipLodBias;
-        samplerDescriptor.anisotropyEnable = newBlock->mMaxAnisotropy > 0.0f ? VK_TRUE : VK_FALSE;
         float maxAllowedAnisotropy = mActiveDevice->mDeviceProperties.limits.maxSamplerAnisotropy;
         samplerDescriptor.maxAnisotropy = newBlock->mMaxAnisotropy > maxAllowedAnisotropy
                                               ? maxAllowedAnisotropy
                                               : newBlock->mMaxAnisotropy;
+        samplerDescriptor.anisotropyEnable =
+            ( mActiveDevice->mDeviceFeatures.samplerAnisotropy == VK_TRUE ) &&
+            ( samplerDescriptor.maxAnisotropy > 1.0f ? VK_TRUE : VK_FALSE );
         samplerDescriptor.addressModeU = VulkanMappings::get( newBlock->mU );
         samplerDescriptor.addressModeV = VulkanMappings::get( newBlock->mV );
         samplerDescriptor.addressModeW = VulkanMappings::get( newBlock->mW );
