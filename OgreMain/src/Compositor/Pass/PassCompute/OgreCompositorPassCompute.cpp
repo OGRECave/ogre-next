@@ -277,11 +277,11 @@ namespace Ogre
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->endRenderPassDescriptor();
 
-        mComputeJob->analyzeBarriers( mResourceTransitions );
-        executeResourceTransitions();
-
         // Set textures/uavs every frame
         setResourcesToJob();
+
+        mComputeJob->analyzeBarriers( mResourceTransitions );
+        executeResourceTransitions();
 
         // Fire the listener in case it wants to change anything
         notifyPassPreExecuteListeners();
