@@ -2387,7 +2387,7 @@ var files_dup =
     ] ],
     [ "OgreWireBoundingBox.h", "_ogre_wire_bounding_box_8h.html", null ],
     [ "OgreWorkarounds.h", "_ogre_workarounds_8h.html", [
-      [ "Workarounds", "struct_ogre_1_1_workarounds.html", null ]
+      [ "Workarounds", "struct_ogre_1_1_workarounds.html", "struct_ogre_1_1_workarounds" ]
     ] ],
     [ "OgreWorkQueue.h", "_ogre_work_queue_8h.html", [
       [ "Request", "class_ogre_1_1_work_queue_1_1_request.html", "class_ogre_1_1_work_queue_1_1_request" ],

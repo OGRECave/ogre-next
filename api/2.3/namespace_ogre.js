@@ -1173,7 +1173,7 @@ var namespace_ogre =
     [ "WindowEventUtilities", "class_ogre_1_1_window_event_utilities.html", "class_ogre_1_1_window_event_utilities" ],
     [ "WireAabb", "class_ogre_1_1_wire_aabb.html", "class_ogre_1_1_wire_aabb" ],
     [ "WireAabbFactory", "class_ogre_1_1_wire_aabb_factory.html", "class_ogre_1_1_wire_aabb_factory" ],
-    [ "Workarounds", "struct_ogre_1_1_workarounds.html", null ],
+    [ "Workarounds", "struct_ogre_1_1_workarounds.html", "struct_ogre_1_1_workarounds" ],
     [ "WorkQueue", "class_ogre_1_1_work_queue.html", "class_ogre_1_1_work_queue" ],
     [ "X11EGLContext", "class_ogre_1_1_x11_e_g_l_context.html", "class_ogre_1_1_x11_e_g_l_context" ],
     [ "X11EGLSupport", "class_ogre_1_1_x11_e_g_l_support.html", "class_ogre_1_1_x11_e_g_l_support" ],
