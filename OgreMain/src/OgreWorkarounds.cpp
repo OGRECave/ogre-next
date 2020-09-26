@@ -36,4 +36,7 @@ namespace Ogre
     bool Workarounds::mAdrenoUbo64kLimitTriggered = false;
     size_t Workarounds::mAdrenoUbo64kLimit = 0u;
 #endif
+#ifdef OGRE_VK_WORKAROUND_ADRENO_D32_FLOAT
+    bool Workarounds::mAdrenoD32FloatBug = false;
+#endif
 }  // namespace Ogre

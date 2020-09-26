@@ -73,6 +73,15 @@ namespace Ogre
         /// If > 0, then the workaround is active
         /// The value contains the maximum range we will bind
         static size_t mAdrenoUbo64kLimit;
+
+// Adreno 505, 506 and many others get glitchy shadows when using D32_FLOAT.
+//
+// Qualcomm claims to have patched this bug at version 512.440
+//
+// First seen: Since the very first driver version
+// Last seen: 2020-09-08
+#define OGRE_VK_WORKAROUND_ADRENO_D32_FLOAT
+        static bool mAdrenoD32FloatBug;
 #endif
 
 #endif

@@ -112,6 +112,8 @@ namespace Ogre
                           TextureGpuManager *textureManager );
         virtual ~VulkanTextureGpu();
 
+        PixelFormatGpu getWorkaroundedPixelFormat( const PixelFormatGpu pixelFormat ) const;
+
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
         virtual ResourceLayout::Layout getCurrentLayout( void ) const;

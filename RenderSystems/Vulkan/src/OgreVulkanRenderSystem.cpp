@@ -594,6 +594,14 @@ namespace Ogre
         rsc->addShaderProfile( "glslvk" );
         rsc->addShaderProfile( "glsl" );
 
+#ifdef OGRE_VK_WORKAROUND_ADRENO_D32_FLOAT
+        if( rsc->getVendor() == GPU_QUALCOMM )
+        {
+            if( !rsc->getDriverVersion().hasMinVersion( 512, 440 ) )
+                Workarounds::mAdrenoD32FloatBug = true;
+        }
+#endif
+
         return rsc;
     }
     //-------------------------------------------------------------------------

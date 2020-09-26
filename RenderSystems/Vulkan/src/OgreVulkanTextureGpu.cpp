@@ -64,10 +64,27 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VulkanTextureGpu::~VulkanTextureGpu() { destroyInternalResourcesImpl(); }
     //-----------------------------------------------------------------------------------
+    PixelFormatGpu VulkanTextureGpu::getWorkaroundedPixelFormat( const PixelFormatGpu pixelFormat ) const
+    {
+        PixelFormatGpu retVal = pixelFormat;
+#ifdef OGRE_VK_WORKAROUND_ADRENO_D32_FLOAT
+        if( Workarounds::mAdrenoD32FloatBug && isTexture() && isRenderToTexture() )
+        {
+            if( pixelFormat == PFG_D32_FLOAT )
+                retVal = PFG_D24_UNORM;
+            else if( pixelFormat == PFG_D32_FLOAT_S8X24_UINT )
+                retVal = PFG_D24_UNORM_S8_UINT;
+        }
+#endif
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::createInternalResourcesImpl( void )
     {
         if( mPixelFormat == PFG_NULL )
             return;  // Nothing to do
+
+        const PixelFormatGpu finalPixelFormat = getWorkaroundedPixelFormat( mPixelFormat );
 
         VkImageCreateInfo imageInfo;
         makeVkStruct( imageInfo, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO );
@@ -79,10 +96,10 @@ namespace Ogre
         imageInfo.arrayLayers = getNumSlices();
         imageInfo.flags = 0;
         if( !isReinterpretable() )
-            imageInfo.format = VulkanMappings::get( mPixelFormat );
+            imageInfo.format = VulkanMappings::get( finalPixelFormat );
         else
         {
-            imageInfo.format = VulkanMappings::get( PixelFormatGpuUtils::getFamily( mPixelFormat ) );
+            imageInfo.format = VulkanMappings::get( PixelFormatGpuUtils::getFamily( finalPixelFormat ) );
             imageInfo.flags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
         }
         imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
@@ -104,7 +121,7 @@ namespace Ogre
             imageInfo.usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
         if( isRenderToTexture() )
         {
-            imageInfo.usage |= PixelFormatGpuUtils::isDepth( mPixelFormat )
+            imageInfo.usage |= PixelFormatGpuUtils::isDepth( finalPixelFormat )
                                    ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
                                    : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
         }
@@ -168,7 +185,7 @@ namespace Ogre
                 if( isRenderToTexture() )
                 {
                     // Assume render textures always start ready to render
-                    if( PixelFormatGpuUtils::isDepth( mPixelFormat ) )
+                    if( PixelFormatGpuUtils::isDepth( finalPixelFormat ) )
                     {
                         mCurrLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                         mNextLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -625,7 +642,7 @@ namespace Ogre
     VkImageSubresourceRange VulkanTextureGpu::getFullSubresourceRange( void ) const
     {
         VkImageSubresourceRange retVal;
-        retVal.aspectMask = VulkanMappings::getImageAspect( mPixelFormat );
+        retVal.aspectMask = VulkanMappings::getImageAspect( getWorkaroundedPixelFormat( mPixelFormat ) );
         retVal.baseMipLevel = 0u;
         retVal.levelCount = VK_REMAINING_MIP_LEVELS;
         retVal.baseArrayLayer = 0u;
@@ -693,6 +710,8 @@ namespace Ogre
             pixelFormat = mPixelFormat;
             if( forUav )
                 pixelFormat = PixelFormatGpuUtils::getEquivalentLinear( pixelFormat );
+
+            pixelFormat = getWorkaroundedPixelFormat( pixelFormat );
         }
         VkImageViewType texType = this->getInternalVulkanTextureViewType();
 
@@ -747,7 +766,7 @@ namespace Ogre
                 flagRestriction.usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
             if( isRenderToTexture() )
             {
-                flagRestriction.usage |= PixelFormatGpuUtils::isDepth( mPixelFormat )
+                flagRestriction.usage |= PixelFormatGpuUtils::isDepth( pixelFormat )
                                              ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
                                              : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
             }
@@ -833,7 +852,8 @@ namespace Ogre
         imageMemBarrier.image = mFinalTextureName;
         imageMemBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         imageMemBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        imageMemBarrier.subresourceRange.aspectMask = VulkanMappings::getImageAspect( mPixelFormat );
+        imageMemBarrier.subresourceRange.aspectMask =
+            VulkanMappings::getImageAspect( getWorkaroundedPixelFormat( mPixelFormat ) );
         imageMemBarrier.subresourceRange.baseMipLevel = 0u;
         imageMemBarrier.subresourceRange.levelCount = mNumMipmaps;
         imageMemBarrier.subresourceRange.baseArrayLayer = mInternalSliceStart;
@@ -885,6 +905,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuRenderTarget::createMsaaSurface( void )
     {
+        const PixelFormatGpu finalPixelFormat = getWorkaroundedPixelFormat( mPixelFormat );
+
         VkImageCreateInfo imageInfo;
         makeVkStruct( imageInfo, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO );
         imageInfo.imageType = getVulkanTextureType();
@@ -893,14 +915,14 @@ namespace Ogre
         imageInfo.extent.depth = getDepth();
         imageInfo.mipLevels = 1u;
         imageInfo.arrayLayers = 1u;
-        imageInfo.format = VulkanMappings::get( mPixelFormat );
+        imageInfo.format = VulkanMappings::get( finalPixelFormat );
         imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         imageInfo.samples = static_cast<VkSampleCountFlagBits>( mSampleDescription.getColourSamples() );
         imageInfo.flags = 0;
-        imageInfo.usage |= PixelFormatGpuUtils::isDepth( mPixelFormat )
+        imageInfo.usage |= PixelFormatGpuUtils::isDepth( finalPixelFormat )
                                ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
                                : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
