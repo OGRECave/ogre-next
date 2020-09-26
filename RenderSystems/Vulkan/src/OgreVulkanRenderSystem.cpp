@@ -594,13 +594,50 @@ namespace Ogre
         rsc->addShaderProfile( "glslvk" );
         rsc->addShaderProfile( "glsl" );
 
-#ifdef OGRE_VK_WORKAROUND_ADRENO_D32_FLOAT
         if( rsc->getVendor() == GPU_QUALCOMM )
         {
+#ifdef OGRE_VK_WORKAROUND_ADRENO_D32_FLOAT
+            Workarounds::mAdrenoD32FloatBug = false;
             if( !rsc->getDriverVersion().hasMinVersion( 512, 440 ) )
                 Workarounds::mAdrenoD32FloatBug = true;
-        }
 #endif
+#ifdef OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
+            Workarounds::mAdreno5xx6xxMinCaps = false;
+
+            const uint32 c_adreno5xx6xxDeviceIds[] = {
+                0x5000400,  // 504
+                0x5000500,  // 505
+                0x5000600,  // 506
+                0x5000800,  // 508
+                0x5000900,  // 509
+                0x5010000,  // 510
+                0x5010200,  // 512
+                0x5030002,  // 530
+                0x5040001,  // 540
+
+                0x6010000,  // 610
+                0x6010200,  // 612
+                0x6010501,  // 615
+                0x6010600,  // 616
+                0x6010800,  // 618
+                0x6020001,  // 620
+                0x6030001,  // 630
+                0x6040001,  // 640
+                0x6050002,  // 650
+            };
+
+            const size_t numDevIds =
+                sizeof( c_adreno5xx6xxDeviceIds ) / sizeof( c_adreno5xx6xxDeviceIds[0] );
+            for( size_t i = 0u; i < numDevIds; ++i )
+            {
+                if( properties.deviceID == c_adreno5xx6xxDeviceIds[i] )
+                {
+                    Workarounds::mAdreno5xx6xxMinCaps = true;
+                    break;
+                }
+            }
+#endif
+        }
 
         return rsc;
     }

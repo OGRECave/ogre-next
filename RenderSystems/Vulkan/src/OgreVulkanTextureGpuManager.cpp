@@ -535,6 +535,25 @@ namespace Ogre
         if( ( props.optimalTilingFeatures & features ) == features )
             return true;
 
+#ifdef OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
+        if( Workarounds::mAdreno5xx6xxMinCaps &&
+            ( textureFlags & ( TextureFlags::Uav | TextureFlags::AllowAutomipmaps ) ) == 0u )
+        {
+            switch( format )
+            {
+            case PFG_R16_UNORM:
+            case PFG_R16_SNORM:
+            case PFG_RG16_UNORM:
+            case PFG_RG16_SNORM:
+            case PFG_RGBA16_UNORM:
+            case PFG_RGBA16_SNORM:
+                return true;
+            default:
+                break;
+            }
+        }
+#endif
+
         return false;
     }
 }  // namespace Ogre

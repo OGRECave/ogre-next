@@ -39,4 +39,7 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_ADRENO_D32_FLOAT
     bool Workarounds::mAdrenoD32FloatBug = false;
 #endif
+#ifdef OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
+    bool Workarounds::mAdreno5xx6xxMinCaps = false;
+#endif
 }  // namespace Ogre

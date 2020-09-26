@@ -82,8 +82,21 @@ namespace Ogre
 // Last seen: 2020-09-08
 #define OGRE_VK_WORKAROUND_ADRENO_D32_FLOAT
         static bool mAdrenoD32FloatBug;
-#endif
 
+// Adreno 5xx & 6xx series report the minimum features required by Vulkan.
+// However they support much more. In fact they are all DX12 FL12 HW.
+//
+// Qualcomm has patched this bug on 6xx series, driver version 512.444.0.
+// It is unlike Qualcomm will patch this bug for the 5xx series.
+//
+//      maxTexelBufferElements is reported 65535. At least 128MB is supported
+//      16-bit UNORM and SNORM formats are supported. Reported as unsupported.
+//
+// First seen: Since the very first driver version
+// Last seen: 2020-09-08
+#define OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
+        static bool mAdreno5xx6xxMinCaps;
+#endif
 #endif
     };
 }

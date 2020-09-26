@@ -116,6 +116,10 @@ namespace Ogre
             Workarounds::mAdrenoUbo64kLimit = mConstBufferMaxSize;
         }
 #endif
+#ifdef OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
+        if( Workarounds::mAdreno5xx6xxMinCaps )
+            mTexBufferMaxSize = std::max<size_t>( mTexBufferMaxSize, 128u * 1024u * 1024u );
+#endif
 
         mSupportsPersistentMapping = true;
         mSupportsIndirectBuffers = mDevice->mDeviceFeatures.multiDrawIndirect &&
