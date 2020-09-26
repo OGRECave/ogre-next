@@ -28,6 +28,8 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
+#include "OgrePrerequisites.h"
+
 #include "OgreWorkarounds.h"
 
 namespace Ogre
@@ -42,4 +44,22 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
     bool Workarounds::mAdreno5xx6xxMinCaps = false;
 #endif
+
+    void Workarounds::dump( void *outStrVoid )
+    {
+        String &outStr = *reinterpret_cast<String *>( outStrVoid );
+
+#ifdef OGRE_VK_WORKAROUND_ADRENO_UBO64K
+        outStr +=
+            "\n - mAdrenoUbo64kLimit: " + StringConverter::toString( Workarounds::mAdrenoUbo64kLimit );
+#endif
+#ifdef OGRE_VK_WORKAROUND_ADRENO_D32_FLOAT
+        outStr +=
+            "\n - mAdrenoD32FloatBug: " + StringConverter::toString( Workarounds::mAdrenoD32FloatBug );
+#endif
+#ifdef OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
+        outStr += "\n - mAdreno5xx6xxMinCaps: " +
+                  StringConverter::toString( Workarounds::mAdreno5xx6xxMinCaps );
+#endif
+    }
 }  // namespace Ogre

@@ -1017,6 +1017,14 @@ namespace Ogre
 
             resetAllBindings();
 
+            String workaroundsStr;
+            Workarounds::dump( (void *)&workaroundsStr );
+            if( !workaroundsStr.empty() )
+            {
+                workaroundsStr = "Workarounds applied:" + workaroundsStr;
+                LogManager::getSingleton().logMessage( workaroundsStr );
+            }
+
             mInitialized = true;
         }
 
