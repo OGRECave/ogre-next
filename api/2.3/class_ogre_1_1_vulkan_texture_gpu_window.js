@@ -85,6 +85,7 @@ var class_ogre_1_1_vulkan_texture_gpu_window =
     [ "getWidth", "class_ogre_1_1_vulkan_texture_gpu_window.html#ad1858af3588de15e9da271d22fe9d5c1", null ],
     [ "getWindowFinalTextureName", "class_ogre_1_1_vulkan_texture_gpu_window.html#a8f4c85a7b1b420e55bef520948b70a1a", null ],
     [ "getWindowNumSurfaces", "class_ogre_1_1_vulkan_texture_gpu_window.html#a4bd6bc37d612eb9a2f61811929296d52", null ],
+    [ "getWorkaroundedPixelFormat", "class_ogre_1_1_vulkan_texture_gpu_window.html#a2f64aa578e0615d892b1b706a9cbb134", null ],
     [ "hasAutomaticBatching", "class_ogre_1_1_vulkan_texture_gpu_window.html#ab038b4f32feeaa739a8cff7397e8809d", null ],
     [ "hasAutoMipmapAuto", "class_ogre_1_1_vulkan_texture_gpu_window.html#a4de8595b73e911c15ce9e8066926380d", null ],
     [ "hasEquivalentParameters", "class_ogre_1_1_vulkan_texture_gpu_window.html#af943f8d1fd87f457fb4633058d696470", null ],

@@ -1,5 +1,8 @@
 var NAVTREEINDEX270 =
 {
+"struct_ogre_1_1_hlms_base_prop.html#ad7fc41fdaebead65e4dd966e5b0a0f6e":[5,2,11,60,51],
+"struct_ogre_1_1_hlms_base_prop.html#adc061a25daa6f9d57b11a21a843b8e39":[5,2,11,60,33],
+"struct_ogre_1_1_hlms_base_prop.html#ae43c7d85a1476358c3d8d750944574d5":[5,2,11,60,58],
 "struct_ogre_1_1_hlms_base_prop.html#ae5365cca56bc9377b99e6e5e0fc7aefe":[5,2,11,60,72],
 "struct_ogre_1_1_hlms_base_prop.html#ae7633dce91e6ede1966dc563493e9ea0":[5,2,11,60,4],
 "struct_ogre_1_1_hlms_base_prop.html#ae7893b8cb9044e9748f3b6e71c134503":[5,2,11,60,71],
@@ -246,8 +249,5 @@ var NAVTREEINDEX270 =
 "struct_ogre_1_1_id_string.html#aedc10c2eb528fe8c1d8d2ab415500d7b":[7,0,0,539,6],
 "struct_ogre_1_1_id_string.html#afbe35aa8a428bd10ca8588921891860f":[7,0,0,539,9],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html":[5,0,0,15,0],
-"struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#aac84518f8d8108d7f7875516128b3474":[5,0,0,15,0,1],
-"struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#acd53cb3f6a58dbf08f1baa12bcb03033":[5,0,0,15,0,2],
-"struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#ad94bec02d71f91fd2f543f3488d25d61":[5,0,0,15,0,0],
-"struct_ogre_1_1_intersection_scene_query_result.html":[5,2,12,23]
+"struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#aac84518f8d8108d7f7875516128b3474":[5,0,0,15,0,1]
 };
