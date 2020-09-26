@@ -425,6 +425,22 @@ namespace Ogre
 
         VkPhysicalDeviceProperties &properties = mActiveDevice->mDeviceProperties;
 
+        LogManager::getSingleton().logMessage(
+            "[Vulkan] API Version: " +
+            StringConverter::toString( VK_VERSION_MAJOR( properties.apiVersion ) ) + "." +
+            StringConverter::toString( VK_VERSION_MINOR( properties.apiVersion ) ) + "." +
+            StringConverter::toString( VK_VERSION_PATCH( properties.apiVersion ) ) + " (" +
+            StringConverter::toString( properties.apiVersion, 0, ' ', std::ios::hex ) + ")" );
+        LogManager::getSingleton().logMessage(
+            "[Vulkan] Driver Version (raw): " +
+            StringConverter::toString( properties.driverVersion, 0, ' ', std::ios::hex ) );
+        LogManager::getSingleton().logMessage(
+            "[Vulkan] Vendor ID: " +
+            StringConverter::toString( properties.vendorID, 0, ' ', std::ios::hex ) );
+        LogManager::getSingleton().logMessage(
+            "[Vulkan] Device ID: " +
+            StringConverter::toString( properties.deviceID, 0, ' ', std::ios::hex ) );
+
         rsc->setDeviceName( properties.deviceName );
 
         switch( properties.vendorID )
