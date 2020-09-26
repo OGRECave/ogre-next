@@ -598,7 +598,7 @@ namespace Ogre
         {
 #ifdef OGRE_VK_WORKAROUND_ADRENO_D32_FLOAT
             Workarounds::mAdrenoD32FloatBug = false;
-            if( !rsc->getDriverVersion().hasMinVersion( 512, 440 ) )
+            if( !rsc->getDriverVersion().hasMinVersion( 512, 415 ) )
                 Workarounds::mAdrenoD32FloatBug = true;
 #endif
 #ifdef OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS

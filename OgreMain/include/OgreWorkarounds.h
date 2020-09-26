@@ -77,6 +77,7 @@ namespace Ogre
 // Adreno 505, 506 and many others get glitchy shadows when using D32_FLOAT.
 //
 // Qualcomm claims to have patched this bug at version 512.440
+// Bug appears to be fixed at version 512.415
 //
 // First seen: Since the very first driver version
 // Last seen: 2020-09-08

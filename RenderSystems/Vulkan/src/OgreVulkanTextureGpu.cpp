@@ -710,9 +710,10 @@ namespace Ogre
             pixelFormat = mPixelFormat;
             if( forUav )
                 pixelFormat = PixelFormatGpuUtils::getEquivalentLinear( pixelFormat );
-
-            pixelFormat = getWorkaroundedPixelFormat( pixelFormat );
         }
+
+        pixelFormat = getWorkaroundedPixelFormat( pixelFormat );
+
         VkImageViewType texType = this->getInternalVulkanTextureViewType();
 
         if( ( cubemapsAs2DArrays || forUav || numSlices == 1u ) &&
