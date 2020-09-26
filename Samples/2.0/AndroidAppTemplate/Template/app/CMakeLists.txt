@@ -20,7 +20,7 @@ include_directories( ${OGRE_SOURCE}/Components/Hlms/Common/include )
 include_directories( ${OGRE_SOURCE}/Components/Hlms/Pbs/include )
 include_directories( ${OGRE_SOURCE}/Components/Hlms/Unlit/include )
 include_directories( ${OGRE_BINARIES}/include )
-include_directories( ${OGRE_SOURCE}/AndroidDependencies/include )
+include_directories( ${OGRE_SOURCE}/DependenciesAndroid/include )
 include_directories( ${OGRE_SOURCE}/Samples/2.0/Common/include )
 
 # build vulkan app
@@ -55,10 +55,10 @@ set( OGRE_LIBS
 	debug ${OGRE_BINARIES}/lib/libRenderSystem_VulkanStatic_d.a
 	debug ${OGRE_BINARIES}/lib/libOgreMainStatic_d.a
 
-	${OGRE_SOURCE}/AndroidDependencies/lib/libshaderc_combined.a
-	${OGRE_SOURCE}/AndroidDependencies/lib/libFreeImage.a
-	${OGRE_SOURCE}/AndroidDependencies/lib/libfreetype.a
-	${OGRE_SOURCE}/AndroidDependencies/lib/libzlib.a
-	${OGRE_SOURCE}/AndroidDependencies/lib/libzziplib.a )
+	${OGRE_SOURCE}/DependenciesAndroid/lib/libshaderc_combined.a
+	${OGRE_SOURCE}/DependenciesAndroid/lib/libFreeImage.a
+	${OGRE_SOURCE}/DependenciesAndroid/lib/libfreetype.a
+	${OGRE_SOURCE}/DependenciesAndroid/lib/libzlib.a
+	${OGRE_SOURCE}/DependenciesAndroid/lib/libzziplib.a )
 
 target_link_libraries( %%sampleName%% app-glue log android vulkan ${OGRE_LIBS} cpufeatures )
