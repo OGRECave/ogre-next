@@ -147,6 +147,9 @@ namespace Ogre
         /// Tests whether the given point contained by this box.
         inline bool contains( const Vector3 &v ) const;
 
+        /// Returns the square of the minimum distance between a given point and any part of the box.
+        inline Real squaredDistance( const Vector3 &v ) const;
+
         /// Returns the minimum distance between a given point and any part of the box.
         inline Real distance( const Vector3 &v ) const;
 
