@@ -155,7 +155,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline Real Aabb::distance( const Vector3 &v ) const
     {
-        return return std::sqrt( squaredDistance( v ) );
+        return std::sqrt( squaredDistance( v ) );
     }
     //-----------------------------------------------------------------------------------
     inline void Aabb::transformAffine( const Matrix4 &m )
