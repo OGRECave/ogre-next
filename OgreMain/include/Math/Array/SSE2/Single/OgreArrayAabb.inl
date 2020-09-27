@@ -129,23 +129,31 @@ namespace Ogre
         return _mm_and_ps( _mm_and_ps( maskX, maskY ), maskZ );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal ArrayAabb::distance( const ArrayVector3 &v ) const
+    inline ArrayReal ArrayAabb::squaredDistance( const ArrayVector3 &v ) const
     {
         ArrayVector3 dist( mCenter - v );
 
-        // x = abs( dist.x ) - halfSize.x
-        // y = abs( dist.y ) - halfSize.y
-        // z = abs( dist.z ) - halfSize.z
-        // return max( min( x, y, z ), 0 ); //Return minimum between xyz, clamp to zero
-        dist.mChunkBase[0] = _mm_sub_ps( MathlibSSE2::Abs4( dist.mChunkBase[0] ),
-                                                mHalfSize.mChunkBase[0] );
-        dist.mChunkBase[1] = _mm_sub_ps( MathlibSSE2::Abs4( dist.mChunkBase[1] ),
-                                                mHalfSize.mChunkBase[1] );
-        dist.mChunkBase[2] = _mm_sub_ps( MathlibSSE2::Abs4( dist.mChunkBase[2] ),
-                                                mHalfSize.mChunkBase[2] );
+        // x = max( abs( dist.x ) - halfSize.x, 0 )
+        // y = max( abs( dist.y ) - halfSize.y, 0 )
+        // z = max( abs( dist.z ) - halfSize.z, 0 )
+        // return squaredLength( x, y, z );
+        dist.mChunkBase[0] =
+            _mm_sub_ps( MathlibSSE2::Abs4( dist.mChunkBase[0] ), mHalfSize.mChunkBase[0] );
+        dist.mChunkBase[1] =
+            _mm_sub_ps( MathlibSSE2::Abs4( dist.mChunkBase[1] ), mHalfSize.mChunkBase[1] );
+        dist.mChunkBase[2] =
+            _mm_sub_ps( MathlibSSE2::Abs4( dist.mChunkBase[2] ), mHalfSize.mChunkBase[2] );
 
-        return _mm_max_ps( _mm_min_ps( _mm_min_ps( dist.mChunkBase[0],
-                    dist.mChunkBase[1] ), dist.mChunkBase[2] ), _mm_setzero_ps() );
+        dist.mChunkBase[0] = _mm_max_ps( dist.mChunkBase[0], _mm_setzero_ps() );
+        dist.mChunkBase[1] = _mm_max_ps( dist.mChunkBase[1], _mm_setzero_ps() );
+        dist.mChunkBase[2] = _mm_max_ps( dist.mChunkBase[2], _mm_setzero_ps() );
+
+        return dist.squaredLength();
+    }
+    //-----------------------------------------------------------------------------------
+    inline ArrayReal ArrayAabb::distance( const ArrayVector3 &v ) const
+    {
+        return _mm_sqrt_ps( squaredDistance( v ) );
     }
     //-----------------------------------------------------------------------------------
     inline void ArrayAabb::transformAffine( const ArrayMatrix4 &m )
