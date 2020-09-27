@@ -1028,14 +1028,21 @@ namespace Ogre
             return;
 
         const size_t windowsSemaphStart = mGpuSignalSemaphForCurrCmdBuff.size();
-        const size_t numWindowsPendingSwap =
-            submissionType >= SubmissionType::EndFrameAndSwap ? mWindowsPendingSwap.size() : 0u;
-        mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff, numWindowsPendingSwap );
+        size_t numWindowsPendingSwap = 0u;
 
-        if( submissionType >= SubmissionType::EndFrameAndSwap )
+        if( submissionType >= SubmissionType::NewFrameIdx )
         {
+            if( submissionType >= SubmissionType::EndFrameAndSwap )
+            {
+                numWindowsPendingSwap = mWindowsPendingSwap.size();
+                mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff,
+                                                      numWindowsPendingSwap );
+            }
+
             if( !mGpuWaitSemaphForCurrCmdBuff.empty() )
             {
+                // We need to wait on these semaphores so that rendering can
+                // only happen start the swapchain is done presenting
                 submitInfo.waitSemaphoreCount =
                     static_cast<uint32>( mGpuWaitSemaphForCurrCmdBuff.size() );
                 submitInfo.pWaitSemaphores = mGpuWaitSemaphForCurrCmdBuff.begin();
@@ -1043,6 +1050,8 @@ namespace Ogre
             }
             if( !mGpuSignalSemaphForCurrCmdBuff.empty() )
             {
+                // We need to signal these semaphores so that presentation
+                // can only happen after we're done rendering
                 submitInfo.signalSemaphoreCount =
                     static_cast<uint32>( mGpuSignalSemaphForCurrCmdBuff.size() );
                 submitInfo.pSignalSemaphores = mGpuSignalSemaphForCurrCmdBuff.begin();
