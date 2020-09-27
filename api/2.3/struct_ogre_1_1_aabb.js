@@ -18,6 +18,7 @@ var struct_ogre_1_1_aabb =
     [ "operator!=", "struct_ogre_1_1_aabb.html#ac91202f6c60154c9ab1b256e36744e14", null ],
     [ "operator==", "struct_ogre_1_1_aabb.html#add6eee6db76e4b675b86bf7b400ea3b8", null ],
     [ "setExtents", "struct_ogre_1_1_aabb.html#a2edd81eb2b940cfeb77b40944e6c5cac", null ],
+    [ "squaredDistance", "struct_ogre_1_1_aabb.html#a8dfc57c664e7af234a9120aca0441c80", null ],
     [ "transformAffine", "struct_ogre_1_1_aabb.html#a8f2ee877e852be3190d2f128a15692a8", null ],
     [ "volume", "struct_ogre_1_1_aabb.html#aed3b2e401da56801dc765ab96871ac80", null ],
     [ "BOX_INFINITE", "struct_ogre_1_1_aabb.html#a2d27270f431266498739d6d875a77517", null ],

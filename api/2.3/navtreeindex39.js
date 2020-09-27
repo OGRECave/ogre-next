@@ -1,5 +1,8 @@
 var NAVTREEINDEX39 =
 {
+"class_ogre_1_1_compositor_pass_scene_def.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,1,19,9],
+"class_ogre_1_1_compositor_pass_scene_def.html#a5b72f1a56bcbd829fc60fa21afde5927":[5,2,1,19,25],
+"class_ogre_1_1_compositor_pass_scene_def.html#a66b4bf89d3f8b9ab611bd03802c062dd":[5,2,1,19,1],
 "class_ogre_1_1_compositor_pass_scene_def.html#a6e881a7f92659dabfe52eefec2ccf603":[5,2,1,19,50],
 "class_ogre_1_1_compositor_pass_scene_def.html#a70ba2384e061021d6eceb5dd20b66d47":[5,2,1,19,49],
 "class_ogre_1_1_compositor_pass_scene_def.html#a7446207e62dfceb532bd3dc3cf78039b":[5,2,1,19,45],
@@ -246,8 +249,5 @@ var NAVTREEINDEX39 =
 "class_ogre_1_1_compositor_shadow_map_repeat_translator.html":[5,2,2,17],
 "class_ogre_1_1_compositor_shadow_map_repeat_translator.html#a04ea23d362269f19a37496edb045635f":[5,2,2,17,1],
 "class_ogre_1_1_compositor_shadow_map_repeat_translator.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,17,4],
-"class_ogre_1_1_compositor_shadow_map_repeat_translator.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,2,17,8],
-"class_ogre_1_1_compositor_shadow_map_repeat_translator.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,2,17,11],
-"class_ogre_1_1_compositor_shadow_map_repeat_translator.html#a581cf2b8e894934a11baa6595c4c7c70":[5,2,2,17,0],
-"class_ogre_1_1_compositor_shadow_map_repeat_translator.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,2,17,6]
+"class_ogre_1_1_compositor_shadow_map_repeat_translator.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,2,17,8]
 };

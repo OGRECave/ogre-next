@@ -36,5 +36,5 @@ var searchData=
   ['trianglefacenormallist_31508',['TriangleFaceNormalList',['../class_ogre_1_1v1_1_1_edge_data.html#a9cab4a6f07b3e3ae5042bdaedf9b5c58',1,'Ogre::v1::EdgeData']]],
   ['trianglelightfacinglist_31509',['TriangleLightFacingList',['../class_ogre_1_1v1_1_1_edge_data.html#a2b1d687ea4871ee5ad09891a6173e321',1,'Ogre::v1::EdgeData']]],
   ['trianglelist_31510',['TriangleList',['../struct_ogre_1_1_lod_data.html#a5348da65897ff8c17af1ada6f3d1be3f',1,'Ogre::LodData::TriangleList()'],['../class_ogre_1_1v1_1_1_edge_data.html#a45723039bb49600179299233d4306224',1,'Ogre::v1::EdgeData::TriangleList()']]],
-  ['type_31511',['Type',['../class_ogre_1_1_com_ptr.html#acea4812003c2493f333bd710a077a32a',1,'Ogre::ComPtr::Type()'],['../class_ogre_1_1iterator__range.html#a3f5e91d206f12b980bc27eb0c0c8c4e5',1,'Ogre::iterator_range::type()']]]
+  ['type_31511',['type',['../class_ogre_1_1iterator__range.html#a3f5e91d206f12b980bc27eb0c0c8c4e5',1,'Ogre::iterator_range::type()'],['../class_ogre_1_1_com_ptr.html#acea4812003c2493f333bd710a077a32a',1,'Ogre::ComPtr::Type()']]]
 ];

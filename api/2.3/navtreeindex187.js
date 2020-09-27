@@ -1,5 +1,8 @@
 var NAVTREEINDEX187 =
 {
+"class_ogre_1_1_sub_mesh.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,11,123,37],
+"class_ogre_1_1_sub_string_ref.html":[5,2,11,124],
+"class_ogre_1_1_sub_string_ref.html#a05957958d248c51b1383702cc805ee19":[5,2,11,124,13],
 "class_ogre_1_1_sub_string_ref.html#a090016348a3edb9d6ea9f81889c21682":[5,2,11,124,11],
 "class_ogre_1_1_sub_string_ref.html#a1bd8577576c33506d834e6499040ef0b":[5,2,11,124,6],
 "class_ogre_1_1_sub_string_ref.html#a2bc9805e1de02777c44b06146ad54790":[5,2,11,124,15],
@@ -246,8 +249,5 @@ var NAVTREEINDEX187 =
 "class_ogre_1_1_technique_translator.html#a4e4ffefd0dce65a646d3bcf010a175ea":[5,2,2,122,0],
 "class_ogre_1_1_technique_translator.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,2,122,5],
 "class_ogre_1_1_technique_translator.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,2,122,1],
-"class_ogre_1_1_technique_translator.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,2,122,4],
-"class_ogre_1_1_technique_translator.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,2,122,8],
-"class_ogre_1_1_technique_translator.html#ab82088132e2cae19532f0381b5b076c0":[5,2,2,122,11],
-"class_ogre_1_1_technique_translator.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,2,122,6]
+"class_ogre_1_1_technique_translator.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,2,122,4]
 };
