@@ -38,31 +38,42 @@ THE SOFTWARE.
 #    endif
 #endif
 
+#if defined( __LP64__ ) || defined( _WIN64 ) || ( defined( __x86_64__ ) && !defined( __ILP32__ ) ) || \
+    defined( _M_X64 ) || defined( __ia64 ) || defined( _M_IA64 ) || defined( __aarch64__ ) || \
+    defined( __powerpc64__ )
+#    define OGRE_VK_NON_DISPATCHABLE_HANDLE( object ) typedef struct object##_T *object;
+#else
+#    define OGRE_VK_NON_DISPATCHABLE_HANDLE( object ) typedef uint64_t object;
+#endif
+
 typedef struct VkInstance_T *VkInstance;
 typedef struct VkPhysicalDevice_T *VkPhysicalDevice;
 typedef struct VkDevice_T *VkDevice;
-typedef struct VkDeviceMemory_T *VkDeviceMemory;
-typedef struct VkBuffer_T *VkBuffer;
-typedef struct VkBufferView_T *VkBufferView;
-
-typedef struct VkSurfaceKHR_T *VkSurfaceKHR;
-typedef struct VkSwapchainKHR_T *VkSwapchainKHR;
-typedef struct VkImage_T *VkImage;
-typedef struct VkSemaphore_T *VkSemaphore;
-typedef struct VkFence_T *VkFence;
-
-typedef struct VkRenderPass_T *VkRenderPass;
-typedef struct VkFramebuffer_T *VkFramebuffer;
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkDeviceMemory )
 typedef struct VkCommandBuffer_T *VkCommandBuffer;
 
-typedef struct VkShaderModule_T *VkShaderModule;
-typedef struct VkDescriptorSetLayout_T *VkDescriptorSetLayout;
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkBuffer )
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkBufferView )
 
-typedef struct VkDescriptorPool_T *VkDescriptorPool;
-typedef struct VkDescriptorSet_T *VkDescriptorSet;
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkSurfaceKHR )
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkSwapchainKHR )
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkImage )
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkSemaphore )
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkFence )
 
-typedef struct VkPipelineLayout_T *VkPipelineLayout;
-typedef struct VkPipeline_T *VkPipeline;
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkRenderPass )
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkFramebuffer )
+
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkShaderModule )
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkDescriptorSetLayout )
+
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkDescriptorPool )
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkDescriptorSet )
+
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkPipelineLayout )
+OGRE_VK_NON_DISPATCHABLE_HANDLE( VkPipeline )
+
+#undef OGRE_VK_NON_DISPATCHABLE_HANDLE
 
 struct VkPipelineShaderStageCreateInfo;
 
