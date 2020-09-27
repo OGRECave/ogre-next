@@ -465,7 +465,7 @@ namespace Ogre
     inline void ArrayQuaternion::Cmov4( ArrayMaskR mask, const ArrayQuaternion &replacement )
     {
         ArrayReal * RESTRICT_ALIAS aChunkBase = &w;
-        const ArrayReal * RESTRICT_ALIAS bChunkBase = &w;
+        const ArrayReal * RESTRICT_ALIAS bChunkBase = &replacement.w;
         aChunkBase[0] = MathlibC::Cmov4( aChunkBase[0], bChunkBase[0], mask );
         aChunkBase[1] = MathlibC::Cmov4( aChunkBase[1], bChunkBase[1], mask );
         aChunkBase[2] = MathlibC::Cmov4( aChunkBase[2], bChunkBase[2], mask );
