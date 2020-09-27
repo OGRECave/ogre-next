@@ -142,20 +142,20 @@ namespace Ogre
                 ( Math::Abs( dist.z ) <= mHalfSize.z );
     }
     //-----------------------------------------------------------------------------------
-    inline Real Aabb::distance( const Vector3 &v ) const
+    inline Real Aabb::squaredDistance( const Vector3 &v ) const
     {
         Vector3 dist( mCenter - v );
 
-        // x = abs( dist.x ) - halfSize.x
-        // y = abs( dist.y ) - halfSize.y
-        // z = abs( dist.z ) - halfSize.z
-        // return max( min( x, y, z ), 0 ); //Return minimum between xyz, clamp to zero
+        dist.x = std::max( Math::Abs( dist.x ) - mHalfSize.x, Real( 0.0 ) );
+        dist.y = std::max( Math::Abs( dist.y ) - mHalfSize.y, Real( 0.0 ) );
+        dist.z = std::max( Math::Abs( dist.z ) - mHalfSize.z, Real( 0.0 ) );
 
-        dist.x = Math::Abs( dist.x ) - mHalfSize.x;
-        dist.y = Math::Abs( dist.y ) - mHalfSize.y;
-        dist.z = Math::Abs( dist.z ) - mHalfSize.z;
-
-        return std::max( std::min( std::min( dist.x, dist.y ), dist.z ), Real(1.0) );
+        return dist.squaredLength();
+    }
+    //-----------------------------------------------------------------------------------
+    inline Real Aabb::distance( const Vector3 &v ) const
+    {
+        return return std::sqrt( squaredDistance( v ) );
     }
     //-----------------------------------------------------------------------------------
     inline void Aabb::transformAffine( const Matrix4 &m )

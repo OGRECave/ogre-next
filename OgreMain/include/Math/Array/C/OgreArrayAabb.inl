@@ -120,20 +120,27 @@ namespace Ogre
         return maskX & maskY & maskZ;
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal ArrayAabb::distance( const ArrayVector3 &v ) const
+    inline ArrayReal ArrayAabb::squaredDistance( const ArrayVector3 &v ) const
     {
         ArrayVector3 distance( mCenter - v );
 
-        // x = abs( distance.x ) - halfSize.x
-        // y = abs( distance.y ) - halfSize.y
-        // z = abs( distance.z ) - halfSize.z
-        // return max( min( x, y, z ), 0 ); //Return minimum between xyz, clamp to zero
-        distance.mChunkBase[0] = Math::Abs( distance.mChunkBase[0] ) - mHalfSize.mChunkBase[0];
-        distance.mChunkBase[1] = Math::Abs( distance.mChunkBase[1] ) - mHalfSize.mChunkBase[1];
-        distance.mChunkBase[2] = Math::Abs( distance.mChunkBase[2] ) - mHalfSize.mChunkBase[2];
+        distance.mChunkBase[0] =
+            std::max( Math::Abs( distance.mChunkBase[0] ) - mHalfSize.mChunkBase[0], Real( 0.0 ) );
+        distance.mChunkBase[1] =
+            std::max( Math::Abs( distance.mChunkBase[1] ) - mHalfSize.mChunkBase[1], Real( 0.0 ) );
+        distance.mChunkBase[2] =
+            std::max( Math::Abs( distance.mChunkBase[2] ) - mHalfSize.mChunkBase[2], Real( 0.0 ) );
 
-        return std::max( std::min( std::min(
-                distance.mChunkBase[0], distance.mChunkBase[1] ), distance.mChunkBase[2] ), Real(0.0) );
+        dist.x = std::max( Math::Abs( dist.x ) - mHalfSize.x, Real( 0.0 ) );
+        dist.y = std::max( Math::Abs( dist.y ) - mHalfSize.y, Real( 0.0 ) );
+        dist.z = std::max( Math::Abs( dist.z ) - mHalfSize.z, Real( 0.0 ) );
+
+        return distance.squaredLength();
+    }
+    //-----------------------------------------------------------------------------------
+    inline ArrayReal ArrayAabb::distance( const ArrayVector3 &v ) const
+    {
+        return return std::sqrt( squaredDistance( v ) );
     }
     //-----------------------------------------------------------------------------------
     inline void ArrayAabb::transformAffine( const ArrayMatrix4 &m )

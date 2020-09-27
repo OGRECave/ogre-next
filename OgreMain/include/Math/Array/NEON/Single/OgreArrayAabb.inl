@@ -129,23 +129,31 @@ namespace Ogre
         return vandq_u32( vandq_u32( maskX, maskY ), maskZ );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal ArrayAabb::distance( const ArrayVector3 &v ) const
+    inline ArrayReal ArrayAabb::squaredDistance( const ArrayVector3 &v ) const
     {
         ArrayVector3 dist( mCenter - v );
 
-        // x = abs( dist.x ) - halfSize.x
-        // y = abs( dist.y ) - halfSize.y
-        // z = abs( dist.z ) - halfSize.z
-        // return max( min( x, y, z ), 0 ); //Return minimum between xyz, clamp to zero
-        dist.mChunkBase[0] = vsubq_f32( MathlibNEON::Abs4( dist.mChunkBase[0] ),
-                                                mHalfSize.mChunkBase[0] );
-        dist.mChunkBase[1] = vsubq_f32( MathlibNEON::Abs4( dist.mChunkBase[1] ),
-                                                mHalfSize.mChunkBase[1] );
-        dist.mChunkBase[2] = vsubq_f32( MathlibNEON::Abs4( dist.mChunkBase[2] ),
-                                                mHalfSize.mChunkBase[2] );
+        // x = max( abs( dist.x ) - halfSize.x, 0 )
+        // y = max( abs( dist.y ) - halfSize.y, 0 )
+        // z = max( abs( dist.z ) - halfSize.z, 0 )
+        // return squaredLength( x, y, z );
+        dist.mChunkBase[0] =
+            vsubq_f32( MathlibNEON::Abs4( dist.mChunkBase[0] ), mHalfSize.mChunkBase[0] );
+        dist.mChunkBase[1] =
+            vsubq_f32( MathlibNEON::Abs4( dist.mChunkBase[1] ), mHalfSize.mChunkBase[1] );
+        dist.mChunkBase[2] =
+            vsubq_f32( MathlibNEON::Abs4( dist.mChunkBase[2] ), mHalfSize.mChunkBase[2] );
 
-        return vmaxq_f32( vminq_f32( vminq_f32( dist.mChunkBase[0],
-                    dist.mChunkBase[1] ), dist.mChunkBase[2] ), vdupq_n_f32(0.0f) );
+        dist.mChunkBase[0] = vmaxq_f32( dist.mChunkBase[0], vdupq_n_f32( 0.0f ) );
+        dist.mChunkBase[1] = vmaxq_f32( dist.mChunkBase[1], vdupq_n_f32( 0.0f ) );
+        dist.mChunkBase[2] = vmaxq_f32( dist.mChunkBase[2], vdupq_n_f32( 0.0f ) );
+
+        return dist.squaredLength();
+    }
+    //-----------------------------------------------------------------------------------
+    inline ArrayReal ArrayAabb::distance( const ArrayVector3 &v ) const
+    {
+        return MathlibNEON::Sqrt( squaredDistance( v ) );
     }
     //-----------------------------------------------------------------------------------
     inline void ArrayAabb::transformAffine( const ArrayMatrix4 &m )
