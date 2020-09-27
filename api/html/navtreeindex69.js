@@ -1,5 +1,8 @@
 var NAVTREEINDEX69 =
 {
+"class_ogre_1_1_e_g_l_window.html#a0d3f944eab02d9dccb9e937e7f534e10":[7,0,0,314,26],
+"class_ogre_1_1_e_g_l_window.html#a15f59cd1b4a2b2e65fcee349d78ae490":[7,0,0,314,1],
+"class_ogre_1_1_e_g_l_window.html#a15f59cd1b4a2b2e65fcee349d78ae490a18416c60c9b82d928db766bef672ecea":[7,0,0,314,1,6],
 "class_ogre_1_1_e_g_l_window.html#a15f59cd1b4a2b2e65fcee349d78ae490a19ef0adeaa177d49fc4ca4c9b87adec1":[7,0,0,314,1,5],
 "class_ogre_1_1_e_g_l_window.html#a15f59cd1b4a2b2e65fcee349d78ae490a1f0cd329c7ff6d5d81b2162c65d04afa":[7,0,0,314,1,1],
 "class_ogre_1_1_e_g_l_window.html#a15f59cd1b4a2b2e65fcee349d78ae490a5ee29312d754f2244987dc0d1f5894e8":[7,0,0,314,1,2],
@@ -246,8 +249,5 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_ellipsoid_emitter.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,315,53],
 "class_ogre_1_1_ellipsoid_emitter.html#ac6faac35cb62e861b8b0803e04ceed13":[7,0,0,315,43],
 "class_ogre_1_1_ellipsoid_emitter.html#ac9741b2623435c312819c9d3903c915e":[7,0,0,315,105],
-"class_ogre_1_1_ellipsoid_emitter.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,315,49],
-"class_ogre_1_1_ellipsoid_emitter.html#acb690da52c45571e198e39857b6a6d89":[7,0,0,315,70],
-"class_ogre_1_1_ellipsoid_emitter.html#ace884b65b722ead9b920b9abf27bf815":[7,0,0,315,84],
-"class_ogre_1_1_ellipsoid_emitter.html#acf92ea5d6c849eafdebeb499b32b3a16":[7,0,0,315,1]
+"class_ogre_1_1_ellipsoid_emitter.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,315,49]
 };
