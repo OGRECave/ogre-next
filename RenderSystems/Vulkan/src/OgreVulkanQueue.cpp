@@ -1028,7 +1028,8 @@ namespace Ogre
             return;
 
         const size_t windowsSemaphStart = mGpuSignalSemaphForCurrCmdBuff.size();
-        const size_t numWindowsPendingSwap = mWindowsPendingSwap.size();
+        const size_t numWindowsPendingSwap =
+            submissionType >= SubmissionType::EndFrameAndSwap ? mWindowsPendingSwap.size() : 0u;
         mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff, numWindowsPendingSwap );
 
         if( submissionType >= SubmissionType::EndFrameAndSwap )
