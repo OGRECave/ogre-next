@@ -1,7 +1,7 @@
 var searchData=
 [
   ['samplemask_28220',['sampleMask',['../struct_ogre_1_1_hlms_pso.html#ac604b5d0efc71adb1c8b9d50e7c9c3d5',1,'Ogre::HlmsPso']]],
-  ['samplerblock_28221',['samplerBlock',['../struct_ogre_1_1_pbs_baked_texture.html#a916c63407a8d1f8deabc8eeda0e57787',1,'Ogre::PbsBakedTexture::samplerBlock()'],['../struct_ogre_1_1_unlit_baked_texture.html#a94c32d9915fea0bb1629b7ed5c19ab30',1,'Ogre::UnlitBakedTexture::samplerBlock()'],['../struct_ogre_1_1_cb_texture.html#a460c0bec2d7ba8669964ee6719b009a1',1,'Ogre::CbTexture::samplerBlock()'],['../struct_ogre_1_1_packed_texture.html#a1c919d60b8fb5864b270b3468b54f8b0',1,'Ogre::PackedTexture::samplerblock()']]],
+  ['samplerblock_28221',['samplerblock',['../struct_ogre_1_1_packed_texture.html#a1c919d60b8fb5864b270b3468b54f8b0',1,'Ogre::PackedTexture::samplerblock()'],['../struct_ogre_1_1_pbs_baked_texture.html#a916c63407a8d1f8deabc8eeda0e57787',1,'Ogre::PbsBakedTexture::samplerBlock()'],['../struct_ogre_1_1_unlit_baked_texture.html#a94c32d9915fea0bb1629b7ed5c19ab30',1,'Ogre::UnlitBakedTexture::samplerBlock()'],['../struct_ogre_1_1_cb_texture.html#a460c0bec2d7ba8669964ee6719b009a1',1,'Ogre::CbTexture::samplerBlock()']]],
   ['samplerblocks_28222',['samplerblocks',['../struct_ogre_1_1_hlms_json_1_1_named_blocks.html#a843b28445fdd9b3027a554fb44ef0eae',1,'Ogre::HlmsJson::NamedBlocks']]],
   ['samplers_28223',['samplers',['../struct_ogre_1_1_terrain_layer_declaration.html#a3beefe92183cb240f5810553909f7bde',1,'Ogre::TerrainLayerDeclaration']]],
   ['save_5funder_28224',['save_under',['../struct_x_set_window_attributes.html#adaa32df4d46b933e56ad7930613e2f7a',1,'XSetWindowAttributes']]],

@@ -302,7 +302,7 @@ var searchData=
   ['transparencyshift_13648',['TransparencyShift',['../class_ogre_1_1_rq_bits.html#a42fe347234f535bbad71e9c07fc1ddc7',1,'Ogre::RqBits']]],
   ['transparent_13649',['Transparent',['../class_ogre_1_1_hlms_pbs_datablock.html#adf6c922e4527b98a3a98aa573b382cebab44e86e71d625be994fd999d1b5200c0',1,'Ogre::HlmsPbsDatablock']]],
   ['transparentmode_13650',['TransparentMode',['../struct_ogre_1_1_pbs_property.html#a15a4870d6b75366659420d9746bafe11',1,'Ogre::PbsProperty']]],
-  ['transpose_13651',['Transpose',['../class_ogre_1_1_matrix3.html#aec1cee52b2574f50b4e98ead1266308b',1,'Ogre::Matrix3::Transpose()'],['../class_ogre_1_1_matrix4.html#a8129ccfa5d07cdd8af4eb268edc1d42e',1,'Ogre::Matrix4::transpose()']]],
+  ['transpose_13651',['transpose',['../class_ogre_1_1_matrix4.html#a8129ccfa5d07cdd8af4eb268edc1d42e',1,'Ogre::Matrix4::transpose()'],['../class_ogre_1_1_matrix3.html#aec1cee52b2574f50b4e98ead1266308b',1,'Ogre::Matrix3::Transpose()']]],
   ['trect_13652',['TRect',['../struct_ogre_1_1_t_rect.html',1,'Ogre::TRect&lt; T &gt;'],['../struct_ogre_1_1_t_rect.html#a91f3cea3b1851f9b4b9004df78822678',1,'Ogre::TRect::TRect()'],['../struct_ogre_1_1_t_rect.html#a79e390fbd62e5a819207d6aee0789ab5',1,'Ogre::TRect::TRect(T const &amp;l, T const &amp;t, T const &amp;r, T const &amp;b)'],['../struct_ogre_1_1_t_rect.html#aaf94532ce0aaa722ff067be346fa15b1',1,'Ogre::TRect::TRect(TRect const &amp;o)']]],
   ['trect_3c_20float_20_3e_13653',['TRect&lt; float &gt;',['../struct_ogre_1_1_t_rect.html',1,'Ogre']]],
   ['trect_3c_20long_20_3e_13654',['TRect&lt; long &gt;',['../struct_ogre_1_1_t_rect.html',1,'Ogre']]],

@@ -1,5 +1,8 @@
 var NAVTREEINDEX134 =
 {
+"class_ogre_1_1_pixel_util.html#aa6a3f3c1e6b98b537ce6dfed949afa3c":[5,2,3,15,31],
+"class_ogre_1_1_pixel_util.html#ac4fcce8523b25011939624bfe2572314":[5,2,3,15,26],
+"class_ogre_1_1_pixel_util.html#aca8f1f4de7db504bd9a6c781cca28a42":[5,2,3,15,32],
 "class_ogre_1_1_pixel_util.html#acb83c9058ba34602be4e07e4d7ce1d2d":[5,2,3,15,33],
 "class_ogre_1_1_pixel_util.html#acbe531d3eabd46c52a860a16a3b779a3":[5,2,3,15,5],
 "class_ogre_1_1_pixel_util.html#ad27d6389824bcfe21185f6728af8974e":[5,2,3,15,4],
@@ -246,8 +249,5 @@ var NAVTREEINDEX134 =
 "class_ogre_1_1_point_emitter.html#a44700655800282c23c7f3f97debfacf7":[7,0,0,767,55],
 "class_ogre_1_1_point_emitter.html#a479b80b892108580d42ea63252abeb39":[7,0,0,767,3],
 "class_ogre_1_1_point_emitter.html#a4a7903addb8535a17cf0d79cb43ce7dd":[7,0,0,767,85],
-"class_ogre_1_1_point_emitter.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,767,54],
-"class_ogre_1_1_point_emitter.html#a4e0b837e02c70c0cfc880f83ce6b6739":[7,0,0,767,39],
-"class_ogre_1_1_point_emitter.html#a51159bb05720260843eb80fde34261fd":[7,0,0,767,19],
-"class_ogre_1_1_point_emitter.html#a58bee75a698865e094bd338ad260ff8a":[7,0,0,767,4]
+"class_ogre_1_1_point_emitter.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,767,54]
 };

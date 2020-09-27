@@ -1,5 +1,8 @@
 var NAVTREEINDEX152 =
 {
+"class_ogre_1_1_ring_emitter.html#a777c4c5c065aae3d07637819300b15b5":[7,0,0,831,29],
+"class_ogre_1_1_ring_emitter.html#a79a2560fdff854fce4e0daf7ebc91291":[7,0,0,831,86],
+"class_ogre_1_1_ring_emitter.html#a7c3c26866ccd70672c01debaa9e398bb":[7,0,0,831,34],
 "class_ogre_1_1_ring_emitter.html#a7c797e53bdbb8505739ef1923b022581":[7,0,0,831,43],
 "class_ogre_1_1_ring_emitter.html#a7e54feab62fa032b0190f3817d9e3d7f":[7,0,0,831,72],
 "class_ogre_1_1_ring_emitter.html#a7f442353f518bf6caae127dac6d0b6ee":[7,0,0,831,65],
@@ -246,8 +249,5 @@ var NAVTREEINDEX152 =
 "class_ogre_1_1_rotational_spline.html#a8ee6d15c86ed31e61e04360d36f1fbf9":[5,2,6,25,10],
 "class_ogre_1_1_rotational_spline.html#a92446820612daa332226ab9bf18d7f6a":[5,2,6,25,4],
 "class_ogre_1_1_rotational_spline.html#a94645c3887ad1b0872bcea3897fae613":[5,2,6,25,9],
-"class_ogre_1_1_rotational_spline.html#a9eec1f4d7ee25b15d435e8c49c69c92a":[5,2,6,25,8],
-"class_ogre_1_1_rotational_spline.html#ac8596d691089c7be12d2879dc5595cea":[5,2,6,25,0],
-"class_ogre_1_1_rotational_spline.html#ad52da70d8d76c5c6d2203197e14b3520":[5,2,6,25,3],
-"class_ogre_1_1_rotational_spline.html#ae7c15794bdabda0d02fb2ce52b3e1ea9":[5,2,6,25,1]
+"class_ogre_1_1_rotational_spline.html#a9eec1f4d7ee25b15d435e8c49c69c92a":[5,2,6,25,8]
 };

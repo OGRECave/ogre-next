@@ -1,5 +1,8 @@
 var NAVTREEINDEX47 =
 {
+"class_ogre_1_1_d3_d11_stereo_driver_impl.html#af4e084fa73f3a1b26becdb7f70e7a66b":[7,0,0,212,2],
+"class_ogre_1_1_d3_d11_stereo_driver_impl.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,212,12],
+"class_ogre_1_1_d3_d11_stereo_driver_n_v_i_d_i_a.html":[7,0,0,213],
 "class_ogre_1_1_d3_d11_stereo_driver_n_v_i_d_i_a.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,213,6],
 "class_ogre_1_1_d3_d11_stereo_driver_n_v_i_d_i_a.html#a22ed83ac8175af0ea3310b47fdee833d":[7,0,0,213,0],
 "class_ogre_1_1_d3_d11_stereo_driver_n_v_i_d_i_a.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,213,10],
@@ -246,8 +249,5 @@ var NAVTREEINDEX47 =
 "class_ogre_1_1_d3_d11_texture_manager.html#ad6d63fe7126510bf10fd337705cb0b29":[7,0,0,216,39],
 "class_ogre_1_1_d3_d11_texture_manager.html#ad9b4efbeacb17f07710c30bd5048e42f":[7,0,0,216,65],
 "class_ogre_1_1_d3_d11_texture_manager.html#ae26b6ecd722f3e24b52de8b4ac9bba0d":[7,0,0,216,54],
-"class_ogre_1_1_d3_d11_texture_manager.html#ae63717cade7ab9c72046cb079cca95e8":[7,0,0,216,4],
-"class_ogre_1_1_d3_d11_texture_manager.html#ae63b06c1fd6d1266b4c5dacc35e521b4":[7,0,0,216,10],
-"class_ogre_1_1_d3_d11_texture_manager.html#aeaa1410333b7bcea14b00c360112a528":[7,0,0,216,76],
-"class_ogre_1_1_d3_d11_texture_manager.html#af1a871ac005af0be0b8c1857a4f8eea9":[7,0,0,216,7]
+"class_ogre_1_1_d3_d11_texture_manager.html#ae63717cade7ab9c72046cb079cca95e8":[7,0,0,216,4]
 };

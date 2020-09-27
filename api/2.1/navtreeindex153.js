@@ -1,5 +1,8 @@
 var NAVTREEINDEX153 =
 {
+"class_ogre_1_1_rotational_spline.html#ac8596d691089c7be12d2879dc5595cea":[5,2,6,25,0],
+"class_ogre_1_1_rotational_spline.html#ad52da70d8d76c5c6d2203197e14b3520":[5,2,6,25,3],
+"class_ogre_1_1_rotational_spline.html#ae7c15794bdabda0d02fb2ce52b3e1ea9":[5,2,6,25,1],
 "class_ogre_1_1_rq_bits.html":[5,2,10,17],
 "class_ogre_1_1_rq_bits.html#a0b1b9cb575563d48f7b8b3afa79cdb71":[5,2,10,17,3],
 "class_ogre_1_1_rq_bits.html#a2a3cd4531243136474c5b6365fa907f6":[5,2,10,17,14],
@@ -246,8 +249,5 @@ var NAVTREEINDEX153 =
 "class_ogre_1_1_scale_affector.html#ae356913ccefbebc4f0119a0599a406fc":[7,0,0,839,24],
 "class_ogre_1_1_scale_affector.html#ae3e13925bde11db245f6c9bbf5031a93":[7,0,0,839,7],
 "class_ogre_1_1_scale_affector.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,839,20],
-"class_ogre_1_1_scale_affector_1_1_cmd_scale_adjust.html":[7,0,0,839,0],
-"class_ogre_1_1_scale_affector_1_1_cmd_scale_adjust.html#a5fb80f9d04d0f85af157a492804f4a17":[7,0,0,839,0,0],
-"class_ogre_1_1_scale_affector_1_1_cmd_scale_adjust.html#a638e5d3003f2cba547bb4b8320eb9f4f":[7,0,0,839,0,1],
-"class_ogre_1_1_scale_affector_factory.html":[7,0,0,840]
+"class_ogre_1_1_scale_affector_1_1_cmd_scale_adjust.html":[7,0,0,839,0]
 };
