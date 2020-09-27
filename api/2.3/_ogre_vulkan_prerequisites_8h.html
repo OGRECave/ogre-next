@@ -116,6 +116,8 @@ Macros</h2></td></tr>
 <tr class="separator:a53230793c393c7f171198d02e427dd4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6787338cb3eaf24539f5c018ee2e4cec"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6787338cb3eaf24539f5c018ee2e4cec">OGRE_VK_EXCEPT</a>(code,  num,  desc,  src)&#160;&#160;&#160;    <a class="el" href="group___general.html#gaf27f0d64dfeb225d37a513c253eaa1a0">OGRE_EXCEPT</a>( code, desc + ( &quot;\nVkResult = &quot; + vkResultToString( num ) ), src )</td></tr>
 <tr class="separator:a6787338cb3eaf24539f5c018ee2e4cec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1163bdf5ce5186a3112f47162c545d36"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a1163bdf5ce5186a3112f47162c545d36">OGRE_VK_NON_DISPATCHABLE_HANDLE</a>(object)&#160;&#160;&#160;typedef uint64_t object;</td></tr>
+<tr class="separator:a1163bdf5ce5186a3112f47162c545d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3273850ef80f78f8eab994199554198e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a3273850ef80f78f8eab994199554198e">OGRE_VULKAN_CONST_SLOT_START</a>&#160;&#160;&#160;16u</td></tr>
 <tr class="separator:a3273850ef80f78f8eab994199554198e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fcbc1c9c91cf506ad1f698314b9347a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a9fcbc1c9c91cf506ad1f698314b9347a">OGRE_VULKAN_CS_CONST_SLOT_START</a>&#160;&#160;&#160;0u</td></tr>
@@ -135,50 +137,18 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:af393c10d516ce887f09c216b40158722"><td class="memItemLeft" align="right" valign="top">typedef struct VkBuffer_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#af393c10d516ce887f09c216b40158722">VkBuffer</a></td></tr>
-<tr class="separator:af393c10d516ce887f09c216b40158722"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c7f8c1ee6e910d00955812060e27fbb"><td class="memItemLeft" align="right" valign="top">typedef struct VkBufferView_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a2c7f8c1ee6e910d00955812060e27fbb">VkBufferView</a></td></tr>
-<tr class="separator:a2c7f8c1ee6e910d00955812060e27fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac45cc67c448b7eb97bc0ddc9d4ce2422"><td class="memItemLeft" align="right" valign="top">typedef struct VkCommandBuffer_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac45cc67c448b7eb97bc0ddc9d4ce2422">VkCommandBuffer</a></td></tr>
 <tr class="separator:ac45cc67c448b7eb97bc0ddc9d4ce2422"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5b06a9b76a6229a61b6529c12f44289"><td class="memItemLeft" align="right" valign="top">typedef struct VkDescriptorPool_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac5b06a9b76a6229a61b6529c12f44289">VkDescriptorPool</a></td></tr>
-<tr class="separator:ac5b06a9b76a6229a61b6529c12f44289"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa16ea4d9843adebe051620c411f33a79"><td class="memItemLeft" align="right" valign="top">typedef struct VkDescriptorSet_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#aa16ea4d9843adebe051620c411f33a79">VkDescriptorSet</a></td></tr>
-<tr class="separator:aa16ea4d9843adebe051620c411f33a79"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad323a4c2d574a3d1d6fead58bb834d94"><td class="memItemLeft" align="right" valign="top">typedef struct VkDescriptorSetLayout_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#ad323a4c2d574a3d1d6fead58bb834d94">VkDescriptorSetLayout</a></td></tr>
-<tr class="separator:ad323a4c2d574a3d1d6fead58bb834d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e9c08f343cc1f9bd6f7d4a3ddbc3442"><td class="memItemLeft" align="right" valign="top">typedef struct VkDevice_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a></td></tr>
 <tr class="separator:a6e9c08f343cc1f9bd6f7d4a3ddbc3442"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefd00941b5df60d56fd51ac72748ddf0"><td class="memItemLeft" align="right" valign="top">typedef struct VkDeviceMemory_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#aefd00941b5df60d56fd51ac72748ddf0">VkDeviceMemory</a></td></tr>
-<tr class="separator:aefd00941b5df60d56fd51ac72748ddf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb819187cde54914d4b4b1eeac1e97e0"><td class="memItemLeft" align="right" valign="top">typedef struct VkFence_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#acb819187cde54914d4b4b1eeac1e97e0">VkFence</a></td></tr>
-<tr class="separator:acb819187cde54914d4b4b1eeac1e97e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a751d388a0b231360abe5cb03585f762e"><td class="memItemLeft" align="right" valign="top">typedef FastArray&lt; <a class="el" href="_ogre_vulkan_prerequisites_8h.html#acb819187cde54914d4b4b1eeac1e97e0">VkFence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a751d388a0b231360abe5cb03585f762e">Ogre::VkFenceArray</a></td></tr>
+<tr class="memitem:a751d388a0b231360abe5cb03585f762e"><td class="memItemLeft" align="right" valign="top">typedef FastArray&lt; VkFence &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a751d388a0b231360abe5cb03585f762e">Ogre::VkFenceArray</a></td></tr>
 <tr class="separator:a751d388a0b231360abe5cb03585f762e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c9c07920a78c694d823071ad3d9e2ef"><td class="memItemLeft" align="right" valign="top">typedef struct VkFramebuffer_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6c9c07920a78c694d823071ad3d9e2ef">VkFramebuffer</a></td></tr>
-<tr class="separator:a6c9c07920a78c694d823071ad3d9e2ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb1c5352ec54d543b18308684cbd65f2"><td class="memItemLeft" align="right" valign="top">typedef struct VkImage_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#afb1c5352ec54d543b18308684cbd65f2">VkImage</a></td></tr>
-<tr class="separator:afb1c5352ec54d543b18308684cbd65f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d9f7e27148712f2c97db45ca6991547"><td class="memItemLeft" align="right" valign="top">typedef struct VkInstance_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6d9f7e27148712f2c97db45ca6991547">VkInstance</a></td></tr>
 <tr class="separator:a6d9f7e27148712f2c97db45ca6991547"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3586f545aff0ff062d7a58ac83b90ecf"><td class="memItemLeft" align="right" valign="top">typedef struct VkPhysicalDevice_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a3586f545aff0ff062d7a58ac83b90ecf">VkPhysicalDevice</a></td></tr>
 <tr class="separator:a3586f545aff0ff062d7a58ac83b90ecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63776adb35d99d809236322e1f829d61"><td class="memItemLeft" align="right" valign="top">typedef struct VkPipeline_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a63776adb35d99d809236322e1f829d61">VkPipeline</a></td></tr>
-<tr class="separator:a63776adb35d99d809236322e1f829d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa41b9ae17f71ed61e362bdd1ba7071f6"><td class="memItemLeft" align="right" valign="top">typedef struct VkPipelineLayout_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#aa41b9ae17f71ed61e362bdd1ba7071f6">VkPipelineLayout</a></td></tr>
-<tr class="separator:aa41b9ae17f71ed61e362bdd1ba7071f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fee46c6260200f7184a2de6442f92db"><td class="memItemLeft" align="right" valign="top">typedef struct VkRenderPass_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a2fee46c6260200f7184a2de6442f92db">VkRenderPass</a></td></tr>
-<tr class="separator:a2fee46c6260200f7184a2de6442f92db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5893c1d743b4adbab85f74a4bf724f5"><td class="memItemLeft" align="right" valign="top">typedef struct VkSemaphore_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac5893c1d743b4adbab85f74a4bf724f5">VkSemaphore</a></td></tr>
-<tr class="separator:ac5893c1d743b4adbab85f74a4bf724f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acae60aed4d41345db59648a2379e3559"><td class="memItemLeft" align="right" valign="top">typedef FastArray&lt; <a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac5893c1d743b4adbab85f74a4bf724f5">VkSemaphore</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#acae60aed4d41345db59648a2379e3559">Ogre::VkSemaphoreArray</a></td></tr>
+<tr class="memitem:acae60aed4d41345db59648a2379e3559"><td class="memItemLeft" align="right" valign="top">typedef FastArray&lt; VkSemaphore &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#acae60aed4d41345db59648a2379e3559">Ogre::VkSemaphoreArray</a></td></tr>
 <tr class="separator:acae60aed4d41345db59648a2379e3559"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af04b970c62eb7501083b8e2aa7a8540f"><td class="memItemLeft" align="right" valign="top">typedef struct VkShaderModule_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#af04b970c62eb7501083b8e2aa7a8540f">VkShaderModule</a></td></tr>
-<tr class="separator:af04b970c62eb7501083b8e2aa7a8540f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1641076055b25f19186e0b70a33b0bcd"><td class="memItemLeft" align="right" valign="top">typedef struct VkSurfaceKHR_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a1641076055b25f19186e0b70a33b0bcd">VkSurfaceKHR</a></td></tr>
-<tr class="separator:a1641076055b25f19186e0b70a33b0bcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8fd41c89aaddeca00037c7c02cc8436"><td class="memItemLeft" align="right" valign="top">typedef struct VkSwapchainKHR_T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#ad8fd41c89aaddeca00037c7c02cc8436">VkSwapchainKHR</a></td></tr>
-<tr class="separator:ad8fd41c89aaddeca00037c7c02cc8436"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -287,6 +257,24 @@ Enumerations</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td>&#160;&#160;&#160;    <a class="el" href="group___general.html#gaf27f0d64dfeb225d37a513c253eaa1a0">OGRE_EXCEPT</a>( code, desc + ( &quot;\nVkResult = &quot; + vkResultToString( num ) ), src )</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1163bdf5ce5186a3112f47162c545d36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1163bdf5ce5186a3112f47162c545d36">&#9670;&nbsp;</a></span>OGRE_VK_NON_DISPATCHABLE_HANDLE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define OGRE_VK_NON_DISPATCHABLE_HANDLE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">object</td><td>)</td>
+          <td>&#160;&#160;&#160;typedef uint64_t object;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -406,34 +394,6 @@ Enumerations</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a id="af393c10d516ce887f09c216b40158722"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af393c10d516ce887f09c216b40158722">&#9670;&nbsp;</a></span>VkBuffer</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkBuffer_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#af393c10d516ce887f09c216b40158722">VkBuffer</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2c7f8c1ee6e910d00955812060e27fbb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c7f8c1ee6e910d00955812060e27fbb">&#9670;&nbsp;</a></span>VkBufferView</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkBufferView_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a2c7f8c1ee6e910d00955812060e27fbb">VkBufferView</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="ac45cc67c448b7eb97bc0ddc9d4ce2422"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac45cc67c448b7eb97bc0ddc9d4ce2422">&#9670;&nbsp;</a></span>VkCommandBuffer</h2>
 
@@ -448,48 +408,6 @@ Enumerations</h2></td></tr>
 
 </div>
 </div>
-<a id="ac5b06a9b76a6229a61b6529c12f44289"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5b06a9b76a6229a61b6529c12f44289">&#9670;&nbsp;</a></span>VkDescriptorPool</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkDescriptorPool_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac5b06a9b76a6229a61b6529c12f44289">VkDescriptorPool</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa16ea4d9843adebe051620c411f33a79"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa16ea4d9843adebe051620c411f33a79">&#9670;&nbsp;</a></span>VkDescriptorSet</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkDescriptorSet_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#aa16ea4d9843adebe051620c411f33a79">VkDescriptorSet</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad323a4c2d574a3d1d6fead58bb834d94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad323a4c2d574a3d1d6fead58bb834d94">&#9670;&nbsp;</a></span>VkDescriptorSetLayout</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkDescriptorSetLayout_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#ad323a4c2d574a3d1d6fead58bb834d94">VkDescriptorSetLayout</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a6e9c08f343cc1f9bd6f7d4a3ddbc3442"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">&#9670;&nbsp;</a></span>VkDevice</h2>
 
@@ -498,62 +416,6 @@ Enumerations</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">typedef struct VkDevice_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aefd00941b5df60d56fd51ac72748ddf0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aefd00941b5df60d56fd51ac72748ddf0">&#9670;&nbsp;</a></span>VkDeviceMemory</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkDeviceMemory_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#aefd00941b5df60d56fd51ac72748ddf0">VkDeviceMemory</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="acb819187cde54914d4b4b1eeac1e97e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb819187cde54914d4b4b1eeac1e97e0">&#9670;&nbsp;</a></span>VkFence</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkFence_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#acb819187cde54914d4b4b1eeac1e97e0">VkFence</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6c9c07920a78c694d823071ad3d9e2ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c9c07920a78c694d823071ad3d9e2ef">&#9670;&nbsp;</a></span>VkFramebuffer</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkFramebuffer_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6c9c07920a78c694d823071ad3d9e2ef">VkFramebuffer</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afb1c5352ec54d543b18308684cbd65f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb1c5352ec54d543b18308684cbd65f2">&#9670;&nbsp;</a></span>VkImage</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkImage_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#afb1c5352ec54d543b18308684cbd65f2">VkImage</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -582,104 +444,6 @@ Enumerations</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">typedef struct VkPhysicalDevice_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a3586f545aff0ff062d7a58ac83b90ecf">VkPhysicalDevice</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a63776adb35d99d809236322e1f829d61"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63776adb35d99d809236322e1f829d61">&#9670;&nbsp;</a></span>VkPipeline</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkPipeline_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a63776adb35d99d809236322e1f829d61">VkPipeline</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa41b9ae17f71ed61e362bdd1ba7071f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa41b9ae17f71ed61e362bdd1ba7071f6">&#9670;&nbsp;</a></span>VkPipelineLayout</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkPipelineLayout_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#aa41b9ae17f71ed61e362bdd1ba7071f6">VkPipelineLayout</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2fee46c6260200f7184a2de6442f92db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2fee46c6260200f7184a2de6442f92db">&#9670;&nbsp;</a></span>VkRenderPass</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkRenderPass_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a2fee46c6260200f7184a2de6442f92db">VkRenderPass</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac5893c1d743b4adbab85f74a4bf724f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5893c1d743b4adbab85f74a4bf724f5">&#9670;&nbsp;</a></span>VkSemaphore</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkSemaphore_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac5893c1d743b4adbab85f74a4bf724f5">VkSemaphore</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af04b970c62eb7501083b8e2aa7a8540f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af04b970c62eb7501083b8e2aa7a8540f">&#9670;&nbsp;</a></span>VkShaderModule</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkShaderModule_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#af04b970c62eb7501083b8e2aa7a8540f">VkShaderModule</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1641076055b25f19186e0b70a33b0bcd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1641076055b25f19186e0b70a33b0bcd">&#9670;&nbsp;</a></span>VkSurfaceKHR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkSurfaceKHR_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a1641076055b25f19186e0b70a33b0bcd">VkSurfaceKHR</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad8fd41c89aaddeca00037c7c02cc8436"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8fd41c89aaddeca00037c7c02cc8436">&#9670;&nbsp;</a></span>VkSwapchainKHR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct VkSwapchainKHR_T* <a class="el" href="_ogre_vulkan_prerequisites_8h.html#ad8fd41c89aaddeca00037c7c02cc8436">VkSwapchainKHR</a></td>
         </tr>
       </table>
 </div><div class="memdoc">

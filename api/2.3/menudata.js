@@ -353,12 +353,7 @@ var menudata={children:[
 {text:"_",url:"globals_func.html#index__5F"},
 {text:"d",url:"globals_func.html#index_d"},
 {text:"x",url:"globals_func.html#index_x"}]},
-{text:"Typedefs",url:"globals_type.html",children:[
-{text:"a",url:"globals_type.html#index_a"},
-{text:"d",url:"globals_type.html#index_d"},
-{text:"v",url:"globals_type.html#index_v"},
-{text:"x",url:"globals_type.html#index_x"},
-{text:"z",url:"globals_type.html#index_z"}]},
+{text:"Typedefs",url:"globals_type.html"},
 {text:"Enumerations",url:"globals_enum.html"},
 {text:"Enumerator",url:"globals_eval.html",children:[
 {text:"d",url:"globals_eval.html#index_d"},

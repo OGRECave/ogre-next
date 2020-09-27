@@ -3804,9 +3804,9 @@ Typedefs</h2></td></tr>
 <tr class="separator:ga06d6e53236b998db135989521a8ad3ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga21ffab3c275854b773dcd9efeba9152c"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="group___scene.html#ga06d6e53236b998db135989521a8ad3ba">VisibleObjectsPerRq</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___scene.html#ga21ffab3c275854b773dcd9efeba9152c">VisibleObjectsPerThreadArray</a></td></tr>
 <tr class="separator:ga21ffab3c275854b773dcd9efeba9152c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a751d388a0b231360abe5cb03585f762e"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="_ogre_vulkan_prerequisites_8h.html#acb819187cde54914d4b4b1eeac1e97e0">VkFence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a751d388a0b231360abe5cb03585f762e">VkFenceArray</a></td></tr>
+<tr class="memitem:a751d388a0b231360abe5cb03585f762e"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; VkFence &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a751d388a0b231360abe5cb03585f762e">VkFenceArray</a></td></tr>
 <tr class="separator:a751d388a0b231360abe5cb03585f762e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acae60aed4d41345db59648a2379e3559"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac5893c1d743b4adbab85f74a4bf724f5">VkSemaphore</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#acae60aed4d41345db59648a2379e3559">VkSemaphoreArray</a></td></tr>
+<tr class="memitem:acae60aed4d41345db59648a2379e3559"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; VkSemaphore &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#acae60aed4d41345db59648a2379e3559">VkSemaphoreArray</a></td></tr>
 <tr class="separator:acae60aed4d41345db59648a2379e3559"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade47b5db929afab7a04bbc1662b702a1"><td class="memItemLeft" align="right" valign="top">typedef vector&lt; <a class="el" href="class_ogre_1_1_vulkan_discard_buffer.html">VulkanDiscardBuffer</a> * &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#ade47b5db929afab7a04bbc1662b702a1">VulkanDiscardBufferVec</a></td></tr>
 <tr class="separator:ade47b5db929afab7a04bbc1662b702a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -6505,21 +6505,21 @@ Functions</h2></td></tr>
 <tr class="memitem:gae542663b49eb68a74336d84e11ba0b9c"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___memory.html#gae542663b49eb68a74336d84e11ba0b9c">constructN</a> (T *basePtr, size_t count)</td></tr>
 <tr class="memdesc:gae542663b49eb68a74336d84e11ba0b9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function for constructing an array of objects with placement new, without using new[] (which allocates an undocumented amount of extra memory and so isn't appropriate for custom allocators).  <a href="group___memory.html#gae542663b49eb68a74336d84e11ba0b9c">More...</a><br /></td></tr>
 <tr class="separator:gae542663b49eb68a74336d84e11ba0b9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad937c7bfa1ff0fc354523f4629fa20a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#ad937c7bfa1ff0fc354523f4629fa20a7">delayed_vkDestroyBufferView</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a2c7f8c1ee6e910d00955812060e27fbb">VkBufferView</a> bufferView, VkAllocationCallbacks const *pAllocator)</td></tr>
+<tr class="memitem:ad937c7bfa1ff0fc354523f4629fa20a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#ad937c7bfa1ff0fc354523f4629fa20a7">delayed_vkDestroyBufferView</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, VkBufferView bufferView, VkAllocationCallbacks const *pAllocator)</td></tr>
 <tr class="separator:ad937c7bfa1ff0fc354523f4629fa20a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01b113f08c88f30467e8c76d8496ceea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a01b113f08c88f30467e8c76d8496ceea">delayed_vkDestroyFramebuffer</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6c9c07920a78c694d823071ad3d9e2ef">VkFramebuffer</a> framebuffer, VkAllocationCallbacks const *pAllocator)</td></tr>
+<tr class="memitem:a01b113f08c88f30467e8c76d8496ceea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a01b113f08c88f30467e8c76d8496ceea">delayed_vkDestroyFramebuffer</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, VkFramebuffer framebuffer, VkAllocationCallbacks const *pAllocator)</td></tr>
 <tr class="separator:a01b113f08c88f30467e8c76d8496ceea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7de04fd70ba4d126cbc0fe7934887186"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a7de04fd70ba4d126cbc0fe7934887186">delayed_vkDestroyImage</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#afb1c5352ec54d543b18308684cbd65f2">VkImage</a> image, VkAllocationCallbacks const *pAllocator)</td></tr>
+<tr class="memitem:a7de04fd70ba4d126cbc0fe7934887186"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a7de04fd70ba4d126cbc0fe7934887186">delayed_vkDestroyImage</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, VkImage image, VkAllocationCallbacks const *pAllocator)</td></tr>
 <tr class="separator:a7de04fd70ba4d126cbc0fe7934887186"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a384a85abe4c776359b5b4cf2771af367"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a384a85abe4c776359b5b4cf2771af367">delayed_vkDestroyImageView</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, VkImageView pView, VkAllocationCallbacks const *pAllocator)</td></tr>
 <tr class="separator:a384a85abe4c776359b5b4cf2771af367"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8159a3c5d756ca7ee2e1dfa203498585"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a8159a3c5d756ca7ee2e1dfa203498585">delayed_vkDestroyPipeline</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a63776adb35d99d809236322e1f829d61">VkPipeline</a> pipeline, VkAllocationCallbacks const *pAllocator)</td></tr>
+<tr class="memitem:a8159a3c5d756ca7ee2e1dfa203498585"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a8159a3c5d756ca7ee2e1dfa203498585">delayed_vkDestroyPipeline</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, VkPipeline pipeline, VkAllocationCallbacks const *pAllocator)</td></tr>
 <tr class="separator:a8159a3c5d756ca7ee2e1dfa203498585"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa2bb027d1c17f8e5600ab0a73455ebd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#afa2bb027d1c17f8e5600ab0a73455ebd">delayed_vkDestroyRenderPass</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a2fee46c6260200f7184a2de6442f92db">VkRenderPass</a> renderPass, VkAllocationCallbacks const *pAllocator)</td></tr>
+<tr class="memitem:afa2bb027d1c17f8e5600ab0a73455ebd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#afa2bb027d1c17f8e5600ab0a73455ebd">delayed_vkDestroyRenderPass</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, VkRenderPass renderPass, VkAllocationCallbacks const *pAllocator)</td></tr>
 <tr class="separator:afa2bb027d1c17f8e5600ab0a73455ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a472ecba1ddd158f3f4b0035b5237f5f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#a472ecba1ddd158f3f4b0035b5237f5f9">delayed_vkDestroySampler</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, VkSampler sampler, VkAllocationCallbacks const *pAllocator)</td></tr>
 <tr class="separator:a472ecba1ddd158f3f4b0035b5237f5f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8c28303f04f47a222edfd79479ca279"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#ab8c28303f04f47a222edfd79479ca279">delayed_vkDestroyShaderModule</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#af04b970c62eb7501083b8e2aa7a8540f">VkShaderModule</a> shaderModule, VkAllocationCallbacks const *pAllocator)</td></tr>
+<tr class="memitem:ab8c28303f04f47a222edfd79479ca279"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#ab8c28303f04f47a222edfd79479ca279">delayed_vkDestroyShaderModule</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoMgr, <a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6e9c08f343cc1f9bd6f7d4a3ddbc3442">VkDevice</a> device, VkShaderModule shaderModule, VkAllocationCallbacks const *pAllocator)</td></tr>
 <tr class="separator:ab8c28303f04f47a222edfd79479ca279"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af78076f7c0517bfdac61219333d3ff8e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:af78076f7c0517bfdac61219333d3ff8e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_ogre.html#af78076f7c0517bfdac61219333d3ff8e">deletePtr</a> (T *ptr)</td></tr>
@@ -9555,7 +9555,7 @@ THE SOFTWARE.</h2>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt;<a class="el" href="_ogre_vulkan_prerequisites_8h.html#acb819187cde54914d4b4b1eeac1e97e0">VkFence</a>&gt; <a class="el" href="namespace_ogre.html#a751d388a0b231360abe5cb03585f762e">Ogre::VkFenceArray</a></td>
+          <td class="memname">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt;VkFence&gt; <a class="el" href="namespace_ogre.html#a751d388a0b231360abe5cb03585f762e">Ogre::VkFenceArray</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -9569,7 +9569,7 @@ THE SOFTWARE.</h2>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt;<a class="el" href="_ogre_vulkan_prerequisites_8h.html#ac5893c1d743b4adbab85f74a4bf724f5">VkSemaphore</a>&gt; <a class="el" href="namespace_ogre.html#acae60aed4d41345db59648a2379e3559">Ogre::VkSemaphoreArray</a></td>
+          <td class="memname">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt;VkSemaphore&gt; <a class="el" href="namespace_ogre.html#acae60aed4d41345db59648a2379e3559">Ogre::VkSemaphoreArray</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -10327,7 +10327,7 @@ THE SOFTWARE.</h2>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a2c7f8c1ee6e910d00955812060e27fbb">VkBufferView</a>&#160;</td>
+          <td class="paramtype">VkBufferView&#160;</td>
           <td class="paramname"><em>bufferView</em>, </td>
         </tr>
         <tr>
@@ -10367,7 +10367,7 @@ THE SOFTWARE.</h2>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a6c9c07920a78c694d823071ad3d9e2ef">VkFramebuffer</a>&#160;</td>
+          <td class="paramtype">VkFramebuffer&#160;</td>
           <td class="paramname"><em>framebuffer</em>, </td>
         </tr>
         <tr>
@@ -10407,7 +10407,7 @@ THE SOFTWARE.</h2>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#afb1c5352ec54d543b18308684cbd65f2">VkImage</a>&#160;</td>
+          <td class="paramtype">VkImage&#160;</td>
           <td class="paramname"><em>image</em>, </td>
         </tr>
         <tr>
@@ -10487,7 +10487,7 @@ THE SOFTWARE.</h2>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a63776adb35d99d809236322e1f829d61">VkPipeline</a>&#160;</td>
+          <td class="paramtype">VkPipeline&#160;</td>
           <td class="paramname"><em>pipeline</em>, </td>
         </tr>
         <tr>
@@ -10527,7 +10527,7 @@ THE SOFTWARE.</h2>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#a2fee46c6260200f7184a2de6442f92db">VkRenderPass</a>&#160;</td>
+          <td class="paramtype">VkRenderPass&#160;</td>
           <td class="paramname"><em>renderPass</em>, </td>
         </tr>
         <tr>
@@ -10607,7 +10607,7 @@ THE SOFTWARE.</h2>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="_ogre_vulkan_prerequisites_8h.html#af04b970c62eb7501083b8e2aa7a8540f">VkShaderModule</a>&#160;</td>
+          <td class="paramtype">VkShaderModule&#160;</td>
           <td class="paramname"><em>shaderModule</em>, </td>
         </tr>
         <tr>
