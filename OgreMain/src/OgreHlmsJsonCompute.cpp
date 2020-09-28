@@ -233,7 +233,7 @@ namespace Ogre
                     if( param.mp.elementType == ShaderParams::ElementFloat &&
                         paramArray[j].IsNumber() )
                     {
-                       dataFloat[j] = paramArray[j].GetDouble();
+                       dataFloat[j] = static_cast<float>( paramArray[j].GetDouble() );
                     }
                     else if( param.mp.elementType == ShaderParams::ElementInt &&
                              paramArray[j].IsInt() )
