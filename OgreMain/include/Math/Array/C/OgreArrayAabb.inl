@@ -131,16 +131,12 @@ namespace Ogre
         distance.mChunkBase[2] =
             std::max( Math::Abs( distance.mChunkBase[2] ) - mHalfSize.mChunkBase[2], Real( 0.0 ) );
 
-        dist.x = std::max( Math::Abs( dist.x ) - mHalfSize.x, Real( 0.0 ) );
-        dist.y = std::max( Math::Abs( dist.y ) - mHalfSize.y, Real( 0.0 ) );
-        dist.z = std::max( Math::Abs( dist.z ) - mHalfSize.z, Real( 0.0 ) );
-
         return distance.squaredLength();
     }
     //-----------------------------------------------------------------------------------
     inline ArrayReal ArrayAabb::distance( const ArrayVector3 &v ) const
     {
-        return return std::sqrt( squaredDistance( v ) );
+        return std::sqrt( squaredDistance( v ) );
     }
     //-----------------------------------------------------------------------------------
     inline void ArrayAabb::transformAffine( const ArrayMatrix4 &m )
