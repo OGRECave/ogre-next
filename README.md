@@ -3,7 +3,7 @@
 
 Ogre is a 3D graphics rendering engine. Not to be confused with a game engine which provides Networking, Sound, Physics, etc.
 
-Ogre 2.3 has had a substantial overhaul to focus on high performance graphics using Data Oriented Design with:
+Ogre 2.2 has had a substantial overhaul to focus on high performance graphics using Data Oriented Design with:
  * Cache friendly Entity and Node layout
  * Threaded batch processing of Nodes, Frustum Culling and other techniques such as Forward Clustered
  * SIMD processing using AoSoA (Array of Structures of Arrays) memory layout
@@ -21,26 +21,23 @@ differences have diverged long enough.
 
 | Build | Status (github) |
 |-------|-----------------|
-| MSVC | [![Build status](https://ci.appveyor.com/api/projects/status/github/OGRECave/ogre-next?branch=master&svg=true)](https://ci.appveyor.com/project/MatiasNGoldberg/ogre-next/branch/master)|
+| MSVC | [![Build status](https://ci.appveyor.com/api/projects/status/github/OGRECave/ogre-next?branch=v2-2&svg=true)](https://ci.appveyor.com/project/MatiasNGoldberg/ogre-next/branch/v2-2)|
 
 ## Supported Backends
 
  * Direct3D 11
  * OpenGL 3.3+
  * Metal
- * Vulkan
 
 ## Supported Platforms
 
- * Windows (XP\*, 7, 8, 10)
+ * Windows (XP*, 7, 8, 10)
  * Linux
- * macOS\*\*
+ * macOS**
  * iOS
- * Android\*\*\*
 
-(\*) XP support is through GL3+. Recent drivers are needed. Old GPUs do not have stable GL drivers capable of running Ogre 2.x.<br/>
-(\*\*) Metal Backend is highly recommended. GL backend is supported in macOS, but the window subsystem hasn't been ported to 2.3 yet.<br/>
-(\*\*\*) Device must be Vulkan-capable. Android 7.0+ is supported; but Android 8.0+ is strongly recommended due to lots of driver bugs in older versions.<br/>
+(*) XP support is through GL3+. Recent drivers are needed. Old GPUs do not have stable GL drivers capable of running Ogre 2.x.
+(**) Metal Backend is highly recommended. GL backend is supported in macOS, but the window subsystem hasn't been ported to 2.2 yet. 
 
 ## Supported Compilers
 
@@ -142,11 +139,11 @@ If you're on Linux, make sure to first install the dependencies (i.e. run the su
 
 If for some reason you want to do it by hand, there's no script for your platform,
 or you want to learn what the scripts are actually doing, see
-[Setting Up Ogre](https://ogrecave.github.io/ogre-next/api/2.3/_setting_up_ogre.html) from the Ogre manual.
+[Setting Up Ogre](https://ogrecave.github.io/ogre-next/api/2.1/_setting_up_ogre.html) from the Ogre manual.
 
 # Manual
 
-For more information see the [online manual](https://ogrecave.github.io/ogre-next/api/2.3/manual.html).
+For more information see the [online manual](https://ogrecave.github.io/ogre-next/api/2.1/manual.html).
 The manual can build on Linux using Doxygen:
 
 ```
@@ -159,27 +156,13 @@ ninja OgreDoc
  * [Forums](https://forums.ogre3d.org/viewforum.php?f=25)
  * [Bug Reports](https://github.com/OGRECave/ogre-next/issues)
  * [Contributing via Pull Requests](https://github.com/OGRECave/ogre-next/pulls)
- * [Documentation](https://ogrecave.github.io/ogre-next/api/2.3/)
+ * [Documentation](https://ogrecave.github.io/ogre-next/api/2.1/)
  * [Ogre 2.1+ FAQ](http://wiki.ogre3d.org/Ogre+2.1+FAQ)
  * [Older resources for interfaces carried over from 1.x](https://www.ogre3d.org/documentation)
 
 # Samples
 
 If you want to test or evaluate Ogre, you can try the [prebuilt samples for Windows](https://bintray.com/darksylinc/ogre-next/download_file?file_path=ogre-samples-windows-x64-vs2015.7z).
-
-# Unit Tests
-
-To run the unit tests, go to Scripts/UnitTesting and to generate the comparison files type:
-
-```
-python3 RunUnitTests.py gl ../../build/Debug/bin/ ./JSON ../../build/UnitTestsOutput/
-```
-
-to check the diff against already generated data:
-
-```
-python3 RunUnitTests.py gl ../../build/Debug/bin/ ./JSON ../../build/UnitTestsOutput/ ../../build/UnitTestsOutput_old/
-```
 
 # License
 
