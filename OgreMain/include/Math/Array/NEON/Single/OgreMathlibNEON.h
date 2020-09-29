@@ -91,31 +91,31 @@ namespace Ogre
 #define veorq_f32( a, b ) vreinterpretq_f32_u32( veorq_u32( vreinterpretq_u32_f32( a ), vreinterpretq_u32_f32( b ) ) )
 #define vandq_f32u32( a, b ) vreinterpretq_f32_u32( vandq_u32( vreinterpretq_u32_f32( a ), b ) )
 
-#define _MM_SHUFFLE(z, y, x, w) (((z) << 6) | ((y) << 4) | ((x) << 2) | (w))
+#define _MM_SHUFFLE(fp3,fp2,fp1,fp0) (((fp3) << 6) | ((fp2) << 4) | ((fp1) << 2) | ((fp0)))
 
     static inline ArrayReal vshuf_f32(ArrayReal a, ArrayReal b, unsigned int idx)
     {
         float x, y, z, w;
 
         // First index used to retrieve from a
-        switch((idx >> 6) & 0x03)
+        switch(idx & 0x03)
         {
             case 0:
-                z = vgetq_lane_f32(a, 0);
+                x = vgetq_lane_f32(a, 0);
                 break;
             case 1:
-                z = vgetq_lane_f32(a, 1);
+                x = vgetq_lane_f32(a, 1);
                 break;
             case 2:
-                z = vgetq_lane_f32(a, 2);
+                x = vgetq_lane_f32(a, 2);
                 break;
             case 3:
-                z = vgetq_lane_f32(a, 3);
+                x = vgetq_lane_f32(a, 3);
                 break;
         }
 
         // Second index used to retrieve from a
-        switch((idx >> 4) & 0x03)
+        switch((idx >> 2) & 0x03)
         {
             case 0:
                 y = vgetq_lane_f32(a, 0);
@@ -132,24 +132,24 @@ namespace Ogre
         }
 
         // Third index used to retrieve from b
-        switch((idx >> 2) & 0x03)
+        switch((idx >> 4) & 0x03)
         {
             case 0:
-                x = vgetq_lane_f32(b, 0);
+                z = vgetq_lane_f32(b, 0);
                 break;
             case 1:
-                x = vgetq_lane_f32(b, 1);
+                z = vgetq_lane_f32(b, 1);
                 break;
             case 2:
-                x = vgetq_lane_f32(b, 2);
+                z = vgetq_lane_f32(b, 2);
                 break;
             case 3:
-                x = vgetq_lane_f32(b, 3);
+                z = vgetq_lane_f32(b, 3);
                 break;
         }
 
         // Four index used to retrieve from b
-        switch(idx & 0x03)
+        switch((idx >> 6) & 0x03)
         {
             case 0:
                 w = vgetq_lane_f32(b, 0);
