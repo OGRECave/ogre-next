@@ -21,6 +21,7 @@ for root, dirs, filenames in os.walk( '../../' ):
 		if fileName not in keep_files:
 			toRemove = os.path.join( root, fileName )
 			print( 'Removing ' + toRemove )
+			os.unlink( toRemove )
 	for dir in dirs:
 		if dir not in keep_files:
 			toRemove = os.path.join( root, dir )
