@@ -687,9 +687,16 @@ namespace Ogre
                 stats.mInstanceCount += instancesPerDraw;
             }
 
-            const Ogre::OperationType type = vao->getOperationType();
-            if( type == OT_TRIANGLE_STRIP || type == OT_TRIANGLE_LIST )
+            switch( vao->getOperationType() )
+            {
+            case OT_TRIANGLE_LIST:
                 stats.mFaceCount += ( vao->mPrimCount / 3u ) * instancesPerDraw;
+                break;
+            case OT_TRIANGLE_STRIP:
+            case OT_TRIANGLE_FAN:
+                stats.mFaceCount += ( vao->mPrimCount - 2u ) * instancesPerDraw;
+                break;
+            }
 
             stats.mVertexCount += vao->mPrimCount * instancesPerDraw;
 
@@ -825,10 +832,15 @@ namespace Ogre
                 stats.mInstanceCount += instancesPerDraw;
             }
 
-            if( renderOp.operationType == OT_TRIANGLE_STRIP ||
-                renderOp.operationType == OT_TRIANGLE_LIST )
+            switch( renderOp.operationType )
             {
+            case OT_TRIANGLE_LIST:
                 stats.mFaceCount += ( renderOp.vertexData->vertexCount / 3u ) * instancesPerDraw;
+                break;
+            case OT_TRIANGLE_STRIP:
+            case OT_TRIANGLE_FAN:
+                stats.mFaceCount += ( renderOp.vertexData->vertexCount - 2u ) * instancesPerDraw;
+                break;
             }
 
             stats.mVertexCount += renderOp.vertexData->vertexCount * instancesPerDraw;
