@@ -92,78 +92,17 @@ namespace Ogre
 #define vandq_f32u32( a, b ) vreinterpretq_f32_u32( vandq_u32( vreinterpretq_u32_f32( a ), b ) )
 
 #define _MM_SHUFFLE(fp3,fp2,fp1,fp0) (((fp3) << 6) | ((fp2) << 4) | ((fp1) << 2) | ((fp0)))
+#define vshuf_f32(a, b, imm) vshuf_f32_<imm>((a), (b))
 
-    static inline ArrayReal vshuf_f32(ArrayReal a, ArrayReal b, unsigned int idx)
+    template<unsigned char idx>
+    ArrayReal vshuf_f32_(ArrayReal a, ArrayReal b)
     {
         float x, y, z, w;
 
-        // First index used to retrieve from a
-        switch(idx & 0x03)
-        {
-            case 0:
-                x = vgetq_lane_f32(a, 0);
-                break;
-            case 1:
-                x = vgetq_lane_f32(a, 1);
-                break;
-            case 2:
-                x = vgetq_lane_f32(a, 2);
-                break;
-            case 3:
-                x = vgetq_lane_f32(a, 3);
-                break;
-        }
-
-        // Second index used to retrieve from a
-        switch((idx >> 2) & 0x03)
-        {
-            case 0:
-                y = vgetq_lane_f32(a, 0);
-                break;
-            case 1:
-                y = vgetq_lane_f32(a, 1);
-                break;
-            case 2:
-                y = vgetq_lane_f32(a, 2);
-                break;
-            case 3:
-                y = vgetq_lane_f32(a, 3);
-                break;
-        }
-
-        // Third index used to retrieve from b
-        switch((idx >> 4) & 0x03)
-        {
-            case 0:
-                z = vgetq_lane_f32(b, 0);
-                break;
-            case 1:
-                z = vgetq_lane_f32(b, 1);
-                break;
-            case 2:
-                z = vgetq_lane_f32(b, 2);
-                break;
-            case 3:
-                z = vgetq_lane_f32(b, 3);
-                break;
-        }
-
-        // Four index used to retrieve from b
-        switch((idx >> 6) & 0x03)
-        {
-            case 0:
-                w = vgetq_lane_f32(b, 0);
-                break;
-            case 1:
-                w = vgetq_lane_f32(b, 1);
-                break;
-            case 2:
-                w = vgetq_lane_f32(b, 2);
-                break;
-            case 3:
-                w = vgetq_lane_f32(b, 3);
-                break;
-        }
+        x = vgetq_lane_f32(a, idx & 0x03);
+        y = vgetq_lane_f32(a, (idx >> 2) & 0x03);
+        z = vgetq_lane_f32(b, (idx >> 4) & 0x03);
+        w = vgetq_lane_f32(b, (idx >> 6) & 0x03);
 
         return (ArrayReal) { x, y, z, w };
     }
