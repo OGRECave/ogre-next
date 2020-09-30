@@ -143,7 +143,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibSSE2::Modf4( ArrayReal x, ArrayReal &outIntegral )
     {
-        outIntegral = _mm_cvtepi32_ps( _mm_cvttps_epi32( x ) ); //outIntegral = floor( x )
+        outIntegral = _mm_cvtepi32_ps( _mm_cvttps_epi32( x ) ); // truncate towards zero, overflows for large input
         return _mm_sub_ps( x, outIntegral );
     }
     //-----------------------------------------------------------------------------------

@@ -143,7 +143,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibNEON::Modf4( ArrayReal x, ArrayReal &outIntegral )
     {
-        outIntegral = (ArrayReal)( (ArrayInt)( x ) );   //outIntegral = floor( x )
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
+        outIntegral = vrndq_f32( x ); // truncate towards zero
+#else
+        outIntegral = vcvtq_f32_s32( vcvtq_s32_f32( x ) ); // truncate towards zero, overflows for large input
+#endif
         return vsubq_f32( x, outIntegral );
     }
     //-----------------------------------------------------------------------------------

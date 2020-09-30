@@ -33,7 +33,7 @@ namespace Ogre
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
         double _outIntegral;
-        ArrayReal fractpart = modf( x, &_outIntegral );
+        ArrayReal fractpart = modf( x, &_outIntegral ); // truncate towards zero
         outIntegral = static_cast<ArrayReal>( _outIntegral );
         return fractpart;
 #else
