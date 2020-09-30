@@ -40,29 +40,31 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    const ArrayReal MathlibNEON::HALF       = vdupq_n_f32( 0.5f );
-    const ArrayReal MathlibNEON::ONE        = vdupq_n_f32( 1.0f );
-    const ArrayReal MathlibNEON::THREE      = vdupq_n_f32( 3.0f );
-    const ArrayReal MathlibNEON::NEG_ONE    = vdupq_n_f32( -1.0f );
-    const ArrayReal MathlibNEON::fEpsilon   = vdupq_n_f32( 1e-6f );
-    const ArrayReal MathlibNEON::fSqEpsilon = vdupq_n_f32( 1e-12f );
-    const ArrayReal MathlibNEON::OneMinusEpsilon= vdupq_n_f32( 1.0f - 1e-6f );
-    const ArrayReal MathlibNEON::FLOAT_MIN  = vdupq_n_f32( std::numeric_limits<Real>::min() );
-    const ArrayReal MathlibNEON::SIGN_MASK  = vdupq_n_f32( -0.0f );
-    const ArrayReal MathlibNEON::INFINITEA  = vdupq_n_f32( std::numeric_limits<Real>::infinity() );
-    const ArrayReal MathlibNEON::MAX_NEG    = vdupq_n_f32( -std::numeric_limits<Real>::max() );
-    const ArrayReal MathlibNEON::MAX_POS    = vdupq_n_f32( std::numeric_limits<Real>::max() );
-    const ArrayReal MathlibNEON::LAST_AFFINE_COLUMN = (ArrayReal) { 0, 0, 0, 1 };
+    #define init_list_4(a) { a, a, a, a }
+    const ArrayReal MathlibNEON::HALF       = init_list_4( 0.5f );
+    const ArrayReal MathlibNEON::ONE        = init_list_4( 1.0f );
+    const ArrayReal MathlibNEON::THREE      = init_list_4( 3.0f );
+    const ArrayReal MathlibNEON::NEG_ONE    = init_list_4( -1.0f );
+    const ArrayReal MathlibNEON::fEpsilon   = init_list_4( 1e-6f );
+    const ArrayReal MathlibNEON::fSqEpsilon = init_list_4( 1e-12f );
+    const ArrayReal MathlibNEON::OneMinusEpsilon= init_list_4( 1.0f - 1e-6f );
+    const ArrayReal MathlibNEON::FLOAT_MIN  = init_list_4( std::numeric_limits<Real>::min() );
+    const ArrayReal MathlibNEON::SIGN_MASK  = init_list_4( -0.0f );
+    const ArrayReal MathlibNEON::INFINITEA  = init_list_4( std::numeric_limits<Real>::infinity() );
+    const ArrayReal MathlibNEON::MAX_NEG    = init_list_4( -std::numeric_limits<Real>::max() );
+    const ArrayReal MathlibNEON::MAX_POS    = init_list_4( std::numeric_limits<Real>::max() );
+    const ArrayReal MathlibNEON::LAST_AFFINE_COLUMN = { 0, 0, 0, 1 };
 
     static const Real _PI = Real( 4.0 * std::atan( 1.0 ) );
     //We can't use Math::fDeg2Rad & Math::fRad2Deg directly because
     //it's not guaranteed to have been initialized first
-    const ArrayReal MathlibNEON::PI         = vdupq_n_f32( _PI );
-    const ArrayReal MathlibNEON::TWO_PI     = vdupq_n_f32( 2.0f * _PI );
-    const ArrayReal MathlibNEON::fDeg2Rad   = vdupq_n_f32( _PI / 180.0f );
-    const ArrayReal MathlibNEON::fRad2Deg   = vdupq_n_f32( 180.0f / _PI );
+    const ArrayReal MathlibNEON::PI         = init_list_4( _PI );
+    const ArrayReal MathlibNEON::TWO_PI     = init_list_4( 2.0f * _PI );
+    const ArrayReal MathlibNEON::fDeg2Rad   = init_list_4( _PI / 180.0f );
+    const ArrayReal MathlibNEON::fRad2Deg   = init_list_4( 180.0f / _PI );
 
-    const ArrayReal MathlibNEON::ONE_DIV_2PI= vdupq_n_f32( 1.0f / (2.0f * _PI) );
+    const ArrayReal MathlibNEON::ONE_DIV_2PI= init_list_4( 1.0f / (2.0f * _PI) );
+    #undef init_list_4
 
     //-----------------------------------------------------------------------------------
     ArrayReal MathlibNEON::Sin4( ArrayReal x )
