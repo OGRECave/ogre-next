@@ -61,10 +61,12 @@ namespace Ogre
         return vmovemaskq_u32( mask );
     }
     //--------------------------------------------------------------------------------------
+#ifndef _MSC_VER // everything is __n128 on MSVC, so extra overloads are not allowed
     inline uint32 BooleanMask4::getScalarMask( ArrayInt mask )
     {
         return vmovemaskq_u32( vreinterpretq_u32_s32( mask ) );
     }
+#endif
 
     #define IS_SET_MASK_X( intMask ) ((intMask & MASK_W) != 0)
     #define IS_SET_MASK_Y( intMask ) ((intMask & MASK_Z) != 0)

@@ -102,6 +102,27 @@ THE SOFTWARE.
                 typedef float32x4_t ArrayReal;
                 typedef uint32x4_t ArrayMaskR;
 
+            // > The vector data types and arrays of the vector data types cannot be initialized by
+            // > direct literal assignment. You must initialize them using one of the load intrinsics.
+            // > https://developer.arm.com/documentation/dui0472/m/using-neon-support/vector-data-types
+            // GCC and Clang do not enforce this restriction, allowing typed-array-like initialization
+            // and baking the global constant in memory under the hood, so that the register could later
+            // be loaded using single Neon instruction. On the other hand, MSVC is not so helpfull, and
+            // helper conversion types like uint32x4_ct are required to do the same.
+            #if defined(__clang__) || defined(__GNUC__)
+                typedef uint32x4_t uint32x4_ct;
+                typedef float32x4_t float32x4_ct;
+            #else
+                struct uint32x4_ct {
+                    union { uint32_t u[4]; float32x4_t v; };
+                    inline operator uint32x4_t() const { return v; }
+                };
+                struct float32x4_ct {
+                    union { float f[4]; float32x4_t v; };
+                    inline operator float32x4_t() const { return v; }
+                };
+            #endif
+
                 #define ARRAY_REAL_ZERO vdupq_n_f32( 0.0f )
                 #define ARRAY_INT_ZERO vdupq_n_u32( 0 )
                 #define ARRAY_MASK_ZERO vdupq_n_u32( 0 )
@@ -109,17 +130,30 @@ THE SOFTWARE.
                 class ArrayRadian;
             }
 
-            // Make sure that we have the preload macro. Might not be available with some compilers.
-            #ifndef __pld
-            #define __pld(x) asm volatile ( "pld [%[addr]]\n" :: [addr] "r" (x) : "cc" );
-            #endif
-
-            #if defined(__arm64__)
+            #if defined(_MSC_VER) && defined(_M_ARM64)
+                #define OGRE_PREFETCH_T0( x ) __prefetch2(x, 0 /*pldl1keep*/)
+                #define OGRE_PREFETCH_T1( x ) __prefetch2(x, 2 /*pldl2keep*/)
+                #define OGRE_PREFETCH_T2( x ) __prefetch2(x, 4 /*pldl3keep*/)
+                #define OGRE_PREFETCH_NTA( x ) __prefetch2(x, 1 /*pldl1strm*/)
+            #elif defined(_MSC_VER) && defined(_M_ARM)
+                #define OGRE_PREFETCH_T0( x ) __prefetch(x)
+                #define OGRE_PREFETCH_T1( x ) __prefetch(x)
+                #define OGRE_PREFETCH_T2( x ) __prefetch(x)
+                #define OGRE_PREFETCH_NTA( x ) __prefetch(x)
+            #elif defined(__clang__) || defined(__GNUC__)
+                #define OGRE_PREFETCH_T0( x ) __builtin_prefetch(x, 0, 3 /*pldl1keep*/)
+                #define OGRE_PREFETCH_T1( x ) __builtin_prefetch(x, 0, 2 /*pldl2keep*/)
+                #define OGRE_PREFETCH_T2( x ) __builtin_prefetch(x, 0, 1 /*pldl3keep*/)
+                #define OGRE_PREFETCH_NTA( x ) __builtin_prefetch(x, 0, 0 /*pldl1strm*/)
+            #elif defined(__arm64__)
                 #define OGRE_PREFETCH_T0( x ) asm volatile ( "prfm pldl1keep, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
                 #define OGRE_PREFETCH_T1( x ) asm volatile ( "prfm pldl2keep, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
                 #define OGRE_PREFETCH_T2( x ) asm volatile ( "prfm pldl3keep, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
                 #define OGRE_PREFETCH_NTA( x ) asm volatile ( "prfm pldl1strm, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
             #else
+                #ifndef __pld
+                #define __pld(x) asm volatile ( "pld [%[addr]]\n" :: [addr] "r" (x) : "cc" );
+                #endif
                 #define OGRE_PREFETCH_T0( x ) __pld(x)
                 #define OGRE_PREFETCH_T1( x ) __pld(x)
                 #define OGRE_PREFETCH_T2( x ) __pld(x)

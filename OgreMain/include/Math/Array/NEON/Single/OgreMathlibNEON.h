@@ -45,7 +45,7 @@ namespace Ogre
     // Similar to _mm_movemask_ps
     static inline uint32 vmovemaskq_u32( uint32x4_t conditions )
     {
-        const uint32x4_t qMask = { 1, 2, 4, 8 };
+        static const uint32x4_ct qMask = { 1, 2, 4, 8 };
         const uint32x4_t qAnded = vandq_u32( conditions, qMask );
 
         // These two are no-ops, they only tell compiler to treat Q register as two D regs
@@ -99,14 +99,21 @@ namespace Ogre
     template<unsigned char idx>
     ArrayReal vshuf_f32_(ArrayReal a, ArrayReal b)
     {
+#if defined(_MSC_VER) && defined(_M_ARM64)
+        float32x4_t t = vdupq_laneq_f32( a, idx & 0x03 );
+        t = vcopyq_laneq_f32( t, 1, a, ( idx >> 2 ) & 0x03 );
+        t = vcopyq_laneq_f32( t, 2, b, ( idx >> 4 ) & 0x03 );
+        t = vcopyq_laneq_f32( t, 3, b, ( idx >> 6 ) & 0x03 );
+        return t;
+#else
+        // It's enough for Clang and GCC to generate the best code, optimized for specific value of idx
         float x, y, z, w;
-
         x = vgetq_lane_f32(a, idx & 0x03);
         y = vgetq_lane_f32(a, (idx >> 2) & 0x03);
         z = vgetq_lane_f32(b, (idx >> 4) & 0x03);
         w = vgetq_lane_f32(b, (idx >> 6) & 0x03);
-
         return (ArrayReal) { x, y, z, w };
+#endif
     }
 
     inline uint32x4_t vcneqq_f32(ArrayReal a, ArrayReal b)
@@ -155,25 +162,25 @@ namespace Ogre
     class _OgreExport MathlibNEON
     {
     public:
-        static const ArrayReal HALF;        //0.5f, 0.5f, 0.5f, 0.5f
-        static const ArrayReal ONE;         //1.0f, 1.0f, 1.0f, 1.0f
-        static const ArrayReal THREE;       //3.0f, 3.0f, 3.0f, 3.0f
-        static const ArrayReal NEG_ONE;     //-1.0f, -1.0f, -1.0f, -1.0f
-        static const ArrayReal PI;          //PI, PI, PI, PI
-        static const ArrayReal TWO_PI;      //2*PI, 2*PI, 2*PI, 2*PI
-        static const ArrayReal ONE_DIV_2PI; //1 / 2PI, 1 / 2PI, 1 / 2PI, 1 / 2PI
-        static const ArrayReal fEpsilon;    //1e-6f, 1e-6f, 1e-6f, 1e-6f
-        static const ArrayReal fSqEpsilon;  //1e-12f, 1e-12f, 1e-12f, 1e-12f
-        static const ArrayReal OneMinusEpsilon;//1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f
-        static const ArrayReal fDeg2Rad;    //Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad
-        static const ArrayReal fRad2Deg;    //Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
-        static const ArrayReal FLOAT_MIN;   //FLT_MIN, FLT_MIN, FLT_MIN, FLT_MIN
-        static const ArrayReal SIGN_MASK;   //0x80000000, 0x80000000, 0x80000000, 0x80000000
+        static const float32x4_ct HALF;        //0.5f, 0.5f, 0.5f, 0.5f
+        static const float32x4_ct ONE;         //1.0f, 1.0f, 1.0f, 1.0f
+        static const float32x4_ct THREE;       //3.0f, 3.0f, 3.0f, 3.0f
+        static const float32x4_ct NEG_ONE;     //-1.0f, -1.0f, -1.0f, -1.0f
+        static const float32x4_ct PI;          //PI, PI, PI, PI
+        static const float32x4_ct TWO_PI;      //2*PI, 2*PI, 2*PI, 2*PI
+        static const float32x4_ct ONE_DIV_2PI; //1 / 2PI, 1 / 2PI, 1 / 2PI, 1 / 2PI
+        static const float32x4_ct fEpsilon;    //1e-6f, 1e-6f, 1e-6f, 1e-6f
+        static const float32x4_ct fSqEpsilon;  //1e-12f, 1e-12f, 1e-12f, 1e-12f
+        static const float32x4_ct OneMinusEpsilon;//1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f
+        static const float32x4_ct fDeg2Rad;    //Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad
+        static const float32x4_ct fRad2Deg;    //Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
+        static const float32x4_ct FLOAT_MIN;   //FLT_MIN, FLT_MIN, FLT_MIN, FLT_MIN
+        static const float32x4_ct SIGN_MASK;   //0x80000000, 0x80000000, 0x80000000, 0x80000000
         //INFINITE is taken in Windows, INFINITY by C99 (bloody macros). A joke on Infinite Tea
-        static const ArrayReal INFINITEA;   //Inf, Inf, Inf, Inf
-        static const ArrayReal MAX_NEG;     //Max negative number (x4)
-        static const ArrayReal MAX_POS;     //Max negative number (x4)
-        static const ArrayReal LAST_AFFINE_COLUMN;//0, 0, 0, 1
+        static const float32x4_ct INFINITEA;   //Inf, Inf, Inf, Inf
+        static const float32x4_ct MAX_NEG;     //Max negative number (x4)
+        static const float32x4_ct MAX_POS;     //Max negative number (x4)
+        static const float32x4_ct LAST_AFFINE_COLUMN;//0, 0, 0, 1
 
         /** Returns the absolute values of each 4 floats
             @param
@@ -255,11 +262,13 @@ namespace Ogre
                     vorrq_u32( vandq_u32( vreinterpretq_u32_f32( arg1 ), mask ),
                                vnand_u32( mask, vreinterpretq_u32_f32( arg2 ) ) ) );
         }
+#ifndef _MSC_VER // everything is __n128 on MSVC, so extra overloads are not allowed
         static inline ArrayInt CmovRobust( ArrayInt arg1, ArrayInt arg2, ArrayMaskI mask )
         {
             return vorrq_s32( vandq_s32( arg1, vreinterpretq_s32_u32( mask ) ),
                               vnand_s32( vreinterpretq_s32_u32( mask ), arg2 ) );
         }
+#endif
 
         /** Returns the result of "a & b"
         @return
@@ -269,6 +278,7 @@ namespace Ogre
         {
             return vandq_f32( a, b );
         }
+#ifndef _MSC_VER // everything is __n128 on MSVC, so extra overloads are not allowed
         static inline ArrayInt And( ArrayInt a, ArrayInt b )
         {
             return vandq_s32( a, b );
@@ -285,6 +295,7 @@ namespace Ogre
         {
             return vandq_u32( a, b );
         }
+#endif
 
         /** Returns the result of "a & b"
         @return
@@ -311,6 +322,7 @@ namespace Ogre
             return veorq_u32( vceqq_s32( vandq_s32( a, b ), vdupq_n_s32(0) ),
                                     vdupq_n_u32( ~0 ) );
         }
+#ifndef _MSC_VER // everything is __n128 on MSVC, so extra overloads are not allowed
         static inline ArrayMaskI TestFlags4( ArrayInt a, ArrayMaskI b )
         {
             // !( (a & b) == 0 ) --> ( (a & b) == 0 ) ^ -1
@@ -323,6 +335,7 @@ namespace Ogre
             return veorq_u32( vceqq_u32( vandq_u32( a, vreinterpretq_u32_s32( b ) ),
                                      vdupq_n_u32(0) ), vdupq_n_u32( ~0 ) );
         }
+#endif
 
 
         /** Returns the result of "a & ~b"
@@ -346,6 +359,7 @@ namespace Ogre
         {
             return vorrq_f32( a, b );
         }
+#ifndef _MSC_VER // everything is __n128 on MSVC, so extra overloads are not allowed
         static inline ArrayInt Or( ArrayInt a, ArrayInt b )
         {
             return vorrq_s32( a, b );
@@ -354,6 +368,7 @@ namespace Ogre
         {
             return vorrq_u32( a, b );
         }
+#endif
 
         /** Returns the result of "a < b"
         @return
@@ -648,10 +663,10 @@ namespace Ogre
     };
 
 #if OGRE_COMPILER != OGRE_COMPILER_CLANG && OGRE_COMPILER != OGRE_COMPILER_GNUC
-//  inline ArrayReal operator - ( ArrayReal l )                 { return _mm_xor_ps( l, MathlibNEON::SIGN_MASK ); }
+    inline ArrayReal operator - ( ArrayReal l )                 { return vnegq_f32( l ); }
 //  inline ArrayReal operator + ( ArrayReal l, Real r )         { return vaddq_f32( l, vdupq_n_f32( r ) ); }
 //  inline ArrayReal operator + ( Real l, ArrayReal r )         { return vaddq_f32( vdupq_n_f32( l ), r ); }
-//  inline ArrayReal operator + ( ArrayReal l, ArrayReal r )    { return vaddq_f32( l, r ); }
+    inline ArrayReal operator + ( ArrayReal l, ArrayReal r )    { return vaddq_f32( l, r ); }
 //  inline ArrayReal operator - ( ArrayReal l, Real r )         { return vsubq_f32( l, vdupq_n_f32( r ) ); }
 //  inline ArrayReal operator - ( Real l, ArrayReal r )         { return vsubq_f32( vdupq_n_f32( l ), r ); }
     inline ArrayReal operator - ( ArrayReal l, ArrayReal r )    { return vsubq_f32( l, r ); }
@@ -660,7 +675,7 @@ namespace Ogre
     inline ArrayReal operator * ( ArrayReal l, ArrayReal r )    { return vmulq_f32( l, r ); }
 //  inline ArrayReal operator / ( ArrayReal l, Real r )         { return _mm_div_ps( l, vdupq_n_f32( r ) ); }
 //  inline ArrayReal operator / ( Real l, ArrayReal r )         { return _mm_div_ps( vdupq_n_f32( l ), r ); }
-//  inline ArrayReal operator / ( ArrayReal l, ArrayReal r )    { return _mm_div_ps( l, r ); }
+    inline ArrayReal operator / ( ArrayReal l, ArrayReal r )    { return vdivq_f32( l, r ); }
 #endif
 }
 

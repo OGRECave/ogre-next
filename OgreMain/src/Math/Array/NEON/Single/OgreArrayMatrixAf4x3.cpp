@@ -40,9 +40,15 @@ namespace Ogre
                             0, 0, 1, 0,
                             0, 0, 0, 1 ) ) );
 
+#if defined(__clang__) || defined(__GNUC__)
     const SimpleMatrixAf4x3 SimpleMatrixAf4x3::IDENTITY( (ArrayReal) { 1, 0, 0, 0 },
                                                          (ArrayReal) { 0, 1, 0, 0 },
                                                          (ArrayReal) { 0, 0, 1, 0 } );
+#else
+    const SimpleMatrixAf4x3 SimpleMatrixAf4x3::IDENTITY( float32x4_ct { 1, 0, 0, 0 },
+                                                         float32x4_ct { 0, 1, 0, 0 },
+                                                         float32x4_ct { 0, 0, 1, 0 } );
+#endif
 }
 
 #endif
