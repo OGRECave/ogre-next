@@ -78,6 +78,7 @@ namespace Ogre
         return (ArrayReal)vorrq_s32((ArrayInt)a, (ArrayInt)b);
     }
 
+#if OGRE_ARCH_TYPE != OGRE_ARCHITECTURE_64 // ARM64 has native vdivq_f32
     static inline ArrayReal vdivq_f32( ArrayReal num, ArrayReal den )
     {
         const ArrayReal inv0 = vrecpeq_f32(den);
@@ -86,6 +87,7 @@ namespace Ogre
         const ArrayReal inv1 = vmulq_f32(step0, inv0);
         return vmulq_f32( num, inv1 );
     }
+#endif
 
 #define vandq_f32( a, b ) vreinterpretq_f32_u32( vandq_u32( vreinterpretq_u32_f32( a ), vreinterpretq_u32_f32( b ) ) )
 #define veorq_f32( a, b ) vreinterpretq_f32_u32( veorq_u32( vreinterpretq_u32_f32( a ), vreinterpretq_u32_f32( b ) ) )
