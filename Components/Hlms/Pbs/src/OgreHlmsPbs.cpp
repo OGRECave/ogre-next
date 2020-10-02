@@ -2785,10 +2785,7 @@ namespace Ogre
         mTexBufUnitSlotEnd = mReservedTexBufferSlots;
         mTexUnitSlotStart = mPreparedPass.shadowMaps.size() + mReservedTexSlots +
                             mReservedTexBufferSlots + mListener->getNumExtraPassTextures( casterPass );
-#ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
-        if( mHasPlanarReflections )
-            mTexUnitSlotStart += 1;
-#endif
+
         if( !casterPass )
         {
             if( mGridBuffer )
@@ -2840,6 +2837,11 @@ namespace Ogre
                     ++mTexUnitSlotStart;
                 }
             }
+
+#ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
+            if( mHasPlanarReflections )
+                mTexUnitSlotStart += 1;
+#endif
         }
 
         uploadDirtyDatablocks();
@@ -3415,8 +3417,8 @@ namespace Ogre
         if( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
         {
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
-            if( mHasPlanarReflections &&
-                (queuedRenderable.renderable->mCustomParameter & 0x80) &&
+            if( !casterPass && mHasPlanarReflections &&
+                (queuedRenderable.renderable->mCustomParameter & 0x80 /* UseActiveActor */) &&
                 mLastBoundPlanarReflection != queuedRenderable.renderable->mCustomParameter )
             {
                 const uint8 activeActorIdx = queuedRenderable.renderable->mCustomParameter & 0x7F;
@@ -3720,6 +3722,8 @@ namespace Ogre
     void HlmsPbs::setPlanarReflections( PlanarReflections *planarReflections )
     {
         mPlanarReflections = planarReflections;
+        if( !mPlanarReflections )
+            mHasPlanarReflections = false;
     }
     //-----------------------------------------------------------------------------------
     PlanarReflections* HlmsPbs::getPlanarReflections(void) const
