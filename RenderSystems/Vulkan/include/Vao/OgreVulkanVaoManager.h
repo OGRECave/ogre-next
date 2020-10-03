@@ -323,8 +323,8 @@ namespace Ogre
                                              BufferPacked *buffer );
 
     public:
-        VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device,
-                          VulkanRenderSystem *renderSystem );
+        VulkanVaoManager( VulkanDevice *device, VulkanRenderSystem *renderSystem,
+                          const NameValuePairList *params );
         virtual ~VulkanVaoManager();
 
         void initDrawIdVertexBuffer();

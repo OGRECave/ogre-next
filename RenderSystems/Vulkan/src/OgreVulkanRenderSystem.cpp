@@ -888,8 +888,6 @@ namespace Ogre
                     mReverseDepth = StringConverter::parseBool( itOption->second, true );
             }
 
-            const uint8 dynBufferMultiplier = 3u;
-
             initializeVkInstance();
 
             mDevice = new VulkanDevice( mVkInstance, mVulkanSupport->getSelectedDeviceIdx(), this );
@@ -943,8 +941,7 @@ namespace Ogre
 
             mDevice->createDevice( deviceExtensions, 0u, 0u );
 
-            VulkanVaoManager *vaoManager =
-                OGRE_NEW VulkanVaoManager( dynBufferMultiplier, mDevice, this );
+            VulkanVaoManager *vaoManager = OGRE_NEW VulkanVaoManager( mDevice, this, miscParams );
             mVaoManager = vaoManager;
             mHardwareBufferManager = OGRE_NEW v1::VulkanHardwareBufferManager( mDevice, mVaoManager );
 

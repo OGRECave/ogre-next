@@ -82,9 +82,9 @@ namespace Ogre
         14,   // VES_BLEND_INDICES2 - 1
     };
 
-    VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device,
-                                        VulkanRenderSystem *renderSystem ) :
-        VaoManager( 0 ),
+    VulkanVaoManager::VulkanVaoManager( VulkanDevice *device, VulkanRenderSystem *renderSystem,
+                                        const NameValuePairList *params ) :
+        VaoManager( params ),
         mVaoNames( 1u ),
         mDrawId( 0 ),
         mDevice( device ),
@@ -144,11 +144,9 @@ namespace Ogre
         if( mDevice->mDeviceProperties.limits.bufferImageGranularity != 1u )
             mDefaultPoolSize[CPU_INACCESSIBLE] = 32u * 1024u * 1024u;
 
-        mDelayedFuncs.resize( dynBufferMultiplier );
+        mDelayedFuncs.resize( mDynamicBufferMultiplier );
 
         determineBestMemoryTypes();
-
-        mDynamicBufferMultiplier = dynBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
     VulkanVaoManager::~VulkanVaoManager()
