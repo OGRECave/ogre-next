@@ -13,7 +13,7 @@ var class_ogre_1_1_vulkan_vao_manager =
       [ "TEXTURES_OPTIMAL", "class_ogre_1_1_vulkan_vao_manager.html#ab58aa47c8a54e57fecd9d7e93b6651a6ad1e8da73c7fc5e3ce7de33801b73f247", null ],
       [ "MAX_VBO_FLAG", "class_ogre_1_1_vulkan_vao_manager.html#ab58aa47c8a54e57fecd9d7e93b6651a6a1faa3e29dbe49f9f22a09f8d01e18bd0", null ]
     ] ],
-    [ "VulkanVaoManager", "class_ogre_1_1_vulkan_vao_manager.html#a2f46dc6b75c2b690d7ed3724ce0559f4", null ],
+    [ "VulkanVaoManager", "class_ogre_1_1_vulkan_vao_manager.html#af585c27cb1ae67c757a1b32df69fb9fe", null ],
     [ "~VulkanVaoManager", "class_ogre_1_1_vulkan_vao_manager.html#a7a7ced25ae7b1eae789a2f415c39aade", null ],
     [ "_beginFrame", "class_ogre_1_1_vulkan_vao_manager.html#ad255ed9aad893f120f6a29e172052ccd", null ],
     [ "_getDynamicBufferCurrentFrameNoWait", "class_ogre_1_1_vulkan_vao_manager.html#a4c2c223f495c035085ffa2b7323bce82", null ],
