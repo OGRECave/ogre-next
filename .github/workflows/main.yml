@@ -16,6 +16,7 @@ env:
   OGRE_BINARY_DIR: "./"
   OGRE_VERSION: "2.3"
   DOXYGEN_HTML_OUTPUT_DIR: "./2.3"
+  OUTPUT_DIRECTORY: "./api/api"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -46,5 +47,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./api
           keep_files: true
