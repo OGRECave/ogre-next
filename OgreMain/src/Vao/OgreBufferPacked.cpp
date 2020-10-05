@@ -263,7 +263,7 @@ namespace Ogre
                          "BufferPacked::advanceFrame" );
         }
 
-        --mLastFrameMappedAndAdvanced;
+        mLastFrameMapped = --mLastFrameMappedAndAdvanced;
 #endif
 
         if( isCurrentlyMapped() )
