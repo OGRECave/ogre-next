@@ -102,6 +102,7 @@ namespace Ogre
         CompositorPassQuad( const CompositorPassQuadDef *definition, Camera *defaultCamera,
                             CompositorNode *parentNode, const RenderTargetViewDef *rtv,
                             Real horizonalTexelOffset, Real verticalTexelOffset );
+        virtual ~CompositorPassQuad();
 
         virtual void execute( const Camera *lodCamera );
 

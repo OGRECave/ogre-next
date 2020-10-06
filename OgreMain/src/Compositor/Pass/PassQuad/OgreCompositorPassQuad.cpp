@@ -139,6 +139,28 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    CompositorPassQuad::~CompositorPassQuad()
+    {
+        if( mPass )
+        {
+            //Reset the names of our material textures, so that material could be reloaded later
+            const CompositorPassQuadDef::TextureSources &textureSources =
+                                                                mDefinition->getTextureSources();
+            CompositorPassQuadDef::TextureSources::const_iterator itor = textureSources.begin();
+            CompositorPassQuadDef::TextureSources::const_iterator end  = textureSources.end();
+            while( itor != end )
+            {
+                if( itor->texUnitIdx < mPass->getNumTextureUnitStates() )
+                {
+                    TextureUnitState *tu = mPass->getTextureUnitState( itor->texUnitIdx );
+                    tu->setTextureName( "" );
+                }
+
+                ++itor;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorPassQuad::execute( const Camera *lodCamera )
     {
         //Execute a limited number of times?
