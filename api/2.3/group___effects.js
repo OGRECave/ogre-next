@@ -656,6 +656,7 @@ var group___effects =
     ] ],
     [ "CompositorPassQuad", "class_ogre_1_1_compositor_pass_quad.html", [
       [ "CompositorPassQuad", "class_ogre_1_1_compositor_pass_quad.html#a6b1c50c49fb502278ba0f492eb57fc5d", null ],
+      [ "~CompositorPassQuad", "class_ogre_1_1_compositor_pass_quad.html#a33a08eb3d4f53df8c7f079ff2a4b6529", null ],
       [ "execute", "class_ogre_1_1_compositor_pass_quad.html#ae0a52291d3b53e65dd6a622e16a2965a", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass_quad.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getCamera", "class_ogre_1_1_compositor_pass_quad.html#a6fdbbe10e0fc36e91b076b123a2ed08f", null ],

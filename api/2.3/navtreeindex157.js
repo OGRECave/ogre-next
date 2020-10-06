@@ -1,5 +1,6 @@
 var NAVTREEINDEX157 =
 {
+"class_ogre_1_1_property_abstract_node.html#af3c62474bc3a0a363d559eb1894e7d30":[5,2,2,91,17],
 "class_ogre_1_1_property_abstract_node.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,2,91,11],
 "class_ogre_1_1_property_base.html":[5,1,1,2],
 "class_ogre_1_1_property_base.html#a1c727e879a260c37b00ce5505fe8e144":[5,1,1,2,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX157 =
 "class_ogre_1_1_quaternion.html#ab929010aac9fae8a14008a7213d9d419":[5,2,6,22,51],
 "class_ogre_1_1_quaternion.html#ac3328c1bb86d17e870c57d52720e2e32":[5,2,6,22,10],
 "class_ogre_1_1_quaternion.html#ac566d9e46f5c1b6368047c132e82a829":[5,2,6,22,19],
-"class_ogre_1_1_quaternion.html#acdcb70a4f122452b6fa70d7cf5ce3cf3":[5,2,6,22,2],
-"class_ogre_1_1_quaternion.html#ad4e2661546b7ac4e40b77f38a35ba8d9":[5,2,6,22,44]
+"class_ogre_1_1_quaternion.html#acdcb70a4f122452b6fa70d7cf5ce3cf3":[5,2,6,22,2]
 };

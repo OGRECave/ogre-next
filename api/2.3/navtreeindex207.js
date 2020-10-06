@@ -1,5 +1,6 @@
 var NAVTREEINDEX207 =
 {
+"class_ogre_1_1_vulkan_uav_buffer_packed.html#a2c72e5f40faf94c5d0de1ab8e740bb7e":[7,0,0,1153,22],
 "class_ogre_1_1_vulkan_uav_buffer_packed.html#a38ce860231b7569ef5a4665d6f3a7e90":[7,0,0,1153,0],
 "class_ogre_1_1_vulkan_uav_buffer_packed.html#a3d389b0aae18bb6dcb82af84c93b77de":[7,0,0,1153,26],
 "class_ogre_1_1_vulkan_uav_buffer_packed.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,1153,34],
@@ -248,6 +249,5 @@ var NAVTREEINDEX207 =
 "class_ogre_1_1_vulkan_window.html#a41466e5bd2fc3c7866e7e02a516eded1":[7,0,0,1157,4],
 "class_ogre_1_1_vulkan_window.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,1157,49],
 "class_ogre_1_1_vulkan_window.html#a462859aeb6b4db7290622623dae2a6a4":[7,0,0,1157,37],
-"class_ogre_1_1_vulkan_window.html#a4ab4e7ebbf7b0aede1246dd4e0c3e0d1":[7,0,0,1157,77],
-"class_ogre_1_1_vulkan_window.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,1157,52]
+"class_ogre_1_1_vulkan_window.html#a4ab4e7ebbf7b0aede1246dd4e0c3e0d1":[7,0,0,1157,77]
 };

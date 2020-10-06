@@ -1,5 +1,6 @@
 var NAVTREEINDEX152 =
 {
+"class_ogre_1_1_pass.html#a00a4036c87d4778c20d19412e9530ff2":[5,2,5,18,14],
 "class_ogre_1_1_pass.html#a025d29e0df7f5fa8209e37e3dbac057a":[5,2,5,18,21],
 "class_ogre_1_1_pass.html#a03306f735122ec4e7d4c391f1528cf50":[5,2,5,18,152],
 "class_ogre_1_1_pass.html#a0adea673c6a85f5fbc1c7403457c284f":[5,2,5,18,65],
@@ -248,6 +249,5 @@ var NAVTREEINDEX152 =
 "class_ogre_1_1_pixel_box.html#a88fa61f841bc444d92075d8b6cb2b43b":[5,2,3,17,35],
 "class_ogre_1_1_pixel_box.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,3,17,19],
 "class_ogre_1_1_pixel_box.html#a94e88a47e03162fabe5eb408d3358e12":[5,2,3,17,3],
-"class_ogre_1_1_pixel_box.html#a9a06f4ef4b6f641f8579a48e50e7ec6b":[5,2,3,17,11],
-"class_ogre_1_1_pixel_box.html#aa4101fdc288dc41dddac88440b4d0818":[5,2,3,17,33]
+"class_ogre_1_1_pixel_box.html#a9a06f4ef4b6f641f8579a48e50e7ec6b":[5,2,3,17,11]
 };
