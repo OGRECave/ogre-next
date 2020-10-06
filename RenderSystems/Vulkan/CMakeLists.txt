@@ -36,7 +36,7 @@ ogre_add_library(RenderSystem_Vulkan ${OGRE_LIB_TYPE} ${HEADER_FILES} ${SOURCE_F
 target_link_libraries(RenderSystem_Vulkan OgreMain ${Vulkan_LIBRARIES})
 
 if( UNIX AND NOT ANDROID )
-	target_link_libraries(RenderSystem_Vulkan xcb-randr)
+	target_link_libraries(RenderSystem_Vulkan xcb-randr X11-xcb)
 endif()
 
 if (OGRE_CONFIG_THREADS)
