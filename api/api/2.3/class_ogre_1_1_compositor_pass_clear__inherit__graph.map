@@ -1,0 +1,5 @@
+<map id="Ogre::CompositorPassClear" name="Ogre::CompositorPassClear">
+<area shape="rect" id="node1" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="5,155,188,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="21,80,173,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="27,5,166,32"/>
+</map>

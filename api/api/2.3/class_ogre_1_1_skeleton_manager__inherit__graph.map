@@ -1,0 +1,5 @@
+<map id="Ogre::SkeletonManager" name="Ogre::SkeletonManager">
+<area shape="rect" id="node1" title="Handles the management of skeleton resources." alt="" coords="94,95,251,121"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,177,47"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="202,13,309,39"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Ogre::ResourceBackgroundQueue" name="Ogre::ResourceBackgroundQueue">
+<area shape="rect" id="node1" title="This class is used to perform Resource operations in a background thread." alt="" coords="241,93,421,135"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="11,5,187,47"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="46,71,153,98"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_work_queue_1_1_request_handler.html" title="Interface definition for a handler of requests." alt="" coords="10,123,189,164"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_work_queue_1_1_response_handler.html" title="Interface definition for a handler of responses." alt="" coords="5,188,193,229"/>
+</map>

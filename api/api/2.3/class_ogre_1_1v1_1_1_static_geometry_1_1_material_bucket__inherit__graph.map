@@ -1,0 +1,4 @@
+<map id="Ogre::v1::StaticGeometry::MaterialBucket" name="Ogre::v1::StaticGeometry::MaterialBucket">
+<area shape="rect" id="node1" title="A MaterialBucket is a collection of smaller buckets with the same Material (and implicitly the same L..." alt="" coords="5,80,172,121"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="11,5,166,32"/>
+</map>

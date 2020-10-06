@@ -1,0 +1,4 @@
+<map id="Ogre::v1::TextAreaOverlayElement::CmdSpaceWidth" name="Ogre::v1::TextAreaOverlayElement::CmdSpaceWidth">
+<area shape="rect" id="node1" title="Command object for setting the width of a space." alt="" coords="5,80,177,121"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_param_command.html" title="Abstract class which is command object which gets/sets parameters." alt="" coords="15,5,168,32"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="Ogre::VulkanDescriptorPool" name="Ogre::VulkanDescriptorPool">
+<area shape="rect" id="node1" title="The VulkanDescriptorPool class A VulkanDescriptorPool manages the pool of a single set (i...." alt="" coords="5,80,187,107"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="39,5,153,32"/>
+</map>

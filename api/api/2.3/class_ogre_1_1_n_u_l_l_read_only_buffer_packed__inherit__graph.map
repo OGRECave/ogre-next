@@ -1,0 +1,8 @@
+<map id="Ogre::NULLReadOnlyBufferPacked" name="Ogre::NULLReadOnlyBufferPacked">
+<area shape="rect" id="node1" title=" " alt="" coords="95,304,277,345"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_read_only_buffer_packed.html" title="Represents the best way to access read&#45;only data." alt="" coords="91,229,281,256"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_tex_buffer_packed.html" title="Represents Texture buffers (also known as tbuffers in D3D11)" alt="" coords="109,155,263,181"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_buffer_packed.html" title=" " alt="" coords="119,80,253,107"/>
+<area shape="rect" id="node5" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,5,188,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="212,5,341,32"/>
+</map>

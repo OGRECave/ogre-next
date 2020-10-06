@@ -1,0 +1,5 @@
+<map id="Ogre::D3D9RenderSystem" name="Ogre::D3D9RenderSystem">
+<area shape="rect" id="node1" title="Implementation of DirectX9 as a rendering system." alt="" coords="5,155,179,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API." alt="" coords="21,80,163,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="35,5,149,32"/>
+</map>

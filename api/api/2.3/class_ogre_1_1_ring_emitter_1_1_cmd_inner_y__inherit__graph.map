@@ -1,0 +1,4 @@
+<map id="Ogre::RingEmitter::CmdInnerY" name="Ogre::RingEmitter::CmdInnerY">
+<area shape="rect" id="node1" title="Command object for inner size (see ParamCommand)." alt="" coords="17,80,147,121"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_param_command.html" title="Abstract class which is command object which gets/sets parameters." alt="" coords="5,5,159,32"/>
+</map>

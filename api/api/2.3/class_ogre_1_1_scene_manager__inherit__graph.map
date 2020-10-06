@@ -1,0 +1,9 @@
+<map id="Ogre::SceneManager" name="Ogre::SceneManager">
+<area shape="rect" id="node1" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="207,81,349,108"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_bsp_scene_manager.html" title="Specialisation of the SceneManager class to deal with indoor scenes based on a BSP tree." alt="" coords="406,5,573,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_default_scene_manager.html" title="Default scene manager." alt="" coords="397,56,581,83"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_octree_scene_manager.html" title="Specialized SceneManager that divides the geometry into an octree in order to facilitate spatial quer..." alt="" coords="398,107,581,133"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_p_c_z_scene_manager.html" title="Specialized SceneManager that uses Portal&#45;Connected&#45;Zones to divide the scene spatially." alt="" coords="405,157,574,184"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,56,159,83"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="29,107,135,133"/>
+</map>

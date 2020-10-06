@@ -1,0 +1,7 @@
+<map id="Ogre::v1::OverlayElementFactory" name="Ogre::v1::OverlayElementFactory">
+<area shape="rect" id="node1" title="Defines the interface which all components wishing to supply OverlayElement subclasses must implement..." alt="" coords="148,71,315,112"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1v1_1_1_border_panel_overlay_element_factory.html" title="Factory for creating BorderPanelOverlayElement instances." alt="" coords="367,5,558,47"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1v1_1_1_panel_overlay_element_factory.html" title="Factory for creating PanelOverlayElement instances." alt="" coords="363,71,563,112"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html" title="Factory for creating TextAreaOverlayElement instances." alt="" coords="377,136,549,177"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,78,100,105"/>
+</map>

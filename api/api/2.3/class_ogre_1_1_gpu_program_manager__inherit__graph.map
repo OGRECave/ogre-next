@@ -1,0 +1,13 @@
+<map id="Ogre::GpuProgramManager" name="Ogre::GpuProgramManager">
+<area shape="rect" id="node1" title=" " alt="" coords="427,132,605,159"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_gpu_program_manager.html" title=" " alt="" coords="655,5,873,32"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d9_gpu_program_manager.html" title=" " alt="" coords="659,56,869,83"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_g_l_e_s2_gpu_program_manager.html" title=" " alt="" coords="653,107,875,133"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_g_l_s_l_shader_manager.html" title=" " alt="" coords="673,157,855,184"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_metal_gpu_program_manager.html" title=" " alt="" coords="659,208,869,235"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_vulkan_gpu_program_manager.html" title=" " alt="" coords="655,259,873,285"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler." alt="" coords="201,103,362,129"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,77,136,104"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="17,128,124,155"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="184,154,379,195"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="Ogre::FrameStats" name="Ogre::FrameStats">
+<area shape="rect" id="node1" title="All return values are either in milliseconds or frames per second; but they&#39;re internally stored in m..." alt="" coords="5,80,129,107"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="22,5,113,32"/>
+</map>

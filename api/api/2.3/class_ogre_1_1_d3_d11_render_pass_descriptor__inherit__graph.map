@@ -1,0 +1,7 @@
+<map id="Ogre::D3D11RenderPassDescriptor" name="Ogre::D3D11RenderPassDescriptor">
+<area shape="rect" id="node1" title="D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that share the same R..." alt="" coords="174,169,399,196"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_render_pass_descriptor.html" title=" " alt="" coords="5,87,192,114"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="41,5,156,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_render_system_1_1_listener.html" title="Defines a listener on the custom events that this render system can raise." alt="" coords="216,80,357,121"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="382,87,573,114"/>
+</map>

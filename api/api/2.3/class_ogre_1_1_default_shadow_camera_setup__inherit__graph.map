@@ -1,0 +1,8 @@
+<map id="Ogre::DefaultShadowCameraSetup" name="Ogre::DefaultShadowCameraSetup">
+<area shape="rect" id="node1" title="Implements default shadow camera setup." alt="" coords="129,155,319,196"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_concentric_shadow_camera.html" title="Implements the concentric shadow mapping algorithm." alt="" coords="5,251,216,278"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_focused_shadow_camera_setup.html" title="Implements the uniform shadow mapping algorithm in focused mode." alt="" coords="239,244,438,285"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_shadow_camera_setup.html" title="This class allows you to plug in new ways to define the camera setup when rendering and projecting sh..." alt="" coords="133,80,315,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="161,5,287,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_p_s_s_m_shadow_camera_setup.html" title="Parallel Split Shadow Map (PSSM) shadow camera setup." alt="" coords="229,333,449,360"/>
+</map>

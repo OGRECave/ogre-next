@@ -1,0 +1,7 @@
+<map id="Ogre::v1::StaticGeometry::Region" name="Ogre::v1::StaticGeometry::Region">
+<area shape="rect" id="node1" title="The details of a topological region which is the highest level of partitioning for this class." alt="" coords="144,155,311,196"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="156,80,299,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="177,5,277,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="301,5,407,32"/>
+</map>

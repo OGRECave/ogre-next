@@ -1,0 +1,5 @@
+<map id="Ogre::RTShader::ShaderGenerator" name="Ogre::RTShader::ShaderGenerator">
+<area shape="rect" id="node1" title="Shader generator system main interface." alt="" coords="119,80,338,107"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="5,5,236,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="260,5,413,32"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="Ogre::Texture" name="Ogre::Texture">
+<area shape="rect" id="node1" title="Abstract class representing a Texture resource." alt="" coords="353,157,452,184"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_texture.html" title=" " alt="" coords="506,56,645,83"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_d3_d9_texture.html" title=" " alt="" coords="510,107,641,133"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_g_l3_plus_texture.html" title=" " alt="" coords="500,157,651,184"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_metal_texture.html" title=" " alt="" coords="510,208,641,235"/>
+<area shape="rect" id="node15" href="$class_ogre_1_1_n_u_l_l_texture.html" title=" " alt="" coords="508,259,643,285"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g." alt="" coords="195,157,305,184"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,132,147,159"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="23,183,129,209"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_depth_texture.html" title=" " alt="" coords="705,5,877,32"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_d3_d11_null_texture.html" title=" " alt="" coords="710,56,871,83"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_g_l3_plus_depth_texture.html" title=" " alt="" coords="699,107,883,133"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_g_l3_plus_null_texture.html" title=" " alt="" coords="704,157,877,184"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_metal_depth_texture.html" title=" " alt="" coords="708,208,873,235"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1_metal_null_texture.html" title=" " alt="" coords="713,259,868,285"/>
+</map>

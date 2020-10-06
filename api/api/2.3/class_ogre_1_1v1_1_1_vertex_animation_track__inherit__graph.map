@@ -1,0 +1,5 @@
+<map id="Ogre::v1::VertexAnimationTrack" name="Ogre::v1::VertexAnimationTrack">
+<area shape="rect" id="node1" title="Specialised AnimationTrack for dealing with changing vertex position information." alt="" coords="5,155,176,196"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1v1_1_1_animation_track.html" title="A &#39;track&#39; in an animation sequence, i.e." alt="" coords="7,80,174,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="36,5,145,32"/>
+</map>

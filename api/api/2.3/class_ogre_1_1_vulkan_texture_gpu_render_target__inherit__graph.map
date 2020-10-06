@@ -1,0 +1,9 @@
+<map id="Ogre::VulkanTextureGpuRenderTarget" name="Ogre::VulkanTextureGpuRenderTarget">
+<area shape="rect" id="node1" title=" " alt="" coords="85,304,289,345"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_vulkan_texture_gpu_window.html" title=" " alt="" coords="83,393,292,420"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_vulkan_texture_gpu.html" title=" " alt="" coords="106,229,269,256"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu.html" title=" " alt="" coords="126,155,249,181"/>
+<area shape="rect" id="node4" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,80,188,107"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_gpu_resource.html" title=" " alt="" coords="212,80,347,107"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="226,5,333,32"/>
+</map>

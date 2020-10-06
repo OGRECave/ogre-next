@@ -1,0 +1,5 @@
+<map id="Ogre::TerrainMaterialGeneratorA::SM2Profile" name="Ogre::TerrainMaterialGeneratorA::SM2Profile">
+<area shape="rect" id="node1" title="Shader model 2 profile target." alt="" coords="5,169,204,211"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_terrain_material_generator_1_1_profile.html" title="Inner class which should also be subclassed to provide profile&#45;specific material generation." alt="" coords="5,80,204,121"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="59,5,150,32"/>
+</map>

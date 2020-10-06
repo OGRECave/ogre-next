@@ -1,0 +1,5 @@
+<map id="Ogre::RTShader::ShaderProgramWriterCGFactory" name="Ogre::RTShader::ShaderProgramWriterCGFactory">
+<area shape="rect" id="node1" title="CG program writer factory implementation." alt="" coords="5,169,216,211"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_r_t_shader_1_1_program_writer_factory.html" title="Interface definition for factories of ShaderProgramWriter." alt="" coords="9,80,212,121"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="34,5,187,32"/>
+</map>

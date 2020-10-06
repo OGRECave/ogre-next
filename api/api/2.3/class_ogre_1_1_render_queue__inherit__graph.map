@@ -1,0 +1,4 @@
+<map id="Ogre::RenderQueue" name="Ogre::RenderQueue">
+<area shape="rect" id="node1" title="Class to manage the scene object rendering queue." alt="" coords="5,80,140,107"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="7,5,138,32"/>
+</map>

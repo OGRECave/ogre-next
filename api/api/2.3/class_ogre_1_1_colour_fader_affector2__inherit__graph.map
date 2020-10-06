@@ -1,0 +1,6 @@
+<map id="Ogre::ColourFaderAffector2" name="Ogre::ColourFaderAffector2">
+<area shape="rect" id="node1" title="This plugin subclass of ParticleAffector allows you to alter the colour of particles." alt="" coords="51,155,229,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_particle_affector.html" title="Abstract class defining the interface to be implemented by particle affectors." alt="" coords="67,80,213,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,5,147,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="170,5,238,32"/>
+</map>

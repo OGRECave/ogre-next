@@ -1,0 +1,9 @@
+<map id="Ogre::Light" name="Ogre::Light">
+<area shape="rect" id="node1" title="Representation of a dynamic light source in the scene." alt="" coords="275,155,361,181"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_p_c_z_light.html" title="Specialized version of Ogre::Light which caches which zones the light affects." alt="" coords="263,229,373,256"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene." alt="" coords="156,80,299,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_animable_object.html" title="Defines an interface to classes which have one or more AnimableValue instances to expose." alt="" coords="5,5,153,32"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="177,5,277,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="301,5,407,32"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_texture_gpu_listener.html" title=" " alt="" coords="323,80,494,107"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Ogre::RTShader::HardwareSkinning" name="Ogre::RTShader::HardwareSkinning">
+<area shape="rect" id="node1" title="Implement a sub render state which performs hardware skinning." alt="" coords="9,169,185,211"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_r_t_shader_1_1_sub_render_state.html" title="This class is the base interface of sub part from a shader based rendering pipeline." alt="" coords="5,80,189,121"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="21,5,174,32"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Ogre::LodOutputProvider" name="Ogre::LodOutputProvider">
+<area shape="rect" id="node1" title=" " alt="" coords="5,56,171,83"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_lod_output_provider_buffer.html" title=" " alt="" coords="255,5,453,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_lod_output_provider_compressed_mesh.html" title=" " alt="" coords="219,56,489,83"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_lod_output_provider_mesh.html" title=" " alt="" coords="255,107,453,133"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_lod_output_provider_compressed_buffer.html" title=" " alt="" coords="537,49,776,90"/>
+</map>

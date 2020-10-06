@@ -1,0 +1,6 @@
+<map id="Ogre::CompositorWorkspaceListener" name="Ogre::CompositorWorkspaceListener">
+<area shape="rect" id="node1" title=" " alt="" coords="144,5,331,47"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="116,95,359,121"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_parallax_corrected_cubemap.html" title=" " alt="" coords="5,169,219,196"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_parallax_corrected_cubemap_auto.html" title="Per&#45;Pixel reflection probes." alt="" coords="243,169,483,196"/>
+</map>

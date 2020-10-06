@@ -1,0 +1,14 @@
+<map id="Ogre::ParticleAffector" name="Ogre::ParticleAffector">
+<area shape="rect" id="node1" title="Abstract class defining the interface to be implemented by particle affectors." alt="" coords="195,224,340,251"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_colour_fader_affector.html" title="This plugin subclass of ParticleAffector allows you to alter the colour of particles." alt="" coords="395,5,566,32"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_colour_fader_affector2.html" title="This plugin subclass of ParticleAffector allows you to alter the colour of particles." alt="" coords="391,56,570,83"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_colour_image_affector.html" title=" " alt="" coords="393,107,568,133"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_colour_interpolator_affector.html" title=" " alt="" coords="401,158,560,199"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_deflector_plane_affector.html" title="This class defines a ParticleAffector which deflects particles." alt="" coords="388,224,573,251"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_direction_randomiser_affector.html" title="This class defines a ParticleAffector which applies randomness to the movement of the particles." alt="" coords="393,275,569,317"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_linear_force_affector.html" title="This class defines a ParticleAffector which applies a linear force to particles in a system." alt="" coords="395,341,566,368"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_rotation_affector.html" title="This plugin subclass of ParticleAffector allows you to alter the rotation of particles." alt="" coords="406,392,555,419"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_scale_affector.html" title="This plugin subclass of ParticleAffector allows you to alter the scale of particles." alt="" coords="413,443,548,469"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_string_interface.html" title="Class defining the common interface which classes can use to present a reflection&#45;style,..." alt="" coords="5,199,147,225"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="42,249,110,276"/>
+</map>

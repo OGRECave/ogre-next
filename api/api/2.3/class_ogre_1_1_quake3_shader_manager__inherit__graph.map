@@ -1,0 +1,6 @@
+<map id="Ogre::Quake3ShaderManager" name="Ogre::Quake3ShaderManager">
+<area shape="rect" id="node1" title="Class for managing Quake3 custom shaders." alt="" coords="168,95,360,121"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_script_loader.html" title="Abstract class defining the interface used by classes which wish to perform script loading to define ..." alt="" coords="5,13,136,39"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_singleton.html" title=" " alt="" coords="161,5,367,47"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="392,13,499,39"/>
+</map>
