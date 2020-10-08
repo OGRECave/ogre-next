@@ -443,8 +443,7 @@ namespace Ogre {
 
     public:
         /// Create an empty preprocessor object
-        CPreprocessor () : MacroList (NULL)
-        { }
+        CPreprocessor ();
 
         /// Destroy the preprocessor object
         virtual ~CPreprocessor ();

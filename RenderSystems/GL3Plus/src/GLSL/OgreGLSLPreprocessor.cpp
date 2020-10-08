@@ -243,6 +243,15 @@ namespace Ogre {
 
     CPreprocessor::ErrorHandlerFunc CPreprocessor::ErrorHandler = DefaultError;
 
+    CPreprocessor::CPreprocessor() : MacroList( NULL )
+    {
+        Source = 0;
+        SourceEnd = 0;
+        EnableOutput = 1;
+        Line = 0;
+        BOL = true;
+        SupplimentaryExpand = false;
+    }
 
     CPreprocessor::CPreprocessor (const Token &iToken, int iLine) : MacroList (NULL)
     {
