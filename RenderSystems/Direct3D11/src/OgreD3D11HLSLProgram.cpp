@@ -459,18 +459,8 @@ namespace Ogre {
 
         String stringBuffer;
         vector<D3D_SHADER_MACRO>::type defines;
-        const D3D_SHADER_MACRO* pDefines = NULL;
-        if (!shaderMacroSet)
-        {
-            getDefines(stringBuffer, defines, mPreprocessorDefines);
-            pDefines = defines.empty() ? NULL : &defines[0];
-        }
-        else
-        {
-            pDefines =  mShaderMacros;
-            shaderMacroSet = false;
-        }
-
+        getDefines(stringBuffer, defines, mPreprocessorDefines);
+        const D3D_SHADER_MACRO* pDefines = defines.empty() ? NULL : &defines[0];
 
         UINT compileFlags=0;
         D3D11RenderSystem *rsys = static_cast<D3D11RenderSystem*>(
@@ -1550,7 +1540,7 @@ namespace Ogre {
         ManualResourceLoader* loader, D3D11Device & device)
         : HighLevelGpuProgram(creator, name, handle, group, isManual, loader)
         , mErrorsInCompile(false), mDevice(device), mConstantBufferSize(0)
-        , mColumnMajorMatrices(true), mEnableBackwardsCompatibility(false), shaderMacroSet(false)
+        , mColumnMajorMatrices(true), mEnableBackwardsCompatibility(false)
         , mDefaultBufferBindPoint(-1)
     {
 #if SUPPORT_SM2_0_HLSL_SHADERS == 1
@@ -2238,13 +2228,6 @@ namespace Ogre {
     { 
         assert(mMicroCode.size() > 0);
         return mMicroCode; 
-    }
-    //-----------------------------------------------------------------------------
-    void D3D11HLSLProgram::setShaderMacros(D3D_SHADER_MACRO* shaderMacros)
-    {
-        mShaderMacros = new D3D_SHADER_MACRO[7];
-        mShaderMacros = shaderMacros;
-        shaderMacroSet = true;
     }
     //-----------------------------------------------------------------------------
     unsigned int D3D11HLSLProgram::getNumInputs( void ) const

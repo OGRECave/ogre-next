@@ -121,9 +121,6 @@ namespace Ogre {
 
         bool mErrorsInCompile;
         MicroCode mMicroCode;
-        
-        D3D_SHADER_MACRO* mShaderMacros;
-        bool shaderMacroSet;
 
         D3D11Device & mDevice;
 
@@ -312,8 +309,6 @@ namespace Ogre {
         const String& getTarget(void) const { return mTarget; }
         /** Gets the shader target promoted to the first compatible, e.g. 'vs_4_0' or 'ps_4_0' if backward compatibility is enabled. */
         const String& getCompatibleTarget(void) const;
-        /** Sets shader macros created manually*/
-        void setShaderMacros(D3D_SHADER_MACRO* shaderMacros);
 
         /** Sets the preprocessor defines use to compile the program. */
         void setPreprocessorDefines(const String& defines) { mPreprocessorDefines = defines; }
