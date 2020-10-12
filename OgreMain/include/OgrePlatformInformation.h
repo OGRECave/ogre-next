@@ -51,7 +51,6 @@ namespace Ogre {
 */
 #if OGRE_CPU == OGRE_CPU_X86
 #   define OGRE_SIMD_ALIGNMENT  16
-
 #else
 #   define OGRE_SIMD_ALIGNMENT  16
 #endif
