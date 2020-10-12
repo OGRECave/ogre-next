@@ -61,9 +61,10 @@ namespace Ogre {
 #define OGRE_CPU_PPC        2
 #define OGRE_CPU_ARM        3
 #define OGRE_CPU_MIPS       4
+#define OGRE_CPU_E2K        5
 
 /* Find CPU type */
-#if defined(__i386__) || defined(__x86_64__) || defined(_M_IX86) || defined(_M_X64) || defined(_M_AMD64)
+#if defined(__i386__) || defined(__x86_64__) || defined(_M_IX86) || defined(_M_X64) || defined(_M_AMD64) || defined(__e2k__)
 #   define OGRE_CPU OGRE_CPU_X86
 #elif defined(__ppc__) || defined(__ppc64__) || defined(_M_PPC)
 #   define OGRE_CPU OGRE_CPU_PPC
@@ -80,7 +81,7 @@ namespace Ogre {
  || defined(__ppc64__) \
  || defined(__arm64__) || defined(__aarch64__) || defined(_M_ARM64) \
  || defined(__mips64) || defined(__mips64_) \
- || defined(__alpha__) || defined(__ia64__) || defined(__s390__) || defined(__s390x__)
+ || defined(__alpha__) || defined(__ia64__) || defined(__e2k__) || defined(__s390__) || defined(__s390x__)
 #   define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_64
 #else
 #   define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_32
@@ -124,7 +125,7 @@ namespace Ogre {
 #elif defined( __BORLANDC__ )
 #   define OGRE_COMPILER OGRE_COMPILER_BORL
 #   define OGRE_COMP_VER __BCPLUSPLUS__
-#   define __FUNCTION__ __FUNC__ 
+#   define __FUNCTION__ __FUNC__
 #else
 #   pragma error "No known compiler. Abort! Abort!"
 

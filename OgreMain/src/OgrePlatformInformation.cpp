@@ -71,7 +71,7 @@ THE SOFTWARE.
 
 namespace Ogre {
 
-#if OGRE_CPU == OGRE_CPU_X86
+#if OGRE_CPU == OGRE_CPU_X86 && !defined(__e2k__)
 
     //---------------------------------------------------------------------
     // Struct for store CPUID instruction result, compiler-independent
@@ -640,7 +640,55 @@ namespace Ogre {
         return cpuID;
     }
 
-#else   // OGRE_CPU == OGRE_CPU_MIPS
+#elif OGRE_CPU == OGRE_CPU_X86 && defined(__e2k__)  // OGRE_CPU == OGRE_CPU_E2K
+
+    //---------------------------------------------------------------------
+    static uint _detectCpuFeatures(void)
+    {
+        // Use preprocessor definitions to determine architecture and CPU features
+        uint features = 0;
+        // MCST e2k (Elbrus 2000) architecture has half native / half software support of most Intel/AMD SIMD
+        // e.g. MMX/SSE/SSE2/SSE3/SSSE3/SSE4.1/SSE4.2/AES/AVX/AVX2 & 3DNow!/SSE4a/XOP/FMA4
+        features |= PlatformInformation::CPU_FEATURE_PRO;
+        features |= PlatformInformation::CPU_FEATURE_TSC;
+        features |= PlatformInformation::CPU_FEATURE_FPU;
+        features |= PlatformInformation::CPU_FEATURE_CMOV;
+#       if defined(__MMX__)
+            features |= PlatformInformation::CPU_FEATURE_MMX;
+#       endif
+#       if defined(__SSE__)
+            features |= PlatformInformation::CPU_FEATURE_MMXEXT;
+            features |= PlatformInformation::CPU_FEATURE_SSE;
+#       endif
+#       if defined(__SSE2__)
+            features |= PlatformInformation::CPU_FEATURE_SSE2;
+#       endif
+#       if defined(__SSE3__)
+            features |= PlatformInformation::CPU_FEATURE_SSE3;
+#       endif
+#       if defined(__3dNOW__)
+            features |= PlatformInformation::CPU_FEATURE_3DNOW;
+#       endif
+#       if defined(__3dNOW_A__)
+            features |= PlatformInformation::CPU_FEATURE_3DNOWEXT;
+#       endif
+        return features;
+    }
+    //---------------------------------------------------------------------
+    static String _detectCpuIdentifier(void)
+    {
+        String cpuID = __builtin_cpu_name();
+
+        return cpuID;
+    }
+    //---------------------------------------------------------------------
+    // Added for compatibility with x86 architecture in void PlatformInformation::log(Log* pLog) section
+    static int _isSupportCpuid(void)
+    {
+        return true;
+    }
+
+#else  // OGRE_CPU == OGRE_CPU_E2K
 
     //---------------------------------------------------------------------
     static uint _detectCpuFeatures(void)
@@ -751,6 +799,5 @@ namespace Ogre {
         pLog->logMessage("-------------------------");
 
     }
-
 
 }
