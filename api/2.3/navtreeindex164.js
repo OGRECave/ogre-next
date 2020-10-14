@@ -1,6 +1,5 @@
 var NAVTREEINDEX164 =
 {
-"class_ogre_1_1_r_t_shader_1_1_shader_generator.html#a8a32eb5519fa040eced4a6c94025dbd8":[5,2,9,48,23],
 "class_ogre_1_1_r_t_shader_1_1_shader_generator.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,9,48,47],
 "class_ogre_1_1_r_t_shader_1_1_shader_generator.html#a96fee1229b6cd03d9da70e58e3290848":[5,2,9,48,19],
 "class_ogre_1_1_r_t_shader_1_1_shader_generator.html#a9a1b9912a57a43aa66b24f3c9b85a4fb":[5,2,9,48,55],
@@ -249,5 +248,6 @@ var NAVTREEINDEX164 =
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing_factory.html#a23839e5fc35257e4ffb9076e2aaf9409":[5,2,9,61,5],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing_factory.html#a3691c3e327fbf3d7236db6110de0cd5c":[5,2,9,61,1],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing_factory.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,9,61,13],
-"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing_factory.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,9,61,16]
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing_factory.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,9,61,16],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing_factory.html#a54a6f6eba1624fef1de9c20eb7b0a6b5":[5,2,9,61,3]
 };

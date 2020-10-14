@@ -1,6 +1,5 @@
 var NAVTREEINDEX165 =
 {
-"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing_factory.html#a54a6f6eba1624fef1de9c20eb7b0a6b5":[5,2,9,61,3],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing_factory.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,9,61,11],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing_factory.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,9,61,7],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing_factory.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,9,61,10],
@@ -249,5 +248,6 @@ var NAVTREEINDEX165 =
 "class_ogre_1_1_radian.html#a6e9f6957e298803562bb63ccddeb6717":[5,2,6,23,13],
 "class_ogre_1_1_radian.html#a788a24ddeedc500a910d6237707e1102":[5,2,6,23,4],
 "class_ogre_1_1_radian.html#aa2366301db74814149be591856884221":[5,2,6,23,11],
-"class_ogre_1_1_radian.html#aaa01cb1c5b32553395c42cf66de94b78":[5,2,6,23,3]
+"class_ogre_1_1_radian.html#aaa01cb1c5b32553395c42cf66de94b78":[5,2,6,23,3],
+"class_ogre_1_1_radian.html#aac01bc3b1f60064a8d3881ec2b622056":[5,2,6,23,8]
 };

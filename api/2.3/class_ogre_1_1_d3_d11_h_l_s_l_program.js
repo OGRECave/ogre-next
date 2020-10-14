@@ -144,7 +144,6 @@ var class_ogre_1_1_d3_d11_h_l_s_l_program =
     [ "setPreprocessorDefines", "class_ogre_1_1_d3_d11_h_l_s_l_program.html#a9305d93d797b39e4f69fa55dbaed1e87", null ],
     [ "setReplaceVersionMacro", "class_ogre_1_1_d3_d11_h_l_s_l_program.html#a0723cad43b2bfee112cc73a92c886d0d", null ],
     [ "setRootLayout", "class_ogre_1_1_d3_d11_h_l_s_l_program.html#adf97e56ab636784432fa469f3539caab", null ],
-    [ "setShaderMacros", "class_ogre_1_1_d3_d11_h_l_s_l_program.html#ab3e938cd5942848fe158ba8d6dfd6844", null ],
     [ "setSkeletalAnimationIncluded", "class_ogre_1_1_d3_d11_h_l_s_l_program.html#af337509a5342cb707df4df78337756ae", null ],
     [ "setSource", "class_ogre_1_1_d3_d11_h_l_s_l_program.html#a300833abd29aa42acb5e6c48ae7c40ea", null ],
     [ "setSource", "class_ogre_1_1_d3_d11_h_l_s_l_program.html#a94c9ce889770e95c0cdc541f8675f06f", null ],
