@@ -116,7 +116,7 @@ namespace Ogre
             {
                 mPrePassDepthTexture =
                     parentNode->getDefinedTexture( mDefinition->mPrePassDepthTexture );
-            };
+            }
 
             if( mDefinition->mPrePassSsrTexture != IdString() )
             {
@@ -134,7 +134,7 @@ namespace Ogre
                              "WITHOUT MSAA",
                              "CompositorPassScene::CompositorPassScene" );
             }
-        };
+        }
 
         if( mDefinition->mRefractionsTexture != IdString() )
             mRefractionsTexture = parentNode->getDefinedTexture( mDefinition->mRefractionsTexture );
