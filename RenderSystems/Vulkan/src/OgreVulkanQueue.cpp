@@ -1074,6 +1074,8 @@ namespace Ogre
         VkFence fence = mCurrentFence;  // Note: mCurrentFence may be nullptr
 
         vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
+        if( submissionType >= SubmissionType::NewFrameIdx )
+            mGpuWaitSemaphForCurrCmdBuff.clear();
 
         if( mCurrentFence && mCurrentFenceRefCount > 0 )
         {
@@ -1114,7 +1116,6 @@ namespace Ogre
                 mWindowsPendingSwap[windowIdx]->acquireNextSwapchain();
             mWindowsPendingSwap.clear();
 
-            mGpuWaitSemaphForCurrCmdBuff.clear();
             mGpuSignalSemaphForCurrCmdBuff.clear();
         }
     }
