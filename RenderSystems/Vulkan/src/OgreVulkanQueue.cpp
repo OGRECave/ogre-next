@@ -1014,9 +1014,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanQueue::commitAndNextCommandBuffer( SubmissionType::SubmissionType submissionType )
     {
-        VkSubmitInfo submitInfo;
-        makeVkStruct( submitInfo, VK_STRUCTURE_TYPE_SUBMIT_INFO );
-
         endCommandBuffer();
 
         // We must reset all bindings or else after 3 (mDynamicBufferCurrentFrame) frames
@@ -1028,6 +1025,19 @@ namespace Ogre
         if( mPendingCmds.empty() )
             return;
 
+        VkSubmitInfo submitInfo;
+        makeVkStruct( submitInfo, VK_STRUCTURE_TYPE_SUBMIT_INFO );
+
+        if( !mGpuWaitSemaphForCurrCmdBuff.empty() )
+        {
+            // We need to wait on these semaphores so that rendering can
+            // only happen start the swapchain is done presenting
+            submitInfo.waitSemaphoreCount =
+                static_cast<uint32>( mGpuWaitSemaphForCurrCmdBuff.size() );
+            submitInfo.pWaitSemaphores = mGpuWaitSemaphForCurrCmdBuff.begin();
+            submitInfo.pWaitDstStageMask = mGpuWaitFlags.begin();
+        }
+
         const size_t windowsSemaphStart = mGpuSignalSemaphForCurrCmdBuff.size();
         size_t numWindowsPendingSwap = 0u;
 
@@ -1035,24 +1045,19 @@ namespace Ogre
         {
             if( submissionType >= SubmissionType::EndFrameAndSwap )
             {
+                // Get some semaphores so that presentation can wait for this job to finish rendering
+                // (one for each window that will be swapped)
                 numWindowsPendingSwap = mWindowsPendingSwap.size();
                 mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff,
                                                       numWindowsPendingSwap );
             }
 
-            if( !mGpuWaitSemaphForCurrCmdBuff.empty() )
-            {
-                // We need to wait on these semaphores so that rendering can
-                // only happen start the swapchain is done presenting
-                submitInfo.waitSemaphoreCount =
-                    static_cast<uint32>( mGpuWaitSemaphForCurrCmdBuff.size() );
-                submitInfo.pWaitSemaphores = mGpuWaitSemaphForCurrCmdBuff.begin();
-                submitInfo.pWaitDstStageMask = mGpuWaitFlags.begin();
-            }
             if( !mGpuSignalSemaphForCurrCmdBuff.empty() )
             {
                 // We need to signal these semaphores so that presentation
-                // can only happen after we're done rendering
+                // can only happen after we're done rendering (presentation may not be the
+                // only thing waiting for us though; thus we must set this with NewFrameIdx
+                // and not just with EndFrameAndSwap)
                 submitInfo.signalSemaphoreCount =
                     static_cast<uint32>( mGpuSignalSemaphForCurrCmdBuff.size() );
                 submitInfo.pSignalSemaphores = mGpuSignalSemaphForCurrCmdBuff.begin();
@@ -1075,8 +1080,7 @@ namespace Ogre
         VkFence fence = mCurrentFence;  // Note: mCurrentFence may be nullptr
 
         vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
-        if( submissionType >= SubmissionType::NewFrameIdx )
-            mGpuWaitSemaphForCurrCmdBuff.clear();
+        mGpuWaitSemaphForCurrCmdBuff.clear();
 
         if( mCurrentFence && mCurrentFenceRefCount > 0 )
         {
