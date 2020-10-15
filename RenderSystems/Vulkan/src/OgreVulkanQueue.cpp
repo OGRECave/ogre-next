@@ -790,7 +790,8 @@ namespace Ogre
 
                 // GPU must stop using this buffer before we can write into it
                 vkCmdPipelineBarrier( mCurrentCmdBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT,
-                                      VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 1u, &memBarrier, 0u, 0, 0u, 0 );
+                                      VK_PIPELINE_STAGE_TRANSFER_BIT, 0, numMemBarriers, &memBarrier, 0u,
+                                      0, 0u, 0 );
             }
 
             mCopyEndReadDstBufferFlags |= bufferAccessFlags;
