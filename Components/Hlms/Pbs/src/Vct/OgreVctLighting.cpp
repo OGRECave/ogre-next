@@ -532,7 +532,7 @@ namespace Ogre
         mBounceVoxelCellSize->setManualValue( mVoxelizer->getVoxelCellSize() );
         mBounceInvVoxelResolution->setManualValue( 1.0f / mVoxelizer->getVoxelResolution() );
         //mBounceIterationDampening->setManualValue( 1.0f / (Math::PI * (bounceIteration * 0.5f + 1.0f)) );
-        mBounceIterationDampening->setManualValue( 1.0f / Math::PI );
+        mBounceIterationDampening->setManualValue( 1.0f / (float)Math::PI );
         mBounceStartBiasInvBias->setManualValue( Vector2( invSmallestRes, smallestRes ) );
         mBounceShaderParams->setDirty();
 

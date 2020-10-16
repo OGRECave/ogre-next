@@ -7533,7 +7533,7 @@ namespace Ogre{
                         }
 
                         AbstractNodeList::const_iterator it0 = prop->values.begin();
-                        if( !getReal( *it0, &defaultParams.normalOffsetBias ) )
+                        if( !getFloat( *it0, &defaultParams.normalOffsetBias ) )
                         {
                             compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file,
                                                 prop->line );
@@ -7555,7 +7555,7 @@ namespace Ogre{
                         }
 
                         AbstractNodeList::const_iterator it0 = prop->values.begin();
-                        if( !getReal( *it0, &defaultParams.constantBiasScale ) )
+                        if( !getFloat( *it0, &defaultParams.constantBiasScale ) )
                         {
                             compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file,
                                                 prop->line );
@@ -9026,7 +9026,7 @@ namespace Ogre{
                             compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
                             return;
                         }
-                        if( !getReal(prop->values.front(), &passClear->mClearDepth) )
+                        if( !getFloat(prop->values.front(), &passClear->mClearDepth) )
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
                         }

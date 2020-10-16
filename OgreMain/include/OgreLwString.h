@@ -351,6 +351,76 @@ namespace Ogre
             return *this;
         }
 
+        struct Double
+        {
+            double  mValue;
+            int     mPrecision;
+            int     mMinWidth;
+
+            /**
+            @param value
+                float value to convert.
+            @param precision
+                Controls truncation/rounding. Example:
+                    value       = 1.56
+                    precision   = 1
+                    prints "1.6"
+            @param minWidth
+                Controls the minimum width of the decimals. Example:
+                    value       = 1.5
+                    minWidth    = 2
+                    prints "1.50"
+            */
+            Double( double value, int precision = -1, int minWidth = -1 ) :
+                mValue( value ),
+                mPrecision( precision ),
+                mMinWidth( minWidth )
+            {
+            }
+        };
+
+        LwString& a( double a0 )
+        {
+            this->a( Double( a0 ) );
+            return *this;
+        }
+
+        LwString& a( Double a0 )
+        {
+            int written = -1;
+            if( a0.mMinWidth < 0 )
+            {
+                if( a0.mPrecision < 0 )
+                {
+                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
+                                         "%lf", a0.mValue );
+                }
+                else
+                {
+                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
+                                         "%.*lf", a0.mPrecision, a0.mValue );
+                }
+            }
+            else
+            {
+                if( a0.mPrecision < 0 )
+                {
+                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
+                                         "%*lf", a0.mMinWidth, a0.mValue );
+                }
+                else
+                {
+                    written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
+                                         "%*.*lf", a0.mMinWidth, a0.mPrecision, a0.mValue );
+                }
+            }
+
+            mStrPtr[mCapacity - 1] = '\0';
+            assert( ( written >= 0 ) && ( (unsigned)written < mCapacity ) );
+            mSize = std::min<size_t>( mSize + std::max( written, 0 ), mCapacity - 1 );
+            return *this;
+        }
+
         size_t size() const         { return mSize; }
         size_t capacity() const     { return mCapacity; }
 

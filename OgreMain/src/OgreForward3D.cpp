@@ -119,8 +119,8 @@ namespace Ogre
         const Resolution &res = mResolutionAtSlice[slice];
         Real fx = Math::saturate( projSpace.x ) * res.width;
         Real fy = Math::saturate( projSpace.y ) * res.height;
-        outX = static_cast<uint32>( std::min( floorf( fx ), Real( res.width - 1 ) ) );
-        outY = static_cast<uint32>( std::min( floorf( fy ), Real( res.height - 1 ) ) );
+        outX = static_cast<uint32>( std::min( std::floor( fx ), Real( res.width - 1 ) ) );
+        outY = static_cast<uint32>( std::min( std::floor( fy ), Real( res.height - 1 ) ) );
     }
     //-----------------------------------------------------------------------------------
     inline bool OrderLightByDistanceToCamera3D( const Light *left, const Light *right )
