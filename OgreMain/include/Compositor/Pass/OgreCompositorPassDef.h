@@ -125,7 +125,7 @@ namespace Ogre
         uint32              mIdentifier;
 
         ColourValue mClearColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        float       mClearDepth;
+        Real        mClearDepth;
         uint32      mClearStencil;
         LoadAction::LoadAction mLoadActionColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         LoadAction::LoadAction mLoadActionDepth;
