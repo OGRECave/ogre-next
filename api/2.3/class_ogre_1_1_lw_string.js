@@ -1,5 +1,6 @@
 var class_ogre_1_1_lw_string =
 [
+    [ "Double", "struct_ogre_1_1_lw_string_1_1_double.html", "struct_ogre_1_1_lw_string_1_1_double" ],
     [ "Float", "struct_ogre_1_1_lw_string_1_1_float.html", "struct_ogre_1_1_lw_string_1_1_float" ],
     [ "LwString", "class_ogre_1_1_lw_string.html#a58e50e8165a54c9721e84777f5f2341b", null ],
     [ "a", "class_ogre_1_1_lw_string.html#ad73427a7062af8eb35d3cb7f8507db44", null ],
@@ -11,6 +12,8 @@ var class_ogre_1_1_lw_string =
     [ "a", "class_ogre_1_1_lw_string.html#ad39f170797caf9f86eaa764d95445002", null ],
     [ "a", "class_ogre_1_1_lw_string.html#a1cd341a990bdeb0004d76c41c320e5bb", null ],
     [ "a", "class_ogre_1_1_lw_string.html#aa9b859141db2891e28aee8d97151b3a6", null ],
+    [ "a", "class_ogre_1_1_lw_string.html#a6ba828f4807f05f4d2008e96e471c48c", null ],
+    [ "a", "class_ogre_1_1_lw_string.html#a5d69ed22c860865bb2982693b0487214", null ],
     [ "a", "class_ogre_1_1_lw_string.html#aa316ddd8539fd4b7160ab90117a40c28", null ],
     [ "a", "class_ogre_1_1_lw_string.html#a5403fd84d30eed3a65648928f0b9a17e", null ],
     [ "a", "class_ogre_1_1_lw_string.html#a0f1499edb441241a029a39b950254662", null ],

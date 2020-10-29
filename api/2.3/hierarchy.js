@@ -1717,6 +1717,7 @@ var hierarchy =
     [ "Ogre::LwConstString", "class_ogre_1_1_lw_const_string.html", [
       [ "Ogre::LwString", "class_ogre_1_1_lw_string.html", null ]
     ] ],
+    [ "Ogre::LwString::Double", "struct_ogre_1_1_lw_string_1_1_double.html", null ],
     [ "Ogre::LwString::Float", "struct_ogre_1_1_lw_string_1_1_float.html", null ],
     [ "Ogre::ManualResourceLoader", "class_ogre_1_1_manual_resource_loader.html", [
       [ "Ogre::MeshManager", "class_ogre_1_1_mesh_manager.html", null ],

@@ -1,5 +1,7 @@
 var NAVTREEINDEX114 =
 {
+"class_ogre_1_1_math.html#a890336e0e4b6914024bfefd79c08f432":[5,2,6,14,63],
+"class_ogre_1_1_math.html#a8a67ce762f77625bf62487ff5ea37bc0":[5,2,6,14,24],
 "class_ogre_1_1_math.html#a8b1113cd4e7b50d4933bebd39a805348":[5,2,6,14,12],
 "class_ogre_1_1_math.html#a8bd528a67c5115c4a806c2bf23111ffe":[5,2,6,14,47],
 "class_ogre_1_1_math.html#a8e299aa79c3a90617cbe764ee977b703":[5,2,6,14,48],
@@ -247,7 +249,5 @@ var NAVTREEINDEX114 =
 "class_ogre_1_1_memory_data_stream.html#abc0369bcd83740cf03cb27a11665486f":[5,2,11,85,36],
 "class_ogre_1_1_memory_data_stream.html#abc2a0d8d886eaf74c9f815598da4ff9a":[5,2,11,85,4],
 "class_ogre_1_1_memory_data_stream.html#ac00699a01f393f0004ac6024421debb9":[5,2,11,85,6],
-"class_ogre_1_1_memory_data_stream.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,11,85,25],
-"class_ogre_1_1_memory_data_stream.html#ac753e2375fcdf5e137210339350b5f21":[5,2,11,85,14],
-"class_ogre_1_1_memory_data_stream.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,11,85,21]
+"class_ogre_1_1_memory_data_stream.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,11,85,25]
 };

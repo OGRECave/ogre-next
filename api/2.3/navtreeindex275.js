@@ -1,7 +1,14 @@
 var NAVTREEINDEX275 =
 {
-"struct_ogre_1_1_static_face_group.html#a3f73219edf1201e9a3c769f9ccc672bf":[5,2,12,57,1],
+"struct_ogre_1_1_staging_buffer_1_1_destination.html#af7b932de702d91cd632a52a6f9508681":[7,0,0,999,0,2],
+"struct_ogre_1_1_static_face_group.html":[5,2,12,57],
+"struct_ogre_1_1_static_face_group.html":[5,0,1,57],
+"struct_ogre_1_1_static_face_group.html#a09215495af768e8a68b20cf1a937af3a":[5,0,1,57,9],
+"struct_ogre_1_1_static_face_group.html#a09215495af768e8a68b20cf1a937af3a":[5,2,12,57,9],
+"struct_ogre_1_1_static_face_group.html#a2dba19f0f06565cd111206a4a673239c":[5,2,12,57,5],
+"struct_ogre_1_1_static_face_group.html#a2dba19f0f06565cd111206a4a673239c":[5,0,1,57,5],
 "struct_ogre_1_1_static_face_group.html#a3f73219edf1201e9a3c769f9ccc672bf":[5,0,1,57,1],
+"struct_ogre_1_1_static_face_group.html#a3f73219edf1201e9a3c769f9ccc672bf":[5,2,12,57,1],
 "struct_ogre_1_1_static_face_group.html#a42cad07e5dea1a57a10304dcd7b7810b":[5,0,1,57,7],
 "struct_ogre_1_1_static_face_group.html#a42cad07e5dea1a57a10304dcd7b7810b":[5,2,12,57,7],
 "struct_ogre_1_1_static_face_group.html#a4b1e2bb83673099b9d2459a1bb67f429":[5,0,1,57,6],
@@ -12,10 +19,10 @@ var NAVTREEINDEX275 =
 "struct_ogre_1_1_static_face_group.html#aa58eb0dbf0fdf7e625c80e7dbb0e76f9":[5,2,12,57,3],
 "struct_ogre_1_1_static_face_group.html#abc91f43284e36aa2376f4d54078f0480":[5,0,1,57,2],
 "struct_ogre_1_1_static_face_group.html#abc91f43284e36aa2376f4d54078f0480":[5,2,12,57,2],
-"struct_ogre_1_1_static_face_group.html#ad258e1806394cbd8b2efe7f39d3a7296":[5,0,1,57,8],
 "struct_ogre_1_1_static_face_group.html#ad258e1806394cbd8b2efe7f39d3a7296":[5,2,12,57,8],
-"struct_ogre_1_1_static_face_group.html#ae57aba80895c22bb02f633d02be64edb":[5,2,12,57,0],
+"struct_ogre_1_1_static_face_group.html#ad258e1806394cbd8b2efe7f39d3a7296":[5,0,1,57,8],
 "struct_ogre_1_1_static_face_group.html#ae57aba80895c22bb02f633d02be64edb":[5,0,1,57,0],
+"struct_ogre_1_1_static_face_group.html#ae57aba80895c22bb02f633d02be64edb":[5,2,12,57,0],
 "struct_ogre_1_1_stencil_params.html":[5,2,2,117],
 "struct_ogre_1_1_stencil_params.html#a21b50e522ea54db40c35872a403c3897":[5,2,2,117,3],
 "struct_ogre_1_1_stencil_params.html#a2e887fc56a085cfe5ec7ce4ba649bda9":[5,2,2,117,5],
@@ -242,12 +249,5 @@ var NAVTREEINDEX275 =
 "struct_ogre_1_1_texture_definition_base_1_1_buffer_definition.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,1,48,0,11],
 "struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html":[5,2,11,128,0],
 "struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#a3b305a772837b369ed09c53a11e6f052":[5,2,11,128,0,5],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#a42597201e679c6c7dbf6ed444c8c6d54":[5,2,11,128,0,3],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#a9af6fe4aa8ffa90842005a79cb01edb8":[5,2,11,128,0,2],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#abd718312943eabec0d581cc55afeab06":[5,2,11,128,0,1],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#aed752397a852938c6beb11898a68b5eb":[5,2,11,128,0,0],
-"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#af08b993255a42fef9937a2671f2eee13":[5,2,11,128,0,4],
-"struct_ogre_1_1_texture_gpu_manager_1_1_metadata_cache_entry.html":[5,2,11,128,1],
-"struct_ogre_1_1_texture_gpu_manager_1_1_metadata_cache_entry.html#a03b826e025ecf812a28ec5746e3fd50a":[5,2,11,128,1,4],
-"struct_ogre_1_1_texture_gpu_manager_1_1_metadata_cache_entry.html#a18e9ee24ab856cc6062a4c0982f95e6c":[5,2,11,128,1,2]
+"struct_ogre_1_1_texture_gpu_manager_1_1_budget_entry.html#a42597201e679c6c7dbf6ed444c8c6d54":[5,2,11,128,0,3]
 };

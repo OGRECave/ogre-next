@@ -15,7 +15,7 @@
 <polygon fill="none" stroke="black" points="0,-0.5 0,-41.5 115,-41.5 115,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-29.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::SharedPtr&lt; Ogre</text>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">::ControllerFunction</text>
-<text text-anchor="middle" x="57.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; T &gt; &gt;</text>
+<text text-anchor="middle" x="57.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; Real &gt; &gt;</text>
 </a>
 </g>
 </g>
