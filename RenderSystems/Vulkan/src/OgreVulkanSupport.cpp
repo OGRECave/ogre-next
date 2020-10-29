@@ -116,7 +116,7 @@ namespace Ogre
         if( it == mOptions.end() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Option named " + name + " does not exist.",
-                         "GL3PlusSupport::setConfigOption" );
+                         "VulkanSupport::setConfigOption" );
         }
         else
         {
