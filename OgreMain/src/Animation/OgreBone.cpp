@@ -189,7 +189,7 @@ namespace Ogre {
         assert( child->getParentBone() == this && "TagPoint says it's not our child (We're Bone)" );
         assert( child->mParentIndex < mTagPointChildren.size() && "mParentIndex was out of date!!!" );
 
-        if( child->mParentIndex < mChildren.size() )
+        if( child->mParentIndex < mTagPointChildren.size() )
         {
             TagPointVec::iterator itor = mTagPointChildren.begin() + child->mParentIndex;
 
