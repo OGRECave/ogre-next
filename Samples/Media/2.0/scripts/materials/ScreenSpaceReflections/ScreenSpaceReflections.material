@@ -16,7 +16,7 @@ fragment_program SSR/ScreenSpaceReflectionsVectors_ps_GLSL glsl
 fragment_program SSR/ScreenSpaceReflectionsVectors_ps_HLSL hlsl
 {
 	source ScreenSpaceReflectionsVectors_ps.hlsl
-	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+	target ps_5_0 ps_4_1
 	entry_point main
 }
 
@@ -54,7 +54,7 @@ fragment_program SSR/ScreenSpaceReflectionsCombine_ps_GLSL glsl
 fragment_program SSR/ScreenSpaceReflectionsCombine_ps_HLSL hlsl
 {
 	source ScreenSpaceReflectionsCombine_ps.hlsl
-	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+	target ps_5_0 ps_4_1
 	entry_point main
 }
 

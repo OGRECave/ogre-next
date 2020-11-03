@@ -16,7 +16,7 @@ fragment_program HDR/Resolve_4xFP32_HDR_Box_ps_VK glslvk
 fragment_program HDR/Resolve_4xFP32_HDR_Box_ps_HLSL hlsl
 {
 	source Resolve_4xFP32_HDR_Box_ps.hlsl
-	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+	target ps_5_0 ps_4_1
 	entry_point main
 }
 
