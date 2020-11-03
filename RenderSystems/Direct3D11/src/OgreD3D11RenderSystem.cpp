@@ -1644,6 +1644,9 @@ namespace Ogre
                            device.GetAddressOf() );
         mDevice.TransferOwnership( device );
 
+        LogManager::getSingleton().stream() << "D3D11: Device Feature Level " <<
+            (mFeatureLevel >> 12) << "." << ((mFeatureLevel >> 8) & 0xF);
+
         LARGE_INTEGER driverVersion = mDevice.GetDriverVersion();
         mDriverVersion.major = HIWORD(driverVersion.HighPart);
         mDriverVersion.minor = LOWORD(driverVersion.HighPart);
