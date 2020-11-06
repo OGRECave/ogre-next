@@ -548,8 +548,11 @@ namespace Ogre {
     {
         // Use preprocessor definitions to determine architecture and CPU features
         uint features = 0;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        int hasNEON;
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
+        // ARM64 always has NEON
+        features |= PlatformInformation::CPU_FEATURE_NEON;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        int hasNEON = 0;
         size_t len = sizeof(size_t);
         sysctlbyname("hw.optional.neon", &hasNEON, &len, NULL, 0);
 
@@ -563,34 +566,51 @@ namespace Ogre {
     static String _detectCpuIdentifier(void)
     {
         String cpuID;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        // Get the size of the CPU subtype struct
-        size_t size;
-        sysctlbyname("hw.cpusubtype", NULL, &size, NULL, 0);
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        // Get the CPU type
+        cpu_type_t cputype = 0;
+        size_t size = sizeof(cputype);
+        sysctlbyname("hw.cputype", &cputype, &size, NULL, 0);
 
-        // Get the ARM CPU subtype
+        // Get the CPU subtype
         cpu_subtype_t cpusubtype = 0;
+        size = sizeof(cpusubtype);
         sysctlbyname("hw.cpusubtype", &cpusubtype, &size, NULL, 0);
 
-        switch(cpusubtype)
+        static const char* armSubtypes[] = { // CPU_TYPE_ARM, CPU_SUBTYPE_ARM_XXX
+            "Unknown ARM", NULL, NULL, NULL,
+            NULL, "ARMv4T", "ARMv6", "ARMv5TEJ",
+            "ARM XScale", "ARMv7", "ARM Cortex-A9"/*V7F*/, "ARM Swift"/*V7S*/,
+            "ARMv7K", "ARMv8", "ARMv6M", "ARMv7M",
+            "ARMv7EM", "ARMv8M"
+        };
+        static const char* arm64Subtypes[] = { // CPU_TYPE_ARM64, CPU_SUBTYPE_ARM64_XXX
+            "Unknown ARM64", "ARM64v8", "ARM64E"
+        };
+        static const char* arm64_32Subtypes[] = { // CPU_TYPE_ARM64_32, CPU_SUBTYPE_ARM64_32_XXX
+            "Unknown ARM64_32", "ARM64_32v8"
+        };
+        
+        unsigned armSubtypesCount = sizeof(armSubtypes) / sizeof(armSubtypes[0]);
+        unsigned arm64SubtypesCount = sizeof(arm64Subtypes) / sizeof(arm64Subtypes[0]);
+        unsigned arm64_32SubtypesCount = sizeof(arm64_32Subtypes) / sizeof(arm64_32Subtypes[0]);
+
+        struct Helper{
+            static const char* getName(const char** names, unsigned count, unsigned idx){
+                return idx < count && names[idx] ? names[idx] : names[0];
+            }
+        };
+
+        switch(cputype)
         {
-            case CPU_SUBTYPE_ARM_V6:
-                cpuID = "ARMv6";
+            case CPU_TYPE_ARM:
+                cpuID = Helper::getName(armSubtypes, armSubtypesCount, cpusubtype);
                 break;
-            case CPU_SUBTYPE_ARM_V7:
-                cpuID = "ARMv7";
+            case CPU_TYPE_ARM64:
+                cpuID = Helper::getName(arm64Subtypes, arm64SubtypesCount, cpusubtype & ~CPU_SUBTYPE_MASK);
                 break;
-            case CPU_SUBTYPE_ARM_V7F:
-                cpuID = "ARM Cortex-A9";
-                break;
-            case CPU_SUBTYPE_ARM_V7S:
-                cpuID = "ARM Swift";
-                break;
-            case CPU_SUBTYPE_ARM_V8:
-                cpuID = "ARMv8";
-                break;
-            case CPU_SUBTYPE_ARM64_V8:
-                cpuID = "ARM64v8";
+            case CPU_TYPE_ARM64_32:
+                cpuID = Helper::getName(arm64_32Subtypes, arm64_32SubtypesCount, cpusubtype & ~CPU_SUBTYPE_MASK);
                 break;
             default:
                 cpuID = "Unknown ARM";
