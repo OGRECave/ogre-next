@@ -1,5 +1,6 @@
 var NAVTREEINDEX42 =
 {
+"class_ogre_1_1_config_dialog.html#ae89a2e30782cf209b2561fe1390036ae":[5,2,2,27,10],
 "class_ogre_1_1_config_dialog.html#ae89a2e30782cf209b2561fe1390036ae":[5,2,2,27,12],
 "class_ogre_1_1_config_dialog.html#ae89a2e30782cf209b2561fe1390036ae":[5,2,2,27,14],
 "class_ogre_1_1_config_dialog.html#ae89a2e30782cf209b2561fe1390036ae":[5,2,2,27,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX42 =
 "class_ogre_1_1_create_compositor_script_compiler_event.html#a1b8f501137d19fd80f68007ff788fce8":[5,2,2,33,2],
 "class_ogre_1_1_create_compositor_script_compiler_event.html#a9f07c294aeb33e46ef06d758add7d584":[5,2,2,33,3],
 "class_ogre_1_1_create_compositor_script_compiler_event.html#aa1246f8c43e041010598e736c293948e":[5,2,2,33,0],
-"class_ogre_1_1_create_compositor_script_compiler_event.html#ab81debbe356569675c115026c16642eb":[5,2,2,33,4],
-"class_ogre_1_1_create_compositor_script_compiler_event.html#ae83d6b4f8c27207b09f2bae4e7c51ce6":[5,2,2,33,5]
+"class_ogre_1_1_create_compositor_script_compiler_event.html#ab81debbe356569675c115026c16642eb":[5,2,2,33,4]
 };

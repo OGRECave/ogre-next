@@ -1,5 +1,6 @@
 var NAVTREEINDEX115 =
 {
+"class_ogre_1_1_memory_data_stream.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,11,85,25],
 "class_ogre_1_1_memory_data_stream.html#ac753e2375fcdf5e137210339350b5f21":[5,2,11,85,14],
 "class_ogre_1_1_memory_data_stream.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,11,85,21],
 "class_ogre_1_1_memory_data_stream.html#accd65733ea1317c49c5fdf7263ff4cc7":[5,2,11,85,39],
@@ -248,6 +249,5 @@ var NAVTREEINDEX115 =
 "class_ogre_1_1_mesh_serializer_impl.html#a5122d5a3161fb5fd819d9a0521fe9d39a7f044c7683a7374276db6e7060f51240":[5,2,11,89,0,1],
 "class_ogre_1_1_mesh_serializer_impl.html#a5122d5a3161fb5fd819d9a0521fe9d39aed60ca999861d8939cf57f19090c70ef":[5,2,11,89,0,0],
 "class_ogre_1_1_mesh_serializer_impl.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,11,89,9],
-"class_ogre_1_1_mesh_serializer_impl.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,11,89,5],
-"class_ogre_1_1_mesh_serializer_impl.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,11,89,8]
+"class_ogre_1_1_mesh_serializer_impl.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,11,89,5]
 };

@@ -19,6 +19,7 @@ var _ogre_platform_8h =
     [ "OGRE_COMPILER_WINSCW", "_ogre_platform_8h.html#a9c256bb4bd2b51e471a4a22a3c735c88", null ],
     [ "OGRE_CPU", "_ogre_platform_8h.html#a719f8e35fd54bc7946246292a772e5cc", null ],
     [ "OGRE_CPU_ARM", "_ogre_platform_8h.html#a87dfb3e6fd0e097cfc22bcf1a936b609", null ],
+    [ "OGRE_CPU_E2K", "_ogre_platform_8h.html#a9b06ccbff40d669b1e03a14e113c0e3b", null ],
     [ "OGRE_CPU_MIPS", "_ogre_platform_8h.html#ab5c7b845a9cea9c938dbcc1f9f6fec35", null ],
     [ "OGRE_CPU_PPC", "_ogre_platform_8h.html#a98616201d2102b59d9d10666f3ce8762", null ],
     [ "OGRE_CPU_UNKNOWN", "_ogre_platform_8h.html#ae606623294d49af88c609d5855ee418b", null ],

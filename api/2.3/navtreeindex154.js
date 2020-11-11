@@ -1,5 +1,6 @@
 var NAVTREEINDEX154 =
 {
+"class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aadeefa0cc2dfd1ec783c2a266ea61f925":[5,0,1,33,0,3],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,12,33,13],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a1c727e879a260c37b00ce5505fe8e144":[5,0,1,33,13],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a1f8750081b57a70381bc6dd9fe663955":[5,2,12,33,3],
@@ -80,10 +81,10 @@ var NAVTREEINDEX154 =
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ab78a921e54419be677839cdf15d1f0b8":[5,0,1,34,12],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,12,34,10],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,0,1,34,10],
-"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#acb46d4b0a597156d9ba5abc39d127792":[5,0,1,34,6],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,12,34,6],
-"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19":[5,0,1,34,3],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#acb46d4b0a597156d9ba5abc39d127792":[5,0,1,34,6],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19":[5,2,12,34,3],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19":[5,0,1,34,3],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,34,13],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,12,34,13],
 "class_ogre_1_1_platform_information.html":[5,2,2,80],
@@ -248,6 +249,5 @@ var NAVTREEINDEX154 =
 "class_ogre_1_1_polygon.html#a9405d8c298356e329363ed663d2fbd20":[5,2,6,21,0],
 "class_ogre_1_1_polygon.html#a9d80e759f5c77ba5a308d298c8b498c2":[5,2,6,21,9],
 "class_ogre_1_1_polygon.html#a9db9518c3381e7a840610bf181d65b73":[5,2,6,21,16],
-"class_ogre_1_1_polygon.html#ac32b2d0a6e7c0cee21471fdaf6da13c4":[5,2,6,21,10],
-"class_ogre_1_1_polygon.html#ae88f6dcead5afbf639ab42959662dac3":[5,2,6,21,8]
+"class_ogre_1_1_polygon.html#ac32b2d0a6e7c0cee21471fdaf6da13c4":[5,2,6,21,10]
 };
