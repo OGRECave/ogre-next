@@ -382,6 +382,7 @@ namespace Ogre
     {
         if("Hardware" == driverTypeName) return D3D_DRIVER_TYPE_HARDWARE;
         if("Software" == driverTypeName) return D3D_DRIVER_TYPE_SOFTWARE;
+        if("Reference"== driverTypeName) return D3D_DRIVER_TYPE_REFERENCE;
         if("Warp" == driverTypeName)     return D3D_DRIVER_TYPE_WARP;
         return fallback;
     }

@@ -238,8 +238,10 @@ namespace Ogre
                                       d3dDriver->getDeviceAdapter() : NULL;
 
         assert( driverType == D3D_DRIVER_TYPE_HARDWARE || driverType == D3D_DRIVER_TYPE_SOFTWARE ||
-                driverType == D3D_DRIVER_TYPE_WARP );
-        if( d3dDriver != NULL )
+                driverType == D3D_DRIVER_TYPE_REFERENCE || driverType == D3D_DRIVER_TYPE_WARP );
+        if ( driverType == D3D_DRIVER_TYPE_REFERENCE || driverType == D3D_DRIVER_TYPE_WARP )
+            d3dDriver = NULL;
+        else if( d3dDriver != NULL )
         {
             if( 0 == wcscmp(d3dDriver->getAdapterIdentifier().Description, L"NVIDIA PerfHUD") )
                 driverType = D3D_DRIVER_TYPE_REFERENCE;
@@ -456,6 +458,7 @@ namespace Ogre
         optDriverType.name = "Driver type";
         optDriverType.possibleValues.push_back("Hardware");
         optDriverType.possibleValues.push_back("Software");
+        optDriverType.possibleValues.push_back("Reference");
         optDriverType.possibleValues.push_back("Warp");
         optDriverType.currentValue = "Hardware";
         optDriverType.immutable = false;
