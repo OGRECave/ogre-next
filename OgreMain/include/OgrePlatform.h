@@ -61,7 +61,6 @@ namespace Ogre {
 #define OGRE_CPU_PPC        2
 #define OGRE_CPU_ARM        3
 #define OGRE_CPU_MIPS       4
-#define OGRE_CPU_E2K        5
 
 /* Find CPU type */
 #if defined(__i386__) || defined(__x86_64__) || defined(_M_IX86) || defined(_M_X64) || defined(_M_AMD64) || defined(__e2k__)

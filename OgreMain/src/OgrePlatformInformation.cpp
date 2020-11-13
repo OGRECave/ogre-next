@@ -640,7 +640,7 @@ namespace Ogre {
         return cpuID;
     }
 
-#elif OGRE_CPU == OGRE_CPU_X86 && defined(__e2k__)  // OGRE_CPU == OGRE_CPU_E2K
+#elif OGRE_CPU == OGRE_CPU_X86 && defined(__e2k__)  // MCST e2k (Elbrus 2000)
 
     //---------------------------------------------------------------------
     static uint _detectCpuFeatures(void)
@@ -688,7 +688,7 @@ namespace Ogre {
         return true;
     }
 
-#else  // OGRE_CPU == OGRE_CPU_E2K
+#else  // OGRE_CPU == OGRE_CPU_UNKNOWN
 
     //---------------------------------------------------------------------
     static uint _detectCpuFeatures(void)
