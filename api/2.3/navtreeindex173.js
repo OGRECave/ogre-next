@@ -1,6 +1,5 @@
 var NAVTREEINDEX173 =
 {
-"class_ogre_1_1_ring_emitter.html#abfea8fc856e37f26eb5901e930c7b21f":[7,0,0,923,98],
 "class_ogre_1_1_ring_emitter.html#abff726acd08f87c5be8a77c2e7d0b9eb":[7,0,0,923,85],
 "class_ogre_1_1_ring_emitter.html#ac18d85d72526f7c20a5a04547cd90c30":[7,0,0,923,33],
 "class_ogre_1_1_ring_emitter.html#ac4a7e742d6abd51a9dceaec92eb0e23a":[7,0,0,923,108],
@@ -249,5 +248,6 @@ var NAVTREEINDEX173 =
 "class_ogre_1_1_rq_bits.html#aa0855fcf8a7f73beb6a148b62657a653":[5,2,10,19,5],
 "class_ogre_1_1_rq_bits.html#aa312d9de9d1bfddee598761df39ea2b2":[5,2,10,19,8],
 "class_ogre_1_1_rq_bits.html#aa5f04f564d0d0e38d657e0db85877baa":[5,2,10,19,9],
-"class_ogre_1_1_rq_bits.html#ac9ca5c712c57d352c79583bff3d5ef64":[5,2,10,19,1]
+"class_ogre_1_1_rq_bits.html#ac9ca5c712c57d352c79583bff3d5ef64":[5,2,10,19,1],
+"class_ogre_1_1_rq_bits.html#adc0852cfac912b34c0d509270a9697a9":[5,2,10,19,7]
 };

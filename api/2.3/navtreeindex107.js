@@ -1,6 +1,5 @@
 var NAVTREEINDEX107 =
 {
-"class_ogre_1_1_irradiance_field_raster.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,561,6],
 "class_ogre_1_1_irradiance_field_raster.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,561,10],
 "class_ogre_1_1_irradiance_field_raster.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,561,13],
 "class_ogre_1_1_irradiance_field_raster.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,561,8],
@@ -249,5 +248,6 @@ var NAVTREEINDEX107 =
 "class_ogre_1_1_item.html#ae7fca7a69a6c69bcc78db2f774346885":[5,0,1,24,38],
 "class_ogre_1_1_item.html#ae7fca7a69a6c69bcc78db2f774346885":[5,2,12,24,38],
 "class_ogre_1_1_item.html#ae9f220178c269da617d31c68b39f4147":[5,0,1,24,50],
-"class_ogre_1_1_item.html#ae9f220178c269da617d31c68b39f4147":[5,2,12,24,50]
+"class_ogre_1_1_item.html#ae9f220178c269da617d31c68b39f4147":[5,2,12,24,50],
+"class_ogre_1_1_item.html#aec8de75364ba934510a7c1d0e8cb6471":[5,0,1,24,34]
 };

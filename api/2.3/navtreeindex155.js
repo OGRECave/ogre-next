@@ -1,6 +1,5 @@
 var NAVTREEINDEX155 =
 {
-"class_ogre_1_1_polygon.html#ae88f6dcead5afbf639ab42959662dac3":[5,2,6,21,8],
 "class_ogre_1_1_pool.html":[7,0,0,849],
 "class_ogre_1_1_pool.html#a3151e6614c063eeae4bf7d95a9fbbbcb":[7,0,0,849,4],
 "class_ogre_1_1_pool.html#a4fb09f4b25feb32de79b6f578359aab1":[7,0,0,849,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX155 =
 "class_ogre_1_1_portal_base.html#a9a62a4a12787812f012691af0c3493f1":[7,0,0,851,111],
 "class_ogre_1_1_portal_base.html#a9a72ade896561e23c32cf8659f1640e4":[7,0,0,851,76],
 "class_ogre_1_1_portal_base.html#aa06f9acec5751ea153153d47c5b7612c":[7,0,0,851,49],
-"class_ogre_1_1_portal_base.html#aaa69ee72a4b964a115991cd58216dfbe":[7,0,0,851,34]
+"class_ogre_1_1_portal_base.html#aaa69ee72a4b964a115991cd58216dfbe":[7,0,0,851,34],
+"class_ogre_1_1_portal_base.html#aaac5bf65835f733433f3338132f2f01f":[7,0,0,851,72]
 };

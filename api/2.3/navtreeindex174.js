@@ -1,6 +1,5 @@
 var NAVTREEINDEX174 =
 {
-"class_ogre_1_1_rq_bits.html#adc0852cfac912b34c0d509270a9697a9":[5,2,10,19,7],
 "class_ogre_1_1_rq_bits.html#adcda46edc34c7cf96fd7074ae6510a2f":[5,2,10,19,4],
 "class_ogre_1_1_rq_bits.html#aec846ea0427d796d08161f3a20c48870":[5,2,10,19,2],
 "class_ogre_1_1_runtime_assertion_exception.html":[5,2,2,95],
@@ -249,5 +248,6 @@ var NAVTREEINDEX174 =
 "class_ogre_1_1_scale_controller_function.html":[5,2,2,97],
 "class_ogre_1_1_scale_controller_function.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,97,4],
 "class_ogre_1_1_scale_controller_function.html#a3e6000bf99e2f0ebd5fbbf3cb4c74338":[5,2,2,97,0],
-"class_ogre_1_1_scale_controller_function.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,2,97,8]
+"class_ogre_1_1_scale_controller_function.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,2,97,8],
+"class_ogre_1_1_scale_controller_function.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,2,97,11]
 };

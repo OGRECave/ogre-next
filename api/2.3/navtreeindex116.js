@@ -1,6 +1,5 @@
 var NAVTREEINDEX116 =
 {
-"class_ogre_1_1_mesh_serializer_impl.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,11,89,8],
 "class_ogre_1_1_mesh_serializer_impl.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,11,89,12],
 "class_ogre_1_1_mesh_serializer_impl.html#ab8249caad10960583a7596a52efa4d02":[5,2,11,89,3],
 "class_ogre_1_1_mesh_serializer_impl.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,11,89,10],
@@ -249,5 +248,6 @@ var NAVTREEINDEX116 =
 "class_ogre_1_1_metal_depth_texture.html#a1a000816d91c92f6e72e6f3b86a0ab76":[7,0,0,667,10],
 "class_ogre_1_1_metal_depth_texture.html#a1aa750a4b994f2b1066220936cdfdb94":[7,0,0,667,0],
 "class_ogre_1_1_metal_depth_texture.html#a1aa750a4b994f2b1066220936cdfdb94a146041ec2a8b5178e5ad541d129c22eb":[7,0,0,667,0,5],
-"class_ogre_1_1_metal_depth_texture.html#a1aa750a4b994f2b1066220936cdfdb94a6ee542226e1cf18df28ab88426be6809":[7,0,0,667,0,1]
+"class_ogre_1_1_metal_depth_texture.html#a1aa750a4b994f2b1066220936cdfdb94a6ee542226e1cf18df28ab88426be6809":[7,0,0,667,0,1],
+"class_ogre_1_1_metal_depth_texture.html#a1aa750a4b994f2b1066220936cdfdb94a70589e0b87b09b0a4fd98ce490dc9782":[7,0,0,667,0,2]
 };

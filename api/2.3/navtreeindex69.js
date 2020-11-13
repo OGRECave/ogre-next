@@ -1,6 +1,5 @@
 var NAVTREEINDEX69 =
 {
-"class_ogre_1_1_degree.html#a0487bcf629d0f637293a6e23d3542ad6":[5,2,6,11,9],
 "class_ogre_1_1_degree.html#a06ce30cb04785abd837cc94bf76b05de":[5,2,6,11,29],
 "class_ogre_1_1_degree.html#a133b76b6d58f5ce8f8e8ea55c04932e0":[5,2,6,11,14],
 "class_ogre_1_1_degree.html#a1b21b5dd134a959f2ff0b4fc36bf2519":[5,2,6,11,18],
@@ -249,5 +248,6 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_dual_quaternion.html#af666d1865aa8b3467648b96e8c597217":[5,2,6,12,11],
 "class_ogre_1_1_dyn_lib.html":[5,2,2,40],
 "class_ogre_1_1_dyn_lib.html#a038546cd3a5b9d9385b14aa3e0a8179b":[5,2,2,40,4],
-"class_ogre_1_1_dyn_lib.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,40,7]
+"class_ogre_1_1_dyn_lib.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,40,7],
+"class_ogre_1_1_dyn_lib.html#a2d7af9ece40f8965e36870948427f972":[5,2,2,40,15]
 };

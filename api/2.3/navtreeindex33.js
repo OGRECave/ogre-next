@@ -1,6 +1,5 @@
 var NAVTREEINDEX33 =
 {
-"class_ogre_1_1_camera.html#af0f02c8ac7e6dc46ae6cd8ee209abd8e":[5,0,1,5,279],
 "class_ogre_1_1_camera.html#af0f02c8ac7e6dc46ae6cd8ee209abd8e":[5,2,12,5,279],
 "class_ogre_1_1_camera.html#af19ca18abcd6ca7bceb2f55a814e1c1b":[5,0,1,5,169],
 "class_ogre_1_1_camera.html#af19ca18abcd6ca7bceb2f55a814e1c1b":[5,2,12,5,169],
@@ -249,5 +248,6 @@ var NAVTREEINDEX33 =
 "class_ogre_1_1_colour_fader_affector.html#a735a1f8fc6b5504d7a1dcd2ccb4f5660":[7,0,0,102,35],
 "class_ogre_1_1_colour_fader_affector.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,102,18],
 "class_ogre_1_1_colour_fader_affector.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,102,21],
-"class_ogre_1_1_colour_fader_affector.html#a9dba68a0a01e6fa6fc74b62cc2ae149a":[7,0,0,102,38]
+"class_ogre_1_1_colour_fader_affector.html#a9dba68a0a01e6fa6fc74b62cc2ae149a":[7,0,0,102,38],
+"class_ogre_1_1_colour_fader_affector.html#aaee9d32ed0a73fafca95bb28c5cde0a8":[7,0,0,102,34]
 };
