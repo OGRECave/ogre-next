@@ -42,8 +42,6 @@ THE SOFTWARE.
 #if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
     #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
         #include <linux/sysctl.h>
-    #else
-        #include <sys/sysctl.h>
     #endif
 #endif
 
