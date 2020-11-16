@@ -124,6 +124,4 @@
 	@property( hlms_instanced_stereo )
 		outVs_viewportIndex	= int( inVs_stereoDrawId & 0x01u );
 	@end
-
-	@insertpiece( custom_vs_posExecution )
 @end
