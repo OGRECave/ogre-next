@@ -325,16 +325,16 @@ namespace Ogre {
                                  std::max( header.numberOfArrayElements, 1u );
         imgData->numMipmaps = static_cast<uint8>( header.numberOfMipmapLevels );
 
-        if( header.pixelDepth >= 1u )
+        if( header.pixelDepth > 1u )
             imgData->textureType = TextureTypes::Type3D;
         else if( header.numberOfFaces == 6u )
         {
-            if( header.numberOfArrayElements >= 1u )
+            if( header.numberOfArrayElements > 1u )
                 imgData->textureType = TextureTypes::TypeCubeArray;
             else
                 imgData->textureType = TextureTypes::TypeCube;
         }
-        else if( header.numberOfArrayElements >= 1u )
+        else if( header.numberOfArrayElements > 1u )
             imgData->textureType = TextureTypes::Type2DArray;
         else
             imgData->textureType = TextureTypes::Type2D;
