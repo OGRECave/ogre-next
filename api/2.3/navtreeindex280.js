@@ -1,5 +1,17 @@
 var NAVTREEINDEX280 =
 {
+"structbsp__brush__t.html":[7,0,5],
+"structbsp__brush__t.html#a0525b4ebc88b426a24ba4ef2a64d1f9e":[7,0,5,0],
+"structbsp__brush__t.html#aa8f2e483aa9cb18168e6d146cc7fb1b2":[7,0,5,1],
+"structbsp__brush__t.html#aca3a9ac86ba907ac43e055d4505f072b":[7,0,5,2],
+"structbsp__brushside__t.html":[7,0,6],
+"structbsp__brushside__t.html#a2538db593bd8c50a52e770fc6ac8456a":[7,0,6,0],
+"structbsp__brushside__t.html#a6091d89170ab0f354f0f573c873346d3":[7,0,6,1],
+"structbsp__face__t.html":[7,0,7],
+"structbsp__face__t.html#a13c0e8661b6ffd6f893b4c35bf7a0022":[7,0,7,2],
+"structbsp__face__t.html#a26742ad3555447b16d7d84a200df90e4":[7,0,7,5],
+"structbsp__face__t.html#a2a6371e0dfe0ca6939fd40da328bffd3":[7,0,7,10],
+"structbsp__face__t.html#a6c520802a723dcf1f887474bab5b415c":[7,0,7,1],
 "structbsp__face__t.html#a8b2ef57308bff5297ca6065a62685f59":[7,0,7,12],
 "structbsp__face__t.html#aa174fa8faa20496d0d789d8ae74dbdde":[7,0,7,6],
 "structbsp__face__t.html#aac42a7e77d3bdd9a6a9e4865201a7d1e":[7,0,7,3],

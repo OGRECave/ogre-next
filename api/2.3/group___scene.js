@@ -443,7 +443,8 @@ var group___scene =
       [ "operator new", "class_ogre_1_1_concentric_shadow_camera.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
       [ "operator new", "class_ogre_1_1_concentric_shadow_camera.html#ab78a921e54419be677839cdf15d1f0b8", null ],
       [ "operator new[]", "class_ogre_1_1_concentric_shadow_camera.html#afa2943846ba6a2b5824a12857139cf5e", null ],
-      [ "operator new[]", "class_ogre_1_1_concentric_shadow_camera.html#a4be37baef81876985aa1071ad5acc6dd", null ]
+      [ "operator new[]", "class_ogre_1_1_concentric_shadow_camera.html#a4be37baef81876985aa1071ad5acc6dd", null ],
+      [ "setUseEsm", "class_ogre_1_1_concentric_shadow_camera.html#a64ec2cc49a15be1446603390cf2d5536", null ]
     ] ],
     [ "CullFrustumRequest", "struct_ogre_1_1_cull_frustum_request.html", [
       [ "ObjectMemoryManagerVec", "struct_ogre_1_1_cull_frustum_request.html#a284f5d9b223893111d554206d4908ffe", null ],
@@ -956,7 +957,8 @@ var group___scene =
       [ "operator new", "class_ogre_1_1_default_shadow_camera_setup.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
       [ "operator new", "class_ogre_1_1_default_shadow_camera_setup.html#ab78a921e54419be677839cdf15d1f0b8", null ],
       [ "operator new[]", "class_ogre_1_1_default_shadow_camera_setup.html#afa2943846ba6a2b5824a12857139cf5e", null ],
-      [ "operator new[]", "class_ogre_1_1_default_shadow_camera_setup.html#a4be37baef81876985aa1071ad5acc6dd", null ]
+      [ "operator new[]", "class_ogre_1_1_default_shadow_camera_setup.html#a4be37baef81876985aa1071ad5acc6dd", null ],
+      [ "setUseEsm", "class_ogre_1_1_default_shadow_camera_setup.html#a64ec2cc49a15be1446603390cf2d5536", null ]
     ] ],
     [ "DefaultSphereSceneQuery", "class_ogre_1_1_default_sphere_scene_query.html", [
       [ "WorldFragmentType", "class_ogre_1_1_default_sphere_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3a", [
@@ -1010,7 +1012,8 @@ var group___scene =
       [ "operator new", "class_ogre_1_1_focused_shadow_camera_setup.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
       [ "operator new", "class_ogre_1_1_focused_shadow_camera_setup.html#ab78a921e54419be677839cdf15d1f0b8", null ],
       [ "operator new[]", "class_ogre_1_1_focused_shadow_camera_setup.html#afa2943846ba6a2b5824a12857139cf5e", null ],
-      [ "operator new[]", "class_ogre_1_1_focused_shadow_camera_setup.html#a4be37baef81876985aa1071ad5acc6dd", null ]
+      [ "operator new[]", "class_ogre_1_1_focused_shadow_camera_setup.html#a4be37baef81876985aa1071ad5acc6dd", null ],
+      [ "setUseEsm", "class_ogre_1_1_focused_shadow_camera_setup.html#a64ec2cc49a15be1446603390cf2d5536", null ]
     ] ],
     [ "IntersectionSceneQuery", "class_ogre_1_1_intersection_scene_query.html", [
       [ "WorldFragmentType", "class_ogre_1_1_intersection_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3a", [
@@ -1908,7 +1911,8 @@ var group___scene =
       [ "operator new", "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
       [ "operator new", "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ab78a921e54419be677839cdf15d1f0b8", null ],
       [ "operator new[]", "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#afa2943846ba6a2b5824a12857139cf5e", null ],
-      [ "operator new[]", "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a4be37baef81876985aa1071ad5acc6dd", null ]
+      [ "operator new[]", "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a4be37baef81876985aa1071ad5acc6dd", null ],
+      [ "setUseEsm", "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a64ec2cc49a15be1446603390cf2d5536", null ]
     ] ],
     [ "PSSMShadowCameraSetup", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html", [
       [ "SplitPointList", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#aad0d2ebd7081a0916ba725a109f7219a", null ],
@@ -1937,7 +1941,8 @@ var group___scene =
       [ "setNumStableSplits", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#ae856178ef392e5f8b082cea81b15c141", null ],
       [ "setOptimalAdjustFactor", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#a4f16797f8c4fcee30141e5dd0690e647", null ],
       [ "setSplitPadding", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#a5000b20f43bea556bcdd994550f1f0ab", null ],
-      [ "setSplitPoints", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#a82cacf643a003a08ee531cd71b505fb0", null ]
+      [ "setSplitPoints", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#a82cacf643a003a08ee531cd71b505fb0", null ],
+      [ "setUseEsm", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#a64ec2cc49a15be1446603390cf2d5536", null ]
     ] ],
     [ "RaySceneQuery", "class_ogre_1_1_ray_scene_query.html", [
       [ "WorldFragmentType", "class_ogre_1_1_ray_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3a", [
@@ -2775,7 +2780,8 @@ var group___scene =
       [ "operator new", "class_ogre_1_1_shadow_camera_setup.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
       [ "operator new", "class_ogre_1_1_shadow_camera_setup.html#ab78a921e54419be677839cdf15d1f0b8", null ],
       [ "operator new[]", "class_ogre_1_1_shadow_camera_setup.html#afa2943846ba6a2b5824a12857139cf5e", null ],
-      [ "operator new[]", "class_ogre_1_1_shadow_camera_setup.html#a4be37baef81876985aa1071ad5acc6dd", null ]
+      [ "operator new[]", "class_ogre_1_1_shadow_camera_setup.html#a4be37baef81876985aa1071ad5acc6dd", null ],
+      [ "setUseEsm", "class_ogre_1_1_shadow_camera_setup.html#a64ec2cc49a15be1446603390cf2d5536", null ]
     ] ],
     [ "ShadowVolumeExtrudeProgram", "class_ogre_1_1_shadow_volume_extrude_program.html", [
       [ "Programs", "class_ogre_1_1_shadow_volume_extrude_program.html#ade24fd66aff9052fb19403696f28a623", [

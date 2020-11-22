@@ -1,5 +1,11 @@
 var NAVTREEINDEX107 =
 {
+"class_ogre_1_1_irradiance_field.html#af5e21d52029763134dd2b879c6f98144":[7,0,0,560,11],
+"class_ogre_1_1_irradiance_field.html#afa88e2552b98e01a2f1b8a21ddbfd064":[7,0,0,560,3],
+"class_ogre_1_1_irradiance_field.html#afc5daa0b4930f3d2dce32ad8edd58c30":[7,0,0,560,5],
+"class_ogre_1_1_irradiance_field_raster.html":[7,0,0,561],
+"class_ogre_1_1_irradiance_field_raster.html#a0bf7e92c3f503e982acfb91e61ed404a":[7,0,0,561,2],
+"class_ogre_1_1_irradiance_field_raster.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,561,6],
 "class_ogre_1_1_irradiance_field_raster.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,561,10],
 "class_ogre_1_1_irradiance_field_raster.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,561,13],
 "class_ogre_1_1_irradiance_field_raster.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,561,8],
@@ -243,11 +249,5 @@ var NAVTREEINDEX107 =
 "class_ogre_1_1_item.html#adac4d1d174d15f5953b2e4b29d977529":[5,2,12,24,6],
 "class_ogre_1_1_item.html#add737d6564593333aeac457a1a2c0269":[5,0,1,24,107],
 "class_ogre_1_1_item.html#add737d6564593333aeac457a1a2c0269":[5,2,12,24,107],
-"class_ogre_1_1_item.html#adeaba7cd215a0d2af0be9fb73510730d":[5,0,1,24,2],
-"class_ogre_1_1_item.html#adeaba7cd215a0d2af0be9fb73510730d":[5,2,12,24,2],
-"class_ogre_1_1_item.html#ae7fca7a69a6c69bcc78db2f774346885":[5,0,1,24,38],
-"class_ogre_1_1_item.html#ae7fca7a69a6c69bcc78db2f774346885":[5,2,12,24,38],
-"class_ogre_1_1_item.html#ae9f220178c269da617d31c68b39f4147":[5,0,1,24,50],
-"class_ogre_1_1_item.html#ae9f220178c269da617d31c68b39f4147":[5,2,12,24,50],
-"class_ogre_1_1_item.html#aec8de75364ba934510a7c1d0e8cb6471":[5,0,1,24,34]
+"class_ogre_1_1_item.html#adeaba7cd215a0d2af0be9fb73510730d":[5,0,1,24,2]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX64 =
 {
+"class_ogre_1_1_default_axis_aligned_box_scene_query.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,11,20],
+"class_ogre_1_1_default_axis_aligned_box_scene_query.html#aff51cd713a6dcfa195ce6d97701f752c":[5,0,1,11,2],
 "class_ogre_1_1_default_axis_aligned_box_scene_query.html#aff51cd713a6dcfa195ce6d97701f752c":[5,2,12,11,2],
 "class_ogre_1_1_default_intersection_scene_query.html":[5,2,12,12],
 "class_ogre_1_1_default_intersection_scene_query.html":[5,0,1,12],
@@ -111,8 +113,8 @@ var NAVTREEINDEX64 =
 "class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,12,13,15],
 "class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html#a982dda57528c3a3ccaa4d577335ed87c":[5,0,1,13,6],
 "class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html#a982dda57528c3a3ccaa4d577335ed87c":[5,2,12,13,6],
-"class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html#aa4e94ff73decaf0fa57ba229c4c5ad9e":[5,2,12,13,5],
 "class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html#aa4e94ff73decaf0fa57ba229c4c5ad9e":[5,0,1,13,5],
+"class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html#aa4e94ff73decaf0fa57ba229c4c5ad9e":[5,2,12,13,5],
 "class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html#ab78a921e54419be677839cdf15d1f0b8":[5,0,1,13,19],
 "class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,12,13,19],
 "class_ogre_1_1_default_plane_bounded_volume_list_scene_query.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,0,1,13,17],
@@ -247,7 +249,5 @@ var NAVTREEINDEX64 =
 "class_ogre_1_1_default_scene_manager.html#a040241bad11b74f5ba8971fb146f8c6d":[5,2,12,16,136],
 "class_ogre_1_1_default_scene_manager.html#a045cc6cee9d3db9c59d0e14523368eb8":[5,0,1,16,194],
 "class_ogre_1_1_default_scene_manager.html#a045cc6cee9d3db9c59d0e14523368eb8":[5,2,12,16,194],
-"class_ogre_1_1_default_scene_manager.html#a04c8414da02aec3e3f98acd013917ed2":[5,0,1,16,252],
-"class_ogre_1_1_default_scene_manager.html#a04c8414da02aec3e3f98acd013917ed2":[5,2,12,16,252],
-"class_ogre_1_1_default_scene_manager.html#a05d952278baae0e75565b527b0442b06":[5,0,1,16,193]
+"class_ogre_1_1_default_scene_manager.html#a04c8414da02aec3e3f98acd013917ed2":[5,0,1,16,252]
 };

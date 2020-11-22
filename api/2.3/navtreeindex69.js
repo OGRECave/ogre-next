@@ -1,5 +1,9 @@
 var NAVTREEINDEX69 =
 {
+"class_ogre_1_1_deflector_plane_affector_factory.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,298,2],
+"class_ogre_1_1_deflector_plane_affector_factory.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,298,9],
+"class_ogre_1_1_degree.html":[5,2,6,11],
+"class_ogre_1_1_degree.html#a0487bcf629d0f637293a6e23d3542ad6":[5,2,6,11,9],
 "class_ogre_1_1_degree.html#a06ce30cb04785abd837cc94bf76b05de":[5,2,6,11,29],
 "class_ogre_1_1_degree.html#a133b76b6d58f5ce8f8e8ea55c04932e0":[5,2,6,11,14],
 "class_ogre_1_1_degree.html#a1b21b5dd134a959f2ff0b4fc36bf2519":[5,2,6,11,18],
@@ -50,8 +54,8 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7e":[5,2,10,1,0],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7e":[5,2,10,1,1],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[5,2,10,1,0,4],
-"class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[5,2,10,1,1,4],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[5,2,10,1,0,9],
+"class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[5,2,10,1,1,4],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[5,2,10,1,1,9],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[5,2,10,1,0,2],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[5,2,10,1,0,7],
@@ -245,9 +249,5 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_dual_quaternion.html#acfec8064c128940237fe204e7b0e9f99":[5,2,6,12,22],
 "class_ogre_1_1_dual_quaternion.html#ad753b864d41eab164118718b27a46425":[5,2,6,12,5],
 "class_ogre_1_1_dual_quaternion.html#aef3bbc49149643d5bfc3dbde4064dde3":[5,2,6,12,19],
-"class_ogre_1_1_dual_quaternion.html#af666d1865aa8b3467648b96e8c597217":[5,2,6,12,11],
-"class_ogre_1_1_dyn_lib.html":[5,2,2,40],
-"class_ogre_1_1_dyn_lib.html#a038546cd3a5b9d9385b14aa3e0a8179b":[5,2,2,40,4],
-"class_ogre_1_1_dyn_lib.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,40,7],
-"class_ogre_1_1_dyn_lib.html#a2d7af9ece40f8965e36870948427f972":[5,2,2,40,15]
+"class_ogre_1_1_dual_quaternion.html#af666d1865aa8b3467648b96e8c597217":[5,2,6,12,11]
 };

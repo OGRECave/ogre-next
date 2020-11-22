@@ -26,5 +26,6 @@ var class_ogre_1_1_p_s_s_m_shadow_camera_setup =
     [ "setNumStableSplits", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#ae856178ef392e5f8b082cea81b15c141", null ],
     [ "setOptimalAdjustFactor", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#a4f16797f8c4fcee30141e5dd0690e647", null ],
     [ "setSplitPadding", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#a5000b20f43bea556bcdd994550f1f0ab", null ],
-    [ "setSplitPoints", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#a82cacf643a003a08ee531cd71b505fb0", null ]
+    [ "setSplitPoints", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#a82cacf643a003a08ee531cd71b505fb0", null ],
+    [ "setUseEsm", "class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#a64ec2cc49a15be1446603390cf2d5536", null ]
 ];

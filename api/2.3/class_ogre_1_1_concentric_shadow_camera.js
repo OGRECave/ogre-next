@@ -14,5 +14,6 @@ var class_ogre_1_1_concentric_shadow_camera =
     [ "operator new", "class_ogre_1_1_concentric_shadow_camera.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
     [ "operator new", "class_ogre_1_1_concentric_shadow_camera.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_concentric_shadow_camera.html#afa2943846ba6a2b5824a12857139cf5e", null ],
-    [ "operator new[]", "class_ogre_1_1_concentric_shadow_camera.html#a4be37baef81876985aa1071ad5acc6dd", null ]
+    [ "operator new[]", "class_ogre_1_1_concentric_shadow_camera.html#a4be37baef81876985aa1071ad5acc6dd", null ],
+    [ "setUseEsm", "class_ogre_1_1_concentric_shadow_camera.html#a64ec2cc49a15be1446603390cf2d5536", null ]
 ];
