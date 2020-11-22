@@ -69,6 +69,8 @@ namespace Ogre {
         /// Defines the min & max frustum distance. TODO: put as output from getShadowCamera
         mutable Real mMinDistance;
         mutable Real mMaxDistance;
+        /// Setup for some corner cases is different for exponential shadow maps
+        static bool mUseEsm;
 
     public:
         /// Function to implement -- must set the shadow camera properties
@@ -81,6 +83,8 @@ namespace Ogre {
 
         Real getMinDistance() const         { return mMinDistance; }
         Real getMaxDistance() const         { return mMaxDistance; }
+
+        static void setUseEsm(bool useEsm)  { mUseEsm = useEsm; }
     };
 
 

@@ -37,6 +37,8 @@ THE SOFTWARE.
 
 namespace Ogre 
 {
+    bool ShadowCameraSetup::mUseEsm = false;
+
     /// Default constructor
     DefaultShadowCameraSetup::DefaultShadowCameraSetup()  {}
     

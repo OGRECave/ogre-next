@@ -3686,6 +3686,7 @@ namespace Ogre
     void HlmsPbs::setShadowSettings( ShadowFilter filter )
     {
         mShadowFilter = filter;
+        ShadowCameraSetup::setUseEsm( filter == ExponentialShadowMaps );
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::setEsmK( uint16 K )

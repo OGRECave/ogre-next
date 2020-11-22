@@ -193,12 +193,15 @@ namespace Ogre
         if( casterBox.isNull() )
         {
             texCam->setProjectionType( PT_ORTHOGRAPHIC );
-            //Anything will do, there are no casters. But we must ensure depth of the receiver
-            //doesn't become negative else a shadow square will appear (i.e. "the sun is below the floor")
-            const Real farDistance = std::min( cam->getFarClipDistance(),
-                                                light->getShadowFarDistance() );
+            // Anything will do, there are no casters. But we must ensure depth of the receiver
+            // doesn't become negative else a shadow square will appear (i.e. "the sun is below the
+            // floor"). On the other hand our implementation of the exponential shadow maps is tolerable
+            // for negative depths but intolerable for too large positive
+            const Real farDistance =
+                std::min( cam->getFarClipDistance(), light->getShadowFarDistance() );
             texCam->setPosition( cam->getDerivedPosition() -
-                                 light->getDerivedDirection() * farDistance );
+                                 light->getDerivedDirection() *
+                                     ( mUseEsm ? -farDistance : farDistance ) );
             texCam->setOrthoWindow( 1, 1 );
             texCam->setNearClipDistance( 1.0f );
             texCam->setFarClipDistance( 1.1f );
