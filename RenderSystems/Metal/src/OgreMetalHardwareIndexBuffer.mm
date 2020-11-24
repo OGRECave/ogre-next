@@ -112,6 +112,11 @@ namespace v1 {
         }
         else
         {
+            if( mShadowBuffer )
+            {
+                mShadowBuffer->copyData( srcBuffer, srcOffset, dstOffset, length, discardWholeBuffer );
+            }
+            
             MetalHardwareBufferCommon *metalBuffer = reinterpret_cast<MetalHardwareBufferCommon*>(
                         srcBuffer.getRenderSystemData() );
             mMetalHardwareBufferCommon.copyData( metalBuffer, srcOffset,
