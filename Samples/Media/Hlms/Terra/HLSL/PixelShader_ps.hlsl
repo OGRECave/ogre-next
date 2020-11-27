@@ -48,7 +48,7 @@ SamplerState samplerStateTerra		: register(s@value(terrainNormals));
 
 @property( hlms_forwardplus )
 	Buffer<uint> f3dGrid : register(t@value(f3dGrid));
-	Buffer<float4> f3dLightList : register(t@value(f3dLightList));
+	ReadOnlyBuffer( @value(f3dLightList), float4, f3dLightList );
 @end
 
 @property( irradiance_volumes )
