@@ -17,6 +17,8 @@ struct PS_INPUT
 	@insertpiece( Terra_VStoPS_block )
 };
 
+@pset( currSampler, samplerStateStart )
+
 @property( !hlms_render_depth_only )
 	@property( hlms_gen_normals_gbuffer )
 		#define outPs_normals outPs.normals
@@ -111,12 +113,10 @@ fragment @insertpiece( output_type ) main_metal
 	@property( use_envprobe_map )
 		@property( !hlms_enable_cubemaps_auto )
 			, texturecube<float>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
-		@end
-		@property( hlms_enable_cubemaps_auto )
+		@else
 			@property( !hlms_cubemaps_use_dpm )
 				, texturecube_array<float>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
-			@end
-			@property( hlms_cubemaps_use_dpm )
+			@else
 				, texture2d_array<float>	texEnvProbeMap [[texture(@value(texEnvProbeMap))]]
 			@end
 		@end
@@ -125,11 +125,12 @@ fragment @insertpiece( output_type ) main_metal
 		@end
 	@end
 	@foreach( num_samplers, n )
-		, sampler samplerState@value(samplerStateStart) [[sampler(@counter(samplerStateStart))]]@end
+		, sampler samplerState@value(currSampler) [[sampler(@counter(currSampler))]]@end
 	@insertpiece( DeclDecalsSamplers )
 	@insertpiece( DeclShadowSamplers )
 	@insertpiece( DeclAreaLtcTextures )
 	@insertpiece( DeclVctTextures )
+	@insertpiece( DeclIrradianceFieldTextures )
 )
 {
 	PS_OUTPUT outPs;

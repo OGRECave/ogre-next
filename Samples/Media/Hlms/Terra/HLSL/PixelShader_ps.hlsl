@@ -15,6 +15,8 @@ struct PS_INPUT
 	@insertpiece( Terra_VStoPS_block )
 };
 
+@pset( currSampler, samplerStateStart )
+
 @property( !hlms_render_depth_only )
 	@property( hlms_gen_normals_gbuffer )
 		#define outPs_normals outPs.normals
@@ -66,7 +68,7 @@ SamplerState samplerStateTerra		: register(s@value(terrainNormals));
 		@property( !hlms_cubemaps_use_dpm )
 			TextureCubeArray	texEnvProbeMap : register(t@value(texEnvProbeMap));
 		@else
-			@property( use_envprobe_map )Texture2DArray	texEnvProbeMap : register(t@value(texEnvProbeMap));@end
+			Texture2DArray	texEnvProbeMap : register(t@value(texEnvProbeMap));
 			@insertpiece( DeclDualParaboloidFunc )
 		@end
 	@end
@@ -76,7 +78,7 @@ SamplerState samplerStateTerra		: register(s@value(terrainNormals));
 @end
 
 @foreach( num_samplers, n )
-	SamplerState samplerState@value(samplerStateStart) : register(s@counter(samplerStateStart));@end
+	SamplerState samplerState@value(currSampler) : register(s@counter(currSampler));@end
 
 @property( use_parallax_correct_cubemaps )
 	@insertpiece( DeclParallaxLocalCorrect )
@@ -92,6 +94,7 @@ SamplerState samplerStateTerra		: register(s@value(terrainNormals));
 @insertpiece( DeclAreaLtcLightFuncs )
 
 @insertpiece( DeclVctTextures )
+@insertpiece( DeclIrradianceFieldTextures )
 
 @insertpiece( DeclOutputType )
 
