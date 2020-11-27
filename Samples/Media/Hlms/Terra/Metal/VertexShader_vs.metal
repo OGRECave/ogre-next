@@ -34,7 +34,11 @@ vertex PS_INPUT main_metal
 	// START UNIFORM DECLARATION
 	@insertpiece( PassDecl )
 	@insertpiece( TerraInstanceDecl )
-	, texture2d<float, access::read> heightMap [[texture(0)]]
+	@property( !terra_use_uint )
+		, texture2d<float, access::read> heightMap [[texture(@value(heightMap))]]
+	@else
+		, texture2d<uint, access::read> heightMap [[texture(@value(heightMap))]]
+	@end
 	@insertpiece( custom_vs_uniformDeclaration )
 	// END UNIFORM DECLARATION
 )

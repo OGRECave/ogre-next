@@ -30,7 +30,11 @@ struct PS_INPUT
 @insertpiece( custom_vs_uniformDeclaration )
 
 // START UNIFORM DECLARATION
-Texture2D<float> heightMap: register(t0);
+@property( !terra_use_uint )
+	Texture2D<float> heightMap: register(t@value(heightMap));
+@else
+	Texture2D<uint> heightMap: register(t@value(heightMap));
+@end
 // END UNIFORM DECLARATION
 
 PS_INPUT main( VS_INPUT input )
