@@ -144,11 +144,15 @@
 		@end
 	@end
 
-	pixelData.roughness =	(roughness0 * detailWeights.x * material.roughness.x +
-							 roughness1 * detailWeights.y * material.roughness.y) +
-							(roughness2 * detailWeights.z * material.roughness.z +
-							 roughness3 * detailWeights.w * material.roughness.w);
-	pixelData.roughness = max( pixelData.roughness, 0.001f );
+	pixelData.perceptualRoughness =	(roughness0 * detailWeights.x * material.roughness.x +
+									 roughness1 * detailWeights.y * material.roughness.y) +
+									(roughness2 * detailWeights.z * material.roughness.z +
+									 roughness3 * detailWeights.w * material.roughness.w);
+	@property( perceptual_roughness )
+		pixelData.roughness = max( pixelData.perceptualRoughness * pixelData.perceptualRoughness, 0.001f );
+	@else
+		pixelData.roughness = max( pixelData.perceptualRoughness, 0.001f );
+	@end
 @end
 
 @undefpiece( LoadNormalData )
