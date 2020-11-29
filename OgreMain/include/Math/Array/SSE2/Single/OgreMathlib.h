@@ -29,10 +29,6 @@ THE SOFTWARE.
 #ifndef __MathlibSSE2_H__
 #define __MathlibSSE2_H__
 
-#include "OgreBuildSettings.h"
-
-#if __OGRE_HAVE_SSE
-
 #include "OgrePrerequisites.h"
 
 namespace Ogre
@@ -534,5 +530,4 @@ namespace Ogre
 
 #include "OgreMathlib.inl"
 
-#endif
 #endif
