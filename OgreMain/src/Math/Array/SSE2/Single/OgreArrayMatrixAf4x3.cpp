@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include <OgreStableHeaders.h>
 
-#include "Math/Array/OgreArrayMatrixAf4x3.h"
+#include "OgreArrayMatrixAf4x3.h"
 
 #if __OGRE_HAVE_SSE
 

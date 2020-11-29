@@ -40,7 +40,7 @@ THE SOFTWARE.
 #include "OgreMovablePlane.h"
 #include "OgreRenderOperation.h"
 
-#include "Math/Array/OgreArrayMatrixAf4x3.h"
+#include "OgreArrayMatrixAf4x3.h"
 
 namespace Ogre {
 

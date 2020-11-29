@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 
 #include "OgreMathlib.h"
-#include "Math/Array/OgreArraySphere.h"
+#include "OgreArraySphere.h"
 #include "OgreBooleanMask.h"
 
 namespace Ogre {

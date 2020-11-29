@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "OgreCamera.h"
 #include "OgreDecal.h"
 
-#include "Math/Array/OgreArraySphere.h"
+#include "OgreArraySphere.h"
 #include "OgreBooleanMask.h"
 
 #include "Compositor/OgreCompositorShadowNode.h"

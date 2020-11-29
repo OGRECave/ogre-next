@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include <OgreStableHeaders.h>
 
-#include "Math/Array/OgreArrayAabb.h"
+#include "OgreArrayAabb.h"
 
 namespace Ogre
 {

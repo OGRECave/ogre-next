@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "OgreLight.h"
 #include "OgreTechnique.h"
 #include "Animation/OgreSkeletonInstance.h"
-#include "Math/Array/OgreArraySphere.h"
+#include "OgreArraySphere.h"
 #include "OgreBooleanMask.h"
 #include "OgreRawPtr.h"
 

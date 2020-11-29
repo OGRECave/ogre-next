@@ -31,9 +31,8 @@ THE SOFTWARE.
 #include "Math/Array/OgreArrayConfig.h"
 #include "Math/Array/OgreArrayMemoryManager.h"
 #include "OgreArrayQuaternion.h"
-#include "Math/Array/OgreArrayAabb.h"
+#include "OgreArrayAabb.h"
 #include "OgreAabb.h"
-#include "Math/Array/OgreArrayAabb.h"
 #include "OgreArrayMatrix4.h"
 
 #include "OgreMatrix4.h"
