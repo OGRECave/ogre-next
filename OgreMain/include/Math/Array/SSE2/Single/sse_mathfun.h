@@ -29,6 +29,8 @@
   (this is the zlib license)
 */
 
+#include "OgreBuildSettings.h"
+
 #if __OGRE_HAVE_SSE
 
 #define USE_SSE2 //Added by dark_sylinc

@@ -29,6 +29,8 @@ THE SOFTWARE.
 #ifndef __MathlibNEON_H__
 #define __MathlibNEON_H__
 
+#include "OgreBuildSettings.h"
+
 #if __OGRE_HAVE_NEON
 
 #include "OgrePrerequisites.h"

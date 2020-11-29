@@ -25,6 +25,7 @@
   (this is the zlib license)
 */
 
+#include "OgreBuildSettings.h"
 #if __OGRE_HAVE_NEON
 
 #include <arm_neon.h>
