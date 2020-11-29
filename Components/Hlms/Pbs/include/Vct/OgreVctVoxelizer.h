@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "OgreHlmsPbsPrerequisites.h"
 #include "OgreId.h"
-#include "Math/Simple/OgreAabb.h"
+#include "OgreAabb.h"
 #include "Vao/OgreVertexBufferDownloadHelper.h"
 
 #ifdef OGRE_FORCE_VCT_VOXELIZER_DETERMINISTIC

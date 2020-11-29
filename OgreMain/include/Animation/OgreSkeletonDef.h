@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgreRawPtr.h"
 
-#include "Math/Array/OgreArrayMatrixAf4x3.h"
+#include "OgreArrayMatrixAf4x3.h"
 
 #include "ogrestd/list.h"
 #include "ogrestd/vector.h"

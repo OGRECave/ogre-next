@@ -34,9 +34,9 @@ THE SOFTWARE.
 #define __Mathlib_H__ //Needed to directly include OgreMathlibNEON
 
 #include "Math/Array/OgreArrayConfig.h"
-#include "Math/Array/NEON/Single/OgreMathlibNEON.h"
+#include "Math/Array/NEON/Single/OgreMathlib.h"
 #include "Math/Array/NEON/Single/neon_mathfun.h"
-#include "Math/Array/OgreBooleanMask.h"
+#include "OgreBooleanMask.h"
 
 namespace Ogre
 {

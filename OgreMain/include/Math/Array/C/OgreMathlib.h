@@ -29,10 +29,6 @@ THE SOFTWARE.
 #ifndef __MathlibC_H__
 #define __MathlibC_H__
 
-#ifndef __Mathlib_H__
-    #error "Don't include this file directly. include Math/Array/OgreMathlib.h"
-#endif
-
 #include "OgrePrerequisites.h"
 #include "OgreCommon.h"
 #include "OgreMath.h"
@@ -411,8 +407,10 @@ namespace Ogre
         */
         static void SinCos4( ArrayReal x, ArrayReal &outSin, ArrayReal &outCos );
     };
+
+    typedef MathlibC Mathlib;
 }
 
-#include "OgreMathlibC.inl"
+#include "OgreMathlib.inl"
 
 #endif

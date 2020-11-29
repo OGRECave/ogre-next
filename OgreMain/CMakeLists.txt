@@ -98,18 +98,41 @@ list(REMOVE_ITEM SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreFreeImageCode
     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreSTBICodec.cpp"
 )
 
-if (OGRE_SIMD_SSE2)
-	add_filtered_std( "Math/Array/SSE2/Single" )
+set(OGRE_SIMD_SSE2 0 CACHE BOOL "" FORCE)
+set(OGRE_SIMD_NEON 0 CACHE BOOL "" FORCE)
+mark_as_advanced(OGRE_SIMD_SSE2)
+mark_as_advanced(OGRE_SIMD_NEON)
+
+if (OGRE_SIMD AND ${CMAKE_SYSTEM_PROCESSOR} MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
+  set(OGRE_SIMD_SSE2 1 CACHE BOOL "" FORCE)
+
+  if (OGRE_CONFIG_DOUBLE)
+	  message(FATAL_ERROR "Double precision with SIMD on x86 is not supported")
+  else()
+	  add_filtered_std( "Math/Array/SSE2/Single" )
+    include_directories(include/Math/Array/SSE2/Single)
+  endif()
+elseif (OGRE_SIMD AND ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
+  set(OGRE_SIMD_NEON 1 CACHE BOOL "" FORCE)
+
+  if (OGRE_CONFIG_DOUBLE)
+	  message(FATAL_ERROR "Double precision with SIMD on ARM is not supported")
+  else()
+	  add_filtered_std( "Math/Array/Neon/Single" )
+    include_directories(include/Math/Array/Neon/Single)
+  endif()
+else()
+  set(OGRE_SIMD_NAME "")
+  if (OGRE_SIMD)
+    message(WARNING "OGRE_SIMD was true but system processor was not handled")
+    set(OGRE_SIMD FALSE CACHE BOOL "" FORCE)
+  endif()
+  
+  add_filtered_std( "Math/Array/C" )
+  include_directories(include/Math/Array/C)
 endif()
 
-if (OGRE_SIMD_NEON)
-	add_filtered_std( "Math/Array/NEON/Single" )
-endif()
-
-if (NOT(OGRE_SIMD_SSE2 OR OGRE_SIMD_NEON))
-	add_filtered_std( "Math/Array/C" )
-endif ()
-
+include_directories(include/Math/Simple/C)
 
 # Add platform specific files
 if (OGRE_BUILD_PLATFORM_NACL)

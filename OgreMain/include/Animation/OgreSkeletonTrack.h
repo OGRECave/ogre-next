@@ -30,7 +30,7 @@ THE SOFTWARE.
 #define __SkeletonTrack_H__
 
 #include "OgrePrerequisites.h"
-#include "Math/Array/OgreArrayQuaternion.h"
+#include "OgreArrayQuaternion.h"
 #include "Math/Array/OgreKfTransform.h"
 
 #include "ogrestd/vector.h"

@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "OgreId.h"
 
-#include "Math/Simple/OgreAabb.h"
+#include "OgreAabb.h"
 #include "OgreIdString.h"
 #include "OgrePixelFormatGpu.h"
 #include "OgreShaderPrimitives.h"

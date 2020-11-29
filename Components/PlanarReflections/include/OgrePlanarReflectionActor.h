@@ -33,8 +33,8 @@ THE SOFTWARE.
 #include "OgrePlane.h"
 #include "OgreVector2.h"
 #include "Math/Array/OgreArrayConfig.h"
-#include "Math/Array/OgreArrayVector3.h"
-#include "Math/Array/OgreArrayQuaternion.h"
+#include "OgreArrayVector3.h"
+#include "OgreArrayQuaternion.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

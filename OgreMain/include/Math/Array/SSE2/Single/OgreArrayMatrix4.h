@@ -28,15 +28,11 @@ THE SOFTWARE.
 #ifndef __SSE2_ArrayMatrix4_H__
 #define __SSE2_ArrayMatrix4_H__
 
-#ifndef __ArrayMatrix4_H__
-    #error "Don't include this file directly. include Math/Array/OgreArrayMatrix4.h"
-#endif
-
 #include "OgreMatrix4.h"
 
-#include "Math/Array/OgreMathlib.h"
-#include "Math/Array/OgreArrayVector3.h"
-#include "Math/Array/OgreArrayQuaternion.h"
+#include "OgreMathlib.h"
+#include "OgreArrayVector3.h"
+#include "OgreArrayQuaternion.h"
 
 namespace Ogre
 {

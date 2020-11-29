@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "OgreHlmsPbsPrerequisites.h"
 #include "OgreVector3.h"
-#include "Math/Simple/OgreAabb.h"
+#include "OgreAabb.h"
 #include "OgreIdString.h"
 #include "OgreTextureGpu.h"
 #include "OgreHeaderPrefix.h"

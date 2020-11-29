@@ -28,10 +28,6 @@ THE SOFTWARE.
 #ifndef __C_Aabb_H__
 #define __C_Aabb_H__
 
-#ifndef __Aabb_H__
-    #error "Don't include this file directly. include Math/Simple/OgreAabb.h"
-#endif
-
 #include "OgreVector3.h"
 #include "OgreMatrix4.h"
 

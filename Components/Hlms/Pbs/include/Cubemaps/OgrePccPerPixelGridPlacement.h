@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 #include "OgrePixelFormatGpu.h"
 
-#include "Math/Simple/OgreAabb.h"
+#include "OgreAabb.h"
 
 namespace Ogre
 {

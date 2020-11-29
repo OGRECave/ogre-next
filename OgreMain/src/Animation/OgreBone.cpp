@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "Math/Array/OgreBoneMemoryManager.h"
 #include "Math/Array/OgreKfTransform.h"
-#include "Math/Array/OgreBooleanMask.h"
+#include "OgreBooleanMask.h"
 
 #if OGRE_DEBUG_MODE
     #define CACHED_TRANSFORM_OUT_OF_DATE() this->setCachedTransformOutOfDate()

@@ -28,15 +28,11 @@ THE SOFTWARE.
 #ifndef _NEON_ArrayMatrixAf4x3_H_
 #define _NEON_ArrayMatrixAf4x3_H_
 
-#ifndef _ArrayMatrixAf4x3_H_
-    #error "Don't include this file directly. include Math/Array/OgreArrayMatrix4.h"
-#endif
-
 #include "OgreMatrix4.h"
 
-#include "Math/Array/OgreMathlib.h"
-#include "Math/Array/OgreArrayVector3.h"
-#include "Math/Array/OgreArrayQuaternion.h"
+#include "OgreMathlib.h"
+#include "OgreArrayVector3.h"
+#include "OgreArrayQuaternion.h"
 
 namespace Ogre
 {

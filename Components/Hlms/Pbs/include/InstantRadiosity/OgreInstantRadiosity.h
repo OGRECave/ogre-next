@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "OgreRay.h"
 #include "OgreRawPtr.h"
 #include "OgreVector2.h"
-#include "Math/Array/OgreArrayRay.h"
+#include "OgreArrayRay.h"
 #include "OgreTextureBox.h"
 #include "OgreHeaderPrefix.h"
 

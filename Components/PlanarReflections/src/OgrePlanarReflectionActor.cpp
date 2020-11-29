@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgrePlanarReflectionActor.h"
-#include "Math/Array/OgreArrayQuaternion.h"
+#include "OgreArrayQuaternion.h"
 
 namespace Ogre
 {

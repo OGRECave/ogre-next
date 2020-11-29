@@ -28,13 +28,9 @@ THE SOFTWARE.
 #ifndef __SSE2_ArrayVector3_H__
 #define __SSE2_ArrayVector3_H__
 
-#ifndef __ArrayVector3_H__
-    #error "Don't include this file directly. include Math/Array/OgreArrayVector3.h"
-#endif
-
 #include "OgreVector3.h"
 
-#include "Math/Array/OgreMathlib.h"
+#include "OgreMathlib.h"
 
 namespace Ogre
 {

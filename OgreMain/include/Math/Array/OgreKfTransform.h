@@ -29,7 +29,7 @@ THE SOFTWARE.
 #ifndef _OgreKfTransform_H_
 #define _OgreKfTransform_H_
 
-#include "Math/Array/OgreArrayQuaternion.h"
+#include "OgreArrayQuaternion.h"
 
 namespace Ogre
 {

@@ -34,9 +34,9 @@ THE SOFTWARE.
 #define __Mathlib_H__ //Neded to directly include OgreMathlibSSE2
 
 #include "Math/Array/OgreArrayConfig.h"
-#include "Math/Array/SSE2/Single/OgreMathlibSSE2.h"
+#include "Math/Array/SSE2/Single/OgreMathlib.h"
 #include "Math/Array/SSE2/Single/sse_mathfun.h"
-#include "Math/Array/OgreBooleanMask.h"
+#include "OgreBooleanMask.h"
 
 namespace Ogre
 {

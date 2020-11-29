@@ -41,7 +41,7 @@ THE SOFTWARE.
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreVertexArrayObject.h"
 
-#include "Math/Array/OgreBooleanMask.h"
+#include "OgreBooleanMask.h"
 
 #include "OgreItem.h"
 #include "OgreLwString.h"

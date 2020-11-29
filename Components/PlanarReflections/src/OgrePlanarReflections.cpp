@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "OgreCamera.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
-#include "Math/Array/OgreBooleanMask.h"
+#include "OgreBooleanMask.h"
 #include "OgreHlmsDatablock.h"
 #include "OgreHlms.h"
 #include "OgreTextureGpuManager.h"

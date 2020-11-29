@@ -29,10 +29,6 @@ THE SOFTWARE.
 #ifndef __NEON_BooleanMask_H__
 #define __NEON_BooleanMask_H__
 
-#ifndef __BooleanMask_H__
-    #error "Don't include this file directly. include Math/Array/OgreBooleanMask.h"
-#endif
-
 namespace Ogre
 {
     class _OgreExport BooleanMask4

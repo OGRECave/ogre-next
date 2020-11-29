@@ -33,8 +33,8 @@ THE SOFTWARE.
 #define __Mathlib_H__ //Neded to directly include OgreMathlibC
 
 #include "Math/Array/OgreArrayConfig.h"
-#include "Math/Array/C/OgreMathlibC.h"
-#include "Math/Array/OgreBooleanMask.h"
+#include "Math/Array/C/OgreMathlib.h"
+#include "OgreBooleanMask.h"
 
 namespace Ogre
 {

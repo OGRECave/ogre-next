@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "Animation/OgreSkeletonTrack.h"
 
-#include "Math/Array/OgreMathlib.h"
+#include "OgreMathlib.h"
 #include "Math/Array/OgreBoneTransform.h"
 #include "Math/Array/OgreKfTransformArrayMemoryManager.h"
 

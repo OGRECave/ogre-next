@@ -28,14 +28,10 @@ THE SOFTWARE.
 #ifndef __SSE2_ArrayAabb_H__
 #define __SSE2_ArrayAabb_H__
 
-#ifndef __ArrayAabb_H__
-    #error "Don't include this file directly. include Math/Array/OgreArrayAabb.h"
-#endif
-
-#include "Math/Array/OgreMathlib.h"
-#include "Math/Array/OgreArrayVector3.h"
-#include "Math/Array/OgreArrayMatrix4.h"
-#include "Math/Simple/OgreAabb.h"
+#include "OgreMathlib.h"
+#include "OgreArrayVector3.h"
+#include "OgreArrayMatrix4.h"
+#include "OgreAabb.h"
 
 namespace Ogre
 {

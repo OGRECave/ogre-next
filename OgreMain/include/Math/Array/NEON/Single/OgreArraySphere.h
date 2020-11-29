@@ -28,14 +28,10 @@ THE SOFTWARE.
 #ifndef __NEON_ArraySphere_H__
 #define __NEON_ArraySphere_H__
 
-#ifndef __ArraySphere_H__
-    #error "Don't include this file directly. include Math/Array/OgreArraySphere.h"
-#endif
-
 #include "OgreSphere.h"
 
-#include "Math/Array/OgreMathlib.h"
-#include "Math/Array/OgreArrayVector3.h"
+#include "OgreMathlib.h"
+#include "OgreArrayVector3.h"
 
 namespace Ogre
 {

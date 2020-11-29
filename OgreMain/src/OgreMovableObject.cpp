@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include "OgreTechnique.h"
 #include "Animation/OgreSkeletonInstance.h"
 #include "Math/Array/OgreArraySphere.h"
-#include "Math/Array/OgreBooleanMask.h"
+#include "OgreBooleanMask.h"
 #include "OgreRawPtr.h"
 
 namespace Ogre {

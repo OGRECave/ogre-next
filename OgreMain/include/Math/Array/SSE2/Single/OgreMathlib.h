@@ -31,10 +31,6 @@ THE SOFTWARE.
 
 #if __OGRE_HAVE_SSE
 
-#ifndef __Mathlib_H__
-    #error "Don't include this file directly. include Math/Array/OgreMathlib.h"
-#endif
-
 #include "OgrePrerequisites.h"
 
 namespace Ogre
@@ -76,7 +72,7 @@ namespace Ogre
         inline ArrayReal operator >= ( const ArrayRadian& r ) const;
         inline ArrayReal operator >  ( const ArrayRadian& r ) const;
     };
-
+ 
     class _OgreExport MathlibSSE2
     {
     public:
@@ -530,9 +526,11 @@ namespace Ogre
 //  inline ArrayReal operator / ( Real l, ArrayReal r )         { return _mm_div_ps( _mm_set1_ps( l ), r ); }
     inline ArrayReal operator / ( ArrayReal l, ArrayReal r )    { return _mm_div_ps( l, r ); }
 #endif
+
+    typedef MathlibSSE2 Mathlib;
 }
 
-#include "OgreMathlibSSE2.inl"
+#include "OgreMathlib.inl"
 
 #endif
 #endif

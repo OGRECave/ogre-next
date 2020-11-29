@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "Animation/OgreTagPoint.h"
 #include "Animation/OgreBone.h"
 
-#include "Math/Array/OgreBooleanMask.h"
+#include "OgreBooleanMask.h"
 #include "Math/Array/OgreNodeMemoryManager.h"
 #include "OgreSceneManager.h"
 

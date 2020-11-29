@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #include "OgreResource.h"
-#include "Math/Simple/OgreAabb.h"
+#include "OgreAabb.h"
 #include "Vao/OgreBufferPacked.h"
 
 #include "OgreVertexBoneAssignment.h"

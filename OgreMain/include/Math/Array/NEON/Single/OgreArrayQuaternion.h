@@ -28,14 +28,10 @@ THE SOFTWARE.
 #ifndef __NEON_ArrayQuaternion_H__
 #define __NEON_ArrayQuaternion_H__
 
-#ifndef __ArrayQuaternion_H__
-    #error "Don't include this file directly. include Math/Array/OgreArrayQuaternion.h"
-#endif
-
 #include "OgreQuaternion.h"
 
-#include "Math/Array/OgreMathlib.h"
-#include "Math/Array/OgreArrayVector3.h"
+#include "OgreMathlib.h"
+#include "OgreArrayVector3.h"
 
 #include "OgreArrayQuaternion.h"
 

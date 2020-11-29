@@ -29,9 +29,9 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "OgreRoot.h"
 
-#include "Math/Array/OgreMathlib.h"
+#include "OgreMathlib.h"
 #include "Math/Array/OgreArraySphere.h"
-#include "Math/Array/OgreBooleanMask.h"
+#include "OgreBooleanMask.h"
 
 namespace Ogre {
     //---------------------------------------------------------------------

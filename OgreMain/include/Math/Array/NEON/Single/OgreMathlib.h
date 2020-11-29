@@ -31,10 +31,6 @@ THE SOFTWARE.
 
 #if __OGRE_HAVE_NEON
 
-#ifndef __Mathlib_H__
-    #error "Don't include this file directly. include Math/Array/OgreMathlib.h"
-#endif
-
 #include "OgrePrerequisites.h"
 
 namespace Ogre
@@ -677,9 +673,11 @@ namespace Ogre
 //  inline ArrayReal operator / ( Real l, ArrayReal r )         { return _mm_div_ps( vdupq_n_f32( l ), r ); }
     inline ArrayReal operator / ( ArrayReal l, ArrayReal r )    { return vdivq_f32( l, r ); }
 #endif
+
+    typedef MathlibNEON Mathlib;
 }
 
-#include "OgreMathlibNEON.inl"
+#include "OgreMathlib.inl"
 
 #endif
 #endif

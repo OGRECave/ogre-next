@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include <OgreStableHeaders.h>
 
-#include "Math/Array/OgreArrayQuaternion.h"
+#include "OgreArrayQuaternion.h"
 
 #if __OGRE_HAVE_NEON
 

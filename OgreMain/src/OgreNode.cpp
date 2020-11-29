@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 
 #include "Math/Array/OgreNodeMemoryManager.h"
-#include "Math/Array/OgreBooleanMask.h"
+#include "OgreBooleanMask.h"
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
     #define CACHED_TRANSFORM_OUT_OF_DATE() this->_setCachedTransformOutOfDate()
