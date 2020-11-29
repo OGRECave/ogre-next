@@ -208,9 +208,9 @@ var_to_string(OGRE_USE_BOOST _boost)
 var_to_string(OGRE_SIMD _simd)
 
 if (OGRE_SIMD_SSE2)
-	set(_simd "SSE2")
+	set(_simd "${_simd} (SSE2)")
 elseif (OGRE_SIMD_NEON)
-	set(_simd "NEON")
+	set(_simd "${_simd} (NEON)")
 endif()
 
 # threading settings
