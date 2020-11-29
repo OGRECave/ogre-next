@@ -101,7 +101,10 @@ elseif (OGRE_SIMD)
   message(WARNING "SIMD not supported for this system, we've set OGRE_SIMD to false")
   set(OGRE_SIMD 0 CACHE BOOL "" FORCE)
   include_directories("${OGRE_SOURCE_DIR}/OgreMain/include/Math/Array/C")
+else()
+  include_directories("${OGRE_SOURCE_DIR}/OgreMain/include/Math/Array/C")
 endif()
+
 include_directories("${OGRE_SOURCE_DIR}/OgreMain/include/Math/Simple/C")
 
 # determine config values depending on build options
