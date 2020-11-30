@@ -500,19 +500,64 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void SkeletonInstance::_updateBoneStartTransforms(void)
     {
+        // mIndex has shifted so the following needs to be changed:
+        //  - mBoneStartTransforms: It literally marks when our bones start in the SIMD group
+        //  - mManualBones needs to be shifted so that we don't accidentally overwrite
+        //    SIMD bones that don't belong to us; and also explicitly set manual bones
+        //    keep working
+        //  - SkeletonAnimation::mBoneWeights, same reason as mManualBones: don't overwrite
+        //    SIMD bones that don't belong to us; and also keep explicitly set bone weights
+
         const SkeletonDef::DepthLevelInfoVec &depthLevelInfo = mDefinition->getDepthLevelInfo();
 
         assert( mBoneStartTransforms.size() == depthLevelInfo.size() );
 
         TransformArray::iterator itBoneStartTr = mBoneStartTransforms.begin();
+        FastArray<size_t> oldSlotStarts = mSlotStarts;
+        mSlotStarts.clear();
+
+        Real *manualBones = reinterpret_cast<Real *>( mManualBones.get() );
+        FastArray<Real> oldManualBones;
 
         SkeletonDef::DepthLevelInfoVec::const_iterator itor = depthLevelInfo.begin();
-        SkeletonDef::DepthLevelInfoVec::const_iterator end  = depthLevelInfo.end();
+        SkeletonDef::DepthLevelInfoVec::const_iterator endr = depthLevelInfo.end();
 
-        while( itor != end )
+        while( itor != endr )
         {
-            *itBoneStartTr++ = mBones[itor->firstBoneIndex]._getTransform();
+            const size_t oldSlotStart = itBoneStartTr->mIndex;
+            *itBoneStartTr = mBones[itor->firstBoneIndex]._getTransform();
+            mSlotStarts.push_back( itBoneStartTr->mIndex );
+
+            OGRE_ASSERT_MEDIUM( oldSlotStart == oldSlotStarts[size_t( itor - depthLevelInfo.begin() )] );
+
+            const size_t slotStart = itBoneStartTr->mIndex;
+            const size_t remainder = ( slotStart + itor->numBonesInLevel ) % ARRAY_PACKED_REALS;
+
+            oldManualBones.resize( itor->numBonesInLevel );
+            memcpy( oldManualBones.begin(), manualBones + oldSlotStart,
+                    sizeof( Real ) * itor->numBonesInLevel );
+
+            for( size_t i = 0u; i < slotStart; ++i )
+                *manualBones++ = 0.0f;
+            for( size_t i = slotStart; i < slotStart + itor->numBonesInLevel; ++i )
+                *manualBones++ = oldManualBones[i - slotStart];
+            if( remainder != 0 )
+            {
+                for( size_t i = 0u; i < ARRAY_PACKED_REALS - remainder; ++i )
+                    *manualBones++ = 0.0f;
+            }
+
+            ++itBoneStartTr;
             ++itor;
+        }
+
+        SkeletonAnimationVec::iterator itAnim = mAnimations.begin();
+        SkeletonAnimationVec::iterator enAnim = mAnimations.end();
+
+        while( itAnim != enAnim )
+        {
+            itAnim->_boneMemoryRebased( oldSlotStarts );
+            ++itAnim;
         }
     }
     //-----------------------------------------------------------------------------------

@@ -70,8 +70,8 @@ namespace Ogre
         {
             if( itor->getUsedSlots() <= (ARRAY_PACKED_REALS >> 1) )
             {
-                size_t level = itor->getBoneBlockIdx() >> 24;
-                size_t slotStart = slotStarts[level];
+                const size_t level = itor->getBoneBlockIdx() >> 24;
+                const size_t slotStart = slotStarts[level];
 
                 for( size_t i=0; i<slotStart; ++i )
                     boneWeightsScalar[i] = 0.0f;
@@ -86,6 +86,44 @@ namespace Ogre
             }
 
             mLastKnownKeyFrames.push_back( itor->getKeyFrames().begin() );
+            boneWeightsScalar += ARRAY_PACKED_REALS;
+            ++boneWeights;
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void SkeletonAnimation::_boneMemoryRebased( const FastArray<size_t> &oldSlotStarts )
+    {
+        const FastArray<size_t> &slotStarts = *mSlotStarts;
+        ArrayReal *boneWeights = mBoneWeights.get();
+        Real *boneWeightsScalar = reinterpret_cast<Real *>( mBoneWeights.get() );
+
+        SkeletonTrackVec::const_iterator itor = mDefinition->mTracks.begin();
+        SkeletonTrackVec::const_iterator endt = mDefinition->mTracks.end();
+
+        while( itor != endt )
+        {
+            if( itor->getUsedSlots() <= ( ARRAY_PACKED_REALS >> 1 ) )
+            {
+                const size_t level = itor->getBoneBlockIdx() >> 24;
+                const size_t slotStart = slotStarts[level];
+                const size_t oldSlotStart = oldSlotStarts[level];
+
+                Real oldBoneWeights[ARRAY_PACKED_REALS];
+                memcpy( oldBoneWeights, boneWeightsScalar, sizeof( oldBoneWeights ) );
+
+                for( size_t i = 0u; i < slotStart; ++i )
+                    boneWeightsScalar[i] = 0.0f;
+                for( size_t i = slotStart; i < slotStart + itor->getUsedSlots(); ++i )
+                    boneWeightsScalar[i] = oldBoneWeights[i - slotStart + oldSlotStart];
+                for( size_t i = slotStart + itor->getUsedSlots(); i < ARRAY_PACKED_REALS; ++i )
+                    boneWeightsScalar[i] = 0.0f;
+            }
+            else
+            {
+                *boneWeights = Mathlib::ONE;
+            }
+
             boneWeightsScalar += ARRAY_PACKED_REALS;
             ++boneWeights;
             ++itor;
