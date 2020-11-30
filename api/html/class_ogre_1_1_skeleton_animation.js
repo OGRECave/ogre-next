@@ -2,6 +2,7 @@ var class_ogre_1_1_skeleton_animation =
 [
     [ "SkeletonAnimation", "class_ogre_1_1_skeleton_animation.html#aff261f8f680b897097b9a499bf8e7332", null ],
     [ "_applyAnimation", "class_ogre_1_1_skeleton_animation.html#ac1e470bfe45f5e9be09a86f0f0cc36fe", null ],
+    [ "_boneMemoryRebased", "class_ogre_1_1_skeleton_animation.html#aca44ea0e26e1cb2a3767717278bb96bd", null ],
     [ "_initialize", "class_ogre_1_1_skeleton_animation.html#a971aea47aeabacdd17086bc7a8f5271c", null ],
     [ "_swapBoneWeightsUniquePtr", "class_ogre_1_1_skeleton_animation.html#ac8cf2d3fbf6147e93400ae5ea048ad45", null ],
     [ "addFrame", "class_ogre_1_1_skeleton_animation.html#a5b02df604af00400d934ef4c2dda42ac", null ],

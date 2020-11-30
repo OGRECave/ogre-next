@@ -113,6 +113,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aff261f8f680b897097b9a499bf8e7332"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1e470bfe45f5e9be09a86f0f0cc36fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#ac1e470bfe45f5e9be09a86f0f0cc36fe">_applyAnimation</a> (const <a class="el" href="namespace_ogre.html#a2b50c8299b49c77b1f41e1a6567ffaff">TransformArray</a> &amp;boneTransforms)</td></tr>
 <tr class="separator:ac1e470bfe45f5e9be09a86f0f0cc36fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca44ea0e26e1cb2a3767717278bb96bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#aca44ea0e26e1cb2a3767717278bb96bd">_boneMemoryRebased</a> (const <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; size_t &gt; &amp;oldSlotStarts)</td></tr>
+<tr class="memdesc:aca44ea0e26e1cb2a3767717278bb96bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shifts the values of mBoneWeights to new locations because the bones' mIndex may have changed.  <a href="class_ogre_1_1_skeleton_animation.html#aca44ea0e26e1cb2a3767717278bb96bd">More...</a><br /></td></tr>
+<tr class="separator:aca44ea0e26e1cb2a3767717278bb96bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a971aea47aeabacdd17086bc7a8f5271c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a971aea47aeabacdd17086bc7a8f5271c">_initialize</a> (void)</td></tr>
 <tr class="memdesc:a971aea47aeabacdd17086bc7a8f5271c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal function that initializes a lot of structures that can't be done in the constructor due to how <a class="el" href="class_ogre_1_1_skeleton_instance.html" title="Instance of a Skeleton, main external interface for retrieving bone positions and applying animations...">SkeletonInstance</a> is created/pushed in a vector.  <a href="class_ogre_1_1_skeleton_animation.html#a971aea47aeabacdd17086bc7a8f5271c">More...</a><br /></td></tr>
 <tr class="separator:a971aea47aeabacdd17086bc7a8f5271c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -261,6 +264,32 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aca44ea0e26e1cb2a3767717278bb96bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca44ea0e26e1cb2a3767717278bb96bd">&#9670;&nbsp;</a></span>_boneMemoryRebased()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SkeletonAnimation::_boneMemoryRebased </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; size_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>oldSlotStarts</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Shifts the values of mBoneWeights to new locations because the bones' mIndex may have changed. </p>
+<p>Needed when our <a class="el" href="class_ogre_1_1_bone_memory_manager.html" title="Wrap-around class that contains multiple ArrayMemoryManager, one per hierarchy depth.">BoneMemoryManager</a> performs a cleanup or similar memory change. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">oldSlotStarts</td><td>Array with the contents old contents of SkeletonInstance::mSlotStarts, one entry per node hirearchy depth level </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a971aea47aeabacdd17086bc7a8f5271c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a971aea47aeabacdd17086bc7a8f5271c">&#9670;&nbsp;</a></span>_initialize()</h2>
 
@@ -404,8 +433,8 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets a pointer current per-bone weight of a particular bone. </p>
-<p>Useful if you intend to have read/write access to this value very often. </p><dl class="section remark"><dt>Remarks</dt><dd>If returnPtr is the return value to bone[0], do not assume that returnPtr+1 affects bone[1] or even any other bone. Doing so the behavior is underfined and most likely you could be affecting the contents of other SkeletonInstances. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Useful if you intend to have read/write access to this value very often. </p><dl class="section remark"><dt>Remarks</dt><dd>!!! EXTREMELY IMPORTANT !!! If <em>any</em> skeleton instance (that shares the same <a class="el" href="class_ogre_1_1_skeleton_def.html">SkeletonDef</a>) is destroyed, the returned value may be invalidated!</dd></dl>
+<p>If returnPtr is the return value to bone[0], do not assume that returnPtr+1 affects bone[1] or even any other bone. Doing so the behavior is underfined and most likely you could be affecting the contents of other SkeletonInstances. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">boneName</td><td>The name of the bone to get. If this animation doesn't affect that bone (or the name is invalid) this function returns a null pointer. </td></tr>
   </table>
