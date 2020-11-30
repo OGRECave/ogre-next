@@ -79,6 +79,15 @@ namespace Ogre
         /// If you're not an Ogre dev, don't call this directly.
         void _initialize(void);
 
+        /** Shifts the values of mBoneWeights to new locations because the bones' mIndex
+            may have changed.
+            Needed when our BoneMemoryManager performs a cleanup or similar memory change.
+        @param oldSlotStarts
+            Array with the contents old contents of SkeletonInstance::mSlotStarts, one
+            entry per node hirearchy depth level
+        */
+        void _boneMemoryRebased( const FastArray<size_t> &oldSlotStarts );
+
         /** Plays the animation forward (or backwards if negative)
         @param time
             Time to advance, in seconds
@@ -154,6 +163,10 @@ namespace Ogre
         /** Gets a pointer current per-bone weight of a particular bone. Useful if you intend
             to have read/write access to this value very often.
         @remarks
+            !!! EXTREMELY IMPORTANT !!!
+            If *any* skeleton instance (that shares the same SkeletonDef) is destroyed,
+            the returned value may be invalidated!
+
             If returnPtr is the return value to bone[0], do not assume that returnPtr+1
             affects bone[1] or even any other bone. Doing so the behavior is underfined
             and most likely you could be affecting the contents of other SkeletonInstances.
