@@ -1604,8 +1604,10 @@ namespace Ogre
             vertexDescriptor.layouts[15].stride = 4;
             vertexDescriptor.layouts[15].stepFunction = MTLVertexStepFunctionPerInstance;
 #endif
-            [psd setVertexDescriptor:vertexDescriptor];
+            psd.vertexDescriptor = vertexDescriptor;
         }
+
+        psd.alphaToCoverageEnabled = newPso->blendblock->mAlphaToCoverageEnabled;
 
         uint8 mrtCount = 0;
         for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
