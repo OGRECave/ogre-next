@@ -760,7 +760,7 @@
 					outPs_colour0.xyz	= finalColour;
 				@end
 
-				@property( hlms_alphablend )
+				@property( hlms_alphablend || hlms_alpha_to_coverage )
 					@property( use_texture_alpha )
 						outPs_colour0.w	= material.F0.w * pixelData.diffuse.w;
 					@else

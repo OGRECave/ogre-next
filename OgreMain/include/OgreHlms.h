@@ -917,6 +917,7 @@ namespace Ogre
         static const IdString AlphaTest;
         static const IdString AlphaTestShadowCasterOnly;
         static const IdString AlphaBlend;
+        static const IdString AlphaToCoverage;
         // Per material. Related with SsRefractionsAvailable
         static const IdString ScreenSpaceRefractions;
 

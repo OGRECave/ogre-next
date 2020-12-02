@@ -183,7 +183,8 @@ namespace Ogre
     //Change per material (hash can be cached on the renderable)
     const IdString HlmsBaseProp::AlphaTest                 = IdString( "alpha_test" );
     const IdString HlmsBaseProp::AlphaTestShadowCasterOnly = IdString( "alpha_test_shadow_caster_only" );
-    const IdString HlmsBaseProp::AlphaBlend     = IdString( "hlms_alphablend" );
+    const IdString HlmsBaseProp::AlphaBlend                = IdString( "hlms_alphablend" );
+    const IdString HlmsBaseProp::AlphaToCoverage           = IdString( "hlms_alpha_to_coverage" );
     const IdString HlmsBaseProp::ScreenSpaceRefractions    = IdString( "hlms_screen_space_refractions" );
 
     const IdString HlmsBaseProp::NoReverseDepth = IdString( "hlms_no_reverse_depth" );
@@ -2528,6 +2529,7 @@ namespace Ogre
         setProperty( HlmsBaseProp::AlphaTest, datablock->getAlphaTest() != CMPF_ALWAYS_PASS );
         setProperty( HlmsBaseProp::AlphaTestShadowCasterOnly, datablock->getAlphaTestShadowCasterOnly() );
         setProperty( HlmsBaseProp::AlphaBlend, datablock->getBlendblock(false)->isAutoTransparent() );
+        setProperty( HlmsBaseProp::AlphaToCoverage, datablock->getBlendblock(false)->mAlphaToCoverageEnabled );
 
         if( renderable->getUseIdentityWorldMatrix() )
             setProperty( HlmsBaseProp::IdentityWorld, 1 );
@@ -2556,6 +2558,7 @@ namespace Ogre
         setProperty( HlmsBaseProp::Normal, 0 );
         setProperty( HlmsBaseProp::QTangent, 0 );
         setProperty( HlmsBaseProp::AlphaBlend, datablock->getBlendblock(true)->isAutoTransparent() );
+        setProperty( HlmsBaseProp::AlphaToCoverage, datablock->getBlendblock(true)->mAlphaToCoverageEnabled );
         PiecesMap piecesCaster[NumShaderTypes];
         if( datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
         {
