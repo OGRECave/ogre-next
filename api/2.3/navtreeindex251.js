@@ -1,5 +1,6 @@
 var NAVTREEINDEX251 =
 {
+"class_ogre_1_1v1_1_1_vertex_element.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,10,49,22],
 "class_ogre_1_1v1_1_1_vertex_element.html#ad9c7254d86150a584e0f1a0b365e90a8":[5,2,10,49,6],
 "class_ogre_1_1v1_1_1_vertex_element.html#aeb9315b4c8fd9d1bb91d5b061034bb33":[5,2,10,49,0],
 "class_ogre_1_1v1_1_1_vertex_element.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,10,49,29],
@@ -248,6 +249,5 @@ var NAVTREEINDEX251 =
 "class_ogre_1_1v1_1_1_vulkan_hardware_vertex_buffer.html#ga9cd84cbd9d0523dcf4a5f7d6fa30e3cf":[7,0,0,3,174,12],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html":[5,0,1,73],
 "class_ogre_1_1v1_1_1_wire_bounding_box.html":[5,2,12,73],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#a015c3801632c98bca5dbb5aa3da1aa24":[5,2,12,73,31],
-"class_ogre_1_1v1_1_1_wire_bounding_box.html#a015c3801632c98bca5dbb5aa3da1aa24":[5,0,1,73,31]
+"class_ogre_1_1v1_1_1_wire_bounding_box.html#a015c3801632c98bca5dbb5aa3da1aa24":[5,2,12,73,31]
 };

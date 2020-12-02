@@ -3,6 +3,7 @@ var struct_ogre_1_1_hlms_base_prop =
     [ "AlphaBlend", "struct_ogre_1_1_hlms_base_prop.html#a8bf55758ad2d7622abc44f449631bc9c", null ],
     [ "AlphaTest", "struct_ogre_1_1_hlms_base_prop.html#a1cdd5b3e6b9e3aecf4e591f9fdd507a4", null ],
     [ "AlphaTestShadowCasterOnly", "struct_ogre_1_1_hlms_base_prop.html#a0f7ba12f4dd9081fb481095598eca626", null ],
+    [ "AlphaToCoverage", "struct_ogre_1_1_hlms_base_prop.html#ac86a040e2762474c17b64194c7edafbb", null ],
     [ "BakeLightingOnly", "struct_ogre_1_1_hlms_base_prop.html#a8a7afc105325ef9e2e6c28ae71e0c02c", null ],
     [ "BonesPerVertex", "struct_ogre_1_1_hlms_base_prop.html#ae7633dce91e6ede1966dc563493e9ea0", null ],
     [ "Colour", "struct_ogre_1_1_hlms_base_prop.html#a3400aace76177d8ce24cc11eb8ef1680", null ],

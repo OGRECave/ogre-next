@@ -245,8 +245,8 @@ var NAVTREEINDEX109 =
 "class_ogre_1_1_light.html#aff35a0dcf855331bdd0fe72fe0f66824":[5,2,12,26,40],
 "class_ogre_1_1_light_factory.html":[5,0,1,27],
 "class_ogre_1_1_light_factory.html":[5,2,12,27],
-"class_ogre_1_1_light_factory.html#a08255f7d58203fe0d7f6802fa6a29d5c":[5,0,1,27,4],
 "class_ogre_1_1_light_factory.html#a08255f7d58203fe0d7f6802fa6a29d5c":[5,2,12,27,4],
+"class_ogre_1_1_light_factory.html#a08255f7d58203fe0d7f6802fa6a29d5c":[5,0,1,27,4],
 "class_ogre_1_1_light_factory.html#a0fbd15da3201007d58dcaf2eddc9ea62":[5,0,1,27,2],
 "class_ogre_1_1_light_factory.html#a0fbd15da3201007d58dcaf2eddc9ea62":[5,2,12,27,2],
 "class_ogre_1_1_light_factory.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,12,27,7]
