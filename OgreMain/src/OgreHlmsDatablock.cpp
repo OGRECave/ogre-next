@@ -308,7 +308,14 @@ namespace Ogre
         if( !casterBlock )
         {
             mIgnoreFlushRenderables = true;
-            setBlendblock( mBlendblock[0], true );
+            if( !mBlendblock[0]->mAlphaToCoverageEnabled )
+                setBlendblock( mBlendblock[0], true );
+            else
+            {
+                HlmsBlendblock blendblockNoAC = *mBlendblock[0];
+                blendblockNoAC.mAlphaToCoverageEnabled = false;
+                setBlendblock( blendblockNoAC, true );
+            }
             mIgnoreFlushRenderables = false;
         }
 
@@ -337,7 +344,14 @@ namespace Ogre
         if( !casterBlock )
         {
             mIgnoreFlushRenderables = true;
-            setBlendblock( mBlendblock[0], true );
+            if( !mBlendblock[0]->mAlphaToCoverageEnabled )
+                setBlendblock( mBlendblock[0], true );
+            else
+            {
+                HlmsBlendblock blendblockNoAC = *mBlendblock[0];
+                blendblockNoAC.mAlphaToCoverageEnabled = false;
+                setBlendblock( blendblockNoAC, true );
+            }
             mIgnoreFlushRenderables = false;
         }
 
