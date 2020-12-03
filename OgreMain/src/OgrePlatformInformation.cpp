@@ -40,29 +40,18 @@ THE SOFTWARE.
 #elif (OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG) && OGRE_PLATFORM != OGRE_PLATFORM_NACL
 #include <signal.h>
 #include <setjmp.h>
-#if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
-    #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        #include <linux/sysctl.h>
-    #endif
 #endif
 
-    #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        #include <cpu-features.h>
-    #elif OGRE_CPU == OGRE_CPU_ARM 
-        #if __MACH__
-            #include <mach/machine.h>
-            #ifndef CPU_SUBTYPE_ARM64_V8
-                #define CPU_SUBTYPE_ARM64_V8 ((cpu_subtype_t) 1)
-            #endif
-            #ifndef CPU_SUBTYPE_ARM_V8
-                #define CPU_SUBTYPE_ARM_V8 ((cpu_subtype_t) 13)
-            #endif
-        #endif
-    #endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+    #include <linux/sysctl.h>
+    #include <cpu-features.h>
 #endif
-
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+    #include <sys/sysctl.h>
+    #include <mach/machine.h>
+#endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    #include "windows.h"
+    #include <windows.h>
 #endif
 
 // Yes, I know, this file looks very ugly, but there aren't other ways to do it better.
