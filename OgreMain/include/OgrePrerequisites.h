@@ -627,22 +627,22 @@ namespace std
 // are passed by reference & need to be everywhere in headers (thus affecting compilation times)
 namespace Ogre
 {
-    template <typename T, typename A = STLAllocator<T, GeneralAllocPolicy> >
+    template <typename T, typename A = class STLAllocator<T, GeneralAllocPolicy> >
     class StdVector;
 
     template <typename K, typename V, typename P = std::less<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+              typename A = class STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
     class StdMap;
 
     template <typename K, typename V, typename P = std::less<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+              typename A = class STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
     class StdMultiMap;
 
-    template <typename T, typename A = STLAllocator<T, GeneralAllocPolicy> >
+    template <typename T, typename A = class STLAllocator<T, GeneralAllocPolicy> >
     class StdList;
 
     template <typename K, typename H = OGRE_HASH_NAMESPACE::hash<K>, typename E = std::equal_to<K>,
-              typename A = STLAllocator<K, GeneralAllocPolicy> >
+              typename A = class STLAllocator<K, GeneralAllocPolicy> >
     class StdUnorderedSet;
 }
 
