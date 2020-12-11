@@ -245,7 +245,7 @@
 		@end
 
 		float4 worldPos = float4( mul(inVs_vertex, worldMat).xyz, 1.0f );
-		@property( hlms_num_shadow_map_lights )
+		@property( ( hlms_normal || hlms_qtangent) && hlms_num_shadow_map_lights )
 			// We need worldNorm for normal offset bias
 			float3 worldNorm = mul( inputNormal, toFloat3x3( worldMat ) ).xyz;
 		@end
@@ -253,7 +253,7 @@
 
 	@insertpiece( PoseTransform )
 
-	@property( !hlms_skeleton && hlms_pose && hlms_num_shadow_map_lights )
+	@property( !hlms_skeleton && hlms_pose && ( hlms_normal || hlms_qtangent) && hlms_num_shadow_map_lights )
 		// We need worldNorm for normal offset bias, special path when using poses
 		float3 worldNorm;
 		worldNorm.x = dot( worldMat[0].xyz, inputNormal );
