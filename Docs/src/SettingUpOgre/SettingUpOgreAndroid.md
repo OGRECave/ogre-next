@@ -65,8 +65,7 @@ cmake \
     -DANDROID_NATIVE_API_LEVEL=24 \
     -DOGRE_BUILD_PLATFORM_ANDROID=1 \
     -DOGRE_DEPENDENCIES_DIR=/home/username/workingdir/ogre-next/DependenciesAndroid \
-    -DOGRE_SIMD_NEON=OFF \
-    -DOGRE_SIMD_SSE2=OFF \
+    -DOGRE_SIMD=OFF \
     -DCMAKE_BUILD_TYPE=Debug \
     ../../../
 make -j9
@@ -83,8 +82,7 @@ cmake \
     -DANDROID_NATIVE_API_LEVEL=24 \
     -DOGRE_BUILD_PLATFORM_ANDROID=1 \
     -DOGRE_DEPENDENCIES_DIR=/home/username/workingdir/ogre-next/DependenciesAndroid \
-    -DOGRE_SIMD_NEON=OFF \
-    -DOGRE_SIMD_SSE2=OFF \
+    -DOGRE_SIMD=OFF \
     -DCMAKE_BUILD_TYPE=Release \
     ../../../
 make -j9

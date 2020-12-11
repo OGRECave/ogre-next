@@ -31,7 +31,7 @@ THE SOFTWARE.
 //This file is a proxy, it redirects to the proper file depending on platform
 #include "OgreArrayConfig.h"
 
-#if OGRE_CPU == OGRE_CPU_X86 && OGRE_USE_SIMD == 1
+#if __OGRE_HAVE_SSE
     #if OGRE_DOUBLE_PRECISION == 1
         #include "SSE2/Double/OgreMathlibSSE2.h"
     #else
@@ -42,7 +42,7 @@ namespace Ogre
 {
     typedef MathlibSSE2 Mathlib;
 }
-#elif OGRE_CPU == OGRE_CPU_ARM && OGRE_USE_SIMD == 1
+#elif __OGRE_HAVE_NEON
     #if OGRE_DOUBLE_PRECISION == 1
         #error Double precision with SIMD on ARM is not supported
     #else

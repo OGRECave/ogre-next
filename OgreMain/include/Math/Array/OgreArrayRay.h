@@ -60,7 +60,7 @@ namespace Ogre
             tmin = minIntersect.mChunkBase[0];
             tmax = maxIntersect.mChunkBase[0];
 
-#if OGRE_CPU == OGRE_CPU_ARM && OGRE_USE_SIMD == 1
+#if __OGRE_HAVE_NEON
             //ARM's NEON behaves the way we want, by propagating NaNs. No need to do anything weird
             tmin = Mathlib::Max( Mathlib::Max( minIntersect.mChunkBase[0],
                                                minIntersect.mChunkBase[1] ),

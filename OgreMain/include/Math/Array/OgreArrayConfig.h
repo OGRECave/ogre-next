@@ -31,163 +31,156 @@ THE SOFTWARE.
 #include "OgreConfig.h"
 #include "OgrePlatformInformation.h"
 
-#if OGRE_USE_SIMD == 1
-    #if OGRE_CPU == OGRE_CPU_X86
-        //x86/x64 - SSE2
-        #if OGRE_DOUBLE_PRECISION == 1
-            #include <emmintrin.h>
-            #define ARRAY_PACKED_REALS 2
-            namespace Ogre {
-                typedef __m128d ArrayReal;
-            }
-        #else
-            #ifndef __MINGW32__
-                #if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER >= 1910
-                    //VS 2017
-                    #include <intrin.h>
-                #else
-                    #include <xmmintrin.h>
-                    #include <emmintrin.h>
-                #endif
-                
-            #else
-                #include <x86intrin.h> //Including separate intrinsics headers under MinGW causes compilation errors
-            #endif
-            #define ARRAY_PACKED_REALS 4
-            namespace Ogre {
-                typedef __m128 ArrayReal;
-                typedef __m128 ArrayMaskR;
-
-                #define ARRAY_REAL_ZERO _mm_setzero_ps()
-                #define ARRAY_INT_ZERO _mm_setzero_si128()
-                #define ARRAY_MASK_ZERO _mm_setzero_ps()
-
-                class ArrayRadian;
-            }
-
-            #define OGRE_PREFETCH_T0( x ) _mm_prefetch( x, _MM_HINT_T0 )
-            #define OGRE_PREFETCH_T1( x ) _mm_prefetch( x, _MM_HINT_T1 )
-            #define OGRE_PREFETCH_T2( x ) _mm_prefetch( x, _MM_HINT_T2 )
-            #define OGRE_PREFETCH_NTA( x ) _mm_prefetch( x, _MM_HINT_NTA )
-
-            //Distance (in ArrayMemoryManager's slots) used to keep fetching data. This also
-            //means the memory manager needs to allocate extra memory for them.
-            #define OGRE_PREFETCH_SLOT_DISTANCE     4*ARRAY_PACKED_REALS //Must be multiple of ARRAY_PACKED_REALS
-        #endif
-
+#if __OGRE_HAVE_SSE
+    //x86/x64 - SSE2
+    #if OGRE_DOUBLE_PRECISION == 1
+        #include <emmintrin.h>
+        #define ARRAY_PACKED_REALS 2
         namespace Ogre {
-            typedef __m128i ArrayInt;
-            typedef __m128i ArrayMaskI;
+            typedef __m128d ArrayReal;
         }
-
-        ///r = (a * b) + c
-        #define _mm_madd_ps( a, b, c )      _mm_add_ps( c, _mm_mul_ps( a, b ) )
-        ///r = -(a * b) + c
-        #define _mm_nmsub_ps( a, b, c )     _mm_sub_ps( c, _mm_mul_ps( a, b ) )
-
-        /// Does not convert, just cast ArrayReal to ArrayInt
-        #define CastRealToInt( x )          _mm_castps_si128( x )
-        #define CastIntToReal( x )          _mm_castsi128_ps( x )
-        /// Input must be 16-byte aligned
-        #define CastArrayToReal( outFloatPtr, arraySimd )       _mm_store_ps( outFloatPtr, arraySimd )
-
-    #elif OGRE_CPU == OGRE_CPU_ARM
-        // ARM - NEON
-        #include <arm_neon.h>
-        #if OGRE_DOUBLE_PRECISION == 1
-            #error Double precision with SIMD on ARM is not supported
-        #else
-            #define ARRAY_PACKED_REALS 4
-            namespace Ogre {
-                typedef float32x4_t ArrayReal;
-                typedef uint32x4_t ArrayMaskR;
-
-            // > The vector data types and arrays of the vector data types cannot be initialized by
-            // > direct literal assignment. You must initialize them using one of the load intrinsics.
-            // > https://developer.arm.com/documentation/dui0472/m/using-neon-support/vector-data-types
-            // GCC and Clang do not enforce this restriction, allowing typed-array-like initialization
-            // and baking the global constant in memory under the hood, so that the register could later
-            // be loaded using single Neon instruction. On the other hand, MSVC is not so helpfull, and
-            // helper conversion types like uint32x4_ct are required to do the same.
-            #if defined(__clang__) || defined(__GNUC__)
-                typedef uint32x4_t uint32x4_ct;
-                typedef float32x4_t float32x4_ct;
-            #else
-                struct uint32x4_ct {
-                    union { uint32_t u[4]; float32x4_t v; };
-                    inline operator uint32x4_t() const { return v; }
-                };
-                struct float32x4_ct {
-                    union { float f[4]; float32x4_t v; };
-                    inline operator float32x4_t() const { return v; }
-                };
-            #endif
-
-                #define ARRAY_REAL_ZERO vdupq_n_f32( 0.0f )
-                #define ARRAY_INT_ZERO vdupq_n_u32( 0 )
-                #define ARRAY_MASK_ZERO vdupq_n_u32( 0 )
-
-                class ArrayRadian;
-            }
-
-            #if defined(_MSC_VER) && defined(_M_ARM64)
-                #define OGRE_PREFETCH_T0( x ) __prefetch2(x, 0 /*pldl1keep*/)
-                #define OGRE_PREFETCH_T1( x ) __prefetch2(x, 2 /*pldl2keep*/)
-                #define OGRE_PREFETCH_T2( x ) __prefetch2(x, 4 /*pldl3keep*/)
-                #define OGRE_PREFETCH_NTA( x ) __prefetch2(x, 1 /*pldl1strm*/)
-            #elif defined(_MSC_VER) && defined(_M_ARM)
-                #define OGRE_PREFETCH_T0( x ) __prefetch(x)
-                #define OGRE_PREFETCH_T1( x ) __prefetch(x)
-                #define OGRE_PREFETCH_T2( x ) __prefetch(x)
-                #define OGRE_PREFETCH_NTA( x ) __prefetch(x)
-            #elif defined(__clang__) || defined(__GNUC__)
-                #define OGRE_PREFETCH_T0( x ) __builtin_prefetch(x, 0, 3 /*pldl1keep*/)
-                #define OGRE_PREFETCH_T1( x ) __builtin_prefetch(x, 0, 2 /*pldl2keep*/)
-                #define OGRE_PREFETCH_T2( x ) __builtin_prefetch(x, 0, 1 /*pldl3keep*/)
-                #define OGRE_PREFETCH_NTA( x ) __builtin_prefetch(x, 0, 0 /*pldl1strm*/)
-            #elif defined(__arm64__)
-                #define OGRE_PREFETCH_T0( x ) asm volatile ( "prfm pldl1keep, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
-                #define OGRE_PREFETCH_T1( x ) asm volatile ( "prfm pldl2keep, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
-                #define OGRE_PREFETCH_T2( x ) asm volatile ( "prfm pldl3keep, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
-                #define OGRE_PREFETCH_NTA( x ) asm volatile ( "prfm pldl1strm, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
-            #else
-                #ifndef __pld
-                #define __pld(x) asm volatile ( "pld [%[addr]]\n" :: [addr] "r" (x) : "cc" );
-                #endif
-                #define OGRE_PREFETCH_T0( x ) __pld(x)
-                #define OGRE_PREFETCH_T1( x ) __pld(x)
-                #define OGRE_PREFETCH_T2( x ) __pld(x)
-                #define OGRE_PREFETCH_NTA( x ) __pld(x)
-            #endif
-
-            //Distance (in ArrayMemoryManager's slots) used to keep fetching data. This also
-            //means the memory manager needs to allocate extra memory for them.
-            #define OGRE_PREFETCH_SLOT_DISTANCE     4*ARRAY_PACKED_REALS //Must be multiple of ARRAY_PACKED_REALS
-        #endif
-
-        namespace Ogre {
-            typedef int32x4_t ArrayInt;
-            typedef uint32x4_t ArrayMaskI;
-        }
-
-        ///r = (a * b) + c
-        #define _mm_madd_ps( a, b, c )      vmlaq_f32( c, a, b )
-        ///r = -(a * b) + c
-        #define _mm_nmsub_ps( a, b, c )     vmlsq_f32( c, a, b )
-
-        /// Does not convert, just cast ArrayReal to ArrayInt
-        //#define CastRealToInt( x )          vreinterpretq_s32_f32( x )
-        //#define CastIntToReal( x )          vreinterpretq_f32_s32( x )
-        #define CastRealToInt( x )          ( x )
-        #define CastIntToReal( x )          ( x )
-        /// Input must be 16-byte aligned
-        #define CastArrayToReal( outFloatPtr, arraySimd )       vst1q_f32( outFloatPtr, arraySimd )
-
     #else
-        //Unsupported architecture, tell user to reconfigure. We could silently fallback to C,
-        //but this is very green code, and architecture may be x86 with a rare compiler.
-        #error "Unknown platform or platform not supported for SIMD. Build Ogre without OGRE_USE_SIMD"
+        #ifndef __MINGW32__
+            #if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER >= 1910
+                //VS 2017
+                #include <intrin.h>
+            #else
+                #include <xmmintrin.h>
+                #include <emmintrin.h>
+            #endif
+            
+        #else
+            #include <x86intrin.h> //Including separate intrinsics headers under MinGW causes compilation errors
+        #endif
+        #define ARRAY_PACKED_REALS 4
+        namespace Ogre {
+            typedef __m128 ArrayReal;
+            typedef __m128 ArrayMaskR;
+
+            #define ARRAY_REAL_ZERO _mm_setzero_ps()
+            #define ARRAY_INT_ZERO _mm_setzero_si128()
+            #define ARRAY_MASK_ZERO _mm_setzero_ps()
+
+            class ArrayRadian;
+        }
+
+        #define OGRE_PREFETCH_T0( x ) _mm_prefetch( x, _MM_HINT_T0 )
+        #define OGRE_PREFETCH_T1( x ) _mm_prefetch( x, _MM_HINT_T1 )
+        #define OGRE_PREFETCH_T2( x ) _mm_prefetch( x, _MM_HINT_T2 )
+        #define OGRE_PREFETCH_NTA( x ) _mm_prefetch( x, _MM_HINT_NTA )
+
+        //Distance (in ArrayMemoryManager's slots) used to keep fetching data. This also
+        //means the memory manager needs to allocate extra memory for them.
+        #define OGRE_PREFETCH_SLOT_DISTANCE     4*ARRAY_PACKED_REALS //Must be multiple of ARRAY_PACKED_REALS
     #endif
+
+    namespace Ogre {
+        typedef __m128i ArrayInt;
+        typedef __m128i ArrayMaskI;
+    }
+
+    ///r = (a * b) + c
+    #define _mm_madd_ps( a, b, c )      _mm_add_ps( c, _mm_mul_ps( a, b ) )
+    ///r = -(a * b) + c
+    #define _mm_nmsub_ps( a, b, c )     _mm_sub_ps( c, _mm_mul_ps( a, b ) )
+
+    /// Does not convert, just cast ArrayReal to ArrayInt
+    #define CastRealToInt( x )          _mm_castps_si128( x )
+    #define CastIntToReal( x )          _mm_castsi128_ps( x )
+    /// Input must be 16-byte aligned
+    #define CastArrayToReal( outFloatPtr, arraySimd )       _mm_store_ps( outFloatPtr, arraySimd )
+
+#elif __OGRE_HAVE_NEON
+    // ARM - NEON
+    #include <arm_neon.h>
+    #if OGRE_DOUBLE_PRECISION == 1
+        #error Double precision with SIMD on ARM is not supported
+    #else
+        #define ARRAY_PACKED_REALS 4
+        namespace Ogre {
+            typedef float32x4_t ArrayReal;
+            typedef uint32x4_t ArrayMaskR;
+
+        // > The vector data types and arrays of the vector data types cannot be initialized by
+        // > direct literal assignment. You must initialize them using one of the load intrinsics.
+        // > https://developer.arm.com/documentation/dui0472/m/using-neon-support/vector-data-types
+        // GCC and Clang do not enforce this restriction, allowing typed-array-like initialization
+        // and baking the global constant in memory under the hood, so that the register could later
+        // be loaded using single Neon instruction. On the other hand, MSVC is not so helpfull, and
+        // helper conversion types like uint32x4_ct are required to do the same.
+        #if defined(__clang__) || defined(__GNUC__)
+            typedef uint32x4_t uint32x4_ct;
+            typedef float32x4_t float32x4_ct;
+        #else
+            struct uint32x4_ct {
+                union { uint32_t u[4]; float32x4_t v; };
+                inline operator uint32x4_t() const { return v; }
+            };
+            struct float32x4_ct {
+                union { float f[4]; float32x4_t v; };
+                inline operator float32x4_t() const { return v; }
+            };
+        #endif
+
+            #define ARRAY_REAL_ZERO vdupq_n_f32( 0.0f )
+            #define ARRAY_INT_ZERO vdupq_n_u32( 0 )
+            #define ARRAY_MASK_ZERO vdupq_n_u32( 0 )
+
+            class ArrayRadian;
+        }
+
+        #if defined(_MSC_VER) && defined(_M_ARM64)
+            #define OGRE_PREFETCH_T0( x ) __prefetch2(x, 0 /*pldl1keep*/)
+            #define OGRE_PREFETCH_T1( x ) __prefetch2(x, 2 /*pldl2keep*/)
+            #define OGRE_PREFETCH_T2( x ) __prefetch2(x, 4 /*pldl3keep*/)
+            #define OGRE_PREFETCH_NTA( x ) __prefetch2(x, 1 /*pldl1strm*/)
+        #elif defined(_MSC_VER) && defined(_M_ARM)
+            #define OGRE_PREFETCH_T0( x ) __prefetch(x)
+            #define OGRE_PREFETCH_T1( x ) __prefetch(x)
+            #define OGRE_PREFETCH_T2( x ) __prefetch(x)
+            #define OGRE_PREFETCH_NTA( x ) __prefetch(x)
+        #elif defined(__clang__) || defined(__GNUC__)
+            #define OGRE_PREFETCH_T0( x ) __builtin_prefetch(x, 0, 3 /*pldl1keep*/)
+            #define OGRE_PREFETCH_T1( x ) __builtin_prefetch(x, 0, 2 /*pldl2keep*/)
+            #define OGRE_PREFETCH_T2( x ) __builtin_prefetch(x, 0, 1 /*pldl3keep*/)
+            #define OGRE_PREFETCH_NTA( x ) __builtin_prefetch(x, 0, 0 /*pldl1strm*/)
+        #elif defined(__arm64__)
+            #define OGRE_PREFETCH_T0( x ) asm volatile ( "prfm pldl1keep, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
+            #define OGRE_PREFETCH_T1( x ) asm volatile ( "prfm pldl2keep, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
+            #define OGRE_PREFETCH_T2( x ) asm volatile ( "prfm pldl3keep, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
+            #define OGRE_PREFETCH_NTA( x ) asm volatile ( "prfm pldl1strm, [%[addr]]\n" :: [addr] "r" (x) : "cc" );
+        #else
+            #ifndef __pld
+            #define __pld(x) asm volatile ( "pld [%[addr]]\n" :: [addr] "r" (x) : "cc" );
+            #endif
+            #define OGRE_PREFETCH_T0( x ) __pld(x)
+            #define OGRE_PREFETCH_T1( x ) __pld(x)
+            #define OGRE_PREFETCH_T2( x ) __pld(x)
+            #define OGRE_PREFETCH_NTA( x ) __pld(x)
+        #endif
+
+        //Distance (in ArrayMemoryManager's slots) used to keep fetching data. This also
+        //means the memory manager needs to allocate extra memory for them.
+        #define OGRE_PREFETCH_SLOT_DISTANCE     4*ARRAY_PACKED_REALS //Must be multiple of ARRAY_PACKED_REALS
+    #endif
+
+    namespace Ogre {
+        typedef int32x4_t ArrayInt;
+        typedef uint32x4_t ArrayMaskI;
+    }
+
+    ///r = (a * b) + c
+    #define _mm_madd_ps( a, b, c )      vmlaq_f32( c, a, b )
+    ///r = -(a * b) + c
+    #define _mm_nmsub_ps( a, b, c )     vmlsq_f32( c, a, b )
+
+    /// Does not convert, just cast ArrayReal to ArrayInt
+    //#define CastRealToInt( x )          vreinterpretq_s32_f32( x )
+    //#define CastIntToReal( x )          vreinterpretq_f32_s32( x )
+    #define CastRealToInt( x )          ( x )
+    #define CastIntToReal( x )          ( x )
+    /// Input must be 16-byte aligned
+    #define CastArrayToReal( outFloatPtr, arraySimd )       vst1q_f32( outFloatPtr, arraySimd )
 #else
     //No SIMD, use C implementation
     #define ARRAY_PACKED_REALS 1

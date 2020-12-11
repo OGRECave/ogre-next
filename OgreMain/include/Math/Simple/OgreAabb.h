@@ -31,7 +31,7 @@ THE SOFTWARE.
 //This file is a proxy, it redirects to the proper file depending on platform
 #include "../Array/OgreArrayConfig.h"
 
-/*#if OGRE_CPU == OGRE_CPU_X86 && defined( OGRE_USE_SIMD )
+/*#if __OGRE_HAVE_SSE
     #if OGRE_DOUBLE_PRECISION == 1
         #include "SSE2/Double/OgreAabb.h"
     #else
