@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __NEON_ArraySphere_H__
-#define __NEON_ArraySphere_H__
+#ifndef __SSE2_ArraySphere_H__
+#define __SSE2_ArraySphere_H__
 
 #ifndef __ArraySphere_H__
     #error "Don't include this file directly. include Math/Array/OgreArraySphere.h"
@@ -103,26 +103,26 @@ namespace Ogre
         {
             const Real fRadius      = sphere.getRadius();
             const Vector3 &center   = sphere.getCenter();
-            mRadius = vdupq_n_f32( fRadius );
-            mCenter.mChunkBase[0] = vdupq_n_f32( center.x );
-            mCenter.mChunkBase[1] = vdupq_n_f32( center.y );
-            mCenter.mChunkBase[2] = vdupq_n_f32( center.z );
+            mRadius = _mm_set_ps1( fRadius );
+            mCenter.mChunkBase[0] = _mm_set_ps1( center.x );
+            mCenter.mChunkBase[1] = _mm_set_ps1( center.y );
+            mCenter.mChunkBase[2] = _mm_set_ps1( center.z );
         }
 
         /// @copydoc Sphere::intersects()
-        inline ArrayMaskR intersects( const ArraySphere &s ) const;
+        inline ArrayReal intersects( const ArraySphere &s ) const;
 
         /// @copydoc Sphere::intersects()
-        inline ArrayMaskR intersects( const ArrayAabb &aabb ) const;
+        inline ArrayReal intersects( const ArrayAabb &aabb ) const;
 
         /// @copydoc Sphere::intersects()
-        inline ArrayMaskR intersects( const ArrayVector3 &v ) const;
+        inline ArrayReal intersects( const ArrayVector3 &v ) const;
     };
     /** @} */
     /** @} */
 
 }
 
-#include "OgreArraySphere.inl"
+#include "OgreArraySphereSSE2.inl"
 
 #endif

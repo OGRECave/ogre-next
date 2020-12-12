@@ -33,18 +33,18 @@ THE SOFTWARE.
 
 #if __OGRE_HAVE_SSE
     #if OGRE_DOUBLE_PRECISION == 1
-        #include "SSE2/Double/OgreArrayQuaternion.h"
+        #include "SSE2/Double/OgreArrayQuaternionSSE2.h"
     #else
-        #include "SSE2/Single/OgreArrayQuaternion.h"
+        #include "SSE2/Single/OgreArrayQuaternionSSE2.h"
     #endif
 #elif __OGRE_HAVE_NEON
     #if OGRE_DOUBLE_PRECISION == 1
         #error Double precision with SIMD on ARM is not supported
     #else
-        #include "NEON/Single/OgreArrayQuaternion.h"
+        #include "NEON/Single/OgreArrayQuaternionNEON.h"
     #endif
 #else
-    #include "C/OgreArrayQuaternion.h"
+    #include "C/OgreArrayQuaternionC.h"
 #endif
 
 #endif

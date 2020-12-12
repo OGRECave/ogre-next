@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __NEON_ArrayVector3_H__
-#define __NEON_ArrayVector3_H__
+#ifndef __C_ArrayVector3_H__
+#define __C_ArrayVector3_H__
 
 #ifndef __ArrayVector3_H__
     #error "Don't include this file directly. include Math/Array/OgreArrayVector3.h"
@@ -105,9 +105,9 @@ namespace Ogre
         /// Sets all packed vectors to the same value as the scalar input vector
         void setAll( const Vector3 &v )
         {
-            mChunkBase[0] = vdupq_n_f32( v.x );
-            mChunkBase[1] = vdupq_n_f32( v.y );
-            mChunkBase[2] = vdupq_n_f32( v.z );
+            mChunkBase[0] = v.x;
+            mChunkBase[1] = v.y;
+            mChunkBase[2] = v.z;
         }
 
         /// Copies only one vector, by looking at the indexes
@@ -120,14 +120,9 @@ namespace Ogre
 
         inline ArrayVector3& operator = ( const Real fScalar )
         {
-            //set1_ps is a composite instrinsic using shuffling instructions.
-            //Store the actual result in a tmp variable and copy. We don't
-            //do mChunkBase[1] = mChunkBase[0]; because of a potential LHS
-            //depending on how smart the compiler was
-            ArrayReal tmp = vdupq_n_f32( fScalar );
-            mChunkBase[0] = tmp;
-            mChunkBase[1] = tmp;
-            mChunkBase[2] = tmp;
+            mChunkBase[0] = fScalar;
+            mChunkBase[1] = fScalar;
+            mChunkBase[2] = fScalar;
 
             return *this;
         }
@@ -165,19 +160,15 @@ namespace Ogre
         inline friend ArrayVector3 operator / ( const ArrayVector3 &lhs, ArrayReal fScalar );
 
         inline void operator += ( const ArrayVector3 &a );
-        inline void operator += ( const Real fScalar );
         inline void operator += ( const ArrayReal fScalar );
 
         inline void operator -= ( const ArrayVector3 &a );
-        inline void operator -= ( const Real fScalar );
         inline void operator -= ( const ArrayReal fScalar );
 
         inline void operator *= ( const ArrayVector3 &a );
-        inline void operator *= ( const Real fScalar );
         inline void operator *= ( const ArrayReal fScalar );
 
         inline void operator /= ( const ArrayVector3 &a );
-        inline void operator /= ( const Real fScalar );
         inline void operator /= ( const ArrayReal fScalar );
 
         /// @copydoc Vector3::length()
@@ -240,13 +231,13 @@ namespace Ogre
         inline ArrayVector3 reflect( const ArrayVector3& normal ) const;
 
         /** Calculates the inverse of the vectors: 1.0f / v;
-         But if original is zero, the zero is left (0 / 0 = 0).
-         Example:
-         Bfore inverseLeaveZero:
-         x = 0; y = 2; z = 3;
-         After inverseLeaveZero
-         x = 0; y = 0.5; z = 0.3333;
-         */
+            But if original is zero, the zero is left (0 / 0 = 0).
+            Example:
+            Bfore inverseLeaveZero:
+                x = 0; y = 2; z = 3;
+            After inverseLeaveZero
+                x = 0; y = 0.5; z = 0.3333;
+        */
         inline void inverseLeaveZeroes( void );
 
         /// @see Vector3::isNaN()
@@ -281,7 +272,7 @@ namespace Ogre
         */
         inline Vector3 collapseMax( void ) const;
 
-        /** Conditional move update. @See MathlibNEON::Cmov4
+        /** Conditional move update. @See MathlibC::Cmov4
             Changes each of the four vectors contained in 'this' with
             the replacement provided
             @remarks
@@ -303,7 +294,7 @@ namespace Ogre
         */
         inline void Cmov4( ArrayMaskR mask, const ArrayVector3 &replacement );
 
-        /** Conditional move update. @See MathlibNEON::CmovRobust
+        /** Conditional move update. @See MathlibC::CmovRobust
             Changes each of the four vectors contained in 'this' with
             the replacement provided
             @remarks
@@ -325,7 +316,7 @@ namespace Ogre
         */
         inline void CmovRobust( ArrayMaskR mask, const ArrayVector3 &replacement );
 
-        /** Conditional move. @See MathlibNEON::Cmov4
+        /** Conditional move. @See MathlibC::Cmov4
             Selects between arg1 & arg2 according to mask
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
@@ -344,21 +335,13 @@ namespace Ogre
         */
         inline static ArrayVector3 Cmov4( const ArrayVector3 &arg1, const ArrayVector3 &arg2, ArrayMaskR mask );
 
-		/** Converts 4 ARRAY_PACKED_REALS reals into this ArrayVector3
-        @remarks
-            'src' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS Vector3
-            i.e. on SSE2 you can construct src as:
-                OGRE_ALIGNED_DECL( Real, vals[ARRAY_PACKED_REALS * 4], OGRE_SIMD_ALIGNMENT ) =
-                {
-                    x0, y0, z0, 0,
-                    x1, y1, z1, 0,
-                    x2, y2, z2, 0,
-                    x3, y3, z3, 0,
-                }
-            @See Frustum::getCustomWorldSpaceCorners implementation for an actual, advanced use case.
-        */
+        /** Converts 4 ARRAY_PACKED_REALS reals into this ArrayVector3
+         @remarks
+         'src' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS Vector3
+         @See Frustum::getCustomWorldSpaceCorners implementation for an actual, advanced use case.
+         */
         inline void loadFromAoS( const Real * RESTRICT_ALIAS src );
-
+        
         static const ArrayVector3 ZERO;
         static const ArrayVector3 UNIT_X;
         static const ArrayVector3 UNIT_Y;
@@ -373,6 +356,6 @@ namespace Ogre
 
 }
 
-#include "OgreArrayVector3.inl"
+#include "OgreArrayVector3C.inl"
 
 #endif

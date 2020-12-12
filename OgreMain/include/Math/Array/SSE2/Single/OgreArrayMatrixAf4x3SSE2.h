@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef _NEON_ArrayMatrixAf4x3_H_
-#define _NEON_ArrayMatrixAf4x3_H_
+#ifndef _SSE2_ArrayMatrixAf4x3_H_
+#define _SSE2_ArrayMatrixAf4x3_H_
 
 #ifndef _ArrayMatrixAf4x3_H_
     #error "Don't include this file directly. include Math/Array/OgreArrayMatrix4.h"
@@ -90,18 +90,18 @@ namespace Ogre
         /// Sets all packed matrices to the same value as the scalar input matrix
         void setAll( const Matrix4 &m )
         {
-            mChunkBase[0]  = vdupq_n_f32( m._m[0] );
-            mChunkBase[1]  = vdupq_n_f32( m._m[1] );
-            mChunkBase[2]  = vdupq_n_f32( m._m[2] );
-            mChunkBase[3]  = vdupq_n_f32( m._m[3] );
-            mChunkBase[4]  = vdupq_n_f32( m._m[4] );
-            mChunkBase[5]  = vdupq_n_f32( m._m[5] );
-            mChunkBase[6]  = vdupq_n_f32( m._m[6] );
-            mChunkBase[7]  = vdupq_n_f32( m._m[7] );
-            mChunkBase[8]  = vdupq_n_f32( m._m[8] );
-            mChunkBase[9]  = vdupq_n_f32( m._m[9] );
-            mChunkBase[10] = vdupq_n_f32( m._m[10] );
-            mChunkBase[11] = vdupq_n_f32( m._m[11] );
+            mChunkBase[0]  = _mm_set_ps1( m._m[0] );
+            mChunkBase[1]  = _mm_set_ps1( m._m[1] );
+            mChunkBase[2]  = _mm_set_ps1( m._m[2] );
+            mChunkBase[3]  = _mm_set_ps1( m._m[3] );
+            mChunkBase[4]  = _mm_set_ps1( m._m[4] );
+            mChunkBase[5]  = _mm_set_ps1( m._m[5] );
+            mChunkBase[6]  = _mm_set_ps1( m._m[6] );
+            mChunkBase[7]  = _mm_set_ps1( m._m[7] );
+            mChunkBase[8]  = _mm_set_ps1( m._m[8] );
+            mChunkBase[9]  = _mm_set_ps1( m._m[9] );
+            mChunkBase[10] = _mm_set_ps1( m._m[10] );
+            mChunkBase[11] = _mm_set_ps1( m._m[11] );
         }
 
         static ArrayMatrixAf4x3 createAllFromMatrix4( const Matrix4 &m )
@@ -139,7 +139,7 @@ namespace Ogre
 
         /// @copydoc Matrix4::decomposition()
         inline void decomposition( ArrayVector3 &position, ArrayVector3 &scale,
-                                  ArrayQuaternion &orientation ) const;
+                                   ArrayQuaternion &orientation ) const;
 
         /** Calculates the inverse of the matrix. If used against degenerate matrices,
             it may cause NaNs and Infs on those. Use @setToInverseDegeneratesAsIdentity
@@ -184,7 +184,7 @@ namespace Ogre
         static const ArrayMatrixAf4x3 IDENTITY;
     };
 
-    /** Simple wrap up to load an AoS matrix 4x3 using NEON. The main reason of this class
+    /** Simple wrap up to load an AoS matrix 4x3 using SSE. The main reason of this class
         is to force MSVC to use 3 movaps to load arrays of MatrixAf4x3s (which are waaay more
         efficient that whatever lea+mov junk it tries to produce)
     */
@@ -204,9 +204,9 @@ namespace Ogre
         /// Assumes src is aligned
         void load( const Matrix4 &src )
         {
-            mChunkBase[0] = vld1q_f32( src._m );
-            mChunkBase[1] = vld1q_f32( src._m+4 );
-            mChunkBase[2] = vld1q_f32( src._m+8 );
+            mChunkBase[0] = _mm_load_ps( src._m );
+            mChunkBase[1] = _mm_load_ps( src._m+4 );
+            mChunkBase[2] = _mm_load_ps( src._m+8 );
         }
 
         /// Assumes dst is aligned
@@ -214,10 +214,10 @@ namespace Ogre
         {
             float * RESTRICT_ALIAS dstPtr = reinterpret_cast<float*>( dst );
 
-            vst1q_f32( dstPtr, mChunkBase[0] );
-            vst1q_f32( dstPtr + 4, mChunkBase[1] );
-            vst1q_f32( dstPtr + 8, mChunkBase[2] );
-            vst1q_f32( dstPtr + 12, MathlibNEON::LAST_AFFINE_COLUMN );
+            _mm_store_ps( dstPtr, mChunkBase[0] );
+            _mm_store_ps( dstPtr + 4, mChunkBase[1] );
+            _mm_store_ps( dstPtr + 8, mChunkBase[2] );
+            _mm_store_ps( dstPtr + 12, MathlibSSE2::LAST_AFFINE_COLUMN );
         }
 
         /// Assumes dst is aligned
@@ -225,26 +225,26 @@ namespace Ogre
         {
             float * RESTRICT_ALIAS dstPtr = reinterpret_cast<float*>( dst );
 
-            vst1q_f32( dstPtr, mChunkBase[0] );
-            vst1q_f32( dstPtr + 4, mChunkBase[1] );
-            vst1q_f32( dstPtr + 8, mChunkBase[2] );
+            _mm_store_ps( dstPtr, mChunkBase[0] );
+            _mm_store_ps( dstPtr + 4, mChunkBase[1] );
+            _mm_store_ps( dstPtr + 8, mChunkBase[2] );
         }
 
         /// Assumes dst is aligned
         void store4x3( float * RESTRICT_ALIAS dst ) const
         {
-            vst1q_f32( dst, mChunkBase[0] );
-            vst1q_f32( dst + 4, mChunkBase[1] );
-            vst1q_f32( dst + 8, mChunkBase[2] );
+            _mm_store_ps( dst, mChunkBase[0] );
+            _mm_store_ps( dst + 4, mChunkBase[1] );
+            _mm_store_ps( dst + 8, mChunkBase[2] );
         }
 
         /// Copies our 4x3 contents using memory write combining when possible.
         void streamTo4x3( float * RESTRICT_ALIAS dst ) const
         {
 #ifndef OGRE_RENDERSYSTEM_API_ALIGN_COMPATIBILITY
-            vst1q_f32( dst,    mChunkBase[0] );
-            vst1q_f32( dst+4,  mChunkBase[1] );
-            vst1q_f32( dst+8,  mChunkBase[2] );
+            _mm_stream_ps( dst,    mChunkBase[0] );
+            _mm_stream_ps( dst+4,  mChunkBase[1] );
+            _mm_stream_ps( dst+8,  mChunkBase[2] );
 #else
             _mm_storeu_ps( dst,    mChunkBase[0] );
             _mm_storeu_ps( dst+4,  mChunkBase[1] );
@@ -260,6 +260,6 @@ namespace Ogre
 
 }
 
-#include "OgreArrayMatrixAf4x3.inl"
+#include "OgreArrayMatrixAf4x3SSE2.inl"
 
 #endif

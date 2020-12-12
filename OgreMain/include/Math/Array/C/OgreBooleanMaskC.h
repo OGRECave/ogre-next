@@ -62,6 +62,6 @@ namespace Ogre
     };
 }
 
-#include "OgreBooleanMask.inl"
+#include "OgreBooleanMaskC.inl"
 
 #endif

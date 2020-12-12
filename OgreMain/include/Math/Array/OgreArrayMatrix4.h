@@ -33,18 +33,18 @@ THE SOFTWARE.
 
 #if __OGRE_HAVE_SSE
     #if OGRE_DOUBLE_PRECISION == 1
-        #include "SSE2/Double/OgreArrayMatrix4.h"
+        #include "SSE2/Double/OgreArrayMatrix4SSE2.h"
     #else
-        #include "SSE2/Single/OgreArrayMatrix4.h"
+        #include "SSE2/Single/OgreArrayMatrix4SSE2.h"
     #endif
 #elif __OGRE_HAVE_NEON
     #if OGRE_DOUBLE_PRECISION == 1
         #error Double precision with SIMD on ARM is not supported
     #else
-        #include "NEON/Single/OgreArrayMatrix4.h"
+        #include "NEON/Single/OgreArrayMatrix4NEON.h"
     #endif
 #else
-    #include "C/OgreArrayMatrix4.h"
+    #include "C/OgreArrayMatrix4C.h"
 #endif
 
 #endif

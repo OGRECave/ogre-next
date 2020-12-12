@@ -38,7 +38,7 @@ THE SOFTWARE.
         #include "SSE2/Single/OgreAabb.h"
     #endif
 #else*/
-    #include "C/OgreAabb.h"
+    #include "C/OgreAabbC.h"
 //#endif
 
 #endif

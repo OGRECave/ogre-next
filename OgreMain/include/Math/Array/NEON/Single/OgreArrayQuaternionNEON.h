@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __C_ArrayQuaternion_H__
-#define __C_ArrayQuaternion_H__
+#ifndef __NEON_ArrayQuaternion_H__
+#define __NEON_ArrayQuaternion_H__
 
 #ifndef __ArrayQuaternion_H__
     #error "Don't include this file directly. include Math/Array/OgreArrayQuaternion.h"
@@ -35,9 +35,7 @@ THE SOFTWARE.
 #include "OgreQuaternion.h"
 
 #include "Math/Array/OgreMathlib.h"
-#include "Math/Array/OgreArrayVector3.h"
-
-#include "OgreArrayQuaternion.h"
+#include "Math/Array/OgreArrayVector3.h
 
 namespace Ogre
 {
@@ -65,22 +63,22 @@ namespace Ogre
     class _OgreExport ArrayQuaternion
     {
     public:
-        Real w, x, y, z;
+        ArrayReal       mChunkBase[4];
 
         ArrayQuaternion() {}
         ArrayQuaternion( const ArrayReal &chunkW, const ArrayReal &chunkX,
                                 const ArrayReal &chunkY, const ArrayReal &chunkZ )
         {
-            w = chunkW;
-            x = chunkX;
-            y = chunkY;
-            z = chunkZ;
+            mChunkBase[0] = chunkW;
+            mChunkBase[1] = chunkX;
+            mChunkBase[2] = chunkY;
+            mChunkBase[3] = chunkZ;
         }
 
         void getAsQuaternion( Quaternion &out, size_t index ) const
         {
             //Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
-            const Real *aliasedReal = reinterpret_cast<const Real*>( &w );
+            const Real *aliasedReal = reinterpret_cast<const Real*>( mChunkBase );
             out.w = aliasedReal[ARRAY_PACKED_REALS * 0 + index];        //W
             out.x = aliasedReal[ARRAY_PACKED_REALS * 1 + index];        //X
             out.y = aliasedReal[ARRAY_PACKED_REALS * 2 + index];        //Y
@@ -92,7 +90,7 @@ namespace Ogre
         Quaternion getAsQuaternion( size_t index ) const
         {
             //Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
-            const Real *aliasedReal = reinterpret_cast<const Real*>( &w );
+            const Real *aliasedReal = reinterpret_cast<const Real*>( mChunkBase );
             return Quaternion( aliasedReal[ARRAY_PACKED_REALS * 0 + index], //W
                             aliasedReal[ARRAY_PACKED_REALS * 1 + index],        //X
                             aliasedReal[ARRAY_PACKED_REALS * 2 + index],        //Y
@@ -101,21 +99,20 @@ namespace Ogre
 
         void setFromQuaternion( const Quaternion &v, size_t index )
         {
-            Real *aliasedReal = reinterpret_cast<Real*>( &w );
+            Real *aliasedReal = reinterpret_cast<Real*>( mChunkBase );
             aliasedReal[ARRAY_PACKED_REALS * 0 + index] = v.w;
             aliasedReal[ARRAY_PACKED_REALS * 1 + index] = v.x;
             aliasedReal[ARRAY_PACKED_REALS * 2 + index] = v.y;
             aliasedReal[ARRAY_PACKED_REALS * 3 + index] = v.z;
         }
-        
-        void setAll( const Quaternion &v )
-        {
-            w = v.w;
-            x = v.x;
-            y = v.y;
-            z = v.z;
-        }
 
+		void setAll( const Quaternion &v )
+        {
+            mChunkBase[0] = vdupq_n_f32( v.w );
+            mChunkBase[1] = vdupq_n_f32( v.x );
+            mChunkBase[2] = vdupq_n_f32( v.y );
+            mChunkBase[3] = vdupq_n_f32( v.z );
+        }
         /** @see Quaternion::FromRotationMatrix
             This code assumes that:
                 Quaternion is orthogonal
@@ -190,21 +187,21 @@ namespace Ogre
         /// @remarks
         ///     shortestPath is always true
         static inline ArrayQuaternion Slerp( ArrayReal fT, const ArrayQuaternion &rkP,
-                                                    const ArrayQuaternion &rkQ );
+                                                const ArrayQuaternion &rkQ );
 
         /// @See Quaternion::nlerp
         /// @remarks
         ///     shortestPath is always true
-        static inline ArrayQuaternion nlerpShortest( ArrayReal fT, const ArrayQuaternion& rkP,
+        static inline ArrayQuaternion nlerpShortest( ArrayReal fT, const ArrayQuaternion& rkP, 
                                                     const ArrayQuaternion& rkQ );
 
         /// @See Quaternion::nlerp
         /// @remarks
         ///     shortestPath is always false
         static inline ArrayQuaternion nlerp( ArrayReal fT, const ArrayQuaternion& rkP, 
-                                                    const ArrayQuaternion& rkQ );
+                                                const ArrayQuaternion& rkQ );
 
-        /** Conditional move update. @See MathlibC::Cmov4
+        /** Conditional move update. @See MathlibNEON::Cmov4
             Changes each of the four vectors contained in 'this' with
             the replacement provided
             @remarks
@@ -226,7 +223,7 @@ namespace Ogre
         */
         inline void Cmov4( ArrayMaskR mask, const ArrayQuaternion &replacement );
 
-        /** Conditional move. @See MathlibC::Cmov4
+        /** Conditional move. @See MathlibNEON::Cmov4
             Selects between arg1 & arg2 according to mask
             @remarks
                 If mask param contains anything other than 0's or 0xffffffff's
@@ -253,6 +250,6 @@ namespace Ogre
 
 }
 
-#include "OgreArrayQuaternion.inl"
+#include "OgreArrayQuaternionNEON.inl"
 
 #endif
