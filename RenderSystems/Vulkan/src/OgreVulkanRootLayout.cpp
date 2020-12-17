@@ -496,7 +496,8 @@ namespace Ogre
                         OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[i]->descriptorCount ==
                                                 bindRanges.getNumUsedSlots() &&
                                             "DescriptorSetTexture/Sampler/Uav provided is incompatible "
-                                            "with active RootLayout" );
+                                            "with active RootLayout. e.g. you can't bind a set of "
+                                            "7 textures when the shader expects 4" );
 
                         VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
                         writeDescSet = *table.bakedDescriptorSets[i];
