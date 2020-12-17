@@ -130,6 +130,7 @@ var class_ogre_1_1_vulkan_render_system =
     [ "fireSharedEvent", "class_ogre_1_1_vulkan_render_system.html#add0b3b86b8ec2f51d8973b6b3e06448e", null ],
     [ "flushCommands", "class_ogre_1_1_vulkan_render_system.html#a19dd1d84896f7671d6707e35d1a8c056", null ],
     [ "flushDescriptorState", "class_ogre_1_1_vulkan_render_system.html#ab98067e9e31da8681c6f14f6502e0f8f", null ],
+    [ "flushPendingAutoResourceLayouts", "class_ogre_1_1_vulkan_render_system.html#ad1957f3495e478db37a5567e674857ce", null ],
     [ "flushTextureCopyOperations", "class_ogre_1_1_vulkan_render_system.html#a451096dac7f529104ee76f6b432c4f81", null ],
     [ "flushUAVs", "class_ogre_1_1_vulkan_render_system.html#a717e68a43a58586c8657eeab9a7e70f0", null ],
     [ "getBarrierSolver", "class_ogre_1_1_vulkan_render_system.html#aac8976a6df3aa4d7b2cc1b6e1b6c3168", null ],

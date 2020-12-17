@@ -1,5 +1,7 @@
 var NAVTREEINDEX70 =
 {
+"class_ogre_1_1_dual_quaternion.html#aef3bbc49149643d5bfc3dbde4064dde3":[5,2,6,12,19],
+"class_ogre_1_1_dual_quaternion.html#af666d1865aa8b3467648b96e8c597217":[5,2,6,12,11],
 "class_ogre_1_1_dyn_lib.html":[5,2,2,40],
 "class_ogre_1_1_dyn_lib.html#a038546cd3a5b9d9385b14aa3e0a8179b":[5,2,2,40,4],
 "class_ogre_1_1_dyn_lib.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,40,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX70 =
 "class_ogre_1_1_e_x_r_codec.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,330,27],
 "class_ogre_1_1_ellipsoid_emitter.html":[7,0,0,318],
 "class_ogre_1_1_ellipsoid_emitter.html#a01a6e571941916969316ab23c5ee4739":[7,0,0,318,34],
-"class_ogre_1_1_ellipsoid_emitter.html#a02624afcd33a3c44995abefba379519f":[7,0,0,318,44],
-"class_ogre_1_1_ellipsoid_emitter.html#a0675cd5508ed0a37fa6613ad5d0978c5":[7,0,0,318,12],
-"class_ogre_1_1_ellipsoid_emitter.html#a0cdad11e98fe6af5c36ca88b83e439ac":[7,0,0,318,95]
+"class_ogre_1_1_ellipsoid_emitter.html#a02624afcd33a3c44995abefba379519f":[7,0,0,318,44]
 };

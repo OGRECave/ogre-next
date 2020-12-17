@@ -1,5 +1,11 @@
 var NAVTREEINDEX165 =
 {
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,9,60,9],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a9bd491cc5e6af400534bd9be3c2e3415":[5,2,9,60,4],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a9d34ec312d5b8a627be41da5b57382eb":[5,2,9,60,3],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#aa73560a3f1b9117cb8b438867848c255":[5,2,9,60,2],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,9,60,13],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#ab8f2cc777a669f421e5a3ab74cf397de":[5,2,9,60,17],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,9,60,11],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,9,60,7],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#ade3517016652e2195659012eccdbd26d":[5,2,9,60,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX165 =
 "class_ogre_1_1_radial_density_mask.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,11,106,10],
 "class_ogre_1_1_radial_density_mask.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,11,106,6],
 "class_ogre_1_1_radial_density_mask.html#adc6f9d4c6aaa769d7ab06ae50560227c":[5,2,11,106,16],
-"class_ogre_1_1_radial_density_mask.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,11,106,13],
-"class_ogre_1_1_radian.html":[5,2,6,23],
-"class_ogre_1_1_radian.html#a16e2f53d94412cdc81c65292ba05c360":[5,2,6,23,17],
-"class_ogre_1_1_radian.html#a1ec08644d17b7119bdb5c27c235a4101":[5,2,6,23,2],
-"class_ogre_1_1_radian.html#a24c502ed700ae70138c521c14f8102b3":[5,2,6,23,18],
-"class_ogre_1_1_radian.html#a2cc76b722fcf4b67d242359f5ad95718":[5,2,6,23,19],
-"class_ogre_1_1_radian.html#a2f16c17c310873f209c3464eea4511d0":[5,2,6,23,25]
+"class_ogre_1_1_radial_density_mask.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,11,106,13]
 };

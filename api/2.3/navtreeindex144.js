@@ -1,5 +1,11 @@
 var NAVTREEINDEX144 =
 {
+"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da218a4243be85ec9c989b777119d5ff47":[7,0,0,820,2,6],
+"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82":[7,0,0,820,2,0],
+"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604":[7,0,0,820,2,7],
+"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da55066351a26967068b944c2170e51af1":[7,0,0,820,2,3],
+"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27":[7,0,0,820,2,1],
+"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da61729c4ae25807d6132d5bc46580ff3d":[7,0,0,820,2,4],
 "class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26":[7,0,0,820,2,8],
 "class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e":[7,0,0,820,2,11],
 "class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257":[7,0,0,820,2,10],
@@ -243,11 +249,5 @@ var NAVTREEINDEX144 =
 "class_ogre_1_1_p_c_z_scene_manager.html#a5447c974f3384f0b7550a2f776a25b28":[7,0,0,828,322],
 "class_ogre_1_1_p_c_z_scene_manager.html#a5674d3ac7f0eefac585c234b14359f9f":[7,0,0,828,226],
 "class_ogre_1_1_p_c_z_scene_manager.html#a570a5bfc2b2285cf38974dc82db416c9":[7,0,0,828,144],
-"class_ogre_1_1_p_c_z_scene_manager.html#a578ab5f9e4b0769af801c4f1115d15f2":[7,0,0,828,197],
-"class_ogre_1_1_p_c_z_scene_manager.html#a57e0523432c6e5133ff4fc251111a60e":[7,0,0,828,283],
-"class_ogre_1_1_p_c_z_scene_manager.html#a58019e4c5104af4fe19d483fb1deec91":[7,0,0,828,16],
-"class_ogre_1_1_p_c_z_scene_manager.html#a58a12d49ce3ccfdda953d2f4b57b9f86":[7,0,0,828,103],
-"class_ogre_1_1_p_c_z_scene_manager.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,828,277],
-"class_ogre_1_1_p_c_z_scene_manager.html#a5c3f8d93657ec9107bfeb014f1454915":[7,0,0,828,186],
-"class_ogre_1_1_p_c_z_scene_manager.html#a5ce6c279340a1bc24d978f2fa26345f7":[7,0,0,828,221]
+"class_ogre_1_1_p_c_z_scene_manager.html#a578ab5f9e4b0769af801c4f1115d15f2":[7,0,0,828,197]
 };

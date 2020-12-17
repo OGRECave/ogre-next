@@ -1,5 +1,13 @@
 var NAVTREEINDEX250 =
 {
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_caption.html":[5,2,8,13,1],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_caption.html#a7beb9a92b222ad56cb3d3062be70b480":[5,2,8,13,1,0],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_caption.html#ab444388080f9b15b11080ab36d2e5b79":[5,2,8,13,1,1],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_char_height.html":[5,2,8,13,2],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_char_height.html#a7d45502e7c0ab0e938b4ebbee954312e":[5,2,8,13,2,0],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_char_height.html#afa5dd27999a1d884484706368c07097d":[5,2,8,13,2,1],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_colour.html":[5,2,8,13,3],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_colour.html#a7255f464f5336522223967f5999c0eb5":[5,2,8,13,3,0],
 "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_colour.html#aee76cc3de0ce4a4be9c1d940bddbb759":[5,2,8,13,3,1],
 "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_colour_bottom.html":[5,2,8,13,4],
 "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_colour_bottom.html#a54f45e06e1a521c3d7e5b2b789891903":[5,2,8,13,4,1],
@@ -241,13 +249,5 @@ var NAVTREEINDEX250 =
 "class_ogre_1_1v1_1_1_vertex_element.html#a83c9abba2d7aab51e22d0a312f657f17":[5,2,10,49,20],
 "class_ogre_1_1v1_1_1_vertex_element.html#a939c4148fe37f6dd3139b0057a504112":[5,2,10,49,8],
 "class_ogre_1_1v1_1_1_vertex_element.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,10,49,24],
-"class_ogre_1_1v1_1_1_vertex_element.html#a988815e754f24add2e6529c744e5f4fb":[5,2,10,49,18],
-"class_ogre_1_1v1_1_1_vertex_element.html#a9a05b2dfa000f96ea6291764dacbe64d":[5,2,10,49,15],
-"class_ogre_1_1v1_1_1_vertex_element.html#a9a54afa1dadae3a7e9a8864d13c46d46":[5,2,10,49,13],
-"class_ogre_1_1v1_1_1_vertex_element.html#aa04c3c9764130524063cd103574a6275":[5,2,10,49,17],
-"class_ogre_1_1v1_1_1_vertex_element.html#aa78ad4f074608a162ca3c51c8f8b5598":[5,2,10,49,11],
-"class_ogre_1_1v1_1_1_vertex_element.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,10,49,28],
-"class_ogre_1_1v1_1_1_vertex_element.html#ab93b246929648e8308e6df18be58d215":[5,2,10,49,12],
-"class_ogre_1_1v1_1_1_vertex_element.html#ac32c5a69cb57cb49d4a6f7e3169f25f9":[5,2,10,49,9],
-"class_ogre_1_1v1_1_1_vertex_element.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,10,49,26]
+"class_ogre_1_1v1_1_1_vertex_element.html#a988815e754f24add2e6529c744e5f4fb":[5,2,10,49,18]
 };

@@ -1,5 +1,13 @@
 var NAVTREEINDEX249 =
 {
+"class_ogre_1_1v1_1_1_tag_point.html#a7b932b5d1e72cc70eda5309e0a93fe27":[5,2,0,27,35],
+"class_ogre_1_1v1_1_1_tag_point.html#a8334ca4383642fd2cbff8113b6677615":[5,2,0,27,78],
+"class_ogre_1_1v1_1_1_tag_point.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,0,27,57],
+"class_ogre_1_1v1_1_1_tag_point.html#a86da6be120d70c5dd8f911e6944e5a9a":[5,2,0,27,17],
+"class_ogre_1_1v1_1_1_tag_point.html#a86f9fbb85ffb6429686a891203d2b938":[5,2,0,27,69],
+"class_ogre_1_1v1_1_1_tag_point.html#a878a033f30f2b449d2f0c91d63be77ff":[5,2,0,27,84],
+"class_ogre_1_1v1_1_1_tag_point.html#a9131b85496f2d6eb71df8956fdba328c":[5,2,0,27,70],
+"class_ogre_1_1v1_1_1_tag_point.html#a917ba7367e44259d9f66d4eade789f5f":[5,2,0,27,4],
 "class_ogre_1_1v1_1_1_tag_point.html#a92fe933a19075ed8fc25055f3dcab478":[5,2,0,27,31],
 "class_ogre_1_1v1_1_1_tag_point.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,0,27,60],
 "class_ogre_1_1v1_1_1_tag_point.html#a9540436cb4632a1e8ec9dbca8d63bf2c":[5,2,0,27,52],
@@ -241,13 +249,5 @@ var NAVTREEINDEX249 =
 "class_ogre_1_1v1_1_1_text_area_overlay_element.html#afcbf4cb36d5911a9d40a40c57e94f23b":[5,2,8,13,119],
 "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html":[5,2,8,13,0],
 "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html#a90af55100e3482cbb2271eb78037db61":[5,2,8,13,0,1],
-"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html#abdd8476e8f055635fda7fd4dfcdbb6d9":[5,2,8,13,0,0],
-"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_caption.html":[5,2,8,13,1],
-"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_caption.html#a7beb9a92b222ad56cb3d3062be70b480":[5,2,8,13,1,0],
-"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_caption.html#ab444388080f9b15b11080ab36d2e5b79":[5,2,8,13,1,1],
-"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_char_height.html":[5,2,8,13,2],
-"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_char_height.html#a7d45502e7c0ab0e938b4ebbee954312e":[5,2,8,13,2,0],
-"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_char_height.html#afa5dd27999a1d884484706368c07097d":[5,2,8,13,2,1],
-"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_colour.html":[5,2,8,13,3],
-"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_colour.html#a7255f464f5336522223967f5999c0eb5":[5,2,8,13,3,0]
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html#abdd8476e8f055635fda7fd4dfcdbb6d9":[5,2,8,13,0,0]
 };

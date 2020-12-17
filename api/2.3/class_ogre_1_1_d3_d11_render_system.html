@@ -410,6 +410,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a352db40a4a6ed3e770718f4b1e6f71ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6266fa40499c9b823b46625b328f549a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_d3_d11_render_system.html#a6266fa40499c9b823b46625b328f549a">flushCommands</a> (void)</td></tr>
 <tr class="separator:a6266fa40499c9b823b46625b328f549a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80e3448280f4a1221fbf75ab8f3d5aed"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a80e3448280f4a1221fbf75ab8f3d5aed">flushPendingAutoResourceLayouts</a> ()</td></tr>
+<tr class="memdesc:a80e3448280f4a1221fbf75ab8f3d5aed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required when caller will soon start analyzing barriers (e.g.  <a href="class_ogre_1_1_render_system.html#a80e3448280f4a1221fbf75ab8f3d5aed">More...</a><br /></td></tr>
+<tr class="separator:a80e3448280f4a1221fbf75ab8f3d5aed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a451096dac7f529104ee76f6b432c4f81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a451096dac7f529104ee76f6b432c4f81">flushTextureCopyOperations</a> (void)</td></tr>
 <tr class="memdesc:a451096dac7f529104ee76f6b432c4f81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this function if you need to call texture-&gt;copyTo or create an <a class="el" href="class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous.">AsyncTextureTicket</a> on a <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> which is currently in either <a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a4d712d43e8f9639bda08a221116ecdba">ResourceLayout::CopySrc</a> or CopyDst layout.  <a href="class_ogre_1_1_render_system.html#a451096dac7f529104ee76f6b432c4f81">More...</a><br /></td></tr>
 <tr class="separator:a451096dac7f529104ee76f6b432c4f81"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -4972,6 +4975,38 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="class_ogre_1_1_render_system.html#a03042760fb5ad088f8c73883f9d7fe14">Ogre::RenderSystem</a>.</p>
+
+</div>
+</div>
+<a id="a80e3448280f4a1221fbf75ab8f3d5aed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80e3448280f4a1221fbf75ab8f3d5aed">&#9670;&nbsp;</a></span>flushPendingAutoResourceLayouts()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::RenderSystem::flushPendingAutoResourceLayouts </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Required when caller will soon start analyzing barriers (e.g. </p>
+<p>use <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a>) <a class="el" href="namespace_ogre.html">Ogre</a> will flush any pending resource transitions.</p>
+<p>Otherwise <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a> will see that a <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> is in a particular state or layout, then when calling executeResourceTransition, the pending resource layout will be flushed, and now the resource transition resolved by <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a> will have the wrong 'old' layout </p>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#ad1957f3495e478db37a5567e674857ce">Ogre::VulkanRenderSystem</a>.</p>
 
 </div>
 </div>

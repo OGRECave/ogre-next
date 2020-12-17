@@ -113,6 +113,7 @@ var class_ogre_1_1_n_u_l_l_render_system =
     [ "executeResourceTransition", "class_ogre_1_1_n_u_l_l_render_system.html#ad6efb4ed490715cf068fca69b689403d", null ],
     [ "fireSharedEvent", "class_ogre_1_1_n_u_l_l_render_system.html#add0b3b86b8ec2f51d8973b6b3e06448e", null ],
     [ "flushCommands", "class_ogre_1_1_n_u_l_l_render_system.html#a4b483b428e14d121ac31eee732dbfd5f", null ],
+    [ "flushPendingAutoResourceLayouts", "class_ogre_1_1_n_u_l_l_render_system.html#a80e3448280f4a1221fbf75ab8f3d5aed", null ],
     [ "flushTextureCopyOperations", "class_ogre_1_1_n_u_l_l_render_system.html#a451096dac7f529104ee76f6b432c4f81", null ],
     [ "getBarrierSolver", "class_ogre_1_1_n_u_l_l_render_system.html#aac8976a6df3aa4d7b2cc1b6e1b6c3168", null ],
     [ "getBoundUav", "class_ogre_1_1_n_u_l_l_render_system.html#afb6f61d5c70531c1eb718cdfbefb0330", null ],

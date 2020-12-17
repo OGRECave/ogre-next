@@ -1,5 +1,9 @@
 var NAVTREEINDEX106 =
 {
+"class_ogre_1_1_internal_cubemap_probe.html#a6e0b185e38d9a51feef2cafa341c801e":[7,0,0,550,4],
+"class_ogre_1_1_internal_cubemap_probe.html#a6fb94e1627676c7d7517e13944bd0580":[7,0,0,550,70],
+"class_ogre_1_1_internal_cubemap_probe.html#a76edaa89bb1889e8f31767bee5913b8c":[7,0,0,550,38],
+"class_ogre_1_1_internal_cubemap_probe.html#a77198e02dd65dd368ea4e6af88a93fda":[7,0,0,550,80],
 "class_ogre_1_1_internal_cubemap_probe.html#a7c3bff2a6922bbc098c789e9386140e3":[7,0,0,550,89],
 "class_ogre_1_1_internal_cubemap_probe.html#a7c633da32362e05bd24871c7a612fdac":[7,0,0,550,24],
 "class_ogre_1_1_internal_cubemap_probe.html#a7cd15e3a5caae8ae786bd752c6b27f26":[7,0,0,550,84],
@@ -245,9 +249,5 @@ var NAVTREEINDEX106 =
 "class_ogre_1_1_irradiance_field.html#a8f0e6e27854fea48c83bb374962b1efd":[7,0,0,560,16],
 "class_ogre_1_1_irradiance_field.html#a90b0c636f04aec3859dd3c5219234623":[7,0,0,560,12],
 "class_ogre_1_1_irradiance_field.html#a9f189cebd1f6a7153c8a9ab7755871f0":[7,0,0,560,15],
-"class_ogre_1_1_irradiance_field.html#ab152c8f646a835c2f88585ad4fe0413a":[7,0,0,560,10],
-"class_ogre_1_1_irradiance_field.html#ac6b23619abaf8b2d57c5bab948cfd6bf":[7,0,0,560,7],
-"class_ogre_1_1_irradiance_field.html#adb140c08b7488b9cb68e3c4238ff1bd6":[7,0,0,560,9],
-"class_ogre_1_1_irradiance_field.html#add8ca4aba0a670ed60eeb8d6964fa8fc":[7,0,0,560,2],
-"class_ogre_1_1_irradiance_field.html#aeca5a734c18fe28d98ea5a9fbb60d6f7":[7,0,0,560,4]
+"class_ogre_1_1_irradiance_field.html#ab152c8f646a835c2f88585ad4fe0413a":[7,0,0,560,10]
 };

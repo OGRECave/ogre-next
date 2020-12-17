@@ -1,5 +1,12 @@
 var NAVTREEINDEX172 =
 {
+"class_ogre_1_1_resource_group_listener.html#a732dfe8e3bc33b9832aeaa0ac55ae3f3":[5,2,11,114,18],
+"class_ogre_1_1_resource_group_listener.html#a8de1d0b6cda474136c540f90d5b08fc9":[5,2,11,114,16],
+"class_ogre_1_1_resource_group_listener.html#aa9e0e3419c71a37ba2d6b2530a58716b":[5,2,11,114,15],
+"class_ogre_1_1_resource_group_listener.html#ab7043301771d9337b5a03638f9124780":[5,2,11,114,12],
+"class_ogre_1_1_resource_group_listener.html#adefd1c2350a941fe79d4820f3418dfc0":[5,2,11,114,3],
+"class_ogre_1_1_resource_group_listener.html#ae00f90c7c6f719f3eccc6cf4f5088ed2":[5,2,11,114,10],
+"class_ogre_1_1_resource_group_listener.html#ae64fcd5c58ef20b4d030762b11662415":[5,2,11,114,4],
 "class_ogre_1_1_resource_group_listener.html#aec5baaa909c2c43aeeb50f73c66a4433":[5,2,11,114,14],
 "class_ogre_1_1_resource_group_listener.html#aeee89b287a1634e5645d9ade5e6d8752":[5,2,11,114,6],
 "class_ogre_1_1_resource_group_listener.html#aef0cfe4119bc10ddef05f0e994d98566":[5,2,11,114,7],
@@ -242,12 +249,5 @@ var NAVTREEINDEX172 =
 "class_ogre_1_1_ring_emitter.html#a8f9062c067ecb49776d4ce73cf41990d":[7,0,0,923,101],
 "class_ogre_1_1_ring_emitter.html#a8f94512cf66c84a243f3cd6383bb9c68":[7,0,0,923,106],
 "class_ogre_1_1_ring_emitter.html#a9194f48e306289c7f3c7f77374febb01":[7,0,0,923,82],
-"class_ogre_1_1_ring_emitter.html#a93027e6a8be2be918488edf6c88217c0":[7,0,0,923,107],
-"class_ogre_1_1_ring_emitter.html#a931a2be6077dd30e596f19a5f5646ba5":[7,0,0,923,109],
-"class_ogre_1_1_ring_emitter.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,923,55],
-"class_ogre_1_1_ring_emitter.html#a95517da295f74f765f031f63b4964fdf":[7,0,0,923,96],
-"class_ogre_1_1_ring_emitter.html#a96b7ceb94e86301975d9f2b47baee906":[7,0,0,923,21],
-"class_ogre_1_1_ring_emitter.html#a98d3f921cd9061414149636172557d71":[7,0,0,923,26],
-"class_ogre_1_1_ring_emitter.html#a9d26a5cb04855bc93abe837dc7cb83ac":[7,0,0,923,77],
-"class_ogre_1_1_ring_emitter.html#aa0784075820b4bdf48c687986ac77117":[7,0,0,923,68]
+"class_ogre_1_1_ring_emitter.html#a93027e6a8be2be918488edf6c88217c0":[7,0,0,923,107]
 };

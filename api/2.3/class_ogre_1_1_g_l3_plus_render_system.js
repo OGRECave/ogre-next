@@ -126,6 +126,7 @@ var class_ogre_1_1_g_l3_plus_render_system =
     [ "executeRenderPassDescriptorDelayedActions", "class_ogre_1_1_g_l3_plus_render_system.html#a3dc08052db357beff034cad183fdfadc", null ],
     [ "executeResourceTransition", "class_ogre_1_1_g_l3_plus_render_system.html#af165f09a00fe576ed462beb0a5434005", null ],
     [ "fireSharedEvent", "class_ogre_1_1_g_l3_plus_render_system.html#add0b3b86b8ec2f51d8973b6b3e06448e", null ],
+    [ "flushPendingAutoResourceLayouts", "class_ogre_1_1_g_l3_plus_render_system.html#a80e3448280f4a1221fbf75ab8f3d5aed", null ],
     [ "flushTextureCopyOperations", "class_ogre_1_1_g_l3_plus_render_system.html#a451096dac7f529104ee76f6b432c4f81", null ],
     [ "flushUAVs", "class_ogre_1_1_g_l3_plus_render_system.html#afd30c12555be388fd450925811c6d8a5", null ],
     [ "getBarrierSolver", "class_ogre_1_1_g_l3_plus_render_system.html#aac8976a6df3aa4d7b2cc1b6e1b6c3168", null ],

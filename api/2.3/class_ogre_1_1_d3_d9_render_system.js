@@ -161,6 +161,7 @@ var class_ogre_1_1_d3_d9_render_system =
     [ "fireDeviceEvent", "class_ogre_1_1_d3_d9_render_system.html#ace53b06d3e61511f9b2dc6156e31c9a9", null ],
     [ "fireSharedEvent", "class_ogre_1_1_d3_d9_render_system.html#add0b3b86b8ec2f51d8973b6b3e06448e", null ],
     [ "flushCommands", "class_ogre_1_1_d3_d9_render_system.html#a03042760fb5ad088f8c73883f9d7fe14", null ],
+    [ "flushPendingAutoResourceLayouts", "class_ogre_1_1_d3_d9_render_system.html#a80e3448280f4a1221fbf75ab8f3d5aed", null ],
     [ "flushTextureCopyOperations", "class_ogre_1_1_d3_d9_render_system.html#a451096dac7f529104ee76f6b432c4f81", null ],
     [ "getActiveD3D9Device", "class_ogre_1_1_d3_d9_render_system.html#af275458fafa039df530a9b3242139d29", null ],
     [ "getActiveD3D9DeviceIfExists", "class_ogre_1_1_d3_d9_render_system.html#a4ce5bef3f937282cfd0c4290e66e0c8f", null ],

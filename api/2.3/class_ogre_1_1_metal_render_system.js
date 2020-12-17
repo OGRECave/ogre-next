@@ -121,6 +121,7 @@ var class_ogre_1_1_metal_render_system =
     [ "executeResourceTransition", "class_ogre_1_1_metal_render_system.html#ad6efb4ed490715cf068fca69b689403d", null ],
     [ "fireSharedEvent", "class_ogre_1_1_metal_render_system.html#add0b3b86b8ec2f51d8973b6b3e06448e", null ],
     [ "flushCommands", "class_ogre_1_1_metal_render_system.html#a003190ca748a8f7ad1f3fa7212fa9126", null ],
+    [ "flushPendingAutoResourceLayouts", "class_ogre_1_1_metal_render_system.html#a80e3448280f4a1221fbf75ab8f3d5aed", null ],
     [ "flushTextureCopyOperations", "class_ogre_1_1_metal_render_system.html#a451096dac7f529104ee76f6b432c4f81", null ],
     [ "flushUAVs", "class_ogre_1_1_metal_render_system.html#acdd8e6a6912a3976f74b856f3c1e62eb", null ],
     [ "getActiveDevice", "class_ogre_1_1_metal_render_system.html#a88d0563ae1097fa2d32b295770d11764", null ],

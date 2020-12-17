@@ -1,5 +1,9 @@
 var NAVTREEINDEX110 =
 {
+"class_ogre_1_1_light_factory.html#a08255f7d58203fe0d7f6802fa6a29d5c":[5,0,1,27,4],
+"class_ogre_1_1_light_factory.html#a0fbd15da3201007d58dcaf2eddc9ea62":[5,2,12,27,2],
+"class_ogre_1_1_light_factory.html#a0fbd15da3201007d58dcaf2eddc9ea62":[5,0,1,27,2],
+"class_ogre_1_1_light_factory.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,12,27,7],
 "class_ogre_1_1_light_factory.html#a1c727e879a260c37b00ce5505fe8e144":[5,0,1,27,7],
 "class_ogre_1_1_light_factory.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,12,27,11],
 "class_ogre_1_1_light_factory.html#a421b197ca3a38da17e2eb1531a645fa2":[5,0,1,27,11],
@@ -15,8 +19,8 @@ var NAVTREEINDEX110 =
 "class_ogre_1_1_light_factory.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,0,1,27,5],
 "class_ogre_1_1_light_factory.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,12,27,8],
 "class_ogre_1_1_light_factory.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,0,1,27,8],
-"class_ogre_1_1_light_factory.html#ab128c82ed2e160d4c870baca1c041add":[5,2,12,27,3],
 "class_ogre_1_1_light_factory.html#ab128c82ed2e160d4c870baca1c041add":[5,0,1,27,3],
+"class_ogre_1_1_light_factory.html#ab128c82ed2e160d4c870baca1c041add":[5,2,12,27,3],
 "class_ogre_1_1_light_factory.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,12,27,12],
 "class_ogre_1_1_light_factory.html#ab78a921e54419be677839cdf15d1f0b8":[5,0,1,27,12],
 "class_ogre_1_1_light_factory.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,12,27,10],
@@ -245,9 +249,5 @@ var NAVTREEINDEX110 =
 "class_ogre_1_1_lod_outside_marker.html":[7,0,0,623],
 "class_ogre_1_1_lod_outside_marker.html#a1a23d5f23d72d073dd4bef1869b00372":[7,0,0,623,0],
 "class_ogre_1_1_lod_outside_marker.html#a29dd4b0f1d314671a8eb66a6ae260f93":[7,0,0,623,3],
-"class_ogre_1_1_lod_outside_marker.html#aca910316d85300475e4d5a4658f27513":[7,0,0,623,1],
-"class_ogre_1_1_lod_outside_marker.html#adbd34574b0c7ab6c636097593b99d7d9":[7,0,0,623,2],
-"class_ogre_1_1_lod_strategy.html":[5,2,4,6],
-"class_ogre_1_1_lod_strategy.html#a0632e960cea07fc780420db0614f2040":[5,2,4,6,8],
-"class_ogre_1_1_lod_strategy.html#a11c15567a651d4e46856030f6d34b789":[5,2,4,6,3]
+"class_ogre_1_1_lod_outside_marker.html#aca910316d85300475e4d5a4658f27513":[7,0,0,623,1]
 };

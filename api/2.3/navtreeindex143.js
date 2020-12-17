@@ -1,5 +1,11 @@
 var NAVTREEINDEX143 =
 {
+"class_ogre_1_1_p_c_z_camera.html#af630e6230261ecca2ecbfcf0b0ee9ce9":[7,0,0,817,155],
+"class_ogre_1_1_p_c_z_camera.html#af6788ed3697ab34c561c0afcf39ac8c3":[7,0,0,817,144],
+"class_ogre_1_1_p_c_z_camera.html#af6b67989c20596808f2078964d9e5ebb":[7,0,0,817,30],
+"class_ogre_1_1_p_c_z_camera.html#af8eda0a4fb82d6e5b6975742c5fb9ae4":[7,0,0,817,288],
+"class_ogre_1_1_p_c_z_camera.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,817,211],
+"class_ogre_1_1_p_c_z_camera.html#afb58624fb567bb790c55d8a716b472da":[7,0,0,817,1],
 "class_ogre_1_1_p_c_z_camera.html#afbacdc365ba31e1d3ace59928a338a7e":[7,0,0,817,40],
 "class_ogre_1_1_p_c_z_camera.html#afbb366a0f8186c2cb85a744556fa5680":[7,0,0,817,218],
 "class_ogre_1_1_p_c_z_camera.html#afcbf4cb36d5911a9d40a40c57e94f23b":[7,0,0,817,217],
@@ -243,11 +249,5 @@ var NAVTREEINDEX143 =
 "class_ogre_1_1_p_c_z_light.html#afb58624fb567bb790c55d8a716b472da":[7,0,0,820,0],
 "class_ogre_1_1_p_c_z_light.html#afdf18128b8f4f8be71566ce2d5d5a30a":[7,0,0,820,139],
 "class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7d":[7,0,0,820,2],
-"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da058c0eecb9f3f188fccc4d0018bf337b":[7,0,0,820,2,2],
-"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da218a4243be85ec9c989b777119d5ff47":[7,0,0,820,2,6],
-"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82":[7,0,0,820,2,0],
-"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604":[7,0,0,820,2,7],
-"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da55066351a26967068b944c2170e51af1":[7,0,0,820,2,3],
-"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27":[7,0,0,820,2,1],
-"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da61729c4ae25807d6132d5bc46580ff3d":[7,0,0,820,2,4]
+"class_ogre_1_1_p_c_z_light.html#afe11bd546cf7315f4526488e7078cc7da058c0eecb9f3f188fccc4d0018bf337b":[7,0,0,820,2,2]
 };
