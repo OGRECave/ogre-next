@@ -223,7 +223,8 @@ namespace Ogre
                                                     const HlmsBlendblock *blendblock,
                                                     const HlmsParamVec &paramVec );
 
-        void setDetailMapProperties( HlmsPbsDatablock *datablock, PiecesMap *inOutPieces );
+        void setDetailMapProperties( HlmsPbsDatablock *datablock, PiecesMap *inOutPieces,
+                                     const bool bCasterPass );
         void setTextureProperty( const char *propertyName, HlmsPbsDatablock *datablock,
                                  PbsTextureTypes texType );
         void setDetailTextureProperty( const char *propertyName, HlmsPbsDatablock *datablock,

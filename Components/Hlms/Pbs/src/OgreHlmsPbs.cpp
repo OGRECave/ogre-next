@@ -591,7 +591,8 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::setDetailMapProperties( HlmsPbsDatablock *datablock, PiecesMap *inOutPieces )
+    void HlmsPbs::setDetailMapProperties( HlmsPbsDatablock *datablock, PiecesMap *inOutPieces,
+                                          const bool bCasterPass )
     {
         uint32 minNormalMap = 4;
         bool hasDiffuseMaps = false;
@@ -602,7 +603,8 @@ namespace Ogre
             uint8 blendMode = datablock->mBlendModes[i];
 
             setDetailTextureProperty( PbsProperty::DetailMapN,   datablock, PBSM_DETAIL0, i );
-            setDetailTextureProperty( PbsProperty::DetailMapNmN, datablock, PBSM_DETAIL0_NM, i );
+            if( !bCasterPass )
+                setDetailTextureProperty( PbsProperty::DetailMapNmN, datablock, PBSM_DETAIL0_NM, i );
 
             if( datablock->getTexture( PBSM_DETAIL0 + i ) )
             {
@@ -611,7 +613,7 @@ namespace Ogre
                 hasDiffuseMaps = true;
             }
 
-            if( datablock->getTexture( PBSM_DETAIL0_NM + i ) )
+            if( !bCasterPass && datablock->getTexture( PBSM_DETAIL0_NM + i ) )
             {
                 minNormalMap = std::min<uint32>( minNormalMap, i );
                 hasNormalMaps = true;
@@ -621,8 +623,8 @@ namespace Ogre
                 setProperty( *PbsProperty::DetailOffsetsPtrs[i], 1 );
 
             if( datablock->mDetailWeight[i] != 1.0f &&
-                (datablock->getTexture( PBSM_DETAIL0 + i ) ||
-                 datablock->getTexture( PBSM_DETAIL0_NM + i )) )
+                ( datablock->getTexture( PBSM_DETAIL0 + i ) ||
+                  ( !bCasterPass && datablock->getTexture( PBSM_DETAIL0_NM + i ) ) ) )
             {
                 anyDetailWeight = true;
             }
@@ -788,7 +790,7 @@ namespace Ogre
         setProperty( PbsProperty::NormalWeight, numNormalWeights );
 
         if( datablock->mTexturesDescSet )
-            setDetailMapProperties( datablock, inOutPieces );
+            setDetailMapProperties( datablock, inOutPieces, false );
         else
             setProperty( PbsProperty::FirstValidDetailMapNm, 4 );
 
@@ -1004,38 +1006,27 @@ namespace Ogre
             }
         }
 
-        if( hasAlphaTest )
+        if( hasAlphaTest && getProperty( PbsProperty::UseTextureAlpha ) )
         {
-            if (datablock->mSamplersDescSet)
-                setProperty(PbsProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size());
+            if( datablock->mTexturesDescSet )
+                setDetailMapProperties( datablock, inOutPieces, true );
 
-            //Keep GLSL happy by not declaring more textures than we'll actually need.
-            uint8 numTextures = 0;
+            if( datablock->mSamplersDescSet )
+                setProperty( PbsProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
+
             if( datablock->mTexturesDescSet )
             {
-                for( int i=0; i<4; ++i )
-                {
-                    uint8 idxToDescTex = datablock->getIndexToDescriptorTexture( PBSM_DETAIL0+i );
-                    if( idxToDescTex < datablock->mTexturesDescSet->mTextures.size() )
-                        numTextures = std::max<uint8>( numTextures, idxToDescTex + 1u );
-                }
+                const bool envMap = datablock->getTexture( PBSM_REFLECTION ) != 0;
+                setProperty( PbsProperty::NumTextures,
+                             datablock->mTexturesDescSet->mTextures.size() - envMap );
 
-                {
-                    uint8 idxToDescTex = datablock->getIndexToDescriptorTexture( PBSM_DIFFUSE );
-                    if( idxToDescTex < datablock->mTexturesDescSet->mTextures.size() )
-                        numTextures = std::max<uint8>( numTextures, idxToDescTex + 1u );
-                }
-            }
-            setProperty( PbsProperty::NumTextures, numTextures );
+                setTextureProperty( PbsProperty::DiffuseMap, datablock, PBSM_DIFFUSE );
+                setTextureProperty( PbsProperty::DetailWeightMap, datablock, PBSM_DETAIL_WEIGHT );
 
-            //Set the blending mode as a piece again
-            for( size_t i=0; i<4; ++i )
-            {
-                uint8 blendMode = datablock->mBlendModes[i];
-                if( datablock->getTexture( PBSM_DETAIL0 + i ) )
+                if( getProperty( PbsProperty::DiffuseMap ) )
                 {
-                    inOutPieces[PixelShader][*PbsProperty::BlendModes[i]] =
-                                                    "@insertpiece( " + c_pbsBlendModes[blendMode] + ")";
+                    if( datablock->getUseDiffuseMapAsGrayscale() )
+                        setProperty( PbsProperty::DiffuseMapGrayscale, 1 );
                 }
             }
         }
@@ -1308,21 +1299,11 @@ namespace Ogre
     bool HlmsPbs::requiredPropertyByAlphaTest( IdString keyName )
     {
         bool retVal =
-                keyName == PbsProperty::NumTextures ||
-                keyName == PbsProperty::DiffuseMap ||
-                keyName == PbsProperty::DetailWeightMap ||
-                keyName == PbsProperty::DetailMap0 || keyName == PbsProperty::DetailMap1 ||
-                keyName == PbsProperty::DetailMap2 || keyName == PbsProperty::DetailMap3 ||
-                keyName == PbsProperty::DetailWeights ||
-                keyName == PbsProperty::DetailOffsets0 || keyName == PbsProperty::DetailOffsets1 ||
-                keyName == PbsProperty::DetailOffsets2 || keyName == PbsProperty::DetailOffsets3 ||
                 keyName == PbsProperty::UvDetailWeight ||
                 keyName == PbsProperty::UvDetail0 || keyName == PbsProperty::UvDetail1 ||
                 keyName == PbsProperty::UvDetail2 || keyName == PbsProperty::UvDetail3 ||
-                keyName == PbsProperty::BlendModeIndex0 || keyName == PbsProperty::BlendModeIndex1 ||
-                keyName == PbsProperty::BlendModeIndex2 || keyName == PbsProperty::BlendModeIndex3 ||
-                keyName == PbsProperty::DetailMapsDiffuse ||
-                keyName == HlmsBaseProp::UvCount;
+                keyName == HlmsBaseProp::UvCount ||
+                keyName == PbsProperty::UseTextureAlpha;
 
         for( int i=0; i<8 && !retVal; ++i )
             retVal |= keyName == *HlmsBaseProp::UvCountPtrs[i];
