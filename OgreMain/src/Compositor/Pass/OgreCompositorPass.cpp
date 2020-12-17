@@ -534,6 +534,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPass::analyzeBarriers( void )
     {
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        renderSystem->flushPendingAutoResourceLayouts();
+
         mResourceTransitions.clear();
 
         if( mRenderPassDesc )
@@ -602,8 +605,6 @@ namespace Ogre
                 ++itDep;
             }
         }
-
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
 
         // Check <anything> -> UAV
         CompositorPassDef::UavDependencyVec::const_iterator itor = mDefinition->mUavDependencies.begin();

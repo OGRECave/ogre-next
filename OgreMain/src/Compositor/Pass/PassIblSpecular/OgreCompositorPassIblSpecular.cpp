@@ -404,6 +404,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPassIblSpecular::analyzeBarriers( void )
     {
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        renderSystem->flushPendingAutoResourceLayouts();
+
         mResourceTransitions.clear();
 
         // Do not use base class'

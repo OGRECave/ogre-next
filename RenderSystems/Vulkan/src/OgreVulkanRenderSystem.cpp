@@ -2431,6 +2431,11 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::flushPendingAutoResourceLayouts( void )
+    {
+        mActiveDevice->mGraphicsQueue.endCopyEncoder();
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::executeResourceTransition( const ResourceTransitionArray &rstCollection )
     {
         if( rstCollection.empty() )
