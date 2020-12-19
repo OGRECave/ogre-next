@@ -4,7 +4,7 @@ OGRE_BRANCH_NAME="master"
 
 mkdir Ogre
 cd Ogre
-if test ! -f ogre-next-deps; then
+if test ! -d ogre-next-deps; then
 	mkdir ogre-next-deps
 	echo "--- Cloning ogre-next-deps ---"
 	git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps || exit $?
@@ -20,13 +20,13 @@ ninja || exit $?
 ninja install || exit $?
 
 cd ../../
-if test ! -f ogre-next; then
+if test ! -d ogre-next; then
 	mkdir ogre-next
 	echo "--- Cloning Ogre master ---"
 	git clone --branch ${OGRE_BRANCH_NAME} https://github.com/OGRECave/ogre-next || exit $?
 fi
 cd ogre-next
-if test ! -f Dependencies; then
+if test ! -L Dependencies; then
 	ln -s ../ogre-next-deps/build/ogredeps Dependencies
 fi
 mkdir -p build/Debug
