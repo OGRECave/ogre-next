@@ -39,12 +39,14 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    uint8 Renderable::msDefaultRenderQueueSubGroup = 0;
+    //-----------------------------------------------------------------------------------
     Renderable::Renderable() :
         mHlmsHash( 0 ),
         mHlmsCasterHash( 0 ),
         mHlmsDatablock( 0 ),
         mCustomParameter( 0 ),
-        mRenderQueueSubGroup( 0 ),
+        mRenderQueueSubGroup( msDefaultRenderQueueSubGroup ),
         mHasSkeletonAnimation( false ),
         mCurrentMaterialLod( 0 ),
         mLodMaterial( &MovableObject::c_DefaultLodMesh ),

@@ -431,7 +431,15 @@ namespace Ogre {
         void setRenderQueueSubGroup( uint8 subGroup )   { mRenderQueueSubGroup = subGroup; }
         uint8 getRenderQueueSubGroup(void) const        { return mRenderQueueSubGroup; }
 
+        /** Sets the default render queue sub group for all future Renderable instances.
+        */
+        static void setDefaultRenderQueueSubGroup( uint8 subGroup ) { msDefaultRenderQueueSubGroup = subGroup; }
+        static uint8 getDefaultRenderQueueSubGroup() { return msDefaultRenderQueueSubGroup; }
+
     protected:
+        /// Default query flags
+        static uint8 msDefaultRenderQueueSubGroup;
+
         CustomParameterMap mCustomParameters;
         /// VAO to render the submesh. One per LOD level. Each LOD may or
         /// may not share the vertex and index buffers the other levels
