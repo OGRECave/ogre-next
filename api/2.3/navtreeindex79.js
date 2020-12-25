@@ -1,5 +1,11 @@
 var NAVTREEINDEX79 =
 {
+"class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,382,6],
+"class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html#aee39c84b8f58d51eae1308c3edd56d9f":[7,0,0,382,0],
+"class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,382,13],
+"class_ogre_1_1_g_l3_plus_null_texture.html":[7,0,0,383],
+"class_ogre_1_1_g_l3_plus_null_texture.html#a017b0d0590ce4afc079f2f1f85a686b8":[7,0,0,383,15],
+"class_ogre_1_1_g_l3_plus_null_texture.html#a01a6e571941916969316ab23c5ee4739":[7,0,0,383,44],
 "class_ogre_1_1_g_l3_plus_null_texture.html#a0389e214a82832a0c11d91babbc0d65f":[7,0,0,383,97],
 "class_ogre_1_1_g_l3_plus_null_texture.html#a04969ca1d25bf40e71e907f2cdb7443b":[7,0,0,383,99],
 "class_ogre_1_1_g_l3_plus_null_texture.html#a0617d9f04ca03bd25f4bde201e6ac13b":[7,0,0,383,46],
@@ -243,11 +249,5 @@ var NAVTREEINDEX79 =
 "class_ogre_1_1_g_l3_plus_r_t_t_manager.html#a7757bd7ac3702c144502e53ad6491888":[7,0,0,395,6],
 "class_ogre_1_1_g_l3_plus_r_t_t_manager.html#a7ab51c46521b89723d6186a52a7e0d7b":[7,0,0,395,7],
 "class_ogre_1_1_g_l3_plus_r_t_t_manager.html#abf996bd86fc3555913aeffe5d1d269c1":[7,0,0,395,4],
-"class_ogre_1_1_g_l3_plus_r_t_t_manager.html#ac5b1307f89fe6fcf665811340cb60491":[7,0,0,395,0],
-"class_ogre_1_1_g_l3_plus_r_t_t_manager.html#af73e88bda20a3d8702d04870381d2c89":[7,0,0,395,5],
-"class_ogre_1_1_g_l3_plus_read_only_buffer_emulated_packed.html":[7,0,0,389],
-"class_ogre_1_1_g_l3_plus_read_only_buffer_emulated_packed.html#a087111d602caab019259df5f5b8ff14f":[7,0,0,389,29],
-"class_ogre_1_1_g_l3_plus_read_only_buffer_emulated_packed.html#a0c6fb3d387685e50e2b5069164b95e6b":[7,0,0,389,43],
-"class_ogre_1_1_g_l3_plus_read_only_buffer_emulated_packed.html#a0f5e109265cfb362a21f47b6731a5c0b":[7,0,0,389,12],
-"class_ogre_1_1_g_l3_plus_read_only_buffer_emulated_packed.html#a155f9b4ef9bc20239691a869d4daa08d":[7,0,0,389,26]
+"class_ogre_1_1_g_l3_plus_r_t_t_manager.html#ac5b1307f89fe6fcf665811340cb60491":[7,0,0,395,0]
 };

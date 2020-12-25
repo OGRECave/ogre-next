@@ -1,5 +1,13 @@
 var NAVTREEINDEX107 =
 {
+"class_ogre_1_1_irradiance_field.html#a57e0523432c6e5133ff4fc251111a60e":[7,0,0,560,13],
+"class_ogre_1_1_irradiance_field.html#a6441c6f4648877c59d59147b2f22b57f":[7,0,0,560,17],
+"class_ogre_1_1_irradiance_field.html#a6ed7bdc966f72180111b87a7c3162df8":[7,0,0,560,8],
+"class_ogre_1_1_irradiance_field.html#a8bd7c938df6c80dd07dacb592a41313d":[7,0,0,560,18],
+"class_ogre_1_1_irradiance_field.html#a8f0e6e27854fea48c83bb374962b1efd":[7,0,0,560,16],
+"class_ogre_1_1_irradiance_field.html#a90b0c636f04aec3859dd3c5219234623":[7,0,0,560,12],
+"class_ogre_1_1_irradiance_field.html#a9f189cebd1f6a7153c8a9ab7755871f0":[7,0,0,560,15],
+"class_ogre_1_1_irradiance_field.html#ab152c8f646a835c2f88585ad4fe0413a":[7,0,0,560,10],
 "class_ogre_1_1_irradiance_field.html#ac6b23619abaf8b2d57c5bab948cfd6bf":[7,0,0,560,7],
 "class_ogre_1_1_irradiance_field.html#adb140c08b7488b9cb68e3c4238ff1bd6":[7,0,0,560,9],
 "class_ogre_1_1_irradiance_field.html#add8ca4aba0a670ed60eeb8d6964fa8fc":[7,0,0,560,2],
@@ -241,13 +249,5 @@ var NAVTREEINDEX107 =
 "class_ogre_1_1_item.html#ad23fd215ed54a72f90c2b1765dfa8cdb":[5,2,12,24,92],
 "class_ogre_1_1_item.html#ad42ba158cac70430c34f8a9eac94b237":[5,0,1,24,58],
 "class_ogre_1_1_item.html#ad42ba158cac70430c34f8a9eac94b237":[5,2,12,24,58],
-"class_ogre_1_1_item.html#ad563191e86e4d119c62ea9acfc2a90d5":[5,0,1,24,103],
-"class_ogre_1_1_item.html#ad563191e86e4d119c62ea9acfc2a90d5":[5,2,12,24,103],
-"class_ogre_1_1_item.html#ad66149b7a6f5ba1cd5c58fbd69f0446a":[5,0,1,24,43],
-"class_ogre_1_1_item.html#ad66149b7a6f5ba1cd5c58fbd69f0446a":[5,2,12,24,43],
-"class_ogre_1_1_item.html#ad6677d2fa74eaea989151816455bfd7b":[5,0,1,24,10],
-"class_ogre_1_1_item.html#ad6677d2fa74eaea989151816455bfd7b":[5,2,12,24,10],
-"class_ogre_1_1_item.html#ad8db1f22329b2a96f2aed7260d565944":[5,0,1,24,88],
-"class_ogre_1_1_item.html#ad8db1f22329b2a96f2aed7260d565944":[5,2,12,24,88],
-"class_ogre_1_1_item.html#adac4d1d174d15f5953b2e4b29d977529":[5,0,1,24,6]
+"class_ogre_1_1_item.html#ad563191e86e4d119c62ea9acfc2a90d5":[5,0,1,24,103]
 };

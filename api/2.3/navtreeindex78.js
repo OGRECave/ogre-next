@@ -1,5 +1,11 @@
 var NAVTREEINDEX78 =
 {
+"class_ogre_1_1_g_l3_plus_dynamic_buffer.html#a8e90c9c59a4a1dec0a8a65832ffcb891":[7,0,0,373,1],
+"class_ogre_1_1_g_l3_plus_dynamic_buffer.html#a8e90c9c59a4a1dec0a8a65832ffcb891":[7,0,0,373,3],
+"class_ogre_1_1_g_l3_plus_dynamic_buffer.html#aad901c35e1999eb8c67f71df184c978c":[7,0,0,373,8],
+"class_ogre_1_1_g_l3_plus_dynamic_buffer.html#aad901c35e1999eb8c67f71df184c978c":[7,0,0,373,9],
+"class_ogre_1_1_g_l3_plus_dynamic_buffer.html#ae62c14eef42ea7b436ddef77c8c2861a":[7,0,0,373,10],
+"class_ogre_1_1_g_l3_plus_dynamic_buffer.html#ae62c14eef42ea7b436ddef77c8c2861a":[7,0,0,373,11],
 "class_ogre_1_1_g_l3_plus_f_b_o_manager.html":[7,0,0,374],
 "class_ogre_1_1_g_l3_plus_f_b_o_manager.html#a037457d00ce8a4924273323218863807":[7,0,0,374,12],
 "class_ogre_1_1_g_l3_plus_f_b_o_manager.html#a0918cefe8a33db9d2d22216e490bd30a":[7,0,0,374,10],
@@ -243,11 +249,5 @@ var NAVTREEINDEX78 =
 "class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html#a8dca320b959449700c90d6e80f98068f":[7,0,0,382,3],
 "class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,382,8],
 "class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,382,12],
-"class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,382,10],
-"class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,382,6],
-"class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html#aee39c84b8f58d51eae1308c3edd56d9f":[7,0,0,382,0],
-"class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,382,13],
-"class_ogre_1_1_g_l3_plus_null_texture.html":[7,0,0,383],
-"class_ogre_1_1_g_l3_plus_null_texture.html#a017b0d0590ce4afc079f2f1f85a686b8":[7,0,0,383,15],
-"class_ogre_1_1_g_l3_plus_null_texture.html#a01a6e571941916969316ab23c5ee4739":[7,0,0,383,44]
+"class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,382,10]
 };

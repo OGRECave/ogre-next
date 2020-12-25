@@ -563,6 +563,11 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a1bea65fa2b3c2ac5a9f3be59b46a80e8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_string_interface.html#a1bea65fa2b3c2ac5a9f3be59b46a80e8">cleanupDictionary</a> ()</td></tr>
 <tr class="memdesc:a1bea65fa2b3c2ac5a9f3be59b46a80e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up the static 'msDictionary' required to reset <a class="el" href="namespace_ogre.html">Ogre</a>, otherwise the containers are left with invalid pointers, which will lead to a crash as soon as one of the <a class="el" href="class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler.">ResourceManager</a> implementers (e.g.  <a href="class_ogre_1_1_string_interface.html#a1bea65fa2b3c2ac5a9f3be59b46a80e8">More...</a><br /></td></tr>
 <tr class="separator:a1bea65fa2b3c2ac5a9f3be59b46a80e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6496cb6bcaffcbb03e25e56f4b88bf7f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#a6496cb6bcaffcbb03e25e56f4b88bf7f">getDefaultRenderQueueSubGroup</a> ()</td></tr>
+<tr class="separator:a6496cb6bcaffcbb03e25e56f4b88bf7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57566d0e53bb1fff6506e97d222bcd1c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#a57566d0e53bb1fff6506e97d222bcd1c">setDefaultRenderQueueSubGroup</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> subGroup)</td></tr>
+<tr class="memdesc:a57566d0e53bb1fff6506e97d222bcd1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the default render queue sub group for all future <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> instances.  <a href="class_ogre_1_1_renderable.html#a57566d0e53bb1fff6506e97d222bcd1c">More...</a><br /></td></tr>
+<tr class="separator:a57566d0e53bb1fff6506e97d222bcd1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -2303,6 +2308,31 @@ Public Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6496cb6bcaffcbb03e25e56f4b88bf7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6496cb6bcaffcbb03e25e56f4b88bf7f">&#9670;&nbsp;</a></span>getDefaultRenderQueueSubGroup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> Ogre::Renderable::getDefaultRenderQueueSubGroup </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4608,6 +4638,34 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>First tries to see if an HLMS datablock exist with the given name, if not, tries to search among low level materials. </p>
+
+</div>
+</div>
+<a id="a57566d0e53bb1fff6506e97d222bcd1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57566d0e53bb1fff6506e97d222bcd1c">&#9670;&nbsp;</a></span>setDefaultRenderQueueSubGroup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Ogre::Renderable::setDefaultRenderQueueSubGroup </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramname"><em>subGroup</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the default render queue sub group for all future <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> instances. </p>
 
 </div>
 </div>

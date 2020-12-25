@@ -1,5 +1,9 @@
 var NAVTREEINDEX69 =
 {
+"class_ogre_1_1_deflector_plane_affector_factory.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,298,10],
+"class_ogre_1_1_deflector_plane_affector_factory.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,298,5],
+"class_ogre_1_1_deflector_plane_affector_factory.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,298,1],
+"class_ogre_1_1_deflector_plane_affector_factory.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,298,4],
 "class_ogre_1_1_deflector_plane_affector_factory.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,298,8],
 "class_ogre_1_1_deflector_plane_affector_factory.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,298,6],
 "class_ogre_1_1_deflector_plane_affector_factory.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,298,2],
@@ -59,8 +63,8 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[5,2,10,1,0,9],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[5,2,10,1,1,4],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[5,2,10,1,1,9],
-"class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[5,2,10,1,0,7],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[5,2,10,1,0,2],
+"class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[5,2,10,1,0,7],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[5,2,10,1,1,2],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[5,2,10,1,1,7],
 "class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7eac3e2a2eeb9d97edbf973e52499d190ec":[5,2,10,1,0,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_dual_quaternion.html#a845da9e63d380d8b71ea6f740b7fd4a1":[5,2,6,12,1],
 "class_ogre_1_1_dual_quaternion.html#aa7459724aaeaf956e29b08dad3986c39":[5,2,6,12,18],
 "class_ogre_1_1_dual_quaternion.html#aac4241fa632d45ee6ae2d155914ddff7":[5,2,6,12,12],
-"class_ogre_1_1_dual_quaternion.html#ab208a261f08d2fc8e95025f294a305c1":[5,2,6,12,16],
-"class_ogre_1_1_dual_quaternion.html#ac727ad9f844ae70d98b0569f00c93c2a":[5,2,6,12,17],
-"class_ogre_1_1_dual_quaternion.html#aca62cb2fb2eeab0637b35bc920a7cae4":[5,2,6,12,26],
-"class_ogre_1_1_dual_quaternion.html#acfec8064c128940237fe204e7b0e9f99":[5,2,6,12,22],
-"class_ogre_1_1_dual_quaternion.html#ad753b864d41eab164118718b27a46425":[5,2,6,12,5]
+"class_ogre_1_1_dual_quaternion.html#ab208a261f08d2fc8e95025f294a305c1":[5,2,6,12,16]
 };
