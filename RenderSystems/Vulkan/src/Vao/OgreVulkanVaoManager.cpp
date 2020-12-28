@@ -561,6 +561,9 @@ namespace Ogre
             ( memProperties.memoryTypes[mBestVkMemoryTypeIndex[CPU_READ_WRITE].back()].propertyFlags &
               VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) != 0;
 
+        if( mDevice->mDeviceProperties.limits.bufferImageGranularity != 1u )
+            mBestVkMemoryTypeIndex[TEXTURES_OPTIMAL] = mBestVkMemoryTypeIndex[CPU_INACCESSIBLE];
+
         logManager.logMessage( "VkDevice will use coherent memory for reading: " +
                                StringConverter::toString( mReadMemoryIsCoherent ) );
 
