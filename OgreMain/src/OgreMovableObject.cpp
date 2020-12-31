@@ -447,9 +447,7 @@ namespace Ogre {
             ArrayReal       planeNegD;
         };
 
-        ArrayVector3 cameraPos, cameraDir, lodCameraPos;
-        cameraPos.setAll( frustum->_getCachedDerivedPosition() );
-        cameraDir.setAll( -frustum->_getCachedDerivedOrientation().zAxis() );
+        ArrayVector3 lodCameraPos;
         lodCameraPos.setAll( lodCamera->_getCachedDerivedPosition() );
 
         // Flip the bit from shadow caster, and leave only that in "includeNonCasters"
@@ -545,10 +543,7 @@ namespace Ogre {
                                 Mathlib::TestFlags4( Mathlib::Or( *visibilityFlags, includeNonCasters ),
                                                         Mathlib::SetAll( LAYER_SHADOW_CASTER ) ) );
 
-            //Project the vector to the object into the camera's plane. This allows
-            //us to use depth for sorting, rather than euclidean distance
-            *distanceToCamera = cameraDir.dotProduct( objData.mWorldAabb->mCenter -
-                                                      cameraPos ) - *worldRadius;
+            *distanceToCamera = frustum->getDistanceToCamera( objData );
 
             //Fuse result with visibility flag
             // finalMask = ((visible|infinite_aabb) & sceneFlags & visibilityFlags) != 0 ? 0xffffffff : 0

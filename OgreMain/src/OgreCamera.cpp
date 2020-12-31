@@ -70,6 +70,8 @@ namespace Ogre {
         mProjType = PT_PERSPECTIVE;
         setFixedYawAxis(true);    // Default to fixed yaw, like freelook since most people expect this
 
+        setSortMode( SM_DISTANCE, false );
+
         invalidateFrustum();
         invalidateView();
 
@@ -1139,6 +1141,52 @@ namespace Ogre {
         assert( rqStart <= rqEnd );
         for( size_t i=rqStart; i<rqEnd; ++i )
             mRenderedRqs[i] = true;
+    }
+    //-----------------------------------------------------------------------
+    void Camera::setSortMode( SortMode mode, bool considerRadius )
+    {
+        mSortMode = mode;
+
+        switch( mSortMode )
+        {
+        case SM_DISTANCE:
+            mSortFunc = considerRadius ? sortby_distanceConsideringRadius : sortby_distance;
+            break;
+        case SM_DIRECTION:
+            mSortFunc = considerRadius ? sortby_projectedZConsideringRadius : sortby_projectedZ;
+            break;
+        }
+    }
+    //-----------------------------------------------------------------------
+    ArrayReal Camera::sortby_distance( const Camera *camera, ObjectData objData )
+    {
+        ArrayVector3 cameraPos;
+        cameraPos.setAll( camera->_getCachedDerivedPosition() );
+
+        return cameraPos.distance( objData.mWorldAabb->mCenter - cameraPos );
+    }
+    //-----------------------------------------------------------------------
+    ArrayReal Camera::sortby_distanceConsideringRadius( const Camera *camera, ObjectData objData )
+    {
+        return sortby_distance( camera, objData ) -
+               *reinterpret_cast<ArrayReal * RESTRICT_ALIAS>( objData.mWorldRadius );
+    }
+    //-----------------------------------------------------------------------
+    ArrayReal Camera::sortby_projectedZ( const Camera *camera, ObjectData objData )
+    {
+        ArrayVector3 cameraPos, cameraDir;
+        cameraPos.setAll( camera->_getCachedDerivedPosition() );
+        cameraDir.setAll( -camera->_getCachedDerivedOrientation().zAxis() );
+
+        //Project the vector to the object into the camera's plane. This allows
+        //us to use depth for sorting, rather than euclidean distance
+        return cameraDir.dotProduct( objData.mWorldAabb->mCenter - cameraPos );
+    }
+    //-----------------------------------------------------------------------
+    ArrayReal Camera::sortby_projectedZConsideringRadius( const Camera *camera, ObjectData objData )
+    {
+        return sortby_projectedZ( camera, objData ) -
+               *reinterpret_cast<ArrayReal * RESTRICT_ALIAS>( objData.mWorldRadius );
     }
     //-----------------------------------------------------------------------
     Camera::Listener::~Listener() {}

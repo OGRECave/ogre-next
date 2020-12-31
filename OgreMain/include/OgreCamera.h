@@ -123,6 +123,13 @@ namespace Ogre {
 
         };
     protected:
+        typedef ArrayReal SortFunc( const Camera *camera, ObjectData objData );
+
+        static SortFunc sortby_distance;
+        static SortFunc sortby_distanceConsideringRadius;
+        static SortFunc sortby_projectedZ;
+        static SortFunc sortby_projectedZConsideringRadius;
+
         /// Scene manager responsible for the scene
         SceneManager *mSceneMgr;
 
@@ -205,6 +212,8 @@ namespace Ogre {
         typedef vector<Listener*>::type ListenerList;
         ListenerList mListeners;
 
+        SortMode mSortMode;
+        SortFunc *mSortFunc;
 
         // Internal functions for calcs
         bool isViewOutOfDate(void) const;
@@ -752,6 +761,13 @@ namespace Ogre {
         /// Returns true if the asked render queue has been rendered. False otherwise
         bool isRenderedRq( size_t rqId ) const          { return mRenderedRqs[rqId]; }
         
+        void setSortMode( SortMode mode, bool considerRadius );
+
+        SortMode getSortMode( void ) const         { return mSortMode; }
+        bool isSortConsideringRadius( void ) const { return mSortFunc == sortby_distanceConsideringRadius ||
+                                                            mSortFunc == sortby_projectedZConsideringRadius; }
+
+        ArrayReal getDistanceToCamera( ObjectData objData ) const { return mSortFunc( this, objData ); }
     };
     /** @} */
     /** @} */
