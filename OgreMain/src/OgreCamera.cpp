@@ -1163,7 +1163,7 @@ namespace Ogre {
         ArrayVector3 cameraPos;
         cameraPos.setAll( camera->_getCachedDerivedPosition() );
 
-        return cameraPos.distance( objData.mWorldAabb->mCenter - cameraPos );
+        return cameraPos.distance( objData.mWorldAabb->mCenter );
     }
     //-----------------------------------------------------------------------
     ArrayReal Camera::sortby_distanceConsideringRadius( const Camera *camera, ObjectData objData )
