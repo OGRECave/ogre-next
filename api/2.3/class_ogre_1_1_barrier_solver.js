@@ -23,5 +23,6 @@ var class_ogre_1_1_barrier_solver =
     [ "resetCopyLayoutsOnly", "class_ogre_1_1_barrier_solver.html#aba81707c8c66fb36015413a52a6c51e7", null ],
     [ "resolveTransition", "class_ogre_1_1_barrier_solver.html#a12439e6b49952e70b70ebdadf346126a", null ],
     [ "resolveTransition", "class_ogre_1_1_barrier_solver.html#a9584ab4268539ec0837eb79b5e7e0c4e", null ],
-    [ "shouldStayLoaded", "class_ogre_1_1_barrier_solver.html#a18fe2becf5150b6305efe2ead04c5a2b", null ]
+    [ "shouldStayLoaded", "class_ogre_1_1_barrier_solver.html#a18fe2becf5150b6305efe2ead04c5a2b", null ],
+    [ "textureDeleted", "class_ogre_1_1_barrier_solver.html#af3c9f5430769936dcd19b56d54e41d9d", null ]
 ];

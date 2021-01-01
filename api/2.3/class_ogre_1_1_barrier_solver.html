@@ -152,6 +152,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9584ab4268539ec0837eb79b5e7e0c4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18fe2becf5150b6305efe2ead04c5a2b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_barrier_solver.html#a18fe2becf5150b6305efe2ead04c5a2b">shouldStayLoaded</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
 <tr class="separator:a18fe2becf5150b6305efe2ead04c5a2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3c9f5430769936dcd19b56d54e41d9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_barrier_solver.html#af3c9f5430769936dcd19b56d54e41d9d">textureDeleted</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
+<tr class="memdesc:af3c9f5430769936dcd19b56d54e41d9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to our notifyTextureChanged overload, to delete what is in mResourceStatus.  <a href="class_ogre_1_1_barrier_solver.html#af3c9f5430769936dcd19b56d54e41d9d">More...</a><br /></td></tr>
+<tr class="separator:af3c9f5430769936dcd19b56d54e41d9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="afe11bd546cf7315f4526488e7078cc7d"></a>
@@ -536,6 +539,31 @@ Public Member Functions</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#a1427f0b635a4186cd6083a9bab879fa2" title="Return true if this TextureGpu should likely stay loaded or else graphical changes could occur.">TextureGpuListener::shouldStayLoaded</a> </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#a1427f0b635a4186cd6083a9bab879fa2">Ogre::TextureGpuListener</a>.</p>
+
+</div>
+</div>
+<a id="af3c9f5430769936dcd19b56d54e41d9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3c9f5430769936dcd19b56d54e41d9d">&#9670;&nbsp;</a></span>textureDeleted()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::BarrierSolver::textureDeleted </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
+          <td class="paramname"><em>texture</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Similar to our notifyTextureChanged overload, to delete what is in mResourceStatus. </p>
+<p>However:</p>
+<ul>
+<li>mCopyStateTextures needs a O(N) search. It is rare for us to put textures there so we use texture-&gt;addListener() and notifyTextureChanged to get notified when a texture living in mCopyStateTextures needs to be searched and removed</li>
+<li>mResourceStatus is an std::map, and many textures can end up there so it could be rather inefficient to call addListener / removeListener frequently Just searching in mResourceStatus should be quite fast. Thus <a class="el" href="class_ogre_1_1_texture_gpu_manager.html" title="This class manages all textures (i.e.">TextureGpuManager</a> will call this function for all textures </li>
+</ul>
 
 </div>
 </div>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX69 =
 {
+"class_ogre_1_1_deflector_plane_affector_factory.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,298,7],
 "class_ogre_1_1_deflector_plane_affector_factory.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,298,10],
 "class_ogre_1_1_deflector_plane_affector_factory.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,298,5],
 "class_ogre_1_1_deflector_plane_affector_factory.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,298,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_dual_quaternion.html#a829e80b909334ea343c106c5fcc29fd5":[5,2,6,12,7],
 "class_ogre_1_1_dual_quaternion.html#a845da9e63d380d8b71ea6f740b7fd4a1":[5,2,6,12,1],
 "class_ogre_1_1_dual_quaternion.html#aa7459724aaeaf956e29b08dad3986c39":[5,2,6,12,18],
-"class_ogre_1_1_dual_quaternion.html#aac4241fa632d45ee6ae2d155914ddff7":[5,2,6,12,12],
-"class_ogre_1_1_dual_quaternion.html#ab208a261f08d2fc8e95025f294a305c1":[5,2,6,12,16]
+"class_ogre_1_1_dual_quaternion.html#aac4241fa632d45ee6ae2d155914ddff7":[5,2,6,12,12]
 };

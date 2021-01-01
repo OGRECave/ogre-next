@@ -1,5 +1,6 @@
 var NAVTREEINDEX154 =
 {
+"class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bcaad112821a6c39f0097136ba5df53052a":[5,2,6,19,0,0],
 "class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bcaaf227c36d02442779fd4600d00580f5e":[5,2,6,19,0,2],
 "class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bcac5f2b56ac439b77aad6dfc4031891be5":[5,2,6,19,0,1],
 "class_ogre_1_1_plane.html#abd98e0aae4723943f83262e59cfda535":[5,2,6,19,5],
@@ -36,8 +37,8 @@ var NAVTREEINDEX154 =
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a20e200f7a33292e6644a44bf882ae8f6":[5,0,1,33,4],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a2813004b8f2a75bcc3a1116a357941ad":[5,2,12,33,8],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a2813004b8f2a75bcc3a1116a357941ad":[5,0,1,33,8],
-"class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a37f0a7cdf7bdb53bfa98c9e3c8541c41":[5,2,12,33,2],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a37f0a7cdf7bdb53bfa98c9e3c8541c41":[5,0,1,33,2],
+"class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a37f0a7cdf7bdb53bfa98c9e3c8541c41":[5,2,12,33,2],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a3eadff3663a1c862a6de073041157bc0":[5,2,12,33,27],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a3eadff3663a1c862a6de073041157bc0":[5,0,1,33,27],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a40f55e11da42a7228929bc4cc049e041":[5,2,12,33,6],
@@ -56,8 +57,8 @@ var NAVTREEINDEX154 =
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,0,1,33,11],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,12,33,14],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,0,1,33,14],
-"class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a982dda57528c3a3ccaa4d577335ed87c":[5,0,1,33,5],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a982dda57528c3a3ccaa4d577335ed87c":[5,2,12,33,5],
+"class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a982dda57528c3a3ccaa4d577335ed87c":[5,0,1,33,5],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#ab78a921e54419be677839cdf15d1f0b8":[5,0,1,33,18],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,12,33,18],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,12,33,16],
@@ -100,12 +101,12 @@ var NAVTREEINDEX154 =
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a5fca5ac3db0ec963d468a050a597e81b":[5,0,1,34,2],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a64ec2cc49a15be1446603390cf2d5536":[5,2,12,34,15],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a64ec2cc49a15be1446603390cf2d5536":[5,0,1,34,15],
-"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,12,34,5],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,0,1,34,5],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,12,34,5],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a84aeb5d693cf9235080fc84031ec881f":[5,2,12,34,0],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a84aeb5d693cf9235080fc84031ec881f":[5,0,1,34,0],
-"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,12,34,8],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,0,1,34,8],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,12,34,8],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,12,34,12],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ab78a921e54419be677839cdf15d1f0b8":[5,0,1,34,12],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,0,1,34,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX154 =
 "class_ogre_1_1_point_emitter_factory.html":[7,0,0,847],
 "class_ogre_1_1_point_emitter_factory.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,847,5],
 "class_ogre_1_1_point_emitter_factory.html#a277279ebb247a8970e00620e10e3ceea":[7,0,0,847,2],
-"class_ogre_1_1_point_emitter_factory.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,847,9],
-"class_ogre_1_1_point_emitter_factory.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,847,12]
+"class_ogre_1_1_point_emitter_factory.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,847,9]
 };
