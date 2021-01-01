@@ -310,6 +310,14 @@ namespace Ogre
         mResourceStatus.insert( resourceStatus.begin(), resourceStatus.end() );
     }
     //-------------------------------------------------------------------------
+    void BarrierSolver::textureDeleted( TextureGpu *texture )
+    {
+        ResourceStatusMap::iterator itor = mResourceStatus.find( texture );
+
+        if( itor != mResourceStatus.end() )
+            mResourceStatus.erase( itor );
+    }
+    //-------------------------------------------------------------------------
     void BarrierSolver::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                               void *extraData )
     {

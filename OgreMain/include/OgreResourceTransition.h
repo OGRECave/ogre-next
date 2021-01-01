@@ -195,6 +195,19 @@ namespace Ogre
         /// Tell the solver all these resources have been transitioned to a different layout, externally
         void assumeTransitions( ResourceStatusMap &resourceStatus );
 
+        /** Similar to our notifyTextureChanged overload, to delete what is in mResourceStatus.
+            However:
+
+            - mCopyStateTextures needs a O(N) search. It is rare for us to put textures there
+              so we use texture->addListener() and notifyTextureChanged to get notified
+              when a texture living in mCopyStateTextures needs to be searched and removed
+            - mResourceStatus is an std::map, and many textures can end up there
+              so it could be rather inefficient to call addListener / removeListener frequently
+              Just searching in mResourceStatus should be quite fast. Thus TextureGpuManager will call
+              this function for all textures
+        */
+        void textureDeleted( TextureGpu *texture );
+
         /// @see TextureGpuListener::notifyTextureChanged
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                            void *extraData );

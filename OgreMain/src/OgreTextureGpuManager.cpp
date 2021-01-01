@@ -511,6 +511,9 @@ namespace Ogre
 
         texture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
 
+        BarrierSolver &barrierSolver = mRenderSystem->getBarrierSolver();
+        barrierSolver.textureDeleted( texture );
+
         delete texture;
         mEntriesMutex.lock();
         mEntries.erase( itor );
