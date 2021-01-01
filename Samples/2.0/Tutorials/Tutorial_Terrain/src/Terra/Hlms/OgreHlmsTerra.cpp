@@ -423,9 +423,13 @@ namespace Ogre
                                                  ResourceLayout::Texture, ResourceAccess::Read,
                                                  1u << VertexShader );
             }
-            barrierSolver.resolveTransition( resourceTransitions, terraObj->getNormalMapTex(),
-                                             ResourceLayout::Texture, ResourceAccess::Read,
-                                             1u << PixelShader );
+            if( terraObj->getNormalMapTex()->isRenderToTexture() ||
+                terraObj->getNormalMapTex()->isUav() )
+            {
+                barrierSolver.resolveTransition( resourceTransitions, terraObj->getNormalMapTex(),
+                                                 ResourceLayout::Texture, ResourceAccess::Read,
+                                                 1u << PixelShader );
+            }
             // Shadow map texture is used in the vertex shader in regular objects.
             // Terra uses it in pixel shader.
             barrierSolver.resolveTransition( resourceTransitions, terraObj->_getShadowMapTex(),

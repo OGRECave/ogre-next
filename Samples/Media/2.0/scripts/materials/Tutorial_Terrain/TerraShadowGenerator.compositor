@@ -1,8 +1,9 @@
 compositor_node Terra/ShadowGenerator
 {
 	in 0 terrain_shadows
+	in 1 tmpGaussianFilter
 	
-	texture tmpGaussianFilter target_width target_height target_format depth_pool 0 uav
+	// texture tmpGaussianFilter target_width target_height target_format depth_pool 0 uav
 
 	target terrain_shadows
 	{
@@ -30,14 +31,16 @@ compositor_node Terra/ShadowGenerator
 
 workspace Terra/ShadowGeneratorWorkspace
 {
-	connect_output Terra/ShadowGenerator 0
+	connect_external 0 Terra/ShadowGenerator 0
+	connect_external 1 Terra/ShadowGenerator 1
 }
 
 compositor_node Terra/ShadowGeneratorU16
 {
 	in 0 terrain_shadows
+	in 1 tmpGaussianFilter
 
-	texture tmpGaussianFilter target_width target_height target_format depth_pool 0 uav
+	// texture tmpGaussianFilter target_width target_height target_format depth_pool 0 uav
 
 	target terrain_shadows
 	{
@@ -65,5 +68,6 @@ compositor_node Terra/ShadowGeneratorU16
 
 workspace Terra/ShadowGeneratorWorkspaceU16
 {
-	connect_output Terra/ShadowGeneratorU16 0
+	connect_external 0 Terra/ShadowGeneratorU16 0
+	connect_external 1 Terra/ShadowGeneratorU16 1
 }

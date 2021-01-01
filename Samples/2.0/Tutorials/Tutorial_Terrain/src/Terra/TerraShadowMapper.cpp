@@ -1,6 +1,8 @@
 
 #include "Terra/TerraShadowMapper.h"
 
+#include "Terra/Terra.h"
+
 #include "OgreTextureGpuManager.h"
 
 #include "OgreSceneManager.h"
@@ -24,11 +26,15 @@ namespace Ogre
         m_shadowPerGroupData( 0 ),
         m_shadowWorkspace( 0 ),
         m_shadowMapTex( 0 ),
+        m_tmpGaussianFilterTex( 0 ),
         m_shadowJob( 0 ),
         m_jobParamDelta( 0 ),
         m_jobParamXYStep( 0 ),
         m_jobParamIsStep( 0 ),
         m_jobParamHeightDelta( 0 ),
+        m_terraId( std::numeric_limits<IdType>::max() ),
+        m_minimizeMemoryConsumption( false ),
+        m_sharedResources( 0 ),
         m_sceneManager( sceneManager ),
         m_compositorManager( compositorManager )
     {
@@ -39,10 +45,45 @@ namespace Ogre
         destroyShadowMap();
     }
     //-----------------------------------------------------------------------------------
+    void ShadowMapper::createCompositorWorkspace()
+    {
+        OGRE_ASSERT_LOW( !m_shadowWorkspace );
+        OGRE_ASSERT_LOW( !m_tmpGaussianFilterTex );
+
+        m_tmpGaussianFilterTex = TerraSharedResources::getTempTexture(
+            "Terra tmpGaussianFilter", m_terraId, m_sharedResources, TerraSharedResources::TmpShadows,
+            m_shadowMapTex, TextureFlags::Uav );
+
+        const bool bUseU16 = m_heightMapTex->getPixelFormat() == PFG_R16_UINT;
+
+        CompositorChannelVec finalTarget( 2, CompositorChannel() );
+        finalTarget[0] = m_shadowMapTex;
+        finalTarget[1] = m_tmpGaussianFilterTex;
+        m_shadowWorkspace = m_compositorManager->addWorkspace(
+            m_sceneManager, finalTarget, 0,
+            bUseU16 ? "Terra/ShadowGeneratorWorkspaceU16" : "Terra/ShadowGeneratorWorkspace", false );
+    }
+    //-----------------------------------------------------------------------------------
+    void ShadowMapper::destroyCompositorWorkspace()
+    {
+        if( m_shadowWorkspace )
+        {
+            m_compositorManager->removeWorkspace( m_shadowWorkspace );
+            m_shadowWorkspace = 0;
+        }
+
+        if( m_tmpGaussianFilterTex )
+        {
+            TerraSharedResources::destroyTempTexture( m_sharedResources, m_tmpGaussianFilterTex );
+            m_tmpGaussianFilterTex = 0;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void ShadowMapper::createShadowMap( IdType id, TextureGpu *heightMapTex )
     {
         destroyShadowMap();
 
+        m_terraId = id;
         m_heightMapTex = heightMapTex;
 
         VaoManager *vaoManager = m_sceneManager->getDestinationRenderSystem()->getVaoManager();
@@ -101,11 +142,8 @@ namespace Ogre
         }
         m_shadowMapTex->scheduleTransitionTo( GpuResidency::Resident );
 
-        CompositorChannelVec finalTarget( 1, CompositorChannel() );
-        finalTarget[0] = m_shadowMapTex;
-        m_shadowWorkspace = m_compositorManager->addWorkspace(
-            m_sceneManager, finalTarget, 0,
-            bUseU16 ? "Terra/ShadowGeneratorWorkspaceU16" : "Terra/ShadowGeneratorWorkspace", false );
+        if( !m_minimizeMemoryConsumption )
+            createCompositorWorkspace();
 
         ShaderParams &shaderParams = m_shadowJob->getShaderParams( "default" );
         m_jobParamDelta = shaderParams.findParameter( "delta" );
@@ -138,11 +176,7 @@ namespace Ogre
             m_shadowPerGroupData = 0;
         }
 
-        if( m_shadowWorkspace )
-        {
-            m_compositorManager->removeWorkspace( m_shadowWorkspace );
-            m_shadowWorkspace = 0;
-        }
+        destroyCompositorWorkspace();
 
         if( m_shadowMapTex )
         {
@@ -180,6 +214,9 @@ namespace Ogre
     void ShadowMapper::updateShadowMap( const Vector3 &lightDir, const Vector2 &xzDimensions,
                                         float heightScale )
     {
+        if( m_minimizeMemoryConsumption )
+            createCompositorWorkspace();
+
         struct PerGroupData
         {
             int32 iterations;
@@ -363,6 +400,9 @@ namespace Ogre
         shaderParams.setDirty();
 
         m_shadowWorkspace->_update();
+
+        if( m_minimizeMemoryConsumption )
+            destroyCompositorWorkspace();
     }
     //-----------------------------------------------------------------------------------
     void ShadowMapper::fillUavDataForCompositorChannel( TextureGpu **outChannel ) const
@@ -380,6 +420,31 @@ namespace Ogre
         setGaussianFilterParams( job, kernelRadius, gaussianDeviationFactor );
         job = hlmsCompute->findComputeJob( "Terra/GaussianBlurV" );
         setGaussianFilterParams( job, kernelRadius, gaussianDeviationFactor );
+    }
+    //-----------------------------------------------------------------------------------
+    void ShadowMapper::_setSharedResources( TerraSharedResources *sharedResources )
+    {
+        const bool bRecreateWorkspace = m_shadowWorkspace != 0;
+        destroyCompositorWorkspace();
+
+        m_sharedResources = sharedResources;
+
+        if( bRecreateWorkspace )
+            createCompositorWorkspace();
+    }
+    //-----------------------------------------------------------------------------------
+    void ShadowMapper::setMinimizeMemoryConsumption( bool bMinimizeMemoryConsumption )
+    {
+        if( bMinimizeMemoryConsumption != m_minimizeMemoryConsumption )
+        {
+            if( !bMinimizeMemoryConsumption && m_heightMapTex )
+                createCompositorWorkspace();
+
+            m_minimizeMemoryConsumption = bMinimizeMemoryConsumption;
+
+            if( bMinimizeMemoryConsumption )
+                destroyCompositorWorkspace();
+        }
     }
     //-----------------------------------------------------------------------------------
     void ShadowMapper::setGaussianFilterParams( HlmsComputeJob *job, uint8 kernelRadius,
