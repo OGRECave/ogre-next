@@ -424,6 +424,31 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
+    inline ArrayReal MovableObject::calculateCameraDistance( uint32 _cameraSortMode,
+                                                             ArrayVector3 cameraPos,
+                                                             ArrayVector3 cameraDir,
+                                                             ArrayAabb *RESTRICT_ALIAS worldAabb,
+                                                             ArrayReal *RESTRICT_ALIAS worldRadius )
+    {
+        const Camera::CameraSortMode sortMode = static_cast<Camera::CameraSortMode>( _cameraSortMode );
+        switch( sortMode )
+        {
+        case Camera::SortModeDistance:
+            return cameraPos.distance( worldAabb->mCenter ) - *worldRadius;
+        case Camera::SortModeDepth:
+            // Project the vector to the object into the camera's plane. This allows
+            // us to use depth for sorting, rather than euclidean distance
+            return cameraDir.dotProduct( worldAabb->mCenter - cameraPos ) - *worldRadius;
+        case Camera::SortModeDistanceRadiusIgnoring:
+            return cameraPos.distance( worldAabb->mCenter );
+        case Camera::SortModeDepthRadiusIgnoring:
+            return cameraDir.dotProduct( worldAabb->mCenter - cameraPos );
+        }
+
+        // We should never reach here. Use a fallback just in case
+        return cameraDir.dotProduct( worldAabb->mCenter - cameraPos ) - *worldRadius;
+    }
+    //-----------------------------------------------------------------------
     void MovableObject::cullFrustum( const size_t numNodes, ObjectData objData, const Camera *frustum,
                                      uint32 sceneVisibilityFlags, MovableObjectArray &outCulledObjects,
                                      const Camera *lodCamera )
@@ -451,6 +476,8 @@ namespace Ogre {
         cameraPos.setAll( frustum->_getCachedDerivedPosition() );
         cameraDir.setAll( -frustum->_getCachedDerivedOrientation().zAxis() );
         lodCameraPos.setAll( lodCamera->_getCachedDerivedPosition() );
+
+        const Camera::CameraSortMode cameraSortMode = frustum->mSortMode;
 
         // Flip the bit from shadow caster, and leave only that in "includeNonCasters"
         Ogre::uint32 includeNonCastersTest = (((sceneVisibilityFlags & LAYER_SHADOW_CASTER) ^ -1) & LAYER_SHADOW_CASTER);
@@ -545,10 +572,8 @@ namespace Ogre {
                                 Mathlib::TestFlags4( Mathlib::Or( *visibilityFlags, includeNonCasters ),
                                                         Mathlib::SetAll( LAYER_SHADOW_CASTER ) ) );
 
-            //Project the vector to the object into the camera's plane. This allows
-            //us to use depth for sorting, rather than euclidean distance
-            *distanceToCamera = cameraDir.dotProduct( objData.mWorldAabb->mCenter -
-                                                      cameraPos ) - *worldRadius;
+            *distanceToCamera = calculateCameraDistance( cameraSortMode, cameraPos, cameraDir,
+                                                         objData.mWorldAabb, worldRadius );
 
             //Fuse result with visibility flag
             // finalMask = ((visible|infinite_aabb) & sceneFlags & visibilityFlags) != 0 ? 0xffffffff : 0

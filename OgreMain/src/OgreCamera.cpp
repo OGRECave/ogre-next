@@ -59,7 +59,8 @@ namespace Ogre {
         mNeedsDepthClamp(false),
         mUseMinPixelSize(false),
         mPixelDisplayRatio(0),
-        mConstantBiasScale(1.0f)
+        mConstantBiasScale(1.0f),
+        mSortMode( Camera::SortModeDepth )
     {
 
         // Reasonable defaults to camera params

@@ -122,6 +122,37 @@ namespace Ogre {
                         { (void)cam; }
 
         };
+
+        /// Sets how the objects are sorted. This affects both opaque
+        /// (performance optimization, rendered front to back) and
+        /// transparents (visual correctness, rendered back to front)
+        ///
+        /// Object sorting is approximate, and some scenes are suited
+        /// to different modes depending on the objects' geometric properties
+        ///
+        /// See https://forums.ogre3d.org/viewtopic.php?f=2&t=94090 for examples
+        ///
+        /// Please note that RenderQueue::addRenderable quantizes the final depth value.
+        /// Therefore if two objects are numerically very close, the chosen mode may not
+        /// make too much of a difference.
+        enum CameraSortMode
+        {
+            /// Sort objects by distance to camera. i.e.
+            ///     cameraPos.squaredDistance( objPos ) - objRadius
+            ///
+            /// The bigger the object radius, the closer it is considered to be to the camera
+            SortModeDistance,
+            /// Sort objects by depth i.e.
+            ///     objViewSpacePos.z - objRadius
+            ///
+            /// The bigger the object radius, the closer it is considered to be to the camera
+            SortModeDepth,
+            /// Same as SortModeDistance, but skips object radius from calculations
+            SortModeDistanceRadiusIgnoring,
+            /// Same as SortModeDepth, but skips object radius from calculations
+            SortModeDepthRadiusIgnoring
+        };
+
     protected:
         /// Scene manager responsible for the scene
         SceneManager *mSceneMgr;
@@ -205,7 +236,12 @@ namespace Ogre {
         typedef vector<Listener*>::type ListenerList;
         ListenerList mListeners;
 
+    public:
+        /// PUBLIC VARIABLE. This variable can be altered directly.
+        /// Changes are reflected immediately.
+        CameraSortMode mSortMode;
 
+    protected:
         // Internal functions for calcs
         bool isViewOutOfDate(void) const;
         /// Signal to update frustum information.
