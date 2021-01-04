@@ -39,6 +39,7 @@ var class_ogre_1_1v1_1_1_entity =
     [ "addSoftwareAnimationRequest", "class_ogre_1_1v1_1_1_entity.html#a1ce49ce2363f5df96649cd7432504b6a", null ],
     [ "addVisibilityFlags", "class_ogre_1_1v1_1_1_entity.html#a6b823b52684730302908ecfd1a8e6d54", null ],
     [ "buildLightList", "class_ogre_1_1v1_1_1_entity.html#ac4305df204604a027ca27ef77efff295", null ],
+    [ "calculateCameraDistance", "class_ogre_1_1v1_1_1_entity.html#a1d80c687f31545a6c1c17bf2d6ff72ed", null ],
     [ "calculateCastersBox", "class_ogre_1_1v1_1_1_entity.html#ab86b755f38ec01b52ed6a512d9d31ef9", null ],
     [ "chooseVertexDataForBinding", "class_ogre_1_1v1_1_1_entity.html#a1b90359fdadd4caf8b077b906e4ad051", null ],
     [ "clone", "class_ogre_1_1v1_1_1_entity.html#a08ba22de5f2f63007bfc1779312e4862", null ],

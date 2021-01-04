@@ -21,6 +21,7 @@ var class_ogre_1_1v1_1_1_static_geometry_1_1_region =
     [ "assign", "class_ogre_1_1v1_1_1_static_geometry_1_1_region.html#a1d57522ff005da57705b97694b75346f", null ],
     [ "build", "class_ogre_1_1v1_1_1_static_geometry_1_1_region.html#aa4c67f15c94e7373016a7cf6df975ec0", null ],
     [ "buildLightList", "class_ogre_1_1v1_1_1_static_geometry_1_1_region.html#ac4305df204604a027ca27ef77efff295", null ],
+    [ "calculateCameraDistance", "class_ogre_1_1v1_1_1_static_geometry_1_1_region.html#a1d80c687f31545a6c1c17bf2d6ff72ed", null ],
     [ "calculateCastersBox", "class_ogre_1_1v1_1_1_static_geometry_1_1_region.html#ab86b755f38ec01b52ed6a512d9d31ef9", null ],
     [ "createAnimableValue", "class_ogre_1_1v1_1_1_static_geometry_1_1_region.html#ab2cfac9af1b0d71c780ec969166b3585", null ],
     [ "cullFrustum", "class_ogre_1_1v1_1_1_static_geometry_1_1_region.html#a7d491859c987cf03cd2b62121e9bfea0", null ],

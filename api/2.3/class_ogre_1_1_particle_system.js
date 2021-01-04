@@ -36,6 +36,7 @@ var class_ogre_1_1_particle_system =
     [ "addQueryFlags", "class_ogre_1_1_particle_system.html#a98fe88f82f86eafa19308074495db809", null ],
     [ "addVisibilityFlags", "class_ogre_1_1_particle_system.html#a6b823b52684730302908ecfd1a8e6d54", null ],
     [ "buildLightList", "class_ogre_1_1_particle_system.html#ac4305df204604a027ca27ef77efff295", null ],
+    [ "calculateCameraDistance", "class_ogre_1_1_particle_system.html#a1d80c687f31545a6c1c17bf2d6ff72ed", null ],
     [ "calculateCastersBox", "class_ogre_1_1_particle_system.html#ab86b755f38ec01b52ed6a512d9d31ef9", null ],
     [ "cleanupDictionary", "class_ogre_1_1_particle_system.html#a1bea65fa2b3c2ac5a9f3be59b46a80e8", null ],
     [ "clear", "class_ogre_1_1_particle_system.html#a59c5bee716096d74a0698fbe57fd81b4", null ],

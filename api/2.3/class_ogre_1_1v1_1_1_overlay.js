@@ -23,6 +23,7 @@ var class_ogre_1_1v1_1_1_overlay =
     [ "addQueryFlags", "class_ogre_1_1v1_1_1_overlay.html#a98fe88f82f86eafa19308074495db809", null ],
     [ "addVisibilityFlags", "class_ogre_1_1v1_1_1_overlay.html#a6b823b52684730302908ecfd1a8e6d54", null ],
     [ "buildLightList", "class_ogre_1_1v1_1_1_overlay.html#ac4305df204604a027ca27ef77efff295", null ],
+    [ "calculateCameraDistance", "class_ogre_1_1v1_1_1_overlay.html#a1d80c687f31545a6c1c17bf2d6ff72ed", null ],
     [ "calculateCastersBox", "class_ogre_1_1v1_1_1_overlay.html#ab86b755f38ec01b52ed6a512d9d31ef9", null ],
     [ "clear", "class_ogre_1_1v1_1_1_overlay.html#afadf3f4d6bbee851683a546a179398d1", null ],
     [ "createAnimableValue", "class_ogre_1_1v1_1_1_overlay.html#ab2cfac9af1b0d71c780ec969166b3585", null ],

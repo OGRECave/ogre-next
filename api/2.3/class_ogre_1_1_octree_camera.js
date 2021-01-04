@@ -2,6 +2,12 @@ var class_ogre_1_1_octree_camera =
 [
     [ "CustomParameterMap", "class_ogre_1_1_octree_camera.html#a91a88d44c3918d174c1d594f9a4c6736", null ],
     [ "MovableObjectArray", "class_ogre_1_1_octree_camera.html#afb58624fb567bb790c55d8a716b472da", null ],
+    [ "CameraSortMode", "class_ogre_1_1_octree_camera.html#a206f478311219fe2f78037b4eeb5ad6f", [
+      [ "SortModeDistance", "class_ogre_1_1_octree_camera.html#a206f478311219fe2f78037b4eeb5ad6fa77de59cc4cbdcdb8e880cc17d6cf8703", null ],
+      [ "SortModeDepth", "class_ogre_1_1_octree_camera.html#a206f478311219fe2f78037b4eeb5ad6fa438d26ef77d3461e79200c901858916c", null ],
+      [ "SortModeDistanceRadiusIgnoring", "class_ogre_1_1_octree_camera.html#a206f478311219fe2f78037b4eeb5ad6fab1873b490294682593b01114b765434b", null ],
+      [ "SortModeDepthRadiusIgnoring", "class_ogre_1_1_octree_camera.html#a206f478311219fe2f78037b4eeb5ad6fa50594bdd48b60f5d44a8111e43aeb7f4", null ]
+    ] ],
     [ "Visibility", "class_ogre_1_1_octree_camera.html#af67c7952bb0d68e4de4060135101ecc5", [
       [ "NONE", "class_ogre_1_1_octree_camera.html#af67c7952bb0d68e4de4060135101ecc5ace3aab586c8bfcc592b079f6106fe5bc", null ],
       [ "PARTIAL", "class_ogre_1_1_octree_camera.html#af67c7952bb0d68e4de4060135101ecc5aebdeb03c5c0e62dd494e79c0fca63e10", null ],
@@ -48,6 +54,7 @@ var class_ogre_1_1_octree_camera =
     [ "addQueryFlags", "class_ogre_1_1_octree_camera.html#a98fe88f82f86eafa19308074495db809", null ],
     [ "addVisibilityFlags", "class_ogre_1_1_octree_camera.html#a6b823b52684730302908ecfd1a8e6d54", null ],
     [ "buildLightList", "class_ogre_1_1_octree_camera.html#ac4305df204604a027ca27ef77efff295", null ],
+    [ "calculateCameraDistance", "class_ogre_1_1_octree_camera.html#a1d80c687f31545a6c1c17bf2d6ff72ed", null ],
     [ "calculateCastersBox", "class_ogre_1_1_octree_camera.html#ab86b755f38ec01b52ed6a512d9d31ef9", null ],
     [ "calcViewMatrixRelative", "class_ogre_1_1_octree_camera.html#a7bc2499afb8ea8c94629604ad084369b", null ],
     [ "createAnimableValue", "class_ogre_1_1_octree_camera.html#ab2cfac9af1b0d71c780ec969166b3585", null ],
@@ -300,5 +307,6 @@ var class_ogre_1_1_octree_camera =
     [ "mGlobalIndex", "class_ogre_1_1_octree_camera.html#aee4828c2dee7731058f0b9cd047cf78d", null ],
     [ "mHlmsGlobalIndex", "class_ogre_1_1_octree_camera.html#a4af66c22373c90b388d2117ee904a92b", null ],
     [ "mParentIndex", "class_ogre_1_1_octree_camera.html#aad9369e62c971d55ca75b7b294c50944", null ],
-    [ "mRenderables", "class_ogre_1_1_octree_camera.html#ab703ec1f1cf82763b0ac9c4b1e51a17b", null ]
+    [ "mRenderables", "class_ogre_1_1_octree_camera.html#ab703ec1f1cf82763b0ac9c4b1e51a17b", null ],
+    [ "mSortMode", "class_ogre_1_1_octree_camera.html#a65528cdcb69117f09a7dfd8519396f32", null ]
 ];

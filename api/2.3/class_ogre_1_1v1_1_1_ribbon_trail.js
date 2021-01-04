@@ -32,6 +32,7 @@ var class_ogre_1_1v1_1_1_ribbon_trail =
     [ "addQueryFlags", "class_ogre_1_1v1_1_1_ribbon_trail.html#a98fe88f82f86eafa19308074495db809", null ],
     [ "addVisibilityFlags", "class_ogre_1_1v1_1_1_ribbon_trail.html#a6b823b52684730302908ecfd1a8e6d54", null ],
     [ "buildLightList", "class_ogre_1_1v1_1_1_ribbon_trail.html#ac4305df204604a027ca27ef77efff295", null ],
+    [ "calculateCameraDistance", "class_ogre_1_1v1_1_1_ribbon_trail.html#a1d80c687f31545a6c1c17bf2d6ff72ed", null ],
     [ "calculateCastersBox", "class_ogre_1_1v1_1_1_ribbon_trail.html#ab86b755f38ec01b52ed6a512d9d31ef9", null ],
     [ "clearAllChains", "class_ogre_1_1v1_1_1_ribbon_trail.html#a62fc40ed17eb91711797b07d1ca92dec", null ],
     [ "clearChain", "class_ogre_1_1v1_1_1_ribbon_trail.html#aea6477ce7018c4e325b95d63b17dccd3", null ],

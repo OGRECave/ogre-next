@@ -338,6 +338,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ac4305df204604a027ca27ef77efff295"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ac4305df204604a027ca27ef77efff295">buildLightList</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, const <a class="el" href="struct_ogre_1_1_light_list_info.html">LightListInfo</a> &amp;globalLightList)</td></tr>
 <tr class="memdesc:ac4305df204604a027ca27ef77efff295"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See SceneManager::buildLightList  <a href="class_ogre_1_1_movable_object.html#ac4305df204604a027ca27ef77efff295">More...</a><br /></td></tr>
 <tr class="separator:ac4305df204604a027ca27ef77efff295"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d80c687f31545a6c1c17bf2d6ff72ed"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#aac03185a5fd1c914eec2116588790352">ArrayReal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a1d80c687f31545a6c1c17bf2d6ff72ed">calculateCameraDistance</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> _cameraSortMode, <a class="el" href="class_ogre_1_1_array_vector3.html">ArrayVector3</a> cameraPos, <a class="el" href="class_ogre_1_1_array_vector3.html">ArrayVector3</a> cameraDir, <a class="el" href="class_ogre_1_1_array_aabb.html">ArrayAabb</a> *<a class="el" href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a> worldAabb, <a class="el" href="namespace_ogre.html#aac03185a5fd1c914eec2116588790352">ArrayReal</a> *<a class="el" href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a> worldRadius)</td></tr>
+<tr class="separator:a1d80c687f31545a6c1c17bf2d6ff72ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab86b755f38ec01b52ed6a512d9d31ef9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ab86b755f38ec01b52ed6a512d9d31ef9">calculateCastersBox</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> sceneVisibilityFlags, <a class="el" href="class_ogre_1_1_axis_aligned_box.html">AxisAlignedBox</a> *outBox)</td></tr>
 <tr class="separator:ab86b755f38ec01b52ed6a512d9d31ef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d491859c987cf03cd2b62121e9bfea0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a7d491859c987cf03cd2b62121e9bfea0">cullFrustum</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *frustum, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> sceneVisibilityFlags, <a class="el" href="class_ogre_1_1_movable_object.html#afb58624fb567bb790c55d8a716b472da">MovableObjectArray</a> &amp;outCulledObjects, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera)</td></tr>
@@ -911,6 +913,60 @@ Static Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a1d80c687f31545a6c1c17bf2d6ff72ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d80c687f31545a6c1c17bf2d6ff72ed">&#9670;&nbsp;</a></span>calculateCameraDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespace_ogre.html#aac03185a5fd1c914eec2116588790352">ArrayReal</a> Ogre::MovableObject::calculateCameraDistance </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td>
+          <td class="paramname"><em>_cameraSortMode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_array_vector3.html">ArrayVector3</a>&#160;</td>
+          <td class="paramname"><em>cameraPos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_array_vector3.html">ArrayVector3</a>&#160;</td>
+          <td class="paramname"><em>cameraDir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_array_aabb.html">ArrayAabb</a> *<a class="el" href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a>&#160;</td>
+          <td class="paramname"><em>worldAabb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#aac03185a5fd1c914eec2116588790352">ArrayReal</a> *<a class="el" href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a>&#160;</td>
+          <td class="paramname"><em>worldRadius</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

@@ -52,6 +52,7 @@ var class_ogre_1_1_p_c_z_light =
     [ "affectsVisibleZone", "class_ogre_1_1_p_c_z_light.html#a8a586f51c15661e78c876d2b6e04c3b7", null ],
     [ "affectsZone", "class_ogre_1_1_p_c_z_light.html#adfed7af8998a6ad31130820527476b37", null ],
     [ "buildLightList", "class_ogre_1_1_p_c_z_light.html#ac4305df204604a027ca27ef77efff295", null ],
+    [ "calculateCameraDistance", "class_ogre_1_1_p_c_z_light.html#a1d80c687f31545a6c1c17bf2d6ff72ed", null ],
     [ "calculateCastersBox", "class_ogre_1_1_p_c_z_light.html#ab86b755f38ec01b52ed6a512d9d31ef9", null ],
     [ "clearAffectedZones", "class_ogre_1_1_p_c_z_light.html#a4b128f16ec323ba495e9373da4800f2a", null ],
     [ "clearNeedsUpdate", "class_ogre_1_1_p_c_z_light.html#a017e849f6d4adcffba153f80d9c8bbe6", null ],

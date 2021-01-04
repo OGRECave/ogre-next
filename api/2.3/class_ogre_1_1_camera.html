@@ -120,6 +120,13 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a206f478311219fe2f78037b4eeb5ad6f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_camera.html#a206f478311219fe2f78037b4eeb5ad6f">CameraSortMode</a> { <a class="el" href="class_ogre_1_1_camera.html#a206f478311219fe2f78037b4eeb5ad6fa77de59cc4cbdcdb8e880cc17d6cf8703">SortModeDistance</a>, 
+<a class="el" href="class_ogre_1_1_camera.html#a206f478311219fe2f78037b4eeb5ad6fa438d26ef77d3461e79200c901858916c">SortModeDepth</a>, 
+<a class="el" href="class_ogre_1_1_camera.html#a206f478311219fe2f78037b4eeb5ad6fab1873b490294682593b01114b765434b">SortModeDistanceRadiusIgnoring</a>, 
+<a class="el" href="class_ogre_1_1_camera.html#a206f478311219fe2f78037b4eeb5ad6fa50594bdd48b60f5d44a8111e43aeb7f4">SortModeDepthRadiusIgnoring</a>
+ }</td></tr>
+<tr class="memdesc:a206f478311219fe2f78037b4eeb5ad6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets how the objects are sorted.  <a href="class_ogre_1_1_camera.html#a206f478311219fe2f78037b4eeb5ad6f">More...</a><br /></td></tr>
+<tr class="separator:a206f478311219fe2f78037b4eeb5ad6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91a88d44c3918d174c1d594f9a4c6736"><td class="memItemLeft" align="right" valign="top">typedef map&lt; size_t, <a class="el" href="class_ogre_1_1_vector4.html">Vector4</a> &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#a91a88d44c3918d174c1d594f9a4c6736">CustomParameterMap</a></td></tr>
 <tr class="separator:a91a88d44c3918d174c1d594f9a4c6736"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb58624fb567bb790c55d8a716b472da"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="class_ogre_1_1_movable_object.html">MovableObject</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#afb58624fb567bb790c55d8a716b472da">MovableObjectArray</a></td></tr>
@@ -908,6 +915,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ac4305df204604a027ca27ef77efff295"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ac4305df204604a027ca27ef77efff295">buildLightList</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, const <a class="el" href="struct_ogre_1_1_light_list_info.html">LightListInfo</a> &amp;globalLightList)</td></tr>
 <tr class="memdesc:ac4305df204604a027ca27ef77efff295"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See SceneManager::buildLightList  <a href="class_ogre_1_1_movable_object.html#ac4305df204604a027ca27ef77efff295">More...</a><br /></td></tr>
 <tr class="separator:ac4305df204604a027ca27ef77efff295"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d80c687f31545a6c1c17bf2d6ff72ed"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#aac03185a5fd1c914eec2116588790352">ArrayReal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a1d80c687f31545a6c1c17bf2d6ff72ed">calculateCameraDistance</a> (<a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> _cameraSortMode, <a class="el" href="class_ogre_1_1_array_vector3.html">ArrayVector3</a> cameraPos, <a class="el" href="class_ogre_1_1_array_vector3.html">ArrayVector3</a> cameraDir, <a class="el" href="class_ogre_1_1_array_aabb.html">ArrayAabb</a> *<a class="el" href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a> worldAabb, <a class="el" href="namespace_ogre.html#aac03185a5fd1c914eec2116588790352">ArrayReal</a> *<a class="el" href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a> worldRadius)</td></tr>
+<tr class="separator:a1d80c687f31545a6c1c17bf2d6ff72ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab86b755f38ec01b52ed6a512d9d31ef9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ab86b755f38ec01b52ed6a512d9d31ef9">calculateCastersBox</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> sceneVisibilityFlags, <a class="el" href="class_ogre_1_1_axis_aligned_box.html">AxisAlignedBox</a> *outBox)</td></tr>
 <tr class="separator:ab86b755f38ec01b52ed6a512d9d31ef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d491859c987cf03cd2b62121e9bfea0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a7d491859c987cf03cd2b62121e9bfea0">cullFrustum</a> (const size_t numNodes, <a class="el" href="struct_ogre_1_1_object_data.html">ObjectData</a> t, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *frustum, <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> sceneVisibilityFlags, <a class="el" href="class_ogre_1_1_movable_object.html#afb58624fb567bb790c55d8a716b472da">MovableObjectArray</a> &amp;outCulledObjects, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera)</td></tr>
@@ -958,6 +967,9 @@ Public Attributes</h2></td></tr>
 <tr class="separator:aad9369e62c971d55ca75b7b294c50944"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab703ec1f1cf82763b0ac9c4b1e51a17b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___material.html#gac2456530a54d76fba2d659954fc243c9">RenderableArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ab703ec1f1cf82763b0ac9c4b1e51a17b">mRenderables</a></td></tr>
 <tr class="separator:ab703ec1f1cf82763b0ac9c4b1e51a17b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65528cdcb69117f09a7dfd8519396f32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_camera.html#a206f478311219fe2f78037b4eeb5ad6f">CameraSortMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_camera.html#a65528cdcb69117f09a7dfd8519396f32">mSortMode</a></td></tr>
+<tr class="memdesc:a65528cdcb69117f09a7dfd8519396f32"><td class="mdescLeft">&#160;</td><td class="mdescRight">PUBLIC VARIABLE.  <a href="class_ogre_1_1_camera.html#a65528cdcb69117f09a7dfd8519396f32">More...</a><br /></td></tr>
+<tr class="separator:a65528cdcb69117f09a7dfd8519396f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -1032,6 +1044,41 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a206f478311219fe2f78037b4eeb5ad6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a206f478311219fe2f78037b4eeb5ad6f">&#9670;&nbsp;</a></span>CameraSortMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ogre_1_1_camera.html#a206f478311219fe2f78037b4eeb5ad6f">Ogre::Camera::CameraSortMode</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets how the objects are sorted. </p>
+<p>This affects both opaque (performance optimization, rendered front to back) and transparents (visual correctness, rendered back to front)</p>
+<p>Object sorting is approximate, and some scenes are suited to different modes depending on the objects' geometric properties</p>
+<p>See <a href="https://forums.ogre3d.org/viewtopic.php?f=2&t=94090">https://forums.ogre3d.org/viewtopic.php?f=2&amp;t=94090</a> for examples</p>
+<p>Please note that RenderQueue::addRenderable quantizes the final depth value. Therefore if two objects are numerically very close, the chosen mode may not make too much of a difference. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a206f478311219fe2f78037b4eeb5ad6fa77de59cc4cbdcdb8e880cc17d6cf8703"></a>SortModeDistance&#160;</td><td class="fielddoc"><p>Sort objects by distance to camera. </p>
+<p>i.e. cameraPos.squaredDistance( objPos ) - objRadius</p>
+<p>The bigger the object radius, the closer it is considered to be to the camera </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a206f478311219fe2f78037b4eeb5ad6fa438d26ef77d3461e79200c901858916c"></a>SortModeDepth&#160;</td><td class="fielddoc"><p>Sort objects by depth i.e. </p>
+<p>objViewSpacePos.z - objRadius</p>
+<p>The bigger the object radius, the closer it is considered to be to the camera </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a206f478311219fe2f78037b4eeb5ad6fab1873b490294682593b01114b765434b"></a>SortModeDistanceRadiusIgnoring&#160;</td><td class="fielddoc"><p>Same as SortModeDistance, but skips object radius from calculations. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a206f478311219fe2f78037b4eeb5ad6fa50594bdd48b60f5d44a8111e43aeb7f4"></a>SortModeDepthRadiusIgnoring&#160;</td><td class="fielddoc"><p>Same as SortModeDepth, but skips object radius from calculations. </p>
+</td></tr>
+</table>
 
 </div>
 </div>
@@ -2271,6 +2318,60 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a1d80c687f31545a6c1c17bf2d6ff72ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d80c687f31545a6c1c17bf2d6ff72ed">&#9670;&nbsp;</a></span>calculateCameraDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespace_ogre.html#aac03185a5fd1c914eec2116588790352">ArrayReal</a> Ogre::MovableObject::calculateCameraDistance </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td>
+          <td class="paramname"><em>_cameraSortMode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_array_vector3.html">ArrayVector3</a>&#160;</td>
+          <td class="paramname"><em>cameraPos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_array_vector3.html">ArrayVector3</a>&#160;</td>
+          <td class="paramname"><em>cameraDir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_array_aabb.html">ArrayAabb</a> *<a class="el" href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a>&#160;</td>
+          <td class="paramname"><em>worldAabb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#aac03185a5fd1c914eec2116588790352">ArrayReal</a> *<a class="el" href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a>&#160;</td>
+          <td class="paramname"><em>worldRadius</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -10072,6 +10173,23 @@ template&lt;class Alloc &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a65528cdcb69117f09a7dfd8519396f32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65528cdcb69117f09a7dfd8519396f32">&#9670;&nbsp;</a></span>mSortMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_camera.html#a206f478311219fe2f78037b4eeb5ad6f">CameraSortMode</a> Ogre::Camera::mSortMode</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>PUBLIC VARIABLE. </p>
+<p>This variable can be altered directly. Changes are reflected immediately. </p>
 
 </div>
 </div>

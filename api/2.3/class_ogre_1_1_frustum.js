@@ -24,6 +24,7 @@ var class_ogre_1_1_frustum =
     [ "addQueryFlags", "class_ogre_1_1_frustum.html#a98fe88f82f86eafa19308074495db809", null ],
     [ "addVisibilityFlags", "class_ogre_1_1_frustum.html#a6b823b52684730302908ecfd1a8e6d54", null ],
     [ "buildLightList", "class_ogre_1_1_frustum.html#ac4305df204604a027ca27ef77efff295", null ],
+    [ "calculateCameraDistance", "class_ogre_1_1_frustum.html#a1d80c687f31545a6c1c17bf2d6ff72ed", null ],
     [ "calculateCastersBox", "class_ogre_1_1_frustum.html#ab86b755f38ec01b52ed6a512d9d31ef9", null ],
     [ "calcViewMatrixRelative", "class_ogre_1_1_frustum.html#a7bc2499afb8ea8c94629604ad084369b", null ],
     [ "createAnimableValue", "class_ogre_1_1_frustum.html#ab2cfac9af1b0d71c780ec969166b3585", null ],
