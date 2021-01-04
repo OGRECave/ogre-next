@@ -222,6 +222,10 @@ namespace Ogre
         TerraSharedResources();
         ~TerraSharedResources();
 
+        /// Destroys all textures in the cache
+        void freeAllMemory();
+
+        /// Destroys all textures that are only used during heightmap load
         void freeStaticMemory();
 
         /**

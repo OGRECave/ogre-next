@@ -742,6 +742,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TerraSharedResources::~TerraSharedResources()
     {
+        freeAllMemory();
+    }
+    //-----------------------------------------------------------------------------------
+    void TerraSharedResources::freeAllMemory()
+    {
         freeStaticMemory();
 
         for( size_t i = NumStaticTmpTextures; i < NumTemporaryUsages; ++i )

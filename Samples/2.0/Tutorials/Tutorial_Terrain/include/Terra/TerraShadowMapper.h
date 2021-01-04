@@ -111,6 +111,10 @@ namespace Ogre
             you can still save a lot of memory by using Terra::setSharedResources so that
             this temporary texture is shared across all Terras.
 
+            If this setting is true and you are using TerraSharedResources,
+            you must still call TerraSharedResources::freeAllMemory to actually
+            free the memory once you're over updating all Terras
+
         @param bMinimizeMemoryConsumption
             True to minimize memory consumption but makes updating light direction slower.
             False to increase memory consumption but being able to change lighting frequently.
