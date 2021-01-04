@@ -1081,7 +1081,7 @@ Static Public Attributes</h2></td></tr>
 <p>Please note that RenderQueue::addRenderable quantizes the final depth value. Therefore if two objects are numerically very close, the chosen mode may not make too much of a difference. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a206f478311219fe2f78037b4eeb5ad6fa77de59cc4cbdcdb8e880cc17d6cf8703"></a>SortModeDistance&#160;</td><td class="fielddoc"><p>Sort objects by distance to camera. </p>
-<p>i.e. cameraPos.squaredDistance( objPos ) - objRadius</p>
+<p>i.e. cameraPos.distance( objPos ) - objRadius</p>
 <p>The bigger the object radius, the closer it is considered to be to the camera </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a206f478311219fe2f78037b4eeb5ad6fa438d26ef77d3461e79200c901858916c"></a>SortModeDepth&#160;</td><td class="fielddoc"><p>Sort objects by depth i.e. </p>
