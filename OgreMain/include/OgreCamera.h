@@ -138,7 +138,7 @@ namespace Ogre {
         enum CameraSortMode
         {
             /// Sort objects by distance to camera. i.e.
-            ///     cameraPos.squaredDistance( objPos ) - objRadius
+            ///     cameraPos.distance( objPos ) - objRadius
             ///
             /// The bigger the object radius, the closer it is considered to be to the camera
             SortModeDistance,
