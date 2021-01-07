@@ -236,10 +236,16 @@ namespace Ogre {
         typedef vector<Listener*>::type ListenerList;
         ListenerList mListeners;
 
+        static CameraSortMode msDefaultSortMode;
+
     public:
         /// PUBLIC VARIABLE. This variable can be altered directly.
         /// Changes are reflected immediately.
         CameraSortMode mSortMode;
+
+        /** Sets the default sort mode for all future Camera instances. */
+        static void setDefaultSortMode( CameraSortMode sortMode ) { msDefaultSortMode = sortMode; }
+        static CameraSortMode getDefaultSortMode( void ) { return msDefaultSortMode; }
 
     protected:
         // Internal functions for calcs
