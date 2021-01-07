@@ -221,7 +221,7 @@ namespace Ogre
 
         assert( !mRenderQueues[rqId].mSorted &&
                 "Called addRenderable after render and before clear" );
-        assert( subId < OGRE_RQ_MAKE_MASK( RqBits::SubRqIdBits ) );
+        assert( subId <= OGRE_RQ_MAKE_MASK( RqBits::SubRqIdBits ) );
 
         uint32 hlmsHash = casterPass ? pRend->getHlmsCasterHash() : pRend->getHlmsHash();
         const HlmsDatablock *datablock = pRend->getDatablock();
