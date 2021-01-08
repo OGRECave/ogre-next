@@ -1,5 +1,13 @@
 var NAVTREEINDEX144 =
 {
+"class_ogre_1_1_p_c_z_light.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,820,110],
+"class_ogre_1_1_p_c_z_light.html#a97143cbcc65f87597c491e566d793c32":[7,0,0,820,7],
+"class_ogre_1_1_p_c_z_light.html#a98fe88f82f86eafa19308074495db809":[7,0,0,820,24],
+"class_ogre_1_1_p_c_z_light.html#a9a62a4a12787812f012691af0c3493f1":[7,0,0,820,130],
+"class_ogre_1_1_p_c_z_light.html#a9a72ade896561e23c32cf8659f1640e4":[7,0,0,820,96],
+"class_ogre_1_1_p_c_z_light.html#a9b67c869ff417a54178b4406a8082144":[7,0,0,820,44],
+"class_ogre_1_1_p_c_z_light.html#aa47b4c48c6f868811bd64cee42097ca3":[7,0,0,820,136],
+"class_ogre_1_1_p_c_z_light.html#aa6978865a8a995606fe9f82eb66002af":[7,0,0,820,42],
 "class_ogre_1_1_p_c_z_light.html#aa839c7ad86c8ea193b2585fab67110a8":[7,0,0,820,43],
 "class_ogre_1_1_p_c_z_light.html#aa904cf95d6f60751cee570bb5983dbbf":[7,0,0,820,85],
 "class_ogre_1_1_p_c_z_light.html#aaa6e49d21586b363c4d40a87407be38b":[7,0,0,820,71],
@@ -241,13 +249,5 @@ var NAVTREEINDEX144 =
 "class_ogre_1_1_p_c_z_scene_manager.html#a25a28f0f0da21cfaf01ccf1cf0fb2d75":[7,0,0,828,108],
 "class_ogre_1_1_p_c_z_scene_manager.html#a25cba02e4766d9511b03684295ce73c7":[7,0,0,828,318],
 "class_ogre_1_1_p_c_z_scene_manager.html#a25cc1bb36997b722fc60efc7903f3760":[7,0,0,828,290],
-"class_ogre_1_1_p_c_z_scene_manager.html#a272d1a76e7854e51f824f0099a4910cf":[7,0,0,828,42],
-"class_ogre_1_1_p_c_z_scene_manager.html#a27d90c6acbd70ed5a84a53bce7c4aca2":[7,0,0,828,268],
-"class_ogre_1_1_p_c_z_scene_manager.html#a27f763bb92fef8b1238e2272889ba58d":[7,0,0,828,55],
-"class_ogre_1_1_p_c_z_scene_manager.html#a280141a83b4880d0fbe929ab8685ab89":[7,0,0,828,142],
-"class_ogre_1_1_p_c_z_scene_manager.html#a2a482e0a9f78109a5a467ddd6c16082b":[7,0,0,828,291],
-"class_ogre_1_1_p_c_z_scene_manager.html#a2a4d997503b651187f2e129cd5eeb7ad":[7,0,0,828,301],
-"class_ogre_1_1_p_c_z_scene_manager.html#a2abfe2af49de9dd7139ec0aea244b410":[7,0,0,828,249],
-"class_ogre_1_1_p_c_z_scene_manager.html#a2ac761cb112de51be26c54609de3c83a":[7,0,0,828,73],
-"class_ogre_1_1_p_c_z_scene_manager.html#a2bace1d8ae2c3c14bd0df22efee3ea8a":[7,0,0,828,183]
+"class_ogre_1_1_p_c_z_scene_manager.html#a272d1a76e7854e51f824f0099a4910cf":[7,0,0,828,42]
 };

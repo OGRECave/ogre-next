@@ -1,5 +1,13 @@
 var NAVTREEINDEX279 =
 {
+"struct_ogre_1_1_vulkan_device.html#ab4c87165ec889ff2051fbc33ba364043":[7,0,0,1122,14],
+"struct_ogre_1_1_vulkan_device.html#aba601df6a5751a44c1b4b5ff63754d2d":[7,0,0,1122,3],
+"struct_ogre_1_1_vulkan_device.html#ad03bde234046f81d5840f88bda6f8193":[7,0,0,1122,20],
+"struct_ogre_1_1_vulkan_device.html#ad1b8cad0bec0d64eae84b3e6d20e9cdc":[7,0,0,1122,26],
+"struct_ogre_1_1_vulkan_device.html#ae174a7cb061e258cb27230f8114b7ee3":[7,0,0,1122,17],
+"struct_ogre_1_1_vulkan_device.html#af497fbe8f23d8a1def3ba2a111db3214":[7,0,0,1122,2],
+"struct_ogre_1_1_vulkan_device_1_1_selected_queue.html":[7,0,0,1122,0],
+"struct_ogre_1_1_vulkan_device_1_1_selected_queue.html#a1a388a35a12b57ac11d216637b6766ef":[7,0,0,1122,0,1],
 "struct_ogre_1_1_vulkan_device_1_1_selected_queue.html#a2d149a0d9900e7edab732cd3424cc665":[7,0,0,1122,0,2],
 "struct_ogre_1_1_vulkan_device_1_1_selected_queue.html#aa43936e3b6a93ac901f27c1d7e6dad72":[7,0,0,1122,0,0],
 "struct_ogre_1_1_vulkan_device_1_1_selected_queue.html#ad3b70ed4aed581a14a7eb46f9499222b":[7,0,0,1122,0,3],
@@ -241,13 +249,5 @@ var NAVTREEINDEX279 =
 "struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html#a9ed227ff3223e24e1830f25953f55d52":[5,2,10,28,4],
 "struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html#aa2ea346279b1d604ad83d494be99ba6e":[5,2,10,28,3],
 "struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html#ab07f6e0c8362b3c487043177f42ed792":[5,2,10,28,8],
-"struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html#ab0b25fcd71c1e3a0036cb9199a2eecd9":[5,2,10,28,1],
-"struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html#abbb10eb66176e02e88c872330e780991":[5,2,10,28,10],
-"struct_ogre_1_1v1_1_1_linked_skeleton_animation_source.html":[5,2,0,17],
-"struct_ogre_1_1v1_1_1_linked_skeleton_animation_source.html#a24c13ecb6c1fa6f4b22e92938a3b8d08":[5,2,0,17,1],
-"struct_ogre_1_1v1_1_1_linked_skeleton_animation_source.html#a36e51d089b1871d32bb080a44cc6e872":[5,2,0,17,0],
-"struct_ogre_1_1v1_1_1_linked_skeleton_animation_source.html#a62e3e2a84c8e132fb1fa1401e727c8d3":[5,2,0,17,3],
-"struct_ogre_1_1v1_1_1_linked_skeleton_animation_source.html#a83245f45467a2c883a441ab4b988a244":[5,2,0,17,2],
-"struct_ogre_1_1v1_1_1_linked_skeleton_animation_source.html#a9a7fcc8c06b8513debdf6ec04faacb80":[5,2,0,17,4],
-"struct_ogre_1_1v1_1_1_mesh_lod_usage.html":[5,2,11,135]
+"struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html#ab0b25fcd71c1e3a0036cb9199a2eecd9":[5,2,10,28,1]
 };
