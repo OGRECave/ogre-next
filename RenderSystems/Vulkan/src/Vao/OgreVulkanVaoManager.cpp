@@ -928,7 +928,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::addDelayedFunc( VulkanDelayedFuncBase *cmd )
     {
-        mDelayedFuncs[mDynamicBufferCurrentFrame].push_back( cmd );
+        const uint8 idx =
+            ( mDynamicBufferCurrentFrame + mDynamicBufferMultiplier - 1u ) % mDynamicBufferMultiplier;
+        mDelayedFuncs[idx].push_back( cmd );
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks )
