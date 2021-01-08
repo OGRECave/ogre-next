@@ -158,9 +158,9 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
 
 	//Diffuse BRDF (*Normalized* Disney, see course_notes_moving_frostbite_to_pbr.pdf
 	//"Moving Frostbite to Physically Based Rendering" Sebastien Lagarde & Charles de Rousiers)
-    float energyBias	= pixelData.roughness * 0.5;
-    float energyFactor	= lerp( 1.0, 1.0 / 1.51, pixelData.roughness );
-    float fd90			= energyBias + 2.0 * VdotH * VdotH * pixelData.roughness;
+    float energyBias	= pixelData.perceptualRoughness * 0.5;
+    float energyFactor	= lerp( 1.0, 1.0 / 1.51, pixelData.perceptualRoughness );
+    float fd90			= energyBias + 2.0 * VdotH * VdotH * pixelData.perceptualRoughness;
 	float lightScatter	= 1.0 + (fd90 - 1.0) * pow( 1.0 - NdotL, 5.0 );
     float viewScatter	= 1.0 + (fd90 - 1.0) * pow( 1.0 - pixelData.NdotV, 5.0 );
 
