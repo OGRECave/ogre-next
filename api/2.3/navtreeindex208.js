@@ -1,5 +1,14 @@
 var NAVTREEINDEX208 =
 {
+"class_ogre_1_1_vulkan_vao_manager.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,1154,80],
+"class_ogre_1_1_vulkan_vao_manager.html#afafd75ba72857e13a55e540a2d0ed414":[7,0,0,1154,15],
+"class_ogre_1_1_vulkan_vao_manager.html#afbc41371222b8bad4d0df08b1edeba2a":[7,0,0,1154,18],
+"class_ogre_1_1_vulkan_vao_manager.html#afce1736c1c28af8657aaf863d366240f":[7,0,0,1154,86],
+"class_ogre_1_1_vulkan_win32_support.html":[7,0,0,1155],
+"class_ogre_1_1_vulkan_win32_support.html#a3541d8a86a2a9301f0ae66850473f1b4":[7,0,0,1155,0],
+"class_ogre_1_1_vulkan_win32_support.html#a4642b454eea1ff29326cd2642ef113ad":[7,0,0,1155,5],
+"class_ogre_1_1_vulkan_win32_support.html#a5282878b83e076c0cc13796b4640ee1a":[7,0,0,1155,2],
+"class_ogre_1_1_vulkan_win32_support.html#a6094e391cfa31b2c6ff4c6fc7696b2b1":[7,0,0,1155,1],
 "class_ogre_1_1_vulkan_win32_support.html#a86746d239ebe765693db1f1b46f55fd7":[7,0,0,1155,6],
 "class_ogre_1_1_vulkan_win32_support.html#a86bef7a792e9c3450da2fd697ff766c4":[7,0,0,1155,4],
 "class_ogre_1_1_vulkan_win32_support.html#ae031d6dfdd4b3f304d76a43d1ba2aae9":[7,0,0,1155,3],
@@ -240,14 +249,5 @@ var NAVTREEINDEX208 =
 "class_ogre_1_1_vulkan_xcb_window.html#aa670ad819f68211cb3d5314b6219bccc":[7,0,0,1159,37],
 "class_ogre_1_1_vulkan_xcb_window.html#aa6ee76edb7111f8feefbb1f73aae50be":[7,0,0,1159,58],
 "class_ogre_1_1_vulkan_xcb_window.html#aa7ce540be5f53ce49c45f59f32b72059":[7,0,0,1159,21],
-"class_ogre_1_1_vulkan_xcb_window.html#aabfaa3d20b4ad5f0ad0b30ccaf6f2ef7":[7,0,0,1159,68],
-"class_ogre_1_1_vulkan_xcb_window.html#aaf419af2de1225e71bff73471441a698":[7,0,0,1159,9],
-"class_ogre_1_1_vulkan_xcb_window.html#ab6a57b4b121d4f1af4e98bcc4f86e161":[7,0,0,1159,7],
-"class_ogre_1_1_vulkan_xcb_window.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,1159,51],
-"class_ogre_1_1_vulkan_xcb_window.html#ab7a63b886f33915e48bc5737c09b53a3":[7,0,0,1159,73],
-"class_ogre_1_1_vulkan_xcb_window.html#abbd5b7389535208fef6a357102b9afb9":[7,0,0,1159,2],
-"class_ogre_1_1_vulkan_xcb_window.html#abca8be051e394795927805bb4b42b723":[7,0,0,1159,65],
-"class_ogre_1_1_vulkan_xcb_window.html#abd8fcac87f23696935285791299f21ce":[7,0,0,1159,32],
-"class_ogre_1_1_vulkan_xcb_window.html#abff4014a88def8fb259ff1104e9c6184":[7,0,0,1159,72],
-"class_ogre_1_1_vulkan_xcb_window.html#ac069d8370ac1e24b5dbd29821e6561db":[7,0,0,1159,12]
+"class_ogre_1_1_vulkan_xcb_window.html#aabfaa3d20b4ad5f0ad0b30ccaf6f2ef7":[7,0,0,1159,68]
 };

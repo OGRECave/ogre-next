@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['performance_20hints_35092',['Performance Hints',['../performance.html',1,'manual']]]
+  ['performance_20hints_35094',['Performance Hints',['../performance.html',1,'manual']]]
 ];
