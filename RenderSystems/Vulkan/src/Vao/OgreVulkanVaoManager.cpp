@@ -1624,7 +1624,7 @@ namespace Ogre
             destroyDelayedBuffers( mDynamicBufferCurrentFrame );
         }
 
-        if( mDelayedFuncs[mDynamicBufferCurrentFrame].empty() )
+        if( !mDelayedFuncs[mDynamicBufferCurrentFrame].empty() )
         {
             waitForTailFrameToFinish();
 
