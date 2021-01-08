@@ -22,6 +22,8 @@ namespace Ogre
     class VulkanDelayedFuncBase
     {{
     public:
+        uint32 frameIdx;
+
 		virtual ~VulkanDelayedFuncBase();
         virtual void execute() = 0;
     }};
