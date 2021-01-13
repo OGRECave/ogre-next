@@ -1,8 +1,14 @@
 
 #include "/media/matias/Datos/SyntaxHighlightingMisc.h"
 
+@undefpiece( MaterialStructDecl )
+@undefpiece( InstanceStructDecl )
+
 @piece( DefaultTerraHeaderPS )
 	@insertpiece( DefaultHeaderPS )
+	@insertpiece( TerraMaterialStructDecl )
+	@insertpiece( TerraInstanceStructDecl )
+
 	@property( !hlms_prepass && needs_view_dir )
 		@insertpiece( DeclareBRDF )
 		@insertpiece( DeclareBRDF_InstantRadiosity )

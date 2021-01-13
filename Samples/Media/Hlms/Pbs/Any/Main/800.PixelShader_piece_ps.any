@@ -1,6 +1,17 @@
 @piece( envSpecularRoughness ) pixelData.perceptualRoughness * passBuf.envMapNumMipmaps @end
 
 @piece( DefaultHeaderPS )
+	// START UNIFORM DECLARATION
+	@property( !hlms_shadowcaster || alpha_test )
+		@property( !hlms_shadowcaster )
+			@insertpiece( PassStructDecl )
+		@end
+		@insertpiece( MaterialStructDecl )
+		@insertpiece( InstanceStructDecl )
+	@end
+	@insertpiece( custom_ps_uniformStructDeclaration )
+	// END UNIFORM DECLARATION
+
 	@property( !fresnel_scalar )
 		#define float_fresnel float
 		#define make_float_fresnel( x ) x

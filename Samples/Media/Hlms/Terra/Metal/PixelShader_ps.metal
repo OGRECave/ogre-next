@@ -6,12 +6,6 @@
 
 @insertpiece( DefaultTerraHeaderPS )
 
-// START UNIFORM STRUCT DECLARATION
-@insertpiece( PassStructDecl )
-@insertpiece( TerraMaterialStructDecl )
-@insertpiece( TerraInstanceStructDecl )
-@insertpiece( custom_ps_uniformDeclaration )
-// END UNIFORM STRUCT DECLARATION
 struct PS_INPUT
 {
 	@insertpiece( Terra_VStoPS_block )

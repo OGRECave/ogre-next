@@ -30,13 +30,10 @@ layout(std140) uniform;
 #define FRAG_COLOR		0
 
 @insertpiece( DefaultTerraHeaderPS )
-
-// START UNIFORM DECLARATION
-@insertpiece( PassStructDecl )
-@insertpiece( TerraMaterialStructDecl )
-@insertpiece( TerraInstanceStructDecl )
 @insertpiece( custom_ps_uniformDeclaration )
-// END UNIFORM DECLARATION
+
+@insertpiece( PccManualProbeDecl )
+
 vulkan_layout( location = 0 )
 in block
 {

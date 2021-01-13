@@ -4,16 +4,6 @@
 @insertpiece( SetCrossPlatformSettings )
 @insertpiece( DeclareUvModifierMacros )
 
-// START UNIFORM STRUCT DECLARATION
-@property( !hlms_shadowcaster || alpha_test )
-	@property( !hlms_shadowcaster )
-		@insertpiece( PassStructDecl )
-	@end
-	@insertpiece( MaterialStructDecl )
-@end
-@insertpiece( custom_ps_uniformStructDeclaration )
-// END UNIFORM STRUCT DECLARATION
-
 @insertpiece( DefaultHeaderPS )
 
 struct PS_INPUT

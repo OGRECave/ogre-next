@@ -61,19 +61,10 @@ layout(std140) uniform;
 in vec4 gl_FragCoord;
 @end
 
-// START UNIFORM DECLARATION
-@property( !hlms_shadowcaster || alpha_test )
-	@property( !hlms_shadowcaster )
-		@insertpiece( PassStructDecl )
-	@end
-	@insertpiece( MaterialStructDecl )
-	@insertpiece( InstanceStructDecl )
-	@insertpiece( PccManualProbeDecl )
-@end
-@insertpiece( custom_ps_uniformDeclaration )
-// END UNIFORM DECLARATION
-
 @insertpiece( DefaultHeaderPS )
+@insertpiece( custom_ps_uniformDeclaration )
+
+@insertpiece( PccManualProbeDecl )
 
 @property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || exponential_shadow_maps )
 vulkan_layout( location = 0 ) in block
