@@ -8,7 +8,6 @@ var class_ogre_1_1_a_p_k_zip_archive_factory =
     [ "createInstance", "class_ogre_1_1_a_p_k_zip_archive_factory.html#ab8a15ddd0face5f460b468b38ab6a2ad", null ],
     [ "createInstance", "class_ogre_1_1_a_p_k_zip_archive_factory.html#a199b8737317a3b1377bb55cb803d3543", null ],
     [ "destroyInstance", "class_ogre_1_1_a_p_k_zip_archive_factory.html#a84f0bbc7ca53b6e525a9a774a03341fe", null ],
-    [ "getType", "class_ogre_1_1_a_p_k_zip_archive_factory.html#a3d8aef92fb9e0eac7ed41167fb686a10", null ],
     [ "getType", "class_ogre_1_1_a_p_k_zip_archive_factory.html#ae89f6de49a3cca78c587c35eeb85f8ca", null ],
     [ "operator delete", "class_ogre_1_1_a_p_k_zip_archive_factory.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_a_p_k_zip_archive_factory.html#acb46d4b0a597156d9ba5abc39d127792", null ],

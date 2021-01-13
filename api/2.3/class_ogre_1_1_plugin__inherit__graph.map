@@ -9,8 +9,8 @@
 <area shape="rect" id="node9" href="$class_ogre_1_1_n_u_l_l_plugin.html" title="Plugin instance for NULL Manager." alt="" coords="317,309,445,336"/>
 <area shape="rect" id="node10" href="$class_ogre_1_1_octree_plugin.html" title="Plugin instance for Octree Manager." alt="" coords="316,360,447,387"/>
 <area shape="rect" id="node11" href="$class_ogre_1_1_octree_zone_plugin.html" title="Plugin instance for OctreeZone." alt="" coords="301,411,461,437"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_particle_f_x_plugin.html" title="Plugin instance for ParticleFX Manager." alt="" coords="305,461,458,488"/>
-<area shape="rect" id="node13" href="$class_ogre_1_1_p_c_z_plugin.html" title="Plugin instance for PCZ Manager." alt="" coords="322,512,441,539"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_p_c_z_plugin.html" title="Plugin instance for PCZ Manager." alt="" coords="322,461,441,488"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_particle_f_x_plugin.html" title="Plugin instance for ParticleFX Manager." alt="" coords="305,512,458,539"/>
 <area shape="rect" id="node14" href="$class_ogre_1_1_vulkan_plugin.html" title="Plugin instance for Vulkan Manager." alt="" coords="315,563,447,589"/>
 <area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,284,92,311"/>
 </map>

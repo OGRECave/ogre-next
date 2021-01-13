@@ -1,18 +1,5 @@
 var group___resources =
 [
-    [ "CommonTextureTypes", "namespace_ogre_1_1_common_texture_types.html", null ],
-    [ "CubemapSide", "namespace_ogre_1_1_cubemap_side.html", null ],
-    [ "DefaultMipmapGen", "namespace_ogre_1_1_default_mipmap_gen.html", null ],
-    [ "LoadAction", "namespace_ogre_1_1_load_action.html", null ],
-    [ "PbsBrdf", "namespace_ogre_1_1_pbs_brdf.html", null ],
-    [ "PrefabRootLayout", "namespace_ogre_1_1_prefab_root_layout.html", null ],
-    [ "ResourceAccess", "namespace_ogre_1_1_resource_access.html", null ],
-    [ "ResourceLayout", "namespace_ogre_1_1_resource_layout.html", null ],
-    [ "StoreAction", "namespace_ogre_1_1_store_action.html", null ],
-    [ "TextureFilter", "namespace_ogre_1_1_texture_filter.html", null ],
-    [ "TextureFlags", "namespace_ogre_1_1_texture_flags.html", null ],
-    [ "TextureSourceType", "namespace_ogre_1_1_texture_source_type.html", null ],
-    [ "TextureTypes", "namespace_ogre_1_1_texture_types.html", null ],
     [ "Archive", "class_ogre_1_1_archive.html", [
       [ "Archive", "class_ogre_1_1_archive.html#aa527675b915110919a754a226feebc4f", null ],
       [ "~Archive", "class_ogre_1_1_archive.html#a370fba29d752fa317e992aec6625d5ed", null ],
@@ -517,7 +504,6 @@ var group___resources =
       [ "createInstance", "class_ogre_1_1_embedded_zip_archive_factory.html#ab8a15ddd0face5f460b468b38ab6a2ad", null ],
       [ "createInstance", "class_ogre_1_1_embedded_zip_archive_factory.html#aaae296fd892af01d1505ba36bedb0848", null ],
       [ "destroyInstance", "class_ogre_1_1_embedded_zip_archive_factory.html#a84f0bbc7ca53b6e525a9a774a03341fe", null ],
-      [ "getType", "class_ogre_1_1_embedded_zip_archive_factory.html#a3d8aef92fb9e0eac7ed41167fb686a10", null ],
       [ "getType", "class_ogre_1_1_embedded_zip_archive_factory.html#aad4203d69a8382413bd74530318edee3", null ],
       [ "operator delete", "class_ogre_1_1_embedded_zip_archive_factory.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
       [ "operator delete", "class_ogre_1_1_embedded_zip_archive_factory.html#acb46d4b0a597156d9ba5abc39d127792", null ],
@@ -653,7 +639,6 @@ var group___resources =
       [ "createInstance", "class_ogre_1_1_file_system_archive_factory.html#ab8a15ddd0face5f460b468b38ab6a2ad", null ],
       [ "createInstance", "class_ogre_1_1_file_system_archive_factory.html#abf77dd8271bb5c237ef56f888f666e34", null ],
       [ "destroyInstance", "class_ogre_1_1_file_system_archive_factory.html#a1eb9e2ef1abd9aa441091438c44daef4", null ],
-      [ "getType", "class_ogre_1_1_file_system_archive_factory.html#a3d8aef92fb9e0eac7ed41167fb686a10", null ],
       [ "getType", "class_ogre_1_1_file_system_archive_factory.html#a0aa13f124f25755334dcc35a28076ce1", null ],
       [ "operator delete", "class_ogre_1_1_file_system_archive_factory.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
       [ "operator delete", "class_ogre_1_1_file_system_archive_factory.html#acb46d4b0a597156d9ba5abc39d127792", null ],
@@ -2075,7 +2060,7 @@ var group___resources =
       [ "savingChangeTextureName", "class_ogre_1_1_hlms_json_listener.html#a2e0c85f8de336de4cb83b18962a5d852", null ]
     ] ],
     [ "HlmsListener", "class_ogre_1_1_hlms_listener.html", [
-      [ "getNumExtraPassTextures", "class_ogre_1_1_hlms_listener.html#a0200b7499fd7d908153f90a1932dacf4", null ],
+      [ "getNumExtraPassTextures", "class_ogre_1_1_hlms_listener.html#a516750b25e741d5260ed81d98e0521b9", null ],
       [ "getPassBufferSize", "class_ogre_1_1_hlms_listener.html#ad6908edd7c16efc1ef1638a6a1e08bd9", null ],
       [ "hlmsTypeChanged", "class_ogre_1_1_hlms_listener.html#a10609ad741f2c3de7ce3715738cd0bea", null ],
       [ "preparePassBuffer", "class_ogre_1_1_hlms_listener.html#a29e1a2fb6c578ba54b8cbce7a4418800", null ],
@@ -5923,7 +5908,6 @@ var group___resources =
       [ "createInstance", "class_ogre_1_1_zip_archive_factory.html#ab8a15ddd0face5f460b468b38ab6a2ad", null ],
       [ "createInstance", "class_ogre_1_1_zip_archive_factory.html#a51a7ddb1aefbe955cfc3aa466549876c", null ],
       [ "destroyInstance", "class_ogre_1_1_zip_archive_factory.html#a84f0bbc7ca53b6e525a9a774a03341fe", null ],
-      [ "getType", "class_ogre_1_1_zip_archive_factory.html#a3d8aef92fb9e0eac7ed41167fb686a10", null ],
       [ "getType", "class_ogre_1_1_zip_archive_factory.html#a41f9f9e4204c07c26d4d685d1d41a18c", null ],
       [ "operator delete", "class_ogre_1_1_zip_archive_factory.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
       [ "operator delete", "class_ogre_1_1_zip_archive_factory.html#acb46d4b0a597156d9ba5abc39d127792", null ],

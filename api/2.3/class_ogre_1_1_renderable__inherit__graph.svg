@@ -12,8 +12,8 @@
 <g id="node1" class="node">
 <title>Node1</title>
 <g id="a_node1"><a xlink:title="Abstract class defining the interface all renderable objects must implement.">
-<polygon fill="#bfbfbf" stroke="black" points="0,-306.5 0,-325.5 91,-325.5 91,-306.5 0,-306.5"/>
-<text text-anchor="middle" x="45.5" y="-313.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Renderable</text>
+<polygon fill="#bfbfbf" stroke="black" points="0,-309.5 0,-328.5 91,-328.5 91,-309.5 0,-309.5"/>
+<text text-anchor="middle" x="45.5" y="-316.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Renderable</text>
 </a>
 </g>
 </g>
@@ -29,8 +29,8 @@
 <!-- Node1&#45;&gt;Node2 -->
 <g id="edge1" class="edge">
 <title>Node1&#45;&gt;Node2</title>
-<path fill="none" stroke="midnightblue" d="M46.04,-335.9C46,-386.88 53.16,-523.36 127,-597 134.7,-604.68 145.27,-609.31 155.74,-612.09"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="49.54,-335.65 46.16,-325.61 42.54,-335.57 49.54,-335.65"/>
+<path fill="none" stroke="midnightblue" d="M46.11,-338.69C46.24,-389.14 53.79,-524.19 127,-597 134.72,-604.67 145.29,-609.3 155.75,-612.07"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="49.62,-338.54 46.19,-328.51 42.62,-338.48 49.62,-338.54"/>
 </g>
 <!-- Node6 -->
 <g id="node6" class="node">
@@ -44,8 +44,8 @@
 <!-- Node1&#45;&gt;Node6 -->
 <g id="edge5" class="edge">
 <title>Node1&#45;&gt;Node6</title>
-<path fill="none" stroke="midnightblue" d="M47.08,-335.66C49.54,-381.64 62.19,-496.95 127,-559 131.02,-562.85 135.75,-565.92 140.82,-568.38"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="50.57,-335.39 46.65,-325.54 43.58,-335.68 50.57,-335.39"/>
+<path fill="none" stroke="midnightblue" d="M47.2,-339.05C49.91,-384.89 63.09,-498.04 127,-559 131.02,-562.84 135.77,-565.91 140.84,-568.37"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="50.69,-338.74 46.71,-328.92 43.7,-339.08 50.69,-338.74"/>
 </g>
 <!-- Node7 -->
 <g id="node7" class="node">
@@ -60,8 +60,8 @@
 <!-- Node1&#45;&gt;Node7 -->
 <g id="edge6" class="edge">
 <title>Node1&#45;&gt;Node7</title>
-<path fill="none" stroke="midnightblue" d="M49.37,-335.42C56.03,-373.82 76.06,-459.96 127,-509 131.02,-512.87 135.71,-516.16 140.69,-518.94"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="52.82,-334.84 47.77,-325.53 45.91,-335.96 52.82,-334.84"/>
+<path fill="none" stroke="midnightblue" d="M49.65,-339.15C56.66,-377.45 77.05,-461.18 127,-509 131.04,-512.86 135.72,-516.14 140.71,-518.92"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="53.02,-338.08 47.89,-328.81 46.12,-339.26 53.02,-338.08"/>
 </g>
 <!-- Node8 -->
 <g id="node8" class="node">
@@ -75,8 +75,8 @@
 <!-- Node1&#45;&gt;Node8 -->
 <g id="edge7" class="edge">
 <title>Node1&#45;&gt;Node8</title>
-<path fill="none" stroke="midnightblue" d="M51.2,-335.49C60.17,-368.43 82.87,-435.02 127,-471 132.53,-475.51 139.07,-478.95 145.86,-481.57"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="54.56,-334.51 48.68,-325.71 47.79,-336.26 54.56,-334.51"/>
+<path fill="none" stroke="midnightblue" d="M51.44,-338.54C60.65,-371 83.59,-435.89 127,-471 132.55,-475.49 139.1,-478.91 145.89,-481.53"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="54.72,-337.27 48.74,-328.52 47.96,-339.09 54.72,-337.27"/>
 </g>
 <!-- Node9 -->
 <g id="node9" class="node">
@@ -90,175 +90,175 @@
 <!-- Node1&#45;&gt;Node9 -->
 <g id="edge8" class="edge">
 <title>Node1&#45;&gt;Node9</title>
-<path fill="none" stroke="midnightblue" d="M54.37,-334.7C66.26,-360.68 91.27,-407.37 127,-433 132.4,-436.88 138.58,-439.96 144.94,-442.42"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="57.57,-333.28 50.33,-325.55 51.16,-336.11 57.57,-333.28"/>
+<path fill="none" stroke="midnightblue" d="M54.84,-337.93C67.01,-363.38 92.07,-408.26 127,-433 132.53,-436.91 138.84,-440.02 145.33,-442.49"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="57.91,-336.24 50.55,-328.63 51.56,-339.17 57.91,-336.24"/>
 </g>
 <!-- Node11 -->
 <g id="node11" class="node">
 <title>Node11</title>
-<g id="a_node11"><a xlink:href="class_ogre_1_1v1_1_1_billboard_chain.html" target="_top" xlink:title="Allows the rendering of a chain of connected billboards.">
-<polygon fill="none" stroke="black" points="135.5,-404.5 135.5,-423.5 254.5,-423.5 254.5,-404.5 135.5,-404.5"/>
-<text text-anchor="middle" x="195" y="-411.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardChain</text>
+<g id="a_node11"><a xlink:href="class_ogre_1_1_voxel_visualizer.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="141,-404.5 141,-423.5 249,-423.5 249,-404.5 141,-404.5"/>
+<text text-anchor="middle" x="195" y="-411.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VoxelVisualizer</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node11 -->
 <g id="edge10" class="edge">
 <title>Node1&#45;&gt;Node11</title>
-<path fill="none" stroke="midnightblue" d="M59.88,-333.55C74.49,-351.52 99.5,-379.03 127,-395 133.59,-398.83 140.99,-401.92 148.41,-404.41"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="62.53,-331.25 53.58,-325.58 57.04,-335.6 62.53,-331.25"/>
+<path fill="none" stroke="midnightblue" d="M60.49,-336.41C75.28,-353.69 100.14,-379.75 127,-395 133.73,-398.82 141.28,-401.92 148.82,-404.42"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="63.17,-334.16 54.08,-328.72 57.8,-338.64 63.17,-334.16"/>
+</g>
+<!-- Node12 -->
+<g id="node12" class="node">
+<title>Node12</title>
+<g id="a_node12"><a xlink:href="class_ogre_1_1_wire_aabb.html" target="_top" xlink:title="Helper class to display the Aabb of a MovableObject as lines.">
+<polygon fill="none" stroke="black" points="153,-366.5 153,-385.5 237,-385.5 237,-366.5 153,-366.5"/>
+<text text-anchor="middle" x="195" y="-373.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::WireAabb</text>
+</a>
+</g>
+</g>
+<!-- Node1&#45;&gt;Node12 -->
+<g id="edge11" class="edge">
+<title>Node1&#45;&gt;Node12</title>
+<path fill="none" stroke="midnightblue" d="M73.63,-333.18C89.02,-340.87 108.78,-350.17 127,-357 136.28,-360.48 146.49,-363.68 156.08,-366.42"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="75.17,-330.04 64.67,-328.64 72.01,-336.28 75.17,-330.04"/>
 </g>
 <!-- Node13 -->
 <g id="node13" class="node">
 <title>Node13</title>
-<g id="a_node13"><a xlink:href="class_ogre_1_1v1_1_1_billboard_set.html" target="_top" xlink:title="A collection of billboards (faces which are always facing the given direction) with the same (default...">
-<polygon fill="none" stroke="black" points="140,-366.5 140,-385.5 250,-385.5 250,-366.5 140,-366.5"/>
-<text text-anchor="middle" x="195" y="-373.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardSet</text>
+<g id="a_node13"><a xlink:href="class_ogre_1_1v1_1_1_billboard_chain.html" target="_top" xlink:title="Allows the rendering of a chain of connected billboards.">
+<polygon fill="none" stroke="black" points="135.5,-328.5 135.5,-347.5 254.5,-347.5 254.5,-328.5 135.5,-328.5"/>
+<text text-anchor="middle" x="195" y="-335.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardChain</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node13 -->
 <g id="edge12" class="edge">
 <title>Node1&#45;&gt;Node13</title>
-<path fill="none" stroke="midnightblue" d="M72.01,-330.61C87.55,-339.1 108.02,-349.56 127,-357 136,-360.53 145.92,-363.71 155.31,-366.41"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="73.46,-327.41 63.02,-325.62 70.06,-333.53 73.46,-327.41"/>
-</g>
-<!-- Node14 -->
-<g id="node14" class="node">
-<title>Node14</title>
-<g id="a_node14"><a xlink:href="class_ogre_1_1v1_1_1_border_renderable.html" target="_top" xlink:title="Class for rendering the border of a BorderPanelOverlayElement.">
-<polygon fill="none" stroke="black" points="128,-328.5 128,-347.5 262,-347.5 262,-328.5 128,-328.5"/>
-<text text-anchor="middle" x="195" y="-335.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderRenderable</text>
-</a>
-</g>
-</g>
-<!-- Node1&#45;&gt;Node14 -->
-<g id="edge13" class="edge">
-<title>Node1&#45;&gt;Node14</title>
-<path fill="none" stroke="midnightblue" d="M101.19,-324.16C110.63,-325.57 120.52,-327.04 130.18,-328.48"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="101.56,-320.67 91.16,-322.66 100.53,-327.6 101.56,-320.67"/>
+<path fill="none" stroke="midnightblue" d="M101.17,-326.04C112.3,-327.48 124.06,-328.99 135.32,-330.44"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="101.52,-322.56 91.16,-324.75 100.63,-329.5 101.52,-322.56"/>
 </g>
 <!-- Node15 -->
 <g id="node15" class="node">
 <title>Node15</title>
-<g id="a_node15"><a xlink:href="class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html" target="_top" xlink:title="Built, renderable section of geometry.">
-<polygon fill="none" stroke="black" points="136.5,-279 136.5,-309 253.5,-309 253.5,-279 136.5,-279"/>
-<text text-anchor="start" x="144.5" y="-297" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::ManualObject</text>
-<text text-anchor="middle" x="195" y="-286" font-family="Helvetica,sans-Serif" font-size="10.00">::ManualObjectSection</text>
+<g id="a_node15"><a xlink:href="class_ogre_1_1v1_1_1_billboard_set.html" target="_top" xlink:title="A collection of billboards (faces which are always facing the given direction) with the same (default...">
+<polygon fill="none" stroke="black" points="140,-290.5 140,-309.5 250,-309.5 250,-290.5 140,-290.5"/>
+<text text-anchor="middle" x="195" y="-297.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BillboardSet</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node15 -->
 <g id="edge14" class="edge">
 <title>Node1&#45;&gt;Node15</title>
-<path fill="none" stroke="midnightblue" d="M101.07,-307.86C112.59,-306.14 124.77,-304.33 136.4,-302.59"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="100.53,-304.4 91.16,-309.34 101.56,-311.33 100.53,-304.4"/>
+<path fill="none" stroke="midnightblue" d="M101.1,-311.97C113.76,-310.34 127.23,-308.6 139.87,-306.97"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="100.63,-308.5 91.16,-313.25 101.52,-315.44 100.63,-308.5"/>
 </g>
 <!-- Node16 -->
 <g id="node16" class="node">
 <title>Node16</title>
-<g id="a_node16"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element.html" target="_top" xlink:title="Abstract definition of a 2D element to be displayed in an Overlay.">
-<polygon fill="none" stroke="black" points="132.5,-240.5 132.5,-259.5 257.5,-259.5 257.5,-240.5 132.5,-240.5"/>
-<text text-anchor="middle" x="195" y="-247.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
+<g id="a_node16"><a xlink:href="class_ogre_1_1v1_1_1_border_renderable.html" target="_top" xlink:title="Class for rendering the border of a BorderPanelOverlayElement.">
+<polygon fill="none" stroke="black" points="128,-252.5 128,-271.5 262,-271.5 262,-252.5 128,-252.5"/>
+<text text-anchor="middle" x="195" y="-259.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderRenderable</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node16 -->
 <g id="edge15" class="edge">
 <title>Node1&#45;&gt;Node16</title>
-<path fill="none" stroke="midnightblue" d="M69.34,-301.07C85.07,-291.26 106.71,-278.69 127,-270 136.37,-265.99 146.81,-262.45 156.6,-259.52"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="67.39,-298.16 60.82,-306.47 71.13,-304.07 67.39,-298.16"/>
+<path fill="none" stroke="midnightblue" d="M73.63,-304.82C89.02,-297.13 108.78,-287.83 127,-281 136.28,-277.52 146.49,-274.32 156.08,-271.58"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="72.01,-301.72 64.67,-309.36 75.17,-307.96 72.01,-301.72"/>
 </g>
-<!-- Node21 -->
-<g id="node21" class="node">
-<title>Node21</title>
-<g id="a_node21"><a xlink:href="class_ogre_1_1v1_1_1_rectangle2_d.html" target="_top" xlink:title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl...">
-<polygon fill="none" stroke="black" points="138.5,-202.5 138.5,-221.5 251.5,-221.5 251.5,-202.5 138.5,-202.5"/>
-<text text-anchor="middle" x="195" y="-209.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::Rectangle2D</text>
+<!-- Node17 -->
+<g id="node17" class="node">
+<title>Node17</title>
+<g id="a_node17"><a xlink:href="class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html" target="_top" xlink:title="Built, renderable section of geometry.">
+<polygon fill="none" stroke="black" points="136.5,-203 136.5,-233 253.5,-233 253.5,-203 136.5,-203"/>
+<text text-anchor="start" x="144.5" y="-221" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::ManualObject</text>
+<text text-anchor="middle" x="195" y="-210" font-family="Helvetica,sans-Serif" font-size="10.00">::ManualObjectSection</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node21 -->
-<g id="edge20" class="edge">
-<title>Node1&#45;&gt;Node21</title>
-<path fill="none" stroke="midnightblue" d="M58.94,-297.96C73.2,-278.62 98.33,-248.36 127,-231 133.41,-227.12 140.65,-224 147.93,-221.51"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="55.99,-296.06 53.01,-306.23 61.68,-300.14 55.99,-296.06"/>
+<!-- Node1&#45;&gt;Node17 -->
+<g id="edge16" class="edge">
+<title>Node1&#45;&gt;Node17</title>
+<path fill="none" stroke="midnightblue" d="M61.41,-301.3C76.48,-284.36 101.16,-259.09 127,-243 133.01,-239.26 139.66,-235.95 146.38,-233.05"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="58.38,-299.46 54.46,-309.3 63.66,-304.05 58.38,-299.46"/>
 </g>
-<!-- Node22 -->
-<g id="node22" class="node">
-<title>Node22</title>
-<g id="a_node22"><a xlink:href="class_ogre_1_1v1_1_1_simple_renderable.html" target="_top" xlink:title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects.">
-<polygon fill="none" stroke="black" points="127,-164.5 127,-183.5 263,-183.5 263,-164.5 127,-164.5"/>
-<text text-anchor="middle" x="195" y="-171.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::SimpleRenderable</text>
+<!-- Node18 -->
+<g id="node18" class="node">
+<title>Node18</title>
+<g id="a_node18"><a xlink:href="class_ogre_1_1v1_1_1_overlay_element.html" target="_top" xlink:title="Abstract definition of a 2D element to be displayed in an Overlay.">
+<polygon fill="none" stroke="black" points="132.5,-164.5 132.5,-183.5 257.5,-183.5 257.5,-164.5 132.5,-164.5"/>
+<text text-anchor="middle" x="195" y="-171.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayElement</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node22 -->
-<g id="edge21" class="edge">
-<title>Node1&#45;&gt;Node22</title>
-<path fill="none" stroke="midnightblue" d="M53.94,-296.75C65.44,-269.53 90.15,-220.09 127,-193 132.26,-189.13 138.28,-186.05 144.51,-183.6"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="50.57,-295.73 50.05,-306.31 57.06,-298.36 50.57,-295.73"/>
+<!-- Node1&#45;&gt;Node18 -->
+<g id="edge17" class="edge">
+<title>Node1&#45;&gt;Node18</title>
+<path fill="none" stroke="midnightblue" d="M53.75,-299.87C65.15,-272.37 89.85,-221.91 127,-194 132.82,-189.62 139.6,-186.2 146.56,-183.53"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="50.49,-298.61 50.04,-309.19 56.99,-301.2 50.49,-298.61"/>
+</g>
+<!-- Node23 -->
+<g id="node23" class="node">
+<title>Node23</title>
+<g id="a_node23"><a xlink:href="class_ogre_1_1v1_1_1_rectangle2_d.html" target="_top" xlink:title="Allows the rendering of a simple 2D rectangle This class renders a simple 2D rectangle; this rectangl...">
+<polygon fill="none" stroke="black" points="138.5,-126.5 138.5,-145.5 251.5,-145.5 251.5,-126.5 138.5,-126.5"/>
+<text text-anchor="middle" x="195" y="-133.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::Rectangle2D</text>
+</a>
+</g>
+</g>
+<!-- Node1&#45;&gt;Node23 -->
+<g id="edge22" class="edge">
+<title>Node1&#45;&gt;Node23</title>
+<path fill="none" stroke="midnightblue" d="M50.63,-299.34C58.92,-264.86 80.85,-193.51 127,-155 131.64,-151.13 137.03,-148.04 142.69,-145.58"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="47.21,-298.62 48.41,-309.15 54.03,-300.17 47.21,-298.62"/>
 </g>
 <!-- Node24 -->
 <g id="node24" class="node">
 <title>Node24</title>
-<g id="a_node24"><a xlink:href="class_ogre_1_1v1_1_1_static_geometry_1_1_geometry_bucket.html" target="_top" xlink:title="A GeometryBucket is a the lowest level bucket where geometry with the same vertex &amp; index format is s...">
-<polygon fill="none" stroke="black" points="132.5,-115 132.5,-145 257.5,-145 257.5,-115 132.5,-115"/>
-<text text-anchor="start" x="140.5" y="-133" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::StaticGeometry</text>
-<text text-anchor="middle" x="195" y="-122" font-family="Helvetica,sans-Serif" font-size="10.00">::GeometryBucket</text>
+<g id="a_node24"><a xlink:href="class_ogre_1_1v1_1_1_simple_renderable.html" target="_top" xlink:title="Simple implementation of MovableObject and Renderable for single&#45;part custom objects.">
+<polygon fill="none" stroke="black" points="127,-88.5 127,-107.5 263,-107.5 263,-88.5 127,-88.5"/>
+<text text-anchor="middle" x="195" y="-95.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::SimpleRenderable</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node24 -->
 <g id="edge23" class="edge">
 <title>Node1&#45;&gt;Node24</title>
-<path fill="none" stroke="midnightblue" d="M51.31,-296.15C60.43,-262.53 83.36,-194.23 127,-155 131.25,-151.18 136.13,-147.93 141.29,-145.16"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="47.84,-295.57 48.73,-306.13 54.62,-297.32 47.84,-295.57"/>
-</g>
-<!-- Node25 -->
-<g id="node25" class="node">
-<title>Node25</title>
-<g id="a_node25"><a xlink:href="class_ogre_1_1v1_1_1_sub_entity.html" target="_top" xlink:title="Utility class which defines the sub&#45;parts of an Entity.">
-<polygon fill="none" stroke="black" points="146,-76.5 146,-95.5 244,-95.5 244,-76.5 146,-76.5"/>
-<text text-anchor="middle" x="195" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::SubEntity</text>
-</a>
-</g>
-</g>
-<!-- Node1&#45;&gt;Node25 -->
-<g id="edge24" class="edge">
-<title>Node1&#45;&gt;Node25</title>
-<path fill="none" stroke="midnightblue" d="M48.25,-296.13C53,-254.42 69.9,-157.27 127,-105 132.35,-100.1 138.87,-96.46 145.73,-93.74"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="44.74,-296.04 47.21,-306.34 51.7,-296.75 44.74,-296.04"/>
+<path fill="none" stroke="midnightblue" d="M48.63,-299.14C54.04,-258.74 72.03,-166.59 127,-117 131.31,-113.11 136.36,-110.02 141.72,-107.55"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="45.13,-298.95 47.4,-309.3 52.08,-299.79 45.13,-298.95"/>
 </g>
 <!-- Node26 -->
 <g id="node26" class="node">
 <title>Node26</title>
-<g id="a_node26"><a xlink:href="class_ogre_1_1_voxel_visualizer.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="141,-38.5 141,-57.5 249,-57.5 249,-38.5 141,-38.5"/>
-<text text-anchor="middle" x="195" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::VoxelVisualizer</text>
+<g id="a_node26"><a xlink:href="class_ogre_1_1v1_1_1_static_geometry_1_1_geometry_bucket.html" target="_top" xlink:title="A GeometryBucket is a the lowest level bucket where geometry with the same vertex &amp; index format is s...">
+<polygon fill="none" stroke="black" points="132.5,-39 132.5,-69 257.5,-69 257.5,-39 132.5,-39"/>
+<text text-anchor="start" x="140.5" y="-57" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::StaticGeometry</text>
+<text text-anchor="middle" x="195" y="-46" font-family="Helvetica,sans-Serif" font-size="10.00">::GeometryBucket</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node26 -->
 <g id="edge25" class="edge">
 <title>Node1&#45;&gt;Node26</title>
-<path fill="none" stroke="midnightblue" d="M46.89,-296.48C48.92,-249.82 60.68,-130.95 127,-67 131,-63.14 135.73,-60.05 140.79,-57.59"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="43.39,-296.37 46.56,-306.48 50.39,-296.6 43.39,-296.37"/>
+<path fill="none" stroke="midnightblue" d="M47.57,-299.01C51.05,-253.73 65.73,-142.36 127,-79 130.71,-75.16 135.07,-71.91 139.74,-69.15"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="44.06,-299.05 46.89,-309.26 51.05,-299.51 44.06,-299.05"/>
 </g>
 <!-- Node27 -->
 <g id="node27" class="node">
 <title>Node27</title>
-<g id="a_node27"><a xlink:href="class_ogre_1_1_wire_aabb.html" target="_top" xlink:title="Helper class to display the Aabb of a MovableObject as lines.">
-<polygon fill="none" stroke="black" points="153,-0.5 153,-19.5 237,-19.5 237,-0.5 153,-0.5"/>
-<text text-anchor="middle" x="195" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::WireAabb</text>
+<g id="a_node27"><a xlink:href="class_ogre_1_1v1_1_1_sub_entity.html" target="_top" xlink:title="Utility class which defines the sub&#45;parts of an Entity.">
+<polygon fill="none" stroke="black" points="146,-0.5 146,-19.5 244,-19.5 244,-0.5 146,-0.5"/>
+<text text-anchor="middle" x="195" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::SubEntity</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node27 -->
 <g id="edge26" class="edge">
 <title>Node1&#45;&gt;Node27</title>
-<path fill="none" stroke="midnightblue" d="M45.9,-296.36C45.45,-244.86 51.59,-104.63 127,-29 134,-21.98 143.39,-17.51 152.92,-14.67"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="42.4,-296.53 46.09,-306.46 49.4,-296.4 42.4,-296.53"/>
+<path fill="none" stroke="midnightblue" d="M45.83,-299.16C45.2,-247.13 50.96,-105.47 127,-29 132.29,-23.68 138.94,-19.83 145.99,-17.04"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="42.34,-299.44 46.05,-309.37 49.33,-299.29 42.34,-299.44"/>
 </g>
 <!-- Node3 -->
 <g id="node3" class="node">
@@ -320,97 +320,97 @@
 <path fill="none" stroke="midnightblue" d="M271.46,-452C290.39,-452 309.93,-452 326.22,-452"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="271.34,-448.5 261.34,-452 271.34,-455.5 271.34,-448.5"/>
 </g>
-<!-- Node12 -->
-<g id="node12" class="node">
-<title>Node12</title>
-<g id="a_node12"><a xlink:href="class_ogre_1_1v1_1_1_ribbon_trail.html" target="_top" xlink:title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances.">
-<polygon fill="none" stroke="black" points="313,-404.5 313,-423.5 419,-423.5 419,-404.5 313,-404.5"/>
-<text text-anchor="middle" x="366" y="-411.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::RibbonTrail</text>
+<!-- Node14 -->
+<g id="node14" class="node">
+<title>Node14</title>
+<g id="a_node14"><a xlink:href="class_ogre_1_1v1_1_1_ribbon_trail.html" target="_top" xlink:title="Subclass of BillboardChain which automatically leaves a trail behind one or more Node instances.">
+<polygon fill="none" stroke="black" points="313,-328.5 313,-347.5 419,-347.5 419,-328.5 313,-328.5"/>
+<text text-anchor="middle" x="366" y="-335.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::RibbonTrail</text>
 </a>
 </g>
 </g>
-<!-- Node11&#45;&gt;Node12 -->
-<g id="edge11" class="edge">
-<title>Node11&#45;&gt;Node12</title>
-<path fill="none" stroke="midnightblue" d="M265.02,-414C281.04,-414 297.82,-414 312.96,-414"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="264.63,-410.5 254.63,-414 264.63,-417.5 264.63,-410.5"/>
-</g>
-<!-- Node17 -->
-<g id="node17" class="node">
-<title>Node17</title>
-<g id="a_node17"><a xlink:href="class_ogre_1_1v1_1_1_overlay_container.html" target="_top" xlink:title="A 2D element which contains other OverlayElement instances.">
-<polygon fill="none" stroke="black" points="300.5,-268.5 300.5,-287.5 431.5,-287.5 431.5,-268.5 300.5,-268.5"/>
-<text text-anchor="middle" x="366" y="-275.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayContainer</text>
-</a>
-</g>
-</g>
-<!-- Node16&#45;&gt;Node17 -->
-<g id="edge16" class="edge">
-<title>Node16&#45;&gt;Node17</title>
-<path fill="none" stroke="midnightblue" d="M263.63,-261.21C278.19,-263.62 293.45,-266.14 307.57,-268.49"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="264.13,-257.74 253.69,-259.56 262.98,-264.65 264.13,-257.74"/>
-</g>
-<!-- Node20 -->
-<g id="node20" class="node">
-<title>Node20</title>
-<g id="a_node20"><a xlink:href="class_ogre_1_1v1_1_1_text_area_overlay_element.html" target="_top" xlink:title="This class implements an overlay element which contains simple unformatted text.">
-<polygon fill="none" stroke="black" points="301.5,-219 301.5,-249 430.5,-249 430.5,-219 301.5,-219"/>
-<text text-anchor="start" x="309.5" y="-237" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::TextAreaOverlay</text>
-<text text-anchor="middle" x="366" y="-226" font-family="Helvetica,sans-Serif" font-size="10.00">Element</text>
-</a>
-</g>
-</g>
-<!-- Node16&#45;&gt;Node20 -->
-<g id="edge19" class="edge">
-<title>Node16&#45;&gt;Node20</title>
-<path fill="none" stroke="midnightblue" d="M268.03,-243.18C279.1,-242.13 290.47,-241.06 301.34,-240.03"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="267.6,-239.71 257.97,-244.13 268.26,-246.67 267.6,-239.71"/>
-</g>
-<!-- Node18 -->
-<g id="node18" class="node">
-<title>Node18</title>
-<g id="a_node18"><a xlink:href="class_ogre_1_1v1_1_1_panel_overlay_element.html" target="_top" xlink:title="OverlayElement representing a flat, single&#45;material (or transparent) panel which can contain other el...">
-<polygon fill="none" stroke="black" points="469,-268.5 469,-287.5 619,-287.5 619,-268.5 469,-268.5"/>
-<text text-anchor="middle" x="544" y="-275.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::PanelOverlayElement</text>
-</a>
-</g>
-</g>
-<!-- Node17&#45;&gt;Node18 -->
-<g id="edge17" class="edge">
-<title>Node17&#45;&gt;Node18</title>
-<path fill="none" stroke="midnightblue" d="M441.64,-278C450.68,-278 459.91,-278 468.94,-278"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="441.54,-274.5 431.54,-278 441.54,-281.5 441.54,-274.5"/>
+<!-- Node13&#45;&gt;Node14 -->
+<g id="edge13" class="edge">
+<title>Node13&#45;&gt;Node14</title>
+<path fill="none" stroke="midnightblue" d="M265.02,-338C281.04,-338 297.82,-338 312.96,-338"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="264.63,-334.5 254.63,-338 264.63,-341.5 264.63,-334.5"/>
 </g>
 <!-- Node19 -->
 <g id="node19" class="node">
 <title>Node19</title>
-<g id="a_node19"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element.html" target="_top" xlink:title="A specialisation of the PanelOverlayElement to provide a panel with a border.">
-<polygon fill="none" stroke="black" points="655,-263 655,-293 798,-293 798,-263 655,-263"/>
-<text text-anchor="start" x="663" y="-281" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
-<text text-anchor="middle" x="726.5" y="-270" font-family="Helvetica,sans-Serif" font-size="10.00">Element</text>
+<g id="a_node19"><a xlink:href="class_ogre_1_1v1_1_1_overlay_container.html" target="_top" xlink:title="A 2D element which contains other OverlayElement instances.">
+<polygon fill="none" stroke="black" points="300.5,-192.5 300.5,-211.5 431.5,-211.5 431.5,-192.5 300.5,-192.5"/>
+<text text-anchor="middle" x="366" y="-199.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::OverlayContainer</text>
 </a>
 </g>
 </g>
 <!-- Node18&#45;&gt;Node19 -->
 <g id="edge18" class="edge">
 <title>Node18&#45;&gt;Node19</title>
-<path fill="none" stroke="midnightblue" d="M629.47,-278C637.94,-278 646.48,-278 654.79,-278"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="629.2,-274.5 619.2,-278 629.2,-281.5 629.2,-274.5"/>
+<path fill="none" stroke="midnightblue" d="M263.63,-185.21C278.19,-187.62 293.45,-190.14 307.57,-192.49"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="264.13,-181.74 253.69,-183.56 262.98,-188.65 264.13,-181.74"/>
 </g>
-<!-- Node23 -->
-<g id="node23" class="node">
-<title>Node23</title>
-<g id="a_node23"><a xlink:href="class_ogre_1_1v1_1_1_wire_bounding_box.html" target="_top" xlink:title="Allows the rendering of a wireframe bounding box.">
-<polygon fill="none" stroke="black" points="299,-164.5 299,-183.5 433,-183.5 433,-164.5 299,-164.5"/>
-<text text-anchor="middle" x="366" y="-171.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::WireBoundingBox</text>
+<!-- Node22 -->
+<g id="node22" class="node">
+<title>Node22</title>
+<g id="a_node22"><a xlink:href="class_ogre_1_1v1_1_1_text_area_overlay_element.html" target="_top" xlink:title="This class implements an overlay element which contains simple unformatted text.">
+<polygon fill="none" stroke="black" points="301.5,-143 301.5,-173 430.5,-173 430.5,-143 301.5,-143"/>
+<text text-anchor="start" x="309.5" y="-161" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::TextAreaOverlay</text>
+<text text-anchor="middle" x="366" y="-150" font-family="Helvetica,sans-Serif" font-size="10.00">Element</text>
 </a>
 </g>
 </g>
-<!-- Node22&#45;&gt;Node23 -->
-<g id="edge22" class="edge">
-<title>Node22&#45;&gt;Node23</title>
-<path fill="none" stroke="midnightblue" d="M273.51,-174C281.95,-174 290.49,-174 298.78,-174"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="273.28,-170.5 263.28,-174 273.28,-177.5 273.28,-170.5"/>
+<!-- Node18&#45;&gt;Node22 -->
+<g id="edge21" class="edge">
+<title>Node18&#45;&gt;Node22</title>
+<path fill="none" stroke="midnightblue" d="M268.03,-167.18C279.1,-166.13 290.47,-165.06 301.34,-164.03"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="267.6,-163.71 257.97,-168.13 268.26,-170.67 267.6,-163.71"/>
+</g>
+<!-- Node20 -->
+<g id="node20" class="node">
+<title>Node20</title>
+<g id="a_node20"><a xlink:href="class_ogre_1_1v1_1_1_panel_overlay_element.html" target="_top" xlink:title="OverlayElement representing a flat, single&#45;material (or transparent) panel which can contain other el...">
+<polygon fill="none" stroke="black" points="469,-192.5 469,-211.5 619,-211.5 619,-192.5 469,-192.5"/>
+<text text-anchor="middle" x="544" y="-199.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::PanelOverlayElement</text>
+</a>
+</g>
+</g>
+<!-- Node19&#45;&gt;Node20 -->
+<g id="edge19" class="edge">
+<title>Node19&#45;&gt;Node20</title>
+<path fill="none" stroke="midnightblue" d="M441.64,-202C450.68,-202 459.91,-202 468.94,-202"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="441.54,-198.5 431.54,-202 441.54,-205.5 441.54,-198.5"/>
+</g>
+<!-- Node21 -->
+<g id="node21" class="node">
+<title>Node21</title>
+<g id="a_node21"><a xlink:href="class_ogre_1_1v1_1_1_border_panel_overlay_element.html" target="_top" xlink:title="A specialisation of the PanelOverlayElement to provide a panel with a border.">
+<polygon fill="none" stroke="black" points="655,-187 655,-217 798,-217 798,-187 655,-187"/>
+<text text-anchor="start" x="663" y="-205" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::BorderPanelOverlay</text>
+<text text-anchor="middle" x="726.5" y="-194" font-family="Helvetica,sans-Serif" font-size="10.00">Element</text>
+</a>
+</g>
+</g>
+<!-- Node20&#45;&gt;Node21 -->
+<g id="edge20" class="edge">
+<title>Node20&#45;&gt;Node21</title>
+<path fill="none" stroke="midnightblue" d="M629.47,-202C637.94,-202 646.48,-202 654.79,-202"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="629.2,-198.5 619.2,-202 629.2,-205.5 629.2,-198.5"/>
+</g>
+<!-- Node25 -->
+<g id="node25" class="node">
+<title>Node25</title>
+<g id="a_node25"><a xlink:href="class_ogre_1_1v1_1_1_wire_bounding_box.html" target="_top" xlink:title="Allows the rendering of a wireframe bounding box.">
+<polygon fill="none" stroke="black" points="299,-88.5 299,-107.5 433,-107.5 433,-88.5 299,-88.5"/>
+<text text-anchor="middle" x="366" y="-95.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::WireBoundingBox</text>
+</a>
+</g>
+</g>
+<!-- Node24&#45;&gt;Node25 -->
+<g id="edge24" class="edge">
+<title>Node24&#45;&gt;Node25</title>
+<path fill="none" stroke="midnightblue" d="M273.51,-98C281.95,-98 290.49,-98 298.78,-98"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="273.28,-94.5 263.28,-98 273.28,-101.5 273.28,-94.5"/>
 </g>
 </g>
 </svg>

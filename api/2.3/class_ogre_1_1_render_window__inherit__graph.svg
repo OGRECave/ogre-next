@@ -95,9 +95,9 @@
 <!-- Node15 -->
 <g id="node15" class="node">
 <title>Node15</title>
-<g id="a_node15"><a xlink:href="class_ogre_1_1_na_cl_window.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="483.5,-76.5 483.5,-95.5 581.5,-95.5 581.5,-76.5 483.5,-76.5"/>
-<text text-anchor="middle" x="532.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::NaClWindow</text>
+<g id="a_node15"><a xlink:href="class_ogre_1_1_n_u_l_l_render_window.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="465.5,-76.5 465.5,-95.5 599.5,-95.5 599.5,-76.5 465.5,-76.5"/>
+<text text-anchor="middle" x="532.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::NULLRenderWindow</text>
 </a>
 </g>
 </g>
@@ -110,16 +110,16 @@
 <!-- Node16 -->
 <g id="node16" class="node">
 <title>Node16</title>
-<g id="a_node16"><a xlink:href="class_ogre_1_1_n_u_l_l_render_window.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="465.5,-38.5 465.5,-57.5 599.5,-57.5 599.5,-38.5 465.5,-38.5"/>
-<text text-anchor="middle" x="532.5" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::NULLRenderWindow</text>
+<g id="a_node16"><a xlink:href="class_ogre_1_1_na_cl_window.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="483.5,-38.5 483.5,-57.5 581.5,-57.5 581.5,-38.5 483.5,-38.5"/>
+<text text-anchor="middle" x="532.5" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::NaClWindow</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node16 -->
 <g id="edge15" class="edge">
 <title>Node1&#45;&gt;Node16</title>
-<path fill="none" stroke="midnightblue" d="M379.86,-125.69C396.27,-108.28 423.88,-81.92 453,-67 460.49,-63.16 468.78,-60.08 477.08,-57.61"/>
+<path fill="none" stroke="midnightblue" d="M379.86,-125.69C396.27,-108.28 423.88,-81.92 453,-67 462.36,-62.2 472.97,-58.59 483.3,-55.87"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="376.93,-123.71 372.74,-133.44 382.09,-128.44 376.93,-123.71"/>
 </g>
 <!-- Node17 -->
