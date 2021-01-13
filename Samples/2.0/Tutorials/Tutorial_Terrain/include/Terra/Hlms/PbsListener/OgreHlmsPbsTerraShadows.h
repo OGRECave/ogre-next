@@ -51,7 +51,8 @@ namespace Ogre
 
         void setTerra( Terra *terra );
 
-        virtual uint16 getNumExtraPassTextures( bool casterPass ) const;
+        virtual uint16 getNumExtraPassTextures( const HlmsPropertyVec &properties,
+                                                bool casterPass ) const;
 
         virtual void propertiesMergedPreGenerationStep(
             Hlms *hlms, const HlmsCache &passCache, const HlmsPropertyVec &renderableCacheProperties,

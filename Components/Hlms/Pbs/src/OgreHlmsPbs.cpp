@@ -1256,7 +1256,7 @@ namespace Ogre
             ++texUnit;
         }
 
-        texUnit += mListener->getNumExtraPassTextures( casterPass );
+        texUnit += mListener->getNumExtraPassTextures( mSetProperties, casterPass );
 
         setProperty( PbsProperty::Set0TextureSlotEnd, texUnit );
 
@@ -2766,7 +2766,8 @@ namespace Ogre
 
         mTexBufUnitSlotEnd = mReservedTexBufferSlots;
         mTexUnitSlotStart = mPreparedPass.shadowMaps.size() + mReservedTexSlots +
-                            mReservedTexBufferSlots + mListener->getNumExtraPassTextures( casterPass );
+                            mReservedTexBufferSlots +
+                            mListener->getNumExtraPassTextures( mSetProperties, casterPass );
 
         if( !casterPass )
         {

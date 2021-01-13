@@ -87,9 +87,18 @@ namespace Ogre
                 const HlmsPropertyVec &properties,
                 const QueuedRenderable &queuedRenderable ) {}
 
-        /// If hlmsTypeChanged is going to be binding extra textures, override this function
-        /// to tell us how many textures you will use, so that we don't use those slots
-        virtual uint16 getNumExtraPassTextures( bool casterPass ) const { return 0u; }
+        /** If hlmsTypeChanged is going to be binding extra textures, override this function
+            to tell us how many textures you will use, so that we don't use those slots
+
+        @remarks
+            Given the same set of properties, the function must always return the same
+            value. Otherwise caching (i.e. HlmsDiskCache) won't work correctly
+        */
+        virtual uint16 getNumExtraPassTextures( const HlmsPropertyVec &properties,
+                                                bool casterPass ) const
+        {
+            return 0u;
+        }
 
         /** Called right before compiling. If customizations require additional resources slots
             (e.g. more textures) then this function should modify the root layout accordingly
