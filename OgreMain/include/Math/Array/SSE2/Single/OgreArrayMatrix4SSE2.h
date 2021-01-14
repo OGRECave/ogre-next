@@ -238,6 +238,6 @@ namespace Ogre
 
 }
 
-#include "OgreArrayMatrix4.inl"
+#include "OgreArrayMatrix4SSE2.inl"
 
 #endif

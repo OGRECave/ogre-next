@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __NEON_ArrayAabb_H__
-#define __NEON_ArrayAabb_H__
+#ifndef __C_ArrayAabb_H__
+#define __C_ArrayAabb_H__
 
 #ifndef __ArrayAabb_H__
     #error "Don't include this file directly. include Math/Array/OgreArrayAabb.h"
@@ -72,7 +72,9 @@ namespace Ogre
         ArrayVector3    mCenter;
         ArrayVector3    mHalfSize;
 
-        ArrayAabb() {}
+        ArrayAabb()
+        {
+        }
 
         ArrayAabb( const ArrayVector3 &center, const ArrayVector3 &halfSize ) :
                 mCenter( center ), mHalfSize( halfSize )
@@ -111,7 +113,7 @@ namespace Ogre
             aliasedReal[ARRAY_PACKED_REALS * 5 + index] = aabb.mHalfSize.z;     //Z
         }
 
-		void setAll( const Aabb &aabb )
+        void setAll( const Aabb &aabb )
         {
             mCenter.setAll( aabb.mCenter );
             mHalfSize.setAll( aabb.mHalfSize );
@@ -175,6 +177,6 @@ namespace Ogre
 
 }
 
-#include "OgreArrayAabb.inl"
+#include "OgreArrayAabbC.inl"
 
 #endif

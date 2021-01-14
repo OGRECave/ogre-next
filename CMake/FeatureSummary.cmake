@@ -205,8 +205,13 @@ var_to_string(OGRE_CONFIG_MEMTRACK_RELEASE _memtrack_release)
 var_to_string(OGRE_CONFIG_STRING_USE_CUSTOM_ALLOCATOR _string)
 var_to_string(OGRE_LEGACY_ANIMATIONS _use_legacy_animations)
 var_to_string(OGRE_USE_BOOST _boost)
-var_to_string(OGRE_SIMD_SSE2 _simdsse2)
-var_to_string(OGRE_SIMD_NEON _simdneon)
+var_to_string(OGRE_SIMD _simd)
+if (OGRE_SIMD_SSE2)
+	set(_simd "${_simd} (SSE2)")
+elseif (OGRE_SIMD_NEON)
+	set(_simd "${_simd} (NEON)")
+endif()
+
 # threading settings
 if (OGRE_CONFIG_THREADS EQUAL 0)
 	set(_threads "none")
@@ -234,8 +239,7 @@ set(_features "${_features}Memory tracker (debug):          ${_memtrack_debug}\n
 set(_features "${_features}Memory tracker (release):        ${_memtrack_release}\n")
 set(_features "${_features}Use 1_x legacy animations:       ${_use_legacy_animations}\n")
 set(_features "${_features}Use Boost:                       ${_boost}\n")
-set(_features "${_features}Use SIMD (SSE2):                 ${_simdsse2}\n")
-set(_features "${_features}Use SIMD (NEON):                 ${_simdneon}\n")
+set(_features "${_features}Use SIMD:                        ${_simd}\n")
 
 
 set(_features "${_features}\n----------------------------------------------------------------------------\n")

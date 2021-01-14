@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __C_ArraySphere_H__
-#define __C_ArraySphere_H__
+#ifndef __NEON_ArraySphere_H__
+#define __NEON_ArraySphere_H__
 
 #ifndef __ArraySphere_H__
     #error "Don't include this file directly. include Math/Array/OgreArraySphere.h"
@@ -103,10 +103,10 @@ namespace Ogre
         {
             const Real fRadius      = sphere.getRadius();
             const Vector3 &center   = sphere.getCenter();
-            mRadius = fRadius;
-            mCenter.mChunkBase[0] = center.x;
-            mCenter.mChunkBase[1] = center.y;
-            mCenter.mChunkBase[2] = center.z;
+            mRadius = vdupq_n_f32( fRadius );
+            mCenter.mChunkBase[0] = vdupq_n_f32( center.x );
+            mCenter.mChunkBase[1] = vdupq_n_f32( center.y );
+            mCenter.mChunkBase[2] = vdupq_n_f32( center.z );
         }
 
         /// @copydoc Sphere::intersects()
@@ -123,6 +123,6 @@ namespace Ogre
 
 }
 
-#include "OgreArraySphere.inl"
+#include "OgreArraySphereNEON.inl"
 
 #endif

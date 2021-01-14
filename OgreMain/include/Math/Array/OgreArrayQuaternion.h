@@ -31,20 +31,20 @@ THE SOFTWARE.
 //This file is a proxy, it redirects to the proper file depending on platform
 #include "OgreArrayConfig.h"
 
-#if OGRE_CPU == OGRE_CPU_X86 && OGRE_USE_SIMD == 1
+#if __OGRE_HAVE_SSE
     #if OGRE_DOUBLE_PRECISION == 1
-        #include "SSE2/Double/OgreArrayQuaternion.h"
+        #include "SSE2/Double/OgreArrayQuaternionSSE2.h"
     #else
-        #include "SSE2/Single/OgreArrayQuaternion.h"
+        #include "SSE2/Single/OgreArrayQuaternionSSE2.h"
     #endif
-#elif OGRE_CPU == OGRE_CPU_ARM && OGRE_USE_SIMD == 1
+#elif __OGRE_HAVE_NEON
     #if OGRE_DOUBLE_PRECISION == 1
         #error Double precision with SIMD on ARM is not supported
     #else
-        #include "NEON/Single/OgreArrayQuaternion.h"
+        #include "NEON/Single/OgreArrayQuaternionNEON.h"
     #endif
 #else
-    #include "C/OgreArrayQuaternion.h"
+    #include "C/OgreArrayQuaternionC.h"
 #endif
 
 #endif

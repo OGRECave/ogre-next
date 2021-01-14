@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __C_ArrayAabb_H__
-#define __C_ArrayAabb_H__
+#ifndef __SSE2_ArrayAabb_H__
+#define __SSE2_ArrayAabb_H__
 
 #ifndef __ArrayAabb_H__
     #error "Don't include this file directly. include Math/Array/OgreArrayAabb.h"
@@ -72,9 +72,7 @@ namespace Ogre
         ArrayVector3    mCenter;
         ArrayVector3    mHalfSize;
 
-        ArrayAabb()
-        {
-        }
+        ArrayAabb() {}
 
         ArrayAabb( const ArrayVector3 &center, const ArrayVector3 &halfSize ) :
                 mCenter( center ), mHalfSize( halfSize )
@@ -177,6 +175,6 @@ namespace Ogre
 
 }
 
-#include "OgreArrayAabb.inl"
+#include "OgreArrayAabbSSE2.inl"
 
 #endif

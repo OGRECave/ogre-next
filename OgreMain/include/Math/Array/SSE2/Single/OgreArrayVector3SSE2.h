@@ -373,6 +373,6 @@ namespace Ogre
 
 }
 
-#include "OgreArrayVector3.inl"
+#include "OgreArrayVector3SSE2.inl"
 
 #endif
