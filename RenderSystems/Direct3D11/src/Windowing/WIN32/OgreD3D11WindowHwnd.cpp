@@ -485,12 +485,11 @@ namespace Ogre
     {
         D3D11WindowSwapChainBased::destroy();
 
-        if( !mHwnd )
-            return;
-
-        WindowEventUtilities::_removeRenderWindow(this);
-
-        DestroyWindow( mHwnd );
+        if( mHwnd && !mIsExternal )
+        {
+            WindowEventUtilities::_removeRenderWindow(this);
+            DestroyWindow( mHwnd );
+        }
         mHwnd = 0;
     }
     //-----------------------------------------------------------------------------------
