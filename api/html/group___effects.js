@@ -1,6 +1,5 @@
 var group___effects =
 [
-    [ "EmitterCommands", "namespace_ogre_1_1_emitter_commands.html", null ],
     [ "BoundUav", "struct_ogre_1_1_bound_uav.html", [
       [ "boundAccess", "struct_ogre_1_1_bound_uav.html#a081a1057f00aa6e1389d6f9024d7f7a3", null ],
       [ "rttOrBuffer", "struct_ogre_1_1_bound_uav.html#ad099daaef4fdd709643d7cb13ef98d79", null ]
@@ -2512,7 +2511,6 @@ var group___effects =
       [ "createInstance", "class_ogre_1_1v1_1_1_billboard_particle_renderer_factory.html#af86f72c5db4e6ab5d082b79388357268", null ],
       [ "destroyInstance", "class_ogre_1_1v1_1_1_billboard_particle_renderer_factory.html#a3ebd1ed78e59f9250ed2eb2d1e5dc40f", null ],
       [ "getType", "class_ogre_1_1v1_1_1_billboard_particle_renderer_factory.html#a116c3fda54689c0dc0b40d8edbb3dffb", null ],
-      [ "getType", "class_ogre_1_1v1_1_1_billboard_particle_renderer_factory.html#a3d8aef92fb9e0eac7ed41167fb686a10", null ],
       [ "operator delete", "class_ogre_1_1v1_1_1_billboard_particle_renderer_factory.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
       [ "operator delete", "class_ogre_1_1v1_1_1_billboard_particle_renderer_factory.html#acb46d4b0a597156d9ba5abc39d127792", null ],
       [ "operator delete", "class_ogre_1_1v1_1_1_billboard_particle_renderer_factory.html#a1c727e879a260c37b00ce5505fe8e144", null ],

@@ -1,6 +1,5 @@
 var class_ogre_1_1v1_1_1_patch_surface =
 [
-    [ "AUTO_LEVEL", "class_ogre_1_1v1_1_1_patch_surface.html#a4b1025ed2cefcc86fab452a93ed573aaa24a525e5b3c75a3a090e08cc944e837b", null ],
     [ "PatchSurfaceType", "class_ogre_1_1v1_1_1_patch_surface.html#a45aa3fdf86a878209849e951b32783be", [
       [ "PST_BEZIER", "class_ogre_1_1v1_1_1_patch_surface.html#a45aa3fdf86a878209849e951b32783beac61f7b51936e54372f94591863a556d8", null ]
     ] ],

@@ -1,5 +1,8 @@
 var NAVTREEINDEX3 =
 {
+"_ogre_d3_d11_staging_texture_8h.html":[8,0,196],
+"_ogre_d3_d11_stereo_driver_a_m_d_8h.html":[8,0,197],
+"_ogre_d3_d11_stereo_driver_bridge_8h.html":[8,0,198],
 "_ogre_d3_d11_stereo_driver_impl_8h.html":[8,0,199],
 "_ogre_d3_d11_stereo_driver_n_v_i_d_i_a_8h.html":[8,0,200],
 "_ogre_d3_d11_tex_buffer_packed_8h.html":[8,0,201],
@@ -85,7 +88,6 @@ var NAVTREEINDEX3 =
 "_ogre_deflate_8h.html#aa4751fbf6d882976fb300ea9815f5010":[8,0,256,1],
 "_ogre_deflector_plane_affector_8h.html":[8,0,257],
 "_ogre_deflector_plane_affector_factory_8h.html":[8,0,258],
-"_ogre_depth_buffer_8h.html":[8,0,260],
 "_ogre_descriptor_set_sampler_8h.html":[8,0,261],
 "_ogre_descriptor_set_texture_8h.html":[8,0,262],
 "_ogre_descriptor_set_uav_8h.html":[8,0,263],
@@ -224,7 +226,6 @@ var NAVTREEINDEX3 =
 "_ogre_g_l3_plus_texture_manager_8h.html#a9f8ede152a4ce600bfcf6e8a7333b29f":[8,0,353,2],
 "_ogre_g_l3_plus_uav_buffer_packed_8h.html":[8,0,354],
 "_ogre_g_l3_plus_vao_manager_8h.html":[8,0,360],
-"_ogre_g_l3_plus_vertex_array_object_8h.html":[8,0,361],
 "_ogre_g_l_e_s2_async_ticket_8h.html":[8,0,363],
 "_ogre_g_l_e_s2_buffer_interface_8h.html":[8,0,364],
 "_ogre_g_l_e_s2_const_buffer_packed_8h.html":[8,0,365],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "_ogre_g_l_e_s2_managed_resource_8h.html":[8,0,383],
 "_ogre_g_l_e_s2_managed_resource_8h.html#a26a443c8384afbcb408a45a7d2888e47":[8,0,383,0],
 "_ogre_g_l_e_s2_managed_resource_8h.html#a2ba4ff6675c8ddf3dfd8dd8bbb7bd8b0":[8,0,383,1],
-"_ogre_g_l_e_s2_managed_resource_manager_8h.html":[8,0,384],
-"_ogre_g_l_e_s2_multi_source_vertex_buffer_pool_8h.html":[8,0,385]
+"_ogre_g_l_e_s2_managed_resource_manager_8h.html":[8,0,384]
 };

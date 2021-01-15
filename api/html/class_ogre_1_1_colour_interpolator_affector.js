@@ -2,7 +2,6 @@ var class_ogre_1_1_colour_interpolator_affector =
 [
     [ "CmdColourAdjust", "class_ogre_1_1_colour_interpolator_affector_1_1_cmd_colour_adjust.html", "class_ogre_1_1_colour_interpolator_affector_1_1_cmd_colour_adjust" ],
     [ "CmdTimeAdjust", "class_ogre_1_1_colour_interpolator_affector_1_1_cmd_time_adjust.html", "class_ogre_1_1_colour_interpolator_affector_1_1_cmd_time_adjust" ],
-    [ "MAX_STAGES", "class_ogre_1_1_colour_interpolator_affector.html#a968525aaa656531c9442663b8f157c68a8bf32ea3e3c96b8616c44bdf5d47fb28", null ],
     [ "ColourInterpolatorAffector", "class_ogre_1_1_colour_interpolator_affector.html#a23342275feed700c10a601e5edb17152", null ],
     [ "_affectParticles", "class_ogre_1_1_colour_interpolator_affector.html#a28d59576dcb488c86373eb74d6f0e1ed", null ],
     [ "_initParticle", "class_ogre_1_1_colour_interpolator_affector.html#a5f401d9023e7bb484ff3ff49e70c9510", null ],

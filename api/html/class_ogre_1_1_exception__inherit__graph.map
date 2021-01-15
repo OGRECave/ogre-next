@@ -1,11 +1,11 @@
 <map id="Ogre::Exception" name="Ogre::Exception">
 <area shape="rect" id="node1" title="When thrown, provides information about an error that has occurred inside the engine." alt="" coords="155,233,267,260"/>
 <area shape="rect" id="node3" href="$class_ogre_1_1_file_not_found_exception.html" title=" " alt="" coords="328,5,519,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_internal_error_exception.html" title=" " alt="" coords="332,56,515,83"/>
-<area shape="rect" id="node5" href="$class_ogre_1_1_invalid_call_exception.html" title=" " alt="" coords="337,107,509,133"/>
-<area shape="rect" id="node6" href="$class_ogre_1_1_invalid_parameters_exception.html" title=" " alt="" coords="315,157,532,184"/>
-<area shape="rect" id="node7" href="$class_ogre_1_1_invalid_state_exception.html" title=" " alt="" coords="333,208,514,235"/>
-<area shape="rect" id="node8" href="$class_ogre_1_1_i_o_exception.html" title=" " alt="" coords="360,259,487,285"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_i_o_exception.html" title=" " alt="" coords="360,56,487,83"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_internal_error_exception.html" title=" " alt="" coords="332,107,515,133"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_invalid_call_exception.html" title=" " alt="" coords="337,157,509,184"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_invalid_parameters_exception.html" title=" " alt="" coords="315,208,532,235"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_invalid_state_exception.html" title=" " alt="" coords="333,259,514,285"/>
 <area shape="rect" id="node9" href="$class_ogre_1_1_item_identity_exception.html" title=" " alt="" coords="333,309,513,336"/>
 <area shape="rect" id="node10" href="$class_ogre_1_1_rendering_a_p_i_exception.html" title=" " alt="" coords="327,360,519,387"/>
 <area shape="rect" id="node11" href="$class_ogre_1_1_runtime_assertion_exception.html" title=" " alt="" coords="316,411,531,437"/>

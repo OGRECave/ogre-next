@@ -1,6 +1,5 @@
 var group___animation =
 [
-    [ "v1", "namespace_ogre_1_1v1.html", null ],
     [ "AnimableObject", "class_ogre_1_1_animable_object.html", [
       [ "AnimableObject", "class_ogre_1_1_animable_object.html#acc4f830de60e226fbed772610eea93a4", null ],
       [ "~AnimableObject", "class_ogre_1_1_animable_object.html#ac61ca9c912e6b00bbe4fdd9ee0e56079", null ],

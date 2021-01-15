@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['what_27s_20new_20in_20ogre_202_2e2_33815',['What&apos;s new in Ogre 2.2',['../_ogre22_changes.html',1,'manual']]],
-  ['windows_33816',['Windows',['../_setting_up_ogre_windows.html',1,'SettingUpOgre']]]
+  ['what_27s_20new_20in_20ogre_202_2e2_33765',['What&apos;s new in Ogre 2.2',['../_ogre22_changes.html',1,'manual']]],
+  ['windows_33766',['Windows',['../_setting_up_ogre_windows.html',1,'SettingUpOgre']]]
 ];
