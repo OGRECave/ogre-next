@@ -1,8 +1,5 @@
 var group___scene =
 [
-    [ "SceneFlags", "namespace_ogre_1_1_scene_flags.html", null ],
-    [ "v1", "namespace_ogre_1_1v1.html", null ],
-    [ "VisibilityFlags", "namespace_ogre_1_1_visibility_flags.html", null ],
     [ "AxisAlignedBoxSceneQuery", "class_ogre_1_1_axis_aligned_box_scene_query.html", [
       [ "WorldFragmentType", "class_ogre_1_1_axis_aligned_box_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3a", [
         [ "WFT_NONE", "class_ogre_1_1_axis_aligned_box_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa6ed287fab168d451beb369009f0fd03b", null ],

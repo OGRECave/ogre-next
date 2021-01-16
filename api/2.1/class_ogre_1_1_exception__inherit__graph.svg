@@ -35,24 +35,24 @@
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
-<g id="a_node4"><a xlink:href="class_ogre_1_1_internal_error_exception.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="245,-304.5 245,-323.5 382,-323.5 382,-304.5 245,-304.5"/>
-<text text-anchor="middle" x="313.5" y="-311.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::InternalErrorException</text>
+<g id="a_node4"><a xlink:href="class_ogre_1_1_i_o_exception.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="266,-304.5 266,-323.5 361,-323.5 361,-304.5 266,-304.5"/>
+<text text-anchor="middle" x="313.5" y="-311.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::IOException</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node4 -->
 <g id="edge3" class="edge">
 <title>Node1&#45;&gt;Node4</title>
-<path fill="none" stroke="midnightblue" d="M162.6,-200.15C173.81,-225.85 197.28,-271.03 232,-295 237.55,-298.83 243.78,-301.9 250.25,-304.35"/>
+<path fill="none" stroke="midnightblue" d="M162.6,-200.15C173.81,-225.85 197.28,-271.03 232,-295 241.93,-301.85 254.01,-306.25 265.76,-309.08"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="165.75,-198.62 158.66,-190.75 159.29,-201.32 165.75,-198.62"/>
 </g>
 <!-- Node5 -->
 <g id="node5" class="node">
 <title>Node5</title>
-<g id="a_node5"><a xlink:href="class_ogre_1_1_invalid_call_exception.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="249,-266.5 249,-285.5 378,-285.5 378,-266.5 249,-266.5"/>
-<text text-anchor="middle" x="313.5" y="-273.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::InvalidCallException</text>
+<g id="a_node5"><a xlink:href="class_ogre_1_1_internal_error_exception.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="245,-266.5 245,-285.5 382,-285.5 382,-266.5 245,-266.5"/>
+<text text-anchor="middle" x="313.5" y="-273.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::InternalErrorException</text>
 </a>
 </g>
 </g>
@@ -65,9 +65,9 @@
 <!-- Node6 -->
 <g id="node6" class="node">
 <title>Node6</title>
-<g id="a_node6"><a xlink:href="class_ogre_1_1_invalid_parameters_exception.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="232,-228.5 232,-247.5 395,-247.5 395,-228.5 232,-228.5"/>
-<text text-anchor="middle" x="313.5" y="-235.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::InvalidParametersException</text>
+<g id="a_node6"><a xlink:href="class_ogre_1_1_invalid_call_exception.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="249,-228.5 249,-247.5 378,-247.5 378,-228.5 249,-228.5"/>
+<text text-anchor="middle" x="313.5" y="-235.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::InvalidCallException</text>
 </a>
 </g>
 </g>
@@ -80,31 +80,31 @@
 <!-- Node7 -->
 <g id="node7" class="node">
 <title>Node7</title>
-<g id="a_node7"><a xlink:href="class_ogre_1_1_invalid_state_exception.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="245.5,-190.5 245.5,-209.5 381.5,-209.5 381.5,-190.5 245.5,-190.5"/>
-<text text-anchor="middle" x="313.5" y="-197.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::InvalidStateException</text>
+<g id="a_node7"><a xlink:href="class_ogre_1_1_invalid_parameters_exception.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="232,-190.5 232,-209.5 395,-209.5 395,-190.5 232,-190.5"/>
+<text text-anchor="middle" x="313.5" y="-197.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::InvalidParametersException</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node7 -->
 <g id="edge6" class="edge">
 <title>Node1&#45;&gt;Node7</title>
-<path fill="none" stroke="midnightblue" d="M206.49,-187.21C218.86,-188.7 232.24,-190.32 245.21,-191.88"/>
+<path fill="none" stroke="midnightblue" d="M206.37,-187.2C215.1,-188.25 224.35,-189.37 233.6,-190.48"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="206.73,-183.71 196.38,-185.99 205.89,-190.66 206.73,-183.71"/>
 </g>
 <!-- Node8 -->
 <g id="node8" class="node">
 <title>Node8</title>
-<g id="a_node8"><a xlink:href="class_ogre_1_1_i_o_exception.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="266,-152.5 266,-171.5 361,-171.5 361,-152.5 266,-152.5"/>
-<text text-anchor="middle" x="313.5" y="-159.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::IOException</text>
+<g id="a_node8"><a xlink:href="class_ogre_1_1_invalid_state_exception.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="245.5,-152.5 245.5,-171.5 381.5,-171.5 381.5,-152.5 245.5,-152.5"/>
+<text text-anchor="middle" x="313.5" y="-159.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::InvalidStateException</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node8 -->
 <g id="edge7" class="edge">
 <title>Node1&#45;&gt;Node8</title>
-<path fill="none" stroke="midnightblue" d="M206.43,-174.8C225.56,-172.49 247.15,-169.88 265.84,-167.63"/>
+<path fill="none" stroke="midnightblue" d="M206.49,-174.79C218.86,-173.3 232.24,-171.68 245.21,-170.12"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="205.89,-171.34 196.38,-176.01 206.73,-178.29 205.89,-171.34"/>
 </g>
 <!-- Node9 -->

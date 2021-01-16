@@ -146,7 +146,7 @@ var searchData=
   ['num_5fcompare_5ffunctions_8788',['NUM_COMPARE_FUNCTIONS',['../group___general.html#gga0212b4eb264f207d84c1df9425208c7aaaca094fbaf9f2b5b12a375e0de08be43',1,'Ogre']]],
   ['num_5flight_5ftypes_8789',['NUM_LIGHT_TYPES',['../class_ogre_1_1_light.html#a4f1dea084d1497c6f49e802ade940dbca90fd73505abfc3ebfa47c8571ca55b18',1,'Ogre::Light']]],
   ['num_5fmapping_5fstate_8790',['NUM_MAPPING_STATE',['../namespace_ogre.html#a447e51d7625af79716667cebcfa6da57aea0c0c9e027fc49a40600a564dbe733d',1,'Ogre']]],
-  ['num_5fmasks_8791',['NUM_MASKS',['../class_ogre_1_1_boolean_mask4.html#af3a5ca1004f3aa3b6f246867c7235ab9a8435abfd8066bc039c1a60292ba0e8c2',1,'Ogre::BooleanMask4']]],
+  ['num_5fmasks_8791',['NUM_MASKS',['../class_ogre_1_1_boolean_mask4.html#a3a28a7d8a0973bd1f81430c6f075cd49a8435abfd8066bc039c1a60292ba0e8c2',1,'Ogre::BooleanMask4']]],
   ['num_5fmipmaps_8792',['num_mipmaps',['../class_ogre_1_1_image_codec_1_1_image_data.html#afe536f70917bc5aef6fba4b1a8f7acf7',1,'Ogre::ImageCodec::ImageData']]],
   ['num_5fpbsm_5fblend_5fmodes_8793',['NUM_PBSM_BLEND_MODES',['../namespace_ogre.html#a0c6264d875a99e59c748064cee2e1fc4a606804789b060eb14931f20eda470342',1,'Ogre']]],
   ['num_5fpbsm_5fsources_8794',['NUM_PBSM_SOURCES',['../namespace_ogre.html#a342a992a9d37255505fc5fbb7f0584d9a5ed85b93ea3aceffa7d2f8f599ed4fff',1,'Ogre']]],
@@ -198,15 +198,8 @@ var searchData=
   ['nx_8840',['nX',['../struct_ogre_1_1_volume_1_1_vertex.html#a94101364a0552536020d26d44b8c2b55',1,'Ogre::Volume::Vertex']]],
   ['ny_8841',['nY',['../struct_ogre_1_1_volume_1_1_vertex.html#aa6e33996a0561273423e609e79d46a21',1,'Ogre::Volume::Vertex']]],
   ['nz_8842',['nZ',['../struct_ogre_1_1_volume_1_1_vertex.html#af1ba6049f69b847ea4db2adf3e7895cf',1,'Ogre::Volume::Vertex']]],
-  ['ogrearrayaabb_2eh_8843',['OgreArrayAabb.h',['../_n_e_o_n_2_single_2_ogre_array_aabb_8h.html',1,'']]],
-  ['ogrearraymatrix4_2eh_8844',['OgreArrayMatrix4.h',['../_n_e_o_n_2_single_2_ogre_array_matrix4_8h.html',1,'']]],
-  ['ogrearraymatrixaf4x3_2eh_8845',['OgreArrayMatrixAf4x3.h',['../_n_e_o_n_2_single_2_ogre_array_matrix_af4x3_8h.html',1,'']]],
-  ['ogrearrayquaternion_2eh_8846',['OgreArrayQuaternion.h',['../_n_e_o_n_2_single_2_ogre_array_quaternion_8h.html',1,'']]],
-  ['ogrearraysphere_2eh_8847',['OgreArraySphere.h',['../_n_e_o_n_2_single_2_ogre_array_sphere_8h.html',1,'']]],
-  ['ogrearrayvector3_2eh_8848',['OgreArrayVector3.h',['../_n_e_o_n_2_single_2_ogre_array_vector3_8h.html',1,'']]],
-  ['ogrebooleanmask_2eh_8849',['OgreBooleanMask.h',['../_n_e_o_n_2_single_2_ogre_boolean_mask_8h.html',1,'']]],
-  ['ogreconfigdialogimp_2eh_8850',['OgreConfigDialogImp.h',['../_na_cl_2_ogre_config_dialog_imp_8h.html',1,'']]],
-  ['ogreerrordialogimp_2eh_8851',['OgreErrorDialogImp.h',['../_na_cl_2_ogre_error_dialog_imp_8h.html',1,'']]],
-  ['ogregles2util_2eh_8852',['OgreGLES2Util.h',['../_na_cl_2_ogre_g_l_e_s2_util_8h.html',1,'']]],
-  ['ogretimerimp_2eh_8853',['OgreTimerImp.h',['../_na_cl_2_ogre_timer_imp_8h.html',1,'']]]
+  ['ogreconfigdialogimp_2eh_8843',['OgreConfigDialogImp.h',['../_na_cl_2_ogre_config_dialog_imp_8h.html',1,'']]],
+  ['ogreerrordialogimp_2eh_8844',['OgreErrorDialogImp.h',['../_na_cl_2_ogre_error_dialog_imp_8h.html',1,'']]],
+  ['ogregles2util_2eh_8845',['OgreGLES2Util.h',['../_na_cl_2_ogre_g_l_e_s2_util_8h.html',1,'']]],
+  ['ogretimerimp_2eh_8846',['OgreTimerImp.h',['../_na_cl_2_ogre_timer_imp_8h.html',1,'']]]
 ];

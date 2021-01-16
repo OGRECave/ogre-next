@@ -1,6 +1,5 @@
 var group___overlays =
 [
-    [ "OverlayElementCommands", "namespace_ogre_1_1v1_1_1_overlay_element_commands.html", null ],
     [ "BorderPanelOverlayElement", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html", [
       [ "CmdBorderBottomLeftUV", "class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_bottom_left_u_v.html", [
         [ "doGet", "class_ogre_1_1v1_1_1_border_panel_overlay_element_1_1_cmd_border_bottom_left_u_v.html#a3c1f2e6beb393bd72e90088303b8ec48", null ],

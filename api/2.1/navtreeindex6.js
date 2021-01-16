@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"_ogre_lod_prerequisites_8h.html#a1d929785307fde3a818e9aa956d0f620":[8,0,513,1],
+"_ogre_lod_prerequisites_8h.html#a21e9f49a10786c1988de97ea4af1a9ee":[8,0,513,4],
 "_ogre_lod_prerequisites_8h.html#a2443cfc3de127c74d364ec23ecfddcad":[8,0,513,0],
 "_ogre_lod_prerequisites_8h.html#a85a340f35bf274668aa757bed23b5ff1":[8,0,513,3],
 "_ogre_lod_prerequisites_8h.html#a9fd71fd7bfbb195319bb4ae3ef81f1c7":[8,0,513,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX6 =
 "_ogre_metal_program_factory_8h.html":[8,0,577],
 "_ogre_metal_render_system_8h.html":[8,0,578],
 "_ogre_metal_render_target_common_8h.html":[8,0,579],
-"_ogre_metal_render_texture_8h.html":[8,0,580],
-"_ogre_metal_render_window_8h.html":[8,0,581],
-"_ogre_metal_staging_buffer_8h.html":[8,0,582]
+"_ogre_metal_render_texture_8h.html":[8,0,580]
 };

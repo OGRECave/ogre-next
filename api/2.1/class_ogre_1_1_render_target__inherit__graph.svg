@@ -504,31 +504,31 @@
 <!-- Node39 -->
 <g id="node39" class="node">
 <title>Node39</title>
-<g id="a_node39"><a xlink:href="class_ogre_1_1_na_cl_window.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="462.5,-114.5 462.5,-133.5 560.5,-133.5 560.5,-114.5 462.5,-114.5"/>
-<text text-anchor="middle" x="511.5" y="-121.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::NaClWindow</text>
+<g id="a_node39"><a xlink:href="class_ogre_1_1_n_u_l_l_render_window.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="444.5,-114.5 444.5,-133.5 578.5,-133.5 578.5,-114.5 444.5,-114.5"/>
+<text text-anchor="middle" x="511.5" y="-121.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::NULLRenderWindow</text>
 </a>
 </g>
 </g>
 <!-- Node26&#45;&gt;Node39 -->
 <g id="edge38" class="edge">
 <title>Node26&#45;&gt;Node39</title>
-<path fill="none" stroke="midnightblue" d="M352.46,-202.22C370.44,-184.85 400.85,-158.19 432,-143 441.45,-138.39 452.11,-134.85 462.44,-132.15"/>
+<path fill="none" stroke="midnightblue" d="M352.46,-202.22C370.44,-184.85 400.85,-158.19 432,-143 439.94,-139.13 448.73,-136.01 457.46,-133.51"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="349.78,-199.95 345.12,-209.47 354.69,-204.93 349.78,-199.95"/>
 </g>
 <!-- Node40 -->
 <g id="node40" class="node">
 <title>Node40</title>
-<g id="a_node40"><a xlink:href="class_ogre_1_1_n_u_l_l_render_window.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="444.5,-76.5 444.5,-95.5 578.5,-95.5 578.5,-76.5 444.5,-76.5"/>
-<text text-anchor="middle" x="511.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::NULLRenderWindow</text>
+<g id="a_node40"><a xlink:href="class_ogre_1_1_na_cl_window.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="462.5,-76.5 462.5,-95.5 560.5,-95.5 560.5,-76.5 462.5,-76.5"/>
+<text text-anchor="middle" x="511.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::NaClWindow</text>
 </a>
 </g>
 </g>
 <!-- Node26&#45;&gt;Node40 -->
 <g id="edge39" class="edge">
 <title>Node26&#45;&gt;Node40</title>
-<path fill="none" stroke="midnightblue" d="M346.34,-200.55C361.64,-175 392.79,-129.27 432,-105 438.32,-101.09 445.39,-97.98 452.62,-95.52"/>
+<path fill="none" stroke="midnightblue" d="M346.34,-200.55C361.64,-175 392.79,-129.27 432,-105 441.18,-99.32 451.94,-95.34 462.5,-92.54"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="343.27,-198.86 341.27,-209.26 349.32,-202.38 343.27,-198.86"/>
 </g>
 <!-- Node41 -->

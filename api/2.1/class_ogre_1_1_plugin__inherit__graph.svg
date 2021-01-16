@@ -170,31 +170,31 @@
 <!-- Node13 -->
 <g id="node13" class="node">
 <title>Node13</title>
-<g id="a_node13"><a xlink:href="class_ogre_1_1_particle_f_x_plugin.html" target="_top" xlink:title="Plugin instance for ParticleFX Manager.">
-<polygon fill="none" stroke="black" points="224.5,-38.5 224.5,-57.5 339.5,-57.5 339.5,-38.5 224.5,-38.5"/>
-<text text-anchor="middle" x="282" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleFXPlugin</text>
+<g id="a_node13"><a xlink:href="class_ogre_1_1_p_c_z_plugin.html" target="_top" xlink:title="Plugin instance for PCZ Manager.">
+<polygon fill="none" stroke="black" points="237.5,-38.5 237.5,-57.5 326.5,-57.5 326.5,-38.5 237.5,-38.5"/>
+<text text-anchor="middle" x="282" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::PCZPlugin</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node13 -->
 <g id="edge12" class="edge">
 <title>Node1&#45;&gt;Node13</title>
-<path fill="none" stroke="midnightblue" d="M139.85,-199.38C146.46,-166.81 164.34,-101.74 206,-67 211.36,-62.53 217.64,-59.09 224.25,-56.45"/>
+<path fill="none" stroke="midnightblue" d="M139.85,-199.38C146.46,-166.81 164.34,-101.74 206,-67 214.87,-59.6 226.25,-55.03 237.44,-52.22"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="136.36,-198.96 137.96,-209.44 143.24,-200.26 136.36,-198.96"/>
 </g>
 <!-- Node14 -->
 <g id="node14" class="node">
 <title>Node14</title>
-<g id="a_node14"><a xlink:href="class_ogre_1_1_p_c_z_plugin.html" target="_top" xlink:title="Plugin instance for PCZ Manager.">
-<polygon fill="none" stroke="black" points="237.5,-0.5 237.5,-19.5 326.5,-19.5 326.5,-0.5 237.5,-0.5"/>
-<text text-anchor="middle" x="282" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::PCZPlugin</text>
+<g id="a_node14"><a xlink:href="class_ogre_1_1_particle_f_x_plugin.html" target="_top" xlink:title="Plugin instance for ParticleFX Manager.">
+<polygon fill="none" stroke="black" points="224.5,-0.5 224.5,-19.5 339.5,-19.5 339.5,-0.5 224.5,-0.5"/>
+<text text-anchor="middle" x="282" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ParticleFXPlugin</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node14 -->
 <g id="edge13" class="edge">
 <title>Node1&#45;&gt;Node14</title>
-<path fill="none" stroke="midnightblue" d="M137.86,-198.96C141.59,-160.17 155.43,-74.63 206,-29 214.68,-21.17 226.12,-16.47 237.44,-13.67"/>
+<path fill="none" stroke="midnightblue" d="M137.86,-198.96C141.59,-160.17 155.43,-74.63 206,-29 211.29,-24.23 217.6,-20.62 224.28,-17.9"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="134.33,-199.15 136.99,-209.4 141.31,-199.72 134.33,-199.15"/>
 </g>
 <!-- Node2 -->

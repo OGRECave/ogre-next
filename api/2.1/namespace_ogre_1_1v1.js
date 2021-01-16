@@ -179,5 +179,81 @@ var namespace_ogre_1_1v1 =
     [ "VertexMorphKeyFrame", "class_ogre_1_1v1_1_1_vertex_morph_key_frame.html", "class_ogre_1_1v1_1_1_vertex_morph_key_frame" ],
     [ "VertexPoseKeyFrame", "class_ogre_1_1v1_1_1_vertex_pose_key_frame.html", "class_ogre_1_1v1_1_1_vertex_pose_key_frame" ],
     [ "VertexShadowMapHelper", "class_ogre_1_1v1_1_1_vertex_shadow_map_helper.html", "class_ogre_1_1v1_1_1_vertex_shadow_map_helper" ],
-    [ "WireBoundingBox", "class_ogre_1_1v1_1_1_wire_bounding_box.html", "class_ogre_1_1v1_1_1_wire_bounding_box" ]
+    [ "WireBoundingBox", "class_ogre_1_1v1_1_1_wire_bounding_box.html", "class_ogre_1_1v1_1_1_wire_bounding_box" ],
+    [ "AnimationStateIterator", "group___animation.html#ga6c8619d12ac269631ef4f400ea2e2ba3", null ],
+    [ "AnimationStateMap", "group___animation.html#gaad46f086762ed2a6c7f62093f3428366", null ],
+    [ "BufferUsageList", "group___render_system.html#gac447334468fd281ee1a3548172f5d349", null ],
+    [ "ConstAnimationStateIterator", "group___animation.html#gaa6056ead4e5a305f169e0e1af92a419b", null ],
+    [ "ConstEnabledAnimationStateIterator", "group___animation.html#gac64a5390e8e276ddaf90ab630b0b4ef7", null ],
+    [ "DisplayString", "group___overlays.html#gaee1daf9c6299d9ebcc7dd5670862c58a", null ],
+    [ "EnabledAnimationStateList", "group___animation.html#ga279208f932a74cc90207482d4bd82f6b", null ],
+    [ "HardwareIndexBufferLockGuard", "group___render_system.html#ga38b128c3e3f0b4cf471113da3fab392f", null ],
+    [ "HardwareVertexBufferLockGuard", "group___render_system.html#gaa071037bd63c8e1fab0d9d8ce7f47d8c", null ],
+    [ "MeshPtr", "namespace_ogre_1_1v1.html#a500ac3b30068793f1dda3f0627c5cf67", null ],
+    [ "PatchMeshPtr", "namespace_ogre_1_1v1.html#a19db7502fb86a64292b1067b641e11e0", null ],
+    [ "PoseList", "group___animation.html#gab5ec9084edc972c9e5553a519cf79670", null ],
+    [ "RenderToVertexBufferSharedPtr", "namespace_ogre_1_1v1.html#a2f7057decf95fb9c5529bfab76d10e26", null ],
+    [ "SkeletonPtr", "namespace_ogre_1_1v1.html#a2348646dd6dc0d382222eb16955ece6e", null ],
+    [ "VertexBoneAssignment", "namespace_ogre_1_1v1.html#a47f47b1d5bab50fcb65ef93ced388d15", null ],
+    [ "BillboardOrigin", "group___effects.html#gab8ff161dfa5a04cd890cf1342438ad8e", [
+      [ "BBO_TOP_LEFT", "group___effects.html#ggab8ff161dfa5a04cd890cf1342438ad8ea224377e5e7066c9d5584aaf3d54dac02", null ],
+      [ "BBO_TOP_CENTER", "group___effects.html#ggab8ff161dfa5a04cd890cf1342438ad8ea36569a2831e12b644781d1acd97281e2", null ],
+      [ "BBO_TOP_RIGHT", "group___effects.html#ggab8ff161dfa5a04cd890cf1342438ad8ea31a409cb8a7590418baf50f41a874c85", null ],
+      [ "BBO_CENTER_LEFT", "group___effects.html#ggab8ff161dfa5a04cd890cf1342438ad8ea7f57b840e16d778aa6a5a789263504d2", null ],
+      [ "BBO_CENTER", "group___effects.html#ggab8ff161dfa5a04cd890cf1342438ad8ea12d4105ac28f3098ce73cbe35fea3462", null ],
+      [ "BBO_CENTER_RIGHT", "group___effects.html#ggab8ff161dfa5a04cd890cf1342438ad8eaf710810c16bcab603ce3717336d3da09", null ],
+      [ "BBO_BOTTOM_LEFT", "group___effects.html#ggab8ff161dfa5a04cd890cf1342438ad8ea71809bc6ad4abc4fddf1561e401e50ba", null ],
+      [ "BBO_BOTTOM_CENTER", "group___effects.html#ggab8ff161dfa5a04cd890cf1342438ad8ea173f1922ad01982b90bfe3f733283a4d", null ],
+      [ "BBO_BOTTOM_RIGHT", "group___effects.html#ggab8ff161dfa5a04cd890cf1342438ad8ea261d5934d4ff6d68debb4840aa813e4e", null ]
+    ] ],
+    [ "BillboardRotationType", "group___effects.html#gab5bb5620adfcbf0c29101b12d264d8ef", [
+      [ "BBR_VERTEX", "group___effects.html#ggab5bb5620adfcbf0c29101b12d264d8efa7cbf62c4eab7dd7f304cdd9553b8d841", null ],
+      [ "BBR_TEXCOORD", "group___effects.html#ggab5bb5620adfcbf0c29101b12d264d8efab3f6449901894cb86e639995aac1ca94", null ]
+    ] ],
+    [ "BillboardType", "group___effects.html#ga9a03fbc1b94264c6427a80902d52bf88", [
+      [ "BBT_POINT", "group___effects.html#gga9a03fbc1b94264c6427a80902d52bf88a985cf9aa9ff554e422d8498016bf0693", null ],
+      [ "BBT_ORIENTED_COMMON", "group___effects.html#gga9a03fbc1b94264c6427a80902d52bf88a000a3c707ccdf6aa0e409ed23f2feb5d", null ],
+      [ "BBT_ORIENTED_SELF", "group___effects.html#gga9a03fbc1b94264c6427a80902d52bf88ac367ded03e9c52d58802d58e11574fa4", null ],
+      [ "BBT_PERPENDICULAR_COMMON", "group___effects.html#gga9a03fbc1b94264c6427a80902d52bf88a99fc78d6880fae34d50d5a3e28987821", null ],
+      [ "BBT_PERPENDICULAR_SELF", "group___effects.html#gga9a03fbc1b94264c6427a80902d52bf88a80d75eb3a3de28b0b98f12df94865875", null ]
+    ] ],
+    [ "GuiHorizontalAlignment", "group___overlays.html#gaf00dd954640209bdaf41c561803c337c", [
+      [ "GHA_LEFT", "group___overlays.html#ggaf00dd954640209bdaf41c561803c337caf857d25b34f9cac63a6f80a7fd98e57c", null ],
+      [ "GHA_CENTER", "group___overlays.html#ggaf00dd954640209bdaf41c561803c337ca4321f070cebb60c6cbc0e986dc368f99", null ],
+      [ "GHA_RIGHT", "group___overlays.html#ggaf00dd954640209bdaf41c561803c337cacf63e7efa224817351582a18a5b85c9f", null ]
+    ] ],
+    [ "GuiMetricsMode", "group___overlays.html#ga978febf62001d1ba30eb43e9087c8d80", [
+      [ "GMM_RELATIVE", "group___overlays.html#gga978febf62001d1ba30eb43e9087c8d80ae1fba94681d4c7f4e81f57877d96f1ad", null ],
+      [ "GMM_PIXELS", "group___overlays.html#gga978febf62001d1ba30eb43e9087c8d80ab914a124f07acce7d85d977a75d1e67d", null ],
+      [ "GMM_RELATIVE_ASPECT_ADJUSTED", "group___overlays.html#gga978febf62001d1ba30eb43e9087c8d80a9c52a0d1123215c72e44c3503c73d04f", null ]
+    ] ],
+    [ "GuiVerticalAlignment", "group___overlays.html#ga9e3894529c45039606127f43c750382d", [
+      [ "GVA_TOP", "group___overlays.html#gga9e3894529c45039606127f43c750382da129954c420771057ddcd5657fcaf2068", null ],
+      [ "GVA_CENTER", "group___overlays.html#gga9e3894529c45039606127f43c750382da7350663734264399184470166677247c", null ],
+      [ "GVA_BOTTOM", "group___overlays.html#gga9e3894529c45039606127f43c750382dac17101e3c70054f17d2d90f5f21cbb03", null ]
+    ] ],
+    [ "MeshVersion", "namespace_ogre_1_1v1.html#ada7f44b0e95a262656a6b5b715c05377", [
+      [ "MESH_VERSION_LATEST", "namespace_ogre_1_1v1.html#ada7f44b0e95a262656a6b5b715c05377a8270af4f4f39b583d53d34dd510055ba", null ],
+      [ "MESH_VERSION_2_1", "namespace_ogre_1_1v1.html#ada7f44b0e95a262656a6b5b715c05377a2447a30a81e24b1673b1c711d30df707", null ],
+      [ "MESH_VERSION_1_10", "namespace_ogre_1_1v1.html#ada7f44b0e95a262656a6b5b715c05377a52b913ba9d690cef502235b418d4d0d5", null ],
+      [ "MESH_VERSION_1_8", "namespace_ogre_1_1v1.html#ada7f44b0e95a262656a6b5b715c05377aa8739b4f2e13736bdaed91bb034d9ec7", null ],
+      [ "MESH_VERSION_1_7", "namespace_ogre_1_1v1.html#ada7f44b0e95a262656a6b5b715c05377a583e39e479f272b3cd5ed27ba428f8cf", null ],
+      [ "MESH_VERSION_1_4", "namespace_ogre_1_1v1.html#ada7f44b0e95a262656a6b5b715c05377a1023a1d25a093f071cdaca924d08444d", null ],
+      [ "MESH_VERSION_1_0", "namespace_ogre_1_1v1.html#ada7f44b0e95a262656a6b5b715c05377a15b6e901f15ab9ceae9fcd39122847d4", null ],
+      [ "MESH_VERSION_LEGACY", "namespace_ogre_1_1v1.html#ada7f44b0e95a262656a6b5b715c05377a771877ec3b7dce42429c8bfdb7e99693", null ]
+    ] ],
+    [ "SkeletonAnimationBlendMode", "group___animation.html#ga510fd38b22b888529b6e70e26a6bca78", [
+      [ "ANIMBLEND_AVERAGE", "group___animation.html#gga510fd38b22b888529b6e70e26a6bca78a8cc2d6fa497ee0cf353276f6e79268f2", null ],
+      [ "ANIMBLEND_CUMULATIVE", "group___animation.html#gga510fd38b22b888529b6e70e26a6bca78a2b0f7d6c9066e2dc6a3bc98f020b3332", null ]
+    ] ],
+    [ "SkeletonVersion", "namespace_ogre_1_1v1.html#a64f38234a267554c4c68b1c0206782f4", [
+      [ "SKELETON_VERSION_1_0", "namespace_ogre_1_1v1.html#a64f38234a267554c4c68b1c0206782f4acf6905c12898822b78559576daf4170c", null ],
+      [ "SKELETON_VERSION_1_8", "namespace_ogre_1_1v1.html#a64f38234a267554c4c68b1c0206782f4aa6690f92e1251831234a0a1105956eb5", null ],
+      [ "SKELETON_VERSION_LATEST", "namespace_ogre_1_1v1.html#a64f38234a267554c4c68b1c0206782f4aca8e3f21df506544aa6ed79dac1ddf30", null ]
+    ] ],
+    [ "VertexAnimationType", "group___animation.html#gaf2d888ccfb9c1ca21c75a257643742e1", [
+      [ "VAT_NONE", "group___animation.html#ggaf2d888ccfb9c1ca21c75a257643742e1a33673f3772746053d3c1d3721282da8d", null ],
+      [ "VAT_MORPH", "group___animation.html#ggaf2d888ccfb9c1ca21c75a257643742e1a4a27253c5022a0baae04bc99f6b4358c", null ],
+      [ "VAT_POSE", "group___animation.html#ggaf2d888ccfb9c1ca21c75a257643742e1a49476812375d4a9a37f4bdc72ebfdec5", null ]
+    ] ]
 ];
