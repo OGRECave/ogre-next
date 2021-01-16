@@ -276,10 +276,10 @@ namespace Ogre {
         writeData( &blendIndexToBoneIndexCount, 1, 1 );
         writeShorts( s->mBlendIndexToBoneIndexMap.begin(), blendIndexToBoneIndexCount );
 
-        uint8 numLodLevels = static_cast<uint8>( s->mVao[VpNormal].size() );
+        const uint8 numLodLevels = static_cast<uint8>( s->mVao[VpNormal].size() );
         writeData( &numLodLevels, 1, 1 );
 
-        uint8 numVaoPasses = s->mParent->hasIndependentShadowMappingVaos() + 1;
+        const uint8 numVaoPasses = s->mParent->hasIndependentShadowMappingVaos() + 1;
         for( uint i=0; i<numVaoPasses; ++i )
         {
             for( uint8 lodLevel=0; lodLevel<numLodLevels; ++lodLevel )
@@ -553,13 +553,19 @@ namespace Ogre {
         
         // Material name
         size += calcStringSize(pSub->getMaterialName());
+
+        // uint8 blendIndexToBoneIndexCount
+        size += sizeof(uint8);
+        size += sizeof(uint16) * pSub->mBlendIndexToBoneIndexMap.size();
+
         // uint8 numLodLevels
         size += sizeof(uint8);
 
-        uint8 numVaoPasses = pSub->mParent->hasIndependentShadowMappingVaos() + 1;
+        const uint8 numLodLevels = static_cast<uint8>( pSub->mVao[VpNormal].size() );
+        const uint8 numVaoPasses = pSub->mParent->hasIndependentShadowMappingVaos() + 1;
         for( uint8 i=0; i<numVaoPasses; ++i )
         {
-            for( uint8 lodLevel=0; lodLevel<pSub->mVao[i].size(); ++lodLevel )
+            for( uint8 lodLevel=0; lodLevel<numLodLevels; ++lodLevel )
                 size += calcSubMeshLodSize( pSub->mVao[i][lodLevel], lodVertexTable[lodLevel] != lodLevel );
         }
 
@@ -575,12 +581,15 @@ namespace Ogre {
 
         // uint32 indexCount
         size += sizeof(uint32);
-        // bool indexes32bit
-        size += sizeof(bool);
 
         const IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
         if( indexBuffer )
+        {
+            // bool indexes32bit
+            size += sizeof(bool);
+
             size += indexBuffer->getTotalSizeBytes();
+        }
 
         if( !skipVertexBuffer )
         {
@@ -589,7 +598,7 @@ namespace Ogre {
         else
         {
             //uint8 lodSource
-            size += sizeof(uint8);
+            size += MSTREAM_OVERHEAD_SIZE + sizeof(uint8);
         }
 
         return size;
