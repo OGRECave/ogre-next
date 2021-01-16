@@ -115,7 +115,6 @@ namespace Ogre {
         SkeletonDefPtr  mSkeleton;
 
         String          mLodStrategyName;
-        uint16          mNumLods;
         LodValueArray   mLodValues;
 
         VaoManager      *mVaoManager;

@@ -114,6 +114,7 @@ namespace Ogre {
         virtual void writeGeometry(const VertexBufferPackedVec &pGeom);
         virtual void writeSkeletonLink(const String& skelName);
 
+        virtual void writeMeshLodLevel(const Mesh* pMesh);
         virtual void writeBoundsInfo(const Mesh* pMesh);
         /*virtual void writeEdgeList(const Mesh* pMesh);
         virtual void writeAnimations(const Mesh* pMesh);
@@ -145,6 +146,7 @@ namespace Ogre {
         virtual size_t calcPoseKeyframeSize(const VertexPoseKeyFrame* kf);
         virtual size_t calcPoseKeyframePoseRefSize(void);
         virtual size_t calcPoseVertexSize(const Pose* pose);*/
+        virtual size_t calcLodLevelSize(const Mesh* pMesh);
         virtual size_t calcBoundsInfoSize(const Mesh* pMesh);
 
         virtual void readTextureLayer(DataStreamPtr& stream, Mesh* pMesh, MaterialPtr& pMat);
@@ -164,6 +166,7 @@ namespace Ogre {
         virtual void readGeometryVertexBuffer(DataStreamPtr& stream, Mesh* pMesh, VertexData* dest);*/
 
         virtual void readSkeletonLink(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener);
+        virtual void readMeshLodLevel(DataStreamPtr& stream, Mesh* pMesh);
         virtual void readBoundsInfo(DataStreamPtr& stream, Mesh* pMesh);
         /*virtual void readEdgeList(DataStreamPtr& stream, Mesh* pMesh);
         virtual void readEdgeListLodInfo(DataStreamPtr& stream, EdgeData* edgeData);
