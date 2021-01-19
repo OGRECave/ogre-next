@@ -107,7 +107,7 @@ namespace Ogre {
             return base + '/' + name;
     }
 	//-----------------------------------------------------------------------
-#ifdef _OGRE_FILESYSTEM_ARCHIVE_UNICODE
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 	std::wstring to_wpath(const String& text, unsigned codepage = CP_UTF8)
 	{
 		const int utf16Length = ::MultiByteToWideChar(codepage, 0, text.c_str(), (int)text.size(), NULL, 0);
@@ -131,6 +131,26 @@ namespace Ogre {
 				return str;
 		}
 		return "";
+	}
+	FileSystemPath fileSystemPathFromString(const String& path)
+	{
+#ifdef _OGRE_FILESYSTEM_ARCHIVE_UNICODE
+		return to_wpath(path, CP_UTF8);
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+		return to_wpath(path, AreFileApisANSI() ? CP_ACP : CP_OEMCP);
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+		return to_wpath(path, CP_ACP);
+#endif
+	}
+	String fileSystemPathToString(const FileSystemPath& path)
+	{
+#ifdef _OGRE_FILESYSTEM_ARCHIVE_UNICODE
+		return from_wpath(path, CP_UTF8);
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+		return from_wpath(path, AreFileApisANSI() ? CP_ACP : CP_OEMCP);
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+		return from_wpath(path, CP_ACP);
+#endif
 	}
 #endif
     //-----------------------------------------------------------------------

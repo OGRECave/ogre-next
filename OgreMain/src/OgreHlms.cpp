@@ -313,6 +313,9 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         mOutputPath = macCachePath() + '/';
 #endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+        mOutputPath = fileSystemPathToString(Windows::Storage::ApplicationData::Current->TemporaryFolder->Path->Data());
+#endif
     }
     //-----------------------------------------------------------------------------------
     Hlms::~Hlms()
@@ -2134,7 +2137,7 @@ namespace Ogre
                     debugFilenameOutput = mOutputPath + "./" +
                                           StringConverter::toString( finalHash ) +
                                           ShaderFiles[i] + mShaderFileExt;
-                    debugDumpFile.open( debugFilenameOutput.c_str(), std::ios::out | std::ios::binary );
+                    debugDumpFile.open( Ogre::fileSystemPathFromString(debugFilenameOutput).c_str(), std::ios::out | std::ios::binary );
 
                     if( mDebugOutputProperties )
                         dumpProperties( debugDumpFile );
@@ -2208,7 +2211,7 @@ namespace Ogre
                     debugFilenameOutput = mOutputPath + "./" +
                                           StringConverter::toString( finalHash ) +
                                           ShaderFiles[i] + mShaderFileExt;
-                    debugDumpFile.open( debugFilenameOutput.c_str(), std::ios::out | std::ios::binary );
+                    debugDumpFile.open( Ogre::fileSystemPathFromString(debugFilenameOutput).c_str(), std::ios::out | std::ios::binary );
 
                     //We need to dump the properties before processing the files, as these
                     //may be overwritten or polluted by the files, thus hiding why we

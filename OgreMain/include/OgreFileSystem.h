@@ -37,6 +37,24 @@ THE SOFTWARE.
 
 namespace Ogre {
 
+    /** Some machinery to properly handle Unicode filesystem pathes.
+    *   It is designed to be later replaced by typedef std::filesystem::path FileSystemPath;
+    *   FileSystemPath is always internally Unicode and is intended to be passed to the same
+    *   std::[iof]stream constructors and methods that accepts std::filesystem::path in C++17.
+    *   Note: Narrow strings are interpreted as UTF-8 on most platforms, but on Windows 
+    *   interpretation in both this machinery and FileSystemArchive is controlled by internal 
+    *   define _OGRE_FILESYSTEM_ARCHIVE_UNICODE, and could be CP_UTF8, CP_ACP or even CP_OEMCP.
+    */
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+    typedef std::wstring FileSystemPath;
+    FileSystemPath fileSystemPathFromString(const String& path);
+    String fileSystemPathToString(const FileSystemPath& path);
+#else
+    typedef String FileSystemPath;
+    inline const FileSystemPath& fileSystemPathFromString(const String& path) { return path; }
+    inline const String& fileSystemPathToString(const FileSystemPath& path) { return path; }
+#endif
+
     /** \addtogroup Core
     *  @{
     */
