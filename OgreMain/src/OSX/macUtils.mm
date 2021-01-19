@@ -136,7 +136,7 @@ namespace Ogre {
 	
     String macBundlePath()
     {
-        char path[1024];
+        char path[PATH_MAX];
         CFBundleRef mainBundle = CFBundleGetMainBundle();
         assert(mainBundle);
         
@@ -146,7 +146,7 @@ namespace Ogre {
         CFStringRef cfStringRef = CFURLCopyFileSystemPath( mainBundleURL, kCFURLPOSIXPathStyle);
         assert(cfStringRef);
         
-        CFStringGetFileSystemRepresentation(cfStringRef, path, 1024);
+        CFStringGetFileSystemRepresentation(cfStringRef, path, PATH_MAX);
         
         CFRelease(mainBundleURL);
         CFRelease(cfStringRef);
@@ -159,18 +159,19 @@ namespace Ogre {
 		return macBundlePath() + "/Contents/Plugins/";
 	}
 
-    String macCachePath()
-    {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString *cachesDirectory = [paths objectAtIndex:0];
-        
-        return [cachesDirectory cStringUsingEncoding:NSASCIIStringEncoding];
-    }
-
     String macFrameworksPath()
 	{
 		return macBundlePath() + "/Contents/Frameworks/";
 	}
+
+    String macCachePath()
+    {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        NSString *cachesDirectory = [paths objectAtIndex:0];
+        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
+
+        return [[cachesDirectory stringByAppendingPathComponent:bundleId] fileSystemRepresentation];
+    }
 
     String macTempFileName()
     {
@@ -182,6 +183,7 @@ namespace Ogre {
             if (![fileManager fileExistsAtPath:tempFilePath])
                 break;
         }
-        return String([tempFilePath cStringUsingEncoding:NSASCIIStringEncoding]);
+        return String([tempFilePath fileSystemRepresentation]);
     }
+
 }

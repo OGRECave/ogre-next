@@ -59,6 +59,9 @@ THE SOFTWARE.
 
 #include "OgreProfiler.h"
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+    #include "OSX/macUtils.h"
+#endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
     #include "iOS/macUtils.h"
 #endif
@@ -307,7 +310,7 @@ namespace Ogre
 
         enumeratePieceFiles();
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         mOutputPath = macCachePath() + '/';
 #endif
     }

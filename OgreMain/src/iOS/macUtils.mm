@@ -40,19 +40,6 @@ namespace Ogre {
         return NULL;
     }
 
-    String macTempFileName()
-    {
-        NSString *tempFilePath;
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        for (;;) {
-            NSString *baseName = [NSString stringWithFormat:@"tmp-%x", arc4random()];
-            tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:baseName];
-            if (![fileManager fileExistsAtPath:tempFilePath])
-                break;
-        }
-        return String([tempFilePath cStringUsingEncoding:NSASCIIStringEncoding]);
-    }
-
     String macBundlePath()
     {
         char path[PATH_MAX];
@@ -65,7 +52,7 @@ namespace Ogre {
         CFStringRef cfStringRef = CFURLCopyFileSystemPath( mainBundleURL, kCFURLPOSIXPathStyle);
         assert(cfStringRef);
         
-        CFStringGetCString(cfStringRef, path, PATH_MAX, kCFStringEncodingASCII);
+        CFStringGetFileSystemRepresentation(cfStringRef, path, PATH_MAX);
         
         CFRelease(mainBundleURL);
         CFRelease(cfStringRef);
@@ -78,15 +65,29 @@ namespace Ogre {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
         
-        return String([documentsDirectory cStringUsingEncoding:NSASCIIStringEncoding]);
+        return String([documentsDirectory fileSystemRepresentation]);
     }
 
     String macCachePath()
     {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         NSString *cachesDirectory = [paths objectAtIndex:0];
+        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
 
-        return [[cachesDirectory stringByAppendingString:@"/"] cStringUsingEncoding:NSASCIIStringEncoding];
+        return [[cachesDirectory stringByAppendingPathComponent:bundleId] fileSystemRepresentation];
+    }
+
+    String macTempFileName()
+    {
+        NSString *tempFilePath;
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        for (;;) {
+            NSString *baseName = [NSString stringWithFormat:@"tmp-%x", arc4random()];
+            tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:baseName];
+            if (![fileManager fileExistsAtPath:tempFilePath])
+                break;
+        }
+        return String([tempFilePath fileSystemRepresentation]);
     }
 
 }
