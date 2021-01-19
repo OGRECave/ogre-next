@@ -1,5 +1,8 @@
 var NAVTREEINDEX108 =
 {
+"class_ogre_1_1_log_manager.html#a887b11fa93f8aa25b912c226dd70943f":[5,2,2,66,1],
+"class_ogre_1_1_log_manager.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,2,66,14],
+"class_ogre_1_1_log_manager.html#a94e537bffee90afa9b96a15e10c3ea21":[5,2,2,66,5],
 "class_ogre_1_1_log_manager.html#aa274af4b29e98ac5340a18ad1b695139":[5,2,2,66,21],
 "class_ogre_1_1_log_manager.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,2,66,18],
 "class_ogre_1_1_log_manager.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,2,66,16],
@@ -35,8 +38,8 @@ var NAVTREEINDEX108 =
 "class_ogre_1_1_lw_string.html#a14b796aad34dd7db20f7ae07faea9238":[7,0,0,636,41],
 "class_ogre_1_1_lw_string.html#a18e40ae521f06bdeae5b57795f911c84":[7,0,0,636,44],
 "class_ogre_1_1_lw_string.html#a1cd341a990bdeb0004d76c41c320e5bb":[7,0,0,636,10],
-"class_ogre_1_1_lw_string.html#a1eaad0efe2338eb834e1aa964e24b590":[7,0,0,636,22],
 "class_ogre_1_1_lw_string.html#a1eaad0efe2338eb834e1aa964e24b590":[7,0,0,636,23],
+"class_ogre_1_1_lw_string.html#a1eaad0efe2338eb834e1aa964e24b590":[7,0,0,636,22],
 "class_ogre_1_1_lw_string.html#a1f7b63ca5ee8043686310df122f9419e":[7,0,0,636,32],
 "class_ogre_1_1_lw_string.html#a22b8907dead7461859044f01f4c8cfac":[7,0,0,636,20],
 "class_ogre_1_1_lw_string.html#a258f588fa5afd72e087ecbf735ba52a8":[7,0,0,636,31],
@@ -246,8 +249,5 @@ var NAVTREEINDEX108 =
 "class_ogre_1_1_manual_object_1_1_manual_object_section.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,637,0,44],
 "class_ogre_1_1_manual_object_1_1_manual_object_section.html#a5a10063845904e7d5c1be58f751894fb":[7,0,0,637,0,16],
 "class_ogre_1_1_manual_object_1_1_manual_object_section.html#a5b50fcb876b347cd3571b009f80eebd8":[7,0,0,637,0,26],
-"class_ogre_1_1_manual_object_1_1_manual_object_section.html#a6496cb6bcaffcbb03e25e56f4b88bf7f":[7,0,0,637,0,13],
-"class_ogre_1_1_manual_object_1_1_manual_object_section.html#a65246f7bdb08b9b4fb169ff5d0235eaa":[7,0,0,637,0,15],
-"class_ogre_1_1_manual_object_1_1_manual_object_section.html#a667b8876930b77c9d609b80ee5fb1515":[7,0,0,637,0,63],
-"class_ogre_1_1_manual_object_1_1_manual_object_section.html#a6d9e689659160cac9735f00ece15c0d4":[7,0,0,637,0,21]
+"class_ogre_1_1_manual_object_1_1_manual_object_section.html#a6496cb6bcaffcbb03e25e56f4b88bf7f":[7,0,0,637,0,13]
 };

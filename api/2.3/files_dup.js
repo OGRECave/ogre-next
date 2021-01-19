@@ -691,7 +691,7 @@ var files_dup =
     [ "OgreFastArray.h", "_ogre_fast_array_8h.html", [
       [ "FastArray", "class_ogre_1_1_fast_array.html", "class_ogre_1_1_fast_array" ]
     ] ],
-    [ "OgreFileSystem.h", "_ogre_file_system_8h.html", null ],
+    [ "OgreFileSystem.h", "_ogre_file_system_8h.html", "_ogre_file_system_8h" ],
     [ "OgreFileSystemLayer.h", "_ogre_file_system_layer_8h.html", [
       [ "FileSystemLayer", "class_ogre_1_1_file_system_layer.html", "class_ogre_1_1_file_system_layer" ]
     ] ],

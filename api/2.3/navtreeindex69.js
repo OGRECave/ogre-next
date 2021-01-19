@@ -1,5 +1,8 @@
 var NAVTREEINDEX69 =
 {
+"class_ogre_1_1_error_dialog.html#a74219f8676f8036cf7dd56b8530390dd":[5,2,2,41,17],
+"class_ogre_1_1_error_dialog.html#a74219f8676f8036cf7dd56b8530390dd":[5,2,2,41,19],
+"class_ogre_1_1_exception.html":[5,2,2,42],
 "class_ogre_1_1_exception.html#a08d436f2af44566f7f40f4467f1d82ff":[5,2,2,42,5],
 "class_ogre_1_1_exception.html#a5323fd0394409fc11d86ac60491ea3e8":[5,2,2,42,12],
 "class_ogre_1_1_exception.html#a551ddbc1f317f31c4d33a0da6262cc63":[5,2,2,42,4],
@@ -246,8 +249,5 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_file_system_archive.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,11,22,17],
 "class_ogre_1_1_file_system_archive.html#ad5ae519a6d13d89a7d4dc66ea8f64875":[5,2,11,22,0],
 "class_ogre_1_1_file_system_archive.html#ad89960cb80cf490a23cab7b909ffa092":[5,2,11,22,1],
-"class_ogre_1_1_file_system_archive.html#ade8a11a1b84b467ee124c8ef96bd594c":[5,2,11,22,26],
-"class_ogre_1_1_file_system_archive.html#ae1e6d89d5edc833b8ea5ef74d32a5ad1":[5,2,11,22,27],
-"class_ogre_1_1_file_system_archive.html#aebb587510a65222aca84fa6f8eb69e0f":[5,2,11,22,13],
-"class_ogre_1_1_file_system_archive.html#af3fbf5feb7c3875831d22808b3545d75":[5,2,11,22,14]
+"class_ogre_1_1_file_system_archive.html#ade8a11a1b84b467ee124c8ef96bd594c":[5,2,11,22,26]
 };
