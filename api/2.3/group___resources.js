@@ -1813,6 +1813,7 @@ var group___resources =
       [ "StaticBranchLights", "struct_ogre_1_1_hlms_base_prop.html#a8b28249335711a3f5a100e4f31670f1a", null ],
       [ "Syntax", "struct_ogre_1_1_hlms_base_prop.html#a2cd566a2316cec4b2e0e9aab58993dca", null ],
       [ "Tangent", "struct_ogre_1_1_hlms_base_prop.html#af10314eb548200c40c30066c638fbe0d", null ],
+      [ "Tangent4", "struct_ogre_1_1_hlms_base_prop.html#a6ddfaf8cda44b0cc3a4ca3d6d2179e4a", null ],
       [ "TexGather", "struct_ogre_1_1_hlms_base_prop.html#aab5d85adccb5bcbd67d7fac9570dcd51", null ],
       [ "UsePrePass", "struct_ogre_1_1_hlms_base_prop.html#aa112290f96cf14277b193cf6da591b29", null ],
       [ "UsePrePassMsaa", "struct_ogre_1_1_hlms_base_prop.html#a7440f6aa5bafdb97858f837f2b884af1", null ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX277 =
 {
+"struct_ogre_1_1_pixel_format_description.html#aaf375ced0cdeab46a2430e0149e9fb61":[7,0,0,834,2],
 "struct_ogre_1_1_pixel_format_description.html#ab13031714c903ff45125947d232cc919":[7,0,0,834,9],
 "struct_ogre_1_1_pixel_format_description.html#ab87f0fc49ed7c0ec3f6c06ef091b4c0d":[7,0,0,834,15],
 "struct_ogre_1_1_pixel_format_description.html#ae8b52d1ce59dbbd3c801ceeb5cdbf943":[7,0,0,834,5],
@@ -106,12 +107,12 @@ var NAVTREEINDEX277 =
 "struct_ogre_1_1_raster_params.html#ae83ecd7e7cb5b6b6d77d488bfb85b68f":[7,0,0,881,4],
 "struct_ogre_1_1_raster_params.html#aee5f67885ec946b99fff90e63f4ed9a9":[7,0,0,881,2],
 "struct_ogre_1_1_raster_params.html#af15eab4c45ebba958b6860627e6ff847":[7,0,0,881,0],
-"struct_ogre_1_1_ray_scene_query_result_entry.html":[5,0,1,35],
 "struct_ogre_1_1_ray_scene_query_result_entry.html":[5,2,12,35],
+"struct_ogre_1_1_ray_scene_query_result_entry.html":[5,0,1,35],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a17af5a6b49fcd71ca726daf1dd67af98":[5,2,12,35,0],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a17af5a6b49fcd71ca726daf1dd67af98":[5,0,1,35,0],
-"struct_ogre_1_1_ray_scene_query_result_entry.html#a58ba184768924a39ab195dcf96472f65":[5,0,1,35,2],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a58ba184768924a39ab195dcf96472f65":[5,2,12,35,2],
+"struct_ogre_1_1_ray_scene_query_result_entry.html#a58ba184768924a39ab195dcf96472f65":[5,0,1,35,2],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#acc6655f373532d7b9d3017acab7535a9":[5,0,1,35,3],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#acc6655f373532d7b9d3017acab7535a9":[5,2,12,35,3],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#af3e8eed523c4215c5733a9886db7ec29":[5,2,12,35,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX277 =
 "struct_ogre_1_1_sample_description.html#a1cd17a1cc5540aef499a95c324945455":[5,2,2,95,13],
 "struct_ogre_1_1_sample_description.html#a25a080d68e4da7e5b1901a4a83eca489":[5,2,2,95,1],
 "struct_ogre_1_1_sample_description.html#a2685a3d76eb1cde81eb163837700f731":[5,2,2,95,3],
-"struct_ogre_1_1_sample_description.html#a26d67335d06144d21fec2f27d610265a":[5,2,2,95,10],
-"struct_ogre_1_1_sample_description.html#a39a62fc76ed2d6dd1f9c55807b430ef8":[5,2,2,95,19]
+"struct_ogre_1_1_sample_description.html#a26d67335d06144d21fec2f27d610265a":[5,2,2,95,10]
 };
