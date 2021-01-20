@@ -341,7 +341,7 @@
 		pixelData.geomNormal = normalize( inPs.normal ) @insertpiece( two_sided_flip_normal );
 		float3 vTangent		= normalize( inPs.tangent );
 
-		@property( hlms_qtangent )
+		@property( hlms_qtangent || hlms_tangent4 )
 			@piece( tbnApplyReflection ) * inPs.biNormalReflection@end
 		@end
 

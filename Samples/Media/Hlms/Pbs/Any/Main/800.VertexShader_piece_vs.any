@@ -30,7 +30,7 @@
 @property( !hlms_skeleton )
 	@piece( local_vertex )inputPos@end
 	@piece( local_normal )inputNormal@end
-	@piece( local_tangent )tangent@end
+	@piece( local_tangent )inputTangent@end
 @else
 	@piece( local_vertex )worldPos@end
 	@piece( local_normal )worldNorm@end
@@ -59,9 +59,9 @@
 	@end
 	@property( normal_map )
 		float3 worldTang;
-		worldTang.x = dot( worldMat[0].xyz, tangent );
-		worldTang.y = dot( worldMat[1].xyz, tangent );
-		worldTang.z = dot( worldMat[2].xyz, tangent );
+		worldTang.x = dot( worldMat[0].xyz, inputTangent );
+		worldTang.y = dot( worldMat[1].xyz, inputTangent );
+		worldTang.z = dot( worldMat[2].xyz, inputTangent );
 		worldTang *= inVs_blendWeights[0];
 	@end
 
@@ -86,9 +86,9 @@
 			worldNorm += tmp.xyz * inVs_blendWeights[@n];
 		@end
 		@property( normal_map )
-			tmp.x = dot( worldMat[0].xyz, tangent );
-			tmp.y = dot( worldMat[1].xyz, tangent );
-			tmp.z = dot( worldMat[2].xyz, tangent );
+			tmp.x = dot( worldMat[0].xyz, inputTangent );
+			tmp.y = dot( worldMat[1].xyz, inputTangent );
+			tmp.z = dot( worldMat[2].xyz, inputTangent );
 			worldTang += tmp.xyz * inVs_blendWeights[@n];
 		@end
 	@end
@@ -101,8 +101,6 @@
 @piece( PoseTransform )
 	// Pose data starts after all 3x4 bone matrices
 	uint poseDataStart = (worldMaterialIdx[inVs_drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex)u * 3u@end ;
-	float4 inputPos = inVs_vertex;
-	@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )float3 inputNormal = normal;@end
 
 	float4 poseData = readOnlyFetch( worldMatBuf, int( poseDataStart ) );
 
@@ -225,16 +223,34 @@
 @end
 
 @piece( DefaultBodyVS )
-	@property( !hlms_pose )#define inputPos inVs_vertex@end
-	//This newline is required else the Hlms parser will put '#define a #define b' in the same line
-	@property( !hlms_pose_normals )#define inputNormal normal@end
+	// Define inputPos using inVs_vertex.
+	@property( hlms_pose )
+		float4 inputPos = inVs_vertex; // We need inputPos as lvalue for PoseTransform
+	@else
+		#define inputPos inVs_vertex
+	@end
 
+	// Define inputNormal and inputTangent using inVs_normal, inVs_tangent, inVs_qtangent
 	@property( hlms_qtangent )
 		//Decode qTangent to TBN with reflection
-		float3 normal		= xAxis( normalize( inVs_qtangent ) );
+		float3 inputNormal	= xAxis( normalize( inVs_qtangent ) );
 		@property( normal_map )
-			float3 tangent	= yAxis( inVs_qtangent );
+			float3 inputTangent	= yAxis( inVs_qtangent );
 			outVs.biNormalReflection = sign( inVs_qtangent.w ); //We ensure in C++ qtangent.w is never 0
+		@end
+	@else
+		@property( hlms_normal && hlms_pose && hlms_pose_normals )
+			float3 inputNormal = inVs_normal; // We need inputNormal as lvalue for PoseTransform
+		@else
+			#define inputNormal inVs_normal
+		@end
+		@property( hlms_tangent4 )
+			#define inputTangent inVs_tangent.xyz
+			@property( normal_map )
+				outVs.biNormalReflection = sign( inVs_tangent.w );
+			@end
+		@else
+			#define inputTangent inVs_tangent
 		@end
 	@end
 

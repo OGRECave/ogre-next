@@ -33,6 +33,9 @@
 
 #define inVs_vertexId input.vertexId
 #define inVs_vertex input.vertex
+#define inVs_normal input.normal
+#define inVs_tangent input.tangent
+#define inVs_binormal input.binormal
 #define inVs_blendWeights input.blendWeights
 #define inVs_blendIndices input.blendIndices
 #define inVs_qtangent input.qtangent

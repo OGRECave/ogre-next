@@ -12,7 +12,8 @@ struct VS_INPUT
 @property( hlms_qtangent )	float4 qtangent [[attribute(VES_NORMAL)]];@end
 
 @property( normal_map && !hlms_qtangent )
-	float3 tangent	[[attribute(VES_TANGENT)]];
+	@property( hlms_tangent4 )float4 tangent	[[attribute(VES_TANGENT)]];@end
+	@property( !hlms_tangent4 )float3 tangent	[[attribute(VES_TANGENT)]];@end
 	@property( hlms_binormal )float3 binormal	[[attribute(VES_BINORMAL)]];@end
 @end
 
@@ -69,11 +70,6 @@ vertex PS_INPUT main_metal
 )
 {
 	PS_INPUT outVs;
-@property( !hlms_qtangent && hlms_normal )
-	float3 normal	= input.normal;
-	@property( normal_map )float3 tangent	= input.tangent;@end
-	@property( hlms_binormal )float3 binormal	= input.binormal;@end
-@end
 
 	@insertpiece( custom_vs_preExecution )
 	@insertpiece( DefaultBodyVS )

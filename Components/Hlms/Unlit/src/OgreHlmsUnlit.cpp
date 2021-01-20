@@ -302,6 +302,7 @@ namespace Ogre
         setProperty( HlmsBaseProp::Normal,      0 );
         setProperty( HlmsBaseProp::QTangent,    0 );
         setProperty( HlmsBaseProp::Tangent,     0 );
+        setProperty( HlmsBaseProp::Tangent4,    0 );
         setProperty( HlmsBaseProp::BonesPerVertex, 0 );
 
         if( datablock->mTexturesDescSet )

@@ -83,6 +83,9 @@
 	#define inVs_vertexId gl_VertexIndex
 @end
 #define inVs_vertex vertex
+#define inVs_normal normal
+#define inVs_tangent tangent
+#define inVs_binormal binormal
 #define inVs_blendWeights blendWeights
 #define inVs_blendIndices blendIndices
 #define inVs_qtangent qtangent

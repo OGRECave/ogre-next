@@ -831,6 +831,7 @@ namespace Ogre
         static const IdString Normal;
         static const IdString QTangent;
         static const IdString Tangent;
+        static const IdString Tangent4;
 
         static const IdString Colour;
 

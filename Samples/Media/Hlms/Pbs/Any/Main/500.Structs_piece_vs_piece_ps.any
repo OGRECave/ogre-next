@@ -404,7 +404,7 @@ struct Material
 			INTERPOLANT( float3 normal, @counter(texcoord) );
 			@property( normal_map )
 				INTERPOLANT( float3 tangent, @counter(texcoord) );
-				@property( hlms_qtangent )FLAT_INTERPOLANT( float biNormalReflection, @counter(texcoord) );@end
+				@property( hlms_qtangent || hlms_tangent4 )FLAT_INTERPOLANT( float biNormalReflection, @counter(texcoord) );@end
 			@end
 		@end
 		@foreach( hlms_uv_count, n )
