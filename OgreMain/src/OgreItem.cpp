@@ -124,6 +124,11 @@ namespace Ogre {
         mObjectData.mWorldAabb->setFromAabb( aabb, mObjectData.mIndex );
         mObjectData.mLocalRadius[mObjectData.mIndex] = aabb.getRadius();
         mObjectData.mWorldRadius[mObjectData.mIndex] = aabb.getRadius();
+        if( mParentNode )
+        {
+            updateSingleWorldAabb();
+            updateSingleWorldRadius();
+        }
 
         mInitialised = true;
     }
