@@ -37,7 +37,6 @@
 #include "OgreGLSLMonolithicProgramManager.h"
 #include "OgreGLSLSeparableProgramManager.h"
 #include "OgreGLSLPreprocessor.h"
-#include "OgreGL3PlusUtil.h"
 
 #include "OgreLwString.h"
 

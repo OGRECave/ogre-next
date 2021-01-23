@@ -31,10 +31,22 @@ elseif (APPLE)
   set(PLATFORM_LIBS ${Cocoa_LIBRARY_FWK})
   set(PLATFORM_HEADER_INSTALL "OSX")
 elseif (UNIX)
-  file(GLOB PLATFORM_HEADERS "include/windowing/GLX/*.h" "src/windowing/GLX/*.h")
-  file(GLOB PLATFORM_SOURCES "src/windowing/GLX/*.cpp")
+	file(GLOB PLATFORM_HEADERS "include/windowing/EGL/*.h" "src/windowing/EGL/*.h")
+	file(GLOB PLATFORM_SOURCES "src/windowing/EGL/*.cpp")
 
-  include_directories(src/windowing/GLX include/windowing/GLX)
+	include_directories( src/windowing/EGL include/windowing/EGL )
+
+#  file(GLOB PLATFORM_HEADERS "include/windowing/GLX/*.h" "src/windowing/GLX/*.h"
+#	  "include/windowing/EGL/*.h" "src/windowing/EGL/*.h")
+#  file(GLOB PLATFORM_SOURCES "src/windowing/GLX/*.cpp" "src/windowing/EGL/*.cpp")
+
+#  include_directories(src/windowing/GLX include/windowing/GLX
+#	  src/windowing/EGL include/windowing/EGL )
+#	file(GLOB PLATFORM_HEADERS "include/windowing/GLX/*.h" "src/windowing/GLX/*.h")
+#	file(GLOB PLATFORM_SOURCES "src/windowing/GLX/*.cpp")
+
+#	include_directories(src/windowing/GLX include/windowing/GLX)
+
   set(PLATFORM_HEADER_INSTALL "GLX")
   set(PLATFORM_LIBS ${X11_LIBRARIES} ${X11_Xrandr_LIB})
 endif ()
@@ -56,11 +68,14 @@ endif()
 
 if (UNIX AND NOT APPLE)
   # Separate GLSupport and Window out to fix Unity builds
-  ogre_add_library(RenderSystem_GL3Plus ${OGRE_LIB_TYPE} ${HEADER_FILES} ${GLSL_SOURCE} ${PLATFORM_HEADERS} ${PLATFORM_SOURCES} ${SOURCE_FILES} SEPARATE "src/windowing/GLX/OgreGLXWindow.cpp" "src/windowing/GLX/OgreGLXGLSupport.cpp")
+  #ogre_add_library(RenderSystem_GL3Plus ${OGRE_LIB_TYPE} ${HEADER_FILES} ${GLSL_SOURCE} ${PLATFORM_HEADERS} ${PLATFORM_SOURCES} ${SOURCE_FILES} SEPARATE "src/windowing/GLX/OgreGLXWindow.cpp" "src/windowing/GLX/OgreGLXGLSupport.cpp")
+  ogre_add_library(RenderSystem_GL3Plus ${OGRE_LIB_TYPE} ${HEADER_FILES} ${GLSL_SOURCE} ${PLATFORM_HEADERS} ${PLATFORM_SOURCES} ${SOURCE_FILES})
 else()
   ogre_add_library(RenderSystem_GL3Plus ${OGRE_LIB_TYPE} ${HEADER_FILES} ${GLSL_SOURCE} ${PLATFORM_HEADERS} ${PLATFORM_SOURCES} ${SOURCE_FILES})
 endif()
 target_link_libraries(RenderSystem_GL3Plus OgreMain ${OPENGL_LIBRARIES} ${PLATFORM_LIBS})
+
+target_link_libraries(RenderSystem_GL3Plus EGL)
 
 if (NOT OGRE_STATIC)
   set_target_properties(RenderSystem_GL3Plus PROPERTIES
