@@ -1317,7 +1317,14 @@ namespace Ogre {
                 return false;
         }
 #if OGRE_NO_RENDERDOC_INTEGRATION == 0
-        mRenderDocApi->StartFrameCapture( NULL, NULL );
+        RENDERDOC_DevicePointer device = 0;
+        RENDERDOC_WindowHandle windowHandle = 0;
+        if( window )
+        {
+            window->getCustomAttribute( "RENDERDOC_DEVICE", device );
+            window->getCustomAttribute( "RENDERDOC_WINDOW", windowHandle );
+        }
+        mRenderDocApi->StartFrameCapture( device, windowHandle );
 #endif
         return true;
     }
@@ -1327,7 +1334,14 @@ namespace Ogre {
         if( !mRenderDocApi )
             return;
 #if OGRE_NO_RENDERDOC_INTEGRATION == 0
-        mRenderDocApi->EndFrameCapture( NULL, NULL );
+        RENDERDOC_DevicePointer device = 0;
+        RENDERDOC_WindowHandle windowHandle = 0;
+        if( window )
+        {
+            window->getCustomAttribute( "RENDERDOC_DEVICE", device );
+            window->getCustomAttribute( "RENDERDOC_WINDOW", windowHandle );
+        }
+        mRenderDocApi->EndFrameCapture( device, windowHandle );
 #endif
     }
     //---------------------------------------------------------------------

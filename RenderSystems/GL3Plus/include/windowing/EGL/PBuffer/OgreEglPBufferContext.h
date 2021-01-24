@@ -44,6 +44,8 @@ namespace Ogre
 
         virtual ~EglPBufferContext();
 
+        const EglPBufferSupport::DeviceData *getDeviceData() const { return mDeviceData; }
+
         /// @copydoc GL3PlusContext::setCurrent
         virtual void setCurrent();
 

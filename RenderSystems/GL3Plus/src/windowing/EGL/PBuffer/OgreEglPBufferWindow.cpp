@@ -234,7 +234,7 @@ namespace Ogre
         OgreProfileBeginDynamic( ( "SwapBuffers: " + mTitle ).c_str() );
         OgreProfileGpuBeginDynamic( "SwapBuffers: " + mTitle );
 
-        eglSwapBuffers( mGLSupport->getGLDisplay(), mGLSupport->getCurrentDevice()->eglSurf );
+        eglSwapBuffers( mContext->getDeviceData()->eglDisplay, mContext->getDeviceData()->eglSurf );
 
         OgreProfileEnd( "SwapBuffers: " + mTitle );
         OgreProfileGpuEnd( "SwapBuffers: " + mTitle );
@@ -245,6 +245,16 @@ namespace Ogre
         if( name == "GLCONTEXT" )
         {
             *static_cast<EglPBufferContext **>( pData ) = mContext;
+            return;
+        }
+        else if( name == "RENDERDOC_DEVICE" )
+        {
+            *static_cast< ::EGLContext *>( pData ) = mContext->getDeviceData()->eglCtx;
+            return;
+        }
+        else if( name == "RENDERDOC_WINDOW" )
+        {
+            *static_cast< ::EGLSurface *>( pData ) = mContext->getDeviceData()->eglSurf;
             return;
         }
     }
