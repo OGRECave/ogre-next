@@ -29,11 +29,12 @@
 #ifndef INCL_OGRE_GLUTIL_H
 #define INCL_OGRE_GLUTIL_H
 
-#include "OgreEGLGLSupport.h"
+//#include "OgreEGLGLSupport.h"
+#include "PBuffer/OgreEglPBufferSupport.h"
 
 namespace Ogre
 {
-    inline GL3PlusSupport *getGLSupport() { return new EGLGLSupport(); }
+    inline GL3PlusSupport *getGLSupport() { return new EglPBufferSupport(); }
 
 }  // namespace Ogre
 

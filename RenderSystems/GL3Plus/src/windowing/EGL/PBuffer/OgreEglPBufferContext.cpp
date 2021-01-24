@@ -26,61 +26,22 @@
   -----------------------------------------------------------------------------
 */
 
-#include "OgreEGLContext.h"
+#include "PBuffer/OgreEglPBufferContext.h"
 
-#include "OgreEGLGLSupport.h"
 #include "OgreGL3PlusRenderSystem.h"
 #include "OgreRoot.h"
 
 namespace Ogre
 {
-    EGLContext::EGLContext( EGLDisplay eglDisplay, EGLGLSupport *glsupport, ::EGLConfig fbconfig,
-                            ::EGLSurface drawable, ::EGLContext context ) :
-        mConfig( fbconfig ),
-        mGLSupport( glsupport ),
-        mEglDisplay( eglDisplay ),
-        mContext( 0 ),
-        mExternalContext( false ),
-        mDrawable( drawable )
+    EglPBufferContext::EglPBufferContext( EglPBufferSupport *support ) :
+        mGLSupport( support ),
+        mDeviceData( support->getCurrentDevice() )
     {
-        GL3PlusRenderSystem *renderSystem =
-            static_cast<GL3PlusRenderSystem *>( Root::getSingleton().getRenderSystem() );
-        EGLContext *mainContext = static_cast<EGLContext *>( renderSystem->_getMainContext() );
-        ::EGLContext shareContext = 0;
-
-        if( mainContext )
-        {
-            shareContext = mainContext->mContext;
-        }
-
-        if( context )
-        {
-            mContext = context;
-            mExternalContext = true;
-        }
-        else
-        {
-            mContext = mGLSupport->createNewContext( eglDisplay, mConfig, shareContext );
-        }
-
-        if( !mContext )
-        {
-            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Unable to create a suitable EGLContext",
-                         "EGLContext::EGLContext" );
-        }
     }
     //-------------------------------------------------------------------------
-    EGLContext::~EGLContext()
+    EglPBufferContext::~EglPBufferContext()
     {
         endCurrent();
-
-        if( !mExternalContext )
-        {
-            eglDestroyContext( mEglDisplay, mContext );
-            EGL_CHECK_ERROR
-        }
-
-        mContext = NULL;
 
         GL3PlusRenderSystem *rs =
             static_cast<GL3PlusRenderSystem *>( Root::getSingleton().getRenderSystem() );
@@ -88,12 +49,16 @@ namespace Ogre
         rs->_unregisterContext( this );
     }
     //-------------------------------------------------------------------------
-    void EGLContext::setCurrent() { eglMakeCurrent( mEglDisplay, mDrawable, mDrawable, mContext ); }
-    //-------------------------------------------------------------------------
-    void EGLContext::endCurrent() { eglMakeCurrent( mEglDisplay, 0, 0, 0 ); }
-    //-------------------------------------------------------------------------
-    GL3PlusContext *EGLContext::clone() const
+    void EglPBufferContext::setCurrent()
     {
-        return new EGLContext( mGLSupport, mGLSupport, mConfig, mDrawable );
+        eglMakeCurrent( mDeviceData->eglDisplay, mDeviceData->eglSurf, mDeviceData->eglSurf,
+                        mDeviceData->eglCtx );
+    }
+    //-------------------------------------------------------------------------
+    void EglPBufferContext::endCurrent() { eglMakeCurrent( mDeviceData->eglDisplay, 0, 0, 0 ); }
+    //-------------------------------------------------------------------------
+    GL3PlusContext *EglPBufferContext::clone() const
+    {
+        return new EglPBufferContext( mGLSupport );
     }
 }  // namespace Ogre

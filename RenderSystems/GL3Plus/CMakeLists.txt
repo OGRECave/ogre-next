@@ -31,8 +31,9 @@ elseif (APPLE)
   set(PLATFORM_LIBS ${Cocoa_LIBRARY_FWK})
   set(PLATFORM_HEADER_INSTALL "OSX")
 elseif (UNIX)
-	file(GLOB PLATFORM_HEADERS "include/windowing/EGL/*.h" "src/windowing/EGL/*.h")
-	file(GLOB PLATFORM_SOURCES "src/windowing/EGL/*.cpp")
+	file(GLOB PLATFORM_HEADERS "include/windowing/EGL/*.h"
+		"include/windowing/EGL/PBuffer/*.h" "src/windowing/EGL/*.h")
+	file(GLOB PLATFORM_SOURCES "src/windowing/EGL/*.cpp" "src/windowing/EGL/PBuffer/*.cpp")
 
 	include_directories( src/windowing/EGL include/windowing/EGL )
 

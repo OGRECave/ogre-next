@@ -500,6 +500,8 @@ namespace Ogre
         /// OpenGL RenderWindows are a bit specific:
         ///     * Their origins are upside down. Which means we need to flip Y.
         ///     * They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true
+        ///     * Headless windows return false since internally they're FBOs. However
+        ///       isRenderWindowSpecific will return true
         virtual bool isOpenGLRenderWindow(void) const;
 
         virtual void _setToDisplayDummyTexture(void) = 0;

@@ -67,6 +67,30 @@ namespace Ogre
         virtual void _setToDisplayDummyTexture(void);
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
     };
+
+    class _OgreGL3PlusExport GL3PlusTextureGpuHeadlessWindow : public GL3PlusTextureGpuRenderTarget
+    {
+        GL3PlusContext *mContext;
+        Window *mWindow;
+
+    public:
+        GL3PlusTextureGpuHeadlessWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                         VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                                         TextureTypes::TextureTypes initialType,
+                                         TextureGpuManager *textureManager, GL3PlusContext *context,
+                                         Window *window );
+        virtual ~GL3PlusTextureGpuHeadlessWindow();
+
+        virtual void setTextureType( TextureTypes::TextureTypes textureType );
+
+        virtual void swapBuffers( void );
+
+        virtual void getCustomAttribute( IdString name, void *pData );
+
+        virtual bool isOpenGLRenderWindow( void ) const;
+
+        virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+    };
 }
 
 #include "OgreHeaderSuffix.h"
