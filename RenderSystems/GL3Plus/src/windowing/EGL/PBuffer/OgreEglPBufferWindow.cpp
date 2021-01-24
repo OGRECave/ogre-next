@@ -49,10 +49,6 @@
 #include <climits>
 #include <iostream>
 
-#include "/home/matias/Projects/renderdoc/renderdoc/api/app/renderdoc_app.h"
-
-static RENDERDOC_API_1_4_1 *rdoc_api = NULL;
-
 namespace Ogre
 {
     EglPBufferWindow::EglPBufferWindow( const String &title, uint32 width, uint32 height,
@@ -238,23 +234,7 @@ namespace Ogre
         OgreProfileBeginDynamic( ( "SwapBuffers: " + mTitle ).c_str() );
         OgreProfileGpuBeginDynamic( "SwapBuffers: " + mTitle );
 
-        const bool bFirstFrame = rdoc_api == 0;
-
-        void *mod;
-        if( !rdoc_api && ( mod = dlopen( "librenderdoc.so", RTLD_NOW | RTLD_NOLOAD ) ) )
-        {
-            pRENDERDOC_GetAPI RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)dlsym( mod, "RENDERDOC_GetAPI" );
-            int ret = RENDERDOC_GetAPI( eRENDERDOC_API_Version_1_4_1, (void **)&rdoc_api );
-            assert( ret == 1 );
-        }
-
-        if( rdoc_api && !bFirstFrame )
-            rdoc_api->EndFrameCapture( NULL, NULL );
-
         eglSwapBuffers( mGLSupport->getGLDisplay(), mGLSupport->getCurrentDevice()->eglSurf );
-
-        if( rdoc_api )
-            rdoc_api->StartFrameCapture( NULL, NULL );
 
         OgreProfileEnd( "SwapBuffers: " + mTitle );
         OgreProfileGpuEnd( "SwapBuffers: " + mTitle );

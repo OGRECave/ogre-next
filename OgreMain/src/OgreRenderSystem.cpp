@@ -52,6 +52,10 @@ THE SOFTWARE.
 
 #include "OgreLwString.h"
 
+#if OGRE_NO_RENDERDOC_INTEGRATION == 0
+#    include "renderdoc/renderdoc_app.h"
+#endif
+
 namespace Ogre {
 
     RenderSystem::Listener* RenderSystem::msSharedEventListener = 0;
@@ -80,6 +84,7 @@ namespace Ogre {
         , mUavRenderingDescSet( 0 )
         , mGlobalInstanceVertexBufferVertexDeclaration(NULL)
         , mGlobalNumberOfInstances(1)
+        , mRenderDocApi(0)
         , mVertexProgramBound(false)
         , mGeometryProgramBound(false)
         , mFragmentProgramBound(false)
@@ -1301,6 +1306,57 @@ namespace Ogre {
     void RenderSystem::setGlobalInstanceVertexBufferVertexDeclaration( v1::VertexDeclaration* val )
     {
         mGlobalInstanceVertexBufferVertexDeclaration = val;
+    }
+    //---------------------------------------------------------------------
+    bool RenderSystem::startGpuDebuggerFrameCapture( Window *window )
+    {
+        if( !mRenderDocApi )
+        {
+            loadRenderDocApi();
+            if( !mRenderDocApi )
+                return false;
+        }
+#if OGRE_NO_RENDERDOC_INTEGRATION == 0
+        mRenderDocApi->StartFrameCapture( NULL, NULL );
+#endif
+        return true;
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::endGpuDebuggerFrameCapture( Window *window )
+    {
+        if( !mRenderDocApi )
+            return;
+#if OGRE_NO_RENDERDOC_INTEGRATION == 0
+        mRenderDocApi->EndFrameCapture( NULL, NULL );
+#endif
+    }
+    //---------------------------------------------------------------------
+    bool RenderSystem::loadRenderDocApi( void )
+    {
+#if OGRE_NO_RENDERDOC_INTEGRATION == 0
+        if( mRenderDocApi )
+            return true;  // Already loaded
+
+#    if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+        void *mod = dlopen( "librenderdoc.so", RTLD_NOW | RTLD_NOLOAD );
+        if( mod )
+        {
+            pRENDERDOC_GetAPI RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)dlsym( mod, "RENDERDOC_GetAPI" );
+            const int ret = RENDERDOC_GetAPI( eRENDERDOC_API_Version_1_4_1, (void **)&mRenderDocApi );
+            return ret == 1;
+        }
+#    elif OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+        HMODULE mod = GetModuleHandleA( "renderdoc.dll" );
+        if( mod )
+        {
+            pRENDERDOC_GetAPI RENDERDOC_GetAPI =
+                (pRENDERDOC_GetAPI)GetProcAddress( mod, "RENDERDOC_GetAPI" );
+            const int ret = RENDERDOC_GetAPI( eRENDERDOC_API_Version_1_4_1, (void **)&mRenderDocApi );
+            return ret == 1;
+        }
+#    endif
+#endif
+        return false;
     }
     //---------------------------------------------------------------------
     void RenderSystem::getCustomAttribute(const String& name, void* pData)

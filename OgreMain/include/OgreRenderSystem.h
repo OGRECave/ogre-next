@@ -44,6 +44,8 @@ THE SOFTWARE.
 #include "OgreViewport.h"
 #include "OgreHeaderPrefix.h"
 
+struct RENDERDOC_API_1_4_1;
+
 namespace Ogre
 {
     /** \addtogroup Core
@@ -1347,6 +1349,46 @@ namespace Ogre
         virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache ) = 0;
         virtual void endGPUSampleProfile( const String &name ) = 0;
 
+        /** Programmatically performs a GPU capture when attached to a GPU debugger like
+            RenderDoc or Metal Graphics Debugger
+
+            You must call RenderSystem::endGpuDebuggerFrameCapture
+
+        @remarks
+            Very big captures (e.g. lots of API calls between start/endGpuDebuggerFrameCapture)
+            may result in the system running out of memory.
+
+        @param window
+            Can be NULL for automatic capture.
+
+            See pRENDERDOC_StartFrameCapture's documentation
+        @return
+            False if we know for certain we failed to capture (e.g. RenderDoc is not running,
+            we were build without integration support, etc)
+
+            True if we believe the frame capture started. Note a capture may still
+            fail regardless due to other more technical reasons, as rendering APIs are complex.
+        */
+        virtual bool startGpuDebuggerFrameCapture( Window *window );
+
+        /// See RenderSystem::startGpuDebuggerFrameCapture
+        /// Call this function when you're done capturing a frame.
+        virtual void endGpuDebuggerFrameCapture( Window *window );
+
+        /// Explicitly loads RenderDoc. It is not necessary to call this function
+        /// unless you want to use RenderSystem::getRenderDocApi before we
+        /// are required to load RenderDoc.
+        bool loadRenderDocApi( void );
+
+        /// Returns the RenderDoc API handle in case you want to do more advanced functionality
+        /// than what we expose.
+        ///
+        /// Note we may return nullptr if RenderDoc was not yet loaded.
+        ///
+        /// Call RenderSystem::loadRenderDocApi first if you wish the returned ptr
+        /// to not be null (it may still be null if we fail to load RenderDoc)
+        RENDERDOC_API_1_4_1 *getRenderDocApi( void ) { return mRenderDocApi; }
+
         /** Determines if the system has anisotropic mip map filter support
         */
         virtual bool hasAnisotropicMipMapFilter() const = 0;
@@ -1467,6 +1509,8 @@ namespace Ogre
         @return True if more iterations are required
         */
         bool updatePassIterationRenderState(void);
+
+        RENDERDOC_API_1_4_1 *mRenderDocApi;
 
         /// List of names of events this rendersystem may raise
         StringVector mEventNames;
