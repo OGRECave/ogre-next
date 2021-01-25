@@ -244,7 +244,7 @@ namespace Ogre
     {
         if( name == "GLCONTEXT" )
         {
-            *static_cast<EglPBufferContext **>( pData ) = mContext;
+            *static_cast<GL3PlusContext **>( pData ) = mContext;
             return;
         }
         else if( name == "RENDERDOC_DEVICE" )
