@@ -32,6 +32,20 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    namespace GpuResidency
+    {
+        // clang-format off
+        static const char* gpuResidencyTable[] =
+        {
+            "OnStorage",
+            "OnSystemRam",
+            "Resident"
+        };
+        // clang-format on
+
+        const char *toString( GpuResidency value ) { return gpuResidencyTable[value]; }
+    }  // namespace GpuResidency
+
     GpuResource::GpuResource( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                               VaoManager *vaoManager, IdString name ) :
         mResidencyStatus( GpuResidency::OnStorage ),

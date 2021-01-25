@@ -1184,7 +1184,7 @@ namespace Ogre
         logMgr.logMessage( text.c_str() );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::dumpMemoryUsage( Log* log ) const
+    void TextureGpuManager::dumpMemoryUsage( Log *log, uint32 mask ) const
     {
         Log* logActual = log == NULL ? LogManager::getSingleton().getDefaultLog() : log;
 
@@ -1246,7 +1246,7 @@ namespace Ogre
 
         logActual->logMessage(
                     "|Alias|Resource Name|Width|Height|Depth|Num Slices|Format|Mipmaps|MSAA|Size in bytes|"
-                    "RTT|UAV|Manual|MSAA Explicit|Reinterpretable|AutomaticBatched",
+                    "RTT|UAV|Manual|MSAA Explicit|Reinterpretable|AutomaticBatched|Residency",
                     LML_CRITICAL );
 
         ResourceEntryMap::const_iterator itEntry = mEntries.begin();
@@ -1256,6 +1256,12 @@ namespace Ogre
         {
             const ResourceEntry &entry = itEntry->second;
             text.clear();
+
+            if( !( ( 1 << entry.texture->getResidencyStatus() ) & mask ) )
+            {
+                ++itEntry;
+                continue;
+            }
 
             const size_t bytesTexture = entry.texture->getSizeBytes();
 
@@ -1272,7 +1278,8 @@ namespace Ogre
                     entry.texture->_isManualTextureFlagPresent(), "|" );
             text.a( entry.texture->hasMsaaExplicitResolves(), "|",
                     entry.texture->isReinterpretable(), "|",
-                    entry.texture->hasAutomaticBatching() );
+                    entry.texture->hasAutomaticBatching(), "|",
+                    GpuResidency::toString( entry.texture->getResidencyStatus()) );
 
             if( !entry.texture->hasAutomaticBatching() )
                 bytesOutsidePool += bytesTexture;

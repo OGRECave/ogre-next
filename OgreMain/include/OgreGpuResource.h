@@ -64,6 +64,8 @@ namespace Ogre
             /// (keep everything on Sys. RAM; load to GPU based on scene demands)
             Resident
         };
+
+        const char *toString( GpuResidency value );
     }
 
     namespace GpuPageOutStrategy
