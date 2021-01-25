@@ -39,6 +39,8 @@ namespace Ogre {
         Win32Context( HDC hdc, HGLRC glrc, uint32 contexMajorVersion, uint32 contexMinorVersion );
         virtual ~Win32Context();
 
+        HGLRC getHGLRC() { return mGlrc; }
+
         /** See GL3PlusContext */
         virtual void setCurrent();
         /** See GL3PlusContext */

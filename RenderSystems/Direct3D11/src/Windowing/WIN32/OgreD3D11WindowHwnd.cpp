@@ -677,7 +677,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::getCustomAttribute( IdString name, void* pData )
     {
-        if( name == "WINDOW" )
+        if( name == "WINDOW" || name == "RENDERDOC_WINDOW" )
         {
             HWND *pWnd = (HWND*)pData;
             *pWnd = mHwnd;
