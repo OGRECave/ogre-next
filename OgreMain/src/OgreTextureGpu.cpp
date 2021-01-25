@@ -1015,6 +1015,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t TextureGpu::getSizeBytes(void) const
     {
+        if( mResidencyStatus == GpuResidency::OnStorage )
+            return 0;
+
         size_t sizeBytes = PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(),
                                                                     getNumSlices(),
                                                                     mPixelFormat, mNumMipmaps, 4u );
