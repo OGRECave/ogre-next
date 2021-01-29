@@ -57,6 +57,7 @@ THE SOFTWARE.
 #include "OgreHlmsListener.h"
 #include "OgreBitset.h"
 
+#include "OgreFileSystem.h"
 #include "OgreProfiler.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE

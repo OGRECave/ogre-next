@@ -46,6 +46,7 @@ THE SOFTWARE.
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
 
+#include "OgreFileSystem.h"
 #include "OgreLogManager.h"
 
 #include "Hash/MurmurHash3.h"
