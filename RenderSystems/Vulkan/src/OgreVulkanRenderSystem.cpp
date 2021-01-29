@@ -2560,7 +2560,7 @@ namespace Ogre
         if( srcStage == 0 )
             srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
         if( dstStage == 0 )
-            dstStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+            dstStage = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 
         vkCmdPipelineBarrier(
             mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer, srcStage & mActiveDevice->mSupportedStages,

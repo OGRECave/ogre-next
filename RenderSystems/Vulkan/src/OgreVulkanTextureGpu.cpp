@@ -168,9 +168,9 @@ namespace Ogre
             imageBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             imageBarrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-            vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
-                                  VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                                  0, 0u, 0, 0u, 0, 1u, &imageBarrier );
+            vkCmdPipelineBarrier(
+                device->mGraphicsQueue.mCurrentCmdBuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0u, 0, 0u, 0, 1u, &imageBarrier );
 
             mCurrLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             mNextLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -590,9 +590,9 @@ namespace Ogre
             imageBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
             imageBarrier.srcAccessMask = 0;
             imageBarrier.dstAccessMask = 0;
-            vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
-                                  VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                                  0, 0u, 0, 0u, 0, 1u, &imageBarrier );
+            vkCmdPipelineBarrier(
+                device->mGraphicsQueue.mCurrentCmdBuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0u, 0, 0u, 0, 1u, &imageBarrier );
 
             VkImageBlit region;
 
@@ -957,8 +957,12 @@ namespace Ogre
         imageBarrier.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         imageBarrier.image = mMsaaFramebufferName;
         vkCmdPipelineBarrier( device->mGraphicsQueue.mCurrentCmdBuffer,
-                              VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0,
-                              0u, 0, 0u, 0, 1u, &imageBarrier );
+                              VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                              PixelFormatGpuUtils::isDepth( finalPixelFormat )
+                                  ? ( VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
+                                      VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT )
+                                  : ( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT ),
+                              0, 0u, 0, 0u, 0, 1u, &imageBarrier );
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuRenderTarget::destroyMsaaSurface( void )

@@ -831,7 +831,7 @@ namespace Ogre
             {
                 // Nothing needs to wait for us. Can happen if all we're
                 // doing is copying from read-only textures (rare)
-                dstStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+                dstStage = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
                 FastArray<TextureGpu *>::const_iterator itor = mImageMemBarrierPtrs.begin();
