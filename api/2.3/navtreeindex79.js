@@ -1,5 +1,13 @@
 var NAVTREEINDEX79 =
 {
+"class_ogre_1_1_g_l3_plus_tex_buffer_packed.html#a481ad7b97cb88501c5777f4703ff2320":[7,0,0,401,4],
+"class_ogre_1_1_g_l3_plus_tex_buffer_packed.html#a49815a3ca152d94e95e4bb8689937005":[7,0,0,401,10],
+"class_ogre_1_1_g_l3_plus_tex_buffer_packed.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,401,39],
+"class_ogre_1_1_g_l3_plus_tex_buffer_packed.html#a4f31390a156614abd7ffe33b48af84b4":[7,0,0,401,24],
+"class_ogre_1_1_g_l3_plus_tex_buffer_packed.html#a50080eb729acd0c995606d512d5633c9":[7,0,0,401,19],
+"class_ogre_1_1_g_l3_plus_tex_buffer_packed.html#a542b46fc7a7cf5fe524cfc7b4b389ba9":[7,0,0,401,21],
+"class_ogre_1_1_g_l3_plus_tex_buffer_packed.html#a564935579f2252627f46dff29142e7ff":[7,0,0,401,8],
+"class_ogre_1_1_g_l3_plus_tex_buffer_packed.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,401,34],
 "class_ogre_1_1_g_l3_plus_tex_buffer_packed.html#a69984ccd67bf7c801cc33dd20780b581":[7,0,0,401,22],
 "class_ogre_1_1_g_l3_plus_tex_buffer_packed.html#a73e02f6b2fa2c16340c1a9359926b481":[7,0,0,401,42],
 "class_ogre_1_1_g_l3_plus_tex_buffer_packed.html#a79c4dcc7cc8a14583ef60d194d800b50":[7,0,0,401,1],
@@ -241,13 +249,5 @@ var NAVTREEINDEX79 =
 "class_ogre_1_1_g_l3_plus_texture_gpu.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,403,90],
 "class_ogre_1_1_g_l3_plus_texture_gpu.html#acc59aec11b770b8fc317dea50313d052":[7,0,0,403,27],
 "class_ogre_1_1_g_l3_plus_texture_gpu.html#acdde6ea96205d73550d17a18bf4653a4":[7,0,0,403,86],
-"class_ogre_1_1_g_l3_plus_texture_gpu.html#ace88832ef330c2b560127ca2386c87de":[7,0,0,403,74],
-"class_ogre_1_1_g_l3_plus_texture_gpu.html#ad1858af3588de15e9da271d22fe9d5c1":[7,0,0,403,68],
-"class_ogre_1_1_g_l3_plus_texture_gpu.html#ad3b879c519f45ccb57f91bc45a221f3e":[7,0,0,403,9],
-"class_ogre_1_1_g_l3_plus_texture_gpu.html#ad623ee0c97e95e276074d3cfd64c374c":[7,0,0,403,2],
-"class_ogre_1_1_g_l3_plus_texture_gpu.html#ad9e5b1428a5fc4fdfaca35292509c716":[7,0,0,403,31],
-"class_ogre_1_1_g_l3_plus_texture_gpu.html#adaef49d04083efa37638502be9ece306":[7,0,0,403,54],
-"class_ogre_1_1_g_l3_plus_texture_gpu.html#adc608f61167b7b737a4129cd2b85f5f4":[7,0,0,403,113],
-"class_ogre_1_1_g_l3_plus_texture_gpu.html#ae3e0ad601752b91f2851c88f9ed49869":[7,0,0,403,100],
-"class_ogre_1_1_g_l3_plus_texture_gpu.html#ae3e8a7c83b8295de9925a974f0121cdc":[7,0,0,403,64]
+"class_ogre_1_1_g_l3_plus_texture_gpu.html#ace88832ef330c2b560127ca2386c87de":[7,0,0,403,74]
 };

@@ -1,5 +1,13 @@
 var NAVTREEINDEX31 =
 {
+"class_ogre_1_1_colour_fader_affector_factory2.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,105,3],
+"class_ogre_1_1_colour_fader_affector_factory2.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,105,7],
+"class_ogre_1_1_colour_fader_affector_factory2.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,105,10],
+"class_ogre_1_1_colour_fader_affector_factory2.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,105,5],
+"class_ogre_1_1_colour_fader_affector_factory2.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,105,1],
+"class_ogre_1_1_colour_fader_affector_factory2.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,105,4],
+"class_ogre_1_1_colour_fader_affector_factory2.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,105,8],
+"class_ogre_1_1_colour_fader_affector_factory2.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,105,6],
 "class_ogre_1_1_colour_fader_affector_factory2.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,105,2],
 "class_ogre_1_1_colour_fader_affector_factory2.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,105,9],
 "class_ogre_1_1_colour_image_affector.html":[7,0,0,106],
@@ -241,13 +249,5 @@ var NAVTREEINDEX31 =
 "class_ogre_1_1_compositor_manager2.html#a2570335ea7df7e197a88334d65468c01":[5,0,1,4,15],
 "class_ogre_1_1_compositor_manager2.html#a2570335ea7df7e197a88334d65468c01":[5,2,12,4,15],
 "class_ogre_1_1_compositor_manager2.html#a261d69d7a799f9e4f3516c86f9859c90":[5,0,1,4,16],
-"class_ogre_1_1_compositor_manager2.html#a261d69d7a799f9e4f3516c86f9859c90":[5,2,12,4,16],
-"class_ogre_1_1_compositor_manager2.html#a2ae2db2ca39599b0de2e70d6fe10e460":[5,0,1,4,5],
-"class_ogre_1_1_compositor_manager2.html#a2ae2db2ca39599b0de2e70d6fe10e460":[5,2,12,4,5],
-"class_ogre_1_1_compositor_manager2.html#a2dd9288f58a4608a9cbca4bbe32ea5d7":[5,0,1,4,45],
-"class_ogre_1_1_compositor_manager2.html#a2dd9288f58a4608a9cbca4bbe32ea5d7":[5,2,12,4,45],
-"class_ogre_1_1_compositor_manager2.html#a3243efb0398eb295a74c707612453e8a":[5,0,1,4,7],
-"class_ogre_1_1_compositor_manager2.html#a3243efb0398eb295a74c707612453e8a":[5,2,12,4,7],
-"class_ogre_1_1_compositor_manager2.html#a3286cce2636f65340e093be124eb17c5":[5,0,1,4,53],
-"class_ogre_1_1_compositor_manager2.html#a3286cce2636f65340e093be124eb17c5":[5,2,12,4,53]
+"class_ogre_1_1_compositor_manager2.html#a261d69d7a799f9e4f3516c86f9859c90":[5,2,12,4,16]
 };

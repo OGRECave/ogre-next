@@ -1,5 +1,13 @@
 var NAVTREEINDEX151 =
 {
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a595ea4c05da8aa987d3800e65d23355d":[5,0,1,31,9],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a5fca5ac3db0ec963d468a050a597e81b":[5,2,12,31,2],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a5fca5ac3db0ec963d468a050a597e81b":[5,0,1,31,2],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a64ec2cc49a15be1446603390cf2d5536":[5,2,12,31,15],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a64ec2cc49a15be1446603390cf2d5536":[5,0,1,31,15],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,12,31,5],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,0,1,31,5],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a84aeb5d693cf9235080fc84031ec881f":[5,2,12,31,0],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a84aeb5d693cf9235080fc84031ec881f":[5,0,1,31,0],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,12,31,8],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,0,1,31,8],
@@ -241,13 +249,5 @@ var NAVTREEINDEX151 =
 "class_ogre_1_1_portal.html#a5efd1ae6c2712d5fda4873f472747a8c":[7,0,0,850,38],
 "class_ogre_1_1_portal.html#a61b39d44e60020d43033a6957895aa5f":[7,0,0,850,31],
 "class_ogre_1_1_portal.html#a64b4a35372e515ba916e36c69127ced7":[7,0,0,850,82],
-"class_ogre_1_1_portal.html#a66063584ab3c6fce4b37f27b07aab1c5":[7,0,0,850,76],
-"class_ogre_1_1_portal.html#a68b42f3ab26a6ffd40c8a2421b053bac":[7,0,0,850,123],
-"class_ogre_1_1_portal.html#a69490b9edef5ddd25dbbdfeb6098f1d6":[7,0,0,850,63],
-"class_ogre_1_1_portal.html#a6b823b52684730302908ecfd1a8e6d54":[7,0,0,850,20],
-"class_ogre_1_1_portal.html#a6c4003f6b67540727844dc33c20714f7":[7,0,0,850,93],
-"class_ogre_1_1_portal.html#a6e0b185e38d9a51feef2cafa341c801e":[7,0,0,850,6],
-"class_ogre_1_1_portal.html#a6f401ef1fa0213f68cfd5706c26bdc69":[7,0,0,850,1],
-"class_ogre_1_1_portal.html#a6f401ef1fa0213f68cfd5706c26bdc69a406ea7e75464164cb9227c29872f072f":[7,0,0,850,1,0],
-"class_ogre_1_1_portal.html#a6f401ef1fa0213f68cfd5706c26bdc69a953cb7c12e4f645a3c70ad412fe3b46d":[7,0,0,850,1,2]
+"class_ogre_1_1_portal.html#a66063584ab3c6fce4b37f27b07aab1c5":[7,0,0,850,76]
 };

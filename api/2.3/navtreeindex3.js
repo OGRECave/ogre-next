@@ -1,8 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"_ogre_d3_d11_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540afff822e7878f67a860efb6c21984db26":[8,0,188,1,1],
-"_ogre_d3_d11_plugin_8h.html":[8,0,189],
-"_ogre_d3_d11_prerequisites_8h.html":[8,0,190],
 "_ogre_d3_d11_prerequisites_8h.html#a4fdfbb7af58cbdd237866fe276917b0e":[8,0,190,5],
 "_ogre_d3_d11_prerequisites_8h.html#a506b3685b3eb05aac751f9e14cbed93b":[8,0,190,3],
 "_ogre_d3_d11_prerequisites_8h.html#a6038f7bdb274c2e159988a57dedbf93d":[8,0,190,4],
@@ -105,6 +102,7 @@ var NAVTREEINDEX3 =
 "_ogre_deflate_8h.html#aa4751fbf6d882976fb300ea9815f5010":[8,0,257,1],
 "_ogre_deflector_plane_affector_8h.html":[8,0,258],
 "_ogre_deflector_plane_affector_factory_8h.html":[8,0,259],
+"_ogre_depth_buffer_8h.html":[8,0,261],
 "_ogre_descriptor_set_sampler_8h.html":[8,0,262],
 "_ogre_descriptor_set_texture_8h.html":[8,0,263],
 "_ogre_descriptor_set_uav_8h.html":[8,0,264],
@@ -239,6 +237,7 @@ var NAVTREEINDEX3 =
 "_ogre_g_l3_plus_texture_manager_8h.html#a9f8ede152a4ce600bfcf6e8a7333b29f":[8,0,355,2],
 "_ogre_g_l3_plus_uav_buffer_packed_8h.html":[8,0,356],
 "_ogre_g_l3_plus_vao_manager_8h.html":[8,0,362],
+"_ogre_g_l3_plus_vertex_array_object_8h.html":[8,0,363],
 "_ogre_g_l_e_s2_async_ticket_8h.html":[8,0,365],
 "_ogre_g_l_e_s2_buffer_interface_8h.html":[8,0,366],
 "_ogre_g_l_e_s2_const_buffer_packed_8h.html":[8,0,367],
@@ -249,5 +248,6 @@ var NAVTREEINDEX3 =
 "_ogre_g_l_e_s2_dynamic_buffer_8h.html":[8,0,372],
 "_ogre_g_l_e_s2_f_b_o_multi_render_target_8h.html":[8,0,373],
 "_ogre_g_l_e_s2_f_b_o_render_texture_8h.html":[8,0,374],
-"_ogre_g_l_e_s2_frame_buffer_object_8h.html":[8,0,375]
+"_ogre_g_l_e_s2_frame_buffer_object_8h.html":[8,0,375],
+"_ogre_g_l_e_s2_gpu_program_manager_8h.html":[8,0,376]
 };

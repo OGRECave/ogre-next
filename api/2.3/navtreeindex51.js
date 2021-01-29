@@ -1,5 +1,13 @@
 var NAVTREEINDEX51 =
 {
+"class_ogre_1_1_d3_d11_vao_manager.html#a222d4e40df5eb53ab0b050e37aca7b89":[7,0,0,235,16],
+"class_ogre_1_1_d3_d11_vao_manager.html#a2519516e7165baa94b1c63642fd5394b":[7,0,0,235,50],
+"class_ogre_1_1_d3_d11_vao_manager.html#a2d0feae113e7a1003d76b3640c51d243":[7,0,0,235,53],
+"class_ogre_1_1_d3_d11_vao_manager.html#a2d29b276731a8aeef821863bad178459":[7,0,0,235,76],
+"class_ogre_1_1_d3_d11_vao_manager.html#a374058250675bac30bfb5b03c26b5eb7":[7,0,0,235,12],
+"class_ogre_1_1_d3_d11_vao_manager.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,235,65],
+"class_ogre_1_1_d3_d11_vao_manager.html#a445b8e5486e061745af43d1831f60eb6":[7,0,0,235,72],
+"class_ogre_1_1_d3_d11_vao_manager.html#a4a00e866aebffe5114767ce1fc81bea8":[7,0,0,235,40],
 "class_ogre_1_1_d3_d11_vao_manager.html#a4a29a345e9655896c164a90434c1607e":[7,0,0,235,21],
 "class_ogre_1_1_d3_d11_vao_manager.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,235,68],
 "class_ogre_1_1_d3_d11_vao_manager.html#a4c2c223f495c035085ffa2b7323bce82":[7,0,0,235,11],
@@ -241,13 +249,5 @@ var NAVTREEINDEX51 =
 "class_ogre_1_1_d3_d9_depth_buffer.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,243,28],
 "class_ogre_1_1_d3_d9_depth_buffer.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,243,26],
 "class_ogre_1_1_d3_d9_depth_buffer.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,243,22],
-"class_ogre_1_1_d3_d9_depth_buffer.html#ad0bf97863bd3b2d70e3b46dea48ca8f7":[7,0,0,243,3],
-"class_ogre_1_1_d3_d9_depth_buffer.html#ae13c9b22d960a0061782bc459cb479ce":[7,0,0,243,19],
-"class_ogre_1_1_d3_d9_depth_buffer.html#ae5095fe367bf95d08dee2da03810beb2":[7,0,0,243,16],
-"class_ogre_1_1_d3_d9_depth_buffer.html#af95e6998e74db40257cb2ca5cab4bdf4":[7,0,0,243,14],
-"class_ogre_1_1_d3_d9_depth_buffer.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,243,29],
-"class_ogre_1_1_d3_d9_depth_buffer.html#afb31d279263557b92843f6715ba6e8c2":[7,0,0,243,12],
-"class_ogre_1_1_d3_d9_device.html":[7,0,0,244],
-"class_ogre_1_1_d3_d9_device.html#a149159ae35779a294f9ec582257c46fc":[7,0,0,244,19],
-"class_ogre_1_1_d3_d9_device.html#a18f2bbecd6ab96a674cc943e052b1fa3":[7,0,0,244,18]
+"class_ogre_1_1_d3_d9_depth_buffer.html#ad0bf97863bd3b2d70e3b46dea48ca8f7":[7,0,0,243,3]
 };

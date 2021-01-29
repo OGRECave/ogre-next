@@ -1,5 +1,13 @@
 var NAVTREEINDEX177 =
 {
+"class_ogre_1_1_script_translator_manager.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,2,106,11],
+"class_ogre_1_1_segment.html":[7,0,0,962],
+"class_ogre_1_1_segment.html#a44470ed7ead1affb566b776c1d771746":[7,0,0,962,1],
+"class_ogre_1_1_segment.html#a44850fd02064b0555e1ec782502032b0":[7,0,0,962,9],
+"class_ogre_1_1_segment.html#a4c26a34309f2ef27674caaa76128621d":[7,0,0,962,8],
+"class_ogre_1_1_segment.html#a505c8fb506a5998c49205215512da8a3":[7,0,0,962,0],
+"class_ogre_1_1_segment.html#a54a372be746c3665fa5db9091e9fc8ed":[7,0,0,962,6],
+"class_ogre_1_1_segment.html#a6e305c32bbf2be9f6541e56f6003eda9":[7,0,0,962,10],
 "class_ogre_1_1_segment.html#a8f2fc7eeb151ba60c9d1b770d7dfeed0":[7,0,0,962,7],
 "class_ogre_1_1_segment.html#aab7e3b6b12f17b430129883443f83cc0":[7,0,0,962,5],
 "class_ogre_1_1_segment.html#abc4c3bf90017fe83e602aa568545a65f":[7,0,0,962,3],
@@ -241,13 +249,5 @@ var NAVTREEINDEX177 =
 "class_ogre_1_1_shadow_volume_extrude_program.html#ade24fd66aff9052fb19403696f28a623af4d3d45a57d9dfd4eb439e564305d0c5":[5,0,1,52,0,1],
 "class_ogre_1_1_shadow_volume_extrude_program.html#ade24fd66aff9052fb19403696f28a623af4d3d45a57d9dfd4eb439e564305d0c5":[5,2,12,52,0,1],
 "class_ogre_1_1_shadow_volume_extrude_program.html#ae002a43fd55ccaae29acde97174302d5":[5,0,1,52,11],
-"class_ogre_1_1_shadow_volume_extrude_program.html#ae002a43fd55ccaae29acde97174302d5":[5,2,12,52,11],
-"class_ogre_1_1_shadow_volume_extrude_program.html#af68498e80e2cf9d6640a54a987fd9ca8":[5,2,12,52,16],
-"class_ogre_1_1_shadow_volume_extrude_program.html#af68498e80e2cf9d6640a54a987fd9ca8":[5,0,1,52,16],
-"class_ogre_1_1_shadow_volume_extrude_program.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,52,54],
-"class_ogre_1_1_shadow_volume_extrude_program.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,12,52,54],
-"class_ogre_1_1_shadow_volume_extrude_program.html#afbed383b707a3ce6d98c60d1fbf3db77":[5,0,1,52,36],
-"class_ogre_1_1_shadow_volume_extrude_program.html#afbed383b707a3ce6d98c60d1fbf3db77":[5,2,12,52,36],
-"class_ogre_1_1_shadow_volume_extrude_program.html#afc09382251e49dd3aa3b75e012c516b7":[5,0,1,52,43],
-"class_ogre_1_1_shadow_volume_extrude_program.html#afc09382251e49dd3aa3b75e012c516b7":[5,2,12,52,43]
+"class_ogre_1_1_shadow_volume_extrude_program.html#ae002a43fd55ccaae29acde97174302d5":[5,2,12,52,11]
 };

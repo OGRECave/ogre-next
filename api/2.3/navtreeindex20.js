@@ -1,5 +1,13 @@
 var NAVTREEINDEX20 =
 {
+"class_ogre_1_1_array_quaternion.html#a682e95327f327b963d4305e0f0a4343a":[5,2,6,5,92],
+"class_ogre_1_1_array_quaternion.html#a6df750766959b256298e2f1d96b5014a":[5,2,6,5,23],
+"class_ogre_1_1_array_quaternion.html#a6df750766959b256298e2f1d96b5014a":[5,2,6,5,22],
+"class_ogre_1_1_array_quaternion.html#a6df750766959b256298e2f1d96b5014a":[5,2,6,5,21],
+"class_ogre_1_1_array_quaternion.html#a7149452ca76a609114893c3acba577d8":[5,2,6,5,24],
+"class_ogre_1_1_array_quaternion.html#a7149452ca76a609114893c3acba577d8":[5,2,6,5,25],
+"class_ogre_1_1_array_quaternion.html#a7149452ca76a609114893c3acba577d8":[5,2,6,5,26],
+"class_ogre_1_1_array_quaternion.html#a729eb2869c3578c682049f3d5522f25a":[5,2,6,5,108],
 "class_ogre_1_1_array_quaternion.html#a73dd9290ccad5b8dcb89c90910f5a2aa":[5,2,6,5,96],
 "class_ogre_1_1_array_quaternion.html#a73dd9290ccad5b8dcb89c90910f5a2aa":[5,2,6,5,97],
 "class_ogre_1_1_array_quaternion.html#a73dd9290ccad5b8dcb89c90910f5a2aa":[5,2,6,5,98],
@@ -241,13 +249,5 @@ var NAVTREEINDEX20 =
 "class_ogre_1_1_array_vector3.html#aa8e0b920f898d2a32c9d7f0cecd4b6ec":[5,2,6,7,114],
 "class_ogre_1_1_array_vector3.html#aa8e0b920f898d2a32c9d7f0cecd4b6ec":[5,2,6,7,115],
 "class_ogre_1_1_array_vector3.html#aaec06d68161d4123b3fad14fb72fd9c5":[5,2,6,7,35],
-"class_ogre_1_1_array_vector3.html#aaec06d68161d4123b3fad14fb72fd9c5":[5,2,6,7,34],
-"class_ogre_1_1_array_vector3.html#aaec06d68161d4123b3fad14fb72fd9c5":[5,2,6,7,33],
-"class_ogre_1_1_array_vector3.html#ab573b7c18f1f76071a3f40b0e1bfd9ea":[5,2,6,7,60],
-"class_ogre_1_1_array_vector3.html#ab573b7c18f1f76071a3f40b0e1bfd9ea":[5,2,6,7,61],
-"class_ogre_1_1_array_vector3.html#ab573b7c18f1f76071a3f40b0e1bfd9ea":[5,2,6,7,62],
-"class_ogre_1_1_array_vector3.html#ab5b7a214726ba5ac0e7c39493e8baed0":[5,2,6,7,39],
-"class_ogre_1_1_array_vector3.html#ab5b7a214726ba5ac0e7c39493e8baed0":[5,2,6,7,40],
-"class_ogre_1_1_array_vector3.html#ab5b7a214726ba5ac0e7c39493e8baed0":[5,2,6,7,41],
-"class_ogre_1_1_array_vector3.html#ab6ab388de60346a25db6a88ef83ab658":[5,2,6,7,119]
+"class_ogre_1_1_array_vector3.html#aaec06d68161d4123b3fad14fb72fd9c5":[5,2,6,7,34]
 };

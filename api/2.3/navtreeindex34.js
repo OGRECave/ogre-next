@@ -1,5 +1,13 @@
 var NAVTREEINDEX34 =
 {
+"class_ogre_1_1_compositor_pass_depth_copy_def.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,1,10,9],
+"class_ogre_1_1_compositor_pass_depth_copy_def.html#a5b72f1a56bcbd829fc60fa21afde5927":[5,2,1,10,20],
+"class_ogre_1_1_compositor_pass_depth_copy_def.html#a6e881a7f92659dabfe52eefec2ccf603":[5,2,1,10,33],
+"class_ogre_1_1_compositor_pass_depth_copy_def.html#a70ba2384e061021d6eceb5dd20b66d47":[5,2,1,10,32],
+"class_ogre_1_1_compositor_pass_depth_copy_def.html#a7446207e62dfceb532bd3dc3cf78039b":[5,2,1,10,31],
+"class_ogre_1_1_compositor_pass_depth_copy_def.html#a7731386fe3b2ac2cdb4a8be6e4e138b2":[5,2,1,10,40],
+"class_ogre_1_1_compositor_pass_depth_copy_def.html#a7c170ea720b9a0b8ef36d73b075700e7":[5,2,1,10,19],
+"class_ogre_1_1_compositor_pass_depth_copy_def.html#a822b8d01cd97e35e420cd254cea54fe9":[5,2,1,10,3],
 "class_ogre_1_1_compositor_pass_depth_copy_def.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,1,10,5],
 "class_ogre_1_1_compositor_pass_depth_copy_def.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,1,10,8],
 "class_ogre_1_1_compositor_pass_depth_copy_def.html#aa3381e8cd31c5ccbc33f1d1c5bf9b86c":[5,2,1,10,23],
@@ -241,13 +249,5 @@ var NAVTREEINDEX34 =
 "class_ogre_1_1_compositor_pass_quad.html#ad4d394f598a677c18b4b653cde572957":[5,2,1,15,3],
 "class_ogre_1_1_compositor_pass_quad.html#ad9e0b79d8ca75e75cc94e0f00608e692":[5,2,1,15,26],
 "class_ogre_1_1_compositor_pass_quad.html#ae0a52291d3b53e65dd6a622e16a2965a":[5,2,1,15,2],
-"class_ogre_1_1_compositor_pass_quad.html#ae980ee6ed32e7cb59addeb213dc15f4d":[5,2,1,15,5],
-"class_ogre_1_1_compositor_pass_quad.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,1,15,24],
-"class_ogre_1_1_compositor_pass_quad.html#afadaded3472e9b18c03a347fe4d5ff39":[5,2,1,15,7],
-"class_ogre_1_1_compositor_pass_quad.html#afe6a90034aeaa2ed38e32d9f344e38c3":[5,2,1,15,28],
-"class_ogre_1_1_compositor_pass_quad_def.html":[5,2,1,16],
-"class_ogre_1_1_compositor_pass_quad_def.html#a03f4a196d4bc9d62b967019c5bf7c5ac":[5,2,1,16,56],
-"class_ogre_1_1_compositor_pass_quad_def.html#a08c66aa1c72aef43599f360cfc6ada68":[5,2,1,16,20],
-"class_ogre_1_1_compositor_pass_quad_def.html#a0fdf3a38961c32069cde61f23d7ff674":[5,2,1,16,47],
-"class_ogre_1_1_compositor_pass_quad_def.html#a1069395554fa1c1d947729aed878f7c0":[5,2,1,16,8]
+"class_ogre_1_1_compositor_pass_quad.html#ae980ee6ed32e7cb59addeb213dc15f4d":[5,2,1,15,5]
 };

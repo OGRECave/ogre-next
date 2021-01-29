@@ -1,5 +1,13 @@
 var NAVTREEINDEX166 =
 {
+"class_ogre_1_1_render_system_capabilities_manager.html#a971e78f1cccb481a2ac705c60b24b597":[5,2,10,10,4],
+"class_ogre_1_1_render_system_capabilities_manager.html#aa8df6e6b393ea46430e43dbc48297e7f":[5,2,10,10,3],
+"class_ogre_1_1_render_system_capabilities_manager.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,10,10,14],
+"class_ogre_1_1_render_system_capabilities_manager.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,10,10,12],
+"class_ogre_1_1_render_system_capabilities_manager.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,10,10,8],
+"class_ogre_1_1_render_system_capabilities_manager.html#af156b74a3c166ab4b05e82a89d2445d9":[5,2,10,10,5],
+"class_ogre_1_1_render_system_capabilities_manager.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,10,10,15],
+"class_ogre_1_1_render_system_capabilities_serializer.html":[5,2,10,11],
 "class_ogre_1_1_render_system_capabilities_serializer.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,10,11,4],
 "class_ogre_1_1_render_system_capabilities_serializer.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,10,11,8],
 "class_ogre_1_1_render_system_capabilities_serializer.html#a44bd515809b4ed26fa372b9c836a3137":[5,2,10,11,12],
@@ -241,13 +249,5 @@ var NAVTREEINDEX166 =
 "class_ogre_1_1_render_window.html#a62a35f19422bd10282b044909e757b2e":[5,2,10,17,64],
 "class_ogre_1_1_render_window.html#a62f7ce3ddeb263e5561c8521401f4ad6":[5,2,10,17,13],
 "class_ogre_1_1_render_window.html#a68bd7eab7040d56b092605ab45923799":[5,2,10,17,42],
-"class_ogre_1_1_render_window.html#a6c32524efacf6da599d5daccf3d9e166":[5,2,10,17,19],
-"class_ogre_1_1_render_window.html#a6dd357cb57f1020fb11de230f7fee61a":[5,2,10,17,28],
-"class_ogre_1_1_render_window.html#a6fc748317d2951512cd42d19e3445352":[5,2,10,17,65],
-"class_ogre_1_1_render_window.html#a70c43cd6bebbdea84711eb49bb9f1375":[5,2,10,17,67],
-"class_ogre_1_1_render_window.html#a74f922747c11f98718be00c2fa86165c":[5,2,10,17,82],
-"class_ogre_1_1_render_window.html#a756b752e30cad1f8f71b69c86bc2f6f2":[5,2,10,17,89],
-"class_ogre_1_1_render_window.html#a79c057e010286b2b6c3a27f296233c5c":[5,2,10,17,37],
-"class_ogre_1_1_render_window.html#a7bd367fcadf2aba85f08cf9c5fd27e22":[5,2,10,17,15],
-"class_ogre_1_1_render_window.html#a812eadaec07bee20d103a948920e615c":[5,2,10,17,68]
+"class_ogre_1_1_render_window.html#a6c32524efacf6da599d5daccf3d9e166":[5,2,10,17,19]
 };

@@ -1,9 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"_ogre_blend_mode_8h.html#gga41c76d419d6c9c205a6c1d3b42872213a374792bd937134c4ca2aad748661c22c":[8,0,62,4,6],
-"_ogre_blend_mode_8h.html#gga41c76d419d6c9c205a6c1d3b42872213a5b1a11e0ec0d1cf0bdab0176cca26eea":[8,0,62,4,7],
-"_ogre_blend_mode_8h.html#gga41c76d419d6c9c205a6c1d3b42872213a7ea50d3d5960138db1c46ecb42f94969":[8,0,62,4,4],
-"_ogre_blend_mode_8h.html#gga41c76d419d6c9c205a6c1d3b42872213a93b05f61a5076cf0f649ac5d656970fe":[8,0,62,4,5],
 "_ogre_blend_mode_8h.html#gga41c76d419d6c9c205a6c1d3b42872213ad2741858a9d9f668a47ea75b82ae0318":[8,0,62,4,0],
 "_ogre_blend_mode_8h.html#gga41c76d419d6c9c205a6c1d3b42872213aec796e9f58f4cce849379f0239e059a6":[8,0,62,4,3],
 "_ogre_blend_mode_8h.html#gga41c76d419d6c9c205a6c1d3b42872213affe55d98f2cd26e9451af52dbc74f7b2":[8,0,62,4,2],
@@ -30,6 +26,7 @@ var NAVTREEINDEX1 =
 "_ogre_bone_array_memory_manager_8h.html":[8,0,64],
 "_ogre_bone_memory_manager_8h.html":[8,0,65],
 "_ogre_bone_transform_8h.html":[8,0,66],
+"_ogre_boolean_mask_8h.html":[8,0,69],
 "_ogre_border_panel_overlay_element_8h.html":[8,0,71],
 "_ogre_box_emitter_8h.html":[8,0,72],
 "_ogre_box_emitter_factory_8h.html":[8,0,73],
@@ -249,5 +246,8 @@ var NAVTREEINDEX1 =
 "_ogre_common_8h.html#gga63b5ab6176b81463bbdd0e260b751d2eacdf428dd5632cc60914c8f93d08de106":[8,0,102,25,0],
 "_ogre_common_8h.html#gga68866b02aa7f99e3431337511fbb3345a7e87bf8ec063f4e7bf022a7396346211":[8,0,102,24,2],
 "_ogre_common_8h.html#gga68866b02aa7f99e3431337511fbb3345ac1f71aad59ecae8cd02f0743dc7efa5d":[8,0,102,24,1],
-"_ogre_common_8h.html#gga68866b02aa7f99e3431337511fbb3345adfb098e30463c0f0689e0e1fbbd5eb0f":[8,0,102,24,0]
+"_ogre_common_8h.html#gga68866b02aa7f99e3431337511fbb3345adfb098e30463c0f0689e0e1fbbd5eb0f":[8,0,102,24,0],
+"_ogre_common_8h.html#gga7049ce296bb4883feab25251d3865035a0bf893209b217d59e15abaf48092d132":[8,0,102,28,5],
+"_ogre_common_8h.html#gga7049ce296bb4883feab25251d3865035a3401095a48724f9b624466d596891233":[8,0,102,28,0],
+"_ogre_common_8h.html#gga7049ce296bb4883feab25251d3865035a63dd081c4d08bece8b71016780453737":[8,0,102,28,2]
 };

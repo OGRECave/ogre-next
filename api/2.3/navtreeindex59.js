@@ -1,5 +1,13 @@
 var NAVTREEINDEX59 =
 {
+"class_ogre_1_1_d3_d9_texture_manager.html#ac6fb858ee86f3b7b75de32e3e04ee5c8":[7,0,0,273,33],
+"class_ogre_1_1_d3_d9_texture_manager.html#ac8f7ee61606730572a8590060d8896a0":[7,0,0,273,23],
+"class_ogre_1_1_d3_d9_texture_manager.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,273,44],
+"class_ogre_1_1_d3_d9_texture_manager.html#acd4223279e97a7687e2f9994f05e2491":[7,0,0,273,15],
+"class_ogre_1_1_d3_d9_texture_manager.html#ad18cc3f0a4b3e0553cfe715204f15359":[7,0,0,273,30],
+"class_ogre_1_1_d3_d9_texture_manager.html#ad6d63fe7126510bf10fd337705cb0b29":[7,0,0,273,39],
+"class_ogre_1_1_d3_d9_texture_manager.html#ad9b4efbeacb17f07710c30bd5048e42f":[7,0,0,273,65],
+"class_ogre_1_1_d3_d9_texture_manager.html#ae26b6ecd722f3e24b52de8b4ac9bba0d":[7,0,0,273,54],
 "class_ogre_1_1_d3_d9_texture_manager.html#ae63717cade7ab9c72046cb079cca95e8":[7,0,0,273,4],
 "class_ogre_1_1_d3_d9_texture_manager.html#ae63b06c1fd6d1266b4c5dacc35e521b4":[7,0,0,273,10],
 "class_ogre_1_1_d3_d9_texture_manager.html#aeaa1410333b7bcea14b00c360112a528":[7,0,0,273,76],
@@ -241,13 +249,5 @@ var NAVTREEINDEX59 =
 "class_ogre_1_1_decal.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,280,73],
 "class_ogre_1_1_decal.html#ab86b755f38ec01b52ed6a512d9d31ef9":[7,0,0,280,19],
 "class_ogre_1_1_decal.html#abd5561a07f78291e327351fe83e64a9b":[7,0,0,280,13],
-"class_ogre_1_1_decal.html#ac2904cb122ab8c8d5066abefb29dfa96":[7,0,0,280,84],
-"class_ogre_1_1_decal.html#ac4305df204604a027ca27ef77efff295":[7,0,0,280,17],
-"class_ogre_1_1_decal.html#ac4b8f3f72f7bf7a6bc20dd0677e125c1":[7,0,0,280,22],
-"class_ogre_1_1_decal.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,280,71],
-"class_ogre_1_1_decal.html#ac62f83a3f18bdd2c3a4a165dd7952238":[7,0,0,280,40],
-"class_ogre_1_1_decal.html#ac9ad20d42eb097914272b28452911133":[7,0,0,280,2],
-"class_ogre_1_1_decal.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,280,67],
-"class_ogre_1_1_decal.html#acbfc4840224e8b6ed6e27849d3341675":[7,0,0,280,81],
-"class_ogre_1_1_decal.html#acf63bcde095c3d6624d8ac3681e747d2":[7,0,0,280,86]
+"class_ogre_1_1_decal.html#ac2904cb122ab8c8d5066abefb29dfa96":[7,0,0,280,84]
 };

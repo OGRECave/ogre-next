@@ -1,5 +1,13 @@
 var NAVTREEINDEX35 =
 {
+"class_ogre_1_1_compositor_pass_quad.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,1,15,24],
+"class_ogre_1_1_compositor_pass_quad.html#afadaded3472e9b18c03a347fe4d5ff39":[5,2,1,15,7],
+"class_ogre_1_1_compositor_pass_quad.html#afe6a90034aeaa2ed38e32d9f344e38c3":[5,2,1,15,28],
+"class_ogre_1_1_compositor_pass_quad_def.html":[5,2,1,16],
+"class_ogre_1_1_compositor_pass_quad_def.html#a03f4a196d4bc9d62b967019c5bf7c5ac":[5,2,1,16,56],
+"class_ogre_1_1_compositor_pass_quad_def.html#a08c66aa1c72aef43599f360cfc6ada68":[5,2,1,16,20],
+"class_ogre_1_1_compositor_pass_quad_def.html#a0fdf3a38961c32069cde61f23d7ff674":[5,2,1,16,47],
+"class_ogre_1_1_compositor_pass_quad_def.html#a1069395554fa1c1d947729aed878f7c0":[5,2,1,16,8],
 "class_ogre_1_1_compositor_pass_quad_def.html#a114c9c278a29353ebe78cc7d7e3fce6f":[5,2,1,16,2],
 "class_ogre_1_1_compositor_pass_quad_def.html#a1c2ec91e26d3a0792c113570885b47a5":[5,2,1,16,49],
 "class_ogre_1_1_compositor_pass_quad_def.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,1,16,12],
@@ -241,13 +249,5 @@ var NAVTREEINDEX35 =
 "class_ogre_1_1_compositor_pass_stencil_def.html#adf943c28ea67c3d52d2e02058eeedbc1":[5,2,1,20,27],
 "class_ogre_1_1_compositor_pass_stencil_def.html#ae60a3c68c0b8e960042c7e15cd83e8e3":[5,2,1,20,2],
 "class_ogre_1_1_compositor_pass_stencil_def.html#aecd3ae94eb59058a4f064cf3aff60a95":[5,2,1,20,36],
-"class_ogre_1_1_compositor_pass_stencil_def.html#af587f9f213a712bf6dc5f02e46d5f395":[5,2,1,20,20],
-"class_ogre_1_1_compositor_pass_stencil_def.html#af603f6cce02284ad5a4781c261a05137":[5,2,1,20,42],
-"class_ogre_1_1_compositor_pass_stencil_def.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,1,20,13],
-"class_ogre_1_1_compositor_pass_translator.html":[5,2,2,14],
-"class_ogre_1_1_compositor_pass_translator.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,14,3],
-"class_ogre_1_1_compositor_pass_translator.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,2,14,7],
-"class_ogre_1_1_compositor_pass_translator.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,2,14,10],
-"class_ogre_1_1_compositor_pass_translator.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,2,14,5],
-"class_ogre_1_1_compositor_pass_translator.html#a622e14a9ae4836a1df2c368d89acf655":[5,2,2,14,0]
+"class_ogre_1_1_compositor_pass_stencil_def.html#af587f9f213a712bf6dc5f02e46d5f395":[5,2,1,20,20]
 };

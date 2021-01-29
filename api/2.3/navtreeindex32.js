@@ -1,5 +1,13 @@
 var NAVTREEINDEX32 =
 {
+"class_ogre_1_1_compositor_manager2.html#a2ae2db2ca39599b0de2e70d6fe10e460":[5,0,1,4,5],
+"class_ogre_1_1_compositor_manager2.html#a2ae2db2ca39599b0de2e70d6fe10e460":[5,2,12,4,5],
+"class_ogre_1_1_compositor_manager2.html#a2dd9288f58a4608a9cbca4bbe32ea5d7":[5,0,1,4,45],
+"class_ogre_1_1_compositor_manager2.html#a2dd9288f58a4608a9cbca4bbe32ea5d7":[5,2,12,4,45],
+"class_ogre_1_1_compositor_manager2.html#a3243efb0398eb295a74c707612453e8a":[5,0,1,4,7],
+"class_ogre_1_1_compositor_manager2.html#a3243efb0398eb295a74c707612453e8a":[5,2,12,4,7],
+"class_ogre_1_1_compositor_manager2.html#a3286cce2636f65340e093be124eb17c5":[5,0,1,4,53],
+"class_ogre_1_1_compositor_manager2.html#a3286cce2636f65340e093be124eb17c5":[5,2,12,4,53],
 "class_ogre_1_1_compositor_manager2.html#a40c78a0c7a6e2241991359130a130e51":[5,0,1,4,51],
 "class_ogre_1_1_compositor_manager2.html#a40c78a0c7a6e2241991359130a130e51":[5,2,12,4,51],
 "class_ogre_1_1_compositor_manager2.html#a421b197ca3a38da17e2eb1531a645fa2":[5,0,1,4,41],
@@ -241,13 +249,5 @@ var NAVTREEINDEX32 =
 "class_ogre_1_1_compositor_pass.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,1,3,19],
 "class_ogre_1_1_compositor_pass.html#ac92baa443272b1bb6a1b703b570267f3":[5,2,1,3,13],
 "class_ogre_1_1_compositor_pass.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,1,3,15],
-"class_ogre_1_1_compositor_pass.html#ad4d394f598a677c18b4b653cde572957":[5,2,1,3,3],
-"class_ogre_1_1_compositor_pass.html#ad9e0b79d8ca75e75cc94e0f00608e692":[5,2,1,3,24],
-"class_ogre_1_1_compositor_pass.html#ae980ee6ed32e7cb59addeb213dc15f4d":[5,2,1,3,4],
-"class_ogre_1_1_compositor_pass.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,1,3,22],
-"class_ogre_1_1_compositor_pass.html#afe6a90034aeaa2ed38e32d9f344e38c3":[5,2,1,3,26],
-"class_ogre_1_1_compositor_pass_clear.html":[5,2,1,4],
-"class_ogre_1_1_compositor_pass_clear.html#a0234978d9674bb285541bb7a3d244c55":[5,2,1,4,11],
-"class_ogre_1_1_compositor_pass_clear.html#a06f6772e803d5408499f05fb3bd335a8":[5,2,1,4,0],
-"class_ogre_1_1_compositor_pass_clear.html#a109f49cb2e6f8a9c0e1377817bcb9e6d":[5,2,1,4,9]
+"class_ogre_1_1_compositor_pass.html#ad4d394f598a677c18b4b653cde572957":[5,2,1,3,3]
 };
