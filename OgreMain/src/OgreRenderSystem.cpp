@@ -54,6 +54,12 @@ THE SOFTWARE.
 
 #if OGRE_NO_RENDERDOC_INTEGRATION == 0
 #    include "renderdoc/renderdoc_app.h"
+#    if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#        define WIN32_LEAN_AND_MEAN
+#        define VC_EXTRALEAN
+#        define NOMINMAX
+#        include <Windows.h>
+#    endif
 #endif
 
 namespace Ogre {
