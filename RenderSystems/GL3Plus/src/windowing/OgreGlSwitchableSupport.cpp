@@ -33,11 +33,14 @@
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
 
-#include "windowing/EGL/PBuffer/OgreEglPBufferSupport.h"
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#ifdef OGRE_GLSUPPORT_USE_GLX
 #    include "windowing/GLX/OgreGLXGLSupport.h"
-#elif OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#endif
+#ifdef OGRE_GLSUPPORT_USE_WGL
 #    include "windowing/win32/OgreWin32GLSupport.h"
+#endif
+#ifdef OGRE_GLSUPPORT_USE_EGL_HEADLESS
+#    include "windowing/EGL/PBuffer/OgreEglPBufferSupport.h"
 #endif
 
 namespace Ogre
@@ -45,12 +48,15 @@ namespace Ogre
     //-------------------------------------------------------------------------
     GlSwitchableSupport::GlSwitchableSupport() : mSelectedInterface( 0u ), mInterfaceSelected( false )
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#ifdef OGRE_GLSUPPORT_USE_GLX
         mAvailableInterfaces.push_back( Interface( WindowNative, new GLXGLSupport() ) );
-#elif OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#endif
+#ifdef OGRE_GLSUPPORT_USE_WGL
         mAvailableInterfaces.push_back( Interface( WindowNative, new Win32GLSupport() ) );
 #endif
+#ifdef OGRE_GLSUPPORT_USE_EGL_HEADLESS
         mAvailableInterfaces.push_back( Interface( HeadlessEgl, new EglPBufferSupport() ) );
+#endif
     }
     //-------------------------------------------------------------------------
     GlSwitchableSupport::~GlSwitchableSupport()

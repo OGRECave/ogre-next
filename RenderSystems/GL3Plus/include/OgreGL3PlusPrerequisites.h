@@ -32,6 +32,8 @@ THE SOFTWARE.
 
 #include "OgreLogManager.h"
 
+#include "OgreGL3PlusBuildSettings.h"
+
 namespace Ogre {
     // Forward declarations
     class GL3PlusAsyncTextureTicket;
