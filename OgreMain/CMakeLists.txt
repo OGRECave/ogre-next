@@ -79,6 +79,7 @@ add_filter_only( "Source Files\\Threading" "${CMAKE_CURRENT_SOURCE_DIR}/src/Thre
 
 # Remove optional header files
 list(REMOVE_ITEM HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreFreeImageCodec2.h"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgreASTCCodec.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgreDDSCodec2.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/OgrePVRTCCodec.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreETCCodec.h"
@@ -89,6 +90,7 @@ list(REMOVE_ITEM HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreFreeImage
 
 # Remove optional source files
 list(REMOVE_ITEM SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreFreeImageCodec2.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreASTCCodec.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreDDSCodec2.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgrePVRTCCodec.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreETCCodec.cpp"
