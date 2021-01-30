@@ -220,6 +220,16 @@ namespace Ogre
         return BLANKSTRING;
     }
     //-------------------------------------------------------------------------
+    const char* EglPBufferSupport::getPriorityConfigOption( size_t ) const
+    {
+        return "Device";
+    }
+    //-------------------------------------------------------------------------
+    size_t EglPBufferSupport::getNumPriorityConfigOptions( void ) const
+    {
+        return 1u;
+    }
+    //-------------------------------------------------------------------------
     Window *EglPBufferSupport::createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
                                              const String &windowTitle )
     {

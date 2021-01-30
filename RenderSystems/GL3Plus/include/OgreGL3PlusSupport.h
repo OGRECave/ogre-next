@@ -51,6 +51,10 @@ namespace Ogre
             virtual void addConfig() = 0;
             virtual void setConfigOption(const String &name, const String &value);
 
+            virtual const char* getPriorityConfigOption( size_t idx ) const;
+
+            virtual size_t getNumPriorityConfigOptions() const;
+
            /**
             * Make sure all the extra options are valid
             * @return string with error message

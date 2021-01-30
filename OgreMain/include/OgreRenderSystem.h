@@ -185,6 +185,38 @@ namespace Ogre
         */
         virtual void setConfigOption(const String &name, const String &value) = 0;
 
+        /** Some options depend on other options. Therefore it's best to call
+        RenderSystem::setConfigOption in order
+        @param idx
+            Value must be in range [0; getNumPriorityConfigOptions)
+
+            Options must be set in ascending order,
+            i.e. idx = 0 must be called before idx = 1
+        @return
+            The name to use in setConfigOption( name, value )
+        */
+        virtual const char* getPriorityConfigOption( size_t idx ) const;
+
+        /** Number of priority config options in RenderSystem::getPriorityConfigOption
+        @remarks
+            IMPORTANT: The return value can change after calls to setConfigOption,
+            it can even return higher or lower values than before.
+
+            Therefore a proper loop would call getNumPriorityConfigOptions on every iteration:
+
+            @code
+                // GOOD:
+                for( size_t i=0; i < rs->getNumPriorityConfigOptions(); ++i )
+                    rs->setConfigOption( rs->getPriorityConfigOption( i ), value );
+
+                // BAD:
+                const size_t cachedNumOptions = rs->getNumPriorityConfigOptions();
+                for( size_t i=0; i < cachedNumOptions; ++i )
+                    rs->setConfigOption( rs->getPriorityConfigOption( i ), value );
+            @endcode
+        */
+        virtual size_t getNumPriorityConfigOptions( void ) const;
+
         /** Create an object for performing hardware occlusion queries. 
         */
         virtual HardwareOcclusionQuery* createHardwareOcclusionQuery(void) = 0;

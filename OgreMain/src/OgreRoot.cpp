@@ -572,7 +572,7 @@ namespace Ogre {
         while (iSection.hasMoreElements())
         {
             const String& renderSystem = iSection.peekNextKey();
-            const ConfigFile::SettingsMultiMap& settings = *iSection.getNext();
+            ConfigFile::SettingsMultiMap settings = *iSection.getNext(); // Hard copy
 
             RenderSystem* rs = getRenderSystemByName(renderSystem);
             if (!rs)
@@ -583,6 +583,17 @@ namespace Ogre {
 
             try
             {
+                for( size_t i = 0; i < rs->getNumPriorityConfigOptions(); ++i )
+                {
+                    const char *configName = rs->getPriorityConfigOption( i );
+                    ConfigFile::SettingsMultiMap::iterator itor = settings.find( configName );
+                    if( itor != settings.end() )
+                    {
+                        rs->setConfigOption( itor->first, itor->second );
+                        settings.erase( itor );
+                    }
+                }
+
                 ConfigFile::SettingsMultiMap::const_iterator i;
                 for (i = settings.begin(); i != settings.end(); ++i)
                 {

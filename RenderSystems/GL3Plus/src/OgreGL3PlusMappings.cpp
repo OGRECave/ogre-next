@@ -661,6 +661,7 @@ namespace Ogre
         case PFG_RGB8_UNORM_SRGB:
         case PFG_BGR8_UNORM:
         case PFG_BGR8_UNORM_SRGB:
+        case PFG_RGB16_UNORM:
             format = GL_NONE;
             OGRE_EXCEPT(
                 Exception::ERR_INVALIDPARAMS,

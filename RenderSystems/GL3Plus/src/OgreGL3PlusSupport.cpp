@@ -54,6 +54,16 @@ namespace Ogre {
         return mOptions;
     }
 
+    const char* GL3PlusSupport::getPriorityConfigOption( size_t ) const
+    {
+        return 0;
+    }
+
+    size_t GL3PlusSupport::getNumPriorityConfigOptions() const
+    {
+        return 0u;
+    }
+
     void GL3PlusSupport::initialiseExtensions(void)
     {
         // get driver version.

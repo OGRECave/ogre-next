@@ -1193,6 +1193,14 @@ namespace Ogre {
             msSharedEventListener->eventOccurred(name, params);
     }
     //-----------------------------------------------------------------------
+    const char* RenderSystem::getPriorityConfigOption( size_t ) const
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "idx must be < getNumPriorityConfigOptions()",
+                     "RenderSystem::getPriorityConfigOption" );
+    }
+    //-----------------------------------------------------------------------
+    size_t RenderSystem::getNumPriorityConfigOptions( void ) const { return 0u; }
+    //-----------------------------------------------------------------------
     void RenderSystem::destroyHardwareOcclusionQuery( HardwareOcclusionQuery *hq)
     {
         HardwareOcclusionQueryList::iterator i =

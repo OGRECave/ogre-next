@@ -255,6 +255,17 @@ namespace Ogre {
         mGLSupport->setConfigOption(name, value);
     }
 
+    //-----------------------------------------------------------------------
+    const char *GL3PlusRenderSystem::getPriorityConfigOption( size_t idx ) const
+    {
+        return mGLSupport->getPriorityConfigOption( idx );
+    }
+    //-----------------------------------------------------------------------
+    size_t GL3PlusRenderSystem::getNumPriorityConfigOptions( void ) const
+    {
+        return mGLSupport->getNumPriorityConfigOptions();
+    }
+
     String GL3PlusRenderSystem::validateConfigOptions(void)
     {
         // XXX Return an error string if something is invalid

@@ -25,49 +25,47 @@
   THE SOFTWARE.
   -----------------------------------------------------------------------------
 */
-#ifndef OGRE_EglPBufferSupport_H
-#define OGRE_EglPBufferSupport_H
+#ifndef OGRE_GlSwitchableSupport_H
+#define OGRE_GlSwitchableSupport_H
 
 #include "OgreGL3PlusSupport.h"
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-
 namespace Ogre
 {
-    class _OgrePrivate EglPBufferSupport : public GL3PlusSupport
+    class _OgrePrivate GlSwitchableSupport : public GL3PlusSupport
     {
-    public:
-        struct DeviceData
+        enum InterfaceType
         {
-            String name;
-            FastArray<SampleDescription> fsaa;
-
-            EGLDisplay eglDisplay;
-            EGLConfig eglCfg;
-            EGLSurface eglSurf;
-            ::EGLContext eglCtx;
-
-            DeviceData() : eglDisplay( 0 ), eglCfg( 0 ), eglSurf( 0 ), eglCtx( 0 ) {}
-
-            bool operator==( const String &otherName ) const { return name == otherName; }
+            WindowNative,  // GLX / WGL / Cocoa
+            HeadlessEgl    // EGL headless
         };
 
-    protected:
-        FastArray<DeviceData> mDeviceData;
-        FastArray<EGLDeviceEXT> mDevices;
+        struct Interface
+        {
+            InterfaceType type;
+            GL3PlusSupport *support;
+
+            Interface( InterfaceType _type, GL3PlusSupport *_support ) :
+                type( _type ),
+                support( _support )
+            {
+            }
+        };
+
+        uint8 mSelectedInterface;
+        bool mInterfaceSelected;
+        FastArray<Interface> mAvailableInterfaces;
+
+        static const char *getInterfaceName( InterfaceType interface );
 
         /**
          * Refresh config options to reflect dependencies
          */
         void refreshConfig( void );
 
-        void initDevice( const size_t deviceIdx );
-        void destroyDevice( const size_t deviceIdx );
-
     public:
-        EglPBufferSupport();
-        ~EglPBufferSupport();
+        GlSwitchableSupport();
+        ~GlSwitchableSupport();
 
         /// @copydoc see GL3PlusSupport::addConfig
         void addConfig( void );
@@ -75,14 +73,14 @@ namespace Ogre
         /// @copydoc see GL3PlusSupport::validateConfig
         String validateConfig( void );
 
+        /// @copydoc see GL3PlusSupport::setConfigOption
+        void setConfigOption( const String &name, const String &value );
+
         /// @copydoc see RenderSystem::getPriorityConfigOption
         virtual const char* getPriorityConfigOption( size_t idx ) const;
 
         /// @copydoc see RenderSystem::getPriorityConfigOption
         virtual size_t getNumPriorityConfigOptions( void ) const;
-
-        /// @copydoc see GL3PlusSupport::setConfigOption
-        void setConfigOption( const String &name, const String &value );
 
         /// @copydoc GL3PlusSupport::createWindow
         Window *createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
@@ -101,14 +99,8 @@ namespace Ogre
         /// @copydoc see GL3PlusSupport::getProcAddress
         void *getProcAddress( const char *procname ) const;
 
-        const DeviceData *getCurrentDevice( void );
-
-        /// Get the Display connection used for rendering
-        /// This function establishes the initial connection when necessary.
-        EGLDisplay getGLDisplay( void );
-
-        uint32 getSelectedDeviceIdx( void ) const;
+        uint8 findSelectedInterfaceIdx( void ) const;
     };
 }  // namespace Ogre
 
-#endif  // OGRE_EglPBufferSupport_H
+#endif  // OGRE_GlSwitchableSupport_H
