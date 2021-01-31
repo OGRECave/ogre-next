@@ -9,6 +9,8 @@ var class_ogre_1_1_g_l3_plus_support =
     [ "getDisplayMonitorCount", "class_ogre_1_1_g_l3_plus_support.html#a00f443e800891f54ac1176072e99e3a5", null ],
     [ "getGLVendor", "class_ogre_1_1_g_l3_plus_support.html#ac1f06da1f33ec693eaddb05627b18a65", null ],
     [ "getGLVersion", "class_ogre_1_1_g_l3_plus_support.html#a1502ce2a3d26462b90321ca00634e2fd", null ],
+    [ "getNumPriorityConfigOptions", "class_ogre_1_1_g_l3_plus_support.html#ad97c5b4d8a1ac2b8a5e55f41bc3b8634", null ],
+    [ "getPriorityConfigOption", "class_ogre_1_1_g_l3_plus_support.html#a3ed4bd84727e1ca52051882c47c5d214", null ],
     [ "getProcAddress", "class_ogre_1_1_g_l3_plus_support.html#a06d07ceb76072c7fd01c8f1ea957de5b", null ],
     [ "getShaderCachePath", "class_ogre_1_1_g_l3_plus_support.html#a05611e652e80b1c5dd260ad829d8bc7d", null ],
     [ "getShaderLibraryPath", "class_ogre_1_1_g_l3_plus_support.html#a8c87e29883b18efc8da37afbe42b3852", null ],

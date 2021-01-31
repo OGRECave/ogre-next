@@ -1,8 +1,8 @@
 var files_dup =
 [
     [ "Ogre.h", "_ogre_8h.html", null ],
-    [ "Simple/C/OgreAabb.h", "_simple_2_c_2_ogre_aabb_8h.html", null ],
-    [ "Simple/OgreAabb.h", "_simple_2_ogre_aabb_8h.html", null ],
+    [ "C/OgreAabb.h", "_c_2_ogre_aabb_8h.html", null ],
+    [ "OgreAabb.h", "_ogre_aabb_8h.html", null ],
     [ "OgreAlignedAllocator.h", "_ogre_aligned_allocator_8h.html", null ],
     [ "OgreAndroidEGLContext.h", "_ogre_android_e_g_l_context_8h.html", [
       [ "AndroidEGLContext", "class_ogre_1_1_android_e_g_l_context.html", "class_ogre_1_1_android_e_g_l_context" ]
@@ -39,35 +39,35 @@ var files_dup =
       [ "CmdHeight", "class_ogre_1_1_area_emitter_1_1_cmd_height.html", "class_ogre_1_1_area_emitter_1_1_cmd_height" ],
       [ "CmdWidth", "class_ogre_1_1_area_emitter_1_1_cmd_width.html", "class_ogre_1_1_area_emitter_1_1_cmd_width" ]
     ] ],
-    [ "Array/C/OgreArrayAabb.h", "_array_2_c_2_ogre_array_aabb_8h.html", null ],
-    [ "Array/NEON/Single/OgreArrayAabb.h", "_array_2_n_e_o_n_2_single_2_ogre_array_aabb_8h.html", null ],
-    [ "Array/OgreArrayAabb.h", "_array_2_ogre_array_aabb_8h.html", null ],
-    [ "Array/SSE2/Single/OgreArrayAabb.h", "_array_2_s_s_e2_2_single_2_ogre_array_aabb_8h.html", null ],
+    [ "C/OgreArrayAabb.h", "_c_2_ogre_array_aabb_8h.html", null ],
+    [ "NEON/Single/OgreArrayAabb.h", "_n_e_o_n_2_single_2_ogre_array_aabb_8h.html", null ],
+    [ "OgreArrayAabb.h", "_ogre_array_aabb_8h.html", null ],
+    [ "SSE2/Single/OgreArrayAabb.h", "_s_s_e2_2_single_2_ogre_array_aabb_8h.html", null ],
     [ "OgreArrayConfig.h", "_ogre_array_config_8h.html", "_ogre_array_config_8h" ],
-    [ "Array/C/OgreArrayMatrix4.h", "_array_2_c_2_ogre_array_matrix4_8h.html", null ],
-    [ "Array/NEON/Single/OgreArrayMatrix4.h", "_array_2_n_e_o_n_2_single_2_ogre_array_matrix4_8h.html", null ],
-    [ "Array/OgreArrayMatrix4.h", "_array_2_ogre_array_matrix4_8h.html", null ],
-    [ "Array/SSE2/Single/OgreArrayMatrix4.h", "_array_2_s_s_e2_2_single_2_ogre_array_matrix4_8h.html", null ],
-    [ "Array/C/OgreArrayMatrixAf4x3.h", "_array_2_c_2_ogre_array_matrix_af4x3_8h.html", null ],
-    [ "Array/NEON/Single/OgreArrayMatrixAf4x3.h", "_array_2_n_e_o_n_2_single_2_ogre_array_matrix_af4x3_8h.html", null ],
-    [ "Array/OgreArrayMatrixAf4x3.h", "_array_2_ogre_array_matrix_af4x3_8h.html", null ],
-    [ "Array/SSE2/Single/OgreArrayMatrixAf4x3.h", "_array_2_s_s_e2_2_single_2_ogre_array_matrix_af4x3_8h.html", null ],
+    [ "C/OgreArrayMatrix4.h", "_c_2_ogre_array_matrix4_8h.html", null ],
+    [ "NEON/Single/OgreArrayMatrix4.h", "_n_e_o_n_2_single_2_ogre_array_matrix4_8h.html", null ],
+    [ "OgreArrayMatrix4.h", "_ogre_array_matrix4_8h.html", null ],
+    [ "SSE2/Single/OgreArrayMatrix4.h", "_s_s_e2_2_single_2_ogre_array_matrix4_8h.html", null ],
+    [ "C/OgreArrayMatrixAf4x3.h", "_c_2_ogre_array_matrix_af4x3_8h.html", null ],
+    [ "NEON/Single/OgreArrayMatrixAf4x3.h", "_n_e_o_n_2_single_2_ogre_array_matrix_af4x3_8h.html", null ],
+    [ "OgreArrayMatrixAf4x3.h", "_ogre_array_matrix_af4x3_8h.html", null ],
+    [ "SSE2/Single/OgreArrayMatrixAf4x3.h", "_s_s_e2_2_single_2_ogre_array_matrix_af4x3_8h.html", null ],
     [ "OgreArrayMemoryManager.h", "_ogre_array_memory_manager_8h.html", "_ogre_array_memory_manager_8h" ],
-    [ "Array/C/OgreArrayQuaternion.h", "_array_2_c_2_ogre_array_quaternion_8h.html", null ],
-    [ "Array/NEON/Single/OgreArrayQuaternion.h", "_array_2_n_e_o_n_2_single_2_ogre_array_quaternion_8h.html", null ],
-    [ "Array/OgreArrayQuaternion.h", "_array_2_ogre_array_quaternion_8h.html", null ],
-    [ "Array/SSE2/Single/OgreArrayQuaternion.h", "_array_2_s_s_e2_2_single_2_ogre_array_quaternion_8h.html", null ],
+    [ "C/OgreArrayQuaternion.h", "_c_2_ogre_array_quaternion_8h.html", null ],
+    [ "NEON/Single/OgreArrayQuaternion.h", "_n_e_o_n_2_single_2_ogre_array_quaternion_8h.html", null ],
+    [ "OgreArrayQuaternion.h", "_ogre_array_quaternion_8h.html", null ],
+    [ "SSE2/Single/OgreArrayQuaternion.h", "_s_s_e2_2_single_2_ogre_array_quaternion_8h.html", null ],
     [ "OgreArrayRay.h", "_ogre_array_ray_8h.html", [
       [ "ArrayRay", "class_ogre_1_1_array_ray.html", "class_ogre_1_1_array_ray" ]
     ] ],
-    [ "Array/C/OgreArraySphere.h", "_array_2_c_2_ogre_array_sphere_8h.html", null ],
-    [ "Array/NEON/Single/OgreArraySphere.h", "_array_2_n_e_o_n_2_single_2_ogre_array_sphere_8h.html", null ],
-    [ "Array/OgreArraySphere.h", "_array_2_ogre_array_sphere_8h.html", null ],
-    [ "Array/SSE2/Single/OgreArraySphere.h", "_array_2_s_s_e2_2_single_2_ogre_array_sphere_8h.html", null ],
-    [ "Array/C/OgreArrayVector3.h", "_array_2_c_2_ogre_array_vector3_8h.html", null ],
-    [ "Array/NEON/Single/OgreArrayVector3.h", "_array_2_n_e_o_n_2_single_2_ogre_array_vector3_8h.html", null ],
-    [ "Array/OgreArrayVector3.h", "_array_2_ogre_array_vector3_8h.html", null ],
-    [ "Array/SSE2/Single/OgreArrayVector3.h", "_array_2_s_s_e2_2_single_2_ogre_array_vector3_8h.html", null ],
+    [ "C/OgreArraySphere.h", "_c_2_ogre_array_sphere_8h.html", null ],
+    [ "NEON/Single/OgreArraySphere.h", "_n_e_o_n_2_single_2_ogre_array_sphere_8h.html", null ],
+    [ "OgreArraySphere.h", "_ogre_array_sphere_8h.html", null ],
+    [ "SSE2/Single/OgreArraySphere.h", "_s_s_e2_2_single_2_ogre_array_sphere_8h.html", null ],
+    [ "C/OgreArrayVector3.h", "_c_2_ogre_array_vector3_8h.html", null ],
+    [ "NEON/Single/OgreArrayVector3.h", "_n_e_o_n_2_single_2_ogre_array_vector3_8h.html", null ],
+    [ "OgreArrayVector3.h", "_ogre_array_vector3_8h.html", null ],
+    [ "SSE2/Single/OgreArrayVector3.h", "_s_s_e2_2_single_2_ogre_array_vector3_8h.html", null ],
     [ "OgreAssert.h", "_ogre_assert_8h.html", "_ogre_assert_8h" ],
     [ "OgreASTCCodec.h", "_ogre_a_s_t_c_codec_8h.html", null ],
     [ "OgreAsyncTextureTicket.h", "_ogre_async_texture_ticket_8h.html", [
@@ -107,14 +107,14 @@ var files_dup =
     [ "OgreBoneTransform.h", "_ogre_bone_transform_8h.html", [
       [ "BoneTransform", "struct_ogre_1_1_bone_transform.html", "struct_ogre_1_1_bone_transform" ]
     ] ],
-    [ "Array/C/OgreBooleanMask.h", "_array_2_c_2_ogre_boolean_mask_8h.html", [
+    [ "C/OgreBooleanMask.h", "_c_2_ogre_boolean_mask_8h.html", [
       [ "BooleanMask4", "class_ogre_1_1_boolean_mask4.html", "class_ogre_1_1_boolean_mask4" ]
     ] ],
-    [ "Array/NEON/Single/OgreBooleanMask.h", "_array_2_n_e_o_n_2_single_2_ogre_boolean_mask_8h.html", [
+    [ "NEON/Single/OgreBooleanMask.h", "_n_e_o_n_2_single_2_ogre_boolean_mask_8h.html", [
       [ "BooleanMask4", "class_ogre_1_1_boolean_mask4.html", "class_ogre_1_1_boolean_mask4" ]
     ] ],
-    [ "Array/OgreBooleanMask.h", "_array_2_ogre_boolean_mask_8h.html", null ],
-    [ "Array/SSE2/Single/OgreBooleanMask.h", "_array_2_s_s_e2_2_single_2_ogre_boolean_mask_8h.html", [
+    [ "OgreBooleanMask.h", "_ogre_boolean_mask_8h.html", null ],
+    [ "SSE2/Single/OgreBooleanMask.h", "_s_s_e2_2_single_2_ogre_boolean_mask_8h.html", [
       [ "BooleanMask4", "class_ogre_1_1_boolean_mask4.html", "class_ogre_1_1_boolean_mask4" ]
     ] ],
     [ "OgreBorderPanelOverlayElement.h", "_ogre_border_panel_overlay_element_8h.html", [
@@ -614,8 +614,8 @@ var files_dup =
     [ "OgreDeflectorPlaneAffectorFactory.h", "_ogre_deflector_plane_affector_factory_8h.html", [
       [ "DeflectorPlaneAffectorFactory", "class_ogre_1_1_deflector_plane_affector_factory.html", "class_ogre_1_1_deflector_plane_affector_factory" ]
     ] ],
-    [ "include/Deprecated/OgreDepthBuffer.h", "include_2_deprecated_2_ogre_depth_buffer_8h.html", null ],
-    [ "include/OgreDepthBuffer.h", "include_2_ogre_depth_buffer_8h.html", null ],
+    [ "Deprecated/OgreDepthBuffer.h", "_deprecated_2_ogre_depth_buffer_8h.html", null ],
+    [ "OgreDepthBuffer.h", "_ogre_depth_buffer_8h.html", null ],
     [ "OgreDescriptorSetSampler.h", "_ogre_descriptor_set_sampler_8h.html", null ],
     [ "OgreDescriptorSetTexture.h", "_ogre_descriptor_set_texture_8h.html", [
       [ "BufferSlot", "struct_ogre_1_1_descriptor_set_texture2_1_1_buffer_slot.html", "struct_ogre_1_1_descriptor_set_texture2_1_1_buffer_slot" ],
@@ -645,12 +645,31 @@ var files_dup =
       [ "EdgeGroup", "struct_ogre_1_1v1_1_1_edge_data_1_1_edge_group.html", "struct_ogre_1_1v1_1_1_edge_data_1_1_edge_group" ],
       [ "Triangle", "struct_ogre_1_1v1_1_1_edge_data_1_1_triangle.html", "struct_ogre_1_1v1_1_1_edge_data_1_1_triangle" ]
     ] ],
-    [ "OgreEGLContext.h", "_ogre_e_g_l_context_8h.html", [
+    [ "GL3Plus/include/windowing/EGL/OgreEGLContext.h", "_g_l3_plus_2include_2windowing_2_e_g_l_2_ogre_e_g_l_context_8h.html", [
       [ "EGLContext", "class_ogre_1_1_e_g_l_context.html", "class_ogre_1_1_e_g_l_context" ]
+    ] ],
+    [ "GLES2/include/EGL/OgreEGLContext.h", "_g_l_e_s2_2include_2_e_g_l_2_ogre_e_g_l_context_8h.html", [
+      [ "EGLContext", "class_ogre_1_1_e_g_l_context.html", "class_ogre_1_1_e_g_l_context" ]
+    ] ],
+    [ "OgreEGLGLSupport.h", "_ogre_e_g_l_g_l_support_8h.html", [
+      [ "EGLGLSupport", "class_ogre_1_1_e_g_l_g_l_support.html", "class_ogre_1_1_e_g_l_g_l_support" ]
+    ] ],
+    [ "OgreEglPBufferContext.h", "_ogre_egl_p_buffer_context_8h.html", [
+      [ "EglPBufferContext", "class_ogre_1_1_egl_p_buffer_context.html", "class_ogre_1_1_egl_p_buffer_context" ]
+    ] ],
+    [ "OgreEglPBufferSupport.h", "_ogre_egl_p_buffer_support_8h.html", [
+      [ "EglPBufferSupport", "class_ogre_1_1_egl_p_buffer_support.html", "class_ogre_1_1_egl_p_buffer_support" ],
+      [ "DeviceData", "struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html", "struct_ogre_1_1_egl_p_buffer_support_1_1_device_data" ]
+    ] ],
+    [ "OgreEglPBufferWindow.h", "_ogre_egl_p_buffer_window_8h.html", [
+      [ "EglPBufferWindow", "class_ogre_1_1_egl_p_buffer_window.html", "class_ogre_1_1_egl_p_buffer_window" ]
     ] ],
     [ "OgreEGLRenderTexture.h", "_ogre_e_g_l_render_texture_8h.html", null ],
     [ "OgreEGLSupport.h", "_ogre_e_g_l_support_8h.html", "_ogre_e_g_l_support_8h" ],
-    [ "OgreEGLWindow.h", "_ogre_e_g_l_window_8h.html", [
+    [ "GL3Plus/include/windowing/EGL/OgreEGLWindow.h", "_g_l3_plus_2include_2windowing_2_e_g_l_2_ogre_e_g_l_window_8h.html", [
+      [ "EGLWindow", "class_ogre_1_1_e_g_l_window.html", "class_ogre_1_1_e_g_l_window" ]
+    ] ],
+    [ "GLES2/include/EGL/OgreEGLWindow.h", "_g_l_e_s2_2include_2_e_g_l_2_ogre_e_g_l_window_8h.html", [
       [ "EGLWindow", "class_ogre_1_1_e_g_l_window.html", "class_ogre_1_1_e_g_l_window" ]
     ] ],
     [ "OgreEllipsoidEmitter.h", "_ogre_ellipsoid_emitter_8h.html", [
@@ -832,14 +851,17 @@ var files_dup =
     ] ],
     [ "OgreGL3PlusTextureGpuManager.h", "_ogre_g_l3_plus_texture_gpu_manager_8h.html", null ],
     [ "OgreGL3PlusTextureGpuWindow.h", "_ogre_g_l3_plus_texture_gpu_window_8h.html", [
+      [ "GL3PlusTextureGpuHeadlessWindow", "class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html", "class_ogre_1_1_g_l3_plus_texture_gpu_headless_window" ],
       [ "GL3PlusTextureGpuWindow", "class_ogre_1_1_g_l3_plus_texture_gpu_window.html", "class_ogre_1_1_g_l3_plus_texture_gpu_window" ]
     ] ],
     [ "OgreGL3PlusTextureManager.h", "_ogre_g_l3_plus_texture_manager_8h.html", "_ogre_g_l3_plus_texture_manager_8h" ],
     [ "OgreGL3PlusUavBufferPacked.h", "_ogre_g_l3_plus_uav_buffer_packed_8h.html", [
       [ "GL3PlusUavBufferPacked", "class_ogre_1_1_g_l3_plus_uav_buffer_packed.html", "class_ogre_1_1_g_l3_plus_uav_buffer_packed" ]
     ] ],
+    [ "EGL/OgreGL3PlusUtil.h", "_e_g_l_2_ogre_g_l3_plus_util_8h.html", "_e_g_l_2_ogre_g_l3_plus_util_8h" ],
     [ "GLX/OgreGL3PlusUtil.h", "_g_l_x_2_ogre_g_l3_plus_util_8h.html", "_g_l_x_2_ogre_g_l3_plus_util_8h" ],
     [ "gtk/OgreGL3PlusUtil.h", "gtk_2_ogre_g_l3_plus_util_8h.html", "gtk_2_ogre_g_l3_plus_util_8h" ],
+    [ "OgreGL3PlusUtil.h", "_ogre_g_l3_plus_util_8h.html", "_ogre_g_l3_plus_util_8h" ],
     [ "OSX/OgreGL3PlusUtil.h", "_o_s_x_2_ogre_g_l3_plus_util_8h.html", "_o_s_x_2_ogre_g_l3_plus_util_8h" ],
     [ "SDL/OgreGL3PlusUtil.h", "_s_d_l_2_ogre_g_l3_plus_util_8h.html", "_s_d_l_2_ogre_g_l3_plus_util_8h" ],
     [ "win32/OgreGL3PlusUtil.h", "win32_2_ogre_g_l3_plus_util_8h.html", "win32_2_ogre_g_l3_plus_util_8h" ],
@@ -849,10 +871,10 @@ var files_dup =
       [ "StrideChanger", "struct_ogre_1_1_g_l3_plus_vao_manager_1_1_stride_changer.html", "struct_ogre_1_1_g_l3_plus_vao_manager_1_1_stride_changer" ],
       [ "VertexBinding", "struct_ogre_1_1_g_l3_plus_vao_manager_1_1_vao_1_1_vertex_binding.html", "struct_ogre_1_1_g_l3_plus_vao_manager_1_1_vao_1_1_vertex_binding" ]
     ] ],
-    [ "include/OgreGL3PlusVertexArrayObject.h", "include_2_ogre_g_l3_plus_vertex_array_object_8h.html", [
+    [ "OgreGL3PlusVertexArrayObject.h", "_ogre_g_l3_plus_vertex_array_object_8h.html", [
       [ "GL3PlusOldVertexArrayObject", "class_ogre_1_1_g_l3_plus_old_vertex_array_object.html", "class_ogre_1_1_g_l3_plus_old_vertex_array_object" ]
     ] ],
-    [ "include/Vao/OgreGL3PlusVertexArrayObject.h", "include_2_vao_2_ogre_g_l3_plus_vertex_array_object_8h.html", [
+    [ "Vao/OgreGL3PlusVertexArrayObject.h", "_vao_2_ogre_g_l3_plus_vertex_array_object_8h.html", [
       [ "GL3PlusVertexArrayObject", "struct_ogre_1_1_g_l3_plus_vertex_array_object.html", "struct_ogre_1_1_g_l3_plus_vertex_array_object" ]
     ] ],
     [ "OgreGLES2AsyncTicket.h", "_ogre_g_l_e_s2_async_ticket_8h.html", [
@@ -982,10 +1004,10 @@ var files_dup =
       [ "StrideChanger", "struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_stride_changer.html", "struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_stride_changer" ],
       [ "VertexBinding", "struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_vao_1_1_vertex_binding.html", "struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_vao_1_1_vertex_binding" ]
     ] ],
-    [ "include/OgreGLES2VertexArrayObject.h", "include_2_ogre_g_l_e_s2_vertex_array_object_8h.html", [
+    [ "OgreGLES2VertexArrayObject.h", "_ogre_g_l_e_s2_vertex_array_object_8h.html", [
       [ "GLES2OldVertexArrayObject", "class_ogre_1_1_g_l_e_s2_old_vertex_array_object.html", "class_ogre_1_1_g_l_e_s2_old_vertex_array_object" ]
     ] ],
-    [ "include/Vao/OgreGLES2VertexArrayObject.h", "include_2_vao_2_ogre_g_l_e_s2_vertex_array_object_8h.html", [
+    [ "Vao/OgreGLES2VertexArrayObject.h", "_vao_2_ogre_g_l_e_s2_vertex_array_object_8h.html", [
       [ "GLES2VertexArrayObject", "struct_ogre_1_1_g_l_e_s2_vertex_array_object.html", "struct_ogre_1_1_g_l_e_s2_vertex_array_object" ]
     ] ],
     [ "OgreGLSLESExtSupport.h", "_ogre_g_l_s_l_e_s_ext_support_8h.html", "_ogre_g_l_s_l_e_s_ext_support_8h" ],
@@ -1050,6 +1072,9 @@ var files_dup =
     ] ],
     [ "OgreGLSLShaderManager.h", "_ogre_g_l_s_l_shader_manager_8h.html", [
       [ "GLSLShaderManager", "class_ogre_1_1_g_l_s_l_shader_manager.html", "class_ogre_1_1_g_l_s_l_shader_manager" ]
+    ] ],
+    [ "OgreGlSwitchableSupport.h", "_ogre_gl_switchable_support_8h.html", [
+      [ "GlSwitchableSupport", "class_ogre_1_1_gl_switchable_support.html", "class_ogre_1_1_gl_switchable_support" ]
     ] ],
     [ "OgreGLXContext.h", "_ogre_g_l_x_context_8h.html", [
       [ "GLXContext", "class_ogre_1_1_g_l_x_context.html", "class_ogre_1_1_g_l_x_context" ]
@@ -2039,8 +2064,8 @@ var files_dup =
     [ "OgreSubMesh2.h", "_ogre_sub_mesh2_8h.html", [
       [ "SourceData", "struct_ogre_1_1_sub_mesh_1_1_source_data.html", "struct_ogre_1_1_sub_mesh_1_1_source_data" ]
     ] ],
-    [ "include/Animation/OgreTagPoint.h", "include_2_animation_2_ogre_tag_point_8h.html", null ],
-    [ "include/OgreTagPoint.h", "include_2_ogre_tag_point_8h.html", null ],
+    [ "Animation/OgreTagPoint.h", "_animation_2_ogre_tag_point_8h.html", null ],
+    [ "OgreTagPoint.h", "_ogre_tag_point_8h.html", null ],
     [ "OgreTangentSpaceCalc.h", "_ogre_tangent_space_calc_8h.html", [
       [ "IndexRemap", "struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_index_remap.html", "struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_index_remap" ],
       [ "Result", "struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_result.html", "struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_result" ]
