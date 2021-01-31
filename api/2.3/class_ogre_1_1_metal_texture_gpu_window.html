@@ -2952,10 +2952,11 @@ Static Public Attributes</h2></td></tr>
 <p>OpenGL RenderWindows are a bit specific: </p>
 <ul>
 <li>Their origins are upside down. Which means we need to flip Y.</li>
-<li>They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true </li>
+<li>They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true</li>
+<li>Headless windows return false since internally they're FBOs. However isRenderWindowSpecific will return true </li>
 </ul>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_texture_gpu_window.html#a8f0edacbcb6b52f7db50913446ffbee8">Ogre::VulkanTextureGpuWindow</a>, and <a class="el" href="class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a465589165bc3c4ac818aab46631a0433">Ogre::GL3PlusTextureGpuWindow</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_texture_gpu_window.html#a8f0edacbcb6b52f7db50913446ffbee8">Ogre::VulkanTextureGpuWindow</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html#ab81e9a755ba2b500f911c02b1df1893a">Ogre::GL3PlusTextureGpuHeadlessWindow</a>, and <a class="el" href="class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a465589165bc3c4ac818aab46631a0433">Ogre::GL3PlusTextureGpuWindow</a>.</p>
 
 </div>
 </div>

@@ -8,6 +8,8 @@ var class_ogre_1_1_win32_g_l_support =
     [ "getDisplayMonitorCount", "class_ogre_1_1_win32_g_l_support.html#a528b9202eff7e961b346d409b5ed9352", null ],
     [ "getGLVendor", "class_ogre_1_1_win32_g_l_support.html#ac1f06da1f33ec693eaddb05627b18a65", null ],
     [ "getGLVersion", "class_ogre_1_1_win32_g_l_support.html#a1502ce2a3d26462b90321ca00634e2fd", null ],
+    [ "getNumPriorityConfigOptions", "class_ogre_1_1_win32_g_l_support.html#ad97c5b4d8a1ac2b8a5e55f41bc3b8634", null ],
+    [ "getPriorityConfigOption", "class_ogre_1_1_win32_g_l_support.html#a3ed4bd84727e1ca52051882c47c5d214", null ],
     [ "getProcAddress", "class_ogre_1_1_win32_g_l_support.html#a9703d3cfd8273f179922795e04942aea", null ],
     [ "getShaderCachePath", "class_ogre_1_1_win32_g_l_support.html#a05611e652e80b1c5dd260ad829d8bc7d", null ],
     [ "getShaderLibraryPath", "class_ogre_1_1_win32_g_l_support.html#a8c87e29883b18efc8da37afbe42b3852", null ],

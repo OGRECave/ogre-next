@@ -648,12 +648,31 @@ var files_dup =
       [ "EdgeGroup", "struct_ogre_1_1v1_1_1_edge_data_1_1_edge_group.html", "struct_ogre_1_1v1_1_1_edge_data_1_1_edge_group" ],
       [ "Triangle", "struct_ogre_1_1v1_1_1_edge_data_1_1_triangle.html", "struct_ogre_1_1v1_1_1_edge_data_1_1_triangle" ]
     ] ],
-    [ "OgreEGLContext.h", "_ogre_e_g_l_context_8h.html", [
+    [ "GL3Plus/include/windowing/EGL/OgreEGLContext.h", "_g_l3_plus_2include_2windowing_2_e_g_l_2_ogre_e_g_l_context_8h.html", [
       [ "EGLContext", "class_ogre_1_1_e_g_l_context.html", "class_ogre_1_1_e_g_l_context" ]
+    ] ],
+    [ "GLES2/include/EGL/OgreEGLContext.h", "_g_l_e_s2_2include_2_e_g_l_2_ogre_e_g_l_context_8h.html", [
+      [ "EGLContext", "class_ogre_1_1_e_g_l_context.html", "class_ogre_1_1_e_g_l_context" ]
+    ] ],
+    [ "OgreEGLGLSupport.h", "_ogre_e_g_l_g_l_support_8h.html", [
+      [ "EGLGLSupport", "class_ogre_1_1_e_g_l_g_l_support.html", "class_ogre_1_1_e_g_l_g_l_support" ]
+    ] ],
+    [ "OgreEglPBufferContext.h", "_ogre_egl_p_buffer_context_8h.html", [
+      [ "EglPBufferContext", "class_ogre_1_1_egl_p_buffer_context.html", "class_ogre_1_1_egl_p_buffer_context" ]
+    ] ],
+    [ "OgreEglPBufferSupport.h", "_ogre_egl_p_buffer_support_8h.html", [
+      [ "EglPBufferSupport", "class_ogre_1_1_egl_p_buffer_support.html", "class_ogre_1_1_egl_p_buffer_support" ],
+      [ "DeviceData", "struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html", "struct_ogre_1_1_egl_p_buffer_support_1_1_device_data" ]
+    ] ],
+    [ "OgreEglPBufferWindow.h", "_ogre_egl_p_buffer_window_8h.html", [
+      [ "EglPBufferWindow", "class_ogre_1_1_egl_p_buffer_window.html", "class_ogre_1_1_egl_p_buffer_window" ]
     ] ],
     [ "OgreEGLRenderTexture.h", "_ogre_e_g_l_render_texture_8h.html", null ],
     [ "OgreEGLSupport.h", "_ogre_e_g_l_support_8h.html", "_ogre_e_g_l_support_8h" ],
-    [ "OgreEGLWindow.h", "_ogre_e_g_l_window_8h.html", [
+    [ "GL3Plus/include/windowing/EGL/OgreEGLWindow.h", "_g_l3_plus_2include_2windowing_2_e_g_l_2_ogre_e_g_l_window_8h.html", [
+      [ "EGLWindow", "class_ogre_1_1_e_g_l_window.html", "class_ogre_1_1_e_g_l_window" ]
+    ] ],
+    [ "GLES2/include/EGL/OgreEGLWindow.h", "_g_l_e_s2_2include_2_e_g_l_2_ogre_e_g_l_window_8h.html", [
       [ "EGLWindow", "class_ogre_1_1_e_g_l_window.html", "class_ogre_1_1_e_g_l_window" ]
     ] ],
     [ "OgreEllipsoidEmitter.h", "_ogre_ellipsoid_emitter_8h.html", [
@@ -840,14 +859,17 @@ var files_dup =
     ] ],
     [ "OgreGL3PlusTextureGpuManager.h", "_ogre_g_l3_plus_texture_gpu_manager_8h.html", null ],
     [ "OgreGL3PlusTextureGpuWindow.h", "_ogre_g_l3_plus_texture_gpu_window_8h.html", [
+      [ "GL3PlusTextureGpuHeadlessWindow", "class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html", "class_ogre_1_1_g_l3_plus_texture_gpu_headless_window" ],
       [ "GL3PlusTextureGpuWindow", "class_ogre_1_1_g_l3_plus_texture_gpu_window.html", "class_ogre_1_1_g_l3_plus_texture_gpu_window" ]
     ] ],
     [ "OgreGL3PlusTextureManager.h", "_ogre_g_l3_plus_texture_manager_8h.html", "_ogre_g_l3_plus_texture_manager_8h" ],
     [ "OgreGL3PlusUavBufferPacked.h", "_ogre_g_l3_plus_uav_buffer_packed_8h.html", [
       [ "GL3PlusUavBufferPacked", "class_ogre_1_1_g_l3_plus_uav_buffer_packed.html", "class_ogre_1_1_g_l3_plus_uav_buffer_packed" ]
     ] ],
+    [ "EGL/OgreGL3PlusUtil.h", "_e_g_l_2_ogre_g_l3_plus_util_8h.html", "_e_g_l_2_ogre_g_l3_plus_util_8h" ],
     [ "GLX/OgreGL3PlusUtil.h", "_g_l_x_2_ogre_g_l3_plus_util_8h.html", "_g_l_x_2_ogre_g_l3_plus_util_8h" ],
     [ "gtk/OgreGL3PlusUtil.h", "gtk_2_ogre_g_l3_plus_util_8h.html", "gtk_2_ogre_g_l3_plus_util_8h" ],
+    [ "OgreGL3PlusUtil.h", "_ogre_g_l3_plus_util_8h.html", "_ogre_g_l3_plus_util_8h" ],
     [ "OSX/OgreGL3PlusUtil.h", "_o_s_x_2_ogre_g_l3_plus_util_8h.html", "_o_s_x_2_ogre_g_l3_plus_util_8h" ],
     [ "SDL/OgreGL3PlusUtil.h", "_s_d_l_2_ogre_g_l3_plus_util_8h.html", "_s_d_l_2_ogre_g_l3_plus_util_8h" ],
     [ "win32/OgreGL3PlusUtil.h", "win32_2_ogre_g_l3_plus_util_8h.html", "win32_2_ogre_g_l3_plus_util_8h" ],
@@ -1058,6 +1080,9 @@ var files_dup =
     ] ],
     [ "OgreGLSLShaderManager.h", "_ogre_g_l_s_l_shader_manager_8h.html", [
       [ "GLSLShaderManager", "class_ogre_1_1_g_l_s_l_shader_manager.html", "class_ogre_1_1_g_l_s_l_shader_manager" ]
+    ] ],
+    [ "OgreGlSwitchableSupport.h", "_ogre_gl_switchable_support_8h.html", [
+      [ "GlSwitchableSupport", "class_ogre_1_1_gl_switchable_support.html", "class_ogre_1_1_gl_switchable_support" ]
     ] ],
     [ "OgreGLXContext.h", "_ogre_g_l_x_context_8h.html", [
       [ "GLXContext", "class_ogre_1_1_g_l_x_context.html", "class_ogre_1_1_g_l_x_context" ]

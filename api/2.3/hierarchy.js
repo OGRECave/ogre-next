@@ -82,7 +82,9 @@ var hierarchy =
     [ "Ogre::FastArray< DescriptorSetUav::Slot >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< DEVMODE >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< DownloadData >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< EGLDeviceEXT >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< float >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Interface >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Item * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Light * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< LightArray >", "class_ogre_1_1_fast_array.html", null ],
@@ -92,12 +94,14 @@ var hierarchy =
     [ "Ogre::FastArray< Ogre::AsyncTextureTicket * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::DescriptorSetTexture2::Slot >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::DescriptorSetUav::Slot >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::EglPBufferSupport::DeviceData >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::FastArray >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::HlmsComputeJob * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::IesLoader * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::MetalBufferRegion >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::MetalTexRegion >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::ObjCmdBuffer::Cmd * >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::SampleDescription >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::SkeletonInstance * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::TextureGpu * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::VulkanDescriptorPool * >", "class_ogre_1_1_fast_array.html", null ],
@@ -422,6 +426,7 @@ var hierarchy =
           ] ],
           [ "Ogre::GL3PlusTextureGpu", "class_ogre_1_1_g_l3_plus_texture_gpu.html", [
             [ "Ogre::GL3PlusTextureGpuRenderTarget", "class_ogre_1_1_g_l3_plus_texture_gpu_render_target.html", [
+              [ "Ogre::GL3PlusTextureGpuHeadlessWindow", "class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html", null ],
               [ "Ogre::GL3PlusTextureGpuWindow", "class_ogre_1_1_g_l3_plus_texture_gpu_window.html", null ]
             ] ]
           ] ],
@@ -1128,6 +1133,8 @@ var hierarchy =
         [ "Ogre::D3D11Window", "class_ogre_1_1_d3_d11_window.html", [
           [ "Ogre::D3D11WindowSwapChainBased", "class_ogre_1_1_d3_d11_window_swap_chain_based.html", null ]
         ] ],
+        [ "Ogre::EGLWindow", "class_ogre_1_1_e_g_l_window.html", null ],
+        [ "Ogre::EglPBufferWindow", "class_ogre_1_1_egl_p_buffer_window.html", null ],
         [ "Ogre::GLXWindow", "class_ogre_1_1_g_l_x_window.html", null ],
         [ "Ogre::MetalWindow", "class_ogre_1_1_metal_window.html", null ],
         [ "Ogre::NULLWindow", "class_ogre_1_1_n_u_l_l_window.html", null ],
@@ -1466,6 +1473,7 @@ var hierarchy =
     [ "Ogre::DescriptorSetUav::TextureSlot", "struct_ogre_1_1_descriptor_set_uav_1_1_texture_slot.html", null ],
     [ "Ogre::DriverVersion", "struct_ogre_1_1_driver_version.html", null ],
     [ "Ogre::DualQuaternion", "class_ogre_1_1_dual_quaternion.html", null ],
+    [ "Ogre::EglPBufferSupport::DeviceData", "struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html", null ],
     [ "Ogre::EntityMaterialLodChangedEvent", "struct_ogre_1_1_entity_material_lod_changed_event.html", null ],
     [ "Ogre::EntityMeshLodChangedEvent", "struct_ogre_1_1_entity_mesh_lod_changed_event.html", null ],
     [ "Ogre::ErrorDialog", "class_ogre_1_1_error_dialog.html", null ],
@@ -1494,6 +1502,13 @@ var hierarchy =
     [ "Ogre::FreeOnDestructor", "struct_ogre_1_1_free_on_destructor.html", null ],
     [ "Ogre::GL3PlusContext", "class_ogre_1_1_g_l3_plus_context.html", [
       [ "Ogre::CocoaContext", "class_ogre_1_1_cocoa_context.html", null ],
+      [ "Ogre::EGLContext", "class_ogre_1_1_e_g_l_context.html", [
+        [ "Ogre::AndroidEGLContext", "class_ogre_1_1_android_e_g_l_context.html", null ],
+        [ "Ogre::EmscriptenEGLContext", "class_ogre_1_1_emscripten_e_g_l_context.html", null ],
+        [ "Ogre::Win32EGLContext", "class_ogre_1_1_win32_e_g_l_context.html", null ],
+        [ "Ogre::X11EGLContext", "class_ogre_1_1_x11_e_g_l_context.html", null ]
+      ] ],
+      [ "Ogre::EglPBufferContext", "class_ogre_1_1_egl_p_buffer_context.html", null ],
       [ "Ogre::GLXContext", "class_ogre_1_1_g_l_x_context.html", null ],
       [ "Ogre::Win32Context", "class_ogre_1_1_win32_context.html", null ]
     ] ],
@@ -1507,8 +1522,11 @@ var hierarchy =
     [ "Ogre::GL3PlusOldVertexArrayObject", "class_ogre_1_1_g_l3_plus_old_vertex_array_object.html", null ],
     [ "Ogre::GL3PlusPixelUtil", "class_ogre_1_1_g_l3_plus_pixel_util.html", null ],
     [ "Ogre::GL3PlusSupport", "class_ogre_1_1_g_l3_plus_support.html", [
+      [ "Ogre::EGLGLSupport", "class_ogre_1_1_e_g_l_g_l_support.html", null ],
+      [ "Ogre::EglPBufferSupport", "class_ogre_1_1_egl_p_buffer_support.html", null ],
       [ "Ogre::GLXGLSupport", "class_ogre_1_1_g_l_x_g_l_support.html", null ],
       [ "Ogre::GTKGLSupport", "class_ogre_1_1_g_t_k_g_l_support.html", null ],
+      [ "Ogre::GlSwitchableSupport", "class_ogre_1_1_gl_switchable_support.html", null ],
       [ "Ogre::OSXGL3PlusSupport", "class_ogre_1_1_o_s_x_g_l3_plus_support.html", null ],
       [ "Ogre::SDLGLSupport", "class_ogre_1_1_s_d_l_g_l_support.html", null ],
       [ "Ogre::Win32GLSupport", "class_ogre_1_1_win32_g_l_support.html", null ]
@@ -1519,12 +1537,7 @@ var hierarchy =
     [ "Ogre::GL3PlusVaoManager::Vao::VertexBinding", "struct_ogre_1_1_g_l3_plus_vao_manager_1_1_vao_1_1_vertex_binding.html", null ],
     [ "Ogre::GLAtomicCounterReference", "struct_ogre_1_1_g_l_atomic_counter_reference.html", null ],
     [ "Ogre::GLES2Context", "class_ogre_1_1_g_l_e_s2_context.html", [
-      [ "Ogre::EGLContext", "class_ogre_1_1_e_g_l_context.html", [
-        [ "Ogre::AndroidEGLContext", "class_ogre_1_1_android_e_g_l_context.html", null ],
-        [ "Ogre::EmscriptenEGLContext", "class_ogre_1_1_emscripten_e_g_l_context.html", null ],
-        [ "Ogre::Win32EGLContext", "class_ogre_1_1_win32_e_g_l_context.html", null ],
-        [ "Ogre::X11EGLContext", "class_ogre_1_1_x11_e_g_l_context.html", null ]
-      ] ],
+      [ "Ogre::EGLContext", "class_ogre_1_1_e_g_l_context.html", null ],
       [ "Ogre::NaClGLContext", "class_ogre_1_1_na_cl_g_l_context.html", null ]
     ] ],
     [ "Ogre::GLES2DynamicBuffer", "class_ogre_1_1_g_l_e_s2_dynamic_buffer.html", null ],

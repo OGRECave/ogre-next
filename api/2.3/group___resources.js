@@ -1113,6 +1113,7 @@ var group___resources =
       [ "createOrRetrieveTexture", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a83d7383e2379c98d83f3fac0c636ad48", null ],
       [ "createTexture", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a99afdb46d8ccbb07163924494b69c350", null ],
       [ "createTexture", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a2230b358a0acfaaf47b2e75685912a34", null ],
+      [ "createTextureGpuHeadlessWindow", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a1f5d670e4989a9cee4b7e7c531323590", null ],
       [ "createTextureGpuWindow", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a8245eaae1dd17bb1804bda6b5579046f", null ],
       [ "destroyAllAsyncTextureTicket", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a02832e2789d8fc68b4ce4586bad25010", null ],
       [ "destroyAsyncTextureTicket", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#af906e6a5e055170b281a1986374b4754", null ],

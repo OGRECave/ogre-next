@@ -3377,7 +3377,8 @@ Static Public Attributes</h2></td></tr>
 <p>OpenGL RenderWindows are a bit specific: </p>
 <ul>
 <li>Their origins are upside down. Which means we need to flip Y.</li>
-<li>They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true </li>
+<li>They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true</li>
+<li>Headless windows return false since internally they're FBOs. However isRenderWindowSpecific will return true </li>
 </ul>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_texture_gpu.html#a31a1ba96b03d3bab1a3c5943d03531fc">Ogre::TextureGpu</a>.</p>

@@ -138,6 +138,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1502ce2a3d26462b90321ca00634e2fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f9ad5e1460743551e74690541e6b905"><td class="memItemLeft" align="right" valign="top">Glib::RefPtr&lt; const Gdk::GL::Context &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_t_k_g_l_support.html#a2f9ad5e1460743551e74690541e6b905">getMainContext</a> () const</td></tr>
 <tr class="separator:a2f9ad5e1460743551e74690541e6b905"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad97c5b4d8a1ac2b8a5e55f41bc3b8634"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_support.html#ad97c5b4d8a1ac2b8a5e55f41bc3b8634">getNumPriorityConfigOptions</a> () const</td></tr>
+<tr class="separator:ad97c5b4d8a1ac2b8a5e55f41bc3b8634"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ed4bd84727e1ca52051882c47c5d214"><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_support.html#a3ed4bd84727e1ca52051882c47c5d214">getPriorityConfigOption</a> (size_t idx) const</td></tr>
+<tr class="separator:a3ed4bd84727e1ca52051882c47c5d214"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd724e8bec30e414d732f5f344802792"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_t_k_g_l_support.html#abd724e8bec30e414d732f5f344802792">getProcAddress</a> (const char *procname) const</td></tr>
 <tr class="memdesc:abd724e8bec30e414d732f5f344802792"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the address of a function.  <a href="class_ogre_1_1_g_t_k_g_l_support.html#abd724e8bec30e414d732f5f344802792">More...</a><br /></td></tr>
 <tr class="separator:abd724e8bec30e414d732f5f344802792"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -492,6 +496,61 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad97c5b4d8a1ac2b8a5e55f41bc3b8634"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad97c5b4d8a1ac2b8a5e55f41bc3b8634">&#9670;&nbsp;</a></span>getNumPriorityConfigOptions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual size_t Ogre::GL3PlusSupport::getNumPriorityConfigOptions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_gl_switchable_support.html#af198399bde5ecd0e9543d0cd1f8fcf0f">Ogre::GlSwitchableSupport</a>, and <a class="el" href="class_ogre_1_1_egl_p_buffer_support.html#a8bd62abfa24666b8110de75e4a24a46f">Ogre::EglPBufferSupport</a>.</p>
+
+</div>
+</div>
+<a id="a3ed4bd84727e1ca52051882c47c5d214"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ed4bd84727e1ca52051882c47c5d214">&#9670;&nbsp;</a></span>getPriorityConfigOption()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const char* Ogre::GL3PlusSupport::getPriorityConfigOption </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>idx</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_gl_switchable_support.html#a76582879652d1ab9fa571b5c10dbedc1">Ogre::GlSwitchableSupport</a>, and <a class="el" href="class_ogre_1_1_egl_p_buffer_support.html#a5734eeb65382de9739d9f9d2cbe68e8a">Ogre::EglPBufferSupport</a>.</p>
 
 </div>
 </div>
@@ -854,7 +913,7 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_s_d_l_g_l_support.html#a3cd7f1eef4ea8b8c842054c09540392b">Ogre::SDLGLSupport</a>, <a class="el" href="class_ogre_1_1_o_s_x_g_l3_plus_support.html#a3e4a0f920442e8f0c5aeeeb5435e879b">Ogre::OSXGL3PlusSupport</a>, <a class="el" href="class_ogre_1_1_win32_g_l_support.html#a4e9f4426ddce1ff35131933c2f20c56d">Ogre::Win32GLSupport</a>, and <a class="el" href="class_ogre_1_1_g_l_x_g_l_support.html#ae93a8e1862f526707e4e192f688a2095">Ogre::GLXGLSupport</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_s_d_l_g_l_support.html#a3cd7f1eef4ea8b8c842054c09540392b">Ogre::SDLGLSupport</a>, <a class="el" href="class_ogre_1_1_o_s_x_g_l3_plus_support.html#a3e4a0f920442e8f0c5aeeeb5435e879b">Ogre::OSXGL3PlusSupport</a>, <a class="el" href="class_ogre_1_1_win32_g_l_support.html#a4e9f4426ddce1ff35131933c2f20c56d">Ogre::Win32GLSupport</a>, <a class="el" href="class_ogre_1_1_gl_switchable_support.html#acd9e19e009c8ed4b8773f7c8fc80d958">Ogre::GlSwitchableSupport</a>, <a class="el" href="class_ogre_1_1_g_l_x_g_l_support.html#ae93a8e1862f526707e4e192f688a2095">Ogre::GLXGLSupport</a>, <a class="el" href="class_ogre_1_1_egl_p_buffer_support.html#ab262446a5fb2254957fc52edce02d0b3">Ogre::EglPBufferSupport</a>, and <a class="el" href="class_ogre_1_1_e_g_l_g_l_support.html#acf3254713d7a50b59c0d381c44c45dbe">Ogre::EGLGLSupport</a>.</p>
 
 </div>
 </div>
@@ -968,7 +1027,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_win32_g_l_support.html#a43ab2c268ec21fab487ebc0ffdbe0271">Ogre::Win32GLSupport</a>, and <a class="el" href="class_ogre_1_1_g_l_x_g_l_support.html#a2e5252c7b29e1989cc510285929353e1">Ogre::GLXGLSupport</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_win32_g_l_support.html#a43ab2c268ec21fab487ebc0ffdbe0271">Ogre::Win32GLSupport</a>, <a class="el" href="class_ogre_1_1_gl_switchable_support.html#a47fa13c98e5e46feae6d1e2c8b2ced31">Ogre::GlSwitchableSupport</a>, <a class="el" href="class_ogre_1_1_g_l_x_g_l_support.html#a2e5252c7b29e1989cc510285929353e1">Ogre::GLXGLSupport</a>, <a class="el" href="class_ogre_1_1_egl_p_buffer_support.html#ab0f1e560e37dc452aa5b6c169323d5e5">Ogre::EglPBufferSupport</a>, and <a class="el" href="class_ogre_1_1_e_g_l_g_l_support.html#a8f94965f0f81b7e5561df59c5f502da0">Ogre::EGLGLSupport</a>.</p>
 
 </div>
 </div>
