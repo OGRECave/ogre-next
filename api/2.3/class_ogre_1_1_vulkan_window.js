@@ -23,7 +23,7 @@ var class_ogre_1_1_vulkan_window =
     [ "destroy", "class_ogre_1_1_vulkan_window.html#a244905c8ff68d178ff279f40ebc8e6fc", null ],
     [ "destroySwapchain", "class_ogre_1_1_vulkan_window.html#a91a2e0d9c4b46a6632b130975ba73d9e", null ],
     [ "getBorderless", "class_ogre_1_1_vulkan_window.html#a67ba7307754a41632bb41c383191bba7", null ],
-    [ "getCustomAttribute", "class_ogre_1_1_vulkan_window.html#a6222c12d52c1b0b2cc3fa612b7e45a69", null ],
+    [ "getCustomAttribute", "class_ogre_1_1_vulkan_window.html#a51842837d590fcff9834d3a8279896c1", null ],
     [ "getDepthBuffer", "class_ogre_1_1_vulkan_window.html#a3925b8a9f1b5a7c29b9249d1b11357b5", null ],
     [ "getFrequencyDenominator", "class_ogre_1_1_vulkan_window.html#a70cfe4412cfa68a9423854fc1b19872e", null ],
     [ "getFrequencyNumerator", "class_ogre_1_1_vulkan_window.html#a8d7e786602979fc29169555056834c65", null ],

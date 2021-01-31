@@ -150,8 +150,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a91a2e0d9c4b46a6632b130975ba73d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67ba7307754a41632bb41c383191bba7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_window.html#a67ba7307754a41632bb41c383191bba7">getBorderless</a> (void) const</td></tr>
 <tr class="separator:a67ba7307754a41632bb41c383191bba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6222c12d52c1b0b2cc3fa612b7e45a69"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_window.html#a6222c12d52c1b0b2cc3fa612b7e45a69">getCustomAttribute</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> name, void *pData)</td></tr>
-<tr class="separator:a6222c12d52c1b0b2cc3fa612b7e45a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51842837d590fcff9834d3a8279896c1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_window.html#a51842837d590fcff9834d3a8279896c1">getCustomAttribute</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> name, void *pData)</td></tr>
+<tr class="separator:a51842837d590fcff9834d3a8279896c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3925b8a9f1b5a7c29b9249d1b11357b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_window.html#a3925b8a9f1b5a7c29b9249d1b11357b5">getDepthBuffer</a> (void) const</td></tr>
 <tr class="separator:a3925b8a9f1b5a7c29b9249d1b11357b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70cfe4412cfa68a9423854fc1b19872e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_window.html#a70cfe4412cfa68a9423854fc1b19872e">getFrequencyDenominator</a> (void) const</td></tr>
@@ -708,8 +708,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a6222c12d52c1b0b2cc3fa612b7e45a69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6222c12d52c1b0b2cc3fa612b7e45a69">&#9670;&nbsp;</a></span>getCustomAttribute()</h2>
+<a id="a51842837d590fcff9834d3a8279896c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51842837d590fcff9834d3a8279896c1">&#9670;&nbsp;</a></span>getCustomAttribute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -718,7 +718,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::Window::getCustomAttribute </td>
+          <td class="memname">virtual void Ogre::VulkanWindow::getCustomAttribute </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -737,12 +737,14 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_xcb_window.html#af84c22b86889bef2ecc6d550264c880e">Ogre::VulkanXcbWindow</a>, <a class="el" href="class_ogre_1_1_vulkan_win32_window.html#acc15e72c6b6e8e90a93ca44f07a8b1e8">Ogre::VulkanWin32Window</a>, <a class="el" href="class_ogre_1_1_vulkan_android_window.html#a8816fd24c769894c73f57a4b0927f08f">Ogre::VulkanAndroidWindow</a>, <a class="el" href="class_ogre_1_1_metal_window.html#ae8e44f8a7ca0456a4bd8e57e0978445a">Ogre::MetalWindow</a>, <a class="el" href="class_ogre_1_1_win32_window.html#a68f013af5be31a8907a3caa22e9139dd">Ogre::Win32Window</a>, <a class="el" href="class_ogre_1_1_g_l_x_window.html#abeb5449758233dd05051bfdd897a7d10">Ogre::GLXWindow</a>, <a class="el" href="class_ogre_1_1_egl_p_buffer_window.html#aa8c616e4ad1eb3976c9fab8233945a09">Ogre::EglPBufferWindow</a>, <a class="el" href="class_ogre_1_1_e_g_l_window.html#a0fcddbd42767a6f35d3660e3bd5f02be">Ogre::EGLWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d11_window.html#a5a97866f3f7ce86466fbe8ef775d7301">Ogre::D3D11Window</a>.</p>
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_window.html#a6222c12d52c1b0b2cc3fa612b7e45a69">Ogre::Window</a>.</p>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_xcb_window.html#af84c22b86889bef2ecc6d550264c880e">Ogre::VulkanXcbWindow</a>, <a class="el" href="class_ogre_1_1_vulkan_win32_window.html#acc15e72c6b6e8e90a93ca44f07a8b1e8">Ogre::VulkanWin32Window</a>, and <a class="el" href="class_ogre_1_1_vulkan_android_window.html#a8816fd24c769894c73f57a4b0927f08f">Ogre::VulkanAndroidWindow</a>.</p>
 
 </div>
 </div>
