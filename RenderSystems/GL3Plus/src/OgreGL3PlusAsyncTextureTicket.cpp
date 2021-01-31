@@ -206,7 +206,7 @@ namespace Ogre
             mSubregion = TextureBox();
         }
 
-        if( !textureSrc->isRenderWindowSpecific() )
+        if( !textureSrc->isOpenGLRenderWindow() )
         {
             if( fullSrcTextureBox.equalSize( srcTextureBox ) || !mSupportsGetTextureSubImage )
             {
