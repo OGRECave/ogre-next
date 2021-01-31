@@ -83,6 +83,7 @@ static GL3WglProc get_proc(const char *proc)
 #else
 #include <dlfcn.h>
 #include <GL/glx.h>
+#include <stdio.h>
 
 static void *libgl;
 static PFNGLXGETPROCADDRESSPROC glx_get_proc_address;
@@ -90,6 +91,12 @@ static PFNGLXGETPROCADDRESSPROC glx_get_proc_address;
 static void open_libgl(void)
 {
     libgl = dlopen("libGL.so.1", RTLD_LAZY | RTLD_GLOBAL);
+
+    if( !libgl )
+    {
+        fprintf( stderr, "ERROR: libGL.so.1 failed to load. OpenGL not installed correctly?\n" );
+    }
+
     *(void **)(&glx_get_proc_address) = dlsym(libgl, "glXGetProcAddressARB");
 }
 
