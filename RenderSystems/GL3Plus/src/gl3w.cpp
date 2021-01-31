@@ -93,23 +93,36 @@ static GL3WglProc get_proc(const char *proc)
 }
 #else
 #include <dlfcn.h>
+#include "OgreGL3PlusPrerequisites.h"
+
+#ifdef OGRE_CONFIG_UNIX_NO_X11
+#include <EGL/egl.h>
+#endif
 
 static void *libgl;
 static GL3WglProc (*glx_get_proc_address)(const GLubyte *);
 
 static int open_libgl(void)
 {
+#ifndef OGRE_CONFIG_UNIX_NO_X11
     libgl = dlopen("libGL.so.1", RTLD_LAZY | RTLD_LOCAL);
     if (!libgl)
         return GL3W_ERROR_LIBRARY_OPEN;
 
     *(void **)(&glx_get_proc_address) = dlsym(libgl, "glXGetProcAddressARB");
+#else
+    libgl = 0;
+    // Fortunately GL3WglProc and eglGetProcAddress have the same signature
+    *(void **)(&glx_get_proc_address) = (void *)eglGetProcAddress;
+#endif
     return GL3W_OK;
 }
 
 static void close_libgl(void)
 {
+#ifndef OGRE_CONFIG_UNIX_NO_X11
     dlclose(libgl);
+#endif
 }
 
 static GL3WglProc get_proc(const char *proc)

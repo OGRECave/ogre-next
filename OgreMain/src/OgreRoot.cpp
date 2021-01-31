@@ -627,7 +627,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     bool Root::showConfigDialog( ConfigDialog* aCustomDialog /*= 0*/ )
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_NACL || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
+#if OGRE_PLATFORM == OGRE_PLATFORM_NACL || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN || \
+    defined( OGRE_CONFIG_UNIX_NO_X11 )
         OGRE_EXCEPT(Exception::ERR_CANNOT_WRITE_TO_FILE, "showConfigDialog is not supported on NaCl",
             "Root::showConfigDialog");
 #endif

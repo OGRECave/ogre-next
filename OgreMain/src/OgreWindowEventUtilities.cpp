@@ -53,6 +53,7 @@ void WindowEventUtilities::messagePump()
         DispatchMessage( &msg );
     }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
+#    ifndef OGRE_CONFIG_UNIX_NO_X11
     //GLX Message Pump
     WindowList::iterator win = _msWindows.begin();
     WindowList::iterator end = _msWindows.end();
@@ -80,6 +81,7 @@ void WindowEventUtilities::messagePump()
         GLXProc(*win, event);
         }
     }
+#    endif
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE && !defined __OBJC__ && !defined __LP64__
     // OSX Message Pump
     EventRef event = NULL;

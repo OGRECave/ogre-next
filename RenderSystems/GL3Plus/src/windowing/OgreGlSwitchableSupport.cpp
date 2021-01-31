@@ -103,7 +103,7 @@ namespace Ogre
         switch( interface )
         {
         case WindowNative:
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
             return "GLX Window (Default)";
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WIN32
             return "WGL Window (Default)";
