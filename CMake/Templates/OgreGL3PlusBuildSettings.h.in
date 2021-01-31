@@ -1,0 +1,11 @@
+#ifndef OGREGL3PLUS_Custom_Config_H
+#define OGREGL3PLUS_Custom_Config_H
+
+// CMake auto-generated configuration options
+
+#cmakedefine OGRE_GLSUPPORT_USE_GLX
+#cmakedefine OGRE_GLSUPPORT_USE_WGL
+#cmakedefine OGRE_GLSUPPORT_USE_COCOA
+#cmakedefine OGRE_GLSUPPORT_USE_EGL_HEADLESS
+
+#endif

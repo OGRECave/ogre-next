@@ -32,6 +32,8 @@ THE SOFTWARE.
 
 #include "OgreLogManager.h"
 
+#include "OgreGL3PlusBuildSettings.h"
+
 namespace Ogre {
     // Forward declarations
     class GL3PlusAsyncTextureTicket;
@@ -143,8 +145,21 @@ namespace Ogre {
         LogManager::getSingleton().logMessage(msgBuf, LML_CRITICAL); \
     } \
 }
+
+#define EGL_CHECK_ERROR \
+{ \
+    int e = eglGetError(); \
+    if ((e != 0) && (e != EGL_SUCCESS))\
+    { \
+        char msgBuf[4096]; \
+        sprintf(msgBuf, "EGL error 0x%04X in %s at line %i\n", e, __PRETTY_FUNCTION__, __LINE__); \
+        LogManager::getSingleton().logMessage(msgBuf); \
+        OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR, msgBuf, __PRETTY_FUNCTION__); \
+    } \
+}
 #else
 #   define OGRE_CHECK_GL_ERROR(glFunc) { glFunc; }
+#   define EGL_CHECK_ERROR {}
 #endif
 
 #define OCGE OGRE_CHECK_GL_ERROR
