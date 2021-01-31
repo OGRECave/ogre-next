@@ -157,6 +157,18 @@ namespace Ogre
                                                  TextureTypes::Type2D, this, context, window );
     }
     //-----------------------------------------------------------------------------------
+    TextureGpu *GL3PlusTextureGpuManager::createTextureGpuHeadlessWindow( GL3PlusContext *context,
+                                                                          Window *window )
+    {
+        return OGRE_NEW GL3PlusTextureGpuHeadlessWindow( GpuPageOutStrategy::Discard, mVaoManager,
+                                                         "RenderWindow",
+                                                         TextureFlags::NotTexture |                   //
+                                                             TextureFlags::RenderToTexture |          //
+                                                             TextureFlags::RequiresTextureFlipping |  //
+                                                             TextureFlags::RenderWindowSpecific,      //
+                                                         TextureTypes::Type2D, this, context, window );
+    }
+    //-----------------------------------------------------------------------------------
     GLuint GL3PlusTextureGpuManager::getBlankTextureGlName(
             TextureTypes::TextureTypes textureType ) const
     {

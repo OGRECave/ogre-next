@@ -574,7 +574,7 @@ namespace Ogre {
         while (iSection.hasMoreElements())
         {
             const String& renderSystem = iSection.peekNextKey();
-            const ConfigFile::SettingsMultiMap& settings = *iSection.getNext();
+            ConfigFile::SettingsMultiMap settings = *iSection.getNext(); // Hard copy
 
             RenderSystem* rs = getRenderSystemByName(renderSystem);
             if (!rs)
@@ -585,6 +585,17 @@ namespace Ogre {
 
             try
             {
+                for( size_t i = 0; i < rs->getNumPriorityConfigOptions(); ++i )
+                {
+                    const char *configName = rs->getPriorityConfigOption( i );
+                    ConfigFile::SettingsMultiMap::iterator itor = settings.find( configName );
+                    if( itor != settings.end() )
+                    {
+                        rs->setConfigOption( itor->first, itor->second );
+                        settings.erase( itor );
+                    }
+                }
+
                 ConfigFile::SettingsMultiMap::const_iterator i;
                 for (i = settings.begin(); i != settings.end(); ++i)
                 {
@@ -618,7 +629,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     bool Root::showConfigDialog( ConfigDialog* aCustomDialog /*= 0*/ )
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_NACL || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
+#if OGRE_PLATFORM == OGRE_PLATFORM_NACL || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN || \
+    defined( OGRE_CONFIG_UNIX_NO_X11 )
         OGRE_EXCEPT(Exception::ERR_CANNOT_WRITE_TO_FILE, "showConfigDialog is not supported on NaCl",
             "Root::showConfigDialog");
 #endif

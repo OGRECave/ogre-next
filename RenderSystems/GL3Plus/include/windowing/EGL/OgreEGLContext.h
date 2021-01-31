@@ -25,37 +25,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __OgreW32Context_H__
-#define __OgreW32Context_H__
+#ifndef __OgreEGLContext_H__
+#define __OgreEGLContext_H__
 
-#include "OgreWin32Prerequisites.h"
 #include "OgreGL3PlusContext.h"
 
-namespace Ogre {
+#include "OgreEGLGLSupport.h"
 
-    class _OgreGL3PlusExport Win32Context: public GL3PlusContext
+namespace Ogre
+{
+    class _OgrePrivate EGLContext : public GL3PlusContext
     {
+        EGLConfig mConfig;
+        EGLGLSupport *mGLSupport;
+        EGLDisplay mEglDisplay;
+        ::EGLContext mContext;
+        bool mExternalContext;
+
     public:
-        Win32Context( HDC hdc, HGLRC glrc, uint32 contexMajorVersion, uint32 contexMinorVersion );
-        virtual ~Win32Context();
+        EGLSurface mDrawable;
 
-        HGLRC getHGLRC() { return mGlrc; }
+        EGLContext( EGLDisplay eglDisplay, EGLGLSupport *glsupport, ::EGLConfig fbconfig,
+                    ::EGLSurface drawable, ::EGLContext context = 0 );
 
-        /** See GL3PlusContext */
+        virtual ~EGLContext();
+
+        /// @copydoc GL3PlusContext::setCurrent
         virtual void setCurrent();
-        /** See GL3PlusContext */
+
+        /// @copydoc GL3PlusContext::endCurrent
         virtual void endCurrent();
+
         /// @copydoc GL3PlusContext::clone
-        GL3PlusContext* clone() const;
-
-        virtual void releaseContext();
-
-    protected:
-        HDC     mHDC;
-        HGLRC   mGlrc;
-        uint32  mContexMajorVersion;
-        uint32  mContexMinorVersion;
+        GL3PlusContext *clone() const;
     };
-}
+}  // namespace Ogre
 
 #endif

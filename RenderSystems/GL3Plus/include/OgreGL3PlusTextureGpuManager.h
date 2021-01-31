@@ -76,6 +76,10 @@ namespace Ogre
         */
         TextureGpu* createTextureGpuWindow( GL3PlusContext *context, Window *window );
 
+        /// See EglPBufferWindow. We do not track this pointer.
+        /// If caller doesnt' delete it, it will leak.
+        TextureGpu* createTextureGpuHeadlessWindow( GL3PlusContext *context, Window *window );
+
         GLuint getBlankTextureGlName( TextureTypes::TextureTypes textureType ) const;
 
         /// fboIdx must be in range [0; 1]

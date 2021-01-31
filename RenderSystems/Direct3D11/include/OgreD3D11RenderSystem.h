@@ -218,6 +218,8 @@ namespace Ogre
         void getCustomAttribute(const String& name, void* pData);
         // Low-level overridden members
         void setConfigOption( const String &name, const String &value );
+        virtual const char* getPriorityConfigOption( size_t idx ) const;
+        virtual size_t getNumPriorityConfigOptions( void ) const;
         void reinitialise();
         void shutdown();
         bool validateDevice(bool forceDeviceElection = false);

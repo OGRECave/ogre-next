@@ -407,6 +407,17 @@ endif()
 cmake_dependent_option(OGRE_STATIC "Static build" FALSE "" TRUE)
 cmake_dependent_option(OGRE_BUILD_RENDERSYSTEM_D3D11 "Build Direct3D11 RenderSystem" TRUE "WIN32;DirectX11_FOUND OR WINDOWS_STORE OR WINDOWS_PHONE" FALSE)
 cmake_dependent_option(OGRE_BUILD_RENDERSYSTEM_GL3PLUS "Build OpenGL 3+ RenderSystem" TRUE "OPENGL_FOUND; NOT OGRE_BUILD_RENDERSYSTEM_GLES; NOT OGRE_BUILD_RENDERSYSTEM_GLES2;NOT WINDOWS_STORE;NOT WINDOWS_PHONE;NOT OGRE_BUILD_PLATFORM_APPLE_IOS" FALSE)
+cmake_dependent_option(OGRE_GLSUPPORT_USE_EGL_HEADLESS "Use EGL. Required if you want to use GL3+ headless support (e.g. rendering on the Cloud without X11). If more than one GLSUPPORT is enabled, interface can be selected at runtime" FALSE "OGRE_BUILD_RENDERSYSTEM_GL3PLUS;EGL_FOUND" FALSE)
+cmake_dependent_option(OGRE_CONFIG_UNIX_NO_X11 "Avoid X11 dependencies as much as possible. OGRE_GLSUPPORT_USE_GLX won't be available" FALSE "OGRE_GLSUPPORT_USE_EGL_HEADLESS;UNIX" FALSE)
+cmake_dependent_option(OGRE_GLSUPPORT_USE_GLX "Use GLX (Default / Native window). If more than one GLSUPPORT is enabled, interface can be selected at runtime" TRUE "OGRE_BUILD_RENDERSYSTEM_GL3PLUS;UNIX;NOT OGRE_CONFIG_UNIX_NO_X11" FALSE)
+cmake_dependent_option(OGRE_GLSUPPORT_USE_WGL "Use WGL (Default / Native window). If more than one GLSUPPORT is enabled, interface can be selected at runtime" TRUE "OGRE_BUILD_RENDERSYSTEM_GL3PLUS;WIN32" FALSE)
+cmake_dependent_option(OGRE_GLSUPPORT_USE_COCOA "Use Cocoa (Default / Native window). If more than one GLSUPPORT is enabled, interface can be selected at runtime" TRUE "OGRE_BUILD_RENDERSYSTEM_GL3PLUS;APPLE" FALSE)
+if( OGRE_GLSUPPORT_USE_GLX OR OGRE_GLSUPPORT_USE_WGL OR OGRE_GLSUPPORT_USE_COCOA )
+	math( EXPR OGRE_GLSUPPORT_NUM_INTERFACES "${OGRE_GLSUPPORT_NUM_INTERFACES} + 1" )
+endif()
+if( OGRE_GLSUPPORT_USE_EGL_HEADLESS )
+	math( EXPR OGRE_GLSUPPORT_NUM_INTERFACES "${OGRE_GLSUPPORT_NUM_INTERFACES} + 1" )
+endif()
 cmake_dependent_option(OGRE_BUILD_RENDERSYSTEM_GLES2 "Build OpenGL ES 2.x RenderSystem" FALSE "OPENGLES_FOUND;NOT WINDOWS_STORE;NOT WINDOWS_PHONE" FALSE)
 cmake_dependent_option(OGRE_BUILD_RENDERSYSTEM_VULKAN "Build Vulkan RenderSystem" TRUE "Vulkan_FOUND" FALSE)
 if( APPLE )
@@ -498,6 +509,7 @@ cmake_dependent_option(OGRE_CONFIG_ENABLE_GLES2_GLSL_OPTIMISER "Enable GLSL opti
 cmake_dependent_option(OGRE_CONFIG_ENABLE_GLES2_VAO_SUPPORT "Use VertexArrayObjects if possible." FALSE "OGRE_BUILD_RENDERSYSTEM_GLES2" FALSE)
 cmake_dependent_option(OGRE_CONFIG_ENABLE_GL_STATE_CACHE_SUPPORT "Enable OpenGL state cache management" FALSE "OGRE_BUILD_RENDERSYSTEM_GL OR OGRE_BUILD_RENDERSYSTEM_GLES OR OGRE_BUILD_RENDERSYSTEM_GLES2 OR OGRE_BUILD_RENDERSYSTEM_GL3PLUS" FALSE)
 cmake_dependent_option(OGRE_CONFIG_ENABLE_GLES3_SUPPORT "Enable OpenGL ES 3.x Features" TRUE "OPENGLES3_FOUND;OGRE_BUILD_RENDERSYSTEM_GLES2" FALSE)
+cmake_dependent_option(OGRE_CONFIG_RENDERDOC_INTEGRATION "Programmatically schedule captures when launched from RenderDoc" TRUE "NOT ANDROID; NOT APPLE;RenderDoc_FOUND" FALSE)
 option(OGRE_CONFIG_ENABLE_FINE_LIGHT_MASK_GRANULARITY "Forward+ will support setLightMask, for a fine granularity control over which lights affect which objects. Performance impact may vary (may be slower, may be faster if you filter a lot of lights)" FALSE)
 option(OGRE_CONFIG_ENABLE_TBB_SCHEDULER "Enable TBB's scheduler initialisation/shutdown." TRUE)
 cmake_dependent_option(OGRE_USE_BOOST "Use Boost extensions" FALSE "Boost_FOUND" FALSE)
@@ -572,6 +584,7 @@ mark_as_advanced(
   OGRE_CONFIG_ENABLE_GLES2_GLSL_OPTIMISER
   OGRE_CONFIG_ENABLE_GLES2_VAO_SUPPORT
   OGRE_CONFIG_ENABLE_GLES3_SUPPORT
+  OGRE_CONFIG_RENDERDOC_INTEGRATION
   OGRE_CONFIG_ENABLE_TBB_SCHEDULER
   OGRE_CONFIG_ENABLE_FINE_LIGHT_MASK_GRANULARITY
   OGRE_CONFIG_ENABLE_LIGHT_OBB_RESTRAINT

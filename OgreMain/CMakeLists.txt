@@ -79,6 +79,7 @@ add_filter_only( "Source Files\\Threading" "${CMAKE_CURRENT_SOURCE_DIR}/src/Thre
 
 # Remove optional header files
 list(REMOVE_ITEM HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreFreeImageCodec2.h"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgreASTCCodec.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgreDDSCodec2.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/OgrePVRTCCodec.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreETCCodec.h"
@@ -89,6 +90,7 @@ list(REMOVE_ITEM HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreFreeImage
 
 # Remove optional source files
 list(REMOVE_ITEM SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreFreeImageCodec2.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreASTCCodec.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreDDSCodec2.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgrePVRTCCodec.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreETCCodec.cpp"
@@ -231,21 +233,36 @@ elseif(ANDROID)
 
   set(PLATFORM_HEADER_INSTALL "Android")
 elseif (UNIX)
-  include_directories(include/GLX ${X11_INCLUDE_DIR})
+	if( NOT OGRE_CONFIG_UNIX_NO_X11 )
+		include_directories(include/GLX ${X11_INCLUDE_DIR})
 
-  file(GLOB PLATFORM_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/GLX/*.h"
-      "${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/GLX_backdrop.h")
-  file(GLOB PLATFORM_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/*.cpp"
-      src/OgreSearchOps.cpp)
+		file(GLOB PLATFORM_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/GLX/*.h"
+		  "${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/GLX_backdrop.h")
+		file(GLOB PLATFORM_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/*.cpp"
+		  src/OgreSearchOps.cpp)
 
-  set(PLATFORM_LIBS ${X11_LIBRARIES} ${X11_Xt_LIB} ${XAW_LIBRARY} ${X11_Xrandr_LIB} pthread)
-  set(PLATFORM_HEADER_INSTALL "GLX")
-  # some platforms require explicit linking to libdl, see if it's available
-  find_library(DL_LIBRARY NAMES dl dlsym)
-  mark_as_advanced(DL_LIBRARY)
-  if (DL_LIBRARY)
-    list(APPEND PLATFORM_LIBS dl)
-  endif ()
+		set(PLATFORM_LIBS ${X11_LIBRARIES} ${X11_Xt_LIB} ${XAW_LIBRARY} ${X11_Xrandr_LIB} pthread)
+		set(PLATFORM_HEADER_INSTALL "GLX")
+	else()
+		file(GLOB PLATFORM_HEADERS
+			"${CMAKE_CURRENT_SOURCE_DIR}/include/GLX/OgreTimer.h"
+			"${CMAKE_CURRENT_SOURCE_DIR}/include/GLX/OgreErrorDialog.h"
+			src/OgreSearchOps.cpp)
+		file(GLOB PLATFORM_SOURCE_FILES
+			"${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/OgreTimer.cpp"
+			"${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/OgreErrorDialog.cpp"
+			"${CMAKE_CURRENT_SOURCE_DIR}/src/GLX/OgreFileSystemLayer.cpp"
+			src/OgreSearchOps.cpp)
+
+		set(PLATFORM_LIBS pthread)
+		set(PLATFORM_HEADER_INSTALL "")
+	endif()
+	# some platforms require explicit linking to libdl, see if it's available
+	find_library(DL_LIBRARY NAMES dl dlsym)
+	mark_as_advanced(DL_LIBRARY)
+	if (DL_LIBRARY)
+		list(APPEND PLATFORM_LIBS dl)
+	endif ()
 endif()
 
 if (NOT WIN32)

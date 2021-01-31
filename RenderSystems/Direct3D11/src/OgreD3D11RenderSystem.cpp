@@ -632,6 +632,16 @@ namespace Ogre
 
     }
     //---------------------------------------------------------------------
+    const char* D3D11RenderSystem::getPriorityConfigOption( size_t ) const
+    {
+        return "Rendering Device";
+    }
+    //---------------------------------------------------------------------
+    size_t D3D11RenderSystem::getNumPriorityConfigOptions( void ) const
+    {
+        return 1u;
+    }
+    //---------------------------------------------------------------------
     void D3D11RenderSystem::refreshFSAAOptions(void)
     {
         ConfigOptionMap::iterator it = mOptions.find( "FSAA" );

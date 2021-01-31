@@ -136,4 +136,50 @@ namespace Ogre
             }
         }
     }
-}
+    //-----------------------------------------------------------------------------------
+    GL3PlusTextureGpuHeadlessWindow::GL3PlusTextureGpuHeadlessWindow(
+        GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager, IdString name,
+        uint32 textureFlags, TextureTypes::TextureTypes initialType, TextureGpuManager *textureManager,
+        GL3PlusContext *context, Window *window ) :
+        GL3PlusTextureGpuRenderTarget( pageOutStrategy, vaoManager, name, textureFlags, initialType,
+                                       textureManager ),
+        mContext( context ),
+        mWindow( window )
+    {
+        mTextureType = TextureTypes::Type2D;
+    }
+    //-----------------------------------------------------------------------------------
+    GL3PlusTextureGpuHeadlessWindow::~GL3PlusTextureGpuHeadlessWindow()
+    {
+        destroyInternalResourcesImpl();
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpuHeadlessWindow::swapBuffers( void ) { mWindow->swapBuffers(); }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpuHeadlessWindow::getCustomAttribute( IdString name, void *pData )
+    {
+        if( name == CustomAttributeIdString_GLCONTEXT )
+            *static_cast<GL3PlusContext **>( pData ) = mContext;
+        else if( name == "Window" )
+            *static_cast<Window **>( pData ) = mWindow;
+    }
+    //-----------------------------------------------------------------------------------
+    bool GL3PlusTextureGpuHeadlessWindow::isOpenGLRenderWindow( void ) const
+    {
+        return false;  // We must lie. Internally it's an FBO. We don't expose the PBuffer
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpuHeadlessWindow::_notifyTextureSlotChanged( const TexturePool *newPool,
+                                                                     uint16 slice )
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "",
+                     "GL3PlusTextureGpuHeadlessWindow::_notifyTextureSlotChanged" );
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpuHeadlessWindow::setTextureType( TextureTypes::TextureTypes textureType )
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
+                     "You cannot call setTextureType if isRenderWindowSpecific is true",
+                     "GL3PlusTextureGpuHeadlessWindow::setTextureType" );
+    }
+}  // namespace Ogre

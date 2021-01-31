@@ -255,6 +255,17 @@ namespace Ogre {
         mGLSupport->setConfigOption(name, value);
     }
 
+    //-----------------------------------------------------------------------
+    const char *GL3PlusRenderSystem::getPriorityConfigOption( size_t idx ) const
+    {
+        return mGLSupport->getPriorityConfigOption( idx );
+    }
+    //-----------------------------------------------------------------------
+    size_t GL3PlusRenderSystem::getNumPriorityConfigOptions( void ) const
+    {
+        return mGLSupport->getNumPriorityConfigOptions();
+    }
+
     String GL3PlusRenderSystem::validateConfigOptions(void)
     {
         // XXX Return an error string if something is invalid
@@ -3346,9 +3357,23 @@ namespace Ogre {
             mCurrentContext->setCurrent();
 
         // Initialise GL3W
-		bool gl3wFailed = gl3wInit() != 0;
-        if( gl3wFailed )
+        int gl3wRetStatus = gl3wInit();
+        if( gl3wRetStatus != GL3W_OK )
         {
+            if( gl3wRetStatus != GL3W_ERROR_INIT )
+            {
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+                const String dllName = "opengl32.dll";
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+                const String dllName = "/System/Library/Frameworks/OpenGL.framework/OpenGL";
+#else
+                const String dllName = "libGL.so.1";
+#endif
+                LogManager::getSingleton().logMessage(
+                    "ERROR: " + dllName + " failed to load. OpenGL not installed correctly?",
+                    LML_CRITICAL );
+            }
+
             LogManager::getSingleton().logMessage("Failed to initialize GL3W", LML_CRITICAL);
         }
         else
@@ -3358,7 +3383,7 @@ namespace Ogre {
         }
 
         // Make sure that OpenGL 3.3+ is supported in this context
-        if( gl3wFailed || !mGLSupport->hasMinGLVersion(3, 3) )
+        if( gl3wRetStatus != GL3W_OK || !mGLSupport->hasMinGLVersion(3, 3) )
         {
             OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                         "OpenGL 3.3 is not supported. Please update your graphics card drivers.",

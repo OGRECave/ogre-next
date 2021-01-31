@@ -625,7 +625,7 @@ namespace Ogre
                 static_cast<GL3PlusTextureGpuManager*>( mTextureManager );
         const GL3PlusSupport &support = textureManagerGl->getGlSupport();
 
-        if( !this->isRenderWindowSpecific() && !dst->isRenderWindowSpecific() &&
+        if( !this->isOpenGLRenderWindow() && !dst->isOpenGLRenderWindow() &&
             ( !this->isMultisample() || !dst->isMultisample() ||
               ( this->hasMsaaExplicitResolves() && dst->hasMsaaExplicitResolves() ) ) )
         {

@@ -26,6 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include <cmath>
+
 namespace Ogre
 {
     inline void Aabb::setExtents( const Vector3& min, const Vector3& max )

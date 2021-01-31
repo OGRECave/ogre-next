@@ -54,6 +54,16 @@ THE SOFTWARE.
 
 #include "OgreLwString.h"
 
+#if OGRE_NO_RENDERDOC_INTEGRATION == 0
+#    include "renderdoc/renderdoc_app.h"
+#    if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#        define WIN32_LEAN_AND_MEAN
+#        define VC_EXTRALEAN
+#        define NOMINMAX
+#        include <Windows.h>
+#    endif
+#endif
+
 namespace Ogre {
 
     RenderSystem::ListenerList  RenderSystem::msSharedEventListeners;
@@ -82,6 +92,7 @@ namespace Ogre {
         , mUavRenderingDescSet( 0 )
         , mGlobalInstanceVertexBufferVertexDeclaration(NULL)
         , mGlobalNumberOfInstances(1)
+        , mRenderDocApi(0)
         , mVertexProgramBound(false)
         , mGeometryProgramBound(false)
         , mFragmentProgramBound(false)
@@ -1238,6 +1249,14 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
+    const char* RenderSystem::getPriorityConfigOption( size_t ) const
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "idx must be < getNumPriorityConfigOptions()",
+                     "RenderSystem::getPriorityConfigOption" );
+    }
+    //-----------------------------------------------------------------------
+    size_t RenderSystem::getNumPriorityConfigOptions( void ) const { return 0u; }
+    //-----------------------------------------------------------------------
     void RenderSystem::destroyHardwareOcclusionQuery( HardwareOcclusionQuery *hq)
     {
         HardwareOcclusionQueryList::iterator i =
@@ -1356,6 +1375,71 @@ namespace Ogre {
     void RenderSystem::setGlobalInstanceVertexBufferVertexDeclaration( v1::VertexDeclaration* val )
     {
         mGlobalInstanceVertexBufferVertexDeclaration = val;
+    }
+    //---------------------------------------------------------------------
+    bool RenderSystem::startGpuDebuggerFrameCapture( Window *window )
+    {
+        if( !mRenderDocApi )
+        {
+            loadRenderDocApi();
+            if( !mRenderDocApi )
+                return false;
+        }
+#if OGRE_NO_RENDERDOC_INTEGRATION == 0
+        RENDERDOC_DevicePointer device = 0;
+        RENDERDOC_WindowHandle windowHandle = 0;
+        if( window )
+        {
+            window->getCustomAttribute( "RENDERDOC_DEVICE", device );
+            window->getCustomAttribute( "RENDERDOC_WINDOW", windowHandle );
+        }
+        mRenderDocApi->StartFrameCapture( device, windowHandle );
+#endif
+        return true;
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::endGpuDebuggerFrameCapture( Window *window )
+    {
+        if( !mRenderDocApi )
+            return;
+#if OGRE_NO_RENDERDOC_INTEGRATION == 0
+        RENDERDOC_DevicePointer device = 0;
+        RENDERDOC_WindowHandle windowHandle = 0;
+        if( window )
+        {
+            window->getCustomAttribute( "RENDERDOC_DEVICE", device );
+            window->getCustomAttribute( "RENDERDOC_WINDOW", windowHandle );
+        }
+        mRenderDocApi->EndFrameCapture( device, windowHandle );
+#endif
+    }
+    //---------------------------------------------------------------------
+    bool RenderSystem::loadRenderDocApi( void )
+    {
+#if OGRE_NO_RENDERDOC_INTEGRATION == 0
+        if( mRenderDocApi )
+            return true;  // Already loaded
+
+#    if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+        void *mod = dlopen( "librenderdoc.so", RTLD_NOW | RTLD_NOLOAD );
+        if( mod )
+        {
+            pRENDERDOC_GetAPI RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)dlsym( mod, "RENDERDOC_GetAPI" );
+            const int ret = RENDERDOC_GetAPI( eRENDERDOC_API_Version_1_4_1, (void **)&mRenderDocApi );
+            return ret == 1;
+        }
+#    elif OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+        HMODULE mod = GetModuleHandleA( "renderdoc.dll" );
+        if( mod )
+        {
+            pRENDERDOC_GetAPI RENDERDOC_GetAPI =
+                (pRENDERDOC_GetAPI)GetProcAddress( mod, "RENDERDOC_GetAPI" );
+            const int ret = RENDERDOC_GetAPI( eRENDERDOC_API_Version_1_4_1, (void **)&mRenderDocApi );
+            return ret == 1;
+        }
+#    endif
+#endif
+        return false;
     }
     //---------------------------------------------------------------------
     void RenderSystem::getCustomAttribute(const String& name, void* pData)

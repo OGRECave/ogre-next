@@ -95,7 +95,10 @@ namespace Ogre
                              "GL3PlusRenderPassDescriptor::checkRenderWindowStatus" );
             }
 
-            switchToRenderWindow();
+            if( mColour[0].texture->isOpenGLRenderWindow() )
+                switchToRenderWindow();
+            else
+                switchToFBO(); // Headless window
         }
         else
         {
@@ -228,7 +231,7 @@ namespace Ogre
                 assert( dynamic_cast<GL3PlusTextureGpu*>( mColour[i].texture ) );
                 GL3PlusTextureGpu *texture = static_cast<GL3PlusTextureGpu*>( mColour[i].texture );
 
-                if( texture->isRenderWindowSpecific() )
+                if( texture->isOpenGLRenderWindow() )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "Cannot use RenderWindow as MRT with other colour textures",

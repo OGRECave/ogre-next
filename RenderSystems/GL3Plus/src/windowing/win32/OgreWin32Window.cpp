@@ -1089,11 +1089,16 @@ namespace Ogre
             *static_cast<GL3PlusContext**>(pData) = mContext;
             return;
         }
-        else if( name == "WINDOW" )
+        else if( name == "WINDOW" || name == "RENDERDOC_WINDOW" )
         {
             HWND *pHwnd = (HWND*)pData;
             *pHwnd = getWindowHandle();
             return;
-        } 
+        }
+        else if( name == "RENDERDOC_DEVICE" )
+        {
+            *static_cast<HGLRC*>(pData) = mContext->getHGLRC();
+            return;
+        }
     }
 }

@@ -829,6 +829,16 @@ namespace Ogre
             *static_cast<GLXContext**>(pData) = mContext;
             return;
         }
+        else if( name == "RENDERDOC_DEVICE" )
+        {
+            *static_cast< ::GLXContext *>( pData ) = mContext->mContext;
+            return;
+        }
+        else if( name == "RENDERDOC_WINDOW" )
+        {
+            *static_cast< ::GLXDrawable *>( pData ) = mContext->mDrawable;
+            return;
+        }
         else if( name == "XDISPLAY" )
         {
             *static_cast<Display**>(pData) = mGLSupport->getXDisplay();

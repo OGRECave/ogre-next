@@ -106,7 +106,10 @@ endif ()
 
 # Find rapidjson
 find_package(Rapidjson)
-macro_log_feature(Rapidjson_FOUND "rapidjson" "C++ JSON parser" "http://rapidjson.org/" FALSE "" "")
+macro_log_feature(Rapidjson_FOUND "rapidjson" "C++ JSON parser" "https://rapidjson.org/" FALSE "" "")
+
+find_package(RenderDoc)
+macro_log_feature(RenderDoc_FOUND "RenderDoc" "RenderDoc Integration" "https://renderdoc.org/" FALSE "" "")
 
 
 #######################################################################
