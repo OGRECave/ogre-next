@@ -33,6 +33,10 @@
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
+#ifdef None
+#    undef None
+#endif
+
 namespace Ogre
 {
     class _OgrePrivate EglPBufferSupport : public GL3PlusSupport
@@ -76,7 +80,7 @@ namespace Ogre
         String validateConfig( void );
 
         /// @copydoc see RenderSystem::getPriorityConfigOption
-        virtual const char* getPriorityConfigOption( size_t idx ) const;
+        virtual const char *getPriorityConfigOption( size_t idx ) const;
 
         /// @copydoc see RenderSystem::getPriorityConfigOption
         virtual size_t getNumPriorityConfigOptions( void ) const;

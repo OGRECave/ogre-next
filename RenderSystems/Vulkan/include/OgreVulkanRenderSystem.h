@@ -158,6 +158,8 @@ namespace Ogre
         void initConfigOptions();
         virtual ConfigOptionMap &getConfigOptions( void );
         virtual void setConfigOption( const String &name, const String &value );
+        virtual const char* getPriorityConfigOption( size_t idx ) const;
+        virtual size_t getNumPriorityConfigOptions( void ) const;
 
         virtual HardwareOcclusionQuery *createHardwareOcclusionQuery( void );
 

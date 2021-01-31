@@ -159,7 +159,7 @@ namespace Ogre {
 }
 #else
 #   define OGRE_CHECK_GL_ERROR(glFunc) do { glFunc; } while( 0 )
-#   define EGL_CHECK_ERROR do {} while( 0 )
+#   define EGL_CHECK_ERROR {}
 #endif
 
 #define OCGE OGRE_CHECK_GL_ERROR

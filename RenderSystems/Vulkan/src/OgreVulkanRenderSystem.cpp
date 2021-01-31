@@ -346,6 +346,10 @@ namespace Ogre
         mVulkanSupport->setConfigOption( name, value );
     }
     //-------------------------------------------------------------------------
+    const char *VulkanRenderSystem::getPriorityConfigOption( size_t ) const { return "Device"; }
+    //-------------------------------------------------------------------------
+    size_t VulkanRenderSystem::getNumPriorityConfigOptions( void ) const { return 1u; }
+    //-------------------------------------------------------------------------
     String VulkanRenderSystem::validateConfigOptions( void )
     {
         return mVulkanSupport->validateConfigOptions();
