@@ -49,15 +49,41 @@ namespace Ogre
     GlSwitchableSupport::GlSwitchableSupport() : mSelectedInterface( 0u ), mInterfaceSelected( false )
     {
 #ifdef OGRE_GLSUPPORT_USE_GLX
-        mAvailableInterfaces.push_back( Interface( WindowNative, new GLXGLSupport() ) );
+        try
+        {
+            mAvailableInterfaces.push_back( Interface( WindowNative, new GLXGLSupport() ) );
+        }
+        catch( Exception &e )
+        {
+            LogManager::getSingleton().logMessage(
+                "GLX raised an exception. Won't be available. Is X11 running?" );
+            LogManager::getSingleton().logMessage( e.getFullDescription() );
+        }
 #endif
 #ifdef OGRE_GLSUPPORT_USE_WGL
         mAvailableInterfaces.push_back( Interface( WindowNative, new Win32GLSupport() ) );
 #endif
 #ifdef OGRE_GLSUPPORT_USE_EGL_HEADLESS
-        mAvailableInterfaces.push_back( Interface( HeadlessEgl, new EglPBufferSupport() ) );
+        try
+        {
+            mAvailableInterfaces.push_back( Interface( HeadlessEgl, new EglPBufferSupport() ) );
+        }
+        catch( Exception &e )
+        {
+            LogManager::getSingleton().logMessage(
+                "EGL Headless raised an exception. Won't be available. Are drivers too old?" );
+            LogManager::getSingleton().logMessage( e.getFullDescription() );
+        }
 #endif
-    }
+
+        if( mAvailableInterfaces.empty() )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "No Interface could be loaded. Check previous error messages."
+                         "Try disabling OpenGL plugin from plugins.cfg.",
+                         "GlSwitchableSupport::GlSwitchableSupport" );
+        }
+    }  // namespace Ogre
     //-------------------------------------------------------------------------
     GlSwitchableSupport::~GlSwitchableSupport()
     {
