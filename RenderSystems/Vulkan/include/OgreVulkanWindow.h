@@ -120,6 +120,8 @@ namespace Ogre
             Makes our present request wait until the Queue is done executing before we can present
         */
         void _swapBuffers( VkSemaphore queueFinishSemaphore );
+
+        virtual void getCustomAttribute( IdString name, void *pData );
     };
 }  // namespace Ogre
 

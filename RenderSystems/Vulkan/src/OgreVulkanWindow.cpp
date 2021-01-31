@@ -555,4 +555,17 @@ namespace Ogre
 
         mSwapchainStatus = SwapchainReleased;
     }
+    //-------------------------------------------------------------------------
+    void VulkanWindow::getCustomAttribute( IdString name, void *pData )
+    {
+        if( name == "RENDERDOC_DEVICE" )
+        {
+            *static_cast<VkInstance *>( pData ) = mDevice->mInstance;
+            return;
+        }
+        else
+        {
+            Window::getCustomAttribute( name, pData );
+        }
+    }
 }  // namespace Ogre

@@ -571,10 +571,14 @@ namespace Ogre
             *static_cast<xcb_atom_t *>( pData ) = mWmDeleteWindow;
             return;
         }
-        else if( name == "xcb_window_t" )
+        else if( name == "xcb_window_t" || name == "RENDERDOC_WINDOW" )
         {
             *static_cast<xcb_window_t *>( pData ) = mXcbWindow;
             return;
+        }
+        else
+        {
+            VulkanWindow::getCustomAttribute( name, pData );
         }
     }
 }  // namespace Ogre

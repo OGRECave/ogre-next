@@ -777,7 +777,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanWin32Window::getCustomAttribute( IdString name, void *pData )
     {
-        if( name == "WINDOW" )
+        if( name == "WINDOW" || name == "RENDERDOC_WINDOW" )
         {
             HWND *pHwnd = (HWND *)pData;
             *pHwnd = mHwnd;

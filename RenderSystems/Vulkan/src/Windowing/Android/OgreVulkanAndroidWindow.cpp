@@ -280,10 +280,14 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::getCustomAttribute( IdString name, void *pData )
     {
-        if( name == "ANativeWindow" )
+        if( name == "ANativeWindow" || name == "RENDERDOC_WINDOW" )
         {
             *static_cast<ANativeWindow **>( pData ) = mNativeWindow;
             return;
+        }
+        else
+        {
+            VulkanWindow::getCustomAttribute( name, pData );
         }
     }
 }  // namespace Ogre
