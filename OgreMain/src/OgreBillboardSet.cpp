@@ -333,11 +333,11 @@ namespace v1 {
         return mWorldSpace;
     }
     //-----------------------------------------------------------------------
-    void BillboardSet::_notifyCurrentCamera( const Camera* cam )
+    void BillboardSet::_notifyCurrentCamera( const Camera* camera, const Camera* lodCamera )
     {
         // Calculate camera orientation and position
-        mCamQ = cam->getDerivedOrientation();
-        mCamPos = cam->getDerivedPosition();
+        mCamQ = camera->getDerivedOrientation();
+        mCamPos = camera->getDerivedPosition();
         if (!mWorldSpace)
         {
             // Default behaviour is that billboards are in local node space
@@ -567,7 +567,7 @@ namespace v1 {
     //-----------------------------------------------------------------------
     void BillboardSet::_updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera)
     {
-        _notifyCurrentCamera( lodCamera );
+        _notifyCurrentCamera( camera, lodCamera );
         _updateRenderQueueImpl( queue, camera, lodCamera );
     }
     //-----------------------------------------------------------------------

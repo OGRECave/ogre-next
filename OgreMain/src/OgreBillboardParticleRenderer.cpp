@@ -135,7 +135,7 @@ namespace v1 {
         RenderableArray &outRenderables )
     {
         mBillboardSet->setCullIndividually(cullIndividually);
-        mBillboardSet->_notifyCurrentCamera( lodCamera );
+        mBillboardSet->_notifyCurrentCamera( camera, lodCamera );
 
         // Update billboard set geometry
         mBillboardSet->beginBillboards(currentParticles.size());
@@ -234,9 +234,9 @@ namespace v1 {
         return mBillboardSet->getCommonUpVector();
     }
     //-----------------------------------------------------------------------
-    void BillboardParticleRenderer::_notifyCurrentCamera( const Camera* cam )
+    void BillboardParticleRenderer::_notifyCurrentCamera( const Camera* camera, const Camera* lodCamera )
     {
-        mBillboardSet->_notifyCurrentCamera(cam);
+        mBillboardSet->_notifyCurrentCamera(camera, lodCamera);
     }
     //-----------------------------------------------------------------------
     void BillboardParticleRenderer::_notifyParticleRotated(void)

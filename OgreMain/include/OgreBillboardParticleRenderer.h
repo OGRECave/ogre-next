@@ -210,7 +210,7 @@ namespace v1 {
         /// @copydoc ParticleSystemRenderer::_setMaterialName
         virtual void _setMaterialName( const String &matName, const String &resourceGroup );
         /// @copydoc ParticleSystemRenderer::_notifyCurrentCamera
-        void _notifyCurrentCamera( const Camera* cam );
+        void _notifyCurrentCamera( const Camera* camera, const Camera* lodCamera );
         /// @copydoc ParticleSystemRenderer::_notifyParticleRotated
         void _notifyParticleRotated(void);
         /// @copydoc ParticleSystemRenderer::_notifyParticleResized

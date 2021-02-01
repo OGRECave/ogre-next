@@ -535,7 +535,7 @@ namespace v1 {
         @see
             MovableObject
         */
-        virtual void _notifyCurrentCamera( const Camera* cam );
+        virtual void _notifyCurrentCamera( const Camera* camera, const Camera* lodCamera );
 
         /** Begin injection of billboard data; applicable when 
             constructing the BillboardSet for external data use.
