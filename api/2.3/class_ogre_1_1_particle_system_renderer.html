@@ -127,9 +127,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2aea8e94bb68335126bce074015061eb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_renderer.html#a2aea8e94bb68335126bce074015061eb">_notifyAttached</a> (<a class="el" href="class_ogre_1_1_node.html">Node</a> *parent)=0</td></tr>
 <tr class="memdesc:a2aea8e94bb68335126bce074015061eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delegated to by <a class="el" href="class_ogre_1_1_particle_system.html#a918267ffee26f6031a31357ea1490370" title="Overridden from MovableObject.">ParticleSystem::_notifyAttached</a>.  <a href="class_ogre_1_1_particle_system_renderer.html#a2aea8e94bb68335126bce074015061eb">More...</a><br /></td></tr>
 <tr class="separator:a2aea8e94bb68335126bce074015061eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a22fdafc49149ef864487dbed205923"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_renderer.html#a5a22fdafc49149ef864487dbed205923">_notifyCurrentCamera</a> (const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *cam)=0</td></tr>
-<tr class="memdesc:a5a22fdafc49149ef864487dbed205923"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delegated to by ParticleSystem::_notifyCurrentCamera.  <a href="class_ogre_1_1_particle_system_renderer.html#a5a22fdafc49149ef864487dbed205923">More...</a><br /></td></tr>
-<tr class="separator:a5a22fdafc49149ef864487dbed205923"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bb9db57cb17ee560cf7664d262f0a43"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_renderer.html#a9bb9db57cb17ee560cf7664d262f0a43">_notifyCurrentCamera</a> (const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *camera, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera)=0</td></tr>
+<tr class="memdesc:a9bb9db57cb17ee560cf7664d262f0a43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delegated to by ParticleSystem::_notifyCurrentCamera.  <a href="class_ogre_1_1_particle_system_renderer.html#a9bb9db57cb17ee560cf7664d262f0a43">More...</a><br /></td></tr>
+<tr class="separator:a9bb9db57cb17ee560cf7664d262f0a43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e0b651fd9d845b9bc70e9aaf64e5915"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_particle_system_renderer.html#a2e0b651fd9d845b9bc70e9aaf64e5915">_notifyDefaultDimensions</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> width, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> height)=0</td></tr>
 <tr class="memdesc:a2e0b651fd9d845b9bc70e9aaf64e5915"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells the renderer that the particle default size has changed.  <a href="class_ogre_1_1_particle_system_renderer.html#a2e0b651fd9d845b9bc70e9aaf64e5915">More...</a><br /></td></tr>
 <tr class="separator:a2e0b651fd9d845b9bc70e9aaf64e5915"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -400,8 +400,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5a22fdafc49149ef864487dbed205923"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a22fdafc49149ef864487dbed205923">&#9670;&nbsp;</a></span>_notifyCurrentCamera()</h2>
+<a id="a9bb9db57cb17ee560cf7664d262f0a43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bb9db57cb17ee560cf7664d262f0a43">&#9670;&nbsp;</a></span>_notifyCurrentCamera()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -413,8 +413,18 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">virtual void Ogre::ParticleSystemRenderer::_notifyCurrentCamera </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td>
-          <td class="paramname"><em>cam</em></td><td>)</td>
+          <td class="paramname"><em>camera</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>lodCamera</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -426,7 +436,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Delegated to by ParticleSystem::_notifyCurrentCamera. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a8e0973df33d3fbb6f23443885de5d79f">Ogre::v1::BillboardParticleRenderer</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a22b84c86732fa39ab3286e49f34f16b1">Ogre::v1::BillboardParticleRenderer</a>.</p>
 
 </div>
 </div>

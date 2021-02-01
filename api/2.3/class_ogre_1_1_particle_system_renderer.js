@@ -6,7 +6,7 @@ var class_ogre_1_1_particle_system_renderer =
     [ "_destroyVisualData", "class_ogre_1_1_particle_system_renderer.html#addc7a41c0c6aba115a7ca23219001690", null ],
     [ "_getSortMode", "class_ogre_1_1_particle_system_renderer.html#a2b90d2d5d6b6a46e59e409c54d7dc198", null ],
     [ "_notifyAttached", "class_ogre_1_1_particle_system_renderer.html#a2aea8e94bb68335126bce074015061eb", null ],
-    [ "_notifyCurrentCamera", "class_ogre_1_1_particle_system_renderer.html#a5a22fdafc49149ef864487dbed205923", null ],
+    [ "_notifyCurrentCamera", "class_ogre_1_1_particle_system_renderer.html#a9bb9db57cb17ee560cf7664d262f0a43", null ],
     [ "_notifyDefaultDimensions", "class_ogre_1_1_particle_system_renderer.html#a2e0b651fd9d845b9bc70e9aaf64e5915", null ],
     [ "_notifyParticleCleared", "class_ogre_1_1_particle_system_renderer.html#aa76e67b53dd09f60313e9ebfb59ed5c0", null ],
     [ "_notifyParticleEmitted", "class_ogre_1_1_particle_system_renderer.html#aec55835fcde21e77487cfbb20f439944", null ],

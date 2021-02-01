@@ -13,7 +13,7 @@ var class_ogre_1_1v1_1_1_billboard_particle_renderer =
     [ "_destroyVisualData", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#addc7a41c0c6aba115a7ca23219001690", null ],
     [ "_getSortMode", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a86c37da5bee613ee9b84fc2fec223346", null ],
     [ "_notifyAttached", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#ae28bafdb030e667b5f69110528203251", null ],
-    [ "_notifyCurrentCamera", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a8e0973df33d3fbb6f23443885de5d79f", null ],
+    [ "_notifyCurrentCamera", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#a22b84c86732fa39ab3286e49f34f16b1", null ],
     [ "_notifyDefaultDimensions", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#ab12fc729d91b606e758f7c4ccd3712eb", null ],
     [ "_notifyParticleCleared", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#aa76e67b53dd09f60313e9ebfb59ed5c0", null ],
     [ "_notifyParticleEmitted", "class_ogre_1_1v1_1_1_billboard_particle_renderer.html#aec55835fcde21e77487cfbb20f439944", null ],

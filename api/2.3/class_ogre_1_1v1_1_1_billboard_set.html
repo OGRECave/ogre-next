@@ -150,9 +150,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a10baed8eacf72717f8e166f0f178130b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html#a10baed8eacf72717f8e166f0f178130b">_notifyBillboardRotated</a> (void)</td></tr>
 <tr class="memdesc:a10baed8eacf72717f8e166f0f178130b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal callback used by Billboards to notify their parent that they have been rotated.  <a href="class_ogre_1_1v1_1_1_billboard_set.html#a10baed8eacf72717f8e166f0f178130b">More...</a><br /></td></tr>
 <tr class="separator:a10baed8eacf72717f8e166f0f178130b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56573ed993a9f60054c154e7410fd2dc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html#a56573ed993a9f60054c154e7410fd2dc">_notifyCurrentCamera</a> (const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *cam)</td></tr>
-<tr class="memdesc:a56573ed993a9f60054c154e7410fd2dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overridden from <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a>.  <a href="class_ogre_1_1v1_1_1_billboard_set.html#a56573ed993a9f60054c154e7410fd2dc">More...</a><br /></td></tr>
-<tr class="separator:a56573ed993a9f60054c154e7410fd2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a30fbd6a01705777e14e62e00ddfb27"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html#a1a30fbd6a01705777e14e62e00ddfb27">_notifyCurrentCamera</a> (const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *camera, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera)</td></tr>
+<tr class="memdesc:a1a30fbd6a01705777e14e62e00ddfb27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overridden from <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a>.  <a href="class_ogre_1_1v1_1_1_billboard_set.html#a1a30fbd6a01705777e14e62e00ddfb27">More...</a><br /></td></tr>
+<tr class="separator:a1a30fbd6a01705777e14e62e00ddfb27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a865cb46cc09cbb8bd560abeca1d0d31e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a865cb46cc09cbb8bd560abeca1d0d31e">_notifyManager</a> (<a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *man)</td></tr>
 <tr class="memdesc:a865cb46cc09cbb8bd560abeca1d0d31e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notify the object of it's manager (internal use only)  <a href="class_ogre_1_1_movable_object.html#a865cb46cc09cbb8bd560abeca1d0d31e">More...</a><br /></td></tr>
 <tr class="separator:a865cb46cc09cbb8bd560abeca1d0d31e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1074,8 +1074,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a56573ed993a9f60054c154e7410fd2dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56573ed993a9f60054c154e7410fd2dc">&#9670;&nbsp;</a></span>_notifyCurrentCamera()</h2>
+<a id="a1a30fbd6a01705777e14e62e00ddfb27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a30fbd6a01705777e14e62e00ddfb27">&#9670;&nbsp;</a></span>_notifyCurrentCamera()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1087,8 +1087,18 @@ Static Public Attributes</h2></td></tr>
           <td class="memname">virtual void Ogre::v1::BillboardSet::_notifyCurrentCamera </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td>
-          <td class="paramname"><em>cam</em></td><td>)</td>
+          <td class="paramname"><em>camera</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>lodCamera</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
