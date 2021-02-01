@@ -1,5 +1,11 @@
 var NAVTREEINDEX29 =
 {
+"class_ogre_1_1_colour_interpolator_affector.html#a28d59576dcb488c86373eb74d6f0e1ed":[7,0,0,107,3],
+"class_ogre_1_1_colour_interpolator_affector.html#a3534e0793f6d1aa89477c58e16a822a9":[7,0,0,107,24],
+"class_ogre_1_1_colour_interpolator_affector.html#a3c600369ab5d6957524125c93915019f":[7,0,0,107,6],
+"class_ogre_1_1_colour_interpolator_affector.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,107,20],
+"class_ogre_1_1_colour_interpolator_affector.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,107,23],
+"class_ogre_1_1_colour_interpolator_affector.html#a4ebe10757356bf52a3debdfffa4c9b80":[7,0,0,107,27],
 "class_ogre_1_1_colour_interpolator_affector.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,107,18],
 "class_ogre_1_1_colour_interpolator_affector.html#a5f401d9023e7bb484ff3ff49e70c9510":[7,0,0,107,4],
 "class_ogre_1_1_colour_interpolator_affector.html#a7f3dfd3656eb976353b98ed34319d60a":[7,0,0,107,12],
@@ -243,11 +249,5 @@ var NAVTREEINDEX29 =
 "class_ogre_1_1_compositor_manager2.html#aedef19dd7de5ab286f880e505cb3f834":[5,2,12,3,6],
 "class_ogre_1_1_compositor_manager2.html#af0102241744aaab9ee5d4e5d5724c96e":[5,0,1,3,1],
 "class_ogre_1_1_compositor_manager2.html#af0102241744aaab9ee5d4e5d5724c96e":[5,2,12,3,1],
-"class_ogre_1_1_compositor_manager2.html#af6277a3536a4d3c878989cab4f4a7beb":[5,0,1,3,50],
-"class_ogre_1_1_compositor_manager2.html#af6277a3536a4d3c878989cab4f4a7beb":[5,2,12,3,50],
-"class_ogre_1_1_compositor_manager2.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,3,38],
-"class_ogre_1_1_compositor_manager2.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,12,3,38],
-"class_ogre_1_1_compositor_node.html":[5,2,1,3],
-"class_ogre_1_1_compositor_node.html#a01e7c49813462a88761ff73f514d7ce8":[5,2,1,3,35],
-"class_ogre_1_1_compositor_node.html#a081b18ad77e67e1d5e561ceb61933bbf":[5,2,1,3,34]
+"class_ogre_1_1_compositor_manager2.html#af6277a3536a4d3c878989cab4f4a7beb":[5,0,1,3,50]
 };

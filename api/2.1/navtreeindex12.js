@@ -1,6 +1,5 @@
 var NAVTREEINDEX12 =
 {
-"_ogre_thread_defines_poco_8h.html#a215c480bf7f0aef85c342201319e256a":[8,0,888,32],
 "_ogre_thread_defines_poco_8h.html#a21d86a876c769de54655c13cd2743a1e":[8,0,888,21],
 "_ogre_thread_defines_poco_8h.html#a29238378cd8d5ec729999a09d2db45ef":[8,0,888,17],
 "_ogre_thread_defines_poco_8h.html#a2a5197ca265b2bfc25a5d0aa570d1f31":[8,0,888,33],
@@ -249,5 +248,6 @@ var NAVTREEINDEX12 =
 "_ogre_win32_window_8h.html":[8,0,949],
 "_ogre_window_event_utilities_8h.html":[8,0,950],
 "_ogre_wire_aabb_8h.html":[8,0,951],
-"_ogre_wire_bounding_box_8h.html":[8,0,952]
+"_ogre_wire_bounding_box_8h.html":[8,0,952],
+"_ogre_work_queue_8h.html":[8,0,954]
 };

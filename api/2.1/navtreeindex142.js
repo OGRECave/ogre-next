@@ -1,5 +1,11 @@
 var NAVTREEINDEX142 =
 {
+"class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler_factory.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,9,59,25],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html":[5,2,9,60],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,9,60,8],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a33a8df75aa637178e60fc1fcac452ef2":[5,2,9,60,19],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a4063d9deca7c2f65c667947fae0eab73":[5,2,9,60,16],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,9,60,12],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a43f3f0854dd21c6400076169ef123073":[5,2,9,60,18],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a4b43c261946926ebbc6456deccc6697a":[5,2,9,60,1],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,9,60,15],
@@ -243,11 +249,5 @@ var NAVTREEINDEX142 =
 "class_ogre_1_1_radian.html#a3762e26668e58d4225b9a5a9326b47b4":[5,2,6,23,21],
 "class_ogre_1_1_radian.html#a3f9fa4e32a72cd3cd26a2e7af81cc12a":[5,2,6,23,5],
 "class_ogre_1_1_radian.html#a48ae159d7a2ae102749613982fb661c9":[5,2,6,23,16],
-"class_ogre_1_1_radian.html#a4eb5fdad21a84b38f56e21b939588845":[5,2,6,23,22],
-"class_ogre_1_1_radian.html#a5f96dcd933471eabd3d3a21893554834":[5,2,6,23,15],
-"class_ogre_1_1_radian.html#a687923d48a83e82c1a0a75b0d3586396":[5,2,6,23,29],
-"class_ogre_1_1_radian.html#a6b34aca5c2b5cbc483dde8f22d3de0a1":[5,2,6,23,24],
-"class_ogre_1_1_radian.html#a6e9f6957e298803562bb63ccddeb6717":[5,2,6,23,13],
-"class_ogre_1_1_radian.html#a788a24ddeedc500a910d6237707e1102":[5,2,6,23,4],
-"class_ogre_1_1_radian.html#aa2366301db74814149be591856884221":[5,2,6,23,11]
+"class_ogre_1_1_radian.html#a4eb5fdad21a84b38f56e21b939588845":[5,2,6,23,22]
 };

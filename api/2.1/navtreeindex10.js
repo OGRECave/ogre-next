@@ -1,7 +1,5 @@
 var NAVTREEINDEX10 =
 {
-"_ogre_resource_group_manager_8h.html":[8,0,750],
-"_ogre_resource_manager_8h.html":[8,0,751],
 "_ogre_resource_transition_8h.html":[8,0,752],
 "_ogre_resource_transition_8h.html#a1feaa6e1253297279f75eedaae089d09":[8,0,752,6],
 "_ogre_resource_transition_8h.html#a732c0b8774d76d325e0749d09ce70aad":[8,0,752,4],
@@ -249,5 +247,7 @@ var NAVTREEINDEX10 =
 "_ogre_shader_program_writer_manager_8h.html":[8,0,820],
 "_ogre_shader_render_state_8h.html":[8,0,821],
 "_ogre_shader_render_state_8h.html#ga3a45db6ba3ebab9f7a49005934a19213":[8,0,821,2],
-"_ogre_shader_render_state_8h.html#ga9b53abaeb85c8e817dafe314bf1ef7e8":[8,0,821,0]
+"_ogre_shader_render_state_8h.html#ga9b53abaeb85c8e817dafe314bf1ef7e8":[8,0,821,0],
+"_ogre_shader_render_state_8h.html#ga9eabb56de59faf73d0671baef58ba5b0":[8,0,821,1],
+"_ogre_shader_script_translator_8h.html":[8,0,822]
 };

@@ -1,5 +1,11 @@
 var NAVTREEINDEX33 =
 {
+"class_ogre_1_1_compositor_pass_stencil.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,1,19,17],
+"class_ogre_1_1_compositor_pass_stencil.html#a88a90cd8524ca4838ba402598452ec01":[5,2,1,19,4],
+"class_ogre_1_1_compositor_pass_stencil.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,1,19,20],
+"class_ogre_1_1_compositor_pass_stencil.html#aa6621e893549d6581966a51d7f2afe52":[5,2,1,19,3],
+"class_ogre_1_1_compositor_pass_stencil.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,1,19,24],
+"class_ogre_1_1_compositor_pass_stencil.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,1,19,22],
 "class_ogre_1_1_compositor_pass_stencil.html#ac92baa443272b1bb6a1b703b570267f3":[5,2,1,19,16],
 "class_ogre_1_1_compositor_pass_stencil.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,1,19,18],
 "class_ogre_1_1_compositor_pass_stencil.html#ad75735f2516fb15f48a875d078cbc505":[5,2,1,19,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX33 =
 "class_ogre_1_1_compositor_shadow_node.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,1,23,57],
 "class_ogre_1_1_compositor_shadow_node.html#acf4e9f7b9d8e5b8c61bce6d164185e5d":[5,2,1,23,71],
 "class_ogre_1_1_compositor_shadow_node.html#ad2eb91ac8d2a01147d9623ce9e0a8020":[5,2,1,23,18],
-"class_ogre_1_1_compositor_shadow_node.html#adc51f87af9846e88b03c932dc79ac0af":[5,2,1,23,49],
-"class_ogre_1_1_compositor_shadow_node.html#ae0d443c369fb5e9d26ec20300c85aaf7":[5,2,1,23,17],
-"class_ogre_1_1_compositor_shadow_node.html#ae2cd092a04aa6951fd9760f0619c3515":[5,2,1,23,2],
-"class_ogre_1_1_compositor_shadow_node.html#ae2fa015e01b5e725c3b8016e10cb5408":[5,2,1,23,43],
-"class_ogre_1_1_compositor_shadow_node.html#ae693eac3a7af913adfbb28ba49935842":[5,2,1,23,69],
-"class_ogre_1_1_compositor_shadow_node.html#aeb9eb4f664cb4048c4ff035b705b9adb":[5,2,1,23,6],
-"class_ogre_1_1_compositor_shadow_node.html#aeed3172d72e30cbd79ef663c8c1adfd7":[5,2,1,23,14]
+"class_ogre_1_1_compositor_shadow_node.html#adc51f87af9846e88b03c932dc79ac0af":[5,2,1,23,49]
 };

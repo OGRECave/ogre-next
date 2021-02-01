@@ -1,7 +1,5 @@
 var NAVTREEINDEX11 =
 {
-"_ogre_shader_render_state_8h.html#ga9eabb56de59faf73d0671baef58ba5b0":[8,0,821,1],
-"_ogre_shader_script_translator_8h.html":[8,0,822],
 "_ogre_shader_sub_render_state_8h.html":[8,0,823],
 "_ogre_shader_sub_render_state_8h.html#ga00d3d84afe3e5e75ca3fe1050c2fd29a":[8,0,823,5],
 "_ogre_shader_sub_render_state_8h.html#ga279d48a1cabb619e85aba3c931e71b33":[8,0,823,1],
@@ -111,6 +109,7 @@ var NAVTREEINDEX11 =
 "_ogre_sub_item_8h.html":[8,0,860],
 "_ogre_sub_mesh2_8h.html":[8,0,862],
 "_ogre_sub_mesh_8h.html":[8,0,861],
+"_ogre_tag_point_8h.html":[8,0,864],
 "_ogre_tangent_space_calc_8h.html":[8,0,865],
 "_ogre_technique_8h.html":[8,0,866],
 "_ogre_terrain_8h.html":[8,0,867],
@@ -249,5 +248,6 @@ var NAVTREEINDEX11 =
 "_ogre_thread_defines_poco_8h.html#a062b6df8793a5440c06a9056ff1c8fe9":[8,0,888,5],
 "_ogre_thread_defines_poco_8h.html#a0a38f532fc987f34e7ffa1d18b770fc9":[8,0,888,9],
 "_ogre_thread_defines_poco_8h.html#a15a4eee729a2c973782b3d65262b6c33":[8,0,888,22],
-"_ogre_thread_defines_poco_8h.html#a18a523fad1f9e10324e1742865f562b7":[8,0,888,0]
+"_ogre_thread_defines_poco_8h.html#a18a523fad1f9e10324e1742865f562b7":[8,0,888,0],
+"_ogre_thread_defines_poco_8h.html#a215c480bf7f0aef85c342201319e256a":[8,0,888,32]
 };

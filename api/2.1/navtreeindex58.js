@@ -1,5 +1,11 @@
 var NAVTREEINDEX58 =
 {
+"class_ogre_1_1_deflate_stream.html#a3a99b8b9b4ce6cce64322ba89ea45e43":[7,0,0,274,13],
+"class_ogre_1_1_deflate_stream.html#a3bf53c73a9933c5e6e1ae215cba72845":[7,0,0,274,2],
+"class_ogre_1_1_deflate_stream.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,274,21],
+"class_ogre_1_1_deflate_stream.html#a4486e6a49b36dc62ea4a948214e6d6f2":[7,0,0,274,32],
+"class_ogre_1_1_deflate_stream.html#a49bfe5809b50735b5ce49e7df9615e5a":[7,0,0,274,25],
+"class_ogre_1_1_deflate_stream.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,274,24],
 "class_ogre_1_1_deflate_stream.html#a560b07ced4d47d31315d8d7f51638a8f":[7,0,0,274,8],
 "class_ogre_1_1_deflate_stream.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,274,19],
 "class_ogre_1_1_deflate_stream.html#a5ba171261e6c5d8c2f2880e99ca5c141":[7,0,0,274,12],
@@ -243,11 +249,5 @@ var NAVTREEINDEX58 =
 "class_ogre_1_1_distance_lod_sphere_strategy.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,4,1,20],
 "class_ogre_1_1_distance_lod_sphere_strategy.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,4,1,23],
 "class_ogre_1_1_distance_lod_sphere_strategy.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,4,1,18],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a5b60368988f8c388b97d6af77b7c08c9":[5,2,4,1,10],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a6637262cc1547ecb50bd3a55720896df":[5,2,4,1,28],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a68dbd83cee06a2bbbbf531e04083610e":[5,2,4,1,8],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a6ffe63d24cfcaf5c0d6028fe61baa80e":[5,2,4,1,5],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,4,1,14],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a9049c547f1df50c59ccea9ffa5170bce":[5,2,4,1,27],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,4,1,17]
+"class_ogre_1_1_distance_lod_sphere_strategy.html#a5b60368988f8c388b97d6af77b7c08c9":[5,2,4,1,10]
 };

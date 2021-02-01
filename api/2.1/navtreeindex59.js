@@ -1,5 +1,11 @@
 var NAVTREEINDEX59 =
 {
+"class_ogre_1_1_distance_lod_sphere_strategy.html#a6637262cc1547ecb50bd3a55720896df":[5,2,4,1,28],
+"class_ogre_1_1_distance_lod_sphere_strategy.html#a68dbd83cee06a2bbbbf531e04083610e":[5,2,4,1,8],
+"class_ogre_1_1_distance_lod_sphere_strategy.html#a6ffe63d24cfcaf5c0d6028fe61baa80e":[5,2,4,1,5],
+"class_ogre_1_1_distance_lod_sphere_strategy.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,4,1,14],
+"class_ogre_1_1_distance_lod_sphere_strategy.html#a9049c547f1df50c59ccea9ffa5170bce":[5,2,4,1,27],
+"class_ogre_1_1_distance_lod_sphere_strategy.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,4,1,17],
 "class_ogre_1_1_distance_lod_sphere_strategy.html#a99b5ef240e4230111c22e2e131474f3f":[5,2,4,1,0],
 "class_ogre_1_1_distance_lod_sphere_strategy.html#aa97570f960384c50ffe6319dbb5981f8":[5,2,4,1,3],
 "class_ogre_1_1_distance_lod_sphere_strategy.html#aac8890f5f7fbda974dee926427d83068":[5,2,4,1,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX59 =
 "class_ogre_1_1_e_g_l_window.html#af72cb6156c72e9d9568591dadcc54217":[7,0,0,291,31],
 "class_ogre_1_1_e_g_l_window.html#af77a2b45550db00c0ca364d762a5ca36":[7,0,0,291,22],
 "class_ogre_1_1_e_g_l_window.html#af8615122f9bc57a80ffc8c73a75d2852":[7,0,0,291,84],
-"class_ogre_1_1_e_g_l_window.html#af8854efa9b905e9becd10e062a53ae3a":[7,0,0,291,50],
-"class_ogre_1_1_e_g_l_window.html#af8ca9d240bd48662c37dbdf8fa881bad":[7,0,0,291,73],
-"class_ogre_1_1_e_g_l_window.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,291,62],
-"class_ogre_1_1_e_t_c_codec.html":[5,2,3,2],
-"class_ogre_1_1_e_t_c_codec.html#a02d7a0bbacc0ec3464919574bd9248f3":[5,2,3,2,29],
-"class_ogre_1_1_e_t_c_codec.html#a048e36f958d0b2c8133ef3d611fcfc6d":[5,2,3,2,13],
-"class_ogre_1_1_e_t_c_codec.html#a1bacde29620c1a5c111635fa26f2e99d":[5,2,3,2,28]
+"class_ogre_1_1_e_g_l_window.html#af8854efa9b905e9becd10e062a53ae3a":[7,0,0,291,50]
 };
