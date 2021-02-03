@@ -51,24 +51,18 @@ namespace Ogre
 
         if( eglQueryDevices == 0 )
         {
-            LogManager::getSingleton().logMessage(
-                "[ERROR] eglQueryDevicesEXT not found. EGL driver too old. "
-                "Update your GPU drivers and try again" );
-
-            // Do not throw. It will cause all plugins to fail to load.
-            // This is may be a recoverable error
-            return;
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "eglQueryDevicesEXT not found. EGL driver too old. "
+                         "Update your GPU drivers and try again",
+                         "EglPBufferSupport::EglPBufferSupport" );
         }
 
         if( eglQueryDeviceStringEXT == 0 )
         {
-            LogManager::getSingleton().logMessage(
-                "[ERROR] eglQueryDeviceStringEXT not found. EGL driver too old. "
-                "Update your GPU drivers and try again" );
-
-            // Do not throw. It will cause all plugins to fail to load.
-            // This is may be a recoverable error
-            return;
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "eglQueryDeviceStringEXT not found. EGL driver too old. "
+                         "Update your GPU drivers and try again",
+                         "EglPBufferSupport::EglPBufferSupport" );
         }
 
         EGLint numDevices = 0;
@@ -84,6 +78,13 @@ namespace Ogre
 
         LogManager::getSingleton().logMessage( "Found Num EGL Devices: " +
                                                StringConverter::toString( numDevices ) );
+
+        if( numDevices == 0 )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "No EGL devices found! Update your GPU drivers and try again",
+                         "EglPBufferSupport::EglPBufferSupport" );
+        }
 
         for( int i = 0u; i < numDevices; ++i )
         {
@@ -220,15 +221,9 @@ namespace Ogre
         return BLANKSTRING;
     }
     //-------------------------------------------------------------------------
-    const char* EglPBufferSupport::getPriorityConfigOption( size_t ) const
-    {
-        return "Device";
-    }
+    const char *EglPBufferSupport::getPriorityConfigOption( size_t ) const { return "Device"; }
     //-------------------------------------------------------------------------
-    size_t EglPBufferSupport::getNumPriorityConfigOptions( void ) const
-    {
-        return 1u;
-    }
+    size_t EglPBufferSupport::getNumPriorityConfigOptions( void ) const { return 1u; }
     //-------------------------------------------------------------------------
     Window *EglPBufferSupport::createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
                                              const String &windowTitle )
