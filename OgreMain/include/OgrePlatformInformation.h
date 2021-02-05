@@ -31,61 +31,7 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 namespace Ogre {
-//
-// TODO: Puts following macros into OgrePlatform.h?
-//
 
-/* Find how to declare aligned variable.
-*/
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#   define OGRE_ALIGNED_DECL(type, var, alignment)  __declspec(align(alignment)) type var
-
-#elif (OGRE_COMPILER == OGRE_COMPILER_GNUC) || (OGRE_COMPILER == OGRE_COMPILER_CLANG)
-#   define OGRE_ALIGNED_DECL(type, var, alignment)  type var __attribute__((__aligned__(alignment)))
-
-#else
-#   define OGRE_ALIGNED_DECL(type, var, alignment)  type var
-#endif
-
-/** Find perfect alignment (should supports SIMD alignment if SIMD available)
-*/
-#if OGRE_CPU == OGRE_CPU_X86
-#   define OGRE_SIMD_ALIGNMENT  16
-#else
-#   define OGRE_SIMD_ALIGNMENT  16
-#endif
-
-/* Declare variable aligned to SIMD alignment.
-*/
-#define OGRE_SIMD_ALIGNED_DECL(type, var)   OGRE_ALIGNED_DECL(type, var, OGRE_SIMD_ALIGNMENT)
-
-/* Define whether or not Ogre compiled with SSE support.
-*/
-#if OGRE_USE_SIMD == 1
-    #if   OGRE_DOUBLE_PRECISION == 0 && OGRE_CPU == OGRE_CPU_X86 && OGRE_PLATFORM != OGRE_PLATFORM_NACL
-    #   define __OGRE_HAVE_SSE  1
-    #endif
-
-    /* Define whether or not Ogre compiled with NEON support.
-     */
-    #if OGRE_DOUBLE_PRECISION == 0 && OGRE_CPU == OGRE_CPU_ARM && \
-        ( defined(__ARM_NEON__) || defined(_WIN32_WINNT_WIN8) && _WIN32_WINNT >= _WIN32_WINNT_WIN8 )
-    #   define __OGRE_HAVE_NEON  1
-    #endif
-#endif
-
-#ifndef __OGRE_HAVE_SSE
-#   define __OGRE_HAVE_SSE  0
-#endif
-
-#if OGRE_USE_SIMD == 0 || !defined(__OGRE_HAVE_NEON)
-#   define __OGRE_HAVE_NEON  0
-#endif
-
-#if !defined(__OGRE_HAVE_DIRECTXMATH)
-#   define __OGRE_HAVE_DIRECTXMATH  0
-#endif
-    
 	/** \addtogroup Core
 	*  @{
 	*/

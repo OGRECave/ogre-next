@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define __SHADOWVOLUMEEXTRUDEPROGRAM_H__
 
 #include "OgrePrerequisites.h"
+#include "OgreGpuProgram.h"
 #include "OgreLight.h"
 #include "OgreHeaderPrefix.h"
 

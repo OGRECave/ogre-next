@@ -36,6 +36,7 @@ THE SOFTWARE.
 
 #include "OgreMovableObject.h"
 #include "OgreRenderable.h"
+#include "OgreAxisAlignedBox.h"
 #include "OgreResourceGroupManager.h"
 #include "OgreHeaderPrefix.h"
 

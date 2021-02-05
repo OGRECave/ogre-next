@@ -30,6 +30,8 @@ THE SOFTWARE.
 
 #include "Threading/OgreThreads.h"
 
+#include "ogrestd/vector.h"
+
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <windows.h>

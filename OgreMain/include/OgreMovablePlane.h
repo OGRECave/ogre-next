@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include "OgrePlane.h"
 #include "OgreMovableObject.h"
+#include "OgreAxisAlignedBox.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {

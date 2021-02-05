@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include "OgreCommon.h"
 #include "OgreRenderable.h"
 
+#include "ogrestd/list.h"
+
 namespace Ogre {
 
     typedef FastArray<Renderable*> RenderableArray;

@@ -33,6 +33,7 @@ THE SOFTWARE.
 
 #include "OgreMovableObject.h"
 #include "OgreRenderable.h"
+#include "Vao/OgreBufferPacked.h"
 
 #include "OgreHeaderPrefix.h"
 
