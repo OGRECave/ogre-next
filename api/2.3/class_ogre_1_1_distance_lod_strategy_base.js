@@ -1,15 +1,11 @@
 var class_ogre_1_1_distance_lod_strategy_base =
 [
     [ "DistanceLodStrategyBase", "class_ogre_1_1_distance_lod_strategy_base.html#a15f1fe0235a041c18abd9644dbed5d87", null ],
-    [ "assertSorted", "class_ogre_1_1_distance_lod_strategy_base.html#a1e351a0f700ac6e6242aa3cf0b73262d", null ],
     [ "getBaseValue", "class_ogre_1_1_distance_lod_strategy_base.html#aac8890f5f7fbda974dee926427d83068", null ],
-    [ "getIndex", "class_ogre_1_1_distance_lod_strategy_base.html#aa97570f960384c50ffe6319dbb5981f8", null ],
-    [ "getIndex", "class_ogre_1_1_distance_lod_strategy_base.html#a275a99620c8507f3d34fb12ad3f98cec", null ],
     [ "getName", "class_ogre_1_1_distance_lod_strategy_base.html#a6ffe63d24cfcaf5c0d6028fe61baa80e", null ],
     [ "getSquaredDepth", "class_ogre_1_1_distance_lod_strategy_base.html#a4f8f711a88a7ad7308bfb58e525503ab", null ],
     [ "getValue", "class_ogre_1_1_distance_lod_strategy_base.html#adeb7d40e283838e2f04139fc183c95d0", null ],
     [ "isReferenceViewEnabled", "class_ogre_1_1_distance_lod_strategy_base.html#a5b60368988f8c388b97d6af77b7c08c9", null ],
-    [ "isSorted", "class_ogre_1_1_distance_lod_strategy_base.html#a0632e960cea07fc780420db0614f2040", null ],
     [ "lodSet", "class_ogre_1_1_distance_lod_strategy_base.html#a2400dc929b5f7727f0d69336b3b1e05d", null ],
     [ "lodUpdateImpl", "class_ogre_1_1_distance_lod_strategy_base.html#a289769d33fc240f77383171cb102faaa", null ],
     [ "operator delete", "class_ogre_1_1_distance_lod_strategy_base.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
@@ -24,7 +20,6 @@ var class_ogre_1_1_distance_lod_strategy_base =
     [ "operator new[]", "class_ogre_1_1_distance_lod_strategy_base.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "setReferenceView", "class_ogre_1_1_distance_lod_strategy_base.html#aed77c6dfbdc0fbf75bf9deaf4f2b8bfc", null ],
     [ "setReferenceViewEnabled", "class_ogre_1_1_distance_lod_strategy_base.html#a0de7722e986cdcca067bc1773feb6065", null ],
-    [ "sort", "class_ogre_1_1_distance_lod_strategy_base.html#aca8fdfeda9ae762ed441aa9aaea5589a", null ],
     [ "transformBias", "class_ogre_1_1_distance_lod_strategy_base.html#a9049c547f1df50c59ccea9ffa5170bce", null ],
     [ "transformUserValue", "class_ogre_1_1_distance_lod_strategy_base.html#a6637262cc1547ecb50bd3a55720896df", null ]
 ];
