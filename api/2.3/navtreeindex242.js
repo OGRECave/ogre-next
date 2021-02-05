@@ -246,8 +246,8 @@ var NAVTREEINDEX242 =
 "class_ogre_1_1v1_1_1_ribbon_trail_factory.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,1,56,6],
 "class_ogre_1_1v1_1_1_ribbon_trail_factory.html#adf8884966a54e4128672260ac22f5a3c":[5,2,1,56,3],
 "class_ogre_1_1v1_1_1_ribbon_trail_factory.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,1,56,13],
-"class_ogre_1_1v1_1_1_simple_renderable.html":[5,2,12,67],
 "class_ogre_1_1v1_1_1_simple_renderable.html":[5,0,1,67],
+"class_ogre_1_1v1_1_1_simple_renderable.html":[5,2,12,67],
 "class_ogre_1_1v1_1_1_simple_renderable.html#a015c3801632c98bca5dbb5aa3da1aa24":[5,2,12,67,32],
 "class_ogre_1_1v1_1_1_simple_renderable.html#a015c3801632c98bca5dbb5aa3da1aa24":[5,0,1,67,32]
 };

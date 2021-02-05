@@ -1643,6 +1643,15 @@ var group___general =
       [ "getSource", "class_ogre_1_1_rendering_a_p_i_exception.html#ac3c2e6a43d2b1030eaf3ee8a34247737", null ],
       [ "what", "class_ogre_1_1_rendering_a_p_i_exception.html#a5323fd0394409fc11d86ac60491ea3e8", null ]
     ] ],
+    [ "RenderingMetrics", "struct_ogre_1_1_rendering_metrics.html", [
+      [ "RenderingMetrics", "struct_ogre_1_1_rendering_metrics.html#a8e6d2e09bd08cfaed88d20ae40a236fa", null ],
+      [ "mBatchCount", "struct_ogre_1_1_rendering_metrics.html#a8acff1695548ca659fad24363c0c32b8", null ],
+      [ "mDrawCount", "struct_ogre_1_1_rendering_metrics.html#af3f28bc50e4dc72e47ff1099fbbb47a2", null ],
+      [ "mFaceCount", "struct_ogre_1_1_rendering_metrics.html#ab4abfdaf1472a2146853cfd2113cbb21", null ],
+      [ "mInstanceCount", "struct_ogre_1_1_rendering_metrics.html#a9122bced949f770c78d83be40a95793a", null ],
+      [ "mIsRecordingMetrics", "struct_ogre_1_1_rendering_metrics.html#a226ff71a38bdee6b6795aa6e7ac22e3f", null ],
+      [ "mVertexCount", "struct_ogre_1_1_rendering_metrics.html#aec6cb495fca1733334602271d043cfff", null ]
+    ] ],
     [ "Root", "class_ogre_1_1_root.html", [
       [ "MovableObjectFactoryIterator", "class_ogre_1_1_root.html#a724ee7dcbdb7b8052420df2fecd07c0d", null ],
       [ "PluginInstanceList", "class_ogre_1_1_root.html#a5483dc1f87b9861cae629b5aba6a6071", null ],

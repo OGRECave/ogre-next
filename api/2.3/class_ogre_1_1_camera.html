@@ -184,6 +184,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adac4d1d174d15f5953b2e4b29d977529"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_matrix4.html">Matrix4</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#adac4d1d174d15f5953b2e4b29d977529">_getParentNodeFullTransform</a> (void) const</td></tr>
 <tr class="memdesc:adac4d1d174d15f5953b2e4b29d977529"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the full transformation of the parent sceneNode or the attachingPoint node.  <a href="class_ogre_1_1_movable_object.html#adac4d1d174d15f5953b2e4b29d977529">More...</a><br /></td></tr>
 <tr class="separator:adac4d1d174d15f5953b2e4b29d977529"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0e614e0feb688570ab71131493067a8"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_ogre_1_1_rendering_metrics.html">RenderingMetrics</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_camera.html#ab0e614e0feb688570ab71131493067a8">_getRenderingMetrics</a> (void) const</td></tr>
+<tr class="memdesc:ab0e614e0feb688570ab71131493067a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method to retrieve the number of visible faces, batches, etc in the last render.  <a href="class_ogre_1_1_camera.html#ab0e614e0feb688570ab71131493067a8">More...</a><br /></td></tr>
+<tr class="separator:ab0e614e0feb688570ab71131493067a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c29a048d9254c17c43a9fa313df0a6b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a4c29a048d9254c17c43a9fa313df0a6b">_notifyAttached</a> (<a class="el" href="class_ogre_1_1_node.html">Node</a> *parent)</td></tr>
 <tr class="memdesc:a4c29a048d9254c17c43a9fa313df0a6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method called to notify the object that it has been attached to a node.  <a href="class_ogre_1_1_movable_object.html#a4c29a048d9254c17c43a9fa313df0a6b">More...</a><br /></td></tr>
 <tr class="separator:a4c29a048d9254c17c43a9fa313df0a6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,12 +196,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae47c1fe914431bbbd47d5d2a3ba258d0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ae47c1fe914431bbbd47d5d2a3ba258d0">_notifyParentNodeMemoryChanged</a> (void)</td></tr>
 <tr class="memdesc:ae47c1fe914431bbbd47d5d2a3ba258d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See <a class="el" href="class_ogre_1_1_node.html#ae97b41e6bade0e8cfad1706de1a4bd30" title="Internal use, notifies all attached objects that our memory pointers (i.e.">Node::_callMemoryChangeListeners</a>  <a href="class_ogre_1_1_movable_object.html#ae47c1fe914431bbbd47d5d2a3ba258d0">More...</a><br /></td></tr>
 <tr class="separator:ae47c1fe914431bbbd47d5d2a3ba258d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc1975e107602245fcbeb652376d57d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_camera.html#acc1975e107602245fcbeb652376d57d2">_notifyRenderedBatches</a> (size_t numbatches)</td></tr>
-<tr class="memdesc:acc1975e107602245fcbeb652376d57d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method to notify camera of the visible batches in the last render.  <a href="class_ogre_1_1_camera.html#acc1975e107602245fcbeb652376d57d2">More...</a><br /></td></tr>
-<tr class="separator:acc1975e107602245fcbeb652376d57d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a598a07cba5daafc231c3069fee0464"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_camera.html#a4a598a07cba5daafc231c3069fee0464">_notifyRenderedFaces</a> (size_t numfaces)</td></tr>
-<tr class="memdesc:a4a598a07cba5daafc231c3069fee0464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method to notify camera of the visible faces in the last render.  <a href="class_ogre_1_1_camera.html#a4a598a07cba5daafc231c3069fee0464">More...</a><br /></td></tr>
-<tr class="separator:a4a598a07cba5daafc231c3069fee0464"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a3dbbee69c8dbe1212c6cce1ba0d155"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_camera.html#a3a3dbbee69c8dbe1212c6cce1ba0d155">_notifyRenderingMetrics</a> (const <a class="el" href="struct_ogre_1_1_rendering_metrics.html">RenderingMetrics</a> &amp;metrics)</td></tr>
+<tr class="memdesc:a3a3dbbee69c8dbe1212c6cce1ba0d155"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method to notify camera of the visible faces in the last render.  <a href="class_ogre_1_1_camera.html#a3a3dbbee69c8dbe1212c6cce1ba0d155">More...</a><br /></td></tr>
+<tr class="separator:a3a3dbbee69c8dbe1212c6cce1ba0d155"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3fe0289fbcabb17897c53445fa29339"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ab3fe0289fbcabb17897c53445fa29339">_notifyStaticDirty</a> (void) const</td></tr>
 <tr class="memdesc:ab3fe0289fbcabb17897c53445fa29339"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> when it is telling we're a static <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> being dirty Don't call this directly.  <a href="class_ogre_1_1_movable_object.html#ab3fe0289fbcabb17897c53445fa29339">More...</a><br /></td></tr>
 <tr class="separator:ab3fe0289fbcabb17897c53445fa29339"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1514,6 +1514,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Internal method to retrieve the number of visible batches in the last render. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated:</a></b></dt><dd>use <a class="el" href="class_ogre_1_1_camera.html#ab0e614e0feb688570ab71131493067a8" title="Internal method to retrieve the number of visible faces, batches, etc in the last render.">Camera::_getRenderingMetrics()</a> instead. </dd></dl>
 
 </div>
 </div>
@@ -1534,6 +1535,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Internal method to retrieve the number of visible faces in the last render. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd>use <a class="el" href="class_ogre_1_1_camera.html#ab0e614e0feb688570ab71131493067a8" title="Internal method to retrieve the number of visible faces, batches, etc in the last render.">Camera::_getRenderingMetrics()</a> instead. </dd></dl>
 
 </div>
 </div>
@@ -1589,6 +1591,26 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the full transformation of the parent sceneNode or the attachingPoint node. </p>
+
+</div>
+</div>
+<a id="ab0e614e0feb688570ab71131493067a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0e614e0feb688570ab71131493067a8">&#9670;&nbsp;</a></span>_getRenderingMetrics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="struct_ogre_1_1_rendering_metrics.html">RenderingMetrics</a>&amp; Ogre::Camera::_getRenderingMetrics </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Internal method to retrieve the number of visible faces, batches, etc in the last render. </p>
 
 </div>
 </div>
@@ -1682,37 +1704,17 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="acc1975e107602245fcbeb652376d57d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc1975e107602245fcbeb652376d57d2">&#9670;&nbsp;</a></span>_notifyRenderedBatches()</h2>
+<a id="a3a3dbbee69c8dbe1212c6cce1ba0d155"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a3dbbee69c8dbe1212c6cce1ba0d155">&#9670;&nbsp;</a></span>_notifyRenderingMetrics()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::Camera::_notifyRenderedBatches </td>
+          <td class="memname">void Ogre::Camera::_notifyRenderingMetrics </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>numbatches</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Internal method to notify camera of the visible batches in the last render. </p>
-
-</div>
-</div>
-<a id="a4a598a07cba5daafc231c3069fee0464"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a598a07cba5daafc231c3069fee0464">&#9670;&nbsp;</a></span>_notifyRenderedFaces()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::Camera::_notifyRenderedFaces </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>numfaces</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_rendering_metrics.html">RenderingMetrics</a> &amp;&#160;</td>
+          <td class="paramname"><em>metrics</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -5808,7 +5810,7 @@ This parameter is used in min display size calculations. </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated:</a></b></dt><dd>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#a7b0c9bd7cf25e2d95aea3ee5138ef5b5" title="Retrieves the custom key less user object associated with this class.">UserObjectBindings::getUserAny</a> via <a class="el" href="class_ogre_1_1_movable_object.html#aaac5bf65835f733433f3338132f2f01f" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated:</a></b></dt><dd>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#a7b0c9bd7cf25e2d95aea3ee5138ef5b5" title="Retrieves the custom key less user object associated with this class.">UserObjectBindings::getUserAny</a> via <a class="el" href="class_ogre_1_1_movable_object.html#aaac5bf65835f733433f3338132f2f01f" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead.</dd></dl>
 <p>Retrieves the custom user value associated with this object. </p>
 
 </div>
@@ -9758,7 +9760,7 @@ template&lt;class Alloc &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated:</a></b></dt><dd>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#ac6d05bbca44c5c3b44860c36205f9a68" title="Sets any kind of user object on this class instance.">UserObjectBindings::setUserAny</a> via <a class="el" href="class_ogre_1_1_movable_object.html#aaac5bf65835f733433f3338132f2f01f" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated:</a></b></dt><dd>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#ac6d05bbca44c5c3b44860c36205f9a68" title="Sets any kind of user object on this class instance.">UserObjectBindings::setUserAny</a> via <a class="el" href="class_ogre_1_1_movable_object.html#aaac5bf65835f733433f3338132f2f01f" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead.</dd></dl>
 <p>Sets any kind of user value on this object. </p><dl class="section remark"><dt>Remarks</dt><dd>This method allows you to associate any user value you like with this <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a>. This can be a pointer back to one of your own classes for instance. </dd></dl>
 
 </div>

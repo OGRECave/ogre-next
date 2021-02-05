@@ -1219,6 +1219,7 @@ var annotated_dup =
       [ "Renderable", "class_ogre_1_1_renderable.html", "class_ogre_1_1_renderable" ],
       [ "RenderableAnimated", "class_ogre_1_1_renderable_animated.html", "class_ogre_1_1_renderable_animated" ],
       [ "RenderingAPIException", "class_ogre_1_1_rendering_a_p_i_exception.html", "class_ogre_1_1_rendering_a_p_i_exception" ],
+      [ "RenderingMetrics", "struct_ogre_1_1_rendering_metrics.html", "struct_ogre_1_1_rendering_metrics" ],
       [ "RenderObjectListener", "class_ogre_1_1_render_object_listener.html", "class_ogre_1_1_render_object_listener" ],
       [ "RenderPassColourTarget", "struct_ogre_1_1_render_pass_colour_target.html", "struct_ogre_1_1_render_pass_colour_target" ],
       [ "RenderPassDepthTarget", "struct_ogre_1_1_render_pass_depth_target.html", "struct_ogre_1_1_render_pass_depth_target" ],

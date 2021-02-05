@@ -2013,6 +2013,7 @@ var hierarchy =
       [ "Ogre::v1::StaticGeometry::GeometryBucket", "class_ogre_1_1v1_1_1_static_geometry_1_1_geometry_bucket.html", null ],
       [ "Ogre::v1::SubEntity", "class_ogre_1_1v1_1_1_sub_entity.html", null ]
     ] ],
+    [ "Ogre::RenderingMetrics", "struct_ogre_1_1_rendering_metrics.html", null ],
     [ "Ogre::RenderObjectListener", "class_ogre_1_1_render_object_listener.html", null ],
     [ "Ogre::RenderPassTargetBase", "struct_ogre_1_1_render_pass_target_base.html", [
       [ "Ogre::RenderPassColourTarget", "struct_ogre_1_1_render_pass_colour_target.html", null ],
@@ -2028,7 +2029,6 @@ var hierarchy =
       [ "Ogre::ParallaxCorrectedCubemapBase", "class_ogre_1_1_parallax_corrected_cubemap_base.html", null ],
       [ "Ogre::v1::OverlaySystem", "class_ogre_1_1v1_1_1_overlay_system.html", null ]
     ] ],
-    [ "Ogre::RenderSystem::Metrics", "struct_ogre_1_1_render_system_1_1_metrics.html", null ],
     [ "Ogre::RenderSystem::RenderSystemContext", "struct_ogre_1_1_render_system_1_1_render_system_context.html", null ],
     [ "Ogre::RenderTarget::FrameStats", "struct_ogre_1_1_render_target_1_1_frame_stats.html", null ],
     [ "Ogre::RenderTarget::Impl", "class_ogre_1_1_render_target_1_1_impl.html", null ],

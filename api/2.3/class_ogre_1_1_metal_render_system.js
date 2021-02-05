@@ -2,7 +2,7 @@ var class_ogre_1_1_metal_render_system =
 [
     [ "MetalRenderSystem", "class_ogre_1_1_metal_render_system.html#a804ecaa039d94a9a6cc0774c2565dbfd", null ],
     [ "~MetalRenderSystem", "class_ogre_1_1_metal_render_system.html#a63ecac512bd8329f7bae6f9d2ffce2d2", null ],
-    [ "_addMetrics", "class_ogre_1_1_metal_render_system.html#ab4c80dcdf2f20df687035fb8c72797ea", null ],
+    [ "_addMetrics", "class_ogre_1_1_metal_render_system.html#a54ebaf329b7173ef06cbfcd0dff64cb5", null ],
     [ "_beginFrame", "class_ogre_1_1_metal_render_system.html#af1e85ce890084fe8bb1b5abc571f0c74", null ],
     [ "_beginFrameOnce", "class_ogre_1_1_metal_render_system.html#ace7a694a186fe589b8271bff4a8ee6ce", null ],
     [ "_cleanupDepthBuffers", "class_ogre_1_1_metal_render_system.html#a93ef27c77c394d18f8c1ba6361dbef98", null ],
@@ -149,7 +149,7 @@ var class_ogre_1_1_metal_render_system =
     [ "getMaxBoundViewports", "class_ogre_1_1_metal_render_system.html#a3a83f5a8128df163c7bed5a87a7ee923", null ],
     [ "getMaximumDepthInputValue", "class_ogre_1_1_metal_render_system.html#afacb509d974b6aad029acc32f8575914", null ],
     [ "getMetalProgramFactory", "class_ogre_1_1_metal_render_system.html#a93ffc68c256ef1c4fc26e51c8f799823", null ],
-    [ "getMetrics", "class_ogre_1_1_metal_render_system.html#a2e51b45ee14fa30894f79bd9cff33c4a", null ],
+    [ "getMetrics", "class_ogre_1_1_metal_render_system.html#a4f5ac3f6b8a91e4e68bc622d9c8a5d8e", null ],
     [ "getMinimumDepthInputValue", "class_ogre_1_1_metal_render_system.html#a4675ea90e37a28ebcb60f0aeeea0dce8", null ],
     [ "getMutableCapabilities", "class_ogre_1_1_metal_render_system.html#ab0aa0cedf1898f8cc70e290703b428c7", null ],
     [ "getName", "class_ogre_1_1_metal_render_system.html#a1423420c1cc8bcbfcd99c61b2ad70d98", null ],

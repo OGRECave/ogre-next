@@ -248,6 +248,6 @@ var NAVTREEINDEX135 =
 "class_ogre_1_1_octree_camera.html#a35245b8ebc6b09a88ad9df2bb3362bec":[7,0,0,759,196],
 "class_ogre_1_1_octree_camera.html#a35b519fd7cbbee4b8dc8ef7c1e526ba3":[7,0,0,759,108],
 "class_ogre_1_1_octree_camera.html#a38f8241458458e4f1235eae7d8f850c3":[7,0,0,759,281],
-"class_ogre_1_1_octree_camera.html#a3a8fafedc41616f8ae8306409443c3e4":[7,0,0,759,74],
-"class_ogre_1_1_octree_camera.html#a3af0fe1c9ee3f1998f80f1093969db2e":[7,0,0,759,130]
+"class_ogre_1_1_octree_camera.html#a3a3dbbee69c8dbe1212c6cce1ba0d155":[7,0,0,759,26],
+"class_ogre_1_1_octree_camera.html#a3a8fafedc41616f8ae8306409443c3e4":[7,0,0,759,74]
 };

@@ -2,7 +2,7 @@ var class_ogre_1_1_vulkan_render_system =
 [
     [ "VulkanRenderSystem", "class_ogre_1_1_vulkan_render_system.html#a3256329a9db37b1a3f1d9093d287372c", null ],
     [ "~VulkanRenderSystem", "class_ogre_1_1_vulkan_render_system.html#a7c7413d33c75a04a5539f5675f559c5c", null ],
-    [ "_addMetrics", "class_ogre_1_1_vulkan_render_system.html#ab4c80dcdf2f20df687035fb8c72797ea", null ],
+    [ "_addMetrics", "class_ogre_1_1_vulkan_render_system.html#a54ebaf329b7173ef06cbfcd0dff64cb5", null ],
     [ "_beginFrame", "class_ogre_1_1_vulkan_render_system.html#a46fb89504034e6cd3fcf112ef34d4a8c", null ],
     [ "_beginFrameOnce", "class_ogre_1_1_vulkan_render_system.html#ada60763d5b8ef9cfba1c77ecfe3e4188", null ],
     [ "_cleanupDepthBuffers", "class_ogre_1_1_vulkan_render_system.html#a93ef27c77c394d18f8c1ba6361dbef98", null ],
@@ -156,7 +156,7 @@ var class_ogre_1_1_vulkan_render_system =
     [ "getInvertVertexWinding", "class_ogre_1_1_vulkan_render_system.html#a133c89c9430091210e01ac44d638a0a3", null ],
     [ "getMaxBoundViewports", "class_ogre_1_1_vulkan_render_system.html#a3a83f5a8128df163c7bed5a87a7ee923", null ],
     [ "getMaximumDepthInputValue", "class_ogre_1_1_vulkan_render_system.html#a13da367bf18cdd27a8f9171fcc18700e", null ],
-    [ "getMetrics", "class_ogre_1_1_vulkan_render_system.html#a2e51b45ee14fa30894f79bd9cff33c4a", null ],
+    [ "getMetrics", "class_ogre_1_1_vulkan_render_system.html#a4f5ac3f6b8a91e4e68bc622d9c8a5d8e", null ],
     [ "getMinimumDepthInputValue", "class_ogre_1_1_vulkan_render_system.html#a7dc960ae4b821007ebd62b3557e60ec3", null ],
     [ "getMutableCapabilities", "class_ogre_1_1_vulkan_render_system.html#ab0aa0cedf1898f8cc70e290703b428c7", null ],
     [ "getName", "class_ogre_1_1_vulkan_render_system.html#ab33522f3c4a05d76ac009a9700cfb0b6", null ],

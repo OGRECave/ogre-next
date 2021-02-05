@@ -1,7 +1,6 @@
 var _ogre_render_system_8h =
 [
     [ "Listener", "class_ogre_1_1_render_system_1_1_listener.html", "class_ogre_1_1_render_system_1_1_listener" ],
-    [ "Metrics", "struct_ogre_1_1_render_system_1_1_metrics.html", "struct_ogre_1_1_render_system_1_1_metrics" ],
     [ "RenderSystemContext", "struct_ogre_1_1_render_system_1_1_render_system_context.html", null ],
     [ "DepthBufferMap2", "_ogre_render_system_8h.html#ga9028f924eb43635fc009ad71cdceab02", null ],
     [ "DepthBufferRefMap", "_ogre_render_system_8h.html#gad0bb968d3cdf8cefbdb2b8f545daf392", null ],

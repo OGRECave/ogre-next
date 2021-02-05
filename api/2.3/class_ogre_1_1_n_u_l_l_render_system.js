@@ -2,7 +2,7 @@ var class_ogre_1_1_n_u_l_l_render_system =
 [
     [ "NULLRenderSystem", "class_ogre_1_1_n_u_l_l_render_system.html#a7920ab3f09c3315a3072ea55176b0fc9", null ],
     [ "~NULLRenderSystem", "class_ogre_1_1_n_u_l_l_render_system.html#aeea42bbd7555f7c03c6c7f50a6eb15ac", null ],
-    [ "_addMetrics", "class_ogre_1_1_n_u_l_l_render_system.html#ab4c80dcdf2f20df687035fb8c72797ea", null ],
+    [ "_addMetrics", "class_ogre_1_1_n_u_l_l_render_system.html#a54ebaf329b7173ef06cbfcd0dff64cb5", null ],
     [ "_beginFrame", "class_ogre_1_1_n_u_l_l_render_system.html#aba1d51199ffa913a9a56e3b67e19de5a", null ],
     [ "_beginFrameOnce", "class_ogre_1_1_n_u_l_l_render_system.html#ada60763d5b8ef9cfba1c77ecfe3e4188", null ],
     [ "_cleanupDepthBuffers", "class_ogre_1_1_n_u_l_l_render_system.html#a93ef27c77c394d18f8c1ba6361dbef98", null ],
@@ -138,7 +138,7 @@ var class_ogre_1_1_n_u_l_l_render_system =
     [ "getInvertVertexWinding", "class_ogre_1_1_n_u_l_l_render_system.html#a133c89c9430091210e01ac44d638a0a3", null ],
     [ "getMaxBoundViewports", "class_ogre_1_1_n_u_l_l_render_system.html#a3a83f5a8128df163c7bed5a87a7ee923", null ],
     [ "getMaximumDepthInputValue", "class_ogre_1_1_n_u_l_l_render_system.html#a0a5893a3c9269bd6df4c29bb05b7bf89", null ],
-    [ "getMetrics", "class_ogre_1_1_n_u_l_l_render_system.html#a2e51b45ee14fa30894f79bd9cff33c4a", null ],
+    [ "getMetrics", "class_ogre_1_1_n_u_l_l_render_system.html#a4f5ac3f6b8a91e4e68bc622d9c8a5d8e", null ],
     [ "getMinimumDepthInputValue", "class_ogre_1_1_n_u_l_l_render_system.html#a044087a49b372da9a3ef891cc4d8e3ca", null ],
     [ "getMutableCapabilities", "class_ogre_1_1_n_u_l_l_render_system.html#ab0aa0cedf1898f8cc70e290703b428c7", null ],
     [ "getName", "class_ogre_1_1_n_u_l_l_render_system.html#abb24fa8a025e9af3a49770dd91a6d78b", null ],
