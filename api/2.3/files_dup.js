@@ -1820,7 +1820,7 @@ var files_dup =
     [ "OgrePlane.h", "_ogre_plane_8h.html", "_ogre_plane_8h" ],
     [ "OgrePlaneBoundedVolume.h", "_ogre_plane_bounded_volume_8h.html", "_ogre_plane_bounded_volume_8h" ],
     [ "OgrePlatform.h", "_ogre_platform_8h.html", "_ogre_platform_8h" ],
-    [ "OgrePlatformInformation.h", "_ogre_platform_information_8h.html", "_ogre_platform_information_8h" ],
+    [ "OgrePlatformInformation.h", "_ogre_platform_information_8h.html", null ],
     [ "OgrePlugin.h", "_ogre_plugin_8h.html", null ],
     [ "OgrePointEmitter.h", "_ogre_point_emitter_8h.html", [
       [ "PointEmitter", "class_ogre_1_1_point_emitter.html", "class_ogre_1_1_point_emitter" ]

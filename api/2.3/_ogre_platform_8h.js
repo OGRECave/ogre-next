@@ -1,9 +1,12 @@
 var _ogre_platform_8h =
 [
     [ "__OGRE_HAVE_DIRECTXMATH", "_ogre_platform_8h.html#afc2156f1568d01752c95dc7236018b6d", null ],
+    [ "__OGRE_HAVE_NEON", "_ogre_platform_8h.html#a8e0a27b6fe252308fa9eb6700548a78c", null ],
+    [ "__OGRE_HAVE_SSE", "_ogre_platform_8h.html#ac00688e814459c227d0c68a0f6352da7", null ],
     [ "_OGRE_SIMD_ALIGN_ATTRIBUTE", "_ogre_platform_8h.html#a2f0155896e2458b8547f85aa7f82fd02", null ],
     [ "DECL_MALLOC", "_ogre_platform_8h.html#aa1730b3ff27777dab53a340f23844db4", null ],
     [ "FORCEINLINE", "_ogre_platform_8h.html#a724fb9f82013c782db5c3c12ea36aac8", null ],
+    [ "OGRE_ALIGNED_DECL", "_ogre_platform_8h.html#af405686ffe3dd6aa1b9683a99e5990ed", null ],
     [ "OGRE_ARCH_TYPE", "_ogre_platform_8h.html#a4de9497f1c50d8052061e4870d5cdb42", null ],
     [ "OGRE_ARCHITECTURE_32", "_ogre_platform_8h.html#a37b62784316fecdf49524d6492b2f54e", null ],
     [ "OGRE_ARCHITECTURE_64", "_ogre_platform_8h.html#a338389706b17fb84162ebfa9a4c2195a", null ],
@@ -49,6 +52,8 @@ var _ogre_platform_8h =
     [ "OGRE_QUOTE", "_ogre_platform_8h.html#ab79b68443593aa3abe67d6adea621226", null ],
     [ "OGRE_QUOTE_INPLACE", "_ogre_platform_8h.html#a9201035492049999bc82d4baa25ee090", null ],
     [ "OGRE_RESTRICT_ALIASING", "_ogre_platform_8h.html#a5f33057a2bbced0905164daf8e398d0f", null ],
+    [ "OGRE_SIMD_ALIGNED_DECL", "_ogre_platform_8h.html#ae6883e4c8b217447e45bdaec1b1465af", null ],
+    [ "OGRE_SIMD_ALIGNMENT", "_ogre_platform_8h.html#a30f03b7a029b1b1303e8f816b68c3368", null ],
     [ "OGRE_WARN", "_ogre_platform_8h.html#ab61ba9272b27cdd1181dd5a18d40b750", null ],
     [ "OGRE_WCHAR_T_STRINGS", "_ogre_platform_8h.html#ade9393c71d42cc913f5c8a9425991d0c", null ],
     [ "RESTRICT_ALIAS", "_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154", null ],

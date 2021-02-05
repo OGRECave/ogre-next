@@ -2,8 +2,8 @@ var searchData=
 [
   ['_5f_5fhas_5fbuiltin_0',['__has_builtin',['../_ogre_bitwise_8h.html#a447121dcab4275b7839a56082b7a1ab8',1,'OgreBitwise.h']]],
   ['_5f_5fogre_5fhave_5fdirectxmath_1',['__OGRE_HAVE_DIRECTXMATH',['../_ogre_platform_8h.html#afc2156f1568d01752c95dc7236018b6d',1,'OgrePlatform.h']]],
-  ['_5f_5fogre_5fhave_5fneon_2',['__OGRE_HAVE_NEON',['../_ogre_platform_information_8h.html#a8e0a27b6fe252308fa9eb6700548a78c',1,'OgrePlatformInformation.h']]],
-  ['_5f_5fogre_5fhave_5fsse_3',['__OGRE_HAVE_SSE',['../_ogre_platform_information_8h.html#ac00688e814459c227d0c68a0f6352da7',1,'OgrePlatformInformation.h']]],
+  ['_5f_5fogre_5fhave_5fneon_2',['__OGRE_HAVE_NEON',['../_ogre_platform_8h.html#a8e0a27b6fe252308fa9eb6700548a78c',1,'OgrePlatform.h']]],
+  ['_5f_5fogre_5fhave_5fsse_3',['__OGRE_HAVE_SSE',['../_ogre_platform_8h.html#ac00688e814459c227d0c68a0f6352da7',1,'OgrePlatform.h']]],
   ['_5f_5fpretty_5ffunction_5f_5f_4',['__PRETTY_FUNCTION__',['../_ogre_g_l3_plus_prerequisites_8h.html#a9c15fe1e91b07ea3280f5239f9841b67',1,'OgreGL3PlusPrerequisites.h']]],
   ['_5fa_5farch_5',['_A_ARCH',['../_ogre_search_ops_8h.html#a2a05b90a3f8ec8a95a0b8cb11bb3fecc',1,'OgreSearchOps.h']]],
   ['_5fa_5fhidden_6',['_A_HIDDEN',['../_ogre_search_ops_8h.html#a323473f813bf2bc807c912831011c58e',1,'OgreSearchOps.h']]],

@@ -664,7 +664,7 @@ Automatic batching</h2>
 <div class="line">    <a class="code" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>      yIdx;</div>
 <div class="line">    <a class="code" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>      divisor;</div>
 <div class="line">};</div>
-<div class="ttc" id="anamespace_ogre_html_aa8263b218e7d187ad5ef03a73a6ad7fd"><div class="ttname"><a href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">Ogre::uint16</a></div><div class="ttdeci">unsigned short uint16</div><div class="ttdef"><b>Definition:</b> OgrePlatform.h:479</div></div>
+<div class="ttc" id="anamespace_ogre_html_aa8263b218e7d187ad5ef03a73a6ad7fd"><div class="ttname"><a href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">Ogre::uint16</a></div><div class="ttdeci">unsigned short uint16</div><div class="ttdef"><b>Definition:</b> OgrePlatform.h:524</div></div>
 </div><!-- fragment --><p>The texture pointer is the actual atlas/array texture.</p>
 <p>On Desktop, only xIdx is used, which indicates which slice in the array contains our texture.</p>
 <p>In order to sample in the pixel shader, one needs to perform:</p>
@@ -731,7 +731,7 @@ Automatic parameters</h3>
 <div class="line">    ThresholdVec    textureArraysTresholds;</div>
 <div class="line">};</div>
 <div class="ttc" id="agroup___image_html_ga7e0353e7d36d4c2e8468641b7303d39c"><div class="ttname"><a href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">Ogre::PixelFormat</a></div><div class="ttdeci">PixelFormat</div><div class="ttdoc">The pixel format used for images, textures, and render surfaces.</div><div class="ttdef"><b>Definition:</b> OgrePixelFormat.h:44</div></div>
-<div class="ttc" id="anamespace_ogre_html_adf2a0cf2e77143b5ee1d38a75e289545"><div class="ttname"><a href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">Ogre::uint32</a></div><div class="ttdeci">unsigned int uint32</div><div class="ttdef"><b>Definition:</b> OgrePlatform.h:478</div></div>
+<div class="ttc" id="anamespace_ogre_html_adf2a0cf2e77143b5ee1d38a75e289545"><div class="ttname"><a href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">Ogre::uint32</a></div><div class="ttdeci">unsigned int uint32</div><div class="ttdef"><b>Definition:</b> OgrePlatform.h:523</div></div>
 </div><!-- fragment --><p>The comments and the code itself should be self-explanatory. The setting <code>pixelFormat</code> allows to force a conversion to a particular format. When left as <code>PF_UNKNOWN</code>, the texture's original format will be used (except for RGB/BGR/ARGB/BGRA/etc variations).</p>
 <p>The setting <code>maxTexturesPerArray</code> controls the maximum number of textures that can be packed together. Note the actual number may be lower either due to hardware limitations (i.e. you can't make an uv atlas with 16 512x512 textures on a GPU that has a maximum texture resolution of 1024x1024) or due to the <code>textureArraysTresholds</code> parameter (which only applies on Desktop).</p>
 <p>The parameters <code>packNonPow2</code> and <code>packMaxRatio</code> operate under the assumption that such textures are rare and therefore should not be packed to prevent memory waste.</p>

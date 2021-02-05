@@ -98,7 +98,7 @@ var NAVTREEINDEX =
 "_ogre_memory_allocator_config_8h.html#a61c92fc2d65ecf3d3da5078c57f85f2a",
 "_ogre_o_s_version_helpers_8h.html#aad7d5e9663d83404a7a23a27aeceb0c5",
 "_ogre_pixel_format_8h.html#gga7e0353e7d36d4c2e8468641b7303d39cab63dbcddd53d1f766d742fd557c26be4",
-"_ogre_platform_8h.html#a9af9f9208025e8051717aee67e4e7267",
+"_ogre_platform_8h.html#a9841c02eaa22e4d4d5067cd6cfa9b38f",
 "_ogre_render_pass_descriptor_8h.html#a5660308b2075405f9623301506fc922eaa1fe2778d88f5afdd20f9bc68f2679cd",
 "_ogre_script_compiler_8h.html#ga788dd054963542ec3375d9b83255bc98",
 "_ogre_string_vector_8h.html",
