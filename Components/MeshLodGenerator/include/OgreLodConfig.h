@@ -31,6 +31,10 @@
 
 #include "OgreLodPrerequisites.h"
 #include "OgreDistanceLodStrategy.h"
+#include "OgreVector3.h"
+#include "OgreSharedPtr.h"
+
+#include "ogrestd/vector.h"
 
 namespace Ogre
 {

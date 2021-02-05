@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreMesh2Serializer.h"
 #include "OgreMeshManager2.h"
 #include "OgreMeshManager.h"
+#include "OgreMesh.h"
 #include "OgreHardwareBufferManager.h"
 #include "OgreIteratorWrappers.h"
 #include "OgreException.h"

@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreLwString.h"
 
 #include "OgreItem.h"
+#include "OgreMesh.h"
 #include "OgreMesh2.h"
 #include "OgreEntity.h"
 #include "OgreDecal.h"

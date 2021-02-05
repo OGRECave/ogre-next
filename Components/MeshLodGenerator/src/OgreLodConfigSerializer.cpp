@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 #include "OgreHardwareIndexBuffer.h"
 #include "OgreMeshManager.h"
+#include "OgreMesh.h"
 
 #include <fstream>
 

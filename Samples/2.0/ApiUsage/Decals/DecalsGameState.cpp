@@ -8,6 +8,7 @@
 
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
+#include "OgreMesh.h"
 #include "OgreMesh2.h"
 
 #include "OgreCamera.h"

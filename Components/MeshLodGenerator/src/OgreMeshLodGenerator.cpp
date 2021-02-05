@@ -27,6 +27,7 @@
  */
 
 #include "OgreMeshLodGenerator.h"
+#include "OgreMesh.h"
 #include "OgrePixelCountLodStrategy.h"
 #include "OgreLodWorkQueueWorker.h"
 #include "OgreLodWorkQueueInjector.h"

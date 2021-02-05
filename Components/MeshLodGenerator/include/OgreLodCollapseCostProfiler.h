@@ -35,6 +35,8 @@
 #include "OgreLodData.h"
 #include "OgreLodConfig.h"
 
+#include "ogrestd/unordered_map.h"
+
 namespace Ogre
 {
 

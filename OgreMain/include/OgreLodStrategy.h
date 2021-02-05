@@ -30,8 +30,6 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "OgreMesh.h"
-#include "OgreMaterial.h"
 #include "Math/Array/OgreArrayConfig.h"
 #include "OgreHeaderPrefix.h"
 
@@ -90,6 +88,8 @@ namespace Ogre {
         /** Compute the LOD value for a given movable object relative to a given camera. */
         Real getValue(const MovableObject *movableObject, const Camera *camera) const;
 
+#if 0 // Unused and requires including Mesh.h and Material.h
+
         /** Get the index of the LOD usage which applies to a given value. */
         static ushort getIndex(Real value, const v1::Mesh::MeshLodUsageList& meshLodUsageList);
 
@@ -104,6 +104,7 @@ namespace Ogre {
 
         /** Assert that the LOD values are sorted from greatest detail to least detail. */
         static void assertSorted(const v1::Mesh::LodValueArray& values);
+#endif
 
         /** Get the name of this strategy. */
         const String& getName() const { return mName; }

@@ -55,6 +55,7 @@ namespace Ogre {
         return getValueImpl(movableObject, camera->getLodCamera());
     }
     //-----------------------------------------------------------------------
+#if 0
     void LodStrategy::assertSorted(const v1::Mesh::LodValueArray &values)
     {
         assert(isSorted(values) && "The LOD values must be sorted");
@@ -126,6 +127,7 @@ namespace Ogre {
         // If we fall all the way through, use the highest value
         return static_cast<ushort>(materialLodValueArray.size() - 1);
     }
+#endif
 
     LodListener::~LodListener () {}
 
