@@ -55,7 +55,10 @@ namespace Ogre
         mFinalTextureName( 0 ),
         mMsaaFramebufferName( 0 )
     {
-        _setToDisplayDummyTexture();
+        // The vtable hasn't yet been populated so
+        // GL3PlusTextureGpuWindow::_setToDisplayDummyTexture won't kick in
+        if( !isRenderWindowSpecific() )
+            _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
     GL3PlusTextureGpu::~GL3PlusTextureGpu()
