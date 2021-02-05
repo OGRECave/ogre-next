@@ -1473,11 +1473,8 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
     //Restore vertex winding
     mDestRenderSystem->setInvertVertexWinding(false);
 
-    // Notify camera of vis faces
-    camera->_notifyRenderedFaces( mDestRenderSystem->getMetrics().mFaceCount );
-
-    // Notify camera of vis batches
-    camera->_notifyRenderedBatches( mDestRenderSystem->getMetrics().mBatchCount );
+    // Notify camera of vis faces, batches, etc.
+    camera->_notifyRenderingMetrics( mDestRenderSystem->getMetrics() );
 
     Root::getSingleton()._popCurrentSceneManager(this);
 }

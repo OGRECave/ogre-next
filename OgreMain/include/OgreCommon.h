@@ -1050,6 +1050,17 @@ namespace Ogre {
         void getFsaaDesc( String &outFsaaSetting ) const;
     };
 
+    struct _OgreExport RenderingMetrics
+    {
+        bool mIsRecordingMetrics;
+        size_t mBatchCount;
+        size_t mFaceCount;
+        size_t mVertexCount;
+        size_t mDrawCount;
+        size_t mInstanceCount;
+        RenderingMetrics();
+    };
+
     /// Render window container.
     typedef StdVector<Window*> WindowList;
 

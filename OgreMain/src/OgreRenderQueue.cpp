@@ -569,7 +569,7 @@ namespace Ogre
         CbDrawCall *drawCmd = 0;
         CbSharedDraw *drawCountPtr = 0;
 
-        RenderSystem::Metrics stats;
+        RenderingMetrics stats;
 
         const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
 
@@ -730,7 +730,7 @@ namespace Ogre
 
         v1::CbDrawCall *drawCmd = 0;
 
-        RenderSystem::Metrics stats;
+        RenderingMetrics stats;
 
         const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
 

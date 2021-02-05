@@ -177,4 +177,15 @@ namespace Ogre
         getFsaaDesc( desc );
         outFsaaSetting += desc.c_str();
     }
+    //-----------------------------------------------------------------------------------
+    RenderingMetrics::RenderingMetrics() :
+        mIsRecordingMetrics( false ),
+        mBatchCount( 0 ),
+        mFaceCount( 0 ),
+        mVertexCount( 0 ),
+        mDrawCount( 0 ),
+        mInstanceCount( 0 )
+    {
+    }
+
 }  // namespace Ogre

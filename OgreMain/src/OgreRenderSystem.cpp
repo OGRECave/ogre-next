@@ -825,11 +825,11 @@ namespace Ogre {
     void RenderSystem::_resetMetrics()
     {
         const bool oldValue = mMetrics.mIsRecordingMetrics;
-        mMetrics = Metrics();
+        mMetrics = RenderingMetrics();
         mMetrics.mIsRecordingMetrics = oldValue;
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::_addMetrics( const Metrics &newMetrics )
+    void RenderSystem::_addMetrics( const RenderingMetrics &newMetrics )
     {
         if( mMetrics.mIsRecordingMetrics )
         {
@@ -846,7 +846,7 @@ namespace Ogre {
         mMetrics.mIsRecordingMetrics = bEnable;
     }
     //-----------------------------------------------------------------------
-    const RenderSystem::Metrics& RenderSystem::getMetrics() const
+    const RenderingMetrics& RenderSystem::getMetrics() const
     {
         return mMetrics;
     }
@@ -1465,14 +1465,5 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
     RenderSystem::Listener::~Listener() {}
-    RenderSystem::Metrics::Metrics() :
-        mIsRecordingMetrics( false ),
-        mBatchCount( 0 ),
-        mFaceCount( 0 ),
-        mVertexCount( 0 ),
-        mDrawCount( 0 ),
-        mInstanceCount( 0 )
-    {
-    }
 }
 

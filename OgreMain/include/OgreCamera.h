@@ -176,11 +176,8 @@ namespace Ogre {
         /// Fixed axis to yaw around
         Vector3 mYawFixedAxis;
 
-        /// Stored number of visible faces in the last render
-        size_t mVisFacesLastRender;
-
-        /// Stored number of visible batches in the last render
-        size_t mVisBatchesLastRender;
+        /// Stored number of visible faces, batches, etc. in the last render
+        RenderingMetrics mLastRenderingMetrics;
 
         VrData *mVrData;
 
@@ -436,17 +433,19 @@ namespace Ogre {
 
         /** Internal method to notify camera of the visible faces in the last render.
         */
-        void _notifyRenderedFaces( size_t numfaces );
+        void _notifyRenderingMetrics( const RenderingMetrics& metrics );
 
-        /** Internal method to notify camera of the visible batches in the last render.
-         */
-        void _notifyRenderedBatches( size_t numbatches );
+        /** Internal method to retrieve the number of visible faces, batches, etc in the last render.
+        */
+        const RenderingMetrics& _getRenderingMetrics( void ) const;
 
         /** Internal method to retrieve the number of visible faces in the last render.
+        * @deprecated use Camera::_getRenderingMetrics() instead.
         */
         size_t _getNumRenderedFaces( void ) const;
 
         /** Internal method to retrieve the number of visible batches in the last render.
+        * @deprecated use Camera::_getRenderingMetrics() instead.
          */
         size_t _getNumRenderedBatches( void ) const;
 

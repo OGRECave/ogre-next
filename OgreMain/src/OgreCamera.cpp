@@ -459,15 +459,13 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void Camera::_notifyRenderedFaces( size_t numfaces ) { mVisFacesLastRender = numfaces; }
-
+    void Camera::_notifyRenderingMetrics( const RenderingMetrics& metrics ) { mLastRenderingMetrics = metrics; }
     //-----------------------------------------------------------------------
-    void Camera::_notifyRenderedBatches( size_t numbatches ) { mVisBatchesLastRender = numbatches; }
-
+    const RenderingMetrics& Camera::_getRenderingMetrics( void ) const { return mLastRenderingMetrics; }
     //-----------------------------------------------------------------------
-    size_t Camera::_getNumRenderedFaces( void ) const { return mVisFacesLastRender; }
+    size_t Camera::_getNumRenderedFaces( void ) const { return mLastRenderingMetrics.mFaceCount; }
     //-----------------------------------------------------------------------
-    size_t Camera::_getNumRenderedBatches( void ) const { return mVisBatchesLastRender; }
+    size_t Camera::_getNumRenderedBatches( void ) const { return mLastRenderingMetrics.mBatchCount; }
     //-----------------------------------------------------------------------
     const Quaternion& Camera::getOrientation(void) const
     {
