@@ -407,6 +407,7 @@ namespace Ogre
 
         if( deviceData.eglCtx )
         {
+            eglMakeCurrent( deviceData.eglDisplay, 0, 0, 0 );
             eglDestroyContext( deviceData.eglDisplay, deviceData.eglCtx );
             deviceData.eglCtx = 0;
         }
