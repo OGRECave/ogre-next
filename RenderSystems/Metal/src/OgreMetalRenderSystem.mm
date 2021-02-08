@@ -2138,10 +2138,48 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_render( const CbDrawCallIndexed *cmd )
     {
+        const VertexArrayObject *vao = cmd->vao;
+
+        const MTLIndexType indexType = static_cast<MTLIndexType>( vao->mIndexBuffer->getIndexType() );
+        const MTLPrimitiveType primType =  std::min(
+                    MTLPrimitiveTypeTriangleStrip,
+                    static_cast<MTLPrimitiveType>( vao->getOperationType() - 1u ) );
+
+        MetalBufferInterface *indexBufferInterface = static_cast<MetalBufferInterface*>(
+                    vao->mIndexBuffer->getBufferInterface() );
+        __unsafe_unretained id<MTLBuffer> indexBuffer = indexBufferInterface->getVboName();
+
+        size_t indirectBufferOffset = (size_t)cmd->indirectBufferOffset;
+        for( uint32 i=cmd->numDraws; i; i--)
+        {
+            [mActiveRenderEncoder drawIndexedPrimitives:primType
+                                              indexType:indexType
+                                            indexBuffer:indexBuffer
+                                      indexBufferOffset:0
+                                         indirectBuffer:mIndirectBuffer
+                                   indirectBufferOffset:indirectBufferOffset];
+            
+            indirectBufferOffset += sizeof( CbDrawIndexed ); // MTLDrawIndexedPrimitivesIndirectArguments
+        }
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_render( const CbDrawCallStrip *cmd )
     {
+        const VertexArrayObject *vao = cmd->vao;
+
+        const MTLPrimitiveType primType =  std::min(
+                    MTLPrimitiveTypeTriangleStrip,
+                    static_cast<MTLPrimitiveType>( vao->getOperationType() - 1u ) );
+
+        size_t indirectBufferOffset = (size_t)cmd->indirectBufferOffset;
+        for( uint32 i=cmd->numDraws; i; i--)
+        {
+            [mActiveRenderEncoder drawPrimitives:primType
+                                  indirectBuffer:mIndirectBuffer
+                            indirectBufferOffset:indirectBufferOffset];
+            
+            indirectBufferOffset += sizeof( CbDrawStrip ); // MTLDrawPrimitivesIndirectArguments
+        }
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_renderEmulated( const CbDrawCallIndexed *cmd )
@@ -2155,6 +2193,7 @@ namespace Ogre
                     MTLPrimitiveTypeTriangleStrip,
                     static_cast<MTLPrimitiveType>( vao->getOperationType() - 1u ) );
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         //Calculate bytesPerVertexBuffer & numVertexBuffers which is the same for all draws in this cmd
         uint32 bytesPerVertexBuffer[15];
         size_t numVertexBuffers = 0;
@@ -2168,6 +2207,7 @@ namespace Ogre
             ++numVertexBuffers;
             ++itor;
         }
+#endif
 
         //Get index buffer stuff which is the same for all draws in this cmd
         const size_t bytesPerIndexElement = vao->mIndexBuffer->getBytesPerElement();

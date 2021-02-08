@@ -162,7 +162,7 @@ namespace Ogre
         for( size_t i=CPU_ACCESSIBLE_DEFAULT; i<=CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
             mDefaultPoolSize[i] = 4 * 1024 * 1024;
 
-        mSupportsIndirectBuffers    = false; // TODO: the _render() overload is not implemented yet!
+        mSupportsIndirectBuffers    = false; // supported, but there are no performance benefits
 #endif
         if( params )
         {
