@@ -832,14 +832,16 @@ namespace Ogre
                 stats.mInstanceCount += instancesPerDraw;
             }
 
+            size_t primCount =
+                renderOp.useIndexes ? renderOp.indexData->indexCount : renderOp.vertexData->vertexCount;
             switch( renderOp.operationType )
             {
             case OT_TRIANGLE_LIST:
-                stats.mFaceCount += ( renderOp.vertexData->vertexCount / 3u ) * instancesPerDraw;
+                stats.mFaceCount += ( primCount / 3u ) * instancesPerDraw;
                 break;
             case OT_TRIANGLE_STRIP:
             case OT_TRIANGLE_FAN:
-                stats.mFaceCount += ( renderOp.vertexData->vertexCount - 2u ) * instancesPerDraw;
+                stats.mFaceCount += ( primCount - 2u ) * instancesPerDraw;
                 break;
             }
 
