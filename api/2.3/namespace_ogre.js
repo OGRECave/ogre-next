@@ -74,7 +74,8 @@ var namespace_ogre =
         [ "OnStorage", "namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98ad60acc99d4bcd4898f280cbf6d8ef1dc", null ],
         [ "OnSystemRam", "namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98a96b255b9535992cc830591ed916d15f3", null ],
         [ "Resident", "namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98a268f91accb452d1707dd83b5aeb72aa2", null ]
-      ] ]
+      ] ],
+      [ "toString", "namespace_ogre_1_1_gpu_residency.html#aad8f652c1e87903f805f4d03d0d0118f", null ]
     ] ],
     [ "LampConeType", "namespace_ogre_1_1_lamp_cone_type.html", [
       [ "LampConeType", "namespace_ogre_1_1_lamp_cone_type.html#a6dfdc0962f55b3c26763ed1def663976", [

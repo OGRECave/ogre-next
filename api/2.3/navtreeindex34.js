@@ -1,5 +1,6 @@
 var NAVTREEINDEX34 =
 {
+"class_ogre_1_1_compositor_pass_def.html#aa78f703dc8c8b28cf575ac419653dc40":[5,2,1,8,44],
 "class_ogre_1_1_compositor_pass_def.html#aa9377ca6479c21df519128eb6142b169":[5,2,1,8,26],
 "class_ogre_1_1_compositor_pass_def.html#aa9def33c89448b89c2d920d96ff55f28":[5,2,1,8,35],
 "class_ogre_1_1_compositor_pass_def.html#aacdeaffb7cacec5f264de2be66410c67":[5,2,1,8,29],
@@ -248,6 +249,5 @@ var NAVTREEINDEX34 =
 "class_ogre_1_1_compositor_pass_mipmap_def.html#abf1c159397e4fa8e205eb3461a6eec8d":[5,2,1,14,43],
 "class_ogre_1_1_compositor_pass_mipmap_def.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,1,14,11],
 "class_ogre_1_1_compositor_pass_mipmap_def.html#acb37409e6e5fbc0467773942e8c14bdc":[5,2,1,14,20],
-"class_ogre_1_1_compositor_pass_mipmap_def.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,1,14,7],
-"class_ogre_1_1_compositor_pass_mipmap_def.html#acb4b5b4edffa1281c16b859a9df00b7c":[5,2,1,14,31]
+"class_ogre_1_1_compositor_pass_mipmap_def.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,1,14,7]
 };

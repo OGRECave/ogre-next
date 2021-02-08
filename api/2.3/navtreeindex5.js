@@ -17,6 +17,7 @@ var NAVTREEINDEX5 =
 "_ogre_gpu_resource_8h.html#a4d2162c156be30917f38f15e2327ce65a154441f49638a86fc2da0e1a712fc614":[8,0,449,1,2],
 "_ogre_gpu_resource_8h.html#a4d2162c156be30917f38f15e2327ce65a28135d9485a60bfa1a598cba471d6891":[8,0,449,1,1],
 "_ogre_gpu_resource_8h.html#a4d2162c156be30917f38f15e2327ce65ab808dbb463bfe5239a47a06dc4d5ec98":[8,0,449,1,0],
+"_ogre_gpu_resource_8h.html#aad8f652c1e87903f805f4d03d0d0118f":[8,0,449,3],
 "_ogre_grid2_d_page_strategy_8h.html":[8,0,450],
 "_ogre_grid2_d_page_strategy_8h.html#ga725e3c2dccf1dbcec4a12f165681317c":[8,0,450,0],
 "_ogre_grid2_d_page_strategy_8h.html#gga725e3c2dccf1dbcec4a12f165681317ca6d3b2d3c9720ebf2ab1b24fc3d1bfb18":[8,0,450,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "_ogre_hlms_unlit_prerequisites_8h.html#a90397bac6ee36d3380f98a549eada0daaf82b53523ae9316a8d30215b7ca8ad88":[8,0,498,1,0],
 "_ogre_hlms_unlit_prerequisites_8h.html#aca26521ca85f8cf8db10860443a83a26":[8,0,498,2],
 "_ogre_hlms_unlit_prerequisites_8h.html#aca26521ca85f8cf8db10860443a83a26a1d0b018b82109f20c90c1e44b6602243":[8,0,498,2,0],
-"_ogre_hlms_unlit_prerequisites_8h.html#ae961aad2816fa90b982569e5bd3589c5":[8,0,498,0],
-"_ogre_hollow_ellipsoid_emitter_8h.html":[8,0,499]
+"_ogre_hlms_unlit_prerequisites_8h.html#ae961aad2816fa90b982569e5bd3589c5":[8,0,498,0]
 };

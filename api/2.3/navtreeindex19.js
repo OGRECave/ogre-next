@@ -1,5 +1,6 @@
 var NAVTREEINDEX19 =
 {
+"class_ogre_1_1_area_emitter.html#a659edec094aae09a7f1325e7e8fbc29a":[7,0,0,30,90],
 "class_ogre_1_1_area_emitter.html#a6607b5a35ab594e8e5e01df766cd5462":[7,0,0,30,31],
 "class_ogre_1_1_area_emitter.html#a666a8c8c660ffc55ff338b59a416f682":[7,0,0,30,12],
 "class_ogre_1_1_area_emitter.html#a674566db12d25f32513a382a4118b5da":[7,0,0,30,65],
@@ -248,6 +249,5 @@ var NAVTREEINDEX19 =
 "class_ogre_1_1_array_matrix_af4x3.html#ae9d1b8008bbf7aab6d1e8e4e8a49d8e9":[5,2,6,4,24],
 "class_ogre_1_1_array_matrix_af4x3.html#ae9d1b8008bbf7aab6d1e8e4e8a49d8e9":[5,2,6,4,25],
 "class_ogre_1_1_array_matrix_af4x3.html#ae9d1b8008bbf7aab6d1e8e4e8a49d8e9":[5,2,6,4,26],
-"class_ogre_1_1_array_matrix_af4x3.html#aefd4b573fd192ea5cc53bb62d1b7cd1a":[5,2,6,4,34],
-"class_ogre_1_1_array_matrix_af4x3.html#aefd4b573fd192ea5cc53bb62d1b7cd1a":[5,2,6,4,35]
+"class_ogre_1_1_array_matrix_af4x3.html#aefd4b573fd192ea5cc53bb62d1b7cd1a":[5,2,6,4,34]
 };

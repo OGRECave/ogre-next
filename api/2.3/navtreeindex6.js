@@ -1,5 +1,6 @@
 var NAVTREEINDEX6 =
 {
+"_ogre_hollow_ellipsoid_emitter_8h.html":[8,0,499],
 "_ogre_hollow_ellipsoid_emitter_factory_8h.html":[8,0,500],
 "_ogre_id_8h.html":[8,0,501],
 "_ogre_id_8h.html#afcab9522fbe8edb20b32fbb5d8a48ed5":[8,0,501,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "_ogre_memory_allocator_config_8h.html#a56da08bec93672fcd2f1c24c7ad495d0":[8,0,575,95],
 "_ogre_memory_allocator_config_8h.html#a585fa2d21e2525019ad062d76df8b719":[8,0,575,65],
 "_ogre_memory_allocator_config_8h.html#a58ac0addbec4db9072a7405d75e6bd57":[8,0,575,64],
-"_ogre_memory_allocator_config_8h.html#a5d60f07603a9106ef3ea80c2436071e3":[8,0,575,35],
-"_ogre_memory_allocator_config_8h.html#a5fae23475351938803d15fcbabc3b6d8":[8,0,575,52]
+"_ogre_memory_allocator_config_8h.html#a5d60f07603a9106ef3ea80c2436071e3":[8,0,575,35]
 };

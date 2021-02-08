@@ -10,5 +10,6 @@ var _ogre_gpu_resource_8h =
       [ "OnStorage", "_ogre_gpu_resource_8h.html#a2dee9b512fd45f8d010e8e18e25ebd98ad60acc99d4bcd4898f280cbf6d8ef1dc", null ],
       [ "OnSystemRam", "_ogre_gpu_resource_8h.html#a2dee9b512fd45f8d010e8e18e25ebd98a96b255b9535992cc830591ed916d15f3", null ],
       [ "Resident", "_ogre_gpu_resource_8h.html#a2dee9b512fd45f8d010e8e18e25ebd98a268f91accb452d1707dd83b5aeb72aa2", null ]
-    ] ]
+    ] ],
+    [ "toString", "_ogre_gpu_resource_8h.html#aad8f652c1e87903f805f4d03d0d0118f", null ]
 ];

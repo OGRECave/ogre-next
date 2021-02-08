@@ -221,6 +221,12 @@ var group___resources =
       [ "BudgetEntryVec", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a243112239378b673ba9f1df5e7abdbf3", null ],
       [ "MetadataCacheMap", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a8278157117fb77bf258134bdbdc95124", null ],
       [ "ResourceEntryMap", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#aafb0e4cae1bf3b910231eb113b1a839e", null ],
+      [ "MemoryUsageMask", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128", [
+        [ "OnStorage", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128ab7d6ce2a2cdd5d390f0ce4084813d9c1", null ],
+        [ "OnSystemRam", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a1bee4ddf7cf946446704351f93fbc060", null ],
+        [ "Resident", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128aab245447e501515964973a77d196f7f0", null ],
+        [ "All", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a8d54cc48c9861b0eb3458c044cdc941e", null ]
+      ] ],
       [ "Reason", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7d", [
         [ "Unknown", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82", null ],
         [ "FromStorageToSysRam", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27", null ],
@@ -264,7 +270,7 @@ var group___resources =
       [ "destroyAllAsyncTextureTicket", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a02832e2789d8fc68b4ce4586bad25010", null ],
       [ "destroyAsyncTextureTicket", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#af906e6a5e055170b281a1986374b4754", null ],
       [ "destroyTexture", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a7dc898578da3113affb78ed60f209b71", null ],
-      [ "dumpMemoryUsage", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#af2427f674c9e14b62b82740642406efa", null ],
+      [ "dumpMemoryUsage", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a5c116eef4f91f1b8061f6f09d4739a06", null ],
       [ "dumpStats", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a0b0ab5ff277943748df853653efb8913", null ],
       [ "executeTask", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a400906a91ef0c5b7b61329de7872c91e", null ],
       [ "exportTextureMetadataCache", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a25ea160f5cd58eb1569743dee3bff9cc", null ],
@@ -1077,6 +1083,12 @@ var group___resources =
       [ "BudgetEntryVec", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a243112239378b673ba9f1df5e7abdbf3", null ],
       [ "MetadataCacheMap", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a8278157117fb77bf258134bdbdc95124", null ],
       [ "ResourceEntryMap", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#aafb0e4cae1bf3b910231eb113b1a839e", null ],
+      [ "MemoryUsageMask", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128", [
+        [ "OnStorage", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128ab7d6ce2a2cdd5d390f0ce4084813d9c1", null ],
+        [ "OnSystemRam", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a1bee4ddf7cf946446704351f93fbc060", null ],
+        [ "Resident", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128aab245447e501515964973a77d196f7f0", null ],
+        [ "All", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a8d54cc48c9861b0eb3458c044cdc941e", null ]
+      ] ],
       [ "Reason", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7d", [
         [ "Unknown", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82", null ],
         [ "FromStorageToSysRam", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27", null ],
@@ -1118,7 +1130,7 @@ var group___resources =
       [ "destroyAllAsyncTextureTicket", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a02832e2789d8fc68b4ce4586bad25010", null ],
       [ "destroyAsyncTextureTicket", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#af906e6a5e055170b281a1986374b4754", null ],
       [ "destroyTexture", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a7dc898578da3113affb78ed60f209b71", null ],
-      [ "dumpMemoryUsage", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#af2427f674c9e14b62b82740642406efa", null ],
+      [ "dumpMemoryUsage", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a5c116eef4f91f1b8061f6f09d4739a06", null ],
       [ "dumpStats", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a0b0ab5ff277943748df853653efb8913", null ],
       [ "executeTask", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a400906a91ef0c5b7b61329de7872c91e", null ],
       [ "exportTextureMetadataCache", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a25ea160f5cd58eb1569743dee3bff9cc", null ],
@@ -2944,6 +2956,12 @@ var group___resources =
       [ "BudgetEntryVec", "class_ogre_1_1_metal_texture_gpu_manager.html#a243112239378b673ba9f1df5e7abdbf3", null ],
       [ "MetadataCacheMap", "class_ogre_1_1_metal_texture_gpu_manager.html#a8278157117fb77bf258134bdbdc95124", null ],
       [ "ResourceEntryMap", "class_ogre_1_1_metal_texture_gpu_manager.html#aafb0e4cae1bf3b910231eb113b1a839e", null ],
+      [ "MemoryUsageMask", "class_ogre_1_1_metal_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128", [
+        [ "OnStorage", "class_ogre_1_1_metal_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128ab7d6ce2a2cdd5d390f0ce4084813d9c1", null ],
+        [ "OnSystemRam", "class_ogre_1_1_metal_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a1bee4ddf7cf946446704351f93fbc060", null ],
+        [ "Resident", "class_ogre_1_1_metal_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128aab245447e501515964973a77d196f7f0", null ],
+        [ "All", "class_ogre_1_1_metal_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a8d54cc48c9861b0eb3458c044cdc941e", null ]
+      ] ],
       [ "Reason", "class_ogre_1_1_metal_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7d", [
         [ "Unknown", "class_ogre_1_1_metal_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82", null ],
         [ "FromStorageToSysRam", "class_ogre_1_1_metal_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27", null ],
@@ -2985,7 +3003,7 @@ var group___resources =
       [ "destroyAllAsyncTextureTicket", "class_ogre_1_1_metal_texture_gpu_manager.html#a02832e2789d8fc68b4ce4586bad25010", null ],
       [ "destroyAsyncTextureTicket", "class_ogre_1_1_metal_texture_gpu_manager.html#af906e6a5e055170b281a1986374b4754", null ],
       [ "destroyTexture", "class_ogre_1_1_metal_texture_gpu_manager.html#a7dc898578da3113affb78ed60f209b71", null ],
-      [ "dumpMemoryUsage", "class_ogre_1_1_metal_texture_gpu_manager.html#af2427f674c9e14b62b82740642406efa", null ],
+      [ "dumpMemoryUsage", "class_ogre_1_1_metal_texture_gpu_manager.html#a5c116eef4f91f1b8061f6f09d4739a06", null ],
       [ "dumpStats", "class_ogre_1_1_metal_texture_gpu_manager.html#a0b0ab5ff277943748df853653efb8913", null ],
       [ "executeTask", "class_ogre_1_1_metal_texture_gpu_manager.html#a400906a91ef0c5b7b61329de7872c91e", null ],
       [ "exportTextureMetadataCache", "class_ogre_1_1_metal_texture_gpu_manager.html#a25ea160f5cd58eb1569743dee3bff9cc", null ],
@@ -3155,6 +3173,12 @@ var group___resources =
       [ "BudgetEntryVec", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a243112239378b673ba9f1df5e7abdbf3", null ],
       [ "MetadataCacheMap", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a8278157117fb77bf258134bdbdc95124", null ],
       [ "ResourceEntryMap", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#aafb0e4cae1bf3b910231eb113b1a839e", null ],
+      [ "MemoryUsageMask", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128", [
+        [ "OnStorage", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128ab7d6ce2a2cdd5d390f0ce4084813d9c1", null ],
+        [ "OnSystemRam", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a1bee4ddf7cf946446704351f93fbc060", null ],
+        [ "Resident", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128aab245447e501515964973a77d196f7f0", null ],
+        [ "All", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a8d54cc48c9861b0eb3458c044cdc941e", null ]
+      ] ],
       [ "Reason", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7d", [
         [ "Unknown", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82", null ],
         [ "FromStorageToSysRam", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27", null ],
@@ -3195,7 +3219,7 @@ var group___resources =
       [ "destroyAllAsyncTextureTicket", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a02832e2789d8fc68b4ce4586bad25010", null ],
       [ "destroyAsyncTextureTicket", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#af906e6a5e055170b281a1986374b4754", null ],
       [ "destroyTexture", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a7dc898578da3113affb78ed60f209b71", null ],
-      [ "dumpMemoryUsage", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#af2427f674c9e14b62b82740642406efa", null ],
+      [ "dumpMemoryUsage", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a5c116eef4f91f1b8061f6f09d4739a06", null ],
       [ "dumpStats", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a0b0ab5ff277943748df853653efb8913", null ],
       [ "executeTask", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a400906a91ef0c5b7b61329de7872c91e", null ],
       [ "exportTextureMetadataCache", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a25ea160f5cd58eb1569743dee3bff9cc", null ],
@@ -4462,6 +4486,12 @@ var group___resources =
       [ "BudgetEntryVec", "class_ogre_1_1_texture_gpu_manager.html#a243112239378b673ba9f1df5e7abdbf3", null ],
       [ "MetadataCacheMap", "class_ogre_1_1_texture_gpu_manager.html#a8278157117fb77bf258134bdbdc95124", null ],
       [ "ResourceEntryMap", "class_ogre_1_1_texture_gpu_manager.html#aafb0e4cae1bf3b910231eb113b1a839e", null ],
+      [ "MemoryUsageMask", "class_ogre_1_1_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128", [
+        [ "OnStorage", "class_ogre_1_1_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128ab7d6ce2a2cdd5d390f0ce4084813d9c1", null ],
+        [ "OnSystemRam", "class_ogre_1_1_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a1bee4ddf7cf946446704351f93fbc060", null ],
+        [ "Resident", "class_ogre_1_1_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128aab245447e501515964973a77d196f7f0", null ],
+        [ "All", "class_ogre_1_1_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a8d54cc48c9861b0eb3458c044cdc941e", null ]
+      ] ],
       [ "Reason", "class_ogre_1_1_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7d", [
         [ "Unknown", "class_ogre_1_1_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82", null ],
         [ "FromStorageToSysRam", "class_ogre_1_1_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27", null ],
@@ -4501,7 +4531,7 @@ var group___resources =
       [ "destroyAllAsyncTextureTicket", "class_ogre_1_1_texture_gpu_manager.html#a02832e2789d8fc68b4ce4586bad25010", null ],
       [ "destroyAsyncTextureTicket", "class_ogre_1_1_texture_gpu_manager.html#af906e6a5e055170b281a1986374b4754", null ],
       [ "destroyTexture", "class_ogre_1_1_texture_gpu_manager.html#a7dc898578da3113affb78ed60f209b71", null ],
-      [ "dumpMemoryUsage", "class_ogre_1_1_texture_gpu_manager.html#af2427f674c9e14b62b82740642406efa", null ],
+      [ "dumpMemoryUsage", "class_ogre_1_1_texture_gpu_manager.html#a5c116eef4f91f1b8061f6f09d4739a06", null ],
       [ "dumpStats", "class_ogre_1_1_texture_gpu_manager.html#a0b0ab5ff277943748df853653efb8913", null ],
       [ "executeTask", "class_ogre_1_1_texture_gpu_manager.html#a400906a91ef0c5b7b61329de7872c91e", null ],
       [ "exportTextureMetadataCache", "class_ogre_1_1_texture_gpu_manager.html#a25ea160f5cd58eb1569743dee3bff9cc", null ],
@@ -5589,6 +5619,12 @@ var group___resources =
       [ "BudgetEntryVec", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a243112239378b673ba9f1df5e7abdbf3", null ],
       [ "MetadataCacheMap", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a8278157117fb77bf258134bdbdc95124", null ],
       [ "ResourceEntryMap", "class_ogre_1_1_vulkan_texture_gpu_manager.html#aafb0e4cae1bf3b910231eb113b1a839e", null ],
+      [ "MemoryUsageMask", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128", [
+        [ "OnStorage", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128ab7d6ce2a2cdd5d390f0ce4084813d9c1", null ],
+        [ "OnSystemRam", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a1bee4ddf7cf946446704351f93fbc060", null ],
+        [ "Resident", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128aab245447e501515964973a77d196f7f0", null ],
+        [ "All", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a5e5b8eca4ada14dd344ae169297d4128a8d54cc48c9861b0eb3458c044cdc941e", null ]
+      ] ],
       [ "Reason", "class_ogre_1_1_vulkan_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7d", [
         [ "Unknown", "class_ogre_1_1_vulkan_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82", null ],
         [ "FromStorageToSysRam", "class_ogre_1_1_vulkan_texture_gpu_manager.html#afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27", null ],
@@ -5635,7 +5671,7 @@ var group___resources =
       [ "destroyTexture", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a7dc898578da3113affb78ed60f209b71", null ],
       [ "destroyView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a899ae784a461fde4dbd09dcd63ce8837", null ],
       [ "destroyView", "class_ogre_1_1_vulkan_texture_gpu_manager.html#aaa5a2bf5a1d6426b02da324b2a5e119e", null ],
-      [ "dumpMemoryUsage", "class_ogre_1_1_vulkan_texture_gpu_manager.html#af2427f674c9e14b62b82740642406efa", null ],
+      [ "dumpMemoryUsage", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a5c116eef4f91f1b8061f6f09d4739a06", null ],
       [ "dumpStats", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a0b0ab5ff277943748df853653efb8913", null ],
       [ "executeTask", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a400906a91ef0c5b7b61329de7872c91e", null ],
       [ "exportTextureMetadataCache", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a25ea160f5cd58eb1569743dee3bff9cc", null ],

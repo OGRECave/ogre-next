@@ -225,14 +225,14 @@ Supporting multiple submeshes</h1>
 <div class="line"><span class="keywordflow">for</span>(<a class="code" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> i=0;i&lt;mesh-&gt;getNumSubMeshes();++i )</div>
 <div class="line">{</div>
 <div class="line">    InstanceManager *mgr =</div>
-<div class="line">        mSceneMgr-&gt;createInstanceManager(<span class="stringliteral">&quot;MyManager&quot;</span>+<a class="code" href="namespace_ogre_1_1_resource_access.html#a1feaa6e1253297279f75eedaae089d09">StringConverter::toString</a>(i ),</div>
+<div class="line">        mSceneMgr-&gt;createInstanceManager(<span class="stringliteral">&quot;MyManager&quot;</span>+<a class="code" href="namespace_ogre_1_1_gpu_residency.html#aad8f652c1e87903f805f4d03d0d0118f">StringConverter::toString</a>(i ),</div>
 <div class="line">                    <span class="stringliteral">&quot;myMesh.mesh&quot;</span>,</div>
 <div class="line">                ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,</div>
 <div class="line">                    InstanceManager::HWInstancingVTF,numInstancePerBatch,</div>
 <div class="line">                    flags,i );</div>
 <div class="line">    instanceManagers.push_back(mgr );</div>
 <div class="line">}    </div>
-<div class="ttc" id="anamespace_ogre_1_1_resource_access_html_a1feaa6e1253297279f75eedaae089d09"><div class="ttname"><a href="namespace_ogre_1_1_resource_access.html#a1feaa6e1253297279f75eedaae089d09">Ogre::ResourceAccess::toString</a></div><div class="ttdeci">const char * toString(ResourceAccess value)</div></div>
+<div class="ttc" id="anamespace_ogre_1_1_gpu_residency_html_aad8f652c1e87903f805f4d03d0d0118f"><div class="ttname"><a href="namespace_ogre_1_1_gpu_residency.html#aad8f652c1e87903f805f4d03d0d0118f">Ogre::GpuResidency::toString</a></div><div class="ttdeci">const char * toString(GpuResidency value)</div></div>
 <div class="ttc" id="anamespace_ogre_html_a5c4c0c56ea9f824c49e331f6fad33ddb"><div class="ttname"><a href="namespace_ogre.html#a5c4c0c56ea9f824c49e331f6fad33ddb">Ogre::MeshPtr</a></div><div class="ttdeci">SharedPtr&lt; Mesh &gt; MeshPtr</div><div class="ttdef"><b>Definition:</b> OgrePrerequisites.h:398</div></div>
 <div class="ttc" id="anamespace_ogre_html_aa8263b218e7d187ad5ef03a73a6ad7fd"><div class="ttname"><a href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">Ogre::uint16</a></div><div class="ttdeci">unsigned short uint16</div><div class="ttdef"><b>Definition:</b> OgrePlatform.h:524</div></div>
 </div><!-- fragment --><p>The second step lies in sharing the transform with one of the submeshes (which will be named 'master'; i.e. the first submesh) to improve performance and reduce RAM consumption when creating the Instanced Entities:</p>

@@ -1,5 +1,11 @@
 var NAVTREEINDEX51 =
 {
+"class_ogre_1_1_d3_d11_texture_manager.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,233,44],
+"class_ogre_1_1_d3_d11_texture_manager.html#acd4223279e97a7687e2f9994f05e2491":[7,0,0,233,15],
+"class_ogre_1_1_d3_d11_texture_manager.html#ad18cc3f0a4b3e0553cfe715204f15359":[7,0,0,233,30],
+"class_ogre_1_1_d3_d11_texture_manager.html#ad6d63fe7126510bf10fd337705cb0b29":[7,0,0,233,39],
+"class_ogre_1_1_d3_d11_texture_manager.html#ad9b4efbeacb17f07710c30bd5048e42f":[7,0,0,233,65],
+"class_ogre_1_1_d3_d11_texture_manager.html#ae26b6ecd722f3e24b52de8b4ac9bba0d":[7,0,0,233,54],
 "class_ogre_1_1_d3_d11_texture_manager.html#ae63717cade7ab9c72046cb079cca95e8":[7,0,0,233,4],
 "class_ogre_1_1_d3_d11_texture_manager.html#ae63b06c1fd6d1266b4c5dacc35e521b4":[7,0,0,233,10],
 "class_ogre_1_1_d3_d11_texture_manager.html#aeaa1410333b7bcea14b00c360112a528":[7,0,0,233,76],
@@ -243,11 +249,5 @@ var NAVTREEINDEX51 =
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#a76b56f475ba7474c83760b557c34c6a5":[7,0,0,242,49],
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#a7c9f7111539b0d1e859caa947f9e8220":[7,0,0,242,47],
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#a7df3603f7918dcb9af4e6c031d0b7fb9":[7,0,0,242,45],
-"class_ogre_1_1_d3_d11_window_swap_chain_based.html#a814de6b1529bba5f7aa80ea3ac537ae1":[7,0,0,242,23],
-"class_ogre_1_1_d3_d11_window_swap_chain_based.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,242,31],
-"class_ogre_1_1_d3_d11_window_swap_chain_based.html#a84739cd779700fa8d7991c9cf11c289d":[7,0,0,242,21],
-"class_ogre_1_1_d3_d11_window_swap_chain_based.html#a8a464e98db9c09042b866bdb95b210f4":[7,0,0,242,12],
-"class_ogre_1_1_d3_d11_window_swap_chain_based.html#a8b05fabc7b8b6cf3129279629562476d":[7,0,0,242,14],
-"class_ogre_1_1_d3_d11_window_swap_chain_based.html#a8c1bb2ab75cacd7d2b470406d33f427d":[7,0,0,242,27],
-"class_ogre_1_1_d3_d11_window_swap_chain_based.html#a8d7e786602979fc29169555056834c65":[7,0,0,242,10]
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#a814de6b1529bba5f7aa80ea3ac537ae1":[7,0,0,242,23]
 };
