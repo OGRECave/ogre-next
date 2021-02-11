@@ -28,8 +28,7 @@ THE SOFTWARE.
 #ifndef __OgreArrayConfig_H__
 #define __OgreArrayConfig_H__
 
-#include "OgreConfig.h"
-#include "OgrePlatformInformation.h"
+#include "OgrePrerequisites.h"
 
 #if OGRE_USE_SIMD == 1
     #if OGRE_CPU == OGRE_CPU_X86

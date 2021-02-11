@@ -29,7 +29,7 @@ THE SOFTWARE.
 #define __Common_H__
 // Common stuff
 
-#include "OgrePlatformInformation.h"
+#include "OgrePrerequisites.h"
 
 #include "OgreHeaderPrefix.h"
 #include "Hash/MurmurHash3.h"
