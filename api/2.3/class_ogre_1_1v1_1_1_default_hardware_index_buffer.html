@@ -88,6 +88,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1v1_1_1_default_hardware_
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="class_ogre_1_1v1_1_1_default_hardware_index_buffer-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Ogre::v1::DefaultHardwareIndexBuffer Class Reference<div class="ingroups"><a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___render_system.html">RenderSystem</a></div></div>  </div>
@@ -109,10 +110,8 @@ $(document).ready(function(){initNavTree('class_ogre_1_1v1_1_1_default_hardware_
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a525fa4b4e666c29a2eae7d5993c74d6f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6f">IndexType</a> { <a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6fa844de54bc3888cc127183f0331615fff">IT_16BIT</a>
-, <a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6fa5619d24e60002f0ca94398226dcdb4e8">IT_32BIT</a>
- }</td></tr>
-<tr class="separator:a525fa4b4e666c29a2eae7d5993c74d6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06f21d817782a7f95017e59581b9ddb5"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">Ogre::IndexType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#a06f21d817782a7f95017e59581b9ddb5">IndexType</a></td></tr>
+<tr class="separator:a06f21d817782a7f95017e59581b9ddb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0c56e93ce6f29bf39fb48c3d5dc64cf"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cf">LockOptions</a> { <br />
 &#160;&#160;<a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfaf32b55fa8a975d085b07236f89900f26">HBL_NORMAL</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfa364f94b757045261468e68fe09c36cca">HBL_DISCARD</a>
@@ -140,7 +139,7 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2bb6108f91c16a51ff41f3239442f5e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_default_hardware_index_buffer.html#a2bb6108f91c16a51ff41f3239442f5e4">DefaultHardwareIndexBuffer</a> (<a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6f">IndexType</a> idxType, size_t numIndexes, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a> usage)</td></tr>
+<tr class="memitem:a2bb6108f91c16a51ff41f3239442f5e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_default_hardware_index_buffer.html#a2bb6108f91c16a51ff41f3239442f5e4">DefaultHardwareIndexBuffer</a> (<a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a> idxType, size_t numIndexes, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a> usage)</td></tr>
 <tr class="separator:a2bb6108f91c16a51ff41f3239442f5e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab86cf70c32619db9a4bfbd5bea9573dd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_default_hardware_index_buffer.html#ab86cf70c32619db9a4bfbd5bea9573dd">~DefaultHardwareIndexBuffer</a> ()</td></tr>
 <tr class="separator:ab86cf70c32619db9a4bfbd5bea9573dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -168,7 +167,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6776e40af767f8db7d428f35d9b3055c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a6776e40af767f8db7d428f35d9b3055c">getSizeInBytes</a> (void) const</td></tr>
 <tr class="memdesc:a6776e40af767f8db7d428f35d9b3055c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size of this buffer in bytes.  <a href="class_ogre_1_1v1_1_1_hardware_buffer.html#a6776e40af767f8db7d428f35d9b3055c">More...</a><br /></td></tr>
 <tr class="separator:a6776e40af767f8db7d428f35d9b3055c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8877417cc9443facdcc362be2fe72e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6f">IndexType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#aa8877417cc9443facdcc362be2fe72e2">getType</a> (void) const</td></tr>
+<tr class="memitem:aa8877417cc9443facdcc362be2fe72e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#aa8877417cc9443facdcc362be2fe72e2">getType</a> (void) const</td></tr>
 <tr class="memdesc:aa8877417cc9443facdcc362be2fe72e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the type of indexes used in this buffer.  <a href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#aa8877417cc9443facdcc362be2fe72e2">More...</a><br /></td></tr>
 <tr class="separator:aa8877417cc9443facdcc362be2fe72e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82d667c1abc2577fa7754ea44dd684b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">Usage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a82d667c1abc2577fa7754ea44dd684b3">getUsage</a> (void) const</td></tr>
@@ -224,12 +223,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae6c9e4d89f38e0d4065961dd31565a49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_default_hardware_index_buffer.html#ae6c9e4d89f38e0d4065961dd31565a49">writeData</a> (size_t offset, size_t length, const void *pSource, bool discardWholeBuffer=false)</td></tr>
 <tr class="memdesc:ae6c9e4d89f38e0d4065961dd31565a49"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers.">HardwareBuffer</a>.  <a href="class_ogre_1_1v1_1_1_default_hardware_index_buffer.html#ae6c9e4d89f38e0d4065961dd31565a49">More...</a><br /></td></tr>
 <tr class="separator:ae6c9e4d89f38e0d4065961dd31565a49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a99816df51f0f9df30bf05ba8cdad0268"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#a99816df51f0f9df30bf05ba8cdad0268">IT_16BIT</a> = IndexType::IT_16BIT</td></tr>
+<tr class="separator:a99816df51f0f9df30bf05ba8cdad0268"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9a7bf368aa7c755fe7acd9fc936753c"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#ac9a7bf368aa7c755fe7acd9fc936753c">IT_32BIT</a> = IndexType::IT_32BIT</td></tr>
+<tr class="separator:ac9a7bf368aa7c755fe7acd9fc936753c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Specialisation of <a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html" title="Specialisation of HardwareBuffer for vertex index buffers, still abstract.">HardwareIndexBuffer</a> for emulation. </p>
-</div><h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="a525fa4b4e666c29a2eae7d5993c74d6f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a525fa4b4e666c29a2eae7d5993c74d6f">&#9670;&nbsp;</a></span>IndexType</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a06f21d817782a7f95017e59581b9ddb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06f21d817782a7f95017e59581b9ddb5">&#9670;&nbsp;</a></span>IndexType</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -238,7 +244,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6f">Ogre::v1::HardwareIndexBuffer::IndexType</a></td>
+          <td class="memname">typedef <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">Ogre::IndexType</a> <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">Ogre::v1::HardwareIndexBuffer::IndexType</a></td>
         </tr>
       </table>
   </td>
@@ -247,13 +253,10 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a525fa4b4e666c29a2eae7d5993c74d6fa844de54bc3888cc127183f0331615fff"></a>IT_16BIT&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a525fa4b4e666c29a2eae7d5993c74d6fa5619d24e60002f0ca94398226dcdb4e8"></a>IT_32BIT&#160;</td><td class="fielddoc"></td></tr>
-</table>
 
 </div>
 </div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="ac0c56e93ce6f29bf39fb48c3d5dc64cf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac0c56e93ce6f29bf39fb48c3d5dc64cf">&#9670;&nbsp;</a></span>LockOptions</h2>
 
@@ -347,7 +350,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">Ogre::v1::DefaultHardwareIndexBuffer::DefaultHardwareIndexBuffer </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6f">IndexType</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a>&#160;</td>
           <td class="paramname"><em>idxType</em>, </td>
         </tr>
         <tr>
@@ -675,7 +678,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6f">IndexType</a> Ogre::v1::HardwareIndexBuffer::getType </td>
+          <td class="memname"><a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a> Ogre::v1::HardwareIndexBuffer::getType </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -1437,6 +1440,55 @@ template&lt;class Alloc &gt; </div>
 <p>See <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers.">HardwareBuffer</a>. </p>
 
 <p>Implements <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#ae998a972e53f2d5a9931f34aea21df8c">Ogre::v1::HardwareBuffer</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a99816df51f0f9df30bf05ba8cdad0268"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99816df51f0f9df30bf05ba8cdad0268">&#9670;&nbsp;</a></span>IT_16BIT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a> Ogre::v1::HardwareIndexBuffer::IT_16BIT = IndexType::IT_16BIT</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html#aee28a819a630985af9e1cf51eedc9dc9">Ogre::Lod0Stripifier::RemapInfo::minimalIndexType()</a>.</p>
+
+</div>
+</div>
+<a id="ac9a7bf368aa7c755fe7acd9fc936753c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9a7bf368aa7c755fe7acd9fc936753c">&#9670;&nbsp;</a></span>IT_32BIT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a> Ogre::v1::HardwareIndexBuffer::IT_32BIT = IndexType::IT_32BIT</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html#aee28a819a630985af9e1cf51eedc9dc9">Ogre::Lod0Stripifier::RemapInfo::minimalIndexType()</a>.</p>
 
 </div>
 </div>

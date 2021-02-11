@@ -1,9 +1,6 @@
 var class_ogre_1_1_index_buffer_packed =
 [
-    [ "IndexType", "class_ogre_1_1_index_buffer_packed.html#a055e96bf575601f365c4f4d35f5dae60", [
-      [ "IT_16BIT", "class_ogre_1_1_index_buffer_packed.html#a055e96bf575601f365c4f4d35f5dae60a014b07c3c7d2b092bb55f2ffc862597b", null ],
-      [ "IT_32BIT", "class_ogre_1_1_index_buffer_packed.html#a055e96bf575601f365c4f4d35f5dae60abda84f4d5efcd0d300f27c51451d02c8", null ]
-    ] ],
+    [ "IndexType", "class_ogre_1_1_index_buffer_packed.html#ac7b56d6119f781930a33d74b2437c0d0", null ],
     [ "IndexBufferPacked", "class_ogre_1_1_index_buffer_packed.html#a41e3ad5826d77521647cf3f4d1171f6a", null ],
     [ "_getFinalBufferStart", "class_ogre_1_1_index_buffer_packed.html#aac73dd5b3bfea12dca1c5a64e6e95c7a", null ],
     [ "_getInternalBufferStart", "class_ogre_1_1_index_buffer_packed.html#a481ad7b97cb88501c5777f4703ff2320", null ],
@@ -39,5 +36,7 @@ var class_ogre_1_1_index_buffer_packed =
     [ "readRequest", "class_ogre_1_1_index_buffer_packed.html#a80c6682bd4adc315782091679d230cee", null ],
     [ "regressFrame", "class_ogre_1_1_index_buffer_packed.html#aba157f97e7a2c5d08ddda393aeb028f8", null ],
     [ "unmap", "class_ogre_1_1_index_buffer_packed.html#a73e02f6b2fa2c16340c1a9359926b481", null ],
-    [ "upload", "class_ogre_1_1_index_buffer_packed.html#a0c6fb3d387685e50e2b5069164b95e6b", null ]
+    [ "upload", "class_ogre_1_1_index_buffer_packed.html#a0c6fb3d387685e50e2b5069164b95e6b", null ],
+    [ "IT_16BIT", "class_ogre_1_1_index_buffer_packed.html#a76b421d2e1b50550e4342d653ef6172a", null ],
+    [ "IT_32BIT", "class_ogre_1_1_index_buffer_packed.html#a054893b8b191337521c8240536fba5d2", null ]
 ];

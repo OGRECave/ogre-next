@@ -1,5 +1,8 @@
 var NAVTREEINDEX35 =
 {
+"class_ogre_1_1_compositor_pass_mipmap_def.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,1,14,11],
+"class_ogre_1_1_compositor_pass_mipmap_def.html#acb37409e6e5fbc0467773942e8c14bdc":[5,2,1,14,20],
+"class_ogre_1_1_compositor_pass_mipmap_def.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,1,14,7],
 "class_ogre_1_1_compositor_pass_mipmap_def.html#acb4b5b4edffa1281c16b859a9df00b7c":[5,2,1,14,31],
 "class_ogre_1_1_compositor_pass_mipmap_def.html#ad7fab9725642fc9f33db037e4de914e2":[5,2,1,14,46],
 "class_ogre_1_1_compositor_pass_mipmap_def.html#adf943c28ea67c3d52d2e02058eeedbc1":[5,2,1,14,30],
@@ -246,8 +249,5 @@ var NAVTREEINDEX35 =
 "class_ogre_1_1_compositor_pass_stencil.html#a109f49cb2e6f8a9c0e1377817bcb9e6d":[5,2,1,19,9],
 "class_ogre_1_1_compositor_pass_stencil.html#a16704c18033351daf553055113309e44":[5,2,1,19,0],
 "class_ogre_1_1_compositor_pass_stencil.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,1,19,15],
-"class_ogre_1_1_compositor_pass_stencil.html#a220924c4a37f7cf458646522bc5cc72f":[5,2,1,19,7],
-"class_ogre_1_1_compositor_pass_stencil.html#a280e7b34575c7554487b1f66a1ea8f5a":[5,2,1,19,6],
-"class_ogre_1_1_compositor_pass_stencil.html#a2eedb01d342205286e9d8d87513bad20":[5,2,1,19,4],
-"class_ogre_1_1_compositor_pass_stencil.html#a3d94bb7e758731f7160eb7dedae69ed7":[5,2,1,19,24]
+"class_ogre_1_1_compositor_pass_stencil.html#a220924c4a37f7cf458646522bc5cc72f":[5,2,1,19,7]
 };

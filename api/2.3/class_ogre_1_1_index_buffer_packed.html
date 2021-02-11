@@ -88,6 +88,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_index_buffer_packed.htm
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="class_ogre_1_1_index_buffer_packed-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Ogre::IndexBufferPacked Class Reference</div>  </div>
@@ -106,10 +107,8 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_index_buffer_packed.htm
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a055e96bf575601f365c4f4d35f5dae60"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_index_buffer_packed.html#a055e96bf575601f365c4f4d35f5dae60">IndexType</a> { <a class="el" href="class_ogre_1_1_index_buffer_packed.html#a055e96bf575601f365c4f4d35f5dae60a014b07c3c7d2b092bb55f2ffc862597b">IT_16BIT</a>
-, <a class="el" href="class_ogre_1_1_index_buffer_packed.html#a055e96bf575601f365c4f4d35f5dae60abda84f4d5efcd0d300f27c51451d02c8">IT_32BIT</a>
- }</td></tr>
-<tr class="separator:a055e96bf575601f365c4f4d35f5dae60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7b56d6119f781930a33d74b2437c0d0"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">Ogre::IndexType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_index_buffer_packed.html#ac7b56d6119f781930a33d74b2437c0d0">IndexType</a></td></tr>
+<tr class="separator:ac7b56d6119f781930a33d74b2437c0d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -143,7 +142,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a50080eb729acd0c995606d512d5633c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af98ad9606c188cc815fc647a21f20498"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_packed.html#af98ad9606c188cc815fc647a21f20498">getBytesPerElement</a> (void) const</td></tr>
 <tr class="separator:af98ad9606c188cc815fc647a21f20498"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af298f5d7fbb17c857ca41f9b912c5f86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_index_buffer_packed.html#a055e96bf575601f365c4f4d35f5dae60">IndexType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_index_buffer_packed.html#af298f5d7fbb17c857ca41f9b912c5f86">getIndexType</a> (void) const</td></tr>
+<tr class="memitem:af298f5d7fbb17c857ca41f9b912c5f86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_index_buffer_packed.html#af298f5d7fbb17c857ca41f9b912c5f86">getIndexType</a> (void) const</td></tr>
 <tr class="separator:af298f5d7fbb17c857ca41f9b912c5f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a542b46fc7a7cf5fe524cfc7b4b389ba9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a447e51d7625af79716667cebcfa6da57">MappingState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_packed.html#a542b46fc7a7cf5fe524cfc7b4b389ba9">getMappingState</a> (void) const</td></tr>
 <tr class="memdesc:a542b46fc7a7cf5fe524cfc7b4b389ba9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the mapping state.  <a href="class_ogre_1_1_buffer_packed.html#a542b46fc7a7cf5fe524cfc7b4b389ba9">More...</a><br /></td></tr>
@@ -200,23 +199,26 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0c6fb3d387685e50e2b5069164b95e6b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_buffer_packed.html#a0c6fb3d387685e50e2b5069164b95e6b">upload</a> (const void *data, size_t elementStart, size_t elementCount)</td></tr>
 <tr class="memdesc:a0c6fb3d387685e50e2b5069164b95e6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends the provided data to the GPU.  <a href="class_ogre_1_1_buffer_packed.html#a0c6fb3d387685e50e2b5069164b95e6b">More...</a><br /></td></tr>
 <tr class="separator:a0c6fb3d387685e50e2b5069164b95e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a76b421d2e1b50550e4342d653ef6172a"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_index_buffer_packed.html#a76b421d2e1b50550e4342d653ef6172a">IT_16BIT</a> = IndexType::IT_16BIT</td></tr>
+<tr class="separator:a76b421d2e1b50550e4342d653ef6172a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a054893b8b191337521c8240536fba5d2"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_index_buffer_packed.html#a054893b8b191337521c8240536fba5d2">IT_32BIT</a> = IndexType::IT_32BIT</td></tr>
+<tr class="separator:a054893b8b191337521c8240536fba5d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="a055e96bf575601f365c4f4d35f5dae60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a055e96bf575601f365c4f4d35f5dae60">&#9670;&nbsp;</a></span>IndexType</h2>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ac7b56d6119f781930a33d74b2437c0d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7b56d6119f781930a33d74b2437c0d0">&#9670;&nbsp;</a></span>IndexType</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="class_ogre_1_1_index_buffer_packed.html#a055e96bf575601f365c4f4d35f5dae60">Ogre::IndexBufferPacked::IndexType</a></td>
+          <td class="memname">typedef <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">Ogre::IndexType</a> <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">Ogre::IndexBufferPacked::IndexType</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a055e96bf575601f365c4f4d35f5dae60a014b07c3c7d2b092bb55f2ffc862597b"></a>IT_16BIT&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a055e96bf575601f365c4f4d35f5dae60abda84f4d5efcd0d300f27c51451d02c8"></a>IT_32BIT&#160;</td><td class="fielddoc"></td></tr>
-</table>
 
 </div>
 </div>
@@ -668,7 +670,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_index_buffer_packed.html#a055e96bf575601f365c4f4d35f5dae60">IndexType</a> Ogre::IndexBufferPacked::getIndexType </td>
+          <td class="memname"><a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a> Ogre::IndexBufferPacked::getIndexType </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -681,6 +683,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="group___general.html#gga496e620c45a7855770e490d92611ad19a2b1adecd6d01e51c79e71211b1a7caaa">Ogre::IT_16BIT</a>, and <a class="el" href="group___general.html#gga496e620c45a7855770e490d92611ad19a1dc2d08608b21fcbccfe5d405db830e6">Ogre::IT_32BIT</a>.</p>
 
 </div>
 </div>
@@ -1506,6 +1510,51 @@ template&lt;class Alloc &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a76b421d2e1b50550e4342d653ef6172a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76b421d2e1b50550e4342d653ef6172a">&#9670;&nbsp;</a></span>IT_16BIT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a> Ogre::IndexBufferPacked::IT_16BIT = IndexType::IT_16BIT</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a054893b8b191337521c8240536fba5d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a054893b8b191337521c8240536fba5d2">&#9670;&nbsp;</a></span>IT_32BIT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">IndexType</a> Ogre::IndexBufferPacked::IT_32BIT = IndexType::IT_32BIT</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

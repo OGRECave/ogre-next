@@ -1,9 +1,6 @@
 var class_ogre_1_1v1_1_1_hardware_index_buffer =
 [
-    [ "IndexType", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6f", [
-      [ "IT_16BIT", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6fa844de54bc3888cc127183f0331615fff", null ],
-      [ "IT_32BIT", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6fa5619d24e60002f0ca94398226dcdb4e8", null ]
-    ] ],
+    [ "IndexType", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#a06f21d817782a7f95017e59581b9ddb5", null ],
     [ "LockOptions", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cf", [
       [ "HBL_NORMAL", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfaf32b55fa8a975d085b07236f89900f26", null ],
       [ "HBL_DISCARD", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfa364f94b757045261468e68fe09c36cca", null ],
@@ -50,5 +47,7 @@ var class_ogre_1_1v1_1_1_hardware_index_buffer =
     [ "readData", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#a19c89711b1b819388d454bedee62efda", null ],
     [ "suppressHardwareUpdate", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#a4674ce75bfc84fa7e6ac03a059f0dbb5", null ],
     [ "unlock", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#ac20e63654b67a94b3836c52f9c81da99", null ],
-    [ "writeData", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#ae998a972e53f2d5a9931f34aea21df8c", null ]
+    [ "writeData", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#ae998a972e53f2d5a9931f34aea21df8c", null ],
+    [ "IT_16BIT", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#a99816df51f0f9df30bf05ba8cdad0268", null ],
+    [ "IT_32BIT", "class_ogre_1_1v1_1_1_hardware_index_buffer.html#ac9a7bf368aa7c755fe7acd9fc936753c", null ]
 ];

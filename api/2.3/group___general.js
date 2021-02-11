@@ -2962,6 +2962,10 @@ var group___general =
       [ "FBT_DEPTH", "group___general.html#gga0206520b2d2647504c13017f2aaf4741a3466d3d0081023a40db64a4cd389fe40", null ],
       [ "FBT_STENCIL", "group___general.html#gga0206520b2d2647504c13017f2aaf4741a9433297f57098654c19a42bee065fc9b", null ]
     ] ],
+    [ "IndexType", "group___general.html#ga496e620c45a7855770e490d92611ad19", [
+      [ "IT_16BIT", "group___general.html#gga496e620c45a7855770e490d92611ad19a2b1adecd6d01e51c79e71211b1a7caaa", null ],
+      [ "IT_32BIT", "group___general.html#gga496e620c45a7855770e490d92611ad19a1dc2d08608b21fcbccfe5d405db830e6", null ]
+    ] ],
     [ "InstanceManagerFlags", "group___general.html#ga4921efc65b347efe08a6d4992af069e2", [
       [ "IM_USE16BIT", "group___general.html#gga4921efc65b347efe08a6d4992af069e2ab30b6fd5797e6fb286d5655dcd7008e6", null ],
       [ "IM_VTFBESTFIT", "group___general.html#gga4921efc65b347efe08a6d4992af069e2a500082ab3222e5aa5013ea48897031d2", null ],

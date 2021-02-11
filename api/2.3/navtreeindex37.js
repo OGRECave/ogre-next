@@ -1,5 +1,8 @@
 var NAVTREEINDEX37 =
 {
+"class_ogre_1_1_compositor_shadow_node.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,1,23,61],
+"class_ogre_1_1_compositor_shadow_node.html#a55280f3dbe04abff8b8970b57fd79807":[5,2,1,23,18],
+"class_ogre_1_1_compositor_shadow_node.html#a5768e502ca461ede1ba8398a50792843":[5,2,1,23,26],
 "class_ogre_1_1_compositor_shadow_node.html#a57e0523432c6e5133ff4fc251111a60e":[5,2,1,23,62],
 "class_ogre_1_1_compositor_shadow_node.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,1,23,56],
 "class_ogre_1_1_compositor_shadow_node.html#a5d95735afda16b2785d3da3aee60b218":[5,2,1,23,38],
@@ -246,8 +249,5 @@ var NAVTREEINDEX37 =
 "class_ogre_1_1_compositor_workspace.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,1,27,40],
 "class_ogre_1_1_compositor_workspace.html#ac778f4ac7450efaf14dd9baa6fca7be0":[5,2,1,27,29],
 "class_ogre_1_1_compositor_workspace.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,1,27,36],
-"class_ogre_1_1_compositor_workspace.html#ad0225c0414c62f12774f0cfa167836ff":[5,2,1,27,54],
-"class_ogre_1_1_compositor_workspace.html#ad6156676fc15140b9d9cf965867ee273":[5,2,1,27,4],
-"class_ogre_1_1_compositor_workspace.html#ad857c10e7ed80a2b84c5dcc77b002c08":[5,2,1,27,5],
-"class_ogre_1_1_compositor_workspace.html#adc7fe91fd1a1299b26daaf976e699951":[5,2,1,27,18]
+"class_ogre_1_1_compositor_workspace.html#ad0225c0414c62f12774f0cfa167836ff":[5,2,1,27,54]
 };

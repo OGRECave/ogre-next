@@ -1,5 +1,14 @@
 var NAVTREEINDEX286 =
 {
+"struct_strange_data.html#aba8174a434e7d7d072355f0da6064cd0":[7,0,30,0],
+"struct_x_client_message_event.html":[7,0,32],
+"struct_x_client_message_event.html#a06c61635d61e002df1231f60c3c681d2":[7,0,32,5],
+"struct_x_client_message_event.html#a1dd6a2701fdaa704fff0d789d4a2c04f":[7,0,32,6],
+"struct_x_client_message_event.html#a4fd2aa0da85c49238eefc8ee7494696a":[7,0,32,0],
+"struct_x_client_message_event.html#a52902beaba98cc4b1c5448f8915bfcde":[7,0,32,2],
+"struct_x_client_message_event.html#a5f1761a5775e149a3657e39f0b81a761":[7,0,32,4],
+"struct_x_client_message_event.html#ad391aef10e5c82c5221b49c9b9607961":[7,0,32,1],
+"struct_x_client_message_event.html#aebcdb6d799b39a40027af5d24cbb4273":[7,0,32,3],
 "struct_x_client_message_event_data.html":[7,0,33],
 "struct_x_client_message_event_data.html#af9ab2e94eb01f68d26563596eb428490":[7,0,33,0],
 "struct_x_event.html":[7,0,35],

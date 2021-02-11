@@ -2208,6 +2208,10 @@ var namespace_ogre =
       [ "IF_CUBEMAP", "group___image.html#gga975bb6abd3c277b9a91d849367885474ae53b467393ae6fd94277782dd276b620", null ],
       [ "IF_3D_TEXTURE", "group___image.html#gga975bb6abd3c277b9a91d849367885474a208116a07b56e2f93b38333acfeadba4", null ]
     ] ],
+    [ "IndexType", "group___general.html#ga496e620c45a7855770e490d92611ad19", [
+      [ "IT_16BIT", "group___general.html#gga496e620c45a7855770e490d92611ad19a2b1adecd6d01e51c79e71211b1a7caaa", null ],
+      [ "IT_32BIT", "group___general.html#gga496e620c45a7855770e490d92611ad19a1dc2d08608b21fcbccfe5d405db830e6", null ]
+    ] ],
     [ "InstanceManagerFlags", "group___general.html#ga4921efc65b347efe08a6d4992af069e2", [
       [ "IM_USE16BIT", "group___general.html#gga4921efc65b347efe08a6d4992af069e2ab30b6fd5797e6fb286d5655dcd7008e6", null ],
       [ "IM_VTFBESTFIT", "group___general.html#gga4921efc65b347efe08a6d4992af069e2a500082ab3222e5aa5013ea48897031d2", null ],

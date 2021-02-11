@@ -1,9 +1,6 @@
 var class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer =
 [
-    [ "IndexType", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6f", [
-      [ "IT_16BIT", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6fa844de54bc3888cc127183f0331615fff", null ],
-      [ "IT_32BIT", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#a525fa4b4e666c29a2eae7d5993c74d6fa5619d24e60002f0ca94398226dcdb4e8", null ]
-    ] ],
+    [ "IndexType", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#a06f21d817782a7f95017e59581b9ddb5", null ],
     [ "LockOptions", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cf", [
       [ "HBL_NORMAL", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfaf32b55fa8a975d085b07236f89900f26", null ],
       [ "HBL_DISCARD", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfa364f94b757045261468e68fe09c36cca", null ],
@@ -51,5 +48,7 @@ var class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer =
     [ "readData", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#a3bbcd217c05466cf870b1bad6a2d918a", null ],
     [ "suppressHardwareUpdate", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#a4674ce75bfc84fa7e6ac03a059f0dbb5", null ],
     [ "unlock", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#a27a473e4b565bcea3969f869981dfa45", null ],
-    [ "writeData", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#a46452f1ef735fe30305dd1ab6c9aa02c", null ]
+    [ "writeData", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#a46452f1ef735fe30305dd1ab6c9aa02c", null ],
+    [ "IT_16BIT", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#a99816df51f0f9df30bf05ba8cdad0268", null ],
+    [ "IT_32BIT", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_index_buffer.html#ac9a7bf368aa7c755fe7acd9fc936753c", null ]
 ];
