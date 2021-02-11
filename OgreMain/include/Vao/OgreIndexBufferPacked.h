@@ -30,17 +30,16 @@ THE SOFTWARE.
 #define _Ogre_IndexBufferPacked_H_
 
 #include "Vao/OgreBufferPacked.h"
+#include "OgreCommon.h"
 
 namespace Ogre
 {
     class _OgreExport IndexBufferPacked : public BufferPacked
     {
     public:
-        enum IndexType
-        {
-            IT_16BIT,
-            IT_32BIT
-        };
+        typedef Ogre::IndexType IndexType;
+        static const IndexType IT_16BIT = IndexType::IT_16BIT;
+        static const IndexType IT_32BIT = IndexType::IT_32BIT;
 
         IndexBufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
                            uint32 numElementsPadding, BufferType bufferType,

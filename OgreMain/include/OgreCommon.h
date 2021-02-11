@@ -75,6 +75,12 @@ namespace Ogre {
         PrePassUse
     };
 
+    enum IndexType
+    {
+        IT_16BIT,
+        IT_32BIT
+    };
+
     /** Comparison functions used for the depth/stencil buffer operations and 
         others. */
     enum CompareFunction
