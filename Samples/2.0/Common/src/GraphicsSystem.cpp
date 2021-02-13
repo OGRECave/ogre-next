@@ -35,6 +35,8 @@
 
 #include "OgreLogManager.h"
 
+#include "OgrePlatformInformation.h"
+
 #include "System/Android/AndroidSystems.h"
 
 #include <fstream>
