@@ -287,7 +287,7 @@ namespace Ogre {
         */
         FORCEINLINE const SimpleMatrixAf4x3& _getFullTransform(void) const
         {
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
             assert( !mCachedTransformOutOfDate &&
                     (!mDebugParentNode || !mDebugParentNode->isCachedTransformOutOfDate()) );
 #endif
@@ -309,7 +309,7 @@ namespace Ogre {
                                          ArrayMatrixAf4x3 const * RESTRICT_ALIAS reverseBind,
                                          size_t numBinds );
 
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         virtual void _setCachedTransformOutOfDate(void);
         bool isCachedTransformOutOfDate(void) const             { return mCachedTransformOutOfDate; }
 #endif
