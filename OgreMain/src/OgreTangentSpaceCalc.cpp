@@ -553,16 +553,6 @@ namespace v1
 
     }
     //---------------------------------------------------------------------
-    struct ScopedLock
-    {
-        HardwareVertexBufferSharedPtr buf;
-        ~ScopedLock()
-        {
-            if( buf )
-                buf->unlock();
-        }
-    };
-
     void TangentSpaceCalc::populateVertexArray(unsigned short sourceTexCoordSet)
     {
         // Just pull data out into more friendly structures
@@ -580,15 +570,14 @@ namespace v1
                 "TangentSpaceCalc::build");
         }
 
-        ScopedLock uvBufScope, posBufScope, normBufScope;
-
         HardwareVertexBufferSharedPtr uvBuf, posBuf, normBuf;
+        HardwareBufferLockGuard uvBufLock, posBufLock, normBufLock;
         unsigned char *pUvBase, *pPosBase, *pNormBase;
         size_t uvInc, posInc, normInc;
 
-        uvBuf = bind->getBuffer( uvElem->getSource() );
-        pUvBase = static_cast<unsigned char *>( uvBuf->lock( HardwareBuffer::HBL_READ_ONLY ) );
-        uvBufScope.buf = uvBuf;
+        uvBuf = bind->getBuffer(uvElem->getSource());
+        uvBufLock.lock(uvBuf, HardwareBuffer::HBL_READ_ONLY);
+        pUvBase = static_cast<unsigned char*>(uvBufLock.pData);
         uvInc = uvBuf->getVertexSize();
         // offset for vertex start
         pUvBase += mVData->vertexStart * uvInc;
@@ -604,9 +593,8 @@ namespace v1
         {
             // A different buffer
             posBuf = bind->getBuffer(posElem->getSource());
-            pPosBase = static_cast<unsigned char*>(
-                posBuf->lock(HardwareBuffer::HBL_READ_ONLY));
-            posBufScope.buf = posBuf;
+            posBufLock.lock(posBuf, HardwareBuffer::HBL_READ_ONLY);
+            pPosBase = static_cast<unsigned char*>(posBufLock.pData);
             posInc = posBuf->getVertexSize();
             // offset for vertex start
             pPosBase += mVData->vertexStart * posInc;
@@ -635,9 +623,8 @@ namespace v1
         {
             // A different buffer
             normBuf = bind->getBuffer(normElem->getSource());
-            pNormBase = static_cast<unsigned char*>(
-                normBuf->lock(HardwareBuffer::HBL_READ_ONLY));
-            normBufScope.buf = normBuf;
+            normBufLock.lock(normBuf, HardwareBuffer::HBL_READ_ONLY);
+            pNormBase = static_cast<unsigned char*>(normBufLock.pData);
             normInc = normBuf->getVertexSize();
             // offset for vertex start
             pNormBase += mVData->vertexStart * normInc;
