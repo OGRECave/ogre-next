@@ -1114,6 +1114,12 @@ namespace v1
         mesh->clearBoneAssignments();
 
         mesh->prepareForShadowMapping( false );
+
+        if( mesh->isEdgeListBuilt() )
+        {
+            mesh->freeEdgeList();
+            mesh->buildEdgeList();
+        }
     }
     //-----------------------------------------------------------------------
     Resource* MeshManager::createImpl(const String& name, ResourceHandle handle, 
