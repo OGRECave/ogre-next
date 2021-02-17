@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgrePatchMesh.h"
 #include "OgreHardwareBufferManager.h"
 #include "OgreException.h"
+#include "OgreVertexRemapping.h"
 
 #include "OgrePrefabFactory.h"
 
@@ -984,48 +985,6 @@ namespace v1
         mBoundsPaddingFactor = paddingFactor;
     }
     //-----------------------------------------------------------------------
-    //-----------------------------------------------------------------------
-    // Helper functions to unshare the vertices
-    //-----------------------------------------------------------------------
-    typedef map<uint32, uint32>::type IndicesMap;
-
-    template< typename TIndexType >
-    IndicesMap getUsedIndices(IndexData* idxData)
-    {
-        HardwareBufferLockGuard indexLock(
-            idxData->indexBuffer, idxData->indexStart * sizeof( TIndexType ),
-            idxData->indexCount * sizeof( TIndexType ), HardwareBuffer::HBL_READ_ONLY );
-
-        TIndexType *data = (TIndexType*)indexLock.pData;
-
-        IndicesMap indicesMap;
-        for (size_t i = 0; i < idxData->indexCount; i++)
-        {
-            TIndexType index = data[i];
-            if (indicesMap.find(index) == indicesMap.end())
-            {
-                uint32 val = (uint32)(indicesMap.size());
-                indicesMap[index] = val;
-            }
-        }
-
-        return indicesMap;
-    }
-    //-----------------------------------------------------------------------
-    template< typename TIndexType >
-    void copyIndexBuffer(IndexData* idxData, IndicesMap& indicesMap)
-    {
-        HardwareBufferLockGuard indexLock(
-            idxData->indexBuffer, idxData->indexStart * sizeof( TIndexType ),
-            idxData->indexCount * sizeof( TIndexType ), HardwareBuffer::HBL_NORMAL );
-        TIndexType *data = (TIndexType*)indexLock.pData;
-
-        for (uint32 i = 0; i < idxData->indexCount; i++)
-        {
-            data[i] = (TIndexType)indicesMap[data[i]];
-        }
-    }
-    //-----------------------------------------------------------------------
     void MeshManager::unshareVertices( Mesh *mesh )
     {
         // Retrieve data to copy bone assignments
@@ -1033,19 +992,25 @@ namespace v1
 
         // Access shared vertices
         VertexData* sharedVertexData = mesh->sharedVertexData[VpNormal];
+        if (!sharedVertexData)
+            return;
 
+        VerticesRemapInfo remapInfo;
         for (size_t subMeshIdx = 0; subMeshIdx < mesh->getNumSubMeshes(); subMeshIdx++)
         {
             SubMesh *subMesh = mesh->getSubMesh(subMeshIdx);
+            if (!subMesh->useSharedVertices)
+                continue;
 
             IndexData *indexData = subMesh->indexData[VpNormal];
-            HardwareIndexBuffer::IndexType idxType = indexData->indexBuffer->getType();
-            IndicesMap indicesMap = (idxType == HardwareIndexBuffer::IT_16BIT) ? getUsedIndices<uint16>(indexData) :
-                                                                                 getUsedIndices<uint32>(indexData);
+            if (!indexData)
+                continue;
 
+            remapInfo.initialize( sharedVertexData->vertexCount, false );
+            remapInfo.markUsedIndices( indexData );
 
             VertexData *newVertexData = new VertexData();
-            newVertexData->vertexCount = indicesMap.size();
+            newVertexData->vertexCount = remapInfo.usedCount;
             HardwareBufferManager::getSingleton().
                     destroyVertexDeclaration( newVertexData->vertexDeclaration );
             newVertexData->vertexDeclaration = sharedVertexData->vertexDeclaration->clone(mesh->getHardwareBufferManager());
@@ -1053,54 +1018,26 @@ namespace v1
             for (size_t bufIdx = 0; bufIdx < sharedVertexData->vertexBufferBinding->getBufferCount(); bufIdx++)
             {
                 HardwareVertexBufferSharedPtr sharedVertexBuffer = sharedVertexData->vertexBufferBinding->getBuffer(bufIdx);
-                size_t vertexSize = sharedVertexBuffer->getVertexSize();
-
-                HardwareVertexBufferSharedPtr newVertexBuffer = mesh->getHardwareBufferManager()->createVertexBuffer
-                    (vertexSize, newVertexData->vertexCount, sharedVertexBuffer->getUsage(), sharedVertexBuffer->hasShadowBuffer());
-
-                HardwareBufferLockGuard oldLock(sharedVertexBuffer, 0, sharedVertexData->vertexCount * vertexSize, HardwareBuffer::HBL_READ_ONLY);
-                HardwareBufferLockGuard newLock(newVertexBuffer, 0, newVertexData->vertexCount * vertexSize, HardwareBuffer::HBL_NORMAL);
-
-                IndicesMap::iterator indIt = indicesMap.begin();
-                IndicesMap::iterator endIndIt = indicesMap.end();
-                for (; indIt != endIndIt; ++indIt)
-                {
-                    memcpy((uint8*)newLock.pData + vertexSize * indIt->second, (uint8*)oldLock.pData + vertexSize * indIt->first, vertexSize);
-                }
+                HardwareVertexBufferSharedPtr newVertexBuffer = remapInfo.getRemappedVertexBuffer(
+                    mesh->getHardwareBufferManager(), sharedVertexBuffer, sharedVertexData->vertexStart, sharedVertexData->vertexCount );
 
                 newVertexData->vertexBufferBinding->setBinding(bufIdx, newVertexBuffer);
             }
 
-            if (idxType == HardwareIndexBuffer::IT_16BIT)
+            ushort numLods = mesh->hasManualLodLevel() ? 1 : mesh->getNumLodLevels();
+            for (ushort lod = 1; lod < numLods; ++lod)
             {
-                copyIndexBuffer<uint16>(indexData, indicesMap);
+                v1::IndexData *lodIndexData = subMesh->mLodFaceList[VpNormal][lod - 1]; // lod0 is stored separately
+                remapInfo.performIndexDataRemap(mesh->getHardwareBufferManager(), lodIndexData);
             }
-            else
-            {
-                copyIndexBuffer<uint32>(indexData, indicesMap);
-            }
+            remapInfo.performIndexDataRemap(mesh->getHardwareBufferManager(), indexData);
 
             // Store new attributes
             subMesh->useSharedVertices = false;
             subMesh->vertexData[VpNormal] = newVertexData;
 
             // Transfer bone assignments to the submesh
-            Mesh::VertexBoneAssignmentList::const_iterator itor = boneAssignments.begin();
-            Mesh::VertexBoneAssignmentList::const_iterator end  = boneAssignments.end();
-            IndicesMap::const_iterator enVertIdx = indicesMap.end();
-            while( itor != end )
-            {
-                VertexBoneAssignment boneAssignment = (*itor).second;
-                IndicesMap::const_iterator itVertIdx = indicesMap.find( boneAssignment.vertexIndex );
-
-                if( itVertIdx != enVertIdx )
-                {
-                    boneAssignment.vertexIndex = itVertIdx->second;
-                    subMesh->addBoneAssignment(boneAssignment);
-                }
-
-                ++itor;
-            }
+            remapInfo.performBoneAssignmentRemap(subMesh, mesh);
         }
 
         // Release shared vertex data
