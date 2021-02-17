@@ -1265,8 +1265,7 @@ var files_dup =
       [ "LinearForceAffectorFactory", "class_ogre_1_1_linear_force_affector_factory.html", "class_ogre_1_1_linear_force_affector_factory" ]
     ] ],
     [ "OgreLod0Stripifier.h", "_ogre_lod0_stripifier_8h.html", [
-      [ "Lod0Stripifier", "class_ogre_1_1_lod0_stripifier.html", "class_ogre_1_1_lod0_stripifier" ],
-      [ "RemapInfo", "struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html", "struct_ogre_1_1_lod0_stripifier_1_1_remap_info" ]
+      [ "Lod0Stripifier", "class_ogre_1_1_lod0_stripifier.html", "class_ogre_1_1_lod0_stripifier" ]
     ] ],
     [ "OgreLodBuffer.h", "_ogre_lod_buffer_8h.html", [
       [ "LodIndexBuffer", "struct_ogre_1_1_lod_index_buffer.html", "struct_ogre_1_1_lod_index_buffer" ],
@@ -2206,6 +2205,9 @@ var files_dup =
     [ "OgreVertexBufferPacked.h", "_ogre_vertex_buffer_packed_8h.html", "_ogre_vertex_buffer_packed_8h" ],
     [ "OgreVertexElements.h", "_ogre_vertex_elements_8h.html", "_ogre_vertex_elements_8h" ],
     [ "OgreVertexIndexData.h", "_ogre_vertex_index_data_8h.html", "_ogre_vertex_index_data_8h" ],
+    [ "OgreVertexRemapping.h", "_ogre_vertex_remapping_8h.html", [
+      [ "VerticesRemapInfo", "struct_ogre_1_1_vertices_remap_info.html", "struct_ogre_1_1_vertices_remap_info" ]
+    ] ],
     [ "OgreVertexShadowMapHelper.h", "_ogre_vertex_shadow_map_helper_8h.html", [
       [ "VertexShadowMapHelper", "class_ogre_1_1v1_1_1_vertex_shadow_map_helper.html", "class_ogre_1_1v1_1_1_vertex_shadow_map_helper" ],
       [ "Geometry", "struct_ogre_1_1v1_1_1_vertex_shadow_map_helper_1_1_geometry.html", "struct_ogre_1_1v1_1_1_vertex_shadow_map_helper_1_1_geometry" ],

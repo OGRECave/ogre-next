@@ -1,5 +1,6 @@
 var NAVTREEINDEX70 =
 {
+"class_ogre_1_1_emscripten_e_g_l_window.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,327,100],
 "class_ogre_1_1_emscripten_e_g_l_window.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,327,99],
 "class_ogre_1_1_emscripten_e_g_l_window.html#ab82d2cf13a93ae6406cee9d2d044aa06":[7,0,0,327,46],
 "class_ogre_1_1_emscripten_e_g_l_window.html#abb4fa5e6970515a4d6cb9a16501557b5":[7,0,0,327,63],
@@ -248,6 +249,5 @@ var NAVTREEINDEX70 =
 "class_ogre_1_1_file_not_found_exception.html#af4d342026b7af34ba64ed365c7300659":[5,2,2,45,6],
 "class_ogre_1_1_file_not_found_exception.html#af6e85a048732d785797152da81a2706c":[5,2,2,45,5],
 "class_ogre_1_1_file_not_found_exception.html#af78517adc8ac77b0a3cfb14add58f16d":[5,2,2,45,2],
-"class_ogre_1_1_file_stream_data_stream.html":[5,2,11,21],
-"class_ogre_1_1_file_stream_data_stream.html#a022f49c9313deffc5da4383d59d1f32d":[5,2,11,21,11]
+"class_ogre_1_1_file_stream_data_stream.html":[5,2,11,21]
 };

@@ -1421,6 +1421,7 @@ var annotated_dup =
       [ "VertexElement2", "struct_ogre_1_1_vertex_element2.html", "struct_ogre_1_1_vertex_element2" ],
       [ "VertexElementSemanticFull", "struct_ogre_1_1_vertex_element_semantic_full.html", "struct_ogre_1_1_vertex_element_semantic_full" ],
       [ "VertexShadowMapHelper", "class_ogre_1_1_vertex_shadow_map_helper.html", "class_ogre_1_1_vertex_shadow_map_helper" ],
+      [ "VerticesRemapInfo", "struct_ogre_1_1_vertices_remap_info.html", "struct_ogre_1_1_vertices_remap_info" ],
       [ "ViewPoint", "struct_ogre_1_1_view_point.html", "struct_ogre_1_1_view_point" ],
       [ "Viewport", "class_ogre_1_1_viewport.html", "class_ogre_1_1_viewport" ],
       [ "VoxelizerBucket", "struct_ogre_1_1_voxelizer_bucket.html", "struct_ogre_1_1_voxelizer_bucket" ],

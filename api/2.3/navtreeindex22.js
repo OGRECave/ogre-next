@@ -1,5 +1,6 @@
 var NAVTREEINDEX22 =
 {
+"class_ogre_1_1_auto_param_data_source.html#a2676c59444a01f558c1361f9f8bbd604":[5,2,5,0,57],
 "class_ogre_1_1_auto_param_data_source.html#a277b593c791b45b0521858d28374906c":[5,2,5,0,15],
 "class_ogre_1_1_auto_param_data_source.html#a28c7553bcec92e7b673559e664bc119e":[5,2,5,0,18],
 "class_ogre_1_1_auto_param_data_source.html#a2a9f934f6a597fb87666eb31d363646d":[5,2,5,0,81],
@@ -248,6 +249,5 @@ var NAVTREEINDEX22 =
 "class_ogre_1_1_axis_aligned_box_scene_query.html#ae52b991bb3e6ecdb688c3d06d245c468":[5,0,1,0,22],
 "class_ogre_1_1_axis_aligned_box_scene_query.html#ae52b991bb3e6ecdb688c3d06d245c468":[5,2,12,0,22],
 "class_ogre_1_1_axis_aligned_box_scene_query.html#ae61b5e8ce50437c582e078bc327b7473":[5,0,1,0,1],
-"class_ogre_1_1_axis_aligned_box_scene_query.html#ae61b5e8ce50437c582e078bc327b7473":[5,2,12,0,1],
-"class_ogre_1_1_axis_aligned_box_scene_query.html#aec3aa0b8b16c41fae990ee78150f8d2a":[5,0,1,0,25]
+"class_ogre_1_1_axis_aligned_box_scene_query.html#ae61b5e8ce50437c582e078bc327b7473":[5,2,12,0,1]
 };

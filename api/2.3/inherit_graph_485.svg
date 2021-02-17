@@ -11,11 +11,11 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="struct_ogre_1_1_r_t_shader_1_1_function_invocation_1_1_function_invocation_compare.html" target="_top" xlink:title="Comparator function to be used for comparisons.">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1_r_t_shader_1_1_function_invocation_1_1_function_invocation_less_than.html" target="_top" xlink:title="Comparator function to be used for sorting.">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-41.5 149,-41.5 149,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-29.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RTShader::Function</text>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Invocation::FunctionInvocation</text>
-<text text-anchor="middle" x="74.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Compare</text>
+<text text-anchor="middle" x="74.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">LessThan</text>
 </a>
 </g>
 </g>

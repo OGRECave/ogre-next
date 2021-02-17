@@ -1691,7 +1691,6 @@ var hierarchy =
     [ "Ogre::LinearResampler_Byte< channels >", "struct_ogre_1_1_linear_resampler___byte.html", null ],
     [ "Ogre::LinearResampler_Float32", "struct_ogre_1_1_linear_resampler___float32.html", null ],
     [ "Ogre::Lod0Stripifier", "class_ogre_1_1_lod0_stripifier.html", null ],
-    [ "Ogre::Lod0Stripifier::RemapInfo", "struct_ogre_1_1_lod0_stripifier_1_1_remap_info.html", null ],
     [ "Ogre::LodCollapseCost", "class_ogre_1_1_lod_collapse_cost.html", [
       [ "Ogre::LodCollapseCostCurvature", "class_ogre_1_1_lod_collapse_cost_curvature.html", null ],
       [ "Ogre::LodCollapseCostOutside", "class_ogre_1_1_lod_collapse_cost_outside.html", null ],
@@ -2276,6 +2275,7 @@ var hierarchy =
     [ "Ogre::VertexElement2", "struct_ogre_1_1_vertex_element2.html", null ],
     [ "Ogre::VertexElementSemanticFull", "struct_ogre_1_1_vertex_element_semantic_full.html", null ],
     [ "Ogre::VertexShadowMapHelper", "class_ogre_1_1_vertex_shadow_map_helper.html", null ],
+    [ "Ogre::VerticesRemapInfo", "struct_ogre_1_1_vertices_remap_info.html", null ],
     [ "Ogre::ViewPoint", "struct_ogre_1_1_view_point.html", null ],
     [ "Ogre::Volume::ChunkParameters", "struct_ogre_1_1_volume_1_1_chunk_parameters.html", null ],
     [ "Ogre::Volume::ChunkRequest", "struct_ogre_1_1_volume_1_1_chunk_request.html", null ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX47 =
 {
+"class_ogre_1_1_d3_d11_render_window_base.html#a5eead80cbbe6ebb3ad654838573930b5":[7,0,0,219,76],
 "class_ogre_1_1_d3_d11_render_window_base.html#a5fe9b7de87bc535e7278dac1e6bdc002":[7,0,0,219,40],
 "class_ogre_1_1_d3_d11_render_window_base.html#a61409e992901a9893e5ebb54ff97cb45":[7,0,0,219,38],
 "class_ogre_1_1_d3_d11_render_window_base.html#a629ce6c74ec3b4b565ce5b85a98e0482":[7,0,0,219,54],
@@ -248,6 +249,5 @@ var NAVTREEINDEX47 =
 "class_ogre_1_1_d3_d11_stereo_driver_a_m_d.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,223,5],
 "class_ogre_1_1_d3_d11_stereo_driver_a_m_d.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,223,12],
 "class_ogre_1_1_d3_d11_stereo_driver_a_m_d.html#afb324c2273198b7ba48b637e7f19b233":[7,0,0,223,15],
-"class_ogre_1_1_d3_d11_stereo_driver_bridge.html":[7,0,0,224],
-"class_ogre_1_1_d3_d11_stereo_driver_bridge.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,224,9]
+"class_ogre_1_1_d3_d11_stereo_driver_bridge.html":[7,0,0,224]
 };

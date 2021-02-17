@@ -1,5 +1,6 @@
 var NAVTREEINDEX153 =
 {
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ab78a921e54419be677839cdf15d1f0b8":[5,0,1,31,12],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,12,31,10],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,0,1,31,10],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,12,31,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX153 =
 "class_ogre_1_1_portal.html#a6f401ef1fa0213f68cfd5706c26bdc69ac82b2db8007314e8f6cb45923defbe71":[7,0,0,856,1,1],
 "class_ogre_1_1_portal.html#a6fb94e1627676c7d7517e13944bd0580":[7,0,0,856,108],
 "class_ogre_1_1_portal.html#a7144c56ea2f0f8cb5dc6215c573aa8a1":[7,0,0,856,89],
-"class_ogre_1_1_portal.html#a727e088f147250e0a12f39a68b22e33e":[7,0,0,856,132],
-"class_ogre_1_1_portal.html#a745c586d6aaf5739841fa78cd058f21b":[7,0,0,856,136]
+"class_ogre_1_1_portal.html#a727e088f147250e0a12f39a68b22e33e":[7,0,0,856,132]
 };
