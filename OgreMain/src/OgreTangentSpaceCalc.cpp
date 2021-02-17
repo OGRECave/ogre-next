@@ -551,6 +551,16 @@ namespace v1
 
     }
     //---------------------------------------------------------------------
+    struct ScopedLock
+    {
+        HardwareVertexBufferSharedPtr buf;
+        ~ScopedLock()
+        {
+            if( buf )
+                buf->unlock();
+        }
+    };
+
     void TangentSpaceCalc::populateVertexArray(unsigned short sourceTexCoordSet)
     {
         // Just pull data out into more friendly structures
@@ -568,13 +578,15 @@ namespace v1
                 "TangentSpaceCalc::build");
         }
 
+        ScopedLock uvBufScope, posBufScope, normBufScope;
+
         HardwareVertexBufferSharedPtr uvBuf, posBuf, normBuf;
         unsigned char *pUvBase, *pPosBase, *pNormBase;
         size_t uvInc, posInc, normInc;
 
-        uvBuf = bind->getBuffer(uvElem->getSource());
-        pUvBase = static_cast<unsigned char*>(
-            uvBuf->lock(HardwareBuffer::HBL_READ_ONLY));
+        uvBuf = bind->getBuffer( uvElem->getSource() );
+        pUvBase = static_cast<unsigned char *>( uvBuf->lock( HardwareBuffer::HBL_READ_ONLY ) );
+        uvBufScope.buf = uvBuf;
         uvInc = uvBuf->getVertexSize();
         // offset for vertex start
         pUvBase += mVData->vertexStart * uvInc;
@@ -592,6 +604,7 @@ namespace v1
             posBuf = bind->getBuffer(posElem->getSource());
             pPosBase = static_cast<unsigned char*>(
                 posBuf->lock(HardwareBuffer::HBL_READ_ONLY));
+            posBufScope.buf = posBuf;
             posInc = posBuf->getVertexSize();
             // offset for vertex start
             pPosBase += mVData->vertexStart * posInc;
@@ -622,6 +635,7 @@ namespace v1
             normBuf = bind->getBuffer(normElem->getSource());
             pNormBase = static_cast<unsigned char*>(
                 normBuf->lock(HardwareBuffer::HBL_READ_ONLY));
+            normBufScope.buf = normBuf;
             normInc = normBuf->getVertexSize();
             // offset for vertex start
             pNormBase += mVData->vertexStart * normInc;
@@ -654,18 +668,6 @@ namespace v1
 
 
         }
-
-        // unlock buffers
-        uvBuf->unlock();
-        if (!posBuf.isNull())
-        {
-            posBuf->unlock();
-        }
-        if (!normBuf.isNull())
-        {
-            normBuf->unlock();
-        }
-
     }
     //---------------------------------------------------------------------
     void TangentSpaceCalc::insertTangents(Result& res,
