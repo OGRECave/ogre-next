@@ -534,6 +534,16 @@ namespace v1
 
     }
     //---------------------------------------------------------------------
+    struct ScopedLock
+    {
+        HardwareVertexBufferSharedPtr buf;
+        ~ScopedLock()
+        {
+            if( buf )
+                buf->unlock();
+        }
+    };
+
     void TangentSpaceCalc::populateVertexArray(unsigned short sourceTexCoordSet)
     {
         // Just pull data out into more friendly structures
@@ -551,14 +561,17 @@ namespace v1
                 "TangentSpaceCalc::build");
         }
 
+        ScopedLock uvBufScope, posBufScope, normBufScope;
+
         HardwareVertexBufferSharedPtr uvBuf, posBuf, normBuf;
         HardwareBufferLockGuard uvBufLock, posBufLock, normBufLock;
         unsigned char *pUvBase, *pPosBase, *pNormBase;
         size_t uvInc, posInc, normInc;
 
-        uvBuf = bind->getBuffer(uvElem->getSource());
-        uvBufLock.lock(uvBuf, HardwareBuffer::HBL_READ_ONLY);
-        pUvBase = static_cast<unsigned char*>(uvBufLock.pData);
+        uvBuf = bind->getBuffer( uvElem->getSource() );
+        uvBufLock.lock( uvBuf, HardwareBuffer::HBL_READ_ONLY );
+        uvBufScope.buf = uvBuf;
+        pUvBase = static_cast<unsigned char *>( uvBufLock.pData );
         uvInc = uvBuf->getVertexSize();
         // offset for vertex start
         pUvBase += mVData->vertexStart * uvInc;
@@ -575,6 +588,7 @@ namespace v1
             // A different buffer
             posBuf = bind->getBuffer(posElem->getSource());
             posBufLock.lock(posBuf, HardwareBuffer::HBL_READ_ONLY);
+            posBufScope.buf = posBuf;
             pPosBase = static_cast<unsigned char*>(posBufLock.pData);
             posInc = posBuf->getVertexSize();
             // offset for vertex start
@@ -605,6 +619,7 @@ namespace v1
             // A different buffer
             normBuf = bind->getBuffer(normElem->getSource());
             normBufLock.lock(normBuf, HardwareBuffer::HBL_READ_ONLY);
+            normBufScope.buf = normBuf;
             pNormBase = static_cast<unsigned char*>(normBufLock.pData);
             normInc = normBuf->getVertexSize();
             // offset for vertex start
