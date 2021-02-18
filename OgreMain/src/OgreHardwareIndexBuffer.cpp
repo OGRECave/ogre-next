@@ -33,6 +33,8 @@ THE SOFTWARE.
 
 namespace Ogre {
 namespace v1 {
+    const IndexType HardwareIndexBuffer::IT_16BIT = Ogre::IT_16BIT;
+    const IndexType HardwareIndexBuffer::IT_32BIT = Ogre::IT_32BIT;
     //-----------------------------------------------------------------------------
     HardwareIndexBuffer::HardwareIndexBuffer(HardwareBufferManagerBase* mgr, IndexType idxType, 
         size_t numIndexes, HardwareBuffer::Usage usage, 

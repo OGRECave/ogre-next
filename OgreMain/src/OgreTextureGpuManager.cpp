@@ -1257,7 +1257,7 @@ namespace Ogre
             const ResourceEntry &entry = itEntry->second;
             text.clear();
 
-            if( !( ( 1 << entry.texture->getResidencyStatus() ) & mask ) )
+            if( !( ( 1u << entry.texture->getResidencyStatus() ) & mask ) )
             {
                 ++itEntry;
                 continue;
