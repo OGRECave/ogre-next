@@ -477,7 +477,11 @@ namespace Ogre
         if( usedByUs )
         {
             mWarnedNoAutomipmapsAlready = false;
-            setupComputeShaders();
+            if( mDefinition->mMipmapGenerationMethod == CompositorPassMipmapDef::Compute ||
+                mDefinition->mMipmapGenerationMethod == CompositorPassMipmapDef::ComputeHQ )
+            {
+                setupComputeShaders();
+            }
         }
 
         return usedByUs;
