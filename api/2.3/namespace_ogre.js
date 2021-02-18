@@ -196,6 +196,14 @@ var namespace_ogre =
         [ "Max", "namespace_ogre_1_1_prefab_root_layout.html#a665760a12d36c016d52459fb4354e524ac771af66d58b27db3b9c64d6be26ff52", null ]
       ] ]
     ] ],
+    [ "ResidencyMask", "namespace_ogre_1_1_residency_mask.html", [
+      [ "ResidencyMask", "namespace_ogre_1_1_residency_mask.html#a41a75eb215f69beb19a0039eb7e2b141", [
+        [ "OnStorage", "namespace_ogre_1_1_residency_mask.html#a41a75eb215f69beb19a0039eb7e2b141a69a6f0ab740421bc76a254809bebd0fa", null ],
+        [ "OnSystemRam", "namespace_ogre_1_1_residency_mask.html#a41a75eb215f69beb19a0039eb7e2b141a9860f6d46f268c23c8ef2c560e869545", null ],
+        [ "Resident", "namespace_ogre_1_1_residency_mask.html#a41a75eb215f69beb19a0039eb7e2b141a980c10322838f647ac2ca4a274ff6366", null ],
+        [ "All", "namespace_ogre_1_1_residency_mask.html#a41a75eb215f69beb19a0039eb7e2b141a98b6ac43f7a59e7ed0b61a1b529f06ca", null ]
+      ] ]
+    ] ],
     [ "ResourceAccess", "namespace_ogre_1_1_resource_access.html", [
       [ "ResourceAccess", "namespace_ogre_1_1_resource_access.html#a732c0b8774d76d325e0749d09ce70aad", [
         [ "Undefined", "namespace_ogre_1_1_resource_access.html#a732c0b8774d76d325e0749d09ce70aada02a9e71f3a63cfcd3eb481311365de6f", null ],
