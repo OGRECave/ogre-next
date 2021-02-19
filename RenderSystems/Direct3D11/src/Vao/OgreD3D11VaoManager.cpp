@@ -1321,11 +1321,20 @@ namespace Ogre
                              "D3D11VaoManager::createShaderBufferInterface" );
             }
 
-            D3D11DynamicBuffer *dynamicBuffer = 0;
-            if( bufferType >= BT_DYNAMIC_DEFAULT )
-                dynamicBuffer = new D3D11DynamicBuffer( vboName.Get(), internalSizeBytes, mDevice );
+            if( mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
+            {
+                D3D11DynamicBuffer *dynamicBuffer = 0;
+                if( bufferType >= BT_DYNAMIC_DEFAULT )
+                    dynamicBuffer = new D3D11DynamicBuffer( vboName.Get(), internalSizeBytes, mDevice );
 
-            bufferInterface = new D3D11BufferInterface( 0, vboName.Get(), dynamicBuffer );
+                bufferInterface = new D3D11BufferInterface( 0, vboName.Get(), dynamicBuffer );
+            }
+            else
+            {
+                // D3D11.0 doesn't support NO_OVERWRITE on shader buffers.
+                // Use the basic interface. But it does support structured buffers
+                bufferInterface = new D3D11CompatBufferInterface( 0, vboName.Get(), mDevice );
+            }
         }
         else
         {
@@ -1343,8 +1352,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11VaoManager::destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer )
     {
-        if( !mReadOnlyIsTexBuffer )
+        if( !mReadOnlyIsTexBuffer && mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
         {
+            OGRE_ASSERT_HIGH(
+                dynamic_cast<D3D11BufferInterface *>( readOnlyBuffer->getBufferInterface() ) );
             D3D11BufferInterface *bufferInterface =
                 static_cast<D3D11BufferInterface *>( readOnlyBuffer->getBufferInterface() );
 
@@ -1360,6 +1371,7 @@ namespace Ogre
 
                 readOnlyBuffer->unmap( UO_UNMAP_ALL );
             }
+
             delete bufferInterface->getDynamicBuffer();
             bufferInterface->_setNullDynamicBuffer();
         }
