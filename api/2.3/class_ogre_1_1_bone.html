@@ -144,6 +144,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2b12f7cf0adf5025c9864cc242396226"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#a2b12f7cf0adf5025c9864cc242396226">_memoryRebased</a> (void)</td></tr>
 <tr class="memdesc:a2b12f7cf0adf5025c9864cc242396226"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal use. Called from <a class="el" href="class_ogre_1_1_bone_memory_manager.html" title="Wrap-around class that contains multiple ArrayMemoryManager, one per hierarchy depth.">BoneMemoryManager</a>'s rebases (i.e. cleanups, grows)  <a href="class_ogre_1_1_bone.html#a2b12f7cf0adf5025c9864cc242396226">More...</a><br /></td></tr>
 <tr class="separator:a2b12f7cf0adf5025c9864cc242396226"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18b15976da18ad094bba1bf2fd06e439"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#a18b15976da18ad094bba1bf2fd06e439">_setCachedTransformOutOfDate</a> (void)</td></tr>
+<tr class="separator:a18b15976da18ad094bba1bf2fd06e439"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addcf86004230191108a13f3db29b8d04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#addcf86004230191108a13f3db29b8d04">_setNodeParent</a> (<a class="el" href="class_ogre_1_1_node.html">Node</a> *nodeParent)</td></tr>
 <tr class="memdesc:addcf86004230191108a13f3db29b8d04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a regular <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> to be parent of this <a class="el" href="class_ogre_1_1_bone.html" title="Class representing a Bone in the join hierarchy of a skeleton.">Bone</a>.  <a href="class_ogre_1_1_bone.html#addcf86004230191108a13f3db29b8d04">More...</a><br /></td></tr>
 <tr class="separator:addcf86004230191108a13f3db29b8d04"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,6 +192,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a701afdce7ebabf66d52eb0220140f06d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#a701afdce7ebabf66d52eb0220140f06d">getScale</a> (void) const</td></tr>
 <tr class="memdesc:a701afdce7ebabf66d52eb0220140f06d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the scale of the node relative to its parent.  <a href="class_ogre_1_1_bone.html#a701afdce7ebabf66d52eb0220140f06d">More...</a><br /></td></tr>
 <tr class="separator:a701afdce7ebabf66d52eb0220140f06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3868cc5320c6e3868ae9f79ad04d10d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#ab3868cc5320c6e3868ae9f79ad04d10d">isCachedTransformOutOfDate</a> (void) const</td></tr>
+<tr class="separator:ab3868cc5320c6e3868ae9f79ad04d10d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -538,6 +542,32 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Internal use. Called from <a class="el" href="class_ogre_1_1_bone_memory_manager.html" title="Wrap-around class that contains multiple ArrayMemoryManager, one per hierarchy depth.">BoneMemoryManager</a>'s rebases (i.e. cleanups, grows) </p>
+
+</div>
+</div>
+<a id="a18b15976da18ad094bba1bf2fd06e439"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18b15976da18ad094bba1bf2fd06e439">&#9670;&nbsp;</a></span>_setCachedTransformOutOfDate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::Bone::_setCachedTransformOutOfDate </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -961,6 +991,32 @@ Public Attributes</h2></td></tr>
 
 <p>Gets the scale of the node relative to its parent. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Don't call this function too often, as we need to convert from SoA </dd></dl>
+
+</div>
+</div>
+<a id="ab3868cc5320c6e3868ae9f79ad04d10d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3868cc5320c6e3868ae9f79ad04d10d">&#9670;&nbsp;</a></span>isCachedTransformOutOfDate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::Bone::isCachedTransformOutOfDate </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

@@ -1,5 +1,7 @@
 var NAVTREEINDEX38 =
 {
+"class_ogre_1_1_compositor_workspace.html#ab152c8f646a835c2f88585ad4fe0413a":[5,2,1,27,27],
+"class_ogre_1_1_compositor_workspace.html#ab33e87f8b5f6cc8306e4acbe01c2d51b":[5,2,1,27,9],
 "class_ogre_1_1_compositor_workspace.html#ab5c4b2d2d42914dae8d0c3e5c95fa8cd":[5,2,1,27,28],
 "class_ogre_1_1_compositor_workspace.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,1,27,42],
 "class_ogre_1_1_compositor_workspace.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,1,27,40],
@@ -173,10 +175,10 @@ var NAVTREEINDEX38 =
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,23],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,24],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,25],
-"class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,26],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,27],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,28],
 "class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,29],
+"class_ogre_1_1_config_dialog.html#a7f0b3ad5a525337726df195f619033ba":[5,2,2,26,26],
 "class_ogre_1_1_config_dialog.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,2,26,34],
 "class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,1],
 "class_ogre_1_1_config_dialog.html#a845325a51753f951ee75c29b1ad8aa85":[5,2,2,26,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX38 =
 "class_ogre_1_1_const_buffer_packed.html#a481ad7b97cb88501c5777f4703ff2320":[7,0,0,163,2],
 "class_ogre_1_1_const_buffer_packed.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,163,36],
 "class_ogre_1_1_const_buffer_packed.html#a4ecf6ab68e08468525626cfd253edfef":[7,0,0,163,13],
-"class_ogre_1_1_const_buffer_packed.html#a50080eb729acd0c995606d512d5633c9":[7,0,0,163,17],
-"class_ogre_1_1_const_buffer_packed.html#a542b46fc7a7cf5fe524cfc7b4b389ba9":[7,0,0,163,19],
-"class_ogre_1_1_const_buffer_packed.html#a564935579f2252627f46dff29142e7ff":[7,0,0,163,6]
+"class_ogre_1_1_const_buffer_packed.html#a50080eb729acd0c995606d512d5633c9":[7,0,0,163,17]
 };
