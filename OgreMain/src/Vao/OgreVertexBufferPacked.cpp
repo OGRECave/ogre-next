@@ -33,9 +33,6 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    const IndexType IndexBufferPacked::IT_16BIT = Ogre::IT_16BIT;
-    const IndexType IndexBufferPacked::IT_32BIT = Ogre::IT_32BIT;
-
     VertexBufferPacked::VertexBufferPacked( size_t internalBufferStartBytes, size_t numElements,
                                             uint32 bytesPerElement, uint32 numElementsPadding,
                                             BufferType bufferType,

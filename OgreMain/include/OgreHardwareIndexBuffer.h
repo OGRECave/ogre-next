@@ -50,8 +50,8 @@ namespace v1 {
     {
         public:
             typedef Ogre::IndexType IndexType;
-            static const IndexType IT_16BIT;
-            static const IndexType IT_32BIT;
+            static const IndexType IT_16BIT = Ogre::IT_16BIT;
+            static const IndexType IT_32BIT = Ogre::IT_32BIT;
 
         protected:
             HardwareBufferManagerBase* mMgr;
