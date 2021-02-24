@@ -160,12 +160,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a513a2379245911d5ed1993d5f25c4bef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_plane.html#a513a2379245911d5ed1993d5f25c4bef">projectVector</a> (const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;v) const</td></tr>
 <tr class="memdesc:a513a2379245911d5ed1993d5f25c4bef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Project a vector onto the plane.  <a href="class_ogre_1_1_plane.html#a513a2379245911d5ed1993d5f25c4bef">More...</a><br /></td></tr>
 <tr class="separator:a513a2379245911d5ed1993d5f25c4bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93b10ba23a8142123cbcac6e4094f15c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_plane.html#a93b10ba23a8142123cbcac6e4094f15c">redefine</a> (const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;p0, const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;p1, const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;p2)</td></tr>
+<tr class="memdesc:a93b10ba23a8142123cbcac6e4094f15c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redefine this plane based on 3 points.  <a href="class_ogre_1_1_plane.html#a93b10ba23a8142123cbcac6e4094f15c">More...</a><br /></td></tr>
+<tr class="separator:a93b10ba23a8142123cbcac6e4094f15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74dab1f3fb059277cd477aa683b238f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_plane.html#a74dab1f3fb059277cd477aa683b238f7">redefine</a> (const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;rkNormal, const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;rkPoint)</td></tr>
 <tr class="memdesc:a74dab1f3fb059277cd477aa683b238f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redefine this plane based on a normal and a point.  <a href="class_ogre_1_1_plane.html#a74dab1f3fb059277cd477aa683b238f7">More...</a><br /></td></tr>
 <tr class="separator:a74dab1f3fb059277cd477aa683b238f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3edb29b896bac43b3a199460123e94b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_plane.html#a3edb29b896bac43b3a199460123e94b2">redefine</a> (const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;rkPoint0, const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;rkPoint1, const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;rkPoint2)</td></tr>
-<tr class="memdesc:a3edb29b896bac43b3a199460123e94b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redefine this plane based on 3 points.  <a href="class_ogre_1_1_plane.html#a3edb29b896bac43b3a199460123e94b2">More...</a><br /></td></tr>
-<tr class="separator:a3edb29b896bac43b3a199460123e94b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09ed045de29ff480bfaaf8d35549f3b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_p_c_plane.html#a09ed045de29ff480bfaaf8d35549f3b5">setFromOgrePlane</a> (<a class="el" href="class_ogre_1_1_plane.html">Plane</a> &amp;ogrePlane)</td></tr>
 <tr class="memdesc:a09ed045de29ff480bfaaf8d35549f3b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy from an <a class="el" href="namespace_ogre.html">Ogre</a> <a class="el" href="class_ogre_1_1_plane.html" title="Defines a plane in 3D space.">Plane</a>.  <a href="class_ogre_1_1_p_c_plane.html#a09ed045de29ff480bfaaf8d35549f3b5">More...</a><br /></td></tr>
 <tr class="separator:a09ed045de29ff480bfaaf8d35549f3b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -357,13 +357,15 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>This is a pseudodistance. </p>
 <p>The sign of the return value is positive if the point is on the positive side of the plane, negative if the point is on the negative side, and zero if the point is on the plane. </p><dl class="section user"><dt></dt><dd>The absolute value of the return value is the true distance only when the plane normal is a unit length vector. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_ogre_1_1_vector3.html#ad677c37bfc81b5b5472e76a59647b704">Ogre::Vector3::dotProduct()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="class_ogre_1_1_plane_bounded_volume.html#a2381ee685a1657cb601f1859ed8bc9b0">Ogre::PlaneBoundedVolume::intersects()</a>.</p>
 
@@ -490,10 +492,12 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bcaaf227c36d02442779fd4600d00580f5e">Ogre::Plane::NEGATIVE_SIDE</a>, <a class="el" href="class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bcaad112821a6c39f0097136ba5df53052a">Ogre::Plane::NO_SIDE</a>, and <a class="el" href="class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bcac5f2b56ac439b77aad6dfc4031891be5">Ogre::Plane::POSITIVE_SIDE</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="class_ogre_1_1_plane_bounded_volume.html#ac92a3d627da4cadbc9ebe7331b368e6e">Ogre::PlaneBoundedVolume::intersects()</a>.</p>
 
@@ -652,8 +656,54 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a93b10ba23a8142123cbcac6e4094f15c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93b10ba23a8142123cbcac6e4094f15c">&#9670;&nbsp;</a></span>redefine() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Plane::redefine </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>p0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>p1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>p2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Redefine this plane based on 3 points. </p>
+
+<p class="reference">References <a class="el" href="class_ogre_1_1_vector3.html#ad677c37bfc81b5b5472e76a59647b704">Ogre::Vector3::dotProduct()</a>, and <a class="el" href="class_ogre_1_1_vector3.html#a3aca610d8cc0298d0c49ddc9a445f5cd">Ogre::Vector3::normalisedCopy()</a>.</p>
+
+</div>
+</div>
 <a id="a74dab1f3fb059277cd477aa683b238f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74dab1f3fb059277cd477aa683b238f7">&#9670;&nbsp;</a></span>redefine() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a74dab1f3fb059277cd477aa683b238f7">&#9670;&nbsp;</a></span>redefine() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -681,56 +731,14 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Redefine this plane based on a normal and a point. </p>
 
-</div>
-</div>
-<a id="a3edb29b896bac43b3a199460123e94b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3edb29b896bac43b3a199460123e94b2">&#9670;&nbsp;</a></span>redefine() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::Plane::redefine </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
-          <td class="paramname"><em>rkPoint0</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
-          <td class="paramname"><em>rkPoint1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
-          <td class="paramname"><em>rkPoint2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Redefine this plane based on 3 points. </p>
+<p class="reference">References <a class="el" href="class_ogre_1_1_vector3.html#ad677c37bfc81b5b5472e76a59647b704">Ogre::Vector3::dotProduct()</a>.</p>
 
 </div>
 </div>
