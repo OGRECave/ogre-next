@@ -2038,8 +2038,7 @@ var files_dup =
     [ "OgreSkeletonManager.h", "_ogre_skeleton_manager_8h.html", null ],
     [ "OgreSkeletonSerializer.h", "_ogre_skeleton_serializer_8h.html", "_ogre_skeleton_serializer_8h" ],
     [ "OgreSkeletonTrack.h", "_ogre_skeleton_track_8h.html", "_ogre_skeleton_track_8h" ],
-    [ "Components/MeshLodGenerator/include/OgreSmallVector.h", "_components_2_mesh_lod_generator_2include_2_ogre_small_vector_8h.html", "_components_2_mesh_lod_generator_2include_2_ogre_small_vector_8h" ],
-    [ "OgreMain/include/OgreSmallVector.h", "_ogre_main_2include_2_ogre_small_vector_8h.html", "_ogre_main_2include_2_ogre_small_vector_8h" ],
+    [ "OgreSmallVector.h", "_ogre_small_vector_8h.html", "_ogre_small_vector_8h" ],
     [ "OgreSphere.h", "_ogre_sphere_8h.html", null ],
     [ "OgreStableHeaders.h", "_ogre_stable_headers_8h.html", null ],
     [ "OgreStackVector.h", "_ogre_stack_vector_8h.html", [

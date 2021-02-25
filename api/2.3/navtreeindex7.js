@@ -1,11 +1,5 @@
 var NAVTREEINDEX7 =
 {
-"_ogre_memory_allocator_config_8h.html#a585fa2d21e2525019ad062d76df8b719":[8,0,575,65],
-"_ogre_memory_allocator_config_8h.html#a58ac0addbec4db9072a7405d75e6bd57":[8,0,575,64],
-"_ogre_memory_allocator_config_8h.html#a5d60f07603a9106ef3ea80c2436071e3":[8,0,575,35],
-"_ogre_memory_allocator_config_8h.html#a5fae23475351938803d15fcbabc3b6d8":[8,0,575,52],
-"_ogre_memory_allocator_config_8h.html#a61c92fc2d65ecf3d3da5078c57f85f2a":[8,0,575,29],
-"_ogre_memory_allocator_config_8h.html#a62bd950b43a50257f8aa1589d2e823f9":[8,0,575,34],
 "_ogre_memory_allocator_config_8h.html#a6cb7d42eba87cebf8ccb40505b63377a":[8,0,575,38],
 "_ogre_memory_allocator_config_8h.html#a7760dfd33392321cbb59cb913ebbfb07":[8,0,575,33],
 "_ogre_memory_allocator_config_8h.html#a7af43449266010d92fd985d19d3f6483":[8,0,575,78],
@@ -249,5 +243,11 @@ var NAVTREEINDEX7 =
 "_ogre_nsight_checker_8h.html":[8,0,646],
 "_ogre_nsight_checker_8h.html#aeb4d8035f572648e0d6181944d70ca18":[8,0,646,0],
 "_ogre_numerics_8h.html":[8,0,669],
-"_ogre_numerics_8h.html#ga006856a8eae8ec29bf45365bbd67ea46":[8,0,669,0]
+"_ogre_numerics_8h.html#ga006856a8eae8ec29bf45365bbd67ea46":[8,0,669,0],
+"_ogre_o_i_t_d_codec_8h.html":[8,0,685],
+"_ogre_o_s_version_helpers_8h.html":[8,0,691],
+"_ogre_o_s_version_helpers_8h.html#a89b31b859227cdb5cc6321eca16d4a2b":[8,0,691,1],
+"_ogre_o_s_version_helpers_8h.html#a916f47ab16334b59ff1532cc0438c482":[8,0,691,2],
+"_ogre_o_s_version_helpers_8h.html#aad7d5e9663d83404a7a23a27aeceb0c5":[8,0,691,3],
+"_ogre_o_s_version_helpers_8h.html#ad8a247a955766c3f4905be6c3021f93c":[8,0,691,0]
 };

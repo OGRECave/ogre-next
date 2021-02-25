@@ -1,8 +1,5 @@
 var NAVTREEINDEX34 =
 {
-"class_ogre_1_1_compositor_pass_def.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,1,8,12],
-"class_ogre_1_1_compositor_pass_def.html#a5b72f1a56bcbd829fc60fa21afde5927":[5,2,1,8,21],
-"class_ogre_1_1_compositor_pass_def.html#a625c0163d6577b29e5d502da3f13837d":[5,2,1,8,3],
 "class_ogre_1_1_compositor_pass_def.html#a6e881a7f92659dabfe52eefec2ccf603":[5,2,1,8,34],
 "class_ogre_1_1_compositor_pass_def.html#a70ba2384e061021d6eceb5dd20b66d47":[5,2,1,8,33],
 "class_ogre_1_1_compositor_pass_def.html#a7446207e62dfceb532bd3dc3cf78039b":[5,2,1,8,32],
@@ -249,5 +246,8 @@ var NAVTREEINDEX34 =
 "class_ogre_1_1_compositor_pass_mipmap_def.html#aa9377ca6479c21df519128eb6142b169":[5,2,1,14,24],
 "class_ogre_1_1_compositor_pass_mipmap_def.html#aa9def33c89448b89c2d920d96ff55f28":[5,2,1,14,36],
 "class_ogre_1_1_compositor_pass_mipmap_def.html#aa9fc749c877ef112faac9fd759d65eb4":[5,2,1,14,1],
-"class_ogre_1_1_compositor_pass_mipmap_def.html#aa9fc749c877ef112faac9fd759d65eb4a09fff6dcecf1ac988c4674350847c2e8":[5,2,1,14,1,1]
+"class_ogre_1_1_compositor_pass_mipmap_def.html#aa9fc749c877ef112faac9fd759d65eb4a09fff6dcecf1ac988c4674350847c2e8":[5,2,1,14,1,1],
+"class_ogre_1_1_compositor_pass_mipmap_def.html#aa9fc749c877ef112faac9fd759d65eb4a8091aab9a83ab19f4c1d8c9127e3c31d":[5,2,1,14,1,2],
+"class_ogre_1_1_compositor_pass_mipmap_def.html#aa9fc749c877ef112faac9fd759d65eb4ab44e11c00e5d3e6cf9680a5e125aebd0":[5,2,1,14,1,0],
+"class_ogre_1_1_compositor_pass_mipmap_def.html#aacdeaffb7cacec5f264de2be66410c67":[5,2,1,14,28]
 };

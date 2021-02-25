@@ -2128,24 +2128,16 @@ var hierarchy =
             [ "Ogre::SmallVector< T, S >", "class_ogre_1_1_small_vector.html", [
               [ "Ogre::VectorSet< T, S >", "struct_ogre_1_1_vector_set.html", null ]
             ] ],
-            [ "Ogre::SmallVector< T, S >", "class_ogre_1_1_small_vector.html", null ],
             [ "Ogre::SmallVector< T, N >", "class_ogre_1_1_small_vector.html", [
               [ "Ogre::VectorSet< Triangle *, 7 >", "struct_ogre_1_1_vector_set.html", null ],
               [ "Ogre::VectorSet< Edge, 8 >", "struct_ogre_1_1_vector_set.html", null ]
             ] ],
-            [ "Ogre::SmallVector< T, N >", "class_ogre_1_1_small_vector.html", null ],
-            [ "Ogre::SmallVector< T, 0 >", "class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html", null ],
             [ "Ogre::SmallVector< T, 0 >", "class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html", null ]
-          ] ],
-          [ "Ogre::SmallVectorImpl< T >", "class_ogre_1_1_small_vector_impl.html", null ]
+          ] ]
         ] ],
-        [ "Ogre::SmallVectorTemplateBase< T, isPodLike< T >::value >", "class_ogre_1_1_small_vector_template_base.html", null ],
         [ "Ogre::SmallVectorTemplateBase< T, isPodLike >", "class_ogre_1_1_small_vector_template_base.html", null ],
-        [ "Ogre::SmallVectorTemplateBase< T, isPodLike >", "class_ogre_1_1_small_vector_template_base.html", null ],
-        [ "Ogre::SmallVectorTemplateBase< T, true >", "class_ogre_1_1_small_vector_template_base_3_01_t_00_01true_01_4.html", null ],
         [ "Ogre::SmallVectorTemplateBase< T, true >", "class_ogre_1_1_small_vector_template_base_3_01_t_00_01true_01_4.html", null ]
-      ] ],
-      [ "Ogre::SmallVectorTemplateCommon< T >", "class_ogre_1_1_small_vector_template_common.html", null ]
+      ] ]
     ] ],
     [ "Ogre::Sphere", "class_ogre_1_1_sphere.html", null ],
     [ "Ogre::StackVector< T, Capacity >", "class_ogre_1_1_stack_vector.html", null ],
