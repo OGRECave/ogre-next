@@ -113,7 +113,7 @@ namespace Ogre {
 
     /// SmallVectorBase - This is all the non-templated stuff common to all
     /// SmallVectors.
-    class SmallVectorBase {
+    class _OgreExport SmallVectorBase {
     protected:
         void *BeginX, *EndX, *CapacityX;
         
