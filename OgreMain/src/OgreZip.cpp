@@ -272,6 +272,7 @@ namespace Ogre {
         return ret;
     }
     //-----------------------------------------------------------------------
+#if __cplusplus < 201103L
     struct FileNameCompare
     {
         typedef FileInfo first_argument_type;
@@ -283,6 +284,7 @@ namespace Ogre {
             return lhs.filename == filename;
         }
     };
+#endif
     //-----------------------------------------------------------------------
     bool ZipArchive::exists(const String& filename)
     {       
@@ -294,11 +296,13 @@ namespace Ogre {
             cleanName = tokens[tokens.size() - 1];
         }
 
-#       if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER >= 1910
+#if __cplusplus >= 201103L
+        return std::find_if( mFileList.begin(), mFileList.end(), [&cleanName](const FileInfo& fi){ return fi.filename == cleanName; }) != mFileList.end();
+#elif OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER >= 1910
         return std::find_if( mFileList.begin(), mFileList.end(), std::bind( FileNameCompare(), std::placeholders::_1, cleanName ) ) != mFileList.end();
-#       else
+#else
         return std::find_if( mFileList.begin(), mFileList.end(), std::bind2nd<FileNameCompare>( FileNameCompare(), cleanName ) ) != mFileList.end();
-#       endif
+#endif
     }
     //---------------------------------------------------------------------
     time_t ZipArchive::getModifiedTime(const String& filename)
