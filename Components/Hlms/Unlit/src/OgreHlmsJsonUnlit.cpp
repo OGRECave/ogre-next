@@ -318,7 +318,7 @@ namespace Ogre
         assert( dynamic_cast<const HlmsUnlitDatablock*>(datablock) );
         const HlmsUnlitDatablock *unlitDatablock = static_cast<const HlmsUnlitDatablock*>(datablock);
 
-		ColourValue value = unlitDatablock->getColour();;
+		ColourValue value = unlitDatablock->getColour();
 		if (unlitDatablock->hasColour() && value != ColourValue::White)
 		{
 			outString += ",\n\t\t\t\"diffuse\" : ";

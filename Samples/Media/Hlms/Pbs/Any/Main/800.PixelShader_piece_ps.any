@@ -183,7 +183,7 @@
 		@property( detail_weight_map )	ushort texIndex_weightMapIdx		= material.indices0_3.z & 0x0000FFFFu;@end
 		@property( detail_map0 )		ushort texIndex_detailMapIdx0		= material.indices0_3.z >> 16u;@end
 		@property( detail_map1 )		ushort texIndex_detailMapIdx1		= material.indices0_3.w & 0x0000FFFFu;@end
-		@property( detail_map2 )		ushort texIndex_detailMapIdx2		= material.indices0_3.w >> 16u;;@end
+		@property( detail_map2 )		ushort texIndex_detailMapIdx2		= material.indices0_3.w >> 16u;@end
 		@property( detail_map3 )		ushort texIndex_detailMapIdx3		= material.indices4_7.x & 0x0000FFFFu;@end
 	@end
 @end

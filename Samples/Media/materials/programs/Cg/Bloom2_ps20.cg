@@ -19,7 +19,7 @@ float4 main(float2 texCoord: TEXCOORD0,
 
 	//return ( sharp + blur * 1.8 ) / 2;
 
-//	return (sharp*3/6 + (blur*4/6))*float4(1.5, 1.5, 1.5, 1);;
+//	return (sharp*3/6 + (blur*4/6))*float4(1.5, 1.5, 1.5, 1);
 
 //	float4 color	= lerp( sharp, blur, 0.4f );
 

@@ -192,7 +192,7 @@ namespace Ogre
                     pixelFormat = PixelFormatGpuUtils::getEquivalentLinear( pixelFormat );
 
                 TextureGpuManager *textureGpuManager =
-                            mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();;
+                            mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
                 actorData.reflectionTexture =
                         textureGpuManager->createTexture(
                             "PlanarReflections #" + StringConverter::toString( uniqueId ),

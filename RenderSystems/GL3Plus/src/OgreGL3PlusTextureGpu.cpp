@@ -499,7 +499,7 @@ namespace Ogre
                         bufferBits = GL_COLOR_BUFFER_BIT;
 
                     GLint srcX0 = srcBox.x;
-                    GLint srcX1 = srcBox.x + srcBox.width;;
+                    GLint srcX1 = srcBox.x + srcBox.width;
                     GLint srcY0;
                     GLint srcY1;
                     if( this->isRenderWindowSpecific() )

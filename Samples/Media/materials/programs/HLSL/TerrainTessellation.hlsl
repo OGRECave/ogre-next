@@ -679,7 +679,7 @@ float4 SmoothShadePS(MeshVertex input,
 	const float3 normal = normalize(coarseNormal + detailNormal);
 
 	// Texture coords have to be offset by the eye's 2D world position.  Why the 2x???
-	const float2 texUV = input.vWorldXZ + 2 * float2(g_TextureWorldOffset.x, -g_TextureWorldOffset.z);;
+	const float2 texUV = input.vWorldXZ + 2 * float2(g_TextureWorldOffset.x, -g_TextureWorldOffset.z);
 
 	// We apply two textures at vastly different scales: macro and micro detail.
 	float3 macroDetail = g_TerrainColourTexture1.Sample(SamplerRepeatMaxAniso, texUV).xyz;				// we know that this is grey only

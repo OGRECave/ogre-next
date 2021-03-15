@@ -171,7 +171,7 @@ namespace OgreMayaExporter
                 }
             }
             // Get world bind matrix
-            MMatrix bindMatrix = jointDag.inclusiveMatrix();;
+            MMatrix bindMatrix = jointDag.inclusiveMatrix();
             // Calculate local bind matrix
             MMatrix localMatrix;
             if (parent)

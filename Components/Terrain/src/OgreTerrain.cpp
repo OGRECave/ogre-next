@@ -2293,7 +2293,7 @@ namespace Ogre
         if (!mIsLoaded)
             return;
 
-        mLastMillis = Root::getSingleton().getTimer()->getMilliseconds();;
+        mLastMillis = Root::getSingleton().getTimer()->getMilliseconds();
         // only calculate LOD once per LOD camera, per frame, per viewport height
         const Camera* lodCamera = source->getCameraInProgress()->getLodCamera();
         unsigned long frameNum = Root::getSingleton().getNextFrameNumber();

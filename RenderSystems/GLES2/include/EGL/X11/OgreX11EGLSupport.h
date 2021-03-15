@@ -109,7 +109,7 @@ THE SOFTWARE.
     int DisplayHeight(Display* nativeDisplayType, int screen);
     Display* XOpenDisplay(int num);
     void XCloseDisplay(Display* nativeDisplayType);
-    Atom XInternAtom(Display* nativeDisplayType, char * name, X11Bool isTrue);;
+    Atom XInternAtom(Display* nativeDisplayType, char * name, X11Bool isTrue);
     char * DisplayString(NativeDisplayType nativeDisplayType);
     const char * XDisplayName(char * name);
     Visual * DefaultVisual(Display* nativeDisplayType,  int screen);
