@@ -67,6 +67,10 @@ namespace Ogre
         if( mPixelFormat == PFG_NULL )
             return; //Nothing to do
 
+        MetalTextureGpuManager *textureManagerMetal =
+                static_cast<MetalTextureGpuManager*>( mTextureManager );
+        MetalDevice *device = textureManagerMetal->getDevice();
+
         MTLTextureDescriptor *desc = [MTLTextureDescriptor new];
         desc.mipmapLevelCount   = mNumMipmaps;
         desc.textureType        = getMetalTextureType();
@@ -74,7 +78,7 @@ namespace Ogre
         desc.height             = mHeight;
         desc.depth              = getDepth();
         desc.arrayLength        = getNumSlices();
-        desc.pixelFormat        = MetalMappings::get( mPixelFormat );
+        desc.pixelFormat        = MetalMappings::get( mPixelFormat, device );
         desc.sampleCount        = 1u;
         desc.storageMode        = MTLStorageModePrivate;
 
@@ -96,10 +100,6 @@ namespace Ogre
             desc.usage |= MTLTextureUsagePixelFormatView;
 
         String textureName = getNameStr();
-
-        MetalTextureGpuManager *textureManagerMetal =
-                static_cast<MetalTextureGpuManager*>( mTextureManager );
-        MetalDevice *device = textureManagerMetal->getDevice();
 
         mFinalTextureName = [device->mDevice newTextureWithDescriptor:desc];
         if( !mFinalTextureName )
@@ -354,7 +354,11 @@ namespace Ogre
         NSRange slices;
         slices = NSMakeRange( arraySlice, this->getNumSlices() - arraySlice );
 
-        return [mDisplayTextureName newTextureViewWithPixelFormat:MetalMappings::get( pixelFormat )
+        MetalTextureGpuManager *textureManagerMetal =
+                static_cast<MetalTextureGpuManager*>( mTextureManager );
+        MetalDevice *device = textureManagerMetal->getDevice();
+
+        return [mDisplayTextureName newTextureViewWithPixelFormat:MetalMappings::get( pixelFormat, device )
                                                       textureType:texType
                                                            levels:mipLevels
                                                            slices:slices];

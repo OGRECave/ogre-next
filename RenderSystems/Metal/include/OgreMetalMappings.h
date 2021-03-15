@@ -49,7 +49,7 @@ namespace Ogre
     {
     public:
         /// Can throw if PixelFormat is not depth.
-        static void getDepthStencilFormat( MetalDevice *device, PixelFormatGpu pf,
+        static void getDepthStencilFormat( PixelFormatGpu pf, MetalDevice *device,
                                            MTLPixelFormat &outDepth, MTLPixelFormat &outStencil );
         static MTLBlendFactor get( SceneBlendFactor op );
         static MTLBlendOperation get( SceneBlendOperation op );
@@ -68,7 +68,7 @@ namespace Ogre
 
         static MTLVertexFormat dataTypeToVertexFormat( MTLDataType dataType );
 
-        static MTLPixelFormat get( PixelFormatGpu pf );
+        static MTLPixelFormat get( PixelFormatGpu pf, MetalDevice *device );
 
         static GpuConstantType get( MTLDataType dataType );
     };

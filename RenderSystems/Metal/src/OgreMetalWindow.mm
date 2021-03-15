@@ -97,7 +97,7 @@ namespace Ogre
             {
                 MTLTextureDescriptor* desc = [MTLTextureDescriptor
                                              texture2DDescriptorWithPixelFormat:
-                                             MetalMappings::get( mTexture->getPixelFormat() )
+                                             MetalMappings::get( mTexture->getPixelFormat(), mDevice )
                                              width: widthPx height: heightPx mipmapped: NO];
                 desc.textureType = MTLTextureType2DMultisample;
                 desc.sampleCount = mSampleDescription.getColourSamples();
@@ -301,7 +301,7 @@ namespace Ogre
         mMetalLayer = (CAMetalLayer*)mMetalView.layer;
         mMetalLayer.device      = mDevice->mDevice;
         mMetalLayer.pixelFormat = MetalMappings::get( mHwGamma ? PFG_BGRA8_UNORM_SRGB :
-                                                                 PFG_BGRA8_UNORM );
+                                                                 PFG_BGRA8_UNORM, mDevice );
 
         //This is the default but if we wanted to perform compute
         //on the final rendering layer we could set this to no

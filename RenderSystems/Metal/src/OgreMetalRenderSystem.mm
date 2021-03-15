@@ -1619,7 +1619,7 @@ namespace Ogre
         for( int i=0; i<mrtCount; ++i )
         {
             HlmsBlendblock const *blendblock = newPso->blendblock;
-            psd.colorAttachments[i].pixelFormat = MetalMappings::get( newPso->pass.colourFormat[i] );
+            psd.colorAttachments[i].pixelFormat = MetalMappings::get( newPso->pass.colourFormat[i], mActiveDevice );
 
             if( psd.colorAttachments[i].pixelFormat == MTLPixelFormatInvalid ||
                 (blendblock->mBlendOperation == SBO_ADD &&
@@ -1652,7 +1652,7 @@ namespace Ogre
         {
             MTLPixelFormat depthFormat = MTLPixelFormatInvalid;
             MTLPixelFormat stencilFormat = MTLPixelFormatInvalid;
-            MetalMappings::getDepthStencilFormat( mActiveDevice, newPso->pass.depthFormat,
+            MetalMappings::getDepthStencilFormat( newPso->pass.depthFormat, mActiveDevice,
                                                   depthFormat, stencilFormat );
             psd.depthAttachmentPixelFormat = depthFormat;
             psd.stencilAttachmentPixelFormat = stencilFormat;

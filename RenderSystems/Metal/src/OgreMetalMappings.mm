@@ -34,7 +34,7 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 namespace Ogre
 {
     //-----------------------------------------------------------------------------------
-    void MetalMappings::getDepthStencilFormat( MetalDevice *device, PixelFormatGpu pf,
+    void MetalMappings::getDepthStencilFormat( PixelFormatGpu pf, MetalDevice *device, 
                                                MTLPixelFormat &outDepth, MTLPixelFormat &outStencil )
     {
         MTLPixelFormat depthFormat = MTLPixelFormatInvalid;
@@ -328,7 +328,7 @@ namespace Ogre
         return MTLVertexFormatInvalid;
     }
     //-----------------------------------------------------------------------------------
-    MTLPixelFormat MetalMappings::get( PixelFormatGpu pf )
+    MTLPixelFormat MetalMappings::get( PixelFormatGpu pf, MetalDevice *device )
     {
         switch( pf )
         {
@@ -367,8 +367,10 @@ namespace Ogre
         case PFG_R32_UINT:		                return MTLPixelFormatR32Uint;
         case PFG_R32_SINT:		                return MTLPixelFormatR32Sint;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        case PFG_D24_UNORM:		                return MTLPixelFormatDepth24Unorm_Stencil8;
-        case PFG_D24_UNORM_S8_UINT:             return MTLPixelFormatDepth24Unorm_Stencil8;
+        case PFG_D24_UNORM:
+        case PFG_D24_UNORM_S8_UINT:
+            return device->mDevice.depth24Stencil8PixelFormatSupported ?
+                MTLPixelFormatDepth24Unorm_Stencil8 : MTLPixelFormatDepth32Float_Stencil8;
 #else
         case PFG_D24_UNORM:		                return MTLPixelFormatDepth32Float;
         case PFG_D24_UNORM_S8_UINT:             return MTLPixelFormatDepth32Float_Stencil8;
