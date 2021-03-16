@@ -95,6 +95,7 @@ namespace v1 {
     void HardwareBufferManagerBase::destroyVertexDeclaration(VertexDeclaration* decl)
     {
         OGRE_LOCK_MUTEX(mVertexDeclarationsMutex);
+        assert(mVertexDeclarations.find(decl) != mVertexDeclarations.end());
         mVertexDeclarations.erase(decl);
         destroyVertexDeclarationImpl(decl);
     }
@@ -109,7 +110,7 @@ namespace v1 {
     //-----------------------------------------------------------------------
     void HardwareBufferManagerBase::destroyVertexBufferBinding(VertexBufferBinding* binding)
     {
-            OGRE_LOCK_MUTEX(mVertexBufferBindingsMutex);
+        OGRE_LOCK_MUTEX(mVertexBufferBindingsMutex);
         mVertexBufferBindings.erase(binding);
         destroyVertexBufferBindingImpl(binding);
     }
