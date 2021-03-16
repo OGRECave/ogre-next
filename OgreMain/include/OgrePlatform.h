@@ -531,8 +531,13 @@ typedef signed char int8;
     typedef unsigned __int64 uint64;
     typedef __int64 int64;
 #else
+#   if defined __x86_64__ && !defined __ILP32__
+    typedef unsigned long int uint64;
+    typedef long int int64;
+#   else
     typedef unsigned long long uint64;
     typedef long long int64;
+#   endif
 #endif
 
 #ifndef OGRE_RESTRICT_ALIASING
