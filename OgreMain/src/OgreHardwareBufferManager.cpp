@@ -111,6 +111,7 @@ namespace v1 {
     void HardwareBufferManagerBase::destroyVertexBufferBinding(VertexBufferBinding* binding)
     {
         OGRE_LOCK_MUTEX(mVertexBufferBindingsMutex);
+        assert(mVertexBufferBindings.find(binding) != mVertexBufferBindings.end());
         mVertexBufferBindings.erase(binding);
         destroyVertexBufferBindingImpl(binding);
     }
