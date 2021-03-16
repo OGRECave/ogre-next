@@ -244,7 +244,7 @@ namespace Ogre
                                      "%i", a0 );
             assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
             mStrPtr[mCapacity - 1] = '\0';
-            mSize = std::min<size_t>( mSize + std::max( written, 0 ), mCapacity - 1 );
+            mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
             return *this;
         }
 
@@ -255,7 +255,7 @@ namespace Ogre
                                      "%u", a0 );
             assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
             mStrPtr[mCapacity - 1] = '\0';
-            mSize = std::min<size_t>( mSize + std::max( written, 0 ), mCapacity - 1 );
+            mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
             return *this;
         }
 
@@ -266,7 +266,7 @@ namespace Ogre
                                      "%lli", a0 );
             assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
             mStrPtr[mCapacity - 1] = '\0';
-            mSize = std::min<size_t>( mSize + std::max( written, 0 ), mCapacity - 1 );
+            mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
             return *this;
         }
 
@@ -277,7 +277,7 @@ namespace Ogre
                                      "%llu", a0 );
             assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
             mStrPtr[mCapacity - 1] = '\0';
-            mSize = std::min<size_t>( mSize + std::max( written, 0 ), mCapacity - 1 );
+            mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
             return *this;
         }
 
@@ -323,12 +323,12 @@ namespace Ogre
                 if( a0.mPrecision < 0 )
                 {
                     written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%f", a0.mValue );
+                                         "%f", (double)a0.mValue );
                 }
                 else
                 {
                     written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%.*f", a0.mPrecision, a0.mValue );
+                                         "%.*f", a0.mPrecision, (double)a0.mValue );
                 }
             }
             else
@@ -336,18 +336,18 @@ namespace Ogre
                 if( a0.mPrecision < 0 )
                 {
                     written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%*f", a0.mMinWidth, a0.mValue );
+                                         "%*f", a0.mMinWidth, (double)a0.mValue );
                 }
                 else
                 {
                     written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-                                         "%*.*f", a0.mMinWidth, a0.mPrecision, a0.mValue );
+                                         "%*.*f", a0.mMinWidth, a0.mPrecision, (double)a0.mValue );
                 }
             }
 
             mStrPtr[mCapacity - 1] = '\0';
             assert( ( written >= 0 ) && ( (unsigned)written < mCapacity ) );
-            mSize = std::min<size_t>( mSize + std::max( written, 0 ), mCapacity - 1 );
+            mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
             return *this;
         }
 
