@@ -1026,7 +1026,7 @@ namespace Ogre
         if (mVertexDataRecord && mVertexDataRecord->cpuVertexData && !mVertexDataRecord->gpuVertexData)
         {
             // copy data from CPU to GPU, but re-use vertex buffers (so don't use regular clone)
-            mVertexDataRecord->gpuVertexData = OGRE_NEW VertexData();
+            mVertexDataRecord->gpuVertexData = OGRE_NEW VertexData(NULL);
             VertexData* srcData = mVertexDataRecord->cpuVertexData;
             VertexData* destData = mVertexDataRecord->gpuVertexData;
 

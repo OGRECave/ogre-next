@@ -953,7 +953,7 @@ namespace v1 {
         // default to no indexes unless we're told
         mRenderOperation.useIndexes = false;
         mRenderOperation.useGlobalInstancingVertexBufferIsAvailable = false;
-        mRenderOperation.vertexData = OGRE_NEW VertexData();
+        mRenderOperation.vertexData = OGRE_NEW VertexData(NULL);
         mRenderOperation.vertexData->vertexCount = 0;
 
     }

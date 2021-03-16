@@ -45,7 +45,7 @@ namespace v1 {
 
     void WireBoundingBox::_initWireBoundingBox()
     {
-        mRenderOp.vertexData = OGRE_NEW VertexData();
+        mRenderOp.vertexData = OGRE_NEW VertexData(NULL);
 
         mRenderOp.indexData = 0;
         mRenderOp.vertexData->vertexCount = 24; 

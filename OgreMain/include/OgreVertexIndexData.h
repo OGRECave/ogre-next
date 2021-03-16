@@ -63,7 +63,7 @@ namespace v1 {
             automatically, and arranges for their deletion afterwards.
         @param mgr Optional HardwareBufferManager from which to create resources
         */
-        VertexData(HardwareBufferManagerBase* mgr = 0);
+        VertexData(HardwareBufferManagerBase* mgr);
         /** Constructor.
         @note 
         This constructor receives the VertexDeclaration and VertexBufferBinding

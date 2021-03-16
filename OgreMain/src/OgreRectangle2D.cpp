@@ -60,7 +60,7 @@ namespace v1
         mUseIdentityProjection  = true;
         mUseIdentityView        = true;
 
-        mRenderOp.vertexData = OGRE_NEW VertexData();
+        mRenderOp.vertexData = OGRE_NEW VertexData(NULL);
 
         mRenderOp.indexData                 = 0;
         mRenderOp.vertexData->vertexCount   = mQuad ? 4 : 3;

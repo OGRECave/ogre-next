@@ -69,6 +69,7 @@ namespace Ogre {
         mFrustumExtentsManuallySet(false),
         mFrustrumExtentsType(FET_PROJ_PLANE_POS),
         mOrientationMode(OR_DEGREE_0),
+        mVertexData(NULL),
         mReflect(false), 
         mLinkedReflectPlane(0),
         mObliqueDepthProjection(false), 

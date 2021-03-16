@@ -76,7 +76,7 @@ namespace Volume {
         // Prepare vertex buffer
         operation.operationType = RenderOperation::OT_TRIANGLE_LIST;
 
-        operation.vertexData = OGRE_NEW VertexData();
+        operation.vertexData = OGRE_NEW VertexData(NULL);
         operation.vertexData->vertexCount = mVertices.size();
         operation.vertexData->vertexStart = 0;
     

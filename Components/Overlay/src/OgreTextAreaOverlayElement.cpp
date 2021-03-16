@@ -89,7 +89,7 @@ namespace v1 {
             // Set up the render op
             // Combine positions and texture coords since they tend to change together
             // since character sizes are different
-            mRenderOp.vertexData = OGRE_NEW VertexData();
+            mRenderOp.vertexData = OGRE_NEW VertexData(NULL);
             VertexDeclaration* decl = mRenderOp.vertexData->vertexDeclaration;
             size_t offset = 0;
             // Positions

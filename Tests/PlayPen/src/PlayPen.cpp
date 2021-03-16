@@ -1938,7 +1938,7 @@ extern "C" _OgreSampleExport void dllStopPlugin()
 //        /* This tests the edge builders ability to find shared edges in the simple case
 //           of a single index buffer referencing a single vertex buffer
 //        */
-//        VertexData vd;
+//        VertexData vd(NULL);
 //        IndexData id;
 //        // Test pyramid
 //        vd.vertexCount = 4;
@@ -1982,7 +1982,7 @@ extern "C" _OgreSampleExport void dllStopPlugin()
 //        /* This tests the edge builders ability to find shared edges when there are
 //           multiple index sets (submeshes) using a single vertex buffer.
 //        */
-//        VertexData vd;
+//        VertexData vd(NULL);
 //        IndexData ind[4];
 //        // Test pyramid
 //        vd.vertexCount = 4;

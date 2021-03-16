@@ -87,7 +87,7 @@ namespace v1 {
         mFaceCamera(true),
         mNormalBase(Vector3::UNIT_X)
     {
-        mVertexData = OGRE_NEW VertexData();
+        mVertexData = OGRE_NEW VertexData(NULL);
         mIndexData = OGRE_NEW IndexData();
 
         mOtherTexCoordRange[0] = 0.0f;

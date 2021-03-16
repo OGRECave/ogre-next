@@ -749,7 +749,7 @@ namespace v1 {
                 "expect.", LML_CRITICAL);
         }
 
-        mVertexData = OGRE_NEW VertexData();
+        mVertexData = OGRE_NEW VertexData(NULL);
         if (mPointRendering)
             mVertexData->vertexCount = mPoolSize;
         else

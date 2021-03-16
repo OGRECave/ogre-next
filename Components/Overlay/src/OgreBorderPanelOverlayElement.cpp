@@ -96,7 +96,7 @@ namespace v1 {
         if (init)
         {
             // Setup render op in advance
-            mRenderOp2.vertexData = OGRE_NEW VertexData();
+            mRenderOp2.vertexData = OGRE_NEW VertexData(NULL);
             mRenderOp2.vertexData->vertexCount = 4 * 8; // 8 cells, can't necessarily share vertices cos
                                                         // texcoords may differ
             mRenderOp2.vertexData->vertexStart = 0;

@@ -219,7 +219,7 @@ namespace Ogre {
         // Vertices
         //-----------------------------------------------------------------------
         // Allocate memory for vertices & copy
-        mVertexData = OGRE_NEW VertexData();
+        mVertexData = OGRE_NEW VertexData(NULL);
 
         /// Create vertex declaration
         VertexDeclaration* decl = mVertexData->vertexDeclaration;
