@@ -561,6 +561,7 @@ namespace v1 {
     //---------------------------------------------------------------------
     void SubMesh::importFromV2( Ogre::SubMesh *subMesh )
     {
+        HardwareBufferManagerBase* mgr = parent->getHardwareBufferManager();
         const Ogre::SubMesh::VertexBoneAssignmentVec &v2BoneAssignments = subMesh->getBoneAssignments();
 
         {
@@ -592,8 +593,7 @@ namespace v1 {
             {
                 const VertexBufferPackedVec &vertexBuffers = (*itor)->getVertexBuffers();
 
-                vertexData[i] = OGRE_NEW VertexData();
-                HardwareBufferManagerBase *hwManager = vertexData[i]->_getHardwareBufferManager();
+                vertexData[i] = OGRE_NEW VertexData(mgr);
 
                 VertexBufferPackedVec::const_iterator itVertexBuffer = vertexBuffers.begin();
                 VertexBufferPackedVec::const_iterator enVertexBuffer = vertexBuffers.end();
@@ -603,7 +603,7 @@ namespace v1 {
                     AsyncTicketPtr asyncTicket =
                             (*itVertexBuffer)->readRequest( 0, (*itVertexBuffer)->getNumElements() );
                     const void *srcData = asyncTicket->map();
-                    HardwareVertexBufferSharedPtr v1VertexBuf = hwManager->createVertexBuffer(
+                    HardwareVertexBufferSharedPtr v1VertexBuf = mgr->createVertexBuffer(
                                 VaoManager::calculateVertexSize( (*itVertexBuffer)->getVertexElements() ),
                                 (*itVertexBuffer)->getNumElements(), parent->mVertexBufferUsage );
                     HardwareBufferLockGuard dstLock( v1VertexBuf, HardwareBuffer::HBL_NO_OVERWRITE );
@@ -627,7 +627,7 @@ namespace v1 {
                         indexData[i] = OGRE_NEW IndexData();
 
                     indexData[i]->indexCount = indexBuffer->getNumElements();
-                    indexData[i]->indexBuffer = hwManager->createIndexBuffer(
+                    indexData[i]->indexBuffer = mgr->createIndexBuffer(
                                 indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT ?
                                     HardwareIndexBuffer::IT_16BIT : HardwareIndexBuffer::IT_32BIT,
                                 indexBuffer->getNumElements(), parent->mIndexBufferUsage );

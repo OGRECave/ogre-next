@@ -1128,7 +1128,7 @@ namespace Ogre {
         sm->setMaterialName(proto->materialName);
         // never use shared geometry
         sm->useSharedVertices = false;
-        sm->vertexData = new VertexData();
+        sm->vertexData = new VertexData(pMesh->getHardwareBufferManager());
         // always do triangle list
         sm->indexData->indexCount = proto->indices.size();
         
@@ -1141,7 +1141,7 @@ namespace Ogre {
         }
 
         sm->indexData->indexBuffer = 
-            HardwareBufferManager::getSingleton().createIndexBuffer(
+            pMesh->getHardwareBufferManager()->createIndexBuffer(
             use32BitIndexes ? HardwareIndexBuffer::IT_32BIT : HardwareIndexBuffer::IT_16BIT,
             sm->indexData->indexCount,
             HardwareBuffer::HBU_STATIC_WRITE_ONLY);
@@ -1446,7 +1446,7 @@ namespace Ogre {
         unsigned short bufIdx, UniqueVertexList& uniqueVertexList)
     {
         HardwareVertexBufferSharedPtr vbuf = 
-            HardwareBufferManager::getSingleton().createVertexBuffer(
+            vd->_getHardwareBufferManager()->createVertexBuffer(
                 vd->vertexDeclaration->getVertexSize(bufIdx),
                 vd->vertexCount, 
                 HardwareBuffer::HBU_STATIC_WRITE_ONLY);

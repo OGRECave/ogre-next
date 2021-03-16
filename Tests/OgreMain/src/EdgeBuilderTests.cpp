@@ -55,15 +55,15 @@ void EdgeBuilderTests::testSingleIndexBufSingleVertexBuf()
     /* This tests the edge builders ability to find shared edges in the simple case
     of a single index buffer referencing a single vertex buffer
     */
-    VertexData vd;
+    VertexData vd(NULL);
     IndexData id;
 
     // Test pyramid
     vd.vertexCount = 4;
     vd.vertexStart = 0;
-    vd.vertexDeclaration = HardwareBufferManager::getSingleton().createVertexDeclaration();
+    vd.vertexDeclaration = vd._getHardwareBufferManager()->createVertexDeclaration();
     vd.vertexDeclaration->addElement(0, 0, VET_FLOAT3, VES_POSITION);
-    HardwareVertexBufferSharedPtr vbuf = HardwareBufferManager::getSingleton().createVertexBuffer(sizeof(float)*3, 4, HardwareBuffer::HBU_STATIC,true);
+    HardwareVertexBufferSharedPtr vbuf = vd._getHardwareBufferManager()->createVertexBuffer(sizeof(float)*3, 4, HardwareBuffer::HBU_STATIC,true);
     vd.vertexBufferBinding->setBinding(0, vbuf);
     float* pFloat = static_cast<float*>(vbuf->lock(HardwareBuffer::HBL_DISCARD));
     *pFloat++ = 0  ; *pFloat++ = 0  ; *pFloat++ = 0  ;
@@ -72,7 +72,7 @@ void EdgeBuilderTests::testSingleIndexBufSingleVertexBuf()
     *pFloat++ = 0  ; *pFloat++ = 0  ; *pFloat++ = -50;
     vbuf->unlock();
 
-    id.indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+    id.indexBuffer = vd._getHardwareBufferManager()->createIndexBuffer(
         HardwareIndexBuffer::IT_16BIT, 12, HardwareBuffer::HBU_STATIC, true);
     id.indexCount = 12;
     id.indexStart = 0;
@@ -106,15 +106,15 @@ void EdgeBuilderTests::testMultiIndexBufSingleVertexBuf()
     /* This tests the edge builders ability to find shared edges when there are
     multiple index sets (submeshes) using a single vertex buffer.
     */
-    VertexData vd;
+    VertexData vd(NULL);
     IndexData id[4];
 
     // Test pyramid
     vd.vertexCount = 4;
     vd.vertexStart = 0;
-    vd.vertexDeclaration = HardwareBufferManager::getSingleton().createVertexDeclaration();
+    vd.vertexDeclaration = vd._getHardwareBufferManager()->createVertexDeclaration();
     vd.vertexDeclaration->addElement(0, 0, VET_FLOAT3, VES_POSITION);
-    HardwareVertexBufferSharedPtr vbuf = HardwareBufferManager::getSingleton().createVertexBuffer(sizeof(float)*3, 4, HardwareBuffer::HBU_STATIC,true);
+    HardwareVertexBufferSharedPtr vbuf = vd._getHardwareBufferManager()->createVertexBuffer(sizeof(float)*3, 4, HardwareBuffer::HBU_STATIC,true);
     vd.vertexBufferBinding->setBinding(0, vbuf);
     float* pFloat = static_cast<float*>(vbuf->lock(HardwareBuffer::HBL_DISCARD));
     *pFloat++ = 0  ; *pFloat++ = 0  ; *pFloat++ = 0  ;
@@ -123,7 +123,7 @@ void EdgeBuilderTests::testMultiIndexBufSingleVertexBuf()
     *pFloat++ = 0  ; *pFloat++ = 0  ; *pFloat++ = -50;
     vbuf->unlock();
 
-    id[0].indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+    id[0].indexBuffer = vd._getHardwareBufferManager()->createIndexBuffer(
         HardwareIndexBuffer::IT_16BIT, 3, HardwareBuffer::HBU_STATIC, true);
     id[0].indexCount = 3;
     id[0].indexStart = 0;
@@ -131,7 +131,7 @@ void EdgeBuilderTests::testMultiIndexBufSingleVertexBuf()
     *pIdx++ = 0; *pIdx++ = 1; *pIdx++ = 2;
     id[0].indexBuffer->unlock();
 
-    id[1].indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+    id[1].indexBuffer = vd._getHardwareBufferManager()->createIndexBuffer(
         HardwareIndexBuffer::IT_16BIT, 3, HardwareBuffer::HBU_STATIC, true);
     id[1].indexCount = 3;
     id[1].indexStart = 0;
@@ -139,7 +139,7 @@ void EdgeBuilderTests::testMultiIndexBufSingleVertexBuf()
     *pIdx++ = 0; *pIdx++ = 2; *pIdx++ = 3;
     id[1].indexBuffer->unlock();
 
-    id[2].indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+    id[2].indexBuffer = vd._getHardwareBufferManager()->createIndexBuffer(
         HardwareIndexBuffer::IT_16BIT, 3, HardwareBuffer::HBU_STATIC, true);
     id[2].indexCount = 3;
     id[2].indexStart = 0;
@@ -147,7 +147,7 @@ void EdgeBuilderTests::testMultiIndexBufSingleVertexBuf()
     *pIdx++ = 1; *pIdx++ = 3; *pIdx++ = 2;
     id[2].indexBuffer->unlock();
 
-    id[3].indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+    id[3].indexBuffer = vd._getHardwareBufferManager()->createIndexBuffer(
         HardwareIndexBuffer::IT_16BIT, 3, HardwareBuffer::HBU_STATIC, true);
     id[3].indexCount = 3;
     id[3].indexStart = 0;

@@ -131,7 +131,7 @@ namespace v1 {
             if (normals)
                 vertexSize += VertexElement::getTypeSize(VET_FLOAT3);
                 
-            mBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+            mBuffer = origData->_getHardwareBufferManager()->createVertexBuffer(
                 vertexSize, numVertices, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
             HardwareBufferLockGuard bufLock(mBuffer, HardwareBuffer::HBL_DISCARD);

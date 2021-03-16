@@ -242,8 +242,8 @@ namespace Ogre {
 
         /// Create the vertex buffer, allow space for patches
         rgm._notifyWorldGeometryStageStarted("Setting up vertex data");
-        HardwareVertexBufferSharedPtr vbuf = HardwareBufferManager::getSingleton()
-            .createVertexBuffer(
+        HardwareVertexBufferSharedPtr vbuf = mVertexData->_getHardwareBufferManager()->
+            createVertexBuffer(
                 sizeof(BspVertex), 
                 q3lvl.mNumVertices + mPatchVertexCount, 
                 HardwareBuffer::HBU_STATIC_WRITE_ONLY);

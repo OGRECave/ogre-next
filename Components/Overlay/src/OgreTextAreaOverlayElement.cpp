@@ -136,20 +136,18 @@ namespace v1 {
         size_t allocatedVertexCount = mAllocSize * 6;
         VertexDeclaration* decl = mRenderOp.vertexData->vertexDeclaration;
         VertexBufferBinding* bind = mRenderOp.vertexData->vertexBufferBinding;
+        HardwareBufferManagerBase* mgr = mRenderOp.vertexData->_getHardwareBufferManager();
 
         // Create dynamic since text tends to change a lot
         // positions & texcoords
-        HardwareVertexBufferSharedPtr vbuf = 
-            HardwareBufferManager::getSingleton().
-                createVertexBuffer(
+        HardwareVertexBufferSharedPtr vbuf = mgr->createVertexBuffer(
                     decl->getVertexSize(POS_TEX_BINDING), 
                     allocatedVertexCount,
                     HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY);
         bind->setBinding(POS_TEX_BINDING, vbuf);
 
         // colours
-        vbuf = HardwareBufferManager::getSingleton().
-                createVertexBuffer(
+        vbuf = mgr->createVertexBuffer(
                     decl->getVertexSize(COLOUR_BINDING), 
                     allocatedVertexCount,
                     HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY);

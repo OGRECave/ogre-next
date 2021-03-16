@@ -939,7 +939,7 @@ namespace v1 {
                 case M_GEOMETRY:
                     for( uint8 i=0; i<mNumBufferPasses; ++i )
                     {
-                        pMesh->sharedVertexData[i] = OGRE_NEW VertexData();
+                        pMesh->sharedVertexData[i] = OGRE_NEW VertexData(pMesh->getHardwareBufferManager());
                         try {
                             readGeometry(stream, pMesh, pMesh->sharedVertexData[i]);
                         }
@@ -1085,7 +1085,7 @@ namespace v1 {
                         "MeshSerializerImpl::readSubMesh");
                 }
 
-                sm->vertexData[i] = OGRE_NEW VertexData();
+                sm->vertexData[i] = OGRE_NEW VertexData(pMesh->getHardwareBufferManager());
                 readGeometry(stream, pMesh, sm->vertexData[i]);
             }
         }
@@ -2829,7 +2829,7 @@ namespace v1 {
                 switch(streamID)
                 {
                 case M_GEOMETRY:
-                    pMesh->sharedVertexData[VpNormal] = OGRE_NEW VertexData();
+                    pMesh->sharedVertexData[VpNormal] = OGRE_NEW VertexData(pMesh->getHardwareBufferManager());
                     try {
                         readGeometry(stream, pMesh, pMesh->sharedVertexData[VpNormal]);
                     }

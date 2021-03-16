@@ -1287,7 +1287,7 @@ namespace OgreMayaExporter
     MStatus Mesh::createOgreSharedGeometry(Ogre::MeshPtr pMesh,ParamList& params)
     {
         MStatus stat;
-        pMesh->sharedVertexData = new Ogre::VertexData();
+        pMesh->sharedVertexData = new Ogre::VertexData(pMesh->getHardwareBufferManager());
         pMesh->sharedVertexData->vertexCount = m_sharedGeom.vertices.size();
         // Define a new vertex declaration
         Ogre::VertexDeclaration* pDecl = new Ogre::VertexDeclaration();
@@ -1360,7 +1360,7 @@ namespace OgreMayaExporter
     MStatus Mesh::createOgreVertexBuffer(Ogre::MeshPtr pMesh,Ogre::VertexDeclaration* pDecl,const std::vector<vertex>& vertices)
     {
         Ogre::HardwareVertexBufferSharedPtr vbuf = 
-            Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(pDecl->getVertexSize(0),
+            pMesh->getHardwareBufferManager()->createVertexBuffer(pDecl->getVertexSize(0),
             pMesh->sharedVertexData->vertexCount, 
             Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
         pMesh->sharedVertexData->vertexBufferBinding->setBinding(0, vbuf);
@@ -1531,7 +1531,7 @@ namespace OgreMayaExporter
                     // Create a new keyframe
                     Ogre::VertexMorphKeyFrame* pKeyframe = pTrack->createVertexMorphKeyFrame(t->m_vertexKeyframes[k].time);
                     // Create vertex buffer for current keyframe
-                    Ogre::HardwareVertexBufferSharedPtr pBuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(
+                    Ogre::HardwareVertexBufferSharedPtr pBuffer = pMesh->getHardwareBufferManager()->createVertexBuffer(
                         Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3),
                         t->m_vertexKeyframes[k].positions.size(),
                         Ogre::HardwareBuffer::HBU_STATIC, true);

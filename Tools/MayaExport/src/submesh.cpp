@@ -360,7 +360,7 @@ namespace OgreMayaExporter
         // Set use shared geometry flag
         pSubmesh->useSharedVertices = params.useSharedGeom;
         // Create vertex data for current submesh
-        pSubmesh->vertexData = new Ogre::VertexData();
+        pSubmesh->vertexData = new Ogre::VertexData(pMesh->getHardwareBufferManager());
         // Set number of indexes
         pSubmesh->indexData->indexCount = 3*m_faces.size();
         pSubmesh->vertexData->vertexCount = m_vertices.size();
@@ -371,8 +371,7 @@ namespace OgreMayaExporter
             use32BitIndexes = true;
         }
         // Create a new index buffer
-        pSubmesh->indexData->indexBuffer = 
-            Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(
+        pSubmesh->indexData->indexBuffer = pMesh->getHardwareBufferManager()->createIndexBuffer(
                 use32BitIndexes ? Ogre::HardwareIndexBuffer::IT_32BIT : Ogre::HardwareIndexBuffer::IT_16BIT,
                 pSubmesh->indexData->indexCount,
                 Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
@@ -471,7 +470,7 @@ namespace OgreMayaExporter
     MStatus Submesh::createOgreVertexBuffer(Ogre::SubMesh* pSubmesh,Ogre::VertexDeclaration* pDecl,const std::vector<vertex>& vertices)
     {
         Ogre::HardwareVertexBufferSharedPtr vbuf = 
-            Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(pDecl->getVertexSize(0),
+            pSubmesh->vertexData->_getHardwareBufferManager()->createVertexBuffer(pDecl->getVertexSize(0),
             pSubmesh->vertexData->vertexCount, 
             Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
         pSubmesh->vertexData->vertexBufferBinding->setBinding(0, vbuf);

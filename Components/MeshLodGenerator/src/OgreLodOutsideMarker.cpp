@@ -527,7 +527,7 @@ namespace Ogre
         }
 
         /// Create vertex data structure for 8 vertices shared between submeshes
-        mesh->sharedVertexData[VpNormal] = new v1::VertexData();
+        mesh->sharedVertexData[VpNormal] = new v1::VertexData(mesh->getHardwareBufferManager());
         mesh->sharedVertexData[VpNormal]->vertexCount = mHull.size() * 3;
 
         /// Create declaration (memory format) of vertex data
@@ -539,10 +539,9 @@ namespace Ogre
 
         /// Allocate vertex buffer of the requested number of vertices (vertexCount)
         /// and bytes per vertex (offset)
-        v1::HardwareVertexBufferSharedPtr vbuf =
-            v1::HardwareBufferManager::getSingleton().createVertexBuffer(
-                    offset, mesh->sharedVertexData[VpNormal]->vertexCount,
-                    v1::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+        v1::HardwareVertexBufferSharedPtr vbuf = mesh->getHardwareBufferManager()->createVertexBuffer(
+            offset, mesh->sharedVertexData[VpNormal]->vertexCount,
+            v1::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
         /// Upload the vertex data to the card
         vbuf->writeData(0, vbuf->getSizeInBytes(), &vertexBuffer[0], true);
 
@@ -551,11 +550,9 @@ namespace Ogre
         bind->setBinding(0, vbuf);
 
         /// Allocate index buffer of the requested number of vertices (ibufCount)
-        v1::HardwareIndexBufferSharedPtr ibuf = v1::HardwareBufferManager::getSingleton().
-                                                createIndexBuffer(
-                                                        v1::HardwareIndexBuffer::IT_16BIT,
-                                                        indexBuffer.size(),
-                                                        v1::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+        v1::HardwareIndexBufferSharedPtr ibuf = mesh->getHardwareBufferManager()->createIndexBuffer(
+            v1::HardwareIndexBuffer::IT_16BIT, indexBuffer.size(),
+            v1::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
         /// Upload the index data to the card
         ibuf->writeData(0, ibuf->getSizeInBytes(), &indexBuffer[0], true);

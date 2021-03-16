@@ -139,8 +139,8 @@ namespace Ogre {
         mRenderOp.indexData->indexStart = 0;
         mRenderOp.indexData->indexCount = 0;
         // Create enough index space to render whole level
-        mRenderOp.indexData->indexBuffer = HardwareBufferManager::getSingleton()
-            .createIndexBuffer(
+        mRenderOp.indexData->indexBuffer = mRenderOp.vertexData->_getHardwareBufferManager()->
+            createIndexBuffer(
                 HardwareIndexBuffer::IT_32BIT, // always 32-bit
                 mLevel->mNumIndexes, 
                 HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE, false);
@@ -181,8 +181,8 @@ namespace Ogre {
         mRenderOp.indexData->indexStart = 0;
         mRenderOp.indexData->indexCount = 0;
         // Create enough index space to render whole level
-        mRenderOp.indexData->indexBuffer = HardwareBufferManager::getSingleton()
-            .createIndexBuffer(
+        mRenderOp.indexData->indexBuffer = mRenderOp.vertexData->_getHardwareBufferManager()->
+            createIndexBuffer(
                 HardwareIndexBuffer::IT_32BIT, // always 32-bit
                 mLevel->mNumIndexes, 
                 HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE, false);

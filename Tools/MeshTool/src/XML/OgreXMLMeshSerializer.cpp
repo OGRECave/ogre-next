@@ -80,7 +80,7 @@ namespace v1 {
             const char *claimedVertexCount_ = elem->Attribute("vertexcount");
             if(!claimedVertexCount_ || StringConverter::parseInt(claimedVertexCount_) > 0)
             {
-                mMesh->sharedVertexData[VpNormal] = new VertexData();
+                mMesh->sharedVertexData[VpNormal] = new VertexData(mMesh->getHardwareBufferManager());
                 readGeometry(elem, mMesh->sharedVertexData[VpNormal]);
             }
         }
@@ -774,12 +774,10 @@ namespace v1 {
                     }
 
                     // Allocate space
-                    HardwareIndexBufferSharedPtr ibuf = HardwareBufferManager::getSingleton().
-                        createIndexBuffer(
-                            use32BitIndexes? HardwareIndexBuffer::IT_32BIT : HardwareIndexBuffer::IT_16BIT, 
-                            sm->indexData[VpNormal]->indexCount,
-                            HardwareBuffer::HBU_DYNAMIC,
-                            false);
+                    HardwareIndexBufferSharedPtr ibuf =
+                        mMesh->getHardwareBufferManager()->createIndexBuffer(
+                            use32BitIndexes ? HardwareIndexBuffer::IT_32BIT : HardwareIndexBuffer::IT_16BIT,
+                            sm->indexData[VpNormal]->indexCount, HardwareBuffer::HBU_DYNAMIC, false);
                     sm->indexData[VpNormal]->indexBuffer = ibuf;
                     HardwareBufferLockGuard ibufLock(ibuf, HardwareBuffer::HBL_DISCARD);
                     unsigned int* pInt = static_cast<unsigned int*>(ibufLock.pData);
@@ -828,7 +826,7 @@ namespace v1 {
                 TiXmlElement* geomNode = smElem->FirstChildElement("geometry");
                 if (geomNode)
                 {
-                    sm->vertexData[VpNormal] = new VertexData();
+                    sm->vertexData[VpNormal] = new VertexData(mMesh->getHardwareBufferManager());
                     readGeometry(geomNode, sm->vertexData[VpNormal]);
                 }
             }
@@ -1006,9 +1004,8 @@ namespace v1 {
 
             vertexData->vertexCount = actualVertexCount;
             // Now create the vertex buffer
-            HardwareVertexBufferSharedPtr vbuf = HardwareBufferManager::getSingleton().
-                createVertexBuffer(offset, vertexData->vertexCount, 
-                    HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
+            HardwareVertexBufferSharedPtr vbuf = mMesh->getHardwareBufferManager()->createVertexBuffer(
+                offset, vertexData->vertexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
             // Bind it
             bind->setBinding(bufCount, vbuf);
             // Lock it
@@ -1652,9 +1649,8 @@ namespace v1 {
                 bool use32bitindexes = (itype == HardwareIndexBuffer::IT_32BIT);
 
                 // Assign memory: this will be deleted by the submesh 
-                ibuf = HardwareBufferManager::getSingleton().
-                    createIndexBuffer(
-                        itype, numFaces * 3, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+                ibuf = mMesh->getHardwareBufferManager()->createIndexBuffer(
+                    itype, numFaces * 3, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
                 HardwareBufferLockGuard ibufLock(ibuf, HardwareBuffer::HBL_DISCARD);
                 unsigned int* pInt = static_cast<unsigned int*>(ibufLock.pData);
@@ -1928,10 +1924,8 @@ namespace v1 {
 
             size_t vertexSize = sizeof(float) * (includesNormals ? 6 : 3);
             // create a vertex buffer
-            HardwareVertexBufferSharedPtr vbuf = 
-                HardwareBufferManager::getSingleton().createVertexBuffer(
-                vertexSize, vertexCount, 
-                HardwareBuffer::HBU_STATIC, true);
+            HardwareVertexBufferSharedPtr vbuf = mMesh->getHardwareBufferManager()->createVertexBuffer(
+                vertexSize, vertexCount, HardwareBuffer::HBU_STATIC, true);
 
             HardwareBufferLockGuard vbufLock(vbuf, HardwareBuffer::HBL_DISCARD);
             float* pFloat = static_cast<float*>(vbufLock.pData);

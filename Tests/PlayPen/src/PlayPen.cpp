@@ -914,15 +914,15 @@ extern "C" _OgreSampleExport void dllStopPlugin()
 //
 //        // Allocate vertex buffers
 //        HardwareVertexBufferSharedPtr vbufpos = 
-//            HardwareBufferManager::getSingleton().
+//            pMesh->getHardwareBufferManager()->
 //            createVertexBuffer(vertexDecl->getVertexSize(0), vertexData->vertexCount,
 //            HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
 //        HardwareVertexBufferSharedPtr vbufnorm = 
-//            HardwareBufferManager::getSingleton().
+//            pMesh->getHardwareBufferManager()->
 //            createVertexBuffer(vertexDecl->getVertexSize(1), vertexData->vertexCount,
 //            HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
 //        HardwareVertexBufferSharedPtr vbuftex = 
-//            HardwareBufferManager::getSingleton().
+//            pMesh->getHardwareBufferManager()->
 //            createVertexBuffer(vertexDecl->getVertexSize(2), vertexData->vertexCount,
 //            HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
 //
@@ -1052,7 +1052,7 @@ extern "C" _OgreSampleExport void dllStopPlugin()
 //        // Allocate memory for faces
 //        // Num faces, width*height*2 (2 tris per square), index count is * 3 on top
 //        sm->indexData->indexCount = (meshWidth-1) * (meshHeight-1) * 2 * iterations * 3;
-//        sm->indexData->indexBuffer = HardwareBufferManager::getSingleton().
+//        sm->indexData->indexBuffer = pMesh->getHardwareBufferManager()->
 //            createIndexBuffer(HardwareIndexBuffer::IT_16BIT,
 //            sm->indexData->indexCount, indexBufferUsage, indexShadowBuffer);
 //
@@ -3854,7 +3854,7 @@ extern "C" _OgreSampleExport void dllStopPlugin()
 //
 //      // Create a new position buffer with updated values
 //      HardwareVertexBufferSharedPtr newbuf = 
-//          HardwareBufferManager::getSingleton().createVertexBuffer(
+//          mesh->getHardwareBufferManager()->createVertexBuffer(
 //              VertexElement::getTypeSize(VET_FLOAT3),
 //              sm->vertexData->vertexCount, 
 //              HardwareBuffer::HBU_STATIC, true);

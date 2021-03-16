@@ -134,10 +134,10 @@ namespace v1 {
         // Vertex data
 
         VertexDeclaration* decl = mRenderOp2.vertexData->vertexDeclaration;
+        HardwareBufferManagerBase* mgr = mRenderOp2.vertexData->_getHardwareBufferManager();
 
         // Vertex buffer #1, position
-        HardwareVertexBufferSharedPtr vbuf =
-            HardwareBufferManager::getSingleton().createVertexBuffer(
+        HardwareVertexBufferSharedPtr vbuf = mgr->createVertexBuffer(
                 decl->getVertexSize(POSITION_BINDING), 
                 mRenderOp2.vertexData->vertexCount,
                 HardwareBuffer::HBU_STATIC_WRITE_ONLY);
@@ -146,7 +146,7 @@ namespace v1 {
         binding->setBinding(POSITION_BINDING, vbuf);
 
         // Vertex buffer #2, texcoords
-        vbuf = HardwareBufferManager::getSingleton().createVertexBuffer(
+        vbuf = mgr->createVertexBuffer(
                 decl->getVertexSize(TEXCOORD_BINDING), 
                 mRenderOp2.vertexData->vertexCount,
                 HardwareBuffer::HBU_STATIC_WRITE_ONLY, true);
@@ -163,8 +163,7 @@ namespace v1 {
             |/    |
             1-----3
         */
-        mRenderOp2.indexData->indexBuffer =
-            HardwareBufferManager::getSingleton().createIndexBuffer(
+        mRenderOp2.indexData->indexBuffer = mgr->createIndexBuffer(
                 HardwareIndexBuffer::IT_16BIT, 
                 mRenderOp2.indexData->indexCount, 
                 HardwareBuffer::HBU_STATIC_WRITE_ONLY);

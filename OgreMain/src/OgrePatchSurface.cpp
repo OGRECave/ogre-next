@@ -178,8 +178,8 @@ namespace v1 {
 
         // Subdivide the curve to the MAX :)
         // Do u direction first, so need to step over v levels not done yet
-        size_t vStep = 1 << mMaxVLevel;
-        size_t uStep = 1 << mMaxULevel;
+        size_t vStep = (size_t)1 << mMaxVLevel;
+        size_t uStep = (size_t)1 << mMaxULevel;
 
         size_t v, u;
         for (v = 0; v < mMeshHeight; v += vStep)
@@ -323,7 +323,7 @@ namespace v1 {
 
         // Create mesh
         mMesh = MeshManager::getSingleton().createManual(mMeshName);
-        mMesh->sharedVertexData = OGRE_NEW VertexData();
+        mMesh->sharedVertexData = OGRE_NEW VertexData(mMesh->getHardwareBufferManager());
         // Copy all vertex parameters
         mMesh->sharedVertexData->vertexStart = 0;
         // Vertex count will be set on build() because it depends on current level
@@ -331,8 +331,7 @@ namespace v1 {
         mMesh->sharedVertexData->vertexDeclaration = mDeclaration->clone();
         // Create buffer (only a single buffer)
         // Allocate enough buffer memory for maximum subdivision, not current subdivision
-        HardwareVertexBufferSharedPtr vbuf = HardwareBufferManager::getSingleton().
-            createVertexBuffer(
+        HardwareVertexBufferSharedPtr vbuf = mMesh->getHardwareBufferManager()->createVertexBuffer(
                 mDeclaration->getVertexSize(0), 
                 mMaxMeshHeight * mMaxMeshWidth, // maximum size 
                 HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY); // dynamic for changing level
@@ -345,7 +344,7 @@ namespace v1 {
         sm->indexData->indexStart = 0;
         // Index count will be set on build()
         unsigned short iterations = (mVSide == VS_BOTH ? 2 : 1);
-        sm->indexData->indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+        sm->indexData->indexBuffer = mMesh->getHardwareBufferManager()->createIndexBuffer(
             HardwareIndexBuffer::IT_16BIT, 
             (mMaxMeshWidth-1) * (mMaxMeshHeight-1) * 2 * iterations * 3,  
             HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY);
@@ -384,8 +383,8 @@ namespace v1 {
     void PatchSurface::distributeControlPoints(void* lockedBuffer)
     {
         // Insert original control points into expanded mesh
-        size_t uStep = 1 << mULevel;
-        size_t vStep = 1 << mVLevel;
+        size_t uStep = (size_t)1 << mULevel;
+        size_t vStep = (size_t)1 << mVLevel;
 
         void* pSrc = mControlPointBuffer;
         size_t vertexSize = mDeclaration->getVertexSize(0);

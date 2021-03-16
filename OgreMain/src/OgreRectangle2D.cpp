@@ -80,7 +80,7 @@ namespace v1
         decl->addElement( 0, offset, VET_FLOAT2, VES_TEXTURE_COORDINATES );
 
         HardwareVertexBufferSharedPtr vbuf = 
-            HardwareBufferManager::getSingleton().createVertexBuffer(
+            mRenderOp.vertexData->_getHardwareBufferManager()->createVertexBuffer(
             decl->getVertexSize( 0 ), mRenderOp.vertexData->vertexCount,
             HardwareBuffer::HBU_STATIC_WRITE_ONLY );
 
@@ -155,7 +155,7 @@ namespace v1
         //Add the normals.
         decl->addElement( 1, 0, VET_FLOAT3, VES_NORMAL );
 
-        vbuf = HardwareBufferManager::getSingleton().createVertexBuffer(
+        vbuf = mRenderOp.vertexData->_getHardwareBufferManager()->createVertexBuffer(
                 decl->getVertexSize( 1 ), mRenderOp.vertexData->vertexCount,
                 HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE );
 

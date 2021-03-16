@@ -390,7 +390,7 @@ void PlayPen_testMorphAnimationWithNormals::setupContent()
 
     // Create a new position & normal buffer with updated values
     HardwareVertexBufferSharedPtr newbuf = 
-        HardwareBufferManager::getSingleton().createVertexBuffer(
+        mesh->getHardwareBufferManager()->createVertexBuffer(
             VertexElement::getTypeSize(VET_FLOAT3) * 2,
             sm->vertexData->vertexCount, 
             HardwareBuffer::HBU_STATIC, true);
@@ -542,7 +542,7 @@ void PlayPen_testMorphAnimationWithoutNormals::setupContent()
 
     // Create a new position & normal buffer with updated values
     HardwareVertexBufferSharedPtr newbuf = 
-        HardwareBufferManager::getSingleton().createVertexBuffer(
+        mesh->getHardwareBufferManager()->createVertexBuffer(
         VertexElement::getTypeSize(VET_FLOAT3),
         sm->vertexData->vertexCount, 
         HardwareBuffer::HBU_STATIC, true);

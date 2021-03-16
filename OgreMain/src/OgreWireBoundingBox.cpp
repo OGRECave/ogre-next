@@ -61,7 +61,7 @@ namespace v1 {
 
 
         HardwareVertexBufferSharedPtr vbuf = 
-            HardwareBufferManager::getSingleton().createVertexBuffer(
+            mRenderOp.vertexData->_getHardwareBufferManager()->createVertexBuffer(
                 decl->getVertexSize(POSITION_BINDING),
                 mRenderOp.vertexData->vertexCount,
                 HardwareBuffer::HBU_STATIC_WRITE_ONLY);

@@ -161,7 +161,7 @@ void reorganiseVertexBuffers(const String& desc, v1::Mesh& mesh, v1::SubMesh* sm
                         mesh.hasSkeleton(), mesh.hasVertexAnimation(),
                         sm ? sm->getVertexAnimationIncludesNormals() : mesh.getSharedVertexDataAnimationIncludesNormals());
                 copyElems(newDcl, &elemList);
-                v1::HardwareBufferManager::getSingleton().destroyVertexDeclaration(newDcl);
+                mesh.getHardwareBufferManager()->destroyVertexDeclaration(newDcl);
                 anyChanges = true;
 
             }
@@ -216,7 +216,7 @@ void reorganiseVertexBuffers(const String& desc, v1::Mesh& mesh, v1::SubMesh* sm
             StringUtil::toLowerCase(response);
             if (response == "y")
             {
-                v1::VertexDeclaration* newDecl = v1::HardwareBufferManager::getSingleton().createVertexDeclaration();
+                v1::VertexDeclaration* newDecl = mesh.getHardwareBufferManager()->createVertexDeclaration();
                 v1::VertexDeclaration::VertexElementList::iterator i, iend;
                 iend = elemList.end();
                 unsigned short currentBuffer = 999;

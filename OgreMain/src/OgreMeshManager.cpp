@@ -268,7 +268,7 @@ namespace v1
     }
 
     //-----------------------------------------------------------------------
-    void MeshManager::tesselate2DMesh(SubMesh* sm, unsigned short meshWidth, unsigned short meshHeight, 
+    void MeshManager::tesselate2DMesh(Mesh* pMesh, SubMesh* sm, unsigned short meshWidth, unsigned short meshHeight,
         bool doubleSided, HardwareBuffer::Usage indexBufferUsage, bool indexShadowBuffer)
     {
         // The mesh is built, just make a list of indexes to spit out the triangles
@@ -290,9 +290,9 @@ namespace v1
         // Allocate memory for faces
         // Num faces, width*height*2 (2 tris per square), index count is * 3 on top
         sm->indexData[VpNormal]->indexCount = (meshWidth-1) * (meshHeight-1) * 2 * iterations * 3;
-        sm->indexData[VpNormal]->indexBuffer = HardwareBufferManager::getSingleton().
-            createIndexBuffer(HardwareIndexBuffer::IT_16BIT,
-            sm->indexData[VpNormal]->indexCount, indexBufferUsage, indexShadowBuffer);
+        sm->indexData[VpNormal]->indexBuffer = pMesh->getHardwareBufferManager()->createIndexBuffer(
+            HardwareIndexBuffer::IT_16BIT, sm->indexData[VpNormal]->indexCount, indexBufferUsage,
+            indexShadowBuffer );
 
         unsigned short v1, v2, v3;
         //bool firstTri = true;
@@ -450,7 +450,7 @@ namespace v1
 
         // Set up vertex data
         // Use a single shared buffer
-        pSub->vertexData[VpNormal] = OGRE_NEW VertexData();
+        pSub->vertexData[VpNormal] = OGRE_NEW VertexData(pMesh->getHardwareBufferManager());
         VertexData* vertexData = pSub->vertexData[VpNormal];
         // Set up Vertex Declaration
         VertexDeclaration* vertexDecl = vertexData->vertexDeclaration;
@@ -584,7 +584,7 @@ namespace v1
         vbufLock.unlock();
         // Generate face list
         pSub->useSharedVertices = false;
-        tesselate2DMesh(pSub, params.xsegments + 1, params.ysegments + 1, false, 
+        tesselate2DMesh(pMesh, pSub, params.xsegments + 1, params.ysegments + 1, false,
             params.indexBufferUsage, params.indexShadowBuffer);
 
         pMesh->_setBounds(AxisAlignedBox(min, max), true);
@@ -600,7 +600,7 @@ namespace v1
         SubMesh *pSub = pMesh->createSubMesh();
 
         // Set options
-        pSub->vertexData[VpNormal] = OGRE_NEW VertexData();
+        pSub->vertexData[VpNormal] = OGRE_NEW VertexData(pMesh->getHardwareBufferManager());
         VertexData* vertexData = pSub->vertexData[VpNormal];
         vertexData->vertexStart = 0;
         VertexBufferBinding* bind = vertexData->vertexBufferBinding;
@@ -741,7 +741,7 @@ namespace v1
 
         // Generate face list
         pSub->useSharedVertices = false;
-        tesselate2DMesh(pSub, params.xsegments + 1, params.ysegments + 1, 
+        tesselate2DMesh(pMesh, pSub, params.xsegments + 1, params.ysegments + 1,
             false, params.indexBufferUsage, params.indexShadowBuffer);
 
         pMesh->_setBounds(AxisAlignedBox(min, max), true);
@@ -762,7 +762,7 @@ namespace v1
 
         // Set up vertex data
         // Use a single shared buffer
-        pSub->vertexData[VpNormal] = OGRE_NEW VertexData();
+        pSub->vertexData[VpNormal] = OGRE_NEW VertexData(pMesh->getHardwareBufferManager());
         VertexData* vertexData = pSub->vertexData[VpNormal];
         // Set up Vertex Declaration
         VertexDeclaration* vertexDecl = vertexData->vertexDeclaration;
@@ -926,7 +926,7 @@ namespace v1
         vbufLock.unlock();
         // Generate face list
         pSub->useSharedVertices = false;
-        tesselate2DMesh(pSub, params.xsegments + 1, params.ySegmentsToKeep + 1, false, 
+        tesselate2DMesh(pMesh, pSub, params.xsegments + 1, params.ySegmentsToKeep + 1, false,
             params.indexBufferUsage, params.indexShadowBuffer);
 
         pMesh->_setBounds(AxisAlignedBox(min, max), true);
@@ -1009,10 +1009,9 @@ namespace v1
             remapInfo.initialize( sharedVertexData->vertexCount, false );
             remapInfo.markUsedIndices( indexData );
 
-            VertexData *newVertexData = new VertexData();
+            VertexData *newVertexData = new VertexData(mesh->getHardwareBufferManager());
             newVertexData->vertexCount = remapInfo.usedCount;
-            HardwareBufferManager::getSingleton().
-                    destroyVertexDeclaration( newVertexData->vertexDeclaration );
+            mesh->getHardwareBufferManager()->destroyVertexDeclaration(newVertexData->vertexDeclaration);
             newVertexData->vertexDeclaration = sharedVertexData->vertexDeclaration->clone(mesh->getHardwareBufferManager());
 
             for (size_t bufIdx = 0; bufIdx < sharedVertexData->vertexBufferBinding->getBufferCount(); bufIdx++)

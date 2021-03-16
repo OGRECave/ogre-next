@@ -113,9 +113,10 @@ namespace v1
         if (!vertexSplits.empty())
         {
             // ok, need to increase the vertex buffer size, and alter some indexes
+            HardwareBufferManagerBase* mgr = mVData->_getHardwareBufferManager();
 
             // vertex buffers first
-            VertexBufferBinding* newBindings = HardwareBufferManager::getSingleton().createVertexBufferBinding();
+            VertexBufferBinding* newBindings = mgr->createVertexBufferBinding();
             const VertexBufferBinding::VertexBufferBindingMap& bindmap = 
                 mVData->vertexBufferBinding->getBindings();
             for (VertexBufferBinding::VertexBufferBindingMap::const_iterator i = 
@@ -126,8 +127,7 @@ namespace v1
                 // the vertexStart option in vertex data
                 size_t newVertexCount = srcbuf->getNumVertices() + vertexSplits.size();
                 // Create new buffer & bind
-                HardwareVertexBufferSharedPtr newBuf = 
-                    HardwareBufferManager::getSingleton().createVertexBuffer(
+                HardwareVertexBufferSharedPtr newBuf = mgr->createVertexBuffer(
                     srcbuf->getVertexSize(), newVertexCount, srcbuf->getUsage(), 
                     srcbuf->hasShadowBuffer());
                 newBindings->setBinding(i->first, newBuf);
@@ -151,7 +151,7 @@ namespace v1
             // Increase vertex count according to num splits
             mVData->vertexCount += vertexSplits.size();
             // Flip bindings over to new buffers (old buffers released)
-            HardwareBufferManager::getSingleton().destroyVertexBufferBinding(mVData->vertexBufferBinding);
+            mgr->destroyVertexBufferBinding(mVData->vertexBufferBinding);
             mVData->vertexBufferBinding = newBindings;
 
             // If vertex size requires 32bit index buffer
@@ -167,8 +167,7 @@ namespace v1
                         size_t indexCount = srcbuf->getNumIndexes();
 
                         // convert index buffer to 32bit.
-                        HardwareIndexBufferSharedPtr newBuf =
-                            HardwareBufferManager::getSingleton().createIndexBuffer(
+                        HardwareIndexBufferSharedPtr newBuf = mgr->createIndexBuffer(
                             HardwareIndexBuffer::IT_32BIT, indexCount,
                             srcbuf->getUsage(), srcbuf->hasShadowBuffer());
 
@@ -689,7 +688,7 @@ namespace v1
                 prevTexCoordElem->getSource());
             // Now create a new buffer, which includes the previous contents
             // plus extra space for the 3D coords
-            targetBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+            targetBuffer = mVData->_getHardwareBufferManager()->createVertexBuffer(
                 origBuffer->getVertexSize() + VertexElement::getTypeSize(tangentsType),
                 origBuffer->getNumVertices(),
                 origBuffer->getUsage(),

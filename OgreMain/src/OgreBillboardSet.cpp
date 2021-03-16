@@ -703,7 +703,7 @@ namespace v1 {
             for( size_t i=0; i<dynamicBufferMultiplier; ++i )
             {
                 mMainBuffers[i].push_back(
-                            HardwareBufferManager::getSingleton().createVertexBuffer(
+                            mVertexData->_getHardwareBufferManager()->createVertexBuffer(
                                 vertexSize,
                                 vertexCount * dynamicBufferMultiplier,
                                 HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE) );
@@ -717,7 +717,7 @@ namespace v1 {
             assert( mMainBuffers[0].empty() );
 
             mMainBuffers[0].push_back(
-                        HardwareBufferManager::getSingleton().createVertexBuffer(
+                        mVertexData->_getHardwareBufferManager()->createVertexBuffer(
                             vertexSize, vertexCount,
                             HardwareBuffer::HBU_STATIC_WRITE_ONLY) );
         }
@@ -788,8 +788,8 @@ namespace v1 {
             mIndexData->indexStart = 0;
             mIndexData->indexCount = mPoolSize * 6;
 
-            mIndexData->indexBuffer = HardwareBufferManager::getSingleton().
-                createIndexBuffer(HardwareIndexBuffer::IT_16BIT,
+            mIndexData->indexBuffer = mVertexData->_getHardwareBufferManager()->createIndexBuffer(
+                    HardwareIndexBuffer::IT_16BIT,
                     mIndexData->indexCount,
                     HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 

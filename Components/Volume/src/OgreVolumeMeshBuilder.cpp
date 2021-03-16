@@ -92,7 +92,7 @@ namespace Volume {
         // Add vertex-normals to the buffer
         decl->addElement(0, offset, VET_FLOAT3, VES_NORMAL);
     
-        HardwareVertexBufferSharedPtr vbuf = HardwareBufferManager::getSingleton().createVertexBuffer(
+        HardwareVertexBufferSharedPtr vbuf = operation.vertexData->_getHardwareBufferManager()->createVertexBuffer(
             decl->getVertexSize(MAIN_BINDING),
             operation.vertexData->vertexCount,
             HardwareBuffer::HBU_STATIC_WRITE_ONLY);
@@ -123,7 +123,7 @@ namespace Volume {
         if (operation.indexData->indexCount > USHRT_MAX)
         {
             operation.indexData->indexBuffer =
-                HardwareBufferManager::getSingleton().createIndexBuffer(
+                operation.vertexData->_getHardwareBufferManager()->createIndexBuffer(
                 HardwareIndexBuffer::IT_32BIT,
                 operation.indexData->indexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
@@ -140,7 +140,7 @@ namespace Volume {
         else
         {
             operation.indexData->indexBuffer =
-                HardwareBufferManager::getSingleton().createIndexBuffer(
+                operation.vertexData->_getHardwareBufferManager()->createIndexBuffer(
                 HardwareIndexBuffer::IT_16BIT,
                 operation.indexData->indexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 

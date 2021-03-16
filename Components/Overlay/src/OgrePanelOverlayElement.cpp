@@ -120,10 +120,10 @@ namespace v1 {
             return;
 
         VertexDeclaration* decl = mRenderOp.vertexData->vertexDeclaration;
+        HardwareBufferManagerBase* mgr = mRenderOp.vertexData->_getHardwareBufferManager();
 
         // Vertex buffer #1
-        HardwareVertexBufferSharedPtr vbuf =
-            HardwareBufferManager::getSingleton().createVertexBuffer(
+        HardwareVertexBufferSharedPtr vbuf = mgr->createVertexBuffer(
             decl->getVertexSize(POSITION_BINDING), mRenderOp.vertexData->vertexCount,
             HardwareBuffer::HBU_STATIC_WRITE_ONLY// mostly static except during resizing
             );
@@ -338,7 +338,7 @@ namespace v1 {
             {
                 // NB reference counting will take care of the old one if it exists
                 HardwareVertexBufferSharedPtr newbuf =
-                    HardwareBufferManager::getSingleton().createVertexBuffer(
+                    mRenderOp.vertexData->_getHardwareBufferManager()->createVertexBuffer(
                     decl->getVertexSize(TEXCOORD_BINDING), mRenderOp.vertexData->vertexCount,
                     HardwareBuffer::HBU_STATIC_WRITE_ONLY // mostly static except during resizing
                     );

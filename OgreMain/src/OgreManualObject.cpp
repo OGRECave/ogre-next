@@ -565,7 +565,7 @@ namespace v1 {
             VertexDeclaration* oldDcl = rop->vertexData->vertexDeclaration;
             rop->vertexData->vertexDeclaration =
                 oldDcl->getAutoOrganisedDeclaration(false, false, false);
-            HardwareBufferManager::getSingleton().destroyVertexDeclaration(oldDcl);
+            rop->vertexData->_getHardwareBufferManager()->destroyVertexDeclaration(oldDcl);
         }
         resizeTempVertexBufferIfNeeded(++rop->vertexData->vertexCount);
 
@@ -724,8 +724,7 @@ namespace v1 {
                 // to allow for user-configured growth area
                 const size_t vertexCount = std::max(rop->vertexData->vertexCount,
                     mEstVertexCount);
-                vbuf =
-                    HardwareBufferManager::getSingleton().createVertexBuffer(
+                vbuf = rop->vertexData->_getHardwareBufferManager()->createVertexBuffer(
                         mDeclSize,
                         vertexCount,
                         getHardwareBufferUsage(mDynamic, mWriteOnly));
@@ -737,8 +736,8 @@ namespace v1 {
                 // to allow for user-configured growth area
                 const size_t indexCount = std::max(rop->indexData->indexCount,
                     mEstIndexCount);
-                rop->indexData->indexBuffer =
-                    HardwareBufferManager::getSingleton().createIndexBuffer(
+                rop->indexData->indexBuffer = 
+                    rop->vertexData->_getHardwareBufferManager()->createIndexBuffer(
                         indexType,
                         indexCount,
                         getHardwareBufferUsage(mDynamic, mWriteOnly));

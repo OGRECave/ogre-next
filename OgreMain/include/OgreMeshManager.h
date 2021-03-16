@@ -456,7 +456,7 @@ namespace v1 {
 
         /** Utility method for tessellating 2D meshes.
         */
-        void tesselate2DMesh(SubMesh* pSub, unsigned short meshWidth, unsigned short meshHeight,
+        void tesselate2DMesh(Mesh* pMesh, SubMesh* pSub, unsigned short meshWidth, unsigned short meshHeight,
             bool doubleSided = false,
             HardwareBuffer::Usage indexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
             bool indexSysMem = false);

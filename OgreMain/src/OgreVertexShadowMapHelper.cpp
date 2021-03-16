@@ -447,6 +447,7 @@ namespace v1
         {
             const Geometry &geom = *itor;
             const size_t currentVaoIdx = itor - inGeom.begin();
+            HardwareBufferManagerBase *mgr = geom.vertexData->_getHardwareBufferManager();
 
             VertexData *shadowVertexBuffer = 0;
 
@@ -475,7 +476,7 @@ namespace v1
             else
             {
                 //Not shared. Create a new one by converting the original.
-                shadowVertexBuffer = OGRE_NEW VertexData();
+                shadowVertexBuffer = OGRE_NEW VertexData(mgr);
                 origElements[1] = geom.vertexData->vertexDeclaration->
                                                             findElementBySemantic( VES_BLEND_INDICES );
                 origElements[2] = geom.vertexData->vertexDeclaration->
@@ -584,10 +585,8 @@ namespace v1
                     ticketsLocks[i].unlock();
                 }
 
-                HardwareBufferManagerBase *hwManager = HardwareBufferManager::getSingletonPtr();
-
                 {
-                    HardwareVertexBufferSharedPtr vertexBuf = hwManager->createVertexBuffer(
+                    HardwareVertexBufferSharedPtr vertexBuf = mgr->createVertexBuffer(
                                 bytesPerVertex, newVertexCount, tickets[0]->getUsage() );
 
                     memcpy( HardwareBufferLockGuard( vertexBuf, HardwareBuffer::HBL_NO_OVERWRITE ).pData,
@@ -609,8 +608,8 @@ namespace v1
             {
                 shadowIndexData = OGRE_NEW v1::IndexData();
                 shadowIndexData->indexCount = geom.indexData->indexCount;
-                shadowIndexData->indexBuffer = v1::HardwareBufferManager::getSingleton().
-                                createIndexBuffer( geom.indexData->indexBuffer->getType(),
+                shadowIndexData->indexBuffer = mgr->createIndexBuffer(
+                                                   geom.indexData->indexBuffer->getType(),
                                                    geom.indexData->indexBuffer->getNumIndexes(),
                                                    geom.indexData->indexBuffer->getUsage() );
 

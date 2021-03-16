@@ -318,7 +318,8 @@ Skeleton *Lwo2MeshWriter::doExportSkeleton(const String &skelName, int l)
 
 VertexData *Lwo2MeshWriter::setupVertexData(unsigned short vertexCount, VertexData *oldVertexData, bool deleteOldVertexData)
 {
-    VertexData *vertexData = new VertexData();
+    HardwareBufferManagerBase* mgr = oldVertexData->_getHardwareBufferManager();
+    VertexData *vertexData = new VertexData(mgr);
 
     if (oldVertexData)
     {
@@ -334,8 +335,7 @@ VertexData *Lwo2MeshWriter::setupVertexData(unsigned short vertexCount, VertexDa
         {
             HardwareVertexBufferSharedPtr srcbuf = vbi->second;
             // create new buffer with the same settings
-            HardwareVertexBufferSharedPtr dstBuf = 
-                HardwareBufferManager::getSingleton().createVertexBuffer(
+            HardwareVertexBufferSharedPtr dstBuf = mgr->createVertexBuffer(
                     srcbuf->getVertexSize(), srcbuf->getNumVertices() + vertexCount, srcbuf->getUsage(), srcbuf->isSystemMemory());
 
             // copy data
@@ -368,15 +368,15 @@ VertexData *Lwo2MeshWriter::setupVertexData(unsigned short vertexCount, VertexDa
         VertexDeclaration* decl = vertexData->vertexDeclaration;
         
         decl->addElement(POSITION_BINDING, 0, VET_FLOAT3, VES_POSITION);
-        HardwareVertexBufferSharedPtr pbuf = HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(POSITION_BINDING), vertexData->vertexCount, HardwareBuffer::HBU_DYNAMIC, false);
+        HardwareVertexBufferSharedPtr pbuf = mgr->createVertexBuffer(decl->getVertexSize(POSITION_BINDING), vertexData->vertexCount, HardwareBuffer::HBU_DYNAMIC, false);
         bind->setBinding(POSITION_BINDING, pbuf);
         
         decl->addElement(NORMAL_BINDING, 0, VET_FLOAT3, VES_NORMAL);
-        HardwareVertexBufferSharedPtr nbuf = HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(NORMAL_BINDING), vertexData->vertexCount, HardwareBuffer::HBU_DYNAMIC, false);
+        HardwareVertexBufferSharedPtr nbuf = mgr->createVertexBuffer(decl->getVertexSize(NORMAL_BINDING), vertexData->vertexCount, HardwareBuffer::HBU_DYNAMIC, false);
         bind->setBinding(NORMAL_BINDING, nbuf);
         
         decl->addElement(TEXCOORD_BINDING, 0, VET_FLOAT2, VES_TEXTURE_COORDINATES);
-        HardwareVertexBufferSharedPtr tbuf = HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(TEXCOORD_BINDING), vertexData->vertexCount, HardwareBuffer::HBU_DYNAMIC, false);
+        HardwareVertexBufferSharedPtr tbuf = mgr->createVertexBuffer(decl->getVertexSize(TEXCOORD_BINDING), vertexData->vertexCount, HardwareBuffer::HBU_DYNAMIC, false);
         bind->setBinding(TEXCOORD_BINDING, tbuf);
     }   
     return vertexData;
@@ -687,7 +687,7 @@ bool Lwo2MeshWriter::writeLwo2Mesh(lwObject *nobject, char *ndest)
             ogreSubMesh->useSharedVertices = flags[UseSharedVertexData] && points.size() < POINTLIMIT;
 
             ogreSubMesh->indexData->indexCount = polygons.size() * 3;
-            ogreSubMesh->indexData->indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(HardwareIndexBuffer::IT_16BIT, ogreSubMesh->indexData->indexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+            ogreSubMesh->indexData->indexBuffer = ogreMesh->getHardwareBufferManager()->createIndexBuffer(HardwareIndexBuffer::IT_16BIT, ogreSubMesh->indexData->indexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
             ogreSubMesh->setMaterialName(surface->name);
             
 

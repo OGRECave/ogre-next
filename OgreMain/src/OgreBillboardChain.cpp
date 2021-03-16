@@ -174,7 +174,7 @@ namespace v1 {
         {
             // Create the vertex buffer (always dynamic due to the camera adjust)
             HardwareVertexBufferSharedPtr pBuffer =
-                HardwareBufferManager::getSingleton().createVertexBuffer(
+                mVertexData->_getHardwareBufferManager()->createVertexBuffer(
                 mVertexData->vertexDeclaration->getVertexSize(0),
                 mVertexData->vertexCount,
                 HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
@@ -184,7 +184,7 @@ namespace v1 {
             mVertexData->vertexBufferBinding->setBinding(0, pBuffer);
 
             mIndexData->indexBuffer =
-                HardwareBufferManager::getSingleton().createIndexBuffer(
+                mVertexData->_getHardwareBufferManager()->createIndexBuffer(
                     HardwareIndexBuffer::IT_16BIT,
                     mChainCount * mMaxElementsPerChain * 6, // max we can use
                     mDynamic? HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY : HardwareBuffer::HBU_STATIC_WRITE_ONLY);

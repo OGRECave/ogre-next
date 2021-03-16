@@ -75,7 +75,7 @@ namespace v1 {
             0,0,1,
             0,0 
         };
-        mesh->sharedVertexData[VpNormal] = OGRE_NEW VertexData();
+        mesh->sharedVertexData[VpNormal] = OGRE_NEW VertexData(mesh->getHardwareBufferManager());
         mesh->sharedVertexData[VpNormal]->vertexCount = 4;
         VertexDeclaration* decl = mesh->sharedVertexData[VpNormal]->vertexDeclaration;
         VertexBufferBinding* bind = mesh->sharedVertexData[VpNormal]->vertexBufferBinding;
@@ -88,19 +88,15 @@ namespace v1 {
         decl->addElement(0, offset, VET_FLOAT2, VES_TEXTURE_COORDINATES, 0);
         offset += VertexElement::getTypeSize(VET_FLOAT2);
 
-        HardwareVertexBufferSharedPtr vbuf = 
-            HardwareBufferManager::getSingleton().createVertexBuffer(
+        HardwareVertexBufferSharedPtr vbuf = mesh->getHardwareBufferManager()->createVertexBuffer(
             offset, 4, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
         bind->setBinding(0, vbuf);
 
         vbuf->writeData(0, vbuf->getSizeInBytes(), vertices, true);
 
         sub->useSharedVertices = true;
-        HardwareIndexBufferSharedPtr ibuf = HardwareBufferManager::getSingleton().
-            createIndexBuffer(
-            HardwareIndexBuffer::IT_16BIT, 
-            6, 
-            HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+        HardwareIndexBufferSharedPtr ibuf = mesh->getHardwareBufferManager()->createIndexBuffer(
+            HardwareIndexBuffer::IT_16BIT, 6, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
         unsigned short faces[6] = {0,1,2,
             0,2,3 };
@@ -216,7 +212,7 @@ namespace v1 {
             0,0 
         };
 
-        mesh->sharedVertexData[VpNormal] = OGRE_NEW VertexData();
+        mesh->sharedVertexData[VpNormal] = OGRE_NEW VertexData(mesh->getHardwareBufferManager());
         mesh->sharedVertexData[VpNormal]->vertexCount = NUM_VERTICES;
         VertexDeclaration* decl = mesh->sharedVertexData[VpNormal]->vertexDeclaration;
         VertexBufferBinding* bind = mesh->sharedVertexData[VpNormal]->vertexBufferBinding;
@@ -229,19 +225,15 @@ namespace v1 {
         decl->addElement(0, offset, VET_FLOAT2, VES_TEXTURE_COORDINATES, 0);
         offset += VertexElement::getTypeSize(VET_FLOAT2);
 
-        HardwareVertexBufferSharedPtr vbuf = 
-            HardwareBufferManager::getSingleton().createVertexBuffer(
+        HardwareVertexBufferSharedPtr vbuf = mesh->getHardwareBufferManager()->createVertexBuffer(
             offset, NUM_VERTICES, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
         bind->setBinding(0, vbuf);
 
         vbuf->writeData(0, vbuf->getSizeInBytes(), vertices, true);
 
         sub->useSharedVertices = true;
-        HardwareIndexBufferSharedPtr ibuf = HardwareBufferManager::getSingleton().
-            createIndexBuffer(
-            HardwareIndexBuffer::IT_16BIT, 
-            NUM_INDICES,
-            HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+        HardwareIndexBufferSharedPtr ibuf = mesh->getHardwareBufferManager()->createIndexBuffer(
+            HardwareIndexBuffer::IT_16BIT, NUM_INDICES, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
         unsigned short faces[NUM_INDICES] = {
             // front
@@ -291,7 +283,7 @@ namespace v1 {
         const int NUM_RINGS = 16;
         const Real SPHERE_RADIUS = 50.0;
 
-        mesh->sharedVertexData[VpNormal] = OGRE_NEW VertexData();
+        mesh->sharedVertexData[VpNormal] = OGRE_NEW VertexData(mesh->getHardwareBufferManager());
         VertexData* vertexData = mesh->sharedVertexData[VpNormal];
 
         // define the vertex format
@@ -308,7 +300,7 @@ namespace v1 {
 
         // allocate the vertex buffer
         vertexData->vertexCount = (NUM_RINGS + 1) * (NUM_SEGMENTS+1);
-        HardwareVertexBufferSharedPtr vBuf = HardwareBufferManager::getSingleton().createVertexBuffer(vertexDecl->getVertexSize(0), vertexData->vertexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
+        HardwareVertexBufferSharedPtr vBuf = mesh->getHardwareBufferManager()->createVertexBuffer(vertexDecl->getVertexSize(0), vertexData->vertexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
         VertexBufferBinding* binding = vertexData->vertexBufferBinding;
         binding->setBinding(0, vBuf);
         HardwareBufferLockGuard vBufLock(vBuf, HardwareBuffer::HBL_DISCARD);
@@ -316,7 +308,7 @@ namespace v1 {
 
         // allocate index buffer
         pSphereVertex->indexData[VpNormal]->indexCount = 6 * NUM_RINGS * (NUM_SEGMENTS + 1);
-        pSphereVertex->indexData[VpNormal]->indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(HardwareIndexBuffer::IT_16BIT, pSphereVertex->indexData[VpNormal]->indexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
+        pSphereVertex->indexData[VpNormal]->indexBuffer = mesh->getHardwareBufferManager()->createIndexBuffer(HardwareIndexBuffer::IT_16BIT, pSphereVertex->indexData[VpNormal]->indexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY, false);
         HardwareIndexBufferSharedPtr iBuf = pSphereVertex->indexData[VpNormal]->indexBuffer;
         HardwareBufferLockGuard iBufLock(iBuf, HardwareBuffer::HBL_DISCARD);
         unsigned short* pIndices = static_cast<unsigned short*>(iBufLock.pData);

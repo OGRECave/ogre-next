@@ -86,15 +86,14 @@ namespace v1 {
     void PatchMesh::loadImpl(void)
     {
         SubMesh* sm = this->createSubMesh();
-        sm->vertexData[VpNormal] = OGRE_NEW VertexData();
+        sm->vertexData[VpNormal] = OGRE_NEW VertexData(getHardwareBufferManager());
         sm->useSharedVertices = false;
 
         // Set up vertex buffer
         sm->vertexData[VpNormal]->vertexStart = 0;
         sm->vertexData[VpNormal]->vertexCount = mSurface.getRequiredVertexCount();
         sm->vertexData[VpNormal]->vertexDeclaration = mDeclaration;
-        HardwareVertexBufferSharedPtr vbuf = HardwareBufferManager::getSingleton().
-            createVertexBuffer(
+        HardwareVertexBufferSharedPtr vbuf = getHardwareBufferManager()->createVertexBuffer(
                 mDeclaration->getVertexSize(0), 
                 sm->vertexData[VpNormal]->vertexCount,
                 mVertexBufferUsage, 
@@ -104,8 +103,7 @@ namespace v1 {
         // Set up index buffer
         sm->indexData[VpNormal]->indexStart = 0;
         sm->indexData[VpNormal]->indexCount = mSurface.getRequiredIndexCount();
-        sm->indexData[VpNormal]->indexBuffer = HardwareBufferManager::getSingleton().
-            createIndexBuffer(
+        sm->indexData[VpNormal]->indexBuffer = getHardwareBufferManager()->createIndexBuffer(
                 HardwareIndexBuffer::IT_16BIT, // only 16-bit indexes supported, patches shouldn't be bigger than that
                 sm->indexData[VpNormal]->indexCount,
                 mIndexBufferUsage, 

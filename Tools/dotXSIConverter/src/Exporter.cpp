@@ -129,7 +129,7 @@ void Exporter::exportSubMesh(Mesh *pMesh, CSLMesh* XSIMesh)
 
     // Never use shared geometry
     sm->useSharedVertices = false;
-    sm->vertexData = new VertexData();
+    sm->vertexData = new VertexData(pMesh->getHardwareBufferManager());
 
     // Always do triangle list
     sm->indexData->indexCount = static_cast<size_t>(triArray->GetTriangleCount() * 3);
@@ -169,7 +169,7 @@ void Exporter::exportSubMesh(Mesh *pMesh, CSLMesh* XSIMesh)
     if (mUniqueVertices.size() > 65536)
         use32BitIndexes = true;
     sm->indexData->indexBuffer =
-        HardwareBufferManager::getSingleton().createIndexBuffer(
+        pMesh->getHardwareBufferManager()->createIndexBuffer(
         use32BitIndexes ? HardwareIndexBuffer::IT_32BIT : HardwareIndexBuffer::IT_16BIT,
         triArray->GetTriangleCount() * 3, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
     if (use32BitIndexes)
@@ -305,7 +305,7 @@ void Exporter::writeIndexes(T* buf)
 //-----------------------------------------------------------------------------
 void Exporter::createVertexBuffer(VertexData* vd, unsigned short bufIdx)
 {
-    HardwareVertexBufferSharedPtr vbuf = HardwareBufferManager::getSingleton().createVertexBuffer(
+    HardwareVertexBufferSharedPtr vbuf = vd->_getHardwareBufferManager()->createVertexBuffer(
         vd->vertexDeclaration->getVertexSize(bufIdx),
         vd->vertexCount, 
         HardwareBuffer::HBU_STATIC_WRITE_ONLY);

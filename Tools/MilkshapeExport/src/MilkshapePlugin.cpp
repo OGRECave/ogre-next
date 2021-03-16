@@ -371,7 +371,7 @@ void MilkshapePlugin::doExportMesh(msModel* pModel)
 
         logMgr.logMessage("Setting up geometry...");
         // Set up mesh geometry
-        ogreSubMesh->vertexData = new Ogre::VertexData();
+        ogreSubMesh->vertexData = new Ogre::VertexData(ogreMesh->getHardwareBufferManager());
         ogreSubMesh->vertexData->vertexCount = msMesh_GetVertexCount (pMesh);
         ogreSubMesh->vertexData->vertexStart = 0;
         Ogre::VertexBufferBinding* bind = ogreSubMesh->vertexData->vertexBufferBinding;
@@ -384,13 +384,13 @@ void MilkshapePlugin::doExportMesh(msModel* pModel)
         decl->addElement(NORMAL_BINDING, 0, Ogre::VET_FLOAT3, Ogre::VES_NORMAL);
         decl->addElement(TEXCOORD_BINDING, 0, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES);
         // Create buffers
-        Ogre::HardwareVertexBufferSharedPtr pbuf = Ogre::HardwareBufferManager::getSingleton().
+        Ogre::HardwareVertexBufferSharedPtr pbuf = ogreMesh->getHardwareBufferManager()->
             createVertexBuffer(decl->getVertexSize(POSITION_BINDING), ogreSubMesh->vertexData->vertexCount,
                 Ogre::HardwareBuffer::HBU_DYNAMIC, false);
-        Ogre::HardwareVertexBufferSharedPtr nbuf = Ogre::HardwareBufferManager::getSingleton().
+        Ogre::HardwareVertexBufferSharedPtr nbuf = ogreMesh->getHardwareBufferManager()->
             createVertexBuffer(decl->getVertexSize(NORMAL_BINDING), ogreSubMesh->vertexData->vertexCount,
                 Ogre::HardwareBuffer::HBU_DYNAMIC, false);
-        Ogre::HardwareVertexBufferSharedPtr tbuf = Ogre::HardwareBufferManager::getSingleton().
+        Ogre::HardwareVertexBufferSharedPtr tbuf = ogreMesh->getHardwareBufferManager()->
             createVertexBuffer(decl->getVertexSize(TEXCOORD_BINDING), ogreSubMesh->vertexData->vertexCount,
                 Ogre::HardwareBuffer::HBU_DYNAMIC, false);
         bind->setBinding(POSITION_BINDING, pbuf);
@@ -500,7 +500,7 @@ void MilkshapePlugin::doExportMesh(msModel* pModel)
             nbuf->lock(Ogre::HardwareBuffer::HBL_DISCARD));
         ogreSubMesh->indexData->indexCount = msMesh_GetTriangleCount (pMesh) * 3;
         // Always use 16-bit buffers, Milkshape can't handle more anyway
-        Ogre::HardwareIndexBufferSharedPtr ibuf = Ogre::HardwareBufferManager::getSingleton().
+        Ogre::HardwareIndexBufferSharedPtr ibuf = ogreMesh->getHardwareBufferManager()->
             createIndexBuffer(Ogre::HardwareIndexBuffer::IT_16BIT,
             ogreSubMesh->indexData->indexCount, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
         ogreSubMesh->indexData->indexBuffer = ibuf;
