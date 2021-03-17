@@ -122,6 +122,7 @@ var class_ogre_1_1_android_e_g_l_window =
     [ "removeAllViewports", "class_ogre_1_1_android_e_g_l_window.html#a0c00ca9d1ba7f3efc248ae86511fbff9", null ],
     [ "removeListener", "class_ogre_1_1_android_e_g_l_window.html#a70c43cd6bebbdea84711eb49bb9f1375", null ],
     [ "removeViewport", "class_ogre_1_1_android_e_g_l_window.html#a812eadaec07bee20d103a948920e615c", null ],
+    [ "reposition", "class_ogre_1_1_android_e_g_l_window.html#afd829eb1b4b17d7881a49adbd9206edb", null ],
     [ "requestFullscreenSwitch", "class_ogre_1_1_android_e_g_l_window.html#a6a2b76539652e6c2be9b402ba7f6fbf3", null ],
     [ "requestResolution", "class_ogre_1_1_android_e_g_l_window.html#a6378d754323814ed569589bf57af88a7", null ],
     [ "requiresTextureFlipping", "class_ogre_1_1_android_e_g_l_window.html#a8bb3da6d528f665eab0803ddd676aab8", null ],

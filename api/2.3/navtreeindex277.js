@@ -1,5 +1,15 @@
 var NAVTREEINDEX277 =
 {
+"struct_ogre_1_1_metal_descriptor_set_texture.html#afe8c9cbaba9c0a2d6f8eab534df2ca72":[5,2,11,81,1],
+"struct_ogre_1_1_metal_device.html":[7,0,0,676],
+"struct_ogre_1_1_metal_device.html#a0420f6e053428ffcaf1e555c23ebcf82":[7,0,0,676,17],
+"struct_ogre_1_1_metal_device.html#a0ff5ab08b6d3b2ef9f15bac517acb1da":[7,0,0,676,9],
+"struct_ogre_1_1_metal_device.html#a167c3acabd253acf90473e6059568cd1":[7,0,0,676,18],
+"struct_ogre_1_1_metal_device.html#a1bd0ba1c66f0c2a9f663b572166ff60c":[7,0,0,676,5],
+"struct_ogre_1_1_metal_device.html#a4bcc0d8b429c3a4a73365fc21da4a3b9":[7,0,0,676,8],
+"struct_ogre_1_1_metal_device.html#a7619e459ea80fcbfc3d9e3012981a028":[7,0,0,676,1],
+"struct_ogre_1_1_metal_device.html#a82f1ea9231dab95d21cc0e65a56582c9":[7,0,0,676,15],
+"struct_ogre_1_1_metal_device.html#a90b76e704e679a199f6e3c7fdc4d54a5":[7,0,0,676,4],
 "struct_ogre_1_1_metal_device.html#a954392d24903e403f582fdda1cde0e5b":[7,0,0,676,11],
 "struct_ogre_1_1_metal_device.html#a9c47671b7b0dea0157087f64d7223f65":[7,0,0,676,7],
 "struct_ogre_1_1_metal_device.html#aa8dd85d8f1a453597a8aca64bf7562d9":[7,0,0,676,10],
@@ -239,15 +249,5 @@ var NAVTREEINDEX277 =
 "struct_ogre_1_1_pbs_property.html#a76e4e1218159ed28f686cc163270f7f0":[5,0,0,20,49],
 "struct_ogre_1_1_pbs_property.html#a798bbda97d957177ef76a703b6d0d605":[5,0,0,20,18],
 "struct_ogre_1_1_pbs_property.html#a7afba0dd14e9ab0e3150ed8e6e00d9ef":[5,0,0,20,12],
-"struct_ogre_1_1_pbs_property.html#a7db3869809a2b586d533e2271350096a":[5,0,0,20,111],
-"struct_ogre_1_1_pbs_property.html#a7db390eafb97105791015c1014dae8de":[5,0,0,20,30],
-"struct_ogre_1_1_pbs_property.html#a80e079b8ffbf30609c0fff422ecfd8d5":[5,0,0,20,26],
-"struct_ogre_1_1_pbs_property.html#a81a8eabdfede3cae33ac297548bd3226":[5,0,0,20,14],
-"struct_ogre_1_1_pbs_property.html#a826ab00bef2581ae9697d4237d236c19":[5,0,0,20,71],
-"struct_ogre_1_1_pbs_property.html#a8535ff2f0757f3bb9f9bec6a974432e8":[5,0,0,20,105],
-"struct_ogre_1_1_pbs_property.html#a87b80c888790f7674f372c528409c734":[5,0,0,20,53],
-"struct_ogre_1_1_pbs_property.html#a89f065107a8a2e2a48ef63892c243492":[5,0,0,20,2],
-"struct_ogre_1_1_pbs_property.html#a8a2287f563678877042f98547728546d":[5,0,0,20,82],
-"struct_ogre_1_1_pbs_property.html#a8bd9da53a61ea015df94abb3ee41bc47":[5,0,0,20,64],
-"struct_ogre_1_1_pbs_property.html#a8c7e50d9f8e435a4f15f1ecfbc5acb53":[5,0,0,20,91]
+"struct_ogre_1_1_pbs_property.html#a7db3869809a2b586d533e2271350096a":[5,0,0,20,111]
 };

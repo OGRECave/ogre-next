@@ -1,5 +1,6 @@
 var NAVTREEINDEX27 =
 {
+"class_ogre_1_1_bsp_scene_node.html#acdab50f1d9eff37d64d9c25b40ca55f1":[7,0,0,71,13],
 "class_ogre_1_1_bsp_scene_node.html#acde91d0c99db29ca7fbbf6bec5ed508b":[7,0,0,71,10],
 "class_ogre_1_1_bsp_scene_node.html#ace65afce742d7a51edd85631470e21b8":[7,0,0,71,65],
 "class_ogre_1_1_bsp_scene_node.html#acf639f3cc469fec01702cd647c4ba3a6":[7,0,0,71,115],
@@ -248,6 +249,5 @@ var NAVTREEINDEX27 =
 "class_ogre_1_1_camera.html#a311f3f06799fc4ba14a233406e25503f":[5,0,1,2,40],
 "class_ogre_1_1_camera.html#a311f3f06799fc4ba14a233406e25503f":[5,2,12,2,40],
 "class_ogre_1_1_camera.html#a3235cda8bbc2ae127082e191ae11bcb0":[5,0,1,2,229],
-"class_ogre_1_1_camera.html#a3235cda8bbc2ae127082e191ae11bcb0":[5,2,12,2,229],
-"class_ogre_1_1_camera.html#a3436778d5472fbb52b695278805456fb":[5,0,1,2,292]
+"class_ogre_1_1_camera.html#a3235cda8bbc2ae127082e191ae11bcb0":[5,2,12,2,229]
 };

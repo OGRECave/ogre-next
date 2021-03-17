@@ -103,7 +103,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ac9da0b6dc451a84c41ba15535bf5042f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vertex_shadow_map_helper.html#ac9da0b6dc451a84c41ba15535bf5042f">optimizeForShadowMapping</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoManager, const <a class="el" href="namespace_ogre.html#a3af18a4129f2043729eb4aeb2c9a70e6">VertexArrayObjectArray</a> &amp;inVao, <a class="el" href="namespace_ogre.html#a3af18a4129f2043729eb4aeb2c9a70e6">VertexArrayObjectArray</a> &amp;outVao)</td></tr>
 <tr class="memdesc:ac9da0b6dc451a84c41ba15535bf5042f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads all the vertex &amp; index buffer from all the LOD levels in inVao, optimizes the buffers for shadow mapping, and stores them as new Vaos in outVao.  <a href="class_ogre_1_1_vertex_shadow_map_helper.html#ac9da0b6dc451a84c41ba15535bf5042f">More...</a><br /></td></tr>
 <tr class="separator:ac9da0b6dc451a84c41ba15535bf5042f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46b1cd79af6fa1946049b4a4d2448cd2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vertex_shadow_map_helper.html#a46b1cd79af6fa1946049b4a4d2448cd2">shrinkVertexBuffer</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> *dstData, const <a class="el" href="struct_ogre_1_1_vertex_element2.html">VertexElement2</a> *vertexElements[3], <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> &gt; &amp;vertexConversionLut, bool hasIndexBuffer, const <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> *srcData[3], const size_t srcOffset[3], const size_t srcBytesPerVertex[3], <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> numVertices)</td></tr>
+<tr class="memitem:a46b1cd79af6fa1946049b4a4d2448cd2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vertex_shadow_map_helper.html#a46b1cd79af6fa1946049b4a4d2448cd2">shrinkVertexBuffer</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> *dstData, const <a class="el" href="struct_ogre_1_1_vertex_element2.html">VertexElement2</a> *vertexElements[3], <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> &gt; &amp;vertexConversionLut, bool hasIndexBuffer, const <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> *srcData[3], const size_t srcOffset[3], const size_t srcBytesPerVertex[3], <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> numVertices)</td></tr>
 <tr class="memdesc:a46b1cd79af6fa1946049b4a4d2448cd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the contents from srcData into dstData, but shrinking it by removing duplicated vertices.  <a href="class_ogre_1_1_vertex_shadow_map_helper.html#a46b1cd79af6fa1946049b4a4d2448cd2">More...</a><br /></td></tr>
 <tr class="separator:a46b1cd79af6fa1946049b4a4d2448cd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa146538c74340d04ecc705657a95ae14"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vertex_shadow_map_helper.html#aa146538c74340d04ecc705657a95ae14">useSameVaos</a> (<a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoManager, const <a class="el" href="namespace_ogre.html#a3af18a4129f2043729eb4aeb2c9a70e6">VertexArrayObjectArray</a> &amp;inVao, <a class="el" href="namespace_ogre.html#a3af18a4129f2043729eb4aeb2c9a70e6">VertexArrayObjectArray</a> &amp;outVao)</td></tr>
@@ -234,9 +234,9 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> Ogre::VertexShadowMapHelper::shrinkVertexBuffer </td>
+          <td class="memname">static <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> Ogre::VertexShadowMapHelper::shrinkVertexBuffer </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> *&#160;</td>
           <td class="paramname"><em>dstData</em>, </td>
         </tr>
         <tr>
@@ -248,7 +248,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>vertexConversionLut</em>, </td>
         </tr>
         <tr>
@@ -260,7 +260,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> *&#160;</td>
           <td class="paramname"><em>srcData</em>[3], </td>
         </tr>
         <tr>
@@ -278,7 +278,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#adf2a0cf2e77143b5ee1d38a75e289545">uint32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td>
           <td class="paramname"><em>numVertices</em>&#160;</td>
         </tr>
         <tr>

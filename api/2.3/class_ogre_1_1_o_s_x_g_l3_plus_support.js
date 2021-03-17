@@ -19,6 +19,7 @@ var class_ogre_1_1_o_s_x_g_l3_plus_support =
     [ "getShaderLibraryPath", "class_ogre_1_1_o_s_x_g_l3_plus_support.html#a8c87e29883b18efc8da37afbe42b3852", null ],
     [ "hasMinGLVersion", "class_ogre_1_1_o_s_x_g_l3_plus_support.html#a1967867822fc80e81590ac9be066440b", null ],
     [ "initialiseExtensions", "class_ogre_1_1_o_s_x_g_l3_plus_support.html#a8954a5a970c650fa6fd97e73f3428ef6", null ],
+    [ "newWindow", "class_ogre_1_1_o_s_x_g_l3_plus_support.html#aa58f3b36d08d3061dc216ec2ada8ff5c", null ],
     [ "newWindow", "class_ogre_1_1_o_s_x_g_l3_plus_support.html#a3e4a0f920442e8f0c5aeeeb5435e879b", null ],
     [ "setConfigOption", "class_ogre_1_1_o_s_x_g_l3_plus_support.html#a1c07a0e93c455b400a566562b481d24e", null ],
     [ "setShaderCachePath", "class_ogre_1_1_o_s_x_g_l3_plus_support.html#afc5a8ba353c6479ec2fab128cf736c90", null ],

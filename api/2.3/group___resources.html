@@ -762,21 +762,21 @@ Functions</h2></td></tr>
 <tr class="separator:ga7958a767329218ed9dae3e1be7cbab98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacfaf16aeabaf31d382c9b6b64f312715"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#gacfaf16aeabaf31d382c9b6b64f312715">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::~OGRE_HLMS_TEXTURE_BASE_CLASS</a> ()</td></tr>
 <tr class="separator:gacfaf16aeabaf31d382c9b6b64f312715"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga41e3487b35870cad9986dcd7b19b6e3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga41e3487b35870cad9986dcd7b19b6e3e">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::_setSamplerblock</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> texType, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *samplerblockPtr)</td></tr>
+<tr class="memitem:ga41e3487b35870cad9986dcd7b19b6e3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga41e3487b35870cad9986dcd7b19b6e3e">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::_setSamplerblock</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texType, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *samplerblockPtr)</td></tr>
 <tr class="memdesc:ga41e3487b35870cad9986dcd7b19b6e3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as setSamplerblock, but samplerblockPtr is a raw samplerblock retrieved from <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>, and is assumed to have its reference count already be incremented for us.  <a href="group___resources.html#ga41e3487b35870cad9986dcd7b19b6e3e">More...</a><br /></td></tr>
 <tr class="separator:ga41e3487b35870cad9986dcd7b19b6e3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf340e3f3f27ed498434125466a85f2de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#gaf340e3f3f27ed498434125466a85f2de">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::_setTexture</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> texType, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *samplerblockPtr=0, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> sliceIdx=std::numeric_limits&lt; <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> &gt;::max())</td></tr>
+<tr class="memitem:gaf340e3f3f27ed498434125466a85f2de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#gaf340e3f3f27ed498434125466a85f2de">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::_setTexture</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texType, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *samplerblockPtr=0, <a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> sliceIdx=std::numeric_limits&lt; <a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> &gt;::max())</td></tr>
 <tr class="memdesc:gaf340e3f3f27ed498434125466a85f2de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as setTexture, but samplerblockPtr is a raw samplerblock retrieved from <a class="el" href="class_ogre_1_1_hlms_manager.html" title="HLMS stands for &quot;High Level Material System&quot;.">HlmsManager</a>, and is assumed to have its reference count already be incremented for us (note <a class="el" href="class_ogre_1_1_hlms_manager.html#a5dd766ba47d997b537c99d4b7f2398ba" title="@See getMacroblock.">HlmsManager::getSamplerblock()</a> already increments the ref.  <a href="group___resources.html#gaf340e3f3f27ed498434125466a85f2de">More...</a><br /></td></tr>
 <tr class="separator:gaf340e3f3f27ed498434125466a85f2de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad73533d31863a6df1b9f821ce73ec1bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#gad73533d31863a6df1b9f821ce73ec1bd">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getIndexToDescriptorSampler</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> texType)</td></tr>
+<tr class="memitem:gad73533d31863a6df1b9f821ce73ec1bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#gad73533d31863a6df1b9f821ce73ec1bd">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getIndexToDescriptorSampler</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texType)</td></tr>
 <tr class="memdesc:gad73533d31863a6df1b9f821ce73ec1bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do not call this function if RSC_SEPARATE_SAMPLERS_FROM_TEXTURES is not set.  <a href="group___resources.html#gad73533d31863a6df1b9f821ce73ec1bd">More...</a><br /></td></tr>
 <tr class="separator:gad73533d31863a6df1b9f821ce73ec1bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga35f878c11cf3f6d43a063ce148c2e8d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga35f878c11cf3f6d43a063ce148c2e8d2">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getIndexToDescriptorTexture</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> texType)</td></tr>
+<tr class="memitem:ga35f878c11cf3f6d43a063ce148c2e8d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga35f878c11cf3f6d43a063ce148c2e8d2">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getIndexToDescriptorTexture</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texType)</td></tr>
 <tr class="memdesc:ga35f878c11cf3f6d43a063ce148c2e8d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function has O( log N ) complexity, but O(1) if the texture was not set.  <a href="group___resources.html#ga35f878c11cf3f6d43a063ce148c2e8d2">More...</a><br /></td></tr>
 <tr class="separator:ga35f878c11cf3f6d43a063ce148c2e8d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5cb1017d122d6895a524125580d18ccc"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga5cb1017d122d6895a524125580d18ccc">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getSamplerblock</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> texType) const</td></tr>
+<tr class="memitem:ga5cb1017d122d6895a524125580d18ccc"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga5cb1017d122d6895a524125580d18ccc">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getSamplerblock</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texType) const</td></tr>
 <tr class="separator:ga5cb1017d122d6895a524125580d18ccc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga31e02db74919e58eb1ae1a2365c538b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga31e02db74919e58eb1ae1a2365c538b8">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getTexture</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> texType) const</td></tr>
+<tr class="memitem:ga31e02db74919e58eb1ae1a2365c538b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga31e02db74919e58eb1ae1a2365c538b8">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getTexture</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texType) const</td></tr>
 <tr class="separator:ga31e02db74919e58eb1ae1a2365c538b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1cb9abc1787a40d8abf4b4bc8158cc1c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga1cb9abc1787a40d8abf4b4bc8158cc1c">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::loadAllTextures</a> (void)</td></tr>
 <tr class="separator:ga1cb9abc1787a40d8abf4b4bc8158cc1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -793,10 +793,10 @@ Functions</h2></td></tr>
 <tr class="separator:gad7efc30646f8ceddb7949a0fc17ad380"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga44c599e0df4f7d91bae4bd3e37184657"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga44c599e0df4f7d91bae4bd3e37184657">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::saveTextures</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener)</td></tr>
 <tr class="separator:ga44c599e0df4f7d91bae4bd3e37184657"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga91e2326f0550a4e8b59f08a321d28cf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga91e2326f0550a4e8b59f08a321d28cf5">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::setSamplerblock</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> texType, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> &amp;params)</td></tr>
+<tr class="memitem:ga91e2326f0550a4e8b59f08a321d28cf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga91e2326f0550a4e8b59f08a321d28cf5">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::setSamplerblock</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texType, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> &amp;params)</td></tr>
 <tr class="memdesc:ga91e2326f0550a4e8b59f08a321d28cf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new sampler block to be associated with the texture (i.e.  <a href="group___resources.html#ga91e2326f0550a4e8b59f08a321d28cf5">More...</a><br /></td></tr>
 <tr class="separator:ga91e2326f0550a4e8b59f08a321d28cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga42172622f82ce643f2cab2f746152da8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga42172622f82ce643f2cab2f746152da8">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::setTexture</a> (<a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> texType, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *refParams=0, <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> sliceIdx=std::numeric_limits&lt; <a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> &gt;::max())</td></tr>
+<tr class="memitem:ga42172622f82ce643f2cab2f746152da8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga42172622f82ce643f2cab2f746152da8">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::setTexture</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texType, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *refParams=0, <a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> sliceIdx=std::numeric_limits&lt; <a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> &gt;::max())</td></tr>
 <tr class="memdesc:ga42172622f82ce643f2cab2f746152da8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new texture for rendering.  <a href="group___resources.html#ga42172622f82ce643f2cab2f746152da8">More...</a><br /></td></tr>
 <tr class="separator:ga42172622f82ce643f2cab2f746152da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gafcb88d3a6bd52d7f4959f4a20c90e7b2"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#gafcb88d3a6bd52d7f4959f4a20c90e7b2">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::shouldStayLoaded</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
@@ -1637,7 +1637,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::_setSamplerblock </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td>
           <td class="paramname"><em>texType</em>, </td>
         </tr>
         <tr>
@@ -1668,7 +1668,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::_setTexture </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td>
           <td class="paramname"><em>texType</em>, </td>
         </tr>
         <tr>
@@ -1686,8 +1686,8 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td>
-          <td class="paramname"><em>sliceIdx</em> = <code>std::numeric_limits&lt;&#160;<a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;&gt;::max()</code>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
+          <td class="paramname"><em>sliceIdx</em> = <code>std::numeric_limits&lt;&#160;<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;&gt;::max()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1709,9 +1709,9 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getIndexToDescriptorSampler </td>
+          <td class="memname"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getIndexToDescriptorSampler </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td>
           <td class="paramname"><em>texType</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1730,9 +1730,9 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a> Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getIndexToDescriptorTexture </td>
+          <td class="memname"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getIndexToDescriptorTexture </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td>
           <td class="paramname"><em>texType</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1752,7 +1752,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a>* Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getSamplerblock </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td>
           <td class="paramname"><em>texType</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1770,7 +1770,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a>* Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::getTexture </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td>
           <td class="paramname"><em>texType</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -2071,7 +2071,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::setSamplerblock </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td>
           <td class="paramname"><em>texType</em>, </td>
         </tr>
         <tr>
@@ -2108,7 +2108,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::setTexture </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#a119732ea9d1e88bbddc47b4ac0fa21cb">uint8</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td>
           <td class="paramname"><em>texType</em>, </td>
         </tr>
         <tr>
@@ -2126,8 +2126,8 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td>
-          <td class="paramname"><em>sliceIdx</em> = <code>std::numeric_limits&lt;&#160;<a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;&gt;::max()</code>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
+          <td class="paramname"><em>sliceIdx</em> = <code>std::numeric_limits&lt;&#160;<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;&gt;::max()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>

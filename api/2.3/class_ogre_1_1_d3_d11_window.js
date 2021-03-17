@@ -42,6 +42,7 @@ var class_ogre_1_1_d3_d11_window =
     [ "operator new[]", "class_ogre_1_1_d3_d11_window.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_d3_d11_window.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "reposition", "class_ogre_1_1_d3_d11_window.html#a67e3922f9cdc6d2b8bfaa2e4ccfed206", null ],
+    [ "reposition", "class_ogre_1_1_d3_d11_window.html#a5d39c20103e51bd756ebc97956b3c98d", null ],
     [ "requestFullscreenSwitch", "class_ogre_1_1_d3_d11_window.html#a2d5423c38fb53d7346a00c0e7e582347", null ],
     [ "requestResolution", "class_ogre_1_1_d3_d11_window.html#a1284a6c13adf9c244e4dcc2f973d7749", null ],
     [ "setBorderless", "class_ogre_1_1_d3_d11_window.html#aa6ee76edb7111f8feefbb1f73aae50be", null ],

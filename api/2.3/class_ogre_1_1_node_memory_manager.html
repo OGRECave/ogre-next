@@ -117,10 +117,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a57055b26b6143047324615ab6bd3dae5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#a57055b26b6143047324615ab6bd3dae5">_setTwin</a> (<a class="el" href="group___general.html#ga635aa2486e7e05c17c1fdec1913094a6">SceneMemoryMgrTypes</a> memoryManagerType, <a class="el" href="class_ogre_1_1_node_memory_manager.html">NodeMemoryManager</a> *twinMemoryManager)</td></tr>
 <tr class="memdesc:a57055b26b6143047324615ab6bd3dae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See mMemoryManagerType  <a href="class_ogre_1_1_node_memory_manager.html#a57055b26b6143047324615ab6bd3dae5">More...</a><br /></td></tr>
 <tr class="separator:a57055b26b6143047324615ab6bd3dae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26f857eb9a9d9a6dc9219e6bc3286d81"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#a26f857eb9a9d9a6dc9219e6bc3286d81">applyRebase</a> (<a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> level, const <a class="el" href="namespace_ogre.html#a43278e35ec4d27a6f37928aa78eded36">MemoryPoolVec</a> &amp;newBasePtrs, const <a class="el" href="class_ogre_1_1_array_memory_manager.html#aac88868dab1629f0becfe78f25f27426">ArrayMemoryManager::PtrdiffVec</a> &amp;diffsList)</td></tr>
+<tr class="memitem:a26f857eb9a9d9a6dc9219e6bc3286d81"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#a26f857eb9a9d9a6dc9219e6bc3286d81">applyRebase</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> level, const <a class="el" href="namespace_ogre.html#a43278e35ec4d27a6f37928aa78eded36">MemoryPoolVec</a> &amp;newBasePtrs, const <a class="el" href="class_ogre_1_1_array_memory_manager.html#aac88868dab1629f0becfe78f25f27426">ArrayMemoryManager::PtrdiffVec</a> &amp;diffsList)</td></tr>
 <tr class="memdesc:a26f857eb9a9d9a6dc9219e6bc3286d81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the manager already grew it's memory pool to honour more node requests.  <a href="class_ogre_1_1_node_memory_manager.html#a26f857eb9a9d9a6dc9219e6bc3286d81">More...</a><br /></td></tr>
 <tr class="separator:a26f857eb9a9d9a6dc9219e6bc3286d81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af744a89c4b441d790945cd5bf36691b0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#af744a89c4b441d790945cd5bf36691b0">buildDiffList</a> (<a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> level, const <a class="el" href="namespace_ogre.html#a43278e35ec4d27a6f37928aa78eded36">MemoryPoolVec</a> &amp;basePtrs, <a class="el" href="class_ogre_1_1_array_memory_manager.html#aac88868dab1629f0becfe78f25f27426">ArrayMemoryManager::PtrdiffVec</a> &amp;outDiffsList)</td></tr>
+<tr class="memitem:af744a89c4b441d790945cd5bf36691b0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#af744a89c4b441d790945cd5bf36691b0">buildDiffList</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> level, const <a class="el" href="namespace_ogre.html#a43278e35ec4d27a6f37928aa78eded36">MemoryPoolVec</a> &amp;basePtrs, <a class="el" href="class_ogre_1_1_array_memory_manager.html#aac88868dab1629f0becfe78f25f27426">ArrayMemoryManager::PtrdiffVec</a> &amp;outDiffsList)</td></tr>
 <tr class="memdesc:af744a89c4b441d790945cd5bf36691b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the manager needs to grow it's memory pool to honour more node requests.  <a href="class_ogre_1_1_node_memory_manager.html#af744a89c4b441d790945cd5bf36691b0">More...</a><br /></td></tr>
 <tr class="separator:af744a89c4b441d790945cd5bf36691b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a950dffdcf577432988a0383405c25365"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#a950dffdcf577432988a0383405c25365">defragment</a> (void)</td></tr>
@@ -164,7 +164,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aac63416f2b447710543c3b4a10d1766e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#aac63416f2b447710543c3b4a10d1766e">nodeMoved</a> (<a class="el" href="struct_ogre_1_1_transform.html">Transform</a> &amp;inOutTransform, size_t oldDepth, size_t newDepth)</td></tr>
 <tr class="memdesc:aac63416f2b447710543c3b4a10d1766e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Requests memory for the given <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> to be moved to a different depth level, transferring existing values inside to the new memory slot.  <a href="class_ogre_1_1_node_memory_manager.html#aac63416f2b447710543c3b4a10d1766e">More...</a><br /></td></tr>
 <tr class="separator:aac63416f2b447710543c3b4a10d1766e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac93aa2be3aea6ffb668ea69bc0297fb4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#ac93aa2be3aea6ffb668ea69bc0297fb4">performCleanup</a> (<a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a> level, const <a class="el" href="namespace_ogre.html#a43278e35ec4d27a6f37928aa78eded36">MemoryPoolVec</a> &amp;basePtrs, size_t const *elementsMemSizes, size_t startInstance, size_t diffInstances)</td></tr>
+<tr class="memitem:ac93aa2be3aea6ffb668ea69bc0297fb4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#ac93aa2be3aea6ffb668ea69bc0297fb4">performCleanup</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> level, const <a class="el" href="namespace_ogre.html#a43278e35ec4d27a6f37928aa78eded36">MemoryPoolVec</a> &amp;basePtrs, size_t const *elementsMemSizes, size_t startInstance, size_t diffInstances)</td></tr>
 <tr class="memdesc:ac93aa2be3aea6ffb668ea69bc0297fb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when too many nodes were destroyed in a non-LIFO fashion.  <a href="class_ogre_1_1_node_memory_manager.html#ac93aa2be3aea6ffb668ea69bc0297fb4">More...</a><br /></td></tr>
 <tr class="separator:ac93aa2be3aea6ffb668ea69bc0297fb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4daf838c5f9969d53c7ebbf0a8dc38fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node_memory_manager.html#a4daf838c5f9969d53c7ebbf0a8dc38fc">shrinkToFit</a> (void)</td></tr>
@@ -287,7 +287,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void Ogre::NodeMemoryManager::applyRebase </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
@@ -343,7 +343,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void Ogre::NodeMemoryManager::buildDiffList </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
@@ -894,7 +894,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void Ogre::NodeMemoryManager::performCleanup </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa8263b218e7d187ad5ef03a73a6ad7fd">uint16</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
