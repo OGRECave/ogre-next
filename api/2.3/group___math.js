@@ -1196,7 +1196,7 @@ var group___math =
       ] ],
       [ "Plane", "class_ogre_1_1_plane.html#a1530cc182a2a783e072eabe44f536149", null ],
       [ "Plane", "class_ogre_1_1_plane.html#a296599d7461accceada20df86f7bd334", null ],
-      [ "Plane", "class_ogre_1_1_plane.html#a6bbbefc667888c438cfbe78aaf5a5ee3", null ],
+      [ "Plane", "class_ogre_1_1_plane.html#a49af67b16939ef95ce83fa89b5aebe07", null ],
       [ "Plane", "class_ogre_1_1_plane.html#abd98e0aae4723943f83262e59cfda535", null ],
       [ "Plane", "class_ogre_1_1_plane.html#adb4cf2fec3619764f0e6766df23b303f", null ],
       [ "getDistance", "class_ogre_1_1_plane.html#aa397a61879a2c4ffdc6c237820fae177", null ],
