@@ -35,6 +35,13 @@
 
 #include "OgreLwConstString.h"
 
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1600  // no <inttypes.h>
+#    define PRIi64 "lli"
+#    define PRIu64 "llu"
+#else
+#    include <inttypes.h>
+#endif
+
 #ifndef _MSC_VER
     #define OGRE_LWSTRING_SNPRINTF_DEFINED
     #define _snprintf snprintf
@@ -262,12 +269,7 @@ namespace Ogre
         LwString& a( int64 a0 )
         {
             int written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-#if OGRE_COMPILER != OGRE_COMPILER_MSVC && defined __x86_64__ && !defined __ILP32__
-                                     "%li",
-#else
-                                     "%lli",
-#endif
-                                     a0 );
+                                     "%" PRIi64, a0 );
             assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
             mStrPtr[mCapacity - 1] = '\0';
             mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
@@ -277,12 +279,7 @@ namespace Ogre
         LwString& a( uint64 a0 )
         {
             int written = _snprintf( mStrPtr + mSize, mCapacity - mSize,
-#if OGRE_COMPILER != OGRE_COMPILER_MSVC && defined __x86_64__ && !defined __ILP32__
-                                     "%lu",
-#else
-                                     "%llu",
-#endif
-                                     a0 );
+                                     "%" PRIu64, a0 );
             assert( ( written >= 0 ) && ( (size_t)written < mCapacity ) );
             mStrPtr[mCapacity - 1] = '\0';
             mSize = std::min<size_t>( mSize + (size_t)std::max( written, 0 ), mCapacity - 1u );
