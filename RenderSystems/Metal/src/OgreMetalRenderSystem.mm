@@ -388,7 +388,7 @@ namespace Ogre
         rsc->setCapability(RSC_DEPTH_CLAMP);
 #endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS || ( OGRE_PLATFORM == OGRE_PLATFORM_APPLE && OGRE_CPU == OGRE_CPU_ARM && OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64 )
         rsc->setCapability( RSC_IS_TILER );
         rsc->setCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION );
 #endif
