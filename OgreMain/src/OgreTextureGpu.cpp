@@ -630,7 +630,7 @@ namespace Ogre
         //Decrement mPendingResidencyChanges and prevent underflow
         mPendingResidencyChanges = std::max( mPendingResidencyChanges, 1u ) - 1u;
 
-        notifyAllListenersTextureChanged( TextureGpuListener::LostResidency );
+        notifyAllListenersTextureChanged( listenerReason );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
