@@ -122,11 +122,6 @@ namespace Ogre {
         */
         ~Item();
 
-        /** @copydoc MovableObject::_releaseManualHardwareResources */
-        void _releaseManualHardwareResources();
-        /** @copydoc MovableObject::_restoreManualHardwareResources */
-        void _restoreManualHardwareResources();
-
         /** Gets the Mesh that this Item is based on.
         */
         const MeshPtr& getMesh(void) const;
@@ -226,7 +221,7 @@ namespace Ogre {
 
         /** Returns whether or not this Item is either morph or pose animated.
         */
-        bool hasVertexAnimation(void) const;                
+        //bool hasVertexAnimation(void) const;
 
         /** Returns a pointer to the set of entities which share a OldSkeletonInstance.
             If this instance does not share it's OldSkeletonInstance with other instances @c NULL will be returned
@@ -257,6 +252,9 @@ namespace Ogre {
         void _initialise(bool forceReinitialise = false);
         /** Tear down the internal structures of this Item, rendering it uninitialised. */
         void _deinitialise(void);
+
+        /** Resource::Listener hook to notify Entity that a Mesh is (re)loaded. */
+        void loadingComplete(Resource* res);
 
         virtual void _notifyParentNodeMemoryChanged(void);
     };

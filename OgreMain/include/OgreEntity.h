@@ -247,9 +247,6 @@ namespace v1 {
         /// Last parent transform.
         Matrix4 mLastParentXform;
 
-        /// Mesh state count, used to detect differences.
-        size_t mMeshStateCount;
-
         /** Builds a list of SubEntities based on the SubMeshes contained in the Mesh. */
         void buildSubEntityList(MeshPtr& mesh, SubEntityList* sublist, vector<String>::type* materialsList = 0);
 
@@ -277,11 +274,6 @@ namespace v1 {
         /** Default destructor.
         */
         ~Entity();
-
-        /** @copydoc MovableObject::_releaseManualHardwareResources */
-        void _releaseManualHardwareResources();
-        /** @copydoc MovableObject::_restoreManualHardwareResources */
-        void _restoreManualHardwareResources();
 
         /** Gets the Mesh that this Entity is based on.
         */
@@ -632,6 +624,9 @@ namespace v1 {
         void _initialise(bool forceReinitialise = false);
         /** Tear down the internal structures of this Entity, rendering it uninitialised. */
         void _deinitialise(void);
+
+        /** Resource::Listener hook to notify Entity that a Mesh is (re)loaded. */
+        void loadingComplete(Resource* res);
 
         /** Entity's skeleton's AnimationState will not be automatically updated when set to true.
             Useful if you wish to handle AnimationState updates manually.

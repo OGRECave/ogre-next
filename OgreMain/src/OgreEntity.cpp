@@ -79,8 +79,7 @@ namespace v1 {
           mAlwaysUpdateMainSkeleton(false),
           mSkeletonInstance(0),
           mInitialised(false),
-          mLastParentXform(Matrix4::ZERO),
-          mMeshStateCount(0)
+          mLastParentXform(Matrix4::ZERO)
     {
         mObjectData.mQueryFlags[mObjectData.mIndex] = SceneManager::QUERY_ENTITY_DEFAULT_MASK;
     }
@@ -109,21 +108,18 @@ namespace v1 {
         mAlwaysUpdateMainSkeleton(false),
         mSkeletonInstance(0),
         mInitialised(false),
-        mLastParentXform(Matrix4::ZERO),
-        mMeshStateCount(0)
+        mLastParentXform(Matrix4::ZERO)
     {
         _initialise();
         mObjectData.mQueryFlags[mObjectData.mIndex] = SceneManager::QUERY_ENTITY_DEFAULT_MASK;
     }
     //-----------------------------------------------------------------------
-    void Entity::_releaseManualHardwareResources()
+    void Entity::loadingComplete(Resource* res)
     {
-        // do not call _deinitialise() here to preserve material names
-    }
-    //-----------------------------------------------------------------------
-    void Entity::_restoreManualHardwareResources()
-    {
-        _initialise(true);
+        if(res == mMesh.get() && mInitialised)
+        {
+            _initialise(true);
+        }
     }
     //-----------------------------------------------------------------------
     void Entity::_initialise(bool forceReinitialise)
@@ -143,12 +139,8 @@ namespace v1 {
         if (mInitialised)
             return;
 
-        if (mMesh->isBackgroundLoaded() && !mMesh->isLoaded())
-        {
-            // register for a callback when mesh is finished loading
-            // do this before asking for load to happen to avoid race
-            mMesh->addListener(this);
-        }
+        // register for a callback when mesh is finished loading
+        mMesh->addListener(this);
         
         // On-demand load
         mMesh->load();
@@ -235,7 +227,6 @@ namespace v1 {
         }
 
         mInitialised = true;
-        mMeshStateCount = mMesh->getStateCount();
     }
     //-----------------------------------------------------------------------
     void Entity::_deinitialise(void)
@@ -470,13 +461,6 @@ namespace v1 {
         // Do nothing if not initialised yet
         if (!mInitialised)
             return;
-
-        // Check mesh state count, will be incremented if reloaded
-        if (mMesh->getStateCount() != mMeshStateCount)
-        {
-            // force reinitialise
-            _initialise(true);
-        }
 
         /*{
             FastArray<unsigned char>::const_iterator itCurrentMatLod = mCurrentMaterialLod.begin();
