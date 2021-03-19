@@ -1,7 +1,5 @@
 var NAVTREEINDEX270 =
 {
-"namespace_ogre_1_1_r_t_shader.html#a722d7eb730c66ec0262df86ebf9888b1":[6,0,0,19,79],
-"namespace_ogre_1_1_r_t_shader.html#a8c100ce939d23573f062f3ad579998a1":[6,0,0,19,97],
 "namespace_ogre_1_1_r_t_shader.html#a8c100ce939d23573f062f3ad579998a1a08c0d76a7a8df2b6a839749c5be6c1af":[6,0,0,19,97,1],
 "namespace_ogre_1_1_r_t_shader.html#a8c100ce939d23573f062f3ad579998a1ab979c94e41c61d62d15f4771c5202e3c":[6,0,0,19,97,0],
 "namespace_ogre_1_1_r_t_shader.html#a9b50e9cfcf817b897c37fc77e67f1bbf":[6,0,0,19,70],
@@ -203,8 +201,8 @@ var NAVTREEINDEX270 =
 "namespacemembers_r.html":[6,1,0,16],
 "namespacemembers_s.html":[6,1,0,17],
 "namespacemembers_t.html":[6,1,0,18],
-"namespacemembers_type.html":[6,1,3],
 "namespacemembers_type.html":[6,1,3,0],
+"namespacemembers_type.html":[6,1,3],
 "namespacemembers_type_a.html":[6,1,3,1],
 "namespacemembers_type_b.html":[6,1,3,2],
 "namespacemembers_type_c.html":[6,1,3,3],
@@ -249,5 +247,7 @@ var NAVTREEINDEX270 =
 "struct___d3_d_c_o_l_o_r_v_a_l_u_e.html#aa89857d9c82cd634f3ec9089a9118296":[7,0,3,1],
 "struct__finddata__t.html":[7,0,4],
 "struct__finddata__t.html#a4a50f070b61c49cc821864fa6bb7b599":[7,0,4,0],
-"struct__finddata__t.html#aa8b6c8443328752952e99f366254a6f8":[7,0,4,1]
+"struct__finddata__t.html#aa8b6c8443328752952e99f366254a6f8":[7,0,4,1],
+"struct__finddata__t.html#aacf50a90e0fa143ce6ff22628b8c58aa":[7,0,4,2],
+"struct_d_x_g_i___p_r_e_s_e_n_t___p_a_r_a_m_e_t_e_r_s.html":[7,0,19]
 };

@@ -152,12 +152,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab3fe0289fbcabb17897c53445fa29339"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ab3fe0289fbcabb17897c53445fa29339">_notifyStaticDirty</a> (void) const</td></tr>
 <tr class="memdesc:ab3fe0289fbcabb17897c53445fa29339"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> when it is telling we're a static <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> being dirty Don't call this directly.  <a href="class_ogre_1_1_movable_object.html#ab3fe0289fbcabb17897c53445fa29339">More...</a><br /></td></tr>
 <tr class="separator:ab3fe0289fbcabb17897c53445fa29339"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50001436f230ae5eb719c41f3846479e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_item.html#a50001436f230ae5eb719c41f3846479e">_releaseManualHardwareResources</a> ()</td></tr>
-<tr class="memdesc:a50001436f230ae5eb719c41f3846479e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the movable object that hardware resources were lost.  <a href="class_ogre_1_1_item.html#a50001436f230ae5eb719c41f3846479e">More...</a><br /></td></tr>
-<tr class="separator:a50001436f230ae5eb719c41f3846479e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc516ee2ab7d0ec3eda798f1de1ce8f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_item.html#abc516ee2ab7d0ec3eda798f1de1ce8f0">_restoreManualHardwareResources</a> ()</td></tr>
-<tr class="memdesc:abc516ee2ab7d0ec3eda798f1de1ce8f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the movable object that hardware resources should be restored.  <a href="class_ogre_1_1_item.html#abc516ee2ab7d0ec3eda798f1de1ce8f0">More...</a><br /></td></tr>
-<tr class="separator:abc516ee2ab7d0ec3eda798f1de1ce8f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57123ae4fec1b472f25270c1dd6abe59"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a57123ae4fec1b472f25270c1dd6abe59">_releaseManualHardwareResources</a> ()</td></tr>
+<tr class="memdesc:a57123ae4fec1b472f25270c1dd6abe59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the movable object that hardware resources were lost.  <a href="class_ogre_1_1_movable_object.html#a57123ae4fec1b472f25270c1dd6abe59">More...</a><br /></td></tr>
+<tr class="separator:a57123ae4fec1b472f25270c1dd6abe59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd5561a07f78291e327351fe83e64a9b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#abd5561a07f78291e327351fe83e64a9b">_restoreManualHardwareResources</a> ()</td></tr>
+<tr class="memdesc:abd5561a07f78291e327351fe83e64a9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies the movable object that hardware resources should be restored.  <a href="class_ogre_1_1_movable_object.html#abd5561a07f78291e327351fe83e64a9b">More...</a><br /></td></tr>
+<tr class="separator:abd5561a07f78291e327351fe83e64a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8561b8de767cf64740c37eb1aeddd529"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a8561b8de767cf64740c37eb1aeddd529">_updateRenderQueue</a> (<a class="el" href="class_ogre_1_1_render_queue.html">RenderQueue</a> *queue, <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *camera, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera)</td></tr>
 <tr class="memdesc:a8561b8de767cf64740c37eb1aeddd529"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method by which the movable object must add <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> subclass instances to the rendering queue.  <a href="class_ogre_1_1_movable_object.html#a8561b8de767cf64740c37eb1aeddd529">More...</a><br /></td></tr>
 <tr class="separator:a8561b8de767cf64740c37eb1aeddd529"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -271,9 +271,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa99408d50a19a0103e70dd2bbf80e502"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_item.html#aa99408d50a19a0103e70dd2bbf80e502">hasSkeleton</a> (void) const</td></tr>
 <tr class="memdesc:aa99408d50a19a0103e70dd2bbf80e502"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether or not this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> is skeletally animated.  <a href="class_ogre_1_1_item.html#aa99408d50a19a0103e70dd2bbf80e502">More...</a><br /></td></tr>
 <tr class="separator:aa99408d50a19a0103e70dd2bbf80e502"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af87cf7696b318196866d5deee49acf09"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_item.html#af87cf7696b318196866d5deee49acf09">hasVertexAnimation</a> (void) const</td></tr>
-<tr class="memdesc:af87cf7696b318196866d5deee49acf09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether or not this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> is either morph or pose animated.  <a href="class_ogre_1_1_item.html#af87cf7696b318196866d5deee49acf09">More...</a><br /></td></tr>
-<tr class="separator:af87cf7696b318196866d5deee49acf09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d62d2c3d09910210c948fc660468c46"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a2d62d2c3d09910210c948fc660468c46">instanceBatchCullFrustumThreaded</a> (const <a class="el" href="class_ogre_1_1_frustum.html">Frustum</a> *frustum, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> combinedVisibilityFlags)</td></tr>
 <tr class="memdesc:a2d62d2c3d09910210c948fc660468c46"><td class="mdescLeft">&#160;</td><td class="mdescRight">@See InstancingTheadedCullingMethod,  <a href="class_ogre_1_1_movable_object.html#a2d62d2c3d09910210c948fc660468c46">More...</a><br /></td></tr>
 <tr class="separator:a2d62d2c3d09910210c948fc660468c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -281,7 +278,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aef2a2634077942a2939514a6c1114d32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this object is attached to a <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a>.  <a href="class_ogre_1_1_movable_object.html#aef2a2634077942a2939514a6c1114d32">More...</a><br /></td></tr>
 <tr class="separator:aef2a2634077942a2939514a6c1114d32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae2f6f4e03fd84dd8d36b48fff1358e2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_item.html#aae2f6f4e03fd84dd8d36b48fff1358e2">isInitialised</a> (void) const</td></tr>
-<tr class="memdesc:aae2f6f4e03fd84dd8d36b48fff1358e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the set of entities which share a OldSkeletonInstance.  <a href="class_ogre_1_1_item.html#aae2f6f4e03fd84dd8d36b48fff1358e2">More...</a><br /></td></tr>
+<tr class="memdesc:aae2f6f4e03fd84dd8d36b48fff1358e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether or not this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> is either morph or pose animated.  <a href="class_ogre_1_1_item.html#aae2f6f4e03fd84dd8d36b48fff1358e2">More...</a><br /></td></tr>
 <tr class="separator:aae2f6f4e03fd84dd8d36b48fff1358e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e3e690195e9d7e14c6ad4e1fe7ba9e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a2e3e690195e9d7e14c6ad4e1fe7ba9e5">isStatic</a> () const</td></tr>
 <tr class="memdesc:a2e3e690195e9d7e14c6ad4e1fe7ba9e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether this <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> is static. @See setStatic.  <a href="class_ogre_1_1_movable_object.html#a2e3e690195e9d7e14c6ad4e1fe7ba9e5">More...</a><br /></td></tr>
@@ -289,9 +286,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6c4003f6b67540727844dc33c20714f7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#a6c4003f6b67540727844dc33c20714f7">isVisible</a> (void) const</td></tr>
 <tr class="memdesc:a6c4003f6b67540727844dc33c20714f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether or not this object is supposed to be visible or not.  <a href="class_ogre_1_1_movable_object.html#a6c4003f6b67540727844dc33c20714f7">More...</a><br /></td></tr>
 <tr class="separator:a6c4003f6b67540727844dc33c20714f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8d962ac52ef53a2ad6ddbdc5b6c9655"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_1_1_listener.html#ac8d962ac52ef53a2ad6ddbdc5b6c9655">loadingComplete</a> (<a class="el" href="class_ogre_1_1_resource.html">Resource</a> *)</td></tr>
-<tr class="memdesc:ac8d962ac52ef53a2ad6ddbdc5b6c9655"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called whenever the resource finishes loading.  <a href="class_ogre_1_1_resource_1_1_listener.html#ac8d962ac52ef53a2ad6ddbdc5b6c9655">More...</a><br /></td></tr>
-<tr class="separator:ac8d962ac52ef53a2ad6ddbdc5b6c9655"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe21ced6bc5cd392d5fcd91ffabe6cea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_item.html#afe21ced6bc5cd392d5fcd91ffabe6cea">loadingComplete</a> (<a class="el" href="class_ogre_1_1_resource.html">Resource</a> *res)</td></tr>
+<tr class="memdesc:afe21ced6bc5cd392d5fcd91ffabe6cea"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_resource_1_1_listener.html">Resource::Listener</a> hook to notify Entity that a <a class="el" href="class_ogre_1_1_mesh.html" title="Resource holding data about 3D mesh.">Mesh</a> is (re)loaded.  <a href="class_ogre_1_1_item.html#afe21ced6bc5cd392d5fcd91ffabe6cea">More...</a><br /></td></tr>
+<tr class="separator:afe21ced6bc5cd392d5fcd91ffabe6cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -797,8 +794,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a50001436f230ae5eb719c41f3846479e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50001436f230ae5eb719c41f3846479e">&#9670;&nbsp;</a></span>_releaseManualHardwareResources()</h2>
+<a id="a57123ae4fec1b472f25270c1dd6abe59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57123ae4fec1b472f25270c1dd6abe59">&#9670;&nbsp;</a></span>_releaseManualHardwareResources()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -807,7 +804,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::Item::_releaseManualHardwareResources </td>
+          <td class="memname">virtual void Ogre::MovableObject::_releaseManualHardwareResources </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -815,7 +812,7 @@ Friends</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -823,12 +820,12 @@ Friends</h2></td></tr>
 <p>Notifies the movable object that hardware resources were lost. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Called automatically by <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> if hardware resources were lost and can not be restored using some internal mechanism. Among affected resources are nested shadow renderables, ManualObjects, etc. </dd></dl>
 
-<p>Reimplemented from <a class="el" href="class_ogre_1_1_movable_object.html#a57123ae4fec1b472f25270c1dd6abe59">Ogre::MovableObject</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1v1_1_1_rectangle2_d.html#a752c41e3f8dbc71f92b1d0e1eee4d15c">Ogre::v1::Rectangle2D</a>, <a class="el" href="class_ogre_1_1_manual_object.html#a748269201d1e2df008b7b1c37590ab24">Ogre::ManualObject</a>, <a class="el" href="class_ogre_1_1v1_1_1_manual_object.html#a724ed57be02ac0d2162ddd3e9ef0e7df">Ogre::v1::ManualObject</a>, and <a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html#a29940b4c1f58a372a7acf5685cedc969">Ogre::v1::BillboardSet</a>.</p>
 
 </div>
 </div>
-<a id="abc516ee2ab7d0ec3eda798f1de1ce8f0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc516ee2ab7d0ec3eda798f1de1ce8f0">&#9670;&nbsp;</a></span>_restoreManualHardwareResources()</h2>
+<a id="abd5561a07f78291e327351fe83e64a9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd5561a07f78291e327351fe83e64a9b">&#9670;&nbsp;</a></span>_restoreManualHardwareResources()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -837,7 +834,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Ogre::Item::_restoreManualHardwareResources </td>
+          <td class="memname">virtual void Ogre::MovableObject::_restoreManualHardwareResources </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -845,7 +842,7 @@ Friends</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -853,7 +850,7 @@ Friends</h2></td></tr>
 <p>Notifies the movable object that hardware resources should be restored. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Called automatically by <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> if hardware resources were lost and can not be restored using some internal mechanism. Among affected resources are nested shadow renderables, ManualObjects, etc. </dd></dl>
 
-<p>Reimplemented from <a class="el" href="class_ogre_1_1_movable_object.html#abd5561a07f78291e327351fe83e64a9b">Ogre::MovableObject</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1v1_1_1_rectangle2_d.html#ad5ce6512d531305522e57ef74bda1167">Ogre::v1::Rectangle2D</a>.</p>
 
 </div>
 </div>
@@ -2305,26 +2302,6 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="af87cf7696b318196866d5deee49acf09"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af87cf7696b318196866d5deee49acf09">&#9670;&nbsp;</a></span>hasVertexAnimation()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::Item::hasVertexAnimation </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns whether or not this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> is either morph or pose animated. </p>
-
-</div>
-</div>
 <a id="a2d62d2c3d09910210c948fc660468c46"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2d62d2c3d09910210c948fc660468c46">&#9670;&nbsp;</a></span>instanceBatchCullFrustumThreaded()</h2>
 
@@ -2422,8 +2399,8 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns a pointer to the set of entities which share a OldSkeletonInstance. </p>
-<p>If this instance does not share it's OldSkeletonInstance with other instances <code>NULL</code> will be returned Has this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> been initialised yet? </p><dl class="section remark"><dt>Remarks</dt><dd>If this returns false, it means this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> hasn't been completely constructed yet from the underlying resources (<a class="el" href="class_ogre_1_1_mesh.html" title="Resource holding data about 3D mesh.">Mesh</a>, Skeleton), which probably means they were delay-loaded and aren't available yet. This <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> won't render until it has been successfully initialised, nor will many of the manipulation methods function. </dd></dl>
+<p>Returns whether or not this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> is either morph or pose animated. </p>
+<p>Returns a pointer to the set of entities which share a OldSkeletonInstance. If this instance does not share it's OldSkeletonInstance with other instances <code>NULL</code> will be returned Has this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> been initialised yet? </p><dl class="section remark"><dt>Remarks</dt><dd>If this returns false, it means this <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> hasn't been completely constructed yet from the underlying resources (<a class="el" href="class_ogre_1_1_mesh.html" title="Resource holding data about 3D mesh.">Mesh</a>, Skeleton), which probably means they were delay-loaded and aren't available yet. This <a class="el" href="class_ogre_1_1_item.html" title="Defines an instance of a discrete, movable object based on a Mesh.">Item</a> won't render until it has been successfully initialised, nor will many of the manipulation methods function. </dd></dl>
 
 </div>
 </div>
@@ -2483,8 +2460,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="ac8d962ac52ef53a2ad6ddbdc5b6c9655"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8d962ac52ef53a2ad6ddbdc5b6c9655">&#9670;&nbsp;</a></span>loadingComplete()</h2>
+<a id="afe21ced6bc5cd392d5fcd91ffabe6cea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe21ced6bc5cd392d5fcd91ffabe6cea">&#9670;&nbsp;</a></span>loadingComplete()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2493,25 +2470,23 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::Resource::Listener::loadingComplete </td>
+          <td class="memname">void Ogre::Item::loadingComplete </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_resource.html">Resource</a> *&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><em>res</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called whenever the resource finishes loading. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>If a <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> has been marked as background loaded (</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_resource.html#ae0a0007de944eb3c2f933a372a752b35" title="Tells the resource whether it is background loaded or not.">Resource::setBackgroundLoaded</a>), the call does not itself occur in the thread which is doing the loading; when loading is complete a response indicator is placed with the <a class="el" href="class_ogre_1_1_resource_group_manager.html" title="This singleton class manages the list of resource groups, and notifying the various resource managers...">ResourceGroupManager</a>, which will then be sent back to the listener as part of the application's primary frame loop thread. </dd></dl>
+<p><a class="el" href="class_ogre_1_1_resource_1_1_listener.html">Resource::Listener</a> hook to notify Entity that a <a class="el" href="class_ogre_1_1_mesh.html" title="Resource holding data about 3D mesh.">Mesh</a> is (re)loaded. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_gpu_program_usage.html#af7656f20d47cd7df24b98bc4b44bf8ef">Ogre::GpuProgramUsage</a>.</p>
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_resource_1_1_listener.html#ac8d962ac52ef53a2ad6ddbdc5b6c9655">Ogre::Resource::Listener</a>.</p>
 
 </div>
 </div>
