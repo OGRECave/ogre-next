@@ -249,7 +249,7 @@ namespace Ogre
 
     inline void VerticesRemapInfo::performPoseRemap(v1::Pose* pose) const
     {
-        if(skipProcessing() || pose->getVertexOffsets().empty() && pose->getNormals().empty())
+        if(skipProcessing() || (pose->getVertexOffsets().empty() && pose->getNormals().empty()))
             return;
 
         v1::Pose::VertexOffsetMap vv = pose->getVertexOffsets();
