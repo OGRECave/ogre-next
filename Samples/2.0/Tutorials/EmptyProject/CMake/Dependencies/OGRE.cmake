@@ -63,26 +63,30 @@ endmacro()
 # Generates Plugins.cfg file out of user-editable Plugins.cfg.in file. Will automatically disable those plugins
 # that were not built
 # Copies all relevant DLLs: RenderSystem files, OgreOverlay, Hlms PBS & Unlit.
-macro( setupPluginFileFromTemplate BUILD_TYPE OGRE_USE_SCENE_FORMAT )
-	if( NOT APPLE )
-		file( MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/${BUILD_TYPE}/Plugins" )
-	endif()
-
-	findPluginAndSetPath( ${BUILD_TYPE} OGRE_PLUGIN_RS_D3D11	RenderSystem_Direct3D11 )
-	findPluginAndSetPath( ${BUILD_TYPE} OGRE_PLUGIN_RS_GL3PLUS	RenderSystem_GL3Plus )
-	findPluginAndSetPath( ${BUILD_TYPE} OGRE_PLUGIN_RS_VULKAN	RenderSystem_Vulkan )
-
-	if( ${BUILD_TYPE} STREQUAL "Debug" )
-		configure_file( ${CMAKE_SOURCE_DIR}/CMake/Templates/Plugins.cfg.in ${CMAKE_SOURCE_DIR}/bin/${BUILD_TYPE}/plugins_d.cfg )
-	else()
-		configure_file( ${CMAKE_SOURCE_DIR}/CMake/Templates/Plugins.cfg.in ${CMAKE_SOURCE_DIR}/bin/${BUILD_TYPE}/plugins.cfg )
-	endif()
-
+macro( setupPluginFileFromTemplate BUILD_TYPE OGRE_USE_SCENE_FORMAT OGRE_USE_PLANAR_REFLECTIONS )
 	if( CMAKE_BUILD_TYPE )
 		if( ${CMAKE_BUILD_TYPE} STREQUAL ${BUILD_TYPE} )
 			set( OGRE_BUILD_TYPE_MATCHES 1 )
 		endif()
 	endif()
+
+	# On non-Windows machines, we can only do Plugins for the current build.
+	if( WIN32 OR OGRE_BUILD_TYPE_MATCHES )
+		if( NOT APPLE )
+			file( MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/${BUILD_TYPE}/Plugins" )
+		endif()
+
+		findPluginAndSetPath( ${BUILD_TYPE} OGRE_PLUGIN_RS_D3D11	RenderSystem_Direct3D11 )
+		findPluginAndSetPath( ${BUILD_TYPE} OGRE_PLUGIN_RS_GL3PLUS	RenderSystem_GL3Plus )
+		findPluginAndSetPath( ${BUILD_TYPE} OGRE_PLUGIN_RS_VULKAN	RenderSystem_Vulkan )
+
+		if( ${BUILD_TYPE} STREQUAL "Debug" )
+			configure_file( ${CMAKE_SOURCE_DIR}/CMake/Templates/Plugins.cfg.in
+							${CMAKE_SOURCE_DIR}/bin/${BUILD_TYPE}/plugins_d.cfg )
+		else()
+			configure_file( ${CMAKE_SOURCE_DIR}/CMake/Templates/Plugins.cfg.in
+							${CMAKE_SOURCE_DIR}/bin/${BUILD_TYPE}/plugins.cfg )
+		endif()
 
 	# Copy
 	# "${OGRE_BINARIES}/bin/${BUILD_TYPE}/OgreMain.dll" to "${CMAKE_SOURCE_DIR}/bin/${BUILD_TYPE}
@@ -172,7 +176,7 @@ endfunction()
 
 # Main call to setup Ogre.
 macro( setupOgre OGRE_SOURCE, OGRE_BINARIES, OGRE_LIBRARIES_OUT,
-		OGRE_USE_SCENE_FORMAT )
+		OGRE_USE_SCENE_FORMAT OGRE_USE_PLANAR_REFLECTIONS )
 
 set( CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/Ogre/CMake/Packages" )
 
@@ -200,6 +204,9 @@ include_directories( "${OGRE_SOURCE}/Components/Hlms/Pbs/include" )
 include_directories( "${OGRE_SOURCE}/Components/Overlay/include" )
 if( ${OGRE_USE_SCENE_FORMAT} )
 	include_directories( "${OGRE_SOURCE}/Components/SceneFormat/include" )
+endif()
+if( ${OGRE_USE_PLANAR_REFLECTIONS} )
+	include_directories( "${OGRE_SOURCE}/Components/PlanarReflections/include" )
 endif()
 
 # Parse OgreBuildSettings.h to see if it's a static build
@@ -256,6 +263,13 @@ if( ${OGRE_USE_SCENE_FORMAT} )
 		)
 endif()
 
+if( ${OGRE_USE_PLANAR_REFLECTIONS} )
+	set( OGRE_LIBRARIES ${OGRE_LIBRARIES}
+		debug OgrePlanarReflections${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+		optimized OgrePlanarReflections${OGRE_STATIC}
+		)
+endif()
+
 if( OGRE_STATIC )
 	if( OGRE_BUILD_RENDERSYSTEM_METAL )
 		message( STATUS "Detected Metal RenderSystem. Linking against it." )
@@ -284,13 +298,13 @@ file( COPY "${OGRE_SOURCE}/Samples/Media/2.0/scripts/materials/Common"	DESTINATI
 file( COPY "${OGRE_SOURCE}/Samples/Media/packs/DebugPack.zip"	DESTINATION "${CMAKE_SOURCE_DIR}/bin/Data" )
 
 message( STATUS "Copying DLLs and generating Plugins.cfg for Debug" )
-setupPluginFileFromTemplate( "Debug" ${OGRE_USE_SCENE_FORMAT} )
+setupPluginFileFromTemplate( "Debug" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} )
 message( STATUS "Copying DLLs and generating Plugins.cfg for Release" )
-setupPluginFileFromTemplate( "Release" ${OGRE_USE_SCENE_FORMAT} )
+setupPluginFileFromTemplate( "Release" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} )
 message( STATUS "Copying DLLs and generating Plugins.cfg for RelWithDebInfo" )
-setupPluginFileFromTemplate( "RelWithDebInfo" ${OGRE_USE_SCENE_FORMAT} )
+setupPluginFileFromTemplate( "RelWithDebInfo" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} )
 message( STATUS "Copying DLLs and generating Plugins.cfg for MinSizeRel" )
-setupPluginFileFromTemplate( "MinSizeRel" ${OGRE_USE_SCENE_FORMAT} )
+setupPluginFileFromTemplate( "MinSizeRel" ${OGRE_USE_SCENE_FORMAT} ${OGRE_USE_PLANAR_REFLECTIONS} )
 
 setupResourceFileFromTemplate()
 setupOgreSamplesCommon()
