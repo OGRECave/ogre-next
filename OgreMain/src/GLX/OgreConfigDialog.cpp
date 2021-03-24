@@ -421,6 +421,7 @@ Pixmap GLXConfigurator::CreateBackdrop(::Window rootWindow, int depth) {
         dstBox.x = ( mWidth - srcBox.width ) >> 1u;
         dstBox.y = 12u;
         dstBox.data = (unsigned char*)malloc( mWidth * mHeight * 4u );
+        memset( dstBox.data, 0, mWidth * mHeight * 4u );
 
         PixelFormatGpuUtils::bulkPixelConversion( srcBox, img.getPixelFormat(),
                                                   dstBox, intermediateFormat );
