@@ -173,12 +173,16 @@ namespace Ogre
                 dstSysRamBox = dstTexture->_getSysRamCopyAsBox( mipLevel );
             else
             {
+                const PixelFormatGpu pixelFormat = dstTexture->getPixelFormat();
+
                 dstSysRamBox = *dstBox;
                 dstSysRamBox.data = sysRamCopyBase;
-                dstSysRamBox.bytesPerPixel =
-                        PixelFormatGpuUtils::getBytesPerPixel( dstTexture->getPixelFormat() );
+                dstSysRamBox.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );
                 dstSysRamBox.bytesPerRow = dstTexture->_getSysRamCopyBytesPerRow( mipLevel );
                 dstSysRamBox.bytesPerImage = dstTexture->_getSysRamCopyBytesPerImage( mipLevel );
+
+                if( PixelFormatGpuUtils::isCompressed( pixelFormat ) )
+                    dstSysRamBox.setCompressedPixelFormat( pixelFormat );
             }
 
             dstSysRamBox.copyFrom( *cpuSrcBox );
