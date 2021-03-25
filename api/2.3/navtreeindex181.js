@@ -1,5 +1,6 @@
 var NAVTREEINDEX181 =
 {
+"class_ogre_1_1_skeleton_instance.html#af10116a5a140f2da48c7be5fda6a132f":[5,2,0,6,17],
 "class_ogre_1_1_skeleton_instance.html#af66ba81cc7be010f89c1db0af2cc32a2":[5,2,0,6,5],
 "class_ogre_1_1_skeleton_instance.html#af9ab576ce55b4d2324d11ee5b94868a0":[5,2,0,6,21],
 "class_ogre_1_1_skeleton_instance.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,0,6,35],
@@ -248,6 +249,5 @@ var NAVTREEINDEX181 =
 "class_ogre_1_1_small_vector_template_base.html#a922c12bc5de4cf0fee5c101919fecc94":[7,0,0,1000,16],
 "class_ogre_1_1_small_vector_template_base.html#a9815c7884278cf8ae793f559d5da6d5f":[7,0,0,1000,26],
 "class_ogre_1_1_small_vector_template_base.html#a9e765b3edf8b9303d380e6abb5fdaa7b":[7,0,0,1000,15],
-"class_ogre_1_1_small_vector_template_base.html#aa5c7ed10e04b28acc1fecd075879a3e3":[7,0,0,1000,28],
-"class_ogre_1_1_small_vector_template_base.html#aabbc326f17698c1b404fcfed47099f19":[7,0,0,1000,23]
+"class_ogre_1_1_small_vector_template_base.html#aa5c7ed10e04b28acc1fecd075879a3e3":[7,0,0,1000,28]
 };

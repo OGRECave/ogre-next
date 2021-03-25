@@ -197,6 +197,7 @@ var files_dup =
       [ "CbTexture", "struct_ogre_1_1_cb_texture.html", "struct_ogre_1_1_cb_texture" ],
       [ "CbTextures", "struct_ogre_1_1_cb_textures.html", "struct_ogre_1_1_cb_textures" ]
     ] ],
+    [ "OgreCharconv.h", "_ogre_charconv_8h.html", null ],
     [ "OgreCodec.h", "_ogre_codec_8h.html", [
       [ "CodecData", "class_ogre_1_1_codec_1_1_codec_data.html", "class_ogre_1_1_codec_1_1_codec_data" ]
     ] ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX285 =
 {
+"structbsp__node__t.html":[7,0,12],
 "structbsp__node__t.html#a2c0a276d1d8f91bf8f74f859b58458f3":[7,0,12,0],
 "structbsp__node__t.html#a40a0f331e2b6ccb2c0521ccbaa26a893":[7,0,12,2],
 "structbsp__node__t.html#a4e9ccee1dbdb040fded4e696396eaf28":[7,0,12,1],
@@ -37,6 +38,6 @@ var NAVTREEINDEX285 =
 "union_ogre_1_1_lod_data_1_1_index_buffer_pointer.html":[7,0,0,615,2],
 "union_ogre_1_1_lod_data_1_1_index_buffer_pointer.html#ac52db8e95528c158cd8f2846c02e7613":[7,0,0,615,2,1],
 "union_ogre_1_1_lod_data_1_1_index_buffer_pointer.html#ae8c433c40635ef21a8b872354f9cd454":[7,0,0,615,2,0],
-"win32_2_ogre_g_l3_plus_util_8h.html":[8,0,369],
-"win32_2_ogre_g_l3_plus_util_8h.html#a7331dc70fef58e0eaac23e887e63ec61":[8,0,369,0]
+"win32_2_ogre_g_l3_plus_util_8h.html":[8,0,370],
+"win32_2_ogre_g_l3_plus_util_8h.html#a7331dc70fef58e0eaac23e887e63ec61":[8,0,370,0]
 };
