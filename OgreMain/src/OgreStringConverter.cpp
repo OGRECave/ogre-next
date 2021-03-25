@@ -56,7 +56,20 @@ namespace Ogre {
         stream << val;
         return stream.str();
     }
+    //-----------------------------------------------------------------------
+    template<typename T>
+    T StringConverter::_fromString(const String& val, T defaultValue)
+    {
+        // Use iStringStream for direct correspondence with toString
+        StringStream str(val);
+        if (msUseLocale)
+            str.imbue(msLocale);
+        T ret = defaultValue;
+        if( !(str >> ret) )
+            return defaultValue;
 
+        return ret;
+    }
     //-----------------------------------------------------------------------
     String StringConverter::toString(float val, unsigned short precision,
                                      unsigned short width, char fill, std::ios::fmtflags flags)
@@ -270,67 +283,27 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     int StringConverter::parseInt(const String& val, int defaultValue)
     {
-        // Use iStringStream for direct correspondence with toString
-        StringStream str(val);
-        if (msUseLocale)
-            str.imbue(msLocale);
-        int ret = defaultValue;
-        if( !(str >> ret) )
-            return defaultValue;
-
-        return ret;
+        return _fromString(val, defaultValue);
     }
     //-----------------------------------------------------------------------
     unsigned int StringConverter::parseUnsignedInt(const String& val, unsigned int defaultValue)
     {
-        // Use iStringStream for direct correspondence with toString
-        StringStream str(val);
-        if (msUseLocale)
-            str.imbue(msLocale);
-        unsigned int ret = defaultValue;
-        if( !(str >> ret) )
-            return defaultValue;
-
-        return ret;
+        return _fromString(val, defaultValue);
     }
     //-----------------------------------------------------------------------
     long StringConverter::parseLong(const String& val, long defaultValue)
     {
-        // Use iStringStream for direct correspondence with toString
-        StringStream str(val);
-        if (msUseLocale)
-            str.imbue(msLocale);
-        long ret = defaultValue;
-        if( !(str >> ret) )
-            return defaultValue;
-
-        return ret;
+        return _fromString(val, defaultValue);
     }
     //-----------------------------------------------------------------------
     unsigned long StringConverter::parseUnsignedLong(const String& val, unsigned long defaultValue)
     {
-        // Use iStringStream for direct correspondence with toString
-        StringStream str(val);
-        if (msUseLocale)
-            str.imbue(msLocale);
-        unsigned long ret = defaultValue;
-        if( !(str >> ret) )
-            return defaultValue;
-
-        return ret;
+        return _fromString(val, defaultValue);
     }
     //-----------------------------------------------------------------------
     size_t StringConverter::parseSizeT(const String& val, size_t defaultValue)
     {
-        // Use iStringStream for direct correspondence with toString
-        StringStream str(val);
-        if (msUseLocale)
-            str.imbue(msLocale);
-        size_t ret = defaultValue;
-        if( !(str >> ret) )
-            return defaultValue;
-
-        return ret;
+        return _fromString(val, defaultValue);
     }
     //-----------------------------------------------------------------------
     bool StringConverter::parseBool(const String& val, bool defaultValue, bool* error)
@@ -528,23 +501,23 @@ namespace Ogre {
 	//-----------------------------------------------------------------------
     String StringConverter::toString(ColourBufferType val)
     {
-		StringStream stream;
+		String str;
 		switch (val)
 		{
 		case CBT_BACK:
-		  stream << "Back";
+		  str = "Back";
 		  break;
 		case CBT_BACK_LEFT:
-		  stream << "Back Left";
+		  str = "Back Left";
 		  break;
 		case CBT_BACK_RIGHT:
-		  stream << "Back Right";
+		  str = "Back Right";
 		  break;
 		default:
 		  OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED, "Unsupported colour buffer value", "StringConverter::toString(const ColourBufferType& val)");
 		}
 
-		return stream.str();
+		return str;
     }
     //-----------------------------------------------------------------------
     ColourBufferType StringConverter::parseColourBuffer(const String& val, ColourBufferType defaultValue)
@@ -568,20 +541,20 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     String StringConverter::toString(StereoModeType val)
     {
-		StringStream stream;
+		String str;
 		switch (val)
 		{
 		case SMT_NONE:
-		  stream << "None";
+		  str = "None";
 		  break;
 		case SMT_FRAME_SEQUENTIAL:
-		  stream << "Frame Sequential";
+		  str = "Frame Sequential";
 		  break;
 		default:
 		  OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED, "Unsupported stereo mode value", "StringConverter::toString(const StereoModeType& val)");
 		}
 
-		return stream.str();
+		return str;
     }
     //-----------------------------------------------------------------------
     StereoModeType StringConverter::parseStereoMode(const String& val, StereoModeType defaultValue)

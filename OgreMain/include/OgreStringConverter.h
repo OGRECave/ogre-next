@@ -303,6 +303,8 @@ namespace Ogre {
     protected:
         template<typename T>
         static String _toString(T val, uint16 width, char fill, std::ios::fmtflags flags);
+        template<typename T>
+        static T _fromString(const String& val, T defaultValue);
         
         static String msDefaultStringLocale;
         static std::locale msLocale;
