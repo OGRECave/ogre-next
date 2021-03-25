@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgrePlatform.h"
 #include "OgreString.h"
+#include "OgreCharconv.h"
 
 #include <sstream>
 
@@ -42,6 +43,15 @@ namespace Ogre {
     template<typename T>
     String StringConverter::_toString(T val, unsigned short width, char fill, std::ios::fmtflags flags)
     {
+#ifdef OGRE_HAS_CHARCONV
+        if(width == 0 && flags == std::ios::fmtflags(0))
+        {
+            char buf[32];
+            to_chars_result res = to_chars(buf, buf + sizeof( buf ), val);
+            assert(res.ec == errc());
+            return String(buf, res.ptr);
+        }
+#endif
         StringStream stream;
         if (msUseLocale)
             stream.imbue(msLocale);
@@ -60,6 +70,11 @@ namespace Ogre {
     template<typename T>
     T StringConverter::_fromString(const String& val, T defaultValue)
     {
+#ifdef OGRE_HAS_CHARCONV
+        T v;
+        from_chars_result res = from_chars_all(val.c_str(), val.c_str() + val.size(), v);
+        return res.ec == errc() ? v : defaultValue;
+#else
         // Use iStringStream for direct correspondence with toString
         StringStream str(val);
         if (msUseLocale)
@@ -69,15 +84,28 @@ namespace Ogre {
             return defaultValue;
 
         return ret;
+#endif
     }
     //-----------------------------------------------------------------------
     String StringConverter::toString(float val, unsigned short precision,
                                      unsigned short width, char fill, std::ios::fmtflags flags)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        if(width == 0 && flags == std::ios::fmtflags(0))
+        {
+            char buf[32];
+            to_chars_result res =
+                precision ? to_chars(buf, buf + sizeof( buf ), val, chars_format::general, precision)
+                          : to_chars(buf, buf + sizeof( buf ), val);
+            assert(res.ec == errc());
+            return String(buf, res.ptr);
+        }
+#endif
         StringStream stream;
         if (msUseLocale)
             stream.imbue(msLocale);
-        stream.precision(precision);
+        if(precision != 0)
+            stream.precision(precision);
         stream.width(width);
         stream.fill(fill);
         if (flags)
@@ -89,10 +117,22 @@ namespace Ogre {
     String StringConverter::toString(double val, unsigned short precision,
                                      unsigned short width, char fill, std::ios::fmtflags flags)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        if(width == 0 && flags == std::ios::fmtflags(0))
+        {
+            char buf[32];
+            to_chars_result res =
+                precision ? to_chars(buf, buf + sizeof( buf ), val, chars_format::general, precision)
+                          : to_chars(buf, buf + sizeof( buf ), val);
+            assert(res.ec == errc());
+            return String(buf, res.ptr);
+        }
+#endif
         StringStream stream;
         if (msUseLocale)
             stream.imbue(msLocale);
-        stream.precision(precision);
+        if(precision != 0)
+            stream.precision(precision);
         stream.width(width);
         stream.fill(fill);
         if (flags)
@@ -144,33 +184,63 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     String StringConverter::toString(const Vector2& val)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        char buf[128];
+        to_chars_result res = to_chars_all(buf, buf + sizeof(buf), val.x, val.y);
+        assert(res.ec == errc());
+        return String(buf, res.ptr);
+#else
         StringStream stream;
         if (msUseLocale)
             stream.imbue(msLocale);
         stream << val.x << " " << val.y;
         return stream.str();
+#endif
     }
     //-----------------------------------------------------------------------
     String StringConverter::toString(const Vector3& val)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        char buf[128];
+        to_chars_result res = to_chars_all(buf, buf + sizeof(buf), val.x, val.y, val.z);
+        assert(res.ec == errc());
+        return String(buf, res.ptr);
+#else
         StringStream stream;
         if (msUseLocale)
             stream.imbue(msLocale);
         stream << val.x << " " << val.y << " " << val.z;
         return stream.str();
+#endif
     }
     //-----------------------------------------------------------------------
     String StringConverter::toString(const Vector4& val)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        char buf[128];
+        to_chars_result res = to_chars_all(buf, buf + sizeof(buf), val.x, val.y, val.z, val.w);
+        assert(res.ec == errc());
+        return String(buf, res.ptr);
+#else
         StringStream stream;
         if (msUseLocale)
             stream.imbue(msLocale);
         stream << val.x << " " << val.y << " " << val.z << " " << val.w;
         return stream.str();
+#endif
     }
     //-----------------------------------------------------------------------
     String StringConverter::toString(const Matrix3& val)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        char buf[256]; // 9 * (17 + 1) == 162
+        to_chars_result res = to_chars_all(buf, buf + sizeof(buf),
+            val[0][0], val[0][1], val[0][2],
+            val[1][0], val[1][1], val[1][2],
+            val[2][0], val[2][1], val[2][2]);
+        assert(res.ec == errc());
+        return String(buf, res.ptr);
+#else
         StringStream stream;
         stream.imbue(msLocale);
         stream << val[0][0] << " "
@@ -183,6 +253,7 @@ namespace Ogre {
             << val[2][1] << " "             
             << val[2][2];
         return stream.str();
+#endif
     }
     //-----------------------------------------------------------------------
     String StringConverter::toString(bool val, bool yesNo)
@@ -211,6 +282,16 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     String StringConverter::toString(const Matrix4& val)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        char buf[384]; // 16 * (17 + 1) == 288
+        to_chars_result res = to_chars_all(buf, buf + sizeof(buf),
+            val[0][0], val[0][1], val[0][2], val[0][3],
+            val[1][0], val[1][1], val[1][2], val[1][3],
+            val[2][0], val[2][1], val[2][2], val[2][3],
+            val[3][0], val[3][1], val[3][2], val[3][3]);
+        assert(res.ec == errc());
+        return String(buf, res.ptr);
+#else
         StringStream stream;
         stream.imbue(msLocale);
         stream << val[0][0] << " "
@@ -230,24 +311,39 @@ namespace Ogre {
             << val[3][2] << " "             
             << val[3][3];
         return stream.str();
+#endif
     }
     //-----------------------------------------------------------------------
     String StringConverter::toString(const Quaternion& val)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        char buf[128];
+        to_chars_result res = to_chars_all(buf, buf + sizeof(buf), val.w, val.x, val.y, val.z);
+        assert(res.ec == errc());
+        return String(buf, res.ptr);
+#else
         StringStream stream;
         if (msUseLocale)
             stream.imbue(msLocale);
         stream  << val.w << " " << val.x << " " << val.y << " " << val.z;
         return stream.str();
+#endif
     }
     //-----------------------------------------------------------------------
     String StringConverter::toString(const ColourValue& val)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        char buf[128];
+        to_chars_result res = to_chars_all(buf, buf + sizeof(buf), val.r, val.g, val.b, val.a);
+        assert(res.ec == errc());
+        return String(buf, res.ptr);
+#else
         StringStream stream;
         if (msUseLocale)
             stream.imbue(msLocale);
         stream << val.r << " " << val.g << " " << val.b << " " << val.a;
         return stream.str();
+#endif
     }
     //-----------------------------------------------------------------------
     String StringConverter::toString(const StringVector& val)
@@ -270,6 +366,11 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     Real StringConverter::parseReal(const String& val, Real defaultValue)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        Real v;
+        from_chars_result res = from_chars_all(val.c_str(), val.c_str() + val.size(), v);
+        return res.ec == errc() ? v : defaultValue;
+#else
         // Use iStringStream for direct correspondence with toString
         StringStream str(val);
         if (msUseLocale)
@@ -279,6 +380,7 @@ namespace Ogre {
             return defaultValue;
 
         return ret;
+#endif
     }
     //-----------------------------------------------------------------------
     int StringConverter::parseInt(const String& val, int defaultValue)
@@ -335,6 +437,11 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     Vector2 StringConverter::parseVector2(const String& val, const Vector2& defaultValue)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        Vector2 v;
+        from_chars_result res = from_chars_all(val.c_str(), val.c_str() + val.size(), v.x, v.y);
+        return res.ec == errc() ? v : defaultValue;
+#else
         // Split on space
         vector<String>::type vec = StringUtil::split(val);
 
@@ -346,10 +453,16 @@ namespace Ogre {
         {
             return Vector2(parseReal(vec[0], defaultValue[0]), parseReal(vec[1], defaultValue[1]));
         }
+#endif
     }
     //-----------------------------------------------------------------------
     Vector3 StringConverter::parseVector3(const String& val, const Vector3& defaultValue)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        Vector3 v;
+        from_chars_result res = from_chars_all(val.c_str(), val.c_str() + val.size(), v.x, v.y, v.z);
+        return res.ec == errc() ? v : defaultValue;
+#else
         // Split on space
         vector<String>::type vec = StringUtil::split(val);
 
@@ -363,10 +476,16 @@ namespace Ogre {
                            parseReal(vec[1], defaultValue[1]),
                            parseReal(vec[2], defaultValue[2]));
         }
+#endif
     }
     //-----------------------------------------------------------------------
     Vector4 StringConverter::parseVector4(const String& val, const Vector4& defaultValue)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        Vector4 v;
+        from_chars_result res = from_chars_all(val.c_str(), val.c_str() + val.size(), v.x, v.y, v.z, v.w);
+        return res.ec == errc() ? v : defaultValue;
+#else
         // Split on space
         vector<String>::type vec = StringUtil::split(val);
 
@@ -381,10 +500,19 @@ namespace Ogre {
                            parseReal(vec[2], defaultValue[2]),
                            parseReal(vec[3], defaultValue[3]));
         }
+#endif
     }
     //-----------------------------------------------------------------------
     Matrix3 StringConverter::parseMatrix3(const String& val, const Matrix3& defaultValue)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        Matrix3 v;
+        from_chars_result res = from_chars_all(val.c_str(), val.c_str() + val.size(),
+            v[0][0], v[0][1], v[0][2],
+            v[1][0], v[1][1], v[1][2],
+            v[2][0], v[2][1], v[2][2]);
+        return res.ec == errc() ? v : defaultValue;
+#else
         // Split on space
         vector<String>::type vec = StringUtil::split(val);
 
@@ -406,10 +534,20 @@ namespace Ogre {
                            parseReal(vec[7], defaultValue[2][1]),
                            parseReal(vec[8], defaultValue[2][2]));
         }
+#endif
     }
     //-----------------------------------------------------------------------
     Matrix4 StringConverter::parseMatrix4(const String& val, const Matrix4& defaultValue)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        Matrix4 v;
+        from_chars_result res = from_chars_all(val.c_str(), val.c_str() + val.size(),
+            v[0][0], v[0][1], v[0][2], v[0][3],
+            v[1][0], v[1][1], v[1][2], v[1][3],
+            v[2][0], v[2][1], v[2][2], v[2][3],
+            v[3][0], v[3][1], v[3][2], v[3][3]);
+        return res.ec == errc() ? v : defaultValue;
+#else
         // Split on space
         vector<String>::type vec = StringUtil::split(val);
 
@@ -439,10 +577,16 @@ namespace Ogre {
                            parseReal(vec[14], defaultValue[3][2]),
                            parseReal(vec[15], defaultValue[3][3]));
         }
+#endif
     }
     //-----------------------------------------------------------------------
     Quaternion StringConverter::parseQuaternion(const String& val, const Quaternion& defaultValue)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        Quaternion v;
+        from_chars_result res = from_chars_all(val.c_str(), val.c_str() + val.size(), v.w, v.x, v.y, v.z);
+        return res.ec == errc() ? v : defaultValue;
+#else
         // Split on space
         vector<String>::type vec = StringUtil::split(val);
 
@@ -457,10 +601,18 @@ namespace Ogre {
                               parseReal(vec[2], defaultValue[2]),
                               parseReal(vec[3], defaultValue[3]));
         }
+#endif
     }
     //-----------------------------------------------------------------------
     ColourValue StringConverter::parseColourValue(const String& val, const ColourValue& defaultValue)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        ColourValue v;
+        from_chars_result res = from_chars_all(val.c_str(), val.c_str() + val.size(), v.r, v.g, v.b);
+        if(res.ec == errc() && res.ptr != val.c_str() + val.size())
+            res = from_chars_all(res.ptr, val.c_str() + val.size(), v.a);
+        return res.ec == errc() ? v : defaultValue;
+#else
         // Split on space
         vector<String>::type vec = StringUtil::split(val);
 
@@ -482,6 +634,7 @@ namespace Ogre {
         {
             return defaultValue;
         }
+#endif
     }
     //-----------------------------------------------------------------------
     StringVector StringConverter::parseStringVector(const String& val)
@@ -491,12 +644,21 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     bool StringConverter::isNumber(const String& val)
     {
+#ifdef OGRE_HAS_CHARCONV_FLOAT
+        double d; int64_t i64; uint64_t u64;
+        const char* first = val.c_str(), *last = first + val.size();
+        from_chars_result res = from_chars(first, last, d);
+        if(res.ec != errc()) res = from_chars(first, last, i64);
+        if(res.ec != errc()) res = from_chars(first, last, u64);
+        return res.ec == errc() && res.ptr == last;
+#else
         StringStream str(val);
         if (msUseLocale)
             str.imbue(msLocale);
         float tst;
         str >> tst;
         return !str.fail() && str.eof();
+#endif
     }
 	//-----------------------------------------------------------------------
     String StringConverter::toString(ColourBufferType val)

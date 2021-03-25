@@ -67,24 +67,24 @@ namespace Ogre {
     {
     public:
         /** Converts a float to a String. */
-        static String toString(float val, unsigned short precision = 6,
+        static String toString(float val, unsigned short precision = 0,
                                unsigned short width = 0, char fill = ' ',
                                std::ios::fmtflags flags = std::ios::fmtflags(0));
 
         /** Converts a double to a String. */
-        static String toString(double val, unsigned short precision = 6,
+        static String toString(double val, unsigned short precision = 0,
                                unsigned short width = 0, char fill = ' ',
                                std::ios::fmtflags flags = std::ios::fmtflags(0));
 
         /** Converts a Radian to a String. */
-        static String toString(Radian val, unsigned short precision = 6, 
+        static String toString(Radian val, unsigned short precision = 0, 
             unsigned short width = 0, char fill = ' ', 
             std::ios::fmtflags flags = std::ios::fmtflags(0))
         {
             return toString(val.valueAngleUnits(), precision, width, fill, flags);
         }
         /** Converts a Degree to a String. */
-        static String toString(Degree val, unsigned short precision = 6, 
+        static String toString(Degree val, unsigned short precision = 0, 
             unsigned short width = 0, char fill = ' ', 
             std::ios::fmtflags flags = std::ios::fmtflags(0))
         {
