@@ -35,6 +35,22 @@ THE SOFTWARE.
 #if __cpp_lib_to_chars >= 201611L // defined for MSVC, but not yet for Clang and GCC due to the missing floating point support
 #define OGRE_HAS_CHARCONV
 #define OGRE_HAS_CHARCONV_FLOAT
+
+// Clang STL integer only implementation, not available on old Apple platforms
+#elif defined(_LIBCPP_STD_VER) && _LIBCPP_STD_VER > 14 && \
+    (!defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) || __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ >= 101500) && \
+    (!defined(__ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__) || __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ >= 130000) && \
+    (!defined(__ENVIRONMENT_TV_OS_VERSION_MIN_REQUIRED__) || __ENVIRONMENT_TV_OS_VERSION_MIN_REQUIRED__ >= 130000) && \
+    (!defined(__ENVIRONMENT_WATCH_OS_VERSION_MIN_REQUIRED__) || __ENVIRONMENT_WATCH_OS_VERSION_MIN_REQUIRED__ >= 60000)
+#define OGRE_HAS_CHARCONV
+
+// GCC STL implementation, integer only since GCC 8.1, full since GCC 11.1, but __cpp_lib_to_chars still not yet defined
+#elif defined(_GLIBCXX_RELEASE) && _GLIBCXX_HOSTED && \
+    (_GLIBCXX_RELEASE > 8 || _GLIBCXX_RELEASE == __GNUC__ && (__GNUC__ * 100 + __GNUC_MINOR__) >= 801)
+#define OGRE_HAS_CHARCONV
+#if (_GLIBCXX_RELEASE > 11 || _GLIBCXX_RELEASE == __GNUC__ && (__GNUC__ * 100 + __GNUC_MINOR__) >= 1101)
+#define OGRE_HAS_CHARCONV_FLOAT
+#endif
 #endif
 
 #endif // __has_include(<charconv>)
