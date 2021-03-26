@@ -45,6 +45,13 @@
 			@end
 			float4	diffuse;
 			float3	specular;
+
+			@property( clear_coat )
+				float clearCoat;
+				float clearCoatPerceptualRoughness;
+				float clearCoatRoughness;
+			@end
+
 			float	perceptualRoughness;
 			float	roughness;
 			float_fresnel	F0;
@@ -140,6 +147,8 @@
 	@end
 
 	@property( (hlms_normal || hlms_qtangent) && !hlms_prepass && needs_view_dir )
+		@insertpiece( DeclClearCoatFuncs )
+
 		@insertpiece( DeclareBRDF )
 		@insertpiece( DeclareBRDF_InstantRadiosity )
 		@insertpiece( DeclareBRDF_AreaLightApprox )
@@ -318,6 +327,16 @@
 							 UV_ROUGHNESS( inPs.uv@value(uv_roughness).xy ),
 							 texIndex_roughnessIdx ).x;
 	@end
+
+@property( clear_coat )
+    // This is a hack but it will do: the base layer must be at least as rough
+    // as the clear coat layer to take into account possible diffusion by the
+    // top layer
+    pixelData.perceptualRoughness = lerp(pixelData.perceptualRoughness,
+                                         max(pixelData.perceptualRoughness, pixelData.clearCoatPerceptualRoughness),
+                                         pixelData.clearCoat);
+@end
+
 	@property( perceptual_roughness )
 		pixelData.roughness = max( pixelData.perceptualRoughness * pixelData.perceptualRoughness, 0.001f );
 	@else
@@ -629,6 +648,7 @@
 		@end
 
 		@insertpiece( SampleSpecularMap )
+		@insertpiece( LoadClearCoat )
 		@insertpiece( SampleRoughnessMap )
 
 @property( hlms_bake_lighting_only )

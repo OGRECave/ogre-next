@@ -173,7 +173,31 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
 	//We should divide Rd by PI, but it is already included in kD
     float3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz * lightDiffuse;
 
-	return NdotL * (Rs + Rd);
+    @property( clear_coat )
+        float LoH = saturate(dot(lightDir, halfWay));
+
+        float3 color = Rs + Rd;
+
+        float Fcc;
+        float clearCoat = clearCoatLobe(pixelData, halfWay, NdotH, LoH, Fcc);
+        float attenuation = 1.0 - Fcc;
+
+        @property( normal_map )
+            color *= attenuation * NdotL;
+
+            // If the material has a normal map, we want to use the geometric normal
+            // instead to avoid applying the normal map details to the clear coat layer
+            float clearCoatNoL = saturate(dot(pixelData.geomNormal, lightDir));
+            color += clearCoat * clearCoatNoL;
+        @else
+            color *= attenuation;
+            color += clearCoat;
+        @end
+
+		return NdotL * color;
+    @else
+		return NdotL * (Rs + Rd);
+    @end
 }
 @end
 @end
