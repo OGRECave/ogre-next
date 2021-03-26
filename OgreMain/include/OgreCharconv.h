@@ -28,11 +28,17 @@ THE SOFTWARE.
 #ifndef _OgreCharconv_H_
 #define _OgreCharconv_H_
 
-#if defined (_MSVC_LANG) && _MSVC_LANG >= 201703L // MSVC in C++17 mode
+#if __cplusplus >= 201703L || defined (_MSVC_LANG) && _MSVC_LANG >= 201703L // C++17, we have __has_include
+#if __has_include(<charconv>)
 #include <charconv>
+
+#if __cpp_lib_to_chars >= 201611L // defined for MSVC, but not yet for Clang and GCC due to the missing floating point support
 #define OGRE_HAS_CHARCONV
 #define OGRE_HAS_CHARCONV_FLOAT
 #endif
+
+#endif // __has_include(<charconv>)
+#endif // C++17
 
 
 #ifdef OGRE_HAS_CHARCONV
