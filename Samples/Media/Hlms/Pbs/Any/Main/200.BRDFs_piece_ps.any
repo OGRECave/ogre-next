@@ -154,7 +154,7 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
     float_fresnel fresnelS = @insertpiece( getSpecularFresnel );
 
 	//We should divide Rs by PI, but it was done inside G for performance
-    float3 Rs = ( fresnelS * (R * G) ) * pixelData.specular.xyz * lightSpecular;
+    float3 Rs = ( fresnelS * (R * G) ) * pixelData.specular.xyz;
 
 	//Diffuse BRDF (*Normalized* Disney, see course_notes_moving_frostbite_to_pbr.pdf
 	//"Moving Frostbite to Physically Based Rendering" Sebastien Lagarde & Charles de Rousiers)
@@ -171,10 +171,10 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
     @end
 
 	//We should divide Rd by PI, but it is already included in kD
-    float3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz * lightDiffuse;
+    float3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz;
 
     @property( clear_coat )
-        float3 color = Rs + Rd;
+        float3 color = Rd + Rs;
 
         float Fcc;
         float clearCoat = clearCoatLobe(pixelData, halfWay, NdotH, VdotH, Fcc);
@@ -187,14 +187,16 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
             // instead to avoid applying the normal map details to the clear coat layer
             float clearCoatNoL = saturate(dot(pixelData.geomNormal, lightDir));
             color += clearCoat * clearCoatNoL;
+
+            return color * lightSpecular;
         @else
             color *= attenuation;
             color += clearCoat;
-        @end
 
-		return NdotL * color;
+            return color * lightSpecular * NdotL;
+        @end
     @else
-		return NdotL * (Rs + Rd);
+	return NdotL * (Rs * lightSpecular + Rd * lightDiffuse);
     @end
 }
 @end
