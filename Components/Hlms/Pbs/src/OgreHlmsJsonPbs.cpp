@@ -336,6 +336,20 @@ namespace Ogre
                                            useAlphaFromTextures, changeBlendblock );
         }
 
+        itor = json.FindMember( "clear_coat" );
+        if( itor != json.MemberEnd() && itor->value.IsObject() )
+        {
+            const rapidjson::Value &subobj = itor->value;
+
+            itor = subobj.FindMember( "value" );
+            if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
+                pbsDatablock->setClearCoat( static_cast<float>( itor->value.GetDouble() ) );
+
+            itor = subobj.FindMember( "roughness" );
+            if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
+                pbsDatablock->setClearCoatRoughness( static_cast<float>( itor->value.GetDouble() ) );
+        }
+
         itor = json.FindMember("diffuse");
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
@@ -761,6 +775,16 @@ namespace Ogre
             toQuotedStr( pbsDatablock->getTransparencyMode(), outString );
             outString += ",\n\t\t\t\t\"use_alpha_from_textures\" : ";
             outString += pbsDatablock->getUseAlphaFromTextures() ? "true" : "false";
+            outString += "\n\t\t\t}";
+        }
+
+        if( pbsDatablock->getClearCoat() != 0.0f )
+        {
+            outString += ",\n\t\t\t\"clear_coat\" :\n\t\t\t{";
+            outString += "\n\t\t\t\t\"value\" : ";
+            outString += StringConverter::toString( pbsDatablock->getClearCoat() );
+            outString += ",\n\t\t\t\t\"roughness\" : ";
+            outString += StringConverter::toString( pbsDatablock->getClearCoatRoughness() );
             outString += "\n\t\t\t}";
         }
 

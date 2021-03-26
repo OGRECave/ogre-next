@@ -601,6 +601,7 @@ namespace Ogre
         static const IdString BrdfBlinnPhong;
         static const IdString FresnelSeparateDiffuse;
         static const IdString GgxHeightCorrelated;
+        static const IdString ClearCoat;
         static const IdString LegacyMathBrdf;
         static const IdString RoughnessIsShininess;
 

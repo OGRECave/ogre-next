@@ -290,9 +290,9 @@ struct Material
 	float4 detailOffsetScale[4];
 	float4 emissive;		//emissive.w contains mNormalMapWeight.
 	float refractionStrength;
-	float _padding10;
-	float _padding11;
-	float _padding12;
+	float clearCoat;
+	float clearCoatRoughness;
+	float _padding1;
 	float4 userValue[3];
 
 	@property( syntax != metal )

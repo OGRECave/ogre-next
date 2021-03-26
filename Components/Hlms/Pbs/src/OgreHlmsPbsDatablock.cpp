@@ -90,12 +90,14 @@ namespace Ogre
         mTransparencyValue( 1.0f ),
         mNormalMapWeight( 1.0f ),
         mRefractionStrength( 0.075f ),
+        mClearCoat( 0.0f ),
+        mClearCoatRoughness( 0.0f ),
+        _padding1( 0 ),
         mCubemapProbe( 0 ),
         mBrdf( PbsBrdf::Default )
     {
         memset( mUvSource, 0, sizeof( mUvSource ) );
         memset( mBlendModes, 0, sizeof( mBlendModes ) );
-        memset( _padding1, 0, sizeof( _padding1 ) );
         memset( mUserValue, 0, sizeof( mUserValue ) );
 
         mBgDiffuse[0] = mBgDiffuse[1] = mBgDiffuse[2] = mBgDiffuse[3] = 1.0f;
@@ -898,6 +900,35 @@ namespace Ogre
     void HlmsPbsDatablock::setRefractionStrength( float strength )
     {
         mRefractionStrength = strength;
+        scheduleConstBufferUpdate();
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::setClearCoat( float clearCoat )
+    {
+        assert( ( mBrdf & PbsBrdf::BRDF_MASK ) == PbsBrdf::Default );
+
+        bool wasZero = mClearCoat == 0.0f;
+        mClearCoat = clearCoat;
+
+        if( wasZero && clearCoat != 0.0f || !wasZero && clearCoat == 0.0f )
+        {
+            flushRenderables();
+        }
+
+        scheduleConstBufferUpdate();
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::setClearCoatRoughness( float roughness )
+    {
+        mClearCoatRoughness = roughness;
+
+        if( mClearCoatRoughness <= 1e-6f )
+        {
+            LogManager::getSingleton().logMessage( "WARNING: PBS Datablock '" + mName.getFriendlyText() +
+                                                   "' Very low clear coat roughness values can "
+                                                   "cause NaNs in the pixel shader!" );
+        }
+
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------

@@ -236,7 +236,9 @@ namespace Ogre
         float   mEmissive[3];
         float   mNormalMapWeight;
         float   mRefractionStrength;
-        float   _padding1[3];
+        float   mClearCoat;
+        float   mClearCoatRoughness;
+        float   _padding1;
         float   mUserValue[3][4]; //can be used in custom pieces
         //uint16  mTexIndices[NUM_PBSM_TEXTURE_TYPES];
 
@@ -610,6 +612,17 @@ namespace Ogre
         */
         void setRefractionStrength( float strength );
         float getRefractionStrength( void ) const                   { return mRefractionStrength; }
+
+        /** Sets the strength of the of the clear coat layer and its roughness.
+        @param strength
+            This should be treated as a binary value, set to either 0 or 1. Intermediate values are
+            useful to control transitions between parts of the surface that have a clear coat layers and
+            parts that don't.
+        */
+        void setClearCoat( float clearCoat );
+        void setClearCoatRoughness( float roughness );
+        float getClearCoat( void ) const               { return mClearCoat; }
+        float getClearCoatRoughness( void ) const      { return mClearCoatRoughness; }
 
         /** When false, objects with this material will not receive shadows (independent of
             whether they case shadows or not)
