@@ -174,12 +174,10 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
     float3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz * lightDiffuse;
 
     @property( clear_coat )
-        float LoH = saturate(dot(lightDir, halfWay));
-
         float3 color = Rs + Rd;
 
         float Fcc;
-        float clearCoat = clearCoatLobe(pixelData, halfWay, NdotH, LoH, Fcc);
+        float clearCoat = clearCoatLobe(pixelData, halfWay, NdotH, VdotH, Fcc);
         float attenuation = 1.0 - Fcc;
 
         @property( normal_map )
