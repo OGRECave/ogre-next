@@ -144,6 +144,7 @@ namespace Ogre
     const IdString PbsProperty::Pcf3x3            = IdString( "pcf_3x3" );
     const IdString PbsProperty::Pcf4x4            = IdString( "pcf_4x4" );
     const IdString PbsProperty::PcfIterations     = IdString( "pcf_iterations" );
+    const IdString PbsProperty::ShadowsReceiveOnPs= IdString( "shadows_receive_on_ps" );
     const IdString PbsProperty::ExponentialShadowMaps= IdString( "exponential_shadow_maps" );
 
     const IdString PbsProperty::EnvMapScale       = IdString( "envmap_scale" );
@@ -238,6 +239,7 @@ namespace Ogre
         mFineLightMaskGranularity( true ),
 #endif
         mDebugPssmSplits( false ),
+        mShadowReceiversInPixelShader( false ),
         mShadowFilter( PCF_3x3 ),
         mEsmK( 600u ),
         mAmbientLightMode( AmbientAuto )
@@ -916,6 +918,9 @@ namespace Ogre
             {
                 setProperty( PbsProperty::PcfIterations, 1 );
             }
+
+            if( mShadowReceiversInPixelShader )
+                setProperty( PbsProperty::ShadowsReceiveOnPs, 1 );
 
             if( mDebugPssmSplits )
             {
@@ -2535,6 +2540,11 @@ namespace Ogre
 
         //Fill the data folder path
         outDataFolderPath = "Hlms/Pbs/" + shaderSyntax;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setShadowReceiversInPixelShader( bool bInPixelShader )
+    {
+        mShadowReceiversInPixelShader = bInPixelShader;
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::setDebugPssmSplits( bool bDebug )

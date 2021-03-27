@@ -225,9 +225,17 @@ layout_constbuffer(binding = 3) uniform ManualProbe
 		@foreach( hlms_uv_count, n )
 			vec@value( hlms_uv_count@n ) uv@n;@end
 
-		@foreach( hlms_num_shadow_map_lights, n )
-			@property( !hlms_shadowmap@n_is_point_light )
-				vec4 posL@n;@end @end
+		@property( !shadows_receive_on_ps )
+			@foreach( hlms_num_shadow_map_lights, n )
+				@property( !hlms_shadowmap@n_is_point_light )
+					vec4 posL@n;
+				@end
+			@end
+		@else
+			@property( !hlms_all_point_lights )
+				vec3 worldPos;
+			@end
+		@end
 		@property( hlms_pssm_splits )float depth;@end
 		@property( hlms_use_prepass_msaa > 1 )
 			float2 zwDepth;

@@ -233,9 +233,17 @@ struct Material
 		@foreach( hlms_uv_count, n )
 			float@value( hlms_uv_count@n ) uv@n;@end
 
-		@foreach( hlms_num_shadow_map_lights, n )
-			@property( !hlms_shadowmap@n_is_point_light )
-				float4 posL@n;@end @end
+		@property( !shadows_receive_on_ps )
+			@foreach( hlms_num_shadow_map_lights, n )
+				@property( !hlms_shadowmap@n_is_point_light )
+					float4 posL@n;
+				@end
+			@end
+		@else
+			@property( !hlms_all_point_lights )
+				float3 worldPos;
+			@end
+		@end
 
 		@property( hlms_pssm_splits )float depth;@end
 	@end

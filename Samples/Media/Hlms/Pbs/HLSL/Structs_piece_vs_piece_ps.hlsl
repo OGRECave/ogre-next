@@ -224,9 +224,17 @@ cbuffer ManualProbe : register(b3)
 		@foreach( hlms_uv_count, n )
 			float@value( hlms_uv_count@n ) uv@n	: TEXCOORD@counter(texcoord);@end
 
-		@foreach( hlms_num_shadow_map_lights, n )
-			@property( !hlms_shadowmap@n_is_point_light )
-				float4 posL@n	: TEXCOORD@counter(texcoord);@end @end
+		@property( !shadows_receive_on_ps )
+			@foreach( hlms_num_shadow_map_lights, n )
+				@property( !hlms_shadowmap@n_is_point_light )
+					float4 posL@n	: TEXCOORD@counter(texcoord);
+				@end
+			@end
+		@else
+			@property( !hlms_all_point_lights )
+				float3 worldPos		: TEXCOORD@counter(texcoord);
+			@end
+		@end
 
 		@property( hlms_pssm_splits )float depth	: TEXCOORD@counter(texcoord);@end
 

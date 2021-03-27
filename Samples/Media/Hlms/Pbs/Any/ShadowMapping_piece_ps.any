@@ -138,6 +138,54 @@
 /// Declare getShadow twice (two overloads). The second one manually
 /// performs clamp to border to deal with UV atlases.
 @piece( DeclShadowSamplingFuncs )
+
+	@property( shadows_receive_on_ps )
+		@foreach( hlms_num_shadow_map_lights, n )
+			@property( hlms_shadowmap@n_is_directional_light )
+				#define inPs_posL@n worldPosToDirLightSpace( inPs.worldPos, passBuf.shadowRcv[@n] )
+			@end
+			@property( hlms_shadowmap@n_is_spot_light )
+				#define inPs_posL@n worldPosToSpotLightSpace( inPs.worldPos, passBuf.shadowRcv[@n] )
+			@end
+		@end
+
+		@foreach( 2, m )
+			@property( @m == 0 )
+				INLINE float4 worldPosToDirLightSpace( float3 worldPos, ShadowReceiverData shadowRcv )
+			@else
+				INLINE float4 worldPosToSpotLightSpace( float3 worldPos, ShadowReceiverData shadowRcv )
+			@end
+			{
+				@property( !exponential_shadow_maps )
+					float4 lightSpacePos = mul( float4(worldPos.xyz, 1.0f), shadowRcv.texViewProj );
+					@property( @m == 1 )
+						// Spotlights only
+						lightSpacePos.z = lightSpacePos.z * shadowRcv.shadowDepthRange.y;
+					@end
+					@property( syntax == glsl || syntax == glsles )
+						lightSpacePos.z = ( lightSpacePos.z * 0.5 ) + 0.5;
+					@end
+				@else
+					float4 lightSpacePos = mul( float4(worldPos.xyz, 1.0f), shadowRcv.texViewProj );
+
+					// It's the same as (float4( worldPos.xyz, 1 ) * texViewMatrix).z
+					lightSpacePos.z =
+						-( dot( worldPos.xyz, shadowRcv.texViewZRow.xyz ) + shadowRcv.texViewZRow.w );
+					lightSpacePos.z = ( lightSpacePos.z - shadowRcv.shadowDepthRange.x ) *
+									  shadowRcv.shadowDepthRange.y;
+				@end
+
+				return lightSpacePos;
+			}
+		@end
+	@else
+		@foreach( hlms_num_shadow_map_lights, n )
+			@property( !hlms_shadowmap@n_is_point_light )
+				#define inPs_posL@n inPs.posL@n
+			@end
+		@end
+	@end
+
 @foreach( 4, m )
 	@property( @m == 0 )
 		INLINE float getShadow( @insertpiece( TEXTURE2DSHADOW ) shadowMap, @insertpiece( SamplerShadow )
@@ -160,7 +208,7 @@
 		//Spot and directional lights
 		float fDepth = psPosLN.z;
 		float2 uv = float2( psPosLN.xy / psPosLN.w );
-	@end @property( @m >= 2 )
+	@else
 		//Point lights
 		float3 cubemapDir = posVS.xyz - lightPos.xyz;
 		float fDepth = length( cubemapDir );
@@ -266,14 +314,14 @@
 		if( inPs.depth <= passBuf.pssmSplitPoints@value(CurrentShadowMap) )
 		{
 			fShadow = getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-								 inPs.posL0,
+								 inPs_posL0,
 								 passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 								 hlms_shadowmap@counter(CurrentShadowMap)_uv_param );
 			@property( hlms_pssm_blend )
 				if( inPs.depth > passBuf.pssmBlendPoints@value(CurrentShadowMapBlend) )
 				{
 					fShadowBlend = getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-											  inPs.posL1,
+											  inPs_posL1,
 											  passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 											  hlms_shadowmap@value(CurrentShadowMap)_uv_param );
 					fShadow = lerp( fShadow, fShadowBlend,
@@ -289,14 +337,14 @@
 		else if( inPs.depth <= passBuf.pssmSplitPoints@value(CurrentShadowMap) )
 		{
 			fShadow = getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-								 inPs.posL@n,
+								 inPs_posL@n,
 								 passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 								 hlms_shadowmap@counter(CurrentShadowMap)_uv_param );
 			@property( hlms_pssm_blend && @n < hlms_pssm_splits_minus_one )
 				if( inPs.depth > passBuf.pssmBlendPoints@value(CurrentShadowMapBlend) )
 				{
 					fShadowBlend = getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-											  inPs.posL@value(CurrentShadowMap),
+											  inPs_posL@value(CurrentShadowMap),
 											  passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 											  hlms_shadowmap@value(CurrentShadowMap)_uv_param );
 					fShadow = lerp( fShadow, fShadowBlend,
@@ -325,7 +373,7 @@
 @end @property( !hlms_pssm_splits && hlms_num_shadow_map_lights && hlms_lights_directional )
 	@property( receive_shadows )
 		float fShadow = getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-								   inPs.posL0,
+								   inPs_posL0,
 								   passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 								   hlms_shadowmap@counter(CurrentShadowMap)_uv_param );
 	@end @property( !receive_shadows )
@@ -338,7 +386,7 @@
 	@piece( DarkenWithShadowFirstLight )* fShadow@end
 	@piece( DarkenWithShadow )
 		* getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-					 inPs.posL@value(CurrentShadowMap),
+					 inPs_posL@value(CurrentShadowMap),
 					 passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 					 hlms_shadowmap@counter(CurrentShadowMap)_uv_param )
 	@end
