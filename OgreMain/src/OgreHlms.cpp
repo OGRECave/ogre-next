@@ -2682,8 +2682,6 @@ namespace Ogre
                     }
                 }
 
-				setProperty( "shadows_receive_on_ps", 0 );
-
                 int usesDepthTextures = -1;
 
                 const size_t numShadowMapTextures = contiguousShadowMapTex.size();
