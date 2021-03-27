@@ -166,6 +166,7 @@ namespace Ogre
 
     const IdString PbsProperty::Pcf               = IdString( "pcf" );
     const IdString PbsProperty::PcfIterations     = IdString( "pcf_iterations" );
+    const IdString PbsProperty::ShadowsReceiveOnPs= IdString( "shadows_receive_on_ps" );
     const IdString PbsProperty::ExponentialShadowMaps= IdString( "exponential_shadow_maps" );
 
     const IdString PbsProperty::EnvMapScale       = IdString( "envmap_scale" );
@@ -299,6 +300,7 @@ namespace Ogre
 #endif
         mSetupWorldMatBuf( true ),
         mDebugPssmSplits( false ),
+        mShadowReceiversInPixelShader( false ),
         mPerceptualRoughness( true ),
         mAutoSpecIblMaxMipmap( true ),
         mVctFullConeCount( false ),
@@ -1280,6 +1282,9 @@ namespace Ogre
             {
                 setProperty( PbsProperty::PcfIterations, 1 );
             }
+
+            if( mShadowReceiversInPixelShader )
+                setProperty( PbsProperty::ShadowsReceiveOnPs, 1 );
 
             if( mDebugPssmSplits )
             {
@@ -3476,6 +3481,11 @@ namespace Ogre
 
         //Fill the data folder path
         outDataFolderPath = "Hlms/Pbs/" + shaderSyntax;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setShadowReceiversInPixelShader( bool bInPixelShader )
+    {
+        mShadowReceiversInPixelShader = bInPixelShader;
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::setDebugPssmSplits( bool bDebug ) { mDebugPssmSplits = bDebug; }
