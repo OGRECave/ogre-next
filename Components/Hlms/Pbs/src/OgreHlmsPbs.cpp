@@ -1694,16 +1694,13 @@ namespace Ogre
         const size_t maxBufferSizeLight2 = (numAreaLtcFloat4Vars * 4 * 4) * 8; // 8 Ltc area lights
 
         assert( mapSize <= maxBufferSizeRaw );
-        assert( mapSizeLight0 <= maxBufferSizeLight0);
-        assert( mapSizeLight1 <= maxBufferSizeLight1);
-        assert( mapSizeLight2 <= maxBufferSizeLight2);
+        assert( !mUseLightBuffers || mapSizeLight0 <= maxBufferSizeLight0 );
+        assert( !mUseLightBuffers || mapSizeLight1 <= maxBufferSizeLight1 );
+        assert( !mUseLightBuffers || mapSizeLight2 <= maxBufferSizeLight2 );
 
         size_t maxBufferSize = maxBufferSizeRaw;
         if( !mUseLightBuffers )
-        {
             mapSize += mapSizeLight0 + mapSizeLight1 + mapSizeLight2;
-            maxBufferSize += maxBufferSizeLight0 + maxBufferSizeLight1 + maxBufferSizeLight2;
-        }
 
         if( mCurrentPassBuffer >= mPassBuffers.size() )
         {
