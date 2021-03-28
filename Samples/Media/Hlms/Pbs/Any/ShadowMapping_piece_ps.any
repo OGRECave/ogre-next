@@ -4,6 +4,23 @@
 @property( hlms_num_shadow_map_lights )
 
 @piece( DeclShadowMapMacros )
+
+@property( shadows_receive_on_ps )
+	@foreach( hlms_num_shadow_map_lights, n )
+		@property( hlms_shadowmap@n_is_directional_light )
+			#define shadowMap@nLightDir light0Buf.lights[@value(hlms_shadowmap@n_light_idx)].position.xyz
+		@end
+		@property( hlms_shadowmap@n_is_point_light )
+			#define shadowMap@nLightDir normalize(light0Buf.lights[@value(hlms_shadowmap@n_light_idx)].position.xyz - inPs.pos)
+		@end
+		@property( hlms_shadowmap@n_is_spot )
+			#define shadowMap@nLightDir light0Buf.lights[@value(hlms_shadowmap@n_light_idx)].spotDirection.xyz
+		@end
+	@end
+
+	@insertpiece( DeclNormalOffsetBiasFunc )
+@end
+
 @foreach( hlms_num_shadow_map_lights, n )
 	#define hlms_shadowmap@n texShadowMap@value( hlms_shadowmap@n )
 	#define hlms_shadowmap@n_uv_min float2( @value( hlms_shadowmap@n_uv_min_x_int ).@value( hlms_shadowmap@n_uv_min_x_fract ), @value( hlms_shadowmap@n_uv_min_y_int ).@value( hlms_shadowmap@n_uv_min_y_fract ) )
@@ -148,14 +165,72 @@
 /// Declare getShadow twice (two overloads). The second one manually
 /// performs clamp to border to deal with UV atlases.
 @piece( DeclShadowSamplingFuncs )
+
+	@property( shadows_receive_on_ps )
+		@foreach( hlms_num_shadow_map_lights, n )
+			@property( !skip_normal_offset_bias_vs )
+				@piece( shadowMapNormalOffsetBias@n )getNormalOffsetBias( inPs.worldNorm, inPs.geomNormal, shadowMap@nLightDir, passBuf.shadowRcv[@n].invShadowMapSize.x, passBuf.shadowRcv[@n].shadowDepthRange.y, passBuf.shadowRcv[@n].normalOffsetBias hlms_shadowmap@n_uv_param )@end
+			@else
+				@piece( shadowMapNormalOffsetBias@n )float3( 0.0f, 0.0f, 0.0f )@end
+			@end
+
+			@property( hlms_shadowmap@n_is_directional_light )
+				#define inPs_posL@n worldPosToDirLightSpace( inPs.worldPos, passBuf.shadowRcv[@n], @insertpiece( shadowMapNormalOffsetBias@n ) )
+			@end
+			@property( hlms_shadowmap@n_is_spot )
+				#define inPs_posL@n worldPosToSpotLightSpace( inPs.worldPos, passBuf.shadowRcv[@n], @insertpiece( shadowMapNormalOffsetBias@n ) )
+			@end
+		@end
+
+		@foreach( 2, m )
+			@property( @m == 0 )
+				INLINE float4 worldPosToDirLightSpace( float3 worldPos, ShadowReceiverData shadowRcv,
+													   float3 normalOffsetBias )
+			@else
+				INLINE float4 worldPosToSpotLightSpace( float3 worldPos, ShadowReceiverData shadowRcv,
+														float3 normalOffsetBias )
+			@end
+			{
+				@property( !exponential_shadow_maps )
+					float4 lightSpacePos = mul( float4(worldPos.xyz + normalOffsetBias, 1.0f),
+												shadowRcv.texViewProj );
+					@property( hlms_no_reverse_depth && @m == 1 )
+						// Spotlights only
+						lightSpacePos.z = lightSpacePos.z * shadowRcv.shadowDepthRange.y;
+					@end
+					@property( hlms_no_reverse_depth && (syntax == glsl || syntax == glsles) )
+						lightSpacePos.z = ( lightSpacePos.z * 0.5 ) + 0.5;
+					@end
+				@else
+					float4 lightSpacePos = mul( float4(worldPos.xyz, 1.0f), shadowRcv.texViewProj );
+
+					// It's the same as (float4( worldPos.xyz, 1 ) * texViewMatrix).z
+					lightSpacePos.z =
+						-( dot( worldPos.xyz, shadowRcv.texViewZRow.xyz ) + shadowRcv.texViewZRow.w );
+					lightSpacePos.z = ( lightSpacePos.z - shadowRcv.shadowDepthRange.x ) *
+									  shadowRcv.shadowDepthRange.y;
+				@end
+
+				return lightSpacePos;
+			}
+		@end
+	@else
+		@foreach( hlms_num_shadow_map_lights, n )
+			@property( !hlms_shadowmap@n_is_point_light )
+				#define inPs_posL@n inPs.posL@n
+			@end
+		@end
+	@end
+
 	@foreach( 2, m )
 		// Perform normal offset bias. See https://github.com/OGRECave/ogre-next/issues/100
-		INLINE float3 getNormalOffsetBias( float3 geomNormal, float3 lightDir, float normalOffsetBias,
-										   float shadowMapTexSize, float depthRange
+		INLINE float3 getNormalOffsetBiasPoint( float3 geomNormal, float3 lightDir,
+												float normalOffsetBias, float shadowMapTexSize,
+												float depthRange
 		@property( @m == 0 )
-										   )
+												)
 		@else
-										   , float2 minUV, float2 maxUV )
+												, float2 minUV, float2 maxUV )
 		@end
 		{
 			float tmpNdotL = saturate( dot( lightDir.xyz, geomNormal.xyz ) );
@@ -202,11 +277,11 @@
 	@else
 		//Point lights
 		float3 cubemapDir = posVS.xyz - lightPos.xyz;
-		cubemapDir += getNormalOffsetBias( geomNormal, cubemapDir, normalOffsetBias,
+		cubemapDir += getNormalOffsetBiasPoint( geomNormal, cubemapDir, normalOffsetBias,
 				@property( @m == 2 )
-										   invShadowMapSize.x, invDepthRange.y );
+												invShadowMapSize.x, invDepthRange.y );
 				@else
-										   invShadowMapSize.x, invDepthRange.y, minUV, maxUV );
+												invShadowMapSize.x, invDepthRange.y, minUV, maxUV );
 				@end
 
 		float fDepth = length( cubemapDir );
@@ -370,14 +445,14 @@
 		if( inPs.depth <= passBuf.pssmSplitPoints@value(CurrentShadowMap) )
 		{
 			fShadow = getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-								 inPs.posL0,
+								 inPs_posL0,
 								 passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 								 hlms_shadowmap@counter(CurrentShadowMap)_uv_param );
 			@property( hlms_pssm_blend )
 				if( inPs.depth > passBuf.pssmBlendPoints@value(CurrentShadowMapBlend) )
 				{
 					fShadowBlend = getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-											  inPs.posL1,
+											  inPs_posL1,
 											  passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 											  hlms_shadowmap@value(CurrentShadowMap)_uv_param );
 					fShadow = lerp( fShadow, fShadowBlend,
@@ -393,14 +468,14 @@
 		else if( inPs.depth <= passBuf.pssmSplitPoints@value(CurrentShadowMap) )
 		{
 			fShadow = getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-								 inPs.posL@n,
+								 inPs_posL@n,
 								 passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 								 hlms_shadowmap@counter(CurrentShadowMap)_uv_param );
 			@property( hlms_pssm_blend && @n < hlms_pssm_splits_minus_one )
 				if( inPs.depth > passBuf.pssmBlendPoints@value(CurrentShadowMapBlend) )
 				{
 					fShadowBlend = getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-											  inPs.posL@value(CurrentShadowMap),
+											  inPs_posL@value(CurrentShadowMap),
 											  passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 											  hlms_shadowmap@value(CurrentShadowMap)_uv_param );
 					fShadow = lerp( fShadow, fShadowBlend,
@@ -429,7 +504,7 @@
 @end @property( !hlms_pssm_splits && hlms_num_shadow_map_lights && hlms_lights_directional )
 	@property( receive_shadows )
 		float fShadow = getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-								   inPs.posL0,
+								   inPs_posL0,
 								   passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 								   hlms_shadowmap@counter(CurrentShadowMap)_uv_param );
 	@else
@@ -443,7 +518,7 @@
 
 	@piece( DarkenWithShadow )
 		* getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-					 inPs.posL@value(CurrentShadowMap),
+					 inPs_posL@value(CurrentShadowMap),
 					 passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize
 					 hlms_shadowmap@counter(CurrentShadowMap)_uv_param )
 	@end

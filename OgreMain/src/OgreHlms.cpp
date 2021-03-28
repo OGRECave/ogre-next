@@ -131,6 +131,7 @@ namespace Ogre
     const IdString HlmsBaseProp::LightsAttenuation  = IdString( "hlms_lights_attenuation" );
     const IdString HlmsBaseProp::LightsSpotParams   = IdString( "hlms_lights_spotparams" );
     const IdString HlmsBaseProp::LightsAreaTexColour= IdString( "hlms_lights_area_tex_colour" );
+    const IdString HlmsBaseProp::AllPointLights     = IdString( "hlms_all_point_lights" );
 
     //Change per scene pass
     const IdString HlmsBaseProp::PsoClipDistances	= IdString( "hlms_pso_clip_distances" );
@@ -2937,6 +2938,12 @@ namespace Ogre
                                                           numLightsPerType[Light::LT_SPOTLIGHT] );
             setProperty( HlmsBaseProp::LightsSpotParams,  numLightsPerType[Light::LT_SPOTLIGHT] );
 
+            if( numLightsPerType[Light::LT_POINT] &&         //
+                !numLightsPerType[Light::LT_DIRECTIONAL] &&  //
+                !numLightsPerType[Light::LT_SPOTLIGHT] )
+            {
+                setProperty( HlmsBaseProp::AllPointLights, 1 );
+            }
 
             numLightsPerType[Light::LT_POINT]       += numLightsPerType[Light::LT_DIRECTIONAL];
             numLightsPerType[Light::LT_SPOTLIGHT]   += numLightsPerType[Light::LT_POINT];

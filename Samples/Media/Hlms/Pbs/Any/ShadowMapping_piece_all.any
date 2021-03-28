@@ -1,0 +1,27 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+@property( !hlms_shadowcaster )
+	@piece( DeclNormalOffsetBiasFunc )
+		@foreach( 2, m )
+			// Perform normal offset bias. See https://github.com/OGRECave/ogre-next/issues/100
+			INLINE float3 getNormalOffsetBias( float3 worldNormal, float3 viewSpaceNormal,
+											   float3 lightDir, float shadowMapTexSize,
+											   float depthRange, float normalOffsetBias
+			@property( @m == 0 )
+											   )
+			@else
+											   , float2 minUV, float2 maxUV )
+			@end
+			{
+				float tmpNdotL = saturate( dot( lightDir.xyz, viewSpaceNormal.xyz ) );
+
+				@property( @m == 1 )
+					shadowMapTexSize /= maxUV.x - minUV.x;
+				@end
+
+				return ( ( 1.0f - tmpNdotL ) * normalOffsetBias * worldNormal.xyz * shadowMapTexSize );
+			}
+		@end
+	@end
+@end
