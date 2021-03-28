@@ -324,7 +324,7 @@ namespace Ogre
             bInPixelShader = false is more likely to win.
         */
         void setShadowReceiversInPixelShader( bool bInPixelShader );
-        bool setShadowReceiversInPixelShader( void ) const { return mShadowReceiversInPixelShader; }
+        bool getShadowReceiversInPixelShader( void ) const { return mShadowReceiversInPixelShader; }
 
         void setDebugPssmSplits( bool bDebug );
         bool getDebugPssmSplits(void) const                 { return mDebugPssmSplits; }

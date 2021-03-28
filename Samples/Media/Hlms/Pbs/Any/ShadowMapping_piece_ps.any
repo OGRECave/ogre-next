@@ -137,7 +137,7 @@
 			@property( hlms_shadowmap@n_is_directional_light )
 				#define inPs_posL@n worldPosToDirLightSpace( inPs.worldPos, passBuf.shadowRcv[@n] )
 			@end
-			@property( hlms_shadowmap@n_is_spot_light )
+			@property( hlms_shadowmap@n_is_spot )
 				#define inPs_posL@n worldPosToSpotLightSpace( inPs.worldPos, passBuf.shadowRcv[@n] )
 			@end
 		@end

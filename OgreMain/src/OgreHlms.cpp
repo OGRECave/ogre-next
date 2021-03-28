@@ -2707,7 +2707,7 @@ namespace Ogre
                         else if( light->getType() == Light::LT_SPOTLIGHT )
                         {
                             propName.resize( basePropSize );
-                            propName.a( "_is_spot_light" );
+                            propName.a( "_is_spot" );
                             setProperty( propName.c_str(), 1 );
                         }
 
