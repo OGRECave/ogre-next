@@ -1,4 +1,4 @@
-﻿
+
 //#include "SyntaxHighlightingMisc.h"
 
 @property( hlms_num_shadow_map_lights )
@@ -169,7 +169,7 @@
 	@property( shadows_receive_on_ps )
 		@foreach( hlms_num_shadow_map_lights, n )
 			@property( !skip_normal_offset_bias_vs )
-				@piece( shadowMapNormalOffsetBias@n )getNormalOffsetBias( inPs.worldNorm, inPs.geomNormal, shadowMap@nLightDir, passBuf.shadowRcv[@n].invShadowMapSize.x, passBuf.shadowRcv[@n].shadowDepthRange.y, passBuf.shadowRcv[@n].normalOffsetBias hlms_shadowmap@n_uv_param )@end
+				@piece( shadowMapNormalOffsetBias@n )getNormalOffsetBias( inPs.worldNorm, pixelData.geomNormal, shadowMap@nLightDir, passBuf.shadowRcv[@n].invShadowMapSize.x, passBuf.shadowRcv[@n].shadowDepthRange.y, passBuf.shadowRcv[@n].normalOffsetBias hlms_shadowmap@n_uv_param )@end
 			@else
 				@piece( shadowMapNormalOffsetBias@n )float3( 0.0f, 0.0f, 0.0f )@end
 			@end
