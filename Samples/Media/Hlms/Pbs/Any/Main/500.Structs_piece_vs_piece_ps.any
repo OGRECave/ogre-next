@@ -418,7 +418,9 @@ struct Material
 			@end
 		@else
 			INTERPOLANT( float3 worldPos, @counter(texcoord) );
-			INTERPOLANT( float3 worldNorm, @counter(texcoord) );
+			@property( hlms_normal || hlms_qtangent )
+				INTERPOLANT( float3 worldNorm, @counter(texcoord) );
+			@end
 		@end
 
 		@property( hlms_pssm_splits )INTERPOLANT( float depth, @counter(texcoord) );@end

@@ -733,6 +733,14 @@ namespace Ogre
             setProperty( HlmsBaseProp::ScreenPosUv, 1 );
         }
 
+        if( !getProperty( HlmsBaseProp::QTangent ) && !getProperty( HlmsBaseProp::Normal ) )
+        {
+            // No normals means we can't use normal offset bias.
+            // Without normals, PBS is probably a very poor fit for this object
+            // but at least don't crash
+            setProperty( "skip_normal_offset_bias_vs", 1 );
+        }
+
         uint32 brdf = datablock->getBrdf();
         if( (brdf & PbsBrdf::BRDF_MASK) == PbsBrdf::Default )
         {
