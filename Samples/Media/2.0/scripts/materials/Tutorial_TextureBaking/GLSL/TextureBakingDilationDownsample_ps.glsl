@@ -1,4 +1,4 @@
-#version 330
+#version ogre_glsl_ver_330
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
 #define rshort2 ivec2
@@ -7,9 +7,11 @@
 
 #define float4 vec4
 
-uniform sampler2DArray srcTex;
+vulkan_layout( ogre_t0 ) uniform sampler2DArray srcTex;
 
+vulkan_layout( location = 0 )
 out float4 fragColour;
+
 in vec4 gl_FragCoord;
 
 void addSample( inout float4 accumVal, float4 newSample, inout float counter )

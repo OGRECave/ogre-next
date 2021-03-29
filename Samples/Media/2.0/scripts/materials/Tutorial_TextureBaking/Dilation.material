@@ -7,6 +7,11 @@ fragment_program Ogre/TextureBaking/DilationDownsample_ps_GLSL glsl
 	}
 }
 
+fragment_program Ogre/TextureBaking/DilationDownsample_ps_VK glslvk
+{
+	source TextureBakingDilationDownsample_ps.glsl
+}
+
 fragment_program Ogre/TextureBaking/DilationDownsample_ps_HLSL hlsl
 {
 	source TextureBakingDilationDownsample_ps.hlsl
@@ -23,6 +28,7 @@ fragment_program Ogre/TextureBaking/DilationDownsample_ps_Metal metal
 fragment_program Ogre/TextureBaking/DilationDownsample_ps unified
 {
 	delegate Ogre/TextureBaking/DilationDownsample_ps_GLSL
+	delegate Ogre/TextureBaking/DilationDownsample_ps_VK
 	delegate Ogre/TextureBaking/DilationDownsample_ps_HLSL
 	delegate Ogre/TextureBaking/DilationDownsample_ps_Metal
 }
@@ -68,6 +74,11 @@ fragment_program Ogre/TextureBaking/Dilation_ps_GLSL glsl
 	}
 }
 
+fragment_program Ogre/TextureBaking/Dilation_ps_VK glslvk
+{
+	source TextureBakingDilation_ps.glsl
+}
+
 fragment_program Ogre/TextureBaking/Dilation_ps_HLSL hlsl
 {
 	source TextureBakingDilation_ps.hlsl
@@ -84,6 +95,7 @@ fragment_program Ogre/TextureBaking/Dilation_ps_Metal metal
 fragment_program Ogre/TextureBaking/Dilation_ps unified
 {
 	delegate Ogre/TextureBaking/Dilation_ps_GLSL
+	delegate Ogre/TextureBaking/Dilation_ps_VK
 	delegate Ogre/TextureBaking/Dilation_ps_HLSL
 	delegate Ogre/TextureBaking/Dilation_ps_Metal
 }
