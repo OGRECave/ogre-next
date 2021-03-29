@@ -62,6 +62,7 @@ var struct_ogre_1_1_pbs_property =
     [ "ReceiveShadows", "struct_ogre_1_1_pbs_property.html#af6f3ff51af3dd6e3a602a9d1fca3d92b", null ],
     [ "RoughnessIsShininess", "struct_ogre_1_1_pbs_property.html#a3316a6e95bed9036eb42c29bdd11d11d", null ],
     [ "RoughnessMap", "struct_ogre_1_1_pbs_property.html#a8a2287f563678877042f98547728546d", null ],
+    [ "ShadowsReceiveOnPs", "struct_ogre_1_1_pbs_property.html#a5fcf6da9f9fa45c59442b6037c5d1bad", null ],
     [ "SignedIntTex", "struct_ogre_1_1_pbs_property.html#a0dc5cf5b90f345592698fd831b2c29ff", null ],
     [ "SpecularMap", "struct_ogre_1_1_pbs_property.html#aea29e066cf045002a4e6047a86c02179", null ],
     [ "TargetEnvprobeMap", "struct_ogre_1_1_pbs_property.html#afb99f1784e4d3c9b5c66b31d943bf353", null ],

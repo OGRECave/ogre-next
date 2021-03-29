@@ -453,6 +453,7 @@ var group___material =
       [ "getShaderCodeCache", "class_ogre_1_1_hlms_pbs.html#a7e43c4950fb561817fc39fd76275bf02", null ],
       [ "getShaderProfile", "class_ogre_1_1_hlms_pbs.html#a5e6116a52b87b678622b0c1cee421035", null ],
       [ "getShadowFilter", "class_ogre_1_1_hlms_pbs.html#a0fe1b124783a0662f79fbb3ce10dbb2f", null ],
+      [ "getShadowReceiversInPixelShader", "class_ogre_1_1_hlms_pbs.html#ac9d021f235b2496c0921406fb9a54400", null ],
       [ "getTemplateChecksum", "class_ogre_1_1_hlms_pbs.html#a7a0ec84d5e6078c5627f40e95d8d8ca3", null ],
       [ "getType", "class_ogre_1_1_hlms_pbs.html#ace8c5e82db5fddd737cfbbd5165f89fe", null ],
       [ "getTypeName", "class_ogre_1_1_hlms_pbs.html#a5b71a28313583850f0b16064b9825a17", null ],
@@ -489,6 +490,7 @@ var group___material =
       [ "setOptimizationStrategy", "class_ogre_1_1_hlms_pbs.html#a023354bc0bf10b2734ae943465338cc9", null ],
       [ "setParallaxCorrectedCubemap", "class_ogre_1_1_hlms_pbs.html#a2a27dae62f9f524718ae53d56925973a", null ],
       [ "setProperty", "class_ogre_1_1_hlms_pbs.html#a85c00acdba7c9a0bcab3c6a0a48d587f", null ],
+      [ "setShadowReceiversInPixelShader", "class_ogre_1_1_hlms_pbs.html#aab5abfeb16e83344c10dea49ff4140c2", null ],
       [ "setShadowSettings", "class_ogre_1_1_hlms_pbs.html#a31c997c72e255fdab6c60f88b253b7ea", null ],
       [ "setTextureBufferDefaultSize", "class_ogre_1_1_hlms_pbs.html#a6dff4f91d5b7833aec870f30ae381ccc", null ]
     ] ],
@@ -1010,6 +1012,7 @@ var group___material =
       [ "ReceiveShadows", "struct_ogre_1_1_pbs_property.html#af6f3ff51af3dd6e3a602a9d1fca3d92b", null ],
       [ "RoughnessIsShininess", "struct_ogre_1_1_pbs_property.html#a3316a6e95bed9036eb42c29bdd11d11d", null ],
       [ "RoughnessMap", "struct_ogre_1_1_pbs_property.html#a8a2287f563678877042f98547728546d", null ],
+      [ "ShadowsReceiveOnPs", "struct_ogre_1_1_pbs_property.html#a5fcf6da9f9fa45c59442b6037c5d1bad", null ],
       [ "SignedIntTex", "struct_ogre_1_1_pbs_property.html#a0dc5cf5b90f345592698fd831b2c29ff", null ],
       [ "SpecularMap", "struct_ogre_1_1_pbs_property.html#aea29e066cf045002a4e6047a86c02179", null ],
       [ "TargetEnvprobeMap", "struct_ogre_1_1_pbs_property.html#afb99f1784e4d3c9b5c66b31d943bf353", null ],

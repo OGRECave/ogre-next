@@ -1,5 +1,7 @@
 var NAVTREEINDEX95 =
 {
+"class_ogre_1_1_log_manager.html#a593c2311523df6e700cc8ef6680b0db3":[5,2,2,63,0],
+"class_ogre_1_1_log_manager.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,2,63,15],
 "class_ogre_1_1_log_manager.html#a59b4ecc2ae226ada23b0a106397425d0":[5,2,2,63,23],
 "class_ogre_1_1_log_manager.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,2,63,11],
 "class_ogre_1_1_log_manager.html#a85722e2aa03ca2cd18baa6e52f4a7631":[5,2,2,63,2],
@@ -75,8 +77,8 @@ var NAVTREEINDEX95 =
 "class_ogre_1_1_lw_string.html#aa9b859141db2891e28aee8d97151b3a6":[7,0,0,581,10],
 "class_ogre_1_1_lw_string.html#ab0e63733d66e7cdb9867b12f70f5e5b8":[7,0,0,581,32],
 "class_ogre_1_1_lw_string.html#ac6b53d23014784a8152dcef4c08b54b9":[7,0,0,581,44],
-"class_ogre_1_1_lw_string.html#ac87b467be73fb68eee388fe5ec042e56":[7,0,0,581,25],
 "class_ogre_1_1_lw_string.html#ac87b467be73fb68eee388fe5ec042e56":[7,0,0,581,24],
+"class_ogre_1_1_lw_string.html#ac87b467be73fb68eee388fe5ec042e56":[7,0,0,581,25],
 "class_ogre_1_1_lw_string.html#ad39f170797caf9f86eaa764d95445002":[7,0,0,581,8],
 "class_ogre_1_1_lw_string.html#ad73427a7062af8eb35d3cb7f8507db44":[7,0,0,581,2],
 "class_ogre_1_1_lw_string.html#ae0cd2b49e986253d77b461aa2c8fabe2":[7,0,0,581,36],
@@ -247,7 +249,5 @@ var NAVTREEINDEX95 =
 "class_ogre_1_1_manual_object_1_1_manual_object_section.html#a6d9e689659160cac9735f00ece15c0d4":[7,0,0,582,0,19],
 "class_ogre_1_1_manual_object_1_1_manual_object_section.html#a71f195167dd4bd6aa48af0531b5afec9":[7,0,0,582,0,1],
 "class_ogre_1_1_manual_object_1_1_manual_object_section.html#a73de2dd2cc45eee54c7a9262ff6da180":[7,0,0,582,0,30],
-"class_ogre_1_1_manual_object_1_1_manual_object_section.html#a742052f8185975e8b92103c924b005d3":[7,0,0,582,0,5],
-"class_ogre_1_1_manual_object_1_1_manual_object_section.html#a77230eea8136b7c296cc0a5db1dba9ee":[7,0,0,582,0,48],
-"class_ogre_1_1_manual_object_1_1_manual_object_section.html#a8096988a16728c8b7e32495146111c62":[7,0,0,582,0,53]
+"class_ogre_1_1_manual_object_1_1_manual_object_section.html#a742052f8185975e8b92103c924b005d3":[7,0,0,582,0,5]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX94 =
 {
+"class_ogre_1_1_linear_force_affector_factory.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,540,9],
+"class_ogre_1_1_lod0_stripifier.html":[7,0,0,545],
 "class_ogre_1_1_lod0_stripifier.html#a94f191280507c1253370ddca21113c87":[7,0,0,545,1],
 "class_ogre_1_1_lod0_stripifier.html#aa593f9fb11eedbbe253a4d8f210176b5":[7,0,0,545,3],
 "class_ogre_1_1_lod0_stripifier.html#aaf8b57b5395eed707f960a10a1856d1d":[7,0,0,545,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX94 =
 "class_ogre_1_1_log_manager.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,2,63,17],
 "class_ogre_1_1_log_manager.html#a4b7b19b57b7f4fa7d20fad9e672eba3f":[5,2,2,63,22],
 "class_ogre_1_1_log_manager.html#a4be284d44cb3271413335d2e56fb49fb":[5,2,2,63,10],
-"class_ogre_1_1_log_manager.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,2,63,20],
-"class_ogre_1_1_log_manager.html#a593c2311523df6e700cc8ef6680b0db3":[5,2,2,63,0],
-"class_ogre_1_1_log_manager.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,2,63,15]
+"class_ogre_1_1_log_manager.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,2,63,20]
 };
