@@ -2,8 +2,7 @@
 @echo off
 SETLOCAL
 
-set OGRE_BRANCH_NAME=v2-2
-set GENERATOR="Visual Studio 14 2015"
+set GENERATOR="Visual Studio 16 2019"
 set PLATFORM=x64
 set CONFIGURATION=Debug
 set BUILD_FOLDER=%APPVEYOR_BUILD_FOLDER%
@@ -25,10 +24,16 @@ IF EXIST %CMAKE_BIN_x64% (
 )
 echo Using CMake at %CMAKE_BIN%
 
+%CMAKE_BIN% --version
+echo -- PATH --
+echo %PATH%
+echo -- PYTHONPATH --
+echo %PYTHONPATH%
+
 IF NOT EXIST %BUILD_FOLDER%\..\ogredeps (
 	mkdir %BUILD_FOLDER%\..\ogredeps
 	echo --- Cloning Ogredeps ---
-	hg clone https://bitbucket.org/cabalistic/ogredeps %BUILD_FOLDER%\..\ogredeps
+	git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps %BUILD_FOLDER%\..\ogredeps
 ) ELSE (
 	echo --- Ogredeps repo detected. Cloning skipped ---
 )
