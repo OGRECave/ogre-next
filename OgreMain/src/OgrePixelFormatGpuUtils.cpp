@@ -1242,6 +1242,15 @@ namespace Ogre
 
         OgreProfileExhaustive( "PixelFormatGpuUtils::convertForNormalMapping" );
 
+        if(srcFormat == PFG_RGBA8_UNORM || srcFormat == PFG_RGBA8_SNORM
+        || srcFormat == PFG_BGRA8_UNORM || srcFormat == PFG_BGRX8_UNORM
+        || srcFormat == PFG_RGB8_UNORM || srcFormat == PFG_BGR8_UNORM
+        || srcFormat == PFG_RG8_UNORM || srcFormat == PFG_RG8_SNORM)
+        {
+            bulkPixelConversion( src, srcFormat, dst, dstFormat );
+            return;
+        }
+
         float multPart = 2.0f;
         float addPart  = 1.0f;
 
@@ -1344,12 +1353,24 @@ namespace Ogre
         void convRGBAtoRG(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[0]; dst[1] = src[1]; src += 4; dst += 2; }
         }
+        void convRGBAtoRG_u2s(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0] - 128; dst[1] = src[1] - 128; src += 4; dst += 2; }
+        }
+        void convRGBAtoRG_s2u(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0] + 128; dst[1] = src[1] + 128; src += 4; dst += 2; }
+        }
         void convRGBAtoR(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[0]; src += 4; dst += 1; }
         }
 
         void convBGRAtoRG(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[2]; dst[1] = src[1]; src += 4; dst += 2; }
+        }
+        void convBGRAtoRG_u2s(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[2] - 128; dst[1] = src[1] - 128; src += 4; dst += 2; }
+        }
+        void convBGRAtoRG_s2u(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[2] + 128; dst[1] = src[1] + 128; src += 4; dst += 2; }
         }
         void convBGRAtoR(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[2]; src += 4; dst += 1; }
@@ -1378,12 +1399,24 @@ namespace Ogre
         void convRGBtoRG(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[0]; dst[1] = src[1]; src += 3; dst += 2; }
         }
+        void convRGBtoRG_u2s(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0] - 128; dst[1] = src[1] - 128; src += 3; dst += 2; }
+        }
+        void convRGBtoRG_s2u(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0] + 128; dst[1] = src[1] + 128; src += 3; dst += 2; }
+        }
         void convRGBtoR(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[0]; src += 3; dst += 1; }
         }
 
         void convBGRtoRG(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[2]; dst[1] = src[1]; src += 3; dst += 2; }
+        }
+        void convBGRtoRG_u2s(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[2] - 128; dst[1] = src[1] - 128; src += 3; dst += 2; }
+        }
+        void convBGRtoRG_s2u(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[2] + 128; dst[1] = src[1] + 128; src += 3; dst += 2; }
         }
         void convBGRtoR(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[2]; src += 3; dst += 1; }
@@ -1394,6 +1427,12 @@ namespace Ogre
         }
         void convRGtoBGR(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = 0u; dst[1] = src[1]; dst[2] = src[0]; src += 2; dst += 3; }
+        }
+        void convRGtoRG_u2s(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0] - 128; dst[1] = src[1] - 128; src += 2; dst += 2; }
+        }
+        void convRGtoRG_s2u(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0] + 128; dst[1] = src[1] + 128; src += 2; dst += 2; }
         }
         void convRGtoR(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[0]; src += 2; dst += 1; }
@@ -1434,6 +1473,8 @@ namespace Ogre
 
         // Is there a optimized row conversion?
         row_conversion_func_t rowConversionFunc = 0;
+        assert(PFL_COUNT <= 16); // adjust PFL_PAIR definition if assertion failed
+#define PFL_PAIR( a, b ) ( ( a << 4 ) | b )
         if( srcFormat == dstFormat )
         {
             switch( srcBytesPerPixel )
@@ -1452,8 +1493,6 @@ namespace Ogre
         }
         else if( getFlags( srcFormat ) == getFlags( dstFormat ) )  // semantic match, copy as typeless
         {
-            assert(PFL_COUNT <= 16); // adjust PFL_PAIR definition if assertion failed
-#define PFL_PAIR( a, b ) ( ( a << 4 ) | b )
             PixelFormatLayout srcLayout = getPixelLayout( srcFormat );
             PixelFormatLayout dstLayout = getPixelLayout( dstFormat );
             switch( PFL_PAIR( srcLayout, dstLayout ) )
@@ -1510,8 +1549,40 @@ namespace Ogre
             case PFL_PAIR( PFL_RG8, PFL_R8 ): rowConversionFunc = convRGtoR; break;
                 // clang-format on
             }
-#undef PFL_PAIR
         }
+        else if( getFlags( srcFormat ) == PFF_NORMALIZED && getFlags( dstFormat ) == ( PFF_NORMALIZED | PFF_SIGNED ) )
+        {
+            PixelFormatLayout srcLayout = getPixelLayout( srcFormat );
+            PixelFormatLayout dstLayout = getPixelLayout( dstFormat );
+            switch( PFL_PAIR( srcLayout, dstLayout ) )
+            {
+                // clang-format off
+            case PFL_PAIR( PFL_RGBA8, PFL_RG8 ): rowConversionFunc = convRGBAtoRG_u2s; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_RG8 ): rowConversionFunc = convBGRAtoRG_u2s; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_RG8 ): rowConversionFunc = convBGRAtoRG_u2s; break;
+            case PFL_PAIR( PFL_RGB8, PFL_RG8 ): rowConversionFunc = convRGBtoRG_u2s; break;
+            case PFL_PAIR( PFL_BGR8, PFL_RG8 ): rowConversionFunc = convBGRtoRG_u2s; break;
+            case PFL_PAIR( PFL_RG8, PFL_RG8 ): rowConversionFunc = convRGtoRG_u2s; break;
+                // clang-format on
+            }
+        }
+        else if( getFlags( srcFormat ) == ( PFF_NORMALIZED | PFF_SIGNED ) && getFlags( dstFormat ) == PFF_NORMALIZED )
+        {
+            PixelFormatLayout srcLayout = getPixelLayout( srcFormat );
+            PixelFormatLayout dstLayout = getPixelLayout( dstFormat );
+            switch( PFL_PAIR( srcLayout, dstLayout ) )
+            {
+                // clang-format off
+            case PFL_PAIR( PFL_RGBA8, PFL_RG8 ): rowConversionFunc = convRGBAtoRG_s2u; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_RG8 ): rowConversionFunc = convBGRAtoRG_s2u; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_RG8 ): rowConversionFunc = convBGRAtoRG_s2u; break;
+            case PFL_PAIR( PFL_RGB8, PFL_RG8 ): rowConversionFunc = convRGBtoRG_s2u; break;
+            case PFL_PAIR( PFL_BGR8, PFL_RG8 ): rowConversionFunc = convBGRtoRG_s2u; break;
+            case PFL_PAIR( PFL_RG8, PFL_RG8 ): rowConversionFunc = convRGtoRG_s2u; break;
+                // clang-format on
+            }
+        }
+#undef PFL_PAIR
 
         if (rowConversionFunc)
         {
