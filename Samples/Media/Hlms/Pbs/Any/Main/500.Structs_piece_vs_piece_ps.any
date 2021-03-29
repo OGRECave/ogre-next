@@ -417,7 +417,7 @@ struct Material
 				@end
 			@end
 		@else
-			@property( hlms_num_shadow_map_lights )
+			@property( hlms_num_shadow_map_lights && !hlms_all_point_lights )
 				INTERPOLANT( float3 worldPos, @counter(texcoord) );
 				@property( hlms_normal || hlms_qtangent )
 					INTERPOLANT( float3 worldNorm, @counter(texcoord) );

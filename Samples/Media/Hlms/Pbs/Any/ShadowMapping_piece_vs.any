@@ -76,7 +76,7 @@
 			@end
 		@end
 	@else
-		@property( hlms_num_shadow_map_lights )
+		@property( hlms_num_shadow_map_lights && !hlms_all_point_lights )
 			@piece( DoShadowReceiveVS )
 				outVs.worldPos.xyz = worldPos.xyz;
 				@property( hlms_normal || hlms_qtangent )
