@@ -37,9 +37,11 @@
 		@end
 		@end
 	@else
-		@piece( DoShadowReceiveVS )
-			outVs.worldPos.xyz = worldPos.xyz;
-			@property( hlms_pssm_splits )outVs.depth = outVs_Position.z;@end
+		@property( hlms_num_shadow_map_lights && !hlms_all_point_lights )
+			@piece( DoShadowReceiveVS )
+				outVs.worldPos.xyz = worldPos.xyz;
+				@property( hlms_pssm_splits )outVs.depth = outVs_Position.z;@end
+			@end
 		@end
 	@end
 @end

@@ -240,7 +240,7 @@ struct Material
 				@end
 			@end
 		@else
-			@property( !hlms_all_point_lights )
+			@property( hlms_num_shadow_map_lights && !hlms_all_point_lights )
 				float3 worldPos;
 			@end
 		@end

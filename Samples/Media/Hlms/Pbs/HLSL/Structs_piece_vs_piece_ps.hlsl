@@ -231,7 +231,7 @@ cbuffer ManualProbe : register(b3)
 				@end
 			@end
 		@else
-			@property( !hlms_all_point_lights )
+			@property( hlms_num_shadow_map_lights && !hlms_all_point_lights )
 				float3 worldPos		: TEXCOORD@counter(texcoord);
 			@end
 		@end

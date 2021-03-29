@@ -232,7 +232,7 @@ layout_constbuffer(binding = 3) uniform ManualProbe
 				@end
 			@end
 		@else
-			@property( !hlms_all_point_lights )
+			@property( hlms_num_shadow_map_lights && !hlms_all_point_lights )
 				vec3 worldPos;
 			@end
 		@end
