@@ -1,5 +1,7 @@
 var NAVTREEINDEX157 =
 {
+"class_ogre_1_1_r_t_shader_1_1_const_parameter.html#a4fa6286f097d19e92a8ed91645fbfbe7a2f924f19b83b50ff146c201d9111b096":[5,2,9,3,0,72],
+"class_ogre_1_1_r_t_shader_1_1_const_parameter.html#a4fa6286f097d19e92a8ed91645fbfbe7a300717bc767f7691ac7ebe9895aaf40d":[5,2,9,3,0,89],
 "class_ogre_1_1_r_t_shader_1_1_const_parameter.html#a4fa6286f097d19e92a8ed91645fbfbe7a3148a0f52f16ccb7182f49eeb9ff6160":[5,2,9,3,0,9],
 "class_ogre_1_1_r_t_shader_1_1_const_parameter.html#a4fa6286f097d19e92a8ed91645fbfbe7a344d4442907cd45994fee19e924307af":[5,2,9,3,0,7],
 "class_ogre_1_1_r_t_shader_1_1_const_parameter.html#a4fa6286f097d19e92a8ed91645fbfbe7a36c0e0abf19306fa11f2304fa5c4f6a9":[5,2,9,3,0,67],
@@ -247,7 +249,5 @@ var NAVTREEINDEX157 =
 "class_ogre_1_1_r_t_shader_1_1_f_f_p_colour_factory.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,9,6,8],
 "class_ogre_1_1_r_t_shader_1_1_f_f_p_colour_factory.html#ae3f721960f23b73933bd7ad128f8fa77":[5,2,9,6,2],
 "class_ogre_1_1_r_t_shader_1_1_f_f_p_colour_factory.html#af707b80a34dd94e60f774804f0e46d19":[5,2,9,6,18],
-"class_ogre_1_1_r_t_shader_1_1_f_f_p_colour_factory.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,9,6,15],
-"class_ogre_1_1_r_t_shader_1_1_f_f_p_fog.html":[5,2,9,7],
-"class_ogre_1_1_r_t_shader_1_1_f_f_p_fog.html#a16abb7297592de23c6f5b10d39b09925":[5,2,9,7,19]
+"class_ogre_1_1_r_t_shader_1_1_f_f_p_colour_factory.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,9,6,15]
 };

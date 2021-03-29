@@ -85,6 +85,7 @@ var struct_ogre_1_1_pbs_property =
     [ "RoughnessMap", "struct_ogre_1_1_pbs_property.html#a8a2287f563678877042f98547728546d", null ],
     [ "Set0TextureSlotEnd", "struct_ogre_1_1_pbs_property.html#a2a4bb081db8a662e8a19c6d080241c5a", null ],
     [ "Set1TextureSlotEnd", "struct_ogre_1_1_pbs_property.html#aaf7c56538d2993c05618ce3a34843d86", null ],
+    [ "ShadowsReceiveOnPs", "struct_ogre_1_1_pbs_property.html#a5fcf6da9f9fa45c59442b6037c5d1bad", null ],
     [ "SpecularMap", "struct_ogre_1_1_pbs_property.html#aea29e066cf045002a4e6047a86c02179", null ],
     [ "TargetEnvprobeMap", "struct_ogre_1_1_pbs_property.html#afb99f1784e4d3c9b5c66b31d943bf353", null ],
     [ "TransparentMode", "struct_ogre_1_1_pbs_property.html#a15a4870d6b75366659420d9746bafe11", null ],

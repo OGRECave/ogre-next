@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['macos_35553',['macOS',['../_setting_up_ogre_mac_o_s.html',1,'SettingUpOgre']]],
-  ['manual_35554',['Manual',['../manual.html',1,'']]]
+  ['macos_35564',['macOS',['../_setting_up_ogre_mac_o_s.html',1,'SettingUpOgre']]],
+  ['manual_35565',['Manual',['../manual.html',1,'']]]
 ];

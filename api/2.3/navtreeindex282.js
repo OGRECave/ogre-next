@@ -1,5 +1,9 @@
 var NAVTREEINDEX282 =
 {
+"struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a5e9e1ef044989c8fc9fc88bd4cfbc303":[7,0,0,1083,0,4],
+"struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a79a50788e2c67e0854b8b9f7f568909e":[7,0,0,1083,0,1],
+"struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a7ff3f385ad7ab223dd50ef47009fbff5":[7,0,0,1083,0,0],
+"struct_ogre_1_1_vct_material_1_1_datablock_conversion_result.html":[7,0,0,1086,0],
 "struct_ogre_1_1_vct_material_1_1_datablock_conversion_result.html#a019db3b486b7a6d2d8a5ce4d979cdee7":[7,0,0,1086,0,5],
 "struct_ogre_1_1_vct_material_1_1_datablock_conversion_result.html#a0d0807b1ea9d5b14dc6e0dafc47be42f":[7,0,0,1086,0,3],
 "struct_ogre_1_1_vct_material_1_1_datablock_conversion_result.html#a1586ab5cf9d55b867781fcbf62682f30":[7,0,0,1086,0,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX282 =
 "struct_ogre_1_1_voxelizer_bucket.html#af8c043ce15e5af490ab69152d2324475":[7,0,0,1105,1],
 "struct_ogre_1_1_vr_data.html":[7,0,0,1107],
 "struct_ogre_1_1_vr_data.html#a014f7de047f9b12497278c3ea2807e6f":[7,0,0,1107,2],
-"struct_ogre_1_1_vr_data.html#a36bc3390e5f1e33d07cf195cf417f452":[7,0,0,1107,1],
-"struct_ogre_1_1_vr_data.html#a50794c1228cb48ef47f77c392b76fdcc":[7,0,0,1107,3],
-"struct_ogre_1_1_vr_data.html#a58001cf62fed4b43e1914f33fd420923":[7,0,0,1107,0],
-"struct_ogre_1_1_vulkan_constant_definition_binding_param.html":[7,0,0,1114],
-"struct_ogre_1_1_vulkan_constant_definition_binding_param.html#ac5fc5041f84da192a916a9524e05fc34":[7,0,0,1114,0]
+"struct_ogre_1_1_vr_data.html#a36bc3390e5f1e33d07cf195cf417f452":[7,0,0,1107,1]
 };
