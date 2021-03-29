@@ -416,7 +416,9 @@ struct Material
 				@end
 			@end
 		@else
-			INTERPOLANT( float3 worldPos, @counter(texcoord) );
+			@property( hlms_num_shadow_map_lights && !hlms_all_point_lights )
+				INTERPOLANT( float3 worldPos, @counter(texcoord) );
+			@end
 		@end
 
 		@property( hlms_pssm_splits )INTERPOLANT( float depth, @counter(texcoord) );@end
