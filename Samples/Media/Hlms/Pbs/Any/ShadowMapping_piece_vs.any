@@ -76,12 +76,14 @@
 			@end
 		@end
 	@else
-		@piece( DoShadowReceiveVS )
-			outVs.worldPos.xyz = worldPos.xyz;
-			@property( hlms_normal || hlms_qtangent )
-				outVs.worldNorm.xyz = worldNorm.xyz;
+		@property( hlms_num_shadow_map_lights )
+			@piece( DoShadowReceiveVS )
+				outVs.worldPos.xyz = worldPos.xyz;
+				@property( hlms_normal || hlms_qtangent )
+					outVs.worldNorm.xyz = worldNorm.xyz;
+				@end
+				@property( hlms_pssm_splits )outVs.depth = outVs_Position.w;@end
 			@end
-			@property( hlms_pssm_splits )outVs.depth = outVs_Position.w;@end
 		@end
 	@end
 @end
