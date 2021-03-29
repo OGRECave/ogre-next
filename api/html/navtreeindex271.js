@@ -1,5 +1,9 @@
 var NAVTREEINDEX271 =
 {
+"struct_ogre_1_1v1_1_1_tangent_space_calc_1_1_result.html#a692c1b17cbf67bff3a6d7e1d25c85caf":[5,2,6,32,1,0],
+"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html":[7,0,0,3,161],
+"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html#a0b75671027d6663490eb35375c3bab9c":[7,0,0,3,161,2],
+"struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html#a734e6e3f60de59f1d571b6114151ac03":[7,0,0,3,161,0],
 "struct_ogre_1_1v1_1_1_vertex_bone_assignment__s.html#adcdaf180a49362ed22c542d5d7a3457e":[7,0,0,3,161,1],
 "struct_ogre_1_1v1_1_1_vertex_data_1_1_hardware_animation_data.html":[5,2,10,46,0],
 "struct_ogre_1_1v1_1_1_vertex_data_1_1_hardware_animation_data.html#a6df454c6ed629dc29b9ee4f432ca374f":[5,2,10,46,0,1],

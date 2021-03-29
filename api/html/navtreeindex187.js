@@ -1,5 +1,7 @@
 var NAVTREEINDEX187 =
 {
+"class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,2,1,6],
+"class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,2,1,13],
 "class_ogre_1_1_texture_filter_1_1_generate_sw_mipmaps.html":[7,0,0,2,2],
 "class_ogre_1_1_texture_filter_1_1_generate_sw_mipmaps.html#a037eeaf32c0d8df71ba2f8ea4f4cbc75":[7,0,0,2,2,15],
 "class_ogre_1_1_texture_filter_1_1_generate_sw_mipmaps.html#a19c0b119d8138f02f25c13dc22a357d4":[7,0,0,2,2,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX187 =
 "class_ogre_1_1_texture_gpu_manager.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,11,113,56],
 "class_ogre_1_1_texture_gpu_manager.html#ac55e0672860ad3ed3695374d9e12c7ba":[5,2,11,113,20],
 "class_ogre_1_1_texture_gpu_manager.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,11,113,52],
-"class_ogre_1_1_texture_gpu_manager.html#ace14aaadb7bf3b43b564c218186df62d":[5,2,11,113,41],
-"class_ogre_1_1_texture_gpu_manager.html#ae56bf3ef457708c156860a1b58f02025":[5,2,11,113,22],
-"class_ogre_1_1_texture_gpu_manager.html#ae7152f97e84cd44d73afc86d77951120":[5,2,11,113,48]
+"class_ogre_1_1_texture_gpu_manager.html#ace14aaadb7bf3b43b564c218186df62d":[5,2,11,113,41]
 };

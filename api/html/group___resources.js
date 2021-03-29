@@ -1646,6 +1646,7 @@ var group___resources =
       [ "AlphaTestCmpFunc", "struct_ogre_1_1_hlms_base_pieces.html#a818124924b91cc5cb1f5510fd76a43ce", null ]
     ] ],
     [ "HlmsBaseProp", "struct_ogre_1_1_hlms_base_prop.html", [
+      [ "AllPointLights", "struct_ogre_1_1_hlms_base_prop.html#a13b868a5d8b53b3e69e0499f5518f83e", null ],
       [ "AlphaBlend", "struct_ogre_1_1_hlms_base_prop.html#a8bf55758ad2d7622abc44f449631bc9c", null ],
       [ "AlphaTest", "struct_ogre_1_1_hlms_base_prop.html#a1cdd5b3e6b9e3aecf4e591f9fdd507a4", null ],
       [ "AlphaTestShadowCasterOnly", "struct_ogre_1_1_hlms_base_prop.html#a0f7ba12f4dd9081fb481095598eca626", null ],

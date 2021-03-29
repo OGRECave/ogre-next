@@ -1,5 +1,7 @@
 var NAVTREEINDEX186 =
 {
+"class_ogre_1_1_tex_coord_modifier_controller_value.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,2,122,9],
+"class_ogre_1_1_tex_coord_modifier_controller_value.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,2,122,7],
 "class_ogre_1_1_tex_coord_modifier_controller_value.html#ac6dc86fa295eb4600c960e4e54c018a5":[5,2,2,122,0],
 "class_ogre_1_1_tex_coord_modifier_controller_value.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,2,122,3],
 "class_ogre_1_1_tex_coord_modifier_controller_value.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,2,122,10],
@@ -247,7 +249,5 @@ var NAVTREEINDEX186 =
 "class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,2,1,8],
 "class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,2,1,12],
 "class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,2,1,10],
-"class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html#ac7f9d8c4ac1ec6006fa88995e47fe538":[7,0,0,2,1,2],
-"class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,2,1,6],
-"class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,2,1,13]
+"class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html#ac7f9d8c4ac1ec6006fa88995e47fe538":[7,0,0,2,1,2]
 };
