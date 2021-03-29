@@ -1,4 +1,5 @@
 @piece( envSpecularRoughness ) pixelData.perceptualRoughness * passBuf.envMapNumMipmaps @end
+@piece( envSpecularRoughnessClearCoat ) pixelData.clearCoatPerceptualRoughness * passBuf.envMapNumMipmaps @end
 
 @piece( DefaultHeaderPS )
 	// START UNIFORM DECLARATION
@@ -66,6 +67,10 @@
 				@property( needs_env_brdf )
 					float3 envColourS;
 					float3 envColourD;
+
+					@property( clear_coat )
+						float3 clearCoatEnvColourS;
+					@end
 				@end
 			@end
 		@else
@@ -585,6 +590,13 @@
 
 		envS.xyz *= probeFade;
 
+		@property( clear_coat )
+			float3 clearCoatEnvS = SampleEnvProbe( texEnvProbeMap, samplerState@value( envMapRegSampler ),
+												   reflDirLS,
+												   @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
+			clearCoatEnvS *= probeFade;
+		@end
+
 		@property( vct_num_probes )
 			float vctLerp = getPccVctBlendWeight( inPs.pos, pixelData.reflDir, reflDirLS_dist.w,
 												  pixelData.roughness,
@@ -598,10 +610,18 @@
 			@property( cubemaps_as_diffuse_gi )
 				pixelData.envColourD += vctSpecular.w > 0 ? float3( 0, 0, 0 ) : envD;
 			@end
+
+			@property( clear_coat )
+				pixelData.clearCoatEnvColourS = lerp( clearCoatEnvS, pixelData.clearCoatEnvColourS, vctLerp );
+			@end
 		@else
 			pixelData.envColourS += envS.xyz;
 			@property( cubemaps_as_diffuse_gi )
 				pixelData.envColourD += envD;
+			@end
+
+			@property( clear_coat )
+				pixelData.clearCoatEnvColourS += clearCoatEnvS;
 			@end
 		@end
 	}
@@ -615,6 +635,12 @@
 		pixelData.envColourD += SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
 												mul( pixelData.normal, passBuf.invViewMatCubemap ),
 												11.0 ).xyz @insertpiece( ApplyEnvMapScale );
+	@end
+
+	@property( clear_coat )
+		pixelData.clearCoatEnvColourS += SampleEnvProbe( texEnvProbeMap, samplerState@value( envMapRegSampler ),
+														 mul( pixelData.reflDir, passBuf.invViewMatCubemap ),
+														 @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
 	@end
 @end
 
@@ -740,6 +766,10 @@
 			@property( needs_env_brdf )
 				pixelData.envColourS = float3( 0, 0, 0 );
 				pixelData.envColourD = float3( 0, 0, 0 );
+
+				@property( clear_coat )
+					pixelData.clearCoatEnvColourS = float3( 0, 0, 0 );
+				@end
 			@end
 
 			@insertpiece( applyVoxelConeTracing )
