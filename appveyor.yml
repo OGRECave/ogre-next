@@ -1,9 +1,4 @@
-version: 2.2.{build}
-
-branches:
-   only:
-     - master
-     - v2-1
+version: 2.3.{build}
 
 environment:
   matrix:
@@ -23,7 +18,11 @@ environment:
 #      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 #      BUILD_SCRIPT: build_ogre_Visual_Studio_14_2015_x64.bat
     - PLATFORM: x64
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      PYTHON: "C:\\Python36-x64"
+      PYTHONHOME: "C:\\Python36-x64"
+      PYTHONPATH: "C:\\Python36-x64\\lib\\site-packages"
+      PATH: "C:\\Python36-x64;C:\\Python36\\Scripts;%PATH%"
       BUILD_SCRIPT: build_ci_windows.bat
 
 cache:
