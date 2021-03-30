@@ -135,7 +135,7 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
 	//	Where alpha = roughness
 	//	R = alpha^2 / [ PI * [ ( NdotH^2 * (alpha^2 - 1) ) + 1 ]^2 ]
 	float f = ( NdotH * sqR - NdotH ) * NdotH + 1.0;
-	float R = sqR / (f * f + 1e-6f);
+	float R = sqR / (f * f); // f is guaranteed to not be 0 because we clamped pixelData.roughness
 
 	//Geometric/Visibility term (Smith GGX Height-Correlated)
 @property( GGX_height_correlated )
