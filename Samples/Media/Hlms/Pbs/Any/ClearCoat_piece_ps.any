@@ -31,7 +31,7 @@ float F_Schlick(float f0, float f90, float VoH) {
     return f0 + (f90 - f0) * pow(1.0 - VoH, 5.0);
 }
 
-float clearCoatLobe(const PixelData pixel, const float3 h, float NoH, float LoH, out float Fcc) {
+float clearCoatLobe(const PixelData pixel, const float3 h, float NoH, float LoH, OGRE_OUT_REF(float, Fcc)) {
 @property( normal_map )
     // If the material has a normal map, we want to use the geometric normal
     // instead to avoid applying the normal map details to the clear coat layer
