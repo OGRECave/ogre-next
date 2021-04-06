@@ -1,0 +1,63 @@
+@property( clear_coat )
+@piece( DeclClearCoatFuncs )
+float D_GGX(float roughness, float NoH) {
+	// Walter et al. 2007, "Microfacet Models for Refraction through Rough Surfaces"
+
+	// In mediump, there are two problems computing 1.0 - NoH^2
+	// 1) 1.0 - NoH^2 suffers floating point cancellation when NoH^2 is close to 1 (highlights)
+	// 2) NoH doesn't have enough precision around 1.0
+	// Both problem can be fixed by computing 1-NoH^2 in highp and providing NoH in highp as well
+
+	// However, we can do better using Lagrange's identity:
+	//      ||a x b||^2 = ||a||^2 ||b||^2 - (a . b)^2
+	// since N and H are unit vectors: ||N x H||^2 = 1.0 - NoH^2
+	// This computes 1.0 - NoH^2 directly (which is close to zero in the highlights and has
+	// enough precision).
+	// Overall this yields better performance, keeping all computations in mediump
+	float oneMinusNoHSquared = 1.0 - NoH * NoH;
+
+	float a = NoH * roughness;
+	float k = roughness / (oneMinusNoHSquared + a * a);
+	float d = k * k * (1.0 / 3.14159265359);
+	return d;
+}
+
+float V_Kelemen(float LoH) {
+	// Kelemen 2001, "A Microfacet Based Coupled Specular-Matte BRDF Model with Importance Sampling"
+	return 0.25 / (LoH * LoH);
+}
+
+float F_Schlick(float f0, float f90, float VoH) {
+	return f0 + (f90 - f0) * pow(1.0 - VoH, 5.0);
+}
+
+float clearCoatLobe(const PixelData pixel, const float3 h, float NoH, float LoH, OGRE_OUT_REF(float, Fcc)) {
+@property( normal_map )
+	// If the material has a normal map, we want to use the geometric normal
+	// instead to avoid applying the normal map details to the clear coat layer
+	float clearCoatNoH = saturate(dot(pixel.geomNormal, h));
+@else
+	float clearCoatNoH = NoH;
+@end
+
+	// clear coat specular lobe
+	float D = D_GGX(pixel.clearCoatRoughness, clearCoatNoH);
+	float V = V_Kelemen(LoH);
+	float F = F_Schlick(0.04, 1.0, LoH) * pixel.clearCoat; // fix IOR to 1.5
+
+	Fcc = F;
+	return D * V * F;
+}
+@end
+
+@piece( LoadClearCoat )
+	pixelData.clearCoat = material.clearCoat;
+	pixelData.clearCoatPerceptualRoughness = material.clearCoatRoughness;
+
+	@property( perceptual_roughness )
+		pixelData.clearCoatRoughness = max( pixelData.clearCoatPerceptualRoughness * pixelData.clearCoatPerceptualRoughness, 0.001f );
+	@else
+		pixelData.clearCoatRoughness = max( pixelData.clearCoatPerceptualRoughness, 0.001f );
+	@end
+@end
+@end

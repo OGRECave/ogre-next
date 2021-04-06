@@ -1,4 +1,5 @@
 @piece( envSpecularRoughness ) pixelData.perceptualRoughness * passBuf.envMapNumMipmaps @end
+@piece( envSpecularRoughnessClearCoat ) pixelData.clearCoatPerceptualRoughness * passBuf.envMapNumMipmaps @end
 
 @piece( DefaultHeaderPS )
 	// START UNIFORM DECLARATION
@@ -45,6 +46,13 @@
 			@end
 			float4	diffuse;
 			float3	specular;
+
+			@property( clear_coat )
+				float clearCoat;
+				float clearCoatPerceptualRoughness;
+				float clearCoatRoughness;
+			@end
+
 			float	perceptualRoughness;
 			float	roughness;
 			float_fresnel	F0;
@@ -59,6 +67,10 @@
 				@property( needs_env_brdf )
 					float3 envColourS;
 					float3 envColourD;
+
+					@property( clear_coat )
+						float3 clearCoatEnvColourS;
+					@end
 				@end
 			@end
 		@else
@@ -140,6 +152,8 @@
 	@end
 
 	@property( (hlms_normal || hlms_qtangent) && !hlms_prepass && needs_view_dir )
+		@insertpiece( DeclClearCoatFuncs )
+
 		@insertpiece( DeclareBRDF )
 		@insertpiece( DeclareBRDF_InstantRadiosity )
 		@insertpiece( DeclareBRDF_AreaLightApprox )
@@ -318,6 +332,16 @@
 							 UV_ROUGHNESS( inPs.uv@value(uv_roughness).xy ),
 							 texIndex_roughnessIdx ).x;
 	@end
+
+@property( clear_coat )
+	// This is a hack but it will do: the base layer must be at least as rough
+	// as the clear coat layer to take into account possible diffusion by the
+	// top layer
+	pixelData.perceptualRoughness = lerp(pixelData.perceptualRoughness,
+										 max(pixelData.perceptualRoughness, pixelData.clearCoatPerceptualRoughness),
+										 pixelData.clearCoat);
+@end
+
 	@property( perceptual_roughness )
 		pixelData.roughness = max( pixelData.perceptualRoughness * pixelData.perceptualRoughness, 0.001f );
 	@else
@@ -566,6 +590,13 @@
 
 		envS.xyz *= probeFade;
 
+		@property( clear_coat )
+			float3 clearCoatEnvS = SampleEnvProbe( texEnvProbeMap, samplerState@value( envMapRegSampler ),
+												   reflDirLS,
+												   @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
+			clearCoatEnvS *= probeFade;
+		@end
+
 		@property( vct_num_probes )
 			float vctLerp = getPccVctBlendWeight( inPs.pos, pixelData.reflDir, reflDirLS_dist.w,
 												  pixelData.roughness,
@@ -579,10 +610,18 @@
 			@property( cubemaps_as_diffuse_gi )
 				pixelData.envColourD += vctSpecular.w > 0 ? float3( 0, 0, 0 ) : envD;
 			@end
+
+			@property( clear_coat )
+				pixelData.clearCoatEnvColourS = lerp( clearCoatEnvS, pixelData.clearCoatEnvColourS, vctLerp );
+			@end
 		@else
 			pixelData.envColourS += envS.xyz;
 			@property( cubemaps_as_diffuse_gi )
 				pixelData.envColourD += envD;
+			@end
+
+			@property( clear_coat )
+				pixelData.clearCoatEnvColourS += clearCoatEnvS;
 			@end
 		@end
 	}
@@ -596,6 +635,12 @@
 		pixelData.envColourD += SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
 												mul( pixelData.normal, passBuf.invViewMatCubemap ),
 												11.0 ).xyz @insertpiece( ApplyEnvMapScale );
+	@end
+
+	@property( clear_coat )
+		pixelData.clearCoatEnvColourS += SampleEnvProbe( texEnvProbeMap, samplerState@value( envMapRegSampler ),
+														 mul( pixelData.reflDir, passBuf.invViewMatCubemap ),
+														 @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
 	@end
 @end
 
@@ -629,6 +674,7 @@
 		@end
 
 		@insertpiece( SampleSpecularMap )
+		@insertpiece( LoadClearCoat )
 		@insertpiece( SampleRoughnessMap )
 
 @property( hlms_bake_lighting_only )
@@ -720,6 +766,10 @@
 			@property( needs_env_brdf )
 				pixelData.envColourS = float3( 0, 0, 0 );
 				pixelData.envColourD = float3( 0, 0, 0 );
+
+				@property( clear_coat )
+					pixelData.clearCoatEnvColourS = float3( 0, 0, 0 );
+				@end
 			@end
 
 			@insertpiece( applyVoxelConeTracing )

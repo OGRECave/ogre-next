@@ -203,6 +203,7 @@ namespace Ogre
     const IdString PbsProperty::BrdfBlinnPhong    = IdString( "BRDF_BlinnPhong" );
     const IdString PbsProperty::FresnelSeparateDiffuse  = IdString( "fresnel_separate_diffuse" );
     const IdString PbsProperty::GgxHeightCorrelated     = IdString( "GGX_height_correlated" );
+    const IdString PbsProperty::ClearCoat               = IdString( "clear_coat" );
     const IdString PbsProperty::LegacyMathBrdf          = IdString( "legacy_math_brdf" );
     const IdString PbsProperty::RoughnessIsShininess    = IdString( "roughness_is_shininess" );
 
@@ -748,6 +749,8 @@ namespace Ogre
 
             if( !(brdf & PbsBrdf::FLAG_UNCORRELATED) )
                 setProperty( PbsProperty::GgxHeightCorrelated, 1 );
+
+            setProperty( PbsProperty::ClearCoat, datablock->mClearCoat != 0.0f );
         }
         else if( (brdf & PbsBrdf::BRDF_MASK) == PbsBrdf::CookTorrance )
             setProperty( PbsProperty::BrdfCookTorrance, 1 );
