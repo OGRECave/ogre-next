@@ -173,31 +173,31 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
 	//We should divide Rd by PI, but it is already included in kD
     float3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz;
 
-    @property( clear_coat )
-        float3 color = Rd + Rs;
+	@property( clear_coat )
+		float3 color = Rd + Rs;
 
-        float Fcc;
-        float clearCoat = clearCoatLobe(pixelData, halfWay, NdotH, VdotH, Fcc);
-        float attenuation = 1.0 - Fcc;
+		float Fcc;
+		float clearCoat = clearCoatLobe(pixelData, halfWay, NdotH, VdotH, Fcc);
+		float attenuation = 1.0 - Fcc;
 
-        @property( normal_map )
-            color *= attenuation * NdotL;
+		@property( normal_map )
+			color *= attenuation * NdotL;
 
-            // If the material has a normal map, we want to use the geometric normal
-            // instead to avoid applying the normal map details to the clear coat layer
-            float clearCoatNoL = saturate(dot(pixelData.geomNormal, lightDir));
-            color += clearCoat * clearCoatNoL;
+			// If the material has a normal map, we want to use the geometric normal
+			// instead to avoid applying the normal map details to the clear coat layer
+			float clearCoatNoL = saturate(dot(pixelData.geomNormal, lightDir));
+			color += clearCoat * clearCoatNoL;
 
-            return color * lightSpecular;
-        @else
-            color *= attenuation;
-            color += clearCoat;
+			return color * lightSpecular;
+		@else
+			color *= attenuation;
+			color += clearCoat;
 
-            return color * lightSpecular * NdotL;
-        @end
-    @else
+			return color * lightSpecular * NdotL;
+		@end
+	@else
 	return NdotL * (Rs * lightSpecular + Rd * lightDiffuse);
-    @end
+	@end
 }
 @end
 @end
@@ -256,20 +256,20 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
 	float3 Rd = pixelData.envColourD * pixelData.diffuse.xyz * fresnelD;
 	float3 Rs = pixelData.envColourS * pixelData.specular.xyz * ( fresnelS * envBRDF.x + envBRDF.y );
 
-    @property( clear_coat )
-        @property( normal_map )
-            // We want to use the geometric normal for the clear coat layer
-            float clearCoatNoV = saturate(dot(pixelData.geomNormal, pixelData.viewDir));
-        @else
-            float clearCoatNoV = pixelData.NdotV;
-        @end
-        // The clear coat layer assumes an IOR of 1.5 (4% reflectance)
-        float Fc = F_Schlick(0.04, 1.0, clearCoatNoV) * pixelData.clearCoat;
-        float attenuation = 1.0 - Fc;
-        Rd *= attenuation;
-        Rs *= attenuation;
-        Rs += pixelData.clearCoatEnvColourS * Fc;
-    @end
+	@property( clear_coat )
+		@property( normal_map )
+			// We want to use the geometric normal for the clear coat layer
+			float clearCoatNoV = saturate(dot(pixelData.geomNormal, pixelData.viewDir));
+		@else
+			float clearCoatNoV = pixelData.NdotV;
+		@end
+		// The clear coat layer assumes an IOR of 1.5 (4% reflectance)
+		float Fc = F_Schlick(0.04, 1.0, clearCoatNoV) * pixelData.clearCoat;
+		float attenuation = 1.0 - Fc;
+		Rd *= attenuation;
+		Rs *= attenuation;
+		Rs += pixelData.clearCoatEnvColourS * Fc;
+	@end
 
 	finalColour += Rd + Rs;
 @end
