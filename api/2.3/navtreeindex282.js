@@ -1,5 +1,10 @@
 var NAVTREEINDEX282 =
 {
+"struct_ogre_1_1_update_transform_request.html#ad232e187e67a2040096d0021122681ea":[5,2,12,57,0],
+"struct_ogre_1_1_update_transform_request.html#ad232e187e67a2040096d0021122681ea":[5,0,1,57,0],
+"struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html":[7,0,0,1083,0],
+"struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a489693a648ad2f75aa7b12401b65575d":[7,0,0,1083,0,3],
+"struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a50dd8f02c454f68a88b99cfcb714fa51":[7,0,0,1083,0,2],
 "struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a5e9e1ef044989c8fc9fc88bd4cfbc303":[7,0,0,1083,0,4],
 "struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a79a50788e2c67e0854b8b9f7f568909e":[7,0,0,1083,0,1],
 "struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html#a7ff3f385ad7ab223dd50ef47009fbff5":[7,0,0,1083,0,0],
@@ -184,8 +189,8 @@ var NAVTREEINDEX282 =
 "struct_ogre_1_1_view_point.html":[5,2,12,71],
 "struct_ogre_1_1_view_point.html#a3c5ae8fe5c3adce148bfebd3ed9b8e56":[5,0,1,71,1],
 "struct_ogre_1_1_view_point.html#a3c5ae8fe5c3adce148bfebd3ed9b8e56":[5,2,12,71,1],
-"struct_ogre_1_1_view_point.html#a6a25f94ff18e79c7bf0e275f60494d89":[5,2,12,71,0],
 "struct_ogre_1_1_view_point.html#a6a25f94ff18e79c7bf0e275f60494d89":[5,0,1,71,0],
+"struct_ogre_1_1_view_point.html#a6a25f94ff18e79c7bf0e275f60494d89":[5,2,12,71,0],
 "struct_ogre_1_1_volume_1_1_chunk_parameters.html":[7,0,0,4,3],
 "struct_ogre_1_1_volume_1_1_chunk_parameters.html#a066adb42505bd30a78f1553a1913d273":[7,0,0,4,3,5],
 "struct_ogre_1_1_volume_1_1_chunk_parameters.html#a111c9e9333e7ae3497fc818190a03fd8":[7,0,0,4,3,12],
@@ -244,10 +249,5 @@ var NAVTREEINDEX282 =
 "struct_ogre_1_1_voxelizer_bucket.html#a23c380ca1220b203228d7ceeb63c93ff":[7,0,0,1105,4],
 "struct_ogre_1_1_voxelizer_bucket.html#a3c1cad6128a10f78309502c1cc610790":[7,0,0,1105,0],
 "struct_ogre_1_1_voxelizer_bucket.html#a8210ea049ee9f654d40f8080d64d8142":[7,0,0,1105,3],
-"struct_ogre_1_1_voxelizer_bucket.html#aa5e64dd3767978b9df83956f3b3af454":[7,0,0,1105,5],
-"struct_ogre_1_1_voxelizer_bucket.html#ae57998ae32e3fb4ede73edf19dfbcc98":[7,0,0,1105,2],
-"struct_ogre_1_1_voxelizer_bucket.html#af8c043ce15e5af490ab69152d2324475":[7,0,0,1105,1],
-"struct_ogre_1_1_vr_data.html":[7,0,0,1107],
-"struct_ogre_1_1_vr_data.html#a014f7de047f9b12497278c3ea2807e6f":[7,0,0,1107,2],
-"struct_ogre_1_1_vr_data.html#a36bc3390e5f1e33d07cf195cf417f452":[7,0,0,1107,1]
+"struct_ogre_1_1_voxelizer_bucket.html#aa5e64dd3767978b9df83956f3b3af454":[7,0,0,1105,5]
 };

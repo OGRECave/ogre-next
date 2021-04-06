@@ -12,6 +12,7 @@ var struct_ogre_1_1_pbs_property =
     [ "BrdfBlinnPhong", "struct_ogre_1_1_pbs_property.html#a0a9fb285cc7409a2ac5ed9cba381fbdc", null ],
     [ "BrdfCookTorrance", "struct_ogre_1_1_pbs_property.html#abca1d95fc61db176900d00a61ad67eb3", null ],
     [ "BrdfDefault", "struct_ogre_1_1_pbs_property.html#a95a30290eb66611791b9e4055912dd54", null ],
+    [ "ClearCoat", "struct_ogre_1_1_pbs_property.html#a6b4e9583d96f7c910a35d46e62c767e5", null ],
     [ "CubemapsAsDiffuseGi", "struct_ogre_1_1_pbs_property.html#a7afba0dd14e9ab0e3150ed8e6e00d9ef", null ],
     [ "CubemapsUseDpm", "struct_ogre_1_1_pbs_property.html#a182e937376a07c5233f370f2b189eb49", null ],
     [ "DebugPssmSplits", "struct_ogre_1_1_pbs_property.html#a81a8eabdfede3cae33ac297548bd3226", null ],

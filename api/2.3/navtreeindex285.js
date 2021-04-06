@@ -1,5 +1,10 @@
 var NAVTREEINDEX285 =
 {
+"structbsp__lump__entry__t.html":[7,0,10],
+"structbsp__lump__entry__t.html#ad021d058940d46d220f47218341a2283":[7,0,10,0],
+"structbsp__lump__entry__t.html#adf5538ed3cab74609ee03194b91a877a":[7,0,10,1],
+"structbsp__model__t.html":[7,0,11],
+"structbsp__model__t.html#a257ab849f5a33ce72add089ee49e620d":[7,0,11,4],
 "structbsp__model__t.html#a61eb3d46dec36fc8f520abf5cedf0ef9":[7,0,11,3],
 "structbsp__model__t.html#a959f08d9749321ee5cba5cbafde1a33d":[7,0,11,1],
 "structbsp__model__t.html#aacd58be6fac39ed0f42038aed8edd691":[7,0,11,0],
