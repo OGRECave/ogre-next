@@ -50,7 +50,8 @@ namespace Ogre
         mHasSkeletonAnimation( false ),
         mCurrentMaterialLod( 0 ),
         mLodMaterial( &MovableObject::c_DefaultLodMesh ),
-        mHlmsGlobalIndex( ~0 ),
+        mHlmsGlobalIndex( std::numeric_limits<uint32>::max() ),
+        mRenderableVisible( true ),
         mPolygonModeOverrideable( true ),
         mUseIdentityProjection( false ),
         mUseIdentityView( false )

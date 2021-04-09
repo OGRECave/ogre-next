@@ -1435,7 +1435,8 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
 
                         while( itRend != enRend )
                         {
-                            mRenderQueue->addRenderableV1( i, casterPass, *itRend, *itor );
+                            if( ( *itRend )->mRenderableVisible )
+                                mRenderQueue->addRenderableV1( i, casterPass, *itRend, *itor );
                             ++itRend;
                         }
 
@@ -1982,7 +1983,10 @@ void SceneManager::cullFrustum( const CullFrustumRequest &request, size_t thread
             MovableObject::cullFrustum( numObjs, objData, camera, visibilityMask,
                                         outVisibleObjects, lodCamera );
 
-            if( mRenderQueue->getRenderQueueMode(i) == RenderQueue::FAST && request.addToRenderQueue )
+            const uint8 currRqId = static_cast<uint8>( i );
+
+            if( mRenderQueue->getRenderQueueMode( currRqId ) == RenderQueue::FAST &&
+                request.addToRenderQueue )
             {
                 //V2 meshes can be added to the render queue in parallel
                 bool casterPass = request.casterPass;
@@ -1996,7 +2000,11 @@ void SceneManager::cullFrustum( const CullFrustumRequest &request, size_t thread
 
                     while( itRend != enRend )
                     {
-                        mRenderQueue->addRenderableV2( threadIdx, i, casterPass, *itRend, *itor );
+                        if( ( *itRend )->mRenderableVisible )
+                        {
+                            mRenderQueue->addRenderableV2( threadIdx, currRqId, casterPass, *itRend,
+                                                           *itor );
+                        }
                         ++itRend;
                     }
                     ++itor;

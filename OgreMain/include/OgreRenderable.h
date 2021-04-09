@@ -466,6 +466,18 @@ namespace Ogre {
             Despite being public, Do NOT modify it manually.
         */
         public: uint32      mHlmsGlobalIndex;
+
+    public:
+        /** Control visibility at Renderable (e.g. SubMesh) level
+
+            Note that if our MovableObject owner called MovableObject::setVisible( false )
+            we won't get rendered. Both must be true in order to render.
+        @remarks
+            PUBLIC VARIABLE. This variable can be altered directly.
+            Changes are reflected immediately.
+        */
+        bool mRenderableVisible;
+
     protected:
         bool mPolygonModeOverrideable;
         bool mUseIdentityProjection;
