@@ -354,6 +354,7 @@ var group___scene =
       [ "mHlmsGlobalIndex", "class_ogre_1_1_camera.html#a4af66c22373c90b388d2117ee904a92b", null ],
       [ "mParentIndex", "class_ogre_1_1_camera.html#aad9369e62c971d55ca75b7b294c50944", null ],
       [ "mRenderables", "class_ogre_1_1_camera.html#ab703ec1f1cf82763b0ac9c4b1e51a17b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1_camera.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ],
       [ "mSortMode", "class_ogre_1_1_camera.html#a65528cdcb69117f09a7dfd8519396f32", null ]
     ] ],
     [ "CamerasInProgress", "struct_ogre_1_1_cameras_in_progress.html", [
@@ -2099,7 +2100,8 @@ var group___scene =
       [ "setUserAny", "class_ogre_1_1_renderable.html#a8f18715b01c0851631eb9cccd1a05552", null ],
       [ "LodStrategy::lodSet", "class_ogre_1_1_renderable.html#a7ae9e10420b4c462fd91b7e5c54f0483", null ],
       [ "mCustomParameter", "class_ogre_1_1_renderable.html#ab682cd8eac807d059840e776f247c73f", null ],
-      [ "mHlmsGlobalIndex", "class_ogre_1_1_renderable.html#a4af66c22373c90b388d2117ee904a92b", null ]
+      [ "mHlmsGlobalIndex", "class_ogre_1_1_renderable.html#a4af66c22373c90b388d2117ee904a92b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1_renderable.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "RenderableAnimated", "class_ogre_1_1_renderable_animated.html", [
       [ "CustomParameterMap", "class_ogre_1_1_renderable_animated.html#a91a88d44c3918d174c1d594f9a4c6736", null ],
@@ -2159,7 +2161,8 @@ var group___scene =
       [ "setUseIdentityView", "class_ogre_1_1_renderable_animated.html#ae53cff42a16304f582ef83ad3017d614", null ],
       [ "setUserAny", "class_ogre_1_1_renderable_animated.html#a8f18715b01c0851631eb9cccd1a05552", null ],
       [ "mCustomParameter", "class_ogre_1_1_renderable_animated.html#ab682cd8eac807d059840e776f247c73f", null ],
-      [ "mHlmsGlobalIndex", "class_ogre_1_1_renderable_animated.html#a4af66c22373c90b388d2117ee904a92b", null ]
+      [ "mHlmsGlobalIndex", "class_ogre_1_1_renderable_animated.html#a4af66c22373c90b388d2117ee904a92b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1_renderable_animated.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "SceneFormatBase", "class_ogre_1_1_scene_format_base.html", [
       [ "Version", "class_ogre_1_1_scene_format_base.html#a04a65f7c590e0e1c5a3fb14adaf166a7", [
@@ -2996,7 +2999,8 @@ var group___scene =
       [ "Item", "class_ogre_1_1_sub_item.html#aad85754f188b769ff61150eaf36106c4", null ],
       [ "SceneManager", "class_ogre_1_1_sub_item.html#a284464b0561a6f2915f04b0245b987f0", null ],
       [ "mCustomParameter", "class_ogre_1_1_sub_item.html#ab682cd8eac807d059840e776f247c73f", null ],
-      [ "mHlmsGlobalIndex", "class_ogre_1_1_sub_item.html#a4af66c22373c90b388d2117ee904a92b", null ]
+      [ "mHlmsGlobalIndex", "class_ogre_1_1_sub_item.html#a4af66c22373c90b388d2117ee904a92b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1_sub_item.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "UpdateLodRequest", "struct_ogre_1_1_update_lod_request.html", [
       [ "ObjectMemoryManagerVec", "struct_ogre_1_1_update_lod_request.html#a284f5d9b223893111d554206d4908ffe", null ],
@@ -3300,7 +3304,8 @@ var group___scene =
         [ "setUseIdentityView", "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#ae53cff42a16304f582ef83ad3017d614", null ],
         [ "setUserAny", "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a8f18715b01c0851631eb9cccd1a05552", null ],
         [ "mCustomParameter", "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#ab682cd8eac807d059840e776f247c73f", null ],
-        [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a4af66c22373c90b388d2117ee904a92b", null ]
+        [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#a4af66c22373c90b388d2117ee904a92b", null ],
+        [ "mRenderableVisible", "class_ogre_1_1v1_1_1_manual_object_1_1_manual_object_section.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
       ] ],
       [ "MovableObjectArray", "class_ogre_1_1v1_1_1_manual_object.html#afb58624fb567bb790c55d8a716b472da", null ],
       [ "SectionList", "class_ogre_1_1v1_1_1_manual_object.html#a57e986c779f94db589a4e87e6dec5d53", null ],
@@ -3830,7 +3835,8 @@ var group___scene =
       [ "mGlobalIndex", "class_ogre_1_1v1_1_1_rectangle2_d.html#aee4828c2dee7731058f0b9cd047cf78d", null ],
       [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_rectangle2_d.html#a4af66c22373c90b388d2117ee904a92b", null ],
       [ "mParentIndex", "class_ogre_1_1v1_1_1_rectangle2_d.html#aad9369e62c971d55ca75b7b294c50944", null ],
-      [ "mRenderables", "class_ogre_1_1v1_1_1_rectangle2_d.html#ab703ec1f1cf82763b0ac9c4b1e51a17b", null ]
+      [ "mRenderables", "class_ogre_1_1v1_1_1_rectangle2_d.html#ab703ec1f1cf82763b0ac9c4b1e51a17b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1v1_1_1_rectangle2_d.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "Rectangle2DFactory", "class_ogre_1_1v1_1_1_rectangle2_d_factory.html", [
       [ "Rectangle2DFactory", "class_ogre_1_1v1_1_1_rectangle2_d_factory.html#a6afa07644a11ba6fd18cc4dab66df18f", null ],
@@ -4004,7 +4010,8 @@ var group___scene =
       [ "mGlobalIndex", "class_ogre_1_1v1_1_1_simple_renderable.html#aee4828c2dee7731058f0b9cd047cf78d", null ],
       [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_simple_renderable.html#a4af66c22373c90b388d2117ee904a92b", null ],
       [ "mParentIndex", "class_ogre_1_1v1_1_1_simple_renderable.html#aad9369e62c971d55ca75b7b294c50944", null ],
-      [ "mRenderables", "class_ogre_1_1v1_1_1_simple_renderable.html#ab703ec1f1cf82763b0ac9c4b1e51a17b", null ]
+      [ "mRenderables", "class_ogre_1_1v1_1_1_simple_renderable.html#ab703ec1f1cf82763b0ac9c4b1e51a17b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1v1_1_1_simple_renderable.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "StaticGeometry", "class_ogre_1_1v1_1_1_static_geometry.html", [
       [ "GeometryBucket", "class_ogre_1_1v1_1_1_static_geometry_1_1_geometry_bucket.html", [
@@ -4082,7 +4089,8 @@ var group___scene =
         [ "setUseIdentityView", "class_ogre_1_1v1_1_1_static_geometry_1_1_geometry_bucket.html#ae53cff42a16304f582ef83ad3017d614", null ],
         [ "setUserAny", "class_ogre_1_1v1_1_1_static_geometry_1_1_geometry_bucket.html#a8f18715b01c0851631eb9cccd1a05552", null ],
         [ "mCustomParameter", "class_ogre_1_1v1_1_1_static_geometry_1_1_geometry_bucket.html#ab682cd8eac807d059840e776f247c73f", null ],
-        [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_static_geometry_1_1_geometry_bucket.html#a4af66c22373c90b388d2117ee904a92b", null ]
+        [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_static_geometry_1_1_geometry_bucket.html#a4af66c22373c90b388d2117ee904a92b", null ],
+        [ "mRenderableVisible", "class_ogre_1_1v1_1_1_static_geometry_1_1_geometry_bucket.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
       ] ],
       [ "LODBucket", "class_ogre_1_1v1_1_1_static_geometry_1_1_l_o_d_bucket.html", [
         [ "MaterialBucketMap", "class_ogre_1_1v1_1_1_static_geometry_1_1_l_o_d_bucket.html#a57d6032b51d18f1a3b80456f684e8b28", null ],
@@ -4433,7 +4441,8 @@ var group___scene =
       [ "Entity", "class_ogre_1_1v1_1_1_sub_entity.html#a614439ccac0344926adc4c0165d64060", null ],
       [ "SceneManager", "class_ogre_1_1v1_1_1_sub_entity.html#a284464b0561a6f2915f04b0245b987f0", null ],
       [ "mCustomParameter", "class_ogre_1_1v1_1_1_sub_entity.html#ab682cd8eac807d059840e776f247c73f", null ],
-      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_sub_entity.html#a4af66c22373c90b388d2117ee904a92b", null ]
+      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_sub_entity.html#a4af66c22373c90b388d2117ee904a92b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1v1_1_1_sub_entity.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "WireBoundingBox", "class_ogre_1_1v1_1_1_wire_bounding_box.html", [
       [ "CustomParameterMap", "class_ogre_1_1v1_1_1_wire_bounding_box.html#a91a88d44c3918d174c1d594f9a4c6736", null ],
@@ -4590,7 +4599,8 @@ var group___scene =
       [ "mGlobalIndex", "class_ogre_1_1v1_1_1_wire_bounding_box.html#aee4828c2dee7731058f0b9cd047cf78d", null ],
       [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_wire_bounding_box.html#a4af66c22373c90b388d2117ee904a92b", null ],
       [ "mParentIndex", "class_ogre_1_1v1_1_1_wire_bounding_box.html#aad9369e62c971d55ca75b7b294c50944", null ],
-      [ "mRenderables", "class_ogre_1_1v1_1_1_wire_bounding_box.html#ab703ec1f1cf82763b0ac9c4b1e51a17b", null ]
+      [ "mRenderables", "class_ogre_1_1v1_1_1_wire_bounding_box.html#ab703ec1f1cf82763b0ac9c4b1e51a17b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1v1_1_1_wire_bounding_box.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "ViewPoint", "struct_ogre_1_1_view_point.html", [
       [ "orientation", "struct_ogre_1_1_view_point.html#a6a25f94ff18e79c7bf0e275f60494d89", null ],

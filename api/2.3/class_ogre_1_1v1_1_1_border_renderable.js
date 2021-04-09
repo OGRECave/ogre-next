@@ -65,5 +65,6 @@ var class_ogre_1_1v1_1_1_border_renderable =
     [ "setUseIdentityView", "class_ogre_1_1v1_1_1_border_renderable.html#ae53cff42a16304f582ef83ad3017d614", null ],
     [ "setUserAny", "class_ogre_1_1v1_1_1_border_renderable.html#a8f18715b01c0851631eb9cccd1a05552", null ],
     [ "mCustomParameter", "class_ogre_1_1v1_1_1_border_renderable.html#ab682cd8eac807d059840e776f247c73f", null ],
-    [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_border_renderable.html#a4af66c22373c90b388d2117ee904a92b", null ]
+    [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_border_renderable.html#a4af66c22373c90b388d2117ee904a92b", null ],
+    [ "mRenderableVisible", "class_ogre_1_1v1_1_1_border_renderable.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
 ];

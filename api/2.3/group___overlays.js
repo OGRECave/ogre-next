@@ -228,7 +228,8 @@ var group___overlays =
       [ "show", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#af1a3d1088cc6cbec4b62d487ee1d026b", null ],
       [ "BorderRenderable", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a34cbfdb610c9f91d01c1b4adff0844ab", null ],
       [ "mCustomParameter", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#ab682cd8eac807d059840e776f247c73f", null ],
-      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a4af66c22373c90b388d2117ee904a92b", null ]
+      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#a4af66c22373c90b388d2117ee904a92b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1v1_1_1_border_panel_overlay_element.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "BorderPanelOverlayElementFactory", "class_ogre_1_1v1_1_1_border_panel_overlay_element_factory.html", [
       [ "createOverlayElement", "class_ogre_1_1v1_1_1_border_panel_overlay_element_factory.html#a30b220b419dcebac80271f01cacfec35", null ],
@@ -311,7 +312,8 @@ var group___overlays =
       [ "setUseIdentityView", "class_ogre_1_1v1_1_1_border_renderable.html#ae53cff42a16304f582ef83ad3017d614", null ],
       [ "setUserAny", "class_ogre_1_1v1_1_1_border_renderable.html#a8f18715b01c0851631eb9cccd1a05552", null ],
       [ "mCustomParameter", "class_ogre_1_1v1_1_1_border_renderable.html#ab682cd8eac807d059840e776f247c73f", null ],
-      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_border_renderable.html#a4af66c22373c90b388d2117ee904a92b", null ]
+      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_border_renderable.html#a4af66c22373c90b388d2117ee904a92b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1v1_1_1_border_renderable.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "Overlay", "class_ogre_1_1v1_1_1_overlay.html", [
       [ "MovableObjectArray", "class_ogre_1_1v1_1_1_overlay.html#afb58624fb567bb790c55d8a716b472da", null ],
@@ -591,7 +593,8 @@ var group___overlays =
       [ "setWidth", "class_ogre_1_1v1_1_1_overlay_container.html#aee48fdf58b0797e32fc4449fba7d8309", null ],
       [ "show", "class_ogre_1_1v1_1_1_overlay_container.html#af1a3d1088cc6cbec4b62d487ee1d026b", null ],
       [ "mCustomParameter", "class_ogre_1_1v1_1_1_overlay_container.html#ab682cd8eac807d059840e776f247c73f", null ],
-      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_overlay_container.html#a4af66c22373c90b388d2117ee904a92b", null ]
+      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_overlay_container.html#a4af66c22373c90b388d2117ee904a92b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1v1_1_1_overlay_container.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "OverlayElement", "class_ogre_1_1v1_1_1_overlay_element.html", [
       [ "CustomParameterMap", "class_ogre_1_1v1_1_1_overlay_element.html#a91a88d44c3918d174c1d594f9a4c6736", null ],
@@ -732,7 +735,8 @@ var group___overlays =
       [ "setWidth", "class_ogre_1_1v1_1_1_overlay_element.html#aee48fdf58b0797e32fc4449fba7d8309", null ],
       [ "show", "class_ogre_1_1v1_1_1_overlay_element.html#af1a3d1088cc6cbec4b62d487ee1d026b", null ],
       [ "mCustomParameter", "class_ogre_1_1v1_1_1_overlay_element.html#ab682cd8eac807d059840e776f247c73f", null ],
-      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_overlay_element.html#a4af66c22373c90b388d2117ee904a92b", null ]
+      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_overlay_element.html#a4af66c22373c90b388d2117ee904a92b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1v1_1_1_overlay_element.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "OverlayElementFactory", "class_ogre_1_1v1_1_1_overlay_element_factory.html", [
       [ "~OverlayElementFactory", "class_ogre_1_1v1_1_1_overlay_element_factory.html#aa89747e190e0ca1d4f59c1d89936ebba", null ],
@@ -1011,7 +1015,8 @@ var group___overlays =
       [ "setWidth", "class_ogre_1_1v1_1_1_panel_overlay_element.html#aee48fdf58b0797e32fc4449fba7d8309", null ],
       [ "show", "class_ogre_1_1v1_1_1_panel_overlay_element.html#af1a3d1088cc6cbec4b62d487ee1d026b", null ],
       [ "mCustomParameter", "class_ogre_1_1v1_1_1_panel_overlay_element.html#ab682cd8eac807d059840e776f247c73f", null ],
-      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a4af66c22373c90b388d2117ee904a92b", null ]
+      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_panel_overlay_element.html#a4af66c22373c90b388d2117ee904a92b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1v1_1_1_panel_overlay_element.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "PanelOverlayElementFactory", "class_ogre_1_1v1_1_1_panel_overlay_element_factory.html", [
       [ "createOverlayElement", "class_ogre_1_1v1_1_1_panel_overlay_element_factory.html#a99334bf1c692def612a3063ab97fe5f7", null ],
@@ -1216,7 +1221,8 @@ var group___overlays =
       [ "setWidth", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#aee48fdf58b0797e32fc4449fba7d8309", null ],
       [ "show", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#af1a3d1088cc6cbec4b62d487ee1d026b", null ],
       [ "mCustomParameter", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#ab682cd8eac807d059840e776f247c73f", null ],
-      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a4af66c22373c90b388d2117ee904a92b", null ]
+      [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#a4af66c22373c90b388d2117ee904a92b", null ],
+      [ "mRenderableVisible", "class_ogre_1_1v1_1_1_text_area_overlay_element.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
     ] ],
     [ "TextAreaOverlayElementFactory", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html", [
       [ "createOverlayElement", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#afbb6a6b5fdf011203d5383df6a0c52f5", null ],

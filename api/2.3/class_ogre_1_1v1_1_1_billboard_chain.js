@@ -178,5 +178,6 @@ var class_ogre_1_1v1_1_1_billboard_chain =
     [ "mGlobalIndex", "class_ogre_1_1v1_1_1_billboard_chain.html#aee4828c2dee7731058f0b9cd047cf78d", null ],
     [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_billboard_chain.html#a4af66c22373c90b388d2117ee904a92b", null ],
     [ "mParentIndex", "class_ogre_1_1v1_1_1_billboard_chain.html#aad9369e62c971d55ca75b7b294c50944", null ],
-    [ "mRenderables", "class_ogre_1_1v1_1_1_billboard_chain.html#ab703ec1f1cf82763b0ac9c4b1e51a17b", null ]
+    [ "mRenderables", "class_ogre_1_1v1_1_1_billboard_chain.html#ab703ec1f1cf82763b0ac9c4b1e51a17b", null ],
+    [ "mRenderableVisible", "class_ogre_1_1v1_1_1_billboard_chain.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
 ];

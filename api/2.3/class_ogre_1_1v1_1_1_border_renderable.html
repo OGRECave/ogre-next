@@ -290,6 +290,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a4af66c22373c90b388d2117ee904a92b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#a4af66c22373c90b388d2117ee904a92b">mHlmsGlobalIndex</a></td></tr>
 <tr class="memdesc:a4af66c22373c90b388d2117ee904a92b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index in the vector holding this Rendrable reference in the HLMS datablock.  <a href="class_ogre_1_1_renderable.html#a4af66c22373c90b388d2117ee904a92b">More...</a><br /></td></tr>
 <tr class="separator:a4af66c22373c90b388d2117ee904a92b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac511b8fdb7fc312f6d763fae3bbfa842"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#ac511b8fdb7fc312f6d763fae3bbfa842">mRenderableVisible</a></td></tr>
+<tr class="memdesc:ac511b8fdb7fc312f6d763fae3bbfa842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control visibility at <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> (e.g.  <a href="class_ogre_1_1_renderable.html#ac511b8fdb7fc312f6d763fae3bbfa842">More...</a><br /></td></tr>
+<tr class="separator:ac511b8fdb7fc312f6d763fae3bbfa842"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class for rendering the border of a <a class="el" href="class_ogre_1_1v1_1_1_border_panel_overlay_element.html" title="A specialisation of the PanelOverlayElement to provide a panel with a border.">BorderPanelOverlayElement</a>. </p>
@@ -2410,6 +2413,32 @@ template&lt;class Alloc &gt; </div>
 
 <p>Index in the vector holding this Rendrable reference in the HLMS datablock. </p>
 <p>Used for O(1) removals. </p><dl class="section remark"><dt>Remarks</dt><dd>Despite being public, Do NOT modify it manually. </dd></dl>
+
+</div>
+</div>
+<a id="ac511b8fdb7fc312f6d763fae3bbfa842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac511b8fdb7fc312f6d763fae3bbfa842">&#9670;&nbsp;</a></span>mRenderableVisible</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::Renderable::mRenderableVisible</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Control visibility at <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> (e.g. </p>
+<p><a class="el" href="class_ogre_1_1v1_1_1_sub_mesh.html" title="Defines a part of a complete mesh.">SubMesh</a>) level</p>
+<p>Note that if our <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> owner called MovableObject::setVisible( false ) we won't get rendered. Both must be true in order to render. </p><dl class="section remark"><dt>Remarks</dt><dd>PUBLIC VARIABLE. This variable can be altered directly. Changes are reflected immediately. </dd></dl>
 
 </div>
 </div>

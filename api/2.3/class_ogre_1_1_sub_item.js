@@ -77,5 +77,6 @@ var class_ogre_1_1_sub_item =
     [ "Item", "class_ogre_1_1_sub_item.html#aad85754f188b769ff61150eaf36106c4", null ],
     [ "SceneManager", "class_ogre_1_1_sub_item.html#a284464b0561a6f2915f04b0245b987f0", null ],
     [ "mCustomParameter", "class_ogre_1_1_sub_item.html#ab682cd8eac807d059840e776f247c73f", null ],
-    [ "mHlmsGlobalIndex", "class_ogre_1_1_sub_item.html#a4af66c22373c90b388d2117ee904a92b", null ]
+    [ "mHlmsGlobalIndex", "class_ogre_1_1_sub_item.html#a4af66c22373c90b388d2117ee904a92b", null ],
+    [ "mRenderableVisible", "class_ogre_1_1_sub_item.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
 ];

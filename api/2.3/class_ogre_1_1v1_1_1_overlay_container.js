@@ -154,5 +154,6 @@ var class_ogre_1_1v1_1_1_overlay_container =
     [ "setWidth", "class_ogre_1_1v1_1_1_overlay_container.html#aee48fdf58b0797e32fc4449fba7d8309", null ],
     [ "show", "class_ogre_1_1v1_1_1_overlay_container.html#af1a3d1088cc6cbec4b62d487ee1d026b", null ],
     [ "mCustomParameter", "class_ogre_1_1v1_1_1_overlay_container.html#ab682cd8eac807d059840e776f247c73f", null ],
-    [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_overlay_container.html#a4af66c22373c90b388d2117ee904a92b", null ]
+    [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_overlay_container.html#a4af66c22373c90b388d2117ee904a92b", null ],
+    [ "mRenderableVisible", "class_ogre_1_1v1_1_1_overlay_container.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
 ];

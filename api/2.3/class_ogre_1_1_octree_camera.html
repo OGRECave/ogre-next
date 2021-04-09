@@ -971,6 +971,9 @@ Public Attributes</h2></td></tr>
 <tr class="separator:aad9369e62c971d55ca75b7b294c50944"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab703ec1f1cf82763b0ac9c4b1e51a17b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___material.html#gac2456530a54d76fba2d659954fc243c9">RenderableArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_movable_object.html#ab703ec1f1cf82763b0ac9c4b1e51a17b">mRenderables</a></td></tr>
 <tr class="separator:ab703ec1f1cf82763b0ac9c4b1e51a17b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac511b8fdb7fc312f6d763fae3bbfa842"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_renderable.html#ac511b8fdb7fc312f6d763fae3bbfa842">mRenderableVisible</a></td></tr>
+<tr class="memdesc:ac511b8fdb7fc312f6d763fae3bbfa842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control visibility at <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> (e.g.  <a href="class_ogre_1_1_renderable.html#ac511b8fdb7fc312f6d763fae3bbfa842">More...</a><br /></td></tr>
+<tr class="separator:ac511b8fdb7fc312f6d763fae3bbfa842"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65528cdcb69117f09a7dfd8519396f32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_camera.html#a206f478311219fe2f78037b4eeb5ad6f">CameraSortMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_camera.html#a65528cdcb69117f09a7dfd8519396f32">mSortMode</a></td></tr>
 <tr class="memdesc:a65528cdcb69117f09a7dfd8519396f32"><td class="mdescLeft">&#160;</td><td class="mdescRight">PUBLIC VARIABLE.  <a href="class_ogre_1_1_camera.html#a65528cdcb69117f09a7dfd8519396f32">More...</a><br /></td></tr>
 <tr class="separator:a65528cdcb69117f09a7dfd8519396f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -10682,6 +10685,32 @@ template&lt;class Alloc &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac511b8fdb7fc312f6d763fae3bbfa842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac511b8fdb7fc312f6d763fae3bbfa842">&#9670;&nbsp;</a></span>mRenderableVisible</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::Renderable::mRenderableVisible</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Control visibility at <a class="el" href="class_ogre_1_1_renderable.html" title="Abstract class defining the interface all renderable objects must implement.">Renderable</a> (e.g. </p>
+<p><a class="el" href="class_ogre_1_1_sub_mesh.html" title="Defines a part of a complete mesh.">SubMesh</a>) level</p>
+<p>Note that if our <a class="el" href="class_ogre_1_1_movable_object.html" title="Abstract class defining a movable object in a scene.">MovableObject</a> owner called MovableObject::setVisible( false ) we won't get rendered. Both must be true in order to render. </p><dl class="section remark"><dt>Remarks</dt><dd>PUBLIC VARIABLE. This variable can be altered directly. Changes are reflected immediately. </dd></dl>
 
 </div>
 </div>

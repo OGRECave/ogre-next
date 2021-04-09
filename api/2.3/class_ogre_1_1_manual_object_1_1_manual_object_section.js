@@ -69,5 +69,6 @@ var class_ogre_1_1_manual_object_1_1_manual_object_section =
     [ "setUserAny", "class_ogre_1_1_manual_object_1_1_manual_object_section.html#a8f18715b01c0851631eb9cccd1a05552", null ],
     [ "ManualObject", "class_ogre_1_1_manual_object_1_1_manual_object_section.html#ae9dbb17713ba4a21d22d153a9428e15f", null ],
     [ "mCustomParameter", "class_ogre_1_1_manual_object_1_1_manual_object_section.html#ab682cd8eac807d059840e776f247c73f", null ],
-    [ "mHlmsGlobalIndex", "class_ogre_1_1_manual_object_1_1_manual_object_section.html#a4af66c22373c90b388d2117ee904a92b", null ]
+    [ "mHlmsGlobalIndex", "class_ogre_1_1_manual_object_1_1_manual_object_section.html#a4af66c22373c90b388d2117ee904a92b", null ],
+    [ "mRenderableVisible", "class_ogre_1_1_manual_object_1_1_manual_object_section.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
 ];

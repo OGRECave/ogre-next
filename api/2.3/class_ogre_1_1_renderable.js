@@ -57,5 +57,6 @@ var class_ogre_1_1_renderable =
     [ "setUserAny", "class_ogre_1_1_renderable.html#a8f18715b01c0851631eb9cccd1a05552", null ],
     [ "LodStrategy::lodSet", "class_ogre_1_1_renderable.html#a7ae9e10420b4c462fd91b7e5c54f0483", null ],
     [ "mCustomParameter", "class_ogre_1_1_renderable.html#ab682cd8eac807d059840e776f247c73f", null ],
-    [ "mHlmsGlobalIndex", "class_ogre_1_1_renderable.html#a4af66c22373c90b388d2117ee904a92b", null ]
+    [ "mHlmsGlobalIndex", "class_ogre_1_1_renderable.html#a4af66c22373c90b388d2117ee904a92b", null ],
+    [ "mRenderableVisible", "class_ogre_1_1_renderable.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
 ];

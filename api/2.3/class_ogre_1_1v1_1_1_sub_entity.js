@@ -88,5 +88,6 @@ var class_ogre_1_1v1_1_1_sub_entity =
     [ "Entity", "class_ogre_1_1v1_1_1_sub_entity.html#a614439ccac0344926adc4c0165d64060", null ],
     [ "SceneManager", "class_ogre_1_1v1_1_1_sub_entity.html#a284464b0561a6f2915f04b0245b987f0", null ],
     [ "mCustomParameter", "class_ogre_1_1v1_1_1_sub_entity.html#ab682cd8eac807d059840e776f247c73f", null ],
-    [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_sub_entity.html#a4af66c22373c90b388d2117ee904a92b", null ]
+    [ "mHlmsGlobalIndex", "class_ogre_1_1v1_1_1_sub_entity.html#a4af66c22373c90b388d2117ee904a92b", null ],
+    [ "mRenderableVisible", "class_ogre_1_1v1_1_1_sub_entity.html#ac511b8fdb7fc312f6d763fae3bbfa842", null ]
 ];
