@@ -132,7 +132,7 @@ namespace Ogre
                         (void)ptr;
 #endif
             // convert request to bytes
-            register size_type sz = count*sizeof( T );
+            size_type sz = count*sizeof( T );
             pointer p  = static_cast<pointer>(AllocPolicy::allocateBytes(sz));
             return p;
         }
