@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgrePVRTCCodec.h"
+
+#include "OgreDataStream.h"
 #include "OgreImage.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
