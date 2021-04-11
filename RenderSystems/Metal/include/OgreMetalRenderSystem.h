@@ -320,6 +320,10 @@ namespace Ogre
         virtual void updateCompositorManager( CompositorManager2 *compositorManager,
                                               SceneManagerEnumerator &sceneManagers,
                                               HlmsManager *hlmsManager );
+        virtual void compositorWorkspaceBegin( CompositorWorkspace *workspace,
+                                               const bool forceBeginFrame );
+        virtual void compositorWorkspaceUpdate( CompositorWorkspace *workspace );
+        virtual void compositorWorkspaceEnd( CompositorWorkspace *workspace, const bool forceEndFrame );
 
         MetalDevice* getActiveDevice(void)                      { return mActiveDevice; }
         MetalProgramFactory* getMetalProgramFactory(void)       { return mMetalProgramFactory; }

@@ -724,26 +724,29 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_endFrameOnce(void)
     {
-        //TODO: We shouldn't tidy up JUST the active device. But all of them.
-
-        cleanAutoParamsBuffers();
-
-        __block dispatch_semaphore_t blockSemaphore = mMainGpuSyncSemaphore;
-        [mActiveDevice->mCurrentCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer)
+        @autoreleasepool
         {
-            // GPU has completed rendering the frame and is done using the contents of any buffers
-            // previously encoded on the CPU for that frame. Signal the semaphore and allow the CPU
-            // to proceed and construct the next frame.
-            dispatch_semaphore_signal( blockSemaphore );
-        }];
+            //TODO: We shouldn't tidy up JUST the active device. But all of them.
 
-        mActiveDevice->commitAndNextCommandBuffer();
+            cleanAutoParamsBuffers();
 
-        mActiveRenderTarget = 0;
-        mActiveViewport = 0;
-        mActiveDevice->mFrameAborted = false;
-        mMainSemaphoreAlreadyWaited = false;
-        mBeginFrameOnceStarted = false;
+            __block dispatch_semaphore_t blockSemaphore = mMainGpuSyncSemaphore;
+            [mActiveDevice->mCurrentCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer)
+            {
+                // GPU has completed rendering the frame and is done using the contents of any buffers
+                // previously encoded on the CPU for that frame. Signal the semaphore and allow the CPU
+                // to proceed and construct the next frame.
+                dispatch_semaphore_signal( blockSemaphore );
+            }];
+
+            mActiveDevice->commitAndNextCommandBuffer();
+
+            mActiveRenderTarget = 0;
+            mActiveViewport = 0;
+            mActiveDevice->mFrameAborted = false;
+            mMainSemaphoreAlreadyWaited = false;
+            mBeginFrameOnceStarted = false;
+        }
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::cleanAutoParamsBuffers(void)
@@ -2296,6 +2299,32 @@ namespace Ogre
         @autoreleasepool
         {
             compositorManager->_updateImplementation( sceneManagers, hlmsManager );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::compositorWorkspaceBegin( CompositorWorkspace *workspace,
+                                                      const bool forceBeginFrame )
+    {
+        @autoreleasepool
+        {
+            RenderSystem::compositorWorkspaceBegin( workspace, forceBeginFrame );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::compositorWorkspaceUpdate( CompositorWorkspace *workspace )
+    {
+        @autoreleasepool
+        {
+            RenderSystem::compositorWorkspaceUpdate( workspace );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::compositorWorkspaceEnd( CompositorWorkspace *workspace,
+                                                    const bool forceEndFrame )
+    {
+        @autoreleasepool
+        {
+            RenderSystem::compositorWorkspaceEnd( workspace, forceEndFrame );
         }
     }
     //-------------------------------------------------------------------------

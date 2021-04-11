@@ -929,6 +929,14 @@ namespace Ogre
                                               SceneManagerEnumerator &sceneManagers,
                                               HlmsManager *hlmsManager );
 
+        /// See RenderSystem::updateCompositorManager
+        virtual void compositorWorkspaceBegin( CompositorWorkspace *workspace,
+                                               const bool forceBeginFrame );
+        /// See RenderSystem::updateCompositorManager
+        virtual void compositorWorkspaceUpdate( CompositorWorkspace *workspace );
+        /// See RenderSystem::updateCompositorManager
+        virtual void compositorWorkspaceEnd( CompositorWorkspace *workspace, const bool forceEndFrame );
+
         /**
         Sets the provided viewport as the active one for future
         rendering operations. This viewport is aware of it's own
