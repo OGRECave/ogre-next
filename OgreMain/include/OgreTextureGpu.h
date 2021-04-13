@@ -117,6 +117,8 @@ namespace Ogre
             /// e.g. load PFG_RGBA8_UNORM as PFG_RGBA8_UNORM_SRGB
             /// This flag does not affect RenderTextures, UAVs, or manually created textures.
             /// If you're manually creating sRGB textures, set PFG_RGBA8_UNORM_SRGB directly
+            ///
+            /// See TextureGpuManager::mIgnoreSRgbPreference
             PrefersLoadingFromFileAsSRGB = 1u << 7u,
             /// Indicates this texture contains a RenderWindow. In several APIs render windows
             /// have particular limitations:

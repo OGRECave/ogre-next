@@ -100,6 +100,7 @@ namespace Ogre
     #endif
         mDelayListenerCalls( false ),
         mIgnoreScheduledTasks( false ),
+        mIgnoreSRgbPreference( false ),
         mVaoManager( vaoManager ),
         mRenderSystem( renderSystem )
     {
@@ -390,6 +391,9 @@ namespace Ogre
                          "Only Type2D textures can use TextureFlags::AutomaticBatching.",
                          "TextureGpuManager::createTexture" );
         }
+
+        if( mIgnoreSRgbPreference )
+            textureFlags &= static_cast<uint32>( ~TextureFlags::PrefersLoadingFromFileAsSRGB );
 
         TextureGpu *retVal = createTextureImpl( pageOutStrategy, idName, textureFlags, initialType );
         retVal->setTexturePoolId( poolId );

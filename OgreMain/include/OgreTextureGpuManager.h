@@ -560,6 +560,38 @@ namespace Ogre
         bool                    mDelayListenerCalls;
         bool                    mIgnoreScheduledTasks;
 
+    public:
+        /** While true, calls to createTexture & createOrRetrieveTexture will ignore
+            and unset the TextureFlags::PrefersLoadingFromFileAsSRGB flag.
+
+            This is useful if user is not doing PBR, or working in its own
+            colour space manually handled.
+
+            Default value is false
+
+        @remarks
+            PUBLIC VARIABLE. This variable can be altered directly.
+            Changes are reflected immediately.
+
+            Changes will be reflected on new textures. Existing textures no
+            longer possess the information to know whether they were created
+            w/ PrefersLoadingFromFileAsSRGB
+
+            This value is not read nor write from the worker thread,
+            thus it is thread-safe.
+
+            Textures may still be loaded as SRGB if they explicitly request
+            SRGB e.g. `texture->setPixelFormat( PFG_RGBA8_UNORM_SRGB )` was
+            called or the texture is loaded from an OITD or DDS format
+            specifically asking for PFG_RGBA8_UNORM_SRGB.
+
+            What this flag controls is that if we're loading a regular texture
+            asking for PFG_RGBA8_UNORM like PNG (and other linear formats) then
+            should we honour PrefersLoadingFromFileAsSRGB flag or not.
+        */
+        bool mIgnoreSRgbPreference;
+
+    protected:
         VaoManager          *mVaoManager;
         RenderSystem        *mRenderSystem;
 
