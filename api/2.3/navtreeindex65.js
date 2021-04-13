@@ -1,5 +1,6 @@
 var NAVTREEINDEX65 =
 {
+"class_ogre_1_1_default_work_queue.html#abc3c6f7c29d30bb833a94c516560016c":[7,0,0,292,20],
 "class_ogre_1_1_default_work_queue.html#ac0573403767b65a85dc8b13279fc3375":[7,0,0,292,21],
 "class_ogre_1_1_default_work_queue.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,292,29],
 "class_ogre_1_1_default_work_queue.html#ac79ce136b644d7b44b55f4e6ec2542a2":[7,0,0,292,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX65 =
 "class_ogre_1_1_degree.html#aae5eef4a46d40d762e159610a9905c9f":[5,2,6,11,25],
 "class_ogre_1_1_degree.html#ace8f3be58aeb1dcb44fe9d9865fb47c6":[5,2,6,11,19],
 "class_ogre_1_1_degree.html#adb219a3126dceab35444e0d792108ce9":[5,2,6,11,15],
-"class_ogre_1_1_degree.html#af2441af959738661a1a2251eb16e54bb":[5,2,6,11,12],
-"class_ogre_1_1_degree.html#af39ef1bfdbea08127ca79334c7a921bd":[5,2,6,11,27]
+"class_ogre_1_1_degree.html#af2441af959738661a1a2251eb16e54bb":[5,2,6,11,12]
 };

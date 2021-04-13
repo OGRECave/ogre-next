@@ -94,5 +94,6 @@ var class_ogre_1_1_d3_d11_texture_gpu_manager =
     [ "shutdown", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a1188e251546ab3391ef646d60f2317d8", null ],
     [ "taskLoadToSysRamOrResident", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a0beb6964d2f52e28e852666257a30514", null ],
     [ "taskToUnloadOrDestroy", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a379578bf252f5fcf0c5168f0a88c2130", null ],
-    [ "waitForStreamingCompletion", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ]
+    [ "waitForStreamingCompletion", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ],
+    [ "mIgnoreSRgbPreference", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a1146a2b41f0f3f5d3b0b1bab1e74248d", null ]
 ];

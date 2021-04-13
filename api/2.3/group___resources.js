@@ -312,7 +312,8 @@ var group___resources =
       [ "shutdown", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a1188e251546ab3391ef646d60f2317d8", null ],
       [ "taskLoadToSysRamOrResident", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a0beb6964d2f52e28e852666257a30514", null ],
       [ "taskToUnloadOrDestroy", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a379578bf252f5fcf0c5168f0a88c2130", null ],
-      [ "waitForStreamingCompletion", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ]
+      [ "waitForStreamingCompletion", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ],
+      [ "mIgnoreSRgbPreference", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a1146a2b41f0f3f5d3b0b1bab1e74248d", null ]
     ] ],
     [ "DataStream", "class_ogre_1_1_data_stream.html", [
       [ "AccessMode", "class_ogre_1_1_data_stream.html#a81856582e643b4a560e6c3d3ad05e08c", [
@@ -1166,7 +1167,8 @@ var group___resources =
       [ "shutdown", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a1188e251546ab3391ef646d60f2317d8", null ],
       [ "taskLoadToSysRamOrResident", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a0beb6964d2f52e28e852666257a30514", null ],
       [ "taskToUnloadOrDestroy", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a379578bf252f5fcf0c5168f0a88c2130", null ],
-      [ "waitForStreamingCompletion", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ]
+      [ "waitForStreamingCompletion", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ],
+      [ "mIgnoreSRgbPreference", "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a1146a2b41f0f3f5d3b0b1bab1e74248d", null ]
     ] ],
     [ "GLES2HlmsPso", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html", [
       [ "blendFunc", "struct_ogre_1_1_g_l_e_s2_hlms_pso.html#afa7f9b13b57797c5af4cfe77fd5d05f0", null ],
@@ -3037,7 +3039,8 @@ var group___resources =
       [ "shutdown", "class_ogre_1_1_metal_texture_gpu_manager.html#a1188e251546ab3391ef646d60f2317d8", null ],
       [ "taskLoadToSysRamOrResident", "class_ogre_1_1_metal_texture_gpu_manager.html#a0beb6964d2f52e28e852666257a30514", null ],
       [ "taskToUnloadOrDestroy", "class_ogre_1_1_metal_texture_gpu_manager.html#a379578bf252f5fcf0c5168f0a88c2130", null ],
-      [ "waitForStreamingCompletion", "class_ogre_1_1_metal_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ]
+      [ "waitForStreamingCompletion", "class_ogre_1_1_metal_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ],
+      [ "mIgnoreSRgbPreference", "class_ogre_1_1_metal_texture_gpu_manager.html#a1146a2b41f0f3f5d3b0b1bab1e74248d", null ]
     ] ],
     [ "NULLTextureGpu", "class_ogre_1_1_n_u_l_l_texture_gpu.html", [
       [ "NULLTextureGpu", "class_ogre_1_1_n_u_l_l_texture_gpu.html#a64ee6018e73df7a1f8780e615edf03c3", null ],
@@ -3245,7 +3248,8 @@ var group___resources =
       [ "shutdown", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a1188e251546ab3391ef646d60f2317d8", null ],
       [ "taskLoadToSysRamOrResident", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a0beb6964d2f52e28e852666257a30514", null ],
       [ "taskToUnloadOrDestroy", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a379578bf252f5fcf0c5168f0a88c2130", null ],
-      [ "waitForStreamingCompletion", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ]
+      [ "waitForStreamingCompletion", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ],
+      [ "mIgnoreSRgbPreference", "class_ogre_1_1_n_u_l_l_texture_gpu_manager.html#a1146a2b41f0f3f5d3b0b1bab1e74248d", null ]
     ] ],
     [ "NULLTextureGpuRenderTarget", "class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html", [
       [ "NULLTextureGpuRenderTarget", "class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html#a8f380c216a848de1e3119744f57ff593", null ],
@@ -4551,7 +4555,8 @@ var group___resources =
       [ "shutdown", "class_ogre_1_1_texture_gpu_manager.html#a1188e251546ab3391ef646d60f2317d8", null ],
       [ "taskLoadToSysRamOrResident", "class_ogre_1_1_texture_gpu_manager.html#a0beb6964d2f52e28e852666257a30514", null ],
       [ "taskToUnloadOrDestroy", "class_ogre_1_1_texture_gpu_manager.html#a379578bf252f5fcf0c5168f0a88c2130", null ],
-      [ "waitForStreamingCompletion", "class_ogre_1_1_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ]
+      [ "waitForStreamingCompletion", "class_ogre_1_1_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ],
+      [ "mIgnoreSRgbPreference", "class_ogre_1_1_texture_gpu_manager.html#a1146a2b41f0f3f5d3b0b1bab1e74248d", null ]
     ] ],
     [ "TextureGpuManagerListener", "class_ogre_1_1_texture_gpu_manager_listener.html", [
       [ "Reason", "class_ogre_1_1_texture_gpu_manager_listener.html#afe11bd546cf7315f4526488e7078cc7d", [
@@ -5688,7 +5693,8 @@ var group___resources =
       [ "shutdown", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a1188e251546ab3391ef646d60f2317d8", null ],
       [ "taskLoadToSysRamOrResident", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a0beb6964d2f52e28e852666257a30514", null ],
       [ "taskToUnloadOrDestroy", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a379578bf252f5fcf0c5168f0a88c2130", null ],
-      [ "waitForStreamingCompletion", "class_ogre_1_1_vulkan_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ]
+      [ "waitForStreamingCompletion", "class_ogre_1_1_vulkan_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a", null ],
+      [ "mIgnoreSRgbPreference", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a1146a2b41f0f3f5d3b0b1bab1e74248d", null ]
     ] ],
     [ "VulkanTextureGpuRenderTarget", "class_ogre_1_1_vulkan_texture_gpu_render_target.html", [
       [ "VulkanTextureGpuRenderTarget", "class_ogre_1_1_vulkan_texture_gpu_render_target.html#a10627d70182315c22d8f26c5ab15e6f8", null ],

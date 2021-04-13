@@ -149,7 +149,8 @@ Enumerations</h2></td></tr>
 <p>useful for viewing a PFG_RGBA8_UNORM_SRGB as PFG_RGBA8_UNORM) </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a59b71e36a14465bd82595d6d467e1434aac3ff5c1bb3a3ef222a7eef0d83836ba"></a>PrefersLoadingFromFileAsSRGB&#160;</td><td class="fielddoc"><p>Prefer loading FROM FILES as sRGB when possible. </p>
-<p>e.g. load PFG_RGBA8_UNORM as PFG_RGBA8_UNORM_SRGB This flag does not affect RenderTextures, UAVs, or manually created textures. If you're manually creating sRGB textures, set PFG_RGBA8_UNORM_SRGB directly </p>
+<p>e.g. load PFG_RGBA8_UNORM as PFG_RGBA8_UNORM_SRGB This flag does not affect RenderTextures, UAVs, or manually created textures. If you're manually creating sRGB textures, set PFG_RGBA8_UNORM_SRGB directly</p>
+<p>See <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a1146a2b41f0f3f5d3b0b1bab1e74248d" title="While true, calls to createTexture &amp; createOrRetrieveTexture will ignore and unset the TextureFlags::...">TextureGpuManager::mIgnoreSRgbPreference</a> </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a59b71e36a14465bd82595d6d467e1434aeea1f933ce0dad9bdd94927f4c79c316"></a>RenderWindowSpecific&#160;</td><td class="fielddoc"><p>Indicates this texture contains a <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>. </p>
 <p>In several APIs render windows have particular limitations:</p><ul>

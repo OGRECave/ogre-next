@@ -89,6 +89,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_texture_gpu_manager.htm
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_ogre_1_1_texture_gpu_manager-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Ogre::TextureGpuManager Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___resources.html">Resources</a></div></div>  </div>
@@ -320,6 +321,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abcf4123dc9b7b5242acac4bc1d9eef1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a">waitForStreamingCompletion</a> (void)</td></tr>
 <tr class="memdesc:abcf4123dc9b7b5242acac4bc1d9eef1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocks main thread until all pending textures are fully loaded.  <a href="class_ogre_1_1_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a">More...</a><br /></td></tr>
 <tr class="separator:abcf4123dc9b7b5242acac4bc1d9eef1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a1146a2b41f0f3f5d3b0b1bab1e74248d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a1146a2b41f0f3f5d3b0b1bab1e74248d">mIgnoreSRgbPreference</a></td></tr>
+<tr class="memdesc:a1146a2b41f0f3f5d3b0b1bab1e74248d"><td class="mdescLeft">&#160;</td><td class="mdescRight">While true, calls to createTexture &amp; createOrRetrieveTexture will ignore and unset the <a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434aac3ff5c1bb3a3ef222a7eef0d83836ba" title="Prefer loading FROM FILES as sRGB when possible.">TextureFlags::PrefersLoadingFromFileAsSRGB</a> flag.  <a href="class_ogre_1_1_texture_gpu_manager.html#a1146a2b41f0f3f5d3b0b1bab1e74248d">More...</a><br /></td></tr>
+<tr class="separator:a1146a2b41f0f3f5d3b0b1bab1e74248d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class manages all textures (i.e. </p>
@@ -2772,6 +2779,30 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Blocks main thread until all pending textures are fully loaded. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a1146a2b41f0f3f5d3b0b1bab1e74248d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1146a2b41f0f3f5d3b0b1bab1e74248d">&#9670;&nbsp;</a></span>mIgnoreSRgbPreference</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::TextureGpuManager::mIgnoreSRgbPreference</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>While true, calls to createTexture &amp; createOrRetrieveTexture will ignore and unset the <a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434aac3ff5c1bb3a3ef222a7eef0d83836ba" title="Prefer loading FROM FILES as sRGB when possible.">TextureFlags::PrefersLoadingFromFileAsSRGB</a> flag. </p>
+<p>This is useful if user is not doing PBR, or working in its own colour space manually handled.</p>
+<p>Default value is false</p>
+<dl class="section remark"><dt>Remarks</dt><dd>PUBLIC VARIABLE. This variable can be altered directly. Changes are reflected immediately.</dd></dl>
+<p>Changes will be reflected on new textures. Existing textures no longer possess the information to know whether they were created w/ PrefersLoadingFromFileAsSRGB</p>
+<p>This value is not read nor write from the worker thread, thus it is thread-safe.</p>
+<p>Textures may still be loaded as SRGB if they explicitly request SRGB e.g. <code>texture-&gt;setPixelFormat( PFG_RGBA8_UNORM_SRGB )</code> was called or the texture is loaded from an OITD or DDS format specifically asking for PFG_RGBA8_UNORM_SRGB.</p>
+<p>What this flag controls is that if we're loading a regular texture asking for PFG_RGBA8_UNORM like PNG (and other linear formats) then should we honour PrefersLoadingFromFileAsSRGB flag or not. </p>
 
 </div>
 </div>

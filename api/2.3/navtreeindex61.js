@@ -1,5 +1,6 @@
 var NAVTREEINDEX61 =
 {
+"class_ogre_1_1_default_intersection_scene_query.html#a4be37baef81876985aa1071ad5acc6dd":[5,0,1,9,19],
 "class_ogre_1_1_default_intersection_scene_query.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,12,9,14],
 "class_ogre_1_1_default_intersection_scene_query.html#a595ea4c05da8aa987d3800e65d23355d":[5,0,1,9,14],
 "class_ogre_1_1_default_intersection_scene_query.html#a77bc999513d8b441f423b9fa3fe65424":[5,2,12,9,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX61 =
 "class_ogre_1_1_default_scene_manager.html#a0fec5de5b1af8423dbdae70fa1d18954":[5,2,12,13,169],
 "class_ogre_1_1_default_scene_manager.html#a11c832526246a71e73cd517bff928a64":[5,0,1,13,284],
 "class_ogre_1_1_default_scene_manager.html#a11c832526246a71e73cd517bff928a64":[5,2,12,13,284],
-"class_ogre_1_1_default_scene_manager.html#a1200037971723674d993871980e0516a":[5,0,1,13,64],
-"class_ogre_1_1_default_scene_manager.html#a1200037971723674d993871980e0516a":[5,2,12,13,64]
+"class_ogre_1_1_default_scene_manager.html#a1200037971723674d993871980e0516a":[5,0,1,13,64]
 };
