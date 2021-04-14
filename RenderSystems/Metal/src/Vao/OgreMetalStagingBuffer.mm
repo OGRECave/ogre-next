@@ -417,8 +417,9 @@ namespace Ogre
     void MetalStagingBuffer::_cancelDownload( size_t offset, size_t sizeBytes )
     {
         //If offset isn't multiple of 4, we were making it go forward in
-        //_asyncDownload. We need to backgrack it so regions stay contiguous.
-        StagingBuffer::_cancelDownload( offset & ~size_t(0x03), sizeBytes );
+        //_asyncDownload. We need to backtrack it so regions stay contiguous.
+        size_t delta = offset & 0x03;
+        StagingBuffer::_cancelDownload( offset - delta, alignToNextMultiple( delta + sizeBytes , 4u ) );
     }
     //-----------------------------------------------------------------------------------
     const void* MetalStagingBuffer::_mapForReadImpl( size_t offset, size_t sizeBytes )
