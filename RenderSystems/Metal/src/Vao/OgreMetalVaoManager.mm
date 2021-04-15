@@ -523,15 +523,7 @@ namespace Ogre
             if( vboFlag == CPU_INACCESSIBLE )
                 resourceOptions = MTLResourceStorageModePrivate;
             else
-            {
                 resourceOptions = MTLResourceCPUCacheModeWriteCombined;
-                if( vboFlag == CPU_ACCESSIBLE_DEFAULT )
-                    resourceOptions |= 0;
-                else if( vboFlag == CPU_ACCESSIBLE_PERSISTENT )
-                    resourceOptions |= MTLResourceStorageModeShared;
-                else if( vboFlag == CPU_ACCESSIBLE_PERSISTENT_COHERENT )
-                    resourceOptions |= MTLResourceCPUCacheModeDefaultCache;
-            }
 
             newVbo.vboName = [mDevice->mDevice newBufferWithLength:poolSize options:resourceOptions];
 
