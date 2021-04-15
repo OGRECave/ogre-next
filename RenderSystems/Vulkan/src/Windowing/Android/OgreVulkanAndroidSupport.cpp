@@ -41,7 +41,6 @@ namespace Ogre
         VulkanSupport::addConfig( renderSystem );
 
         ConfigOption optVideoMode;
-        ConfigOption optColourDepth;
         ConfigOption optDisplayFrequency;
         ConfigOption optVSync;
         ConfigOption optVSyncInterval;
@@ -119,7 +118,6 @@ namespace Ogre
         optSRGB.immutable = false;
 
         mOptions[optVideoMode.name] = optVideoMode;
-        mOptions[optColourDepth.name] = optColourDepth;
         mOptions[optDisplayFrequency.name] = optDisplayFrequency;
         mOptions[optVSync.name] = optVSync;
         mOptions[optVSyncInterval.name] = optVSyncInterval;
