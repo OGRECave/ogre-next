@@ -671,8 +671,14 @@ namespace Ogre
         return mDefinition->mCompositorManager->getFrameCount();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::_beginUpdate( bool forceBeginFrame )
+    void CompositorWorkspace::_beginUpdate( bool forceBeginFrame, const bool bInsideAutoreleasePool )
     {
+        if( !bInsideAutoreleasePool )
+        {
+            mRenderSys->compositorWorkspaceBegin( this, forceBeginFrame );
+            return;
+        }
+
         //We need to do this so that D3D9 (and D3D11?) knows which device
         //is active now, so that _beginFrame calls go to the right device.
         TextureGpu *finalTarget = getFinalTarget();
@@ -687,8 +693,14 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::_endUpdate( bool forceEndFrame )
+    void CompositorWorkspace::_endUpdate( bool forceEndFrame, const bool bInsideAutoreleasePool )
     {
+        if( !bInsideAutoreleasePool )
+        {
+            mRenderSys->compositorWorkspaceEnd( this, forceEndFrame );
+            return;
+        }
+
         //We need to do this so that D3D9 (and D3D11?) knows which device
         //is active now, so that _endFrame calls go to the right device.
         TextureGpu *finalTarget = getFinalTarget();
@@ -703,8 +715,13 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::_update(void)
+    void CompositorWorkspace::_update( const bool bInsideAutoreleasePool )
     {
+        if( !bInsideAutoreleasePool )
+        {
+            mRenderSys->compositorWorkspaceUpdate( this );
+            return;
+        }
         {
             CompositorWorkspaceListenerVec::const_iterator itor = mListeners.begin();
             CompositorWorkspaceListenerVec::const_iterator end  = mListeners.end();

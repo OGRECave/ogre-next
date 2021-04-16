@@ -313,6 +313,10 @@ namespace Ogre
         virtual void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities* caps,
                                                              Window *primary );
         virtual void updateCompositorManager( CompositorManager2 *compositorManager );
+        virtual void compositorWorkspaceBegin( CompositorWorkspace *workspace,
+                                               const bool forceBeginFrame );
+        virtual void compositorWorkspaceUpdate( CompositorWorkspace *workspace );
+        virtual void compositorWorkspaceEnd( CompositorWorkspace *workspace, const bool forceEndFrame );
 
         virtual void flushCommands(void);
 
