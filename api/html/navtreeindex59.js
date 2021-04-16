@@ -1,5 +1,11 @@
 var NAVTREEINDEX59 =
 {
+"class_ogre_1_1_decal.html#aef2a2634077942a2939514a6c1114d32":[7,0,0,278,61],
+"class_ogre_1_1_decal.html#af19ca18abcd6ca7bceb2f55a814e1c1b":[7,0,0,278,55],
+"class_ogre_1_1_decal.html#af6788ed3697ab34c561c0afcf39ac8c3":[7,0,0,278,46],
+"class_ogre_1_1_decal.html#af9bcb5b7ca641eb1e75f993b95cd9882":[7,0,0,278,97],
+"class_ogre_1_1_decal.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,278,73],
+"class_ogre_1_1_decal.html#afb58624fb567bb790c55d8a716b472da":[7,0,0,278,0],
 "class_ogre_1_1_decal.html#afdf18128b8f4f8be71566ce2d5d5a30a":[7,0,0,278,93],
 "class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7d":[7,0,0,278,1],
 "class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7da058c0eecb9f3f188fccc4d0018bf337b":[7,0,0,278,1,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX59 =
 "class_ogre_1_1_default_ray_scene_query.html#a07bab17df4892cfcd7a7b73edc2dee2d":[5,0,1,11,1],
 "class_ogre_1_1_default_ray_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3a":[5,2,12,11,0],
 "class_ogre_1_1_default_ray_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3a":[5,0,1,11,0],
-"class_ogre_1_1_default_ray_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa018493b6c87271e0c8ba014f058cffd3":[5,2,12,11,0,2],
-"class_ogre_1_1_default_ray_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa018493b6c87271e0c8ba014f058cffd3":[5,0,1,11,0,2],
-"class_ogre_1_1_default_ray_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa667bbec7031e58ab244f9efc32056f38":[5,2,12,11,0,1],
-"class_ogre_1_1_default_ray_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa667bbec7031e58ab244f9efc32056f38":[5,0,1,11,0,1],
-"class_ogre_1_1_default_ray_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa6ed287fab168d451beb369009f0fd03b":[5,2,12,11,0,0],
-"class_ogre_1_1_default_ray_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa6ed287fab168d451beb369009f0fd03b":[5,0,1,11,0,0],
-"class_ogre_1_1_default_ray_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aad498944c8c6b81d737c3ceee86881e8d":[5,2,12,11,0,4]
+"class_ogre_1_1_default_ray_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa018493b6c87271e0c8ba014f058cffd3":[5,2,12,11,0,2]
 };
