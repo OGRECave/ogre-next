@@ -1,5 +1,6 @@
 var NAVTREEINDEX283 =
 {
+"struct_ogre_1_1_volume_1_1_chunk_parameters.html#afe30999e8cc71a1f48d87d68bf43059d":[7,0,0,4,3,14],
 "struct_ogre_1_1_volume_1_1_chunk_request.html":[7,0,0,4,4],
 "struct_ogre_1_1_volume_1_1_chunk_request.html#a150c915275ff0b09d54e8f97afcbaffd":[7,0,0,4,4,6],
 "struct_ogre_1_1_volume_1_1_chunk_request.html#a194b6f47569db10150aa2726d1ef0dd3":[7,0,0,4,4,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX283 =
 "struct_ogre_1_1is_pod_like_3_01bool_01_4.html":[7,0,0,571],
 "struct_ogre_1_1is_pod_like_3_01bool_01_4.html#abee82e4ddd0de50c57085f40e4afc61a":[7,0,0,571,0],
 "struct_ogre_1_1is_pod_like_3_01char_01_4.html":[7,0,0,572],
-"struct_ogre_1_1is_pod_like_3_01char_01_4.html#a26cec9c44fa431197e653bb059b42c5c":[7,0,0,572,0],
-"struct_ogre_1_1is_pod_like_3_01double_01_4.html":[7,0,0,573]
+"struct_ogre_1_1is_pod_like_3_01char_01_4.html#a26cec9c44fa431197e653bb059b42c5c":[7,0,0,572,0]
 };

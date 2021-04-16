@@ -216,6 +216,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5eeb59973f6dd8dde0dcbcadf7ad143e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37a1b52a7dc03675ec00c6ec25b7a346"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a37a1b52a7dc03675ec00c6ec25b7a346">notifyTextureChanged</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">TextureGpuListener::Reason</a> reason, void *extraData)</td></tr>
 <tr class="separator:a37a1b52a7dc03675ec00c6ec25b7a346"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c185844111ae052e932cdf8af8b91bd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a1c185844111ae052e932cdf8af8b91bd">setAlphaTest</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction, bool shadowCasterOnly=false, bool useAlphaFromTextures=true)</td></tr>
+<tr class="separator:a1c185844111ae052e932cdf8af8b91bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add11930a49857ecceb800bd224180641"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#add11930a49857ecceb800bd224180641">setAlphaTestThreshold</a> (float threshold)</td></tr>
 <tr class="separator:add11930a49857ecceb800bd224180641"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad48f1f9b97e5a7264b6c534478b8c49c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#ad48f1f9b97e5a7264b6c534478b8c49c">setBackgroundDiffuse</a> (const <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a> &amp;bgDiffuse)</td></tr>
@@ -1362,6 +1364,48 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a1c185844111ae052e932cdf8af8b91bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c185844111ae052e932cdf8af8b91bd">&#9670;&nbsp;</a></span>setAlphaTest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::HlmsPbsDatablock::setAlphaTest </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a>&#160;</td>
+          <td class="paramname"><em>compareFunction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>shadowCasterOnly</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>useAlphaFromTextures</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="add11930a49857ecceb800bd224180641"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#add11930a49857ecceb800bd224180641">&#9670;&nbsp;</a></span>setAlphaTestThreshold()</h2>
 
@@ -1385,7 +1429,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_datablock.html#a62bcf1b8e5f3db233bdca43e6e925a58" title="Sets the alpha test to the given compare function.">HlmsDatablock::setAlphaTest</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d" title="Sets the alpha test to the given compare function.">HlmsDatablock::setAlphaTest</a> </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>Alpha testing works on the alpha channel of the diffuse texture. If there is no diffuse texture, the first diffuse detail map after applying the blend weights (texture + params) is used. If there are no diffuse nor detail-diffuse maps, the alpha test is compared against the value 1.0 </dd></dl>
 
 </div>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX148 =
 {
+"class_ogre_1_1_parallax_corrected_cubemap_auto.html#a910d9331477442fc2b206b65e873366b":[7,0,0,791,18],
 "class_ogre_1_1_parallax_corrected_cubemap_auto.html#a947106ab4b5ba03957782d7298588334":[7,0,0,791,0],
 "class_ogre_1_1_parallax_corrected_cubemap_auto.html#a97e192821f896ab3ee77dc684d6f1b71":[7,0,0,791,6],
 "class_ogre_1_1_parallax_corrected_cubemap_auto.html#a9908ac819ec7a3ffdec34f8a4217fdb1":[7,0,0,791,24],
@@ -248,6 +249,5 @@ var NAVTREEINDEX148 =
 "class_ogre_1_1_particle_emitter.html#a8d8c2e2e39187abc715d911cfa802780":[5,2,1,34,82],
 "class_ogre_1_1_particle_emitter.html#a8f9062c067ecb49776d4ce73cf41990d":[5,2,1,34,88],
 "class_ogre_1_1_particle_emitter.html#a8f94512cf66c84a243f3cd6383bb9c68":[5,2,1,34,92],
-"class_ogre_1_1_particle_emitter.html#a9194f48e306289c7f3c7f77374febb01":[5,2,1,34,71],
-"class_ogre_1_1_particle_emitter.html#a93027e6a8be2be918488edf6c88217c0":[5,2,1,34,93]
+"class_ogre_1_1_particle_emitter.html#a9194f48e306289c7f3c7f77374febb01":[5,2,1,34,71]
 };

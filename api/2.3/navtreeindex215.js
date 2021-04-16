@@ -1,5 +1,6 @@
 var NAVTREEINDEX215 =
 {
+"class_ogre_1_1v1_1_1_d3_d11_hardware_buffer_manager.html#a837b8d79883d0776fde7a0ccc3a4c905":[7,0,0,3,24,11],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_buffer_manager.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,3,24,26],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_buffer_manager.html#a95108cb8cebac0fae72bc4439fdd6e65":[7,0,0,3,24,9],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_buffer_manager.html#a9bc8ca31484db834bfe682a660fca9e3":[7,0,0,3,24,1],
@@ -128,8 +129,8 @@ var NAVTREEINDEX215 =
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#a5caebd4b5db7696029eb412351d7767f":[7,0,0,3,27,13],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#a6020e9ad492a9de9770e7978135dbfcd":[7,0,0,3,27,25],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#a6776e40af767f8db7d428f35d9b3055c":[7,0,0,3,27,23],
-"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#a6778f242b88650651a2a7bd7e4c97201":[7,0,0,3,27,32],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#a6778f242b88650651a2a7bd7e4c97201":[7,0,0,3,27,33],
+"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#a6778f242b88650651a2a7bd7e4c97201":[7,0,0,3,27,32],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#a6ed986689e41c247108c1c4e8cca354a":[7,0,0,3,27,49],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#a7549369160db335ac558d0493107fecb":[7,0,0,3,27,34],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#a787c4f5ca31d533e63f089f6d35a5e8e":[7,0,0,3,27,19],
@@ -248,6 +249,5 @@ var NAVTREEINDEX215 =
 "class_ogre_1_1v1_1_1_d3_d11_hardware_vertex_buffer.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,3,29,28],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_vertex_buffer.html#ab936eaeba6717363fa06f461fce6eef6":[7,0,0,3,29,7],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_vertex_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cf":[7,0,0,3,29,0],
-"class_ogre_1_1v1_1_1_d3_d11_hardware_vertex_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfa364f94b757045261468e68fe09c36cca":[7,0,0,3,29,0,1],
-"class_ogre_1_1v1_1_1_d3_d11_hardware_vertex_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfa688a3812b47db689eebdbfefca66df87":[7,0,0,3,29,0,2]
+"class_ogre_1_1v1_1_1_d3_d11_hardware_vertex_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfa364f94b757045261468e68fe09c36cca":[7,0,0,3,29,0,1]
 };

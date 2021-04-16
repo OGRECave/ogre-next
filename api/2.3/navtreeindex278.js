@@ -1,5 +1,6 @@
 var NAVTREEINDEX278 =
 {
+"struct_ogre_1_1_pbs_mobile_shader_creation_data.html#af3d1b46c02430cfdc1b8a7e9ae3da457":[5,0,0,19,10],
 "struct_ogre_1_1_pbs_property.html":[5,0,0,20],
 "struct_ogre_1_1_pbs_property.html#a00f576b6f47ae07086163aa5a77de09d":[5,0,0,20,76],
 "struct_ogre_1_1_pbs_property.html#a02f118e193a8dd750602bd6b7e2fe912":[5,0,0,20,61],
@@ -248,6 +249,5 @@ var NAVTREEINDEX278 =
 "struct_ogre_1_1_ray_scene_query_result_entry.html":[5,0,1,35],
 "struct_ogre_1_1_ray_scene_query_result_entry.html":[5,2,12,35],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a17af5a6b49fcd71ca726daf1dd67af98":[5,2,12,35,0],
-"struct_ogre_1_1_ray_scene_query_result_entry.html#a17af5a6b49fcd71ca726daf1dd67af98":[5,0,1,35,0],
-"struct_ogre_1_1_ray_scene_query_result_entry.html#a58ba184768924a39ab195dcf96472f65":[5,0,1,35,2]
+"struct_ogre_1_1_ray_scene_query_result_entry.html#a17af5a6b49fcd71ca726daf1dd67af98":[5,0,1,35,0]
 };

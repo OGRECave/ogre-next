@@ -1,5 +1,6 @@
 var NAVTREEINDEX189 =
 {
+"class_ogre_1_1_tex_buffer_packed.html#a69984ccd67bf7c801cc33dd20780b581":[7,0,0,1049,21],
 "class_ogre_1_1_tex_buffer_packed.html#a73e02f6b2fa2c16340c1a9359926b481":[7,0,0,1049,41],
 "class_ogre_1_1_tex_buffer_packed.html#a7874daf37b4d5f6f8263b49f071db473":[7,0,0,1049,12],
 "class_ogre_1_1_tex_buffer_packed.html#a7a1becf7083da99d2384294042c34918":[7,0,0,1049,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX189 =
 "class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,1,47,1,6],
 "class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#ab1dbb1ede8eae777def1ff57c185f8bc":[5,2,1,47,1,23],
 "class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,1,47,1,10],
-"class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#ab94a5e618410cf0289cbe2ff35460189":[5,2,1,47,1,13],
-"class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,1,47,1,8]
+"class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#ab94a5e618410cf0289cbe2ff35460189":[5,2,1,47,1,13]
 };
