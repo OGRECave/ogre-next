@@ -112,20 +112,20 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7162fc71f8f1904cbb58a2fbc83a7bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9efe884d6ffa745df688a74b94ba950e"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#a9efe884d6ffa745df688a74b94ba950e">~CompositorWorkspace</a> ()</td></tr>
 <tr class="separator:a9efe884d6ffa745df688a74b94ba950e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b63bd69edc1f718ac2a2f32c0d9c34d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#a1b63bd69edc1f718ac2a2f32c0d9c34d">_beginUpdate</a> (bool forceBeginFrame)</td></tr>
-<tr class="memdesc:a1b63bd69edc1f718ac2a2f32c0d9c34d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call before _update unless the final render target is not a render window.  <a href="class_ogre_1_1_compositor_workspace.html#a1b63bd69edc1f718ac2a2f32c0d9c34d">More...</a><br /></td></tr>
-<tr class="separator:a1b63bd69edc1f718ac2a2f32c0d9c34d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a415cbf8806d2fa75625f877f0e9201f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#a415cbf8806d2fa75625f877f0e9201f8">_endUpdate</a> (bool forceEndFrame)</td></tr>
-<tr class="memdesc:a415cbf8806d2fa75625f877f0e9201f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call after _update unless the final render target is not a render window.  <a href="class_ogre_1_1_compositor_workspace.html#a415cbf8806d2fa75625f877f0e9201f8">More...</a><br /></td></tr>
-<tr class="separator:a415cbf8806d2fa75625f877f0e9201f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa19c3645497eabc3f35c8ae059ba8d1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#aa19c3645497eabc3f35c8ae059ba8d1d">_beginUpdate</a> (bool forceBeginFrame, const bool bInsideAutoreleasePool=false)</td></tr>
+<tr class="memdesc:aa19c3645497eabc3f35c8ae059ba8d1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call before _update unless the final render target is not a render window.  <a href="class_ogre_1_1_compositor_workspace.html#aa19c3645497eabc3f35c8ae059ba8d1d">More...</a><br /></td></tr>
+<tr class="separator:aa19c3645497eabc3f35c8ae059ba8d1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa60ec7be6f4fc116f4a85835e3e7a54b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#aa60ec7be6f4fc116f4a85835e3e7a54b">_endUpdate</a> (bool forceEndFrame, const bool bInsideAutoreleasePool=false)</td></tr>
+<tr class="memdesc:aa60ec7be6f4fc116f4a85835e3e7a54b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call after _update unless the final render target is not a render window.  <a href="class_ogre_1_1_compositor_workspace.html#aa60ec7be6f4fc116f4a85835e3e7a54b">More...</a><br /></td></tr>
+<tr class="separator:aa60ec7be6f4fc116f4a85835e3e7a54b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6156676fc15140b9d9cf965867ee273"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#ad6156676fc15140b9d9cf965867ee273">_notifyBarriersDirty</a> (void)</td></tr>
 <tr class="separator:ad6156676fc15140b9d9cf965867ee273"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9744b1fefa3ab8bd54034f99ad7a0bff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#a9744b1fefa3ab8bd54034f99ad7a0bff">_swapFinalTarget</a> (<a class="el" href="struct_ogre_1_1vector.html">vector</a>&lt; <a class="el" href="class_ogre_1_1_render_target.html">RenderTarget</a> * &gt;::type &amp;swappedTargets)</td></tr>
 <tr class="memdesc:a9744b1fefa3ab8bd54034f99ad7a0bff"><td class="mdescLeft">&#160;</td><td class="mdescRight">In the case of RenderWindows, swaps/copies/flips the front with the back buffer.  <a href="class_ogre_1_1_compositor_workspace.html#a9744b1fefa3ab8bd54034f99ad7a0bff">More...</a><br /></td></tr>
 <tr class="separator:a9744b1fefa3ab8bd54034f99ad7a0bff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d45330147c75cb6febce00a5435d791"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#a4d45330147c75cb6febce00a5435d791">_update</a> (void)</td></tr>
-<tr class="memdesc:a4d45330147c75cb6febce00a5435d791"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the workspace's nodes.  <a href="class_ogre_1_1_compositor_workspace.html#a4d45330147c75cb6febce00a5435d791">More...</a><br /></td></tr>
-<tr class="separator:a4d45330147c75cb6febce00a5435d791"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a253b829e8dfc2e0c906ef8d736c7f880"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#a253b829e8dfc2e0c906ef8d736c7f880">_update</a> (const bool bInsideAutoreleasePool=false)</td></tr>
+<tr class="memdesc:a253b829e8dfc2e0c906ef8d736c7f880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the workspace's nodes.  <a href="class_ogre_1_1_compositor_workspace.html#a253b829e8dfc2e0c906ef8d736c7f880">More...</a><br /></td></tr>
+<tr class="separator:a253b829e8dfc2e0c906ef8d736c7f880"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e8910b0bfda05b52cb3b4ac51f07e74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#a1e8910b0bfda05b52cb3b4ac51f07e74">_validateFinalTarget</a> (void)</td></tr>
 <tr class="memdesc:a1e8910b0bfda05b52cb3b4ac51f07e74"><td class="mdescLeft">&#160;</td><td class="mdescRight">For compatibility with D3D9, forces a device lost check on the <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>, so that BeginScene doesn't fail.  <a href="class_ogre_1_1_compositor_workspace.html#a1e8910b0bfda05b52cb3b4ac51f07e74">More...</a><br /></td></tr>
 <tr class="separator:a1e8910b0bfda05b52cb3b4ac51f07e74"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -238,7 +238,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A compositor workspace is the main interface to render into an RT, be it a <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> or an RTT (Render <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> Target). </p>
-<p>Whereas <a class="el" href="namespace_ogre.html">Ogre</a> 1.x needed you to set a <a class="el" href="class_ogre_1_1_viewport.html" title="An abstraction of a viewport, i.e.">Viewport</a> in order to render to an RTT or RW and then call renderTarget-&gt;update, now you need to set a workspace definition instead and call workspace-&gt;<a class="el" href="class_ogre_1_1_compositor_workspace.html#a4d45330147c75cb6febce00a5435d791" title="Updates the workspace&#39;s nodes.">_update()</a>. </p><dl class="section user"><dt></dt><dd><b>Compositors are not just a "fancy effects" system anymore, they tell <a class="el" href="namespace_ogre.html">Ogre</a> how you want to render the scene. You can't render to an RT without setting a compositor!</b> </dd></dl>
+<p>Whereas <a class="el" href="namespace_ogre.html">Ogre</a> 1.x needed you to set a <a class="el" href="class_ogre_1_1_viewport.html" title="An abstraction of a viewport, i.e.">Viewport</a> in order to render to an RTT or RW and then call renderTarget-&gt;update, now you need to set a workspace definition instead and call workspace-&gt;<a class="el" href="class_ogre_1_1_compositor_workspace.html#a253b829e8dfc2e0c906ef8d736c7f880" title="Updates the workspace&#39;s nodes.">_update()</a>. </p><dl class="section user"><dt></dt><dd><b>Compositors are not just a "fancy effects" system anymore, they tell <a class="el" href="namespace_ogre.html">Ogre</a> how you want to render the scene. You can't render to an RT without setting a compositor!</b> </dd></dl>
 <dl class="section user"><dt></dt><dd>A workspace may be instantiated multiple times for different RTs, or using different cameras (i.e. multiple monitors, stereo 3D, etc), while they all will share the same definition. A workspace definition (</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_workspace_def.html" title="@See CompositorWorkspace.">CompositorWorkspaceDef</a>) contains all the information needed by this <a class="el" href="class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re...">CompositorWorkspace</a> to instantiate and know which nodes to create and how to connect them. @See <a class="el" href="class_ogre_1_1_compositor_node_def.html" title="Compositor nodes are the core subject of compositing.">CompositorNodeDef</a> A workspace may define global textures that are visible to all of its <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> instances. </dd></dl>
 <dl class="section user"><dt></dt><dd>If you want to have (e.g.) two monitors rendering the same but with different compositor effects, you will also have to create two different definitions (CompositorWorkspaceDefs) </dd></dl>
@@ -369,8 +369,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1b63bd69edc1f718ac2a2f32c0d9c34d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b63bd69edc1f718ac2a2f32c0d9c34d">&#9670;&nbsp;</a></span>_beginUpdate()</h2>
+<a id="aa19c3645497eabc3f35c8ae059ba8d1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa19c3645497eabc3f35c8ae059ba8d1d">&#9670;&nbsp;</a></span>_beginUpdate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -379,8 +379,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">void Ogre::CompositorWorkspace::_beginUpdate </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forceBeginFrame</em></td><td>)</td>
+          <td class="paramname"><em>forceBeginFrame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>bInsideAutoreleasePool</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -389,14 +399,16 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">forceBeginFrame</td><td>Forces a beginFrame call to the D3D9 API, even if the final render target is not a <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> (not recommended). To avoid forcing extra begin/end frame pairs, update your manual workspaces inside @CompositorWorkspaceListener::workspacePreUpdate (performance optimization) </td></tr>
+    <tr><td class="paramname">bInsideAutoreleasePool</td><td>If manually updating the workspace, leave this to default.</td></tr>
   </table>
   </dd>
 </dl>
+<p>Relevant only in Metal: If we're not inside an autorelease pool, we automatically wrap the call into one. Otherwise we will leak </p>
 
 </div>
 </div>
-<a id="a415cbf8806d2fa75625f877f0e9201f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a415cbf8806d2fa75625f877f0e9201f8">&#9670;&nbsp;</a></span>_endUpdate()</h2>
+<a id="aa60ec7be6f4fc116f4a85835e3e7a54b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa60ec7be6f4fc116f4a85835e3e7a54b">&#9670;&nbsp;</a></span>_endUpdate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -405,8 +417,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">void Ogre::CompositorWorkspace::_endUpdate </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forceEndFrame</em></td><td>)</td>
+          <td class="paramname"><em>forceEndFrame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>bInsideAutoreleasePool</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -415,9 +437,11 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">forceEndFrame</td><td>@See _beginUpdate !!!WARNING!!! Forcing an end frame can cause API issues w/ D3D9 if <a class="el" href="namespace_ogre.html">Ogre</a> had already issued a begin frame automatically (i.e. if you're calling from inside a <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> or <a class="el" href="class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re...">CompositorWorkspace</a> listener). These API issues may not manifest on all HW/Driver combinations, making it hard to detect (if you're on D3D, use the Debug Runtimes) </td></tr>
+    <tr><td class="paramname">bInsideAutoreleasePool</td><td>If manually updating the workspace, leave this to default.</td></tr>
   </table>
   </dd>
 </dl>
+<p>Relevant only in Metal: If we're not inside an autorelease pool, we automatically wrap the call into one. Otherwise we will leak </p>
 
 </div>
 </div>
@@ -468,8 +492,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4d45330147c75cb6febce00a5435d791"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d45330147c75cb6febce00a5435d791">&#9670;&nbsp;</a></span>_update()</h2>
+<a id="a253b829e8dfc2e0c906ef8d736c7f880"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a253b829e8dfc2e0c906ef8d736c7f880">&#9670;&nbsp;</a></span>_update()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -477,8 +501,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::CompositorWorkspace::_update </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>bInsideAutoreleasePool</em> = <code>false</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -486,6 +510,13 @@ Public Member Functions</h2></td></tr>
 
 <p>Updates the workspace's nodes. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>If you're calling this manually, it may be possible you first need to call <a class="el" href="class_ogre_1_1_render_system.html#ada60763d5b8ef9cfba1c77ecfe3e4188" title="Signifies the beginning of the main frame.">RenderSystem::_beginFrameOnce</a> if it wasn't called by OGRE already. You might also need to enclose the _update calls with _beginUpdate( true ) and _endUpdate( true ) if you're having issues. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bInsideAutoreleasePool</td><td>If manually updating the workspace, leave this to default.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Relevant only in Metal: If we're not inside an autorelease pool, we automatically wrap the call into one. Otherwise we will leak </p>
 
 </div>
 </div>

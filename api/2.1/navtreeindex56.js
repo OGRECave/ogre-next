@@ -1,5 +1,11 @@
 var NAVTREEINDEX56 =
 {
+"class_ogre_1_1_default_scene_manager.html#aa9ec4470160bb92356ae647f70fa9add":[5,2,12,11,26],
+"class_ogre_1_1_default_scene_manager.html#aa9ec4470160bb92356ae647f70fa9add":[5,0,1,11,26],
+"class_ogre_1_1_default_scene_manager.html#aaa36e203e1ba3eeab880e4c51a51efae":[5,2,12,11,22],
+"class_ogre_1_1_default_scene_manager.html#aaa36e203e1ba3eeab880e4c51a51efae":[5,0,1,11,22],
+"class_ogre_1_1_default_scene_manager.html#aaa7164acf31d5275397f2ea4f6ea3de5":[5,0,1,11,188],
+"class_ogre_1_1_default_scene_manager.html#aaa7164acf31d5275397f2ea4f6ea3de5":[5,2,12,11,188],
 "class_ogre_1_1_default_scene_manager.html#aaacb4d0155d88f559516027c8d7c2c67":[5,2,12,11,81],
 "class_ogre_1_1_default_scene_manager.html#aaacb4d0155d88f559516027c8d7c2c67":[5,0,1,11,81],
 "class_ogre_1_1_default_scene_manager.html#aad732f23cbf6537f5919d347932fa542":[5,2,12,11,25],
@@ -243,11 +249,5 @@ var NAVTREEINDEX56 =
 "class_ogre_1_1_default_shadow_camera_setup.html#a4be37baef81876985aa1071ad5acc6dd":[5,0,1,13,14],
 "class_ogre_1_1_default_shadow_camera_setup.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,12,13,14],
 "class_ogre_1_1_default_shadow_camera_setup.html#a595ea4c05da8aa987d3800e65d23355d":[5,0,1,13,9],
-"class_ogre_1_1_default_shadow_camera_setup.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,12,13,9],
-"class_ogre_1_1_default_shadow_camera_setup.html#a5e701a58a1dbd0a22810faec87e9a59a":[5,0,1,13,4],
-"class_ogre_1_1_default_shadow_camera_setup.html#a5e701a58a1dbd0a22810faec87e9a59a":[5,2,12,13,4],
-"class_ogre_1_1_default_shadow_camera_setup.html#a5fca5ac3db0ec963d468a050a597e81b":[5,0,1,13,2],
-"class_ogre_1_1_default_shadow_camera_setup.html#a5fca5ac3db0ec963d468a050a597e81b":[5,2,12,13,2],
-"class_ogre_1_1_default_shadow_camera_setup.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,0,1,13,5],
-"class_ogre_1_1_default_shadow_camera_setup.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,12,13,5]
+"class_ogre_1_1_default_shadow_camera_setup.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,12,13,9]
 };
