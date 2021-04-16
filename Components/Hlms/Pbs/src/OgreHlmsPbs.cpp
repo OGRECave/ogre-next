@@ -841,6 +841,7 @@ namespace Ogre
         if( datablock->mUseAlphaFromTextures &&
             ( datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
               datablock->mBlendblock[0]->isAutoTransparent() ||
+              datablock->mBlendblock[0]->mAlphaToCoverageEnabled ||
               datablock->mTransparencyMode == HlmsPbsDatablock::Refractive ) &&
             ( getProperty( PbsProperty::DiffuseMap ) ||  //
               getProperty( PbsProperty::DetailMapsDiffuse ) ) )
