@@ -33,7 +33,7 @@ var class_ogre_1_1_hlms_datablock =
     [ "operator new[]", "class_ogre_1_1_hlms_datablock.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_hlms_datablock.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "saveTextures", "class_ogre_1_1_hlms_datablock.html#a3f0826a189eec659051ce6513eafaa57", null ],
-    [ "setAlphaTest", "class_ogre_1_1_hlms_datablock.html#a62bcf1b8e5f3db233bdca43e6e925a58", null ],
+    [ "setAlphaTest", "class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d", null ],
     [ "setAlphaTestThreshold", "class_ogre_1_1_hlms_datablock.html#a1a2d38b259d670575af205798067c612", null ],
     [ "setBlendblock", "class_ogre_1_1_hlms_datablock.html#ae98b240d749de133737090afd9912df8", null ],
     [ "setBlendblock", "class_ogre_1_1_hlms_datablock.html#af1eceea7ae2d0610b0b2f8a0ec025015", null ],

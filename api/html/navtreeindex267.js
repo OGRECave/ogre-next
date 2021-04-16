@@ -1,5 +1,6 @@
 var NAVTREEINDEX267 =
 {
+"struct_ogre_1_1_stencil_params.html#a3171a61f29e6563edb2dc9e86326fe3c":[5,2,2,116,7],
 "struct_ogre_1_1_stencil_params.html#a3df6d17bced2516e94b129742485bb06":[5,2,2,116,4],
 "struct_ogre_1_1_stencil_params.html#a49d4a3b268abccd7a6ac9bc284581d0a":[5,2,2,116,1],
 "struct_ogre_1_1_stencil_params.html#a7d95668d775245a469fd5f660e1ebb8a":[5,2,2,116,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX267 =
 "struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry.html#ae6479fe6bf6fcaaec2eabbcb166baab9":[5,2,11,113,2,6],
 "struct_ogre_1_1_texture_pool.html":[5,2,11,116],
 "struct_ogre_1_1_texture_pool.html#a12bc237f86b8626243426104b714b23a":[5,2,11,116,6],
-"struct_ogre_1_1_texture_pool.html#a175ce03b600f641fb9b2b1f6864aaf7a":[5,2,11,116,1],
-"struct_ogre_1_1_texture_pool.html#a18f94e620a9a2320cefe92bfa8e7f02b":[5,2,11,116,0]
+"struct_ogre_1_1_texture_pool.html#a175ce03b600f641fb9b2b1f6864aaf7a":[5,2,11,116,1]
 };

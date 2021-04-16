@@ -213,9 +213,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3f0826a189eec659051ce6513eafaa57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76dcfbf1c4510d7bc5568fa2b6bc15e7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_mobile_datablock.html#a76dcfbf1c4510d7bc5568fa2b6bc15e7">setAlphaTest</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction)</td></tr>
 <tr class="separator:a76dcfbf1c4510d7bc5568fa2b6bc15e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62bcf1b8e5f3db233bdca43e6e925a58"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a62bcf1b8e5f3db233bdca43e6e925a58">setAlphaTest</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction, bool shadowCasterOnly=false)</td></tr>
-<tr class="memdesc:a62bcf1b8e5f3db233bdca43e6e925a58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha test to the given compare function.  <a href="class_ogre_1_1_hlms_datablock.html#a62bcf1b8e5f3db233bdca43e6e925a58">More...</a><br /></td></tr>
-<tr class="separator:a62bcf1b8e5f3db233bdca43e6e925a58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c5bc6488a0f67fa0838f41352172b4d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d">setAlphaTest</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction, bool shadowCasterOnly=false, bool useAlphaFromTextures=true)</td></tr>
+<tr class="memdesc:a4c5bc6488a0f67fa0838f41352172b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha test to the given compare function.  <a href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d">More...</a><br /></td></tr>
+<tr class="separator:a4c5bc6488a0f67fa0838f41352172b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3d3bf7a46ec8f8321e149089c50782f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_mobile_datablock.html#ad3d3bf7a46ec8f8321e149089c50782f">setAlphaTestThreshold</a> (float threshold)</td></tr>
 <tr class="memdesc:ad3d3bf7a46ec8f8321e149089c50782f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alpha test's threshold.  <a href="class_ogre_1_1_hlms_pbs_mobile_datablock.html#ad3d3bf7a46ec8f8321e149089c50782f">More...</a><br /></td></tr>
 <tr class="separator:ad3d3bf7a46ec8f8321e149089c50782f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1659,13 +1659,13 @@ template&lt;class Alloc &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_datablock.html#a62bcf1b8e5f3db233bdca43e6e925a58" title="Sets the alpha test to the given compare function.">HlmsDatablock::setAlphaTest</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d" title="Sets the alpha test to the given compare function.">HlmsDatablock::setAlphaTest</a> </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>Alpha testing works on the alpha channel of the diffuse texture. If there is no diffuse texture, the first diffuse detail map after applying the blend weights (texture + params) is used. If there are no diffuse nor detail-diffuse maps, the alpha test is compared against the value 1.0 </dd></dl>
 
 </div>
 </div>
-<a id="a62bcf1b8e5f3db233bdca43e6e925a58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62bcf1b8e5f3db233bdca43e6e925a58">&#9670;&nbsp;</a></span>setAlphaTest() <span class="overload">[2/2]</span></h2>
+<a id="a4c5bc6488a0f67fa0838f41352172b4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c5bc6488a0f67fa0838f41352172b4d">&#9670;&nbsp;</a></span>setAlphaTest() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1683,7 +1683,13 @@ template&lt;class Alloc &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>shadowCasterOnly</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>shadowCasterOnly</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>useAlphaFromTextures</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1704,6 +1710,8 @@ template&lt;class Alloc &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">compareFunction</td><td>Compare function to use. Default is CMPF_ALWAYS_PASS, which means disabled. Note: CMPF_ALWAYS_FAIL is not supported. Set a negative threshold to workaround this issue. </td></tr>
+    <tr><td class="paramname">shadowCasterOnly</td><td>When true, only the caster should use alpha testing. Useful if you want alpha blending (i.e. transparency) while rendering normally, but want semi-transparent shadows. </td></tr>
+    <tr><td class="paramname">useAlphaFromTextures</td><td>Whether you want the diffuse texture's alpha to influence the alpha test Most likely you want this to be true, unless you're customizing the shader and have special use for alpha testing </td></tr>
   </table>
   </dd>
 </dl>
