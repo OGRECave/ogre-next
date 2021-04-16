@@ -568,6 +568,9 @@ namespace Ogre
 
         virtual bool hasCustomShadowMacroblock(void) const;
 
+        virtual void setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly = false,
+                                   bool useAlphaFromTextures = true );
+
         /** @see HlmsDatablock::setAlphaTest
         @remarks
             Alpha testing works on the alpha channel of the diffuse texture.

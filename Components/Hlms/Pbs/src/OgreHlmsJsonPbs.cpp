@@ -766,7 +766,8 @@ namespace Ogre
         if( !pbsDatablock->getReceiveShadows() )
             outString += ",\n\t\t\t\"receive_shadows\" : false";
 
-        if( pbsDatablock->getTransparencyMode() != HlmsPbsDatablock::None )
+        if( pbsDatablock->getTransparencyMode() != HlmsPbsDatablock::None ||
+            pbsDatablock->getUseAlphaFromTextures() )
         {
             outString += ",\n\t\t\t\"transparency\" :\n\t\t\t{";
             outString += "\n\t\t\t\t\"value\" : ";

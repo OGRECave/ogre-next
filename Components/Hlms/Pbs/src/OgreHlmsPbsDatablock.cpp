@@ -821,6 +821,17 @@ namespace Ogre
         return HlmsDatablock::hasCustomShadowMacroblock();
     }
     //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly,
+                                         bool useAlphaFromTextures )
+    {
+        HlmsDatablock::setAlphaTest( compareFunction, shadowCasterOnly, useAlphaFromTextures );
+        if( useAlphaFromTextures != mUseAlphaFromTextures )
+        {
+            mUseAlphaFromTextures = useAlphaFromTextures;
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setAlphaTestThreshold( float threshold )
     {
         HlmsDatablock::setAlphaTestThreshold( threshold );
