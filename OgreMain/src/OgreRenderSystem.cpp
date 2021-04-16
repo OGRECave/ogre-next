@@ -46,6 +46,7 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreWindow.h"
 #include "Compositor/OgreCompositorManager2.h"
+#include "Compositor/OgreCompositorWorkspace.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
 #include "OgreProfiler.h"
@@ -1268,6 +1269,22 @@ namespace Ogre {
     void RenderSystem::updateCompositorManager( CompositorManager2 *compositorManager )
     {
         compositorManager->_updateImplementation();
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::compositorWorkspaceBegin( CompositorWorkspace *workspace,
+                                                 const bool forceBeginFrame )
+    {
+        workspace->_beginUpdate( forceBeginFrame, true );
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::compositorWorkspaceUpdate( CompositorWorkspace *workspace )
+    {
+        workspace->_update( true );
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::compositorWorkspaceEnd( CompositorWorkspace *workspace, const bool forceEndFrame )
+    {
+        workspace->_endUpdate( forceEndFrame, true );
     }
     //---------------------------------------------------------------------
     const String& RenderSystem::_getDefaultViewportMaterialScheme( void ) const

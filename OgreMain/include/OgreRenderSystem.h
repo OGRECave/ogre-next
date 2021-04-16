@@ -968,6 +968,14 @@ namespace Ogre
         /// compositorManager->_updateImplementation.
         virtual void updateCompositorManager( CompositorManager2 *compositorManager );
 
+        /// See RenderSystem::updateCompositorManager
+        virtual void compositorWorkspaceBegin( CompositorWorkspace *workspace,
+                                               const bool forceBeginFrame );
+        /// See RenderSystem::updateCompositorManager
+        virtual void compositorWorkspaceUpdate( CompositorWorkspace *workspace );
+        /// See RenderSystem::updateCompositorManager
+        virtual void compositorWorkspaceEnd( CompositorWorkspace *workspace, const bool forceEndFrame );
+
         /// @See HlmsSamplerblock. This function MUST be called after _setTexture, not before.
         /// Otherwise not all APIs may see the change.
         virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock ) = 0;

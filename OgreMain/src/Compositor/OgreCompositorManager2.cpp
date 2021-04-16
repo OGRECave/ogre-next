@@ -690,14 +690,14 @@ namespace Ogre
             {
                 if( workspace->isValid() )
                 {
-                    workspace->_beginUpdate( false );
+                    workspace->_beginUpdate( false, true );
                 }
                 else
                 {
                     //TODO: We may end up recreating this every frame for invalid workspaces
                     workspace->recreateAllNodes();
                     if( workspace->isValid() )
-                        workspace->_beginUpdate( false );
+                        workspace->_beginUpdate( false, true );
                 }
             }
             ++itor;
@@ -721,7 +721,7 @@ namespace Ogre
         {
             CompositorWorkspace *workspace = (*itor);
             if( workspace->getEnabled() && workspace->isValid() )
-                    workspace->_update();
+                    workspace->_update( true );
             ++itor;
         }
 
@@ -731,7 +731,7 @@ namespace Ogre
         {
             CompositorWorkspace *workspace = (*itor);
             if( workspace->getEnabled() && workspace->isValid() )
-                    workspace->_endUpdate( false );
+                    workspace->_endUpdate( false, true );
             ++itor;
         }
 
