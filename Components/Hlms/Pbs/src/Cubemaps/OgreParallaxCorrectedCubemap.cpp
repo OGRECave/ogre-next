@@ -75,7 +75,8 @@ namespace Ogre
     ParallaxCorrectedCubemap::ParallaxCorrectedCubemap( IdType id, Root *root,
                                                         SceneManager *sceneManager,
                                                         const CompositorWorkspaceDef *probeWorkspcDef,
-                                                        uint8 reservedRqId, uint32 proxyVisibilityMask ) :
+                                                        uint8 reservedRqId, uint32 proxyVisibilityMask,
+                                                        uint32 proxyQueryMask ) :
         ParallaxCorrectedCubemapBase( id, root, sceneManager, probeWorkspcDef, false ),
         mNumCollectedProbes( 0 ),
         mStagingBuffer( 0 ),
@@ -91,6 +92,7 @@ namespace Ogre
         mSamplerblockPoint( 0 ),
         mCurrentMip( 0 ),
         mProxyVisibilityMask( proxyVisibilityMask ),
+        mProxyQueryMask( proxyQueryMask ),
         mReservedRqId( reservedRqId )
     {
         memset( mProbeNDFs, 0, sizeof(mProbeNDFs) );
@@ -228,6 +230,7 @@ namespace Ogre
             mProxyNodes[i] = mSceneManager->getRootSceneNode()->createChildSceneNode();
             mProxyItems[i]->setRenderQueueGroup( mReservedRqId );
             mProxyItems[i]->setVisibilityFlags( mProxyVisibilityMask );
+            mProxyItems[i]->setQueryFlags( mProxyQueryMask );
             mProxyItems[i]->setCastShadows( false );
             mProxyNodes[i]->attachObject( mProxyItems[i] );
 

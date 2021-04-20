@@ -83,6 +83,7 @@ namespace Ogre
         HlmsSamplerblock const          *mSamplerblockPoint;
         float                           mCurrentMip;
         uint32                          mProxyVisibilityMask;
+        uint32                          mProxyQueryMask;
         uint8                           mReservedRqId;
         MeshPtr                         mProxyMesh;
         Item                            *mProxyItems[OGRE_MAX_CUBE_PROBES];
@@ -137,8 +138,8 @@ namespace Ogre
 
     public:
         ParallaxCorrectedCubemap( IdType id, Root *root, SceneManager *sceneManager,
-                                  const CompositorWorkspaceDef *probeWorkspaceDef,
-                                  uint8 reservedRqId, uint32 proxyVisibilityMask );
+                                  const CompositorWorkspaceDef *probeWorkspaceDef, uint8 reservedRqId,
+                                  uint32 proxyVisibilityMask, uint32 proxyQueryMask = 0 );
         ~ParallaxCorrectedCubemap();
 
         void _releaseManualHardwareResources();
@@ -219,6 +220,8 @@ namespace Ogre
         /// Returns the visibility mask you told us you reserved for storing our internal objects.
         /// Do not attempt to render the objects that match in that Rq ID & visibility mask.
         uint32 getProxyReservedVisibilityMask(void) const   { return mProxyVisibilityMask; }
+        /// Returns the query mask you told us you reserved for storing our internal objects.
+        uint32 getProxyReservedQueryMask( void ) const      { return mProxyQueryMask; }
 
         Item * const * getProxyItems(void) const            { return mProxyItems; }
         SceneNode * const * getProxySceneNodes(void) const  { return mProxyNodes; }
