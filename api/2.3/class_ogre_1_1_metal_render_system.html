@@ -368,6 +368,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4466743bd4fd60d253a2762a5cd165ee"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#a4466743bd4fd60d253a2762a5cd165ee">clearFrameBuffer</a> (<a class="el" href="class_ogre_1_1_render_pass_descriptor.html">RenderPassDescriptor</a> *renderPassDesc, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *anyTarget, <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> mipLevel)</td></tr>
 <tr class="memdesc:a4466743bd4fd60d253a2762a5cd165ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Immediately clears the whole frame buffer on the selected <a class="el" href="class_ogre_1_1_render_pass_descriptor.html">RenderPassDescriptor</a>.  <a href="class_ogre_1_1_metal_render_system.html#a4466743bd4fd60d253a2762a5cd165ee">More...</a><br /></td></tr>
 <tr class="separator:a4466743bd4fd60d253a2762a5cd165ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a23bb9ca0afe50fd1d42eed2581eea8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#a3a23bb9ca0afe50fd1d42eed2581eea8">compositorWorkspaceBegin</a> (<a class="el" href="class_ogre_1_1_compositor_workspace.html">CompositorWorkspace</a> *workspace, const bool forceBeginFrame)</td></tr>
+<tr class="memdesc:a3a23bb9ca0afe50fd1d42eed2581eea8"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_render_system.html#a41328026d8be0e7143402a914f707cf9" title="This gives the renderer a chance to perform the compositor update in a special way.">RenderSystem::updateCompositorManager</a>.  <a href="class_ogre_1_1_metal_render_system.html#a3a23bb9ca0afe50fd1d42eed2581eea8">More...</a><br /></td></tr>
+<tr class="separator:a3a23bb9ca0afe50fd1d42eed2581eea8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a8b10dfa276dc696195e4a15f91c45d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#a6a8b10dfa276dc696195e4a15f91c45d">compositorWorkspaceEnd</a> (<a class="el" href="class_ogre_1_1_compositor_workspace.html">CompositorWorkspace</a> *workspace, const bool forceEndFrame)</td></tr>
+<tr class="memdesc:a6a8b10dfa276dc696195e4a15f91c45d"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_render_system.html#a41328026d8be0e7143402a914f707cf9" title="This gives the renderer a chance to perform the compositor update in a special way.">RenderSystem::updateCompositorManager</a>.  <a href="class_ogre_1_1_metal_render_system.html#a6a8b10dfa276dc696195e4a15f91c45d">More...</a><br /></td></tr>
+<tr class="separator:a6a8b10dfa276dc696195e4a15f91c45d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9591290075d80ee636f0abc2aa2dab7d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#a9591290075d80ee636f0abc2aa2dab7d">compositorWorkspaceUpdate</a> (<a class="el" href="class_ogre_1_1_compositor_workspace.html">CompositorWorkspace</a> *workspace)</td></tr>
+<tr class="memdesc:a9591290075d80ee636f0abc2aa2dab7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_render_system.html#a41328026d8be0e7143402a914f707cf9" title="This gives the renderer a chance to perform the compositor update in a special way.">RenderSystem::updateCompositorManager</a>.  <a href="class_ogre_1_1_metal_render_system.html#a9591290075d80ee636f0abc2aa2dab7d">More...</a><br /></td></tr>
+<tr class="separator:a9591290075d80ee636f0abc2aa2dab7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80d543b61b1152b0dd0049961be4798e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a80d543b61b1152b0dd0049961be4798e">convertColourValue</a> (const <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a> &amp;colour, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> *pDest)</td></tr>
 <tr class="memdesc:a80d543b61b1152b0dd0049961be4798e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates a packed data version of the passed in <a class="el" href="class_ogre_1_1_colour_value.html" title="Class representing colour.">ColourValue</a> suitable for use as with this <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a>.  <a href="class_ogre_1_1_render_system.html#a80d543b61b1152b0dd0049961be4798e">More...</a><br /></td></tr>
 <tr class="separator:a80d543b61b1152b0dd0049961be4798e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -4373,6 +4382,116 @@ Static Public Member Functions</h2></td></tr>
 </ol>
 
 <p>Implements <a class="el" href="class_ogre_1_1_render_system.html#a80605199eceb6f34f01230242d1f8c41">Ogre::RenderSystem</a>.</p>
+
+</div>
+</div>
+<a id="a3a23bb9ca0afe50fd1d42eed2581eea8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a23bb9ca0afe50fd1d42eed2581eea8">&#9670;&nbsp;</a></span>compositorWorkspaceBegin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::MetalRenderSystem::compositorWorkspaceBegin </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_compositor_workspace.html">CompositorWorkspace</a> *&#160;</td>
+          <td class="paramname"><em>workspace</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>forceBeginFrame</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="class_ogre_1_1_render_system.html#a41328026d8be0e7143402a914f707cf9" title="This gives the renderer a chance to perform the compositor update in a special way.">RenderSystem::updateCompositorManager</a>. </p>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#a90d567191f24a30cb806ab0a146bf8b2">Ogre::RenderSystem</a>.</p>
+
+</div>
+</div>
+<a id="a6a8b10dfa276dc696195e4a15f91c45d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a8b10dfa276dc696195e4a15f91c45d">&#9670;&nbsp;</a></span>compositorWorkspaceEnd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::MetalRenderSystem::compositorWorkspaceEnd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_compositor_workspace.html">CompositorWorkspace</a> *&#160;</td>
+          <td class="paramname"><em>workspace</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>forceEndFrame</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="class_ogre_1_1_render_system.html#a41328026d8be0e7143402a914f707cf9" title="This gives the renderer a chance to perform the compositor update in a special way.">RenderSystem::updateCompositorManager</a>. </p>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#ab732bb02d12b702817772ccf4973a47f">Ogre::RenderSystem</a>.</p>
+
+</div>
+</div>
+<a id="a9591290075d80ee636f0abc2aa2dab7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9591290075d80ee636f0abc2aa2dab7d">&#9670;&nbsp;</a></span>compositorWorkspaceUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::MetalRenderSystem::compositorWorkspaceUpdate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_compositor_workspace.html">CompositorWorkspace</a> *&#160;</td>
+          <td class="paramname"><em>workspace</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="class_ogre_1_1_render_system.html#a41328026d8be0e7143402a914f707cf9" title="This gives the renderer a chance to perform the compositor update in a special way.">RenderSystem::updateCompositorManager</a>. </p>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_render_system.html#a2d2d776006ee7a9fa8fae1ac14265177">Ogre::RenderSystem</a>.</p>
 
 </div>
 </div>

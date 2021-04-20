@@ -1,5 +1,11 @@
 var NAVTREEINDEX61 =
 {
+"class_ogre_1_1_default_intersection_scene_query.html#a3eadff3663a1c862a6de073041157bc0":[5,2,12,9,25],
+"class_ogre_1_1_default_intersection_scene_query.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,12,9,16],
+"class_ogre_1_1_default_intersection_scene_query.html#a421b197ca3a38da17e2eb1531a645fa2":[5,0,1,9,16],
+"class_ogre_1_1_default_intersection_scene_query.html#a467a4c2459e8bad4fb14eba9f9d8f567":[5,2,12,9,2],
+"class_ogre_1_1_default_intersection_scene_query.html#a467a4c2459e8bad4fb14eba9f9d8f567":[5,0,1,9,2],
+"class_ogre_1_1_default_intersection_scene_query.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,12,9,19],
 "class_ogre_1_1_default_intersection_scene_query.html#a4be37baef81876985aa1071ad5acc6dd":[5,0,1,9,19],
 "class_ogre_1_1_default_intersection_scene_query.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,12,9,14],
 "class_ogre_1_1_default_intersection_scene_query.html#a595ea4c05da8aa987d3800e65d23355d":[5,0,1,9,14],
@@ -243,11 +249,5 @@ var NAVTREEINDEX61 =
 "class_ogre_1_1_default_scene_manager.html#a0da39851ae801a1a561a2dc8a269532b":[5,2,12,13,212],
 "class_ogre_1_1_default_scene_manager.html#a0dfe820c569ee6b74419af8ee43deda0":[5,0,1,13,223],
 "class_ogre_1_1_default_scene_manager.html#a0dfe820c569ee6b74419af8ee43deda0":[5,2,12,13,223],
-"class_ogre_1_1_default_scene_manager.html#a0e593d05e2f892b8fc3bfca917a75fef":[5,0,1,13,265],
-"class_ogre_1_1_default_scene_manager.html#a0e593d05e2f892b8fc3bfca917a75fef":[5,2,12,13,265],
-"class_ogre_1_1_default_scene_manager.html#a0fec5de5b1af8423dbdae70fa1d18954":[5,0,1,13,169],
-"class_ogre_1_1_default_scene_manager.html#a0fec5de5b1af8423dbdae70fa1d18954":[5,2,12,13,169],
-"class_ogre_1_1_default_scene_manager.html#a11c832526246a71e73cd517bff928a64":[5,0,1,13,284],
-"class_ogre_1_1_default_scene_manager.html#a11c832526246a71e73cd517bff928a64":[5,2,12,13,284],
-"class_ogre_1_1_default_scene_manager.html#a1200037971723674d993871980e0516a":[5,0,1,13,64]
+"class_ogre_1_1_default_scene_manager.html#a0e593d05e2f892b8fc3bfca917a75fef":[5,0,1,13,265]
 };

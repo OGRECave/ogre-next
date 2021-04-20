@@ -223,17 +223,15 @@ var NAVTREEINDEX37 =
 "class_ogre_1_1_compositor_workspace.html#a0ae22596b5bd2a3faf2958ab3d109d1f":[5,2,1,27,46],
 "class_ogre_1_1_compositor_workspace.html#a13b3bf2f9e2857fdada030ea09ece9b5":[5,2,1,27,12],
 "class_ogre_1_1_compositor_workspace.html#a177e48ef34f53b62e540b5a343277c78":[5,2,1,27,33],
-"class_ogre_1_1_compositor_workspace.html#a1b63bd69edc1f718ac2a2f32c0d9c34d":[5,2,1,27,2],
 "class_ogre_1_1_compositor_workspace.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,1,27,37],
 "class_ogre_1_1_compositor_workspace.html#a1e8910b0bfda05b52cb3b4ac51f07e74":[5,2,1,27,7],
 "class_ogre_1_1_compositor_workspace.html#a22adb426ddf56d2a392eaf8ed8ffb635":[5,2,1,27,19],
 "class_ogre_1_1_compositor_workspace.html#a22b27dcc2d6aa2dcd9a046f5d9514ca4":[5,2,1,27,51],
+"class_ogre_1_1_compositor_workspace.html#a253b829e8dfc2e0c906ef8d736c7f880":[5,2,1,27,6],
 "class_ogre_1_1_compositor_workspace.html#a38f47ee7a45c556e25c9ff14618fa13f":[5,2,1,27,34],
-"class_ogre_1_1_compositor_workspace.html#a415cbf8806d2fa75625f877f0e9201f8":[5,2,1,27,3],
 "class_ogre_1_1_compositor_workspace.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,1,27,41],
 "class_ogre_1_1_compositor_workspace.html#a49af3ea3fa59121dff4db0b3f2d576b5":[5,2,1,27,0],
 "class_ogre_1_1_compositor_workspace.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,1,27,44],
-"class_ogre_1_1_compositor_workspace.html#a4d45330147c75cb6febce00a5435d791":[5,2,1,27,6],
 "class_ogre_1_1_compositor_workspace.html#a5517cef92912309be4e23ec36f564d8e":[5,2,1,27,11],
 "class_ogre_1_1_compositor_workspace.html#a57e0523432c6e5133ff4fc251111a60e":[5,2,1,27,45],
 "class_ogre_1_1_compositor_workspace.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,1,27,39],
@@ -249,5 +247,7 @@ var NAVTREEINDEX37 =
 "class_ogre_1_1_compositor_workspace.html#a9313de607fe610e76c99c1b94d2c9767":[5,2,1,27,21],
 "class_ogre_1_1_compositor_workspace.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,1,27,38],
 "class_ogre_1_1_compositor_workspace.html#a9efe884d6ffa745df688a74b94ba950e":[5,2,1,27,1],
-"class_ogre_1_1_compositor_workspace.html#aa4cbcc3ff70190a4a26dc6ae55cd8ebb":[5,2,1,27,53]
+"class_ogre_1_1_compositor_workspace.html#aa19c3645497eabc3f35c8ae059ba8d1d":[5,2,1,27,2],
+"class_ogre_1_1_compositor_workspace.html#aa4cbcc3ff70190a4a26dc6ae55cd8ebb":[5,2,1,27,53],
+"class_ogre_1_1_compositor_workspace.html#aa60ec7be6f4fc116f4a85835e3e7a54b":[5,2,1,27,3]
 };

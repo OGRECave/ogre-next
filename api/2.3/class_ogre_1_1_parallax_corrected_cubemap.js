@@ -1,6 +1,6 @@
 var class_ogre_1_1_parallax_corrected_cubemap =
 [
-    [ "ParallaxCorrectedCubemap", "class_ogre_1_1_parallax_corrected_cubemap.html#ae6185ace5d93eb545d12f211d20e571c", null ],
+    [ "ParallaxCorrectedCubemap", "class_ogre_1_1_parallax_corrected_cubemap.html#a70c8d5951431b36c444c44971fb47d5e", null ],
     [ "~ParallaxCorrectedCubemap", "class_ogre_1_1_parallax_corrected_cubemap.html#adeb2dd07dfb9f1aeffaa2e00e9d12228", null ],
     [ "_acquireTextureSlot", "class_ogre_1_1_parallax_corrected_cubemap.html#a5a207e407d5404d39da2f1c8f3212d93", null ],
     [ "_addManuallyActiveProbe", "class_ogre_1_1_parallax_corrected_cubemap.html#a571e841d8894f6f0eb8616943469fe10", null ],
@@ -40,6 +40,7 @@ var class_ogre_1_1_parallax_corrected_cubemap =
     [ "getNumCollectedProbes", "class_ogre_1_1_parallax_corrected_cubemap.html#a15d61a26e15d4e8092748780eb048c7d", null ],
     [ "getProbes", "class_ogre_1_1_parallax_corrected_cubemap.html#adf88f3a4c19f20c9e1223c84e49e5d2a", null ],
     [ "getProxyItems", "class_ogre_1_1_parallax_corrected_cubemap.html#a4cda67d1614309352586f8f40ed68f3d", null ],
+    [ "getProxyReservedQueryMask", "class_ogre_1_1_parallax_corrected_cubemap.html#aa4fd05f81002050f9f0bd61363b218f0", null ],
     [ "getProxyReservedRenderQueueId", "class_ogre_1_1_parallax_corrected_cubemap.html#a474719c1c5820468db3f9830c6960659", null ],
     [ "getProxyReservedVisibilityMask", "class_ogre_1_1_parallax_corrected_cubemap.html#a5b7ab4a5f5be0a2b650903f48a11a697", null ],
     [ "getProxySceneNodes", "class_ogre_1_1_parallax_corrected_cubemap.html#ac9bd8d642f3cab2cb185dc9322115161", null ],
