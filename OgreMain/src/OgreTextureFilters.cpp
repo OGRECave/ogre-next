@@ -193,9 +193,11 @@ namespace TextureFilter
 
         if( mNeedsMipmaps && texture->getNumMipmaps() <= 1u )
         {
-            texture->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( texture->getWidth(),
-                                                                            texture->getHeight(),
-                                                                            texture->getDepth() ) );
+            uint8 numMipmaps = PixelFormatGpuUtils::getMaxMipmapCount( texture->getWidth(),
+                                                                       texture->getHeight(),
+                                                                       texture->getDepth() );
+            mNeedsMipmaps &= numMipmaps > 1;
+            texture->setNumMipmaps( numMipmaps );
         }
     }
     //-----------------------------------------------------------------------------------
