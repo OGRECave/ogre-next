@@ -1154,7 +1154,7 @@ var files_dup =
     [ "OgreHlmsPbsMobileDatablock.h", "_ogre_hlms_pbs_mobile_datablock_8h.html", null ],
     [ "OgreHlmsPbsMobilePrerequisites.h", "_ogre_hlms_pbs_mobile_prerequisites_8h.html", "_ogre_hlms_pbs_mobile_prerequisites_8h" ],
     [ "OgreHlmsPbsPrerequisites.h", "_ogre_hlms_pbs_prerequisites_8h.html", "_ogre_hlms_pbs_prerequisites_8h" ],
-    [ "OgreHlmsPso.h", "_ogre_hlms_pso_8h.html", "_ogre_hlms_pso_8h" ],
+    [ "OgreHlmsPso.h", "_ogre_hlms_pso_8h.html", null ],
     [ "OgreHlmsSamplerblock.h", "_ogre_hlms_samplerblock_8h.html", "_ogre_hlms_samplerblock_8h" ],
     [ "OgreHlmsTextureBaseClass.h", "_ogre_hlms_texture_base_class_8h.html", null ],
     [ "OgreHlmsTextureManager.h", "_ogre_hlms_texture_manager_8h.html", [
