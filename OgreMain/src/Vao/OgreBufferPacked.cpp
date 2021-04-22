@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "Vao/OgreVaoManager.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
+#include "OgreSharedPtr.h"
 
 namespace Ogre
 {

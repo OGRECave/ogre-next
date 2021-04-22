@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
+#include "OgreException.h"
 #include "OgreStagingTexture.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "Vao/OgreVaoManager.h"

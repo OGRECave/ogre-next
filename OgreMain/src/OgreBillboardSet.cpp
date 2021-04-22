@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "OgreSphere.h"
 #include "OgreRoot.h"
 #include "OgreRenderSystem.h"
+#include "OgreRenderOperation.h"
 #include "OgreException.h"
 #include "OgreSceneNode.h"
 #include "OgreHlms.h"
