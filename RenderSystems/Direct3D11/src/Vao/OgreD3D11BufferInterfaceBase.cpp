@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include "OgreException.h"
 #include "Vao/OgreD3D11BufferInterfaceBase.h"
 #include "Vao/OgreD3D11VaoManager.h"
 #include "OgreD3D11Device.h"

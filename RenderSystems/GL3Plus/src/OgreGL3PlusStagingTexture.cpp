@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreGL3PlusVaoManager.h"
 
+#include "OgreException.h"
 #include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre

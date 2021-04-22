@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "OgreHardwareBuffer.h"
 #include "OgreSharedPtr.h"
 #include "OgreColourValue.h"
-#include "OgreHlmsPso.h"
+#include "OgreCommon.h"
 #include "Vao/OgreVertexBufferPacked.h"
 
 #include "ogrestd/list.h"

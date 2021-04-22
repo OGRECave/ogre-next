@@ -35,9 +35,11 @@ THE SOFTWARE.
 #include "OgreVertexBoneAssignment.h"
 #include "OgreAnimation.h"
 #include "OgreAnimationTrack.h"
-#include "OgreHeaderPrefix.h"
 #include "OgreSharedPtr.h"
 
+#include "ogrestd/unordered_map.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre {
 

@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11VaoManager.h"
 
 #include "Vao/OgreStagingBuffer.h"
+#include "OgreException.h"
 
 #include "OgreD3D11Device.h"
 

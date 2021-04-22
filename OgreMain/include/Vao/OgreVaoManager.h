@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreVertexBufferPacked.h"
 #include "Vao/OgreIndexBufferPacked.h"
-#include "OgreRenderOperation.h"
+#include "OgrePixelFormatGpu.h"
 
 #include "ogrestd/unordered_set.h"
 

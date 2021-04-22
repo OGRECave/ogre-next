@@ -33,6 +33,9 @@ THE SOFTWARE.
 #include "OgreIteratorWrappers.h"
 #include "OgreAnimationTrack.h"
 #include "OgreAnimationState.h"
+
+#include "ogrestd/set.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {
