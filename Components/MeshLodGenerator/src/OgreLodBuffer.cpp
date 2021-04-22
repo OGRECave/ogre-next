@@ -133,6 +133,7 @@ namespace Ogre
             const v1::SubMesh* ogresubmesh = mesh->getSubMesh(i);
             LodInputBuffer::Submesh& outsubmesh = submesh[i];
             outsubmesh.indexBuffer.fillBuffer(ogresubmesh->indexData[VpNormal]);
+            outsubmesh.operationType = ogresubmesh->operationType;
             outsubmesh.useSharedVertexBuffer = ogresubmesh->useSharedVertices;
             if (!outsubmesh.useSharedVertexBuffer)
             {
@@ -145,4 +146,22 @@ namespace Ogre
             }
         }
     }
+
+    void LodInputBuffer::clear()
+    {
+        unsigned short submeshCount = ushort(submesh.size());
+        for (unsigned short i = 0; i < submeshCount; i++)
+        {
+            LodInputBuffer::Submesh& lodsubmesh = submesh[i];
+            lodsubmesh.indexBuffer.indexBuffer.reset();
+            lodsubmesh.vertexBuffer.vertexBuffer.reset();
+            lodsubmesh.vertexBuffer.vertexNormalBuffer.reset();
+        }
+        
+        sharedVertexBuffer.vertexBuffer.reset();
+        sharedVertexBuffer.vertexNormalBuffer.reset();
+
+        submesh.clear();
+    }
+
 }

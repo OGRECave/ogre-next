@@ -33,6 +33,15 @@
 
 namespace Ogre
 {
+    inline size_t getTriangleCount(OperationType renderOp, size_t indexCount)
+    {
+        if(renderOp == OT_TRIANGLE_LIST)
+            return indexCount / 3;
+        else if(renderOp == OT_TRIANGLE_STRIP || renderOp == OT_TRIANGLE_FAN)
+            return indexCount >= 3 ? indexCount - 2 : 0;
+        return 0;
+    }
+
     LodInputProviderMesh::LodInputProviderMesh( v1::MeshPtr mesh ) : mMesh(mesh)
     {
 
@@ -47,6 +56,7 @@ namespace Ogre
     {
         // Get Vertex count for container tuning.
         bool sharedVerticesAdded = false;
+        size_t trianglesCount = 0;
         size_t vertexCount = 0;
         size_t vertexLookupSize = 0;
         size_t sharedVertexLookupSize = 0;
@@ -54,6 +64,7 @@ namespace Ogre
         for (unsigned short i = 0; i < submeshCount; i++)
         {
             const v1::SubMesh* submesh = mMesh->getSubMesh(i);
+            trianglesCount += getTriangleCount(submesh->operationType, submesh->indexData[VpNormal]->indexCount);
             if (!submesh->useSharedVertices)
             {
                 size_t count = submesh->vertexData[VpNormal]->vertexCount;
@@ -70,11 +81,7 @@ namespace Ogre
 
         // Tune containers:
         data->mUniqueVertexSet.rehash(4 * vertexCount); // less then 0.25 item/bucket for low collision rate
-
-        // There are less triangles then 2 * vertexCount. Except if there are bunch of triangles,
-        // where all vertices have the same position, but that would not make much sense.
-        data->mTriangleList.reserve(2 * vertexCount);
-
+        data->mTriangleList.reserve(trianglesCount);
         data->mVertexList.reserve(vertexCount);
         mSharedVertexLookup.reserve(sharedVertexLookupSize);
         mVertexLookup.reserve(vertexLookupSize);
@@ -95,7 +102,7 @@ namespace Ogre
                                           submesh->vertexData[VpNormal]);
             addVertexData(data, vertexData, submesh->useSharedVertices);
             if(submesh->indexData[VpNormal]->indexCount > 0)
-                addIndexData(data, submesh->indexData[VpNormal], submesh->useSharedVertices, i);
+                addIndexData(data, submesh->indexData[VpNormal], submesh->useSharedVertices, i, submesh->operationType);
         }
 
         // These were only needed for addIndexData() and addVertexData().
@@ -223,14 +230,14 @@ namespace Ogre
             }
         }
     }
-    void LodInputProviderMesh::addIndexData( LodData* data, v1::IndexData* indexData,
-            bool useSharedVertexLookup, unsigned short submeshID )
+    void LodInputProviderMesh::addIndexData(LodData* data, v1::IndexData* indexData, bool useSharedVertexLookup, unsigned short submeshID, OperationType op)
     {
         const v1::HardwareIndexBufferSharedPtr& ibuf = indexData->indexBuffer;
         size_t isize = ibuf->getIndexSize();
+        size_t numIndices = indexData->indexCount;
         data->mIndexBufferInfoList[submeshID].indexSize = isize;
-        data->mIndexBufferInfoList[submeshID].indexCount = indexData->indexCount;
-        if (indexData->indexCount == 0)
+        data->mIndexBufferInfoList[submeshID].indexCount = numIndices;
+        if (numIndices == 0)
         {
             // Locking a zero length buffer on Linux with nvidia cards fails.
             return;
@@ -239,17 +246,49 @@ namespace Ogre
 
         // Lock the buffer for reading.
         v1::HardwareBufferLockGuard ibufLock(ibuf, v1::HardwareBuffer::HBL_READ_ONLY);
-        char* iStart = static_cast<char*>(ibufLock.pData);
-        char* iEnd = iStart + ibuf->getSizeInBytes();
         if (isize == sizeof(unsigned short))
         {
-            addIndexDataImpl<unsigned short>(data, (unsigned short*) iStart, (unsigned short*) iEnd, lookup, submeshID);
+            unsigned short* indices = static_cast<unsigned short*>(ibufLock.pData);
+            switch(op)
+            {
+            case OT_TRIANGLE_LIST: // (0,1,2),(3,4,5),(6,7,8),...
+                for (size_t i0 = 0; i0 + 2 < numIndices; i0 += 3)
+                    addTriangle(data, indices[i0], indices[i0 + 1], indices[i0 + 2], lookup, submeshID);
+                break;
+            
+            case OT_TRIANGLE_STRIP: // (0,1,2),(2,1,3),(2,3,4),...
+                for (size_t i0 = 0, i1 = 1, i2 = 2; i2 < numIndices; (i2 & 1) ? i1 = i2 : i0 = i2, ++i2)
+                    addTriangle(data, indices[i0], indices[i1], indices[i2], lookup, submeshID);
+                break;
+            
+            case OT_TRIANGLE_FAN: // (0,1,2),(0,2,3),(0,3,4),...
+                for (size_t i1 = 1; i1 + 1 < numIndices; ++i1)
+                    addTriangle(data, indices[0], indices[i1], indices[i1 + 1], lookup, submeshID);
+                break;
+            }
         }
         else
         {
             // Unsupported index size.
             OgreAssert(isize == sizeof(unsigned int), "");
-            addIndexDataImpl<unsigned int>(data, (unsigned int*) iStart, (unsigned int*) iEnd, lookup, submeshID);
+            unsigned int* indices = static_cast<unsigned int*>(ibufLock.pData);
+            switch(op)
+            {
+            case OT_TRIANGLE_LIST: // (0,1,2),(3,4,5),(6,7,8),...
+                for (size_t i0 = 0; i0 + 2 < numIndices; i0 += 3)
+                    addTriangle(data, indices[i0], indices[i0 + 1], indices[i0 + 2], lookup, submeshID);
+                break;
+            
+            case OT_TRIANGLE_STRIP: // (0,1,2),(2,1,3),(2,3,4),...
+                for (size_t i0 = 0, i1 = 1, i2 = 2; i2 < numIndices; (i2 & 1) ? i1 = i2 : i0 = i2, ++i2)
+                    addTriangle(data, indices[i0], indices[i1], indices[i2], lookup, submeshID);
+                break;
+            
+            case OT_TRIANGLE_FAN: // (0,1,2),(0,2,3),(0,3,4),...
+                for (size_t i1 = 1; i1 + 1 < numIndices; ++i1)
+                    addTriangle(data, indices[0], indices[i1], indices[i1 + 1], lookup, submeshID);
+                break;
+            }
         }
     }
 

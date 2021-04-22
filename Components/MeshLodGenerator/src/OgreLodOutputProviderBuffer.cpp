@@ -161,7 +161,19 @@ namespace Ogre
                                                        indexCount, mMesh->getIndexBufferUsage(), mMesh->isIndexBufferShadowed());
                         size_t sizeInBytes = lods.back()->indexBuffer->getSizeInBytes();
                         v1::HardwareBufferLockGuard indexLock(lods.back()->indexBuffer, 0, sizeInBytes, v1::HardwareBuffer::HBL_DISCARD);
-                        memcpy(indexLock.pData, buff.indexBuffer.get(), sizeInBytes);
+
+                        OperationType renderOp = mMesh->getSubMesh(i)->operationType;
+                        if (renderOp != OT_TRIANGLE_LIST && renderOp != OT_TRIANGLE_STRIP && renderOp != OT_TRIANGLE_FAN)
+                        {
+                            //unsupported operation type - bypass original indexes
+                            v1::IndexData* srcData = mMesh->getSubMesh(i)->indexData[VpNormal];
+                            assert(srcData);
+                            assert(srcData->indexBuffer->getSizeInBytes()==sizeInBytes);
+                            v1::HardwareBufferLockGuard srcLock(srcData->indexBuffer, 0, sizeInBytes, v1::HardwareBuffer::HBL_READ_ONLY);
+                            if (srcLock.pData)
+                                memcpy(indexLock.pData, srcLock.pData, sizeInBytes);
+                        }else
+                            memcpy(indexLock.pData, buff.indexBuffer.get(), sizeInBytes);
                     }
                 }
             }

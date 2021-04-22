@@ -58,29 +58,26 @@ namespace Ogre
 
         void tuneContainerSize(LodData* data);
         void initialize(LodData* data);
-        void addIndexData(LodData* data, v1::IndexData* indexData, bool useSharedVertexLookup, unsigned short submeshID);
+        void addIndexData(LodData* data, v1::IndexData* indexData, bool useSharedVertexLookup, unsigned short submeshID, OperationType op);
         void addVertexData(LodData* data, v1::VertexData* vertexData, bool useSharedVertexLookup);
         template<typename IndexType>
-        void addIndexDataImpl(LodData* data, IndexType* iPos, const IndexType* iEnd,
-                              VertexLookupList& lookup,
-                              unsigned short submeshID)
+        void addTriangle(LodData* data, IndexType i0, IndexType i1, IndexType i2, VertexLookupList& lookup, unsigned short submeshID)
         {
-            // Loop through all triangles and connect them to the vertices.
-            for (; iPos < iEnd; iPos += 3)
-            {
                 // It should never reallocate or every pointer will be invalid.
                 OgreAssert(data->mTriangleList.capacity() > data->mTriangleList.size(), "");
                 data->mTriangleList.push_back(LodData::Triangle());
                 LodData::Triangle* tri = &data->mTriangleList.back();
                 tri->isRemoved = false;
                 tri->submeshID = submeshID;
-                for (int i = 0; i < 3; i++)
-                {
-                    // Invalid index: Index is bigger then vertex buffer size.
-                    OgreAssert(iPos[i] < lookup.size(), "");
-                    tri->vertexID[i] = iPos[i];
-                    tri->vertex[i] = lookup[iPos[i]];
-                }
+                // Invalid index: Index is bigger then vertex buffer size.
+                OgreAssert(i0 < lookup.size() && i1 < lookup.size() && i2 < lookup.size(), "");
+                tri->vertexID[0] = i0;
+                tri->vertexID[1] = i1;
+                tri->vertexID[2] = i2;
+                tri->vertex[0] = lookup[i0];
+                tri->vertex[1] = lookup[i1];
+                tri->vertex[2] = lookup[i2];
+
                 if (tri->isMalformed())
                 {
 #if OGRE_DEBUG_MODE
@@ -93,11 +90,10 @@ namespace Ogre
 #endif
                     tri->isRemoved = true;
                     data->mIndexBufferInfoList[tri->submeshID].indexCount -= 3;
-                    continue;
+                    return;
                 }
                 tri->computeNormal();
                 addTriangleToEdges(data, tri);
-            }
         }
     };
 

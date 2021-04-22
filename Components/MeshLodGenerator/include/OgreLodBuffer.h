@@ -30,6 +30,7 @@
 #define _LodBuffer_H__
 
 #include "OgreLodPrerequisites.h"
+#include "OgreCommon.h"
 #include "OgreSharedPtr.h"
 
 #include "ogrestd/vector.h"
@@ -61,6 +62,7 @@ namespace Ogre
         {
             LodIndexBuffer indexBuffer;
             LodVertexBuffer vertexBuffer;
+            OperationType operationType;
             bool useSharedVertexBuffer;
         };
         vector<Submesh>::type submesh;
@@ -68,8 +70,9 @@ namespace Ogre
         String meshName;
         Real boundingSphereRadius;
         void fillBuffer(Ogre::v1::MeshPtr mesh);
+        void clear();
     };
-/// Data representing the output of the Mesh reduction. Used by LodOutputProviderBuffer.
+    /// Data representing the output of the Mesh reduction. Used by LodOutputProviderBuffer.
     struct _OgreLodExport LodOutputBuffer
     {
 

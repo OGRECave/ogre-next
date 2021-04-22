@@ -157,6 +157,20 @@ namespace Ogre
             {
                 memset(data->mIndexBufferInfoList[i].buf.pshort, 0, 3 * data->mIndexBufferInfoList[i].indexSize);
             }
+            
+            OperationType renderOp = mMesh->getSubMesh(i)->operationType;
+            if (renderOp != OT_TRIANGLE_LIST && renderOp != OT_TRIANGLE_STRIP && renderOp != OT_TRIANGLE_FAN)
+            {
+                // unsupported operation type - bypass original indexes
+                v1::IndexData* srcData = mMesh->getSubMesh(i)->indexData[VpNormal];
+                assert(srcData);
+                v1::HardwareBufferLockGuard srcLock(srcData->indexBuffer, 0, srcData->indexBuffer->getSizeInBytes(), v1::HardwareBuffer::HBL_READ_ONLY);
+                if (srcLock.pData)
+                {
+                    memcpy(data->mIndexBufferInfoList[i].buf.pshort, srcLock.pData,
+                        std::min(srcData->indexBuffer->getSizeInBytes(), prevLod->indexBuffer->getSizeInBytes()));
+                }
+            }
 
             // Set up the other Lod
             v1::IndexData* curLod = *lods.insert(lods.begin() + lodIndex, OGRE_NEW v1::IndexData());
