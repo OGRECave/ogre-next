@@ -104,7 +104,7 @@
 	@insertpiece( custom_ps_preLights )
 
 	@property( alpha_test && (!alpha_test_shadow_caster_only || hlms_shadowcaster) )
-		if( material.alpha_test_threshold.x @insertpiece( alpha_test_cmp_func ) diffuseCol.w )
+		if( !( diffuseCol.w @insertpiece( alpha_test_cmp_func ) material.alpha_test_threshold.x ) )
 			discard;
 	@end
 

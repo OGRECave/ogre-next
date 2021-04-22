@@ -281,7 +281,7 @@
 	@end
 
 	@property( alpha_test && (!alpha_test_shadow_caster_only || hlms_shadowcaster) )
-		if( material.kD.w @insertpiece( alpha_test_cmp_func ) pixelData.diffuse.w )
+		if( !( pixelData.diffuse.w @insertpiece( alpha_test_cmp_func ) material.kD.w ) )
 			discard;
 	@end
 @end
