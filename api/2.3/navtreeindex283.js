@@ -1,5 +1,7 @@
 var NAVTREEINDEX283 =
 {
+"struct_ogre_1_1_vertices_remap_info.html#a98e2f0ffd318cd552513256068f9fd91":[7,0,0,1102,6],
+"struct_ogre_1_1_vertices_remap_info.html#a99bf9023ce51ad7a4a89fe56e2f86c75":[7,0,0,1102,7],
 "struct_ogre_1_1_vertices_remap_info.html#aa87f065af4bea45b309411fb4dd67eec":[7,0,0,1102,1],
 "struct_ogre_1_1_vertices_remap_info.html#ab601cedf8a462b73ecfc7cef546ce143":[7,0,0,1102,4],
 "struct_ogre_1_1_vertices_remap_info.html#add149d2951a80aaeea8344991650ab9b":[7,0,0,1102,11],
@@ -8,8 +10,8 @@ var NAVTREEINDEX283 =
 "struct_ogre_1_1_view_point.html":[5,0,1,71],
 "struct_ogre_1_1_view_point.html#a3c5ae8fe5c3adce148bfebd3ed9b8e56":[5,2,12,71,1],
 "struct_ogre_1_1_view_point.html#a3c5ae8fe5c3adce148bfebd3ed9b8e56":[5,0,1,71,1],
-"struct_ogre_1_1_view_point.html#a6a25f94ff18e79c7bf0e275f60494d89":[5,2,12,71,0],
 "struct_ogre_1_1_view_point.html#a6a25f94ff18e79c7bf0e275f60494d89":[5,0,1,71,0],
+"struct_ogre_1_1_view_point.html#a6a25f94ff18e79c7bf0e275f60494d89":[5,2,12,71,0],
 "struct_ogre_1_1_volume_1_1_chunk_parameters.html":[7,0,0,4,3],
 "struct_ogre_1_1_volume_1_1_chunk_parameters.html#a066adb42505bd30a78f1553a1913d273":[7,0,0,4,3,5],
 "struct_ogre_1_1_volume_1_1_chunk_parameters.html#a111c9e9333e7ae3497fc818190a03fd8":[7,0,0,4,3,12],
@@ -247,7 +249,5 @@ var NAVTREEINDEX283 =
 "struct_ogre_1_1float2.html#ac93d468565eb53d3fc6c7a1f5122e014":[7,0,0,348,2],
 "struct_ogre_1_1float2.html#acc1f836dc566a17404141826fa187759":[7,0,0,348,1],
 "struct_ogre_1_1float2.html#adc33b0e8a1fdd1551c0de5cd3f6576f4":[7,0,0,348,3],
-"struct_ogre_1_1float2.html#aea83a5eb65db2157b55e3df390d4b8de":[7,0,0,348,0],
-"struct_ogre_1_1float4.html":[7,0,0,349],
-"struct_ogre_1_1float4.html#a342fc304f58a4a2b379c3a91dc0ae04d":[7,0,0,349,1]
+"struct_ogre_1_1float2.html#aea83a5eb65db2157b55e3df390d4b8de":[7,0,0,348,0]
 };

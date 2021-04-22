@@ -365,15 +365,15 @@ var NAVTREEINDEX =
 "struct_ogre_1_1_g_l3_plus_hlms_pso.html#a3a7e9e5339e1ea780904c53552b2f3fd",
 "struct_ogre_1_1_hlms_base_prop.html#a1039c0943e010e9927b0430d2ef0628e",
 "struct_ogre_1_1_hlms_samplerblock.html#a3ea46f76e697aad4c5e13ed6d803e0e4",
-"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a575926e31feb1cc9bfebab8a13fded97",
-"struct_ogre_1_1_pbs_mobile_property.html#ad3b350fd2f09d6f74d5efa5c998eaa3a",
-"struct_ogre_1_1_r_t_shader_1_1_layered_blending_1_1_texture_blend.html#aea5f0d71790484ba662134854ea7f525",
-"struct_ogre_1_1_script_compiler_1_1_error.html#afa2943846ba6a2b5824a12857139cf5e",
-"struct_ogre_1_1_terrain_lod_manager_1_1_lod_info.html",
-"struct_ogre_1_1_unlit_property.html#a936800b85a2b5f3185169b1d630d8a9c",
-"struct_ogre_1_1_vertices_remap_info.html#aa87f065af4bea45b309411fb4dd67eec",
-"struct_ogre_1_1float4.html#a455f96a54be42ed640cfbd6fe873f197",
-"struct_x_client_message_event.html#a5f1761a5775e149a3657e39f0b81a761"
+"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a45430c40a1beecf29b83ea08f06ef88b",
+"struct_ogre_1_1_pbs_mobile_property.html#ad0d25dd8b5ebb64e2b8d3090df7afddd",
+"struct_ogre_1_1_r_t_shader_1_1_layered_blending_1_1_texture_blend.html#a8d8716c8bb7b13cad01bd33f866bad14",
+"struct_ogre_1_1_script_compiler_1_1_error.html#ac4bdf968b7b9af8a5239a27da73d5711",
+"struct_ogre_1_1_terrain_lod_manager_1_1_load_lod_request.html#af5dcd715f6a975b4d17ec81a80df0fd5",
+"struct_ogre_1_1_unlit_property.html#a910dd22a0d99a10dce876ea1b3fd9d3e",
+"struct_ogre_1_1_vertices_remap_info.html#a98e2f0ffd318cd552513256068f9fd91",
+"struct_ogre_1_1float4.html",
+"struct_x_client_message_event.html#a4fd2aa0da85c49238eefc8ee7494696a"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
