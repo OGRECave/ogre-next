@@ -48,6 +48,15 @@ namespace Ogre
         void addTriangleToEdges(LodData* data, LodData::Triangle* triangle);
         bool isDuplicateTriangle(LodData::Triangle* triangle, LodData::Triangle* triangle2);
         LodData::Triangle* isDuplicateTriangle(LodData::Triangle* triangle);
+
+        static size_t getTriangleCount(OperationType renderOp, size_t indexCount)
+        {
+            if( renderOp == OT_TRIANGLE_LIST )
+                return indexCount / 3;
+            else if( renderOp == OT_TRIANGLE_STRIP || renderOp == OT_TRIANGLE_FAN )
+                return indexCount >= 3 ? indexCount - 2 : 0;
+            return 0;
+        }
     };
 
 }

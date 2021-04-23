@@ -32,15 +32,6 @@
 
 namespace Ogre
 {
-    inline size_t getTriangleCount(OperationType renderOp, size_t indexCount)
-    {
-        if(renderOp == OT_TRIANGLE_LIST)
-            return indexCount / 3;
-        else if(renderOp == OT_TRIANGLE_STRIP || renderOp == OT_TRIANGLE_FAN)
-            return indexCount >= 3 ? indexCount - 2 : 0;
-        return 0;
-    }
-
     LodInputProviderBuffer::LodInputProviderBuffer( v1::MeshPtr mesh )
     {
         mBuffer.fillBuffer(mesh);
