@@ -107,21 +107,21 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_lod_collapse_cost.html'
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0544405a072903833e93500006036743"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_collapse_cost.html#a0544405a072903833e93500006036743">~LodCollapseCost</a> ()</td></tr>
 <tr class="separator:a0544405a072903833e93500006036743"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bbdb780b79f29c37c205a3f05683437"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_collapse_cost.html#a9bbdb780b79f29c37c205a3f05683437">computeEdgeCollapseCost</a> (<a class="el" href="struct_ogre_1_1_lod_data.html">LodData</a> *data, <a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">LodData::Vertex</a> *src, <a class="el" href="struct_ogre_1_1_lod_data_1_1_edge.html">LodData::Edge</a> *dstEdge)=0</td></tr>
-<tr class="memdesc:a9bbdb780b79f29c37c205a3f05683437"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the collapse cost of the given edge.  <a href="class_ogre_1_1_lod_collapse_cost.html#a9bbdb780b79f29c37c205a3f05683437">More...</a><br /></td></tr>
-<tr class="separator:a9bbdb780b79f29c37c205a3f05683437"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4580c69303375413f5a1bb9b0171ac76"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_collapse_cost.html#a4580c69303375413f5a1bb9b0171ac76">computeVertexCollapseCost</a> (<a class="el" href="struct_ogre_1_1_lod_data.html">LodData</a> *data, <a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">LodData::Vertex</a> *vertex, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> &amp;collapseCost, <a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">LodData::Vertex</a> *&amp;collapseTo)</td></tr>
-<tr class="memdesc:a4580c69303375413f5a1bb9b0171ac76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by initVertexCollapseCost and updateVertexCollapseCost, when the vertex minimal cost needs to be updated.  <a href="class_ogre_1_1_lod_collapse_cost.html#a4580c69303375413f5a1bb9b0171ac76">More...</a><br /></td></tr>
-<tr class="separator:a4580c69303375413f5a1bb9b0171ac76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26facaf2f6d360fe5ccf9853fea41f98"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_collapse_cost.html#a26facaf2f6d360fe5ccf9853fea41f98">computeEdgeCollapseCost</a> (<a class="el" href="struct_ogre_1_1_lod_data.html">LodData</a> *data, <a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">LodData::VertexI</a> srci, <a class="el" href="struct_ogre_1_1_lod_data_1_1_edge.html">LodData::Edge</a> *dstEdge)=0</td></tr>
+<tr class="memdesc:a26facaf2f6d360fe5ccf9853fea41f98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the collapse cost of the given edge.  <a href="class_ogre_1_1_lod_collapse_cost.html#a26facaf2f6d360fe5ccf9853fea41f98">More...</a><br /></td></tr>
+<tr class="separator:a26facaf2f6d360fe5ccf9853fea41f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96e2e1469204e79798e48924a11dee4c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_collapse_cost.html#a96e2e1469204e79798e48924a11dee4c">computeVertexCollapseCost</a> (<a class="el" href="struct_ogre_1_1_lod_data.html">LodData</a> *data, <a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">LodData::VertexI</a> vertexi, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> &amp;collapseCost, <a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">LodData::VertexI</a> &amp;collapseToi)</td></tr>
+<tr class="memdesc:a96e2e1469204e79798e48924a11dee4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by initVertexCollapseCost and updateVertexCollapseCost, when the vertex minimal cost needs to be updated.  <a href="class_ogre_1_1_lod_collapse_cost.html#a96e2e1469204e79798e48924a11dee4c">More...</a><br /></td></tr>
+<tr class="separator:a96e2e1469204e79798e48924a11dee4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a354e7502246237f033d48fec0adfad4f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_collapse_cost.html#a354e7502246237f033d48fec0adfad4f">initCollapseCosts</a> (<a class="el" href="struct_ogre_1_1_lod_data.html">LodData</a> *data)</td></tr>
 <tr class="memdesc:a354e7502246237f033d48fec0adfad4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is called after the <a class="el" href="class_ogre_1_1_lod_input_provider.html">LodInputProvider</a> has initialized <a class="el" href="struct_ogre_1_1_lod_data.html">LodData</a>.  <a href="class_ogre_1_1_lod_collapse_cost.html#a354e7502246237f033d48fec0adfad4f">More...</a><br /></td></tr>
 <tr class="separator:a354e7502246237f033d48fec0adfad4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae76380b7497b62c7baafffe8a618a3d6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_collapse_cost.html#ae76380b7497b62c7baafffe8a618a3d6">initVertexCollapseCost</a> (<a class="el" href="struct_ogre_1_1_lod_data.html">LodData</a> *data, <a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">LodData::Vertex</a> *vertex)</td></tr>
-<tr class="memdesc:ae76380b7497b62c7baafffe8a618a3d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called from initCollapseCosts for every edge.  <a href="class_ogre_1_1_lod_collapse_cost.html#ae76380b7497b62c7baafffe8a618a3d6">More...</a><br /></td></tr>
-<tr class="separator:ae76380b7497b62c7baafffe8a618a3d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20750c76335b8ce8045103902da5ba7e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_collapse_cost.html#a20750c76335b8ce8045103902da5ba7e">updateVertexCollapseCost</a> (<a class="el" href="struct_ogre_1_1_lod_data.html">LodData</a> *data, <a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">LodData::Vertex</a> *vertex)</td></tr>
-<tr class="memdesc:a20750c76335b8ce8045103902da5ba7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when edge cost gets invalid.  <a href="class_ogre_1_1_lod_collapse_cost.html#a20750c76335b8ce8045103902da5ba7e">More...</a><br /></td></tr>
-<tr class="separator:a20750c76335b8ce8045103902da5ba7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1134ac436cd2bc6d46eb316a4f74ef5a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_collapse_cost.html#a1134ac436cd2bc6d46eb316a4f74ef5a">initVertexCollapseCost</a> (<a class="el" href="struct_ogre_1_1_lod_data.html">LodData</a> *data, <a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">LodData::VertexI</a> vertexi)</td></tr>
+<tr class="memdesc:a1134ac436cd2bc6d46eb316a4f74ef5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called from initCollapseCosts for every edge.  <a href="class_ogre_1_1_lod_collapse_cost.html#a1134ac436cd2bc6d46eb316a4f74ef5a">More...</a><br /></td></tr>
+<tr class="separator:a1134ac436cd2bc6d46eb316a4f74ef5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab474f9fb95e3ad566d0b550a7018deb9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_lod_collapse_cost.html#ab474f9fb95e3ad566d0b550a7018deb9">updateVertexCollapseCost</a> (<a class="el" href="struct_ogre_1_1_lod_data.html">LodData</a> *data, <a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">LodData::VertexI</a> vertexi)</td></tr>
+<tr class="memdesc:ab474f9fb95e3ad566d0b550a7018deb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when edge cost gets invalid.  <a href="class_ogre_1_1_lod_collapse_cost.html#ab474f9fb95e3ad566d0b550a7018deb9">More...</a><br /></td></tr>
+<tr class="separator:ab474f9fb95e3ad566d0b550a7018deb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0544405a072903833e93500006036743"></a>
@@ -150,8 +150,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9bbdb780b79f29c37c205a3f05683437"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9bbdb780b79f29c37c205a3f05683437">&#9670;&nbsp;</a></span>computeEdgeCollapseCost()</h2>
+<a id="a26facaf2f6d360fe5ccf9853fea41f98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26facaf2f6d360fe5ccf9853fea41f98">&#9670;&nbsp;</a></span>computeEdgeCollapseCost()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -168,8 +168,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">LodData::Vertex</a> *&#160;</td>
-          <td class="paramname"><em>src</em>, </td>
+          <td class="paramtype"><a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">LodData::VertexI</a>&#160;</td>
+          <td class="paramname"><em>srci</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -192,12 +192,12 @@ Public Member Functions</h2></td></tr>
 
 <p>Returns the collapse cost of the given edge. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_lod_collapse_cost_quadric.html#abab2944bfc909eb48ae0104039872d71">Ogre::LodCollapseCostQuadric</a>, <a class="el" href="class_ogre_1_1_lod_collapse_cost_profiler.html#aede60fa7c250c08c8365f41ce5f04cd6">Ogre::LodCollapseCostProfiler</a>, <a class="el" href="class_ogre_1_1_lod_collapse_cost_outside.html#a93d759651b8798ed65205cc46224c3c5">Ogre::LodCollapseCostOutside</a>, and <a class="el" href="class_ogre_1_1_lod_collapse_cost_curvature.html#a97a4ebc7be0ef5d4d81467edf558eb38">Ogre::LodCollapseCostCurvature</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_lod_collapse_cost_quadric.html#ae658a931cca54a885b56ede1eff3798e">Ogre::LodCollapseCostQuadric</a>, <a class="el" href="class_ogre_1_1_lod_collapse_cost_profiler.html#a66305605b4154ec3c25e8a592f12c078">Ogre::LodCollapseCostProfiler</a>, <a class="el" href="class_ogre_1_1_lod_collapse_cost_outside.html#adaecb877dc2cb42af7723807f703aad7">Ogre::LodCollapseCostOutside</a>, and <a class="el" href="class_ogre_1_1_lod_collapse_cost_curvature.html#ab8b43dbb0610cb663c03ea3c4a2c5e81">Ogre::LodCollapseCostCurvature</a>.</p>
 
 </div>
 </div>
-<a id="a4580c69303375413f5a1bb9b0171ac76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4580c69303375413f5a1bb9b0171ac76">&#9670;&nbsp;</a></span>computeVertexCollapseCost()</h2>
+<a id="a96e2e1469204e79798e48924a11dee4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96e2e1469204e79798e48924a11dee4c">&#9670;&nbsp;</a></span>computeVertexCollapseCost()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -214,8 +214,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">LodData::Vertex</a> *&#160;</td>
-          <td class="paramname"><em>vertex</em>, </td>
+          <td class="paramtype"><a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">LodData::VertexI</a>&#160;</td>
+          <td class="paramname"><em>vertexi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -226,8 +226,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">LodData::Vertex</a> *&amp;&#160;</td>
-          <td class="paramname"><em>collapseTo</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">LodData::VertexI</a> &amp;&#160;</td>
+          <td class="paramname"><em>collapseToi</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -244,7 +244,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Called by initVertexCollapseCost and updateVertexCollapseCost, when the vertex minimal cost needs to be updated. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_lod_collapse_cost_profiler.html#a79e3dee5915b3467ee3fe9a4c527a6e9">Ogre::LodCollapseCostProfiler</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_lod_collapse_cost_profiler.html#a233b15a24b2f61c61c45e2116a13adf0">Ogre::LodCollapseCostProfiler</a>.</p>
 
 </div>
 </div>
@@ -278,8 +278,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae76380b7497b62c7baafffe8a618a3d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae76380b7497b62c7baafffe8a618a3d6">&#9670;&nbsp;</a></span>initVertexCollapseCost()</h2>
+<a id="a1134ac436cd2bc6d46eb316a4f74ef5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1134ac436cd2bc6d46eb316a4f74ef5a">&#9670;&nbsp;</a></span>initVertexCollapseCost()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -296,8 +296,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">LodData::Vertex</a> *&#160;</td>
-          <td class="paramname"><em>vertex</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">LodData::VertexI</a>&#160;</td>
+          <td class="paramname"><em>vertexi</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -316,8 +316,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a20750c76335b8ce8045103902da5ba7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20750c76335b8ce8045103902da5ba7e">&#9670;&nbsp;</a></span>updateVertexCollapseCost()</h2>
+<a id="ab474f9fb95e3ad566d0b550a7018deb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab474f9fb95e3ad566d0b550a7018deb9">&#9670;&nbsp;</a></span>updateVertexCollapseCost()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -334,8 +334,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_ogre_1_1_lod_data_1_1_vertex.html">LodData::Vertex</a> *&#160;</td>
-          <td class="paramname"><em>vertex</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_ogre_1_1_lod_data.html#a1b374936692e279550e2a49760f70c39">LodData::VertexI</a>&#160;</td>
+          <td class="paramname"><em>vertexi</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -352,7 +352,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Called when edge cost gets invalid. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_lod_collapse_cost_quadric.html#a8629e35e547c64c0d0c4961af2f1730a">Ogre::LodCollapseCostQuadric</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_lod_collapse_cost_quadric.html#a64171ea81eb1c4c65b9a6e1a15aae1fe">Ogre::LodCollapseCostQuadric</a>.</p>
 
 </div>
 </div>

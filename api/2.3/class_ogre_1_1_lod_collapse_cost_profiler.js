@@ -1,9 +1,9 @@
 var class_ogre_1_1_lod_collapse_cost_profiler =
 [
     [ "LodCollapseCostProfiler", "class_ogre_1_1_lod_collapse_cost_profiler.html#a54c2815544dadcfeacd1e79f2ce8ba6f", null ],
-    [ "computeEdgeCollapseCost", "class_ogre_1_1_lod_collapse_cost_profiler.html#aede60fa7c250c08c8365f41ce5f04cd6", null ],
-    [ "computeVertexCollapseCost", "class_ogre_1_1_lod_collapse_cost_profiler.html#a79e3dee5915b3467ee3fe9a4c527a6e9", null ],
+    [ "computeEdgeCollapseCost", "class_ogre_1_1_lod_collapse_cost_profiler.html#a66305605b4154ec3c25e8a592f12c078", null ],
+    [ "computeVertexCollapseCost", "class_ogre_1_1_lod_collapse_cost_profiler.html#a233b15a24b2f61c61c45e2116a13adf0", null ],
     [ "initCollapseCosts", "class_ogre_1_1_lod_collapse_cost_profiler.html#a1fd0aae8b9143d3627f479447bc5f7c7", null ],
-    [ "initVertexCollapseCost", "class_ogre_1_1_lod_collapse_cost_profiler.html#ae76380b7497b62c7baafffe8a618a3d6", null ],
-    [ "updateVertexCollapseCost", "class_ogre_1_1_lod_collapse_cost_profiler.html#a20750c76335b8ce8045103902da5ba7e", null ]
+    [ "initVertexCollapseCost", "class_ogre_1_1_lod_collapse_cost_profiler.html#a1134ac436cd2bc6d46eb316a4f74ef5a", null ],
+    [ "updateVertexCollapseCost", "class_ogre_1_1_lod_collapse_cost_profiler.html#ab474f9fb95e3ad566d0b550a7018deb9", null ]
 ];

@@ -2129,7 +2129,7 @@ var hierarchy =
               [ "Ogre::VectorSet< T, S >", "struct_ogre_1_1_vector_set.html", null ]
             ] ],
             [ "Ogre::SmallVector< T, N >", "class_ogre_1_1_small_vector.html", [
-              [ "Ogre::VectorSet< Triangle *, 7 >", "struct_ogre_1_1_vector_set.html", null ],
+              [ "Ogre::VectorSet< TriangleI, 7 >", "struct_ogre_1_1_vector_set.html", null ],
               [ "Ogre::VectorSet< Edge, 8 >", "struct_ogre_1_1_vector_set.html", null ]
             ] ],
             [ "Ogre::SmallVector< T, 0 >", "class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html", null ]
