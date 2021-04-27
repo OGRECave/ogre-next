@@ -46,13 +46,13 @@ namespace Ogre
     public:
         LodCollapseCostProfiler(LodProfile& profile, LodCollapseCostPtr& costCalculator) : mProfile(profile), mCostCalculator(costCalculator) {}
         virtual void initCollapseCosts(LodData* data);
-        virtual void computeVertexCollapseCost(LodData* data, LodData::Vertex* vertex, Real& collapseCost, LodData::Vertex*& collapseTo);
-        virtual Real computeEdgeCollapseCost(LodData* data, LodData::Vertex* src, LodData::Edge* dstEdge);
+        virtual void computeVertexCollapseCost(LodData* data, LodData::VertexI vertexi, Real& collapseCost, LodData::VertexI& collapseToi);
+        virtual Real computeEdgeCollapseCost(LodData* data, LodData::VertexI srci, LodData::Edge* dstEdge);
     protected:
 
         struct ProfiledEdge
         {
-            LodData::Vertex* dst;
+            LodData::VertexI dsti;
             Real cost;
         };
 
@@ -60,7 +60,7 @@ namespace Ogre
 
         HasVertexProfileList mHasProfile;
 
-        typedef unordered_multimap<LodData::Vertex*, ProfiledEdge>::type ProfileLookup;
+        typedef unordered_multimap<LodData::VertexI, ProfiledEdge>::type ProfileLookup;
         ProfileLookup mProfileLookup;
         LodProfile mProfile;
 
@@ -72,5 +72,3 @@ namespace Ogre
 
 }
 #endif
-
-

@@ -43,8 +43,8 @@ namespace Ogre
     {
     public:
         virtual void initCollapseCosts(LodData* data);
-        virtual void updateVertexCollapseCost(LodData* data, LodData::Vertex* vertex);
-        virtual Real computeEdgeCollapseCost(LodData* data, LodData::Vertex* src, LodData::Edge* dstEdge);
+        virtual void updateVertexCollapseCost(LodData* data, LodData::VertexI vertexi);
+        virtual Real computeEdgeCollapseCost(LodData* data, LodData::VertexI srci, LodData::Edge* dstEdge);
     protected:
 
         struct TriangleQuadricPlane

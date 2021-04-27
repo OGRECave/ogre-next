@@ -61,7 +61,7 @@ namespace Ogre
         plane[0] = triangle.normal.x;
         plane[1] = triangle.normal.y;
         plane[2] = triangle.normal.z;
-        Vector3& v0 = triangle.vertex[0]->position;
+        Vector3& v0 = data->mVertexList[triangle.vertexi[0]].position;
         plane[3] = -v0.dotProduct(triangle.normal);
         for(int i=0; i<4; i++)
         {
@@ -72,9 +72,11 @@ namespace Ogre
         }
     }
 
-    Real LodCollapseCostQuadric::computeEdgeCollapseCost( LodData* data, LodData::Vertex* src, LodData::Edge* dstEdge )
+    Real LodCollapseCostQuadric::computeEdgeCollapseCost( LodData* data, LodData::VertexI srci, LodData::Edge* dstEdge )
     {
-        LodData::Vertex* dst = dstEdge->dst;
+        LodData::VertexI dsti = dstEdge->dsti;
+        LodData::Vertex *src = &data->mVertexList[srci];
+        LodData::Vertex *dst = &data->mVertexList[dsti];
 
         if (isBorderVertex(src))
         {
@@ -85,8 +87,7 @@ namespace Ogre
             return LodData::NEVER_COLLAPSE_COST;
         }
 
-        Matrix4 Qnew = mVertexQuadricList[LodData::getVectorIDFromPointer(data->mVertexList, src)] +
-                       mVertexQuadricList[LodData::getVectorIDFromPointer(data->mVertexList, dst)];
+        Matrix4 Qnew = mVertexQuadricList[srci] + mVertexQuadricList[dsti];
 
         Vector4 Vnew(dst->position);
 
@@ -116,16 +117,16 @@ namespace Ogre
         triEnd = vertex.triangles.end();
         for (; tri != triEnd; ++tri)
         {
-            size_t id = LodData::getVectorIDFromPointer(data->mTriangleList, *tri);
+            size_t id = *tri;
             quadric = quadric + mTrianglePlaneQuadricList[id];
         }
     }
 
-    void LodCollapseCostQuadric::updateVertexCollapseCost( LodData* data, LodData::Vertex* vertex )
+    void LodCollapseCostQuadric::updateVertexCollapseCost( LodData* data, LodData::VertexI vertexi )
     {
-        computeVertexQuadric(data, LodData::getVectorIDFromPointer(data->mVertexList, vertex));
+        computeVertexQuadric(data, vertexi);
 
-        LodCollapseCost::updateVertexCollapseCost(data, vertex);
+        LodCollapseCost::updateVertexCollapseCost(data, vertexi);
     }
 
 

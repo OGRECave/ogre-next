@@ -118,16 +118,19 @@ namespace Ogre
         Vector3* pEnd = pOut + vertexBuffer.vertexCount;
         for (; pOut < pEnd; pOut++)
         {
-            data->mVertexList.push_back(LodData::Vertex());
+            LodData::VertexI vi = (LodData::VertexI)data->mVertexList.size();
+            data->mVertexList.push_back( LodData::Vertex() );
             LodData::Vertex* v = &data->mVertexList.back();
             v->position = *pOut;
+            v->collapseToi = LodData::InvalidIndex;
             std::pair<LodData::UniqueVertexSet::iterator, bool> ret;
-            ret = data->mUniqueVertexSet.insert(v);
+            ret = data->mUniqueVertexSet.insert(vi);
             if (!ret.second)
             {
                 // Vertex position already exists.
                 data->mVertexList.pop_back();
-                v = *ret.first; // Point to the existing vertex.
+                vi = *ret.first;
+                v = &data->mVertexList[vi]; // Point to the existing vertex.
                 v->seam = true;
                 if(data->mUseVertexNormals)
                 {
@@ -156,7 +159,7 @@ namespace Ogre
                     pNormalOut++;
                 }
             }
-            lookup.push_back(v);
+            lookup.push_back(vi);
         }
     }
 

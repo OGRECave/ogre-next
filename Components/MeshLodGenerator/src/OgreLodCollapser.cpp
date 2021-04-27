@@ -40,7 +40,7 @@ namespace Ogre
             LodData::CollapseCostHeap::iterator nextVertex = data->mCollapseCostHeap.begin();
             if (nextVertex->first < collapseCostLimit)
             {
-                mLastReducedVertex = nextVertex->second;
+                mLastReducedVertex = &data->mVertexList[nextVertex->second];
                 collapseVertex(data, cost, output, mLastReducedVertex);
             }
             else
@@ -65,49 +65,53 @@ namespace Ogre
         }
     }
 
-    void LodCollapser::assertValidVertex(LodData* data, LodData::Vertex* v)
+    void LodCollapser::assertValidVertex(LodData* data, LodData::VertexI vi)
     {
+        LodData::Vertex *v = &data->mVertexList[vi];
         // Allows to find bugs in collapsing.
         LodData::VTriangles::iterator it = v->triangles.begin();
         LodData::VTriangles::iterator itEnd = v->triangles.end();
         for (; it != itEnd; it++)
         {
-            LodData::Triangle* t = *it;
+            LodData::Triangle *t = &data->mTriangleList[*it];
             for (int i = 0; i < 3; i++)
             {
-                OgreAssert(t->vertex[i]->costHeapPosition != data->mCollapseCostHeap.end(), "");
-                t->vertex[i]->edges.findExists(LodData::Edge(t->vertex[i]->collapseTo));
+                LodData::Vertex *tvi = &data->mVertexList[t->vertexi[i]];
+                OgreAssert( tvi->costHeapPosition != data->mCollapseCostHeap.end(), "" );
+                tvi->edges.findExists(LodData::Edge(tvi->collapseToi));
                 for (int n = 0; n < 3; n++)
                 {
                     if (i != n)
                     {
-                        LodData::VEdges::iterator edgeIt = t->vertex[i]->edges.findExists(LodData::Edge(t->vertex[n]));
+                        LodData::VEdges::iterator edgeIt = tvi->edges.findExists(LodData::Edge(t->vertexi[n]));
                         OgreAssert(edgeIt->collapseCost != LodData::UNINITIALIZED_COLLAPSE_COST, "");
                     }
                     else
                     {
-                        OgreAssert(t->vertex[i]->edges.find(LodData::Edge(t->vertex[n])) == t->vertex[i]->edges.end(), "");
+                        OgreAssert(tvi->edges.find(LodData::Edge(t->vertexi[n])) == tvi->edges.end(), "");
                     }
                 }
             }
         }
     }
 
-    void LodCollapser::assertOutdatedCollapseCost( LodData* data, LodCollapseCost* cost, LodData::Vertex* vertex )
+    void LodCollapser::assertOutdatedCollapseCost( LodData* data, LodCollapseCost* cost, LodData::VertexI vertexi )
     {
         // Validates that collapsing has updated all edges needed by computeEdgeCollapseCost.
         // This will OgreAssert if the dependencies inside computeEdgeCollapseCost changes.
+        LodData::Vertex *vertex = &data->mVertexList[vertexi];
         LodData::VEdges::iterator it = vertex->edges.begin();
         LodData::VEdges::iterator itEnd = vertex->edges.end();
         for (; it != itEnd; it++)
         {
-            OgreAssert(it->collapseCost == cost->computeEdgeCollapseCost(data, vertex, &*it), "");
-            LodData::Vertex* neighbor = it->dst;
+            OgreAssert(it->collapseCost == cost->computeEdgeCollapseCost(data, vertexi, &*it), "");
+            LodData::VertexI neighbori = it->dsti;
+            LodData::Vertex *neighbor = &data->mVertexList[neighbori];
             LodData::VEdges::iterator it2 = neighbor->edges.begin();
             LodData::VEdges::iterator it2End = neighbor->edges.end();
             for (; it2 != it2End; it2++)
             {
-                OgreAssert(it2->collapseCost == cost->computeEdgeCollapseCost(data, neighbor, &*it2), "");
+                OgreAssert(it2->collapseCost == cost->computeEdgeCollapseCost(data, neighbori, &*it2), "");
             }
         }
     }
@@ -125,24 +129,25 @@ namespace Ogre
         }
         return false; // Not found
     }
-    void LodCollapser::removeTriangleFromEdges(LodData::Triangle* triangle, LodData::Vertex* skip)
+    void LodCollapser::removeTriangleFromEdges(LodData* data, LodData::Triangle* triangle, LodData::VertexI skipi)
     {
+        LodData::TriangleI trianglei = (LodData::TriangleI)LodData::getVectorIDFromPointer(data->mTriangleList, triangle);
         triangle->isRemoved = true;
         // skip is needed if we are iterating on the vertex's edges or triangles.
         for (int i = 0; i < 3; i++)
         {
-            if (triangle->vertex[i] != skip)
+            if (triangle->vertexi[i] != skipi)
             {
-                triangle->vertex[i]->triangles.removeExists(triangle);
+                data->mVertexList[triangle->vertexi[i]].triangles.removeExists(trianglei);
             }
         }
         for (int i = 0; i < 3; i++)
         {
             for (int n = 0; n < 3; n++)
             {
-                if (i != n && triangle->vertex[i] != skip)
+                if (i != n && triangle->vertexi[i] != skipi)
                 {
-                    triangle->vertex[i]->removeEdge(LodData::Edge(triangle->vertex[n]));
+                    data->mVertexList[triangle->vertexi[i]].removeEdge(LodData::Edge(triangle->vertexi[n]));
                 }
             }
         }
@@ -171,9 +176,11 @@ namespace Ogre
         }
         return std::numeric_limits<size_t>::max(); // Not found
     }
-    void LodCollapser::replaceVertexID(LodData::Triangle* triangle, unsigned int oldID, unsigned int newID, LodData::Vertex* dst)
+    void LodCollapser::replaceVertexID(LodData* data, LodData::Triangle* triangle, unsigned int oldID, unsigned int newID, LodData::Vertex* dst)
     {
-        dst->triangles.addNotExists(triangle);
+        LodData::TriangleI trianglei = (LodData::TriangleI)LodData::getVectorIDFromPointer(data->mTriangleList, triangle);
+        dst->triangles.addNotExists(trianglei);
+        LodData::VertexI dsti =(LodData::VertexI)LodData::getVectorIDFromPointer(data->mVertexList, dst);
         // NOTE: triangle is not removed from src. This is implementation specific optimization.
 
         // Its up to the compiler to unroll everything.
@@ -188,12 +195,13 @@ namespace Ogre
                         // This is implementation specific optimization to remove following line.
                         // triangle->vertex[i]->removeEdge(LodData::Edge(triangle->vertex[n]));
 
-                        triangle->vertex[n]->removeEdge(LodData::Edge(triangle->vertex[i]));
-                        triangle->vertex[n]->addEdge(LodData::Edge(dst));
-                        dst->addEdge(LodData::Edge(triangle->vertex[n]));
+                        LodData::Vertex *tvn = &data->mVertexList[triangle->vertexi[n]];
+                        tvn->removeEdge( LodData::Edge( triangle->vertexi[i] ) );
+                        tvn->addEdge(LodData::Edge(dsti));
+                        dst->addEdge(LodData::Edge(triangle->vertexi[n]));
                     }
                 }
-                triangle->vertex[i] = dst;
+                triangle->vertexi[i] = dsti;
                 triangle->vertexID[i] = newID;
                 return;
             }
@@ -202,16 +210,18 @@ namespace Ogre
     }
     void LodCollapser::collapseVertex( LodData* data, LodCollapseCost* cost, LodOutputProvider* output, LodData::Vertex* src )
     {
-        LodData::Vertex* dst = src->collapseTo;
+        LodData::VertexI srci = (LodData::VertexI)LodData::getVectorIDFromPointer(data->mVertexList, src);
+        LodData::VertexI dsti = src->collapseToi;
+        LodData::Vertex* dst = &data->mVertexList[dsti];
 #if OGRE_DEBUG_MODE
-        assertValidVertex(data, dst);
-        assertValidVertex(data, src);
+        assertValidVertex(data, dsti);
+        assertValidVertex(data, srci);
 #endif
         OgreAssert(src->costHeapPosition->first != LodData::NEVER_COLLAPSE_COST, "");
         OgreAssert(src->costHeapPosition->first != LodData::UNINITIALIZED_COLLAPSE_COST, "");
         OgreAssert(!src->edges.empty(), "");
         OgreAssert(!src->triangles.empty(), "");
-        OgreAssert(src->edges.find(LodData::Edge(dst)) != src->edges.end(), "");
+        OgreAssert(src->edges.find(LodData::Edge(dsti)) != src->edges.end(), "");
 
         // It may have vertexIDs and triangles from different submeshes(different vertex buffers),
         // so we need to connect them correctly based on deleted triangle's edge.
@@ -221,8 +231,8 @@ namespace Ogre
         LodData::VTriangles::iterator itEnd = src->triangles.end();
         for (; it != itEnd; ++it)
         {
-            LodData::Triangle* triangle = *it;
-            if (triangle->hasVertex(dst))
+            LodData::Triangle* triangle = &data->mTriangleList[*it];
+            if (triangle->hasVertex(dsti))
             {
                 // Remove a triangle
                 // Tasks:
@@ -231,12 +241,12 @@ namespace Ogre
                 // 3. Remove references/pointers to this triangle and mark as removed.
 
                 // 1. task
-                unsigned int srcID = triangle->getVertexID(src);
+                unsigned int srcID = triangle->getVertexID(srci);
                 if (!hasSrcID(srcID, triangle->submeshID))
                 {
                     tmpCollapsedEdges.push_back(CollapsedEdge());
                     tmpCollapsedEdges.back().srcID = srcID;
-                    tmpCollapsedEdges.back().dstID = triangle->getVertexID(dst);
+                    tmpCollapsedEdges.back().dstID = triangle->getVertexID(dsti);
                     tmpCollapsedEdges.back().submeshID = triangle->submeshID;
                 }
 
@@ -244,18 +254,18 @@ namespace Ogre
                 data->mIndexBufferInfoList[triangle->submeshID].indexCount -= 3;
                 output->triangleRemoved(data, triangle);
                 // 3. task
-                removeTriangleFromEdges(triangle, src);
+                removeTriangleFromEdges(data, triangle, srci);
 
             }
         }
         OgreAssert(tmpCollapsedEdges.size(), "");
-        OgreAssert(dst->edges.find(LodData::Edge(src)) == dst->edges.end(), "");
+        OgreAssert(dst->edges.find(LodData::Edge(srci)) == dst->edges.end(), "");
 
         it = src->triangles.begin();
         for (; it != itEnd; ++it)
         {
-            LodData::Triangle* triangle = *it;
-            if (!triangle->hasVertex(dst))
+            LodData::Triangle* triangle = &data->mTriangleList[*it];
+            if (!triangle->hasVertex(dsti))
             {
                 // Replace a triangle
                 // Tasks:
@@ -263,7 +273,7 @@ namespace Ogre
                 // 2. Move along the selected edge.
 
                 // 1. task
-                unsigned int srcID = triangle->getVertexID(src);
+                unsigned int srcID = triangle->getVertexID(srci);
                 size_t id = findDstID(srcID, triangle->submeshID);
                 if (id == std::numeric_limits<size_t>::max())
                 {
@@ -271,13 +281,13 @@ namespace Ogre
                     // Destroy the triangle.
                     data->mIndexBufferInfoList[triangle->submeshID].indexCount -= 3;
                     output->triangleRemoved(data, triangle);
-                    removeTriangleFromEdges(triangle, src);
+                    removeTriangleFromEdges(data, triangle, srci);
                     continue;
                 }
                 unsigned int dstID = tmpCollapsedEdges[id].dstID;
 
                 // 2. task
-                replaceVertexID(triangle, srcID, dstID, dst);
+                replaceVertexID(data, triangle, srcID, dstID, dst);
 
                 output->triangleChanged(data, triangle);
 
@@ -294,23 +304,23 @@ namespace Ogre
         LodData::VEdges::iterator it3End = src->edges.end();
         for (; it3 != it3End; ++it3)
         {
-            cost->updateVertexCollapseCost(data, it3->dst);
+            cost->updateVertexCollapseCost(data, it3->dsti);
         }
 #else
         // TODO: Find out why is this needed. assertOutdatedCollapseCost() fails on some
         // rare situations without this. For example goblin.mesh fails.
-        typedef SmallVector<LodData::Vertex*, 64> UpdatableList;
+        typedef SmallVector<LodData::VertexI, 64> UpdatableList;
         UpdatableList updatable;
         LodData::VEdges::iterator it3 = src->edges.begin();
         LodData::VEdges::iterator it3End = src->edges.end();
         for (; it3 != it3End; it3++)
         {
-            updatable.push_back(it3->dst);
+            updatable.push_back(it3->dsti);
             LodData::VEdges::iterator it4End = it3->dst->edges.end();
             LodData::VEdges::iterator it4 = it3->dst->edges.begin();
             for (; it4 != it4End; it4++)
             {
-                updatable.push_back(it4->dst);
+                updatable.push_back(it4->dsti);
             }
         }
 
@@ -329,15 +339,15 @@ namespace Ogre
         it3End = src->edges.end();
         for (; it3 != it3End; it3++)
         {
-            assertOutdatedCollapseCost(data, cost, it3->dst);
+            assertOutdatedCollapseCost(data, cost, it3->dsti);
         }
         it3 = dst->edges.begin();
         it3End = dst->edges.end();
         for (; it3 != it3End; it3++)
         {
-            assertOutdatedCollapseCost(data, cost, it3->dst);
+            assertOutdatedCollapseCost(data, cost, it3->dsti);
         }
-        assertOutdatedCollapseCost(data, cost, dst);
+        assertOutdatedCollapseCost(data, cost, dsti);
 #endif // ifndef OGRE_DEBUG_MODE
 #endif // ifndef MESHLOD_QUALITY
         data->mCollapseCostHeap.erase(src->costHeapPosition); // Remove src from collapse costs.
@@ -345,7 +355,7 @@ namespace Ogre
         src->triangles.clear(); // Free memory
 #if OGRE_DEBUG_MODE
         src->costHeapPosition = data->mCollapseCostHeap.end();
-        assertValidVertex(data, dst);
+        assertValidVertex(data, dsti);
 #endif
     }
 
@@ -364,9 +374,9 @@ namespace Ogre
 
     bool LodCollapser::_getLastVertexCollapseTo(LodData* data, Vector3& outVec )
     {
-        if(mLastReducedVertex)
+        if( mLastReducedVertex && mLastReducedVertex->collapseToi != LodData::InvalidIndex)
         {
-            outVec = mLastReducedVertex->collapseTo->position;
+            outVec = data->mVertexList[mLastReducedVertex->collapseToi].position;
             return true;
         }
         else

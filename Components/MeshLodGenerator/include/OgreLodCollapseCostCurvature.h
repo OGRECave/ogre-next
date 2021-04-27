@@ -41,7 +41,7 @@ namespace Ogre
         public LodCollapseCost
     {
     public:
-        virtual Real computeEdgeCollapseCost(LodData* data, LodData::Vertex* src, LodData::Edge* dstEdge);
+        virtual Real computeEdgeCollapseCost(LodData* data, LodData::VertexI srci, LodData::Edge* dstEdge);
     };
 
 }

@@ -34,9 +34,10 @@ THE SOFTWARE.
 namespace Ogre
 {
 
-    LodOutsideMarker::LodOutsideMarker(LodData::VertexList & vertexList, Real boundingSphereRadius, Real walkAngle) :
+    LodOutsideMarker::LodOutsideMarker(LodData::VertexList& vertexList, LodData::TriangleList& triangleList, Real boundingSphereRadius, Real walkAngle) :
         mEpsilon(boundingSphereRadius * std::numeric_limits<Real>::epsilon() * (Real)4.0), // How much floating point math error you have for equal values. This may depend on compiler flags.
         mVertexListOrig(vertexList),
+        mTriangleListOrig(triangleList),
         mWalkAngle(walkAngle)
     {
         assert(!vertexList.empty());
@@ -168,31 +169,37 @@ namespace Ogre
         mCentroid = vertex[0]->position + vertex[1]->position + vertex[2]->position + vertex[3]->position;
         mCentroid /= 4.0f;
 
+        LodData::VertexI vertexi[4];
+        vertexi[0] = (LodData::VertexI)LodData::getVectorIDFromPointer(mVertexListOrig, vertex[0]);
+        vertexi[1] = (LodData::VertexI)LodData::getVectorIDFromPointer(mVertexListOrig, vertex[1]);
+        vertexi[2] = (LodData::VertexI)LodData::getVectorIDFromPointer(mVertexListOrig, vertex[2]);
+        vertexi[3] = (LodData::VertexI)LodData::getVectorIDFromPointer(mVertexListOrig, vertex[3]);
+
         // Mark vertices, so that they will not be processed again.
-        getOutsideData(vertex[0])->isInsideHull = true;
-        getOutsideData(vertex[1])->isInsideHull = true;
-        getOutsideData(vertex[2])->isInsideHull = true;
-        getOutsideData(vertex[3])->isInsideHull = true;
+        getOutsideData(vertexi[0])->isInsideHull = true;
+        getOutsideData(vertexi[1])->isInsideHull = true;
+        getOutsideData(vertexi[2])->isInsideHull = true;
+        getOutsideData(vertexi[3])->isInsideHull = true;
 
         // Create the triangles
-        createTriangle(vertex[0], vertex[1], vertex[2]);
-        createTriangle(vertex[0], vertex[1], vertex[3]);
-        createTriangle(vertex[0], vertex[2], vertex[3]);
-        createTriangle(vertex[1], vertex[2], vertex[3]);
+        createTriangle(vertexi[0], vertexi[1], vertexi[2]);
+        createTriangle(vertexi[0], vertexi[1], vertexi[3]);
+        createTriangle(vertexi[0], vertexi[2], vertexi[3]);
+        createTriangle(vertexi[1], vertexi[2], vertexi[3]);
     }
 
-    void LodOutsideMarker::createTriangle( CHVertex* v1, CHVertex* v2, CHVertex* v3 )
+    void LodOutsideMarker::createTriangle( CHVertexI v1, CHVertexI v2, CHVertexI v3 )
     {
         CHTriangle tri;
         tri.removed = false;
-        tri.vertex[0] = v1;
-        tri.vertex[1] = v2;
-        tri.vertex[2] = v3;
-        tri.computeNormal();
+        tri.vertexi[0] = v1;
+        tri.vertexi[1] = v2;
+        tri.vertexi[2] = v3;
+        tri.computeNormal(mVertexListOrig);
         if (isVisible(&tri, mCentroid))
         {
-            std::swap(tri.vertex[0], tri.vertex[1]);
-            tri.computeNormal();
+            std::swap(tri.vertexi[0], tri.vertexi[1]);
+            tri.computeNormal(mVertexListOrig);
         }
         mHull.push_back(tri);
     }
@@ -215,7 +222,7 @@ namespace Ogre
         // Find the furthest vertex from triangle plane towards the facing direction.
         CHVertex* furthestVertex = NULL;
         Real furthestDistance = 0;
-        Plane plane(tri->normal, -tri->normal.dotProduct(tri->vertex[0]->position));
+        Plane plane(tri->normal, -tri->normal.dotProduct(mVertexListOrig[tri->vertexi[0]].position));
         plane.normalise();
         LodData::VertexList::iterator v, vEnd;
         v = mVertexListOrig.begin();
@@ -263,7 +270,7 @@ namespace Ogre
             {
                 continue;
             }
-            Real dot1 = it->normal.dotProduct(it->vertex[0]->position);
+            Real dot1 = it->normal.dotProduct(mVertexListOrig[it->vertexi[0]].position);
             Real dot2 = it->normal.dotProduct(target->position);
             if(std::abs(dot2 - dot1) <= mEpsilon)
             {
@@ -288,7 +295,7 @@ namespace Ogre
         }
     }
 
-    void LodOutsideMarker::addEdge(CHEdgeList& edges, CHVertex* a, CHVertex* b)
+    void LodOutsideMarker::addEdge(CHEdgeList& edges, CHVertexI a, CHVertexI b)
     {
         // We need undirectional edges, so we sort the vertices by their pointer like integers.
         // This is needed, because we want to remove edges which were inside multiple triangles,
@@ -309,9 +316,9 @@ namespace Ogre
         // The idea is that if all angle is smaller to that point, than it should be inside.
         // NOTE: We assume that the vertex is on the triangle plane!
 
-        const Vector3& p0 = tri.vertex[0]->position;
-        const Vector3& p1 = tri.vertex[1]->position;
-        const Vector3& p2 = tri.vertex[2]->position;
+        const Vector3& p0 = mVertexListOrig[tri.vertexi[0]].position;
+        const Vector3& p1 = mVertexListOrig[tri.vertexi[1]].position;
+        const Vector3& p2 = mVertexListOrig[tri.vertexi[2]].position;
         const Vector3& n = tri.normal;
 
         bool b0, b1, b2;
@@ -393,9 +400,9 @@ namespace Ogre
         CHTrianglePList::const_iterator it2End = tri.end();
         for (; it2 != it2End; it2++)
         {
-            addEdge(horizon, (*it2)->vertex[0], (*it2)->vertex[1]);
-            addEdge(horizon, (*it2)->vertex[1], (*it2)->vertex[2]);
-            addEdge(horizon, (*it2)->vertex[2], (*it2)->vertex[0]);
+            addEdge(horizon, (*it2)->vertexi[0], (*it2)->vertexi[1]);
+            addEdge(horizon, (*it2)->vertexi[1], (*it2)->vertexi[2]);
+            addEdge(horizon, (*it2)->vertexi[2], (*it2)->vertexi[0]);
             (*it2)->removed = true;
         }
         // inside edges are twice in the edge list, because it was added by 2 triangles.
@@ -431,19 +438,19 @@ namespace Ogre
     void LodOutsideMarker::fillHorizon(CHEdgeList& horizon, CHVertex* target)
     {
         CHTriangle tri;
-        tri.vertex[2] = target;
+        tri.vertexi[2] = (LodData::VertexI)LodData::getVectorIDFromPointer( mVertexListOrig, target );
         tri.removed = false;
         CHEdgeList::iterator it = horizon.begin();
         CHEdgeList::iterator itEnd = horizon.end();
         for (; it != itEnd; it++)
         {
-            tri.vertex[0] = it->first;
-            tri.vertex[1] = it->second;
-            tri.computeNormal();
+            tri.vertexi[0] = it->first;
+            tri.vertexi[1] = it->second;
+            tri.computeNormal(mVertexListOrig);
             if (isVisible(&tri, mCentroid))
             {
-                std::swap(tri.vertex[0], tri.vertex[1]);
-                tri.computeNormal();
+                std::swap(tri.vertexi[0], tri.vertexi[1]);
+                tri.computeNormal(mVertexListOrig);
             }
             mHull.push_back(tri);
         }
@@ -452,7 +459,7 @@ namespace Ogre
     bool LodOutsideMarker::isVisible(CHTriangle* t, Vector3& v)
     {
         // We don't need epsilon here, because we assume, that the centroid is not on the triangle.
-        return t->normal.dotProduct(t->vertex[0]->position) < t->normal.dotProduct(v);
+        return t->normal.dotProduct(mVertexListOrig[t->vertexi[0]].position) < t->normal.dotProduct(v);
     }
 
     void LodOutsideMarker::cleanHull()
@@ -467,9 +474,9 @@ namespace Ogre
             {
                 // Replace removed item with last item
                 mHull[start].removed = mHull[end].removed;
-                mHull[start].vertex[0] = mHull[end].vertex[0];
-                mHull[start].vertex[1] = mHull[end].vertex[1];
-                mHull[start].vertex[2] = mHull[end].vertex[2];
+                mHull[start].vertexi[0] = mHull[end].vertexi[0];
+                mHull[start].vertexi[1] = mHull[end].vertexi[1];
+                mHull[start].vertexi[2] = mHull[end].vertexi[2];
                 mHull[start].normal = mHull[end].normal;
                 end--;
             }
@@ -486,8 +493,7 @@ namespace Ogre
     {
         // Based on the wiki sample: http://www.ogre3d.org/tikiwiki/tiki-index.php?page=Generating+A+Mesh
 
-        // Resource with given name should not exist!
-        assert(v1::MeshManager::getSingleton().getByName(meshName).isNull());
+        OgreAssert(v1::MeshManager::getSingleton().getByName(meshName).isNull(), "Resource with given name should not exist");
 
         generateHull(); // calculate mHull triangles.
 
@@ -514,15 +520,16 @@ namespace Ogre
             for(size_t n = 0; n < 3; n++)
             {
                 indexBuffer.push_back(id++);
-                vertexBuffer.push_back(mHull[i].vertex[n]->position.x);
-                vertexBuffer.push_back(mHull[i].vertex[n]->position.y);
-                vertexBuffer.push_back(mHull[i].vertex[n]->position.z);
-                minBounds.x = std::min<Real>(minBounds.x, mHull[i].vertex[n]->position.x);
-                minBounds.y = std::min<Real>(minBounds.y, mHull[i].vertex[n]->position.y);
-                minBounds.z = std::min<Real>(minBounds.z, mHull[i].vertex[n]->position.z);
-                maxBounds.x = std::max<Real>(maxBounds.x, mHull[i].vertex[n]->position.x);
-                maxBounds.y = std::max<Real>(maxBounds.y, mHull[i].vertex[n]->position.y);
-                maxBounds.z = std::max<Real>(maxBounds.z, mHull[i].vertex[n]->position.z);
+                const CHVertex *vn = &mVertexListOrig[mHull[i].vertexi[n]];
+                vertexBuffer.push_back(vn->position.x);
+                vertexBuffer.push_back(vn->position.y);
+                vertexBuffer.push_back(vn->position.z);
+                minBounds.x = std::min<Real>(minBounds.x, vn->position.x);
+                minBounds.y = std::min<Real>(minBounds.y, vn->position.y);
+                minBounds.z = std::min<Real>(minBounds.z, vn->position.z);
+                maxBounds.x = std::max<Real>(maxBounds.x, vn->position.x);
+                maxBounds.y = std::max<Real>(maxBounds.y, vn->position.y);
+                maxBounds.z = std::max<Real>(maxBounds.z, vn->position.z);
             }
         }
 
@@ -581,28 +588,28 @@ namespace Ogre
     template<typename T>
     void LodOutsideMarker::addHullTriangleVertices(std::vector<CHVertex*>& stack, T tri)
     {
-        OutsideData* v0 = getOutsideData(tri->vertex[0]);
-        OutsideData* v1 = getOutsideData(tri->vertex[1]);
-        OutsideData* v2 = getOutsideData(tri->vertex[2]);
+        OutsideData* v0 = getOutsideData(tri->vertexi[0]);
+        OutsideData* v1 = getOutsideData(tri->vertexi[1]);
+        OutsideData* v2 = getOutsideData(tri->vertexi[2]);
 
         if (!v0->isOuterWallVertexInPass)
         {
             v0->isOuterWallVertexInPass = true;
             v0->isOuterWallVertex = true;
-            stack.push_back(tri->vertex[0]);
+            stack.push_back(&mVertexListOrig[tri->vertexi[0]]);
         }
         if (!v1->isOuterWallVertexInPass)
         {
             v1->isOuterWallVertexInPass = true;
             v1->isOuterWallVertex = true;
-            stack.push_back(tri->vertex[1]);
+            stack.push_back(&mVertexListOrig[tri->vertexi[1]]);
         }
 
         if (!v2->isOuterWallVertexInPass)
         {
             v2->isOuterWallVertexInPass = true;
             v2->isOuterWallVertex = true;
-            stack.push_back(tri->vertex[2]);
+            stack.push_back(&mVertexListOrig[tri->vertexi[2]]);
         }
     }
 
@@ -638,19 +645,20 @@ namespace Ogre
                 itEnd = vert->triangles.end();
                 for (; it != itEnd; it++)
                 {
-                    if (tri->normal.dotProduct((*it)->normal) > mWalkAngle)
+                    LodData::Triangle* t = &mTriangleListOrig[*it];
+                    if (tri->normal.dotProduct(t->normal) > mWalkAngle)
                     {
-                        addHullTriangleVertices(stack, *it);
+                        addHullTriangleVertices(stack, t);
                     }
                 }
             }
         }
     }
 
-    void LodOutsideMarker::CHTriangle::computeNormal()
+    void LodOutsideMarker::CHTriangle::computeNormal(const LodData::VertexList& vertexList)
     {
-        Vector3 e1 = vertex[1]->position - vertex[0]->position;
-        Vector3 e2 = vertex[2]->position - vertex[1]->position;
+        Vector3 e1 = vertexList[vertexi[1]].position - vertexList[vertexi[0]].position;
+        Vector3 e2 = vertexList[vertexi[2]].position - vertexList[vertexi[1]].position;
 
         normal = e1.crossProduct(e2);
         normal.normalise();

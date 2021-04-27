@@ -44,25 +44,26 @@ namespace Ogre
          * @param walkAngle Walk angle in dot product values. Allowed range is from -1 to 1. Default = 0. Smaller value is bigger angle.
          *        If you set it to 1 then you can disable walking and it will only mark the vertices on the convex hull.
          */
-        LodOutsideMarker(LodData::VertexList & vertexList, Real boundingSphereRadius, Real walkAngle);
+        LodOutsideMarker(LodData::VertexList & vertexList, LodData::TriangleList& triangleList, Real boundingSphereRadius, Real walkAngle);
         void markOutside(); /// Mark vertices, which are visible from outside.
         v1::MeshPtr createConvexHullMesh(const String& meshName,
                                          const String& resourceGroupName = ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME); /// Returns a mesh containing the Convex Hull shape.
 
-        bool isVertexOutside(LodData::Vertex* v)
+        bool isVertexOutside(LodData::VertexI v)
         {
             return getOutsideData(v)->isOuterWallVertex;
         }
 
     private:
         typedef LodData::Vertex CHVertex;
+        typedef LodData::VertexI CHVertexI;
 
         struct CHTriangle
         {
-            bool removed; // Whether the triangle is excluded from hull.
-            CHVertex* vertex[3];
+            CHVertexI vertexi[3];
             Vector3 normal;
-            void computeNormal();
+            bool removed; // Whether the triangle is excluded from hull.
+            void computeNormal( const LodData::VertexList &vertexList );
         };
 
 
@@ -76,7 +77,7 @@ namespace Ogre
         typedef vector<OutsideData>::type OutsideDataList;
         typedef vector<CHTriangle>::type CHTriangleList;
         typedef vector<CHTriangle*>::type CHTrianglePList;
-        typedef vector<std::pair<CHVertex*, CHVertex*> >::type CHEdgeList;
+        typedef vector<std::pair<CHVertexI, CHVertexI> >::type CHEdgeList;
 
 
 
@@ -86,6 +87,7 @@ namespace Ogre
         CHTrianglePList mVisibleTriangles; /// Temporary vector for addVisibleEdges function (prevent allocation every call).
         CHEdgeList mEdges; /// Temporary vector for the horizon edges, when inserting a new vertex into the hull.
         LodData::VertexList& mVertexListOrig; /// Source of input and output of the algorithm.
+        LodData::TriangleList& mTriangleListOrig;  /// Source of input and output of the algorithm.
 
         OutsideDataList mOutsideData;
         Vector3 mCentroid; /// Centroid of the convex hull.
@@ -99,14 +101,18 @@ namespace Ogre
         {
             return &mOutsideData[LodData::getVectorIDFromPointer(mVertexListOrig, v)];
         }
+        OutsideData* getOutsideData(LodData::VertexI vi)
+        {
+            return &mOutsideData[vi];
+        }
 
         void initHull(); /// Initializes the hull for expansion.
-        void createTriangle(CHVertex* v1, CHVertex* v2, CHVertex* v3); /// Sets the vertices of a triangle (called from initHull only).
+        void createTriangle(CHVertexI v1, CHVertexI v2, CHVertexI v3); /// Sets the vertices of a triangle (called from initHull only).
         Real getTetrahedronVolume(CHVertex* v0, CHVertex* v1, CHVertex* v2, CHVertex* v3);
         Real getPointToLineSqraredDistance(CHVertex* x1, CHVertex* x2, CHVertex* vertex);
         void generateHull(); /// Generates the hull.
         size_t addVertex(CHVertex* vertex); /// Adds vertex to hull.
-        void addEdge(CHEdgeList& edges, CHVertex* a, CHVertex* b); /// Add edge to the list of removable edges.
+        void addEdge(CHEdgeList& edges, CHVertexI a, CHVertexI b); /// Add edge to the list of removable edges.
         void cleanHull(); /// Removes Triangles, which are having CHTriangle::removed = true.
         bool isVisible(CHTriangle* triangle, Vector3& vertex); /// Whether face is visible from point.
         CHVertex* getFurthestVertex(CHTriangle* hull); /// Gets furthest vertex from face.

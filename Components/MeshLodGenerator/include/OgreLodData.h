@@ -60,9 +60,15 @@ namespace Ogre
         struct VertexHash;
         struct VertexEqual;
 
-        typedef multimap<Real, Vertex*>::type CollapseCostHeap;
+        typedef unsigned VertexI; // offset in mVertexList
+        typedef unsigned TriangleI; // offset in mTriangleList
+        enum { InvalidIndex = (unsigned)-1 };
+
+        typedef vector<Vertex>::type VertexList;
+        typedef vector<Triangle>::type TriangleList;
+        typedef multimap<Real, VertexI>::type CollapseCostHeap;
         typedef VectorSet<Edge, 8> VEdges;
-        typedef VectorSet<Triangle*, 7> VTriangles;
+        typedef VectorSet<TriangleI, 7> VTriangles;
 
         // Hash function for UniqueVertexSet.
         struct VertexHash
@@ -77,23 +83,27 @@ namespace Ogre
             {
                 mGen = gen;
             }
-            size_t operator() (const Vertex* v) const;
+            size_t operator() (const VertexI v) const;
         };
 
         // Equality function for UniqueVertexSet.
         struct VertexEqual
         {
-            bool operator() (const Vertex* lhs, const Vertex* rhs) const;
+            LodData *mGen;
+
+            VertexEqual() : mGen( 0 ) { assert( 0 ); }
+            VertexEqual( LodData *gen ) { mGen = gen; }
+            bool operator()( const VertexI lhs, const VertexI rhs ) const;
         };
 
         // Directed edge
         struct Edge
         {
-            Vertex* dst; // destination vertex. (other end of the edge)
+            VertexI dsti; // destination vertex. (other end of the edge)
             Real collapseCost; // cost of the edge.
             int refCount; // Reference count on how many triangles are using this edge. The edge will be removed when it gets 0.
 
-            explicit Edge(Vertex* destination);
+            explicit Edge(VertexI destinationi);
             bool operator== (const Edge& other) const;
             Edge& operator= (const Edge& b);
             Edge(const Edge& b);
@@ -107,7 +117,7 @@ namespace Ogre
             VEdges edges;
             VTriangles triangles;
 
-            Vertex* collapseTo;
+            VertexI collapseToi;
             bool seam;
             CollapseCostHeap::iterator costHeapPosition; /// Iterator pointing to the position in the mCollapseCostSet, which allows fast remove.
 
@@ -117,15 +127,15 @@ namespace Ogre
 
         struct Triangle
         {
-            Vertex* vertex[3];
+            VertexI vertexi[3];
             Vector3 normal;
             bool isRemoved;
             unsigned short submeshID; /// ID of the submesh. Usable with mMesh.getSubMesh() function.
             unsigned int vertexID[3]; /// Vertex ID in the buffer associated with the submeshID.
 
-            void computeNormal();
-            bool hasVertex(const Vertex* v) const;
-            unsigned int getVertexID(const Vertex* v) const;
+            void computeNormal(const VertexList& vertexList);
+            bool hasVertex(const VertexI vi) const { return (vi == vertexi[0] || vi == vertexi[1] || vi == vertexi[2]); }
+            unsigned int getVertexID(const VertexI vi) const;
             bool isMalformed();
         };
 
@@ -146,9 +156,7 @@ namespace Ogre
 
         typedef vector<IndexBufferInfo>::type IndexBufferInfoList;
 
-        typedef vector<Vertex>::type VertexList;
-        typedef vector<Triangle>::type TriangleList;
-        typedef unordered_set<Vertex*, VertexHash, VertexEqual>::type UniqueVertexSet;
+        typedef unordered_set<VertexI, VertexHash, VertexEqual>::type UniqueVertexSet;
 
         /// Provides position based vertex lookup. Position is the real identifier of a vertex.
         UniqueVertexSet mUniqueVertexSet;
@@ -173,17 +181,39 @@ namespace Ogre
         template<typename T, typename A>
         static size_t getVectorIDFromPointer(const std::vector<T, A>& vec, const T* pointer)
         {
-            size_t id = pointer - &vec.at(0);
+            size_t id = pointer - &vec[0];
             OgreAssert(id < vec.size() && (&vec[id] == pointer), "Invalid pointer");
             return id;
         }
 
+        UniqueVertexSet::iterator findUniqueVertexByPos(const Vector3& pos)
+        {
+            UniqueVertexSet::iterator it = mUniqueVertexSet.begin();
+            UniqueVertexSet::iterator itEnd = mUniqueVertexSet.end();
+            for(; it!=itEnd; ++it)
+            {
+                Vertex* v = &mVertexList[*it];
+                if(v->position == pos)
+                    break;
+            }
+            return it;
+        }
+
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+// We know it's safe to pass this pointer to VertexHash and VertexEqual because it's not used there yet.
+#    pragma warning( push )
+#    pragma warning( disable : 4355 )
+#endif
         LodData() :
             mUniqueVertexSet((UniqueVertexSet::size_type) 0,
-                             (const UniqueVertexSet::hasher&) VertexHash(this)),
+                             (const UniqueVertexSet::hasher&) VertexHash(this),
+                             (const UniqueVertexSet::key_equal &) VertexEqual(this)),
             mMeshBoundingSphereRadius(0.0f),
             mUseVertexNormals(true)
         {}
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    pragma warning( pop )
+#endif
     };
 
 }

@@ -44,19 +44,11 @@ namespace Ogre
         virtual void initData(LodData* data) = 0;
     protected:
         // Helper functions
-        void printTriangle(LodData::Triangle* triangle, stringstream& str);
+        void printTriangle(LodData* data, LodData::Triangle* triangle, stringstream& str);
         void addTriangleToEdges(LodData* data, LodData::Triangle* triangle);
         bool isDuplicateTriangle(LodData::Triangle* triangle, LodData::Triangle* triangle2);
-        LodData::Triangle* isDuplicateTriangle(LodData::Triangle* triangle);
-
-        static size_t getTriangleCount(OperationType renderOp, size_t indexCount)
-        {
-            if( renderOp == OT_TRIANGLE_LIST )
-                return indexCount / 3;
-            else if( renderOp == OT_TRIANGLE_STRIP || renderOp == OT_TRIANGLE_FAN )
-                return indexCount >= 3 ? indexCount - 2 : 0;
-            return 0;
-        }
+        LodData::Triangle* isDuplicateTriangle(LodData* data, LodData::Triangle* triangle);
+        static size_t getTriangleCount(OperationType renderOp, size_t indexCount);
     };
 
 }

@@ -172,7 +172,8 @@ namespace Ogre
                             v1::HardwareBufferLockGuard srcLock(srcData->indexBuffer, 0, sizeInBytes, v1::HardwareBuffer::HBL_READ_ONLY);
                             if (srcLock.pData)
                                 memcpy(indexLock.pData, srcLock.pData, sizeInBytes);
-                        }else
+                        }
+                        else
                             memcpy(indexLock.pData, buff.indexBuffer.get(), sizeInBytes);
                     }
                 }

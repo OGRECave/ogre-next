@@ -31,36 +31,37 @@
 namespace Ogre
 {
 
-    Real LodCollapseCostProfiler::computeEdgeCollapseCost( LodData* data, LodData::Vertex* src, LodData::Edge* dstEdge )
+    Real LodCollapseCostProfiler::computeEdgeCollapseCost( LodData* data, LodData::VertexI srci, LodData::Edge* dstEdge )
     {
         OgreAssert(0, "Only computeVertexCollapseCost should call this function.");
         return 0;
     }
 
-    void LodCollapseCostProfiler::computeVertexCollapseCost( LodData* data, LodData::Vertex* vertex, Real& collapseCost, LodData::Vertex*& collapseTo )
+    void LodCollapseCostProfiler::computeVertexCollapseCost( LodData* data, LodData::VertexI vertexi, Real& collapseCost, LodData::VertexI& collapseToi )
     {
+        LodData::Vertex *vertex = &data->mVertexList[vertexi];
         LodData::VEdges::iterator it = vertex->edges.begin();
-        if(!mHasProfile[LodData::getVectorIDFromPointer(data->mVertexList, vertex)])
+        if(!mHasProfile[vertexi])
         {
             for (; it != vertex->edges.end(); ++it)
             {
-                it->collapseCost = mCostCalculator->computeEdgeCollapseCost(data, vertex, &*it);
+                it->collapseCost = mCostCalculator->computeEdgeCollapseCost(data, vertexi, &*it);
                 if (collapseCost > it->collapseCost)
                 {
                     collapseCost = it->collapseCost;
-                    collapseTo = it->dst;
+                    collapseToi = it->dsti;
                 }
             }
         }
         else
         {
-            std::pair<ProfileLookup::iterator, ProfileLookup::iterator> ret = mProfileLookup.equal_range(vertex);
+            std::pair<ProfileLookup::iterator, ProfileLookup::iterator> ret = mProfileLookup.equal_range(vertexi);
             for (; it != vertex->edges.end(); ++it)
             {
                 it->collapseCost = LodData::UNINITIALIZED_COLLAPSE_COST;
                 for(ProfileLookup::iterator it2 = ret.first; it2 != ret.second; ++it2)
                 {
-                    if(it2->second.dst == it->dst )
+                    if(it2->second.dsti == it->dsti)
                     {
                         it->collapseCost = it2->second.cost;
                         break;
@@ -68,12 +69,12 @@ namespace Ogre
                 }
                 if(it->collapseCost == LodData::UNINITIALIZED_COLLAPSE_COST)
                 {
-                    it->collapseCost = mCostCalculator->computeEdgeCollapseCost(data, vertex, &*it);
+                    it->collapseCost = mCostCalculator->computeEdgeCollapseCost(data, vertexi, &*it);
                 }
                 if (collapseCost > it->collapseCost)
                 {
                     collapseCost = it->collapseCost;
-                    collapseTo = it->dst;
+                    collapseToi = it->dsti;
                 }
             }
         }
@@ -87,16 +88,13 @@ namespace Ogre
         LodProfile::iterator itEnd = mProfile.end();
         for(; it != itEnd; it++)
         {
-            LodData::Vertex v;
-            v.position = it->src;
-            LodData::UniqueVertexSet::iterator src = data->mUniqueVertexSet.find(&v);
+            LodData::UniqueVertexSet::iterator src = data->findUniqueVertexByPos(it->src);
             OgreAssert(src != data->mUniqueVertexSet.end(), "Invalid vertex position in Lod profile");
-            mHasProfile[LodData::getVectorIDFromPointer(data->mVertexList, *src)] = true;
-            v.position = it->dst;
-            LodData::UniqueVertexSet::iterator dst = data->mUniqueVertexSet.find(&v);
+            mHasProfile[*src] = true;
+            LodData::UniqueVertexSet::iterator dst = data->findUniqueVertexByPos(it->dst);
             OgreAssert(dst != data->mUniqueVertexSet.end(), "Invalid vertex position in Lod profile");
             ProfiledEdge e;
-            e.dst = *dst;
+            e.dsti = *dst;
             e.cost = it->cost;
             OgreAssert(e.cost >= 0 && e.cost != LodData::UNINITIALIZED_COLLAPSE_COST, "Invalid collapse cost");
             mProfileLookup.insert(ProfileLookup::value_type(*src, e));

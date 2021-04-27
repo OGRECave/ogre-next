@@ -45,7 +45,7 @@ namespace Ogre
         LodCollapseCostOutside(LodCollapseCostPtr costCalculator, Real outsideWeight, Real outsideWalkAngle);
         ~LodCollapseCostOutside();
         virtual void initCollapseCosts(LodData* data);
-        virtual Real computeEdgeCollapseCost(LodData* data, LodData::Vertex* src, LodData::Edge* dstEdge);
+        virtual Real computeEdgeCollapseCost(LodData* data, LodData::VertexI srci, LodData::Edge* dstEdge);
     protected:
 
         Real mOutsideWeight;
