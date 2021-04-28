@@ -367,9 +367,11 @@ namespace Ogre
                 if( idx1 >= BT_DYNAMIC_DEFAULT )
                     idx1 = BT_DYNAMIC_DEFAULT;
 
-                if( MAKELONG(idx0, idx1) == internalVboBufferType &&
+                if( unsigned( MAKELONG( idx0, idx1 ) ) == internalVboBufferType &&
                     bufferInterface->getVboPoolIndex() == oldPoolIdx )
+                {
                     bufferInterface->_setVboPoolIndex( newPoolIdx );
+                }
             }
         }
     }
@@ -395,9 +397,9 @@ namespace Ogre
 
                         //There's (unrelated) live buffers whose vboIdx will now point out of bounds.
                         //We need to update them so they don't crash deallocateVbo later.
-                        switchVboPoolIndex( MAKELONG(idx0, idx1),
-                                            (size_t)(mVbos[idx0][idx1].size() - 1u),
-                                            (size_t)(itor - mVbos[idx0][idx1].begin()) );
+                        switchVboPoolIndex( unsigned( MAKELONG( idx0, idx1 ) ),
+                                            ( size_t )( mVbos[idx0][idx1].size() - 1u ),
+                                            ( size_t )( itor - mVbos[idx0][idx1].begin() ) );
 
                         itor = efficientVectorRemove( mVbos[idx0][idx1], itor );
                         end  = mVbos[idx0][idx1].end();

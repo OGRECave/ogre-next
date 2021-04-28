@@ -639,7 +639,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void VaoManager::switchVboPoolIndex( unsigned internalVboBufferType, size_t oldPoolIdx, size_t newPoolIdx )
+    void VaoManager::switchVboPoolIndex( unsigned internalVboBufferType, size_t oldPoolIdx,
+                                         size_t newPoolIdx )
     {
         for( int i=0; i<NUM_BUFFER_PACKED_TYPES; ++i )
         {
@@ -659,7 +660,8 @@ namespace Ogre
 
             while( itor != end )
             {
-                switchVboPoolIndexImpl( internalVboBufferType, oldPoolIdx, newPoolIdx, itor->bufferPacked );
+                switchVboPoolIndexImpl( internalVboBufferType, oldPoolIdx, newPoolIdx,
+                                        itor->bufferPacked );
                 ++itor;
             }
         }
