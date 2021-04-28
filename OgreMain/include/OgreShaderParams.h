@@ -72,7 +72,7 @@ namespace Ogre
             uint8       dataSizeBytes;
             /// Enough data to cover up to a 4x4 matrix.
             /// Gets reinterpret_cast'ed based on elementType
-            uint8       dataBytes[64];
+            uint32      dataBytes[16];
         };
         struct _OgreExport Param
         {
