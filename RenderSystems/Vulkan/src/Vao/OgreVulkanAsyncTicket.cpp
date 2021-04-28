@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreVulkanAsyncTicket.h"
 
+#include "OgreException.h"
 #include "OgreVulkanQueue.h"
 #include "OgreVulkanUtils.h"
 #include "Vao/OgreStagingBuffer.h"

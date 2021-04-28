@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreVulkanDynamicBuffer.h"
 
+#include "OgreException.h"
 #include "Vao/OgreVulkanStagingBuffer.h"
 #include "Vao/OgreVulkanVaoManager.h"
 
