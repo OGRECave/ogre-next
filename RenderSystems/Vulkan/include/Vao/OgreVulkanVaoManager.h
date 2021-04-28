@@ -319,8 +319,8 @@ namespace Ogre
         VboFlag bufferTypeToVboFlag( BufferType bufferType, const bool readCapable ) const;
         bool isVboFlagCoherent( VboFlag vboFlag ) const;
 
-        virtual void switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
-                                             BufferPacked *buffer );
+        virtual void switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
+                                             size_t newPoolIdx, BufferPacked *buffer );
 
     public:
         VulkanVaoManager( VulkanDevice *device, VulkanRenderSystem *renderSystem,

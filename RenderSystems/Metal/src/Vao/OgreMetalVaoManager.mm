@@ -386,8 +386,8 @@ namespace Ogre
         statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------
-    void MetalVaoManager::switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
-                                                  BufferPacked *buffer )
+    void MetalVaoManager::switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
+                                                  size_t newPoolIdx, BufferPacked *buffer )
     {
         if( mSupportsIndirectBuffers || buffer->getBufferPackedType() != BP_TYPE_INDIRECT )
         {
@@ -440,7 +440,7 @@ namespace Ogre
 
                     //There's (unrelated) live buffers whose vboIdx will now point out of bounds.
                     //We need to update them so they don't crash deallocateVbo later.
-                    switchVboPoolIndex( (size_t)(mVbos[vboIdx].size() - 1u),
+                    switchVboPoolIndex( vboIdx, (size_t)(mVbos[vboIdx].size() - 1u),
                                         (size_t)(itor - mVbos[vboIdx].begin()) );
 
                     itor = efficientVectorRemove( mVbos[vboIdx], itor );

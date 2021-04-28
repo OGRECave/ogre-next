@@ -343,8 +343,8 @@ namespace Ogre
         statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11VaoManager::switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
-                                                  BufferPacked *buffer )
+    void D3D11VaoManager::switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
+                                                  size_t newPoolIdx, BufferPacked *buffer )
     {
         const BufferPackedTypes bufferPackedType = buffer->getBufferPackedType();
         if( (mSupportsIndirectBuffers || bufferPackedType != BP_TYPE_INDIRECT) &&
@@ -385,7 +385,7 @@ namespace Ogre
 
                         //There's (unrelated) live buffers whose vboIdx will now point out of bounds.
                         //We need to update them so they don't crash deallocateVbo later.
-                        switchVboPoolIndex( (size_t)(mVbos[idx0][idx1].size() - 1u),
+                        switchVboPoolIndex( idx0, (size_t)(mVbos[idx0][idx1].size() - 1u),
                                             (size_t)(itor - mVbos[idx0][idx1].begin()) );
 
                         itor = efficientVectorRemove( mVbos[idx0][idx1], itor );

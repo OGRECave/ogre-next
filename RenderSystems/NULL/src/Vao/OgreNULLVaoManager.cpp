@@ -436,8 +436,8 @@ namespace Ogre
                                                     CPU_ACCESSIBLE_DEFAULT ) );
     }
     //-----------------------------------------------------------------------------------
-    void NULLVaoManager::switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
-                                                 BufferPacked *buffer )
+    void NULLVaoManager::switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
+                                                 size_t newPoolIdx, BufferPacked *buffer )
     {
     }
 }
