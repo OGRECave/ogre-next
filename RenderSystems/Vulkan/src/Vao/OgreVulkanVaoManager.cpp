@@ -269,8 +269,15 @@ namespace Ogre
         {
             VulkanBufferInterface *bufferInterface =
                 static_cast<VulkanBufferInterface *>( buffer->getBufferInterface() );
-            if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
-                bufferInterface->_setVboPoolIndex( newPoolIdx );
+
+            // All BufferPacked are created with readCapable = false
+            // That is an attribute used for staging buffers
+            const VboFlag vboFlag = bufferTypeToVboFlag( buffer->getBufferType(), false );
+            if( vboFlag == internalVboBufferType )
+            {
+                if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
+                    bufferInterface->_setVboPoolIndex( newPoolIdx );
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -278,7 +285,7 @@ namespace Ogre
     {
         TODO_whenImplemented_include_stagingBuffers;
 
-        for( int vboIdx = 0; vboIdx < MAX_VBO_FLAG; ++vboIdx )
+        for( unsigned vboIdx = 0; vboIdx < MAX_VBO_FLAG; ++vboIdx )
         {
             VboVec::iterator itor = mVbos[vboIdx].begin();
             VboVec::iterator endt = mVbos[vboIdx].end();
