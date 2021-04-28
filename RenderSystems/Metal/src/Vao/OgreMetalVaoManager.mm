@@ -328,7 +328,7 @@ namespace Ogre
         if( log )
             log->logMessage( "Pool Type;Offset;Size Bytes;Pool Capacity", LML_CRITICAL );
 
-        for( int vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
+        for( unsigned vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
         {
             VboVec::const_iterator itor = mVbos[vboIdx].begin();
             VboVec::const_iterator end  = mVbos[vboIdx].end();
@@ -391,16 +391,20 @@ namespace Ogre
     {
         if( mSupportsIndirectBuffers || buffer->getBufferPackedType() != BP_TYPE_INDIRECT )
         {
-            MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>(
-                                                        buffer->getBufferInterface() );
-            if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
-                bufferInterface->_setVboPoolIndex( newPoolIdx );
+            VboFlag vboFlag = bufferTypeToVboFlag( buffer->getBufferType() );
+            if( vboFlag == internalVboBufferType )
+            {
+                MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>(
+                                                            buffer->getBufferInterface() );
+                if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
+                    bufferInterface->_setVboPoolIndex( newPoolIdx );
+            }
         }
     }
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::cleanupEmptyPools(void)
     {
-        for( int vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
+        for( unsigned vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
         {
             VboVec::iterator itor = mVbos[vboIdx].begin();
             VboVec::iterator end  = mVbos[vboIdx].end();
@@ -411,6 +415,7 @@ namespace Ogre
                 if( vbo.freeBlocks.size() == 1u &&
                     vbo.sizeBytes == vbo.freeBlocks.back().size )
                 {
+#ifdef OGRE_ASSERTS_ENABLED
                     VaoVec::iterator itVao = mVaos.begin();
                     VaoVec::iterator enVao = mVaos.end();
 
@@ -433,6 +438,7 @@ namespace Ogre
                                          "a deleted index buffer!" );
                         ++itVao;
                     }
+#endif
 
                     vbo.vboName = 0;
                     delete vbo.dynamicBuffer;
@@ -484,6 +490,7 @@ namespace Ogre
             while( blockIt != blockEn && !foundMatchingStride )
             {
                 const Block &block = *blockIt;
+                assert((block.offset+block.size) <= itor->sizeBytes);
 
                 //Round to next multiple of alignment
                 size_t newOffset = ( (block.offset + alignment - 1) / alignment ) * alignment;
@@ -594,6 +601,7 @@ namespace Ogre
         }
 
         //See if we're contiguous to a free block and make that block grow.
+        assert((bufferOffset+sizeBytes)<=vbo.sizeBytes);
         vbo.freeBlocks.push_back( Block( bufferOffset, sizeBytes ) );
         mergeContiguousBlocks( vbo.freeBlocks.end() - 1, vbo.freeBlocks );
     }

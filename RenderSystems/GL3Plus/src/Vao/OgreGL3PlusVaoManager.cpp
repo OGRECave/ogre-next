@@ -286,7 +286,7 @@ namespace Ogre
         if( log )
             log->logMessage( "Pool Type;Offset;Size Bytes;Pool Capacity", LML_CRITICAL );
 
-        for( int vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
+        for( unsigned vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
         {
             VboVec::const_iterator itor = mVbos[vboIdx].begin();
             VboVec::const_iterator end  = mVbos[vboIdx].end();
@@ -349,10 +349,14 @@ namespace Ogre
     {
         if( mSupportsIndirectBuffers || buffer->getBufferPackedType() != BP_TYPE_INDIRECT )
         {
-            GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
-                                                          buffer->getBufferInterface() );
-            if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
-                bufferInterface->_setVboPoolIndex( newPoolIdx );
+            VboFlag vboFlag = bufferTypeToVboFlag( buffer->getBufferType() );
+            if( vboFlag == internalVboBufferType )
+            {
+                GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
+                                                              buffer->getBufferInterface() );
+                if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
+                    bufferInterface->_setVboPoolIndex( newPoolIdx );
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -360,7 +364,7 @@ namespace Ogre
     {
         FastArray<GLuint> bufferNames;
 
-        for( int vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
+        for( unsigned vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
         {
             VboVec::iterator itor = mVbos[vboIdx].begin();
             VboVec::iterator end  = mVbos[vboIdx].end();
