@@ -283,7 +283,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::cleanupEmptyPools( void )
     {
-        // And StagingBuffers, StagingTextures, and TextureGpu
+        // And StagingBuffers, StagingTextures, TextureGpu, and anything that
+        // calls either allocateVbo or allocateRawBuffer (e.g. AsyncTextureTicket,
+        // VulkanDiscardBufferManager, etc)
         TODO_whenImplemented_include_stagingBuffers;
 
         for( unsigned vboIdx = 0; vboIdx < MAX_VBO_FLAG; ++vboIdx )
