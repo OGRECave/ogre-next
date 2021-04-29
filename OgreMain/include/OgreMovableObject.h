@@ -248,8 +248,9 @@ namespace Ogre {
         */
         static void updateAllBounds( const size_t numNodes, ObjectData t );
 
-        static inline ArrayReal calculateCameraDistance( uint32 _cameraSortMode, ArrayVector3 cameraPos,
-                                                         ArrayVector3 cameraDir,
+        static inline ArrayReal calculateCameraDistance( uint32 _cameraSortMode,
+                                                         const ArrayVector3& cameraPos,
+                                                         const ArrayVector3& cameraDir,
                                                          ArrayAabb *RESTRICT_ALIAS worldAabb,
                                                          ArrayReal *RESTRICT_ALIAS worldRadius );
 

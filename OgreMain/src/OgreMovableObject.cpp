@@ -425,8 +425,8 @@ namespace Ogre {
     }
     //-----------------------------------------------------------------------
     inline ArrayReal MovableObject::calculateCameraDistance( uint32 _cameraSortMode,
-                                                             ArrayVector3 cameraPos,
-                                                             ArrayVector3 cameraDir,
+                                                             const ArrayVector3& cameraPos,
+                                                             const ArrayVector3& cameraDir,
                                                              ArrayAabb *RESTRICT_ALIAS worldAabb,
                                                              ArrayReal *RESTRICT_ALIAS worldRadius )
     {
