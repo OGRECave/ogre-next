@@ -21,7 +21,7 @@ var class_ogre_1_1_manual_object =
     [ "begin", "class_ogre_1_1_manual_object.html#a130adadc034de5fea157b009d0b4c436", null ],
     [ "beginUpdate", "class_ogre_1_1_manual_object.html#a390cba394565658eaa7b10b57bda2ba5", null ],
     [ "buildLightList", "class_ogre_1_1_manual_object.html#ac4305df204604a027ca27ef77efff295", null ],
-    [ "calculateCameraDistance", "class_ogre_1_1_manual_object.html#a1d80c687f31545a6c1c17bf2d6ff72ed", null ],
+    [ "calculateCameraDistance", "class_ogre_1_1_manual_object.html#a64bd61f33ae8a2d4e824ce7e23308d98", null ],
     [ "calculateCastersBox", "class_ogre_1_1_manual_object.html#ab86b755f38ec01b52ed6a512d9d31ef9", null ],
     [ "clear", "class_ogre_1_1_manual_object.html#aa9a6e4b2c4d372aa0bba91f4fc6b36f2", null ],
     [ "colour", "class_ogre_1_1_manual_object.html#acd8acf53176b680b06c61a7e947cbf3f", null ],
