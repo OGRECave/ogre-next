@@ -253,6 +253,10 @@ namespace Demo
         mCameraController = new CameraController( mGraphicsSystem, false );
 
         TutorialGameState::createScene01();
+
+        sceneManager->setSkyStereoMode(true);
+        sceneManager->setSky(true, Ogre::SceneManager::SkyCubemap, "SaintPetersBasilica.dds",
+						 Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
     }
     //-----------------------------------------------------------------------------------
     void Tutorial_OpenVRGameState::update( float timeSinceLast )

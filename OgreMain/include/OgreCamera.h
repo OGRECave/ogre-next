@@ -45,17 +45,22 @@ namespace Ogre {
     struct VrData
     {
         Matrix4 mHeadToEye[2];
+        Matrix4 mEyeToHead[2];
         Matrix4 mProjectionMatrix[2];
-        //Matrix4 mLeftToRight;
+        Matrix4 mProjectionMatrixInverse[2];
         Vector3 mLeftToRight;
 
+        // The corners are ordered as follows: top-right far, top-left far, bottom-left far, bottom-right far.
+        Vector3 mWorldSpaceFarCorners[2][4];
+        
         void set( const Matrix4 eyeToHead[2], const Matrix4 projectionMatrix[2] )
         {
             for( int i=0; i<2; ++i )
             {
-                mHeadToEye[i] = eyeToHead[i];
+                mEyeToHead[i] = eyeToHead[i];
                 mProjectionMatrix[i] = projectionMatrix[i];
-                mHeadToEye[i] = mHeadToEye[i].inverseAffine();
+                mProjectionMatrixInverse[i] = projectionMatrix[i].inverse();
+                mHeadToEye[i] = mEyeToHead[i].inverseAffine();
             }
             mLeftToRight = (mHeadToEye[0] * eyeToHead[1]).getTrans();
         }
@@ -244,6 +249,8 @@ namespace Ogre {
         static void setDefaultSortMode( CameraSortMode sortMode ) { msDefaultSortMode = sortMode; }
         static CameraSortMode getDefaultSortMode( void ) { return msDefaultSortMode; }
 
+        /// Recalculate Vr world space corners for Sky rendering
+        void updateVrWorldSpaceFarCorners();
     protected:
         // Internal functions for calcs
         bool isViewOutOfDate(void) const;
@@ -700,6 +707,11 @@ namespace Ogre {
         bool isVisible(const Vector3& vert, FrustumPlane* culledBy = 0) const;
         /// @copydoc Frustum::getWorldSpaceCorners
         const Vector3* getWorldSpaceCorners(void) const;
+        /** Gets the 4 far world space corners of the frustum.
+		@remarks
+			The corners are ordered as follows: top-right far, top-left far, bottom-left far, bottom-right far.
+		*/
+        const Vector3* getVrWorldSpaceFarCorners(size_t eyeIdx) const;
         /// @copydoc Frustum::getFrustumPlane
         const Plane& getFrustumPlane( unsigned short plane ) const;
         /// @copydoc Frustum::projectSphere

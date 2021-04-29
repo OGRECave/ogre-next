@@ -239,7 +239,7 @@ namespace Ogre
             if( bHasNormals )
             {
                 for( size_t j = 0u; j < 3u; ++j )
-                    *vertexData++ = mNormals[0][j];
+                    *vertexData++ = mNormals[0 + 4 * i][j];
             }
 
             // Top left
@@ -250,7 +250,7 @@ namespace Ogre
             if( bHasNormals )
             {
                 for( size_t j = 0u; j < 3u; ++j )
-                    *vertexData++ = mNormals[1][j];
+                    *vertexData++ = mNormals[1 + 4 * i][j];
             }
 
             // Bottom right
@@ -261,7 +261,7 @@ namespace Ogre
             if( bHasNormals )
             {
                 for( size_t j = 0u; j < 3u; ++j )
-                    *vertexData++ = mNormals[2][j];
+                    *vertexData++ = mNormals[2 + 4 * i][j];
             }
 
             if( isQuad() )
@@ -274,7 +274,7 @@ namespace Ogre
                 if( bHasNormals )
                 {
                     for( size_t j = 0u; j < 3u; ++j )
-                        *vertexData++ = mNormals[3][j];
+                        *vertexData++ = mNormals[3 + 4 * i][j];
                 }
             }
         }
@@ -300,6 +300,18 @@ namespace Ogre
         mNormals[CornerUpperLeft] = upperLeft;
         mNormals[CornerBottomRight] = bottomRight;
         mNormals[CornerUpperRight] = upperRight;
+        mChanged = true;
+    }
+
+    void Rectangle2D::setStereoNormals( const Vector3 &upperLeft, const Vector3 &bottomLeft,
+                                  const Vector3 &upperRight, const Vector3 &bottomRight )
+    {
+        OGRE_ASSERT_MEDIUM( getBufferType() != BT_IMMUTABLE || mVaoPerLod[0].empty() );
+        OGRE_ASSERT_MEDIUM( hasNormals() || mVaoPerLod[0].empty() );
+        mNormals[4 + CornerBottomLeft] = bottomLeft;
+        mNormals[4 + CornerUpperLeft] = upperLeft;
+        mNormals[4 + CornerBottomRight] = bottomRight;
+        mNormals[4 + CornerUpperRight] = upperRight;
         mChanged = true;
     }
     //-----------------------------------------------------------------------------------

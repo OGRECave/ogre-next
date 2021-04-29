@@ -888,7 +888,7 @@ namespace Ogre {
         // Treat infinite fardist as some arbitrary far value
         Real farDist = (mFarDist == 0) ? 100000 : mFarDist;
 
-        // Calc far palne corners
+        // Calc far plane corners
         Real radio = mProjType == PT_PERSPECTIVE ? farDist / mNearDist : 1;
         Real farLeft = nearLeft * radio;
         Real farRight = nearRight * radio;
@@ -940,7 +940,7 @@ namespace Ogre {
         // Treat infinite fardist as some arbitrary far value
         Real farDist = (customFarPlane == 0) ? 100000 : customFarPlane;
 
-        // Calc far palne corners
+        // Calc far plane corners
         Real radio = mProjType == PT_PERSPECTIVE ? farDist / mNearDist : 1;
         Real farLeft = nearLeft * radio;
         Real farRight = nearRight * radio;

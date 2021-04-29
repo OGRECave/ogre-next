@@ -10,7 +10,14 @@
         #define nullptr (0)
     #endif
 #endif
+
+#ifdef __MINGW32__
+// For compilation on Windows with MinGW a special header must be used
+#include "openvr_mingw.hpp"
+#else
 #include "openvr.h"
+#endif
+
 #if __cplusplus <= 199711L
     #ifdef OgreDemoNullptrDefined
         #undef OgreDemoNullptrDefined
