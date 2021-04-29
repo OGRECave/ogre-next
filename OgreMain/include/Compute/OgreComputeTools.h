@@ -54,7 +54,7 @@ namespace Ogre
         @param clearValue
             Bit pattern to clear to
         */
-        void clearUav( TextureGpu *texture, uint32 clearValue[4] );
+        void clearUav( TextureGpu *texture, const uint32 clearValue[4] );
 
         /** Same as ComputeTools::clearUav but specifically for floats, and asserts
             if the texture is of integer format (i.e. it's not float, half, unorm, snorm)
@@ -65,7 +65,7 @@ namespace Ogre
         @param clearValue
             Value to clear to
         */
-        void clearUavFloat( TextureGpu *texture, float clearValue[4] );
+        void clearUavFloat( TextureGpu *texture, const float clearValue[4] );
 
         /** Same as ComputeTools::clearUav but specifically for floats, and asserts
             if the texture is not of integer (signed or unsigned) format
@@ -77,7 +77,7 @@ namespace Ogre
         @param clearValue
             Value to clear to
         */
-        void clearUavUint( TextureGpu *texture, uint32 clearValue[4] );
+        void clearUavUint( TextureGpu *texture, const uint32 clearValue[4] );
     };
 }
 
