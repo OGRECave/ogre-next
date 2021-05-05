@@ -840,7 +840,7 @@ namespace Ogre
         Real det = E1.dotProduct(P);
 
         // if determinant is near zero, ray lies in plane of triangle
-        if(!(positiveSide && det > EPSILON || negativeSide && det < -EPSILON))
+        if( !( ( positiveSide && det > EPSILON ) || ( negativeSide && det < -EPSILON ) ) )
             return std::make_pair(false, (Real)0);
         Real inv_det = 1.0f / det;
 
