@@ -42,6 +42,7 @@ THE SOFTWARE.
 
 #include <sstream>
 
+//#define _OGRE_USE_OLD_RAY_TRIANGLE_INTERSECTION // new Moller-Trumbore implementation is 3x faster but less mature
 
 namespace Ogre
 {
@@ -729,6 +730,7 @@ namespace Ogre
         const Vector3& b, const Vector3& c, const Vector3& normal,
         bool positiveSide, bool negativeSide)
     {
+#ifdef _OGRE_USE_OLD_RAY_TRIANGLE_INTERSECTION
         //
         // Calculate intersection with plane.
         //
@@ -816,14 +818,51 @@ namespace Ogre
         }
 
         return std::pair<bool, Real>(true, (Real)t);
+#else
+        // it is faster to use new implementation ignoring precalculated normal
+        return intersects(ray, a, b, c, positiveSide, negativeSide);
+#endif
     }
     //-----------------------------------------------------------------------
     std::pair<bool, Real> Math::intersects(const Ray& ray, const Vector3& a,
         const Vector3& b, const Vector3& c,
         bool positiveSide, bool negativeSide)
     {
+#ifdef _OGRE_USE_OLD_RAY_TRIANGLE_INTERSECTION
         Vector3 normal = calculateBasicFaceNormalWithoutNormalize(a, b, c);
         return intersects(ray, a, b, c, normal, positiveSide, negativeSide);
+#else
+        // Moller–Trumbore intersection algorithm, http://www.graphics.cornell.edu/pubs/1997/MT97.pdf
+        const Real EPSILON = 1e-6f;
+        Vector3 E1 = b - a;
+        Vector3 E2 = c - a;
+        Vector3 P = ray.getDirection().crossProduct(E2);
+        Real det = E1.dotProduct(P);
+
+        // if determinant is near zero, ray lies in plane of triangle
+        if(!(positiveSide && det > EPSILON || negativeSide && det < -EPSILON))
+            return std::make_pair(false, (Real)0);
+        Real inv_det = 1.0f / det;
+
+        // calculate u parameter and test bounds
+        Vector3 T = ray.getOrigin() - a;
+        Real u = T.dotProduct(P) * inv_det;
+        if(u < 0.0f || u > 1.0f)
+            return std::make_pair(false, (Real)0);
+
+        // calculate v parameter and test bounds
+        Vector3 Q = T.crossProduct(E1);
+        Real v = ray.getDirection().dotProduct(Q) * inv_det;
+        if (v < 0.0f || u + v > 1.0f)
+            return std::make_pair(false, (Real)0);
+
+        // calculate t, ray intersects triangle
+        Real t = E2.dotProduct(Q) * inv_det;
+        if (t < 0.0f)
+            return std::make_pair(false, (Real)0);
+
+        return std::make_pair(true, t);
+#endif
     }
     //-----------------------------------------------------------------------
     bool Math::intersects(const Sphere& sphere, const AxisAlignedBox& box)
