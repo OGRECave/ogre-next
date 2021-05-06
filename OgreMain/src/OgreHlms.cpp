@@ -55,7 +55,7 @@ THE SOFTWARE.
 #include "OgreRenderQueue.h"
 
 #include "OgreHlmsListener.h"
-#include "OgreBitset.h"
+#include "OgreBitset.inl"
 
 #include "OgreFileSystem.h"
 #include "OgreProfiler.h"

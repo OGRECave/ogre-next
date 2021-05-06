@@ -30,12 +30,14 @@ THE SOFTWARE.
 #define _OgreTextureGpuManager_H_
 
 #include "OgrePrerequisites.h"
+
+#include "OgreBitset.h"
+#include "OgreImage2.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuListener.h"
-#include "OgreImage2.h"
 #include "Threading/OgreLightweightMutex.h"
-#include "Threading/OgreWaitableEvent.h"
 #include "Threading/OgreThreads.h"
+#include "Threading/OgreWaitableEvent.h"
 
 #include "ogrestd/list.h"
 #include "ogrestd/map.h"
@@ -382,16 +384,15 @@ namespace Ogre
         struct QueuedImage
         {
             Image2      image;
-            uint64      mipLevelBitSet[4];
+            bitset64    mipLevelBitSet;
             TextureGpu  *dstTexture;
-            uint8       numSlices;
             bool        autoDeleteImage;
             /// See LoadRequest::sliceOrDepth
             uint32      dstSliceOrDepth;
             FilterBaseArray filters;
 
-            QueuedImage( Image2 &srcImage, uint8 numMips, uint8 _numSlices, TextureGpu *_dstTexture,
-                         uint32 _dstSliceOrDepth, FilterBaseArray &inOutFilters );
+			QueuedImage( Image2 &srcImage, TextureGpu *_dstTexture, uint32 _dstSliceOrDepth,
+						 FilterBaseArray &inOutFilters );
             void destroy(void);
             bool empty(void) const;
             bool isMipSliceQueued( uint8 mipLevel, uint8 slice ) const;

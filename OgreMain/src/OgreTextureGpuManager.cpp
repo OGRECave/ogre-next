@@ -40,6 +40,7 @@ THE SOFTWARE.
 #include "OgreLwString.h"
 #include "OgreCommon.h"
 #include "OgreBitwise.h"
+#include "OgreBitset.inl"
 
 #include "Vao/OgreVaoManager.h"
 #include "OgreResourceGroupManager.h"
@@ -2798,11 +2799,8 @@ namespace Ogre
             if( !loadRequest.toSysRam )
             {
                 //Queue the image for upload to GPU.
-                mStreamingData.queuedImages.push_back( QueuedImage( *img, img->getNumMipmaps(),
-                                                                    img->getDepthOrSlices(),
-                                                                    loadRequest.texture,
-                                                                    loadRequest.sliceOrDepth,
-                                                                    filters ) );
+                mStreamingData.queuedImages.push_back(
+                    QueuedImage( *img, loadRequest.texture, loadRequest.sliceOrDepth, filters ) );
                 if( loadRequest.autoDeleteImage )
                     delete loadRequest.image;
 
@@ -3354,15 +3352,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    TextureGpuManager::QueuedImage::QueuedImage( Image2 &srcImage, uint8 numMips, uint8 _numSlices,
-                                                 TextureGpu *_dstTexture, uint32 _dstSliceOrDepth,
+    TextureGpuManager::QueuedImage::QueuedImage( Image2 &srcImage, TextureGpu *_dstTexture,
+                                                 uint32 _dstSliceOrDepth,
                                                  FilterBaseArray &inOutFilters ) :
         dstTexture( _dstTexture ),
-        numSlices( _numSlices ),
         autoDeleteImage( srcImage.getAutoDelete() ),
         dstSliceOrDepth( _dstSliceOrDepth )
     {
-        assert( numSlices >= 1u );
+        assert( srcImage.getDepthOrSlices() >= 1u );
 
         filters.swap( inOutFilters );
 
@@ -3371,23 +3368,13 @@ namespace Ogre
         srcImage._setAutoDelete( false );
         image = srcImage;
 
-        uint64 numMipSlices = numMips * numSlices;
+        const uint8 numMips = image.getNumMipmaps();
+        const uint32 numSlices = image.getDepthOrSlices();
 
-        assert( numMipSlices < 256u );
+        const size_t numMipSlices = numMips * numSlices;
 
-        for( int i=0; i<4; ++i )
-        {
-            if( numMipSlices >= 64u )
-            {
-                mipLevelBitSet[i] = 0xffffffffffffffff;
-                numMipSlices -= 64u;
-            }
-            else
-            {
-                mipLevelBitSet[i] = ( uint64( 1ul ) << numMipSlices ) - uint64( 1ul );
-                numMipSlices = 0;
-            }
-        }
+        mipLevelBitSet.reset( numMipSlices + 1u );
+        mipLevelBitSet.setAllUntil( numMipSlices );
 
         if( srcImage.getTextureType() == TextureTypes::Type3D )
         {
@@ -3418,57 +3405,30 @@ namespace Ogre
                 "These filters will leak" );
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpuManager::QueuedImage::empty(void) const
-    {
-        return  mipLevelBitSet[0] == 0ul && mipLevelBitSet[1] == 0ul &&
-                mipLevelBitSet[2] == 0ul && mipLevelBitSet[3] == 0ul;
-    }
+    bool TextureGpuManager::QueuedImage::empty( void ) const { return mipLevelBitSet.empty(); }
     //-----------------------------------------------------------------------------------
     bool TextureGpuManager::QueuedImage::isMipSliceQueued( uint8 mipLevel, uint8 slice ) const
     {
-        uint32 mipSlice = mipLevel * numSlices + slice;
-        size_t idx  = mipSlice / 64u;
-        uint64 mask = mipSlice % 64u;
-        mask = ((uint64)1ul) << mask;
-        return (mipLevelBitSet[idx] & mask) != 0;
+        const size_t mipSlice = mipLevel * image.getDepthOrSlices() + slice;
+        return mipLevelBitSet.test( mipSlice );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::QueuedImage::unqueueMipSlice( uint8 mipLevel, uint8 slice )
     {
-        uint32 mipSlice = mipLevel * numSlices + slice;
-        size_t idx  = mipSlice / 64u;
-        uint64 mask = mipSlice % 64u;
-        mask = ((uint64)1ul) << mask;
-        mipLevelBitSet[idx] = mipLevelBitSet[idx] & ~mask;
+        const size_t mipSlice = mipLevel * image.getDepthOrSlices() + slice;
+        return mipLevelBitSet.unset( mipSlice );
     }
     //-----------------------------------------------------------------------------------
-    uint8 TextureGpuManager::QueuedImage::getMinMipLevel(void) const
+    uint8 TextureGpuManager::QueuedImage::getMinMipLevel( void ) const
     {
-        for( size_t i=0; i<4u; ++i )
-        {
-            if( mipLevelBitSet[i] != 0u )
-            {
-                uint8 firstBitSet = static_cast<uint8>( Bitwise::ctz64( mipLevelBitSet[i] ) );
-                return (firstBitSet + 64u * i) / numSlices;
-            }
-        }
-
-        return 255u;
+        return static_cast<uint8>( mipLevelBitSet.findFirstBitSet() / image.getDepthOrSlices() );
     }
     //-----------------------------------------------------------------------------------
-    uint8 TextureGpuManager::QueuedImage::getMaxMipLevelPlusOne(void) const
+    uint8 TextureGpuManager::QueuedImage::getMaxMipLevelPlusOne( void ) const
     {
-        for( size_t i=4u; i--; )
-        {
-            if( mipLevelBitSet[i] != 0u )
-            {
-                uint8 lastBitSet =
-                        static_cast<uint8>( 64u - Bitwise::clz64( mipLevelBitSet[i] ) + 64u * i );
-                return (lastBitSet + numSlices - 1u) / numSlices;
-            }
-        }
-
-        return 0u;
+        return static_cast<uint8>(
+            ( mipLevelBitSet.findLastBitSetPlusOne() + image.getDepthOrSlices() - 1u ) /
+            image.getDepthOrSlices() );
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
