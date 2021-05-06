@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_ogre_1_1_waitable_event.html" title="A WaitableEvent is useful in the scenario of a singler consumer, multiple producers The consumer will..." alt="" coords="5,5,144,32"/>
+<area shape="rect" id="node1" href="$struct_ogre_1_1_vulkan_vao_manager_1_1_block.html" title=" " alt="" coords="5,5,175,47"/>
+<area shape="rect" id="node2" href="$struct_ogre_1_1_vulkan_discard_buffer_manager_1_1_unsafe_block.html" title=" " alt="" coords="223,5,397,47"/>
 </map>

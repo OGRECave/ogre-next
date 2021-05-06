@@ -22,6 +22,9 @@ var hierarchy =
     [ "Ogre::cbitsetN< _N, uint32, 5u, 0x1Fu >", "class_ogre_1_1cbitset_n.html", [
       [ "Ogre::cbitset32< _N >", "class_ogre_1_1cbitset32.html", null ]
     ] ],
+    [ "Ogre::cbitsetN< _N, uint64, 6u, 0x3Fu >", "class_ogre_1_1cbitset_n.html", [
+      [ "Ogre::cbitset64< _N >", "class_ogre_1_1cbitset64.html", null ]
+    ] ],
     [ "Ogre::ComPtr< ID3D11Buffer >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComPtr< ID3D11ClassLinkage >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComPtr< ID3D11ComputeShader >", "class_ogre_1_1_com_ptr.html", null ],
@@ -126,6 +129,7 @@ var hierarchy =
     [ "Ogre::FastArray< ThreadRenderQueue >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< TrackedRenderable >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< uint32 >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< uint64 >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< uint8 >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< uint8_t * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< unsigned char >", "class_ogre_1_1_fast_array.html", null ],
@@ -1329,6 +1333,7 @@ var hierarchy =
       [ "Ogre::HlmsMacroblock", "struct_ogre_1_1_hlms_macroblock.html", null ],
       [ "Ogre::HlmsSamplerblock", "struct_ogre_1_1_hlms_samplerblock.html", null ]
     ] ],
+    [ "Ogre::bitset64", "class_ogre_1_1bitset64.html", null ],
     [ "Ogre::Bitwise", "class_ogre_1_1_bitwise.html", null ],
     [ "Ogre::BoneTransform", "struct_ogre_1_1_bone_transform.html", null ],
     [ "Ogre::BooleanMask4", "class_ogre_1_1_boolean_mask4.html", null ],
