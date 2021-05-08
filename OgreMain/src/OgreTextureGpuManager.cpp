@@ -1279,14 +1279,22 @@ namespace Ogre
 
         while( itor != end )
         {
-            if( itor->minNumSlices > 1u && itor->minResolution >= maxSplitResolution )
+            if( ( itor->minNumSlices > 2u && itor->minResolution >= maxSplitResolution ) ||
+                ( itor->minNumSlices > 1u && itor->minResolution > maxSplitResolution ) )
             {
                 LogManager::getSingleton().logMessage(
-                            "[WARNING] setWorkerThreadMinimumBudget called with minNumSlices = " +
-                            StringConverter::toString( itor->minNumSlices ) + " and minResolution = " +
-                            StringConverter::toString( itor->minResolution ) + " which can be very "
-                            "suboptimal given that maxSplitResolution = " +
-                            StringConverter::toString( maxSplitResolution ), LML_CRITICAL );
+                    "[WARNING] setWorkerThreadMinimumBudget called with minNumSlices = " +
+                        StringConverter::toString( itor->minNumSlices ) +
+                        " and minResolution = " + StringConverter::toString( itor->minResolution ) +
+                        " which can be "
+                        "suboptimal given that maxSplitResolution = " +
+                        StringConverter::toString( maxSplitResolution ) +
+                        "\n"
+                        "See "
+                        "https://ogrecave.github.io/ogre-next/api/2.2/"
+                        "hlms.html#setWorkerThreadMinimumBudget or "
+                        "https://github.com/OGRECave/ogre-next/issues/198",
+                    LML_CRITICAL );
             }
             ++itor;
         }
