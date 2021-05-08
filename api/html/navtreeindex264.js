@@ -1,5 +1,6 @@
 var NAVTREEINDEX264 =
 {
+"struct_ogre_1_1_metal_descriptor_set_texture.html#afe8c9cbaba9c0a2d6f8eab534df2ca72":[5,2,11,80,1],
 "struct_ogre_1_1_metal_device.html":[7,0,0,670],
 "struct_ogre_1_1_metal_device.html#a0420f6e053428ffcaf1e555c23ebcf82":[7,0,0,670,17],
 "struct_ogre_1_1_metal_device.html#a0ff5ab08b6d3b2ef9f15bac517acb1da":[7,0,0,670,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX264 =
 "struct_ogre_1_1_pbs_property.html#a76e4e1218159ed28f686cc163270f7f0":[5,0,0,20,49],
 "struct_ogre_1_1_pbs_property.html#a798bbda97d957177ef76a703b6d0d605":[5,0,0,20,18],
 "struct_ogre_1_1_pbs_property.html#a7afba0dd14e9ab0e3150ed8e6e00d9ef":[5,0,0,20,12],
-"struct_ogre_1_1_pbs_property.html#a7db3869809a2b586d533e2271350096a":[5,0,0,20,110],
-"struct_ogre_1_1_pbs_property.html#a7db390eafb97105791015c1014dae8de":[5,0,0,20,30]
+"struct_ogre_1_1_pbs_property.html#a7db3869809a2b586d533e2271350096a":[5,0,0,20,110]
 };

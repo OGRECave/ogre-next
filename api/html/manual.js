@@ -177,7 +177,8 @@ var manual =
         ] ],
         [ "Manual: Texture packs", "hlms.html#HlmsTextureManagerTexturePacks", null ],
         [ "Watching out for memory consumption", "hlms.html#HlmsTextureManagerWatchOutMemory", [
-          [ "Additional memory considerations", "hlms.html#HlmsTextureManagerWatchOutMemoryConsiderations", null ]
+          [ "Additional memory considerations", "hlms.html#HlmsTextureManagerWatchOutMemoryConsiderations", null ],
+          [ "setWorkerThreadMinimumBudget warning", "hlms.html#setWorkerThreadMinimumBudget", null ]
         ] ]
       ] ],
       [ "Troubleshooting", "hlms.html#HlmsTroubleshooting", [
