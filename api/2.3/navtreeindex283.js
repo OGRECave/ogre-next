@@ -1,5 +1,6 @@
 var NAVTREEINDEX283 =
 {
+"struct_ogre_1_1_vertex_bone_assignment.html#a1e16bd8b152ee8849edc690cefaba22f":[5,2,0,32,2],
 "struct_ogre_1_1_vertex_bone_assignment.html#a28656362101fb4efed98e40b5b78aa79":[5,2,0,32,0],
 "struct_ogre_1_1_vertex_bone_assignment.html#a9329a872bd7a4e3adff08eb95d6bc584":[5,2,0,32,6],
 "struct_ogre_1_1_vertex_bone_assignment.html#aa3928595e373d5b072b2927cac841d71":[5,2,0,32,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX283 =
 "struct_ogre_1_1_vulkan_resource_transition.html#a9c337d18258377a7a697b319fe994061":[7,0,0,1153,2],
 "struct_ogre_1_1_vulkan_resource_transition.html#acc5d10d60b904cbfebec0be95d7fdbb4":[7,0,0,1153,1],
 "struct_ogre_1_1_vulkan_vao_manager_1_1_block.html":[7,0,0,1164,0],
-"struct_ogre_1_1_vulkan_vao_manager_1_1_block.html#a1d2ac8d9e343311b2cf094c0449f88f2":[7,0,0,1164,0,2],
-"struct_ogre_1_1_vulkan_vao_manager_1_1_block.html#a6acacae417e9f0ad719e9b885d71035f":[7,0,0,1164,0,1]
+"struct_ogre_1_1_vulkan_vao_manager_1_1_block.html#a1d2ac8d9e343311b2cf094c0449f88f2":[7,0,0,1164,0,2]
 };

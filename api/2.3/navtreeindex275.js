@@ -1,5 +1,6 @@
 var NAVTREEINDEX275 =
 {
+"struct_ogre_1_1_gpu_program_parameters_1_1_auto_constant_definition.html#afd666b79a5ca388640daf451d7da8c07":[5,2,5,8,0,4],
 "struct_ogre_1_1_gpu_tracked_resource.html":[5,2,11,39],
 "struct_ogre_1_1_gpu_tracked_resource.html#a3d389b0aae18bb6dcb82af84c93b77de":[5,2,11,39,1],
 "struct_ogre_1_1_gpu_tracked_resource.html#a69277d380374e3036b00e8c051c09689":[5,2,11,39,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX275 =
 "struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214ba1b3808a230b60328a8f173dab5038c91":[5,2,11,60,0,2],
 "struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214bade67d3843f7d123fa303d129c1e79234":[5,2,11,60,0,3],
 "struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214bae6f3010b1e71eccd877cad332ef9fc0f":[5,2,11,60,0,1],
-"struct_ogre_1_1_hlms_pass_pso.html#afc4dc599d934e99703dc504c9afaee14":[5,2,11,60,4],
-"struct_ogre_1_1_hlms_property.html":[5,2,11,63]
+"struct_ogre_1_1_hlms_pass_pso.html#afc4dc599d934e99703dc504c9afaee14":[5,2,11,60,4]
 };
