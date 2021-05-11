@@ -423,13 +423,22 @@ void SceneManager::clearFrameData(void)
 //-----------------------------------------------------------------------
 Light* SceneManager::createLight()
 {
+    reserveSlotsInGlobalLightList(1);
+
+    Light *newLight = static_cast<Light*>(
+                            createMovableObject(LightFactory::FACTORY_TYPE_NAME, &mLightMemoryManager));
+    return newLight;
+}
+//-----------------------------------------------------------------------
+void SceneManager::reserveSlotsInGlobalLightList(size_t addSlotsToCapacity /* = 0 */)
+{
     //We need calculateTotalNumObjectDataIncludingFragmentedSlots instead of getTotalNumObjects
     //because of the "skips" we perform when doing multithreading
     //(see BuildLightListRequest::startLightIdx). And these skips include fragmented slots
     //(unused slots). If we use getTotalNumObjects, we'll get memory corruption when writing
     //to visibilityMask and boundingSphere from the last thread.
     const size_t requiredCapacity =
-            mLightMemoryManager.calculateTotalNumObjectDataIncludingFragmentedSlots() + 1u;
+            mLightMemoryManager.calculateTotalNumObjectDataIncludingFragmentedSlots() + addSlotsToCapacity;
     if( mGlobalLightList.lights.capacity() < requiredCapacity )
     {
         assert( mGlobalLightList.lights.empty() &&
@@ -442,10 +451,6 @@ Light* SceneManager::createLight()
         mGlobalLightList.boundingSphere = OGRE_ALLOC_T_SIMD( Sphere, requiredCapacity,
                                                             MEMCATEGORY_SCENE_CONTROL );
     }
-
-    Light *newLight = static_cast<Light*>(
-                            createMovableObject(LightFactory::FACTORY_TYPE_NAME, &mLightMemoryManager));
-    return newLight;
 }
 //-----------------------------------------------------------------------
 void SceneManager::destroyLight(Light *l)
