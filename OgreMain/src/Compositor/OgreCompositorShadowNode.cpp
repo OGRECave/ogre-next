@@ -224,19 +224,25 @@ namespace Ogre
     {
         SceneNode *pseudoRootNode = 0;
         SceneManager *sceneManager = mWorkspace->getSceneManager();
-
-        ShadowMapCameraVec::const_iterator itor = mShadowMapCameras.begin();
-        ShadowMapCameraVec::const_iterator end  = mShadowMapCameras.end();
-
-        while( itor != end )
+        
+        if(sceneManager)
         {
-            pseudoRootNode = itor->camera->getParentSceneNode();
-            sceneManager->destroyCamera( itor->camera );
-            ++itor;
-        }
+            if(sceneManager->getCurrentShadowNode()==this)
+                sceneManager->_setCurrentShadowNode(0, false);
+            
+            ShadowMapCameraVec::const_iterator itor = mShadowMapCameras.begin();
+            ShadowMapCameraVec::const_iterator end  = mShadowMapCameras.end();
 
-        if( pseudoRootNode )
-            sceneManager->destroySceneNode( pseudoRootNode );
+            while( itor != end )
+            {
+                pseudoRootNode = itor->camera->getParentSceneNode();
+                sceneManager->destroyCamera( itor->camera );
+                ++itor;
+            }
+
+            if( pseudoRootNode )
+                sceneManager->destroySceneNode( pseudoRootNode );
+        }
     }
     //-----------------------------------------------------------------------------------
     //An Input Iterator that is the same as doing vector<int> val( N ); and goes in increasing
