@@ -635,7 +635,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel, bool keepResolvedTexSynced,
-                             ResourceAccess::ResourceAccess issueBarriers )
+                             CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode,
+                             CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode )
     {
         assert( srcBox.equalSize( dstBox ) );
         assert( this != dst || !srcBox.overlaps( dstBox ) );
@@ -844,10 +845,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::_setNextLayout( ResourceLayout::Layout layout )
     {
-        OGRE_ASSERT_LOW( ( layout != ResourceLayout::CopySrc && layout != ResourceLayout::CopyDst &&
-                           layout != ResourceLayout::CopyEnd ) &&
-                         "CopySrc/Dst layouts are automanaged. "
-                         "Cannot explicitly transition to these layouts" );
+        OGRE_ASSERT_LOW( layout != ResourceLayout::CopyEncoderManaged &&
+                         "Cannot explicitly transition CopyEncoderManaged layouts" );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )

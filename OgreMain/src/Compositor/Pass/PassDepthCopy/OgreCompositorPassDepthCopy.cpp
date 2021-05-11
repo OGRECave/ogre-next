@@ -98,7 +98,9 @@ namespace Ogre
 
         TextureBox srcBox = srcChannel->getEmptyBox( 0 );
         TextureBox dstBox = dstChannel->getEmptyBox( 0 );
-        srcChannel->copyTo( dstChannel, dstBox, 0, srcBox, 0, false, ResourceAccess::Undefined );
+        srcChannel->copyTo( dstChannel, dstBox, 0, srcBox, 0, false,
+                            CopyEncTransitionMode::AlreadyInLayoutThenAuto,
+                            CopyEncTransitionMode::AlreadyInLayoutThenAuto );
 
         notifyPassPosExecuteListeners();
     }
@@ -106,7 +108,7 @@ namespace Ogre
     void CompositorPassDepthCopy::analyzeBarriers( void )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        renderSystem->flushPendingAutoResourceLayouts();
+        renderSystem->endCopyEncoder();
 
         mResourceTransitions.clear();
 

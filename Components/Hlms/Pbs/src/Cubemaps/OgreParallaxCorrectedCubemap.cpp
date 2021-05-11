@@ -1026,6 +1026,8 @@ namespace Ogre
     void ParallaxCorrectedCubemap::transitionBlendResultToTexture( void )
     {
         RenderSystem *renderSystem = mSceneManager->getDestinationRenderSystem();
+        renderSystem->endCopyEncoder();
+
         BarrierSolver &solver = renderSystem->getBarrierSolver();
 
         ResourceTransitionArray &barrier = solver.getNewResourceTransitionsArrayTmp();

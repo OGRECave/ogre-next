@@ -239,12 +239,14 @@ namespace Ogre
             _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                                  const TextureBox &srcBox, uint8 srcMipLevel,
-                                  bool keepResolvedTexSynced,
-                                  ResourceAccess::ResourceAccess issueBarriers )
+    void MetalTextureGpu::copyTo(
+        TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel, const TextureBox &srcBox,
+        uint8 srcMipLevel, bool keepResolvedTexSynced,
+        CopyEncoderTransitionMode::CopyEncoderTransitionMode srcTransitionMode,
+        CopyEncoderTransitionMode::CopyEncoderTransitionMode dstTransitionMode )
     {
-        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, issueBarriers );
+        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, srcTransitionMode,
+                            dstTransitionMode );
 
         assert( dynamic_cast<MetalTextureGpu*>( dst ) );
 
@@ -312,7 +314,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpu::_autogenerateMipmaps( bool bUseBarrierSolver )
+    void MetalTextureGpu::_autogenerateMipmaps( CopyEncoderTransitionMode::CopyEncoderTransitionMode
+                                                /*transitionMode*/ )
     {
         MetalTextureGpuManager *textureManagerMetal =
                 static_cast<MetalTextureGpuManager*>( mTextureManager );

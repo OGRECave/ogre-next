@@ -135,7 +135,7 @@ namespace Ogre
     void CompositorPassClear::analyzeBarriers( void )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        renderSystem->flushPendingAutoResourceLayouts();
+        renderSystem->endCopyEncoder();
 
         mResourceTransitions.clear();
 

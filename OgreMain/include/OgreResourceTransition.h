@@ -31,8 +31,6 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "OgreTextureGpuListener.h"
-
 #include "ogrestd/map.h"
 
 #include "OgreHeaderPrefix.h"
@@ -59,10 +57,11 @@ namespace Ogre
         Uav,
         CopySrc,
         CopyDst,
-        /// Special layout only used in flushTextureCopyOperations to prevent
-        /// conflicts with automatically managed copy encoders
-        CopyEnd,
         MipmapGen,
+        /// Copy encoder is managing this texture. BarrierSolver can't resolve
+        /// operations until the copy encoder is closed.
+        /// (i.e. call RenderSystem::endCopyEncoder)
+        CopyEncoderManaged,
         PresentReady,
 
         NumResourceLayouts
@@ -127,11 +126,10 @@ namespace Ogre
 
     typedef StdMap<GpuTrackedResource*, ResourceStatus> ResourceStatusMap;
 
-    class _OgreExport BarrierSolver : public TextureGpuListener
+    class _OgreExport BarrierSolver
     {
         /// Contains previous state
         ResourceStatusMap mResourceStatus;
-        FastArray<TextureGpu*> mCopyStateTextures;
 
         /// Temporary variable that can be reused to avoid needless reallocations
         ResourceTransitionArray mTmpResourceTransitions;
@@ -153,9 +151,7 @@ namespace Ogre
             return mTmpResourceTransitions;
         }
 
-        void resetCopyLayoutsOnly( ResourceTransitionArray &resourceTransitions );
-
-        void reset( ResourceTransitionArray &resourceTransitions );
+        void reset();
 
         /** By specifying how a texture will be used next, this function figures out
             the necessary barriers that may be required and outputs to resourceTransitions
@@ -207,12 +203,6 @@ namespace Ogre
               this function for all textures
         */
         void textureDeleted( TextureGpu *texture );
-
-        /// @see TextureGpuListener::notifyTextureChanged
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
-        /// @see TextureGpuListener::shouldStayLoaded
-        virtual bool shouldStayLoaded( TextureGpu *texture );
     };
 
     /** @} */

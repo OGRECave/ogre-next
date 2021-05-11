@@ -419,7 +419,8 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanQueue::prepareForUpload( const BufferPacked *buffer, TextureGpu *texture )
+    void VulkanQueue::prepareForUpload( const BufferPacked *buffer, TextureGpu *texture,
+                                        CopyEncTransitionMode::CopyEncTransitionMode transitionMode )
     {
         VkAccessFlags bufferAccessFlags = 0;
 
@@ -463,20 +464,41 @@ namespace Ogre
             }
             else if( it == mCopyDownloadTextures.end() )
             {
-                if( vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ||
-                    vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+                if( transitionMode == CopyEncTransitionMode::Auto &&
+                    ( vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ||
+                      vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                                  "Texture " + vkTexture->getNameStr() +
                                      " is already in CopySrc or CopyDst layout, externally set. Perhaps "
-                                     "you need to call RenderSystem::flushTextureCopyOperations",
+                                     "you need to call RenderSystem::endCopyEncoder or use a different "
+                                     "CopyEncTransitionMode",
+                                 "VulkanQueue::prepareForUpload" );
+                }
+                else if( transitionMode != CopyEncTransitionMode::Auto &&
+                         vkTexture->mCurrLayout != VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                                 "Texture " + vkTexture->getNameStr() +
+                                     " is expected to be in CopyDst layout. "
+                                     "CopyEncTransitionMode promised that.",
                                  "VulkanQueue::prepareForUpload" );
                 }
 
-                texAccessFlags = VulkanMappings::get( texture );
+                if( transitionMode == CopyEncTransitionMode::Auto )
+                    texAccessFlags = VulkanMappings::get( texture );
             }
             else
             {
+                if( transitionMode != CopyEncTransitionMode::Auto )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                                 "Texture " + vkTexture->getNameStr() +
+                                     " was already managed by Copy Encoder but CopyEncTransitionMode "
+                                     "says otherwise",
+                                 "VulkanQueue::prepareForUpload" );
+                }
+
                 if( !it->second )
                 {
                     OGRE_ASSERT_MEDIUM( vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
@@ -492,10 +514,15 @@ namespace Ogre
                 }
             }
 
-            // We need to block subsequent stages from accessing this texture at all
-            // until we're done copying into it
-            mCopyEndReadDstTextureFlags |= VulkanMappings::get( texture );
-            mCopyDownloadTextures[vkTexture] = false;
+            if( transitionMode == CopyEncTransitionMode::Auto )
+            {
+                // We need to block subsequent stages from accessing this texture at all
+                // until we're done copying into it
+                mCopyEndReadDstTextureFlags |= VulkanMappings::get( texture );
+            }
+
+            if( transitionMode != CopyEncTransitionMode::AlreadyInLayoutThenManual )
+                mCopyDownloadTextures[vkTexture] = false;
         }
 
         // One buffer barrier is enough for all buffers.
@@ -567,9 +594,23 @@ namespace Ogre
                                   VK_PIPELINE_STAGE_TRANSFER_BIT, 0, numMemBarriers, &memBarrier, 0u, 0,
                                   numImageMemBarriers, &imageMemBarrier );
         }
+
+        if( !bNeedsTexTransition && vkTexture &&
+            transitionMode == CopyEncTransitionMode::AlreadyInLayoutThenAuto )
+        {
+            // insertRestoreBarrier wants to restore to the current layout after we're
+            // done, but we're already in SRC/DST layout. We want to go to default layout
+            // once we're done.
+            const VkImageLayout currLayout = vkTexture->mCurrLayout;
+            vkTexture->mCurrLayout =
+                VulkanMappings::get( ResourceLayout::CopyEncoderManaged, vkTexture );
+            insertRestoreBarrier( vkTexture, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
+            vkTexture->mCurrLayout = currLayout;
+        }
     }
     //-------------------------------------------------------------------------
-    void VulkanQueue::prepareForDownload( const BufferPacked *buffer, TextureGpu *texture )
+    void VulkanQueue::prepareForDownload( const BufferPacked *buffer, TextureGpu *texture,
+                                          CopyEncTransitionMode::CopyEncTransitionMode transitionMode )
     {
         VkAccessFlags bufferAccessFlags = 0;
         VkPipelineStageFlags srcStage = 0;
@@ -624,45 +665,68 @@ namespace Ogre
 
             if( it == mCopyDownloadTextures.end() )
             {
-                if( vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ||
-                    vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+                if( transitionMode == CopyEncTransitionMode::Auto &&
+                    ( vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ||
+                      vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                                  "Texture " + vkTexture->getNameStr() +
                                      " is already in CopySrc or CopyDst layout, externally set. Perhaps "
-                                     "you need to call RenderSystem::flushTextureCopyOperations",
+                                     "you need to call RenderSystem::endCopyEncoder or use a different "
+                                     "CopyEncTransitionMode",
+                                 "VulkanQueue::prepareForDownload" );
+                }
+                else if( transitionMode != CopyEncTransitionMode::Auto &&
+                         vkTexture->mCurrLayout != VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                                 "Texture " + vkTexture->getNameStr() +
+                                     " is expected to be in CopySrc layout. "
+                                     "CopyEncTransitionMode promised that.",
                                  "VulkanQueue::prepareForDownload" );
                 }
 
-                if( texture->isUav() )
+                if( transitionMode == CopyEncTransitionMode::Auto )
                 {
-                    texAccessFlags |= VK_ACCESS_SHADER_WRITE_BIT;
-                    srcStage |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
-                                VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
-                                VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT |
-                                VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT |
-                                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
-                                VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
-                }
+                    if( texture->isUav() )
+                    {
+                        texAccessFlags |= VK_ACCESS_SHADER_WRITE_BIT;
+                        srcStage |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
+                                    VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
+                                    VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT |
+                                    VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT |
+                                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
+                                    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+                    }
 
-                if( texture->isRenderToTexture() )
-                {
-                    texAccessFlags |= VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-                    if( !PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
+                    if( texture->isRenderToTexture() )
                     {
                         texAccessFlags |= VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-                        srcStage |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-                    }
-                    else
-                    {
-                        texAccessFlags |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-                        srcStage |= VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
-                                    VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+                        if( !PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
+                        {
+                            texAccessFlags |= VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+                            srcStage |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                        }
+                        else
+                        {
+                            texAccessFlags |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+                            srcStage |= VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
+                                        VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+                        }
                     }
                 }
             }
             else
             {
+                if( transitionMode != CopyEncTransitionMode::Auto )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                                 "Texture " + vkTexture->getNameStr() +
+                                     " was already managed by Copy Encoder but CopyEncTransitionMode "
+                                     "says otherwise",
+                                 "VulkanQueue::prepareForDownload" );
+                }
+
                 if( !it->second )
                 {
                     OGRE_ASSERT_MEDIUM( vkTexture->mCurrLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
@@ -676,7 +740,8 @@ namespace Ogre
                 }
             }
 
-            mCopyDownloadTextures[vkTexture] = true;
+            if( transitionMode != CopyEncTransitionMode::AlreadyInLayoutThenManual )
+                mCopyDownloadTextures[vkTexture] = true;
         }
 
         // One buffer barrier is enough for all buffers.
@@ -734,10 +799,24 @@ namespace Ogre
                                   VK_PIPELINE_STAGE_TRANSFER_BIT, 0, numMemBarriers, &memBarrier, 0u, 0,
                                   numImageMemBarriers, &imageMemBarrier );
         }
+
+        if( !bNeedsTexTransition && vkTexture &&
+            transitionMode == CopyEncTransitionMode::AlreadyInLayoutThenAuto )
+        {
+            // insertRestoreBarrier wants to restore to the current layout after we're
+            // done, but we're already in SRC/DST layout. We want to go to default layout
+            // once we're done.
+            const VkImageLayout currLayout = vkTexture->mCurrLayout;
+            vkTexture->mCurrLayout =
+                VulkanMappings::get( ResourceLayout::CopyEncoderManaged, vkTexture );
+            insertRestoreBarrier( vkTexture, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
+            vkTexture->mCurrLayout = currLayout;
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanQueue::getCopyEncoder( const BufferPacked *buffer, TextureGpu *texture,
-                                      const bool bDownload )
+                                      const bool bDownload,
+                                      CopyEncTransitionMode::CopyEncTransitionMode transitionMode )
     {
         if( mEncoderState != EncoderCopyOpen )
         {
@@ -756,10 +835,22 @@ namespace Ogre
             // Which Ogre does not do (too complex to get right).
         }
 
+        if( texture && ( texture->isRenderToTexture() || texture->isUav() ) &&
+            transitionMode != CopyEncTransitionMode::AlreadyInLayoutThenManual )
+        {
+            BarrierSolver &solver = mRenderSystem->getBarrierSolver();
+            solver.assumeTransition( texture, ResourceLayout::CopyEncoderManaged,
+                                     ResourceAccess::Undefined, 0u );
+        }
+
         if( bDownload )
-            prepareForDownload( buffer, texture );
+            prepareForDownload( buffer, texture, transitionMode );
         else
-            prepareForUpload( buffer, texture );
+            prepareForUpload( buffer, texture, transitionMode );
+
+        OGRE_ASSERT_MEDIUM( ( mCopyEndReadDstBufferFlags || !mImageMemBarrierPtrs.empty() ) ||
+                            ( mCopyDownloadTextures.empty() && !mCopyEndReadDstBufferFlags &&
+                              mImageMemBarrierPtrs.empty() ) );
     }
     //-------------------------------------------------------------------------
     void VulkanQueue::getCopyEncoderV1Buffer( const bool bDownload )
@@ -857,14 +948,25 @@ namespace Ogre
             mImageMemBarriers.clear();
             mImageMemBarrierPtrs.clear();
 
+            BarrierSolver &solver = mRenderSystem->getBarrierSolver();
             TextureGpuDownloadMap::const_iterator itor = mCopyDownloadTextures.begin();
             TextureGpuDownloadMap::const_iterator endt = mCopyDownloadTextures.end();
 
             while( itor != endt )
             {
-                itor->first->mCurrLayout = itor->first->mNextLayout;
+                VulkanTextureGpu *texture = itor->first;
+                texture->mCurrLayout = texture->mNextLayout;
+                if( texture->isRenderToTexture() || texture->isUav() )
+                {
+                    solver.assumeTransition( itor->first, itor->first->getCurrentLayout(),
+                                             ResourceAccess::Undefined, 0u );
+                }
                 ++itor;
             }
+        }
+        else
+        {
+            OGRE_ASSERT_LOW( mCopyDownloadTextures.empty() );
         }
 
         mCopyEndReadSrcBufferFlags = 0;
@@ -1032,8 +1134,7 @@ namespace Ogre
         {
             // We need to wait on these semaphores so that rendering can
             // only happen start the swapchain is done presenting
-            submitInfo.waitSemaphoreCount =
-                static_cast<uint32>( mGpuWaitSemaphForCurrCmdBuff.size() );
+            submitInfo.waitSemaphoreCount = static_cast<uint32>( mGpuWaitSemaphForCurrCmdBuff.size() );
             submitInfo.pWaitSemaphores = mGpuWaitSemaphForCurrCmdBuff.begin();
             submitInfo.pWaitDstStageMask = mGpuWaitFlags.begin();
         }

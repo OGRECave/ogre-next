@@ -400,7 +400,10 @@ namespace Ogre
                 if( ( *itor )->getNumMipmaps() > 1u )
                 {
                     if( ( *itor )->allowsAutoMipmaps() )
-                        ( *itor )->_autogenerateMipmaps();
+                    {
+                        ( *itor )->_autogenerateMipmaps(
+                            CopyEncTransitionMode::AlreadyInLayoutThenAuto );
+                    }
                     else if( !mWarnedNoAutomipmapsAlready )
                     {
                         LogManager::getSingleton().logMessage(
@@ -442,7 +445,7 @@ namespace Ogre
     void CompositorPassMipmap::analyzeBarriers( void )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        renderSystem->flushPendingAutoResourceLayouts();
+        renderSystem->endCopyEncoder();
 
         mResourceTransitions.clear();
 

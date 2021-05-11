@@ -376,7 +376,6 @@ namespace Ogre
     {
 
         TextureGpuManager *textureManager = renderTarget->getTextureManager();
-        textureManager->getRenderSystem()->flushTextureCopyOperations();
 
         AsyncTextureTicket *asyncTicket = textureManager->createAsyncTextureTicket(
             1u, 1u, 6u, TextureTypes::TypeCube, renderTarget->getPixelFormat() );

@@ -118,14 +118,17 @@ namespace Ogre
 
         virtual ResourceLayout::Layout getCurrentLayout( void ) const;
 
-        virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel,
-                             bool keepResolvedTexSynced = true,
-                             ResourceAccess::ResourceAccess issueBarriers = ResourceAccess::ReadWrite );
+        virtual void copyTo(
+            TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel, const TextureBox &srcBox,
+            uint8 srcMipLevel, bool keepResolvedTexSynced = true,
+            CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode = CopyEncTransitionMode::Auto,
+            CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode =
+                CopyEncTransitionMode::Auto );
 
         virtual void _setNextLayout( ResourceLayout::Layout layout );
 
-        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false );
+        virtual void _autogenerateMipmaps(
+            CopyEncTransitionMode::CopyEncTransitionMode transitionMode = CopyEncTransitionMode::Auto );
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 

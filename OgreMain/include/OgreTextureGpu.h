@@ -183,6 +183,74 @@ namespace Ogre
         };
     }
 
+    namespace CopyEncTransitionMode
+    {
+        /// Copy Encoder Transition modes to be used by TextureGpu::copyTo
+        /// and TextureGpu::_autogenerateMipmaps
+        enum CopyEncTransitionMode
+        {
+            /// The texture layout transitions are left to the copy encoder.
+            /// Texture must NOT be in CopySrc or CopyDst.
+            ///
+            /// Texture will be marked as being in ResourceLayout::CopyEncoderManaged
+            /// in the BarrierSolver
+            ///
+            /// Once the copy encoder is closed (e.g. implicitly or calling
+            /// RenderSystem::endCopyEncoder) all auto managed textures will be
+            /// transitioned to a default layout and BarrierSolver will be informed
+            Auto,
+
+            /// Texture is already transitioned directly via BarrierSolver to
+            /// the expected CopySrc/CopyDst/MipmapGen.
+            ///
+            /// Main reason to do this because you were able to group many
+            /// texture transitions together.
+            ///
+            /// Afterwards management is handed off to the Copy encoder: texture is
+            /// tagged in BarrierSolver as CopyEncoderManaged and behaves like
+            /// CopyEncTransitionMode::Auto.
+            ///
+            /// e.g.
+            ///
+            /// @code
+            ///     solver.resolveTransition( resourceTransitions, src, ResourceLayout::CopySrc,
+            ///                               ResourceAccess::Read, 0u );
+            ///     renderSystem->executeResourceTransition( resourceTransitions );
+            ///     src->copyTo( dst, dstBox, 0u, src->getEmptyBox( 0u ), 0u, keepResolvedTexSynced,
+            ///                  CopyEncTransitionMode::AlreadyInLayoutThenAuto,
+            ///                  CopyEncTransitionMode::Auto );
+            /// @endcode
+            AlreadyInLayoutThenAuto,
+
+            /// Texture is already transitioned directly via BarrierSolver to
+            /// the expected CopySrc/CopyDst/MipmapGen.
+            ///
+            /// After the copyTo/_autogenerateMipmaps calls, caller is
+            /// responsible for using BarrierSolver again.
+            ///
+            /// Note that this can be very dangerous and not recommended!
+            /// The following code is for example a race condition:
+            ///
+            /// @code
+            ///     solver.resolveTransition( rt, a, ResourceLayout::CopySrc,
+            ///                               ResourceAccess::Read, 0u );
+            ///     renderSystem->executeResourceTransition( rt );
+            ///     B->copyTo( A, ... );
+            ///     C->copyTo( A, ... );
+            /// @endcode
+            ///
+            /// The reason is that there should be a barrier between
+            /// the 1st and 2nd copy; otherwise C copy into A may start
+            /// before the copy from B into A finishes; thus A may not
+            /// fully end up with C's contents.
+            ///
+            /// But if you're wary of placing the barriers correctly, you
+            /// have full control and group as many layout transitions
+            /// as possible
+            AlreadyInLayoutThenManual
+        };
+    }
+
     /**
     @remarks
         Internal layout of data in memory:
@@ -443,31 +511,17 @@ namespace Ogre
 
             Typically the reason to set this to false is if you plane on rendering more
             stuff to dst texture and then resolve.
-        @param issueBarriers
-                - If issueBarriers & ResourceAccess::Read, then
-                  the copy encoder will issue a barrier for 'this'
-                - If issueBarriers & ResourceAccess::Write, then
-                  the copy encoder will issue a barrier for 'dst'
-
-            Defaults to ResourceAccess::ReadWrite to automatically manage barriers on both src & dst.
-
-            The compositor sets this to ResourceAccess::Undefined to manually manage the barriers
-
-            Some users may have to apply a barrier to individual textures
-            e.g. if src is a RenderTexture but the dst is a regular texture then perform:
-
-            @code
-                solver.resolveTransition( resourceTransitions, src, ResourceLayout::CopySrc,
-                                          ResourceAccess::Read, 0u );
-                renderSystem->executeResourceTransition( resourceTransitions );
-                src->copyTo( dst, dstBox, 0u, src->getEmptyBox( 0u ), 0u, keepResolvedTexSynced,
-                             ResourceAccess::Write );
-            @endcode
+        @param srcTransitionMode
+            Transition mode for 'this'
+        @param dstTransitionMode
+            Transition mode for 'dst'
         */
-        virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel,
-                             bool keepResolvedTexSynced = true,
-                             ResourceAccess::ResourceAccess issueBarriers = ResourceAccess::ReadWrite );
+        virtual void copyTo(
+            TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel, const TextureBox &srcBox,
+            uint8 srcMipLevel, bool keepResolvedTexSynced = true,
+            CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode = CopyEncTransitionMode::Auto,
+            CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode =
+                CopyEncTransitionMode::Auto );
 
         /** These 3 values  are used as defaults for the compositor to use, but they may be
             explicitly overriden by a RenderPassDescriptor.
@@ -513,31 +567,13 @@ namespace Ogre
         */
         void _resolveTo( TextureGpu *resolveTexture );
 
-        /** Tells the API to let the HW autogenerate mipmaps. Assumes the
+        /** Tells the API to let the HW autogenerate mipmaps. Assumes
             allowsAutoMipmaps() == true and isRenderToTexture() == true
-        @param bUseBarrierSolver
-            When false, Vulkan will use an heuristic to detect whether this texture
-            is already in MipmapGen (note: MipmapGen may alias to CopySrc).
-                - If it is in MipmapGen/CopySrc, we assume the texture has been already
-                  transitioned externally by a barrier or the copy encoder; thus
-                  no barrier will be issued
-                - If it is not, then we open the copy encoder to take care
-                  of resource transitions; which is desirable if you wish
-                  to use 'this' only as a texture or for copying data around,
-                  but probably undesirable if you wish to do more transitions using
-                  the BarrierSolver for RenderTexture and/or Uav.
-
-            When true, we force a resource transition using the barrier solver.
-            Calling texture->_autogenerateMipmaps( true ) is exactly the same as doing:
-            @code
-                barrierSolver.resolveTransition( resourceTransitions, texture,
-                                                 ResourceLayout::MipmapGen,
-                                                 ResourceAccess::ReadWrite, 0u );
-                renderSystem->executeResourceTransition( resourceTransitions );
-                texture->_autogenerateMipmaps( false );
-            @endcode
+        @param transitionMode
+            See CopyEncTransitionMode::CopyEncTransitionMode
         */
-        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false ) = 0;
+        virtual void _autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
+                                               CopyEncTransitionMode::Auto ) = 0;
         /// Only valid for TextureGpu classes.
         /// TODO: This may be moved to a different class.
         virtual void swapBuffers(void) {}

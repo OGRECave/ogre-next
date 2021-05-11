@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
+#include "OgreTextureGpu.h"
 #include "Vao/OgreBufferPacked.h"
 
 #include "vulkan/vulkan_core.h"
@@ -181,7 +182,8 @@ namespace Ogre
         @param buffer
         @param texture
         */
-        void prepareForUpload( const BufferPacked *buffer, TextureGpu *texture );
+        void prepareForUpload( const BufferPacked *buffer, TextureGpu *texture,
+                               CopyEncTransitionMode::CopyEncTransitionMode transitionMode );
 
         /** There between zero to two barriers that prepareForDownload will generate:
 
@@ -200,7 +202,8 @@ namespace Ogre
         @param buffer
         @param texture
         */
-        void prepareForDownload( const BufferPacked *buffer, TextureGpu *texture );
+        void prepareForDownload( const BufferPacked *buffer, TextureGpu *texture,
+                                 CopyEncTransitionMode::CopyEncTransitionMode transitionMode );
 
     public:
         VulkanQueue();
@@ -247,8 +250,12 @@ namespace Ogre
                 queue->getCopyEncoder( src, src, true );
                 queue->getCopyEncoder( dst, dst, false );
             @endcode
+        @param transitionMode
+            Only used if texture != nullptr
+            See CopyEncTransitionMode::CopyEncTransitionMode
         */
-        void getCopyEncoder( const BufferPacked *buffer, TextureGpu *texture, const bool bDownload );
+        void getCopyEncoder( const BufferPacked *buffer, TextureGpu *texture, const bool bDownload,
+                             CopyEncTransitionMode::CopyEncTransitionMode transitionMode );
         void getCopyEncoderV1Buffer( const bool bDownload );
 
         void endCopyEncoder( void );

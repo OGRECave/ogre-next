@@ -206,14 +206,7 @@ namespace Ogre
         dstBox.sliceStart = sliceIdx;
         dstBox.numSlices = 1u;
 
-        RenderSystem *renderSystem = mTextureGpuManager->getRenderSystem();
-        BarrierSolver &solver = renderSystem->getBarrierSolver();
-        ResourceTransitionArray &barrier = solver.getNewResourceTransitionsArrayTmp();
-        solver.resolveTransition( barrier, mDownsampleTex, ResourceLayout::CopySrc, ResourceAccess::Read,
-                                  0u );
-        renderSystem->executeResourceTransition( barrier );
-        mDownsampleTex->copyTo( mTexturePool, dstBox, 0u, mDownsampleTex->getEmptyBox( 0u ), 0u, true,
-                                ResourceAccess::Write );
+        mDownsampleTex->copyTo( mTexturePool, dstBox, 0u, mDownsampleTex->getEmptyBox( 0u ), 0u, true );
 
         mTextureToPoolEntry[texture] = sliceIdx;
         return sliceIdx;

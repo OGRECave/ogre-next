@@ -440,9 +440,11 @@ namespace Ogre
     void D3D11TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                                   const TextureBox &srcBox, uint8 srcMipLevel,
                                   bool keepResolvedTexSynced,
-                                  ResourceAccess::ResourceAccess issueBarriers )
+                                  CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode,
+                                  CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode )
     {
-        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, issueBarriers );
+        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, srcTransitionMode,
+                            dstTransitionMode );
 
         assert( dynamic_cast<D3D11TextureGpu*>( dst ) );
         D3D11TextureGpu *dstD3d = static_cast<D3D11TextureGpu*>( dst );
@@ -517,7 +519,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::_autogenerateMipmaps( bool bUseBarrierSolver )
+    void D3D11TextureGpu::_autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode
+                                                /*transitionMode*/ )
     {
         if( !mFinalTextureName || !isDataReady() )
             return;

@@ -97,15 +97,18 @@ namespace Ogre
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
-        virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel,
-                             bool keepResolvedTexSynced = true,
-                             ResourceAccess::ResourceAccess issueBarriers = ResourceAccess::ReadWrite );
+        virtual void copyTo(
+            TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel, const TextureBox &srcBox,
+            uint8 srcMipLevel, bool keepResolvedTexSynced = true,
+            CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode = CopyEncTransitionMode::Auto,
+            CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode =
+                CopyEncTransitionMode::Auto );
 
         virtual void _setToDisplayDummyTexture(void);
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
-        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false );
+        virtual void _autogenerateMipmaps(
+            CopyEncTransitionMode::CopyEncTransitionMode transitionMode = CopyEncTransitionMode::Auto );
 
         //The returned pointer has its ref. count incremented! Caller must decrease it!
         ComPtr<ID3D11ShaderResourceView> createSrv( const DescriptorSetTexture2::TextureSlot &texSlot ) const;

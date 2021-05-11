@@ -361,7 +361,8 @@ namespace Ogre
                 {
                     TextureBox emptyBox = mOutputTexture->getEmptyBox( mip );
                     mInputTexture->copyTo( mOutputTexture, emptyBox, mip, emptyBox, mip, true,
-                                           ResourceAccess::Undefined );
+                                           CopyEncTransitionMode::AlreadyInLayoutThenAuto,
+                                           CopyEncTransitionMode::AlreadyInLayoutThenAuto );
                 }
             }
         }
@@ -373,7 +374,7 @@ namespace Ogre
             RenderSystem *renderSystem = mParentNode->getRenderSystem();
             renderSystem->endRenderPassDescriptor();
 
-            mInputTexture->_autogenerateMipmaps();
+            mInputTexture->_autogenerateMipmaps( CopyEncTransitionMode::AlreadyInLayoutThenManual );
 
             {
                 mResourceTransitions.clear();
@@ -405,7 +406,7 @@ namespace Ogre
     void CompositorPassIblSpecular::analyzeBarriers( void )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        renderSystem->flushPendingAutoResourceLayouts();
+        renderSystem->endCopyEncoder();
 
         mResourceTransitions.clear();
 

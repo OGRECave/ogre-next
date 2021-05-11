@@ -315,7 +315,7 @@ namespace Ogre
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );
 
-        virtual void flushPendingAutoResourceLayouts( void );
+        virtual void endCopyEncoder( void );
         virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection );
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );

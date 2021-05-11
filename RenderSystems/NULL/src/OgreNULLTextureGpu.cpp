@@ -65,7 +65,8 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    void NULLTextureGpu::_autogenerateMipmaps( bool bUseBarrierSolver )
+    void NULLTextureGpu::_autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode
+                                               /*transitionMode*/ )
     {
     }
     //-----------------------------------------------------------------------------------

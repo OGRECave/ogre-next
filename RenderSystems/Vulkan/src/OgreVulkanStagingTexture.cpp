@@ -131,7 +131,7 @@ namespace Ogre
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
         VulkanDevice *device = vaoManager->getDevice();
 
-        device->mGraphicsQueue.getCopyEncoder( 0, dstTexture, false );
+        device->mGraphicsQueue.getCopyEncoder( 0, dstTexture, false, CopyEncTransitionMode::Auto );
 
         size_t bytesPerRow = srcBox.bytesPerRow;
         // size_t bytesPerImage = srcBox.bytesPerImage;

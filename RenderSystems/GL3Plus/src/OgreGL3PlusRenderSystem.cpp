@@ -1621,7 +1621,7 @@ namespace Ogre {
                                     GL_FRAMEBUFFER_BARRIER_BIT;
                         break;
                     case ResourceLayout::Undefined:
-                    case ResourceLayout::CopyEnd:
+                    case ResourceLayout::CopyEncoderManaged:
                     case ResourceLayout::NumResourceLayouts:
                         break;
                     }

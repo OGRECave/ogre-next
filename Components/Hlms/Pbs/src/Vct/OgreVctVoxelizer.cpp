@@ -1505,7 +1505,7 @@ namespace Ogre
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
 
         if( mNeedsAlbedoMipmaps )
-            mAlbedoVox->_autogenerateMipmaps( true );
+            mAlbedoVox->_autogenerateMipmaps();
 
         OgreProfileGpuEnd( "VCT build" );
     }

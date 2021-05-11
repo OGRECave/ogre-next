@@ -232,7 +232,8 @@ namespace Ogre
 
             assert( dst.destination->getBufferType() == BT_DEFAULT );
 
-            device->mGraphicsQueue.getCopyEncoder( dst.destination, 0, false );
+            device->mGraphicsQueue.getCopyEncoder( dst.destination, 0, false,
+                                                   CopyEncTransitionMode::Auto );
 
             size_t dstOffset = dst.dstOffset + dst.destination->_getInternalBufferStart() *
                                                    dst.destination->getBytesPerElement();
@@ -287,7 +288,7 @@ namespace Ogre
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
         VulkanDevice *device = vaoManager->getDevice();
 
-        device->mGraphicsQueue.getCopyEncoder( source, 0, true );
+        device->mGraphicsQueue.getCopyEncoder( source, 0, true, CopyEncTransitionMode::Auto );
 
         VkBufferCopy region;
         region.srcOffset = source->_getFinalBufferStart() * source->getBytesPerElement() + srcOffset;

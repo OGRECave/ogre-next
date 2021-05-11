@@ -835,13 +835,6 @@ namespace Ogre
 
         BoundUav getBoundUav( size_t slot ) const;
 
-        /// Call this function if you need to call texture->copyTo or create an AsyncTextureTicket
-        /// on a Texture which is currently in either ResourceLayout::CopySrc or CopyDst layout.
-        ///
-        /// For performance reasons though it is recommended that you wait until
-        /// CompositorManager::_update() is returns
-        void flushTextureCopyOperations( void );
-
         /**
         @param slotStart
         @param set
@@ -865,7 +858,7 @@ namespace Ogre
         /// then when calling executeResourceTransition, the pending resource layout
         /// will be flushed, and now the resource transition resolved by BarrierSolver
         /// will have the wrong 'old' layout
-        virtual void flushPendingAutoResourceLayouts() {}
+        virtual void endCopyEncoder() {}
 
         virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection ) {}
 
@@ -1515,7 +1508,6 @@ namespace Ogre
         void destroyAllRenderPassDescriptors(void);
 
         BarrierSolver mBarrierSolver;
-        ResourceTransitionArray mFinalResourceTransition;
 
         DepthBufferMap2 mDepthBufferPool2;
         DepthBufferRefMap mSharedDepthBufferRefs;

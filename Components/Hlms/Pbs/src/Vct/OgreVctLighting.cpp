@@ -562,7 +562,10 @@ namespace Ogre
         }
 
         if( mLightVoxel[0]->getNumMipmaps() > 1u )
-            mLightVoxel[0]->_autogenerateMipmaps( true );
+        {
+            mLightVoxel[0]->_autogenerateMipmaps();
+            renderSystem->endCopyEncoder();
+        }
     }
     //-------------------------------------------------------------------------
     void VctLighting::setAllowMultipleBounces( bool bAllowMultipleBounces )
@@ -753,6 +756,8 @@ namespace Ogre
         mInvVoxelResolution->setManualValue( invVoxelRes );
         mShaderParams->setDirty();
 
+        renderSystem->endCopyEncoder();
+
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
         mLightInjectionJob->analyzeBarriers( mResourceTransitions );
         renderSystem->executeResourceTransition( mResourceTransitions );
@@ -762,7 +767,10 @@ namespace Ogre
             generateAnisotropicMips();
 
         if( mLightVoxel[0]->getNumMipmaps() > 1u )
-            mLightVoxel[0]->_autogenerateMipmaps( true );
+        {
+            mLightVoxel[0]->_autogenerateMipmaps();
+            renderSystem->endCopyEncoder();
+        }
 
         if( numBounces > 0u )
         {

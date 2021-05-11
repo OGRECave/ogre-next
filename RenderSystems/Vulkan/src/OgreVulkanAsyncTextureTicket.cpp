@@ -118,7 +118,7 @@ namespace Ogre
 
         // No need to call mQueue->getCopyEncoder( this, 0, false ); because
         // this is a fresh memory region (unless mStatus == Downloading)
-        mQueue->getCopyEncoder( 0, textureSrc, true );
+        mQueue->getCopyEncoder( 0, textureSrc, true, CopyEncTransitionMode::Auto );
         if( mStatus == Downloading )
         {
             // User called downloadFromGpu twice in a row without mapping.

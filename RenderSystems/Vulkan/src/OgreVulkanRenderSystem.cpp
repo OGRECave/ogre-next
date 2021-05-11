@@ -2405,10 +2405,10 @@ namespace Ogre
         case ResourceLayout::CopySrc:
         case ResourceLayout::CopyDst:
             return VK_PIPELINE_STAGE_TRANSFER_BIT;
-        case ResourceLayout::CopyEnd:
         case ResourceLayout::ResolveDest:
             return VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
         case ResourceLayout::Undefined:
+        case ResourceLayout::CopyEncoderManaged:
         case ResourceLayout::NumResourceLayouts:
             return 0;
         }
@@ -2435,7 +2435,7 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::flushPendingAutoResourceLayouts( void )
+    void VulkanRenderSystem::endCopyEncoder( void )
     {
         mActiveDevice->mGraphicsQueue.endCopyEncoder();
     }
@@ -2463,8 +2463,10 @@ namespace Ogre
         {
             if( itor->resource && itor->resource->isTextureGpu() )
             {
-                OGRE_ASSERT_MEDIUM( itor->oldLayout != ResourceLayout::CopyEnd &&
-                                    "ResourceLayout::CopyEnd is never in oldLayout" );
+                OGRE_ASSERT_MEDIUM( itor->oldLayout != ResourceLayout::CopyEncoderManaged &&
+                                    "ResourceLayout::CopyEncoderManaged is never in oldLayout" );
+                OGRE_ASSERT_MEDIUM( itor->newLayout != ResourceLayout::CopyEncoderManaged &&
+                                    "ResourceLayout::CopyEncoderManaged is never in newLayout" );
 
                 VulkanTextureGpu *texture = static_cast<VulkanTextureGpu *>( itor->resource );
                 VkImageMemoryBarrier imageBarrier = texture->getImageMemoryBarrier();
@@ -2501,17 +2503,14 @@ namespace Ogre
                         srcStage |= ogreToVkStageFlags( itor->oldStageMask );
                 }
 
-                if( itor->newLayout != ResourceLayout::CopyEnd )
+                if( itor->newLayout != ResourceLayout::Texture &&
+                    itor->newLayout != ResourceLayout::Uav )
                 {
-                    if( itor->newLayout != ResourceLayout::Texture &&
-                        itor->newLayout != ResourceLayout::Uav )
-                    {
-                        dstStage |= toVkPipelineStageFlags( itor->newLayout, bIsDepth );
-                    }
-
-                    if( itor->newStageMask != 0u )
-                        dstStage |= ogreToVkStageFlags( itor->newStageMask );
+                    dstStage |= toVkPipelineStageFlags( itor->newLayout, bIsDepth );
                 }
+
+                if( itor->newStageMask != 0u )
+                    dstStage |= ogreToVkStageFlags( itor->newStageMask );
 
                 texture->mCurrLayout = imageBarrier.newLayout;
 

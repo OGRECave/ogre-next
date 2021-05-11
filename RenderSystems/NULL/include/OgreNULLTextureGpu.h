@@ -59,8 +59,9 @@ namespace Ogre
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
         virtual void notifyDataIsReady(void);
 
-        virtual void _autogenerateMipmaps( bool bUseBarrierSolver = false );
-        virtual void _setToDisplayDummyTexture(void);
+        virtual void _autogenerateMipmaps(
+            CopyEncTransitionMode::CopyEncTransitionMode transitionMode = CopyEncTransitionMode::Auto );
+        virtual void _setToDisplayDummyTexture( void );
 
         virtual bool _isDataReadyImpl(void) const;
     };

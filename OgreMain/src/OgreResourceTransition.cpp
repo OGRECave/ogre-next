@@ -57,38 +57,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     const ResourceStatusMap &BarrierSolver::getResourceStatus( void ) { return mResourceStatus; }
     //-------------------------------------------------------------------------
-    void BarrierSolver::resetCopyLayoutsOnly( ResourceTransitionArray &resourceTransitions )
-    {
-        FastArray<TextureGpu *>::const_iterator itor = mCopyStateTextures.begin();
-        FastArray<TextureGpu *>::const_iterator endt = mCopyStateTextures.end();
-
-        while( itor != endt )
-        {
-            TextureGpu *texture = *itor;
-            ResourceLayout::Layout currLayout = texture->getCurrentLayout();
-            if( currLayout == ResourceLayout::CopySrc || currLayout == ResourceLayout::CopyDst )
-            {
-                // It's still in copy layout. Transition the texture out of that.
-                if( mResourceStatus[texture].layout != ResourceLayout::CopyEnd )
-                {
-                    resolveTransition( resourceTransitions, texture, ResourceLayout::CopyEnd,
-                                       ResourceAccess::Read, 0u );
-                }
-            }
-
-            texture->removeListener( this );
-
-            ++itor;
-        }
-
-        mCopyStateTextures.clear();
-    }
-    //-------------------------------------------------------------------------
-    void BarrierSolver::reset( ResourceTransitionArray &resourceTransitions )
-    {
-        resetCopyLayoutsOnly( resourceTransitions );
-        mResourceStatus.clear();
-    }
+    void BarrierSolver::reset() { mResourceStatus.clear(); }
     //-------------------------------------------------------------------------
     /**
     @brief BarrierSolver::checkDivergingTransition
@@ -154,20 +123,6 @@ namespace Ogre
 
         OGRE_ASSERT_MEDIUM( access != ResourceAccess::Undefined );
 
-        if( newLayout == ResourceLayout::CopySrc || newLayout == ResourceLayout::CopyDst ||
-            newLayout == ResourceLayout::MipmapGen )
-        {
-            // Keep track of textures which have been transitioned to Copy layouts, since
-            // we can't finish the frame with textures in that stage as they're automatically
-            // managed by the Copy Encoder.
-            // Duplicate entries are harmless but we try to avoid it.
-            if( mCopyStateTextures.empty() || mCopyStateTextures.back() != texture )
-            {
-                texture->addListener( this );
-                mCopyStateTextures.push_back( texture );
-            }
-        }
-
         ResourceStatusMap::iterator itor = mResourceStatus.find( texture );
 
         if( itor == mResourceStatus.end() )
@@ -206,12 +161,15 @@ namespace Ogre
         {
             RenderSystem *renderSystem = texture->getTextureManager()->getRenderSystem();
 
+            OGRE_ASSERT_MEDIUM( itor->second.layout != ResourceLayout::CopyEncoderManaged &&
+                                "Call RenderSystem::endCopyEncoder first!" );
+
             OGRE_ASSERT_MEDIUM(
                 ( checkDivergingTransition( resourceTransitions, texture, newLayout ) ||
                   renderSystem->isSameLayout( itor->second.layout, texture->getCurrentLayout(), texture,
                                               true ) ) &&
                 "Layout was altered outside BarrierSolver! "
-                "Common reasons are copyTo and _autogenerateMipmaps(false)" );
+                "Common reasons are copyTo and _autogenerateMipmaps" );
 
             if( !renderSystem->isSameLayout( itor->second.layout, newLayout, texture, false ) ||
                 ( newLayout == ResourceLayout::Uav &&  //
@@ -317,18 +275,4 @@ namespace Ogre
         if( itor != mResourceStatus.end() )
             mResourceStatus.erase( itor );
     }
-    //-------------------------------------------------------------------------
-    void BarrierSolver::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                              void *extraData )
-    {
-        if( reason == TextureGpuListener::Deleted )
-        {
-            FastArray<TextureGpu *>::iterator itor =
-                std::find( mCopyStateTextures.begin(), mCopyStateTextures.end(), texture );
-            efficientVectorRemove( mCopyStateTextures, itor );
-            texture->removeListener( this );
-        }
-    }
-    //-------------------------------------------------------------------------
-    bool BarrierSolver::shouldStayLoaded( TextureGpu *texture ) { return false; }
 }  // namespace Ogre

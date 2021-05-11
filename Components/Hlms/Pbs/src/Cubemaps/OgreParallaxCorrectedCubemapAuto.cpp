@@ -191,12 +191,15 @@ namespace Ogre
         const uint8 numMipmaps = ibl->getNumMipmaps();
         for( uint8 mip=0; mip<numMipmaps; ++mip )
         {
+            const CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
+                mip == 0u ? CopyEncTransitionMode::AlreadyInLayoutThenAuto : CopyEncTransitionMode::Auto;
+
             //srcBox.numSlices = 6, thus we ask the RenderSystem to copy all 6 slices in one call
             TextureBox srcBox = ibl->getEmptyBox( mip );
             TextureBox dstBox = srcBox;
             srcBox.sliceStart = 0;
             dstBox.sliceStart = cubemapArrayIdx;
-            ibl->copyTo( mBindTexture, dstBox, mip, srcBox, mip, true, ResourceAccess::Undefined );
+            ibl->copyTo( mBindTexture, dstBox, mip, srcBox, mip, true, transitionMode, transitionMode );
         }
     }
     //-----------------------------------------------------------------------------------

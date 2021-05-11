@@ -268,15 +268,11 @@ namespace Ogre
         m_compositorManager->removeWorkspace( workspace );
         mManager->destroyCamera( dummyCamera );
 
-        mManager->getDestinationRenderSystem()->flushTextureCopyOperations();
-
         for( uint8 i = 0u; i < m_normalMapTex->getNumMipmaps(); ++i )
         {
             tmpRtt->copyTo( m_normalMapTex, m_normalMapTex->getEmptyBox( i ), i,
                             tmpRtt->getEmptyBox( i ), i );
         }
-
-        //mManager->getDestinationRenderSystem()->flushPendingAutoResourceLayouts();
 
         TerraSharedResources::destroyTempTexture( m_sharedResources, tmpRtt );
     }
