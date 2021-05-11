@@ -58,7 +58,7 @@ namespace Ogre
         mInvOrientation( Matrix3::IDENTITY ),
         mProbeShape( Aabb::BOX_ZERO ),
         mTexture( 0 ),
-        mCubemapArrayIdx( std::numeric_limits<uint32>::max() ),
+        mCubemapArrayIdx( std::numeric_limits<uint16>::max() ),
         mClearWorkspace( 0 ),
         mWorkspace( 0 ),
         mCamera( 0 ),
@@ -207,7 +207,7 @@ namespace Ogre
             destroyInternalProbe();
             mCreator->_releaseTextureSlot( mTexture, mCubemapArrayIdx );
             mTexture = 0;
-            mCubemapArrayIdx = std::numeric_limits<uint32>::max();
+            mCubemapArrayIdx = std::numeric_limits<uint16>::max();
         }
     }
     //-----------------------------------------------------------------------------------
