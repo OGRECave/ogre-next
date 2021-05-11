@@ -124,7 +124,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a4d2162c156be30917f38f15e2327ce65a154441f49638a86fc2da0e1a712fc614"></a>AlwaysKeepSystemRamCopy&#160;</td><td class="fielddoc"><p>Always keep a copy on system RAM, even when resident. </p>
 <p>This makes for fast reading from CPU. Not all resources allow this option (e.g. RTT &amp; UAV textures)</p>
-<p>Warning: This flag has a few drawbacks for Textures. The metadata won't be ready earlier (i.e. it won't be available until the data is available). The metadata cache can't be used. Some calls such as <a class="el" href="class_ogre_1_1_texture_gpu.html#ab4b5769170451116a85dbc4844d356e3">TextureGpu::copyTo</a> require syncing back from GPU to CPU. This is made async, but if you queue more than one copyTo call, it can stall. </p>
+<p>Warning: This flag has a few drawbacks for Textures. The metadata won't be ready earlier (i.e. it won't be available until the data is available). The metadata cache can't be used. Some calls such as <a class="el" href="class_ogre_1_1_texture_gpu.html#a18f60db95a5d6b1681b34aae96d98c4c">TextureGpu::copyTo</a> require syncing back from GPU to CPU. This is made async, but if you queue more than one copyTo call, it can stall. </p>
 </td></tr>
 </table>
 

@@ -31,6 +31,13 @@ var namespace_ogre =
         [ "NumCommonTextureTypes", "namespace_ogre_1_1_common_texture_types.html#a3a978c834ce00930123468c9a64047b4a46cdc74c21d464c0330b5bcb57b22462", null ]
       ] ]
     ] ],
+    [ "CopyEncTransitionMode", "namespace_ogre_1_1_copy_enc_transition_mode.html", [
+      [ "CopyEncTransitionMode", "namespace_ogre_1_1_copy_enc_transition_mode.html#a88628e41c3e6b360f8b1653a1fc6697a", [
+        [ "Auto", "namespace_ogre_1_1_copy_enc_transition_mode.html#a88628e41c3e6b360f8b1653a1fc6697aafa04688137f25d1b66e3e5c9b6429172", null ],
+        [ "AlreadyInLayoutThenAuto", "namespace_ogre_1_1_copy_enc_transition_mode.html#a88628e41c3e6b360f8b1653a1fc6697aac8df964fe9e3a074f16264bf4286328d", null ],
+        [ "AlreadyInLayoutThenManual", "namespace_ogre_1_1_copy_enc_transition_mode.html#a88628e41c3e6b360f8b1653a1fc6697aaf94136572738824a9b28ec2da3ee01a1", null ]
+      ] ]
+    ] ],
     [ "CubemapSide", "namespace_ogre_1_1_cubemap_side.html", [
       [ "CubemapSide", "namespace_ogre_1_1_cubemap_side.html#aa05717bddc9101a336507b0a167cde29", [
         [ "PX", "namespace_ogre_1_1_cubemap_side.html#aa05717bddc9101a336507b0a167cde29a4abb19f074931d8f9894fb21bed001f3", null ],
@@ -224,8 +231,8 @@ var namespace_ogre =
         [ "Uav", "namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7ac3f1d41e37ebfa1d7391428495024cf2", null ],
         [ "CopySrc", "namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a4d712d43e8f9639bda08a221116ecdba", null ],
         [ "CopyDst", "namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a499a0fd60eecd7dfb72b3313e8c0d3eb", null ],
-        [ "CopyEnd", "namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7aeb61f77ce8aa2c19fdb8073fd2f8c9de", null ],
         [ "MipmapGen", "namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a01e996240ebaf3532f90bfdda410f56a", null ],
+        [ "CopyEncoderManaged", "namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7ad299aa2a37b4152e2fbb860b9a1d9875", null ],
         [ "PresentReady", "namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a71d19dc10ffe3564c9f2a81137b731d3", null ],
         [ "NumResourceLayouts", "namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7aca23d90822badf7c7813e47f4900d765", null ]
       ] ]

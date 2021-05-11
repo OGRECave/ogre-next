@@ -26,7 +26,7 @@ var class_ogre_1_1_vulkan_queue =
     [ "endCopyEncoder", "class_ogre_1_1_vulkan_queue.html#a31b6f4bb8e0b2c08829b669836b802d1", null ],
     [ "endRenderEncoder", "class_ogre_1_1_vulkan_queue.html#add80ec09a31bed7221ce55a639eea902", null ],
     [ "getComputeEncoder", "class_ogre_1_1_vulkan_queue.html#a47eda4ae6f4e45efd7c4cc1c153657c4", null ],
-    [ "getCopyEncoder", "class_ogre_1_1_vulkan_queue.html#a6b2c170bd92948980649cc6bc68bd268", null ],
+    [ "getCopyEncoder", "class_ogre_1_1_vulkan_queue.html#a036b99841e3865ee04bd05f624fd97c5", null ],
     [ "getCopyEncoderV1Buffer", "class_ogre_1_1_vulkan_queue.html#affa78f52be9822ce962cdc65875edd10", null ],
     [ "getEncoderState", "class_ogre_1_1_vulkan_queue.html#ab0e5dbece414e38e74c3a149d71f0ac6", null ],
     [ "getFamilyIdx", "class_ogre_1_1_vulkan_queue.html#a424e609f3f750db0c72ad16fb36d3af3", null ],

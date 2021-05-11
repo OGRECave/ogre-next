@@ -106,8 +106,8 @@ Enumerations</h2></td></tr>
 , <a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a4d712d43e8f9639bda08a221116ecdba">CopySrc</a>
 , <br />
 &#160;&#160;<a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a499a0fd60eecd7dfb72b3313e8c0d3eb">CopyDst</a>
-, <a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7aeb61f77ce8aa2c19fdb8073fd2f8c9de">CopyEnd</a>
 , <a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a01e996240ebaf3532f90bfdda410f56a">MipmapGen</a>
+, <a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7ad299aa2a37b4152e2fbb860b9a1d9875">CopyEncoderManaged</a>
 , <a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a71d19dc10ffe3564c9f2a81137b731d3">PresentReady</a>
 , <br />
 &#160;&#160;<a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7aca23d90822badf7c7813e47f4900d765">NumResourceLayouts</a>
@@ -137,9 +137,10 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a7ce11be54143fb01a34d6b7529ba3dc7ac3f1d41e37ebfa1d7391428495024cf2"></a>Uav&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a7ce11be54143fb01a34d6b7529ba3dc7a4d712d43e8f9639bda08a221116ecdba"></a>CopySrc&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a7ce11be54143fb01a34d6b7529ba3dc7a499a0fd60eecd7dfb72b3313e8c0d3eb"></a>CopyDst&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a7ce11be54143fb01a34d6b7529ba3dc7aeb61f77ce8aa2c19fdb8073fd2f8c9de"></a>CopyEnd&#160;</td><td class="fielddoc"><p>Special layout only used in flushTextureCopyOperations to prevent conflicts with automatically managed copy encoders. </p>
-</td></tr>
 <tr><td class="fieldname"><a id="a7ce11be54143fb01a34d6b7529ba3dc7a01e996240ebaf3532f90bfdda410f56a"></a>MipmapGen&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7ce11be54143fb01a34d6b7529ba3dc7ad299aa2a37b4152e2fbb860b9a1d9875"></a>CopyEncoderManaged&#160;</td><td class="fielddoc"><p>Copy encoder is managing this texture. </p>
+<p><a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a> can't resolve operations until the copy encoder is closed. (i.e. call <a class="el" href="class_ogre_1_1_render_system.html#a30b893cdd07ccd24f95623ebef2668b7" title="Required when caller will soon start analyzing barriers (e.g.">RenderSystem::endCopyEncoder</a>) </p>
+</td></tr>
 <tr><td class="fieldname"><a id="a7ce11be54143fb01a34d6b7529ba3dc7a71d19dc10ffe3564c9f2a81137b731d3"></a>PresentReady&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a7ce11be54143fb01a34d6b7529ba3dc7aca23d90822badf7c7813e47f4900d765"></a>NumResourceLayouts&#160;</td><td class="fielddoc"></td></tr>
 </table>

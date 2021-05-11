@@ -1328,6 +1328,7 @@ var hierarchy =
     [ "Ogre::AxisAlignedBox", "class_ogre_1_1_axis_aligned_box.html", null ],
     [ "Ogre::BackgroundProcessResult", "struct_ogre_1_1_background_process_result.html", null ],
     [ "Ogre::Barrier", "class_ogre_1_1_barrier.html", null ],
+    [ "Ogre::BarrierSolver", "class_ogre_1_1_barrier_solver.html", null ],
     [ "Ogre::BasicBlock", "struct_ogre_1_1_basic_block.html", [
       [ "Ogre::HlmsBlendblock", "struct_ogre_1_1_hlms_blendblock.html", null ],
       [ "Ogre::HlmsMacroblock", "struct_ogre_1_1_hlms_macroblock.html", null ],
@@ -2190,7 +2191,6 @@ var hierarchy =
     [ "Ogre::TextureBox", "struct_ogre_1_1_texture_box.html", null ],
     [ "Ogre::TextureGpuListener", "class_ogre_1_1_texture_gpu_listener.html", [
       [ "Ogre::AsyncTextureTicket", "class_ogre_1_1_async_texture_ticket.html", null ],
-      [ "Ogre::BarrierSolver", "class_ogre_1_1_barrier_solver.html", null ],
       [ "Ogre::CompositorPassUav", "class_ogre_1_1_compositor_pass_uav.html", null ],
       [ "Ogre::Decal", "class_ogre_1_1_decal.html", null ],
       [ "Ogre::Font", "class_ogre_1_1_font.html", null ],

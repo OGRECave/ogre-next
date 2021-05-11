@@ -12,8 +12,8 @@ var _ogre_resource_transition_8h =
       [ "Uav", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7ac3f1d41e37ebfa1d7391428495024cf2", null ],
       [ "CopySrc", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7a4d712d43e8f9639bda08a221116ecdba", null ],
       [ "CopyDst", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7a499a0fd60eecd7dfb72b3313e8c0d3eb", null ],
-      [ "CopyEnd", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7aeb61f77ce8aa2c19fdb8073fd2f8c9de", null ],
       [ "MipmapGen", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7a01e996240ebaf3532f90bfdda410f56a", null ],
+      [ "CopyEncoderManaged", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7ad299aa2a37b4152e2fbb860b9a1d9875", null ],
       [ "PresentReady", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7a71d19dc10ffe3564c9f2a81137b731d3", null ],
       [ "NumResourceLayouts", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7aca23d90822badf7c7813e47f4900d765", null ]
     ] ],

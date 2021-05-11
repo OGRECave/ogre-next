@@ -398,6 +398,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a36a560a1e0e171b9a1a19a2748e6dd15"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a36a560a1e0e171b9a1a19a2748e6dd15">destroyRenderWindow</a> (<a class="el" href="class_ogre_1_1_window.html">Window</a> *window)</td></tr>
 <tr class="memdesc:a36a560a1e0e171b9a1a19a2748e6dd15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a render window.  <a href="class_ogre_1_1_render_system.html#a36a560a1e0e171b9a1a19a2748e6dd15">More...</a><br /></td></tr>
 <tr class="separator:a36a560a1e0e171b9a1a19a2748e6dd15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30b893cdd07ccd24f95623ebef2668b7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a30b893cdd07ccd24f95623ebef2668b7">endCopyEncoder</a> ()</td></tr>
+<tr class="memdesc:a30b893cdd07ccd24f95623ebef2668b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required when caller will soon start analyzing barriers (e.g.  <a href="class_ogre_1_1_render_system.html#a30b893cdd07ccd24f95623ebef2668b7">More...</a><br /></td></tr>
+<tr class="separator:a30b893cdd07ccd24f95623ebef2668b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a72b69bed67cdf99239d884748bcb08"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a0a72b69bed67cdf99239d884748bcb08">endGpuDebuggerFrameCapture</a> (<a class="el" href="class_ogre_1_1_window.html">Window</a> *window)</td></tr>
 <tr class="memdesc:a0a72b69bed67cdf99239d884748bcb08"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_render_system.html#afe7705e26f10dccebf2e6db0b3d6859e" title="Programmatically performs a GPU capture when attached to a GPU debugger like RenderDoc or Metal Graph...">RenderSystem::startGpuDebuggerFrameCapture</a> Call this function when you're done capturing a frame.  <a href="class_ogre_1_1_render_system.html#a0a72b69bed67cdf99239d884748bcb08">More...</a><br /></td></tr>
 <tr class="separator:a0a72b69bed67cdf99239d884748bcb08"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -419,12 +422,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad6efb4ed490715cf068fca69b689403d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a003190ca748a8f7ad1f3fa7212fa9126"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#a003190ca748a8f7ad1f3fa7212fa9126">flushCommands</a> (void)</td></tr>
 <tr class="separator:a003190ca748a8f7ad1f3fa7212fa9126"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80e3448280f4a1221fbf75ab8f3d5aed"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a80e3448280f4a1221fbf75ab8f3d5aed">flushPendingAutoResourceLayouts</a> ()</td></tr>
-<tr class="memdesc:a80e3448280f4a1221fbf75ab8f3d5aed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required when caller will soon start analyzing barriers (e.g.  <a href="class_ogre_1_1_render_system.html#a80e3448280f4a1221fbf75ab8f3d5aed">More...</a><br /></td></tr>
-<tr class="separator:a80e3448280f4a1221fbf75ab8f3d5aed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a451096dac7f529104ee76f6b432c4f81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#a451096dac7f529104ee76f6b432c4f81">flushTextureCopyOperations</a> (void)</td></tr>
-<tr class="memdesc:a451096dac7f529104ee76f6b432c4f81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this function if you need to call texture-&gt;copyTo or create an <a class="el" href="class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous.">AsyncTextureTicket</a> on a <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> which is currently in either <a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a4d712d43e8f9639bda08a221116ecdba">ResourceLayout::CopySrc</a> or CopyDst layout.  <a href="class_ogre_1_1_render_system.html#a451096dac7f529104ee76f6b432c4f81">More...</a><br /></td></tr>
-<tr class="separator:a451096dac7f529104ee76f6b432c4f81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdd8e6a6912a3976f74b856f3c1e62eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#acdd8e6a6912a3976f74b856f3c1e62eb">flushUAVs</a> (void)</td></tr>
 <tr class="separator:acdd8e6a6912a3976f74b856f3c1e62eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88d0563ae1097fa2d32b295770d11764"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_metal_device.html">MetalDevice</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_render_system.html#a88d0563ae1097fa2d32b295770d11764">getActiveDevice</a> (void)</td></tr>
@@ -4739,6 +4736,38 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a30b893cdd07ccd24f95623ebef2668b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30b893cdd07ccd24f95623ebef2668b7">&#9670;&nbsp;</a></span>endCopyEncoder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::RenderSystem::endCopyEncoder </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Required when caller will soon start analyzing barriers (e.g. </p>
+<p>use <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a>) <a class="el" href="namespace_ogre.html">Ogre</a> will flush any pending resource transitions.</p>
+<p>Otherwise <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a> will see that a <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> is in a particular state or layout, then when calling executeResourceTransition, the pending resource layout will be flushed, and now the resource transition resolved by <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a> will have the wrong 'old' layout </p>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#a128c02e920ced6f2a536d50ddb5cca2f">Ogre::VulkanRenderSystem</a>.</p>
+
+</div>
+</div>
 <a id="a0a72b69bed67cdf99239d884748bcb08"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0a72b69bed67cdf99239d884748bcb08">&#9670;&nbsp;</a></span>endGpuDebuggerFrameCapture()</h2>
 
@@ -5017,67 +5046,6 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="class_ogre_1_1_render_system.html#a03042760fb5ad088f8c73883f9d7fe14">Ogre::RenderSystem</a>.</p>
-
-</div>
-</div>
-<a id="a80e3448280f4a1221fbf75ab8f3d5aed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a80e3448280f4a1221fbf75ab8f3d5aed">&#9670;&nbsp;</a></span>flushPendingAutoResourceLayouts()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Ogre::RenderSystem::flushPendingAutoResourceLayouts </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Required when caller will soon start analyzing barriers (e.g. </p>
-<p>use <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a>) <a class="el" href="namespace_ogre.html">Ogre</a> will flush any pending resource transitions.</p>
-<p>Otherwise <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a> will see that a <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> is in a particular state or layout, then when calling executeResourceTransition, the pending resource layout will be flushed, and now the resource transition resolved by <a class="el" href="class_ogre_1_1_barrier_solver.html">BarrierSolver</a> will have the wrong 'old' layout </p>
-
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#ad1957f3495e478db37a5567e674857ce">Ogre::VulkanRenderSystem</a>.</p>
-
-</div>
-</div>
-<a id="a451096dac7f529104ee76f6b432c4f81"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a451096dac7f529104ee76f6b432c4f81">&#9670;&nbsp;</a></span>flushTextureCopyOperations()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::RenderSystem::flushTextureCopyOperations </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Call this function if you need to call texture-&gt;copyTo or create an <a class="el" href="class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous.">AsyncTextureTicket</a> on a <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> which is currently in either <a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7a4d712d43e8f9639bda08a221116ecdba">ResourceLayout::CopySrc</a> or CopyDst layout. </p>
-<p>For performance reasons though it is recommended that you wait until CompositorManager::_update() is returns </p>
 
 </div>
 </div>

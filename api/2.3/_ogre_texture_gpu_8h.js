@@ -1,5 +1,10 @@
 var _ogre_texture_gpu_8h =
 [
+    [ "CopyEncTransitionMode", "_ogre_texture_gpu_8h.html#a88628e41c3e6b360f8b1653a1fc6697a", [
+      [ "Auto", "_ogre_texture_gpu_8h.html#a88628e41c3e6b360f8b1653a1fc6697aafa04688137f25d1b66e3e5c9b6429172", null ],
+      [ "AlreadyInLayoutThenAuto", "_ogre_texture_gpu_8h.html#a88628e41c3e6b360f8b1653a1fc6697aac8df964fe9e3a074f16264bf4286328d", null ],
+      [ "AlreadyInLayoutThenManual", "_ogre_texture_gpu_8h.html#a88628e41c3e6b360f8b1653a1fc6697aaf94136572738824a9b28ec2da3ee01a1", null ]
+    ] ],
     [ "CubemapSide", "_ogre_texture_gpu_8h.html#aa05717bddc9101a336507b0a167cde29", [
       [ "PX", "_ogre_texture_gpu_8h.html#aa05717bddc9101a336507b0a167cde29a4abb19f074931d8f9894fb21bed001f3", null ],
       [ "NX", "_ogre_texture_gpu_8h.html#aa05717bddc9101a336507b0a167cde29a4d00c464e1ae8ac9dc6ab2858795e5a2", null ],
