@@ -396,7 +396,6 @@ namespace Ogre
 
         if( itor != end )
         {
-            itor->renderable->mCustomParameter = 0;
             if( !hasFlushPending( itor->renderable ) )
             {
                 //Restore the Hlms setting. If a flush is pending, then it's already up to date,
@@ -404,6 +403,7 @@ namespace Ogre
                 itor->renderable->_setHlmsHashes( itor->hlmsHashes[0],
                                                   itor->renderable->getHlmsCasterHash() );
             }
+            itor->renderable->mCustomParameter = 0;
             efficientVectorRemove( mTrackedRenderables, itor );
         }
     }
