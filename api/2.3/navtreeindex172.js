@@ -1,5 +1,10 @@
 var NAVTREEINDEX172 =
 {
+"class_ogre_1_1_ring_emitter.html#aeb086f851624a470e1b5592b81418d39":[7,0,0,932,63],
+"class_ogre_1_1_ring_emitter.html#aeda09be49871f5084d77f67ad5f2b566":[7,0,0,932,35],
+"class_ogre_1_1_ring_emitter.html#aef756f0d236964369f790e8f4004993f":[7,0,0,932,88],
+"class_ogre_1_1_ring_emitter.html#af05abefb4cf775522fc3cc8bf1cd57f9":[7,0,0,932,76],
+"class_ogre_1_1_ring_emitter.html#af46071e47818d84449ee0c8e73737fa5":[7,0,0,932,50],
 "class_ogre_1_1_ring_emitter.html#af91680375665bc911d80b76262882e8b":[7,0,0,932,10],
 "class_ogre_1_1_ring_emitter.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,932,60],
 "class_ogre_1_1_ring_emitter.html#aface49e7023832dda41e44b26f048843":[7,0,0,932,46],
@@ -244,10 +249,5 @@ var NAVTREEINDEX172 =
 "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9d61f90f76dd3e119d608876ea5f7957":[5,2,2,95,0,1],
 "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9e2cd2d2436678236e339e6a42887090":[5,2,2,95,0,9],
 "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba9f57f8f4aefb7fae5fcd69fe155e7003":[5,2,2,95,0,5],
-"class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71":[5,2,2,95,0,0],
-"class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29bae8c10c1472a5d4005d1c25adb5e2764d":[5,2,2,95,0,8],
-"class_ogre_1_1_runtime_assertion_exception.html#ab4518b52083342bc207ef3b677114e38":[5,2,2,95,7],
-"class_ogre_1_1_runtime_assertion_exception.html#ac3c2e6a43d2b1030eaf3ee8a34247737":[5,2,2,95,8],
-"class_ogre_1_1_runtime_assertion_exception.html#af3a22f862d5868390187d4fdd15a7d9e":[5,2,2,95,2],
-"class_ogre_1_1_runtime_assertion_exception.html#af4d342026b7af34ba64ed365c7300659":[5,2,2,95,6]
+"class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29baaeb75efe079b550f380d62d9a0954e71":[5,2,2,95,0,0]
 };

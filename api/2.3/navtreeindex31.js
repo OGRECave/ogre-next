@@ -1,5 +1,6 @@
 var NAVTREEINDEX31 =
 {
+"class_ogre_1_1_colour_fader_affector2.html#aac4e7d0aac42a1cec21749dcb7f08da9":[7,0,0,105,25],
 "class_ogre_1_1_colour_fader_affector2.html#aae52b36c389607fe187f837c4f110709":[7,0,0,105,58],
 "class_ogre_1_1_colour_fader_affector2.html#ab3861fe5367bc2db89eb0d4a6f0d2616":[7,0,0,105,49],
 "class_ogre_1_1_colour_fader_affector2.html#ab38dc9df81b23a9b041b56d7329cb5b9":[7,0,0,105,27],
@@ -248,6 +249,5 @@ var NAVTREEINDEX31 =
 "class_ogre_1_1_command_buffer.html#a136831fc57b9b583a979a32d88f25793":[7,0,0,113,32],
 "class_ogre_1_1_command_buffer.html#a17281e7254ec930e6e12c3adcebef19d":[7,0,0,113,4],
 "class_ogre_1_1_command_buffer.html#a1a68ad1c10aca27cdc541b0520fe910a":[7,0,0,113,47],
-"class_ogre_1_1_command_buffer.html#a22cf0baf422a2090d5bc3132e10f5fd9":[7,0,0,113,29],
-"class_ogre_1_1_command_buffer.html#a237ae162fe2df772ec72e0d53ed53e76":[7,0,0,113,3]
+"class_ogre_1_1_command_buffer.html#a22cf0baf422a2090d5bc3132e10f5fd9":[7,0,0,113,29]
 };

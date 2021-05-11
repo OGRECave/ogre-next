@@ -260,6 +260,7 @@ var class_ogre_1_1_scene_manager =
     [ "removeLodListener", "class_ogre_1_1_scene_manager.html#a25cc1bb36997b722fc60efc7903f3760", null ],
     [ "removeRenderObjectListener", "class_ogre_1_1_scene_manager.html#a2a482e0a9f78109a5a467ddd6c16082b", null ],
     [ "removeRenderQueueListener", "class_ogre_1_1_scene_manager.html#a190471ba7a61111d576a1e8ca9862706", null ],
+    [ "reserveSlotsInGlobalLightList", "class_ogre_1_1_scene_manager.html#aad27e5120c93cbb43fbd3ec31151dfd4", null ],
     [ "setAmbientLight", "class_ogre_1_1_scene_manager.html#a661eec1b30244cf1ff7d334d4ea3cc30", null ],
     [ "setBuildLegacyLightList", "class_ogre_1_1_scene_manager.html#af2ae1a40967ba02a34db40413ba45968", null ],
     [ "setDecalsDiffuse", "class_ogre_1_1_scene_manager.html#a994566fb8e67589ebb8bb81b6442acf5", null ],

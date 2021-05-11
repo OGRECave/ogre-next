@@ -1,5 +1,12 @@
 var NAVTREEINDEX182 =
 {
+"class_ogre_1_1_small_vector_impl.html#a8fd84d4c57b70b9b8111efa7d81c7d5b":[7,0,0,1001,17],
+"class_ogre_1_1_small_vector_impl.html#a922c12bc5de4cf0fee5c101919fecc94":[7,0,0,1001,20],
+"class_ogre_1_1_small_vector_impl.html#a9815c7884278cf8ae793f559d5da6d5f":[7,0,0,1001,36],
+"class_ogre_1_1_small_vector_impl.html#a9a1d14b49afc3807af68fd5f2ef6238c":[7,0,0,1001,5],
+"class_ogre_1_1_small_vector_impl.html#a9e765b3edf8b9303d380e6abb5fdaa7b":[7,0,0,1001,19],
+"class_ogre_1_1_small_vector_impl.html#aa5c7ed10e04b28acc1fecd075879a3e3":[7,0,0,1001,42],
+"class_ogre_1_1_small_vector_impl.html#aabbc326f17698c1b404fcfed47099f19":[7,0,0,1001,30],
 "class_ogre_1_1_small_vector_impl.html#aac2af29fb404d131e2bc4fb9adba5be3":[7,0,0,1001,12],
 "class_ogre_1_1_small_vector_impl.html#ab3bb5e3be2e6a4f8b68b61c1c16028e4":[7,0,0,1001,41],
 "class_ogre_1_1_small_vector_impl.html#ab4fb906b0b1c29080f7e14222a7a2677":[7,0,0,1001,1],
@@ -172,8 +179,8 @@ var NAVTREEINDEX182 =
 "class_ogre_1_1_sphere_scene_query.html#a49641297f4affe82b8e9f8b9ab3ff9f4":[5,0,1,53,21],
 "class_ogre_1_1_sphere_scene_query.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,12,53,20],
 "class_ogre_1_1_sphere_scene_query.html#a4be37baef81876985aa1071ad5acc6dd":[5,0,1,53,20],
-"class_ogre_1_1_sphere_scene_query.html#a5355b72d0d8fb12e4e35f8661652f190":[5,2,12,53,1],
 "class_ogre_1_1_sphere_scene_query.html#a5355b72d0d8fb12e4e35f8661652f190":[5,0,1,53,1],
+"class_ogre_1_1_sphere_scene_query.html#a5355b72d0d8fb12e4e35f8661652f190":[5,2,12,53,1],
 "class_ogre_1_1_sphere_scene_query.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,12,53,15],
 "class_ogre_1_1_sphere_scene_query.html#a595ea4c05da8aa987d3800e65d23355d":[5,0,1,53,15],
 "class_ogre_1_1_sphere_scene_query.html#a6b8ac84df4b61cdd0abba7fcd43ae956":[5,2,12,53,24],
@@ -242,12 +249,5 @@ var NAVTREEINDEX182 =
 "class_ogre_1_1_stack_vector.html#ac92ba0d9b5b516af975fd3a960242c14":[7,0,0,1007,27],
 "class_ogre_1_1_stack_vector.html#ad51ba32b7ddfada54b984d918c2bf8df":[7,0,0,1007,20],
 "class_ogre_1_1_stack_vector.html#aeedbb4d274e315d6229ca55ff7b923d3":[7,0,0,1007,6],
-"class_ogre_1_1_stack_vector.html#af4bb29e83084ffda1deaffea49b1a22f":[7,0,0,1007,30],
-"class_ogre_1_1_stack_vector.html#affbd87471da12f96836e535dc854d647":[7,0,0,1007,12],
-"class_ogre_1_1_staging_buffer.html":[7,0,0,1008],
-"class_ogre_1_1_staging_buffer.html#a0512e57da9c9f75e7666133a10883126":[7,0,0,1008,11],
-"class_ogre_1_1_staging_buffer.html#a0661bd8e72511fe7e946991db7fee5d6":[7,0,0,1008,15],
-"class_ogre_1_1_staging_buffer.html#a06dfed7c83a6aa991b0bceef76743550":[7,0,0,1008,10],
-"class_ogre_1_1_staging_buffer.html#a10b28de5293c036bf7f23e87bef00de6":[7,0,0,1008,7],
-"class_ogre_1_1_staging_buffer.html#a1bb62ecc6017c1d0b86a80d8b54c6150":[7,0,0,1008,9]
+"class_ogre_1_1_stack_vector.html#af4bb29e83084ffda1deaffea49b1a22f":[7,0,0,1007,30]
 };

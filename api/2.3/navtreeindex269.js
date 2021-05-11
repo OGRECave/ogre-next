@@ -1,5 +1,12 @@
 var NAVTREEINDEX269 =
 {
+"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a464139a1080b831143c015fb3b7b8aca":[6,0,0,1528,23],
+"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a48cb7d33ea97e43f06a5c0f5e1f481c8":[6,0,0,1528,30],
+"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a4e1ae5f830888fa98d05b853031d7220":[6,0,0,1528,28],
+"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a54cdcd400702cdc25b995007b2b93353":[6,0,0,1528,20],
+"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a5ae9b878278ad35c0407cb79217c637d":[6,0,0,1528,26],
+"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a654d06ee35d74d89cf61189da3eb5924":[6,0,0,1528,29],
+"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a6e954eb30376078d260398d662cb6c5e":[6,0,0,1528,31],
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a7fff222e5c474c250050764a18dae866":[6,0,0,1528,11],
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a83fb65735570cd52de6212753b9f3f7a":[6,0,0,1528,41],
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a8739673aa6ac8d08aa15165b9ff995c7":[6,0,0,1528,21],
@@ -242,12 +249,5 @@ var NAVTREEINDEX269 =
 "namespace_ogre_1_1_emitter_commands.html":[6,0,0,6],
 "namespace_ogre_1_1_gpu_page_out_strategy.html":[6,0,0,7],
 "namespace_ogre_1_1_gpu_page_out_strategy.html#a4d2162c156be30917f38f15e2327ce65":[6,0,0,7,0],
-"namespace_ogre_1_1_gpu_page_out_strategy.html#a4d2162c156be30917f38f15e2327ce65a154441f49638a86fc2da0e1a712fc614":[6,0,0,7,0,2],
-"namespace_ogre_1_1_gpu_page_out_strategy.html#a4d2162c156be30917f38f15e2327ce65a28135d9485a60bfa1a598cba471d6891":[6,0,0,7,0,1],
-"namespace_ogre_1_1_gpu_page_out_strategy.html#a4d2162c156be30917f38f15e2327ce65ab808dbb463bfe5239a47a06dc4d5ec98":[6,0,0,7,0,0],
-"namespace_ogre_1_1_gpu_residency.html":[6,0,0,8],
-"namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98":[6,0,0,8,0],
-"namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98a268f91accb452d1707dd83b5aeb72aa2":[6,0,0,8,0,2],
-"namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98a96b255b9535992cc830591ed916d15f3":[6,0,0,8,0,1],
-"namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98ad60acc99d4bcd4898f280cbf6d8ef1dc":[6,0,0,8,0,0]
+"namespace_ogre_1_1_gpu_page_out_strategy.html#a4d2162c156be30917f38f15e2327ce65a154441f49638a86fc2da0e1a712fc614":[6,0,0,7,0,2]
 };

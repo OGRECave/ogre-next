@@ -806,6 +806,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a190471ba7a61111d576a1e8ca9862706"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a190471ba7a61111d576a1e8ca9862706">removeRenderQueueListener</a> (<a class="el" href="class_ogre_1_1_render_queue_listener.html">RenderQueueListener</a> *delListener)</td></tr>
 <tr class="memdesc:a190471ba7a61111d576a1e8ca9862706"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a listener previously added with addRenderQueueListener.  <a href="class_ogre_1_1_scene_manager.html#a190471ba7a61111d576a1e8ca9862706">More...</a><br /></td></tr>
 <tr class="separator:a190471ba7a61111d576a1e8ca9862706"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad27e5120c93cbb43fbd3ec31151dfd4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#aad27e5120c93cbb43fbd3ec31151dfd4">reserveSlotsInGlobalLightList</a> (size_t addSlotsToCapacity=0)</td></tr>
+<tr class="memdesc:aad27e5120c93cbb43fbd3ec31151dfd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates required memory in mGlobalLightList.  <a href="class_ogre_1_1_scene_manager.html#aad27e5120c93cbb43fbd3ec31151dfd4">More...</a><br /></td></tr>
+<tr class="separator:aad27e5120c93cbb43fbd3ec31151dfd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a661eec1b30244cf1ff7d334d4ea3cc30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a661eec1b30244cf1ff7d334d4ea3cc30">setAmbientLight</a> (const <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a> &amp;upperHemisphere, const <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a> &amp;lowerHemisphere, const <a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> &amp;hemisphereDir, <a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> envmapScale=1.0f, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> envFeatures=0xffffffff)</td></tr>
 <tr class="memdesc:a661eec1b30244cf1ff7d334d4ea3cc30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the ambient light level to be used for the scene.  <a href="class_ogre_1_1_scene_manager.html#a661eec1b30244cf1ff7d334d4ea3cc30">More...</a><br /></td></tr>
 <tr class="separator:a661eec1b30244cf1ff7d334d4ea3cc30"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -8834,6 +8837,34 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Removes a listener previously added with addRenderQueueListener. </p>
+
+</div>
+</div>
+<a id="aad27e5120c93cbb43fbd3ec31151dfd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad27e5120c93cbb43fbd3ec31151dfd4">&#9670;&nbsp;</a></span>reserveSlotsInGlobalLightList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::SceneManager::reserveSlotsInGlobalLightList </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>addSlotsToCapacity</em> = <code>0</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Allocates required memory in mGlobalLightList. </p>
 
 </div>
 </div>
