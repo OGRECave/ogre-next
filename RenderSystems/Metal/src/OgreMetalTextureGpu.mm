@@ -242,8 +242,8 @@ namespace Ogre
     void MetalTextureGpu::copyTo(
         TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel, const TextureBox &srcBox,
         uint8 srcMipLevel, bool keepResolvedTexSynced,
-        CopyEncoderTransitionMode::CopyEncoderTransitionMode srcTransitionMode,
-        CopyEncoderTransitionMode::CopyEncoderTransitionMode dstTransitionMode )
+        CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode,
+        CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode )
     {
         TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel, srcTransitionMode,
                             dstTransitionMode );
@@ -314,7 +314,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpu::_autogenerateMipmaps( CopyEncoderTransitionMode::CopyEncoderTransitionMode
+    void MetalTextureGpu::_autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode
                                                 /*transitionMode*/ )
     {
         MetalTextureGpuManager *textureManagerMetal =
