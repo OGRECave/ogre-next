@@ -2662,6 +2662,38 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void MetalRenderSystem::compositorWorkspaceBegin( CompositorWorkspace *workspace,
+                                                      const bool forceBeginFrame )
+    {
+        @autoreleasepool
+        {
+            RenderSystem::compositorWorkspaceBegin( workspace, forceBeginFrame );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::compositorWorkspaceUpdate( CompositorWorkspace *workspace )
+    {
+        @autoreleasepool
+        {
+            RenderSystem::compositorWorkspaceUpdate( workspace );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::compositorWorkspaceEnd( CompositorWorkspace *workspace,
+                                                    const bool forceEndFrame )
+    {
+        @autoreleasepool
+        {
+            RenderSystem::compositorWorkspaceEnd( workspace, forceEndFrame );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::flushCommands(void)
+    {
+        endRenderPassDescriptor( false );
+        mActiveDevice->commitAndNextCommandBuffer();
+    }
+    //-------------------------------------------------------------------------
     void MetalRenderSystem::setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams )
     {
         RenderSystem::setStencilBufferParams( refValue, stencilParams );
