@@ -749,6 +749,24 @@ namespace Ogre
         /// should return true. If it doesn't, then there was a problem loading
         /// the texture.
         /// See isMetadataReady remarks.
+        ///
+        /// Q: What's the penalty for calling this function?
+        ///
+        /// A: We need to wait for the worker thread to finish all previous textures
+        /// until it processes this one. The manager only has broad resolution so
+        /// it may be also possible that we even have to wait the worker thread to
+        /// process a few textures that came *after* this one too.
+        ///
+        /// Thus the cost can be anywhere from "very little" to "a lot" depending on the
+        /// order in which other textures have been loaded.
+        ///
+        /// The real cost is that you lose valuable ability to hide loading times.
+        /// If you must call this function, you can mitigate the problem:
+        ///
+        ///     1. All textures you need to wait for, load them *first* together, then
+        ///        call TextureGpuManager::waitForStreamingCompletion (preferred) or
+        ///        this function. Then proceed to load the rest of the textures.
+        ///     2. If you can't do the above, call this function as late as possible
         void waitForData(void);
     };
 
