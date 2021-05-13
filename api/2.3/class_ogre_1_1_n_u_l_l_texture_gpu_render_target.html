@@ -3796,8 +3796,15 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Blocks main thread until data is ready. </p>
-<p>Afterwards isDataReady should return true. If it doesn't, then there was a problem loading the texture. See isMetadataReady remarks. </p>
-
+<p>Afterwards isDataReady should return true. If it doesn't, then there was a problem loading the texture. See isMetadataReady remarks.</p>
+<p>Q: What's the penalty for calling this function?</p>
+<p>A: We need to wait for the worker thread to finish all previous textures until it processes this one. The manager only has broad resolution so it may be also possible that we even have to wait the worker thread to process a few textures that came <em>after</em> this one too.</p>
+<p>Thus the cost can be anywhere from "very little" to "a lot" depending on the order in which other textures have been loaded.</p>
+<p>The real cost is that you lose valuable ability to hide loading times. If you must call this function, you can mitigate the problem: </p><pre class="fragment">1. All textures you need to wait for, load them *first* together, then
+   call TextureGpuManager::waitForStreamingCompletion (preferred) or
+   this function. Then proceed to load the rest of the textures.
+2. If you can't do the above, call this function as late as possible 
+</pre> 
 </div>
 </div>
 <a id="a6740006ae83f39c4aeb83f300b67f6b2"></a>
