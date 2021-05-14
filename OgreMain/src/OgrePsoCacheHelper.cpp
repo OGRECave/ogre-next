@@ -96,18 +96,17 @@ namespace Ogre
     {
         RenderableCacheEntry entry;
         entry.psoRenderableKey = mCurrentState;
-        RenderableCacheEntryVec::iterator itor = std::lower_bound( mRenderableCache.begin(),
-                                                                   mRenderableCache.end(), entry );
-
-        if( itor == mRenderableCache.end() ||
-            itor->psoRenderableKey.equalExcludePassData( entry.psoRenderableKey ) )
+        RenderableCacheEntryVec::iterator itor;
+        for(itor = mRenderableCache.begin(); itor != mRenderableCache.end(); ++itor)
         {
-            entry.hashToMainCache = mRenderableHashCounter++;
-            const size_t idx = itor - mRenderableCache.begin();
-            mRenderableCache.insert( itor, 1u, entry );
-            itor = mRenderableCache.begin() + idx;
+            if(entry.psoRenderableKey.equalExcludePassData(itor->psoRenderableKey))
+                return itor->hashToMainCache;
         }
-
+        //nothing found in cache, create new entry
+        entry.hashToMainCache = mRenderableHashCounter++;
+        const size_t idx = itor - mRenderableCache.begin();
+        mRenderableCache.insert(itor, 1u, entry);
+        itor = mRenderableCache.begin() + idx;
         return itor->hashToMainCache;
     }
     //-----------------------------------------------------------------------------------
