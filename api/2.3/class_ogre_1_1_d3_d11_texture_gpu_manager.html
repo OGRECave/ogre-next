@@ -152,8 +152,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a93773f33d6018c991b4fa8c475a8a36d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a93773f33d6018c991b4fa8c475a8a36d">_reserveSlotForTexture</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
 <tr class="memdesc:a93773f33d6018c991b4fa8c475a8a36d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be called from main thread.  <a href="class_ogre_1_1_texture_gpu_manager.html#a93773f33d6018c991b4fa8c475a8a36d">More...</a><br /></td></tr>
 <tr class="separator:a93773f33d6018c991b4fa8c475a8a36d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e2c9948df4a9213a64952299d6cd22e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a1e2c9948df4a9213a64952299d6cd22e">_scheduleTransitionTo</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98">GpuResidency::GpuResidency</a> targetResidency, <a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image, bool autoDeleteImage)</td></tr>
-<tr class="separator:a1e2c9948df4a9213a64952299d6cd22e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a435b32507353f22b8428e6f9d849e7e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a435b32507353f22b8428e6f9d849e7e1">_scheduleTransitionTo</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="namespace_ogre_1_1_gpu_residency.html#a2dee9b512fd45f8d010e8e18e25ebd98">GpuResidency::GpuResidency</a> targetResidency, <a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image, bool autoDeleteImage, bool reuploadOnly)</td></tr>
+<tr class="separator:a435b32507353f22b8428e6f9d849e7e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46f6c11e4af75070ada1e868e7b24412"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a46f6c11e4af75070ada1e868e7b24412">_scheduleUpdate</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> filters, <a class="el" href="class_ogre_1_1_image2.html">Image2</a> *image, bool autoDeleteImage, bool skipMetadataCache=false, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> sliceOrDepth=std::numeric_limits&lt; <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> &gt;::max())</td></tr>
+<tr class="separator:a46f6c11e4af75070ada1e868e7b24412"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae905930e6b79e3a3c3152efc20d5249c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#ae905930e6b79e3a3c3152efc20d5249c">_setIgnoreScheduledTasks</a> (bool ignoreSchedTasks)</td></tr>
 <tr class="memdesc:ae905930e6b79e3a3c3152efc20d5249c"><td class="mdescLeft">&#160;</td><td class="mdescRight">When true we will ignore all tasks in mScheduledTasks and execute transitions immediately Caller is responsible for ensuring this is safe to do.  <a href="class_ogre_1_1_texture_gpu_manager.html#ae905930e6b79e3a3c3152efc20d5249c">More...</a><br /></td></tr>
 <tr class="separator:ae905930e6b79e3a3c3152efc20d5249c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -665,8 +667,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a1e2c9948df4a9213a64952299d6cd22e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e2c9948df4a9213a64952299d6cd22e">&#9670;&nbsp;</a></span>_scheduleTransitionTo()</h2>
+<a id="a435b32507353f22b8428e6f9d849e7e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a435b32507353f22b8428e6f9d849e7e1">&#9670;&nbsp;</a></span>_scheduleTransitionTo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -696,7 +698,73 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>autoDeleteImage</em>&#160;</td>
+          <td class="paramname"><em>autoDeleteImage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>reuploadOnly</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a46f6c11e4af75070ada1e868e7b24412"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46f6c11e4af75070ada1e868e7b24412">&#9670;&nbsp;</a></span>_scheduleUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::TextureGpuManager::_scheduleUpdate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
+          <td class="paramname"><em>texture</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td>
+          <td class="paramname"><em>filters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_image2.html">Image2</a> *&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>autoDeleteImage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>skipMetadataCache</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td>
+          <td class="paramname"><em>sliceOrDepth</em> = <code>std::numeric_limits&lt;&#160;<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;&gt;::max()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>

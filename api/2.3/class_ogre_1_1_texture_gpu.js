@@ -98,6 +98,7 @@ var class_ogre_1_1_texture_gpu =
     [ "prefersLoadingFromFileAsSRGB", "class_ogre_1_1_texture_gpu.html#a2e6b84b89e2080bb7103d4778641d86e", null ],
     [ "removeListener", "class_ogre_1_1_texture_gpu.html#ae3e0ad601752b91f2851c88f9ed49869", null ],
     [ "requiresTextureFlipping", "class_ogre_1_1_texture_gpu.html#a3db88cd9e4286f47a56fe7f507cd5c1b", null ],
+    [ "scheduleReupload", "class_ogre_1_1_texture_gpu.html#a0729d200bede23e29f5a88f0b9dcb3f6", null ],
     [ "scheduleTransitionTo", "class_ogre_1_1_texture_gpu.html#a9034d26bf967a6a9ab6a03f3f2a75a88", null ],
     [ "setNumMipmaps", "class_ogre_1_1_texture_gpu.html#a6ae40391d39c8feae00acaf25839c6f9", null ],
     [ "setOrientationMode", "class_ogre_1_1_texture_gpu.html#a3866a77dfd74f1b70fdd31f42382c544", null ],
