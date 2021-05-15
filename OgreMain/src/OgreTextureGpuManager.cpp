@@ -1440,15 +1440,19 @@ namespace Ogre
 
         const GpuResidency::GpuResidency targetResidency = task.residencyTransitionTask.targetResidency;
 
-        if( texture->getResidencyStatus() == GpuResidency::OnStorage )
+        if( texture->getResidencyStatus() == GpuResidency::OnStorage ||
+            task.residencyTransitionTask.reuploadOnly )
         {
             OGRE_ASSERT_MEDIUM( targetResidency == GpuResidency::Resident ||
                                 targetResidency == GpuResidency::OnSystemRam );
+            OGRE_ASSERT_MEDIUM( !task.residencyTransitionTask.reuploadOnly ||
+                                texture->getResidencyStatus() == GpuResidency::Resident );
 
             scheduleLoadRequest( texture,
                                  task.residencyTransitionTask.image,
                                  task.residencyTransitionTask.autoDeleteImage,
-                                 targetResidency == GpuResidency::OnSystemRam );
+                                 targetResidency == GpuResidency::OnSystemRam,
+                                 task.residencyTransitionTask.reuploadOnly );
         }
         else
         {
@@ -1631,16 +1635,15 @@ namespace Ogre
         return mVaoManager;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture,
-                                                 const String &name,
-                                                 const String &resourceGroup,
-                                                 uint32 filters,
-                                                 Image2 *image,
-                                                 bool autoDeleteImage,
-                                                 bool toSysRam,
-                                                 bool skipMetadataCache,
+    void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture, const String &name,
+                                                 const String &resourceGroup, uint32 filters,
+                                                 Image2 *image, bool autoDeleteImage, bool toSysRam,
+                                                 bool reuploadOnly, bool skipMetadataCache,
                                                  uint32 sliceOrDepth )
     {
+        // These two can't be true at the same time
+        OGRE_ASSERT_MEDIUM( !( toSysRam && reuploadOnly ) );
+
         Archive *archive = 0;
         ResourceLoadingListener *loadingListener = 0;
         if( resourceGroup != BLANKSTRING )
@@ -1658,7 +1661,7 @@ namespace Ogre
                 archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
         }
 
-        if( !skipMetadataCache && !toSysRam &&
+        if( !skipMetadataCache && !toSysRam && !reuploadOnly &&
             texture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
         {
             bool metadataSuccess = applyMetadataCacheTo( texture );
@@ -1677,10 +1680,29 @@ namespace Ogre
         mWorkerWaitableEvent.wake();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture, Image2 *image,
-                                                 bool autoDeleteImage, bool toSysRam )
+    void TextureGpuManager::_scheduleUpdate( TextureGpu *texture, uint32 filters, Image2 *image, bool autoDeleteImage,
+                          bool skipMetadataCache,
+                          uint32 sliceOrDepth )
     {
-        OGRE_ASSERT_LOW( texture->getResidencyStatus() == GpuResidency::OnStorage );
+        Archive *archive = 0;
+        ResourceLoadingListener *loadingListener = 0;
+
+        mAddedNewLoadRequests = true;
+        mAddedNewLoadRequestsSinceWaitingForStreamingCompletion = true;
+        ThreadData &mainData = mThreadData[c_mainThread];
+        mLoadRequestsMutex.lock();
+            mainData.loadRequests.push_back( LoadRequest( "", archive, loadingListener, image,
+                                                          texture, sliceOrDepth, filters,
+                                                          autoDeleteImage, false ) );
+        mLoadRequestsMutex.unlock();
+        mWorkerWaitableEvent.wake();
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture, Image2 *image,
+                                                 bool autoDeleteImage, bool toSysRam, bool reuploadOnly )
+    {
+        OGRE_ASSERT_LOW( ( texture->getResidencyStatus() == GpuResidency::OnStorage && !reuploadOnly ) ||
+                         ( texture->getResidencyStatus() == GpuResidency::Resident && reuploadOnly ) );
 
         String name, resourceGroup;
         uint32 filters = 0;
@@ -1695,7 +1717,7 @@ namespace Ogre
         if( texture->getTextureType() != TextureTypes::TypeCube )
         {
             scheduleLoadRequest( texture, name, resourceGroup, filters,
-                                 image, autoDeleteImage, toSysRam );
+                                 image, autoDeleteImage, toSysRam, reuploadOnly );
         }
         else
         {
@@ -1720,7 +1742,7 @@ namespace Ogre
                 // XX HACK there should be a better way to specify whether
                 // all faces are in the same file or not
                 scheduleLoadRequest( texture, name, resourceGroup, filters,
-                                     image, autoDeleteImage, toSysRam );
+                                     image, autoDeleteImage, toSysRam, reuploadOnly );
             }
             else
             {
@@ -1729,9 +1751,9 @@ namespace Ogre
                 for( uint32 i=0; i<6u; ++i )
                 {
                     const bool skipMetadataCache = i != 0;
-                    scheduleLoadRequest( texture, baseName + suffixes[i] + ext,
-                                         resourceGroup, filters, i == 0 ? image : 0,
-                                         autoDeleteImage, toSysRam, skipMetadataCache, i );
+                    scheduleLoadRequest( texture, baseName + suffixes[i] + ext, resourceGroup, filters,
+                                         i == 0 ? image : 0, autoDeleteImage, toSysRam, reuploadOnly,
+                                         skipMetadataCache, i );
                 }
             }
         }
@@ -1796,16 +1818,18 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_scheduleTransitionTo( TextureGpu *texture,
                                                    GpuResidency::GpuResidency targetResidency,
-                                                   Image2 *image, bool autoDeleteImage )
+                                                   Image2 *image, bool autoDeleteImage,
+                                                   bool reuploadOnly )
     {
         ScheduledTasks task;
         task.tasksType = TaskTypeResidencyTransition;
-        task.residencyTransitionTask.init( targetResidency, image, autoDeleteImage );
+        task.residencyTransitionTask.init( targetResidency, image, autoDeleteImage, reuploadOnly );
 
         //getPendingResidencyChanges should be > 1 because it gets incremented by caller
-        OGRE_ASSERT_MEDIUM( texture->getPendingResidencyChanges() != 0u );
+        OGRE_ASSERT_MEDIUM( texture->getPendingResidencyChanges() != 0u || reuploadOnly );
 
-        if( texture->getPendingResidencyChanges() == 1u || mIgnoreScheduledTasks )
+        if( texture->getPendingResidencyChanges() == 1u ||
+            ( reuploadOnly && texture->getPendingResidencyChanges() == 0u ) || mIgnoreScheduledTasks )
         {
             //If we're here, there are no pending tasks that will perform further work
             //on the texture (with one exception: if _isDataReadyImpl does not return true; which

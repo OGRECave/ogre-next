@@ -183,6 +183,11 @@ namespace Ogre
         assert( mResidencyStatus == GpuResidency::Resident );
         assert( mFinalTextureName || mPixelFormat == PFG_NULL );
 
+        OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
+                         "Calling notifyDataIsReady too often! Remove this call"
+                         "See https://github.com/OGRECave/ogre-next/issues/101" );
+        --mDataPreparationsPending;
+
         mDisplayTextureName = mFinalTextureName;
 
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
@@ -190,7 +195,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool MetalTextureGpu::_isDataReadyImpl(void) const
     {
-        return mDisplayTextureName == mFinalTextureName;
+        return mDisplayTextureName == mFinalTextureName && mDataPreparationsPending == 0u;
     }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::_setToDisplayDummyTexture(void)

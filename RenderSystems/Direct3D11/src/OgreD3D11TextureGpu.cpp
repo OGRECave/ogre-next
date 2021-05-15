@@ -364,6 +364,11 @@ namespace Ogre
         assert( mResidencyStatus == GpuResidency::Resident );
         assert( mFinalTextureName || mPixelFormat == PFG_NULL );
 
+        OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
+                         "Calling notifyDataIsReady too often! Remove this call"
+                         "See https://github.com/OGRECave/ogre-next/issues/101" );
+        --mDataPreparationsPending;
+
         mDefaultDisplaySrv.Reset();
 
         mDisplayTextureName = mFinalTextureName.Get();
@@ -379,7 +384,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool D3D11TextureGpu::_isDataReadyImpl(void) const
     {
-        return mDisplayTextureName == mFinalTextureName.Get();
+        return mDisplayTextureName == mFinalTextureName.Get() && mDataPreparationsPending == 0u;
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::_setToDisplayDummyTexture(void)

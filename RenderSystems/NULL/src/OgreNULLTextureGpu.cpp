@@ -63,6 +63,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void NULLTextureGpu::notifyDataIsReady(void)
     {
+        OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
+                         "Calling notifyDataIsReady too often! Remove this call"
+                         "See https://github.com/OGRECave/ogre-next/issues/101" );
+        --mDataPreparationsPending;
     }
     //-----------------------------------------------------------------------------------
     void NULLTextureGpu::_autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode
@@ -76,7 +80,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool NULLTextureGpu::_isDataReadyImpl(void) const
     {
-        return true;
+        return true && mDataPreparationsPending == 0u;
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------

@@ -284,7 +284,6 @@ namespace Demo
         stagingTexture->upload( texBox, noiseTexture, 0, 0, 0 );
         textureManager->removeStagingTexture( stagingTexture );
         stagingTexture = 0;
-        noiseTexture->notifyDataIsReady();
 
 		//---------------------------------------------------------------------------------
 		//Get GpuProgramParametersSharedPtr to set uniforms that we need

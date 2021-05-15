@@ -65,8 +65,6 @@ namespace Ogre
         stagingTexture->upload( box0, texture0 );
         stagingTexture->upload( box1, texture1 );
         textureManager.removeStagingTexture( stagingTexture );
-        texture0->notifyDataIsReady();
-        texture1->notifyDataIsReady();
     @par
         There are other possibilities, as you can request a StagingTexture with twice the
         width & height and then start calling mapRegion with smaller textures and we'll

@@ -310,6 +310,15 @@ namespace Ogre
         /// @see    TextureSourceType::TextureSourceType
         uint8 mSourceType;
 
+        /// See TextureGpu::_isDataReadyImpl
+        ///
+        /// It is increased with every scheduleReupload/scheduleTransitionTo (to resident)
+        /// It is decreased every time the loading is done
+        ///
+        /// _isDataReadyImpl can NOT return true if mDataReady != 0
+        /// _isDataReadyImpl CAN return false if mDataReady == 0
+        uint8 mDataPreparationsPending;
+
         /// This setting can only be altered if mResidencyStatus == OnStorage).
         TextureTypes::TextureTypes  mTextureType;
         PixelFormatGpu              mPixelFormat;
@@ -386,6 +395,40 @@ namespace Ogre
         /// been scheduled; thus it can be called multiple times
         void scheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
                                    Image2 *image=0, bool autoDeleteImage=true );
+
+        /** There are times where you want to reload a texture again (e.g. file on
+            disk changed, uploading a new Image2, etc) without visual disruption.
+
+            e.g. if you were to call:
+            @code
+                tex->scheduleTransitionTo( GpuResidency::OnStorage );
+                tex->scheduleTransitionTo( GpuResidency::Resident, ... );
+            @endcode
+
+            you'll achieve the same result, however the texture becomes immediately
+            unavailable causing a few frames were all the user sees is a blank texture
+            until it is fully reloaded.
+
+            This routine allows for an in-place hot-reload, where the old texture
+            is swapped for the new one once it's done loading.
+
+            This is also faster because DescriptorTextureSets don't change
+
+        @remarks
+            1. Assumes the last queued transition to perform is into
+               Resident or OnSystemRam
+            2. Visual hitches are unavoidable if metadata changes (e.g. new
+               texture is of different pixel format, different number of
+               mipmaps, resolution, etc)
+               If that's the case, it is faster to transition to OnStorage,
+               remove the metadata entry from cache, then to Resident again
+
+        @param image
+            See TextureGpu::unsafeScheduleTransitionTo
+        @param autoDeleteImage
+            Same TextureGpu::unsafeScheduleTransitionTo
+        */
+        void scheduleReupload( Image2 *image = 0, bool autoDeleteImage = true );
 
         // See isMetadataReady for threadsafety on these functions.
         void setResolution( uint32 width, uint32 height, uint32 depthOrSlices=1u );

@@ -61,6 +61,7 @@ namespace Ogre
         mNumMipmaps( 1 ),
         mInternalSliceStart( 0 ),
         mSourceType( TextureSourceType::Standard ),
+        mDataPreparationsPending( 0u ),
         mTextureType( initialType ),
         mPixelFormat( PFG_UNKNOWN ),
         mTextureFlags( textureFlags ),
@@ -161,7 +162,7 @@ namespace Ogre
         else
         {
             //Schedule transition, we'll be loading from a worker thread.
-            mTextureManager->_scheduleTransitionTo( this, nextResidency, image, autoDeleteImage );
+            mTextureManager->_scheduleTransitionTo( this, nextResidency, image, autoDeleteImage, false );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -170,6 +171,25 @@ namespace Ogre
     {
         if( mNextResidencyStatus != nextResidency )
             unsafeScheduleTransitionTo( nextResidency, image, autoDeleteImage );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::scheduleReupload( Image2 *image, bool autoDeleteImage )
+    {
+        OGRE_ASSERT_LOW( mNextResidencyStatus != GpuResidency::OnStorage );
+        OGRE_ASSERT_LOW( mDataPreparationsPending < std::numeric_limits<uint8>::max() &&
+                         "Overflow. Too many transitions queued up" );
+
+        if( mNextResidencyStatus == GpuResidency::OnSystemRam )
+        {
+            scheduleTransitionTo( Ogre::GpuResidency::OnStorage );
+            scheduleTransitionTo( Ogre::GpuResidency::OnSystemRam, image, autoDeleteImage );
+        }
+        else
+        {
+            ++mDataPreparationsPending;
+            mTextureManager->_scheduleTransitionTo( this, GpuResidency::Resident, image, autoDeleteImage,
+                                                    true );
+        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::setResolution( uint32 width, uint32 height, uint32 depthOrSlices )
@@ -479,6 +499,25 @@ namespace Ogre
         bool allowResidencyChange = true;
         TextureGpuListener::Reason listenerReason = TextureGpuListener::Unknown;
 
+        if( mResidencyStatus == GpuResidency::Resident )
+        {
+            const uint8 savedValue = mDataPreparationsPending;
+            mDataPreparationsPending = 0u;
+            const bool bWasDataReady = _isDataReadyImpl();
+            mDataPreparationsPending = savedValue;
+
+            if( !bWasDataReady )
+            {
+                OGRE_ASSERT_LOW( mDataPreparationsPending > 0u && "This should never happen" );
+                // If we reach here, then we're aborting a load. e.g.
+                // user went to Resident then to OnStorage without ever
+                // calling notifyDataIsReady()
+                // This is perfectly valid, and can happen if the texture
+                // metadata cache got out of date for example.
+                --mDataPreparationsPending;
+            }
+        }
+
         if( newResidency == GpuResidency::Resident )
         {
             if( mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
@@ -495,6 +534,10 @@ namespace Ogre
                 assert( sysRamCopy && "Must provide a SysRAM copy if using AlwaysKeepSystemRamCopy" );
                 mSysRamCopy = sysRamCopy;
             }
+
+            OGRE_ASSERT_LOW( mDataPreparationsPending < std::numeric_limits<uint8>::max() &&
+                             "Overflow. Too many transitions queued up" );
+            ++mDataPreparationsPending;
 
             transitionToResident();
             listenerReason = TextureGpuListener::GainedResidency;

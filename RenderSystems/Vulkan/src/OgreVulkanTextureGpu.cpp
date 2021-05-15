@@ -301,6 +301,11 @@ namespace Ogre
             mOwnsSrv = false;
         }
 
+        OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
+                         "Calling notifyDataIsReady too often! Remove this call"
+                         "See https://github.com/OGRECave/ogre-next/issues/101" );
+        --mDataPreparationsPending;
+
         mDisplayTextureName = mFinalTextureName;
 
         if( isTexture() )
@@ -326,7 +331,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool VulkanTextureGpu::_isDataReadyImpl( void ) const
     {
-        return mDisplayTextureName == mFinalTextureName;
+        return mDisplayTextureName == mFinalTextureName && mDataPreparationsPending == 0u;
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::_setToDisplayDummyTexture( void )

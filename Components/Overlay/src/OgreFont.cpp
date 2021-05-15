@@ -498,8 +498,6 @@ namespace Ogre
         OGRE_FREE_SIMD( imageData, MEMCATEGORY_RESOURCE );
         imageData = 0;
 
-        mTexture->notifyDataIsReady();
-
         FT_Done_FreeType(ftLibrary);
     }
     //---------------------------------------------------------------------

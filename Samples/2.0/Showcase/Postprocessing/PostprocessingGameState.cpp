@@ -110,7 +110,6 @@ namespace Demo
 
             stagingTexture->stopMapRegion();
             stagingTexture->upload( texBox, tex, 0, 0, 0, true );
-            tex->notifyDataIsReady();
 
             textureManager->removeStagingTexture( stagingTexture );
             stagingTexture = 0;
@@ -149,7 +148,6 @@ namespace Demo
 
             stagingTexture->stopMapRegion();
             stagingTexture->upload( texBox, tex, 0, 0, 0, true );
-            tex->notifyDataIsReady();
 
             textureManager->removeStagingTexture( stagingTexture );
             stagingTexture = 0;

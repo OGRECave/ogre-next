@@ -74,6 +74,10 @@ namespace Ogre
     void GL3PlusTextureGpuWindow::notifyDataIsReady(void)
     {
         assert( mResidencyStatus == GpuResidency::Resident );
+        OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
+                         "Calling notifyDataIsReady too often! Remove this call"
+                         "See https://github.com/OGRECave/ogre-next/issues/101" );
+        --mDataPreparationsPending;
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
