@@ -2941,13 +2941,14 @@ Real SceneManager::getFogDensity(void) const
     return mFogDensity;
 }
 //-----------------------------------------------------------------------
-v1::BillboardSet* SceneManager::createBillboardSet(unsigned int poolSize)
+v1::BillboardSet* SceneManager::createBillboardSet(unsigned int poolSize,
+                                                   SceneMemoryMgrTypes sceneType)
 {
     NameValuePairList params;
     params["poolSize"] = StringConverter::toString(poolSize);
     return static_cast<v1::BillboardSet*>( createMovableObject(
                                                v1::BillboardSetFactory::FACTORY_TYPE_NAME,
-                                               &mEntityMemoryManager[SCENE_DYNAMIC],
+                                               &mEntityMemoryManager[sceneType],
                                                &params) );
 }
 //-----------------------------------------------------------------------

@@ -2053,7 +2053,8 @@ namespace Ogre {
             @see
                 BillboardSet
         */
-        virtual v1::BillboardSet* createBillboardSet(unsigned int poolSize = 20);
+        virtual v1::BillboardSet* createBillboardSet(unsigned int poolSize = 20,
+                                                     SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC);
 
         /** Removes & destroys an BillboardSet from the SceneManager.
             @warning
