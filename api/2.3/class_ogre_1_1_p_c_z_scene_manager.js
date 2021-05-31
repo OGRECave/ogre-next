@@ -98,7 +98,7 @@ var class_ogre_1_1_p_c_z_scene_manager =
     [ "createAnimationState", "class_ogre_1_1_p_c_z_scene_manager.html#a645918264d13f0fd8e403e7e4554ac89", null ],
     [ "createAntiPortal", "class_ogre_1_1_p_c_z_scene_manager.html#acf775412906734672ef148adeed7d2b4", null ],
     [ "createBillboardChain", "class_ogre_1_1_p_c_z_scene_manager.html#a7ed1f8508aab6937936e59131d37b015", null ],
-    [ "createBillboardSet", "class_ogre_1_1_p_c_z_scene_manager.html#ab332bde9a27fd34aebe523565f2c901e", null ],
+    [ "createBillboardSet", "class_ogre_1_1_p_c_z_scene_manager.html#addb069837e615efa614dacce8fb46567", null ],
     [ "createCamera", "class_ogre_1_1_p_c_z_scene_manager.html#af15f2f30cb8d1b02b5b27226d49294fd", null ],
     [ "createCamera", "class_ogre_1_1_p_c_z_scene_manager.html#af0b123ba8766b15be93d40663f55513b", null ],
     [ "createDecal", "class_ogre_1_1_p_c_z_scene_manager.html#a6c56dbf46094a1c4d03e01b3469e029d", null ],

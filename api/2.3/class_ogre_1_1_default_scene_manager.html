@@ -302,9 +302,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7ed1f8508aab6937936e59131d37b015"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1v1_1_1_billboard_chain.html">v1::BillboardChain</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#a7ed1f8508aab6937936e59131d37b015">createBillboardChain</a> ()</td></tr>
 <tr class="memdesc:a7ed1f8508aab6937936e59131d37b015"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a BillboardChain, an object which you can use to render a linked chain of billboards.  <a href="class_ogre_1_1_scene_manager.html#a7ed1f8508aab6937936e59131d37b015">More...</a><br /></td></tr>
 <tr class="separator:a7ed1f8508aab6937936e59131d37b015"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab332bde9a27fd34aebe523565f2c901e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html">v1::BillboardSet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#ab332bde9a27fd34aebe523565f2c901e">createBillboardSet</a> (unsigned int poolSize=20)</td></tr>
-<tr class="memdesc:ab332bde9a27fd34aebe523565f2c901e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new BillboardSet for use with this scene manager.  <a href="class_ogre_1_1_scene_manager.html#ab332bde9a27fd34aebe523565f2c901e">More...</a><br /></td></tr>
-<tr class="separator:ab332bde9a27fd34aebe523565f2c901e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addb069837e615efa614dacce8fb46567"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html">v1::BillboardSet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#addb069837e615efa614dacce8fb46567">createBillboardSet</a> (unsigned int poolSize=20, <a class="el" href="group___general.html#ga635aa2486e7e05c17c1fdec1913094a6">SceneMemoryMgrTypes</a> sceneType=<a class="el" href="group___general.html#gga635aa2486e7e05c17c1fdec1913094a6a1ea35787f06b0a63e0dd130cce754204">SCENE_DYNAMIC</a>)</td></tr>
+<tr class="memdesc:addb069837e615efa614dacce8fb46567"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new BillboardSet for use with this scene manager.  <a href="class_ogre_1_1_scene_manager.html#addb069837e615efa614dacce8fb46567">More...</a><br /></td></tr>
+<tr class="separator:addb069837e615efa614dacce8fb46567"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0b123ba8766b15be93d40663f55513b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_scene_manager.html#af0b123ba8766b15be93d40663f55513b">createCamera</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, bool notShadowCaster=true, bool forCubemapping=false)</td></tr>
 <tr class="memdesc:af0b123ba8766b15be93d40663f55513b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a camera to be managed by this scene manager.  <a href="class_ogre_1_1_scene_manager.html#af0b123ba8766b15be93d40663f55513b">More...</a><br /></td></tr>
 <tr class="separator:af0b123ba8766b15be93d40663f55513b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -3162,8 +3162,8 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
 
 </div>
 </div>
-<a id="ab332bde9a27fd34aebe523565f2c901e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab332bde9a27fd34aebe523565f2c901e">&#9670;&nbsp;</a></span>createBillboardSet()</h2>
+<a id="addb069837e615efa614dacce8fb46567"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addb069837e615efa614dacce8fb46567">&#9670;&nbsp;</a></span>createBillboardSet()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3175,8 +3175,18 @@ SceneNode::createChildImpl Don't call this function directly </dd></dl>
           <td class="memname">virtual <a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html">v1::BillboardSet</a>* Ogre::SceneManager::createBillboardSet </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>poolSize</em> = <code>20</code></td><td>)</td>
+          <td class="paramname"><em>poolSize</em> = <code>20</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="group___general.html#ga635aa2486e7e05c17c1fdec1913094a6">SceneMemoryMgrTypes</a>&#160;</td>
+          <td class="paramname"><em>sceneType</em> = <code><a class="el" href="group___general.html#gga635aa2486e7e05c17c1fdec1913094a6a1ea35787f06b0a63e0dd130cce754204">SCENE_DYNAMIC</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
