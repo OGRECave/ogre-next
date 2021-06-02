@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['linux_34253',['Linux',['../_setting_up_ogre_linux.html',1,'SettingUpOgre']]]
+  ['instancing_34253',['Instancing',['../instancing.html',1,'manual']]],
+  ['ios_34254',['iOS',['../_setting_up_ogre_i_o_s.html',1,'SettingUpOgre']]]
 ];
