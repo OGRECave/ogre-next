@@ -101,6 +101,27 @@ var manual =
         [ "Ogre + MSAA with Explicit Resolves", "compositor.html#autotoc_md14", null ]
       ] ]
     ] ],
+    [ "Global Illumination Methods", "_gi_methods.html", [
+      [ "Ambient Lighting", "_gi_methods.html#GiAmbientLighting", [
+        [ "Flat", "_gi_methods.html#GiAmbientLightingFlat", null ],
+        [ "Hemisphere", "_gi_methods.html#GiAmbientLightingHemisphere", null ],
+        [ "Spherical Harmonics", "_gi_methods.html#GiAmbientLightingSH", null ]
+      ] ],
+      [ "Parallax Corrected Cubemaps (PCC)", "_gi_methods.html#GiPCC", [
+        [ "Auto PCC", "_gi_methods.html#GiPCCAuto", null ],
+        [ "Manual PCC", "_gi_methods.html#GiPCCManual", null ]
+      ] ],
+      [ "Per Pixel PCC", "_gi_methods.html#GiPPPCC", [
+        [ "PCC Per Pixel Grid Placement", "_gi_methods.html#GiPPGridPlacement", null ]
+      ] ],
+      [ "Instant Radiosity", "_gi_methods.html#GiInstantRadiosity", null ],
+      [ "Irradiance Volume", "_gi_methods.html#GiIrradianceVolume", null ],
+      [ "Voxel Cone Tracing (aka VCT)", "_gi_methods.html#GiVCT", [
+        [ "VCT + Per Pixel PCC Hybrid", "_gi_methods.html#GiVCTPlusPPPCC", null ]
+      ] ],
+      [ "Irradiance Field with Depth (IFD)", "_gi_methods.html#GiIFD", null ],
+      [ "What technique should I choose?", "_gi_methods.html#GiWhatTechniqueChoose", null ]
+    ] ],
     [ "Instancing", "instancing.html", [
       [ "What is instancing?", "instancing.html#WhatIsInstancing", null ],
       [ "Instancing 101", "instancing.html#Instancing101", [
@@ -110,6 +131,14 @@ var manual =
         [ "ShaderBased", "instancing.html#InstancingTechniquesShaderBased", null ],
         [ "VTF (Software)", "instancing.html#InstancingTechniquesVTFSoftware", null ],
         [ "HW VTF", "instancing.html#InstancingTechniquesHWVTF", [
+          [ "Pros", "_gi_methods.html#autotoc_md15", null ],
+          [ "Cons", "_gi_methods.html#autotoc_md16", null ],
+          [ "Pros", "_gi_methods.html#autotoc_md17", null ],
+          [ "Cons", "_gi_methods.html#autotoc_md18", null ],
+          [ "Pros", "_gi_methods.html#autotoc_md19", null ],
+          [ "Cons", "_gi_methods.html#autotoc_md20", null ],
+          [ "Pros", "_gi_methods.html#autotoc_md21", null ],
+          [ "Cons", "_gi_methods.html#autotoc_md22", null ],
           [ "HW VTF LUT", "instancing.html#InstancingTechniquesHW", null ]
         ] ],
         [ "HW Basic", "instancing.html#InstancingTechniquesHWBasic", null ]
@@ -209,31 +238,31 @@ var manual =
       [ "Post-processing the command buffer", "commandbuffer.html#CommandBufferPostProcessing", null ]
     ] ],
     [ "What's new in Ogre 2.2", "_ogre22_changes.html", [
-      [ "Load Store semantics", "_ogre22_changes.html#autotoc_md15", [
-        [ "Now that we’ve explained how TBDRs work, we can explain load and store actions", "_ogre22_changes.html#autotoc_md16", null ]
+      [ "Load Store semantics", "_ogre22_changes.html#autotoc_md23", [
+        [ "Now that we’ve explained how TBDRs work, we can explain load and store actions", "_ogre22_changes.html#autotoc_md24", null ]
       ] ],
-      [ "More control over MSAA", "_ogre22_changes.html#autotoc_md17", null ],
-      [ "Porting to Ogre 2.2 from 2.1", "_ogre22_changes.html#autotoc_md18", [
-        [ "PixelFormats", "_ogre22_changes.html#autotoc_md19", [
-          [ "Common pixel format equivalencies", "_ogre22_changes.html#autotoc_md20", null ]
+      [ "More control over MSAA", "_ogre22_changes.html#autotoc_md25", null ],
+      [ "Porting to Ogre 2.2 from 2.1", "_ogre22_changes.html#autotoc_md26", [
+        [ "PixelFormats", "_ogre22_changes.html#autotoc_md27", [
+          [ "Common pixel format equivalencies", "_ogre22_changes.html#autotoc_md28", null ]
         ] ],
-        [ "Useful code snippets", "_ogre22_changes.html#autotoc_md21", [
-          [ "Create a TextureGpu based on a file", "_ogre22_changes.html#autotoc_md22", null ],
-          [ "Create a TextureGpu based that you manually fill", "_ogre22_changes.html#autotoc_md23", null ],
-          [ "Uploading data to a TextureGpu", "_ogre22_changes.html#autotoc_md24", null ],
-          [ "Upload streaming", "_ogre22_changes.html#autotoc_md25", null ],
-          [ "Downloading data from TextureGpu into CPU", "_ogre22_changes.html#autotoc_md26", null ],
-          [ "Downloading streaming", "_ogre22_changes.html#autotoc_md27", null ]
+        [ "Useful code snippets", "_ogre22_changes.html#autotoc_md29", [
+          [ "Create a TextureGpu based on a file", "_ogre22_changes.html#autotoc_md30", null ],
+          [ "Create a TextureGpu based that you manually fill", "_ogre22_changes.html#autotoc_md31", null ],
+          [ "Uploading data to a TextureGpu", "_ogre22_changes.html#autotoc_md32", null ],
+          [ "Upload streaming", "_ogre22_changes.html#autotoc_md33", null ],
+          [ "Downloading data from TextureGpu into CPU", "_ogre22_changes.html#autotoc_md34", null ],
+          [ "Downloading streaming", "_ogre22_changes.html#autotoc_md35", null ]
         ] ]
       ] ],
-      [ "Difference between depth, numSlices and depthOrSlices", "_ogre22_changes.html#autotoc_md28", null ],
-      [ "Memory layout of textures and images", "_ogre22_changes.html#autotoc_md29", null ],
-      [ "Troubleshooting errors", "_ogre22_changes.html#autotoc_md30", null ],
-      [ "RenderPassDescriptors", "_ogre22_changes.html#autotoc_md31", null ],
-      [ "DescriptorSetTexture & co.", "_ogre22_changes.html#autotoc_md32", null ],
-      [ "Does 2.2 interoperate well with the HLMS texture arrays?", "_ogre22_changes.html#autotoc_md33", null ],
-      [ "Hlms porting", "_ogre22_changes.html#autotoc_md34", null ],
-      [ "Things to watch out when porting", "_ogre22_changes.html#autotoc_md35", null ]
+      [ "Difference between depth, numSlices and depthOrSlices", "_ogre22_changes.html#autotoc_md36", null ],
+      [ "Memory layout of textures and images", "_ogre22_changes.html#autotoc_md37", null ],
+      [ "Troubleshooting errors", "_ogre22_changes.html#autotoc_md38", null ],
+      [ "RenderPassDescriptors", "_ogre22_changes.html#autotoc_md39", null ],
+      [ "DescriptorSetTexture & co.", "_ogre22_changes.html#autotoc_md40", null ],
+      [ "Does 2.2 interoperate well with the HLMS texture arrays?", "_ogre22_changes.html#autotoc_md41", null ],
+      [ "Hlms porting", "_ogre22_changes.html#autotoc_md42", null ],
+      [ "Things to watch out when porting", "_ogre22_changes.html#autotoc_md43", null ]
     ] ],
     [ "Behavor of StagingTexture in D3D11", "_behavor_staging_texture_d3_d11.html", [
       [ "Attempting to be contiguous", "_behavor_staging_texture_d3_d11.html#autotoc_md6", null ],
