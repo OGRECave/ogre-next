@@ -60,6 +60,7 @@ namespace Ogre
 
         FastArray<Terra *> mLinkedTerras;
 
+    protected:
         virtual HlmsDatablock* createDatablockImpl( IdString datablockName,
                                                     const HlmsMacroblock *macroblock,
                                                     const HlmsBlendblock *blendblock,
