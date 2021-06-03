@@ -165,13 +165,13 @@
 @piece( LoadNormalData )
 	// Geometric normal
 	pixelData.geomNormal = OGRE_Sample( terrainNormals, samplerStateTerra, inPs.uv0.xy ).xyz * 2.0 - 1.0;
-	pixelData.geomNormal = mul( pixelData.normal, toFloat3x3( passBuf.view ) );
+	pixelData.geomNormal = mul( pixelData.geomNormal, toFloat3x3( passBuf.view ) );
 	@property( normal_map )
 		//Get the TBN matrix
 		float3 viewSpaceUnitX	= float3( passBuf.view[0].x, passBuf.view[1].x, passBuf.view[2].x );
-		float3 vTangent			= normalize( cross( geomNormal, viewSpaceUnitX ) );
-		float3 vBinormal		= cross( vTangent, geomNormal );
-		float3x3 TBN			= buildFloat3x3( vBinormal, vTangent, geomNormal );
+		float3 vTangent			= normalize( cross( pixelData.geomNormal, viewSpaceUnitX ) );
+		float3 vBinormal		= cross( vTangent, pixelData.geomNormal );
+		float3x3 TBN			= buildFloat3x3( vBinormal, vTangent, pixelData.geomNormal );
 	@end
 @end
 
