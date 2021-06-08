@@ -1,5 +1,11 @@
 var NAVTREEINDEX216 =
 {
+"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfa364f94b757045261468e68fe09c36cca":[7,0,0,3,27,0,1],
+"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfa688a3812b47db689eebdbfefca66df87":[7,0,0,3,27,0,2],
+"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfaacdcbae3ae1ce82b2f4411df53a545cb":[7,0,0,3,27,0,4],
+"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfae160717b1f864d2d91aa2ba24ac38771":[7,0,0,3,27,0,3],
+"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfaf32b55fa8a975d085b07236f89900f26":[7,0,0,3,27,0,0],
+"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac20e63654b67a94b3836c52f9c81da99":[7,0,0,3,27,48],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,3,27,41],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac68ec7b50dc45b7916d6e3dffb0e250f":[7,0,0,3,27,16],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac6d97282de4e5937ff00cf2ff14860a8":[7,0,0,3,27,30],
@@ -243,11 +249,5 @@ var NAVTREEINDEX216 =
 "class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a79513a524782fcac13a6d91e68013ad7":[5,2,10,21,5],
 "class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a7c44192ec26ce81791bf54b52f3c4a48":[5,2,10,21,15],
 "class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a7f51811f14dcf9cc9c62311bf5952ce1":[5,2,10,21,3],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,10,21,20],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,10,21,23],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a99d79f386a09e77e911112e9988838d1":[5,2,10,21,7],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#aa46204e088bed1963b33e42b55d43dcf":[5,2,10,21,12],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#aaec7f834aff615ec9efd3169658950b0":[5,2,10,21,18],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#ab1647b937a868e9239a5207e5f60b97b":[5,2,10,21,14],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,10,21,27]
+"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,10,21,20]
 };

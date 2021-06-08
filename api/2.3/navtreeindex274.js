@@ -1,5 +1,11 @@
 var NAVTREEINDEX274 =
 {
+"struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html":[7,0,0,320,0],
+"struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html#a1322940e2216f41f4f0e08764d1fca08":[7,0,0,320,0,7],
+"struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html#a51ef5bf77e06ea5d4d994c745a1af8d8":[7,0,0,320,0,3],
+"struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html#a7497646dec4102c42d84c137e7778c62":[7,0,0,320,0,6],
+"struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html#a776216a723ceb8802be247fce0ca0eb0":[7,0,0,320,0,5],
+"struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html#a8ba62d285b73672d884482d3afe4ce6e":[7,0,0,320,0,0],
 "struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html#aac616aaf7c1b7f76369d03c3b5338764":[7,0,0,320,0,4],
 "struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html#ab78ebe8078c04919ce6c44b20d52ad1f":[7,0,0,320,0,1],
 "struct_ogre_1_1_egl_p_buffer_support_1_1_device_data.html#ac21f93c3af9e702519a2358b8adbb39d":[7,0,0,320,0,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX274 =
 "struct_ogre_1_1_gpu_logical_buffer_struct.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,5,4,6],
 "struct_ogre_1_1_gpu_logical_buffer_struct.html#a640a99f1ee133b137ce15e7271fdb7cc":[5,2,5,4,12],
 "struct_ogre_1_1_gpu_logical_buffer_struct.html#a811c69b680c296c25a92641f402e3345":[5,2,5,4,1],
-"struct_ogre_1_1_gpu_logical_buffer_struct.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,5,4,2],
-"struct_ogre_1_1_gpu_logical_buffer_struct.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,5,4,5],
-"struct_ogre_1_1_gpu_logical_buffer_struct.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,5,4,9],
-"struct_ogre_1_1_gpu_logical_buffer_struct.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,5,4,7],
-"struct_ogre_1_1_gpu_logical_buffer_struct.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,5,4,3],
-"struct_ogre_1_1_gpu_logical_buffer_struct.html#adab78cf8e26f03488bda5609bed785b7":[5,2,5,4,0],
-"struct_ogre_1_1_gpu_logical_buffer_struct.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,5,4,10]
+"struct_ogre_1_1_gpu_logical_buffer_struct.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,5,4,2]
 };
