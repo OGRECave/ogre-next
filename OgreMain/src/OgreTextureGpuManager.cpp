@@ -87,6 +87,7 @@ namespace Ogre
         mShuttingDown( false ),
         mTryLockMutexFailureCount( 0u ),
         mTryLockMutexFailureLimit( 1200u ),
+        mLastUpdateIsStreamingDone( true ),
         mAddedNewLoadRequests( false ),
         mAddedNewLoadRequestsSinceWaitingForStreamingCompletion( false ),
         mEntriesToProcessPerIteration( 3u ),
@@ -3269,7 +3270,15 @@ namespace Ogre
         dumpStats();
 #endif
 
+        mLastUpdateIsStreamingDone = isDone;
+
         return isDone;
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpuManager::isDoneStreaming( void ) const
+    {
+        return mLastUpdateIsStreamingDone && !mAddedNewLoadRequests && mDownloadToRamQueue.empty() &&
+               mScheduledTasks.empty();
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::waitForStreamingCompletion(void)

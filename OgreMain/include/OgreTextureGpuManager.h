@@ -508,6 +508,7 @@ namespace Ogre
         //Counts how many times mMutex.tryLock returned false in a row
         uint32              mTryLockMutexFailureCount;
         uint32              mTryLockMutexFailureLimit;
+        bool                mLastUpdateIsStreamingDone;
         bool                mAddedNewLoadRequests;
         bool                mAddedNewLoadRequestsSinceWaitingForStreamingCompletion;
         ThreadData          mThreadData[2];
@@ -738,6 +739,30 @@ namespace Ogre
             already notified it.
         */
         bool _update( bool syncWithWorkerThread );
+
+        /** Returns true if we're done loading all textures based on the return value of the
+            last call to TextureGpuManager::_update and whether new tasks have been scheduled
+            since then.
+
+        @remark
+            Do NOT call this in a loop e.g.
+
+            @code
+                // Do not do this
+                while( textureGpuManager->isDoneStreaming() )
+                    Sleep( 1 );
+            @endcode
+
+            Because it will spin forever!
+            The return value of this function changes whenever TextureGpuManager::_update
+            is called (directly or indirectly).
+
+            The main purpose for this function is to poll whether we're done streaming
+            so that e.g. users can show/hide a loading screen or loading icon.
+
+            If you need to wait until all textures are done, use waitForStreamingCompletion
+        */
+        bool isDoneStreaming( void ) const;
 
         /// Blocks main thread until all pending textures are fully loaded.
         void waitForStreamingCompletion(void);
