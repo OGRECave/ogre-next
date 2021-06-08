@@ -86,6 +86,7 @@ namespace Ogre
         mShuttingDown( false ),
         mTryLockMutexFailureCount( 0u ),
         mTryLockMutexFailureLimit( 1200u ),
+        mLastUpdateIsStreamingDone( true ),
         mAddedNewLoadRequests( false ),
         mEntriesToProcessPerIteration( 3u ),
         mMaxPreloadBytes( 256u * 1024u * 1024u ), //A value of 512MB begins to shake driver bugs.
@@ -3171,7 +3172,15 @@ namespace Ogre
         dumpStats();
 #endif
 
+        mLastUpdateIsStreamingDone = isDone;
+
         return isDone;
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpuManager::isDoneStreaming( void ) const
+    {
+        return mLastUpdateIsStreamingDone && !mAddedNewLoadRequests && mDownloadToRamQueue.empty() &&
+               mScheduledTasks.empty();
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::waitForStreamingCompletion(void)
