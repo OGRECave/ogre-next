@@ -1,6 +1,5 @@
 var NAVTREEINDEX71 =
 {
-"class_ogre_1_1_file_handle_data_stream.html#ac6f1032583209f59b503e7f29946230e":[5,2,11,19,4],
 "class_ogre_1_1_file_handle_data_stream.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,11,19,13],
 "class_ogre_1_1_file_handle_data_stream.html#ad061c86660f6415331df5f8560b46a02":[5,2,11,19,30],
 "class_ogre_1_1_file_handle_data_stream.html#aedc53a8cff5334563283a4557d423b25":[5,2,11,19,24],
@@ -249,5 +248,6 @@ var NAVTREEINDEX71 =
 "class_ogre_1_1_font.html#a77d5f72e02500f6db6f460bb48eac721":[5,2,11,24,12],
 "class_ogre_1_1_font.html#a82174dc4f4a0645332483ced7904c2f6":[5,2,11,24,73],
 "class_ogre_1_1_font.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,11,24,55],
-"class_ogre_1_1_font.html#a84c9f4e4a5d536fc6660c8f9fc37db66":[5,2,11,24,24]
+"class_ogre_1_1_font.html#a84c9f4e4a5d536fc6660c8f9fc37db66":[5,2,11,24,24],
+"class_ogre_1_1_font.html#a893c7a150edb48a25e5df700cfc194eb":[5,2,11,24,11]
 };

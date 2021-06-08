@@ -1,6 +1,5 @@
 var NAVTREEINDEX52 =
 {
-"class_ogre_1_1_d3_d11_window_swap_chain_based.html":[7,0,0,244],
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#a09d75f1c1eec5dd8cd06297b76245de6":[7,0,0,244,24],
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#a12411d378aa0623e29287964eeb261c4":[7,0,0,244,20],
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#a1284a6c13adf9c244e4dcc2f973d7749":[7,0,0,244,44],
@@ -81,8 +80,8 @@ var NAVTREEINDEX52 =
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7e":[7,0,0,245,1],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[7,0,0,245,0,4],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[7,0,0,245,0,9],
-"class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[7,0,0,245,1,4],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[7,0,0,245,1,9],
+"class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[7,0,0,245,1,4],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[7,0,0,245,0,2],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[7,0,0,245,0,7],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[7,0,0,245,1,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX52 =
 "class_ogre_1_1_d3_d9_gpu_fragment_program.html#a2443ed18b880eb939123bb8daf9165c7":[7,0,0,250,80],
 "class_ogre_1_1_d3_d9_gpu_fragment_program.html#a27ab608031953550438c054e74b147fc":[7,0,0,250,40],
 "class_ogre_1_1_d3_d9_gpu_fragment_program.html#a300833abd29aa42acb5e6c48ae7c40ea":[7,0,0,250,99],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a350b287fa3e83a389221274f68760008":[7,0,0,250,77]
+"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a350b287fa3e83a389221274f68760008":[7,0,0,250,77],
+"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a367f6fe60bb211cb4c32e3825ca67e4c":[7,0,0,250,15]
 };
