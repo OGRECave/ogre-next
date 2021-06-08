@@ -1,5 +1,6 @@
 var NAVTREEINDEX67 =
 {
+"class_ogre_1_1_egl_p_buffer_window.html#a0f7e59347f6a688da34e9a759e92aa1a":[7,0,0,316,47],
 "class_ogre_1_1_egl_p_buffer_window.html#a12411d378aa0623e29287964eeb261c4":[7,0,0,316,20],
 "class_ogre_1_1_egl_p_buffer_window.html#a1bd6f384f4efa5cba99e54907dd614fc":[7,0,0,316,17],
 "class_ogre_1_1_egl_p_buffer_window.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,316,33],
@@ -248,6 +249,5 @@ var NAVTREEINDEX67 =
 "class_ogre_1_1_emitter_commands_1_1_cmd_min_t_t_l.html":[7,0,0,0,15],
 "class_ogre_1_1_emitter_commands_1_1_cmd_min_t_t_l.html#a6744ef1b0a754650fe0b74eb91efc19a":[7,0,0,0,15,0],
 "class_ogre_1_1_emitter_commands_1_1_cmd_min_t_t_l.html#a73edf98f969e2d7ff3849c0c52e04572":[7,0,0,0,15,1],
-"class_ogre_1_1_emitter_commands_1_1_cmd_min_velocity.html":[7,0,0,0,16],
-"class_ogre_1_1_emitter_commands_1_1_cmd_min_velocity.html#a2842042188b1892b2ccd0073bc08a640":[7,0,0,0,16,1]
+"class_ogre_1_1_emitter_commands_1_1_cmd_min_velocity.html":[7,0,0,0,16]
 };
