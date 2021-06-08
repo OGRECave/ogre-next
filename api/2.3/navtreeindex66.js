@@ -1,5 +1,6 @@
 var NAVTREEINDEX66 =
 {
+"class_ogre_1_1_degree.html#a1b21b5dd134a959f2ff0b4fc36bf2519":[5,2,6,11,18],
 "class_ogre_1_1_degree.html#a1fa8bd1b85a6346de4570c8c7580988f":[5,2,6,11,20],
 "class_ogre_1_1_degree.html#a243c563d71d979f97a734412e6dc63b0":[5,2,6,11,4],
 "class_ogre_1_1_degree.html#a2e68606c59ced916ad55cf4a3158692a":[5,2,6,11,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX66 =
 "class_ogre_1_1_dyn_lib_manager.html":[5,2,2,40],
 "class_ogre_1_1_dyn_lib_manager.html#a11f5a0dfb9988c2bf4b9ec7d89ff34a2":[5,2,2,40,15],
 "class_ogre_1_1_dyn_lib_manager.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,40,7],
-"class_ogre_1_1_dyn_lib_manager.html#a34d606f2c393f90e6d2fb29194a53be7":[5,2,2,40,3],
-"class_ogre_1_1_dyn_lib_manager.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,2,40,11]
+"class_ogre_1_1_dyn_lib_manager.html#a34d606f2c393f90e6d2fb29194a53be7":[5,2,2,40,3]
 };

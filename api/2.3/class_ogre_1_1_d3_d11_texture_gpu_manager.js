@@ -70,6 +70,7 @@ var class_ogre_1_1_d3_d11_texture_gpu_manager =
     [ "hasPoolId", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a064b32e7db16917d223a729f3ce03a96", null ],
     [ "hasTextureResource", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#ae7152f97e84cd44d73afc86d77951120", null ],
     [ "importTextureMetadataCache", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a423e53613f85ab74171ac4bb291c2555", null ],
+    [ "isDoneStreaming", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#aad2d1de6d372585cc4acfa16abae331c", null ],
     [ "notifyTextureChanged", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#ab2012775609f389c5f205ee089a0c8b8", null ],
     [ "operator delete", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_d3_d11_texture_gpu_manager.html#acb46d4b0a597156d9ba5abc39d127792", null ],

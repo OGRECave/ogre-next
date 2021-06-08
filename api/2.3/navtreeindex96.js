@@ -1,5 +1,7 @@
 var NAVTREEINDEX96 =
 {
+"class_ogre_1_1_high_level_gpu_program_manager.html#a42f172a8ed1625011d510b081eee66dd":[5,2,11,44,20],
+"class_ogre_1_1_high_level_gpu_program_manager.html#a48c4a4817afee722b547f7d78a93032e":[5,2,11,44,0],
 "class_ogre_1_1_high_level_gpu_program_manager.html#a48c565d0e63b286c6388439ae73417df":[5,2,11,44,12],
 "class_ogre_1_1_high_level_gpu_program_manager.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,11,44,42],
 "class_ogre_1_1_high_level_gpu_program_manager.html#a4d3289d4636168230da11c1c9794db59":[5,2,11,44,24],
@@ -247,7 +249,5 @@ var NAVTREEINDEX96 =
 "class_ogre_1_1_hlms_compute.html#a666c0da0880cf52f84e31f03e4736cac":[5,0,0,4,69],
 "class_ogre_1_1_hlms_compute.html#a687aefae7d02308facf08680c08ddbea":[5,0,0,4,13],
 "class_ogre_1_1_hlms_compute.html#a69f210db26327a339966b5732db8764f":[5,0,0,4,49],
-"class_ogre_1_1_hlms_compute.html#a6e629e7a87a40040e12d2bfb4ff80d58":[5,0,0,4,2],
-"class_ogre_1_1_hlms_compute.html#a6e629e7a87a40040e12d2bfb4ff80d58a1aba1d888e0aa8e695416e9ad2af44b9":[5,0,0,4,2,2],
-"class_ogre_1_1_hlms_compute.html#a6e629e7a87a40040e12d2bfb4ff80d58a6461fe4856b648eb0bc6ec35df2e4712":[5,0,0,4,2,0]
+"class_ogre_1_1_hlms_compute.html#a6e629e7a87a40040e12d2bfb4ff80d58":[5,0,0,4,2]
 };
