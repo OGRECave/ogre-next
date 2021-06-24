@@ -806,6 +806,26 @@ namespace Ogre
         savedTextures.insert( resourceName );
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpuManager::checkSupport( PixelFormatGpu format, uint32 textureFlags ) const
+    {
+        OGRE_ASSERT_LOW(
+            textureFlags != TextureFlags::NotTexture &&
+            "Invalid textureFlags combination. Asking to check if format is supported to do nothing" );
+
+        if( textureFlags & TextureFlags::AllowAutomipmaps )
+        {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+        // Disable hardware mipmap generation on macOS while there is no fallback
+        // for OpenGL < 4.2 implemented in TextureGpuManager::copyTo
+        return false;
+#endif
+            if( !PixelFormatGpuUtils::supportsHwMipmaps( format ) )
+                return false;
+        }
+
+        return true;
+    }
+    //-----------------------------------------------------------------------------------
     TextureGpuManager::MetadataCacheEntry::MetadataCacheEntry() :
         width( 0 ),
         height( 0 ),

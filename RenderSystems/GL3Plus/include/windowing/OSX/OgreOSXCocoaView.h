@@ -29,23 +29,22 @@ THE SOFTWARE.
 #ifndef __OSXCocoaView_H__
 #define __OSXCocoaView_H__
 
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include <AppKit/NSOpenGLView.h>
 
 @interface OgreGL3PlusView : NSOpenGLView
 {
-    Ogre::RenderWindow *window;
+    Ogre::Window *window;
 }
 
 - (id)initWithFrame:(NSRect)f;
-- (id)initWithGLOSXWindow:(Ogre::RenderWindow*)w;
+- (id)initWithGLOSXWindow:(Ogre::Window*)w;
 
-- (void)setOgreWindow:(Ogre::RenderWindow*)w;
-- (Ogre::RenderWindow*)ogreWindow;
+- (void)setOgreWindow:(Ogre::Window*)w;
+- (Ogre::Window*)ogreWindow;
 
 - (void)setFrameSize:(NSSize)s;
 
 @end
 
-#endif
-
+#endif // __OSXCocoaView_H__

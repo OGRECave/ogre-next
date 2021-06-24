@@ -26,9 +26,8 @@
  -----------------------------------------------------------------------------
  */
 
-#import "OgreOSXCocoaWindow.h"
-
 #import "OgreOSXCocoaWindowDelegate.h"
+#import "OgreOSXCocoaWindow.h"
 #import "OgreWindowEventUtilities.h"
 
 using namespace Ogre;
@@ -36,7 +35,7 @@ using namespace Ogre;
 @implementation CocoaWindowDelegate
 
 
--(id)initWithNSWindow:(NSWindow*)nswin ogreWindow:(RenderWindow*)ogrewin
+-(id)initWithNSWindow:(NSWindow*)nswin ogreWindow:(Window*)ogrewin
 {
     if ((self = [super init]))
     {

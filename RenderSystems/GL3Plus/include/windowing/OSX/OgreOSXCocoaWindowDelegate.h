@@ -26,18 +26,18 @@
  -----------------------------------------------------------------------------
  */
 
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 
 #import <AppKit/NSWindow.h>
 
 @interface CocoaWindowDelegate : NSObject
 {
 @private
-    Ogre::RenderWindow *ogreWindow;
+    Ogre::Window *ogreWindow;
     NSWindow *window;
 }
 
--(id)initWithNSWindow:(NSWindow*)nswin ogreWindow:(Ogre::RenderWindow*)ogrewin;
+-(id)initWithNSWindow:(NSWindow*)nswin ogreWindow:(Ogre::Window*)ogrewin;
 
 @end
 
