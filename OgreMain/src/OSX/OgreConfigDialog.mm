@@ -212,6 +212,10 @@ namespace Ogre {
             [mRenderSystemsPopUp addItemWithTitle:renderSystemName];
         }
 
+        // Initalise storage for the table data source
+        mOptionsKeys = [[NSMutableArray alloc] init];
+        mOptionsValues = [[NSMutableArray alloc] init];
+
         [self refreshConfigOptions];
     }
     return self;
@@ -219,8 +223,8 @@ namespace Ogre {
 
 -(void) refreshConfigOptions
 {
-    NSMutableArray* keys = [NSMutableArray array];
-    NSMutableArray* values = [NSMutableArray array];
+    [mOptionsKeys removeAllObjects];
+    [mOptionsValues removeAllObjects];
 
     // Get detected option values and add them to our config dictionary
     String selectedRenderSystemName = String([[[mRenderSystemsPopUp selectedItem] title] UTF8String]);
@@ -228,12 +232,10 @@ namespace Ogre {
     const ConfigOptionMap& opts = rs->getConfigOptions();
     for (ConfigOptionMap::const_iterator pOpt = opts.begin(); pOpt != opts.end(); ++pOpt)
     {
-        [keys addObject:[NSString stringWithUTF8String:pOpt->first.c_str()]];
-        [values addObject:[NSString stringWithUTF8String:pOpt->second.currentValue.c_str()]];
+        [mOptionsKeys addObject:[NSString stringWithUTF8String:pOpt->first.c_str()]];
+        [mOptionsValues addObject:[NSString stringWithUTF8String:pOpt->second.currentValue.c_str()]];
     }
 
-    mOptionsKeys = keys;
-    mOptionsValues = values;
     [mOptionsTable reloadData];
 }
 
