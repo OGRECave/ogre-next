@@ -111,6 +111,4 @@
 	@property( !hlms_shadowcaster )
 		outPs_colour0 = diffuseCol;
 	@end
-
-	@insertpiece( custom_ps_posExecution )
 @end
