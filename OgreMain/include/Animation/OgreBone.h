@@ -160,6 +160,20 @@ namespace Ogre {
 
         void removeTagPoint( TagPoint *tagPoint );
 
+        /// Reports the number of tag points under this one.
+        size_t getNumTagPoints(void) const                          { return mTagPointChildren.size(); }
+
+        /// Gets a pointer to a child tag point.
+        TagPoint* getTagPoint(size_t index)                         { return mTagPointChildren[index]; }
+        const TagPoint* getTagPoint(size_t index) const             { return mTagPointChildren[index]; }
+
+        /** Retrieves the container for efficiently iterating through all tag points of this bone.
+        @remarks
+            Using this is faster than repeatedly calling getTagPoint if you want to go through
+            all (or most of) the tag points of this bone.
+        */
+        const TagPointVec& getTagPoints(void)                       { return mTagPointChildren; }
+
         /** Sets a regular Node to be parent of this Bone.
             DO NOT USE THIS FUNCTION IF YOU DON'T KNOW WHAT YOU'RE DOING. If you want
             to use a regular Node to control a bone,
@@ -301,7 +315,7 @@ namespace Ogre {
         */
         /*virtual SceneNode* createChildSceneNode(
                 SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC,
-                const Vector3& translate = Vector3::ZERO, 
+                const Vector3& translate = Vector3::ZERO,
                 const Quaternion& rotate = Quaternion::IDENTITY );*/
 
         /// @See Node::updateAllTransforms
