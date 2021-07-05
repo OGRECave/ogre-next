@@ -1,5 +1,9 @@
 var NAVTREEINDEX65 =
 {
+"class_ogre_1_1_default_work_queue.html#a1a0f33724027da3501c0c8b8182480cf":[7,0,0,294,45],
+"class_ogre_1_1_default_work_queue.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,294,26],
+"class_ogre_1_1_default_work_queue.html#a1f0847f5d8a4f9e4703a390acacfaa84":[7,0,0,294,35],
+"class_ogre_1_1_default_work_queue.html#a21e659d67e6c2512c78e0fcb987d6d3c":[7,0,0,294,17],
 "class_ogre_1_1_default_work_queue.html#a291e7c92efb374ec208c680375edd2ce":[7,0,0,294,38],
 "class_ogre_1_1_default_work_queue.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,294,30],
 "class_ogre_1_1_default_work_queue.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,294,33],
@@ -245,9 +249,5 @@ var NAVTREEINDEX65 =
 "class_ogre_1_1_deflector_plane_affector_factory.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,300,8],
 "class_ogre_1_1_deflector_plane_affector_factory.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,300,6],
 "class_ogre_1_1_deflector_plane_affector_factory.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,300,2],
-"class_ogre_1_1_deflector_plane_affector_factory.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,300,9],
-"class_ogre_1_1_degree.html":[5,2,6,11],
-"class_ogre_1_1_degree.html#a0487bcf629d0f637293a6e23d3542ad6":[5,2,6,11,9],
-"class_ogre_1_1_degree.html#a06ce30cb04785abd837cc94bf76b05de":[5,2,6,11,29],
-"class_ogre_1_1_degree.html#a133b76b6d58f5ce8f8e8ea55c04932e0":[5,2,6,11,14]
+"class_ogre_1_1_deflector_plane_affector_factory.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,300,9]
 };

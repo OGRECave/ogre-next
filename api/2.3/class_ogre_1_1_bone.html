@@ -180,6 +180,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a15d50e815c27967e9c92d1060b3f6f86"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#a15d50e815c27967e9c92d1060b3f6f86">getNumChildren</a> (void) const</td></tr>
 <tr class="memdesc:a15d50e815c27967e9c92d1060b3f6f86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports the number of child nodes under this one.  <a href="class_ogre_1_1_bone.html#a15d50e815c27967e9c92d1060b3f6f86">More...</a><br /></td></tr>
 <tr class="separator:a15d50e815c27967e9c92d1060b3f6f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf7f16f502da947118ee28608c06b3fc"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#adf7f16f502da947118ee28608c06b3fc">getNumTagPoints</a> (void) const</td></tr>
+<tr class="memdesc:adf7f16f502da947118ee28608c06b3fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports the number of tag points under this one.  <a href="class_ogre_1_1_bone.html#adf7f16f502da947118ee28608c06b3fc">More...</a><br /></td></tr>
+<tr class="separator:adf7f16f502da947118ee28608c06b3fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4706ffdbe4d04170f0ef0137b5e35995"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_quaternion.html">Quaternion</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#a4706ffdbe4d04170f0ef0137b5e35995">getOrientation</a> () const</td></tr>
 <tr class="memdesc:a4706ffdbe4d04170f0ef0137b5e35995"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a quaternion representing the nodes orientation.  <a href="class_ogre_1_1_bone.html#a4706ffdbe4d04170f0ef0137b5e35995">More...</a><br /></td></tr>
 <tr class="separator:a4706ffdbe4d04170f0ef0137b5e35995"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,6 +195,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a701afdce7ebabf66d52eb0220140f06d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#a701afdce7ebabf66d52eb0220140f06d">getScale</a> (void) const</td></tr>
 <tr class="memdesc:a701afdce7ebabf66d52eb0220140f06d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the scale of the node relative to its parent.  <a href="class_ogre_1_1_bone.html#a701afdce7ebabf66d52eb0220140f06d">More...</a><br /></td></tr>
 <tr class="separator:a701afdce7ebabf66d52eb0220140f06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ac62b6d94b2b5e90cc128ebf729b9d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_tag_point.html">TagPoint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#a1ac62b6d94b2b5e90cc128ebf729b9d2">getTagPoint</a> (size_t index)</td></tr>
+<tr class="memdesc:a1ac62b6d94b2b5e90cc128ebf729b9d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a pointer to a child tag point.  <a href="class_ogre_1_1_bone.html#a1ac62b6d94b2b5e90cc128ebf729b9d2">More...</a><br /></td></tr>
+<tr class="separator:a1ac62b6d94b2b5e90cc128ebf729b9d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5d40ea4b1a9bcf78609a2bfac18c1dc"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_tag_point.html">TagPoint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#ac5d40ea4b1a9bcf78609a2bfac18c1dc">getTagPoint</a> (size_t index) const</td></tr>
+<tr class="separator:ac5d40ea4b1a9bcf78609a2bfac18c1dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c39d51c5750830a279f27d5bb4d297e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_bone.html#acf337040209b1221baa1333b6600d27f">TagPointVec</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#a2c39d51c5750830a279f27d5bb4d297e">getTagPoints</a> (void)</td></tr>
+<tr class="memdesc:a2c39d51c5750830a279f27d5bb4d297e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the container for efficiently iterating through all tag points of this bone.  <a href="class_ogre_1_1_bone.html#a2c39d51c5750830a279f27d5bb4d297e">More...</a><br /></td></tr>
+<tr class="separator:a2c39d51c5750830a279f27d5bb4d297e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3868cc5320c6e3868ae9f79ad04d10d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_bone.html#ab3868cc5320c6e3868ae9f79ad04d10d">isCachedTransformOutOfDate</a> (void) const</td></tr>
 <tr class="separator:ab3868cc5320c6e3868ae9f79ad04d10d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
@@ -880,6 +891,34 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="adf7f16f502da947118ee28608c06b3fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf7f16f502da947118ee28608c06b3fc">&#9670;&nbsp;</a></span>getNumTagPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Ogre::Bone::getNumTagPoints </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reports the number of tag points under this one. </p>
+
+</div>
+</div>
 <a id="a4706ffdbe4d04170f0ef0137b5e35995"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4706ffdbe4d04170f0ef0137b5e35995">&#9670;&nbsp;</a></span>getOrientation()</h2>
 
@@ -991,6 +1030,89 @@ Public Attributes</h2></td></tr>
 
 <p>Gets the scale of the node relative to its parent. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Don't call this function too often, as we need to convert from SoA </dd></dl>
+
+</div>
+</div>
+<a id="a1ac62b6d94b2b5e90cc128ebf729b9d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ac62b6d94b2b5e90cc128ebf729b9d2">&#9670;&nbsp;</a></span>getTagPoint() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_tag_point.html">TagPoint</a>* Ogre::Bone::getTagPoint </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets a pointer to a child tag point. </p>
+
+</div>
+</div>
+<a id="ac5d40ea4b1a9bcf78609a2bfac18c1dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5d40ea4b1a9bcf78609a2bfac18c1dc">&#9670;&nbsp;</a></span>getTagPoint() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_ogre_1_1_tag_point.html">TagPoint</a>* Ogre::Bone::getTagPoint </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2c39d51c5750830a279f27d5bb4d297e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c39d51c5750830a279f27d5bb4d297e">&#9670;&nbsp;</a></span>getTagPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_ogre_1_1_bone.html#acf337040209b1221baa1333b6600d27f">TagPointVec</a>&amp; Ogre::Bone::getTagPoints </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the container for efficiently iterating through all tag points of this bone. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Using this is faster than repeatedly calling getTagPoint if you want to go through all (or most of) the tag points of this bone. </dd></dl>
 
 </div>
 </div>

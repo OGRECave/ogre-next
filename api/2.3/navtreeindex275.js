@@ -1,5 +1,9 @@
 var NAVTREEINDEX275 =
 {
+"struct_ogre_1_1_gpu_logical_buffer_struct.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,5,4,6],
+"struct_ogre_1_1_gpu_logical_buffer_struct.html#a640a99f1ee133b137ce15e7271fdb7cc":[5,2,5,4,12],
+"struct_ogre_1_1_gpu_logical_buffer_struct.html#a811c69b680c296c25a92641f402e3345":[5,2,5,4,1],
+"struct_ogre_1_1_gpu_logical_buffer_struct.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,5,4,2],
 "struct_ogre_1_1_gpu_logical_buffer_struct.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,5,4,5],
 "struct_ogre_1_1_gpu_logical_buffer_struct.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,5,4,9],
 "struct_ogre_1_1_gpu_logical_buffer_struct.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,5,4,7],
@@ -245,9 +249,5 @@ var NAVTREEINDEX275 =
 "struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#a055d41115a743c79ab2bfc5b798ba390":[5,2,11,53,1,4],
 "struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#a324c77640a910a09c5c6e6349d8decee":[5,2,11,53,1,5],
 "struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#a77e3ac39032e4a92eca7d1ac1e2ae350":[5,2,11,53,1,1],
-"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#aa33b5cac7f2c55ad861cefd6c3a51daa":[5,2,11,53,1,2],
-"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#ab474d42949e1800fb64e0b3ab378de75":[5,2,11,53,1,6],
-"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#ac9163fe8946dea3c8f469ff12c1c8b46":[5,2,11,53,1,3],
-"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#afb97efbb9fcb672ca21456120e38912e":[5,2,11,53,1,0],
-"struct_ogre_1_1_hlms_disk_cache_1_1_source_code.html":[5,2,11,53,2]
+"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#aa33b5cac7f2c55ad861cefd6c3a51daa":[5,2,11,53,1,2]
 };

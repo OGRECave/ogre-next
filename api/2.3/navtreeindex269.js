@@ -1,5 +1,9 @@
 var NAVTREEINDEX269 =
 {
+"namespace_ogre.html#a6010b300e6b49e831c837cfb21a89e33":[6,0,0,1313],
+"namespace_ogre.html#a617f201d9cbae270480ce958d29d89b4":[6,0,0,1692],
+"namespace_ogre.html#a6190e7c0a19190277aeadf25f536ac8c":[6,0,0,1219],
+"namespace_ogre.html#a61c92fc2d65ecf3d3da5078c57f85f2a":[6,0,0,1233],
 "namespace_ogre.html#a626dceff763286830a1ef619f5468ab0":[6,0,0,1346],
 "namespace_ogre.html#a62bd950b43a50257f8aa1589d2e823f9":[6,0,0,1258],
 "namespace_ogre.html#a644f74bf84779c83312a97e169164d07":[6,0,0,1322],
@@ -94,8 +98,8 @@ var NAVTREEINDEX269 =
 "namespace_ogre.html#a98503157cdb45dcaf5e79671a9d4f7a0":[6,0,0,1270],
 "namespace_ogre.html#a9affda69c1f17eb53d0ad94659c565e7":[6,0,0,1785],
 "namespace_ogre.html#a9b895fae7e7ce5a60cbfe4bdfbe9e634":[6,0,0,1688],
-"namespace_ogre.html#a9bf62a3d82d33910484284a0fc6300a8":[6,0,0,1757],
 "namespace_ogre.html#a9bf62a3d82d33910484284a0fc6300a8":[6,0,0,1758],
+"namespace_ogre.html#a9bf62a3d82d33910484284a0fc6300a8":[6,0,0,1757],
 "namespace_ogre.html#a9cd4601f9bf87a6bd2846370ccea6acb":[6,0,0,1329],
 "namespace_ogre.html#a9cfdd79a0595db4d941675d0d73beb6f":[6,0,0,1300],
 "namespace_ogre.html#a9e58d974b559e9184139357d0cb30ba5":[6,0,0,1221],
@@ -245,9 +249,5 @@ var NAVTREEINDEX269 =
 "namespace_ogre_1_1_baked_descriptor_sets.html#a8ea612cd4e3340a99b41fcdbef0c65c5a422388fa0796545b2dc10c283b3cbec1":[6,0,0,1,0,3],
 "namespace_ogre_1_1_baked_descriptor_sets.html#a8ea612cd4e3340a99b41fcdbef0c65c5a435c10bf902278dbc2b5acb5aaee9e49":[6,0,0,1,0,2],
 "namespace_ogre_1_1_baked_descriptor_sets.html#a8ea612cd4e3340a99b41fcdbef0c65c5abbee09a118ad180f057750d1eaeeca61":[6,0,0,1,0,4],
-"namespace_ogre_1_1_baked_descriptor_sets.html#a8ea612cd4e3340a99b41fcdbef0c65c5af124b9cca787c6efc8f186f8322e4993":[6,0,0,1,0,0],
-"namespace_ogre_1_1_common_texture_types.html":[6,0,0,2],
-"namespace_ogre_1_1_common_texture_types.html#a3a978c834ce00930123468c9a64047b4":[6,0,0,2,0],
-"namespace_ogre_1_1_common_texture_types.html#a3a978c834ce00930123468c9a64047b4a1401cab26e1cb6b3730cfd610cbe6f09":[6,0,0,2,0,1],
-"namespace_ogre_1_1_common_texture_types.html#a3a978c834ce00930123468c9a64047b4a3f22b32546d18bc52eae77308ad07721":[6,0,0,2,0,0]
+"namespace_ogre_1_1_baked_descriptor_sets.html#a8ea612cd4e3340a99b41fcdbef0c65c5af124b9cca787c6efc8f186f8322e4993":[6,0,0,1,0,0]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX216 =
 {
+"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ab60da8e622506487a7d44200a1c704b6":[7,0,0,3,27,46],
+"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,3,27,43],
+"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#abfdc78f4d215818fa1869709d91ccab7":[7,0,0,3,27,5],
+"class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cf":[7,0,0,3,27,0],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfa364f94b757045261468e68fe09c36cca":[7,0,0,3,27,0,1],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfa688a3812b47db689eebdbfefca66df87":[7,0,0,3,27,0,2],
 "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html#ac0c56e93ce6f29bf39fb48c3d5dc64cfaacdcbae3ae1ce82b2f4411df53a545cb":[7,0,0,3,27,0,4],
@@ -245,9 +249,5 @@ var NAVTREEINDEX216 =
 "class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a6226ef7551a81bb853b64b61f8590e96":[5,2,10,21,13],
 "class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a73af0e384fffafd30ec13438507d31eb":[5,2,10,21,0],
 "class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a73af0e384fffafd30ec13438507d31eba2b12eec76abb4c56344b6c6ff1cdb65f":[5,2,10,21,0,1],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a73af0e384fffafd30ec13438507d31ebaefbef8f3135135145a860b8647faba4c":[5,2,10,21,0,0],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a79513a524782fcac13a6d91e68013ad7":[5,2,10,21,5],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a7c44192ec26ce81791bf54b52f3c4a48":[5,2,10,21,15],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a7f51811f14dcf9cc9c62311bf5952ce1":[5,2,10,21,3],
-"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,10,21,20]
+"class_ogre_1_1v1_1_1_default_hardware_buffer_manager_base.html#a73af0e384fffafd30ec13438507d31ebaefbef8f3135135145a860b8647faba4c":[5,2,10,21,0,0]
 };
