@@ -249,5 +249,5 @@ var NAVTREEINDEX81 =
 "class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html#afe802beaa684f0f1a42ff4294fe7712b":[7,0,0,410,88],
 "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html":[5,2,11,34],
 "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a02832e2789d8fc68b4ce4586bad25010":[5,2,11,34,29],
-"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a0532737ff33e0b1357ea2be6662fb1bb":[5,2,11,34,49]
+"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a0532737ff33e0b1357ea2be6662fb1bb":[5,2,11,34,50]
 };
