@@ -181,7 +181,7 @@ namespace Ogre
             }
 
             // If feature level is 11, create class linkage
-            if (mD3D11Device->GetFeatureLevel() == D3D_FEATURE_LEVEL_11_0)
+            if (mD3D11Device->GetFeatureLevel() >= D3D_FEATURE_LEVEL_11_0)
             {
                 hr = mD3D11Device->CreateClassLinkage(mClassLinkage.ReleaseAndGetAddressOf());
             }
