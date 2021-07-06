@@ -53,8 +53,8 @@ THE SOFTWARE.
     NSButton *mCancelButton;
     NSTextField *mOptionLabel;
     
-    NSArray *mOptionsKeys;
-    NSArray *mOptionsValues;
+    NSMutableArray *mOptionsKeys;
+    NSMutableArray *mOptionsValues;
 }
 
 - (void)cancelButtonPressed:(id)sender;
