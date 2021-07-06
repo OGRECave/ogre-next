@@ -87,9 +87,9 @@ namespace Ogre
         mShuttingDown( false ),
         mTryLockMutexFailureCount( 0u ),
         mTryLockMutexFailureLimit( 1200u ),
+        mLoadRequestsCounter( 0u ),
         mLastUpdateIsStreamingDone( true ),
         mAddedNewLoadRequests( false ),
-        mAddedNewLoadRequestsSinceWaitingForStreamingCompletion( false ),
         mEntriesToProcessPerIteration( 3u ),
         mMaxPreloadBytes( 256u * 1024u * 1024u ), //A value of 512MB begins to shake driver bugs.
         mTextureGpuManagerListener( &sDefaultTextureGpuManagerListener ),
@@ -1671,7 +1671,7 @@ namespace Ogre
         }
 
         mAddedNewLoadRequests = true;
-        mAddedNewLoadRequestsSinceWaitingForStreamingCompletion = true;
+        ++mLoadRequestsCounter;
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
             mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image,
@@ -1681,15 +1681,15 @@ namespace Ogre
         mWorkerWaitableEvent.wake();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::_scheduleUpdate( TextureGpu *texture, uint32 filters, Image2 *image, bool autoDeleteImage,
-                          bool skipMetadataCache,
-                          uint32 sliceOrDepth )
+    void TextureGpuManager::_scheduleUpdate( TextureGpu *texture, uint32 filters, Image2 *image,
+                                             bool autoDeleteImage, bool skipMetadataCache,
+                                             uint32 sliceOrDepth )
     {
         Archive *archive = 0;
         ResourceLoadingListener *loadingListener = 0;
 
         mAddedNewLoadRequests = true;
-        mAddedNewLoadRequestsSinceWaitingForStreamingCompletion = true;
+        ++mLoadRequestsCounter;
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
             mainData.loadRequests.push_back( LoadRequest( "", archive, loadingListener, image,
@@ -1808,7 +1808,7 @@ namespace Ogre
         texture->_transitionTo( GpuResidency::Resident, texture->_getSysRamCopy( 0 ), false );
 
         mAddedNewLoadRequests = true;
-        mAddedNewLoadRequestsSinceWaitingForStreamingCompletion = true;
+        ++mLoadRequestsCounter;
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
             mainData.loadRequests.push_back( LoadRequest( name, 0, 0, image, texture,
@@ -3308,7 +3308,6 @@ namespace Ogre
           dumpStats();
 #endif
         }
-        mAddedNewLoadRequestsSinceWaitingForStreamingCompletion = false;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_waitFor( TextureGpu *texture, bool metadataOnly )

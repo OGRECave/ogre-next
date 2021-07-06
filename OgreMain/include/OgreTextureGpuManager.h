@@ -508,9 +508,9 @@ namespace Ogre
         //Counts how many times mMutex.tryLock returned false in a row
         uint32              mTryLockMutexFailureCount;
         uint32              mTryLockMutexFailureLimit;
+        uint64              mLoadRequestsCounter;
         bool                mLastUpdateIsStreamingDone;
         bool                mAddedNewLoadRequests;
-        bool                mAddedNewLoadRequestsSinceWaitingForStreamingCompletion;
         ThreadData          mThreadData[2];
         StreamingData       mStreamingData;
 
@@ -767,11 +767,25 @@ namespace Ogre
         /// Blocks main thread until all pending textures are fully loaded.
         void waitForStreamingCompletion(void);
 
-        /// It is not enough to call waitForStreamingCompletion to render
-        /// single frame with all textures loaded, as new loading requests
-        /// could be added during frame rendering. In this case waiting
-        /// and rendering could be repeated to avoid the problem.
-        bool hasNewLoadRequests() const { return mAddedNewLoadRequestsSinceWaitingForStreamingCompletion; }
+        /** Calling waitForStreamingCompletion before Root::renderOneFrame should
+            guarantee the render is perfect.
+
+            Except... a new texture may be loaded while inside renderOneFrame.
+            If that happens the render may not be perfect. You can solve that
+            by rendering the frame again if you need all frames to be 'perfect':
+
+            @code
+                textureMgr->waitForStreamingCompletion();
+                const oldValue = textureMgr->getLoadRequestsCounter();
+                root->renderOneFrame();
+                if( oldValue != textureMgr->getLoadRequestsCounter() )
+                {
+                    textureMgr->waitForStreamingCompletion();
+                    root->renderOneFrame();
+                }
+            @endcode
+        */
+        uint64 getLoadRequestsCounter() const { return mLoadRequestsCounter; }
 
         /// Do not use directly. See TextureGpu::waitForMetadata & TextureGpu::waitForDataReady
         void _waitFor( TextureGpu *texture, bool metadataOnly );
