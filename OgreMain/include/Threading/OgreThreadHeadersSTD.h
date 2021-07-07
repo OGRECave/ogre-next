@@ -30,5 +30,6 @@ THE SOFTWARE
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <shared_mutex>
 
 #endif
