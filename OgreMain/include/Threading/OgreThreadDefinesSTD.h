@@ -110,9 +110,9 @@ namespace Ogre
 #define OGRE_THREAD_NOTIFY_ALL(sync) sync.notify_all()
 
 // Read-write mutex
-#define OGRE_RW_MUTEX(name) mutable std::recursive_mutex name
-#define OGRE_LOCK_RW_MUTEX_READ(name) std::unique_lock<std::recursive_mutex> OGRE_TOKEN_PASTE_EXTRA(ogrenameLock, __LINE__) (name)
-#define OGRE_LOCK_RW_MUTEX_WRITE(name) std::unique_lock<std::recursive_mutex> OGRE_TOKEN_PASTE_EXTRA(ogrenameLock, __LINE__) (name)
+#define OGRE_RW_MUTEX(name) mutable std::shared_mutex name
+#define OGRE_LOCK_RW_MUTEX_READ(name) std::shared_lock<std::shared_mutex> OGRE_TOKEN_PASTE_EXTRA(ogrenameLock, __LINE__) (name)
+#define OGRE_LOCK_RW_MUTEX_WRITE(name) std::unique_lock<std::shared_mutex> OGRE_TOKEN_PASTE_EXTRA(ogrenameLock, __LINE__) (name)
 
 // Thread-local pointer
 #define OGRE_THREAD_POINTER(T, var) Ogre::ThreadLocalPtr<T> var
