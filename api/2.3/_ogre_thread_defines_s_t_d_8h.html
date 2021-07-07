@@ -122,9 +122,9 @@ Macros</h2></td></tr>
 <tr class="separator:a8a4683cdaf73994ea7ec391c1ba82b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39e611f7baf80408d740fce6a2502414"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_thread_defines_s_t_d_8h.html#a39e611f7baf80408d740fce6a2502414">OGRE_LOCK_MUTEX_NAMED</a>(mutexName,  lockName)&#160;&#160;&#160;std::unique_lock&lt;std::recursive_mutex&gt; lockName(mutexName)</td></tr>
 <tr class="separator:a39e611f7baf80408d740fce6a2502414"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94e5c080fee840c4ee87132157cc3eda"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_thread_defines_s_t_d_8h.html#a94e5c080fee840c4ee87132157cc3eda">OGRE_LOCK_RW_MUTEX_READ</a>(name)&#160;&#160;&#160;std::unique_lock&lt;std::recursive_mutex&gt; <a class="el" href="_ogre_thread_defines_t_b_b_8h.html#a91ea768464f54b7215ce6ddce806d168">OGRE_TOKEN_PASTE_EXTRA</a>(ogrenameLock, __LINE__) (name)</td></tr>
+<tr class="memitem:a94e5c080fee840c4ee87132157cc3eda"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_thread_defines_s_t_d_8h.html#a94e5c080fee840c4ee87132157cc3eda">OGRE_LOCK_RW_MUTEX_READ</a>(name)&#160;&#160;&#160;std::shared_lock&lt;std::shared_mutex&gt; <a class="el" href="_ogre_thread_defines_t_b_b_8h.html#a91ea768464f54b7215ce6ddce806d168">OGRE_TOKEN_PASTE_EXTRA</a>(ogrenameLock, __LINE__) (name)</td></tr>
 <tr class="separator:a94e5c080fee840c4ee87132157cc3eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a38f532fc987f34e7ffa1d18b770fc9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_thread_defines_s_t_d_8h.html#a0a38f532fc987f34e7ffa1d18b770fc9">OGRE_LOCK_RW_MUTEX_WRITE</a>(name)&#160;&#160;&#160;std::unique_lock&lt;std::recursive_mutex&gt; <a class="el" href="_ogre_thread_defines_t_b_b_8h.html#a91ea768464f54b7215ce6ddce806d168">OGRE_TOKEN_PASTE_EXTRA</a>(ogrenameLock, __LINE__) (name)</td></tr>
+<tr class="memitem:a0a38f532fc987f34e7ffa1d18b770fc9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_thread_defines_s_t_d_8h.html#a0a38f532fc987f34e7ffa1d18b770fc9">OGRE_LOCK_RW_MUTEX_WRITE</a>(name)&#160;&#160;&#160;std::unique_lock&lt;std::shared_mutex&gt; <a class="el" href="_ogre_thread_defines_t_b_b_8h.html#a91ea768464f54b7215ce6ddce806d168">OGRE_TOKEN_PASTE_EXTRA</a>(ogrenameLock, __LINE__) (name)</td></tr>
 <tr class="separator:a0a38f532fc987f34e7ffa1d18b770fc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fb96ea8ad9700f804480d1d7f5d692d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_thread_defines_s_t_d_8h.html#a2fb96ea8ad9700f804480d1d7f5d692d">OGRE_MUTEX</a>(name)&#160;&#160;&#160;mutable std::recursive_mutex name</td></tr>
 <tr class="separator:a2fb96ea8ad9700f804480d1d7f5d692d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,7 +132,7 @@ Macros</h2></td></tr>
 <tr class="separator:a615a8a037a8f3290ec86ec0e376042b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ea1b6f845efd15c581b914ac84b93a3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_thread_defines_s_t_d_8h.html#a9ea1b6f845efd15c581b914ac84b93a3">OGRE_NEW_AUTO_SHARED_MUTEX</a>&#160;&#160;&#160;assert(!<a class="el" href="_ogre_thread_defines_8h.html#ab5230fc97085f9d074db2e47a4fd93d4">OGRE_AUTO_MUTEX_NAME</a>); <a class="el" href="_ogre_thread_defines_8h.html#ab5230fc97085f9d074db2e47a4fd93d4">OGRE_AUTO_MUTEX_NAME</a> = new std::recursive_mutex()</td></tr>
 <tr class="separator:a9ea1b6f845efd15c581b914ac84b93a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd886be58b0d9b415076b07abfcc50fc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_thread_defines_s_t_d_8h.html#afd886be58b0d9b415076b07abfcc50fc">OGRE_RW_MUTEX</a>(name)&#160;&#160;&#160;mutable std::recursive_mutex name</td></tr>
+<tr class="memitem:afd886be58b0d9b415076b07abfcc50fc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_thread_defines_s_t_d_8h.html#afd886be58b0d9b415076b07abfcc50fc">OGRE_RW_MUTEX</a>(name)&#160;&#160;&#160;mutable std::shared_mutex name</td></tr>
 <tr class="separator:afd886be58b0d9b415076b07abfcc50fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a053475f75a35e320fa019cf083ba8918"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_ogre_thread_defines_s_t_d_8h.html#a053475f75a35e320fa019cf083ba8918">OGRE_SET_AUTO_SHARED_MUTEX_NULL</a>&#160;&#160;&#160;<a class="el" href="_ogre_thread_defines_8h.html#ab5230fc97085f9d074db2e47a4fd93d4">OGRE_AUTO_MUTEX_NAME</a> = 0</td></tr>
 <tr class="separator:a053475f75a35e320fa019cf083ba8918"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -329,7 +329,7 @@ Macros</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">name</td><td>)</td>
-          <td>&#160;&#160;&#160;std::unique_lock&lt;std::recursive_mutex&gt; <a class="el" href="_ogre_thread_defines_t_b_b_8h.html#a91ea768464f54b7215ce6ddce806d168">OGRE_TOKEN_PASTE_EXTRA</a>(ogrenameLock, __LINE__) (name)</td>
+          <td>&#160;&#160;&#160;std::shared_lock&lt;std::shared_mutex&gt; <a class="el" href="_ogre_thread_defines_t_b_b_8h.html#a91ea768464f54b7215ce6ddce806d168">OGRE_TOKEN_PASTE_EXTRA</a>(ogrenameLock, __LINE__) (name)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -347,7 +347,7 @@ Macros</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">name</td><td>)</td>
-          <td>&#160;&#160;&#160;std::unique_lock&lt;std::recursive_mutex&gt; <a class="el" href="_ogre_thread_defines_t_b_b_8h.html#a91ea768464f54b7215ce6ddce806d168">OGRE_TOKEN_PASTE_EXTRA</a>(ogrenameLock, __LINE__) (name)</td>
+          <td>&#160;&#160;&#160;std::unique_lock&lt;std::shared_mutex&gt; <a class="el" href="_ogre_thread_defines_t_b_b_8h.html#a91ea768464f54b7215ce6ddce806d168">OGRE_TOKEN_PASTE_EXTRA</a>(ogrenameLock, __LINE__) (name)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -415,7 +415,7 @@ Macros</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">name</td><td>)</td>
-          <td>&#160;&#160;&#160;mutable std::recursive_mutex name</td>
+          <td>&#160;&#160;&#160;mutable std::shared_mutex name</td>
         </tr>
       </table>
 </div><div class="memdoc">
