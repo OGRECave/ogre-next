@@ -156,7 +156,8 @@ including invalid combinations (i.e. having a Metallic texture and a Specular te
                 "value" : [1.0, 1.0, 1.0],
                 "texture" : "texture.png",
                 "sampler" : "unique_name",
-                "uv" : 0
+                "uv" : 0,
+                "lightmap" : false
             },
 
             "reflection" :

@@ -205,6 +205,15 @@ namespace Ogre
                 }
             }
 
+            if( textureType == PBSM_EMISSIVE )
+            {
+                itor = json.FindMember( "lightmap" );
+                if( itor != json.MemberEnd() && itor->value.IsBool() )
+                {
+                    datablock->setUseEmissiveAsLightmap( itor->value.GetBool() );
+                }
+            }
+
             uint32 textureFlags = TextureFlags::AutomaticBatching;
 
             if( datablock->suggestUsingSRGB( textureType ) )
@@ -719,6 +728,11 @@ namespace Ogre
                     if(textureType == PBSM_DIFFUSE && datablock->getUseDiffuseMapAsGrayscale())
                     {
                         outString += ",\n\t\t\t\t\"grayscale\" : true";
+                    }
+
+                    if( textureType == PBSM_EMISSIVE && datablock->getUseEmissiveAsLightmap() )
+                    {
+                        outString += ",\n\t\t\t\t\"lightmap\" : true";
                     }
                 }
             }
