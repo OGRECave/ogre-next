@@ -409,9 +409,18 @@ struct Material
 		@foreach( hlms_uv_count, n )
 			INTERPOLANT( float@value( hlms_uv_count@n ) uv@n, @counter(texcoord) );@end
 
-		@foreach( hlms_num_shadow_map_lights, n )
-			@property( !hlms_shadowmap@n_is_point_light )
-				INTERPOLANT( float4 posL@n, @counter(texcoord) );@end @end
+		@property( !shadows_receive_on_ps )
+			@foreach( hlms_num_shadow_map_lights, n )
+				@property( !hlms_shadowmap@n_is_point_light )
+					INTERPOLANT( float4 posL@n, @counter(texcoord) );
+				@end
+			@end
+		@else
+			@property( hlms_num_shadow_map_lights && !hlms_all_point_lights )
+				INTERPOLANT( float3 worldPos, @counter(texcoord) );
+			@end
+		@end
+
 		@property( hlms_pssm_splits )INTERPOLANT( float depth, @counter(texcoord) );@end
 		@property( hlms_use_prepass_msaa > 1 )
 			INTERPOLANT( float2 zwDepth, @counter(texcoord) );

@@ -191,6 +191,7 @@ namespace Ogre
 #endif
         bool mSetupWorldMatBuf;
         bool mDebugPssmSplits;
+        bool mShadowReceiversInPixelShader;
         bool mPerceptualRoughness;
 
         bool mAutoSpecIblMaxMipmap;
@@ -304,6 +305,26 @@ namespace Ogre
                                                     { mFineLightMaskGranularity = useFineGranularity; }
         bool getFineLightMaskGranularity(void) const{ return mFineLightMaskGranularity; }
 #endif
+
+        /** Toggles whether light-space position is calculated in vertex or pixel shader.
+            This position is used for evaluating shadow mapping
+        @remarks
+            Set this setting to true if you need to support a very large number of shadow mapped
+            lights (e.g. > 30) because otherwise you will hit HW limits on how much data
+            we can send from Vertex to Pixel shader.
+
+            Performance: Whether this setting results in higher or lower performance depends on:
+
+                1. Vertex count of the scene (high vertex count benefit from bInPixelShader = true)
+                2. Screen resolution (large resolutions benefit from bInPixelShader = false)
+                3. Number of shadow mapping lights (large numbers benefit from bInPixelShader = true)
+
+            You will have to profile which setting gives you better performance, although
+            generally speaking for low number of lights (e.g. < 5)
+            bInPixelShader = false is more likely to win.
+        */
+        void setShadowReceiversInPixelShader( bool bInPixelShader );
+        bool getShadowReceiversInPixelShader( void ) const { return mShadowReceiversInPixelShader; }
 
         void setDebugPssmSplits( bool bDebug );
         bool getDebugPssmSplits(void) const                 { return mDebugPssmSplits; }
@@ -535,6 +556,7 @@ namespace Ogre
 
         static const IdString Pcf;
         static const IdString PcfIterations;
+        static const IdString ShadowsReceiveOnPs;
         static const IdString ExponentialShadowMaps;
 
         static const IdString AmbientHemisphere;

@@ -550,7 +550,7 @@ namespace Ogre
             (dst2) = _mm_shuffle_ps(tmp2, tmp3, 0x88);              \
             (dst3) = _mm_shuffle_ps(tmp2, tmp3, 0xDD);              \
         }
-        register ArrayReal m0, m1, m2, m3;
+        ArrayReal m0, m1, m2, m3;
 
         _MM_TRANSPOSE4_SRC_DST_PS(
                             this->mChunkBase[0], this->mChunkBase[1],
@@ -604,7 +604,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline void ArrayMatrixAf4x3::streamToAoS( SimpleMatrixAf4x3 * RESTRICT_ALIAS _dst ) const
     {
-        register __m128 dst0, dst1, dst2, dst3;
+        __m128 dst0, dst1, dst2, dst3;
         Real *dst = reinterpret_cast<Real*>( _dst );
 
         _MM_TRANSPOSE4_SRC_DST_PS(

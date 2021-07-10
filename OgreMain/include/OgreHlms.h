@@ -851,6 +851,7 @@ namespace Ogre
         static const IdString LightsAttenuation;
         static const IdString LightsSpotParams;
         static const IdString LightsAreaTexColour;
+        static const IdString AllPointLights;
 
         //Change per scene pass
         static const IdString PsoClipDistances;

@@ -271,8 +271,13 @@ namespace Ogre
             a RenderWindow (not recommended). To avoid forcing extra begin/end frame pairs,
             update your manual workspaces inside @CompositorWorkspaceListener::workspacePreUpdate
             (performance optimization)
+        @param bInsideAutoreleasePool
+            If manually updating the workspace, leave this to default.
+
+            Relevant only in Metal: If we're not inside an autorelease pool, we
+            automatically wrap the call into one. Otherwise we will leak
         */
-        void _beginUpdate( bool forceBeginFrame );
+        void _beginUpdate( bool forceBeginFrame, const bool bInsideAutoreleasePool = false );
 
         /** Updates the workspace's nodes.
         @remarks
@@ -280,8 +285,13 @@ namespace Ogre
             RenderSystem::_beginFrameOnce if it wasn't called by OGRE already.
             You might also need to enclose the _update calls with _beginUpdate( true )
             and _endUpdate( true ) if you're having issues.
+        @param bInsideAutoreleasePool
+            If manually updating the workspace, leave this to default.
+
+            Relevant only in Metal: If we're not inside an autorelease pool, we
+            automatically wrap the call into one. Otherwise we will leak
         */
-        void _update(void);
+        void _update( const bool bInsideAutoreleasePool = false );
 
         /** Call after _update unless the final render target is not a render window
         @param forceEndFrame
@@ -290,8 +300,13 @@ namespace Ogre
             issued a begin frame automatically (i.e. if you're calling from inside a RenderTarget
             or CompositorWorkspace listener). These API issues may not manifest on all HW/Driver
             combinations, making it hard to detect (if you're on D3D, use the Debug Runtimes)
+        @param bInsideAutoreleasePool
+            If manually updating the workspace, leave this to default.
+
+            Relevant only in Metal: If we're not inside an autorelease pool, we
+            automatically wrap the call into one. Otherwise we will leak
         */
-        void _endUpdate( bool forceEndFrame );
+        void _endUpdate( bool forceEndFrame, const bool bInsideAutoreleasePool = false );
 
         /** In the case of RenderWindows, swaps/copies/flips the front with the back buffer.
             In the case of RenderTextures, resolves FSAA (unless it's tagged as explicit

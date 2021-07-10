@@ -166,6 +166,7 @@ namespace Ogre
 
     const IdString PbsProperty::Pcf               = IdString( "pcf" );
     const IdString PbsProperty::PcfIterations     = IdString( "pcf_iterations" );
+    const IdString PbsProperty::ShadowsReceiveOnPs= IdString( "shadows_receive_on_ps" );
     const IdString PbsProperty::ExponentialShadowMaps= IdString( "exponential_shadow_maps" );
 
     const IdString PbsProperty::EnvMapScale       = IdString( "envmap_scale" );
@@ -299,6 +300,7 @@ namespace Ogre
 #endif
         mSetupWorldMatBuf( true ),
         mDebugPssmSplits( false ),
+        mShadowReceiversInPixelShader( false ),
         mPerceptualRoughness( true ),
         mAutoSpecIblMaxMipmap( true ),
         mVctFullConeCount( false ),
@@ -837,7 +839,9 @@ namespace Ogre
         }
 
         if( datablock->mUseAlphaFromTextures &&
-            ( datablock->mBlendblock[0]->isAutoTransparent() ||  //
+            ( datablock->getAlphaTest() != CMPF_ALWAYS_PASS ||
+              datablock->mBlendblock[0]->isAutoTransparent() ||
+              datablock->mBlendblock[0]->mAlphaToCoverageEnabled ||
               datablock->mTransparencyMode == HlmsPbsDatablock::Refractive ) &&
             ( getProperty( PbsProperty::DiffuseMap ) ||  //
               getProperty( PbsProperty::DetailMapsDiffuse ) ) )
@@ -1281,6 +1285,9 @@ namespace Ogre
                 setProperty( PbsProperty::PcfIterations, 1 );
             }
 
+            if( mShadowReceiversInPixelShader )
+                setProperty( PbsProperty::ShadowsReceiveOnPs, 1 );
+
             if( mDebugPssmSplits )
             {
                 int32 numPssmSplits = 0;
@@ -1689,16 +1696,13 @@ namespace Ogre
         const size_t maxBufferSizeLight2 = (numAreaLtcFloat4Vars * 4 * 4) * 8; // 8 Ltc area lights
 
         assert( mapSize <= maxBufferSizeRaw );
-        assert( mapSizeLight0 <= maxBufferSizeLight0);
-        assert( mapSizeLight1 <= maxBufferSizeLight1);
-        assert( mapSizeLight2 <= maxBufferSizeLight2);
+        assert( !mUseLightBuffers || mapSizeLight0 <= maxBufferSizeLight0 );
+        assert( !mUseLightBuffers || mapSizeLight1 <= maxBufferSizeLight1 );
+        assert( !mUseLightBuffers || mapSizeLight2 <= maxBufferSizeLight2 );
 
         size_t maxBufferSize = maxBufferSizeRaw;
         if( !mUseLightBuffers )
-        {
             mapSize += mapSizeLight0 + mapSizeLight1 + mapSizeLight2;
-            maxBufferSize += maxBufferSizeLight0 + maxBufferSizeLight1 + maxBufferSizeLight2;
-        }
 
         if( mCurrentPassBuffer >= mPassBuffers.size() )
         {
@@ -3476,6 +3480,11 @@ namespace Ogre
 
         //Fill the data folder path
         outDataFolderPath = "Hlms/Pbs/" + shaderSyntax;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setShadowReceiversInPixelShader( bool bInPixelShader )
+    {
+        mShadowReceiversInPixelShader = bInPixelShader;
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::setDebugPssmSplits( bool bDebug ) { mDebugPssmSplits = bDebug; }

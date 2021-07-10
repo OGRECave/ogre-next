@@ -468,7 +468,7 @@ namespace Ogre
             dst3 = tmp1.val[3];                     \
         }
 
-        register ArrayReal m0, m1, m2, m3;
+        ArrayReal m0, m1, m2, m3;
 
         _MM_TRANSPOSE4_SRC_DST_PS(
                             this->mChunkBase[0], this->mChunkBase[1],

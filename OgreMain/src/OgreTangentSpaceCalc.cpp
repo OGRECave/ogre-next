@@ -571,12 +571,13 @@ namespace v1
         }
 
         HardwareVertexBufferSharedPtr uvBuf, posBuf, normBuf;
+        HardwareBufferLockGuard uvBufLock, posBufLock, normBufLock;
         unsigned char *pUvBase, *pPosBase, *pNormBase;
         size_t uvInc, posInc, normInc;
 
         uvBuf = bind->getBuffer(uvElem->getSource());
-        pUvBase = static_cast<unsigned char*>(
-            uvBuf->lock(HardwareBuffer::HBL_READ_ONLY));
+        uvBufLock.lock(uvBuf, HardwareBuffer::HBL_READ_ONLY);
+        pUvBase = static_cast<unsigned char*>(uvBufLock.pData);
         uvInc = uvBuf->getVertexSize();
         // offset for vertex start
         pUvBase += mVData->vertexStart * uvInc;
@@ -592,8 +593,8 @@ namespace v1
         {
             // A different buffer
             posBuf = bind->getBuffer(posElem->getSource());
-            pPosBase = static_cast<unsigned char*>(
-                posBuf->lock(HardwareBuffer::HBL_READ_ONLY));
+            posBufLock.lock(posBuf, HardwareBuffer::HBL_READ_ONLY);
+            pPosBase = static_cast<unsigned char*>(posBufLock.pData);
             posInc = posBuf->getVertexSize();
             // offset for vertex start
             pPosBase += mVData->vertexStart * posInc;
@@ -622,8 +623,8 @@ namespace v1
         {
             // A different buffer
             normBuf = bind->getBuffer(normElem->getSource());
-            pNormBase = static_cast<unsigned char*>(
-                normBuf->lock(HardwareBuffer::HBL_READ_ONLY));
+            normBufLock.lock(normBuf, HardwareBuffer::HBL_READ_ONLY);
+            pNormBase = static_cast<unsigned char*>(normBufLock.pData);
             normInc = normBuf->getVertexSize();
             // offset for vertex start
             pNormBase += mVData->vertexStart * normInc;
@@ -656,18 +657,6 @@ namespace v1
 
 
         }
-
-        // unlock buffers
-        uvBuf->unlock();
-        if (!posBuf.isNull())
-        {
-            posBuf->unlock();
-        }
-        if (!normBuf.isNull())
-        {
-            normBuf->unlock();
-        }
-
     }
     //---------------------------------------------------------------------
     void TangentSpaceCalc::insertTangents(Result& res,

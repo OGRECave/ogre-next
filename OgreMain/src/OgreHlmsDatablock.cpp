@@ -374,7 +374,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly )
+    void HlmsDatablock::setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly,
+                                      bool /*useAlphaFromTextures*/ )
     {
         if( mAlphaTestCmp != compareFunction || mAlphaTestShadowCasterOnly != shadowCasterOnly )
         {

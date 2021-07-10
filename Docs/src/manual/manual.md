@@ -6,6 +6,7 @@ painful and traumatic as possible.
 - @subpage Ogre20Changes
 - @subpage TechnicalOverview
 - @subpage compositor
+- @subpage GiMethods
 - @subpage instancing
 - @subpage threading
 - @subpage performance

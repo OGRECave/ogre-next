@@ -51,24 +51,18 @@ namespace Ogre
 
         if( eglQueryDevices == 0 )
         {
-            LogManager::getSingleton().logMessage(
-                "[ERROR] eglQueryDevicesEXT not found. EGL driver too old. "
-                "Update your GPU drivers and try again" );
-
-            // Do not throw. It will cause all plugins to fail to load.
-            // This is may be a recoverable error
-            return;
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "eglQueryDevicesEXT not found. EGL driver too old. "
+                         "Update your GPU drivers and try again",
+                         "EglPBufferSupport::EglPBufferSupport" );
         }
 
         if( eglQueryDeviceStringEXT == 0 )
         {
-            LogManager::getSingleton().logMessage(
-                "[ERROR] eglQueryDeviceStringEXT not found. EGL driver too old. "
-                "Update your GPU drivers and try again" );
-
-            // Do not throw. It will cause all plugins to fail to load.
-            // This is may be a recoverable error
-            return;
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "eglQueryDeviceStringEXT not found. EGL driver too old. "
+                         "Update your GPU drivers and try again",
+                         "EglPBufferSupport::EglPBufferSupport" );
         }
 
         EGLint numDevices = 0;
@@ -85,14 +79,30 @@ namespace Ogre
         LogManager::getSingleton().logMessage( "Found Num EGL Devices: " +
                                                StringConverter::toString( numDevices ) );
 
+        if( numDevices == 0 )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "No EGL devices found! Update your GPU drivers and try again",
+                         "EglPBufferSupport::EglPBufferSupport" );
+        }
+
         for( int i = 0u; i < numDevices; ++i )
         {
             EGLDeviceEXT device = mDevices[size_t( i )];
-            const char *name =
-                eglQueryDeviceStringEXT( device, EGL_EXTENSIONS /*EGL_DRM_DEVICE_FILE_EXT*/ );
+            const char *name = eglQueryDeviceStringEXT( device, EGL_EXTENSIONS );
 
             DeviceData deviceData;
             deviceData.name = name + ( " #" + StringConverter::toString( i ) );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+            const char *gpuCard = eglQueryDeviceStringEXT( device, EGL_DRM_DEVICE_FILE_EXT );
+            if( gpuCard )
+            {
+                deviceData.name += " ";
+                deviceData.name += gpuCard;
+            }
+#endif
+
             LogManager::getSingleton().logMessage( "EGL Device: " + deviceData.name );
 
             // Always support no MSAA (in case maxSamples returned invalid value of 0)
@@ -126,6 +136,7 @@ namespace Ogre
             catch( Exception &e )
             {
                 LogManager::getSingleton().logMessage( e.getFullDescription(), LML_CRITICAL );
+                destroyDevice( size_t( i ) );
             }
         }
     }
@@ -220,15 +231,9 @@ namespace Ogre
         return BLANKSTRING;
     }
     //-------------------------------------------------------------------------
-    const char* EglPBufferSupport::getPriorityConfigOption( size_t ) const
-    {
-        return "Device";
-    }
+    const char *EglPBufferSupport::getPriorityConfigOption( size_t ) const { return "Device"; }
     //-------------------------------------------------------------------------
-    size_t EglPBufferSupport::getNumPriorityConfigOptions( void ) const
-    {
-        return 1u;
-    }
+    size_t EglPBufferSupport::getNumPriorityConfigOptions( void ) const { return 1u; }
     //-------------------------------------------------------------------------
     Window *EglPBufferSupport::createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
                                              const String &windowTitle )
@@ -298,7 +303,7 @@ namespace Ogre
 
         EGLAttrib attribs[] = { EGL_NONE };
         deviceData.eglDisplay =
-            eglGetPlatformDisplay( EGL_PLATFORM_DEVICE_EXT, mDevices[getSelectedDeviceIdx()], attribs );
+            eglGetPlatformDisplay( EGL_PLATFORM_DEVICE_EXT, mDevices[deviceIdx], attribs );
 
         EGL_CHECK_ERROR
 
@@ -402,6 +407,7 @@ namespace Ogre
 
         if( deviceData.eglCtx )
         {
+            eglMakeCurrent( deviceData.eglDisplay, 0, 0, 0 );
             eglDestroyContext( deviceData.eglDisplay, deviceData.eglCtx );
             deviceData.eglCtx = 0;
         }
