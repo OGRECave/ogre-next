@@ -155,10 +155,6 @@ namespace Ogre
         assert( dynamic_cast<GL3PlusTextureGpu*>( textureSrc ) );
         GL3PlusTextureGpu *srcTextureGl = static_cast<GL3PlusTextureGpu*>( textureSrc );
 
-        const GLenum targetGl   = srcTextureGl->getGlTextureTarget();
-        const GLuint texName    = srcTextureGl->getFinalTextureName();
-
-        OCGE( glBindTexture( targetGl, texName ) );
         OCGE( glBindBuffer( GL_PIXEL_PACK_BUFFER, mVboName ) );
 
         GLint xPos          = static_cast<GLint>( srcTextureBox.x );
@@ -208,6 +204,11 @@ namespace Ogre
 
         if( !textureSrc->isOpenGLRenderWindow() )
         {
+            const GLenum targetGl   = srcTextureGl->getGlTextureTarget();
+            const GLuint texName    = srcTextureGl->getFinalTextureName();
+
+            OCGE( glBindTexture( targetGl, texName ) );
+
             if( fullSrcTextureBox.equalSize( srcTextureBox ) || !mSupportsGetTextureSubImage )
             {
                 //We can use glGetTexImage & glGetCompressedTexImage (cubemaps need a special path)
