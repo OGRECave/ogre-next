@@ -40,7 +40,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    static const uint16 c_hlmsDiskCacheVersion = 1u;
+    static const uint16 c_hlmsDiskCacheVersion = 2u;
 
     HlmsDiskCache::HlmsDiskCache( HlmsManager *hlmsManager ) :
         mTemplatesOutOfDate( false ),
@@ -377,6 +377,7 @@ namespace Ogre
                 write( dataStream, itor->pso.pass );
 
                 write( dataStream, itor->macroblock.mScissorTestEnabled );
+                write( dataStream, itor->macroblock.mDepthClamp );
                 write( dataStream, itor->macroblock.mDepthCheck );
                 write( dataStream, itor->macroblock.mDepthWrite );
                 write( dataStream, itor->macroblock.mDepthFunc );
@@ -562,6 +563,7 @@ namespace Ogre
                 read( dataStream, pso.pso.pass );
 
                 read( dataStream, pso.macroblock.mScissorTestEnabled );
+                read( dataStream, pso.macroblock.mDepthClamp );
                 read( dataStream, pso.macroblock.mDepthCheck );
                 read( dataStream, pso.macroblock.mDepthWrite );
                 read( dataStream, pso.macroblock.mDepthFunc );
