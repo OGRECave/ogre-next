@@ -474,7 +474,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_metal_window.html#ae8e44f8a7ca0456a4bd8e57e0978445a">Ogre::MetalWindow</a>, <a class="el" href="class_ogre_1_1_win32_window.html#a68f013af5be31a8907a3caa22e9139dd">Ogre::Win32Window</a>, <a class="el" href="class_ogre_1_1_g_l_x_window.html#abeb5449758233dd05051bfdd897a7d10">Ogre::GLXWindow</a>, <a class="el" href="class_ogre_1_1_egl_p_buffer_window.html#aa8c616e4ad1eb3976c9fab8233945a09">Ogre::EglPBufferWindow</a>, <a class="el" href="class_ogre_1_1_e_g_l_window.html#a0fcddbd42767a6f35d3660e3bd5f02be">Ogre::EGLWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d11_window.html#a5a97866f3f7ce86466fbe8ef775d7301">Ogre::D3D11Window</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_metal_window.html#ae8e44f8a7ca0456a4bd8e57e0978445a">Ogre::MetalWindow</a>, <a class="el" href="class_ogre_1_1_win32_window.html#a68f013af5be31a8907a3caa22e9139dd">Ogre::Win32Window</a>, <a class="el" href="class_ogre_1_1_cocoa_window.html#a0df474e1dd41fcee6bd46c27ffdd91ee">Ogre::CocoaWindow</a>, <a class="el" href="class_ogre_1_1_g_l_x_window.html#abeb5449758233dd05051bfdd897a7d10">Ogre::GLXWindow</a>, <a class="el" href="class_ogre_1_1_egl_p_buffer_window.html#aa8c616e4ad1eb3976c9fab8233945a09">Ogre::EglPBufferWindow</a>, <a class="el" href="class_ogre_1_1_e_g_l_window.html#a0fcddbd42767a6f35d3660e3bd5f02be">Ogre::EGLWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d11_window.html#a5a97866f3f7ce86466fbe8ef775d7301">Ogre::D3D11Window</a>.</p>
 
 </div>
 </div>
@@ -847,7 +847,7 @@ Public Member Functions</h2></td></tr>
 <p>In any case, all such windowing system provides the way to convert such view points to pixels, be it DisplayProperties::LogicalDpi on WinRT or backingScaleFactor on MacOSX. We use pixels consistently through the <a class="el" href="namespace_ogre.html">Ogre</a>, but window/view management functions takes view points for convenience, as does the rest of windowing system. Such parameters are named using xxxxPt pattern, and should not be mixed with pixels without being converted using <a class="el" href="class_ogre_1_1_window.html#a12411d378aa0623e29287964eeb261c4" title="Many windowing systems that support HiDPI displays use special points to specify size of the windows ...">getViewPointToPixelScale()</a> function.</p>
 <p>Sometimes such scale factor can change on-the-fly, for example if window is dragged to monitor with different DPI. In such situation, window size in view points is usually preserved by windowing system, and <a class="el" href="namespace_ogre.html">Ogre</a> should adjust pixel size of <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_metal_window.html#a70f59aa59b7dd09f587ab758001fbb5e">Ogre::MetalWindow</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a14bd7b06e27132d6685222698ea9e256">Ogre::CocoaWindow</a>, and <a class="el" href="class_ogre_1_1_metal_window.html#a70f59aa59b7dd09f587ab758001fbb5e">Ogre::MetalWindow</a>.</p>
 
 </div>
 </div>
@@ -1976,7 +1976,7 @@ template&lt;class Alloc &gt; </div>
 <p>Notify that the window has been resized. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>You don't need to call this unless you created the window externally. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_metal_window.html#ab7439533a834d6a9103f0338888cff61">Ogre::MetalWindow</a>, <a class="el" href="class_ogre_1_1_win32_window.html#a3d4b38f599f55fd80488de6b02b85853">Ogre::Win32Window</a>, <a class="el" href="class_ogre_1_1_g_l_x_window.html#a74e1926c4e664c1cf9ad23765815a59a">Ogre::GLXWindow</a>, and <a class="el" href="class_ogre_1_1_e_g_l_window.html#a265e3105acde68347279a9467b0725e9">Ogre::EGLWindow</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a6f6f68d3cb19b9fe2195a5dfebee6377">Ogre::CocoaWindow</a>, <a class="el" href="class_ogre_1_1_metal_window.html#ab7439533a834d6a9103f0338888cff61">Ogre::MetalWindow</a>, <a class="el" href="class_ogre_1_1_win32_window.html#a3d4b38f599f55fd80488de6b02b85853">Ogre::Win32Window</a>, <a class="el" href="class_ogre_1_1_g_l_x_window.html#a74e1926c4e664c1cf9ad23765815a59a">Ogre::GLXWindow</a>, and <a class="el" href="class_ogre_1_1_e_g_l_window.html#a265e3105acde68347279a9467b0725e9">Ogre::EGLWindow</a>.</p>
 
 </div>
 </div>

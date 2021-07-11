@@ -269,7 +269,6 @@ var hierarchy =
         ] ],
         [ "Ogre::VertexBufferPacked", "class_ogre_1_1_vertex_buffer_packed.html", null ]
       ] ],
-      [ "Ogre::CocoaContext", "class_ogre_1_1_cocoa_context.html", null ],
       [ "Ogre::Codec", "class_ogre_1_1_codec.html", [
         [ "Ogre::ImageCodec", "class_ogre_1_1_image_codec.html", [
           [ "Ogre::DDSCodec", "class_ogre_1_1_d_d_s_codec.html", null ],
@@ -762,7 +761,6 @@ var hierarchy =
           [ "Ogre::NULLRenderTexture", "class_ogre_1_1_n_u_l_l_render_texture.html", null ]
         ] ],
         [ "Ogre::RenderWindow", "class_ogre_1_1_render_window.html", [
-          [ "Ogre::CocoaWindow", "class_ogre_1_1_cocoa_window.html", null ],
           [ "Ogre::D3D11RenderWindowBase", "class_ogre_1_1_d3_d11_render_window_base.html", [
             [ "Ogre::D3D11RenderWindowSwapChainBased", "class_ogre_1_1_d3_d11_render_window_swap_chain_based.html", null ]
           ] ],
@@ -1070,6 +1068,7 @@ var hierarchy =
       [ "Ogre::Volume::MeshBuilder", "class_ogre_1_1_volume_1_1_mesh_builder.html", null ],
       [ "Ogre::Volume::OctreeNode", "class_ogre_1_1_volume_1_1_octree_node.html", null ],
       [ "Ogre::Window", "class_ogre_1_1_window.html", [
+        [ "Ogre::CocoaWindow", "class_ogre_1_1_cocoa_window.html", null ],
         [ "Ogre::D3D11Window", "class_ogre_1_1_d3_d11_window.html", [
           [ "Ogre::D3D11WindowSwapChainBased", "class_ogre_1_1_d3_d11_window_swap_chain_based.html", null ]
         ] ],

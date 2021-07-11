@@ -656,6 +656,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afe7705e26f10dccebf2e6db0b3d6859e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#afe7705e26f10dccebf2e6db0b3d6859e">startGpuDebuggerFrameCapture</a> (<a class="el" href="class_ogre_1_1_window.html">Window</a> *window)</td></tr>
 <tr class="memdesc:afe7705e26f10dccebf2e6db0b3d6859e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Programmatically performs a GPU capture when attached to a GPU debugger like RenderDoc or Metal Graphics Debugger.  <a href="class_ogre_1_1_render_system.html#afe7705e26f10dccebf2e6db0b3d6859e">More...</a><br /></td></tr>
 <tr class="separator:afe7705e26f10dccebf2e6db0b3d6859e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2ccbf26adde0526cf9c39f8bc9d2989"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#ad2ccbf26adde0526cf9c39f8bc9d2989">supportsTargetIndependentRasterization</a> () const</td></tr>
+<tr class="separator:ad2ccbf26adde0526cf9c39f8bc9d2989"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf5969cca19f815380e71a45386d2e81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#abf5969cca19f815380e71a45386d2e81">unregisterThread</a> ()</td></tr>
 <tr class="memdesc:abf5969cca19f815380e71a45386d2e81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregister an additional thread which may make calls to rendersystem-related objects.  <a href="class_ogre_1_1_g_l3_plus_render_system.html#abf5969cca19f815380e71a45386d2e81">More...</a><br /></td></tr>
 <tr class="separator:abf5969cca19f815380e71a45386d2e81"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -7760,6 +7762,31 @@ Once this init sequence is completed the threads are independent but this startu
 </dl>
 <p>See pRENDERDOC_StartFrameCapture's documentation </p><dl class="section return"><dt>Returns</dt><dd>False if we know for certain we failed to capture (e.g. RenderDoc is not running, we were build without integration support, etc)</dd></dl>
 <p>True if we believe the frame capture started. Note a capture may still fail regardless due to other more technical reasons, as rendering APIs are complex. </p>
+
+</div>
+</div>
+<a id="ad2ccbf26adde0526cf9c39f8bc9d2989"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2ccbf26adde0526cf9c39f8bc9d2989">&#9670;&nbsp;</a></span>supportsTargetIndependentRasterization()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::GL3PlusRenderSystem::supportsTargetIndependentRasterization </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

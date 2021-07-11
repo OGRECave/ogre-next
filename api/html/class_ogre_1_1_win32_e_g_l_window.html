@@ -1806,8 +1806,6 @@ you can use it like this for example : <pre>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a601c6d3b1c9d7348d7b14a31cd87132a">Ogre::CocoaWindow</a>.</p>
-
 </div>
 </div>
 <a id="add8e20491fc0e054c9cab3c75297c6ec"></a>
@@ -2339,8 +2337,6 @@ you can use it like this for example : <pre>
 <p>In any case, all such windowing system provides the way to convert such view points to pixels, be it DisplayProperties::LogicalDpi on WinRT or backingScaleFactor on MacOSX. We use pixels consistently through the <a class="el" href="namespace_ogre.html">Ogre</a>, but window/view management functions takes view points for convenience, as does the rest of windowing system. Such parameters are named using xxxxPt pattern, and should not be mixed with pixels without being converted using <a class="el" href="class_ogre_1_1_render_window.html#a5fe9b7de87bc535e7278dac1e6bdc002" title="Many windowing systems that support HiDPI displays use special points to specify size of the windows ...">getViewPointToPixelScale()</a> function.</p>
 <p>Sometimes such scale factor can change on-the-fly, for example if window is dragged to monitor with different DPI. In such situation, window size in view points is usually preserved by windowing system, and <a class="el" href="namespace_ogre.html">Ogre</a> should adjust pixel size of <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#ad297c227d738853b2b4b9b03dad5500b">Ogre::CocoaWindow</a>.</p>
-
 </div>
 </div>
 <a id="a12411d378aa0623e29287964eeb261c4"></a>
@@ -2372,7 +2368,7 @@ you can use it like this for example : <pre>
 <p>In any case, all such windowing system provides the way to convert such view points to pixels, be it DisplayProperties::LogicalDpi on WinRT or backingScaleFactor on MacOSX. We use pixels consistently through the <a class="el" href="namespace_ogre.html">Ogre</a>, but window/view management functions takes view points for convenience, as does the rest of windowing system. Such parameters are named using xxxxPt pattern, and should not be mixed with pixels without being converted using <a class="el" href="class_ogre_1_1_render_window.html#a5fe9b7de87bc535e7278dac1e6bdc002" title="Many windowing systems that support HiDPI displays use special points to specify size of the windows ...">getViewPointToPixelScale()</a> function.</p>
 <p>Sometimes such scale factor can change on-the-fly, for example if window is dragged to monitor with different DPI. In such situation, window size in view points is usually preserved by windowing system, and <a class="el" href="namespace_ogre.html">Ogre</a> should adjust pixel size of <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_metal_window.html#a70f59aa59b7dd09f587ab758001fbb5e">Ogre::MetalWindow</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a14bd7b06e27132d6685222698ea9e256">Ogre::CocoaWindow</a>, and <a class="el" href="class_ogre_1_1_metal_window.html#a70f59aa59b7dd09f587ab758001fbb5e">Ogre::MetalWindow</a>.</p>
 
 </div>
 </div>
@@ -2509,8 +2505,6 @@ you can use it like this for example : <pre>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a01d22489df9c47313956f7991ebce9f4">Ogre::CocoaWindow</a>.</p>
-
 </div>
 </div>
 <a id="a814de6b1529bba5f7aa80ea3ac537ae1"></a>
@@ -2567,7 +2561,7 @@ you can use it like this for example : <pre>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_render_target.html#a0ee2aaaebdf52b6c91910396a20d5a18">Ogre::RenderTarget</a>.</p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_s_d_l_window.html#a8af1d2bb2c137ef3a236b6daacfd0160">Ogre::SDLWindow</a>, <a class="el" href="class_ogre_1_1_cocoa_window.html#ad7745b636947bac46166b659b69bd40d">Ogre::CocoaWindow</a>, <a class="el" href="class_ogre_1_1_g_t_k_window.html#a2323474489558d2a414a1ff35de2429b">Ogre::GTKWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#a025284ecc79c03ff79d84bb5f89d7100">Ogre::D3D9RenderWindow</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_s_d_l_window.html#a8af1d2bb2c137ef3a236b6daacfd0160">Ogre::SDLWindow</a>, <a class="el" href="class_ogre_1_1_g_t_k_window.html#a2323474489558d2a414a1ff35de2429b">Ogre::GTKWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#a025284ecc79c03ff79d84bb5f89d7100">Ogre::D3D9RenderWindow</a>.</p>
 
 </div>
 </div>
@@ -3086,7 +3080,7 @@ you can use it like this for example : <pre>
 
 <p>Indicates whether vertical sync is activated for the window. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_s_d_l_window.html#a7e945e939cd82ebd629316eae0d2e8fe">Ogre::SDLWindow</a>, <a class="el" href="class_ogre_1_1_cocoa_window.html#a7ae0cf200646b462c87aa4d5d5c97898">Ogre::CocoaWindow</a>, <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#adf1d2bf752446fd708a94d8d6766110a">Ogre::D3D9RenderWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#a499b0f032818de46881c78f6ffa10dad">Ogre::D3D11RenderWindowSwapChainBased</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_s_d_l_window.html#a7e945e939cd82ebd629316eae0d2e8fe">Ogre::SDLWindow</a>, <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#adf1d2bf752446fd708a94d8d6766110a">Ogre::D3D9RenderWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#a499b0f032818de46881c78f6ffa10dad">Ogre::D3D11RenderWindowSwapChainBased</a>.</p>
 
 </div>
 </div>
@@ -4821,7 +4815,7 @@ template&lt;class Alloc &gt; </div>
 
 <p>Enable or disable vertical sync for the <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_s_d_l_window.html#a2525068a76692037c3c6b4155fdc2f78">Ogre::SDLWindow</a>, <a class="el" href="class_ogre_1_1_cocoa_window.html#a0b3ed575baac520544d7763e8abe2850">Ogre::CocoaWindow</a>, <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#af4c9b925c1b7c0365c3d738bcba8b2bb">Ogre::D3D9RenderWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#a3289ed8b046e099aa36b485ba8e6cac3">Ogre::D3D11RenderWindowSwapChainBased</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_s_d_l_window.html#a2525068a76692037c3c6b4155fdc2f78">Ogre::SDLWindow</a>, <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#af4c9b925c1b7c0365c3d738bcba8b2bb">Ogre::D3D9RenderWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_window_swap_chain_based.html#a3289ed8b046e099aa36b485ba8e6cac3">Ogre::D3D11RenderWindowSwapChainBased</a>.</p>
 
 </div>
 </div>
