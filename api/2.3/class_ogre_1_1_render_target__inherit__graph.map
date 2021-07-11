@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title="A &#39;canvas&#39; which can receive the results of a rendering operation." alt="" coords="236,649,371,676"/>
 <area shape="rect" id="node4" href="$class_ogre_1_1_multi_render_target.html" title="This class represents a render target that renders to multiple RenderTextures at once." alt="" coords="419,148,581,175"/>
 <area shape="rect" id="node10" href="$class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture." alt="" coords="430,649,570,676"/>
-<area shape="rect" id="node26" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="429,1181,571,1208"/>
+<area shape="rect" id="node26" href="$class_ogre_1_1_render_window.html" title="Manages the target rendering window." alt="" coords="429,1156,571,1183"/>
 <area shape="rect" id="node2" href="$struct_ogre_1_1_gpu_tracked_resource.html" title=" " alt="" coords="5,624,188,651"/>
 <area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="39,675,154,701"/>
 <area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_multi_render_target.html" title=" " alt="" coords="635,5,836,32"/>
@@ -25,17 +25,16 @@
 <area shape="rect" id="node24" href="$class_ogre_1_1_metal_render_texture.html" title=" " alt="" coords="649,928,821,955"/>
 <area shape="rect" id="node25" href="$class_ogre_1_1_n_u_l_l_render_texture.html" title=" " alt="" coords="647,979,823,1005"/>
 <area shape="rect" id="node18" href="$class_ogre_1_1_g_l3_plus_f_b_o_render_texture.html" title="RenderTexture for GL FBO." alt="" coords="889,624,1108,651"/>
-<area shape="rect" id="node27" href="$class_ogre_1_1_cocoa_window.html" title=" " alt="" coords="666,1029,805,1056"/>
-<area shape="rect" id="node28" href="$class_ogre_1_1_d3_d11_render_window_base.html" title=" " alt="" coords="629,1080,841,1107"/>
-<area shape="rect" id="node30" href="$class_ogre_1_1_d3_d9_render_window.html" title=" " alt="" coords="648,1131,823,1157"/>
-<area shape="rect" id="node31" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="671,1181,799,1208"/>
-<area shape="rect" id="node36" href="$class_ogre_1_1_g_t_k_window.html" title=" " alt="" coords="671,1232,800,1259"/>
-<area shape="rect" id="node37" href="$class_ogre_1_1_n_u_l_l_render_window.html" title=" " alt="" coords="646,1283,825,1309"/>
-<area shape="rect" id="node38" href="$class_ogre_1_1_na_cl_window.html" title=" " alt="" coords="670,1333,801,1360"/>
-<area shape="rect" id="node39" href="$class_ogre_1_1_s_d_l_window.html" title=" " alt="" coords="671,1384,799,1411"/>
-<area shape="rect" id="node29" href="$class_ogre_1_1_d3_d11_render_window_swap_chain_based.html" title=" " alt="" coords="891,1065,1106,1106"/>
-<area shape="rect" id="node32" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="913,1131,1085,1157"/>
-<area shape="rect" id="node33" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="902,1181,1095,1208"/>
-<area shape="rect" id="node34" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="917,1232,1081,1259"/>
-<area shape="rect" id="node35" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="923,1283,1074,1309"/>
+<area shape="rect" id="node27" href="$class_ogre_1_1_d3_d11_render_window_base.html" title=" " alt="" coords="629,1029,841,1056"/>
+<area shape="rect" id="node29" href="$class_ogre_1_1_d3_d9_render_window.html" title=" " alt="" coords="648,1080,823,1107"/>
+<area shape="rect" id="node30" href="$class_ogre_1_1_e_g_l_window.html" title=" " alt="" coords="671,1131,799,1157"/>
+<area shape="rect" id="node35" href="$class_ogre_1_1_g_t_k_window.html" title=" " alt="" coords="671,1181,800,1208"/>
+<area shape="rect" id="node36" href="$class_ogre_1_1_n_u_l_l_render_window.html" title=" " alt="" coords="646,1232,825,1259"/>
+<area shape="rect" id="node37" href="$class_ogre_1_1_na_cl_window.html" title=" " alt="" coords="670,1283,801,1309"/>
+<area shape="rect" id="node38" href="$class_ogre_1_1_s_d_l_window.html" title=" " alt="" coords="671,1333,799,1360"/>
+<area shape="rect" id="node28" href="$class_ogre_1_1_d3_d11_render_window_swap_chain_based.html" title=" " alt="" coords="891,1014,1106,1055"/>
+<area shape="rect" id="node31" href="$class_ogre_1_1_android_e_g_l_window.html" title=" " alt="" coords="913,1080,1085,1107"/>
+<area shape="rect" id="node32" href="$class_ogre_1_1_emscripten_e_g_l_window.html" title=" " alt="" coords="902,1131,1095,1157"/>
+<area shape="rect" id="node33" href="$class_ogre_1_1_win32_e_g_l_window.html" title=" " alt="" coords="917,1181,1081,1208"/>
+<area shape="rect" id="node34" href="$class_ogre_1_1_x11_e_g_l_window.html" title=" " alt="" coords="923,1232,1074,1259"/>
 </map>

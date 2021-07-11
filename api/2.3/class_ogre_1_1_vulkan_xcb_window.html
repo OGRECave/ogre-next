@@ -1289,7 +1289,7 @@ Public Attributes</h2></td></tr>
 <p>In any case, all such windowing system provides the way to convert such view points to pixels, be it DisplayProperties::LogicalDpi on WinRT or backingScaleFactor on MacOSX. We use pixels consistently through the <a class="el" href="namespace_ogre.html">Ogre</a>, but window/view management functions takes view points for convenience, as does the rest of windowing system. Such parameters are named using xxxxPt pattern, and should not be mixed with pixels without being converted using <a class="el" href="class_ogre_1_1_window.html#a12411d378aa0623e29287964eeb261c4" title="Many windowing systems that support HiDPI displays use special points to specify size of the windows ...">getViewPointToPixelScale()</a> function.</p>
 <p>Sometimes such scale factor can change on-the-fly, for example if window is dragged to monitor with different DPI. In such situation, window size in view points is usually preserved by windowing system, and <a class="el" href="namespace_ogre.html">Ogre</a> should adjust pixel size of <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_metal_window.html#a70f59aa59b7dd09f587ab758001fbb5e">Ogre::MetalWindow</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a14bd7b06e27132d6685222698ea9e256">Ogre::CocoaWindow</a>, and <a class="el" href="class_ogre_1_1_metal_window.html#a70f59aa59b7dd09f587ab758001fbb5e">Ogre::MetalWindow</a>.</p>
 
 </div>
 </div>

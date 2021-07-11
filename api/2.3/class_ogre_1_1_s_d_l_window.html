@@ -1431,8 +1431,6 @@ you can use it like this for example : <pre>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a601c6d3b1c9d7348d7b14a31cd87132a">Ogre::CocoaWindow</a>.</p>
-
 </div>
 </div>
 <a id="ad4e95b76827cb41d936ccb4a8c308c6e"></a>
@@ -1702,8 +1700,6 @@ you can use it like this for example : <pre>
 <p>In any case, all such windowing system provides the way to convert such view points to pixels, be it DisplayProperties::LogicalDpi on WinRT or backingScaleFactor on MacOSX. We use pixels consistently through the <a class="el" href="namespace_ogre.html">Ogre</a>, but window/view management functions takes view points for convenience, as does the rest of windowing system. Such parameters are named using xxxxPt pattern, and should not be mixed with pixels without being converted using <a class="el" href="class_ogre_1_1_render_window.html#a5fe9b7de87bc535e7278dac1e6bdc002" title="Many windowing systems that support HiDPI displays use special points to specify size of the windows ...">getViewPointToPixelScale()</a> function.</p>
 <p>Sometimes such scale factor can change on-the-fly, for example if window is dragged to monitor with different DPI. In such situation, window size in view points is usually preserved by windowing system, and <a class="el" href="namespace_ogre.html">Ogre</a> should adjust pixel size of <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>. </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#ad297c227d738853b2b4b9b03dad5500b">Ogre::CocoaWindow</a>.</p>
-
 </div>
 </div>
 <a id="a79c057e010286b2b6c3a27f296233c5c"></a>
@@ -1786,8 +1782,6 @@ you can use it like this for example : <pre>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a01d22489df9c47313956f7991ebce9f4">Ogre::CocoaWindow</a>.</p>
 
 </div>
 </div>
@@ -1990,7 +1984,7 @@ you can use it like this for example : <pre>
 
 <p>Indicates whether the window was set to hidden (not displayed) </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a80904ef4f265359b95ec5d34e7e3132c">Ogre::CocoaWindow</a>, <a class="el" href="class_ogre_1_1_e_g_l_window.html#a1d8e7ae222973449defdfe63d3981c70">Ogre::EGLWindow</a>, <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#ae75a81683b457f893bb1531da88667c3">Ogre::D3D9RenderWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_window_base.html#a62fc766a70a6f080caf04f4387b85f3b">Ogre::D3D11RenderWindowBase</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_e_g_l_window.html#a1d8e7ae222973449defdfe63d3981c70">Ogre::EGLWindow</a>, <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#ae75a81683b457f893bb1531da88667c3">Ogre::D3D9RenderWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d11_render_window_base.html#a62fc766a70a6f080caf04f4387b85f3b">Ogre::D3D11RenderWindowBase</a>.</p>
 
 </div>
 </div>
@@ -3153,7 +3147,7 @@ template&lt;class Alloc &gt; </div>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#aa8f95132b814bd4d76773ccbf9374ef0">Ogre::CocoaWindow</a>, <a class="el" href="class_ogre_1_1_g_t_k_window.html#a53346e1394285b27ad589ad3d2a1271f">Ogre::GTKWindow</a>, <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#ab91255700266fd7c45c47df5fea14ad8">Ogre::D3D9RenderWindow</a>, <a class="el" href="class_ogre_1_1_x11_e_g_l_window.html#a9747bbf409dee7c0239298c2c820d15e">Ogre::X11EGLWindow</a>, and <a class="el" href="class_ogre_1_1_e_g_l_window.html#a3c1b90c776b100ac3f5b23683dc660ec">Ogre::EGLWindow</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_t_k_window.html#a53346e1394285b27ad589ad3d2a1271f">Ogre::GTKWindow</a>, <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#ab91255700266fd7c45c47df5fea14ad8">Ogre::D3D9RenderWindow</a>, <a class="el" href="class_ogre_1_1_x11_e_g_l_window.html#a9747bbf409dee7c0239298c2c820d15e">Ogre::X11EGLWindow</a>, and <a class="el" href="class_ogre_1_1_e_g_l_window.html#a3c1b90c776b100ac3f5b23683dc660ec">Ogre::EGLWindow</a>.</p>
 
 </div>
 </div>
@@ -3184,7 +3178,7 @@ template&lt;class Alloc &gt; </div>
 <p>Hide (or show) the window. </p>
 <p>If called with hidden=true, this will make the window completely invisible to the user. </p><dl class="section remark"><dt>Remarks</dt><dd>Setting a window to hidden is useful to create a dummy primary <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> hidden from the user so that you can create and recreate your actual RenderWindows without having to recreate all your resources. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a258a980b05d038a8075226c2fbc27f31">Ogre::CocoaWindow</a>, <a class="el" href="class_ogre_1_1_e_g_l_window.html#a154bf76eb66058a0135bad1e7be04bd1">Ogre::EGLWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#ad40fa7ba5e51dc8eaff16ff88fe6a431">Ogre::D3D9RenderWindow</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_e_g_l_window.html#a154bf76eb66058a0135bad1e7be04bd1">Ogre::EGLWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#ad40fa7ba5e51dc8eaff16ff88fe6a431">Ogre::D3D9RenderWindow</a>.</p>
 
 </div>
 </div>
@@ -3432,7 +3426,7 @@ template&lt;class Alloc &gt; </div>
 <p>Notify that the window has been resized. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>You don't need to call this unless you created the window externally. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#aa610bf1a9beac627d9de20d7a96e03c3">Ogre::CocoaWindow</a>, <a class="el" href="class_ogre_1_1_e_g_l_window.html#a265e3105acde68347279a9467b0725e9">Ogre::EGLWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#a657440860ee5bd518e3bd535b0bfaf50">Ogre::D3D9RenderWindow</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_e_g_l_window.html#a265e3105acde68347279a9467b0725e9">Ogre::EGLWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d9_render_window.html#a657440860ee5bd518e3bd535b0bfaf50">Ogre::D3D9RenderWindow</a>.</p>
 
 </div>
 </div>

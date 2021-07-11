@@ -217,6 +217,7 @@ var class_ogre_1_1_g_l3_plus_render_system =
     [ "setWBufferEnabled", "class_ogre_1_1_g_l3_plus_render_system.html#a01c339f6e89d82b526fb7725424a4263", null ],
     [ "shutdown", "class_ogre_1_1_g_l3_plus_render_system.html#abf7098c116afdd2eeb9104f38d97e51d", null ],
     [ "startGpuDebuggerFrameCapture", "class_ogre_1_1_g_l3_plus_render_system.html#afe7705e26f10dccebf2e6db0b3d6859e", null ],
+    [ "supportsTargetIndependentRasterization", "class_ogre_1_1_g_l3_plus_render_system.html#ad2ccbf26adde0526cf9c39f8bc9d2989", null ],
     [ "unregisterThread", "class_ogre_1_1_g_l3_plus_render_system.html#abf5969cca19f815380e71a45386d2e81", null ],
     [ "updateCompositorManager", "class_ogre_1_1_g_l3_plus_render_system.html#a41328026d8be0e7143402a914f707cf9", null ],
     [ "useCustomRenderSystemCapabilities", "class_ogre_1_1_g_l3_plus_render_system.html#a6219a2d1f92be5548983a03de9522365", null ],
