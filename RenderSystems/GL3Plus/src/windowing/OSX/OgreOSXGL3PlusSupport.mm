@@ -26,16 +26,16 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#import "OgreOSXGL3PlusSupport.h"
+#import "OgreOSXCocoaWindow.h"
+
+#import "OgreGL3PlusRenderSystem.h"
+#import "OgreGL3PlusSupport.h"
+
 #import "OgreException.h"
 #import "OgreLogManager.h"
 #import "OgreStringConverter.h"
 #import "OgreRoot.h"
-
-#import "OgreGL3PlusSupport.h"
-#import "OgreOSXGL3PlusSupport.h"
-#import "OgreOSXCocoaWindow.h"
-#import "OgreGL3PlusTexture.h"
-#import "OgreGL3PlusRenderSystem.h"
 
 #import "macUtils.h"
 #import <dlfcn.h>
@@ -45,17 +45,20 @@ THE SOFTWARE.
 
 namespace Ogre {
 
+//-----------------------------------------------------------------------
 OSXGL3PlusSupport::OSXGL3PlusSupport()
 {
 }
 
+//-----------------------------------------------------------------------
 OSXGL3PlusSupport::~OSXGL3PlusSupport()
 {
 }
 
+//-----------------------------------------------------------------------
 void OSXGL3PlusSupport::addConfig( void )
 {
-	ConfigOption optFullScreen;
+    ConfigOption optFullScreen;
 	ConfigOption optVideoMode;
 	ConfigOption optBitDepth;
 	ConfigOption optFSAA;
@@ -211,7 +214,8 @@ void OSXGL3PlusSupport::addConfig( void )
 		String resoString = StringConverter::toString(fWidth) + " x " + StringConverter::toString(fHeight);
 		optVideoMode.possibleValues.push_back(resoString);
     }
-	
+    optVideoMode.currentValue = optVideoMode.possibleValues[0];
+
     // Release memory
     CFRelease(goodModes);
 
@@ -236,12 +240,14 @@ void OSXGL3PlusSupport::addConfig( void )
     setShaderLibraryPath(Ogre::macBundlePath() + "/Contents/Resources/RTShaderLib/GLSL150");
 }
 
+//-----------------------------------------------------------------------
 String OSXGL3PlusSupport::validateConfig( void )
 {
 	return String( "" );
 }
 
-RenderWindow* OSXGL3PlusSupport::createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle ) 
+//-----------------------------------------------------------------------
+Window* OSXGL3PlusSupport::createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle ) 
 {
 	if( autoCreateWindow )
 	{
@@ -307,17 +313,18 @@ RenderWindow* OSXGL3PlusSupport::createWindow( bool autoCreateWindow, GL3PlusRen
 	}
 }
 
-RenderWindow* OSXGL3PlusSupport::newWindow( const String &name, unsigned int width, unsigned int height, 
+//-----------------------------------------------------------------------
+Window* OSXGL3PlusSupport::newWindow( const String &name, unsigned int width, unsigned int height, 
 	bool fullScreen, const NameValuePairList *miscParams )
 {
 	// Create the window, if Cocoa return a Cocoa window
     LogManager::getSingleton().logMessage("Creating a Cocoa Compatible Render System");
-    CocoaWindow *window = OGRE_NEW CocoaWindow();
-    window->create(name, width, height, fullScreen, miscParams);
+    CocoaWindow *window = OGRE_NEW CocoaWindow(name, width, height, fullScreen, miscParams);
 
     return window;
 }
 
+//-----------------------------------------------------------------------
 void OSXGL3PlusSupport::start()
 {
 	LogManager::getSingleton().logMessage(
@@ -326,6 +333,7 @@ void OSXGL3PlusSupport::start()
 			"***********************************************");
 }
 
+//-----------------------------------------------------------------------
 void OSXGL3PlusSupport::stop()
 {
 	LogManager::getSingleton().logMessage(
@@ -334,11 +342,13 @@ void OSXGL3PlusSupport::stop()
 			"***********************************************");
 }
 
+//-----------------------------------------------------------------------
 void* OSXGL3PlusSupport::getProcAddress(const char* procname) const
 {
     return dlsym (RTLD_DEFAULT, procname);
 }
 
+//-----------------------------------------------------------------------
 CFComparisonResult OSXGL3PlusSupport::_compareModes (const void *val1, const void *val2, void *context)
 {
 	// These are the values we will be interested in...
@@ -346,7 +356,6 @@ CFComparisonResult OSXGL3PlusSupport::_compareModes (const void *val1, const voi
 	CGDisplayModeGetWidth
 	CGDisplayModeGetHeight
 	CGDisplayModeGetRefreshRate
-	_getDictionaryLong((mode), kCGDisplayBitsPerPixel)
 	CGDisplayModeGetIOFlags((mode), kDisplayModeStretchedFlag)
 	CGDisplayModeGetIOFlags((mode), kDisplayModeSafetyFlags)
 	*/
@@ -388,28 +397,4 @@ CFComparisonResult OSXGL3PlusSupport::_compareModes (const void *val1, const voi
 	return kCFCompareEqualTo;
 }
 
-Boolean OSXGL3PlusSupport::_getDictionaryBoolean(CFDictionaryRef dict, const void* key)
-{
-	Boolean value = false;
-	CFBooleanRef boolRef;
-	boolRef = (CFBooleanRef)CFDictionaryGetValue(dict, key);
-	
-	if (boolRef != NULL)
-		value = CFBooleanGetValue(boolRef); 	
-		
-	return value;
-}
-
-long OSXGL3PlusSupport::_getDictionaryLong(CFDictionaryRef dict, const void* key)
-{
-	long value = 0;
-	CFNumberRef numRef;
-	numRef = (CFNumberRef)CFDictionaryGetValue(dict, key);
-	
-	if (numRef != NULL)
-		CFNumberGetValue(numRef, kCFNumberLongType, &value);	
-		
-	return value;
-}
-
-}
+} // namespace Ogre

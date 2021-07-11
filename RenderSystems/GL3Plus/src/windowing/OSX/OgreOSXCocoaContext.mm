@@ -27,8 +27,8 @@ THE SOFTWARE.
 */
 
 #import "OgreOSXCocoaContext.h"
-#include "OgreGL3PlusRenderSystem.h"
-#include "OgreRoot.h"
+#import "OgreGL3PlusRenderSystem.h"
+#import "OgreRoot.h"
 
 namespace Ogre
 {
@@ -71,3 +71,4 @@ namespace Ogre
 		return mNSGLPixelFormat;
 	}
 }
+

@@ -42,7 +42,7 @@ THE SOFTWARE.
 	return self;
 }
 
-- (id)initWithGLOSXWindow:(Ogre::RenderWindow*)w
+- (id)initWithGLOSXWindow:(Ogre::Window*)w
 {
 	if((self = [super initWithFrame:NSMakeRect(0, 0, w->getWidth(), w->getHeight())]))
     {
@@ -51,12 +51,12 @@ THE SOFTWARE.
 	return self;
 }
 
-- (void)setOgreWindow:(Ogre::RenderWindow*)w
+- (void)setOgreWindow:(Ogre::Window*)w
 {
 	window = w;
 }
 
-- (Ogre::RenderWindow*)ogreWindow
+- (Ogre::Window*)ogreWindow
 {
 	return window;
 }

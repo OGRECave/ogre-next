@@ -36,31 +36,41 @@ THE SOFTWARE.
 #include "OgreOSXCocoaView.h"
 #include "OgreOSXCocoaWindowDelegate.h"
 
+#include "OgreWindow.h"
+#include "OgreTextureGpu.h"
+
 @class CocoaWindowDelegate;
 
 @interface OgreGL3PlusWindow : NSWindow
 
 @end
 
-namespace Ogre {
-    class _OgreGL3PlusExport CocoaWindow : public RenderWindow
+namespace Ogre
+{
+    class _OgreGL3PlusExport CocoaWindow : public Window
     {
     private:
         NSWindow *mWindow;
         NSView *mView;
         NSOpenGLContext *mGLContext;
         NSOpenGLPixelFormat *mGLPixelFormat;
-        CVDisplayLinkRef mDisplayLink;
+        // CVDisplayLinkRef mDisplayLink;
         NSPoint mWindowOriginPt;
         CocoaWindowDelegate *mWindowDelegate;
         CocoaContext* mContext;
 
-        bool mActive;
         bool mClosed;
+        bool mVisible;
         bool mHidden;
+        bool mIsExternal;
+
+        // Legacy
+        bool mActive;
+        bool mAutoDeactivatedOnFocusChange;
+
+        bool mHwGamma;
         bool mVSync;
         bool mHasResized;
-        bool mIsExternal;
         String mWindowTitle;
         bool mUseOgreGLView;
         float mContentScalingFactor;
@@ -69,57 +79,76 @@ namespace Ogre {
         void _setWindowParameters(unsigned int widthPt, unsigned int heightPt);
         
     public:
-        CocoaWindow();
-        ~CocoaWindow();
-        
-        NSView* ogreView() const { return mView; };
-        NSWindow* ogreWindow() const { return mWindow; };
-        NSOpenGLContext* nsopenGLContext() const { return mGLContext; };
-        void createWithView(OgreGL3PlusView *view);
+        CocoaWindow(const String &title, uint32 widthPt, uint32 heightPt, bool fullscreenMode,
+            const NameValuePairList *miscParams);
 
-        /** @copydoc see RenderWindow::getViewPointToPixelScale */
-        float getViewPointToPixelScale();
-        /** Overridden - see RenderWindow */
-        void create(const String& name, unsigned int widthPt, unsigned int heightPt,
-                bool fullScreen, const NameValuePairList *miscParams);
-        /** Overridden - see RenderWindow */
-        void destroy(void);
-        /** Overridden - see RenderWindow */
-        bool isActive(void) const;
-        /** Overridden - see RenderWindow */
-        bool isClosed(void) const;
-        /** @copydoc see RenderWindow::isHidden */
-        bool isHidden(void) const { return mHidden; }
+        virtual ~CocoaWindow();
+
+        /** @copydoc see Window::_initialize */
+        void _initialize(TextureGpuManager *textureManager) override;
+
+        /** @copydoc see Window::setVSync */
+        // void setVSync(bool vSync, uint32 vSyncInterval) override;
+
+        /** @copydoc see Window::getViewPointToPixelScale */
+        float getViewPointToPixelScale() const override;
+
+        /** @copydoc see Window::destroy */
+        void destroy(void) override;
+
+        /** @copydoc see Window::isVisible */
+        bool isVisible( void ) const override;
+
+        /** @copydoc see Window::_setVisible */
+        void _setVisible( bool visible ) override;
+
+        /** @copydoc see Window::isClosed */
+        bool isClosed(void) const override;
+
+        /** @copydoc see Window::isHidden */
+        bool isHidden(void) const override { return mHidden; }
+
         /** @copydoc see RenderWindow::setHidden */
-        void setHidden(bool hidden);
-        /** @copydoc see RenderWindow::setVSyncEnabled */
-        void setVSyncEnabled(bool vsync);
-        /** @copydoc see RenderWindow::isVSyncEnabled */
-        bool isVSyncEnabled() const;
-        /** Overridden - see RenderWindow */
-        void reposition(int leftPt, int topPt);
-        /** Overridden - see RenderWindow */
-        void resize(unsigned int widthPt, unsigned int heightPt);
-        /** Overridden - see RenderWindow */
-        void swapBuffers();
-        /** Overridden - see RenderTarget */
-        virtual void copyContentsToMemory(const Box& src, const PixelBox &dst, FrameBuffer buffer);
-        /** Overridden - see RenderWindow */
-        virtual void setFullscreen(bool fullScreen, unsigned int widthPt, unsigned int heightPt);
-        /** Overridden - see RenderWindow */
-        virtual unsigned int getWidth(void) const;
-        /** Overridden - see RenderWindow */
-        virtual unsigned int getHeight(void) const;
-        /** Overridden - see RenderWindow */
-        void windowMovedOrResized(void);
-        void windowHasResized(void);
-        void createNewWindow(unsigned int width, unsigned int height, String title);
-        void createWindowFromExternal(NSView *viewRef);
+        void setHidden(bool hidden) override;
 
-        bool requiresTextureFlipping() const { return false; }      
-        void getCustomAttribute( const String& name, void* pData );
+        /** @copydoc see Window::reposition */
+        void reposition(int leftPt, int topPt) override;
+
+        /** @copydoc see Window::swapBuffers */
+        void swapBuffers() override;
+
+        /** @copydoc see Window::windowMovedOrResized */
+        void windowMovedOrResized(void) override;
+
+        /** @copydoc see Window::getCustomAttribute */
+        /**
+           @remarks
+           * Get custom attribute; the following attributes are valid:
+           * GLCONTEXT
+           * WINDOW
+           * VIEW
+           * NSOPENGLCONTEXT
+           * NSOPENGLPIXELFORMAT
+           */
+        void getCustomAttribute(IdString name, void* pData);
+
+    public:
+        // Required by CocoaWindowDelegate
+        void setVisible(bool visible);
+
+        // Legacy: from RenderTarget, RenderWindow 
+        bool isActive() const;
+        void setActive(bool value);
+        bool isDeactivatedOnFocusChange() const;
+        void setDeactivateOnFocusChange(bool deactivate);
+
+    private:
+        void _create(const String &name, unsigned int widthPt, unsigned int heightPt,
+            bool fullScreen, const NameValuePairList *miscParams);
+
+        void _createNewWindow(String title, unsigned int widthPt, unsigned int heightPt);
+
     };
 }
 
-#endif
-
+#endif // __OSXCocoaWindow_H__

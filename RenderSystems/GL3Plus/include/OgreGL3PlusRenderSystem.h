@@ -100,6 +100,8 @@ namespace Ogre {
 
         bool mUseAutoTextureMatrix;
 
+        bool mSupportsTargetIndependentRasterization;
+
         /// GL support class, used for creating windows etc.
         GL3PlusSupport *mGLSupport;
 
@@ -483,6 +485,11 @@ namespace Ogre {
 
         GLint convertCompareFunction(CompareFunction func) const;
         GLint convertStencilOp(StencilOperation op) const;
+
+        bool supportsTargetIndependentRasterization() const
+        {
+            return mSupportsTargetIndependentRasterization;
+        }
 
         const GL3PlusSupport* getGLSupport(void) const { return mGLSupport; }
 

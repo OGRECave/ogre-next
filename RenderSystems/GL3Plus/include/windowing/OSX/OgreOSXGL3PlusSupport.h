@@ -39,47 +39,34 @@ class OSXGL3PlusSupport : public GL3PlusSupport
 {
 public:
     OSXGL3PlusSupport();
-    ~OSXGL3PlusSupport();
 
-    /**
-    * Add any special config values to the system.
-    * Must have a "Full Screen" value that is a bool and a "Video Mode" value
-    * that is a string in the form of wxh
-    */
-    void addConfig( void );
+    virtual ~OSXGL3PlusSupport();
 
-    /**
-    * Make sure all the extra options are valid
-    */
-    String validateConfig( void );
+    /// @copydoc GL3PlusSupport::addConfig
+    void addConfig( void ) override;
+
+    /// @copydoc GL3PlusSupport::validateConfig
+    String validateConfig( void ) override;
 
     /// @copydoc GL3PlusSupport::createWindow
-    RenderWindow* createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle );
+    Window* createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle ) override;
+
+    /// @copydoc GL3PlusSupport::newWindow
+    virtual Window* newWindow( const String &name, unsigned int width, unsigned int height, 
+        bool fullScreen, const NameValuePairList *miscParams = 0 ) override;
     
-    /// @copydoc RenderSystem::createRenderWindow
-    virtual RenderWindow* newWindow( const String &name, unsigned int width, unsigned int height, 
-        bool fullScreen, const NameValuePairList *miscParams = 0 );
-    
-    /**
-    * Start anything special
-    */
-    void start();
+    /// @copydoc GL3PlusSupport::start
+    void start() override;
 
-    /**
-    * Stop anything special
-    */
-    void stop();
+    /// @copydoc GL3PlusSupport::stop
+    void stop() override;
 
-    /**
-    * Get the address of a function
-    */
-    void* getProcAddress(const char *procname) const;
+    /// @copydoc GL3PlusSupport::getProcAddress
+    void* getProcAddress(const char *procname) const override;
 
+private:
     // Core Foundation Array callback function for sorting, must be static for the function ptr
-    static CFComparisonResult _compareModes (const void *val1, const void *val2, void *context);
-    // Core Fondation Dictionary helper functions, also static for ease of use in above static
-    static Boolean _getDictionaryBoolean(CFDictionaryRef dict, const void* key);
-    static long _getDictionaryLong(CFDictionaryRef dict, const void* key);
+    static CFComparisonResult _compareModes(const void *val1, const void *val2, void *context);
 
 }; // class OSXGL3PlusSupport
 

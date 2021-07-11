@@ -33,36 +33,32 @@ THE SOFTWARE.
 
 namespace Ogre {
 
-    class _OgreGL3PlusExport CocoaContext : public GL3PlusContext, public GeneralAllocatedObject
+    class _OgrePrivate CocoaContext : public GL3PlusContext
     {
     public:
         CocoaContext(NSOpenGLContext *context, NSOpenGLPixelFormat *pixelFormat);
 
         virtual ~CocoaContext();
 
-        /** See GL3PlusContext */
+        /// @copydoc GL3PlusContext::setCurrent
         virtual void setCurrent();
-        /**
-         * This is called before another context is made current. By default,
-         * nothing is done here.
-         */
+
+        /// @copydoc GL3PlusContext::endCurrent
         virtual void endCurrent();
-        /** Create a new context based on the same window/pbuffer as this
-            context - mostly useful for additional threads.
-        @note The caller is responsible for deleting the returned context.
-        */
+
+        /// @copydoc GL3PlusContext::clone
         virtual GL3PlusContext* clone() const;
 
-        /** Grab the NSOpenGLContext if it exists */
+        /// Grab the NSOpenGLContext if it exists
         NSOpenGLContext* getContext();
         
-        /** Grab the NSOpenGLPixelFormat if it exists */
+        /// Grab the NSOpenGLPixelFormat if it exists
         NSOpenGLPixelFormat* getPixelFormat();
         
     private:
         NSOpenGLContext* mNSGLContext;
         NSOpenGLPixelFormat *mNSGLPixelFormat;
     };
-}
+} // namespace Ogre
 
-#endif
+#endif // __OgreOSXCocoaContext_H__

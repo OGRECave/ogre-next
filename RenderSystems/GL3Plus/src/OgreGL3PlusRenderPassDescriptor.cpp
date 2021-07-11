@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreGL3PlusRenderPassDescriptor.h"
+#include "OgreGL3PlusTextureGpuManager.h"
+#include "OgreGL3PlusSupport.h"
 
 #include "OgreGL3PlusTextureGpu.h"
 #include "OgreGL3PlusRenderSystem.h"
@@ -141,8 +143,11 @@ namespace Ogre
 
             //Disable target independent rasterization to let the driver warn us
             //of wrong behavior during regular rendering.
-            OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0 ) );
-            OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0 ) );
+            if( mRenderSystem->supportsTargetIndependentRasterization() )
+            {
+                OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0 ) );
+                OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0 ) );
+            }
             frameBufferDescMap[key] = value;
             newItor = frameBufferDescMap.find( key );
         }
@@ -203,7 +208,9 @@ namespace Ogre
             }
         }
 
-        if( !mHasRenderWindow )
+        const bool bSupportsTIR = mRenderSystem->supportsTargetIndependentRasterization();
+
+        if( !mHasRenderWindow && bSupportsTIR )
         {
             OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0 ) );
             OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0 ) );
@@ -226,7 +233,7 @@ namespace Ogre
             if( PixelFormatGpuUtils::isSRgb( mColour[i].texture->getPixelFormat() ) )
                 mHasSRGB |= true;
 
-            if( !mHasRenderWindow && mColour[i].texture->getPixelFormat() != PFG_NULL )
+            if( !mHasRenderWindow && mColour[i].texture->getPixelFormat() != PFG_NULL && bSupportsTIR )
             {
                 assert( dynamic_cast<GL3PlusTextureGpu*>( mColour[i].texture ) );
                 GL3PlusTextureGpu *texture = static_cast<GL3PlusTextureGpu*>( mColour[i].texture );
@@ -275,7 +282,7 @@ namespace Ogre
                     }
                 }
             }
-            else if( mColour[i].texture->getPixelFormat() == PFG_NULL )
+            else if( mColour[i].texture->getPixelFormat() == PFG_NULL && bSupportsTIR )
             {
                 OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
                                                mColour[i].texture->getWidth() ) );
