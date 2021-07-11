@@ -230,4 +230,19 @@ namespace Ogre
                                                    pixelFormatFamily, vaoManager,
                                                    supportsGetTextureSubImage );
     }
+    //-----------------------------------------------------------------------------------
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+    bool GL3PlusTextureGpuManager::checkSupport( PixelFormatGpu format, uint32 textureFlags ) const
+    {
+        if( ( textureFlags & ( TextureFlags::AllowAutomipmaps | TextureFlags::RenderToTexture ) ) ==
+            TextureFlags::AllowAutomipmaps )
+        {
+            // Disable hardware mipmap generation on macOS while there is no fallback
+            // for OpenGL < 4.2 implemented in TextureGpuManager::copyTo
+            return false;
+        }
+
+        return TextureGpuManager::checkSupport( format, textureFlags );
+    }
+#endif
 }

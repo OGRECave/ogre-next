@@ -815,11 +815,6 @@ namespace Ogre
 
         if( textureFlags & TextureFlags::AllowAutomipmaps )
         {
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-        // Disable hardware mipmap generation on macOS while there is no fallback
-        // for OpenGL < 4.2 implemented in TextureGpuManager::copyTo
-        return false;
-#endif
             if( !PixelFormatGpuUtils::supportsHwMipmaps( format ) )
                 return false;
         }
