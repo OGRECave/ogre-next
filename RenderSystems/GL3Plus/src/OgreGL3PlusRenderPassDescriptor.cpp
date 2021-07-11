@@ -128,14 +128,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderPassDescriptor::switchToFBO(void)
     {
-        // Capabilities
-        auto *textureManager = mRenderSystem->getTextureGpuManager();
-        auto *textureManagerGL =
-                static_cast<GL3PlusTextureGpuManager*>(textureManager);
-        auto &support = textureManagerGL->getGlSupport();
-        bool hasGL43 = support.hasMinGLVersion(4, 3);
-        bool hasARBCopyImage = support.checkExtension("GL_ARB_copy_image");
-
         FrameBufferDescKey key( *this );
         GL3PlusFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
         GL3PlusFrameBufferDescMap::iterator newItor = frameBufferDescMap.find( key );
@@ -151,7 +143,7 @@ namespace Ogre
 
             //Disable target independent rasterization to let the driver warn us
             //of wrong behavior during regular rendering.
-            if (hasGL43 || hasARBCopyImage)
+            if( mRenderSystem->supportsTargetIndependentRasterization() )
             {
                 OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0 ) );
                 OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0 ) );
@@ -206,14 +198,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderPassDescriptor::updateColourFbo( uint8 lastNumColourEntries )
     {
-        // Capabilities
-        auto *textureManager = mRenderSystem->getTextureGpuManager();
-        auto *textureManagerGL =
-                static_cast<GL3PlusTextureGpuManager*>(textureManager);
-        auto &support = textureManagerGL->getGlSupport();
-        bool hasGL43 = support.hasMinGLVersion(4, 3);
-        bool hasARBCopyImage = support.checkExtension("GL_ARB_copy_image");
-
         if( mNumColourEntries < lastNumColourEntries && !mHasRenderWindow )
         {
             for( size_t i=mNumColourEntries; i<lastNumColourEntries; ++i )
@@ -224,7 +208,9 @@ namespace Ogre
             }
         }
 
-        if( !mHasRenderWindow && (hasGL43 || hasARBCopyImage))
+        const bool bSupportsTIR = mRenderSystem->supportsTargetIndependentRasterization();
+
+        if( !mHasRenderWindow && bSupportsTIR )
         {
             OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0 ) );
             OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0 ) );
@@ -247,7 +233,7 @@ namespace Ogre
             if( PixelFormatGpuUtils::isSRgb( mColour[i].texture->getPixelFormat() ) )
                 mHasSRGB |= true;
 
-            if( !mHasRenderWindow && mColour[i].texture->getPixelFormat() != PFG_NULL && (hasGL43 || hasARBCopyImage) )
+            if( !mHasRenderWindow && mColour[i].texture->getPixelFormat() != PFG_NULL && bSupportsTIR )
             {
                 assert( dynamic_cast<GL3PlusTextureGpu*>( mColour[i].texture ) );
                 GL3PlusTextureGpu *texture = static_cast<GL3PlusTextureGpu*>( mColour[i].texture );
@@ -296,7 +282,7 @@ namespace Ogre
                     }
                 }
             }
-            else if( mColour[i].texture->getPixelFormat() == PFG_NULL && (hasGL43 || hasARBCopyImage))
+            else if( mColour[i].texture->getPixelFormat() == PFG_NULL && bSupportsTIR )
             {
                 OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
                                                mColour[i].texture->getWidth() ) );

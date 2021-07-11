@@ -172,6 +172,7 @@ namespace Ogre {
         : mBlendChannelMask( HlmsBlendblock::BlendChannelAll ),
           mDepthWrite(true),
           mScissorsEnabled(false),
+          mSupportsTargetIndependentRasterization(false),
           mGlobalVao( 0 ),
           mCurrentVertexBuffer( 0 ),
           mCurrentIndexBuffer( 0 ),
@@ -3366,6 +3367,8 @@ namespace Ogre {
         }
 
         mHasGL43 = mGLSupport->hasMinGLVersion(4, 3);
+        mSupportsTargetIndependentRasterization =
+            mHasGL43 || mGLSupport->checkExtension( "GL_ARB_framebuffer_no_attachments" );
 
         LogManager::getSingleton().logMessage("**************************************");
         LogManager::getSingleton().logMessage("***   OpenGL 3+ Renderer Started   ***");
