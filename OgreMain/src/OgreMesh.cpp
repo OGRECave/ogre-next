@@ -1689,7 +1689,10 @@ namespace v1 {
             for (SubMeshList::iterator i = mSubMeshList.begin(); i != mSubMeshList.end(); ++i)
             {
                 SubMesh* sm = *i;
-                if (sm->useSharedVertices)
+                if (sm->useSharedVertices &&
+                    (sm->operationType == OT_TRIANGLE_FAN ||
+                    sm->operationType == OT_TRIANGLE_LIST ||
+                    sm->operationType == OT_TRIANGLE_STRIP))
                 {
                     tangentsCalc.addIndexData(sm->indexData[VpNormal]);
                     found = true;
@@ -1752,7 +1755,10 @@ namespace v1 {
         for (SubMeshList::iterator i = mSubMeshList.begin(); i != mSubMeshList.end(); ++i)
         {
             SubMesh* sm = *i;
-            if (!sm->useSharedVertices)
+            if (!sm->useSharedVertices &&
+                (sm->operationType == OT_TRIANGLE_FAN ||
+                sm->operationType == OT_TRIANGLE_LIST ||
+                sm->operationType == OT_TRIANGLE_STRIP))
             {
                 tangentsCalc.clear();
                 tangentsCalc.setVertexData(sm->vertexData[VpNormal]);
