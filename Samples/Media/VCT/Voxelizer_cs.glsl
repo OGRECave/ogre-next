@@ -11,13 +11,46 @@
 
 @insertpiece( SetCrossPlatformSettings )
 
+@insertpiece( DeclUavCrossPlatform )
+
 @piece( CustomGlslExtensions )
 	#extension GL_ARB_shader_group_vote: require
 @end
 
-#define OGRE_imageLoad3D( inImage, iuv ) imageLoad( inImage, int3( iuv ) )
-#define OGRE_imageWrite3D1( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
-#define OGRE_imageWrite3D4( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
+@property( !vendor_shader_extension )
+	// We are emulating anyInvocationARB because for it to work
+	// correctly we need the following guarantees:
+	//	1. gl_SubGroupSizeARB is known beforehand and all lanes [0; gl_SubGroupSizeARB) are always active
+	//	2. VK_EXT_subgroup_size_control to enforce 1
+	//	3. REQUIRE_FULL_SUBGROUPS_BIT_EXT to ensure all lanes are occupied the way we need
+	//     (perfect lockstep)
+	//
+	// See https://github.com/KhronosGroup/GLSL/issues/19#issuecomment-881931582
+	// See https://forums.ogre3d.org/viewtopic.php?p=551000#p551000
+	shared bool g_emulatedGroupVote[64];
+
+	bool emulatedAnyInvocationARB( bool value )
+	{
+		g_emulatedGroupVote[gl_LocalInvocationIndex] = value;
+
+		for( uint i=0u; i<6u; ++i )
+		{
+			__sharedOnlyBarrier;
+			uint nextIdx = gl_LocalInvocationIndex + (1u << i);
+			uint mask = (1u << (i+1u)) - 1u;
+			if( ( gl_LocalInvocationIndex & mask ) == 0u )
+			{
+				g_emulatedGroupVote[gl_LocalInvocationIndex] =
+					g_emulatedGroupVote[gl_LocalInvocationIndex] || g_emulatedGroupVote[nextIdx];
+			}
+		}
+
+		__sharedOnlyBarrier;
+		return g_emulatedGroupVote[0];
+	}
+
+	#define anyInvocationARB( value ) emulatedAnyInvocationARB( value )
+@end
 
 @insertpiece( PreBindingsHeaderCS )
 
