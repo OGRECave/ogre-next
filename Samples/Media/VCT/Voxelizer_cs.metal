@@ -25,9 +25,10 @@ struct Params
 	float3 voxelCellSize;
 };
 
-#if defined(__HAVE_SIMDGROUP_BALLOT__)
+// Do not use __HAVE_SIMDGROUP_BALLOT__, see GLSL comments
+/*#if defined(__HAVE_SIMDGROUP_BALLOT__)
 	#define anyInvocationARB( value ) simd_any( value )
-#else
+#else*/
 	//At least on High Sierra AMD, when using a threadgroup uchar or bool,
 	//it crashes the Metal compiler so we're using ushort instead
 	inline bool emulatedAnyInvocationARB( bool value, ushort gl_LocalInvocationIndex,
@@ -53,7 +54,7 @@ struct Params
 
 	#define anyInvocationARB( value ) emulatedAnyInvocationARB( value, gl_LocalInvocationIndex, g_emulatedGroupVote )
 	#define EMULATING_anyInvocationARB
-#endif
+//#endif
 
 /*inline float4 unpackUnormRGB10A2( uint v )
 {
