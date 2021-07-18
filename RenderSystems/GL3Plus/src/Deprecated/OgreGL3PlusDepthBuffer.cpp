@@ -173,9 +173,9 @@ namespace Ogre
         else
         {
             if( mDepthBufferName )
-                glDeleteFramebuffers( 1, &mDepthBufferName );
+                glDeleteRenderbuffers( 1, &mDepthBufferName );
             if( hasSeparateStencilBuffer() )
-                glDeleteFramebuffers( 1, &mStencilBufferName );
+                glDeleteRenderbuffers( 1, &mStencilBufferName );
         }
     }
     //---------------------------------------------------------------------
