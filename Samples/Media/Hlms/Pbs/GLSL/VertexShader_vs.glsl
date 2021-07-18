@@ -4,8 +4,8 @@
 out gl_PerVertex
 {
 	vec4 gl_Position;
-@property( hlms_global_clip_planes )
-	float gl_ClipDistance[@value(hlms_global_clip_planes)];
+@property( hlms_pso_clip_distances )
+	float gl_ClipDistance[@value(hlms_pso_clip_distances)];
 @end
 };
 
