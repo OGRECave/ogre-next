@@ -3701,7 +3701,6 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::setClipPlanesImpl(const Ogre::PlaneList& planeList)
     {
-        OGRE_CHECK_GL_ERROR(glEnable(GL_DEPTH_CLAMP));
     }
 
     void GL3PlusRenderSystem::registerThread()
