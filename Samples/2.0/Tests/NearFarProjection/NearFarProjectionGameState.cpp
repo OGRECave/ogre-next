@@ -1,0 +1,129 @@
+
+#include "NearFarProjectionGameState.h"
+
+#include "GraphicsSystem.h"
+
+#include "OgreCamera.h"
+#include "OgreItem.h"
+#include "OgreLwString.h"
+#include "OgreMesh.h"
+#include "OgreMesh2.h"
+#include "OgreMeshManager.h"
+#include "OgreMeshManager2.h"
+#include "OgreSceneManager.h"
+
+using namespace Demo;
+
+namespace Demo
+{
+    NearFarProjectionGameState::NearFarProjectionGameState( const Ogre::String &helpDescription ) :
+        TutorialGameState( helpDescription )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    void NearFarProjectionGameState::createScene01( void )
+    {
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
+        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
+            "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+            Ogre::Plane( Ogre::Vector3::UNIT_Z, 0.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,
+            Ogre::Vector3::UNIT_Y, Ogre::v1::HardwareBuffer::HBU_STATIC,
+            Ogre::v1::HardwareBuffer::HBU_STATIC );
+
+        Ogre::MeshPtr planeMesh;
+        {
+            // Create a v2 mesh to import to, with a different name (arbitrary).
+            planeMesh = Ogre::MeshManager::getSingleton().createManual(
+                "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+
+            bool halfPosition = true;
+            bool halfUVs = true;
+            bool useQtangents = true;
+
+            // Import the v1 mesh to v2
+            planeMesh->importV1( planeMeshV1.get(), halfPosition, halfUVs, useQtangents );
+
+            // We don't need the v1 mesh. Free CPU memory, get it out of the GPU.
+            // Leave it loaded if you want to use athene with v1 Entity.
+            planeMeshV1->unload();
+        }
+
+        Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
+        mSceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                         ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        mSceneNode->setPosition( 0, 0, -5 );
+        mSceneNode->setScale( Ogre::Vector3( 1000.0f ) );
+        mSceneNode->attachObject( item );
+
+        Ogre::Light *light = sceneManager->createLight();
+        Ogre::SceneNode *lightNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+        lightNode->attachObject( light );
+        light->setPowerScale( Ogre::Math::PI );  // Since we don't do HDR, counter the PBS' division by
+                                                 // PI
+        light->setType( Ogre::Light::LT_DIRECTIONAL );
+        light->setDirection( Ogre::Vector3( -1, -1, -1 ).normalisedCopy() );
+
+        Ogre::Camera *camera = mGraphicsSystem->getCamera();
+        camera->setPosition( 0, 0, 0 );
+        camera->setOrientation( Ogre::Quaternion::IDENTITY );
+
+        camera->setNearClipDistance( 0.5f );
+        mSceneNode->setPosition( 0, 0, -0.5f );
+
+        TutorialGameState::createScene01();
+    }
+    //-----------------------------------------------------------------------------------
+    void NearFarProjectionGameState::generateDebugText( float timeSinceLast, Ogre::String &outText )
+    {
+        TutorialGameState::generateDebugText( timeSinceLast, outText );
+        outText += "\nF2 to test at near plane";
+        outText += "\nF3 to test after near plane";
+        outText += "\nF4 to test behind far plane";
+        outText += "\nF5 to test at far plane";
+
+        char tmpBuffer[256];
+        Ogre::LwString tmpStr( Ogre::LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+        tmpStr.a( "\nObject Z: ", -mSceneNode->_getDerivedPositionUpdated().z );
+        outText += tmpStr.c_str();
+
+        const Ogre::Camera *camera = mGraphicsSystem->getCamera();
+        tmpStr.clear();
+        tmpStr.a( "\nCamera Near: ", camera->getNearClipDistance(),
+                  "; Far: ", camera->getFarClipDistance() );
+        outText += tmpStr.c_str();
+    }
+    //-----------------------------------------------------------------------------------
+    void NearFarProjectionGameState::keyReleased( const SDL_KeyboardEvent &arg )
+    {
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
+        {
+            TutorialGameState::keyReleased( arg );
+            return;
+        }
+
+        Ogre::Camera *camera = mGraphicsSystem->getCamera();
+
+        if( arg.keysym.sym == SDLK_F2 )
+        {
+            mSceneNode->setPosition( 0, 0, -camera->getNearClipDistance() );
+        }
+        else if( arg.keysym.sym == SDLK_F3 )
+        {
+            mSceneNode->setPosition( 0, 0, -camera->getNearClipDistance() - 1e-6f );
+        }
+        else if( arg.keysym.sym == SDLK_F4 )
+        {
+            mSceneNode->setPosition( 0, 0, -camera->getFarClipDistance() + 0.5f );
+        }
+        else if( arg.keysym.sym == SDLK_F5 )
+        {
+            mSceneNode->setPosition( 0, 0, -camera->getFarClipDistance() );
+        }
+        else
+        {
+            TutorialGameState::keyReleased( arg );
+        }
+    }
+}  // namespace Demo
