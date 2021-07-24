@@ -35,10 +35,19 @@ namespace Demo
             "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
             true, true );
 
+
+        {
+            // We must alter the AABB because we want to always pass frustum culling
+            // Otherwise frustum culling may hide bugs in the projection matrix math
+            planeMesh->load();
+            Ogre::Aabb aabb = planeMesh->getAabb();
+            aabb.mHalfSize.z = aabb.mHalfSize.x;
+            planeMesh->_setBounds( aabb );
+        }
+
         Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
         mSceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                          ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
-        mSceneNode->setPosition( 0, 0, -5 );
         mSceneNode->setScale( Ogre::Vector3( 1000.0f ) );
         mSceneNode->attachObject( item );
 
@@ -55,7 +64,7 @@ namespace Demo
         camera->setOrientation( Ogre::Quaternion::IDENTITY );
 
         camera->setNearClipDistance( 0.5f );
-        mSceneNode->setPosition( 0, 0, -0.5f );
+        mSceneNode->setPosition( 0, 0, -0.5f + 1e-6f );
 
         TutorialGameState::createScene01();
     }
@@ -68,10 +77,10 @@ namespace Demo
         TutorialGameState::generateDebugText( timeSinceLast, outText );
         outText += "\nZ Mode: ";
         outText += renderSystem->isReverseDepth() ? "[Reverse Z]" : "[Normal Z]";
-        outText += "\nF2 to test at near plane";
-        outText += "\nF3 to test after near plane";
-        outText += "\nF4 to test behind far plane";
-        outText += "\nF5 to test at far plane";
+        outText += "\nF2 to test behind near plane (should be blue)";
+        outText += "\nF3 to test after near plane (should be grey)";
+        outText += "\nF4 to test behind far plane (should be grey)";
+        outText += "\nF5 to test after far plane (should be blue)";
 
         char tmpBuffer[256];
         Ogre::LwString tmpStr( Ogre::LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
@@ -98,7 +107,7 @@ namespace Demo
 
         if( arg.keysym.sym == SDLK_F2 )
         {
-            mSceneNode->setPosition( 0, 0, -camera->getNearClipDistance() );
+            mSceneNode->setPosition( 0, 0, -camera->getNearClipDistance() + 1e-6f );
         }
         else if( arg.keysym.sym == SDLK_F3 )
         {
@@ -110,7 +119,7 @@ namespace Demo
         }
         else if( arg.keysym.sym == SDLK_F5 )
         {
-            mSceneNode->setPosition( 0, 0, -camera->getFarClipDistance() );
+            mSceneNode->setPosition( 0, 0, -camera->getFarClipDistance() - 0.5f );
         }
         else
         {
