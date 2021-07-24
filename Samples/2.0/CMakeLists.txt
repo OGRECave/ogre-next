@@ -197,6 +197,7 @@ endif()
 
 if( OGRE_BUILD_TESTS )
 	add_subdirectory(Tests/MemoryCleanup)
+	add_subdirectory(Tests/NearFarProjection)
 	add_subdirectory(Tests/Restart)
 	add_subdirectory(Tests/TextureResidency)
 	add_subdirectory(Tests/Voxelizer)
