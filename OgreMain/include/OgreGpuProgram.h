@@ -86,6 +86,12 @@ namespace Ogre {
         String doGet(const void* target) const;
         void doSet(void* target, const String& val);
     };
+    class _OgreExport CmdClipDistance : public ParamCommand
+    {
+    public:
+        String doGet(const void* target) const;
+        void doSet(void* target, const String& val);
+    };
     class _OgreExport CmdSkeletal : public ParamCommand
     {
     public:
@@ -138,6 +144,7 @@ namespace Ogre {
     static CmdType msTypeCmd;
     static CmdSyntax msSyntaxCmd;
     static CmdBuildParamsFromRefl msBuildParamsFromReflCmd;
+    static CmdClipDistance msClipDistanceCmd;
     static CmdSkeletal msSkeletalCmd;
     static CmdMorph msMorphCmd;
     static CmdPose msPoseCmd;
@@ -159,6 +166,8 @@ namespace Ogre {
     /// Hlms shaders rarely need reflection. Because it's expensive in Metal,
     /// it's turned off by default, and enabled for low level materials.
     bool mBuildParametersFromReflection;
+    /// Number of clip distances to pass to the PSO
+    uint8 mNumClipDistances;
     /// Does this (vertex) program include skeletal animation?
     bool mSkeletalAnimation;
     /// Does this (vertex) program include morph animation?
@@ -302,6 +311,13 @@ namespace Ogre {
     { mBuildParametersFromReflection = buildParams; }
 
     bool getBuildParametersFromReflection(void) const { return mBuildParametersFromReflection; }
+
+    /// Sets the number of clip distances this shader uses.
+    /// Only valid for vertex shaders. Default is 0
+    void setNumClipDistances( const uint8 numClipDistances );
+
+    /// Retrieves the number of clip distances. See GpuProgram::setNumClipDistances
+    uint8 getNumClipDistances( void ) const { return mNumClipDistances; }
 
     /** Sets whether a vertex program includes the required instructions
         to perform skeletal animation.

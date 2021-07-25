@@ -42,6 +42,7 @@ namespace Ogre
     GpuProgram::CmdType GpuProgram::msTypeCmd;
     GpuProgram::CmdSyntax GpuProgram::msSyntaxCmd;
     GpuProgram::CmdBuildParamsFromRefl GpuProgram::msBuildParamsFromReflCmd;
+    GpuProgram::CmdClipDistance GpuProgram::msClipDistanceCmd;
     GpuProgram::CmdSkeletal GpuProgram::msSkeletalCmd;
     GpuProgram::CmdMorph GpuProgram::msMorphCmd;
     GpuProgram::CmdPose GpuProgram::msPoseCmd;
@@ -57,7 +58,7 @@ namespace Ogre
         const String& group, bool isManual, ManualResourceLoader* loader) 
         :Resource(creator, name, handle, group, isManual, loader),
         mType(GPT_VERTEX_PROGRAM), mLoadFromFile(true), mBuildParametersFromReflection(true),
-        mSkeletalAnimation(false), mMorphAnimation(false), mPoseAnimation(0),
+        mNumClipDistances(0u), mSkeletalAnimation(false), mMorphAnimation(false), mPoseAnimation(0),
         mVertexTextureFetch(false), mVpAndRtArrayIndexFromAnyShader(false), mNeedsAdjacencyInfo(false),
         mCompileError(false), mLoadedManualNamedConstants(false)
     {
@@ -321,6 +322,16 @@ namespace Ogre
         return ret;
     }
     //-----------------------------------------------------------------------------
+    void GpuProgram::setNumClipDistances( const uint8 numClipDistances )
+    {
+        if( mType != GPT_VERTEX_PROGRAM )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Only vertex shader supports this call",
+                         "GpuProgram::setNumClipDistances" );
+        }
+        mNumClipDistances = numClipDistances;
+    }
+    //-----------------------------------------------------------------------------
     GpuProgramParametersSharedPtr GpuProgram::getDefaultParameters(void)
     {
         if (mDefaultParams.isNull())
@@ -345,8 +356,12 @@ namespace Ogre
                          "params and such (optimization when disabled)", PT_BOOL),
             &msBuildParamsFromReflCmd);
         dict->addParameter(
-            ParameterDef("includes_skeletal_animation", 
-                         "Whether this vertex program includes skeletal animation", PT_BOOL), 
+            ParameterDef("num_clip_distances",
+                         "Number of clip distances this vertex shader uses", PT_UNSIGNED_INT),
+            &msClipDistanceCmd);
+        dict->addParameter(
+            ParameterDef("includes_skeletal_animation",
+                         "Whether this vertex program includes skeletal animation", PT_BOOL),
             &msSkeletalCmd);
         dict->addParameter(
             ParameterDef("includes_morph_animation", 
@@ -465,6 +480,18 @@ namespace Ogre
     {
         GpuProgram* t = static_cast<GpuProgram*>(target);
         t->setBuildParametersFromReflection(StringConverter::parseBool(val));
+    }
+    //-----------------------------------------------------------------------
+    String GpuProgram::CmdClipDistance::doGet(const void* target) const
+    {
+        const GpuProgram* t = static_cast<const GpuProgram*>(target);
+        return StringConverter::toString(t->getNumClipDistances());
+    }
+    void GpuProgram::CmdClipDistance::doSet(void* target, const String& val)
+    {
+        GpuProgram* t = static_cast<GpuProgram*>(target);
+        unsigned int asUint = StringConverter::parseUnsignedInt(val);
+        t->setNumClipDistances(static_cast<uint8>(asUint));
     }
     //-----------------------------------------------------------------------
     String GpuProgram::CmdSkeletal::doGet(const void* target) const
