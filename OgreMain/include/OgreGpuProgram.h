@@ -168,6 +168,7 @@ namespace Ogre
         static CmdType msTypeCmd;
         static CmdSyntax msSyntaxCmd;
         static CmdBuildParamsFromRefl msBuildParamsFromReflCmd;
+        static CmdClipDistance msClipDistanceCmd;
         static CmdSkeletal msSkeletalCmd;
         static CmdMorph msMorphCmd;
         static CmdPose msPoseCmd;
@@ -190,6 +191,8 @@ namespace Ogre
         /// Hlms shaders rarely need reflection. Because it's expensive in Metal,
         /// it's turned off by default, and enabled for low level materials.
         bool mBuildParametersFromReflection;
+        /// Number of clip distances to pass to the PSO
+        uint8 mNumClipDistances;
         /// Does this (vertex) program include skeletal animation?
         bool mSkeletalAnimation;
         /// Does this (vertex) program include morph animation?
