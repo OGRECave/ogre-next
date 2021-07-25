@@ -1,5 +1,15 @@
 var NAVTREEINDEX71 =
 {
+"class_ogre_1_1_file_stream_data_stream.html#a645b1e56b481855c35185ff98cfc06ce":[5,2,11,21,7],
+"class_ogre_1_1_file_stream_data_stream.html#a7336968b7a08e61d5d7adbd4eb337c48":[5,2,11,21,34],
+"class_ogre_1_1_file_stream_data_stream.html#a7ebd86825f86b7114024d168e9751395":[5,2,11,21,13],
+"class_ogre_1_1_file_stream_data_stream.html#a81856582e643b4a560e6c3d3ad05e08c":[5,2,11,21,0],
+"class_ogre_1_1_file_stream_data_stream.html#a81856582e643b4a560e6c3d3ad05e08ca8e221ca82d405d21d275997fbd3eb900":[5,2,11,21,0,1],
+"class_ogre_1_1_file_stream_data_stream.html#a81856582e643b4a560e6c3d3ad05e08cac5f9d1587e9cc7dd1577af114dcba50e":[5,2,11,21,0,0],
+"class_ogre_1_1_file_stream_data_stream.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,11,21,16],
+"class_ogre_1_1_file_stream_data_stream.html#a85cb7005fc0eadec79baae3e11eb5865":[5,2,11,21,5],
+"class_ogre_1_1_file_stream_data_stream.html#a86d2ff5dff63ce4b689dd1d486d3243f":[5,2,11,21,12],
+"class_ogre_1_1_file_stream_data_stream.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,11,21,19],
 "class_ogre_1_1_file_stream_data_stream.html#a9d5b5224e17b9fc9d9756d8156a77a5c":[5,2,11,21,30],
 "class_ogre_1_1_file_stream_data_stream.html#aa2532ca6886377bea5384e917ee12ebb":[5,2,11,21,27],
 "class_ogre_1_1_file_stream_data_stream.html#ab09b3fc8eaad4c49164b5c41bfdfee44":[5,2,11,21,33],
@@ -239,15 +249,5 @@ var NAVTREEINDEX71 =
 "class_ogre_1_1_font.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e":[5,2,11,24,7,11],
 "class_ogre_1_1_font.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257":[5,2,11,24,7,10],
 "class_ogre_1_1_font.html#afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7":[5,2,11,24,7,9],
-"class_ogre_1_1_font.html#afe11bd546cf7315f4526488e7078cc7dafbdd85981846de4423d48d1a0ff665e0":[5,2,11,24,7,5],
-"class_ogre_1_1_font.html#aff75a40e8ca00a64f19c265e90c61733":[5,2,11,24,19],
-"class_ogre_1_1_font_manager.html":[5,2,11,25],
-"class_ogre_1_1_font_manager.html#a00a7fe59aaaa4acdfda07edc704516ee":[5,2,11,25,14],
-"class_ogre_1_1_font_manager.html#a159ba6550b0c2731768db9df66472d19":[5,2,11,25,5],
-"class_ogre_1_1_font_manager.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,11,25,32],
-"class_ogre_1_1_font_manager.html#a1fe343406d15d5367cfc4f86ba589b55":[5,2,11,25,56],
-"class_ogre_1_1_font_manager.html#a2cf457c70ea86892b1bec52028c96237":[5,2,11,25,54],
-"class_ogre_1_1_font_manager.html#a3f92489910e40e3756606a35618d7b06":[5,2,11,25,45],
-"class_ogre_1_1_font_manager.html#a40769092850d5b296e1d1a9190631700":[5,2,11,25,8],
-"class_ogre_1_1_font_manager.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,11,25,36]
+"class_ogre_1_1_font.html#afe11bd546cf7315f4526488e7078cc7dafbdd85981846de4423d48d1a0ff665e0":[5,2,11,24,7,5]
 };
