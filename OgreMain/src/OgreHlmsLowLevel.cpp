@@ -88,7 +88,10 @@ namespace Ogre
         HlmsPso pso;
         pso.initialize();
         if( pass->hasVertexProgram() )
-            pso.vertexShader            = pass->getVertexProgram();
+        {
+            pso.vertexShader = pass->getVertexProgram();
+            pso.clipDistances = pso.vertexShader->getNumClipDistances();
+        }
         if( pass->hasGeometryProgram() )
             pso.geometryShader          = pass->getGeometryProgram();
         if( pass->hasTessellationHullProgram() )

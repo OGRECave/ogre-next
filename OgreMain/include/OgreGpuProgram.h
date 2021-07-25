@@ -103,6 +103,13 @@ namespace Ogre
             String doGet( const void *target ) const;
             void doSet( void *target, const String &val );
         };
+
+        class _OgreExport CmdClipDistance : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const;
+            void doSet( void *target, const String &val );
+        };
         class _OgreExport CmdSkeletal : public ParamCommand
         {
         public:
@@ -361,6 +368,13 @@ namespace Ogre
         }
 
         bool getBuildParametersFromReflection( void ) const { return mBuildParametersFromReflection; }
+
+        /// Sets the number of clip distances this shader uses.
+        /// Only valid for vertex shaders. Default is 0
+        void setNumClipDistances( const uint8 numClipDistances );
+
+        /// Retrieves the number of clip distances. See GpuProgram::setNumClipDistances
+        uint8 getNumClipDistances( void ) const { return mNumClipDistances; }
 
         /** Sets whether a vertex program includes the required instructions
             to perform skeletal animation.
