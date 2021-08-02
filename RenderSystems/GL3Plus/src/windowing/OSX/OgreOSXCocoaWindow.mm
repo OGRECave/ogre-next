@@ -129,10 +129,11 @@ namespace Ogre {
             NSString *windowTitle = [NSString stringWithCString:name.c_str() encoding:NSUTF8StringEncoding];
             int winxPt = 0, winyPt = 0;
             int colourDepth = 32;
-            NSOpenGLContext *externalGLContext;
-            NSObject* externalWindowHandle; // NSOpenGLView, NSView or NSWindow
+            NSOpenGLContext *externalGLContext = nil;
+            NSObject* externalWindowHandle = nil; // NSOpenGLView, NSView or NSWindow
             NameValuePairList::const_iterator opt;
-            
+            bool useCurrentGLContext = false;
+
             mIsFullScreen = fullScreen;
             
             if(miscParams)
@@ -181,6 +182,10 @@ namespace Ogre {
                 if(opt != miscParams->end())
                     mContentScalingFactor = StringConverter::parseReal(opt->second);
                 
+                opt = miscParams->find("currentGLContext");
+                if(opt != miscParams->end())
+                    useCurrentGLContext = StringConverter::parseBool(opt->second);
+                
                 opt = miscParams->find("externalGLContext");
                 if(opt != miscParams->end())
                     externalGLContext = (__bridge NSOpenGLContext *)(void*)StringConverter::parseSizeT(opt->second);
@@ -212,6 +217,12 @@ namespace Ogre {
             {
                 mGLContext = externalGLContext;
                 mGLPixelFormat = externalGLContext.pixelFormat;
+            }
+            else if(useCurrentGLContext)
+            {
+                CGLContextObj currentGLContext = CGLGetCurrentContext();
+                mGLContext = [[NSOpenGLContext alloc] initWithCGLContextObj:currentGLContext];
+                mGLPixelFormat = mGLContext.pixelFormat;
             }
             else
             {
@@ -339,8 +350,21 @@ namespace Ogre {
                 [(id)mView setOpenGLContext:mGLContext];
             
             // Repeat what -[NSOpenGLView setOpenGLContext:] does in case mView is not NSOpenGLView
+            // Must be called on the main (UI) thread or else a hard crash occurs
+            // on macOS Catalina and later.
             if([mGLContext view] != mView)
-                [mGLContext setView:mView];
+            {
+                if ([NSThread isMainThread])
+                {
+                    [mGLContext setView:mView];
+                }
+                else
+                {
+                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
+                        "NSOpenGLContext setView must be called on main (UI) thread.",
+                        "CocoaWindow::create");
+                }
+            }
             [mGLContext makeCurrentContext];
             
 #if OGRE_DEBUG_MODE
@@ -602,7 +626,18 @@ namespace Ogre {
         [mGLContext makeCurrentContext];
 
         if([mGLContext view] != mView)
-            [mGLContext setView:mView];
+        {
+            if ([NSThread isMainThread])
+            {
+                [mGLContext setView:mView];
+            }
+            else
+            {
+                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
+                    "NSOpenGLContext setView must be called on main (UI) thread.",
+                    "CocoaWindow::swapBuffers");
+            }
+        }
 
         [mGLContext flushBuffer];
         CGLUnlockContext((CGLContextObj)[mGLContext CGLContextObj]);
@@ -653,10 +688,23 @@ namespace Ogre {
         else
             windowRect = NSMakeRect(0.0, 0.0, widthPt, heightPt);
 
-        mWindow = [[OgreGL3PlusWindow alloc] initWithContentRect:windowRect
-                                              styleMask:mIsFullScreen ? NSBorderlessWindowMask : NSResizableWindowMask|NSTitledWindowMask
+        @try
+        {
+            mWindow = [[OgreGL3PlusWindow alloc] initWithContentRect:windowRect
+                                                styleMask:mIsFullScreen ? 
+                                                    NSWindowStyleMaskBorderless :
+                                                    NSWindowStyleMaskResizable|NSWindowStyleMaskTitled
                                                 backing:NSBackingStoreBuffered
-                                                  defer:YES];
+                                                defer:YES];
+        }
+        @catch (NSException *exception)
+        {
+            std::string msg([exception.reason UTF8String]); 
+            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
+                "Failed to create window : " + msg,
+                "CocoaWindow::createNewWindow");
+        }
+
         [mWindow setTitle:[NSString stringWithCString:title.c_str() encoding:NSUTF8StringEncoding]];
         mWindowTitle = title;
 
