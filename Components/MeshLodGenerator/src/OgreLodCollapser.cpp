@@ -132,7 +132,7 @@ namespace Ogre
     void LodCollapser::removeTriangleFromEdges(LodData* data, LodData::Triangle* triangle, LodData::VertexI skipi)
     {
         LodData::TriangleI trianglei = (LodData::TriangleI)LodData::getVectorIDFromPointer(data->mTriangleList, triangle);
-        triangle->isRemoved = true;
+        triangle->setRemoved();
         // skip is needed if we are iterating on the vertex's edges or triangles.
         for (int i = 0; i < 3; i++)
         {
@@ -242,16 +242,16 @@ namespace Ogre
 
                 // 1. task
                 unsigned int srcID = triangle->getVertexID(srci);
-                if (!hasSrcID(srcID, triangle->submeshID))
+                if (!hasSrcID(srcID, triangle->submeshID()))
                 {
                     tmpCollapsedEdges.push_back(CollapsedEdge());
                     tmpCollapsedEdges.back().srcID = srcID;
                     tmpCollapsedEdges.back().dstID = triangle->getVertexID(dsti);
-                    tmpCollapsedEdges.back().submeshID = triangle->submeshID;
+                    tmpCollapsedEdges.back().submeshID = triangle->submeshID();
                 }
 
                 // 2. task
-                data->mIndexBufferInfoList[triangle->submeshID].indexCount -= 3;
+                data->mIndexBufferInfoList[triangle->submeshID()].indexCount -= 3;
                 output->triangleRemoved(data, triangle);
                 // 3. task
                 removeTriangleFromEdges(data, triangle, srci);
@@ -274,12 +274,12 @@ namespace Ogre
 
                 // 1. task
                 unsigned int srcID = triangle->getVertexID(srci);
-                size_t id = findDstID(srcID, triangle->submeshID);
+                size_t id = findDstID(srcID, triangle->submeshID());
                 if (id == std::numeric_limits<size_t>::max())
                 {
                     // Not found any edge to move along.
                     // Destroy the triangle.
-                    data->mIndexBufferInfoList[triangle->submeshID].indexCount -= 3;
+                    data->mIndexBufferInfoList[triangle->submeshID()].indexCount -= 3;
                     output->triangleRemoved(data, triangle);
                     removeTriangleFromEdges(data, triangle, srci);
                     continue;

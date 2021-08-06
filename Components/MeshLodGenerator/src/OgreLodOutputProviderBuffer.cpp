@@ -105,13 +105,13 @@ namespace Ogre
         size_t triangleCount = data->mTriangleList.size();
         for (size_t i = 0; i < triangleCount; i++)
         {
-            if (!data->mTriangleList[i].isRemoved)
+            if (!data->mTriangleList[i].isRemoved())
             {
-                if (data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].indexSize == 2)
+                if (data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].indexSize == 2)
                 {
                     for (int m = 0; m < 3; m++)
                     {
-                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].buf.pshort++) =
+                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].buf.pshort++) =
                             static_cast<unsigned short>(data->mTriangleList[i].vertexID[m]);
                     }
                 }
@@ -119,7 +119,7 @@ namespace Ogre
                 {
                     for (int m = 0; m < 3; m++)
                     {
-                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].buf.pint++) =
+                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].buf.pint++) =
                             static_cast<unsigned int>(data->mTriangleList[i].vertexID[m]);
                     }
                 }

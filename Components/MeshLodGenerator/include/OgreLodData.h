@@ -129,10 +129,12 @@ namespace Ogre
         {
             VertexI vertexi[3];
             Vector3 normal;
-            bool isRemoved;
-            unsigned int submeshID; /// ID of the submesh. Usable with mMesh.getSubMesh() function.
+            unsigned int submeshIDOrRemovedTag; /// ID of the submesh. Usable with mMesh.getSubMesh() function. Holds ~0U for removed triangles
             unsigned int vertexID[3]; /// Vertex ID in the buffer associated with the submeshID.
 
+            unsigned int submeshID() const { OgreAssert(!isRemoved(), ""); return submeshIDOrRemovedTag; }
+            bool isRemoved() const { return submeshIDOrRemovedTag == ~0U; }
+            void setRemoved() { submeshIDOrRemovedTag = ~0U; }
             void computeNormal(const VertexList& vertexList);
             bool hasVertex(const VertexI vi) const { return (vi == vertexi[0] || vi == vertexi[1] || vi == vertexi[2]); }
             unsigned int getVertexID(const VertexI vi) const;

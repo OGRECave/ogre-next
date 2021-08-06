@@ -96,8 +96,8 @@ namespace Ogre
                 str << "Triangle " << LodData::getVectorIDFromPointer(data->mTriangleList, triangle) << " will be excluded from Lod level calculations.";
                 LogManager::getSingleton().stream() << str.str();
 #endif
-                triangle->isRemoved = true;
-                data->mIndexBufferInfoList[triangle->submeshID].indexCount -= 3;
+                data->mIndexBufferInfoList[triangle->submeshID()].indexCount -= 3;
+                triangle->setRemoved();
                 return;
             }
         }

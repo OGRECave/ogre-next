@@ -59,6 +59,7 @@ namespace Ogre
         struct TriangleCache
         {
             unsigned int vertexID[3];
+            unsigned int submeshID;
             bool vertexChanged;
         };
 

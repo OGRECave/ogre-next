@@ -53,11 +53,12 @@ namespace Ogre
         for (size_t i = 0; i < triangleCount; i++)
         {
             mTriangleCacheList[i].vertexChanged = false;
-            if (!data->mTriangleList[i].isRemoved)
+            if (!data->mTriangleList[i].isRemoved())
             {
                 mTriangleCacheList[i].vertexID[0] = data->mTriangleList[i].vertexID[0];
                 mTriangleCacheList[i].vertexID[1] = data->mTriangleList[i].vertexID[1];
                 mTriangleCacheList[i].vertexID[2] = data->mTriangleList[i].vertexID[2];
+                mTriangleCacheList[i].submeshID = data->mTriangleList[i].submeshID();
             }
         }
     }
@@ -120,15 +121,15 @@ namespace Ogre
         {
             if (mTriangleCacheList[i].vertexChanged)
             {
-                assert(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].prevIndexCount != 0);
+                assert(data->mIndexBufferInfoList[mTriangleCacheList[i].submeshID].prevIndexCount != 0);
                 assert(mTriangleCacheList[i].vertexID[0] != mTriangleCacheList[i].vertexID[1]);
                 assert(mTriangleCacheList[i].vertexID[1] != mTriangleCacheList[i].vertexID[2]);
                 assert(mTriangleCacheList[i].vertexID[2] != mTriangleCacheList[i].vertexID[0]);
-                if (data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].indexSize == 2)
+                if (data->mIndexBufferInfoList[mTriangleCacheList[i].submeshID].indexSize == 2)
                 {
                     for (int m = 0; m < 3; m++)
                     {
-                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].buf.pshort++) =
+                        *(data->mIndexBufferInfoList[mTriangleCacheList[i].submeshID].buf.pshort++) =
                             static_cast<unsigned short>(mTriangleCacheList[i].vertexID[m]);
                     }
                 }
@@ -136,7 +137,7 @@ namespace Ogre
                 {
                     for (int m = 0; m < 3; m++)
                     {
-                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].buf.pint++) =
+                        *(data->mIndexBufferInfoList[mTriangleCacheList[i].submeshID].buf.pint++) =
                             static_cast<unsigned int>(mTriangleCacheList[i].vertexID[m]);
                     }
                 }
@@ -147,19 +148,19 @@ namespace Ogre
         // 2. shared indices.
         for (size_t i = 0; i < triangleCount; i++)
         {
-            if (!data->mTriangleList[i].isRemoved && !mTriangleCacheList[i].vertexChanged)
+            if (!data->mTriangleList[i].isRemoved() && !mTriangleCacheList[i].vertexChanged)
             {
                 assert(mTriangleCacheList[i].vertexID[0] == data->mTriangleList[i].vertexID[0]);
                 assert(mTriangleCacheList[i].vertexID[1] == data->mTriangleList[i].vertexID[1]);
                 assert(mTriangleCacheList[i].vertexID[2] == data->mTriangleList[i].vertexID[2]);
 
-                assert(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].indexCount != 0);
-                assert(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].prevIndexCount != 0);
-                if (data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].indexSize == 2)
+                assert(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].indexCount != 0);
+                assert(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].prevIndexCount != 0);
+                if (data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].indexSize == 2)
                 {
                     for (int m = 0; m < 3; m++)
                     {
-                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].buf.pshort++) =
+                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].buf.pshort++) =
                             static_cast<unsigned short>(data->mTriangleList[i].vertexID[m]);
                     }
                 }
@@ -167,7 +168,7 @@ namespace Ogre
                 {
                     for (int m = 0; m < 3; m++)
                     {
-                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].buf.pint++) =
+                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].buf.pint++) =
                             static_cast<unsigned int>(data->mTriangleList[i].vertexID[m]);
                     }
                 }
@@ -177,14 +178,14 @@ namespace Ogre
         // 3. curLod indices only.
         for (size_t i = 0; i < triangleCount; i++)
         {
-            if (!data->mTriangleList[i].isRemoved && mTriangleCacheList[i].vertexChanged)
+            if (!data->mTriangleList[i].isRemoved() && mTriangleCacheList[i].vertexChanged)
             {
-                assert(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].indexCount != 0);
-                if (data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].indexSize == 2)
+                assert(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].indexCount != 0);
+                if (data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].indexSize == 2)
                 {
                     for (int m = 0; m < 3; m++)
                     {
-                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].buf.pshort++) =
+                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].buf.pshort++) =
                             static_cast<unsigned short>(data->mTriangleList[i].vertexID[m]);
                     }
                 }
@@ -192,7 +193,7 @@ namespace Ogre
                 {
                     for (int m = 0; m < 3; m++)
                     {
-                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID].buf.pint++) =
+                        *(data->mIndexBufferInfoList[data->mTriangleList[i].submeshID()].buf.pint++) =
                             static_cast<unsigned int>(data->mTriangleList[i].vertexID[m]);
                     }
                 }

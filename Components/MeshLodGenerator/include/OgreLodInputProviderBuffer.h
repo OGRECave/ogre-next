@@ -70,8 +70,7 @@ namespace Ogre
                 OgreAssert(data->mTriangleList.capacity() > data->mTriangleList.size(), "");
                 data->mTriangleList.push_back(LodData::Triangle());
                 LodData::Triangle* tri = &data->mTriangleList.back();
-                tri->isRemoved = false;
-                tri->submeshID = submeshID;
+                tri->submeshIDOrRemovedTag = submeshID;
                 // Invalid index: Index is bigger then vertex buffer size.
                 OgreAssert(i0 < lookup.size() && i1 < lookup.size() && i2 < lookup.size(), "");
                 tri->vertexID[0] = i0;
@@ -91,8 +90,8 @@ namespace Ogre
                     str << "It will be excluded from Lod level calculations.";
                     LogManager::getSingleton().stream() << str.str();
 #endif
-                    tri->isRemoved = true;
-                    data->mIndexBufferInfoList[tri->submeshID].indexCount -= 3;
+                    data->mIndexBufferInfoList[tri->submeshID()].indexCount -= 3;
+                    tri->setRemoved();
                     return;
                 }
                 tri->computeNormal(data->mVertexList);
