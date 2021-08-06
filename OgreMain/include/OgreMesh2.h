@@ -175,11 +175,11 @@ namespace Ogre {
 
         /** Gets the number of sub meshes which comprise this mesh.
         */
-        unsigned short getNumSubMeshes(void) const;
+        unsigned getNumSubMeshes(void) const;
 
         /** Gets a pointer to the submesh indicated by the index.
         */
-        SubMesh* getSubMesh(unsigned short index) const;
+        SubMesh* getSubMesh(unsigned index) const;
         
         /** Destroy a SubMesh with the given index. 
         @note
@@ -187,13 +187,13 @@ namespace Ogre {
             any other object that is referring to the SubMesh list. Entity will
             detect this and reinitialise, but it is still a disruptive action.
         */
-        void destroySubMesh(unsigned short index);
+        void destroySubMesh(unsigned index);
 
         /// Gets an iterator over the available submeshes
         const SubMeshVec& getSubMeshes(void) const      { return mSubMeshes; }
 
-        /// Gives a name to a SubMesh
-        void nameSubMesh(const String& name, ushort index);
+        /// Gives a name to a SubMesh. Note, only first 65536 submeshes could be named.
+        void nameSubMesh(const String& name, unsigned index);
 
         /// Removes a name from a SubMesh
         void unnameSubMesh(const String& name);

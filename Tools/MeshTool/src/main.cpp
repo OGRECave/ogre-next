@@ -785,7 +785,7 @@ void resolveColourAmbiguities(v1::Mesh* mesh)
     {
         checkColour(mesh->sharedVertexData[VpNormal], hasColour, hasAmbiguousColour, originalType);
     }
-    for (unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i)
+    for (unsigned i = 0; i < mesh->getNumSubMeshes(); ++i)
     {
         v1::SubMesh* sm = mesh->getSubMesh(i);
         if (sm->useSharedVertices == false)
@@ -876,7 +876,7 @@ void resolveColourAmbiguities(v1::Mesh* mesh)
     {
         mesh->sharedVertexData[VpNormal]->convertPackedColour(originalType, desiredType);
     }
-    for (unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i)
+    for (unsigned i = 0; i < mesh->getNumSubMeshes(); ++i)
     {
         v1::SubMesh* sm = mesh->getSubMesh(i);
         if (sm->useSharedVertices == false && hasColour)

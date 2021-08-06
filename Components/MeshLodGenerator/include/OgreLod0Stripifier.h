@@ -53,10 +53,10 @@ namespace Ogre
 
     inline void Lod0Stripifier::generateRemapInfo(const v1::MeshPtr& mesh, bool stableVertexOrder)
     {
-        ushort submeshCount = mesh->getNumSubMeshes();
+        unsigned submeshCount = mesh->getNumSubMeshes();
         remapInfos.resize(1 + submeshCount);
         remapInfos[0].initialize(mesh->sharedVertexData[VpNormal] ? mesh->sharedVertexData[VpNormal]->vertexCount : 0);
-        for(ushort i = 0; i < submeshCount; i++)
+        for(unsigned i = 0; i < submeshCount; i++)
         {
             const v1::SubMesh* submesh = mesh->getSubMesh(i);
             remapInfos[1 + i].initialize(submesh->useSharedVertices ? 0 : submesh->vertexData[VpNormal]->vertexCount);
@@ -101,8 +101,8 @@ namespace Ogre
             remapInfos[0].performVertexDataRemap(mesh->getHardwareBufferManager(), mesh->sharedVertexData[VpNormal]);
         remapInfos[0].performBoneAssignmentRemap(mesh.get());
 
-        ushort submeshCount = mesh->getNumSubMeshes();
-        for(ushort i = 0; i < submeshCount; i++)
+        unsigned submeshCount = mesh->getNumSubMeshes();
+        for(unsigned i = 0; i < submeshCount; i++)
         {
             v1::SubMesh* submesh = mesh->getSubMesh(i);
             const VerticesRemapInfo& remapInfo = remapInfos[submesh->useSharedVertices ? 0 : 1 + i];

@@ -996,7 +996,7 @@ namespace v1
             return;
 
         VerticesRemapInfo remapInfo;
-        for (size_t subMeshIdx = 0; subMeshIdx < mesh->getNumSubMeshes(); subMeshIdx++)
+        for (unsigned subMeshIdx = 0; subMeshIdx < mesh->getNumSubMeshes(); subMeshIdx++)
         {
             SubMesh *subMesh = mesh->getSubMesh(subMeshIdx);
             if (!subMesh->useSharedVertices)

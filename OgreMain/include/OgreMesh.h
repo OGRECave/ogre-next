@@ -233,13 +233,13 @@ namespace v1 {
         */
         SubMesh* createSubMesh(void);
 
-        /** Creates a new SubMesh and gives it a name
+        /** Creates a new SubMesh and gives it a name. Note, only first 65536 submeshes could be named.
         */
         SubMesh* createSubMesh(const String& name);
         
-        /** Gives a name to a SubMesh
+        /** Gives a name to a SubMesh. Note, only first 65536 submeshes could be named.
         */
-        void nameSubMesh(const String& name, ushort index);
+        void nameSubMesh(const String& name, unsigned index);
 
         /** Removes a name from a SubMesh
         */
@@ -250,15 +250,15 @@ namespace v1 {
             Useful if you identify the SubMeshes by name (using nameSubMesh)
             but wish to have faster repeat access.
         */
-        ushort _getSubMeshIndex(const String& name) const;
+        unsigned _getSubMeshIndex(const String& name) const;
 
         /** Gets the number of sub meshes which comprise this mesh.
         */
-        unsigned short getNumSubMeshes(void) const;
+        unsigned getNumSubMeshes(void) const;
 
         /** Gets a pointer to the submesh indicated by the index.
         */
-        SubMesh* getSubMesh(unsigned short index) const;
+        SubMesh* getSubMesh(unsigned index) const;
 
         /** Gets a SubMesh by name
         */
@@ -270,7 +270,7 @@ namespace v1 {
             any other object that is referring to the SubMesh list. Entity will
             detect this and reinitialise, but it is still a disruptive action.
         */
-        void destroySubMesh(unsigned short index);
+        void destroySubMesh(unsigned index);
 
         /** Destroy a SubMesh with the given name. 
         @note
@@ -549,7 +549,7 @@ namespace v1 {
         /** Internal methods for loading LOD, do not use. */
         void _setLodUsage(unsigned short level, const MeshLodUsage& usage);
         /** Internal methods for loading LOD, do not use. */
-        void _setSubMeshLodFaceList( unsigned short subIdx, unsigned short level, IndexData* facedata,
+        void _setSubMeshLodFaceList( unsigned subIdx, unsigned short level, IndexData* facedata,
                                      bool casterPass );
         /** Internal methods for loading LOD, do not use. */
         bool _isManualLodLevel(unsigned short level) const;

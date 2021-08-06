@@ -150,7 +150,7 @@ namespace v1 {
         }
 
         // Write Submeshes
-        for (unsigned short i = 0; i < pMesh->getNumSubMeshes(); ++i)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); ++i)
         {
             LogManager::getSingleton().logMessage("Writing submesh...");
             writeSubMesh(pMesh->getSubMesh(i));
@@ -321,7 +321,7 @@ namespace v1 {
     void MeshSerializerImpl::writeExtremes(const Mesh *pMesh)
     {
         bool has_extremes = false;
-        for (unsigned short i = 0; i < pMesh->getNumSubMeshes(); ++i)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); ++i)
         {
             SubMesh *sm = pMesh->getSubMesh(i);
             if (sm->extremityPoints.empty())
@@ -339,7 +339,7 @@ namespace v1 {
     size_t MeshSerializerImpl::calcExtremesSize(const Mesh* pMesh)
     {
         size_t size = 0;
-        for (unsigned short i = 0; i < pMesh->getNumSubMeshes(); ++i)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); ++i)
         {
             SubMesh *sm = pMesh->getSubMesh(i);
             if (!sm->extremityPoints.empty()){
@@ -543,7 +543,7 @@ namespace v1 {
         }
 
         // Submeshes
-        for (unsigned short i = 0; i < pMesh->getNumSubMeshes(); ++i)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); ++i)
         {
             size += calcSubMeshSize(pMesh->getSubMesh(i));
         }
@@ -1332,7 +1332,7 @@ namespace v1 {
         writeChunkHeader(M_MESH_LOD_GENERATED, calcLodUsageGeneratedSize(pMesh, usage, lodNum, casterPass));
         float userValue = static_cast<float>(usage.userValue);
         writeFloats(&userValue, 1);
-        for (ushort i = 0; i < pMesh->getNumSubMeshes(); i++)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); i++)
         {
             SubMesh* submesh = pMesh->getSubMesh(i);
             writeLodUsageGeneratedSubmesh(submesh, lodNum, casterPass);
@@ -1377,7 +1377,7 @@ namespace v1 {
     {
         size_t size = MSTREAM_OVERHEAD_SIZE;
         size += sizeof(float); // float usage.userValue;
-        for (ushort i = 0; i < pMesh->getNumSubMeshes(); i++)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); i++)
         {
             SubMesh* submesh = pMesh->getSubMesh(i);
             size += calcLodUsageGeneratedSubmeshSize(submesh, lodNum, casterPass);
@@ -1470,7 +1470,7 @@ namespace v1 {
         // Since we got here, we have already read the chunk header.
         backpedalChunkHeader(stream);
         */
-        uint16 numSubs = pMesh->getNumSubMeshes();
+        unsigned numSubs = pMesh->getNumSubMeshes();
         String strategyName = readString(stream);
         uint16 numLods;
         readShorts(stream, &numLods, 1);
@@ -1489,7 +1489,7 @@ namespace v1 {
                     break;
                 }
                 case M_MESH_LOD_GENERATED:
-                    for (int i = 0; i < numSubs; ++i)
+                    for (unsigned i = 0; i < numSubs; ++i)
                     {
                         unsigned int numIndexes;
                         readInts(stream, &numIndexes, 1);
@@ -1534,7 +1534,7 @@ namespace v1 {
 
         pMesh->mMeshLodUsageList.resize(pMesh->mNumLods);
         pMesh->mLodValues.resize(pMesh->mNumLods, 0);
-        ushort numSubs, i;
+        unsigned numSubs, i;
         numSubs = pMesh->getNumSubMeshes();
         for (i = 0; i < numSubs; ++i)
         {
@@ -1583,7 +1583,7 @@ namespace v1 {
         usage.manualName = readString(stream);
         
         // Generate for mixed
-        ushort numSubs, i;
+        unsigned numSubs, i;
         numSubs = pMesh->getNumSubMeshes();
         for (i = 0; i < numSubs; ++i)
         {
@@ -1598,7 +1598,7 @@ namespace v1 {
         usage.manualName = "";
 
         // Get one set of detail per SubMesh
-        unsigned short numSubs, i;
+        unsigned numSubs, i;
         numSubs = pMesh->getNumSubMeshes();
         for (i = 0; i < numSubs; ++i)
         {
@@ -2921,7 +2921,7 @@ namespace v1 {
             writeGeometry(pMesh->sharedVertexData[VpNormal]);
 
         // Write Submeshes
-        for (unsigned short i = 0; i < pMesh->getNumSubMeshes(); ++i)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); ++i)
         {
             LogManager::getSingleton().logMessage("Writing submesh...");
             writeSubMesh(pMesh->getSubMesh(i));
@@ -3091,13 +3091,12 @@ namespace v1 {
     {
         // Usage Header
         size_t size = MSTREAM_OVERHEAD_SIZE;
-        unsigned short subidx;
 
         // float fromDepthSquared;
         size += sizeof(float);
 
         // Calc generated SubMesh sections size
-        for (subidx = 0; subidx < pMesh->getNumSubMeshes(); ++subidx)
+        for (unsigned subidx = 0; subidx < pMesh->getNumSubMeshes(); ++subidx)
         {
             SubMesh* submesh = pMesh->getSubMesh(subidx);
             size += calcLodUsageGeneratedSubmeshSize(submesh, lodNum, casterPass);
@@ -3168,7 +3167,7 @@ namespace v1 {
         writeFloats(&(usage.userValue), 1);
         pushInnerChunk(mStream);
         // Now write sections
-        for (unsigned short subidx = 0; subidx < pMesh->getNumSubMeshes(); ++subidx)
+        for (unsigned subidx = 0; subidx < pMesh->getNumSubMeshes(); ++subidx)
         {
             SubMesh* sm = pMesh->getSubMesh(subidx);
             const IndexData* indexData = sm->mLodFaceList[VpNormal][lodNum-1];
@@ -3207,7 +3206,7 @@ namespace v1 {
         float userValue = static_cast<float>(usage.userValue);
         writeFloats(&userValue, 1);
         pushInnerChunk(mStream);
-        for (ushort i = 0; i < pMesh->getNumSubMeshes(); i++)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); i++)
         {
             SubMesh* submesh = pMesh->getSubMesh(i);
             writeLodUsageGeneratedSubmesh(submesh, lodNum, casterPass);
@@ -3258,7 +3257,7 @@ namespace v1 {
         pushInnerChunk(stream);
         {
             // Get one set of detail per SubMesh
-            unsigned short numSubs, i;
+            unsigned numSubs, i;
             numSubs = pMesh->getNumSubMeshes();
             for (i = 0; i < numSubs; ++i)
             {
@@ -3335,7 +3334,7 @@ namespace v1 {
         // Since we got here, we have already read the chunk header.
         backpedalChunkHeader(stream);
         */
-        uint16 numSubs = pMesh->getNumSubMeshes();
+        unsigned numSubs = pMesh->getNumSubMeshes();
         String strategyName = readString(stream);
         uint16 numLods;
         readShorts(stream, &numLods, 1);
@@ -3370,7 +3369,7 @@ namespace v1 {
             else
             {
                 pushInnerChunk(stream);
-                for (uint16 n = 0; n < numSubs; ++n)
+                for (unsigned n = 0; n < numSubs; ++n)
                 {
                     unsigned long streamID = readChunk(stream);
                     if (streamID != M_MESH_LOD_GENERATED)
@@ -3394,7 +3393,7 @@ namespace v1 {
         }
         popInnerChunk(stream);
 #else
-        unsigned short streamID, i;
+        unsigned short streamID;
 
         // Read the strategy to be used for this mesh
         String strategyName = readString(stream);
@@ -3408,8 +3407,8 @@ namespace v1 {
         // Preallocate submesh lod face data if not manual
         if (!pMesh->hasManualLodLevel())
         {
-            unsigned short numsubs = pMesh->getNumSubMeshes();
-            for (i = 0; i < numsubs; ++i)
+            unsigned numsubs = pMesh->getNumSubMeshes();
+            for (unsigned i = 0; i < numsubs; ++i)
             {
                 SubMesh* sm = pMesh->getSubMesh(i);
                 assert(sm->mLodFaceList[VpNormal].empty());
@@ -3422,7 +3421,7 @@ namespace v1 {
 		pMesh->mMeshLodUsageList.reserve( pMesh->mNumLods );
 		pMesh->mLodValues.resize( pMesh->mNumLods, 0 );
         // Loop from 1 rather than 0 (full detail index is not in file)
-        for (i = 1; i < pMesh->mNumLods; ++i)
+        for (unsigned i = 1; i < pMesh->mNumLods; ++i)
         {
             streamID = readChunk(stream);
             if (streamID != M_MESH_LOD_USAGE)
@@ -3709,7 +3708,7 @@ namespace v1 {
         float value = static_cast<float>(usage.value);
         writeFloats(&value, 1); // <== In v1_4 this is value instead of userValue
         pushInnerChunk(mStream);
-        for (ushort i = 0; i < pMesh->getNumSubMeshes(); i++)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); i++)
         {
             SubMesh* submesh = pMesh->getSubMesh(i);
             writeLodUsageGeneratedSubmesh(submesh, lodNum, casterPass);
@@ -3730,7 +3729,7 @@ namespace v1 {
         // Since we got here, we have already read the chunk header.
         backpedalChunkHeader(stream);
         */
-        uint16 numSubs = pMesh->getNumSubMeshes();
+        unsigned numSubs = pMesh->getNumSubMeshes();
         // String strategyName = readString(stream); // missing in v1_4
         uint16 numLods;
         readShorts(stream, &numLods, 1);
@@ -3765,7 +3764,7 @@ namespace v1 {
             else
             {
                 pushInnerChunk(stream);
-                for (uint16 n = 0; n < numSubs; ++n)
+                for (unsigned n = 0; n < numSubs; ++n)
                 {
                     unsigned long streamID = readChunk(stream);
                     if (streamID != M_MESH_LOD_GENERATED)
@@ -3789,7 +3788,7 @@ namespace v1 {
         }
         popInnerChunk(stream);
 #else
-        unsigned short streamID, i;
+        unsigned short streamID;
 
         // Use the old strategy for this mesh
         LodStrategy *strategy = DistanceLodSphereStrategy::getSingletonPtr();
@@ -3805,8 +3804,8 @@ namespace v1 {
         // Preallocate submesh LOD face data if not manual
         if (!manual)
         {
-            unsigned short numsubs = pMesh->getNumSubMeshes();
-            for (i = 0; i < numsubs; ++i)
+            unsigned numsubs = pMesh->getNumSubMeshes();
+            for (unsigned i = 0; i < numsubs; ++i)
             {
                 SubMesh* sm = pMesh->getSubMesh(i);
                 assert( sm->mLodFaceList[VpNormal].empty() );
@@ -3817,7 +3816,7 @@ namespace v1 {
 		pMesh->mMeshLodUsageList.reserve( pMesh->mNumLods );
 		pMesh->mLodValues.resize( pMesh->mNumLods, 0 );
         // Loop from 1 rather than 0 (full detail index is not in file)
-        for (i = 1; i < pMesh->mNumLods; ++i)
+        for (unsigned i = 1; i < pMesh->mNumLods; ++i)
         {
             streamID = readChunk(stream);
             if (streamID != M_MESH_LOD_USAGE)

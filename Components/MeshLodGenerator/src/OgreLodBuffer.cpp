@@ -126,9 +126,9 @@ namespace Ogre
         meshName = mesh->getName();
         boundingSphereRadius = mesh->getBoundingSphereRadius();
         bool sharedVerticesAdded = false;
-        unsigned short submeshCount = mesh->getNumSubMeshes();
+        unsigned submeshCount = mesh->getNumSubMeshes();
         submesh.resize(submeshCount);
-        for (unsigned short i = 0; i < submeshCount; i++)
+        for (unsigned i = 0; i < submeshCount; i++)
         {
             const v1::SubMesh* ogresubmesh = mesh->getSubMesh(i);
             LodInputBuffer::Submesh& outsubmesh = submesh[i];
@@ -149,8 +149,8 @@ namespace Ogre
 
     void LodInputBuffer::clear()
     {
-        unsigned short submeshCount = ushort(submesh.size());
-        for (unsigned short i = 0; i < submeshCount; i++)
+        size_t submeshCount = submesh.size();
+        for (size_t i = 0; i < submeshCount; i++)
         {
             LodInputBuffer::Submesh& lodsubmesh = submesh[i];
             lodsubmesh.indexBuffer.indexBuffer.reset();

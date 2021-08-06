@@ -163,7 +163,7 @@ namespace Ogre
         }
     }
 
-    void LodInputProviderBuffer::addIndexData(LodData* data, LodIndexBuffer& indexBuffer, bool useSharedVertexLookup, unsigned short submeshID, OperationType op)
+    void LodInputProviderBuffer::addIndexData(LodData* data, LodIndexBuffer& indexBuffer, bool useSharedVertexLookup, unsigned submeshID, OperationType op)
     {
         size_t isize = indexBuffer.indexSize;
         size_t numIndices = indexBuffer.indexCount;

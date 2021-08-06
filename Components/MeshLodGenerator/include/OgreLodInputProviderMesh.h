@@ -58,10 +58,10 @@ namespace Ogre
 
         void tuneContainerSize(LodData* data);
         void initialize(LodData* data);
-        void addIndexData(LodData* data, v1::IndexData* indexData, bool useSharedVertexLookup, unsigned short submeshID, OperationType op);
+        void addIndexData(LodData* data, v1::IndexData* indexData, bool useSharedVertexLookup, unsigned submeshID, OperationType op);
         void addVertexData(LodData* data, v1::VertexData* vertexData, bool useSharedVertexLookup);
         template<typename IndexType>
-        void addTriangle(LodData* data, IndexType i0, IndexType i1, IndexType i2, VertexLookupList& lookup, unsigned short submeshID)
+        void addTriangle(LodData* data, IndexType i0, IndexType i1, IndexType i2, VertexLookupList& lookup, unsigned submeshID)
         {
                 // It should never reallocate or every pointer will be invalid.
                 OgreAssert(data->mTriangleList.capacity() > data->mTriangleList.size(), "");

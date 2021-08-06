@@ -277,9 +277,9 @@ namespace Ogre {
     void Item::buildSubItems( vector<String>::type* materialsList )
     {
         // Create SubEntities
-        size_t numSubMeshes = mMesh->getNumSubMeshes();
+        unsigned numSubMeshes = mMesh->getNumSubMeshes();
         mSubItems.reserve( numSubMeshes );
-        for( size_t i=0; i<numSubMeshes; ++i )
+        for( unsigned i=0; i<numSubMeshes; ++i )
         {
             SubMesh *subMesh = mMesh->getSubMesh(i);
             mSubItems.push_back( SubItem( this, subMesh ) );

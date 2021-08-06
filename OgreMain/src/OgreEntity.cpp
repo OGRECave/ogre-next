@@ -1232,7 +1232,7 @@ namespace v1 {
     void Entity::buildSubEntityList(MeshPtr& mesh, SubEntityList* sublist, vector<String>::type* materialList)
     {
         // Create SubEntities
-        unsigned short i, numSubMeshes;
+        unsigned i, numSubMeshes;
         SubMesh* subMesh;
 
         numSubMeshes = mesh->getNumSubMeshes();

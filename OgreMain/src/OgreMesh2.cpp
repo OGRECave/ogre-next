@@ -92,7 +92,7 @@ namespace Ogre {
         return sub;
     }
     //-----------------------------------------------------------------------
-    void Mesh::destroySubMesh(unsigned short index)
+    void Mesh::destroySubMesh(unsigned index)
     {
         if( index >= mSubMeshes.size() )
         {
@@ -110,12 +110,12 @@ namespace Ogre {
             _dirtyState();
     }
     //-----------------------------------------------------------------------
-    unsigned short Mesh::getNumSubMeshes() const
+    unsigned Mesh::getNumSubMeshes() const
     {
-        return static_cast< unsigned short >( mSubMeshes.size() );
+        return static_cast< unsigned >( mSubMeshes.size() );
     }
     //-----------------------------------------------------------------------
-    SubMesh* Mesh::getSubMesh(unsigned short index) const
+    SubMesh* Mesh::getSubMesh(unsigned index) const
     {
         if (index >= mSubMeshes.size())
         {
@@ -437,8 +437,14 @@ namespace Ogre {
         mIndexBufferShadowBuffer    = shadowBuffer;
     }
     //---------------------------------------------------------------------
-    void Mesh::nameSubMesh(const String& name, ushort index)
+    void Mesh::nameSubMesh(const String& name, unsigned index)
     {
+        if (index >= 65536)
+        {
+            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
+                "Only first 65536 submeshes could be named.",
+                "Mesh::nameSubMesh");
+        }
         mSubMeshNameMap[name] = index;
     }
     //---------------------------------------------------------------------
@@ -539,7 +545,7 @@ namespace Ogre {
         {
         }
 
-        for( size_t i=0; i<mesh->getNumSubMeshes(); ++i )
+        for( unsigned i=0; i<mesh->getNumSubMeshes(); ++i )
         {
             SubMesh *subMesh = createSubMesh();
             subMesh->importFromV1( mesh->getSubMesh( i ), halfPos, halfTexCoords, qTangents, halfPose );

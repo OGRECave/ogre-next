@@ -51,8 +51,8 @@ namespace Ogre
         size_t vertexCount = 0;
         size_t vertexLookupSize = 0;
         size_t sharedVertexLookupSize = 0;
-        unsigned short submeshCount = mMesh->getNumSubMeshes();
-        for (unsigned short i = 0; i < submeshCount; i++)
+        unsigned submeshCount = mMesh->getNumSubMeshes();
+        for (unsigned i = 0; i < submeshCount; i++)
         {
             const v1::SubMesh* submesh = mMesh->getSubMesh(i);
             trianglesCount += getTriangleCount(submesh->operationType, submesh->indexData[VpNormal]->indexCount);
@@ -85,8 +85,8 @@ namespace Ogre
         data->mMeshName = mMesh->getName();
 #endif
         data->mMeshBoundingSphereRadius = mMesh->getBoundingSphereRadius();
-        unsigned short submeshCount = mMesh->getNumSubMeshes();
-        for (unsigned short i = 0; i < submeshCount; ++i)
+        unsigned submeshCount = mMesh->getNumSubMeshes();
+        for (unsigned i = 0; i < submeshCount; ++i)
         {
             const v1::SubMesh* submesh = mMesh->getSubMesh(i);
             v1::VertexData* vertexData = (submesh->useSharedVertices ? mMesh->sharedVertexData[VpNormal] :
@@ -224,7 +224,7 @@ namespace Ogre
             }
         }
     }
-    void LodInputProviderMesh::addIndexData(LodData* data, v1::IndexData* indexData, bool useSharedVertexLookup, unsigned short submeshID, OperationType op)
+    void LodInputProviderMesh::addIndexData(LodData* data, v1::IndexData* indexData, bool useSharedVertexLookup, unsigned submeshID, OperationType op)
     {
         const v1::HardwareIndexBufferSharedPtr& ibuf = indexData->indexBuffer;
         size_t isize = ibuf->getIndexSize();

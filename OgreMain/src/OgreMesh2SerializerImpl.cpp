@@ -93,7 +93,7 @@ namespace Ogre {
                 "MeshSerializerImpl::exportMesh");
         }
 
-        for (uint16 i = 0; i < pMesh->getNumSubMeshes(); ++i)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); ++i)
         {
             if( pMesh->getSubMesh(i)->mVao[VpNormal].empty() )
             {
@@ -152,7 +152,7 @@ namespace Ogre {
         LodLevelVertexBufferTableVec lodVertexTable;
         lodVertexTable.resize( pMesh->getNumSubMeshes() );
 
-        for( size_t i=0; i<pMesh->getNumSubMeshes(); ++i )
+        for( unsigned i=0; i<pMesh->getNumSubMeshes(); ++i )
         {
             const SubMesh *s = pMesh->getSubMesh( i );
 
@@ -189,7 +189,7 @@ namespace Ogre {
             pushInnerChunk(mStream);
 
         // Write Submeshes
-        for (uint16 i = 0; i < pMesh->getNumSubMeshes(); ++i)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); ++i)
         {
             LogManager::getSingleton().logMessage("Writing submesh...");
             writeSubMesh( pMesh->getSubMesh(i), lodVertexTable[i] );
@@ -512,7 +512,7 @@ namespace Ogre {
         size += calcStringSize( pMesh->getLodStrategyName() );
 
         // Submeshes
-        for (uint16 i = 0; i < pMesh->getNumSubMeshes(); ++i)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); ++i)
         {
             size += calcSubMeshSize( pMesh->getSubMesh(i), lodVertexTable[i] );
         }

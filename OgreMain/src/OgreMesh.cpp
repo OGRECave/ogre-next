@@ -121,12 +121,18 @@ namespace v1 {
     //-----------------------------------------------------------------------
     SubMesh* Mesh::createSubMesh(const String& name)
     {
+        if (mSubMeshList.size() >= 65536)
+        {
+            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
+                "Only first 65536 submeshes could be named.",
+                "Mesh::createSubMesh");
+        }
         SubMesh *sub = createSubMesh();
-        nameSubMesh(name, (ushort)mSubMeshList.size()-1);
+        nameSubMesh(name, mSubMeshList.size()-1);
         return sub ;
     }
     //-----------------------------------------------------------------------
-    void Mesh::destroySubMesh(unsigned short index)
+    void Mesh::destroySubMesh(unsigned index)
     {
         if (index >= mSubMeshList.size())
         {
@@ -171,18 +177,24 @@ namespace v1 {
     //-----------------------------------------------------------------------
     void Mesh::destroySubMesh(const String& name)
     {
-        unsigned short index = _getSubMeshIndex(name);
+        unsigned index = _getSubMeshIndex(name);
         destroySubMesh(index);
     }
     //-----------------------------------------------------------------------
-    unsigned short Mesh::getNumSubMeshes() const
+    unsigned Mesh::getNumSubMeshes() const
     {
-        return static_cast< unsigned short >( mSubMeshList.size() );
+        return static_cast< unsigned >( mSubMeshList.size() );
     }
 
     //---------------------------------------------------------------------
-    void Mesh::nameSubMesh(const String& name, ushort index)
+    void Mesh::nameSubMesh(const String& name, unsigned index)
     {
+        if (index >= 65536)
+        {
+            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
+                "Only first 65536 submeshes could be named.",
+                "Mesh::nameSubMesh");
+        }
         mSubMeshNameMap[name] = index ;
     }
 
@@ -196,11 +208,11 @@ namespace v1 {
     //-----------------------------------------------------------------------
     SubMesh* Mesh::getSubMesh(const String& name) const
     {
-        ushort index = _getSubMeshIndex(name);
+        unsigned index = _getSubMeshIndex(name);
         return getSubMesh(index);
     }
     //-----------------------------------------------------------------------
-    SubMesh* Mesh::getSubMesh(unsigned short index) const
+    SubMesh* Mesh::getSubMesh(unsigned index) const
     {
         if (index >= mSubMeshList.size())
         {
@@ -377,7 +389,7 @@ namespace v1 {
         mBoundRadius = mesh->getBoundingSphereRadius();
         mBoneBoundingRadius = mBoundRadius;
 
-        for( size_t i=0; i<mesh->getNumSubMeshes(); ++i )
+        for( unsigned i=0; i<mesh->getNumSubMeshes(); ++i )
         {
             SubMesh *subMesh = createSubMesh();
             subMesh->importFromV2( mesh->getSubMesh( i ) );
@@ -1276,7 +1288,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    void Mesh::_setSubMeshLodFaceList( unsigned short subIdx, unsigned short level,
+    void Mesh::_setSubMeshLodFaceList( unsigned subIdx, unsigned short level,
                                        IndexData* facedata, bool casterPass )
     {
         assert(!mEdgeListsBuilt && "Can't modify LOD after edge lists built");
@@ -1301,7 +1313,7 @@ namespace v1 {
 #endif
     }
     //---------------------------------------------------------------------
-    ushort Mesh::_getSubMeshIndex(const String& name) const
+    unsigned Mesh::_getSubMeshIndex(const String& name) const
     {
         SubMeshNameMap::const_iterator i = mSubMeshNameMap.find(name) ;
         if (i == mSubMeshNameMap.end())

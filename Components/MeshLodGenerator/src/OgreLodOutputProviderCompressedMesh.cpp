@@ -97,11 +97,11 @@ namespace Ogre
     }
     void LodOutputProviderCompressedMesh::bakeFirstPass(LodData* data, int lodIndex)
     {
-        unsigned short submeshCount = mMesh->getNumSubMeshes();
+        unsigned submeshCount = mMesh->getNumSubMeshes();
         assert(mTriangleCacheList.size() == data->mTriangleList.size());
         mLastIndexBufferID =  lodIndex;
 
-        for (unsigned short i = 0; i < submeshCount; i++)
+        for (unsigned i = 0; i < submeshCount; i++)
         {
             data->mIndexBufferInfoList[i].prevIndexCount = data->mIndexBufferInfoList[i].indexCount;
             data->mIndexBufferInfoList[i].prevOnlyIndexCount = 0;
@@ -121,11 +121,11 @@ namespace Ogre
     }
     void LodOutputProviderCompressedMesh::bakeSecondPass(LodData* data, int lodIndex)
     {
-        unsigned short submeshCount = mMesh->getNumSubMeshes();
+        unsigned submeshCount = mMesh->getNumSubMeshes();
         assert(mTriangleCacheList.size() == data->mTriangleList.size());
         assert(lodIndex > mLastIndexBufferID); // Implementation limitation
         // Create buffers.
-        for (unsigned short i = 0; i < submeshCount; i++)
+        for (unsigned i = 0; i < submeshCount; i++)
         {
             v1::SubMesh::LODFaceList& lods = mMesh->getSubMesh(i)->mLodFaceList[VpNormal];
             lods.reserve(lods.size() + 2);

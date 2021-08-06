@@ -224,7 +224,7 @@ void recalcBounds( v1::MeshPtr &v1Mesh, MeshPtr &v2Mesh )
         {
             recalcBounds( v1Mesh->sharedVertexData[VpNormal], aabb, radius );
         }
-        for (unsigned short i = 0; i < v1Mesh->getNumSubMeshes(); ++i)
+        for (unsigned i = 0; i < v1Mesh->getNumSubMeshes(); ++i)
         {
             v1::SubMesh* sm = v1Mesh->getSubMesh(i);
             if (!sm->useSharedVertices)
@@ -242,7 +242,7 @@ void recalcBounds( v1::MeshPtr &v1Mesh, MeshPtr &v2Mesh )
         AxisAlignedBox aabb;
         Real radius = 0.0f;
 
-        for( uint32 i=0; i<v2Mesh->getNumSubMeshes(); ++i )
+        for( unsigned i=0; i<v2Mesh->getNumSubMeshes(); ++i )
         {
             SubMesh *subMesh = v2Mesh->getSubMesh(i);
             recalcBounds( subMesh->mVao[0].front(), aabb, radius );

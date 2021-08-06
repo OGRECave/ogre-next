@@ -36,10 +36,10 @@ namespace Ogre
 
     void LodOutputProviderMesh::prepare( LodData* data )
     {
-        unsigned short submeshCount = mMesh->getNumSubMeshes();
+        unsigned submeshCount = mMesh->getNumSubMeshes();
 
         // Create buffers.
-        for (unsigned short i = 0; i < submeshCount; i++)
+        for (unsigned i = 0; i < submeshCount; i++)
         {
             v1::SubMesh::LODFaceList& lods = mMesh->getSubMesh(i)->mLodFaceList[VpNormal];
             lods.resize(1);
@@ -49,8 +49,8 @@ namespace Ogre
     void LodOutputProviderMesh::bakeManualLodLevel( LodData* data, String& manualMeshName, int lodIndex)
     {
         // placeholder dummy
-        unsigned short submeshCount = mMesh->getNumSubMeshes();
-        for (unsigned short i = 0; i < submeshCount; i++)
+        unsigned submeshCount = mMesh->getNumSubMeshes();
+        for (unsigned i = 0; i < submeshCount; i++)
         {
             v1::SubMesh::LODFaceList& lods = mMesh->getSubMesh(i)->mLodFaceList[VpNormal];
             lods.insert(lods.begin() + lodIndex, OGRE_NEW v1::IndexData());
@@ -59,10 +59,10 @@ namespace Ogre
 
     void LodOutputProviderMesh::bakeLodLevel(LodData* data, int lodIndex)
     {
-        unsigned short submeshCount = mMesh->getNumSubMeshes();
+        unsigned submeshCount = mMesh->getNumSubMeshes();
 
         // Create buffers.
-        for (unsigned short i = 0; i < submeshCount; i++)
+        for (unsigned i = 0; i < submeshCount; i++)
         {
             v1::SubMesh::LODFaceList& lods = mMesh->getSubMesh(i)->mLodFaceList[VpNormal];
             size_t indexCount = data->mIndexBufferInfoList[i].indexCount;

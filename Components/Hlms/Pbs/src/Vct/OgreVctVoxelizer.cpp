@@ -293,13 +293,13 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh )
     {
-        const uint16 numSubmeshes = mesh->getNumSubMeshes();
+        const unsigned numSubmeshes = mesh->getNumSubMeshes();
 
         uint32 totalNumVertices = 0u;
         uint32 totalNumIndices16 = 0u;
         uint32 totalNumIndices32 = 0u;
 
-        for( uint16 subMeshIdx=0; subMeshIdx<numSubmeshes; ++subMeshIdx )
+        for( unsigned subMeshIdx=0; subMeshIdx<numSubmeshes; ++subMeshIdx )
         {
             SubMesh *subMesh = mesh->getSubMesh( subMeshIdx );
             VertexArrayObject *vao = subMesh->mVao[VpNormal].front();
@@ -517,9 +517,9 @@ namespace Ogre
     {
         OgreProfile( "VctVoxelizer::convertMeshUncompressed" );
 
-        const uint16 numSubmeshes = mesh->getNumSubMeshes();
+        const unsigned numSubmeshes = mesh->getNumSubMeshes();
 
-        for( uint16 subMeshIdx=0; subMeshIdx<numSubmeshes; ++subMeshIdx )
+        for( unsigned subMeshIdx=0; subMeshIdx<numSubmeshes; ++subMeshIdx )
         {
             SubMesh *subMesh = mesh->getSubMesh( subMeshIdx );
             VertexArrayObject *vao = subMesh->mVao[VpNormal].front();

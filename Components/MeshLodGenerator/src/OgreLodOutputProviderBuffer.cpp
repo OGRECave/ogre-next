@@ -129,10 +129,10 @@ namespace Ogre
 
     void LodOutputProviderBuffer::inject()
     {
-        unsigned short submeshCount = mBuffer.submesh.size();
+        unsigned submeshCount = mBuffer.submesh.size();
         OgreAssert(mMesh->getNumSubMeshes() == submeshCount, "");
         mMesh->removeLodLevels();
-        for (unsigned short i = 0; i < submeshCount; i++)
+        for (unsigned i = 0; i < submeshCount; i++)
         {
             v1::SubMesh::LODFaceList& lods = mMesh->getSubMesh(i)->mLodFaceList[VpNormal];
             typedef vector<LodIndexBuffer>::type GenBuffers;

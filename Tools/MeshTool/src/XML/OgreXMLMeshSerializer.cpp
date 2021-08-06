@@ -179,7 +179,7 @@ namespace v1 {
         // Write Submeshes
         TiXmlElement* subMeshesNode = 
             rootNode->InsertEndChild(TiXmlElement("submeshes"))->ToElement();
-        for (int i = 0; i < pMesh->getNumSubMeshes(); ++i)
+        for (unsigned i = 0; i < pMesh->getNumSubMeshes(); ++i)
         {
             LogManager::getSingleton().logMessage("Writing submesh...");
             writeSubMesh(subMeshesNode, pMesh->getSubMesh(i));
@@ -1453,9 +1453,9 @@ namespace v1 {
             StringConverter::toString(usage.userValue));
 
         // Iterate over submeshes at this level
-        unsigned short numsubs = pMesh->getNumSubMeshes();
+        unsigned numsubs = pMesh->getNumSubMeshes();
 
-        for (unsigned short subi = 0; subi < numsubs; ++subi)
+        for (unsigned subi = 0; subi < numsubs; ++subi)
         {
             TiXmlElement* subNode = 
                 generatedNode->InsertEndChild(TiXmlElement("lodfacelist"))->ToElement();
@@ -1502,8 +1502,8 @@ namespace v1 {
     void XMLMeshSerializer::writeExtremes(TiXmlElement* mMeshNode, const Mesh* m)
     {
         TiXmlElement* extremesNode = NULL;
-        ushort submeshCount = m->getNumSubMeshes();
-        for (int idx = 0; idx < submeshCount; ++idx)
+        unsigned submeshCount = m->getNumSubMeshes();
+        for (unsigned idx = 0; idx < submeshCount; ++idx)
         {
             SubMesh *sm = m->getSubMesh(idx);
             if (sm->extremityPoints.empty())
@@ -1596,7 +1596,7 @@ namespace v1 {
         usage.edgeData = NULL;
 
         // Generate for mixed
-        ushort numSubs, i;
+        unsigned numSubs, i;
         numSubs = mMesh->getNumSubMeshes();
         for (i = 0; i < numSubs; ++i)
         {
