@@ -47,7 +47,7 @@ namespace Ogre
     void LodOutputProviderBuffer::bakeManualLodLevel( LodData* data, String& manualMeshName, int lodIndex )
     {
         // placeholder dummy
-        unsigned short submeshCount = mBuffer.submesh.size();
+        unsigned submeshCount = mBuffer.submesh.size();
         LodIndexBuffer buffer;
         buffer.indexSize = 2;
         buffer.indexCount = 0;
@@ -55,14 +55,14 @@ namespace Ogre
         buffer.indexBufferSize = 0;
         if(lodIndex < 0)
         {
-            for (unsigned short i = 0; i < submeshCount; i++)
+            for (unsigned i = 0; i < submeshCount; i++)
             {
                 mBuffer.submesh[i].genIndexBuffers.push_back(buffer);
             }
         }
         else
         {
-            for (unsigned short i = 0; i < submeshCount; i++)
+            for (unsigned i = 0; i < submeshCount; i++)
             {
                 mBuffer.submesh[i].genIndexBuffers.insert(mBuffer.submesh[i].genIndexBuffers.begin() + lodIndex, buffer);
             }
@@ -71,10 +71,10 @@ namespace Ogre
 
     void LodOutputProviderBuffer::bakeLodLevel(LodData* data, int lodIndex)
     {
-        unsigned short submeshCount = mBuffer.submesh.size();
+        unsigned submeshCount = mBuffer.submesh.size();
 
         // Create buffers.
-        for (unsigned short i = 0; i < submeshCount; i++)
+        for (unsigned i = 0; i < submeshCount; i++)
         {
             vector<LodIndexBuffer>::type& lods = mBuffer.submesh[i].genIndexBuffers;
             size_t indexCount = data->mIndexBufferInfoList[i].indexCount;
