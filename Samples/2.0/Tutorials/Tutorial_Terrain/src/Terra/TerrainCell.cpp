@@ -32,6 +32,8 @@ namespace Ogre
         mVaoPerLod[VpShadow].clear();
     }
     //-----------------------------------------------------------------------------------
+    bool TerrainCell::isZUp( void ) const { return m_parentTerra->m_zUp; }
+    //-----------------------------------------------------------------------------------
     void TerrainCell::initialize( VaoManager *vaoManager, bool useSkirts )
     {
         assert( mVaoPerLod[VpNormal].empty() && "Already initialized!" );

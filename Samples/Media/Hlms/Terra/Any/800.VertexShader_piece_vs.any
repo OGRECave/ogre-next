@@ -95,6 +95,10 @@
 	worldPos.xz = float2( uVertexPos.xy );
 	worldPos.xyz = worldPos.xyz * cellData.scale.xyz + cellData.pos.xyz;
 
+	@property( z_up )
+		  worldPos.yz = float2( -worldPos.z, worldPos.y );
+	@end
+
 	@insertpiece( VertexTerraTransform )
 
 	outVs.uv0.xy = float2( uVertexPos.xy ) * float2( cellData.pos.w, cellData.scale.w );

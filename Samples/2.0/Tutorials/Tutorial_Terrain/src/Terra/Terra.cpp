@@ -20,9 +20,23 @@
 
 namespace Ogre
 {
-    Terra::Terra( IdType id, ObjectMemoryManager *objectMemoryManager,
-                  SceneManager *sceneManager, uint8 renderQueueId,
-                  CompositorManager2 *compositorManager, Camera *camera ) :
+    inline Vector3 ZupToYup( Vector3 value )
+    {
+        std::swap( value.y, value.z );
+        value.y = -value.y;
+        return value;
+    }
+
+    inline Ogre::Vector3 YupToZup( Ogre::Vector3 value ) { return ZupToYup( value ); }
+
+    /*inline Ogre::Quaternion ZupToYup( Ogre::Quaternion value )
+    {
+        return value * Ogre::Quaternion( Ogre::Radian( Ogre::Math::HALF_PI ), Ogre::Vector3::UNIT_X );
+    }*/
+
+    Terra::Terra( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *sceneManager,
+                  uint8 renderQueueId, CompositorManager2 *compositorManager, Camera *camera,
+                  bool zUp ) :
         MovableObject( id, objectMemoryManager, sceneManager, renderQueueId ),
         m_width( 0u ),
         m_depth( 0u ),
@@ -30,6 +44,7 @@ namespace Ogre
         m_skirtSize( 10.0f ),
         m_invWidth( 1.0f ),
         m_invDepth( 1.0f ),
+        m_zUp( zUp ),
         m_xzDimensions( Vector2::UNIT_SCALE ),
         m_xzInvDimensions( Vector2::UNIT_SCALE ),
         m_xzRelativeSize( Vector2::UNIT_SCALE ),
@@ -59,6 +74,34 @@ namespace Ogre
         destroyNormalTexture();
         destroyHeightmapTexture();
         m_terrainCells.clear();
+    }
+    //-----------------------------------------------------------------------------------
+    Vector3 Terra::fromYUp( Vector3 value ) const
+    {
+        if( m_zUp )
+            return YupToZup( value );
+        return value;
+    }
+    //-----------------------------------------------------------------------------------
+    Vector3 Terra::fromYUpSignPreserving( Vector3 value ) const
+    {
+        if( m_zUp )
+            std::swap( value.y, value.z );
+        return value;
+    }
+    //-----------------------------------------------------------------------------------
+    Vector3 Terra::toYUp( Vector3 value ) const
+    {
+        if( m_zUp )
+            return ZupToYup( value );
+        return value;
+    }
+    //-----------------------------------------------------------------------------------
+    Vector3 Terra::toYUpSignPreserving( Vector3 value ) const
+    {
+        if( m_zUp )
+            std::swap( value.y, value.z );
+        return value;
     }
     //-----------------------------------------------------------------------------------
     void Terra::createDescriptorSet(void)
@@ -367,10 +410,12 @@ namespace Ogre
         const Vector2 cellSize( (gSize.x + 1u) * m_xzRelativeSize.x,
                                 (gSize.z + 1u) * m_xzRelativeSize.y );
 
-        const Vector3 vHalfSize = Vector3( cellSize.x, m_height, cellSize.y ) * 0.5f;
-        const Vector3 vCenter = Vector3( cellPos.x, m_terrainOrigin.y, cellPos.y ) + vHalfSize;
+        const Vector3 vHalfSizeYUp = Vector3( cellSize.x, m_height, cellSize.y ) * 0.5f;
+        const Vector3 vCenter =
+            fromYUp( Vector3( cellPos.x, m_terrainOrigin.y, cellPos.y ) + vHalfSizeYUp );
+        const Vector3 vHalfSize = fromYUpSignPreserving( vHalfSizeYUp );
 
-        for( int i=0; i<6; ++i )
+        for( unsigned i = 0; i < 6u; ++i )
         {
             //Skip far plane if view frustum is infinite
             if( i == FRUSTUM_PLANE_FAR && m_camera->getFarClipDistance() == 0 )
@@ -441,7 +486,7 @@ namespace Ogre
                     (float)m_prevLightDir.dotProduct( lightDir.normalisedCopy() ), -1.0f, 1.0f );
         if( lightCosAngleChange <= (1.0f - lightEpsilon) )
         {
-            m_shadowMapper->updateShadowMap( lightDir, m_xzDimensions, m_height );
+            m_shadowMapper->updateShadowMap( toYUp( lightDir ), m_xzDimensions, m_height );
             m_prevLightDir = lightDir.normalisedCopy();
         }
         //m_shadowMapper->updateShadowMap( Vector3::UNIT_X, m_xzDimensions, m_height );
@@ -453,6 +498,9 @@ namespace Ogre
         m_currentCell = 0;
 
         Vector3 camPos = m_camera->getDerivedPosition();
+
+        if( m_zUp )
+            camPos = ZupToYup( camPos );
 
         const uint32 basePixelDimension = m_basePixelDimension;
         const uint32 vertPixelDimension = static_cast<uint32>(m_basePixelDimension * m_depthWidthRatio);
@@ -561,7 +609,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void Terra::load( const String &texName, const Vector3 center, const Vector3 &dimensions )
+    void Terra::load( const String &texName, const Vector3 &center, const Vector3 &dimensions )
     {
         Ogre::Image2 image;
         image.load( texName, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
@@ -569,10 +617,12 @@ namespace Ogre
         load( image, center, dimensions, texName );
     }
     //-----------------------------------------------------------------------------------
-    void Terra::load( Image2 &image, const Vector3 center,
-                      const Vector3 &dimensions, const String &imageName )
+    void Terra::load( Image2 &image, Vector3 center,
+                      Vector3 dimensions, const String &imageName )
     {
-        m_terrainOrigin = center - dimensions * 0.5f;
+        m_terrainOrigin = toYUp( center - dimensions * 0.5f );
+        center = toYUp( center );
+        dimensions = toYUpSignPreserving( dimensions );
         m_xzDimensions = Vector2( dimensions.x, dimensions.z );
         m_xzInvDimensions = 1.0f / m_xzDimensions;
         m_height = dimensions.y;
@@ -619,9 +669,12 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool Terra::getHeightAt( Vector3 &vPos ) const
+    bool Terra::getHeightAt( Vector3 &vPosArg ) const
     {
         bool retVal = false;
+
+        Vector3 vPos = toYUp( vPosArg );
+
         GridPoint pos2D = worldToGrid( vPos );
 
         if( pos2D.x < m_width-1 && pos2D.z < m_depth-1 )
@@ -663,6 +716,8 @@ namespace Ogre
             retVal = true;
         }
 
+        vPosArg = fromYUp( vPos );
+
         return retVal;
     }
     //-----------------------------------------------------------------------------------
@@ -682,6 +737,8 @@ namespace Ogre
     {
         return m_shadowMapper->getShadowMapTex();
     }
+    //-----------------------------------------------------------------------------------
+    Vector3 Terra::getTerrainOrigin( void ) const { return fromYUp( m_terrainOrigin ); }
     //-----------------------------------------------------------------------------------
     Vector2 Terra::getTerrainXZCenter(void) const
     {

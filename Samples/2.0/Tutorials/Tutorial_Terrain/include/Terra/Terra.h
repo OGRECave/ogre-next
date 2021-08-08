@@ -24,6 +24,12 @@ namespace Ogre
 
     class ShadowMapper;
 
+    /**
+    @brief The Terra class
+        Internally Terra operates in Y-up space so input and outputs may
+        be converted to/from the correct spaces based on setting, unless
+        explicitly stated to be always Y-up by documentation.
+    */
     class Terra : public MovableObject
     {
         friend class TerrainCell;
@@ -35,6 +41,8 @@ namespace Ogre
         float                       m_skirtSize;
         float                       m_invWidth;
         float                       m_invDepth;
+
+        bool m_zUp;
 
         Vector2     m_xzDimensions;
         Vector2     m_xzInvDimensions;
@@ -57,6 +65,13 @@ namespace Ogre
         //Ogre stuff
         CompositorManager2      *m_compositorManager;
         Camera                  *m_camera;
+
+        /// Converts value from Y-up to whatever the user up vector is (see m_zUp)
+        inline Vector3 fromYUp( Vector3 value ) const;
+        /// Same as fromYUp, but preserves original sign. Needed when value is a scale
+        inline Vector3 fromYUpSignPreserving( Vector3 value ) const;
+        inline Vector3 toYUp( Vector3 value ) const;
+        inline Vector3 toYUpSignPreserving( Vector3 value ) const;
 
         void createDescriptorSet(void);
         void destroyDescriptorSet(void);
@@ -91,7 +106,7 @@ namespace Ogre
 
     public:
         Terra( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *sceneManager,
-               uint8 renderQueueId, CompositorManager2 *compositorManager, Camera *camera );
+               uint8 renderQueueId, CompositorManager2 *compositorManager, Camera *camera, bool zUp );
         ~Terra();
 
         /** Must be called every frame so we can check the camera's position
@@ -113,17 +128,21 @@ namespace Ogre
         */
         void update( const Vector3 &lightDir, float lightEpsilon=1e-6f );
 
-        void load( const String &texName, const Vector3 center, const Vector3 &dimensions );
-        void load( Image2 &image, const Vector3 center, const Vector3 &dimensions,
+        void load( const String &texName, const Vector3 &center, const Vector3 &dimensions );
+        void load( Image2 &image, Vector3 center, Vector3 dimensions,
                    const String &imageName = BLANKSTRING );
 
         /** Gets the interpolated height at the given location.
             If outside the bounds, it leaves the height untouched.
         @param vPos
-            [in] XZ position, Y for default height.
-            [out] Y height, or default Y (from input) if outside terrain bounds.
+            Y-up:
+                [in] XZ position, Y for default height.
+                [out] Y height, or default Y (from input) if outside terrain bounds.
+            Z-up
+                [in] XY position, Z for default height.
+                [out] Z height, or default Z (from input) if outside terrain bounds.
         @return
-            True if Y component was changed
+            True if Y (or Z for Z-up) component was changed
         */
         bool getHeightAt( Vector3 &vPos ) const;
 
@@ -136,6 +155,8 @@ namespace Ogre
         Camera* getCamera() const                       { return m_camera; }
         void setCamera( Camera *camera )                { m_camera = camera; }
 
+        bool isZUp( void ) const { return m_zUp; }
+
         const ShadowMapper* getShadowMapper(void) const { return m_shadowMapper; }
 
         const Ogre::DescriptorSetTexture* getDescriptorSetTexture(void) const { return m_descriptorSet; }
@@ -144,11 +165,15 @@ namespace Ogre
         Ogre::TextureGpu* getNormalMapTex(void) const   { return m_normalMapTex; }
         TextureGpu* _getShadowMapTex(void) const;
 
+        // These are always in Y-up space
         const Vector2& getXZDimensions(void) const      { return m_xzDimensions; }
         const Vector2& getXZInvDimensions(void) const   { return m_xzInvDimensions; }
         float getHeight(void) const                     { return m_height; }
-        const Vector3& getTerrainOrigin(void) const     { return m_terrainOrigin; }
 
+        /// Return value is in client-space (i.e. could be y- or z-up)
+        Vector3 getTerrainOrigin( void ) const;
+
+        // Always in Y-up space
         Vector2 getTerrainXZCenter(void) const;
     };
 }

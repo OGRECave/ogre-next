@@ -120,6 +120,7 @@ namespace Ogre
     struct TerraProperty
     {
         static const IdString UseSkirts;
+        static const IdString ZUp;
 
         static const IdString NumTextures;
         static const char *DiffuseMap;

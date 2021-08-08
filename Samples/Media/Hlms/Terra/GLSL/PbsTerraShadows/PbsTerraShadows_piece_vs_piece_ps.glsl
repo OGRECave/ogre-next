@@ -22,8 +22,14 @@
 /// Doing it at the pixel shader level would be more accurate, but the difference
 /// is barely noticeable, and slower
 @piece( custom_vs_posExecution )
-	vec3 terraShadowData = textureLod( terrainShadows, worldPos.xz * passBuf.invTerraBounds.xz + passBuf.terraOrigin.xz, 0 ).xyz;
-	float terraHeightWeight = worldPos.y * passBuf.invTerraBounds.y + passBuf.terraOrigin.y;
+	@property( z_up )
+		vec3 terraWorldPos = vec3( worldPos.x, -worldPos.z, worldPos.y );
+	@else
+		vec3 terraWorldPos = worldPos.xyz;
+	@end
+	vec3 terraShadowData = textureLod( terrainShadows, terraWorldPos.xz * passBuf.invTerraBounds.xz +
+						   passBuf.terraOrigin.xz, 0 ).xyz;
+	float terraHeightWeight = terraWorldPos.y * passBuf.invTerraBounds.y + passBuf.terraOrigin.y;
     terraHeightWeight = (terraHeightWeight - terraShadowData.y) * terraShadowData.z * 1023.0;
     outVs.terrainShadow = mix( terraShadowData.x, 1.0, clamp( terraHeightWeight, 0.0, 1.0 ) );
 @end

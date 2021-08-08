@@ -27,6 +27,8 @@ THE SOFTWARE.
 */
 
 #include "Terra/Hlms/PbsListener/OgreHlmsPbsTerraShadows.h"
+
+#include "Terra/Hlms/OgreHlmsTerra.h"
 #include "Terra/Terra.h"
 
 #include "CommandBuffer/OgreCommandBuffer.h"
@@ -112,6 +114,7 @@ namespace Ogre
             }
 
             hlms->_setProperty( PbsTerraProperty::TerraEnabled, mTerra != 0 );
+            hlms->_setProperty( TerraProperty::ZUp, mTerra->isZUp() );
         }
     }
     //-----------------------------------------------------------------------------------
