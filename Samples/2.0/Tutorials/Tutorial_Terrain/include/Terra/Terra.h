@@ -73,7 +73,9 @@ namespace Ogre
         inline Vector3 fromYUp( Vector3 value ) const;
         /// Same as fromYUp, but preserves original sign. Needed when value is a scale
         inline Vector3 fromYUpSignPreserving( Vector3 value ) const;
+        /// Converts value from user up vector to Y-up
         inline Vector3 toYUp( Vector3 value ) const;
+        /// Same as toYUp, but preserves original sign. Needed when value is a scale
         inline Vector3 toYUpSignPreserving( Vector3 value ) const;
 
     public:
@@ -189,9 +191,11 @@ namespace Ogre
         const Vector2& getXZDimensions(void) const      { return m_xzDimensions; }
         const Vector2& getXZInvDimensions(void) const   { return m_xzInvDimensions; }
         float getHeight(void) const                     { return m_height; }
+        const Vector3& getTerrainOriginRaw( void ) const{ return m_terrainOrigin; }
 
         /// Return value is in client-space (i.e. could be y- or z-up)
         Vector3 getTerrainOrigin( void ) const;
+
 
         // Always in Y-up space
         Vector2 getTerrainXZCenter(void) const;

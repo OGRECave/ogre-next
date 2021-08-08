@@ -128,7 +128,7 @@ namespace Ogre
         if( !casterPass && mTerra )
         {
             const float invHeight = 1.0f / mTerra->getHeight();
-            const Vector3 &terrainOrigin = mTerra->getTerrainOrigin();
+            const Vector3 &terrainOrigin = mTerra->getTerrainOriginRaw();
             const Vector2 &terrainXZInvDim = mTerra->getXZInvDimensions();
             *passBufferPtr++ = -terrainOrigin.x * terrainXZInvDim.x;
             *passBufferPtr++ = -terrainOrigin.y * invHeight;

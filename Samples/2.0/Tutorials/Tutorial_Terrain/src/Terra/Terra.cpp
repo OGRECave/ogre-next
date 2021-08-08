@@ -23,11 +23,16 @@ namespace Ogre
     inline Vector3 ZupToYup( Vector3 value )
     {
         std::swap( value.y, value.z );
-        value.y = -value.y;
+        value.z = -value.z;
         return value;
     }
 
-    inline Ogre::Vector3 YupToZup( Ogre::Vector3 value ) { return ZupToYup( value ); }
+    inline Ogre::Vector3 YupToZup( Ogre::Vector3 value )
+    {
+        std::swap( value.y, value.z );
+        value.y = -value.y;
+        return value;
+    }
 
     /*inline Ogre::Quaternion ZupToYup( Ogre::Quaternion value )
     {
@@ -515,10 +520,7 @@ namespace Ogre
         mRenderables.clear();
         m_currentCell = 0;
 
-        Vector3 camPos = m_camera->getDerivedPosition();
-
-        if( m_zUp )
-            camPos = ZupToYup( camPos );
+        const Vector3 camPos = toYUp( m_camera->getDerivedPosition() );
 
         const uint32 basePixelDimension = m_basePixelDimension;
         const uint32 vertPixelDimension = static_cast<uint32>(m_basePixelDimension * m_depthWidthRatio);
@@ -639,7 +641,10 @@ namespace Ogre
     void Terra::load( Image2 &image, Vector3 center, Vector3 dimensions,
                       bool bMinimizeMemoryConsumption, const String &imageName )
     {
-        m_terrainOrigin = toYUp( center - dimensions * 0.5f );
+        // Use sign-preserving because origin in XZ plane is always from
+        // bottom-left to top-right.
+        // If we use toYUp, we'll start from top-right and go up and right
+        m_terrainOrigin = toYUpSignPreserving( center - dimensions * 0.5f );
         center = toYUp( center );
         dimensions = toYUpSignPreserving( dimensions );
         m_xzDimensions = Vector2( dimensions.x, dimensions.z );
@@ -769,7 +774,7 @@ namespace Ogre
         return m_shadowMapper->getShadowMapTex();
     }
     //-----------------------------------------------------------------------------------
-    Vector3 Terra::getTerrainOrigin( void ) const { return fromYUp( m_terrainOrigin ); }
+    Vector3 Terra::getTerrainOrigin( void ) const { return fromYUpSignPreserving( m_terrainOrigin ); }
     //-----------------------------------------------------------------------------------
     Vector2 Terra::getTerrainXZCenter(void) const
     {
