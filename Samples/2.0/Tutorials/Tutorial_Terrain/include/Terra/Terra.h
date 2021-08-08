@@ -111,6 +111,20 @@ namespace Ogre
                uint8 renderQueueId, CompositorManager2 *compositorManager, Camera *camera, bool zUp );
         ~Terra();
 
+        /// How low should the skirt be. Normally you should let this value untouched and let
+        /// calculateOptimumSkirtSize do its thing for best performance/quality ratio.
+        ///
+        /// However if your height values are unconventional (i.e. artificial, non-natural) and you
+        /// need to look the terrain from the "outside" (rather than being inside the terrain),
+        /// you may have to tweak this value manually.
+        ///
+        /// This value should be between min height and max height of the heightmap.
+        ///
+        /// A value of 0.0 will give you the biggest skirt and fix all skirt-related issues.
+        /// Note however, this may have a *tremendous* GPU performance impact.
+        void setCustomSkirtMinHeight( const float skirtMinHeight ) { m_skirtSize = skirtMinHeight; }
+        float getCustomSkirtMinHeight( void ) const { return m_skirtSize; }
+
         /** Must be called every frame so we can check the camera's position
             (passed in the constructor) and update our visible batches (and LODs)
             We also update the shadow map if the light direction changed.
