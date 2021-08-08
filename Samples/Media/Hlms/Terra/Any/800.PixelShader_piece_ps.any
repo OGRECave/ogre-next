@@ -165,6 +165,9 @@
 @piece( LoadNormalData )
 	// Geometric normal
 	pixelData.geomNormal = OGRE_Sample( terrainNormals, samplerStateTerra, inPs.uv0.xy ).xyz * 2.0 - 1.0;
+	@property( z_up )
+		  pixelData.geomNormal.yz = float2( -pixelData.geomNormal.z, pixelData.geomNormal.y );
+	@end
 	pixelData.geomNormal = mul( pixelData.geomNormal, toFloat3x3( passBuf.view ) );
 	@property( normal_map )
 		//Get the TBN matrix

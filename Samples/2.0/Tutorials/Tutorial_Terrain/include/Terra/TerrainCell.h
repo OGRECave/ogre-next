@@ -32,6 +32,8 @@ namespace Ogre
 
         bool getUseSkirts(void) const                   { return m_useSkirts; }
 
+        bool isZUp( void ) const;
+
         void initialize( VaoManager *vaoManager, bool useSkirts );
 
         void setOrigin( const GridPoint &gridPos, uint32 horizontalPixelDim,

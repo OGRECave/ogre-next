@@ -63,6 +63,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     const IdString TerraProperty::UseSkirts         = IdString( "use_skirts" );
+    const IdString TerraProperty::ZUp               = IdString( "z_up" );
 
     const char *TerraProperty::DiffuseMap           = "diffuse_map";
     const char *TerraProperty::EnvProbeMap          = "envprobe_map";
@@ -280,6 +281,7 @@ namespace Ogre
 
         TerrainCell *terrainCell = static_cast<TerrainCell*>(renderable);
         setProperty( TerraProperty::UseSkirts, terrainCell->getUseSkirts() );
+        setProperty( TerraProperty::ZUp, terrainCell->isZUp() );
 
         assert( dynamic_cast<HlmsTerraDatablock*>( renderable->getDatablock() ) );
         HlmsTerraDatablock *datablock = static_cast<HlmsTerraDatablock*>( renderable->getDatablock() );

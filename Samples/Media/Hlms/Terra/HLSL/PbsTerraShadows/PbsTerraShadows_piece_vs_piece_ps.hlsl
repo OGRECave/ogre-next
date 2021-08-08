@@ -23,8 +23,15 @@
 /// Doing it at the pixel shader level would be more accurate, but the difference
 /// is barely noticeable, and slower
 @piece( custom_vs_posExecution )
-    float3 terraShadowData = terrainShadows.SampleLevel( terrainShadowSampler, worldPos.xz * passBuf.invTerraBounds.xz + passBuf.terraOrigin.xz, 0 ).xyz;
-    float terraHeightWeight = worldPos.y * passBuf.invTerraBounds.y + passBuf.terraOrigin.y;
+	@property( z_up )
+		float3 terraWorldPos = float3( worldPos.x, -worldPos.z, worldPos.y );
+	@else
+		float3 terraWorldPos = worldPos.xyz;
+	@end
+	float3 terraShadowData = terrainShadows.SampleLevel( terrainShadowSampler,
+								terraWorldPos.xz * passBuf.invTerraBounds.xz + passBuf.terraOrigin.xz,
+								0 ).xyz;
+	float terraHeightWeight = terraWorldPos.y * passBuf.invTerraBounds.y + passBuf.terraOrigin.y;
     terraHeightWeight = (terraHeightWeight - terraShadowData.y) * terraShadowData.z * 1023.0;
     outVs.terrainShadow = lerp( terraShadowData.x, 1.0, saturate( terraHeightWeight ) );
 @end

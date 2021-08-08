@@ -52,7 +52,7 @@ namespace Demo
         mTerra = new Ogre::Terra( Ogre::Id::generateNewId<Ogre::MovableObject>(),
                                   &sceneManager->_getEntityMemoryManager( Ogre::SCENE_STATIC ),
                                   sceneManager, 11u, root->getCompositorManager2(),
-                                  mGraphicsSystem->getCamera() );
+                                  mGraphicsSystem->getCamera(), false );
         mTerra->setCastShadows( false );
 
         //mTerra->load( "Heightmap.png", Ogre::Vector3::ZERO, Ogre::Vector3( 256.0f, 1.0f, 256.0f ), false );
