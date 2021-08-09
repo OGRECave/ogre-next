@@ -263,9 +263,8 @@ namespace Ogre
                                                                  void *initialData,
                                                                  uint32 structureByteStride = 0 );
 
-        inline void getMemoryStats( const Block &block, uint32 vboIdx0, uint32 vboIdx1,
-                                    size_t poolCapacity, LwString &text,
-                                    MemoryStatsEntryVec &outStats,
+        inline void getMemoryStats( const Block &block, uint32 vboIdx0, uint32 vboIdx1, size_t poolIdx,
+                                    size_t poolCapacity, LwString &text, MemoryStatsEntryVec &outStats,
                                     Log *log ) const;
 
         virtual void switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,

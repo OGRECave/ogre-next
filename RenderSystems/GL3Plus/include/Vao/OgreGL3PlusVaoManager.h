@@ -240,9 +240,9 @@ namespace Ogre
 
         static VboFlag bufferTypeToVboFlag( BufferType bufferType );
 
-        inline void getMemoryStats( const Block &block,
-                                    size_t vboIdx, size_t poolCapacity, LwString &text,
-                                    MemoryStatsEntryVec &outStats, Log *log ) const;
+        inline void getMemoryStats( const Block &block, size_t vboIdx, size_t poolIdx,
+                                    size_t poolCapacity, LwString &text, MemoryStatsEntryVec &outStats,
+                                    Log *log ) const;
 
         virtual void switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
                                              BufferPacked *buffer );

@@ -182,9 +182,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void D3D11VaoManager::getMemoryStats( const Block &block, uint32 vboIdx0, uint32 vboIdx1,
-                                          size_t poolCapacity, LwString &text,
-                                          MemoryStatsEntryVec &outStats,
-                                          Log *log ) const
+                                          size_t poolIdx, size_t poolCapacity, LwString &text,
+                                          MemoryStatsEntryVec &outStats, Log *log ) const
     {
         if( log )
         {
@@ -197,7 +196,7 @@ namespace Ogre
         }
 
         const uint32 vboIdx = (vboIdx0 << 16u) | (vboIdx1 & 0xFFFF);
-        MemoryStatsEntry entry( vboIdx, block.offset, block.size, poolCapacity );
+        MemoryStatsEntry entry( vboIdx, (uint32)poolIdx, block.offset, block.size, poolCapacity );
         outStats.push_back( entry );
     }
     //-----------------------------------------------------------------------------------
@@ -226,6 +225,7 @@ namespace Ogre
                 while( itor != end )
                 {
                     const Vbo &vbo = *itor;
+                    const size_t poolIdx = static_cast<size_t>( itor - mVbos[idx0][idx1].begin() );
                     capacityBytes += vbo.sizeBytes;
 
                     Block usedBlock( 0, 0 );
@@ -250,14 +250,17 @@ namespace Ogre
                         }
 
                         freeBytes += nextBlock->size;
-                        usedBlock.size = nextBlock->offset;
+                        usedBlock.size = nextBlock->offset - usedBlock.offset;
 
                         //usedBlock.size could be 0 if:
                         //  1. All of memory is free
                         //  2. There's two contiguous free blocks, which should not happen
                         //     due to mergeContiguousBlocks
                         if( usedBlock.size > 0u )
-                            getMemoryStats( usedBlock, idx0, idx1, vbo.sizeBytes, text, statsVec, log );
+                        {
+                            getMemoryStats( usedBlock, idx0, idx1, poolIdx, vbo.sizeBytes, text,
+                                            statsVec, log );
+                        }
 
                         usedBlock.offset += usedBlock.size;
                         usedBlock.size = 0;
@@ -265,7 +268,10 @@ namespace Ogre
                     }
 
                     if( usedBlock.size > 0u || (usedBlock.offset == 0 && usedBlock.size == 0) )
-                        getMemoryStats( usedBlock, idx0, idx1, vbo.sizeBytes, text, statsVec, log );
+                    {
+                        getMemoryStats( usedBlock, idx0, idx1, poolIdx, vbo.sizeBytes, text, statsVec,
+                                        log );
+                    }
 
                     ++itor;
                 }

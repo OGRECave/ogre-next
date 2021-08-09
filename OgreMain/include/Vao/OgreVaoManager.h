@@ -164,15 +164,56 @@ namespace Ogre
 
         struct _OgreExport MemoryStatsEntry
         {
+            /// @see
+            ///     D3D11VaoManager::InternalBufferType & BufferType
+            ///     GL3PlusVaoManager::VboFlag
+            ///     MetalVaoManager::VboFlag
+            ///     VulkanVaoManager::VboFlag
             uint32 poolType;
+            uint32 poolIdx;
             size_t offset;
             size_t sizeBytes;
-            size_t poolCapacity; /// This value is the same for all entries with same poolType & poolIdx
+            size_t poolCapacity; /// This value is the same for all entries with same getCombinedPoolIdx
 
-            MemoryStatsEntry( uint32 _poolType, size_t _offset,
-                              size_t _sizeBytes, size_t _poolCapacity ) :
-                poolType( _poolType ), offset( _offset ),
-                sizeBytes( _sizeBytes ), poolCapacity( _poolCapacity ) {}
+            MemoryStatsEntry( uint32 _poolType, uint32 _poolIdx, size_t _offset, size_t _sizeBytes,
+                              size_t _poolCapacity ) :
+                poolType( _poolType ),
+                poolIdx( _poolIdx ),
+                offset( _offset ),
+                sizeBytes( _sizeBytes ),
+                poolCapacity( _poolCapacity )
+            {
+            }
+
+            /**
+            @brief getCombinedPoolIdx
+                You can use this code to calculate pool capacity per poolType:
+
+                @code
+                    std::set<uint64_t> poolsSeen;
+                    size_t usedBytes = 0u;
+                    size_t capacityBytes = 0u;
+                    VaoManager::MemoryStatsEntryVec::const_iterator itor = memoryStats.begin();
+                    VaoManager::MemoryStatsEntryVec::const_iterator endt = memoryStats.end();
+
+                    while( itor != endt )
+                    {
+                        const uint64_t poolVal = itor->getCombinedPoolIdx();
+                        dynUsedBytes += itor->sizeBytes;
+                        if( poolsSeen.find( poolVal ) == poolsSeen.end() )
+                        {
+                            capacityBytes += itor->poolCapacity;
+                            poolsSeen.insert( poolVal );
+                        }
+                        ++itor;
+                    }
+                @endcode
+            @return
+            */
+            uint64 getCombinedPoolIdx() const
+            {
+                return ( uint64_t( this->poolType ) << 32u ) | this->poolIdx;
+            }
         };
 
         typedef vector<MemoryStatsEntry>::type MemoryStatsEntryVec;
