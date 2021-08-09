@@ -97,8 +97,13 @@
 		@property( !detail_map@n )float3 detailCol@n = float3( 0.0f, 0.0f, 0.0f );@end
 	@end
 
-	pixelData.diffuse.xyz *= (detailCol0.xyz * detailWeights.x + detailCol1.xyz * detailWeights.y) +
-							 (detailCol2.xyz * detailWeights.z + detailCol3.xyz * detailWeights.w);
+
+	@property( !detail_maps_diffuse && !detail_maps_normal )
+		float4 detailWeights = float4( 0.25f, 0.25f, 0.25f, 0.25f );
+	@else
+		pixelData.diffuse.xyz *= (detailCol0.xyz * detailWeights.x + detailCol1.xyz * detailWeights.y) +
+								 (detailCol2.xyz * detailWeights.z + detailCol3.xyz * detailWeights.w);
+	@end
 
 	/// Apply the material's diffuse over the textures
 	pixelData.diffuse.xyz *= material.kD.xyz;
