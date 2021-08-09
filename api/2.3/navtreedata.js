@@ -371,9 +371,9 @@ var NAVTREEINDEX =
 "struct_ogre_1_1_scene_query_1_1_world_fragment.html",
 "struct_ogre_1_1_terrain_group_1_1_terrain_slot.html",
 "struct_ogre_1_1_unlit_mobile_prop.html#af1d0dd9ad63edd1c9ff35550bfb269be",
-"struct_ogre_1_1_vertex_array_object.html#afa2943846ba6a2b5824a12857139cf5e",
-"struct_ogre_1_1_vulkan_raw_buffer.html#ab59cd06e32651ca9ecd1383ff4a4f109",
-"struct_ogre_1_1v1_1_1_static_geometry_1_1_queued_sub_mesh.html#ad3e5a77c315787713abbe113fb64b749"
+"struct_ogre_1_1_vertex_array_object.html#aedb8aeacdb894bae73b3ce3f609f29be",
+"struct_ogre_1_1_vulkan_raw_buffer.html#aaaccf48dda64df2af4886b480607f8f8",
+"struct_ogre_1_1v1_1_1_static_geometry_1_1_queued_sub_mesh.html#ace19eb97a4816f71e3f4035949bd1c8c"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
