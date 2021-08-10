@@ -334,8 +334,17 @@ namespace Ogre
                     efficientVectorRemove( freeBlocks, nextBlock );
                 }
 
-                if( usedBlock.size > 0u || (usedBlock.offset == 0 && usedBlock.size == 0) )
+                if( usedBlock.size > 0u || ( usedBlock.offset == 0 && usedBlock.size == 0 ) )
+                {
+                    if( vbo.freeBlocks.empty() )
+                    {
+                        // Deal with edge case when we're 100% full
+                        OGRE_ASSERT_LOW( usedBlock.offset == 0 && usedBlock.size == 0 );
+                        usedBlock.offset = 0u;
+                        usedBlock.size = vbo.sizeBytes;
+                    }
                     getMemoryStats( usedBlock, vboIdx, poolIdx, vbo.sizeBytes, text, statsVec, log );
+                }
 
                 ++itor;
             }
