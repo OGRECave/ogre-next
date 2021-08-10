@@ -354,7 +354,7 @@ namespace Ogre
 
                         while( itBlock != enBlock )
                         {
-                            if( nextBlock->offset < itBlock->offset )
+                            if( itBlock->offset < nextBlock->offset )
                                 nextBlock = itBlock;
                             ++itBlock;
                         }
