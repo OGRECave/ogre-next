@@ -252,10 +252,8 @@ namespace Ogre
         if( log )
         {
             text.clear();
-            text.a( c_vboTypes[vboIdx], ";",
-                    (uint64)block.offset, ";",
-                    (uint64)block.size, ";",
-                    (uint64)poolCapacity );
+            text.a( c_vboTypes[vboIdx], ";", (uint64)block.offset, ";", (uint64)block.size, ";" );
+            text.a( (uint64)poolIdx, ";", (uint64)poolCapacity );
             log->logMessage( text.c_str(), LML_CRITICAL );
         }
 
@@ -277,7 +275,7 @@ namespace Ogre
         LwString text( LwString::FromEmptyPointer( &tmpBuffer[0], tmpBuffer.size() ) );
 
         if( log )
-            log->logMessage( "Pool Type;Offset;Size Bytes;Pool Capacity", LML_CRITICAL );
+            log->logMessage( "Pool Type;Offset;Size Bytes;Pool Idx;Pool Capacity", LML_CRITICAL );
 
         for( int vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
         {
