@@ -248,6 +248,6 @@ var NAVTREEINDEX262 =
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#ad94bec02d71f91fd2f543f3488d25d61":[5,0,0,15,0,0],
 "struct_ogre_1_1_intersection_scene_query_result.html":[5,2,12,20],
 "struct_ogre_1_1_intersection_scene_query_result.html":[5,0,1,20],
-"struct_ogre_1_1_intersection_scene_query_result.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,12,20,2],
-"struct_ogre_1_1_intersection_scene_query_result.html#a1c727e879a260c37b00ce5505fe8e144":[5,0,1,20,2]
+"struct_ogre_1_1_intersection_scene_query_result.html#a1c727e879a260c37b00ce5505fe8e144":[5,0,1,20,2],
+"struct_ogre_1_1_intersection_scene_query_result.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,12,20,2]
 };

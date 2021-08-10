@@ -357,9 +357,9 @@ var NAVTREEINDEX =
 "struct_ogre_1_1_render_system_1_1_metrics.html#a2a087be22dd6247b6ed687bc548cfb76",
 "struct_ogre_1_1_static_face_group.html#a4b1e2bb83673099b9d2459a1bb67f429",
 "struct_ogre_1_1_texture_gpu_manager_1_1_metadata_cache_entry.html#ab76b06e436e383483e18654d5514d0f4",
-"struct_ogre_1_1_vector_range.html#a63c42093c4a283c7f1954970f83cc342",
-"struct_ogre_1_1_volume_1_1_vertex.html#aa6e33996a0561273423e609e79d46a21",
-"struct_ogre_1_1v1_1_1_static_geometry_1_1_queued_sub_mesh.html#afa2943846ba6a2b5824a12857139cf5e"
+"struct_ogre_1_1_vector_range.html#a3f5e91d206f12b980bc27eb0c0c8c4e5",
+"struct_ogre_1_1_volume_1_1_vertex.html#a43f1271cb06918224f0e90540e739836",
+"struct_ogre_1_1v1_1_1_static_geometry_1_1_queued_sub_mesh.html#ae5b50aed7d609c1af4f5593cf50f947f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
