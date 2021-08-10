@@ -274,7 +274,7 @@ namespace Ogre
         virtual ~MetalVaoManager();
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
-                                     size_t &outFreeBytes, Log *log ) const;
+                                     size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const;
 
         virtual void cleanupEmptyPools(void);
 

@@ -183,15 +183,20 @@ namespace Ogre
             uint32 poolIdx;
             size_t offset;
             size_t sizeBytes;
-            size_t poolCapacity; /// This value is the same for all entries with same getCombinedPoolIdx
+            size_t poolCapacity;  /// This value is the same for all entries with same getCombinedPoolIdx
+            /// Relevant for Vulkan: when this value is true, the whole pool
+            /// may contain texture data (not necessarily this block)
+            /// See Tutorial_Memory on how to deal with this parameter
+            bool bPoolHasTextures;
 
             MemoryStatsEntry( uint32 _poolType, uint32 _poolIdx, size_t _offset, size_t _sizeBytes,
-                              size_t _poolCapacity ) :
+                              size_t _poolCapacity, bool _bPoolHasTextures ) :
                 poolType( _poolType ),
                 poolIdx( _poolIdx ),
                 offset( _offset ),
                 sizeBytes( _sizeBytes ),
-                poolCapacity( _poolCapacity )
+                poolCapacity( _poolCapacity ),
+                bPoolHasTextures( _bPoolHasTextures )
             {
             }
 
@@ -251,9 +256,18 @@ namespace Ogre
             Total free memory available for consumption.
         @param log
             Optional to dump all information to a CSV file. Nullptr to avoid dumping.
+        @param outIncludesTextures [out]
+            When true, memory reports in outCapacityBytes & outFreeBytes include textures.
+            See Tutorial_Memory on how to deal with this output.
+
+            Note outIncludesTextures may be false but some entries in
+            outStats[n].bPoolHasTextures may be true. If this happens, then
+            outCapacityBytes & outFreeBytes don't include texture consumption;
+            but the pools with bPoolHasTextures in MemoryStatsEntryVec may.
         */
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
-                                     size_t &outFreeBytes, Log *log ) const = 0;
+                                     size_t &outFreeBytes, Log *log,
+                                     bool &outIncludesTextures ) const = 0;
 
         /// Frees GPU memory if there are empty, unused pools
         virtual void cleanupEmptyPools(void) = 0;

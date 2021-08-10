@@ -76,10 +76,12 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void NULLVaoManager::getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
-                                         size_t &outFreeBytes, Log *log ) const
+                                         size_t &outFreeBytes, Log *log,
+                                         bool &outIncludesTextures ) const
     {
         outCapacityBytes = 0;
         outFreeBytes = 0;
+        outIncludesTextures = false;
     }
     //-----------------------------------------------------------------------------------
     void NULLVaoManager::cleanupEmptyPools(void)

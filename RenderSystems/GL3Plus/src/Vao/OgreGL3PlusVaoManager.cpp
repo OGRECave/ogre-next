@@ -265,13 +265,14 @@ namespace Ogre
             log->logMessage( text.c_str(), LML_CRITICAL );
         }
 
-        MemoryStatsEntry entry( (uint32)vboIdx, (uint32)poolIdx, block.offset, block.size,
-                                poolCapacity );
+        MemoryStatsEntry entry( (uint32)vboIdx, (uint32)poolIdx, block.offset, block.size, poolCapacity,
+                                false );
         outStats.push_back( entry );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusVaoManager::getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
-                                            size_t &outFreeBytes, Log *log ) const
+                                            size_t &outFreeBytes, Log *log,
+                                            bool &outIncludesTextures ) const
     {
         size_t capacityBytes = 0;
         size_t freeBytes = 0;
@@ -352,6 +353,7 @@ namespace Ogre
 
         outCapacityBytes = capacityBytes;
         outFreeBytes = freeBytes;
+        outIncludesTextures = false;
         statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------

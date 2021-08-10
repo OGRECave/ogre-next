@@ -64,7 +64,7 @@ namespace Ogre
 
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mVaoManager );
         vaoManager->deallocateVbo( mVboPoolIdx, mInternalBufferStart, getMaxSize(), BT_DYNAMIC_DEFAULT,
-                                   !mUploadOnly );
+                                   !mUploadOnly, true );
     }
     //-----------------------------------------------------------------------------------
     void VulkanStagingBuffer::addFence( size_t from, size_t to, bool forceFence )

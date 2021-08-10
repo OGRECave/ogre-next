@@ -337,7 +337,17 @@ namespace Demo
         Ogre::VaoManager::MemoryStatsEntryVec memoryStats;
         size_t freeBytes;
         size_t capacityBytes;
-        vaoManager->getMemoryStats( memoryStats, capacityBytes, freeBytes, 0 );
+        bool bIncludesTextures;
+        vaoManager->getMemoryStats( memoryStats, capacityBytes, freeBytes, 0, bIncludesTextures );
+
+        Ogre::TextureGpuManager *textureGpuManager = renderSystem->getTextureGpuManager();
+        size_t textureBytesCpu, textureBytesGpu, usedStagingTextureBytes, availableStagingTextureBytes;
+        textureGpuManager->getMemoryStats( textureBytesCpu, textureBytesGpu,
+                                           usedStagingTextureBytes, availableStagingTextureBytes );
+
+        // Don't count texture memory twice if it's already included in VaoManager
+        if( bIncludesTextures )
+            capacityBytes -= textureBytesGpu + usedStagingTextureBytes + availableStagingTextureBytes;
 
         const size_t bytesToMb = 1024u * 1024u;
         char tmpBuffer[256];
@@ -349,11 +359,6 @@ namespace Demo
                 (Ogre::uint32)(capacityBytes / bytesToMb), " MB" );
         outText += text.c_str();
 
-        Ogre::TextureGpuManager *textureGpuManager = renderSystem->getTextureGpuManager();
-        size_t textureBytesCpu, textureBytesGpu, usedStagingTextureBytes, availableStagingTextureBytes;
-        textureGpuManager->getMemoryStats( textureBytesCpu, textureBytesGpu,
-                                           usedStagingTextureBytes, availableStagingTextureBytes );
-
         text.clear();
         text.a( "\nGPU StagingTextures. In use: ",
                 (Ogre::uint32)(usedStagingTextureBytes / bytesToMb), " MB. Available: ",
@@ -361,13 +366,13 @@ namespace Demo
                 (Ogre::uint32)((usedStagingTextureBytes + availableStagingTextureBytes) / bytesToMb) );
         outText += text.c_str();
 
+        const size_t totalBytesNeeded =
+            capacityBytes + textureBytesGpu + usedStagingTextureBytes + availableStagingTextureBytes;
+
         text.clear();
-        text.a( "\nGPU Textures:\t", (Ogre::uint32)(textureBytesGpu / bytesToMb), " MB" );
-        text.a( "\nCPU Textures:\t", (Ogre::uint32)(textureBytesCpu / bytesToMb), " MB" );
-        text.a( "\nTotal GPU:\t",
-                (Ogre::uint32)((capacityBytes + textureBytesGpu +
-                                usedStagingTextureBytes + availableStagingTextureBytes) /
-                               bytesToMb), " MB" );
+        text.a( "\nGPU Textures:\t", ( Ogre::uint32 )( textureBytesGpu / bytesToMb ), " MB" );
+        text.a( "\nCPU Textures:\t", ( Ogre::uint32 )( textureBytesCpu / bytesToMb ), " MB" );
+        text.a( "\nTotal GPU:\t", ( Ogre::uint32 )( totalBytesNeeded / bytesToMb ), " MB" );
         outText += text.c_str();
     }
     //-----------------------------------------------------------------------------------

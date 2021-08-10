@@ -237,9 +237,13 @@ namespace Ogre
             The index to the mVbos.
         @param outBufferOffset [out]
             The offset in bytes at which the buffer data should be placed.
+        @param skipDynBufferMultiplier
+            When true and BufferType is BT_DYNAMIC_*, we don't multiply sizeBytes against
+            mDynamicBufferMultiplier. This assumes caller knows how to properly fence
+            uploads or sizeBytes is already multiplied
         */
         void allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType, bool readCapable,
-                          size_t &outVboIdx, size_t &outBufferOffset );
+                          bool skipDynBufferMultiplier, size_t &outVboIdx, size_t &outBufferOffset );
 
         void allocateVbo( size_t sizeBytes, size_t alignment, VboFlag vboFlag, uint32 textureMemTypeBits,
                           size_t &outVboIdx, size_t &outBufferOffset );
@@ -253,12 +257,14 @@ namespace Ogre
         @param bufferOffset
             The buffer offset that was returned by allocateVbo
         @param sizeBytes
-            The sizeBytes parameter that was passed to allocateVbos.
+            The sizeBytes parameter that was passed to allocateVbo.
         @param bufferType
             The type of buffer that was passed to allocateVbo.
+        @param skipDynBufferMultiplier
+            Setting that was passed to allocateVbo.
         */
         void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes, BufferType bufferType,
-                            bool readCapable );
+                            bool readCapable, bool skipDynBufferMultiplier );
 
         void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes, VboVec &vboVec );
 
@@ -319,6 +325,10 @@ namespace Ogre
         VboFlag bufferTypeToVboFlag( BufferType bufferType, const bool readCapable ) const;
         bool isVboFlagCoherent( VboFlag vboFlag ) const;
 
+        inline void getMemoryStats( const Block &block, size_t vboIdx, size_t poolIdx,
+                                    size_t poolCapacity, LwString &text, MemoryStatsEntryVec &outStats,
+                                    Log *log ) const;
+
         virtual void switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
                                              size_t newPoolIdx, BufferPacked *buffer );
 
@@ -340,7 +350,7 @@ namespace Ogre
         void addDelayedFunc( VulkanDelayedFuncBase *cmd );
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
-                                     size_t &outFreeBytes, Log *log ) const;
+                                     size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const;
 
         virtual void cleanupEmptyPools( void );
 
