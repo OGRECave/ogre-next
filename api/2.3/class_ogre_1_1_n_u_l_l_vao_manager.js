@@ -40,7 +40,7 @@ var class_ogre_1_1_n_u_l_l_vao_manager =
     [ "getDefaultStagingBufferUnfencedTime", "class_ogre_1_1_n_u_l_l_vao_manager.html#a5388b5890025a724a42f4469363bb267", null ],
     [ "getDynamicBufferMultiplier", "class_ogre_1_1_n_u_l_l_vao_manager.html#a9b609165fb053afe550711546254e230", null ],
     [ "getFrameCount", "class_ogre_1_1_n_u_l_l_vao_manager.html#ab528ecee92f02772be5dc8329c0e1e1b", null ],
-    [ "getMemoryStats", "class_ogre_1_1_n_u_l_l_vao_manager.html#afd18f93d172991d73320ac3d5806cf38", null ],
+    [ "getMemoryStats", "class_ogre_1_1_n_u_l_l_vao_manager.html#a2315fa4fc0fe2ba8c1890de8fbadd2f5", null ],
     [ "getReadOnlyBufferMaxSize", "class_ogre_1_1_n_u_l_l_vao_manager.html#ae8ea50dfdfc83e13bae02da290647884", null ],
     [ "getStagingBuffer", "class_ogre_1_1_n_u_l_l_vao_manager.html#a755b7f61f17c568f32a6708c4d4cb986", null ],
     [ "getTexBufferAlignment", "class_ogre_1_1_n_u_l_l_vao_manager.html#a6c4856f0420c296824372ce64825cbfd", null ],

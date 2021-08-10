@@ -65,7 +65,7 @@ var class_ogre_1_1_vulkan_vao_manager =
     [ "getDrawId", "class_ogre_1_1_vulkan_vao_manager.html#a7507385d7b739c7dd2d0b9c247a71802", null ],
     [ "getDynamicBufferMultiplier", "class_ogre_1_1_vulkan_vao_manager.html#a9b609165fb053afe550711546254e230", null ],
     [ "getFrameCount", "class_ogre_1_1_vulkan_vao_manager.html#ab528ecee92f02772be5dc8329c0e1e1b", null ],
-    [ "getMemoryStats", "class_ogre_1_1_vulkan_vao_manager.html#a8f78b2ebfc424d4f8ba8afaaef847c51", null ],
+    [ "getMemoryStats", "class_ogre_1_1_vulkan_vao_manager.html#a43a37c0a384ba984e02e7eceac8c3ffb", null ],
     [ "getReadOnlyBufferMaxSize", "class_ogre_1_1_vulkan_vao_manager.html#ae8ea50dfdfc83e13bae02da290647884", null ],
     [ "getStagingBuffer", "class_ogre_1_1_vulkan_vao_manager.html#a755b7f61f17c568f32a6708c4d4cb986", null ],
     [ "getTexBufferAlignment", "class_ogre_1_1_vulkan_vao_manager.html#a6c4856f0420c296824372ce64825cbfd", null ],

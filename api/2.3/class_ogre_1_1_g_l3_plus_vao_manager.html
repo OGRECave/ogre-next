@@ -221,9 +221,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab528ecee92f02772be5dc8329c0e1e1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5140b54e5640aa8b8b931a6c14d1e4c2"><td class="memItemLeft" align="right" valign="top">GLint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_vao_manager.html#a5140b54e5640aa8b8b931a6c14d1e4c2">getMaxVertexAttribs</a> (void) const</td></tr>
 <tr class="separator:a5140b54e5640aa8b8b931a6c14d1e4c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70811386532e1aa7ad5600165a4013a6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_vao_manager.html#a70811386532e1aa7ad5600165a4013a6">getMemoryStats</a> (<a class="el" href="class_ogre_1_1_vao_manager.html#a8a984ae987b00e95b35198131a4e9a6b">MemoryStatsEntryVec</a> &amp;outStats, size_t &amp;outCapacityBytes, size_t &amp;outFreeBytes, <a class="el" href="class_ogre_1_1_log.html">Log</a> *log) const</td></tr>
-<tr class="memdesc:a70811386532e1aa7ad5600165a4013a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves memory stats about our GPU pools being managed.  <a href="class_ogre_1_1_g_l3_plus_vao_manager.html#a70811386532e1aa7ad5600165a4013a6">More...</a><br /></td></tr>
-<tr class="separator:a70811386532e1aa7ad5600165a4013a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c941ddbd14acb71c749d7a752e38ccc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_vao_manager.html#a0c941ddbd14acb71c749d7a752e38ccc">getMemoryStats</a> (<a class="el" href="class_ogre_1_1_vao_manager.html#a8a984ae987b00e95b35198131a4e9a6b">MemoryStatsEntryVec</a> &amp;outStats, size_t &amp;outCapacityBytes, size_t &amp;outFreeBytes, <a class="el" href="class_ogre_1_1_log.html">Log</a> *log, bool &amp;outIncludesTextures) const</td></tr>
+<tr class="memdesc:a0c941ddbd14acb71c749d7a752e38ccc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves memory stats about our GPU pools being managed.  <a href="class_ogre_1_1_g_l3_plus_vao_manager.html#a0c941ddbd14acb71c749d7a752e38ccc">More...</a><br /></td></tr>
+<tr class="separator:a0c941ddbd14acb71c749d7a752e38ccc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8ea50dfdfc83e13bae02da290647884"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vao_manager.html#ae8ea50dfdfc83e13bae02da290647884">getReadOnlyBufferMaxSize</a> (void) const</td></tr>
 <tr class="separator:ae8ea50dfdfc83e13bae02da290647884"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a755b7f61f17c568f32a6708c4d4cb986"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_staging_buffer.html">StagingBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vao_manager.html#a755b7f61f17c568f32a6708c4d4cb986">getStagingBuffer</a> (size_t minSizeBytes, bool forUpload)</td></tr>
@@ -1819,8 +1819,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a70811386532e1aa7ad5600165a4013a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a70811386532e1aa7ad5600165a4013a6">&#9670;&nbsp;</a></span>getMemoryStats()</h2>
+<a id="a0c941ddbd14acb71c749d7a752e38ccc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c941ddbd14acb71c749d7a752e38ccc">&#9670;&nbsp;</a></span>getMemoryStats()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1850,7 +1850,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_log.html">Log</a> *&#160;</td>
-          <td class="paramname"><em>log</em>&#160;</td>
+          <td class="paramname"><em>log</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &amp;&#160;</td>
+          <td class="paramname"><em>outIncludesTextures</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1875,11 +1881,13 @@ Static Public Member Functions</h2></td></tr>
     <tr><td class="paramname">outCapacityBytes</td><td>Total capacity i.e. total used VRAM in GPU. </td></tr>
     <tr><td class="paramname">outFreeBytes</td><td>Total free memory available for consumption. </td></tr>
     <tr><td class="paramname">log</td><td>Optional to dump all information to a CSV file. Nullptr to avoid dumping. </td></tr>
+    <tr><td class="paramname">outIncludesTextures</td><td>[out] When true, memory reports in outCapacityBytes &amp; outFreeBytes include textures. See Tutorial_Memory on how to deal with this output.</td></tr>
   </table>
   </dd>
 </dl>
+<p>Note outIncludesTextures may be false but some entries in outStats[n].bPoolHasTextures may be true. If this happens, then outCapacityBytes &amp; outFreeBytes don't include texture consumption; but the pools with bPoolHasTextures in MemoryStatsEntryVec may. </p>
 
-<p>Implements <a class="el" href="class_ogre_1_1_vao_manager.html#ab35499fd8188bd81807454a5c8de836c">Ogre::VaoManager</a>.</p>
+<p>Implements <a class="el" href="class_ogre_1_1_vao_manager.html#afb673d6cf486d740c9aa5dc33c1f4c0d">Ogre::VaoManager</a>.</p>
 
 </div>
 </div>

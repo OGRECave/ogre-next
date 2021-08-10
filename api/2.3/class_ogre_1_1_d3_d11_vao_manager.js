@@ -48,7 +48,7 @@ var class_ogre_1_1_d3_d11_vao_manager =
     [ "getDevice", "class_ogre_1_1_d3_d11_vao_manager.html#ab6ea37ec90e0596bb8c58f4d99308e86", null ],
     [ "getDynamicBufferMultiplier", "class_ogre_1_1_d3_d11_vao_manager.html#a9b609165fb053afe550711546254e230", null ],
     [ "getFrameCount", "class_ogre_1_1_d3_d11_vao_manager.html#ab528ecee92f02772be5dc8329c0e1e1b", null ],
-    [ "getMemoryStats", "class_ogre_1_1_d3_d11_vao_manager.html#afd69b09d9a610ba78a57586915ae7059", null ],
+    [ "getMemoryStats", "class_ogre_1_1_d3_d11_vao_manager.html#a00c5f71cf3c04510468ea8c6e6a3f7ce", null ],
     [ "getReadOnlyBufferMaxSize", "class_ogre_1_1_d3_d11_vao_manager.html#ae8ea50dfdfc83e13bae02da290647884", null ],
     [ "getSplicingHelperBuffer", "class_ogre_1_1_d3_d11_vao_manager.html#a2519516e7165baa94b1c63642fd5394b", null ],
     [ "getStagingBuffer", "class_ogre_1_1_d3_d11_vao_manager.html#a755b7f61f17c568f32a6708c4d4cb986", null ],
