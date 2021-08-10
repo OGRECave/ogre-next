@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreVulkanPrerequisites.h"
 
 #include "Vao/OgreVaoManager.h"
+#include "ogrestd/set.h"
 
 #include "vulkan/vulkan_core.h"
 
@@ -116,11 +117,33 @@ namespace Ogre
             VkBuffer            vkBuffer;
             size_t              sizeBytes;
             uint32              vkMemoryTypeIdx;
+            /// Frame in which this Vbo became empty. Only valid if isEmpty() == true
+            uint32              emptyFrame;
             VulkanDynamicBuffer *dynamicBuffer; //Null for CPU_INACCESSIBLE BOs.
 
             BlockVec            freeBlocks;
             StrideChangerVec    strideChangers;
             // clang-format on
+
+            bool isEmpty() const
+            {
+                return this->freeBlocks.size() == 1u && this->freeBlocks.back().size == this->sizeBytes;
+            }
+
+            bool isAllocated() const { return this->vboName != VK_NULL_HANDLE; }
+        };
+
+        struct VboIndex
+        {
+            VboFlag vboFlag;
+            uint32 vboIdx;
+
+            bool operator<( const VboIndex &other ) const
+            {
+                if( this->vboFlag != other.vboFlag )
+                    return this->vboFlag < other.vboFlag;
+                return this->vboIdx < other.vboIdx;
+            }
         };
 
         struct Vao
@@ -169,8 +192,22 @@ namespace Ogre
         /// types were available. If that's the case, then
         /// Vbo::vkMemoryTypeIdx & mBestVkMemoryTypeIndex[CPU_INACCESIBLE] will be 0
         VboVec mVbos[MAX_VBO_FLAG];
+        /// Contains all idx to slots in mVbos[vboFlag][y] that are not allocated.
+        /// Thus can be reused.
+        ///
+        /// We cannot easily remove entries from mVbos because that changes all poolIdx
+        /// from a lot of resources (that's only done in VaoManager::cleanupEmptyPools)
+        FastArray<uint32> mUnallocatedVbos[MAX_VBO_FLAG];
         size_t mDefaultPoolSize[MAX_VBO_FLAG];
         size_t mUsedHeapMemory[VK_MAX_MEMORY_HEAPS];
+
+        /// Holds all VBOs that are empty and target for destruction.
+        /// They're empty, but still allocated.
+        /// We're waiting for the GPU to finish using them.
+        ///
+        /// Elements may be unqueued from destruction if we
+        /// allocate more and can reuse this pool
+        set<VboIndex>::type mEmptyVboPools;
 
         VaoVec mVaos;
         uint32 mVaoNames;
@@ -266,7 +303,8 @@ namespace Ogre
         void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes, BufferType bufferType,
                             bool readCapable, bool skipDynBufferMultiplier );
 
-        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes, VboVec &vboVec );
+        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
+                            const VboFlag vboFlag );
 
         virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                             BufferType bufferType, void *initialData,
@@ -328,6 +366,8 @@ namespace Ogre
         inline void getMemoryStats( const Block &block, size_t vboIdx, size_t poolIdx,
                                     size_t poolCapacity, LwString &text, MemoryStatsEntryVec &outStats,
                                     Log *log ) const;
+
+        void deallocateEmptyVbos( const bool bDeviceStall );
 
         virtual void switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
                                              size_t newPoolIdx, BufferPacked *buffer );

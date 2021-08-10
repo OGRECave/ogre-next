@@ -224,6 +224,8 @@ namespace Ogre
             mDescriptorPools.clear();
         }
 
+        mEmptyVboPools.clear();
+
         for( size_t i = 0; i < MAX_VBO_FLAG; ++i )
         {
             VboVec::iterator itor = mVbos[i].begin();
@@ -231,12 +233,15 @@ namespace Ogre
 
             while( itor != endt )
             {
-                vkDestroyBuffer( mDevice->mDevice, itor->vkBuffer, 0 );
-                vkFreeMemory( mDevice->mDevice, itor->vboName, 0 );
+                if( itor->isAllocated() )
+                {
+                    vkDestroyBuffer( mDevice->mDevice, itor->vkBuffer, 0 );
+                    vkFreeMemory( mDevice->mDevice, itor->vboName, 0 );
 
-                itor->vboName = 0;
-                delete itor->dynamicBuffer;
-                itor->dynamicBuffer = 0;
+                    itor->vboName = 0;
+                    delete itor->dynamicBuffer;
+                    itor->dynamicBuffer = 0;
+                }
                 ++itor;
             }
         }
@@ -371,6 +376,49 @@ namespace Ogre
         statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::deallocateEmptyVbos( const bool bDeviceStall )
+    {
+        if( mEmptyVboPools.empty() )
+            return;
+
+        if( !bDeviceStall )
+            waitForTailFrameToFinish();
+
+        set<VboIndex>::type::iterator itor = mEmptyVboPools.begin();
+        set<VboIndex>::type::iterator endt = mEmptyVboPools.end();
+
+        while( itor != endt )
+        {
+            Vbo &vbo = mVbos[itor->vboFlag][itor->vboIdx];
+            OGRE_ASSERT_MEDIUM( vbo.isEmpty() );
+            OGRE_ASSERT_MEDIUM( vbo.isAllocated() );
+
+            if( ( mFrameCount - vbo.emptyFrame ) >= mDynamicBufferMultiplier || bDeviceStall )
+            {
+                vkDestroyBuffer( mDevice->mDevice, vbo.vkBuffer, 0 );
+                vkFreeMemory( mDevice->mDevice, vbo.vboName, 0 );
+
+                vbo.vboName = 0;
+                vbo.vkBuffer = 0;
+                vbo.sizeBytes = 0u;
+                delete vbo.dynamicBuffer;
+                vbo.dynamicBuffer = 0;
+
+                vbo.freeBlocks.clear();
+                vbo.emptyFrame = mFrameCount;
+
+                mUnallocatedVbos[itor->vboFlag].push_back( itor->vboIdx );
+
+                set<VboIndex>::type::iterator toErase = itor++;
+                mEmptyVboPools.erase( toErase );
+            }
+            else
+            {
+                ++itor;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void VulkanVaoManager::switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
                                                    size_t newPoolIdx, BufferPacked *buffer )
     {
@@ -395,7 +443,10 @@ namespace Ogre
         // And StagingBuffers, StagingTextures, TextureGpu, and anything that
         // calls either allocateVbo or allocateRawBuffer (e.g. AsyncTextureTicket,
         // VulkanDiscardBufferManager, etc)
+        // And mEmptyVboPools, and clear mUnallocatedVbos
         TODO_whenImplemented_include_stagingBuffers;
+
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "VulkanVaoManager::cleanupEmptyPools" );
 
         for( unsigned vboIdx = 0; vboIdx < MAX_VBO_FLAG; ++vboIdx )
         {
@@ -928,7 +979,33 @@ namespace Ogre
                                                                 isCoherent, false, mDevice );
             }
 
-            vboVec.push_back( newVbo );
+            if( !mUnallocatedVbos[vboFlag].empty() )
+            {
+                // There is an unallocated pool wasting space. Place the new pool there
+                bestVboIdx = mUnallocatedVbos[vboFlag].back();
+                mUnallocatedVbos[vboFlag].pop_back();
+                vboVec[bestVboIdx] = newVbo;
+            }
+            else
+            {
+                vboVec.push_back( newVbo );
+            }
+        }
+        else
+        {
+            Vbo &bestVbo = vboVec[bestVboIdx];
+            if( bestVbo.isEmpty() )
+            {
+                OGRE_ASSERT_HIGH( bestVbo.isAllocated() );
+
+                // The block will no longer be empty, hence no unschedule from destruction
+                VboIndex vboIndex;
+                vboIndex.vboFlag = vboFlag;
+                vboIndex.vboIdx = static_cast<uint32>( bestVboIdx );
+                OGRE_ASSERT_HIGH( mEmptyVboPools.find( vboIndex ) != mEmptyVboPools.end() &&
+                                  "If the Vbo pool was empty, it should be in mEmptyVboPools" );
+                mEmptyVboPools.erase( vboIndex );
+            }
         }
 
         // clang-format off
@@ -971,13 +1048,13 @@ namespace Ogre
         if( bufferType >= BT_DYNAMIC_DEFAULT && !readCapable && !skipDynBufferMultiplier )
             sizeBytes *= mDynamicBufferMultiplier;
 
-        deallocateVbo( vboIdx, bufferOffset, sizeBytes, mVbos[vboFlag] );
+        deallocateVbo( vboIdx, bufferOffset, sizeBytes, vboFlag );
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
-                                          VboVec &vboVec )
+                                          const VboFlag vboFlag )
     {
-        Vbo &vbo = vboVec[vboIdx];
+        Vbo &vbo = mVbos[vboFlag][vboIdx];
         StrideChangerVec::iterator itStride =
             std::lower_bound( vbo.strideChangers.begin(), vbo.strideChangers.end(),  //
                               bufferOffset, StrideChanger() );
@@ -995,6 +1072,18 @@ namespace Ogre
         // See if we're contiguous to a free block and make that block grow.
         vbo.freeBlocks.push_back( Block( bufferOffset, sizeBytes ) );
         mergeContiguousBlocks( vbo.freeBlocks.end() - 1u, vbo.freeBlocks );
+
+        if( vbo.isEmpty() )
+        {
+            // This pool is empty. Schedule for removal
+            // We may reuse their memory if more memory is requested before they're actually removed.
+            OGRE_ASSERT_LOW( vbo.strideChangers.empty() );
+            vbo.emptyFrame = mFrameCount;
+            VboIndex vboIndex;
+            vboIndex.vboFlag = vboFlag;
+            vboIndex.vboIdx = static_cast<uint32>( vboIdx );
+            mEmptyVboPools.insert( vboIndex );
+        }
     }
     //-----------------------------------------------------------------------------------
     VkDeviceMemory VulkanVaoManager::allocateTexture( const VkMemoryRequirements &memReq,
@@ -1014,7 +1103,7 @@ namespace Ogre
         const VboFlag vboFlag = mDevice->mDeviceProperties.limits.bufferImageGranularity == 1u
                                     ? CPU_INACCESSIBLE
                                     : TEXTURES_OPTIMAL;
-        deallocateVbo( vboIdx, bufferOffset, sizeBytes, mVbos[vboFlag] );
+        deallocateVbo( vboIdx, bufferOffset, sizeBytes, vboFlag );
     }
     //-----------------------------------------------------------------------------------
     VulkanRawBuffer VulkanVaoManager::allocateRawBuffer( VboFlag vboFlag, size_t sizeBytes,
@@ -1043,7 +1132,7 @@ namespace Ogre
         OGRE_ASSERT_LOW( rawBuffer.mUnmapTicket == std::numeric_limits<size_t>::max() &&
                          "VulkanRawBuffer not unmapped (or dangling)" );
         deallocateVbo( rawBuffer.mVboPoolIdx, rawBuffer.mInternalBufferStart, rawBuffer.mSize,
-                       mVbos[rawBuffer.mVboFlag] );
+                       static_cast<VboFlag>( rawBuffer.mVboFlag ) );
         memset( &rawBuffer, 0, sizeof( rawBuffer ) );
     }
     //-----------------------------------------------------------------------------------
@@ -1771,6 +1860,8 @@ namespace Ogre
                 mDelayedFuncs[mDynamicBufferCurrentFrame].begin(), itor );
         }
 
+        deallocateEmptyVbos( false );
+
         if( !mFenceFlushed )
         {
             // We could only reach here if _update() was called
@@ -1978,6 +2069,8 @@ namespace Ogre
             itFrame->clear();
             ++itFrame;
         }
+
+        deallocateEmptyVbos( true );
 
         mFrameCount += mDynamicBufferMultiplier;
     }
