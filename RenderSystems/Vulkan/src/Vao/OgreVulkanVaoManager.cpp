@@ -332,7 +332,7 @@ namespace Ogre
 
                         while( itBlock != enBlock )
                         {
-                            if( nextBlock->offset < itBlock->offset )
+                            if( itBlock->offset < nextBlock->offset )
                                 nextBlock = itBlock;
                             ++itBlock;
                         }
@@ -340,6 +340,9 @@ namespace Ogre
 
                     freeBytes += nextBlock->size;
                     usedBlock.size = nextBlock->offset - usedBlock.offset;
+
+                    OGRE_ASSERT_LOW( usedBlock.size <= vbo.sizeBytes );
+                    OGRE_ASSERT_LOW( usedBlock.offset + usedBlock.size <= vbo.sizeBytes );
 
                     // usedBlock.size could be 0 if:
                     //  1. All of memory is free
