@@ -921,7 +921,7 @@ namespace Ogre
         bool wasZero = mClearCoat == 0.0f;
         mClearCoat = clearCoat;
 
-        if( wasZero && clearCoat != 0.0f || !wasZero && clearCoat == 0.0f )
+        if( ( wasZero && clearCoat != 0.0f ) || ( !wasZero && clearCoat == 0.0f ) )
         {
             flushRenderables();
         }
