@@ -224,6 +224,7 @@ else()
 	unset( OGRE_STATIC )
 endif()
 findOgreBuildSetting( ${OGRE_BUILD_SETTINGS_STR} OGRE_BUILD_RENDERSYSTEM_METAL )
+findOgreBuildSetting( ${OGRE_BUILD_SETTINGS_STR} OGRE_BUILD_RENDERSYSTEM_VULKAN )
 unset( OGRE_BUILD_SETTINGS_STR )
 
 if( NOT APPLE )
@@ -278,6 +279,14 @@ if( OGRE_STATIC )
 			debug RenderSystem_Metal${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
 			optimized RenderSystem_Metal${OGRE_STATIC} )
 		include_directories( "${OGRE_SOURCE}/RenderSystems/Metal/include" )
+	endif()
+	if( OGRE_BUILD_RENDERSYSTEM_VULKAN )
+		message( STATUS "Detected Vulkan RenderSystem. Linking against it." )
+		set( OGRE_LIBRARIES
+			${OGRE_LIBRARIES}
+			debug RenderSystem_Vulkan${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+			optimized RenderSystem_Vulkan${OGRE_STATIC} )
+		include_directories( "${OGRE_SOURCE}/RenderSystems/Vulkan/include" )
 	endif()
 endif()
 
