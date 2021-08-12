@@ -334,6 +334,9 @@ macro( addStaticDependencies OGRE_SOURCE, OGRE_BINARIES, OGRE_BUILD_SETTINGS_STR
 	elseif( IOS )
 		set( OGRE_DEPENDENCIES "${OGRE_SOURCE}/iOSDependencies/lib/$(CONFIGURATION)" CACHE STRING
 			 "Path to OGRE's dependencies folder. Only used in Static Builds" )
+	elseif( ANDROID )
+		set( OGRE_DEPENDENCIES "${OGRE_SOURCE}/DependenciesAndroid/lib" CACHE STRING
+			"Path to OGRE's dependencies folder. Only used in Static Builds" )
 	else()
 		set( OGRE_DEPENDENCIES "${OGRE_SOURCE}/Dependencies/lib" CACHE STRING
 			 "Path to OGRE's dependencies folder. Only used in Static Builds" )
