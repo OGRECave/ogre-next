@@ -90,7 +90,14 @@
 	float3 worldPos;
 	worldPos.y = OGRE_Load2D( heightMap, rshort2( uVertexPos.xy ), 0 ).x;
 @property( use_skirts )
-	worldPos.y = isSkirt ? uintBitsToFloat(cellData.numVertsPerLine.w) : worldPos.y;
+	float skirtHeight = uintBitsToFloat( cellData.numVertsPerLine.w );
+	if( isSkirt )
+	{
+		if( worldPos.y <= skirtHeight )
+			worldPos.y = worldPos.y - skirtHeight;
+		else
+			worldPos.y = skirtHeight;
+	}
 @end
 	worldPos.xz = float2( uVertexPos.xy );
 	worldPos.xyz = worldPos.xyz * cellData.scale.xyz + cellData.pos.xyz;
