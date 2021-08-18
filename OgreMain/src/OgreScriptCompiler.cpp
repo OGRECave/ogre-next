@@ -1281,6 +1281,7 @@ namespace Ogre
         mIds["clear_depth"]     = ID_CLEAR_DEPTH;
         mIds["clear_stencil"]   = ID_CLEAR_STENCIL;
         mIds["warn_if_rtv_was_flushed"]   = ID_WARN_IF_RTV_WAS_FLUSHED;
+        mIds["skip_load_store_semantics"] = ID_SKIP_LOAD_STORE_SEMANTICS;
         mIds["viewport"]        = ID_VIEWPORT;
         mIds["num_initial"]     = ID_NUM_INITIAL;
         mIds["flush_command_buffers"] = ID_FLUSH_COMMAND_BUFFERS;

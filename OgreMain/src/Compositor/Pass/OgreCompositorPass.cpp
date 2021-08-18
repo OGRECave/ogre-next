@@ -38,6 +38,7 @@ THE SOFTWARE.
 
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreViewport.h"
+#include "OgreLogManager.h"
 
 #include "OgreProfiler.h"
 #include "OgreRenderSystem.h"
@@ -85,7 +86,8 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "No RenderTargetViewDef provided to this compositor pass "
                          "(e.g. you wrote target {} instead of target myTexture {}.\n"
-                         "Only a few compositor passes support this (e.g. Compute passes)\n"
+                         "Only a few compositor passes support this "
+                         "(e.g. Compute passes, Shadows passes)\n"
                          "Node with error: " +
                              mDefinition->getParentTargetDef()->getParentNodeDef()->getNameStr() + "\n",
                          "CompositorPass::CompositorPass" );
@@ -137,6 +139,35 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPass::setRenderPassDescToCurrent( void )
     {
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        if( mDefinition->mSkipLoadStoreSemantics )
+        {
+            OGRE_ASSERT_MEDIUM(
+                ( mDefinition->getType() == PASS_QUAD || mDefinition->getType() == PASS_SCENE ||
+                  mDefinition->getType() == PASS_CUSTOM ) &&
+                "mSkipLoadStoreSemantics is only intended for use with pass quad, scene & custom" );
+
+            const RenderPassDescriptor *currRenderPassDesc = renderSystem->getCurrentPassDescriptor();
+            if( !currRenderPassDesc )
+            {
+                LogManager::getSingleton().logMessage(
+                    "mSkipLoadStoreSemantics was requested but there is no active render pass "
+                    "descriptor. Disable this setting for pass " +
+                        mDefinition->mProfilingId + " with RT " +
+                        mDefinition->getParentTargetDef()->getRenderTargetNameStr() +
+                        "\n - Check the contents of CompositorPass::mResourceTransitions to see if you "
+                        "can "
+                        "move them to a barrier pass",
+                    LML_CRITICAL );
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "mSkipLoadStoreSemantics was requested but there is no active render pass "
+                             "descriptor.\nSee Ogre.log for details",
+                             "CompositorPass::setRenderPassDescToCurrent" );
+            }
+
+            return;
+        }
+
         CompositorWorkspace *workspace = mParentNode->getWorkspace();
         uint8 workspaceVpMask = workspace->getViewportModifierMask();
 
@@ -163,7 +194,6 @@ namespace Ogre
             scissors[i] = Vector4( scLeft, scTop, scWidth, scHeight );
         }
 
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->beginRenderPassDescriptor(
             mRenderPassDesc, mAnyTargetTexture, mAnyMipLevel, vpSize, scissors, numViewports,
             mDefinition->mIncludeOverlays, mDefinition->mWarnIfRtvWasFlushed );

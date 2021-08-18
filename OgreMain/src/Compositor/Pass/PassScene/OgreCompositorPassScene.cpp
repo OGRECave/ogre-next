@@ -241,7 +241,14 @@ namespace Ogre
 
         if( mUpdateShadowNode && shadowNode )
         {
-            //We need to prepare for rendering another RT (we broke the contiguous chain)
+            // We need to prepare for rendering another RT (we broke the contiguous chain)
+            if( mDefinition->mSkipLoadStoreSemantics )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "mSkipLoadStoreSemantics can't be true if updating the shadow node. You "
+                             "can use shadow_node reuse",
+                             "CompositorPassScene::execute" );
+            }
 
             //Save the value in case the listener changed it
             const uint32 oldVisibilityMask = viewport->getVisibilityMask();

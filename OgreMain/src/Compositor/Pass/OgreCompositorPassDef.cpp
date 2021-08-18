@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassMipmap/OgreCompositorPassMipmapDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
+#include "Compositor/Pass/PassShadows/OgreCompositorPassShadowsDef.h"
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
 
@@ -59,6 +60,7 @@ namespace Ogre
         "UAV",
         "MIPMAP",
         "IBL_SPECULAR",
+        "SHADOWS",
         "COMPUTE",
         "CUSTOM"
     };
@@ -112,6 +114,9 @@ namespace Ogre
             break;
         case PASS_MIPMAP:
             retVal = OGRE_NEW CompositorPassMipmapDef( this );
+            break;
+        case PASS_SHADOWS:
+            retVal = OGRE_NEW CompositorPassShadowsDef( mParentNodeDef, this );
             break;
         case PASS_COMPUTE:
             retVal = OGRE_NEW CompositorPassComputeDef( mParentNodeDef, this );

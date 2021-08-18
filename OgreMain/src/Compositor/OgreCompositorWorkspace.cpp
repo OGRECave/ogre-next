@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorShadowNode.h"
 
 #include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
+#include "Compositor/Pass/PassShadows/OgreCompositorPassShadows.h"
 
 #include "OgreViewport.h"
 
@@ -392,7 +393,7 @@ namespace Ogre
 
         while( itShadowNode != enShadowNode )
         {
-#ifndef NDEBUG
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
             set<Camera*>::type usedCameras;
 #endif
             Camera *lastCamera = 0;
@@ -408,7 +409,28 @@ namespace Ogre
 
                 while( itPasses != enPasses )
                 {
-                    if( (*itPasses)->getType() == PASS_SCENE )
+                    if( (*itPasses)->getType() == PASS_SHADOWS )
+                    {
+                        OGRE_ASSERT_HIGH( dynamic_cast<CompositorPassShadows *>( *itPasses ) );
+                        CompositorPassShadows *pass = static_cast<CompositorPassShadows *>( *itPasses );
+                        const FastArray<CompositorShadowNode *> &shadowNodes =pass->getShadowNodes();
+
+                        FastArray<CompositorShadowNode *>::const_iterator itShadow = shadowNodes.begin();
+                        FastArray<CompositorShadowNode *>::const_iterator enShadow = shadowNodes.end();
+
+                        while( itShadow != enShadow )
+                        {
+                            if( shadowNode == *itShadow )
+                            {
+                                lastCamera = pass->getCullCamera();
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
+                                usedCameras.insert( lastCamera );
+#endif
+                            }
+                            ++itShadow;
+                        }
+                    }
+                    else if( (*itPasses)->getType() == PASS_SCENE )
                     {
                         assert( dynamic_cast<CompositorPassScene*>( *itPasses ) );
                         CompositorPassScene *pass = static_cast<CompositorPassScene*>( *itPasses );
@@ -421,26 +443,26 @@ namespace Ogre
                             if( recalc == SHADOW_NODE_RECALCULATE )
                             {
                                 //We're forced to recalculate anyway, save the new camera
-                                lastCamera = pass->getCamera();
-#ifndef NDEBUG
+                                lastCamera = pass->getCullCamera();
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
                                 usedCameras.insert( lastCamera );
 #endif
                             }
                             else if( recalc == SHADOW_NODE_FIRST_ONLY )
                             {
-                                if( lastCamera != pass->getCamera() )
+                                if( lastCamera != pass->getCullCamera() )
                                 {
                                     //Either this is the first one, or camera changed.
                                     //We need to recalculate
                                     pass->_setUpdateShadowNode( true );
-                                    lastCamera = pass->getCamera();
+                                    lastCamera = pass->getCullCamera();
 
                                     //Performance warning check. Only on non-release builds.
                                     //We don't raise the log on SHADOW_NODE_RECALCULATE because
                                     //that's explicit. We assume the user knows what he's doing.
                                     //(may be he changed the objects without us knowing
                                     //through a listener)
-#ifndef NDEBUG
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
                                     if( usedCameras.find( lastCamera ) != usedCameras.end() )
                                     {
                                         LogManager::getSingleton().logMessage(

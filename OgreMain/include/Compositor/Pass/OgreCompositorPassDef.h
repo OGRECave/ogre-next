@@ -60,6 +60,7 @@ namespace Ogre
         PASS_UAV,
         PASS_MIPMAP,
         PASS_IBL_SPECULAR,
+        PASS_SHADOWS,
         PASS_COMPUTE,
         PASS_CUSTOM
     };
@@ -76,6 +77,7 @@ namespace Ogre
             * PASS_DEPTHCOPY (@See CompositorPassDepthCopy)
             * PASS_UAV (@See CompositorPassUavDef)
             * PASS_COMPUTE (@See CompositorPassComputeDef)
+            * PASS_SHADOWS (@See CompositorPassShadowsDef)
             * PASS_MIPMAP (@See CompositorPassMipmapDef)
         This class doesn't do much on its own. See the derived types for more information
         A definition is shared by all pass instantiations (i.e. Five CompositorPassScene can
@@ -133,6 +135,16 @@ namespace Ogre
         StoreAction::StoreAction mStoreActionColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         StoreAction::StoreAction mStoreActionDepth;
         StoreAction::StoreAction mStoreActionStencil;
+
+        /// Ignore mLoadAction*/mStoreAction*
+        ///
+        /// Useful when doing multiple passes and you want to continue
+        /// using the same pass semantics opened by a previous pass
+        ///
+        /// Be careful with this setting. It can silently break a lot of stuff
+        ///
+        /// Only valid for PASS_QUAD and PASS_SCENE
+        bool mSkipLoadStoreSemantics;
 
         /** Will issue a warning (by raising an exception) if Ogre is forced to flush
             the RenderTarget, which is very bad for performance on mobile, and can
@@ -218,6 +230,7 @@ namespace Ogre
             mLoadActionStencil( LoadAction::Load ),
             mStoreActionDepth( StoreAction::StoreOrResolve ),
             mStoreActionStencil( StoreAction::StoreOrResolve ),
+            mSkipLoadStoreSemantics( false ),
             mWarnIfRtvWasFlushed( false ),
             mColourWrite( true ),
             mReadOnlyDepth( false ),

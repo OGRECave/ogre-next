@@ -262,15 +262,17 @@ texture, this value is silently ignored. Default: slice = 0
 ## Passes {#CompositorNodesPasses}
 
 Passes are the same as they were in Ogre 1.x. At the time of writing
-there are 8 types of passes:
+there are 10 types of passes:
 
 -   clear (PASS\_CLEAR)
 -   generate\_mipmaps (PASS\_MIPMAP)
 -   quad (PASS\_QUAD)
 -   resolve (PASS\_RESOLVE)
 -   render\_scene (PASS\_SCENE)
+-   shadows (PASS\_SHADOWS)
 -   stencil (PASS\_STENCIL)
 -   uav\_queue (PASS\_UAV)
+-   compute (PASS\_COMPUTE)
 -   custom (PASS\_CUSTOM)
 
 More passes are planned including the ability for users to extend with
@@ -448,6 +450,58 @@ know which textures may or will be used during the pass so resource
 transitions and barriers can be issued in explicit APIs like DX12 and
 Vulkan.
 
+-   skip\_load\_store\_semantics \<yes|no\>;
+
+When yes, the load and store semantics will be ignored. Use with care
+as improper usage may lead to rendering bugs or crashes.
+
+Normally Ogre tries to merge passes when possible but certain advanced
+uses are impossible or difficult to get automatically merged, thus this
+flag indicates we want
+e.g.
+
+```cpp
+compositor_node MyNode
+{
+	in 0 rtt
+
+	target rtt
+	{
+		pass render_quad
+		{
+			load
+			{
+				// Do not load or clear anything to colour, this pass will overwrite everything
+				all		clear
+				colour	dont_care
+			}
+			store
+			{
+				// Only save colour, don't care about depth/stencil
+				all		dont_care
+				colour	store
+			}
+
+			material MaterialThatWritesToEveryColourPixel
+		}
+
+		pass render_scene
+		{
+			// Inherit the same semantics of the previous pass
+			skip_load_store_semantics true
+
+			rq_first 0
+			rq_last max
+
+			// We can NOT use recalculate or first, because
+			// doing so will end the pass, and we're explicitly
+			// asking Ogre to not close the pass.
+			shadows		MyShadowNode reuse
+		}
+	}
+}
+```
+
 The following setting was available in Ogre 1.x; but was not documented:
 
 -   quad\_normals
@@ -512,6 +566,10 @@ Replaces first\_render\_queue. The default is 0. Must be a value between
 Replaces last\_render\_queue. The default is `max` which is a special
 parameter that implies the last active render queue ID. If numeric,
 value must be between 0 and 255. The value is **not** inclusive.
+
+-   skip\_load\_store\_semantics \<yes|no\>;
+
+See render\_quad.
 
 -   viewport \[idx\] \<left\>; \<top\>; \<width\>; \<height\>;
     \[\<scissor\_left\>; \<scissor\_top\>; \<scissor\_width\>;
@@ -582,6 +640,15 @@ it. Very useful for reflection passes (mirrors, water) where the user
 wants to be in control of the camera, while the Compositor is associated
 with it. The Camera must be created by the user before the workspace is
 instantiated and remain valid until the workspace is destroyed.
+
+-   cull\_camera \<camera\_name\>;
+
+In VR we want to reuse the same cull list for both eyes. Additionally we'd like
+to calculate shadows for both eyes once, rather than once per eye.
+This setting allows setting a cull camera different from the rendering
+camera that should be placed in such a way that the cull camera's frustum encompases
+both left and right eye. When this string is empty, the regular camera is used.
+Default: Empty string.
 
 -   lod\_camera \<camera\_name\>;
 
@@ -668,6 +735,46 @@ SSR (Screen Space Reflections).
 
 Whether to use instanced stereo, for VR rendering. See InstancedStereo and OpenVR samples.
 You will probably want to also set multiple viewports, at the very least viewports 0 and 1
+
+### shadows {#CompositorNodesPassesShadows}
+
+This pass enables force-updating multiple shadow nodes in batch in its own pass
+
+This is useful because shadow nodes may "break" a render pass in 3:
+
+ - Normal rendering to RT
+ - Shadow node update
+ - Continue Normal rendering to the same RT
+
+This is an unnecessary performance hit on mobile (TBDR) thus executing them
+earlier allows for a smooth:
+
+ - Shadow node update (all of them? Up to you)
+ - Normal rendering to RT
+
+Don't forget to set shadow nodes to reuse in the pass scene passes or
+else you may overwrite them unnecessarily
+
+Usage is simple:
+
+```cpp
+// This pass supports being part of a nameless target
+target
+{
+	pass shadows
+	{
+		// We can update multiple shadow nodes
+		shadows	MyShadowNode_0
+		shadows	MyShadowNode_1
+		shadows	MyShadowNode_2
+
+		// These 3 parameters are the same as in pass_scene
+		camera		CameraName
+		lod_camera	CameraName
+		cull_camera	CameraName
+	}
+}
+```
 
 ### stencil {#CompositorNodesPassesStencil}
 

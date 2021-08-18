@@ -888,6 +888,7 @@ namespace Ogre
                         ID_CLEAR_STENCIL,
                         ID_WARN_IF_RTV_WAS_FLUSHED,
                     ID_STORE,
+                    ID_SKIP_LOAD_STORE_SEMANTICS,
                     ID_VIEWPORT,
                     ID_NUM_INITIAL,
                     ID_FLUSH_COMMAND_BUFFERS,

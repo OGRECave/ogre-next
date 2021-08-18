@@ -41,6 +41,8 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuad.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
+#include "Compositor/Pass/PassShadows/OgreCompositorPassShadows.h"
+#include "Compositor/Pass/PassShadows/OgreCompositorPassShadowsDef.h"
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencil.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUav.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
@@ -728,6 +730,11 @@ namespace Ogre
                 case PASS_IBL_SPECULAR:
                     newPass = OGRE_NEW CompositorPassIblSpecular(
                         static_cast<CompositorPassIblSpecularDef *>( *itPass ), rtvDef, this );
+                    break;
+                case PASS_SHADOWS:
+                    newPass = OGRE_NEW CompositorPassShadows(
+                        static_cast<CompositorPassShadowsDef *>( *itPass ),
+                        mWorkspace->getDefaultCamera(), this, rtvDef );
                     break;
                 case PASS_COMPUTE:
                     newPass = OGRE_NEW CompositorPassCompute(

@@ -61,6 +61,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassMipmap/OgreCompositorPassMipmapDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
+#include "Compositor/Pass/PassShadows/OgreCompositorPassShadowsDef.h"
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
 #include "Compositor/Pass/OgreCompositorPassProvider.h"
@@ -9287,6 +9288,22 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_SKIP_LOAD_STORE_SEMANTICS:
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+                    else if (prop->values.size() > 1)
+                    {
+                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+                    if( !getBoolean( prop->values.front(), &passQuad->mSkipLoadStoreSemantics ) )
+                    {
+                         compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                    }
+                    break;
                 case ID_VIEWPORT:
                 case ID_IDENTIFIER:
                 case ID_FLUSH_COMMAND_BUFFERS:
@@ -9804,6 +9821,22 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_SKIP_LOAD_STORE_SEMANTICS:
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+                    else if (prop->values.size() > 1)
+                    {
+                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+                    if( !getBoolean( prop->values.front(), &passScene->mSkipLoadStoreSemantics ) )
+                    {
+                         compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                    }
+                    break;
                 case ID_VIEWPORT:
                 case ID_IDENTIFIER:
                 case ID_FLUSH_COMMAND_BUFFERS:
@@ -9819,6 +9852,138 @@ namespace Ogre{
                     break;
                 default:
                     compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line, 
+                        "token \"" + prop->name + "\" is not recognized");
+                }
+            }
+        }
+    }
+
+    void CompositorPassTranslator::translateShadows(
+            ScriptCompiler *compiler, const AbstractNodePtr &node,
+            CompositorTargetDef *targetDef)
+    {
+        mPassDef = targetDef->addPass( PASS_SHADOWS );
+        CompositorPassShadowsDef *passShadows = static_cast<CompositorPassShadowsDef*>( mPassDef );
+
+        ObjectAbstractNode *obj = reinterpret_cast<ObjectAbstractNode*>(node.get());
+        obj->context = Any(mPassDef);
+
+        for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
+        {
+            if((*i)->type == ANT_OBJECT)
+            {
+                processNode(compiler, *i);
+            }
+            else if((*i)->type == ANT_PROPERTY)
+            {
+                PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
+                switch(prop->id)
+                {
+                case ID_SHADOWS_ENABLED:
+                    {
+                        if(prop->values.empty())
+                        {
+                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                            return;
+                        }
+                        else if(prop->values.size() > 2)
+                        {
+                            compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line);
+                            return;
+                        }
+
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        AbstractNodeList::const_iterator it1 = it0;
+                        if( prop->values.size() > 1 )
+                            ++it1;
+
+                        String str;
+                        if( getString( *it0, &str ) )
+                        {
+                            passShadows->mShadowNodes.push_back( IdString( str ) );
+                        }
+                        else
+                        {
+                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                "Usage is 'shadow myNodeName', can be repeated many times to update multiple shadow nodes");
+                        }
+                    }
+                    break;
+                case ID_CAMERA:
+                    {
+                        if(prop->values.empty())
+                        {
+                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                            return;
+                        }
+
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getIdString( *it0, &passShadows->mCameraName ) )
+                        {
+                             compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        }
+                    }
+                    break;
+                case ID_LOD_CAMERA:
+                    {
+                        if(prop->values.empty())
+                        {
+                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                            return;
+                        }
+
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getIdString( *it0, &passShadows->mLodCameraName ) )
+                        {
+                             compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        }
+                    }
+                    break;
+                case ID_CULL_CAMERA:
+                    {
+                        if( prop->values.empty() )
+                        {
+                            compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                            return;
+                        }
+
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getIdString( *it0, &passShadows->mCullCameraName ) )
+                        {
+                             compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        }
+                    }
+                    break;
+                case ID_CAMERA_CUBEMAP_REORIENT:
+                    {
+                        if(prop->values.empty())
+                        {
+                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                            return;
+                        }
+
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getBoolean( *it0, &passShadows->mCameraCubemapReorient ) )
+                        {
+                             compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                        }
+                    }
+                    break;
+                case ID_VIEWPORT:
+                case ID_IDENTIFIER:
+                case ID_FLUSH_COMMAND_BUFFERS:
+                case ID_NUM_INITIAL:
+                case ID_OVERLAYS:
+                case ID_EXECUTION_MASK:
+                case ID_VIEWPORT_MODIFIER_MASK:
+                case ID_USES_UAV:
+                case ID_EXPOSE:
+                case ID_COLOUR_WRITE:
+                case ID_SHADOW_MAP_FULL_VIEWPORT:
+                case ID_PROFILING_ID:
+                    break;
+                default:
+                    compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line,
                         "token \"" + prop->name + "\" is not recognized");
                 }
             }
@@ -10828,6 +10993,8 @@ namespace Ogre{
             translateDepthCopy( compiler, node, target );
         else if(obj->name == "bind_uav")
             translateUav( compiler, node, target );
+        else if(obj->name == "shadows")
+            translateShadows( compiler, node, target );
         else if(obj->name == "compute")
             translateCompute( compiler, node, target );
         else if(obj->name == "generate_mipmaps")
