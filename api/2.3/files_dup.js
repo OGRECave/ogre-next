@@ -274,6 +274,8 @@ var files_dup =
     ] ],
     [ "OgreCompositorPassScene.h", "_ogre_compositor_pass_scene_8h.html", null ],
     [ "OgreCompositorPassSceneDef.h", "_ogre_compositor_pass_scene_def_8h.html", "_ogre_compositor_pass_scene_def_8h" ],
+    [ "OgreCompositorPassShadows.h", "_ogre_compositor_pass_shadows_8h.html", null ],
+    [ "OgreCompositorPassShadowsDef.h", "_ogre_compositor_pass_shadows_def_8h.html", null ],
     [ "OgreCompositorPassStencil.h", "_ogre_compositor_pass_stencil_8h.html", null ],
     [ "OgreCompositorPassStencilDef.h", "_ogre_compositor_pass_stencil_def_8h.html", null ],
     [ "OgreCompositorPassUav.h", "_ogre_compositor_pass_uav_8h.html", null ],

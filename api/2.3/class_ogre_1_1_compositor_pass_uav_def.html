@@ -218,6 +218,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:aecd3ae94eb59058a4f064cf3aff60a95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#aecd3ae94eb59058a4f064cf3aff60a95">mShadowMapIdx</a></td></tr>
 <tr class="memdesc:aecd3ae94eb59058a4f064cf3aff60a95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shadow map index it belongs to (only filled in passes owned by Shadow Nodes)  <a href="class_ogre_1_1_compositor_pass_def.html#aecd3ae94eb59058a4f064cf3aff60a95">More...</a><br /></td></tr>
 <tr class="separator:aecd3ae94eb59058a4f064cf3aff60a95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a313d390f851cc3f0ac463ea78fe5e860"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#a313d390f851cc3f0ac463ea78fe5e860">mSkipLoadStoreSemantics</a></td></tr>
+<tr class="memdesc:a313d390f851cc3f0ac463ea78fe5e860"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ignore mLoadAction*&zwj;/mStoreAction*.  <a href="class_ogre_1_1_compositor_pass_def.html#a313d390f851cc3f0ac463ea78fe5e860">More...</a><br /></td></tr>
+<tr class="separator:a313d390f851cc3f0ac463ea78fe5e860"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4712fa57d68ae444860775563ae4eb0d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_uav_def.html#a4712fa57d68ae444860775563ae4eb0d">mStartingSlot</a></td></tr>
 <tr class="memdesc:a4712fa57d68ae444860775563ae4eb0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max value (0xff) means don't alter it.  <a href="class_ogre_1_1_compositor_pass_uav_def.html#a4712fa57d68ae444860775563ae4eb0d">More...</a><br /></td></tr>
 <tr class="separator:a4712fa57d68ae444860775563ae4eb0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1475,6 +1478,33 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Shadow map index it belongs to (only filled in passes owned by Shadow Nodes) </p>
+
+</div>
+</div>
+<a id="a313d390f851cc3f0ac463ea78fe5e860"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a313d390f851cc3f0ac463ea78fe5e860">&#9670;&nbsp;</a></span>mSkipLoadStoreSemantics</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::CompositorPassDef::mSkipLoadStoreSemantics</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Ignore mLoadAction*&zwj;/mStoreAction*. </p>
+<p>Useful when doing multiple passes and you want to continue using the same pass semantics opened by a previous pass</p>
+<p>Be careful with this setting. It can silently break a lot of stuff</p>
+<p>Only valid for PASS_QUAD and PASS_SCENE </p>
 
 </div>
 </div>

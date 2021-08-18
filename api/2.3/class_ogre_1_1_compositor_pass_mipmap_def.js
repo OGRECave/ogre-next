@@ -45,6 +45,7 @@ var class_ogre_1_1_compositor_pass_mipmap_def =
     [ "mReadOnlyStencil", "class_ogre_1_1_compositor_pass_mipmap_def.html#a1e9e560eddce4c5ac862789a1a752909", null ],
     [ "mShadowMapFullViewport", "class_ogre_1_1_compositor_pass_mipmap_def.html#a0fdf3a38961c32069cde61f23d7ff674", null ],
     [ "mShadowMapIdx", "class_ogre_1_1_compositor_pass_mipmap_def.html#aecd3ae94eb59058a4f064cf3aff60a95", null ],
+    [ "mSkipLoadStoreSemantics", "class_ogre_1_1_compositor_pass_mipmap_def.html#a313d390f851cc3f0ac463ea78fe5e860", null ],
     [ "mStoreActionColour", "class_ogre_1_1_compositor_pass_mipmap_def.html#a1c2ec91e26d3a0792c113570885b47a5", null ],
     [ "mStoreActionDepth", "class_ogre_1_1_compositor_pass_mipmap_def.html#a7731386fe3b2ac2cdb4a8be6e4e138b2", null ],
     [ "mStoreActionStencil", "class_ogre_1_1_compositor_pass_mipmap_def.html#abf1c159397e4fa8e205eb3461a6eec8d", null ],

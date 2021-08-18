@@ -37,6 +37,7 @@ var class_ogre_1_1_compositor_pass_stencil_def =
     [ "mReadOnlyStencil", "class_ogre_1_1_compositor_pass_stencil_def.html#a1e9e560eddce4c5ac862789a1a752909", null ],
     [ "mShadowMapFullViewport", "class_ogre_1_1_compositor_pass_stencil_def.html#a0fdf3a38961c32069cde61f23d7ff674", null ],
     [ "mShadowMapIdx", "class_ogre_1_1_compositor_pass_stencil_def.html#aecd3ae94eb59058a4f064cf3aff60a95", null ],
+    [ "mSkipLoadStoreSemantics", "class_ogre_1_1_compositor_pass_stencil_def.html#a313d390f851cc3f0ac463ea78fe5e860", null ],
     [ "mStencilParams", "class_ogre_1_1_compositor_pass_stencil_def.html#aad91334a6501898874f38807ae573379", null ],
     [ "mStencilRef", "class_ogre_1_1_compositor_pass_stencil_def.html#ac4a939a87c6557b0a0b58ec9c79657a2", null ],
     [ "mStoreActionColour", "class_ogre_1_1_compositor_pass_stencil_def.html#a1c2ec91e26d3a0792c113570885b47a5", null ],

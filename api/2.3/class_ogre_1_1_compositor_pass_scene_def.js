@@ -64,6 +64,7 @@ var class_ogre_1_1_compositor_pass_scene_def =
     [ "mShadowMapIdx", "class_ogre_1_1_compositor_pass_scene_def.html#aecd3ae94eb59058a4f064cf3aff60a95", null ],
     [ "mShadowNode", "class_ogre_1_1_compositor_pass_scene_def.html#aa96ca6678cf0c7b4af32c3740d301dd4", null ],
     [ "mShadowNodeRecalculation", "class_ogre_1_1_compositor_pass_scene_def.html#a46121097b8cde2e75de7a10bd7177e09", null ],
+    [ "mSkipLoadStoreSemantics", "class_ogre_1_1_compositor_pass_scene_def.html#a313d390f851cc3f0ac463ea78fe5e860", null ],
     [ "mStoreActionColour", "class_ogre_1_1_compositor_pass_scene_def.html#a1c2ec91e26d3a0792c113570885b47a5", null ],
     [ "mStoreActionDepth", "class_ogre_1_1_compositor_pass_scene_def.html#a7731386fe3b2ac2cdb4a8be6e4e138b2", null ],
     [ "mStoreActionStencil", "class_ogre_1_1_compositor_pass_scene_def.html#abf1c159397e4fa8e205eb3461a6eec8d", null ],

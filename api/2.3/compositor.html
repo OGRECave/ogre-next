@@ -102,6 +102,7 @@ $(document).ready(function(){initNavTree('compositor.html',''); initResizable();
 <li class="level3"><a href="#CompositorNodesPassesQuad">quad</a></li>
 <li class="level3"><a href="#CompositorNodesPassesResolve">resolve</a></li>
 <li class="level3"><a href="#CompositorNodesPassesRenderScene">render_scene</a></li>
+<li class="level3"><a href="#CompositorNodesPassesShadows">shadows</a></li>
 <li class="level3"><a href="#CompositorNodesPassesStencil">stencil</a></li>
 <li class="level3"><a href="#CompositorNodesPassesUavQueue">uav_queue</a><ul><li class="level4"><a href="#CompositorNodesPassesUavQueueSync">Synchronization</a></li>
 </ul>
@@ -295,15 +296,17 @@ Target</h2>
 <p>Note: When the target is a 3D/Cubemap/array texture, if the slice goes out of bounds, an exception will be raised. If the target is a 2D or 1D texture, this value is silently ignored. Default: slice = 0</p>
 <h2><a class="anchor" id="CompositorNodesPasses"></a>
 Passes</h2>
-<p>Passes are the same as they were in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x. At the time of writing there are 8 types of passes:</p>
+<p>Passes are the same as they were in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x. At the time of writing there are 10 types of passes:</p>
 <ul>
 <li>clear (PASS_CLEAR)</li>
 <li>generate_mipmaps (PASS_MIPMAP)</li>
 <li>quad (PASS_QUAD)</li>
 <li>resolve (PASS_RESOLVE)</li>
 <li>render_scene (PASS_SCENE)</li>
+<li>shadows (PASS_SHADOWS)</li>
 <li>stencil (PASS_STENCIL)</li>
 <li>uav_queue (PASS_UAV)</li>
+<li>compute (PASS_COMPUTE)</li>
 <li>custom (PASS_CUSTOM)</li>
 </ul>
 <p>More passes are planned including the ability for users to extend with custom passes which used to be present in 1.x.</p>
@@ -394,7 +397,51 @@ quad</h3>
 <li>expose &lt;textureName&gt;;</li>
 </ul>
 <p>Low level materials can access local and global textures via the old 'content_type compositor' setting, and Hlms materials can access them by calling <code>SceneManager::getCompositorTextures</code>. But before you can do that, you need to expose them to the pass. This is necessary so <a class="el" href="namespace_ogre.html">Ogre</a> can know which textures may or will be used during the pass so resource transitions and barriers can be issued in explicit APIs like DX12 and Vulkan.</p>
-<p>The following setting was available in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x; but was not documented:</p>
+<ul>
+<li>skip_load_store_semantics &lt;yes|no&gt;;</li>
+</ul>
+<p>When yes, the load and store semantics will be ignored. Use with care as improper usage may lead to rendering bugs or crashes.</p>
+<p>Normally <a class="el" href="namespace_ogre.html">Ogre</a> tries to merge passes when possible but certain advanced uses are impossible or difficult to get automatically merged, thus this flag indicates we want e.g.</p>
+<div class="fragment"><div class="line">compositor_node MyNode</div>
+<div class="line">{</div>
+<div class="line">    in 0 rtt</div>
+<div class="line"> </div>
+<div class="line">    target rtt</div>
+<div class="line">    {</div>
+<div class="line">        pass render_quad</div>
+<div class="line">        {</div>
+<div class="line">            load</div>
+<div class="line">            {</div>
+<div class="line">                <span class="comment">// Do not load or clear anything to colour, this pass will overwrite everything</span></div>
+<div class="line">                all     clear</div>
+<div class="line">                colour  dont_care</div>
+<div class="line">            }</div>
+<div class="line">            store</div>
+<div class="line">            {</div>
+<div class="line">                <span class="comment">// Only save colour, don&#39;t care about depth/stencil</span></div>
+<div class="line">                all     dont_care</div>
+<div class="line">                colour  store</div>
+<div class="line">            }</div>
+<div class="line"> </div>
+<div class="line">            material MaterialThatWritesToEveryColourPixel</div>
+<div class="line">        }</div>
+<div class="line"> </div>
+<div class="line">        pass render_scene</div>
+<div class="line">        {</div>
+<div class="line">            <span class="comment">// Inherit the same semantics of the previous pass</span></div>
+<div class="line">            skip_load_store_semantics <span class="keyword">true</span></div>
+<div class="line"> </div>
+<div class="line">            rq_first 0</div>
+<div class="line">            rq_last max</div>
+<div class="line"> </div>
+<div class="line">            <span class="comment">// We can NOT use recalculate or first, because</span></div>
+<div class="line">            <span class="comment">// doing so will end the pass, and we&#39;re explicitly</span></div>
+<div class="line">            <span class="comment">// asking Ogre to not close the pass.</span></div>
+<div class="line">            shadows     MyShadowNode reuse</div>
+<div class="line">        }</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+</div><!-- fragment --><p>The following setting was available in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x; but was not documented:</p>
 <ul>
 <li>quad_normals [camera_far_corners_view_space|camera_far_corners_view_space_normalized|camera_far_corners_view_space_normalized_lh|camera_far_corners_world_space|camera_far_corners_world_space_centered|camera_direction]</li>
 </ul>
@@ -427,6 +474,10 @@ render_scene</h3>
 </ul>
 <p>Replaces last_render_queue. The default is <code>max</code> which is a special parameter that implies the last active render queue ID. If numeric, value must be between 0 and 255. The value is <b>not</b> inclusive.</p>
 <ul>
+<li>skip_load_store_semantics &lt;yes|no&gt;;</li>
+</ul>
+<p>See render_quad.</p>
+<ul>
 <li>viewport [idx] &lt;left&gt;; &lt;top&gt;; &lt;width&gt;; &lt;height&gt;; [&lt;scissor_left&gt;; &lt;scissor_top&gt;; &lt;scissor_width&gt;; &lt;scissor_height&gt;;]</li>
 </ul>
 <p>Specifies the viewport. Also supported by all other passes (i.e. clear &amp; quads), The default is <code>0 0 1 1</code> which covers the entire screen. Values should be between 0 and 1.</p>
@@ -454,6 +505,10 @@ render_scene</h3>
 </ul>
 <p>When not specified, the default camera is used for rendering the pass (this default camera is specified when instantiating the workspace from C++).</p>
 <p>When a name is given, the Compositor will look for this camera and use it. Very useful for reflection passes (mirrors, water) where the user wants to be in control of the camera, while the Compositor is associated with it. The Camera must be created by the user before the workspace is instantiated and remain valid until the workspace is destroyed.</p>
+<ul>
+<li>cull_camera &lt;camera_name&gt;;</li>
+</ul>
+<p>In VR we want to reuse the same cull list for both eyes. Additionally we'd like to calculate shadows for both eyes once, rather than once per eye. This setting allows setting a cull camera different from the rendering camera that should be placed in such a way that the cull camera's frustum encompases both left and right eye. When this string is empty, the regular camera is used. Default: Empty string.</p>
 <ul>
 <li>lod_camera &lt;camera_name&gt;;</li>
 </ul>
@@ -496,7 +551,39 @@ render_scene</h3>
 <li>instanced_stereo [yes|no]</li>
 </ul>
 <p>Whether to use instanced stereo, for VR rendering. See InstancedStereo and OpenVR samples. You will probably want to also set multiple viewports, at the very least viewports 0 and 1</p>
-<h3><a class="anchor" id="CompositorNodesPassesStencil"></a>
+<h3><a class="anchor" id="CompositorNodesPassesShadows"></a>
+shadows</h3>
+<p>This pass enables force-updating multiple shadow nodes in batch in its own pass</p>
+<p>This is useful because shadow nodes may "break" a render pass in 3:</p>
+<ul>
+<li>Normal rendering to RT</li>
+<li>Shadow node update</li>
+<li>Continue Normal rendering to the same RT</li>
+</ul>
+<p>This is an unnecessary performance hit on mobile (TBDR) thus executing them earlier allows for a smooth:</p>
+<ul>
+<li>Shadow node update (all of them? Up to you)</li>
+<li>Normal rendering to RT</li>
+</ul>
+<p>Don't forget to set shadow nodes to reuse in the pass scene passes or else you may overwrite them unnecessarily</p>
+<p>Usage is simple:</p>
+<div class="fragment"><div class="line"><span class="comment">// This pass supports being part of a nameless target</span></div>
+<div class="line">target</div>
+<div class="line">{</div>
+<div class="line">    pass shadows</div>
+<div class="line">    {</div>
+<div class="line">        <span class="comment">// We can update multiple shadow nodes</span></div>
+<div class="line">        shadows MyShadowNode_0</div>
+<div class="line">        shadows MyShadowNode_1</div>
+<div class="line">        shadows MyShadowNode_2</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// These 3 parameters are the same as in pass_scene</span></div>
+<div class="line">        camera      CameraName</div>
+<div class="line">        lod_camera  CameraName</div>
+<div class="line">        cull_camera CameraName</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+</div><!-- fragment --><h3><a class="anchor" id="CompositorNodesPassesStencil"></a>
 stencil</h3>
 <p>Stencil passes are little more flexible than in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x; always remember to restore the stencil passes before leaving the node otherwise next nodes that will be executed may use unexpected stencil settings.</p>
 <p>Most relevant changes are that two sided stencil can now be definted with more flexibility (it's not a boolean anymore), and that syntax has slightly changed to accomodate for this change:</p>

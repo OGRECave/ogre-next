@@ -464,6 +464,8 @@ var namespace_ogre =
     [ "CompositorPassQuadDef", "class_ogre_1_1_compositor_pass_quad_def.html", "class_ogre_1_1_compositor_pass_quad_def" ],
     [ "CompositorPassScene", "class_ogre_1_1_compositor_pass_scene.html", "class_ogre_1_1_compositor_pass_scene" ],
     [ "CompositorPassSceneDef", "class_ogre_1_1_compositor_pass_scene_def.html", "class_ogre_1_1_compositor_pass_scene_def" ],
+    [ "CompositorPassShadows", "class_ogre_1_1_compositor_pass_shadows.html", "class_ogre_1_1_compositor_pass_shadows" ],
+    [ "CompositorPassShadowsDef", "class_ogre_1_1_compositor_pass_shadows_def.html", "class_ogre_1_1_compositor_pass_shadows_def" ],
     [ "CompositorPassStencil", "class_ogre_1_1_compositor_pass_stencil.html", "class_ogre_1_1_compositor_pass_stencil" ],
     [ "CompositorPassStencilDef", "class_ogre_1_1_compositor_pass_stencil_def.html", "class_ogre_1_1_compositor_pass_stencil_def" ],
     [ "CompositorPassTranslator", "class_ogre_1_1_compositor_pass_translator.html", "class_ogre_1_1_compositor_pass_translator" ],
@@ -2036,6 +2038,7 @@ var namespace_ogre =
       [ "PASS_UAV", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa64169071182113bc2f2612ce360d83dc", null ],
       [ "PASS_MIPMAP", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa43539099735fda358fe3b01e3536933f", null ],
       [ "PASS_IBL_SPECULAR", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa0fe924f8a19ffe8a3d7c0445946d7ec5", null ],
+      [ "PASS_SHADOWS", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa3ec0d9a6e1feeb393d5c3070589c9b60", null ],
       [ "PASS_COMPUTE", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa973bc7a5a948dd54130595d7539eb7ba", null ],
       [ "PASS_CUSTOM", "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa8be4347345faa339a4c663a8c5da1c51", null ]
     ] ],

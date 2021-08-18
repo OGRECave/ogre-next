@@ -50,6 +50,7 @@ var manual =
           [ "quad", "compositor.html#CompositorNodesPassesQuad", null ],
           [ "resolve", "compositor.html#CompositorNodesPassesResolve", null ],
           [ "render_scene", "compositor.html#CompositorNodesPassesRenderScene", null ],
+          [ "shadows", "compositor.html#CompositorNodesPassesShadows", null ],
           [ "stencil", "compositor.html#CompositorNodesPassesStencil", null ],
           [ "uav_queue", "compositor.html#CompositorNodesPassesUavQueue", [
             [ "Synchronization", "compositor.html#CompositorNodesPassesUavQueueSync", null ]
