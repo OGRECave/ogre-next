@@ -214,6 +214,7 @@ namespace Ogre
             const size_t otherSize = otherEnd - otherBegin;
 
             growToFit( otherSize );
+            where = mData + idx;
 
             memmove( mData + idx + otherSize, mData + idx, (mSize - idx) *  sizeof(T) );
 
