@@ -294,7 +294,86 @@ Target</h2>
 <p>The slice parameter is optional and refers to which slice or face from a 3D texture (or cubemap or 2D array) to use from the given texture. Valid values can be numeric or the hint '+X'. '-X', '+Y', '-Y', '+Z', and '-Z'.</p>
 <p>Note: The word 'slice' must not be written. Just write 'target myTexture +X' to work.</p>
 <p>Note: When the target is a 3D/Cubemap/array texture, if the slice goes out of bounds, an exception will be raised. If the target is a 2D or 1D texture, this value is silently ignored. Default: slice = 0</p>
-<h2><a class="anchor" id="CompositorNodesPasses"></a>
+<p>At the moment there is only one setting:</p>
+<ul>
+<li>target_level_barrier [yes|no];</li>
+</ul>
+<p>Default value is no.</p>
+<p>When yes, this setting is meant to be used with <code>skip_load_store_semantics</code> for optimization on mobile/TBDR targets, but should be used with care.</p>
+<p><code>skip_load_store_semantics</code> allows <a class="el" href="namespace_ogre.html">Ogre</a> to execute multiple consecutive passes as if they were only one.</p>
+<p>An obstacle for this is that barriers from all theses passes mut be issued <em>before</em> the first pass executes; otherwise the passes need to be internally broken up and <a class="el" href="namespace_ogre.html">Ogre</a> will complain if <code>skip_load_store_semantics on</code> but we can't merge the passes.</p>
+<p><code>target_level_barrier yes</code> means that an extra hidden pass will be inserted at the beginning of the target and issue all necessary barriers from subsequent passes:</p>
+<div class="fragment"><div class="line">target rt_renderwindow</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">// By having this set to true or yes, a barrier will be issued</span></div>
+<div class="line">    <span class="comment">// to cover all 4 passes in this target, which happens</span></div>
+<div class="line">    <span class="comment">// before the first render_quad</span></div>
+<div class="line">    target_level_barrier <span class="keyword">true</span></div>
+<div class="line"> </div>
+<div class="line">    pass render_quad</div>
+<div class="line">    {</div>
+<div class="line">        load</div>
+<div class="line">        {</div>
+<div class="line">            all     dont_care</div>
+<div class="line">        }</div>
+<div class="line">        store</div>
+<div class="line">        {</div>
+<div class="line">            all     dont_care</div>
+<div class="line">            colour  store</div>
+<div class="line">        }</div>
+<div class="line"> </div>
+<div class="line">        material MyMaterial</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    pass render_scene</div>
+<div class="line">    {</div>
+<div class="line">        skip_load_store_semantics <span class="keyword">true</span></div>
+<div class="line"> </div>
+<div class="line">        rq_first    0</div>
+<div class="line">        rq_last     5</div>
+<div class="line"> </div>
+<div class="line">        shadows     MainCharacter reuse</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    pass render_quad</div>
+<div class="line">    {</div>
+<div class="line">        skip_load_store_semantics <span class="keyword">true</span></div>
+<div class="line">        material <a class="code" href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb">Compositor</a>/UpsampleDepth</div>
+<div class="line">        input 0 worldRt_depth</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    pass render_scene</div>
+<div class="line">    {</div>
+<div class="line">        skip_load_store_semantics <span class="keyword">true</span></div>
+<div class="line"> </div>
+<div class="line">        rq_first    14</div>
+<div class="line">        rq_last     249</div>
+<div class="line"> </div>
+<div class="line">        shadows     NormalShadows reuse</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="ttc" id="anamespace_ogre_1_1_texture_source_type_html_a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb"><div class="ttname"><a href="namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb">Ogre::TextureSourceType::Compositor</a></div><div class="ttdeci">@ Compositor</div><div class="ttdoc">Created by compositor, for shadow mapping.</div><div class="ttdef"><b>Definition:</b> OgreTextureGpu.h:178</div></div>
+</div><!-- fragment --><p><b>Note that not always <code>target_level_barrier yes</code> can be successful.</b></p>
+<p>For example if pass <code>A</code> needs texture <code>X</code> to be in state <code>Texture</code> for sampling but pass <code>C</code> needs that same texture in state <code>Uav</code> then we have a contradiction as we can't transition to two states at the same time.</p>
+<p>The only solution is to break up the passes and issue two barriers. Note that you can however issue break ups manually:</p>
+<div class="fragment"><div class="line">target rt_renderwindow</div>
+<div class="line">{</div>
+<div class="line">    target_level_barrier <span class="keyword">true</span></div>
+<div class="line">    <span class="comment">// Pass A</span></div>
+<div class="line">    pass render_quad {}</div>
+<div class="line">    <span class="comment">// Pass B</span></div>
+<div class="line">    pass render_quad {skip_load_store_semantics <span class="keyword">true</span>}</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line">target rt_renderwindow</div>
+<div class="line">{</div>
+<div class="line">    target_level_barrier <span class="keyword">true</span></div>
+<div class="line">    <span class="comment">// Pass C</span></div>
+<div class="line">    pass render_quad {}</div>
+<div class="line">    <span class="comment">// Pass D</span></div>
+<div class="line">    pass render_quad {skip_load_store_semantics <span class="keyword">true</span>}</div>
+<div class="line">}</div>
+</div><!-- fragment --><h2><a class="anchor" id="CompositorNodesPasses"></a>
 Passes</h2>
 <p>Passes are the same as they were in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x. At the time of writing there are 10 types of passes:</p>
 <ul>
@@ -398,7 +477,7 @@ quad</h3>
 </ul>
 <p>Low level materials can access local and global textures via the old 'content_type compositor' setting, and Hlms materials can access them by calling <code>SceneManager::getCompositorTextures</code>. But before you can do that, you need to expose them to the pass. This is necessary so <a class="el" href="namespace_ogre.html">Ogre</a> can know which textures may or will be used during the pass so resource transitions and barriers can be issued in explicit APIs like DX12 and Vulkan.</p>
 <ul>
-<li>skip_load_store_semantics &lt;yes|no&gt;;</li>
+<li>skip_load_store_semantics [yes|no];</li>
 </ul>
 <p>When yes, the load and store semantics will be ignored. Use with care as improper usage may lead to rendering bugs or crashes.</p>
 <p>Normally <a class="el" href="namespace_ogre.html">Ogre</a> tries to merge passes when possible but certain advanced uses are impossible or difficult to get automatically merged, thus this flag indicates we want e.g.</p>
@@ -441,7 +520,22 @@ quad</h3>
 <div class="line">        }</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-</div><!-- fragment --><p>The following setting was available in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x; but was not documented:</p>
+</div><!-- fragment --><p>The reason you should be careful is that we assume you know where you're drawing. Consider the following example:</p>
+<div class="fragment"><div class="line">target TargetA</div>
+<div class="line">{</div>
+<div class="line">    pass render_quad {}</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line">target UnrelatedTargetB</div>
+<div class="line">{</div>
+<div class="line">    pass render_quad { skip_load_store_semantics <span class="keyword">true</span> }</div>
+<div class="line">}</div>
+</div><!-- fragment --><p>This script will <em>not</em> behave as expected because <b>both render_quad passes will draw to TargetA!</b></p>
+<p>This is because with <code>skip_load_store_semantics</code> you're telling <a class="el" href="namespace_ogre.html">Ogre</a> not to set <code>UnrelatedTargetB</code> as the current target <em>because <a class="el" href="namespace_ogre.html">Ogre</a> should assume it already is</em> the current target.</p>
+<p>Likewise there should be no barriers to execute because barriers force the pass to 'close' which means store semantics must be executed; and to open another pass we must execute load semantics again (see <code>target_level_barrier</code> to solve this problem).</p>
+<p>We try to perform validation checks in Debug mode to avoid these type of errors, but we can't cover them all.</p>
+<p>This setting is an optimization specifically aimed at mobile and you should pay attention to errors, the Ogre.log, Vulkan Validation Layers, and tools like RenderDoc to be sure rendering is happening as intended.</p>
+<p>The following setting was available in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x; but was not documented:</p>
 <ul>
 <li>quad_normals [camera_far_corners_view_space|camera_far_corners_view_space_normalized|camera_far_corners_view_space_normalized_lh|camera_far_corners_world_space|camera_far_corners_world_space_centered|camera_direction]</li>
 </ul>
@@ -474,7 +568,7 @@ render_scene</h3>
 </ul>
 <p>Replaces last_render_queue. The default is <code>max</code> which is a special parameter that implies the last active render queue ID. If numeric, value must be between 0 and 255. The value is <b>not</b> inclusive.</p>
 <ul>
-<li>skip_load_store_semantics &lt;yes|no&gt;;</li>
+<li>skip_load_store_semantics [yes|no];</li>
 </ul>
 <p>See render_quad.</p>
 <ul>

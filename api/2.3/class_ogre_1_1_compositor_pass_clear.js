@@ -6,6 +6,7 @@ var class_ogre_1_1_compositor_pass_clear =
     [ "getDefinition", "class_ogre_1_1_compositor_pass_clear.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
     [ "getParentNode", "class_ogre_1_1_compositor_pass_clear.html#a2eedb01d342205286e9d8d87513bad20", null ],
     [ "getRenderPassDesc", "class_ogre_1_1_compositor_pass_clear.html#aa8f5b48afbb18756b3dbcc28b080fda0", null ],
+    [ "getResourceTransitions", "class_ogre_1_1_compositor_pass_clear.html#a24976b937f4c62d9b95fc176c8d1f576", null ],
     [ "getTextureDependencies", "class_ogre_1_1_compositor_pass_clear.html#a280e7b34575c7554487b1f66a1ea8f5a", null ],
     [ "getType", "class_ogre_1_1_compositor_pass_clear.html#a220924c4a37f7cf458646522bc5cc72f", null ],
     [ "notifyCleared", "class_ogre_1_1_compositor_pass_clear.html#a4837e8afd093a37f67d708c64b793b4d", null ],

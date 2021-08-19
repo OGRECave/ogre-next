@@ -2,11 +2,13 @@ var class_ogre_1_1_compositor_pass =
 [
     [ "CompositorPass", "class_ogre_1_1_compositor_pass.html#a42ea402b654f1343c0abf4464cf30afe", null ],
     [ "~CompositorPass", "class_ogre_1_1_compositor_pass.html#a58360737ad569caedc863cf9aea9986a", null ],
+    [ "analyzeBarriers", "class_ogre_1_1_compositor_pass.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
     [ "execute", "class_ogre_1_1_compositor_pass.html#a2cc832fbb80b9685b4fedf874b46075c", null ],
     [ "getActualDimensions", "class_ogre_1_1_compositor_pass.html#ad4d394f598a677c18b4b653cde572957", null ],
     [ "getDefinition", "class_ogre_1_1_compositor_pass.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
     [ "getParentNode", "class_ogre_1_1_compositor_pass.html#a2eedb01d342205286e9d8d87513bad20", null ],
     [ "getRenderPassDesc", "class_ogre_1_1_compositor_pass.html#aa8f5b48afbb18756b3dbcc28b080fda0", null ],
+    [ "getResourceTransitions", "class_ogre_1_1_compositor_pass.html#a24976b937f4c62d9b95fc176c8d1f576", null ],
     [ "getTextureDependencies", "class_ogre_1_1_compositor_pass.html#a280e7b34575c7554487b1f66a1ea8f5a", null ],
     [ "getType", "class_ogre_1_1_compositor_pass.html#a220924c4a37f7cf458646522bc5cc72f", null ],
     [ "notifyCleared", "class_ogre_1_1_compositor_pass.html#a4837e8afd093a37f67d708c64b793b4d", null ],

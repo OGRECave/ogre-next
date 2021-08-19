@@ -95,6 +95,7 @@ var hierarchy =
     [ "Ogre::FastArray< LightCount >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Octant >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::AsyncTextureTicket * >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::CompositorPass * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::CompositorShadowNode * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::DescriptorSetTexture2::Slot >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::DescriptorSetUav::Slot >", "class_ogre_1_1_fast_array.html", null ],
@@ -348,6 +349,7 @@ var hierarchy =
         [ "Ogre::CompositorPassScene", "class_ogre_1_1_compositor_pass_scene.html", null ],
         [ "Ogre::CompositorPassShadows", "class_ogre_1_1_compositor_pass_shadows.html", null ],
         [ "Ogre::CompositorPassStencil", "class_ogre_1_1_compositor_pass_stencil.html", null ],
+        [ "Ogre::CompositorPassTargetBarrier", "class_ogre_1_1_compositor_pass_target_barrier.html", null ],
         [ "Ogre::CompositorPassUav", "class_ogre_1_1_compositor_pass_uav.html", null ]
       ] ],
       [ "Ogre::CompositorPassDef", "class_ogre_1_1_compositor_pass_def.html", [
@@ -360,6 +362,7 @@ var hierarchy =
         [ "Ogre::CompositorPassSceneDef", "class_ogre_1_1_compositor_pass_scene_def.html", null ],
         [ "Ogre::CompositorPassShadowsDef", "class_ogre_1_1_compositor_pass_shadows_def.html", null ],
         [ "Ogre::CompositorPassStencilDef", "class_ogre_1_1_compositor_pass_stencil_def.html", null ],
+        [ "Ogre::CompositorPassTargetBarrierDef", "class_ogre_1_1_compositor_pass_target_barrier_def.html", null ],
         [ "Ogre::CompositorPassUavDef", "class_ogre_1_1_compositor_pass_uav_def.html", null ]
       ] ],
       [ "Ogre::CompositorPassProvider", "class_ogre_1_1_compositor_pass_provider.html", null ],

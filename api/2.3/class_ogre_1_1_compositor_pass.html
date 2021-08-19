@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_compositor_pass.html','
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_compositor_pass__inherit__graph.svg" width="615" height="494"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_compositor_pass__inherit__graph.svg" width="615" height="560"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -112,6 +112,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a42ea402b654f1343c0abf4464cf30afe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58360737ad569caedc863cf9aea9986a"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a58360737ad569caedc863cf9aea9986a">~CompositorPass</a> ()</td></tr>
 <tr class="separator:a58360737ad569caedc863cf9aea9986a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a416dcadd1b717825a028e3d4fb274ac2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a416dcadd1b717825a028e3d4fb274ac2">analyzeBarriers</a> (void)</td></tr>
+<tr class="memdesc:a416dcadd1b717825a028e3d4fb274ac2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bakes most of the memory barriers / resource transition that will be needed during execution.  <a href="class_ogre_1_1_compositor_pass.html#a416dcadd1b717825a028e3d4fb274ac2">More...</a><br /></td></tr>
+<tr class="separator:a416dcadd1b717825a028e3d4fb274ac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cc832fbb80b9685b4fedf874b46075c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a2cc832fbb80b9685b4fedf874b46075c">execute</a> (const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCameraconst)=0</td></tr>
 <tr class="separator:a2cc832fbb80b9685b4fedf874b46075c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4d394f598a677c18b4b653cde572957"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#ad4d394f598a677c18b4b653cde572957">getActualDimensions</a> (void) const</td></tr>
@@ -122,6 +125,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2eedb01d342205286e9d8d87513bad20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8f5b48afbb18756b3dbcc28b080fda0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_render_pass_descriptor.html">RenderPassDescriptor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#aa8f5b48afbb18756b3dbcc28b080fda0">getRenderPassDesc</a> (void) const</td></tr>
 <tr class="separator:aa8f5b48afbb18756b3dbcc28b080fda0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24976b937f4c62d9b95fc176c8d1f576"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___resources.html#gab881163687bedff909edce16d11d9127">ResourceTransitionArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a24976b937f4c62d9b95fc176c8d1f576">getResourceTransitions</a> (void) const</td></tr>
+<tr class="separator:a24976b937f4c62d9b95fc176c8d1f576"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a280e7b34575c7554487b1f66a1ea8f5a"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___effects.html#ga5b2773dd5ab4626bf794ee82b5f822e8">CompositorTextureVec</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a280e7b34575c7554487b1f66a1ea8f5a">getTextureDependencies</a> (void) const</td></tr>
 <tr class="separator:a280e7b34575c7554487b1f66a1ea8f5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a220924c4a37f7cf458646522bc5cc72f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___effects.html#ga6f176e5de375550ba7f1c8dccde8345a">CompositorPassType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a220924c4a37f7cf458646522bc5cc72f">getType</a> () const</td></tr>
@@ -228,6 +233,41 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a416dcadd1b717825a028e3d4fb274ac2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a416dcadd1b717825a028e3d4fb274ac2">&#9670;&nbsp;</a></span>analyzeBarriers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::CompositorPass::analyzeBarriers </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Bakes most of the memory barriers / resource transition that will be needed during execution. </p>
+<p>Some passes may still generate more barriers/transitions that need to be placed dynamically. These passes must update resourceStatus without inserting a barrier into mResourceTransitions </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">boundUavs</td><td>[in/out] An array of the currently bound UAVs by slot. The derived class <a class="el" href="class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs.">CompositorPassUav</a> will write to them as part of the emulation. The base implementation reads from this value. </td></tr>
+    <tr><td class="paramname">resourceStatus</td><td>[in/out] A map with the last access flags used for each <a class="el" href="struct_ogre_1_1_gpu_tracked_resource.html">GpuTrackedResource</a>. We need it to identify how it was last used and thus what barrier we need to insert </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a2cc832fbb80b9685b4fedf874b46075c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2cc832fbb80b9685b4fedf874b46075c">&#9670;&nbsp;</a></span>execute()</h2>
 
@@ -252,7 +292,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_compositor_pass_uav.html#ae1000129c8f43557451a4a14fcce596b">Ogre::CompositorPassUav</a>, <a class="el" href="class_ogre_1_1_compositor_pass_stencil.html#a88a90cd8524ca4838ba402598452ec01">Ogre::CompositorPassStencil</a>, <a class="el" href="class_ogre_1_1_compositor_pass_shadows.html#aeb75c436ed13866bba63fd0fbc4080d5">Ogre::CompositorPassShadows</a>, <a class="el" href="class_ogre_1_1_compositor_pass_scene.html#aec967713ee6a2a049152f6090ebf7fcc">Ogre::CompositorPassScene</a>, <a class="el" href="class_ogre_1_1_compositor_pass_quad.html#ae0a52291d3b53e65dd6a622e16a2965a">Ogre::CompositorPassQuad</a>, <a class="el" href="class_ogre_1_1_compositor_pass_mipmap.html#aa2bda339febc5ee5e09ecebabfb2a42b">Ogre::CompositorPassMipmap</a>, <a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular.html#a87aaa5fc3d51100ca03271033ad97964">Ogre::CompositorPassIblSpecular</a>, <a class="el" href="class_ogre_1_1_compositor_pass_depth_copy.html#ad2722938f1d35a3e5e3575f7d0400dc1">Ogre::CompositorPassDepthCopy</a>, <a class="el" href="class_ogre_1_1_compositor_pass_compute.html#a15cad2078e73debdb2818c8c71f919dd">Ogre::CompositorPassCompute</a>, and <a class="el" href="class_ogre_1_1_compositor_pass_clear.html#a14fc14a5c21a6954471003284994c064">Ogre::CompositorPassClear</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_compositor_pass_uav.html#ae1000129c8f43557451a4a14fcce596b">Ogre::CompositorPassUav</a>, <a class="el" href="class_ogre_1_1_compositor_pass_target_barrier.html#add0c440fb317338a3a3ebdc79473df48">Ogre::CompositorPassTargetBarrier</a>, <a class="el" href="class_ogre_1_1_compositor_pass_stencil.html#a88a90cd8524ca4838ba402598452ec01">Ogre::CompositorPassStencil</a>, <a class="el" href="class_ogre_1_1_compositor_pass_shadows.html#aeb75c436ed13866bba63fd0fbc4080d5">Ogre::CompositorPassShadows</a>, <a class="el" href="class_ogre_1_1_compositor_pass_scene.html#aec967713ee6a2a049152f6090ebf7fcc">Ogre::CompositorPassScene</a>, <a class="el" href="class_ogre_1_1_compositor_pass_quad.html#ae0a52291d3b53e65dd6a622e16a2965a">Ogre::CompositorPassQuad</a>, <a class="el" href="class_ogre_1_1_compositor_pass_mipmap.html#aa2bda339febc5ee5e09ecebabfb2a42b">Ogre::CompositorPassMipmap</a>, <a class="el" href="class_ogre_1_1_compositor_pass_ibl_specular.html#a87aaa5fc3d51100ca03271033ad97964">Ogre::CompositorPassIblSpecular</a>, <a class="el" href="class_ogre_1_1_compositor_pass_depth_copy.html#ad2722938f1d35a3e5e3575f7d0400dc1">Ogre::CompositorPassDepthCopy</a>, <a class="el" href="class_ogre_1_1_compositor_pass_compute.html#a15cad2078e73debdb2818c8c71f919dd">Ogre::CompositorPassCompute</a>, and <a class="el" href="class_ogre_1_1_compositor_pass_clear.html#a14fc14a5c21a6954471003284994c064">Ogre::CompositorPassClear</a>.</p>
 
 </div>
 </div>
@@ -337,6 +377,32 @@ Public Member Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="class_ogre_1_1_render_pass_descriptor.html">RenderPassDescriptor</a>* Ogre::CompositorPass::getRenderPassDesc </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a24976b937f4c62d9b95fc176c8d1f576"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24976b937f4c62d9b95fc176c8d1f576">&#9670;&nbsp;</a></span>getResourceTransitions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="group___resources.html#gab881163687bedff909edce16d11d9127">ResourceTransitionArray</a>&amp; Ogre::CompositorPass::getResourceTransitions </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>

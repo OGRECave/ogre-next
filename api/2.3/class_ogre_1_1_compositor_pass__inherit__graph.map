@@ -1,5 +1,5 @@
 <map id="Ogre::CompositorPass" name="Ogre::CompositorPass">
-<area shape="rect" id="node1" title="Abstract class for compositor passes." alt="" coords="192,233,344,260"/>
+<area shape="rect" id="node1" title="Abstract class for compositor passes." alt="" coords="192,259,344,285"/>
 <area shape="rect" id="node3" href="$class_ogre_1_1_compositor_pass_clear.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="409,5,592,32"/>
 <area shape="rect" id="node4" href="$class_ogre_1_1_compositor_pass_compute.html" title="Implementation of CompositorPass This implementation will render a fullscreen triangle/quad to the Re..." alt="" coords="399,56,603,83"/>
 <area shape="rect" id="node5" href="$class_ogre_1_1_compositor_pass_depth_copy.html" title="Implementation of CompositorPass This implementation will copy one DepthBuffer to another DepthBuffer..." alt="" coords="393,107,608,133"/>
@@ -9,6 +9,7 @@
 <area shape="rect" id="node9" href="$class_ogre_1_1_compositor_pass_scene.html" title="Implementation of CompositorPass This implementation will perform main rendering, selecting several p..." alt="" coords="406,309,595,336"/>
 <area shape="rect" id="node10" href="$class_ogre_1_1_compositor_pass_shadows.html" title="CompositorPassShadows This class enables force&#45;updating multiple shadow nodes in batch in its own pas..." alt="" coords="397,360,604,387"/>
 <area shape="rect" id="node11" href="$class_ogre_1_1_compositor_pass_stencil.html" title="Implementation of CompositorPass This implementation will clear the RenderTarget using the parameters..." alt="" coords="405,411,597,437"/>
-<area shape="rect" id="node12" href="$class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="413,461,589,488"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,233,144,260"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_compositor_pass_target_barrier.html" title=" " alt="" coords="406,462,595,503"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs." alt="" coords="413,528,589,555"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,259,144,285"/>
 </map>

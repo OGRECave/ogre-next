@@ -126,6 +126,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0b1ae1e0eff65e010cc09919bb449855"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1341c5b11d6006eafae99a9cf2f9cc93"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_target_def.html#a1341c5b11d6006eafae99a9cf2f9cc93">getShadowMapSupportedLightTypes</a> (void) const</td></tr>
 <tr class="separator:a1341c5b11d6006eafae99a9cf2f9cc93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e894653645b4ec180930a86d158c140"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_target_def.html#a5e894653645b4ec180930a86d158c140">getTargetLevelBarrier</a> (void) const</td></tr>
+<tr class="separator:a5e894653645b4ec180930a86d158c140"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b2e210abecdca9123040f674ff9eaeb"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_compositor_pass_target_barrier_def.html">CompositorPassTargetBarrierDef</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_target_def.html#a2b2e210abecdca9123040f674ff9eaeb">getTargetLevelBarrierDef</a> (void) const</td></tr>
+<tr class="separator:a2b2e210abecdca9123040f674ff9eaeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -154,6 +158,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a18e78bc5c721786e07d10df5c3809563"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8633b1cdc6a1e9a0d3bd31e083ac20c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_target_def.html#a8633b1cdc6a1e9a0d3bd31e083ac20c5">setShadowMapSupportedLightTypes</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> types)</td></tr>
 <tr class="separator:a8633b1cdc6a1e9a0d3bd31e083ac20c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe6a03c3d3be1fd9ec2fb778f18b104f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_target_def.html#abe6a03c3d3be1fd9ec2fb778f18b104f">setTargetLevelBarrier</a> (bool bBarrier)</td></tr>
+<tr class="separator:abe6a03c3d3be1fd9ec2fb778f18b104f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6d72bb705e7fb55d3d6470b9e1d4b875"></a>
@@ -402,6 +408,58 @@ Public Member Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> Ogre::CompositorTargetDef::getShadowMapSupportedLightTypes </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5e894653645b4ec180930a86d158c140"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e894653645b4ec180930a86d158c140">&#9670;&nbsp;</a></span>getTargetLevelBarrier()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::CompositorTargetDef::getTargetLevelBarrier </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2b2e210abecdca9123040f674ff9eaeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b2e210abecdca9123040f674ff9eaeb">&#9670;&nbsp;</a></span>getTargetLevelBarrierDef()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_ogre_1_1_compositor_pass_target_barrier_def.html">CompositorPassTargetBarrierDef</a>* Ogre::CompositorTargetDef::getTargetLevelBarrierDef </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -868,6 +926,24 @@ template&lt;class Alloc &gt; </div>
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe6a03c3d3be1fd9ec2fb778f18b104f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe6a03c3d3be1fd9ec2fb778f18b104f">&#9670;&nbsp;</a></span>setTargetLevelBarrier()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::CompositorTargetDef::setTargetLevelBarrier </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bBarrier</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>

@@ -9,6 +9,7 @@ var class_ogre_1_1_compositor_pass_quad =
     [ "getParentNode", "class_ogre_1_1_compositor_pass_quad.html#a2eedb01d342205286e9d8d87513bad20", null ],
     [ "getPass", "class_ogre_1_1_compositor_pass_quad.html#afadaded3472e9b18c03a347fe4d5ff39", null ],
     [ "getRenderPassDesc", "class_ogre_1_1_compositor_pass_quad.html#aa8f5b48afbb18756b3dbcc28b080fda0", null ],
+    [ "getResourceTransitions", "class_ogre_1_1_compositor_pass_quad.html#a24976b937f4c62d9b95fc176c8d1f576", null ],
     [ "getTextureDependencies", "class_ogre_1_1_compositor_pass_quad.html#a280e7b34575c7554487b1f66a1ea8f5a", null ],
     [ "getType", "class_ogre_1_1_compositor_pass_quad.html#a220924c4a37f7cf458646522bc5cc72f", null ],
     [ "notifyCleared", "class_ogre_1_1_compositor_pass_quad.html#a4837e8afd093a37f67d708c64b793b4d", null ],

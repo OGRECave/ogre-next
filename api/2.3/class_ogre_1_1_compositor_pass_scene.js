@@ -12,6 +12,7 @@ var class_ogre_1_1_compositor_pass_scene =
     [ "getDefinition", "class_ogre_1_1_compositor_pass_scene.html#af5343bd8cc6f56a6956d784c513daaa7", null ],
     [ "getParentNode", "class_ogre_1_1_compositor_pass_scene.html#a2eedb01d342205286e9d8d87513bad20", null ],
     [ "getRenderPassDesc", "class_ogre_1_1_compositor_pass_scene.html#aa8f5b48afbb18756b3dbcc28b080fda0", null ],
+    [ "getResourceTransitions", "class_ogre_1_1_compositor_pass_scene.html#a24976b937f4c62d9b95fc176c8d1f576", null ],
     [ "getShadowNode", "class_ogre_1_1_compositor_pass_scene.html#a38697f93f13f4cfa0d13cc72175a5ecf", null ],
     [ "getTextureDependencies", "class_ogre_1_1_compositor_pass_scene.html#a280e7b34575c7554487b1f66a1ea8f5a", null ],
     [ "getType", "class_ogre_1_1_compositor_pass_scene.html#a220924c4a37f7cf458646522bc5cc72f", null ],

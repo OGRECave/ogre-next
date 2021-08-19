@@ -278,6 +278,8 @@ var files_dup =
     [ "OgreCompositorPassShadowsDef.h", "_ogre_compositor_pass_shadows_def_8h.html", null ],
     [ "OgreCompositorPassStencil.h", "_ogre_compositor_pass_stencil_8h.html", null ],
     [ "OgreCompositorPassStencilDef.h", "_ogre_compositor_pass_stencil_def_8h.html", null ],
+    [ "OgreCompositorPassTargetBarrier.h", "_ogre_compositor_pass_target_barrier_8h.html", null ],
+    [ "OgreCompositorPassTargetBarrierDef.h", "_ogre_compositor_pass_target_barrier_def_8h.html", null ],
     [ "OgreCompositorPassUav.h", "_ogre_compositor_pass_uav_8h.html", null ],
     [ "OgreCompositorPassUavDef.h", "_ogre_compositor_pass_uav_def_8h.html", [
       [ "BufferSource", "struct_ogre_1_1_compositor_pass_uav_def_1_1_buffer_source.html", "struct_ogre_1_1_compositor_pass_uav_def_1_1_buffer_source" ],

@@ -460,6 +460,8 @@ var annotated_dup =
       [ "CompositorPassShadowsDef", "class_ogre_1_1_compositor_pass_shadows_def.html", "class_ogre_1_1_compositor_pass_shadows_def" ],
       [ "CompositorPassStencil", "class_ogre_1_1_compositor_pass_stencil.html", "class_ogre_1_1_compositor_pass_stencil" ],
       [ "CompositorPassStencilDef", "class_ogre_1_1_compositor_pass_stencil_def.html", "class_ogre_1_1_compositor_pass_stencil_def" ],
+      [ "CompositorPassTargetBarrier", "class_ogre_1_1_compositor_pass_target_barrier.html", "class_ogre_1_1_compositor_pass_target_barrier" ],
+      [ "CompositorPassTargetBarrierDef", "class_ogre_1_1_compositor_pass_target_barrier_def.html", "class_ogre_1_1_compositor_pass_target_barrier_def" ],
       [ "CompositorPassTranslator", "class_ogre_1_1_compositor_pass_translator.html", "class_ogre_1_1_compositor_pass_translator" ],
       [ "CompositorPassUav", "class_ogre_1_1_compositor_pass_uav.html", "class_ogre_1_1_compositor_pass_uav" ],
       [ "CompositorPassUavDef", "class_ogre_1_1_compositor_pass_uav_def.html", "class_ogre_1_1_compositor_pass_uav_def" ],

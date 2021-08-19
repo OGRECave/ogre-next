@@ -1,11 +1,13 @@
 var class_ogre_1_1_compositor_pass_stencil =
 [
     [ "CompositorPassStencil", "class_ogre_1_1_compositor_pass_stencil.html#a16704c18033351daf553055113309e44", null ],
+    [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_stencil.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
     [ "execute", "class_ogre_1_1_compositor_pass_stencil.html#a88a90cd8524ca4838ba402598452ec01", null ],
     [ "getActualDimensions", "class_ogre_1_1_compositor_pass_stencil.html#ad4d394f598a677c18b4b653cde572957", null ],
     [ "getDefinition", "class_ogre_1_1_compositor_pass_stencil.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
     [ "getParentNode", "class_ogre_1_1_compositor_pass_stencil.html#a2eedb01d342205286e9d8d87513bad20", null ],
     [ "getRenderPassDesc", "class_ogre_1_1_compositor_pass_stencil.html#aa8f5b48afbb18756b3dbcc28b080fda0", null ],
+    [ "getResourceTransitions", "class_ogre_1_1_compositor_pass_stencil.html#a24976b937f4c62d9b95fc176c8d1f576", null ],
     [ "getTextureDependencies", "class_ogre_1_1_compositor_pass_stencil.html#a280e7b34575c7554487b1f66a1ea8f5a", null ],
     [ "getType", "class_ogre_1_1_compositor_pass_stencil.html#a220924c4a37f7cf458646522bc5cc72f", null ],
     [ "notifyCleared", "class_ogre_1_1_compositor_pass_stencil.html#a4837e8afd093a37f67d708c64b793b4d", null ],
