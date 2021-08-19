@@ -9969,6 +9969,26 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_VISIBILITY_MASK:
+                    {
+                        if(prop->values.empty())
+                        {
+                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                            return;
+                        }
+
+                        uint32 var;
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( getHex( *it0, &var ) )
+                        {
+                            passShadows->setVisibilityMask( var );
+                        }
+                        else
+                        {
+                             compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                        }
+                    }
+                    break;
                 case ID_VIEWPORT:
                 case ID_IDENTIFIER:
                 case ID_FLUSH_COMMAND_BUFFERS:

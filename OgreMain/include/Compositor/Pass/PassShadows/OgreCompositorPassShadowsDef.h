@@ -63,11 +63,16 @@ namespace Ogre
         /// @copydoc CompositorPassSceneDef::mCullCameraName
         IdString mCullCameraName;
 
+        /// @copydoc CompositorPassSceneDef::mVisibilityMask
+        uint32 mVisibilityMask;
+
         /// @copydoc CompositorPassSceneDef::mCameraCubemapReorient
         bool mCameraCubemapReorient;
 
         CompositorPassShadowsDef( CompositorNodeDef *parentNodeDef,
                                   CompositorTargetDef *parentTargetDef );
+
+        void setVisibilityMask( uint32 visibilityMask );
     };
 
     /** @} */

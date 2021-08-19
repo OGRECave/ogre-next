@@ -768,10 +768,11 @@ target
 		shadows	MyShadowNode_1
 		shadows	MyShadowNode_2
 
-		// These 3 parameters are the same as in pass_scene
+		// These 4 parameters are the same as in pass_scene
 		camera		CameraName
 		lod_camera	CameraName
 		cull_camera	CameraName
+		visibility_mask	0xffffffff
 	}
 }
 ```

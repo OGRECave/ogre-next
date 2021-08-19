@@ -53,8 +53,14 @@ namespace Ogre
                                                         CompositorTargetDef *parentTargetDef ) :
         CompositorPassDef( PASS_SHADOWS, parentTargetDef ),
         mParentNodeDef( parentNodeDef ),
+        mVisibilityMask( VisibilityFlags::RESERVED_VISIBILITY_FLAGS ),
         mCameraCubemapReorient( false )
     {
+    }
+    //-------------------------------------------------------------------------
+    void CompositorPassShadowsDef::setVisibilityMask( uint32 visibilityMask )
+    {
+        mVisibilityMask = visibilityMask & VisibilityFlags::RESERVED_VISIBILITY_FLAGS;
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -139,6 +145,7 @@ namespace Ogre
 
         while( itor != endt )
         {
+            viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mVisibilityMask );
             sceneManager->_setCurrentShadowNode( *itor, false );
 
             // use culling camera for shadows, so if shadows are re used for slightly different camera
