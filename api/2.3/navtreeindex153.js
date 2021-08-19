@@ -1,5 +1,7 @@
 var NAVTREEINDEX153 =
 {
+"class_ogre_1_1_plane.html#a8e7de1712320968bee111002bc2938b8":[5,2,6,19,18],
+"class_ogre_1_1_plane.html#a93b10ba23a8142123cbcac6e4094f15c":[5,2,6,19,15],
 "class_ogre_1_1_plane.html#aa397a61879a2c4ffdc6c237820fae177":[5,2,6,19,6],
 "class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bc":[5,2,6,19,0],
 "class_ogre_1_1_plane.html#aa5d44b14d6f032f3e0a26e83589180bca44420e1c49338ae721f298826e164935":[5,2,6,19,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX153 =
 "class_ogre_1_1_point_emitter.html#af41030fee74fd28fa295975da55404d4":[7,0,0,856,62],
 "class_ogre_1_1_point_emitter.html#af46071e47818d84449ee0c8e73737fa5":[7,0,0,856,43],
 "class_ogre_1_1_point_emitter.html#af91680375665bc911d80b76262882e8b":[7,0,0,856,8],
-"class_ogre_1_1_point_emitter.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,856,53],
-"class_ogre_1_1_point_emitter.html#aface49e7023832dda41e44b26f048843":[7,0,0,856,40],
-"class_ogre_1_1_point_emitter_factory.html":[7,0,0,857]
+"class_ogre_1_1_point_emitter.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,856,53]
 };

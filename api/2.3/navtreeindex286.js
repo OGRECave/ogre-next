@@ -1,5 +1,7 @@
 var NAVTREEINDEX286 =
 {
+"structbsp__vis__t.html":[7,0,16],
+"structbsp__vis__t.html#a8f0660626e3f15e243af6939a5f28943":[7,0,16,1],
 "structbsp__vis__t.html#af901a42ac1824a4a2a18f708a593c9a8":[7,0,16,0],
 "structbsp__vis__t.html#afe3ced1a3ae54a548fd92bff20b6293b":[7,0,16,2],
 "structrapidjson_1_1_u_t_f8.html":[7,0,1,3],

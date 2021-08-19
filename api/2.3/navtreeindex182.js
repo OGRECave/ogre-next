@@ -1,5 +1,7 @@
 var NAVTREEINDEX182 =
 {
+"class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html#a3e4105820c0f20b850e06ce43eadb92f":[7,0,0,1001,50],
+"class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html#a3e7a18d63d341d3b421bfcd49becebb8":[7,0,0,1001,53],
 "class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html#a3f415ae6de28aa261e1d160d7577a3f7":[7,0,0,1001,3],
 "class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html#a40bfd177bea1ec263d342c9973d0721d":[7,0,0,1001,17],
 "class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html#a44c80d4f7bcd71b7cc02038fd13356de":[7,0,0,1001,49],
@@ -234,8 +236,8 @@ var NAVTREEINDEX182 =
 "class_ogre_1_1_sphere_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa018493b6c87271e0c8ba014f058cffd3":[5,0,1,53,0,2],
 "class_ogre_1_1_sphere_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa667bbec7031e58ab244f9efc32056f38":[5,2,12,53,0,1],
 "class_ogre_1_1_sphere_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa667bbec7031e58ab244f9efc32056f38":[5,0,1,53,0,1],
-"class_ogre_1_1_sphere_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa6ed287fab168d451beb369009f0fd03b":[5,2,12,53,0,0],
 "class_ogre_1_1_sphere_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa6ed287fab168d451beb369009f0fd03b":[5,0,1,53,0,0],
+"class_ogre_1_1_sphere_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa6ed287fab168d451beb369009f0fd03b":[5,2,12,53,0,0],
 "class_ogre_1_1_sphere_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aad498944c8c6b81d737c3ceee86881e8d":[5,2,12,53,0,4],
 "class_ogre_1_1_sphere_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aad498944c8c6b81d737c3ceee86881e8d":[5,0,1,53,0,4],
 "class_ogre_1_1_sphere_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aadeefa0cc2dfd1ec783c2a266ea61f925":[5,2,12,53,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX182 =
 "class_ogre_1_1_sphere_scene_query.html#a20e200f7a33292e6644a44bf882ae8f6":[5,2,12,53,4],
 "class_ogre_1_1_sphere_scene_query.html#a20e200f7a33292e6644a44bf882ae8f6":[5,0,1,53,4],
 "class_ogre_1_1_sphere_scene_query.html#a2813004b8f2a75bcc3a1116a357941ad":[5,2,12,53,9],
-"class_ogre_1_1_sphere_scene_query.html#a2813004b8f2a75bcc3a1116a357941ad":[5,0,1,53,9],
-"class_ogre_1_1_sphere_scene_query.html#a3eadff3663a1c862a6de073041157bc0":[5,0,1,53,27],
-"class_ogre_1_1_sphere_scene_query.html#a3eadff3663a1c862a6de073041157bc0":[5,2,12,53,27]
+"class_ogre_1_1_sphere_scene_query.html#a2813004b8f2a75bcc3a1116a357941ad":[5,0,1,53,9]
 };

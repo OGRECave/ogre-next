@@ -1,5 +1,7 @@
 var NAVTREEINDEX52 =
 {
+"class_ogre_1_1_d3_d11_window.html#a5133583078cba5b94af528f2c887ca9f":[7,0,0,245,18],
+"class_ogre_1_1_d3_d11_window.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,245,35],
 "class_ogre_1_1_d3_d11_window.html#a5a97866f3f7ce86466fbe8ef775d7301":[7,0,0,245,7],
 "class_ogre_1_1_d3_d11_window.html#a5d39c20103e51bd756ebc97956b3c98d":[7,0,0,245,42],
 "class_ogre_1_1_d3_d11_window.html#a6649ad876d350f201b59b45b20b57108":[7,0,0,245,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX52 =
 "class_ogre_1_1_d3_d9_driver_list.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,251,6],
 "class_ogre_1_1_d3_d9_driver_list.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,251,9],
 "class_ogre_1_1_d3_d9_driver_list.html#aae72ada2d57f48cd51c90ab617ba9860":[7,0,0,251,4],
-"class_ogre_1_1_d3_d9_driver_list.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,251,13],
-"class_ogre_1_1_d3_d9_driver_list.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,251,11],
-"class_ogre_1_1_d3_d9_driver_list.html#ac7a836b95decf3893fa8b1f7fbaa1703":[7,0,0,251,1]
+"class_ogre_1_1_d3_d9_driver_list.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,251,13]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX276 =
 {
+"struct_ogre_1_1_hlms_bits.html#a731e3c69bac1bb342b92f3e61ca65655":[5,2,11,48,7],
+"struct_ogre_1_1_hlms_bits.html#a7c4a502448a66c6373a8763b49a12980":[5,2,11,48,9],
 "struct_ogre_1_1_hlms_bits.html#aa95210cbd33619cba7e5b8b22fb291f5":[5,2,11,48,8],
 "struct_ogre_1_1_hlms_bits.html#ac237b60d622c46a6d2f104f139361df1":[5,2,11,48,3],
 "struct_ogre_1_1_hlms_bits.html#ad0c6f98536709c96db518d331980a0c7":[5,2,11,48,2],
@@ -224,10 +226,10 @@ var NAVTREEINDEX276 =
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#ad94bec02d71f91fd2f543f3488d25d61":[5,0,0,15,0,0],
 "struct_ogre_1_1_intersection_scene_query_result.html":[5,0,1,20],
 "struct_ogre_1_1_intersection_scene_query_result.html":[5,2,12,20],
-"struct_ogre_1_1_intersection_scene_query_result.html#a1c727e879a260c37b00ce5505fe8e144":[5,0,1,20,2],
 "struct_ogre_1_1_intersection_scene_query_result.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,12,20,2],
-"struct_ogre_1_1_intersection_scene_query_result.html#a421b197ca3a38da17e2eb1531a645fa2":[5,0,1,20,6],
+"struct_ogre_1_1_intersection_scene_query_result.html#a1c727e879a260c37b00ce5505fe8e144":[5,0,1,20,2],
 "struct_ogre_1_1_intersection_scene_query_result.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,12,20,6],
+"struct_ogre_1_1_intersection_scene_query_result.html#a421b197ca3a38da17e2eb1531a645fa2":[5,0,1,20,6],
 "struct_ogre_1_1_intersection_scene_query_result.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,12,20,9],
 "struct_ogre_1_1_intersection_scene_query_result.html#a4be37baef81876985aa1071ad5acc6dd":[5,0,1,20,9],
 "struct_ogre_1_1_intersection_scene_query_result.html#a595ea4c05da8aa987d3800e65d23355d":[5,0,1,20,4],
@@ -242,12 +244,10 @@ var NAVTREEINDEX276 =
 "struct_ogre_1_1_intersection_scene_query_result.html#ab78a921e54419be677839cdf15d1f0b8":[5,0,1,20,7],
 "struct_ogre_1_1_intersection_scene_query_result.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,12,20,5],
 "struct_ogre_1_1_intersection_scene_query_result.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,0,1,20,5],
-"struct_ogre_1_1_intersection_scene_query_result.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,12,20,1],
 "struct_ogre_1_1_intersection_scene_query_result.html#acb46d4b0a597156d9ba5abc39d127792":[5,0,1,20,1],
+"struct_ogre_1_1_intersection_scene_query_result.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,12,20,1],
 "struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[5,2,12,20,10],
 "struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[5,0,1,20,10],
 "struct_ogre_1_1_intersection_scene_query_result.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,12,20,8],
-"struct_ogre_1_1_intersection_scene_query_result.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,20,8],
-"struct_ogre_1_1_irradiance_field_settings.html":[7,0,0,572],
-"struct_ogre_1_1_irradiance_field_settings.html#a133d81cee0826d5616fcf1c62b5f743c":[7,0,0,572,0]
+"struct_ogre_1_1_intersection_scene_query_result.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,20,8]
 };

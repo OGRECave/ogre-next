@@ -1,5 +1,7 @@
 var NAVTREEINDEX65 =
 {
+"class_ogre_1_1_default_sphere_scene_query.html#acffb9330fc3de7109f8274822e362b00":[5,2,12,16,11],
+"class_ogre_1_1_default_sphere_scene_query.html#ad392a7fc0b338e5507540d3183f82cfb":[5,0,1,16,24],
 "class_ogre_1_1_default_sphere_scene_query.html#ad392a7fc0b338e5507540d3183f82cfb":[5,2,12,16,24],
 "class_ogre_1_1_default_sphere_scene_query.html#adfd70f00b13654735336f4360af84995":[5,0,1,16,27],
 "class_ogre_1_1_default_sphere_scene_query.html#adfd70f00b13654735336f4360af84995":[5,2,12,16,27],
@@ -58,8 +60,8 @@ var NAVTREEINDEX65 =
 "class_ogre_1_1_default_work_queue.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,296,28],
 "class_ogre_1_1_default_work_queue.html#a634fdd65c89267fc6aeca8e8f6cf5446":[7,0,0,296,11],
 "class_ogre_1_1_default_work_queue.html#a6dc3b2f4d1c039b29ec4ffd748b3355d":[7,0,0,296,4],
-"class_ogre_1_1_default_work_queue.html#a74aec1a66a9d5a5639a62ed33747eb76":[7,0,0,296,43],
 "class_ogre_1_1_default_work_queue.html#a74aec1a66a9d5a5639a62ed33747eb76":[7,0,0,296,42],
+"class_ogre_1_1_default_work_queue.html#a74aec1a66a9d5a5639a62ed33747eb76":[7,0,0,296,43],
 "class_ogre_1_1_default_work_queue.html#a7b7a4119647b82187af2341d96f51e3b":[7,0,0,296,39],
 "class_ogre_1_1_default_work_queue.html#a7edecae3229cfb6616774688070eeffa":[7,0,0,296,41],
 "class_ogre_1_1_default_work_queue.html#a7f471c07b8f0fdd002d6c299750a1578":[7,0,0,296,37],
@@ -247,7 +249,5 @@ var NAVTREEINDEX65 =
 "class_ogre_1_1_deflector_plane_affector.html#a1270e11fac75d4a23c844663435880f4":[7,0,0,301,33],
 "class_ogre_1_1_deflector_plane_affector.html#a1bea65fa2b3c2ac5a9f3be59b46a80e8":[7,0,0,301,6],
 "class_ogre_1_1_deflector_plane_affector.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,301,18],
-"class_ogre_1_1_deflector_plane_affector.html#a27f5a61343d867f092b952e7e7e2bd84":[7,0,0,301,14],
-"class_ogre_1_1_deflector_plane_affector.html#a2b792c697baec1f9261441a8c3d8e411":[7,0,0,301,31],
-"class_ogre_1_1_deflector_plane_affector.html#a3c600369ab5d6957524125c93915019f":[7,0,0,301,7]
+"class_ogre_1_1_deflector_plane_affector.html#a27f5a61343d867f092b952e7e7e2bd84":[7,0,0,301,14]
 };

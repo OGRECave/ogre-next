@@ -1,5 +1,7 @@
 var NAVTREEINDEX160 =
 {
+"class_ogre_1_1_r_t_shader_1_1_hardware_skinning.html#a4b43c261946926ebbc6456deccc6697a":[5,2,9,23,4],
+"class_ogre_1_1_r_t_shader_1_1_hardware_skinning.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,9,23,23],
 "class_ogre_1_1_r_t_shader_1_1_hardware_skinning.html#a4c2acbc15e44c3fe42868abce1116ec2":[5,2,9,23,26],
 "class_ogre_1_1_r_t_shader_1_1_hardware_skinning.html#a5482d3476401bfb267daa11298473e39":[5,2,9,23,10],
 "class_ogre_1_1_r_t_shader_1_1_hardware_skinning.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,9,23,18],
@@ -247,7 +249,5 @@ var NAVTREEINDEX160 =
 "class_ogre_1_1_r_t_shader_1_1_normal_map_lighting_factory.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,9,32,9],
 "class_ogre_1_1_r_t_shader_1_1_normal_map_lighting_factory.html#a23839e5fc35257e4ffb9076e2aaf9409":[5,2,9,32,5],
 "class_ogre_1_1_r_t_shader_1_1_normal_map_lighting_factory.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,9,32,13],
-"class_ogre_1_1_r_t_shader_1_1_normal_map_lighting_factory.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,9,32,16],
-"class_ogre_1_1_r_t_shader_1_1_normal_map_lighting_factory.html#a54a6f6eba1624fef1de9c20eb7b0a6b5":[5,2,9,32,3],
-"class_ogre_1_1_r_t_shader_1_1_normal_map_lighting_factory.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,9,32,11]
+"class_ogre_1_1_r_t_shader_1_1_normal_map_lighting_factory.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,9,32,16]
 };

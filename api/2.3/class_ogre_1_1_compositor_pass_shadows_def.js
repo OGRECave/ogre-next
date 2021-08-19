@@ -18,6 +18,7 @@ var class_ogre_1_1_compositor_pass_shadows_def =
     [ "setAllClearColours", "class_ogre_1_1_compositor_pass_shadows_def.html#a08c66aa1c72aef43599f360cfc6ada68", null ],
     [ "setAllLoadActions", "class_ogre_1_1_compositor_pass_shadows_def.html#ab6b2041bfd40579556b2637f9809ec62", null ],
     [ "setAllStoreActions", "class_ogre_1_1_compositor_pass_shadows_def.html#a544008d76e21be83ab7b91f96f36b3bc", null ],
+    [ "setVisibilityMask", "class_ogre_1_1_compositor_pass_shadows_def.html#a2c5cf20f44ad3b353a804835884d16cd", null ],
     [ "mCameraCubemapReorient", "class_ogre_1_1_compositor_pass_shadows_def.html#a41144aff43b51b640c97701716bf1a9f", null ],
     [ "mCameraName", "class_ogre_1_1_compositor_pass_shadows_def.html#a9aea77fa684d8b5a4069179541619b9e", null ],
     [ "mClearColour", "class_ogre_1_1_compositor_pass_shadows_def.html#a5b72f1a56bcbd829fc60fa21afde5927", null ],
@@ -48,6 +49,7 @@ var class_ogre_1_1_compositor_pass_shadows_def =
     [ "mStoreActionStencil", "class_ogre_1_1_compositor_pass_shadows_def.html#abf1c159397e4fa8e205eb3461a6eec8d", null ],
     [ "mUavDependencies", "class_ogre_1_1_compositor_pass_shadows_def.html#af603f6cce02284ad5a4781c261a05137", null ],
     [ "mViewportModifierMask", "class_ogre_1_1_compositor_pass_shadows_def.html#aa78f703dc8c8b28cf575ac419653dc40", null ],
+    [ "mVisibilityMask", "class_ogre_1_1_compositor_pass_shadows_def.html#ae9e9d85cb01a250fe3a3610f081e6a6f", null ],
     [ "mVpRect", "class_ogre_1_1_compositor_pass_shadows_def.html#ad7fab9725642fc9f33db037e4de914e2", null ],
     [ "mWarnIfRtvWasFlushed", "class_ogre_1_1_compositor_pass_shadows_def.html#a03f4a196d4bc9d62b967019c5bf7c5ac", null ]
 ];

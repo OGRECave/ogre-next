@@ -1,5 +1,7 @@
 var NAVTREEINDEX109 =
 {
+"class_ogre_1_1_light_profiles.html#a717a824f23e75904bd2a2cae66f20911":[7,0,0,602,5],
+"class_ogre_1_1_light_profiles.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,602,8],
 "class_ogre_1_1_light_profiles.html#a923784e8c4fb05d7aace3f8e1aadece4":[7,0,0,602,0],
 "class_ogre_1_1_light_profiles.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,602,11],
 "class_ogre_1_1_light_profiles.html#aa2f7befb98ebd7a4996916672c3583df":[7,0,0,602,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX109 =
 "class_ogre_1_1_lod_strategy_manager.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,4,7,15],
 "class_ogre_1_1_lod_strategy_manager.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,4,7,13],
 "class_ogre_1_1_lod_strategy_manager.html#ac76befbdcec821cfdaef18e003db6a20":[5,2,4,7,4],
-"class_ogre_1_1_lod_strategy_manager.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,4,7,9],
-"class_ogre_1_1_lod_strategy_manager.html#ae0e46b7b70199f285a5520f2de34e483":[5,2,4,7,2],
-"class_ogre_1_1_lod_strategy_manager.html#ae1c307853cfa3a52383d24a76f253834":[5,2,4,7,6]
+"class_ogre_1_1_lod_strategy_manager.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,4,7,9]
 };

@@ -149,6 +149,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab6b2041bfd40579556b2637f9809ec62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a544008d76e21be83ab7b91f96f36b3bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#a544008d76e21be83ab7b91f96f36b3bc">setAllStoreActions</a> (<a class="el" href="namespace_ogre_1_1_store_action.html#a1605e763b81f293b404de4a521f541ca">StoreAction::StoreAction</a> storeAction)</td></tr>
 <tr class="separator:a544008d76e21be83ab7b91f96f36b3bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c5cf20f44ad3b353a804835884d16cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_shadows_def.html#a2c5cf20f44ad3b353a804835884d16cd">setVisibilityMask</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> visibilityMask)</td></tr>
+<tr class="separator:a2c5cf20f44ad3b353a804835884d16cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -225,6 +227,9 @@ Public Attributes</h2></td></tr>
 <tr class="separator:af603f6cce02284ad5a4781c261a05137"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa78f703dc8c8b28cf575ac419653dc40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#aa78f703dc8c8b28cf575ac419653dc40">mViewportModifierMask</a></td></tr>
 <tr class="separator:aa78f703dc8c8b28cf575ac419653dc40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9e9d85cb01a250fe3a3610f081e6a6f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_shadows_def.html#ae9e9d85cb01a250fe3a3610f081e6a6f">mVisibilityMask</a></td></tr>
+<tr class="memdesc:ae9e9d85cb01a250fe3a3610f081e6a6f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_viewport.html" title="An abstraction of a viewport, i.e.">Viewport</a>'s visibility mask while rendering our pass.  <a href="class_ogre_1_1_compositor_pass_shadows_def.html#ae9e9d85cb01a250fe3a3610f081e6a6f">More...</a><br /></td></tr>
+<tr class="separator:ae9e9d85cb01a250fe3a3610f081e6a6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7fab9725642fc9f33db037e4de914e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect.html">ViewportRect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_def.html#ad7fab9725642fc9f33db037e4de914e2">mVpRect</a> [16]</td></tr>
 <tr class="memdesc:ad7fab9725642fc9f33db037e4de914e2"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_ogre_1_1_viewport.html" title="An abstraction of a viewport, i.e.">Viewport</a>'s region to draw.  <a href="class_ogre_1_1_compositor_pass_def.html#ad7fab9725642fc9f33db037e4de914e2">More...</a><br /></td></tr>
 <tr class="separator:ad7fab9725642fc9f33db037e4de914e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -831,6 +836,24 @@ template&lt;class Alloc &gt; </div>
 <span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2c5cf20f44ad3b353a804835884d16cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c5cf20f44ad3b353a804835884d16cd">&#9670;&nbsp;</a></span>setVisibilityMask()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::CompositorPassShadowsDef::setVisibilityMask </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td>
+          <td class="paramname"><em>visibilityMask</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -1488,6 +1511,22 @@ template&lt;class Alloc &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae9e9d85cb01a250fe3a3610f081e6a6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9e9d85cb01a250fe3a3610f081e6a6f">&#9670;&nbsp;</a></span>mVisibilityMask</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> Ogre::CompositorPassShadowsDef::mVisibilityMask</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_ogre_1_1_viewport.html" title="An abstraction of a viewport, i.e.">Viewport</a>'s visibility mask while rendering our pass. </p>
 
 </div>
 </div>
