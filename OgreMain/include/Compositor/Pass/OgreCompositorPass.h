@@ -150,6 +150,10 @@ namespace Ogre
         void resolveTransition( GpuTrackedResource *bufferRes, ResourceAccess::ResourceAccess access,
                                 uint8 stageMask );
 
+    public:
+        CompositorPass( const CompositorPassDef *definition, CompositorNode *parentNode );
+        virtual ~CompositorPass();
+
         /** Bakes most of the memory barriers / resource transition that will be needed
             during execution.
 
@@ -165,11 +169,7 @@ namespace Ogre
             We need it to identify how it was last used and thus what barrier
             we need to insert
         */
-        void analyzeBarriers( void );
-
-    public:
-        CompositorPass( const CompositorPassDef *definition, CompositorNode *parentNode );
-        virtual ~CompositorPass();
+        virtual void analyzeBarriers( void );
 
         void profilingBegin(void);
         void profilingEnd(void);
@@ -198,6 +198,11 @@ namespace Ogre
         const CompositorPassDef* getDefinition(void) const  { return mDefinition; }
 
 		const CompositorNode* getParentNode(void) const		{ return mParentNode; }
+
+        const ResourceTransitionArray &getResourceTransitions( void ) const
+        {
+            return mResourceTransitions;
+        }
 
         const CompositorTextureVec& getTextureDependencies(void) const  { return mTextureDependencies; }
     };

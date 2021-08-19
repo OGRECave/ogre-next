@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "Compositor/Pass/PassShadows/OgreCompositorPassShadowsDef.h"
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
+#include "Compositor/Pass/PassTargetBarrier/OgreCompositorPassTargetBarrierDef.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
 
 #include "Compositor/OgreCompositorNodeDef.h"
@@ -61,6 +62,7 @@ namespace Ogre
         "MIPMAP",
         "IBL_SPECULAR",
         "SHADOWS",
+        "TARGET_BARRIER",
         "COMPUTE",
         "CUSTOM"
     };
@@ -71,6 +73,7 @@ namespace Ogre
         mRenderTargetNameStr( renderTargetName ),
         mRtIndex( rtIndex ),
         mShadowMapSupportedLightTypes( 0 ),
+        mTargetLevelBarrier( 0 ),
         mParentNodeDef( parentNodeDef )
     {
     }
@@ -87,6 +90,23 @@ namespace Ogre
         }
 
         mCompositorPasses.clear();
+
+        delete mTargetLevelBarrier;
+        mTargetLevelBarrier = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorTargetDef::setTargetLevelBarrier( bool bBarrier )
+    {
+        if( bBarrier == getTargetLevelBarrier() )
+            return;
+
+        if( bBarrier )
+            mTargetLevelBarrier = new CompositorPassTargetBarrierDef( this );
+        else
+        {
+            delete mTargetLevelBarrier;
+            mTargetLevelBarrier = 0;
+        }
     }
     //-----------------------------------------------------------------------------------
     CompositorPassDef* CompositorTargetDef::addPass( CompositorPassType passType, IdString customId )
@@ -138,6 +158,9 @@ namespace Ogre
                 retVal = passProvider->addPassDef( passType, customId, this, mParentNodeDef );
             }
             break;
+        case PASS_TARGET_BARRIER:
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Use CompositorTargetDef::setTargetLevelBarrier",
+                         "CompositorTargetDef::addPass" );
         default:
             break;
         }

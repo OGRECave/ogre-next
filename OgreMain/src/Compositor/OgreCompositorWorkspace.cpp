@@ -607,7 +607,7 @@ namespace Ogre
                 {
                     const RenderPassDescriptor *renderPassDesc = ( *itPass )->getRenderPassDesc();
 
-                    if( renderPassDesc )
+                    if( renderPassDesc && !( *itPass )->getDefinition()->mSkipLoadStoreSemantics )
                     {
                         const size_t numColourEntries = renderPassDesc->getNumColourEntries();
                         for( size_t i = 0u; i < numColourEntries; ++i )

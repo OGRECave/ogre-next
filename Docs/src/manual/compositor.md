@@ -259,6 +259,108 @@ Note: When the target is a 3D/Cubemap/array texture, if the slice goes
 out of bounds, an exception will be raised. If the target is a 2D or 1D
 texture, this value is silently ignored. Default: slice = 0
 
+At the moment there is only one setting:
+
+-   target\_level\_barrier \[yes|no\];
+
+Default value is no.
+
+When yes, this setting is meant to be used with `skip_load_store_semantics` for
+optimization on mobile/TBDR targets, but should be used with care.
+
+`skip_load_store_semantics` allows Ogre to execute multiple consecutive passes
+as if they were only one.
+
+An obstacle for this is that barriers from all theses passes mut be issued
+*before* the first pass executes; otherwise the passes need to be internally
+broken up and Ogre will complain if `skip_load_store_semantics on` but we can't
+merge the passes.
+
+`target_level_barrier yes` means that an extra hidden pass will be inserted at
+the beginning of the target and issue all necessary barriers from subsequent passes:
+
+```cpp
+target rt_renderwindow
+{
+    // By having this set to true or yes, a barrier will be issued
+    // to cover all 4 passes in this target, which happens
+    // before the first render_quad
+    target_level_barrier true
+
+    pass render_quad
+    {
+        load
+        {
+            all		dont_care
+        }
+        store
+        {
+            all		dont_care
+            colour	store
+        }
+
+        material MyMaterial
+    }
+
+    pass render_scene
+    {
+        skip_load_store_semantics true
+
+        rq_first	0
+        rq_last		5
+
+        shadows		MainCharacter reuse
+    }
+
+    pass render_quad
+    {
+        skip_load_store_semantics true
+        material Compositor/UpsampleDepth
+        input 0 worldRt_depth
+    }
+
+    pass render_scene
+    {
+        skip_load_store_semantics true
+
+        rq_first	14
+        rq_last		249
+
+        shadows		NormalShadows reuse
+    }
+}
+```
+
+**Note that not always `target_level_barrier yes` can be successful.**
+
+For example if pass `A` needs texture `X` to be in state `Texture` for sampling
+but pass `C` needs that same texture in state `Uav` then we have a contradiction
+as we can't transition to two states at the same time.
+
+The only solution is to break up the passes and issue two barriers.
+Note that you can however issue break ups manually:
+
+```cpp
+target rt_renderwindow
+{
+    target_level_barrier true
+    // Pass A
+    pass render_quad {}
+    // Pass B
+    pass render_quad {skip_load_store_semantics true}
+}
+
+target rt_renderwindow
+{
+    target_level_barrier true
+    // Pass C
+    pass render_quad {}
+    // Pass D
+    pass render_quad {skip_load_store_semantics true}
+}
+```
+
+
 ## Passes {#CompositorNodesPasses}
 
 Passes are the same as they were in Ogre 1.x. At the time of writing
@@ -450,7 +552,7 @@ know which textures may or will be used during the pass so resource
 transitions and barriers can be issued in explicit APIs like DX12 and
 Vulkan.
 
--   skip\_load\_store\_semantics \<yes|no\>;
+-   skip\_load\_store\_semantics \[yes|no\];
 
 When yes, the load and store semantics will be ignored. Use with care
 as improper usage may lead to rendering bugs or crashes.
@@ -501,6 +603,40 @@ compositor_node MyNode
 	}
 }
 ```
+
+The reason you should be careful is that we assume you know where you're drawing.
+Consider the following example:
+
+```cpp
+target TargetA
+{
+    pass render_quad {}
+}
+
+target UnrelatedTargetB
+{
+    pass render_quad { skip_load_store_semantics true }
+}
+```
+
+This script will *not* behave as expected because **both render\_quad passes
+will draw to TargetA!**
+
+This is because with `skip_load_store_semantics` you're telling Ogre not to
+set `UnrelatedTargetB` as the current target *because Ogre should assume it already
+is* the current target.
+
+Likewise there should be no barriers to execute because barriers force the pass
+to 'close' which means store semantics must be executed; and to open another
+pass we must execute load semantics again (see `target_level_barrier` to
+solve this problem).
+
+We try to perform validation checks in Debug mode to avoid these type of errors,
+but we can't cover them all.
+
+This setting is an optimization specifically aimed at mobile and you
+should pay attention to errors, the Ogre.log, Vulkan Validation Layers, and tools
+like RenderDoc to be sure rendering is happening as intended.
 
 The following setting was available in Ogre 1.x; but was not documented:
 
@@ -567,7 +703,7 @@ Replaces last\_render\_queue. The default is `max` which is a special
 parameter that implies the last active render queue ID. If numeric,
 value must be between 0 and 255. The value is **not** inclusive.
 
--   skip\_load\_store\_semantics \<yes|no\>;
+-   skip\_load\_store\_semantics \[yes|no\];
 
 See render\_quad.
 

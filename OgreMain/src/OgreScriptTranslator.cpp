@@ -8146,6 +8146,33 @@ namespace Ogre{
             {
                 processNode(compiler, *i);
             }
+            else if((*i)->type == ANT_PROPERTY)
+            {
+                PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
+                switch(prop->id)
+                {
+                case ID_TARGET_LEVEL_BARRIER:
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+
+                    bool bUseTargetLevelBarrier;
+                    if( getBoolean(prop->values.front(), &bUseTargetLevelBarrier) )
+                    {
+                        mTargetDef->setTargetLevelBarrier( bUseTargetLevelBarrier );
+                    }
+                    else
+                    {
+                        compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
+                    }
+                    break;
+                default:
+                    compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line,
+                        "token \"" + prop->name + "\" is not recognized");
+                }
+            }
             else
             {
                 compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, (*i)->file, (*i)->line,

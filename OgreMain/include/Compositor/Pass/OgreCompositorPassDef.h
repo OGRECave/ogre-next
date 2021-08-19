@@ -41,6 +41,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     class CompositorNodeDef;
+    class CompositorPassTargetBarrierDef;
 
     /** \addtogroup Core
     *  @{
@@ -61,6 +62,7 @@ namespace Ogre
         PASS_MIPMAP,
         PASS_IBL_SPECULAR,
         PASS_SHADOWS,
+        PASS_TARGET_BARRIER,
         PASS_COMPUTE,
         PASS_CUSTOM
     };
@@ -281,6 +283,8 @@ namespace Ogre
         ///     mShadowMapSupportedLightTypes & 1u << Light::LT_SPOTLIGHT
         uint8                   mShadowMapSupportedLightTypes;
 
+        CompositorPassTargetBarrierDef *mTargetLevelBarrier;
+
         CompositorNodeDef       *mParentNodeDef;
 
     public:
@@ -296,6 +300,9 @@ namespace Ogre
         void setShadowMapSupportedLightTypes( uint8 types ) { mShadowMapSupportedLightTypes = types; }
         uint8 getShadowMapSupportedLightTypes(void) const   { return mShadowMapSupportedLightTypes; }
 
+        void setTargetLevelBarrier( bool bBarrier );
+        bool getTargetLevelBarrier( void ) const { return mTargetLevelBarrier != 0; }
+
         /** Reserves enough memory for all passes (efficient allocation)
         @remarks
             Calling this function is not obligatory, but recommended
@@ -305,6 +312,11 @@ namespace Ogre
         void setNumPasses( size_t numPasses )           { mCompositorPasses.reserve( numPasses ); }
 
         CompositorPassDef* addPass( CompositorPassType passType, IdString customId = IdString() );
+
+        const CompositorPassTargetBarrierDef *getTargetLevelBarrierDef( void ) const
+        {
+            return mTargetLevelBarrier;
+        }
 
         const CompositorPassDefVec& getCompositorPasses() const { return mCompositorPasses; }
 

@@ -1261,6 +1261,7 @@ namespace Ogre
         mIds["no_automipmaps"]      = ID_NO_AUTOMIPMAPS;
 
         mIds["target"] = ID_TARGET;
+        mIds["target_level_barrier"]= ID_TARGET_LEVEL_BARRIER;
 
         mIds["clear"]           = ID_CLEAR;
         mIds["stencil"]         = ID_STENCIL;

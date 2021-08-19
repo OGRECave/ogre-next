@@ -870,6 +870,7 @@ namespace Ogre
 
                 ID_NO_AUTOMIPMAPS,
             ID_TARGET,
+                ID_TARGET_LEVEL_BARRIER,
         //  ID_PASS,
                 ID_CLEAR,
                 ID_STENCIL,

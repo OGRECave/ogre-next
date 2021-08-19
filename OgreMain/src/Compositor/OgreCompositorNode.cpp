@@ -44,6 +44,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassShadows/OgreCompositorPassShadows.h"
 #include "Compositor/Pass/PassShadows/OgreCompositorPassShadowsDef.h"
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencil.h"
+#include "Compositor/Pass/PassTargetBarrier/OgreCompositorPassTargetBarrier.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUav.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
@@ -129,7 +130,7 @@ namespace Ogre
         {
             size_t index;
             TextureDefinitionBase::TextureSource textureSource;
-            mDefinition->getTextureSource( itor - begin, index, textureSource );
+            mDefinition->getTextureSource( static_cast<size_t>( itor - begin ), index, textureSource );
 
             assert( textureSource == TextureDefinitionBase::TEXTURE_LOCAL ||
                     textureSource == TextureDefinitionBase::TEXTURE_INPUT );
@@ -672,9 +673,9 @@ namespace Ogre
         populateGlobalBuffers();
 
         CompositorTargetDefVec::const_iterator itor = mDefinition->mTargetPasses.begin();
-        CompositorTargetDefVec::const_iterator end  = mDefinition->mTargetPasses.end();
+        CompositorTargetDefVec::const_iterator endt = mDefinition->mTargetPasses.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             RenderTargetViewDef const *rtvDef = 0;
 
@@ -682,6 +683,16 @@ namespace Ogre
                 rtvDef = mDefinition->getRenderTargetViewDef( itor->getRenderTargetName() );
 
             const CompositorPassDefVec &passes = itor->getCompositorPasses();
+
+            CompositorPassTargetBarrier *targetBarrier = 0;
+            if( itor->getTargetLevelBarrier() )
+            {
+                targetBarrier = OGRE_NEW CompositorPassTargetBarrier( itor->getTargetLevelBarrierDef(),
+                                                                      this, passes.size() );
+                postInitializePass( targetBarrier );
+                mPasses.push_back( targetBarrier );
+            }
+
             CompositorPassDefVec::const_iterator itPass = passes.begin();
             CompositorPassDefVec::const_iterator enPass = passes.end();
 
@@ -749,16 +760,18 @@ namespace Ogre
                                                          rtvDef, mWorkspace->getSceneManager() );
                     }
                     break;
+                case PASS_TARGET_BARRIER:
                 default:
                     OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                                 "Pass type not implemented or not recognized",
                                 "CompositorNode::initializePasses" );
-                    break;
                 }
 
                 postInitializePass( newPass );
 
                 mPasses.push_back( newPass );
+                if( targetBarrier )
+                    targetBarrier->addPass( newPass );
                 ++itPass;
             }
 

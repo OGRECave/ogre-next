@@ -30,22 +30,12 @@ THE SOFTWARE.
 
 #include "Compositor/Pass/PassShadows/OgreCompositorPassShadows.h"
 
-#include "Compositor/OgreCompositorManager2.h"
-#include "Compositor/OgreCompositorNode.h"
-#include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/OgreCompositorWorkspace.h"
-#include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "Compositor/Pass/PassShadows/OgreCompositorPassShadowsDef.h"
 
-#include "OgreHlmsCompute.h"
-#include "OgreHlmsComputeJob.h"
-#include "OgreHlmsManager.h"
-#include "OgreRoot.h"
-
 #include "OgreCamera.h"
-
-#include "Vao/OgreUavBufferPacked.h"
+#include "OgreRoot.h"
 
 namespace Ogre
 {
