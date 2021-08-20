@@ -94,6 +94,14 @@ namespace Ogre
         Pass::_getBlendFlags( alpha, mSourceBlendFactorAlpha, mDestBlendFactorAlpha );
     }
     //-----------------------------------------------------------------------------------
+    void HlmsBlendblock::calculateSeparateBlendMode()
+    {
+        mSeparateBlend = mSourceBlendFactor != mSourceBlendFactorAlpha ||
+                         mDestBlendFactor != mDestBlendFactorAlpha ||
+                         mBlendOperation != mBlendOperationAlpha;
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     HlmsDatablock::HlmsDatablock( IdString name, Hlms *creator, const HlmsMacroblock *macroblock,
                                   const HlmsBlendblock *blendblock,

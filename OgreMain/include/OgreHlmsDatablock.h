@@ -189,6 +189,9 @@ namespace Ogre
         /// Sets colour and alpha individually, turns mSeparateBlend on.
         void setBlendType( SceneBlendType colour, SceneBlendType alpha );
 
+        /// Sets mSeparateBlend to true or false based on current settings
+        void calculateSeparateBlendMode();
+
         bool operator == ( const HlmsBlendblock &_r ) const
         {
             return !(*this != _r);
