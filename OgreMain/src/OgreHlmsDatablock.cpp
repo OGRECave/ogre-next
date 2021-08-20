@@ -103,6 +103,13 @@ namespace Ogre
             mIsTransparent &= ~0x02u;
     }
     //-----------------------------------------------------------------------------------
+    void HlmsBlendblock::calculateSeparateBlendMode()
+    {
+        mSeparateBlend = mSourceBlendFactor != mSourceBlendFactorAlpha ||
+                         mDestBlendFactor != mDestBlendFactorAlpha ||
+                         mBlendOperation != mBlendOperationAlpha;
+    }
+    //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     HlmsDatablock::HlmsDatablock( IdString name, Hlms *creator, const HlmsMacroblock *macroblock,
                                   const HlmsBlendblock *blendblock,

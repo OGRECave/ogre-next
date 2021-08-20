@@ -204,6 +204,9 @@ namespace Ogre
         */
         void setForceTransparentRenderOrder( bool bForceTransparent );
 
+        /// Sets mSeparateBlend to true or false based on current settings
+        void calculateSeparateBlendMode();
+
         bool isAutoTransparent( void ) const { return ( mIsTransparent & 0x01u ) != 0u; }
         bool isForcedTransparent( void ) const { return ( mIsTransparent & 0x02u ) != 0u; }
 

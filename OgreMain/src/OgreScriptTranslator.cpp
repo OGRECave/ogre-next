@@ -1207,6 +1207,7 @@ namespace Ogre{
         }
 
         std::sort( paramVec.begin(), paramVec.end(), OrderParamVecByKey );
+        blendblock.calculateSeparateBlendMode();
         hlms->createDatablock( obj->name, obj->name, macroblock, blendblock, paramVec, true,
                                obj->file, compiler->getResourceGroup() );
 
