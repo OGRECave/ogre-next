@@ -1,5 +1,6 @@
 var NAVTREEINDEX255 =
 {
+"struct_ogre_1_1_vertex_array_object.html#aedb8aeacdb894bae73b3ce3f609f29be":[7,0,0,980,4],
 "struct_ogre_1_1_vertex_array_object.html#aeedbc5dadc06e31d8adc2e2784055e1b":[7,0,0,980,8],
 "struct_ogre_1_1_vertex_array_object.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,980,25],
 "struct_ogre_1_1_vertex_array_object_1_1_read_requests.html":[7,0,0,980,0],
@@ -236,8 +237,8 @@ var NAVTREEINDEX255 =
 "struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html#ab07f6e0c8362b3c487043177f42ed792":[5,2,10,26,8],
 "struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html#ab0b25fcd71c1e3a0036cb9199a2eecd9":[5,2,10,26,1],
 "struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html#abbb10eb66176e02e88c872330e780991":[5,2,10,26,10],
-"struct_ogre_1_1v1_1_1_instance_manager_cmp.html":[5,2,12,68],
 "struct_ogre_1_1v1_1_1_instance_manager_cmp.html":[5,0,1,68],
+"struct_ogre_1_1v1_1_1_instance_manager_cmp.html":[5,2,12,68],
 "struct_ogre_1_1v1_1_1_linked_skeleton_animation_source.html":[5,2,0,16],
 "struct_ogre_1_1v1_1_1_linked_skeleton_animation_source.html#a24c13ecb6c1fa6f4b22e92938a3b8d08":[5,2,0,16,1],
 "struct_ogre_1_1v1_1_1_linked_skeleton_animation_source.html#a36e51d089b1871d32bb080a44cc6e872":[5,2,0,16,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX255 =
 "struct_ogre_1_1v1_1_1_mesh_lod_usage.html#a56b1c29c413f8c256348b059063b3383":[5,2,11,84,1],
 "struct_ogre_1_1v1_1_1_mesh_lod_usage.html#a6038e11af5bd0cad8767dc4bff23b871":[5,2,11,84,0],
 "struct_ogre_1_1v1_1_1_mesh_lod_usage.html#a73a8a551824b023186673d090bffa8c1":[5,2,11,84,3],
-"struct_ogre_1_1v1_1_1_mesh_lod_usage.html#abfaf37d771b30297bd76fab8ea565089":[5,2,11,84,4],
-"struct_ogre_1_1v1_1_1_mesh_lod_usage.html#add6133940d0337da192df6fc141211fc":[5,2,11,84,2]
+"struct_ogre_1_1v1_1_1_mesh_lod_usage.html#abfaf37d771b30297bd76fab8ea565089":[5,2,11,84,4]
 };

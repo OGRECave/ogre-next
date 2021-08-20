@@ -1284,6 +1284,7 @@ var group___resources =
         [ "BlendChannelAll", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1a89410fa1818738772d4b91cd088a21d9", null ]
       ] ],
       [ "HlmsBlendblock", "struct_ogre_1_1_hlms_blendblock.html#a920ff67adb5aaa2238ce71994d7f9c7e", null ],
+      [ "calculateSeparateBlendMode", "struct_ogre_1_1_hlms_blendblock.html#acaab72f26e7b41ab1082508d86a7ac0f", null ],
       [ "operator!=", "struct_ogre_1_1_hlms_blendblock.html#afa02cd5c594a782367716cd76413c723", null ],
       [ "operator==", "struct_ogre_1_1_hlms_blendblock.html#a90c4eb9d310e3b3c6713acf92dd1bd06", null ],
       [ "setBlendType", "struct_ogre_1_1_hlms_blendblock.html#a83761f7ffc5e458eaa2a5fbea2e9c407", null ],
