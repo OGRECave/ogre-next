@@ -193,6 +193,9 @@ namespace Ogre
         /// Sets colour and alpha individually, turns mSeparateBlend on.
         void setBlendType( SceneBlendType colour, SceneBlendType alpha );
 
+        /// Sets mSeparateBlend to true or false based on current settings
+        void calculateSeparateBlendMode();
+
         /** Sometimes you want to force the RenderQueue to render back to front even if
             the object isn't alpha blended (e.g. you're rendering refractive materials)
         @param bForceTransparent
