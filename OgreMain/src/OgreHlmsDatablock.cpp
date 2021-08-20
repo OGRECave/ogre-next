@@ -95,6 +95,13 @@ namespace Ogre
         Pass::_getBlendFlags( alpha, mSourceBlendFactorAlpha, mDestBlendFactorAlpha );
     }
     //-----------------------------------------------------------------------------------
+    void HlmsBlendblock::calculateSeparateBlendMode()
+    {
+        mSeparateBlend = mSourceBlendFactor != mSourceBlendFactorAlpha ||
+                         mDestBlendFactor != mDestBlendFactorAlpha ||
+                         mBlendOperation != mBlendOperationAlpha;
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsBlendblock::setForceTransparentRenderOrder( bool bForceTransparent )
     {
         if( bForceTransparent )
@@ -103,12 +110,6 @@ namespace Ogre
             mIsTransparent &= ~0x02u;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsBlendblock::calculateSeparateBlendMode()
-    {
-        mSeparateBlend = mSourceBlendFactor != mSourceBlendFactorAlpha ||
-                         mDestBlendFactor != mDestBlendFactorAlpha ||
-                         mBlendOperation != mBlendOperationAlpha;
-    }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     HlmsDatablock::HlmsDatablock( IdString name, Hlms *creator, const HlmsMacroblock *macroblock,
