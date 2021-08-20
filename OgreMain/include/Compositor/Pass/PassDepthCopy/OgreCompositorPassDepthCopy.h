@@ -57,7 +57,7 @@ namespace Ogre
     {
         CompositorPassDepthCopyDef const *mDefinition;
 
-        void analyzeBarriers( void );
+        virtual void analyzeBarriers( const bool bClearBarriers = true );
 
     public:
         CompositorPassDepthCopy( const CompositorPassDepthCopyDef *definition,

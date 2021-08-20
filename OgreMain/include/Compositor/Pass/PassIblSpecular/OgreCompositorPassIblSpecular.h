@@ -72,7 +72,7 @@ namespace Ogre
         void setupComputeShaders( void );
         void destroyComputeShaders( void );
 
-        void analyzeBarriers( void );
+        virtual void analyzeBarriers( const bool bClearBarriers = true );
 
     public:
         CompositorPassIblSpecular( const CompositorPassIblSpecularDef *definition,

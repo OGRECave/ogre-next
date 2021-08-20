@@ -60,19 +60,22 @@ namespace Ogre
     void BarrierSolver::reset() { mResourceStatus.clear(); }
     //-------------------------------------------------------------------------
     /**
-    @brief BarrierSolver::checkDivergingTransition
+    @brief BarrierSolver::debugCheckDivergingTransition
         Checks if there's already a transition for this texture and whether
         we're trying to transition to two different layouts (which is impossible)
+
+        Or if the texture is supposed to be in a different layout than it actually
+        is (which would mean it was modified outside this BarrierSolver's knowledge)
     @param resourceTransitions
     @param texture
     @param newLayout
-    @return
-        True if there is already an entry barrier in the barrier to transition this texture
-        False otherwise
+    @param renderSystem
+    @param lastKnownLayout
     */
-    bool BarrierSolver::checkDivergingTransition( const ResourceTransitionArray &resourceTransitions,
-                                                  const TextureGpu *texture,
-                                                  ResourceLayout::Layout newLayout )
+    void BarrierSolver::debugCheckDivergingTransition(
+        const ResourceTransitionArray &resourceTransitions, const TextureGpu *texture,
+        const ResourceLayout::Layout newLayout, const RenderSystem *renderSystem,
+        const ResourceLayout::Layout lastKnownLayout )
     {
         ResourceTransitionArray::const_iterator itor = resourceTransitions.begin();
         ResourceTransitionArray::const_iterator endt = resourceTransitions.end();
@@ -80,13 +83,35 @@ namespace Ogre
         while( itor != endt && itor->resource != texture )
             ++itor;
 
+        const bool bConsistentCurrentLayout =
+            renderSystem->isSameLayout( lastKnownLayout, texture->getCurrentLayout(), texture, true );
+        bool bConsistentOldRecord = false;
+
         if( itor != endt )
         {
             OGRE_ASSERT( itor->newLayout == newLayout &&
                          "Trying to transition a texture to 2 different layouts at the same time" );
+
+            if( !bConsistentCurrentLayout )
+            {
+                // The layout the texture is currently in does not match our records.
+                // This can mean either of two things:
+                //  1. Texture was transitioned outside BarrierSolver's knowledge
+                //
+                //  2. User called resolveTransition() twice on this texture
+                //     without executing the transition yet. Thus 'lastKnownLayout'
+                //     contains the layout we will transition to. So we need
+                //     to check the current layout matches the *old* record,
+                //     not the future one.
+                //     That's what we're checking here.
+                bConsistentOldRecord = renderSystem->isSameLayout(
+                    itor->oldLayout, texture->getCurrentLayout(), texture, true );
+            }
         }
 
-        return itor != endt;
+        OGRE_ASSERT( ( bConsistentCurrentLayout || bConsistentOldRecord ) &&
+                     "Layout was altered outside BarrierSolver! "
+                     "Common reasons are copyTo and _autogenerateMipmaps" );
     }
     //-------------------------------------------------------------------------
     void BarrierSolver::resolveTransition( ResourceTransitionArray &resourceTransitions,
@@ -164,12 +189,10 @@ namespace Ogre
             OGRE_ASSERT_MEDIUM( itor->second.layout != ResourceLayout::CopyEncoderManaged &&
                                 "Call RenderSystem::endCopyEncoder first!" );
 
-            OGRE_ASSERT_MEDIUM(
-                ( checkDivergingTransition( resourceTransitions, texture, newLayout ) ||
-                  renderSystem->isSameLayout( itor->second.layout, texture->getCurrentLayout(), texture,
-                                              true ) ) &&
-                "Layout was altered outside BarrierSolver! "
-                "Common reasons are copyTo and _autogenerateMipmaps" );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+            debugCheckDivergingTransition( resourceTransitions, texture, newLayout, renderSystem,
+                                           itor->second.layout );
+#endif
 
             if( !renderSystem->isSameLayout( itor->second.layout, newLayout, texture, false ) ||
                 ( newLayout == ResourceLayout::Uav &&  //

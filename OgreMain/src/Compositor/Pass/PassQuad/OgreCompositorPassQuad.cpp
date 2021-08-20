@@ -326,9 +326,9 @@ namespace Ogre
         profilingEnd();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassQuad::analyzeBarriers( void )
+    void CompositorPassQuad::analyzeBarriers( const bool bClearBarriers )
     {
-        CompositorPass::analyzeBarriers();
+        CompositorPass::analyzeBarriers( bClearBarriers );
 
         if( mDefinition->mAnalyzeAllTextureLayouts && mMaterial )
         {

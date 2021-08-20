@@ -61,7 +61,7 @@ namespace Ogre
         virtual bool allowResolveStoreActionsWithoutResolveTexture(void) const;
         virtual void postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc );
 
-        void analyzeBarriers( void );
+        virtual void analyzeBarriers( const bool bClearBarriers = true );
 
     public:
         CompositorPassClear( const CompositorPassClearDef *definition, SceneManager *sceneManager,

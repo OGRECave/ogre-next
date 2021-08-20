@@ -85,10 +85,11 @@ namespace Ogre
 
         while( itor != endt )
         {
-            ( *itor )->analyzeBarriers();
-            const ResourceTransitionArray &barriers = ( *itor )->getResourceTransitions();
-            mResourceTransitions.insertPOD( mResourceTransitions.end(), barriers.begin(),
-                                            barriers.end() );
+            ResourceTransitionArray &barriers = ( *itor )->_getResourceTransitionsNonConst();
+            barriers.clear();
+            barriers.swap( mResourceTransitions );
+            ( *itor )->analyzeBarriers( false );
+            barriers.swap( mResourceTransitions );
             ++itor;
         }
         executeResourceTransitions();

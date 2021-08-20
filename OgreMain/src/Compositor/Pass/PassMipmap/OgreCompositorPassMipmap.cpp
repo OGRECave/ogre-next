@@ -442,15 +442,16 @@ namespace Ogre
         profilingEnd();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassMipmap::analyzeBarriers( void )
+    void CompositorPassMipmap::analyzeBarriers( const bool bClearBarriers )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->endCopyEncoder();
 
-        mResourceTransitions.clear();
+        if( bClearBarriers )
+            mResourceTransitions.clear();
 
         // Do not use base class'
-        // CompositorPass::analyzeBarriers();
+        // CompositorPass::analyzeBarriers( bClearBarriers );
 
         const bool usesCompute = !mJobs.empty();
 

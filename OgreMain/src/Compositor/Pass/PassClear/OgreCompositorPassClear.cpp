@@ -132,15 +132,16 @@ namespace Ogre
         profilingEnd();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassClear::analyzeBarriers( void )
+    void CompositorPassClear::analyzeBarriers( const bool bClearBarriers )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->endCopyEncoder();
 
-        mResourceTransitions.clear();
+        if( bClearBarriers )
+            mResourceTransitions.clear();
 
         // Do not use base class'
-        // CompositorPass::analyzeBarriers();
+        // CompositorPass::analyzeBarriers( bClearBarriers );
 
         // Check <anything> -> Clear
         for( int i = 0; i < mRenderPassDesc->getNumColourEntries(); ++i )

@@ -105,15 +105,16 @@ namespace Ogre
         notifyPassPosExecuteListeners();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassDepthCopy::analyzeBarriers( void )
+    void CompositorPassDepthCopy::analyzeBarriers( const bool bClearBarriers )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->endCopyEncoder();
 
-        mResourceTransitions.clear();
+        if( bClearBarriers )
+            mResourceTransitions.clear();
 
         // Do not use base class'
-        // CompositorPass::analyzeBarriers();
+        // CompositorPass::analyzeBarriers( bClearBarriers );
 
         TextureGpu *srcChannel = mParentNode->getDefinedTexture( mDefinition->mSrcDepthTextureName );
         TextureGpu *dstChannel = mParentNode->getDefinedTexture( mDefinition->mDstDepthTextureName );

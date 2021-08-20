@@ -323,9 +323,9 @@ namespace Ogre
         profilingEnd();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassScene::analyzeBarriers( void )
+    void CompositorPassScene::analyzeBarriers( const bool bClearBarriers )
     {
-        CompositorPass::analyzeBarriers();
+        CompositorPass::analyzeBarriers( bClearBarriers );
 
         if( mShadowNode && mShadowNode->getEnabled() )
         {

@@ -65,7 +65,8 @@ namespace Ogre
         void destroyComputeShaders( void );
         void setGaussianFilterParams( HlmsComputeJob *job, uint8 kernelRadius,
                                       float gaussianDeviationFactor );
-        void analyzeBarriers( void );
+
+        virtual void analyzeBarriers( const bool bClearBarriers = true );
 
     public:
         CompositorPassMipmap( const CompositorPassMipmapDef *definition,  //

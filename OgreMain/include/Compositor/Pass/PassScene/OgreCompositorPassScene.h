@@ -79,7 +79,7 @@ namespace Ogre
         void notifyPassSceneAfterShadowMapsListeners(void);
         void notifyPassSceneAfterFrustumCullingListeners(void);
 
-        void analyzeBarriers( void );
+        virtual void analyzeBarriers( const bool bClearBarriers = true );
 
     public:
         /** Constructor

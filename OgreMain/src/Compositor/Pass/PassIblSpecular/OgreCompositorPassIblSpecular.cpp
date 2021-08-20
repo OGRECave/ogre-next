@@ -403,15 +403,16 @@ namespace Ogre
         profilingEnd();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassIblSpecular::analyzeBarriers( void )
+    void CompositorPassIblSpecular::analyzeBarriers( const bool bClearBarriers )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->endCopyEncoder();
 
-        mResourceTransitions.clear();
+        if( bClearBarriers )
+            mResourceTransitions.clear();
 
         // Do not use base class'
-        // CompositorPass::analyzeBarriers();
+        // CompositorPass::analyzeBarriers( bClearBarriers );
 
         const bool usesCompute = !mJobs.empty();
 

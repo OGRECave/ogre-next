@@ -96,7 +96,7 @@ namespace Ogre
         Real        mHorizonalTexelOffset;
         Real        mVerticalTexelOffset;
 
-        void analyzeBarriers( void );
+        virtual void analyzeBarriers( const bool bClearBarriers = true );
 
     public:
         CompositorPassQuad( const CompositorPassQuadDef *definition, Camera *defaultCamera,

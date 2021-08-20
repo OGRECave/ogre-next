@@ -566,12 +566,13 @@ namespace Ogre
         mBarrierSolver.resolveTransition( mResourceTransitions, bufferRes, access, stageMask );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::analyzeBarriers( void )
+    void CompositorPass::analyzeBarriers( const bool bClearBarriers )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->endCopyEncoder();
 
-        mResourceTransitions.clear();
+        if( bClearBarriers )
+            mResourceTransitions.clear();
 
         if( mRenderPassDesc && !mDefinition->mSkipLoadStoreSemantics )
         {

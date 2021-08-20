@@ -134,9 +134,11 @@ namespace Ogre
         /// Temporary variable that can be reused to avoid needless reallocations
         ResourceTransitionArray mTmpResourceTransitions;
 
-        static bool checkDivergingTransition( const ResourceTransitionArray &resourceTransitions,
-                                              const TextureGpu *texture,
-                                              ResourceLayout::Layout newLayout );
+        static void debugCheckDivergingTransition( const ResourceTransitionArray &resourceTransitions,
+                                                   const TextureGpu *texture,
+                                                   const ResourceLayout::Layout newLayout,
+                                                   const RenderSystem *renderSystem,
+                                                   const ResourceLayout::Layout lastKnownLayout );
 
     public:
         const ResourceStatusMap &getResourceStatus( void );

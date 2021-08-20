@@ -154,22 +154,12 @@ namespace Ogre
         CompositorPass( const CompositorPassDef *definition, CompositorNode *parentNode );
         virtual ~CompositorPass();
 
-        /** Bakes most of the memory barriers / resource transition that will be needed
-            during execution.
-
-            Some passes may still generate more barriers/transitions that need to be placed
-            dynamically. These passes must update resourceStatus without inserting a barrier
-            into mResourceTransitions
-        @param boundUavs [in/out]
-            An array of the currently bound UAVs by slot.
-            The derived class CompositorPassUav will write to them as part of the
-            emulation. The base implementation reads from this value.
-        @param resourceStatus [in/out]
-            A map with the last access flags used for each GpuTrackedResource.
-            We need it to identify how it was last used and thus what barrier
-            we need to insert
+        /** Bakes all of the memory barriers / resource transition that will be needed
+            before executing a GPU command like rendering, copying/blit or compute.
+        @param bClearBarriers
+            True to do mResourceTransitions.clear();
         */
-        virtual void analyzeBarriers( void );
+        virtual void analyzeBarriers( const bool bClearBarriers = true );
 
         void profilingBegin(void);
         void profilingEnd(void);
@@ -203,6 +193,7 @@ namespace Ogre
         {
             return mResourceTransitions;
         }
+        ResourceTransitionArray &_getResourceTransitionsNonConst( void ) { return mResourceTransitions; }
 
         const CompositorTextureVec& getTextureDependencies(void) const  { return mTextureDependencies; }
     };
