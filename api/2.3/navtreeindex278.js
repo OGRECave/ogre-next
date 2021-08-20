@@ -1,5 +1,6 @@
 var NAVTREEINDEX278 =
 {
+"struct_ogre_1_1_lod_input_buffer.html#ac889e3caaa0b8fef6a9c2c14e52112ca":[7,0,0,623,6],
 "struct_ogre_1_1_lod_input_buffer_1_1_submesh.html":[7,0,0,623,0],
 "struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a45430c40a1beecf29b83ea08f06ef88b":[7,0,0,623,0,3],
 "struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a575926e31feb1cc9bfebab8a13fded97":[7,0,0,623,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX278 =
 "struct_ogre_1_1_pbs_mobile_property.html#ab9e56887f2c66d30b4a9a92ef49d5848":[5,0,0,18,24],
 "struct_ogre_1_1_pbs_mobile_property.html#abbc80781e8fc16eda61c5307b4f582ba":[5,0,0,18,26],
 "struct_ogre_1_1_pbs_mobile_property.html#ac1ab87ab14fe19098284b032d6d2ec20":[5,0,0,18,11],
-"struct_ogre_1_1_pbs_mobile_property.html#ac6fd2f6d2b7ed8d7b395469a275ecaa9":[5,0,0,18,6],
-"struct_ogre_1_1_pbs_mobile_property.html#ac7f61a27c2ea3f3cb41dfeea35ceef13":[5,0,0,18,12]
+"struct_ogre_1_1_pbs_mobile_property.html#ac6fd2f6d2b7ed8d7b395469a275ecaa9":[5,0,0,18,6]
 };
