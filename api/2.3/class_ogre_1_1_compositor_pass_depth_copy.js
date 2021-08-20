@@ -1,6 +1,7 @@
 var class_ogre_1_1_compositor_pass_depth_copy =
 [
     [ "CompositorPassDepthCopy", "class_ogre_1_1_compositor_pass_depth_copy.html#a0486cad6b5552a1fd8344263bb0ab544", null ],
+    [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_depth_copy.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
     [ "execute", "class_ogre_1_1_compositor_pass_depth_copy.html#ad2722938f1d35a3e5e3575f7d0400dc1", null ],
     [ "getActualDimensions", "class_ogre_1_1_compositor_pass_depth_copy.html#ad4d394f598a677c18b4b653cde572957", null ],
     [ "getDefinition", "class_ogre_1_1_compositor_pass_depth_copy.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],

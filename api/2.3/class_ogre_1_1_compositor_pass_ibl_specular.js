@@ -2,6 +2,7 @@ var class_ogre_1_1_compositor_pass_ibl_specular =
 [
     [ "CompositorPassIblSpecular", "class_ogre_1_1_compositor_pass_ibl_specular.html#a9c8202ba20003b4496ecc031d52c6fda", null ],
     [ "~CompositorPassIblSpecular", "class_ogre_1_1_compositor_pass_ibl_specular.html#ac20ef166854462d1d57ee6ca0daf0794", null ],
+    [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_ibl_specular.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
     [ "execute", "class_ogre_1_1_compositor_pass_ibl_specular.html#a87aaa5fc3d51100ca03271033ad97964", null ],
     [ "getActualDimensions", "class_ogre_1_1_compositor_pass_ibl_specular.html#ad4d394f598a677c18b4b653cde572957", null ],
     [ "getDefinition", "class_ogre_1_1_compositor_pass_ibl_specular.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],

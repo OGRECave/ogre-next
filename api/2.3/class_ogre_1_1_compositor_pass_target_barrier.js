@@ -2,8 +2,9 @@ var class_ogre_1_1_compositor_pass_target_barrier =
 [
     [ "CompositorPassTargetBarrier", "class_ogre_1_1_compositor_pass_target_barrier.html#ab91b8c75f9a23ce0d2f45ab832fcf293", null ],
     [ "~CompositorPassTargetBarrier", "class_ogre_1_1_compositor_pass_target_barrier.html#af6d58ff1ffd5c936ff6c42a0b909fb7e", null ],
+    [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_target_barrier.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
     [ "addPass", "class_ogre_1_1_compositor_pass_target_barrier.html#a38471b125ae8836bb6b49dae37525010", null ],
-    [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_target_barrier.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
+    [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_target_barrier.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
     [ "execute", "class_ogre_1_1_compositor_pass_target_barrier.html#add0c440fb317338a3a3ebdc79473df48", null ],
     [ "getActualDimensions", "class_ogre_1_1_compositor_pass_target_barrier.html#ad4d394f598a677c18b4b653cde572957", null ],
     [ "getDefinition", "class_ogre_1_1_compositor_pass_target_barrier.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],

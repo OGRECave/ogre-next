@@ -1,7 +1,8 @@
 var class_ogre_1_1_compositor_pass_stencil =
 [
     [ "CompositorPassStencil", "class_ogre_1_1_compositor_pass_stencil.html#a16704c18033351daf553055113309e44", null ],
-    [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_stencil.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
+    [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_stencil.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
+    [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_stencil.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
     [ "execute", "class_ogre_1_1_compositor_pass_stencil.html#a88a90cd8524ca4838ba402598452ec01", null ],
     [ "getActualDimensions", "class_ogre_1_1_compositor_pass_stencil.html#ad4d394f598a677c18b4b653cde572957", null ],
     [ "getDefinition", "class_ogre_1_1_compositor_pass_stencil.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],

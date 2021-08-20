@@ -2,7 +2,8 @@ var class_ogre_1_1_compositor_pass_compute =
 [
     [ "CompositorPassCompute", "class_ogre_1_1_compositor_pass_compute.html#af3987c75805bab6531c49e40001586b5", null ],
     [ "~CompositorPassCompute", "class_ogre_1_1_compositor_pass_compute.html#ad20eb73f7eccb9432800b5e73aba2aee", null ],
-    [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_compute.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
+    [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_compute.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
+    [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_compute.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
     [ "execute", "class_ogre_1_1_compositor_pass_compute.html#a15cad2078e73debdb2818c8c71f919dd", null ],
     [ "getActualDimensions", "class_ogre_1_1_compositor_pass_compute.html#ad4d394f598a677c18b4b653cde572957", null ],
     [ "getDefinition", "class_ogre_1_1_compositor_pass_compute.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],

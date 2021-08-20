@@ -136,7 +136,8 @@ var group___effects =
     [ "CompositorPass", "class_ogre_1_1_compositor_pass.html", [
       [ "CompositorPass", "class_ogre_1_1_compositor_pass.html#a42ea402b654f1343c0abf4464cf30afe", null ],
       [ "~CompositorPass", "class_ogre_1_1_compositor_pass.html#a58360737ad569caedc863cf9aea9986a", null ],
-      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
+      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
       [ "execute", "class_ogre_1_1_compositor_pass.html#a2cc832fbb80b9685b4fedf874b46075c", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getDefinition", "class_ogre_1_1_compositor_pass.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
@@ -166,6 +167,7 @@ var group___effects =
     ] ],
     [ "CompositorPassClear", "class_ogre_1_1_compositor_pass_clear.html", [
       [ "CompositorPassClear", "class_ogre_1_1_compositor_pass_clear.html#a06f6772e803d5408499f05fb3bd335a8", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_clear.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
       [ "execute", "class_ogre_1_1_compositor_pass_clear.html#a14fc14a5c21a6954471003284994c064", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass_clear.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getDefinition", "class_ogre_1_1_compositor_pass_clear.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
@@ -245,7 +247,8 @@ var group___effects =
     [ "CompositorPassCompute", "class_ogre_1_1_compositor_pass_compute.html", [
       [ "CompositorPassCompute", "class_ogre_1_1_compositor_pass_compute.html#af3987c75805bab6531c49e40001586b5", null ],
       [ "~CompositorPassCompute", "class_ogre_1_1_compositor_pass_compute.html#ad20eb73f7eccb9432800b5e73aba2aee", null ],
-      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_compute.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_compute.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
+      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_compute.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
       [ "execute", "class_ogre_1_1_compositor_pass_compute.html#a15cad2078e73debdb2818c8c71f919dd", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass_compute.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getDefinition", "class_ogre_1_1_compositor_pass_compute.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
@@ -419,6 +422,7 @@ var group___effects =
     ] ],
     [ "CompositorPassDepthCopy", "class_ogre_1_1_compositor_pass_depth_copy.html", [
       [ "CompositorPassDepthCopy", "class_ogre_1_1_compositor_pass_depth_copy.html#a0486cad6b5552a1fd8344263bb0ab544", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_depth_copy.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
       [ "execute", "class_ogre_1_1_compositor_pass_depth_copy.html#ad2722938f1d35a3e5e3575f7d0400dc1", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass_depth_copy.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getDefinition", "class_ogre_1_1_compositor_pass_depth_copy.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
@@ -498,6 +502,7 @@ var group___effects =
     [ "CompositorPassIblSpecular", "class_ogre_1_1_compositor_pass_ibl_specular.html", [
       [ "CompositorPassIblSpecular", "class_ogre_1_1_compositor_pass_ibl_specular.html#a9c8202ba20003b4496ecc031d52c6fda", null ],
       [ "~CompositorPassIblSpecular", "class_ogre_1_1_compositor_pass_ibl_specular.html#ac20ef166854462d1d57ee6ca0daf0794", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_ibl_specular.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
       [ "execute", "class_ogre_1_1_compositor_pass_ibl_specular.html#a87aaa5fc3d51100ca03271033ad97964", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass_ibl_specular.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getDefinition", "class_ogre_1_1_compositor_pass_ibl_specular.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
@@ -585,6 +590,7 @@ var group___effects =
     [ "CompositorPassMipmap", "class_ogre_1_1_compositor_pass_mipmap.html", [
       [ "CompositorPassMipmap", "class_ogre_1_1_compositor_pass_mipmap.html#a4f438861e7ff9d2eaa9dcc3187095bd0", null ],
       [ "~CompositorPassMipmap", "class_ogre_1_1_compositor_pass_mipmap.html#aabe88af37d6171865aaa1a181c3472cf", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_mipmap.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
       [ "execute", "class_ogre_1_1_compositor_pass_mipmap.html#aa2bda339febc5ee5e09ecebabfb2a42b", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass_mipmap.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getDefinition", "class_ogre_1_1_compositor_pass_mipmap.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
@@ -670,6 +676,7 @@ var group___effects =
     [ "CompositorPassQuad", "class_ogre_1_1_compositor_pass_quad.html", [
       [ "CompositorPassQuad", "class_ogre_1_1_compositor_pass_quad.html#a6b1c50c49fb502278ba0f492eb57fc5d", null ],
       [ "~CompositorPassQuad", "class_ogre_1_1_compositor_pass_quad.html#a33a08eb3d4f53df8c7f079ff2a4b6529", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_quad.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
       [ "execute", "class_ogre_1_1_compositor_pass_quad.html#ae0a52291d3b53e65dd6a622e16a2965a", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass_quad.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getCamera", "class_ogre_1_1_compositor_pass_quad.html#a6fdbbe10e0fc36e91b076b123a2ed08f", null ],
@@ -774,6 +781,7 @@ var group___effects =
     [ "CompositorPassScene", "class_ogre_1_1_compositor_pass_scene.html", [
       [ "CompositorPassScene", "class_ogre_1_1_compositor_pass_scene.html#a01c5cd0c3130338b2e1da7965f587308", null ],
       [ "~CompositorPassScene", "class_ogre_1_1_compositor_pass_scene.html#abd2076cd40a89983f3cf8fcaea1f4585", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_scene.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
       [ "_setCustomCamera", "class_ogre_1_1_compositor_pass_scene.html#a2848615398e6c9d8db87dc406066aa71", null ],
       [ "_setCustomCullCamera", "class_ogre_1_1_compositor_pass_scene.html#a85d32d112dec394ed1122de03ca95ae4", null ],
       [ "_setUpdateShadowNode", "class_ogre_1_1_compositor_pass_scene.html#a100e06e7f301a1f65b21407343a3bb1a", null ],
@@ -889,7 +897,8 @@ var group___effects =
     [ "CompositorPassShadows", "class_ogre_1_1_compositor_pass_shadows.html", [
       [ "CompositorPassShadows", "class_ogre_1_1_compositor_pass_shadows.html#a66647669a32b142982801a19af52d97a", null ],
       [ "~CompositorPassShadows", "class_ogre_1_1_compositor_pass_shadows.html#ae846d75dffdc9f58048d119b543098e5", null ],
-      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_shadows.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_shadows.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
+      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_shadows.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
       [ "execute", "class_ogre_1_1_compositor_pass_shadows.html#aeb75c436ed13866bba63fd0fbc4080d5", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass_shadows.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getCullCamera", "class_ogre_1_1_compositor_pass_shadows.html#a0ed6a9ac2bca4b30fda4015c1fe7fd1c", null ],
@@ -975,7 +984,8 @@ var group___effects =
     ] ],
     [ "CompositorPassStencil", "class_ogre_1_1_compositor_pass_stencil.html", [
       [ "CompositorPassStencil", "class_ogre_1_1_compositor_pass_stencil.html#a16704c18033351daf553055113309e44", null ],
-      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_stencil.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_stencil.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
+      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_stencil.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
       [ "execute", "class_ogre_1_1_compositor_pass_stencil.html#a88a90cd8524ca4838ba402598452ec01", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass_stencil.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getDefinition", "class_ogre_1_1_compositor_pass_stencil.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
@@ -1055,8 +1065,9 @@ var group___effects =
     [ "CompositorPassTargetBarrier", "class_ogre_1_1_compositor_pass_target_barrier.html", [
       [ "CompositorPassTargetBarrier", "class_ogre_1_1_compositor_pass_target_barrier.html#ab91b8c75f9a23ce0d2f45ab832fcf293", null ],
       [ "~CompositorPassTargetBarrier", "class_ogre_1_1_compositor_pass_target_barrier.html#af6d58ff1ffd5c936ff6c42a0b909fb7e", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_target_barrier.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
       [ "addPass", "class_ogre_1_1_compositor_pass_target_barrier.html#a38471b125ae8836bb6b49dae37525010", null ],
-      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_target_barrier.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
+      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_target_barrier.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
       [ "execute", "class_ogre_1_1_compositor_pass_target_barrier.html#add0c440fb317338a3a3ebdc79473df48", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass_target_barrier.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getDefinition", "class_ogre_1_1_compositor_pass_target_barrier.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
@@ -1148,7 +1159,8 @@ var group___effects =
       ] ],
       [ "CompositorPassUav", "class_ogre_1_1_compositor_pass_uav.html#a3efe41bf681ca811dc65b8e57a742db0", null ],
       [ "~CompositorPassUav", "class_ogre_1_1_compositor_pass_uav.html#afbcbbbb270592e0d3f318a6a49979c8f", null ],
-      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_uav.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
+      [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_uav.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
+      [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_uav.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
       [ "execute", "class_ogre_1_1_compositor_pass_uav.html#ae1000129c8f43557451a4a14fcce596b", null ],
       [ "getActualDimensions", "class_ogre_1_1_compositor_pass_uav.html#ad4d394f598a677c18b4b653cde572957", null ],
       [ "getDefinition", "class_ogre_1_1_compositor_pass_uav.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],

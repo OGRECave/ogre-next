@@ -2,7 +2,8 @@ var class_ogre_1_1_compositor_pass_shadows =
 [
     [ "CompositorPassShadows", "class_ogre_1_1_compositor_pass_shadows.html#a66647669a32b142982801a19af52d97a", null ],
     [ "~CompositorPassShadows", "class_ogre_1_1_compositor_pass_shadows.html#ae846d75dffdc9f58048d119b543098e5", null ],
-    [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_shadows.html#a416dcadd1b717825a028e3d4fb274ac2", null ],
+    [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_shadows.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
+    [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_shadows.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
     [ "execute", "class_ogre_1_1_compositor_pass_shadows.html#aeb75c436ed13866bba63fd0fbc4080d5", null ],
     [ "getActualDimensions", "class_ogre_1_1_compositor_pass_shadows.html#ad4d394f598a677c18b4b653cde572957", null ],
     [ "getCullCamera", "class_ogre_1_1_compositor_pass_shadows.html#a0ed6a9ac2bca4b30fda4015c1fe7fd1c", null ],

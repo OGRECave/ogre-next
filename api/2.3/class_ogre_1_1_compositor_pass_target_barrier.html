@@ -109,11 +109,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab91b8c75f9a23ce0d2f45ab832fcf293"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6d58ff1ffd5c936ff6c42a0b909fb7e"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_target_barrier.html#af6d58ff1ffd5c936ff6c42a0b909fb7e">~CompositorPassTargetBarrier</a> ()</td></tr>
 <tr class="separator:af6d58ff1ffd5c936ff6c42a0b909fb7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4c2d313eeaadec2dbef3ca92e411357"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___resources.html#gab881163687bedff909edce16d11d9127">ResourceTransitionArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#ab4c2d313eeaadec2dbef3ca92e411357">_getResourceTransitionsNonConst</a> (void)</td></tr>
+<tr class="separator:ab4c2d313eeaadec2dbef3ca92e411357"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38471b125ae8836bb6b49dae37525010"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_target_barrier.html#a38471b125ae8836bb6b49dae37525010">addPass</a> (<a class="el" href="class_ogre_1_1_compositor_pass.html">CompositorPass</a> *pass)</td></tr>
 <tr class="separator:a38471b125ae8836bb6b49dae37525010"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a416dcadd1b717825a028e3d4fb274ac2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#a416dcadd1b717825a028e3d4fb274ac2">analyzeBarriers</a> (void)</td></tr>
-<tr class="memdesc:a416dcadd1b717825a028e3d4fb274ac2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bakes most of the memory barriers / resource transition that will be needed during execution.  <a href="class_ogre_1_1_compositor_pass.html#a416dcadd1b717825a028e3d4fb274ac2">More...</a><br /></td></tr>
-<tr class="separator:a416dcadd1b717825a028e3d4fb274ac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0d628f807e0bcb2ef5c2782e6245ac3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#af0d628f807e0bcb2ef5c2782e6245ac3">analyzeBarriers</a> (const bool bClearBarriers=true)</td></tr>
+<tr class="memdesc:af0d628f807e0bcb2ef5c2782e6245ac3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bakes all of the memory barriers / resource transition that will be needed before executing a GPU command like rendering, copying/blit or compute.  <a href="class_ogre_1_1_compositor_pass.html#af0d628f807e0bcb2ef5c2782e6245ac3">More...</a><br /></td></tr>
+<tr class="separator:af0d628f807e0bcb2ef5c2782e6245ac3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add0c440fb317338a3a3ebdc79473df48"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass_target_barrier.html#add0c440fb317338a3a3ebdc79473df48">execute</a> (const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *lodCamera)</td></tr>
 <tr class="separator:add0c440fb317338a3a3ebdc79473df48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4d394f598a677c18b4b653cde572957"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_pass.html#ad4d394f598a677c18b4b653cde572957">getActualDimensions</a> (void) const</td></tr>
@@ -237,6 +239,32 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab4c2d313eeaadec2dbef3ca92e411357"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4c2d313eeaadec2dbef3ca92e411357">&#9670;&nbsp;</a></span>_getResourceTransitionsNonConst()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group___resources.html#gab881163687bedff909edce16d11d9127">ResourceTransitionArray</a>&amp; Ogre::CompositorPass::_getResourceTransitionsNonConst </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a38471b125ae8836bb6b49dae37525010"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a38471b125ae8836bb6b49dae37525010">&#9670;&nbsp;</a></span>addPass()</h2>
 
@@ -255,8 +283,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a416dcadd1b717825a028e3d4fb274ac2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a416dcadd1b717825a028e3d4fb274ac2">&#9670;&nbsp;</a></span>analyzeBarriers()</h2>
+<a id="af0d628f807e0bcb2ef5c2782e6245ac3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0d628f807e0bcb2ef5c2782e6245ac3">&#9670;&nbsp;</a></span>analyzeBarriers()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -267,8 +295,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void Ogre::CompositorPass::analyzeBarriers </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>bClearBarriers</em> = <code>true</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -279,11 +307,10 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Bakes most of the memory barriers / resource transition that will be needed during execution. </p>
-<p>Some passes may still generate more barriers/transitions that need to be placed dynamically. These passes must update resourceStatus without inserting a barrier into mResourceTransitions </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Bakes all of the memory barriers / resource transition that will be needed before executing a GPU command like rendering, copying/blit or compute. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">boundUavs</td><td>[in/out] An array of the currently bound UAVs by slot. The derived class <a class="el" href="class_ogre_1_1_compositor_pass_uav.html" title="Implementation of CompositorPass This implementation will set UAVs.">CompositorPassUav</a> will write to them as part of the emulation. The base implementation reads from this value. </td></tr>
-    <tr><td class="paramname">resourceStatus</td><td>[in/out] A map with the last access flags used for each <a class="el" href="struct_ogre_1_1_gpu_tracked_resource.html">GpuTrackedResource</a>. We need it to identify how it was last used and thus what barrier we need to insert </td></tr>
+    <tr><td class="paramname">bClearBarriers</td><td>True to do mResourceTransitions.clear(); </td></tr>
   </table>
   </dd>
 </dl>

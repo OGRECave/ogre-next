@@ -1,5 +1,17 @@
 var NAVTREEINDEX181 =
 {
+"class_ogre_1_1_shared_ptr.html":[5,2,2,110],
+"class_ogre_1_1_shared_ptr.html#a0102c9ce0678ec964b26e47b8a5310d1":[5,2,2,110,18],
+"class_ogre_1_1_shared_ptr.html#a058dfd1737dcf94ed8b049718475f816":[5,2,2,110,20],
+"class_ogre_1_1_shared_ptr.html#a08987cfe83e246fc1e24bbc026c8e161":[5,2,2,110,21],
+"class_ogre_1_1_shared_ptr.html#a0d782aa6b8e566367c6178732813fa9f":[5,2,2,110,0],
+"class_ogre_1_1_shared_ptr.html#a152e9f01d597734a7c14c639b112dc3f":[5,2,2,110,16],
+"class_ogre_1_1_shared_ptr.html#a1ce00b90526a205ae31268a88bc9ed35":[5,2,2,110,14],
+"class_ogre_1_1_shared_ptr.html#a1fe9d89e89df46f06ea5d3173bb554ac":[5,2,2,110,19],
+"class_ogre_1_1_shared_ptr.html#a291dacc84f7f971399a37f725003e9df":[5,2,2,110,15],
+"class_ogre_1_1_shared_ptr.html#a52d62f8b23524bac7b345fb12b8cf16e":[5,2,2,110,13],
+"class_ogre_1_1_shared_ptr.html#a564789e0743e9be6ccb5505057ed63b6":[5,2,2,110,9],
+"class_ogre_1_1_shared_ptr.html#a5de511dc537736b5c290588ff0d6db8e":[5,2,2,110,11],
 "class_ogre_1_1_shared_ptr.html#a6dc65b8171394624d1bb43fd9d54a8f6":[5,2,2,110,1],
 "class_ogre_1_1_shared_ptr.html#a722d443fdfd8b3ea12b22bcf07a7977d":[5,2,2,110,17],
 "class_ogre_1_1_shared_ptr.html#a7461c17614870330dfbc034bd2309c56":[5,2,2,110,23],
@@ -237,17 +249,5 @@ var NAVTREEINDEX181 =
 "class_ogre_1_1_skeleton_instance.html#af9ab576ce55b4d2324d11ee5b94868a0":[5,2,0,6,21],
 "class_ogre_1_1_skeleton_instance.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,0,6,35],
 "class_ogre_1_1_skeleton_manager.html":[5,2,0,7],
-"class_ogre_1_1_skeleton_manager.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,0,7,9],
-"class_ogre_1_1_skeleton_manager.html#a21c2e42c7e440c04b8df6af455a27563":[5,2,0,7,4],
-"class_ogre_1_1_skeleton_manager.html#a2f635f8a9879a29690654d810844ec8e":[5,2,0,7,0],
-"class_ogre_1_1_skeleton_manager.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,0,7,13],
-"class_ogre_1_1_skeleton_manager.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,0,7,16],
-"class_ogre_1_1_skeleton_manager.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,0,7,11],
-"class_ogre_1_1_skeleton_manager.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,0,7,7],
-"class_ogre_1_1_skeleton_manager.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,0,7,10],
-"class_ogre_1_1_skeleton_manager.html#aa5de657acff092ae119cbc3715c1e4b8":[5,2,0,7,17],
-"class_ogre_1_1_skeleton_manager.html#ab77025797819af2c50c4a9cc955fa61b":[5,2,0,7,1],
-"class_ogre_1_1_skeleton_manager.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,0,7,14],
-"class_ogre_1_1_skeleton_manager.html#abf6b5ad96a16a1619c1d37a0e32a5517":[5,2,0,7,3],
-"class_ogre_1_1_skeleton_manager.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,0,7,12]
+"class_ogre_1_1_skeleton_manager.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,0,7,9]
 };

@@ -1,6 +1,7 @@
 var class_ogre_1_1_compositor_pass_clear =
 [
     [ "CompositorPassClear", "class_ogre_1_1_compositor_pass_clear.html#a06f6772e803d5408499f05fb3bd335a8", null ],
+    [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_clear.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
     [ "execute", "class_ogre_1_1_compositor_pass_clear.html#a14fc14a5c21a6954471003284994c064", null ],
     [ "getActualDimensions", "class_ogre_1_1_compositor_pass_clear.html#ad4d394f598a677c18b4b653cde572957", null ],
     [ "getDefinition", "class_ogre_1_1_compositor_pass_clear.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],

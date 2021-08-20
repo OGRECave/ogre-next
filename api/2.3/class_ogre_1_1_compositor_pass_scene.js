@@ -2,6 +2,7 @@ var class_ogre_1_1_compositor_pass_scene =
 [
     [ "CompositorPassScene", "class_ogre_1_1_compositor_pass_scene.html#a01c5cd0c3130338b2e1da7965f587308", null ],
     [ "~CompositorPassScene", "class_ogre_1_1_compositor_pass_scene.html#abd2076cd40a89983f3cf8fcaea1f4585", null ],
+    [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_scene.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
     [ "_setCustomCamera", "class_ogre_1_1_compositor_pass_scene.html#a2848615398e6c9d8db87dc406066aa71", null ],
     [ "_setCustomCullCamera", "class_ogre_1_1_compositor_pass_scene.html#a85d32d112dec394ed1122de03ca95ae4", null ],
     [ "_setUpdateShadowNode", "class_ogre_1_1_compositor_pass_scene.html#a100e06e7f301a1f65b21407343a3bb1a", null ],
