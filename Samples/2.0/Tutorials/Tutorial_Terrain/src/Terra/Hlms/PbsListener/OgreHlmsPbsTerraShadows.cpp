@@ -83,7 +83,8 @@ namespace Ogre
         const PiecesMap renderableCachePieces[NumShaderTypes], const HlmsPropertyVec &properties,
         const QueuedRenderable &queuedRenderable )
     {
-        if( hlms->_getProperty( HlmsBaseProp::ShadowCaster ) == 0 && mTerra )
+        if( hlms->_getProperty( HlmsBaseProp::ShadowCaster ) == 0 &&
+            hlms->_getProperty( PbsTerraProperty::TerraEnabled ) != 0 )
         {
             int32 texUnit = hlms->_getProperty( PbsProperty::Set0TextureSlotEnd );
             hlms->_setTextureReg( VertexShader, "terrainShadows", texUnit - 1 );
@@ -109,7 +110,7 @@ namespace Ogre
             }
 
             hlms->_setProperty( PbsTerraProperty::TerraEnabled, mTerra != 0 );
-            hlms->_setProperty( TerraProperty::ZUp, mTerra->isZUp() );
+            hlms->_setProperty( TerraProperty::ZUp, mTerra && mTerra->isZUp() );
         }
     }
     //-----------------------------------------------------------------------------------
