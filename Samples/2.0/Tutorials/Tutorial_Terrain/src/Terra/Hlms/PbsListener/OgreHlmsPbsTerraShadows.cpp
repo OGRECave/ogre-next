@@ -79,7 +79,8 @@ namespace Ogre
     {
         if( shaderProfile != "hlsl" &&
             shaderProfile != "metal" &&
-            Hlms::getProperty( passCache.setProperties, HlmsBaseProp::ShadowCaster ) == 0 )
+            Hlms::getProperty( passCache.setProperties, HlmsBaseProp::ShadowCaster ) == 0 &&
+            Hlms::getProperty( passCache.setProperties, PbsTerraProperty::TerraEnabled ) != 0 )
         {
             if( !hlmsCacheEntry->pso.vertexShader.isNull() )
             {
@@ -114,7 +115,7 @@ namespace Ogre
             }
 
             hlms->_setProperty( PbsTerraProperty::TerraEnabled, mTerra != 0 );
-            hlms->_setProperty( TerraProperty::ZUp, mTerra->isZUp() );
+            hlms->_setProperty( TerraProperty::ZUp, mTerra && mTerra->isZUp() );
         }
     }
     //-----------------------------------------------------------------------------------
