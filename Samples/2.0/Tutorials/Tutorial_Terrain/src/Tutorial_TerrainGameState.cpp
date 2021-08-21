@@ -13,9 +13,11 @@
 #include "OgreCamera.h"
 #include "OgreWindow.h"
 
+#include "Terra/Hlms/OgreHlmsTerra.h"
+#include "Terra/Hlms/PbsListener/OgreHlmsPbsTerraShadows.h"
 #include "Terra/Terra.h"
 #include "Terra/TerraShadowMapper.h"
-#include "Terra/Hlms/PbsListener/OgreHlmsPbsTerraShadows.h"
+#include "Terra/TerraWorkspaceListener.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
 #include "Compositor/OgreCompositorManager2.h"
@@ -39,7 +41,8 @@ namespace Demo
         mAzimuth( 0 ),
         mTerra( 0 ),
         mSunLight( 0 ),
-        mHlmsPbsTerraShadows( 0 )
+        mHlmsPbsTerraShadows( 0 ),
+        mTerraWorkspaceListener( 0 )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -109,10 +112,20 @@ namespace Demo
             externalChannels[1] = nullTex;
         }
 
-        return compositorManager->addWorkspace( sceneManager, externalChannels, camera,
-                                                "Tutorial_TerrainWorkspace", true, -1,
-                                                (UavBufferPackedVec*)0, &initialLayouts,
-                                                &initialUavAccess );
+        CompositorWorkspace *workspace = compositorManager->addWorkspace(
+            sceneManager, externalChannels, camera, "Tutorial_TerrainWorkspace", true, -1,
+            (UavBufferPackedVec *)0, &initialLayouts, &initialUavAccess );
+
+        if( !mTerraWorkspaceListener )
+        {
+            Ogre::HlmsManager *hlmsManager = root->getHlmsManager();
+            Hlms *hlms = hlmsManager->getHlms( HLMS_USER3 );
+            OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( hlms ) );
+            mTerraWorkspaceListener = new TerraWorkspaceListener( static_cast<HlmsTerra *>( hlms ) );
+        }
+        workspace->addListener( mTerraWorkspaceListener );
+
+        return workspace;
     }
     //-----------------------------------------------------------------------------------
     void Tutorial_TerrainGameState::createScene01(void)
@@ -210,6 +223,10 @@ namespace Demo
             delete mHlmsPbsTerraShadows;
             mHlmsPbsTerraShadows = 0;
         }
+
+        mGraphicsSystem->getCompositorWorkspace()->removeListener( mTerraWorkspaceListener );
+        delete mTerraWorkspaceListener;
+        mTerraWorkspaceListener = 0;
 
         delete mTerra;
         mTerra = 0;

@@ -7,10 +7,12 @@
 @insertpiece( DefaultTerraHeaderPS )
 
 // START UNIFORM STRUCT DECLARATION
-@insertpiece( PassStructDecl )
-@insertpiece( TerraMaterialStructDecl )
-@insertpiece( TerraInstanceStructDecl )
-@insertpiece( custom_ps_uniformDeclaration )
+@property( !hlms_shadowcaster )
+	@insertpiece( PassStructDecl )
+	@insertpiece( TerraMaterialStructDecl )
+	@insertpiece( TerraInstanceStructDecl )
+@end
+@insertpiece( custom_ps_uniformStructDeclaration )
 // END UNIFORM STRUCT DECLARATION
 struct PS_INPUT
 {
@@ -26,6 +28,8 @@ struct PS_INPUT
 @padd( metalness_map1_sampler,	samplerStateStart )
 @padd( metalness_map2_sampler,	samplerStateStart )
 @padd( metalness_map3_sampler,	samplerStateStart )
+
+@property( !hlms_shadowcaster )
 
 @property( !hlms_render_depth_only )
 	@property( hlms_gen_normals_gbuffer )
@@ -151,3 +155,38 @@ fragment @insertpiece( output_type ) main_metal
 	return outPs;
 @end
 }
+@else ///!hlms_shadowcaster
+
+@insertpiece( DeclShadowCasterMacros )
+
+@property( hlms_shadowcaster_point || exponential_shadow_maps )
+	@insertpiece( PassStructDecl )
+@end
+
+@insertpiece( DeclOutputType )
+
+fragment @insertpiece( output_type ) main_metal
+(
+	PS_INPUT inPs [[stage_in]]
+
+	// START UNIFORM DECLARATION
+	@property( hlms_shadowcaster_point )
+		@insertpiece( PassDecl )
+	@end
+	@insertpiece( custom_ps_uniformDeclaration )
+	// END UNIFORM DECLARATION
+)
+{
+@property( !hlms_render_depth_only || exponential_shadow_maps || hlms_shadowcaster_point )
+	PS_OUTPUT outPs;
+@end
+
+	@insertpiece( custom_ps_preExecution )
+	@insertpiece( DefaultBodyPS )
+	@insertpiece( custom_ps_posExecution )
+
+@property( !hlms_render_depth_only || exponential_shadow_maps || hlms_shadowcaster_point )
+	return outPs;
+@end
+}
+@end

@@ -9,6 +9,7 @@ namespace Ogre
 {
     class Terra;
     class HlmsPbsTerraShadows;
+    class TerraWorkspaceListener;
 }
 
 namespace Demo
@@ -23,6 +24,7 @@ namespace Demo
 
         /// Listener to make PBS objects also be affected by terrain's shadows
         Ogre::HlmsPbsTerraShadows *mHlmsPbsTerraShadows;
+        Ogre::TerraWorkspaceListener *mTerraWorkspaceListener;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 

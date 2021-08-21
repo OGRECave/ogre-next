@@ -98,6 +98,36 @@ namespace Ogre
         destroyAllBuffers();
     }
     //-----------------------------------------------------------------------------------
+    void HlmsTerra::_linkTerra( Terra *terra )
+    {
+        OGRE_ASSERT_LOW( terra->mHlmsTerraIndex == std::numeric_limits<uint32>::max() &&
+                         "Terra instance must be unlinked before being linked again!" );
+
+        terra->mHlmsTerraIndex = static_cast<uint32>( mLinkedTerras.size() );
+        mLinkedTerras.push_back( terra );
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsTerra::_unlinkTerra( Terra *terra )
+    {
+        if( terra->mHlmsTerraIndex >= mLinkedTerras.size() ||
+            terra != *( mLinkedTerras.begin() + terra->mHlmsTerraIndex ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
+                         "A Terra instance had it's mHlmsTerraIndex out of date!!! "
+                         "(or the instance wasn't being tracked by this HlmsTerra)",
+                         "HlmsTerra::_unlinkTerra" );
+        }
+
+        FastArray<Terra *>::iterator itor = mLinkedTerras.begin() + terra->mHlmsTerraIndex;
+        itor = efficientVectorRemove( mLinkedTerras, itor );
+
+        // The Renderable that was at the end got swapped and has now a different index
+        if( itor != mLinkedTerras.end() )
+            ( *itor )->mHlmsTerraIndex = static_cast<uint32>( itor - mLinkedTerras.begin() );
+
+        terra->mHlmsTerraIndex = std::numeric_limits<uint32>::max();
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsTerra::_changeRenderSystem( RenderSystem *newRs )
     {
         HlmsPbs::_changeRenderSystem( newRs );
@@ -360,8 +390,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsTerra::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces )
     {
-        //Override, since shadow casting is not supported
+        // Override, since shadow casting is very basic
         mSetProperties.clear();
+        setProperty( "hlms_no_shadowConstantBias_decl", 1 );
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::notifyPropertiesMergedPreGenerationStep(void)
@@ -369,8 +400,11 @@ namespace Ogre
         HlmsPbs::notifyPropertiesMergedPreGenerationStep();
 
         setTextureReg( VertexShader, "heightMap", 0 );
-        setTextureReg( PixelShader, "terrainNormals", 1 );
-        setTextureReg( PixelShader, "terrainShadows", 2 );
+        if( !getProperty( HlmsBaseProp::ShadowCaster ) )
+        {
+            setTextureReg( PixelShader, "terrainNormals", 1 );
+            setTextureReg( PixelShader, "terrainShadows", 2 );
+        }
     }
     //-----------------------------------------------------------------------------------
     uint32 HlmsTerra::fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
@@ -544,11 +578,14 @@ namespace Ogre
 
         //Don't bind the material buffer on caster passes (important to keep
         //MDI & auto-instancing running on shadow map passes)
-        if( mLastBoundPool != datablock->getAssignedPool() &&
-            (!casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS) )
+        if( mLastBoundPool != datablock->getAssignedPool() )
         {
             //layout(binding = 1) uniform MaterialBuf {} materialArray
             const ConstBufferPool::BufferPool *newPool = datablock->getAssignedPool();
+            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
+                                                                           1, newPool->materialBuffer, 0,
+                                                                           newPool->materialBuffer->
+                                                                           getTotalSizeBytes() );
             *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( PixelShader,
                                                                            1, newPool->materialBuffer, 0,
                                                                            newPool->materialBuffer->

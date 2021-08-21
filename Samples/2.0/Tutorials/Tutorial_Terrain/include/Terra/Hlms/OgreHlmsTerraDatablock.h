@@ -172,7 +172,7 @@ namespace Ogre
 
     protected:
         float   mkDr, mkDg, mkDb;                   //kD
-        float   _padding0;
+        float   mShadowConstantBiasGpu;
         float   mRoughness[4];
         float   mMetalness[4];
         Vector4 mDetailsOffsetScale[4];
@@ -228,6 +228,10 @@ namespace Ogre
 
         /// Overloaded to tell it's unsupported
         virtual void setAlphaTestThreshold( float threshold );
+
+        /// Unlike most Hlms implementations, directly modifying mShadowConstantBias is not enough
+        /// Call this function instead
+        void setShadowConstantBias( float shadowConstantBias );
 
         /// Changes the BRDF in use. Calling this function may trigger an
         /// HlmsDatablock::flushRenderables

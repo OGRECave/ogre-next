@@ -34,6 +34,9 @@ vertex PS_INPUT main_metal
 	// START UNIFORM DECLARATION
 	@insertpiece( PassDecl )
 	@insertpiece( TerraInstanceDecl )
+	@property( hlms_shadowcaster )
+		@insertpiece( MaterialDecl )
+	@end
 	, texture2d<float, access::read> heightMap [[texture(0)]]
 	@insertpiece( custom_vs_uniformDeclaration )
 	// END UNIFORM DECLARATION
