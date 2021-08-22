@@ -420,7 +420,7 @@ namespace Ogre {
             }
             
             // Create register the context with the rendersystem and associate it with this window
-            mContext = OGRE_NEW CocoaContext(mGLContext, mGLPixelFormat);
+            mContext = new CocoaContext(mGLContext, mGLPixelFormat);
             
             // Create the window delegate instance to handle window resizing and other window events
             mWindowDelegate = [[CocoaWindowDelegate alloc] initWithNSWindow:mWindow ogreWindow:this];
