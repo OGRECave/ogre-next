@@ -59,12 +59,18 @@ namespace Ogre
         datablockImpl->mFresnelB = mFresnelB;
         datablockImpl->mTransparencyValue = mTransparencyValue;
         datablockImpl->mNormalMapWeight = mNormalMapWeight;
+        datablockImpl->mRefractionStrength = mRefractionStrength;
         datablockImpl->mCubemapProbe = mCubemapProbe;
         datablockImpl->mBrdf = mBrdf;
 
         for( size_t i=0; i<3; ++i )
         {
             datablockImpl->mEmissive[i] = mEmissive[i];
+        }
+
+        for( size_t i=0; i<3; ++i )
+        {
+            datablockImpl->_padding1[i] = _padding1[i];
         }
 
         for( size_t i=0; i<3; ++i )
