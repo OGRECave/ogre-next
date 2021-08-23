@@ -118,7 +118,11 @@
 
 	@insertpiece( DoShadowReceiveVS )
 	@property( hlms_shadowcaster )
-		float shadowConstantBias = material.kD.w;
+		@property( hlms_no_reverse_depth || hlms_shadowcaster_point )
+			float shadowConstantBias = material.kD.w;
+		@else
+			float shadowConstantBias = -material.kD.w;
+		@end
 		@insertpiece( DoShadowCasterVS )
 	@end
 

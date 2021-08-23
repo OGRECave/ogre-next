@@ -65,7 +65,7 @@ namespace Ogre
         mShadowConstantBiasGpu( 0.0f ),
         mBrdf( TerraBrdf::Default )
     {
-        mShadowConstantBiasGpu = mShadowConstantBias = 0.0f;
+        mShadowConstantBiasGpu = mShadowConstantBias = 0.01f;
 
         mRoughness[0] = mRoughness[1] = 1.0f;
         mRoughness[2] = mRoughness[3] = 1.0f;
