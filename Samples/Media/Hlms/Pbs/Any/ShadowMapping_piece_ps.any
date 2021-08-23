@@ -287,7 +287,7 @@
 		float fDepth = length( cubemapDir );
 		cubemapDir *= 1.0 / fDepth;
 		cubemapDir = mul( cubemapDir.xyz, passBuf.invViewMatCubemap );
-		@property( hlms_no_reverse_depth )
+		@property( hlms_no_reverse_depth || exponential_shadow_maps )
 			fDepth = (fDepth - invDepthRange.x) * invDepthRange.y;
 		@else
 			fDepth = (invDepthRange.x - fDepth) * invDepthRange.y;

@@ -42,6 +42,25 @@ abstract target cubemap_target_shadow
 	}
 }
 
+abstract target cubemap_target_esm_shadow
+{
+	pass render_scene
+	{
+		load
+		{
+			all				clear
+			clear_colour	1 1 1 1
+		}
+		store
+		{
+			//We only care about the contents of the colour target with point shadows
+			depth			dont_care
+			stencil			dont_care
+		}
+		camera_cubemap_reorient true
+	}
+}
+
 compositor_node_shadow ShadowMapDebuggingShadowNode
 {
 	technique pssm
@@ -224,12 +243,12 @@ abstract compositor_node_shadow ShadowMapDebuggingEsmShadowNodeBase
 	{
 		shadow_map_repeat 3 4
 		{
-			target tmpCubemap +X : cubemap_target_shadow {}
-			target tmpCubemap -X : cubemap_target_shadow {}
-			target tmpCubemap +Y : cubemap_target_shadow {}
-			target tmpCubemap -Y : cubemap_target_shadow {}
-			target tmpCubemap +Z : cubemap_target_shadow {}
-			target tmpCubemap -Z : cubemap_target_shadow {}
+			target tmpCubemap +X : cubemap_target_esm_shadow {}
+			target tmpCubemap -X : cubemap_target_esm_shadow {}
+			target tmpCubemap +Y : cubemap_target_esm_shadow {}
+			target tmpCubemap -Y : cubemap_target_esm_shadow {}
+			target tmpCubemap +Z : cubemap_target_esm_shadow {}
+			target tmpCubemap -Z : cubemap_target_esm_shadow {}
 
 			shadow_map
 			{
