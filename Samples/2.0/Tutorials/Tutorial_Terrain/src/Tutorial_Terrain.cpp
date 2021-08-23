@@ -7,9 +7,11 @@
 #include "OgreConfigFile.h"
 #include "OgreWindow.h"
 
-#include "Terra/Hlms/OgreHlmsTerra.h"
-#include "OgreHlmsManager.h"
+#include "Compositor/OgreCompositorWorkspace.h"
 #include "OgreArchiveManager.h"
+#include "OgreHlmsManager.h"
+#include "Terra/Hlms/OgreHlmsTerra.h"
+#include "Terra/TerraWorkspaceListener.h"
 
 //Declares WinMain / main
 #include "MainEntryPointHelper.h"
@@ -29,11 +31,34 @@ namespace Demo
 {
     class Tutorial_TerrainGraphicsSystem : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace* setupCompositor()
+        Ogre::TerraWorkspaceListener *mTerraWorkspaceListener;
+
+        virtual void stopCompositor( void )
         {
-            Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
-                                                    "Tutorial_TerrainWorkspace", true );
+            if( mWorkspace )
+                mWorkspace->removeListener( mTerraWorkspaceListener );
+            delete mTerraWorkspaceListener;
+            mTerraWorkspaceListener = 0;
+        }
+
+        virtual Ogre::CompositorWorkspace *setupCompositor()
+        {
+            using namespace Ogre;
+            CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
+
+            CompositorWorkspace *workspace = compositorManager->addWorkspace(
+                mSceneManager, mRenderWindow->getTexture(), mCamera, "Tutorial_TerrainWorkspace", true );
+
+            if( !mTerraWorkspaceListener )
+            {
+                HlmsManager *hlmsManager = mRoot->getHlmsManager();
+                Hlms *hlms = hlmsManager->getHlms( HLMS_USER3 );
+                OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( hlms ) );
+                mTerraWorkspaceListener = new TerraWorkspaceListener( static_cast<HlmsTerra *>( hlms ) );
+            }
+            workspace->addListener( mTerraWorkspaceListener );
+
+            return workspace;
         }
 
         virtual void setupResources(void)
@@ -142,7 +167,8 @@ namespace Demo
 
     public:
         Tutorial_TerrainGraphicsSystem( GameState *gameState ) :
-            GraphicsSystem( gameState )
+            GraphicsSystem( gameState ),
+            mTerraWorkspaceListener( 0 )
         {
         }
     };

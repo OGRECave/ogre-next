@@ -71,9 +71,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     Terra::~Terra()
     {
-        if( !m_terrainCells.empty() && m_terrainCells.back().getDatablock() )
+        if( !m_terrainCells[0].empty() && m_terrainCells[0].back().getDatablock() )
         {
-            HlmsDatablock *datablock = m_terrainCells.back().getDatablock();
+            HlmsDatablock *datablock = m_terrainCells[0].back().getDatablock();
             OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
             HlmsTerra *hlms = static_cast<HlmsTerra *>( datablock->getCreator() );
             hlms->_unlinkTerra( this );
@@ -87,7 +87,8 @@ namespace Ogre
         }
         destroyNormalTexture();
         destroyHeightmapTexture();
-        m_terrainCells.clear();
+        m_terrainCells[0].clear();
+        m_terrainCells[1].clear();
     }
     //-----------------------------------------------------------------------------------
     Vector3 Terra::fromYUp( Vector3 value ) const
@@ -449,7 +450,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Terra::addRenderable( const GridPoint &gridPos, const GridPoint &cellSize, uint32 lodLevel )
     {
-        TerrainCell *cell = &m_terrainCells[m_currentCell++];
+        TerrainCell *cell = &m_terrainCells[0][m_currentCell++];
         cell->setOrigin( gridPos, cellSize.x, cellSize.z, lodLevel );
         m_collectedCells[0].push_back( cell );
     }
@@ -676,28 +677,35 @@ namespace Ogre
             accumDim += maxPixelDimension * (1u << iteration);
             ++iteration;
 
-            if( !m_terrainCells.empty() && m_terrainCells.back().getDatablock() )
+            if( !m_terrainCells[0].empty() && m_terrainCells[0].back().getDatablock() )
             {
-                HlmsDatablock *datablock = m_terrainCells.back().getDatablock();
+                HlmsDatablock *datablock = m_terrainCells[0].back().getDatablock();
                 OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
                 HlmsTerra *hlms = static_cast<HlmsTerra *>( datablock->getCreator() );
                 hlms->_unlinkTerra( this );
             }
 
-            m_terrainCells.clear();
-            m_terrainCells.resize( numCells, TerrainCell( this ) );
+            for( size_t i = 0u; i < 2u; ++i )
+            {
+                m_terrainCells[i].clear();
+                m_terrainCells[i].resize( numCells, TerrainCell( this ) );
+            }
         }
 
         VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
-        std::vector<TerrainCell>::iterator itor = m_terrainCells.begin();
-        std::vector<TerrainCell>::iterator end  = m_terrainCells.end();
 
-        const std::vector<TerrainCell>::iterator begin = itor;
-
-        while( itor != end )
+        for( size_t i = 0u; i < 2u; ++i )
         {
-            itor->initialize( vaoManager, (itor - begin) >= 16u );
-            ++itor;
+            std::vector<TerrainCell>::iterator itor = m_terrainCells[i].begin();
+            std::vector<TerrainCell>::iterator endt = m_terrainCells[i].end();
+
+            const std::vector<TerrainCell>::iterator begin = itor;
+
+            while( itor != endt )
+            {
+                itor->initialize( vaoManager, ( itor - begin ) >= 16u );
+                ++itor;
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -755,13 +763,16 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Terra::setDatablock( HlmsDatablock *datablock )
     {
-        std::vector<TerrainCell>::iterator itor = m_terrainCells.begin();
-        std::vector<TerrainCell>::iterator end  = m_terrainCells.end();
-
-        while( itor != end )
+        for( size_t i = 0u; i < 2u; ++i )
         {
-            itor->setDatablock( datablock );
-            ++itor;
+            std::vector<TerrainCell>::iterator itor = m_terrainCells[i].begin();
+            std::vector<TerrainCell>::iterator end  = m_terrainCells[i].end();
+
+            while( itor != end )
+            {
+                itor->setDatablock( datablock );
+                ++itor;
+            }
         }
 
         OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
@@ -786,6 +797,14 @@ namespace Ogre
     {
         static const String movType = "Terra";
         return movType;
+    }
+    //-----------------------------------------------------------------------------------
+    void Terra::_swapSavedState( void )
+    {
+        m_terrainCells[0].swap( m_terrainCells[1] );
+        m_savedState.m_renderables.swap( mRenderables );
+        std::swap( m_savedState.m_currentCell, m_currentCell );
+        std::swap( m_savedState.m_camera, m_camera );
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------

@@ -13,9 +13,10 @@
 #include "OgreCamera.h"
 #include "OgreWindow.h"
 
+#include "Terra/Hlms/OgreHlmsTerra.h"
+#include "Terra/Hlms/PbsListener/OgreHlmsPbsTerraShadows.h"
 #include "Terra/Terra.h"
 #include "Terra/TerraShadowMapper.h"
-#include "Terra/Hlms/PbsListener/OgreHlmsPbsTerraShadows.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
 #include "Compositor/OgreCompositorManager2.h"

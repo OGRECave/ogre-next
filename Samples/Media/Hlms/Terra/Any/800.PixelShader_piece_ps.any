@@ -6,8 +6,15 @@
 
 @piece( DefaultTerraHeaderPS )
 	@insertpiece( DefaultHeaderPS )
-	@insertpiece( TerraMaterialStructDecl )
-	@insertpiece( TerraInstanceStructDecl )
+	@property( !hlms_shadowcaster )
+		@insertpiece( TerraMaterialStructDecl )
+		@insertpiece( TerraInstanceStructDecl )
+	@else
+		@insertpiece( DeclShadowCasterMacros )
+		@property( hlms_shadowcaster_point || exponential_shadow_maps )
+			@insertpiece( PassStructDecl )
+		@end
+	@end
 
 	@property( !hlms_prepass && needs_view_dir )
 		@insertpiece( DeclareBRDF )

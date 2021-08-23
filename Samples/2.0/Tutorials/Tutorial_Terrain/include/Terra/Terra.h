@@ -35,6 +35,13 @@ namespace Ogre
     {
         friend class TerrainCell;
 
+        struct SavedState
+        {
+            RenderableArray m_renderables;
+            size_t m_currentCell;
+            Camera const *m_camera;
+        };
+
         std::vector<float>          m_heightMap;
         uint32                      m_width;
         uint32                      m_depth; //PNG's Height
@@ -53,7 +60,10 @@ namespace Ogre
         Vector3     m_terrainOrigin;
         uint32      m_basePixelDimension;
 
-        std::vector<TerrainCell>   m_terrainCells;
+        /// 0 is currently in use
+        /// 1 is SavedState
+        std::vector<TerrainCell>   m_terrainCells[2];
+        /// 0 & 1 are for tmp use
         std::vector<TerrainCell*>  m_collectedCells[2];
         size_t                     m_currentCell;
 
@@ -65,9 +75,13 @@ namespace Ogre
 
         TerraSharedResources *m_sharedResources;
 
+        /// When rendering shadows we want to override the data calculated by update
+        /// but only temporarily, for later restoring it.
+        SavedState m_savedState;
+
         //Ogre stuff
         CompositorManager2      *m_compositorManager;
-        Camera                  *m_camera;
+        Camera const            *m_camera;
 
         /// Converts value from Y-up to whatever the user up vector is (see m_zUp)
         inline Vector3 fromYUp( Vector3 value ) const;
@@ -190,8 +204,11 @@ namespace Ogre
         //MovableObject overloads
         const String& getMovableType(void) const;
 
-        Camera* getCamera() const                       { return m_camera; }
-        void setCamera( Camera *camera )                { m_camera = camera; }
+        /// Swaps current state with a saved one. Useful for rendering shadow maps
+        void _swapSavedState( void );
+
+        const Camera* getCamera() const                 { return m_camera; }
+        void setCamera( const Camera *camera )          { m_camera = camera; }
 
         bool isZUp( void ) const { return m_zUp; }
 
@@ -209,7 +226,6 @@ namespace Ogre
 
         /// Return value is in client-space (i.e. could be y- or z-up)
         Vector3 getTerrainOrigin( void ) const;
-
 
         // Always in Y-up space
         Vector2 getTerrainXZCenter(void) const;

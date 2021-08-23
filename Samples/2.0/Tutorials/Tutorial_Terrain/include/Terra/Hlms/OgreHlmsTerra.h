@@ -87,6 +87,8 @@ namespace Ogre
         HlmsTerra( Archive *dataFolder, ArchiveVec *libraryFolders );
         virtual ~HlmsTerra();
 
+        const FastArray<Terra *> &getLinkedTerras( void ) const { return mLinkedTerras; }
+
         void _linkTerra( Terra *terra );
         void _unlinkTerra( Terra *terra );
 

@@ -1,36 +1,19 @@
-@property( false )
-@insertpiece( SetCrossPlatformSettings )
-@insertpiece( SetCompatibilityLayer )
-
-layout(std140) uniform;
-#define FRAG_COLOR		0
-layout(location = FRAG_COLOR, index = 0) out vec4 outColour;
-
-uniform sampler2D terrainNormals;
-
-in block
-{
-@insertpiece( VStoPS_block )
-} inPs;
-
-void main()
-{
-	outColour = vec4( inPs.uv0.xy, 0.0, 1.0 );
-}
-
-@else
 @insertpiece( SetCrossPlatformSettings )
 @property( GL3+ < 430 )
 	@property( hlms_tex_gather )#extension GL_ARB_texture_gather: require@end
 @end
 @insertpiece( SetCompatibilityLayer )
+
 @insertpiece( DeclareUvModifierMacros )
 
 layout(std140) uniform;
 #define FRAG_COLOR		0
 
 @insertpiece( DefaultTerraHeaderPS )
+
+// START UNIFORM DECLARATION
 @insertpiece( custom_ps_uniformDeclaration )
+// END UNIFORM DECLARATION
 
 @insertpiece( PccManualProbeDecl )
 
@@ -43,18 +26,24 @@ in block
 @pset( currSampler, samplerStateStart )
 
 @property( !hlms_render_depth_only )
-	@property( !hlms_prepass )
-		layout(location = FRAG_COLOR, index = 0) out vec4 outColour;
-	@end
-	@property( hlms_gen_normals_gbuffer )
-		#define outPs_normals outNormals
-		layout(location = 0) out vec4 outNormals;
-	@end
-	@property( hlms_prepass )
-		#define outPs_shadowRoughness outShadowRoughness
-		layout(location = 1) out vec2 outShadowRoughness;
+	@property( !hlms_shadowcaster )
+		@property( !hlms_prepass )
+			layout(location = @counter(rtv_target), index = 0) out vec4 outColour;
+		@end
+		@property( hlms_gen_normals_gbuffer )
+			#define outPs_normals outNormals
+			layout(location = @counter(rtv_target)) out vec4 outNormals;
+		@end
+		@property( hlms_prepass )
+			#define outPs_shadowRoughness outShadowRoughness
+			layout(location = @counter(rtv_target)) out vec2 outShadowRoughness;
+		@end
+	@else
+		layout(location = @counter(rtv_target), index = 0) out float outColour;
 	@end
 @end
+
+@property( !hlms_shadowcaster )
 
 @property( hlms_use_prepass )
 	@property( !hlms_use_prepass_msaa )
@@ -137,6 +126,14 @@ void main()
 {
 	@insertpiece( custom_ps_preExecution )
 	@insertpiece( DefaultTerraBodyPS )
+	@insertpiece( custom_ps_posExecution )
+}
+@else /// !hlms_shadowcaster
+
+void main()
+{
+	@insertpiece( custom_ps_preExecution )
+	@insertpiece( DefaultBodyPS )
 	@insertpiece( custom_ps_posExecution )
 }
 @end

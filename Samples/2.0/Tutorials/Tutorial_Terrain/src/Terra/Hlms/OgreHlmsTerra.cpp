@@ -386,8 +386,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsTerra::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces )
     {
-        //Override, since shadow casting is not supported
+        // Override, since shadow casting is very basic
         mSetProperties.clear();
+        setProperty( "hlms_no_shadowConstantBias_decl", 1 );
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::notifyPropertiesMergedPreGenerationStep(void)
@@ -398,8 +399,11 @@ namespace Ogre
         if( getProperty( HlmsBaseProp::ForwardPlus ) )
             texSlotsStart = getProperty( "f3dGrid" ) + 1;
         setTextureReg( VertexShader, "heightMap", texSlotsStart + 0 );
-        setTextureReg( PixelShader, "terrainNormals", texSlotsStart + 1 );
-        setTextureReg( PixelShader, "terrainShadows", texSlotsStart + 2 );
+        if( !getProperty( HlmsBaseProp::ShadowCaster ) )
+        {
+                setTextureReg( PixelShader, "terrainNormals", texSlotsStart + 1 );
+                setTextureReg( PixelShader, "terrainShadows", texSlotsStart + 2 );
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::analyzeBarriers( BarrierSolver &barrierSolver,
@@ -611,11 +615,14 @@ namespace Ogre
 
         //Don't bind the material buffer on caster passes (important to keep
         //MDI & auto-instancing running on shadow map passes)
-        if( mLastBoundPool != datablock->getAssignedPool() &&
-            (!casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS) )
+        if( mLastBoundPool != datablock->getAssignedPool() )
         {
             //layout(binding = 1) uniform MaterialBuf {} materialArray
             const ConstBufferPool::BufferPool *newPool = datablock->getAssignedPool();
+            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
+                                                                           1, newPool->materialBuffer, 0,
+                                                                           newPool->materialBuffer->
+                                                                           getTotalSizeBytes() );
             *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( PixelShader,
                                                                            1, newPool->materialBuffer, 0,
                                                                            newPool->materialBuffer->
@@ -629,11 +636,18 @@ namespace Ogre
             const Terra *terraObj = static_cast<const Terra*>( queuedRenderable.movableObject );
             *commandBuffer->addCommand<CbTexture>() =
                 CbTexture( mTexBufUnitSlotEnd + 0u, terraObj->getHeightMapTex() );
-            // We need one for terrainNormals & terrainShadows. Reuse an existing samplerblock
-            *commandBuffer->addCommand<CbTexture>() = CbTexture(
-                mTexBufUnitSlotEnd + 1u, terraObj->getNormalMapTex(), mAreaLightMasksSamplerblock );
-            *commandBuffer->addCommand<CbTexture>() = CbTexture(
-                mTexBufUnitSlotEnd + 2u, terraObj->_getShadowMapTex(), mAreaLightMasksSamplerblock );
+            if( !casterPass )
+            {
+                // Do not bind these textures during caster pass:
+                //  1. They're not actually used/needed
+                //  2. We haven't transitioned them to Texture yet
+
+                // We need one for terrainNormals & terrainShadows. Reuse an existing samplerblock
+                *commandBuffer->addCommand<CbTexture>() = CbTexture(
+                    mTexBufUnitSlotEnd + 1u, terraObj->getNormalMapTex(), mAreaLightMasksSamplerblock );
+                *commandBuffer->addCommand<CbTexture>() = CbTexture(
+                    mTexBufUnitSlotEnd + 2u, terraObj->_getShadowMapTex(), mAreaLightMasksSamplerblock );
+            }
             mLastMovableObject = queuedRenderable.movableObject;
         }
 
