@@ -188,6 +188,7 @@ namespace Ogre
                                       VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                       TextureTypes::TextureTypes initialType,
                                       TextureGpuManager *textureManager );
+        virtual ~VulkanTextureGpuRenderTarget();
 
         virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
                                               PixelFormatGpu desiredDepthBufferFormat );

@@ -853,6 +853,8 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    VulkanTextureGpuRenderTarget::~VulkanTextureGpuRenderTarget() { destroyInternalResourcesImpl(); }
+    //-----------------------------------------------------------------------------------
     void VulkanTextureGpuRenderTarget::_setDepthBufferDefaults( uint16 depthBufferPoolId,
                                                                 bool preferDepthTexture,
                                                                 PixelFormatGpu desiredDepthBufferFormat )
