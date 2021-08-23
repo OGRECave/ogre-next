@@ -1,5 +1,6 @@
 var NAVTREEINDEX282 =
 {
+"struct_ogre_1_1_terrain_layer_sampler.html#acbf57cf471d575ffc862c50d15bad9b0":[5,1,2,8,4],
 "struct_ogre_1_1_terrain_layer_sampler.html#ade7747cc8625094da5ed01bc5ab3e19c":[5,1,2,8,3],
 "struct_ogre_1_1_terrain_layer_sampler_element.html":[5,1,2,9],
 "struct_ogre_1_1_terrain_layer_sampler_element.html#a1f5544d50fad51034e72258400eb561b":[5,1,2,9,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX282 =
 "struct_ogre_1_1_unlit_property.html#a51da605e999c655394daa1633ba07483":[7,0,0,1085,50],
 "struct_ogre_1_1_unlit_property.html#a5804c83c441b035992b4d81ac5b3e72f":[7,0,0,1085,57],
 "struct_ogre_1_1_unlit_property.html#a5859dbc4cc080f7bb4c69ff69c28e022":[7,0,0,1085,54],
-"struct_ogre_1_1_unlit_property.html#a589b56a42bd6867d756be461af9ccee7":[7,0,0,1085,66],
-"struct_ogre_1_1_unlit_property.html#a5e469472b50598858c76606eed55fd60":[7,0,0,1085,13]
+"struct_ogre_1_1_unlit_property.html#a589b56a42bd6867d756be461af9ccee7":[7,0,0,1085,66]
 };

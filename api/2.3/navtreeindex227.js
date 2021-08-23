@@ -1,5 +1,6 @@
 var NAVTREEINDEX227 =
 {
+"class_ogre_1_1v1_1_1_hardware_counter_buffer.html#a4c89e8f3e555b5baf18bcae16d5fb8dd":[5,2,10,31,6],
 "class_ogre_1_1v1_1_1_hardware_counter_buffer.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,10,31,21],
 "class_ogre_1_1v1_1_1_hardware_counter_buffer.html#a5caebd4b5db7696029eb412351d7767f":[5,2,10,31,5],
 "class_ogre_1_1v1_1_1_hardware_counter_buffer.html#a6776e40af767f8db7d428f35d9b3055c":[5,2,10,31,10],
@@ -137,8 +138,8 @@ var NAVTREEINDEX227 =
 "class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,10,35,34],
 "class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#a5caebd4b5db7696029eb412351d7767f":[5,2,10,35,11],
 "class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#a6776e40af767f8db7d428f35d9b3055c":[5,2,10,35,19],
-"class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#a6778f242b88650651a2a7bd7e4c97201":[5,2,10,35,26],
 "class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#a6778f242b88650651a2a7bd7e4c97201":[5,2,10,35,27],
+"class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#a6778f242b88650651a2a7bd7e4c97201":[5,2,10,35,26],
 "class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#a6ed986689e41c247108c1c4e8cca354a":[5,2,10,35,43],
 "class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#a7549369160db335ac558d0493107fecb":[5,2,10,35,28],
 "class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#a787c4f5ca31d533e63f089f6d35a5e8e":[5,2,10,35,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX227 =
 "class_ogre_1_1v1_1_1_hardware_uniform_buffer_shared_ptr.html#a1fe9d89e89df46f06ea5d3173bb554ac":[5,2,10,38,14],
 "class_ogre_1_1v1_1_1_hardware_uniform_buffer_shared_ptr.html#a52d62f8b23524bac7b345fb12b8cf16e":[5,2,10,38,10],
 "class_ogre_1_1v1_1_1_hardware_uniform_buffer_shared_ptr.html#a564789e0743e9be6ccb5505057ed63b6":[5,2,10,38,6],
-"class_ogre_1_1v1_1_1_hardware_uniform_buffer_shared_ptr.html#a5de511dc537736b5c290588ff0d6db8e":[5,2,10,38,8],
-"class_ogre_1_1v1_1_1_hardware_uniform_buffer_shared_ptr.html#a722d443fdfd8b3ea12b22bcf07a7977d":[5,2,10,38,12]
+"class_ogre_1_1v1_1_1_hardware_uniform_buffer_shared_ptr.html#a5de511dc537736b5c290588ff0d6db8e":[5,2,10,38,8]
 };

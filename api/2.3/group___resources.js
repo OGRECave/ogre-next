@@ -5705,6 +5705,7 @@ var group___resources =
     ] ],
     [ "VulkanTextureGpuRenderTarget", "class_ogre_1_1_vulkan_texture_gpu_render_target.html", [
       [ "VulkanTextureGpuRenderTarget", "class_ogre_1_1_vulkan_texture_gpu_render_target.html#a10627d70182315c22d8f26c5ab15e6f8", null ],
+      [ "~VulkanTextureGpuRenderTarget", "class_ogre_1_1_vulkan_texture_gpu_render_target.html#a7e2d3374cbff5de58c3b35f30d7d4828", null ],
       [ "_addPendingResidencyChanges", "class_ogre_1_1_vulkan_texture_gpu_render_target.html#ad623ee0c97e95e276074d3cfd64c374c", null ],
       [ "_autogenerateMipmaps", "class_ogre_1_1_vulkan_texture_gpu_render_target.html#a2e7688bdd3bad5ad0f08bc5024e6431c", null ],
       [ "_createView", "class_ogre_1_1_vulkan_texture_gpu_render_target.html#a335f8053b320bab94073cd0359da9f15", null ],
