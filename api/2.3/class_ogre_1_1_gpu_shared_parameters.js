@@ -2,10 +2,8 @@ var class_ogre_1_1_gpu_shared_parameters =
 [
     [ "GpuSharedParameters", "class_ogre_1_1_gpu_shared_parameters.html#a0d0b2668f52743cc1e949cedb97abefc", null ],
     [ "~GpuSharedParameters", "class_ogre_1_1_gpu_shared_parameters.html#a09b0026f12f8bd997f88c7627991a56d", null ],
-    [ "_getRenderSystemData", "class_ogre_1_1_gpu_shared_parameters.html#abadfc59203ae1b077d6fcf0c8a717f2b", null ],
     [ "_markClean", "class_ogre_1_1_gpu_shared_parameters.html#a1b178e4c6bb62c148d7b57d76c7890f3", null ],
     [ "_markDirty", "class_ogre_1_1_gpu_shared_parameters.html#aa53d15b0327750087e989b29b1d64946", null ],
-    [ "_setRenderSystemData", "class_ogre_1_1_gpu_shared_parameters.html#a96d3f0ffeea45bc3168c427f05565b05", null ],
     [ "addConstantDefinition", "class_ogre_1_1_gpu_shared_parameters.html#ab76a3c158f6e5386831b2e6dcce3478f", null ],
     [ "calculateSize", "class_ogre_1_1_gpu_shared_parameters.html#afbe82e2a5d2207fc79dae1d7ff2acc28", null ],
     [ "getConstantDefinition", "class_ogre_1_1_gpu_shared_parameters.html#a463139c2df218d313e1c7a6e13d9e939", null ],

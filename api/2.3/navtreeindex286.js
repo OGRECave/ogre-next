@@ -1,11 +1,5 @@
 var NAVTREEINDEX286 =
 {
-"struct_ogre_1_1v1_1_1_vertex_data_1_1_read_requests.html#a41c888a01022a7ad7c0bb5a285a1e9a3":[5,2,10,47,1,4],
-"struct_ogre_1_1v1_1_1_vertex_data_1_1_read_requests.html#a82aaf1c352018fe02f86d8c097006592":[5,2,10,47,1,3],
-"struct_ogre_1_1v1_1_1_vertex_data_1_1_read_requests.html#aa8287997dd4b37c0d23bbef72637a310":[5,2,10,47,1,0],
-"struct_ogre_1_1v1_1_1_vertex_data_1_1_read_requests.html#adcc8e172180de5a0a3023f81aa1f902a":[5,2,10,47,1,2],
-"struct_ogre_1_1v1_1_1_vertex_pose_key_frame_1_1_pose_ref.html":[5,2,0,31,0],
-"struct_ogre_1_1v1_1_1_vertex_pose_key_frame_1_1_pose_ref.html#a6d1a2d339faf5006d287ff9672b6de76":[5,2,0,31,0,1],
 "struct_ogre_1_1v1_1_1_vertex_pose_key_frame_1_1_pose_ref.html#ad176f1e475e6868f08128d7c136f6f5d":[5,2,0,31,0,0],
 "struct_ogre_1_1v1_1_1_vertex_pose_key_frame_1_1_pose_ref.html#ae84042b7177ea6d85dbdd8f18f643eb4":[5,2,0,31,0,2],
 "struct_ogre_1_1v1_1_1_vertex_shadow_map_helper_1_1_geometry.html":[7,0,0,3,169,0],

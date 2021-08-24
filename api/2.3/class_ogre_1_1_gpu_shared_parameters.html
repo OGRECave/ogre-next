@@ -112,18 +112,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0d0b2668f52743cc1e949cedb97abefc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09b0026f12f8bd997f88c7627991a56d"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_shared_parameters.html#a09b0026f12f8bd997f88c7627991a56d">~GpuSharedParameters</a> ()</td></tr>
 <tr class="separator:a09b0026f12f8bd997f88c7627991a56d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abadfc59203ae1b077d6fcf0c8a717f2b"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_any.html">Any</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_shared_parameters.html#abadfc59203ae1b077d6fcf0c8a717f2b">_getRenderSystemData</a> () const</td></tr>
-<tr class="memdesc:abadfc59203ae1b077d6fcf0c8a717f2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method that the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> might use to store optional data.  <a href="class_ogre_1_1_gpu_shared_parameters.html#abadfc59203ae1b077d6fcf0c8a717f2b">More...</a><br /></td></tr>
-<tr class="separator:abadfc59203ae1b077d6fcf0c8a717f2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b178e4c6bb62c148d7b57d76c7890f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_shared_parameters.html#a1b178e4c6bb62c148d7b57d76c7890f3">_markClean</a> ()</td></tr>
 <tr class="memdesc:a1b178e4c6bb62c148d7b57d76c7890f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mark the shared set as being clean (values successfully updated by the render system).  <a href="class_ogre_1_1_gpu_shared_parameters.html#a1b178e4c6bb62c148d7b57d76c7890f3">More...</a><br /></td></tr>
 <tr class="separator:a1b178e4c6bb62c148d7b57d76c7890f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa53d15b0327750087e989b29b1d64946"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_shared_parameters.html#aa53d15b0327750087e989b29b1d64946">_markDirty</a> ()</td></tr>
 <tr class="memdesc:aa53d15b0327750087e989b29b1d64946"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mark the shared set as being dirty (values modified and not yet updated in render system).  <a href="class_ogre_1_1_gpu_shared_parameters.html#aa53d15b0327750087e989b29b1d64946">More...</a><br /></td></tr>
 <tr class="separator:aa53d15b0327750087e989b29b1d64946"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96d3f0ffeea45bc3168c427f05565b05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_shared_parameters.html#a96d3f0ffeea45bc3168c427f05565b05">_setRenderSystemData</a> (const <a class="el" href="class_ogre_1_1_any.html">Any</a> &amp;data) const</td></tr>
-<tr class="memdesc:a96d3f0ffeea45bc3168c427f05565b05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method that the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> might use to store optional data.  <a href="class_ogre_1_1_gpu_shared_parameters.html#a96d3f0ffeea45bc3168c427f05565b05">More...</a><br /></td></tr>
-<tr class="separator:a96d3f0ffeea45bc3168c427f05565b05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab76a3c158f6e5386831b2e6dcce3478f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_shared_parameters.html#ab76a3c158f6e5386831b2e6dcce3478f">addConstantDefinition</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, <a class="el" href="group___materials.html#ga9c5b2950be06ff56a6ee0bace240d447">GpuConstantType</a> constType, size_t arraySize=1)</td></tr>
 <tr class="memdesc:ab76a3c158f6e5386831b2e6dcce3478f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new constant definition to this shared set of parameters.  <a href="class_ogre_1_1_gpu_shared_parameters.html#ab76a3c158f6e5386831b2e6dcce3478f">More...</a><br /></td></tr>
 <tr class="separator:ab76a3c158f6e5386831b2e6dcce3478f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -303,33 +297,6 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="abadfc59203ae1b077d6fcf0c8a717f2b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abadfc59203ae1b077d6fcf0c8a717f2b">&#9670;&nbsp;</a></span>_getRenderSystemData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="class_ogre_1_1_any.html">Any</a>&amp; Ogre::GpuSharedParameters::_getRenderSystemData </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Internal method that the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> might use to store optional data. </p>
-
-</div>
-</div>
 <a id="a1b178e4c6bb62c148d7b57d76c7890f3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1b178e4c6bb62c148d7b57d76c7890f3">&#9670;&nbsp;</a></span>_markClean()</h2>
 
@@ -367,34 +334,6 @@ Public Member Functions</h2></td></tr>
 
 <p>Mark the shared set as being dirty (values modified and not yet updated in render system). </p>
 <dl class="section remark"><dt>Remarks</dt><dd>You do not need to call this yourself. The set is marked as dirty whenever setNamedConstant or (non const) getFloatPointer et al are called. </dd></dl>
-
-</div>
-</div>
-<a id="a96d3f0ffeea45bc3168c427f05565b05"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96d3f0ffeea45bc3168c427f05565b05">&#9670;&nbsp;</a></span>_setRenderSystemData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::GpuSharedParameters::_setRenderSystemData </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_any.html">Any</a> &amp;&#160;</td>
-          <td class="paramname"><em>data</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Internal method that the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> might use to store optional data. </p>
 
 </div>
 </div>
