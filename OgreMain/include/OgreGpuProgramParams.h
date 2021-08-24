@@ -652,9 +652,6 @@ namespace Ogre {
         UnsignedIntConstantList mUnsignedIntConstants;
         // BoolConstantList mBoolConstants;
 
-        /// Optional data the rendersystem might want to store.
-        mutable Any mRenderSystemData;
-
         /// Not used when copying data, but might be useful to RS using shared buffers.
         size_t mFrameLastUpdated;
 
@@ -798,11 +795,6 @@ namespace Ogre {
         // /// Get a reference to the list of bool constants
         // const BoolConstantList& getBoolConstantList() const { return mBoolConstants; }
 
-        /** Internal method that the RenderSystem might use to store optional data. */
-        void _setRenderSystemData(const Any& data) const { mRenderSystemData = data; }
-        /** Internal method that the RenderSystem might use to store optional data. */
-        const Any& _getRenderSystemData() const { return mRenderSystemData; }
-
     };
 
     class GpuProgramParameters;
@@ -825,9 +817,6 @@ namespace Ogre {
         typedef vector<CopyDataEntry>::type CopyDataList;
 
         CopyDataList mCopyDataList;
-
-        // Optional data the rendersystem might want to store
-        mutable Any mRenderSystemData;
 
         /// Version of shared params we based the copydata on
         unsigned long mCopyDataVersion;
@@ -854,12 +843,6 @@ namespace Ogre {
 
         GpuSharedParametersPtr getSharedParams() const { return mSharedParams; }
         GpuProgramParameters* getTargetParams() const { return mParams; }
-
-        /** Internal method that the RenderSystem might use to store optional data. */
-        void _setRenderSystemData(const Any& data) const { mRenderSystemData = data; }
-        /** Internal method that the RenderSystem might use to store optional data. */
-        const Any& _getRenderSystemData() const { return mRenderSystemData; }
-
 
     };
 
@@ -1517,9 +1500,6 @@ namespace Ogre {
         void copySharedParamSetUsage(const GpuSharedParamUsageList& srcList);
 
         GpuSharedParamUsageList mSharedParamSets;
-
-        // Optional data the rendersystem might want to store
-        mutable Any mRenderSystemData;
 
 
     public:
@@ -2445,11 +2425,6 @@ namespace Ogre {
 
         /** Get the list of shared parameter sets. */
         const GpuSharedParamUsageList& getSharedParameters() const;
-
-        /** Internal method that the RenderSystem might use to store optional data. */
-        void _setRenderSystemData(const Any& data) const { mRenderSystemData = data; }
-        /** Internal method that the RenderSystem might use to store optional data. */
-        const Any& _getRenderSystemData() const { return mRenderSystemData; }
 
         /** Update the parameters by copying the data from the shared
             parameters.
