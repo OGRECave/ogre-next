@@ -312,9 +312,21 @@ namespace Ogre
             }
             else
             {
-                optVideoMode->second.currentValue = StringConverter::toString(mVideoModes[0].first.first,4) + " x " +
-                                                    StringConverter::toString(mVideoModes[0].first.second,4);
-                optDisplayFrequency->second.currentValue = StringConverter::toString(mVideoModes[0].second) + " Hz";
+                if( !mVideoModes.empty() )
+                {
+                    optVideoMode->second.currentValue =
+                        StringConverter::toString( mVideoModes[0].first.first, 4 ) + " x " +
+                        StringConverter::toString( mVideoModes[0].first.second, 4 );
+                    optDisplayFrequency->second.currentValue =
+                        StringConverter::toString( mVideoModes[0].second ) + " Hz";
+                }
+                else
+                {
+                    LogManager::getSingleton().logMessage(
+                        "Could not find any suitable video mode. Is no monitor connected?" );
+                    optVideoMode->second.currentValue = "800 x 600";
+                    optDisplayFrequency->second.currentValue = "60 Hz";
+                }
             }
         }
     }
