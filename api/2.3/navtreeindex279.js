@@ -1,5 +1,6 @@
 var NAVTREEINDEX279 =
 {
+"struct_ogre_1_1_pbs_mobile_property.html#aac6d6e04f3109bc13ff4c790a5fb7300":[5,0,0,18,29],
 "struct_ogre_1_1_pbs_mobile_property.html#aacb70b008d82ae6e77e401b39d0f45fa":[5,0,0,18,38],
 "struct_ogre_1_1_pbs_mobile_property.html#ab368794cd70d249a1af1bbe07191c0d3":[5,0,0,18,53],
 "struct_ogre_1_1_pbs_mobile_property.html#ab54971aab037aab0020ea012d932c7b6":[5,0,0,18,39],
@@ -248,6 +249,5 @@ var NAVTREEINDEX279 =
 "struct_ogre_1_1_r_t_shader_1_1_function_invocation_1_1_function_invocation_compare.html#a245e1792f097365ce61c570d33eab6ff":[5,2,9,18,0,0],
 "struct_ogre_1_1_r_t_shader_1_1_function_invocation_1_1_function_invocation_less_than.html":[5,2,9,18,1],
 "struct_ogre_1_1_r_t_shader_1_1_function_invocation_1_1_function_invocation_less_than.html#ac3d3e63542d1e06cf8fc16d0a2f39a1c":[5,2,9,18,1,0],
-"struct_ogre_1_1_r_t_shader_1_1_hardware_skinning_1_1_skinning_data.html":[5,2,9,23,0],
-"struct_ogre_1_1_r_t_shader_1_1_hardware_skinning_1_1_skinning_data.html#a0dcf1f5c90e9bd2491aeafca5f609178":[5,2,9,23,0,6]
+"struct_ogre_1_1_r_t_shader_1_1_hardware_skinning_1_1_skinning_data.html":[5,2,9,23,0]
 };

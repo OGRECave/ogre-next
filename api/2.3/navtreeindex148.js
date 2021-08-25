@@ -1,5 +1,6 @@
 var NAVTREEINDEX148 =
 {
+"class_ogre_1_1_paged_world.html":[5,1,0,7],
 "class_ogre_1_1_paged_world.html#a01a47d516ddcd57334b25ba2d017c1e3":[5,1,0,7,13],
 "class_ogre_1_1_paged_world.html#a0b2b14361f0b4b262b40f0cafa229246":[5,1,0,7,18],
 "class_ogre_1_1_paged_world.html#a0fa22b0759b2ce34f2277b304af216e0":[5,1,0,7,39],
@@ -248,6 +249,5 @@ var NAVTREEINDEX148 =
 "class_ogre_1_1_parallax_corrected_cubemap_base.html#a039657d1c26eee4e9a7c412d5be12ed9":[7,0,0,799,42],
 "class_ogre_1_1_parallax_corrected_cubemap_base.html#a05e462d3023683a1213e2daeab4c3c9a":[7,0,0,799,20],
 "class_ogre_1_1_parallax_corrected_cubemap_base.html#a07e512c3dd7e5bb668ac3481c2c793a8":[7,0,0,799,31],
-"class_ogre_1_1_parallax_corrected_cubemap_base.html#a091333b335b9fa21ab6859145bb87e26":[7,0,0,799,33],
-"class_ogre_1_1_parallax_corrected_cubemap_base.html#a0ae22596b5bd2a3faf2958ab3d109d1f":[7,0,0,799,35]
+"class_ogre_1_1_parallax_corrected_cubemap_base.html#a091333b335b9fa21ab6859145bb87e26":[7,0,0,799,33]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX111 =
 {
+"class_ogre_1_1_lw_string.html#a811b55e86aebefb4d3b7ffe9b80f5e3c":[7,0,0,648,42],
 "class_ogre_1_1_lw_string.html#a831e0062d60e70cec93d77bff80340e4":[7,0,0,648,33],
 "class_ogre_1_1_lw_string.html#a943f4c6ab72d9322dc922f8f6a955b44":[7,0,0,648,51],
 "class_ogre_1_1_lw_string.html#a97be235367bd7ac41ef586aec53fb0f1":[7,0,0,648,37],
@@ -248,6 +249,5 @@ var NAVTREEINDEX111 =
 "class_ogre_1_1_manual_resource_loader.html#ae04795ab21e4a46709beb6d521a75c53":[5,2,11,71,2],
 "class_ogre_1_1_map_iterator.html":[7,0,0,652],
 "class_ogre_1_1_map_iterator.html#a0fd0df9bbfe0fc16939600b37de81739":[7,0,0,652,10],
-"class_ogre_1_1_map_iterator.html#a1ab2dc537e2e04c6163f5901b791e9fc":[7,0,0,652,14],
-"class_ogre_1_1_map_iterator.html#a22c1c22fab97253a922a190d2ace205e":[7,0,0,652,1]
+"class_ogre_1_1_map_iterator.html#a1ab2dc537e2e04c6163f5901b791e9fc":[7,0,0,652,14]
 };

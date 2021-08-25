@@ -91,9 +91,11 @@ $(document).ready(function(){initNavTree('_setting_up_ogre_mac_o_s.html',''); in
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#autotoc_md44">Install cmake</a></li>
-<li class="level1"><a href="#autotoc_md45">Install dependencies</a></li>
-<li class="level1"><a href="#autotoc_md46">Build Ogre</a></li>
-<li class="level1"><a href="#autotoc_md47">Build offline version of the docs</a></li>
+<li class="level1"><a href="#autotoc_md45">Install dependencies</a><ul><li class="level2"><a href="#autotoc_md46">Install SDL2 using brew</a></li>
+</ul>
+</li>
+<li class="level1"><a href="#autotoc_md47">Build Ogre</a></li>
+<li class="level1"><a href="#autotoc_md48">Build offline version of the docs</a></li>
 </ul>
 </div>
 <div class="textblock"><p><a class="anchor" id="md_Docs_src_SettingUpOgre_SettingUpOgre_macOS"></a></p>
@@ -102,13 +104,27 @@ Install cmake</h1>
 <p>If you do not already have <code>cmake</code>, install it with <code>brew</code> or whatever your favorite way is: </p><div class="fragment"><div class="line">brew install cmake</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md45"></a>
 Install dependencies</h1>
-<p><a class="el" href="namespace_ogre.html">Ogre</a> have some dependencies (depending on which components you choose to build). You can find them at <a href="https://bitbucket.org/cabalistic/ogredeps/src/default/src/">https://bitbucket.org/cabalistic/ogredeps/src/default/src/</a>. This guide won't escribe in detail on how to install them, but the author recommends using <code>brew</code> to install them, e.g. </p><div class="fragment"><div class="line">brew install libzzip</div>
-<div class="line">brew install freetype</div>
-<div class="line">brew install rapidjson</div>
-<div class="line"># [...more if needed...]</div>
-</div><!-- fragment --><p> and cmake should be able to find them automatically.</p>
-<h1><a class="anchor" id="autotoc_md46"></a>
+<p>Clone dependencies from <a href="https://github.com/OGRECave/ogre-next-deps">ogre-next-deps</a> and build the <code>ALL</code> target and then the <code>INSTALL</code> target:</p>
+<div class="fragment"><div class="line">git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps</div>
+<div class="line">cd ogre-next-deps</div>
+<div class="line">mkdir build</div>
+<div class="line">cd build</div>
+<div class="line">cmake ../ -G Xcode</div>
+<div class="line">cmake --build . --target ALL --config Debug</div>
+<div class="line">cmake --build . --target install --config Debug</div>
+<div class="line">cmake --build . --target ALL --config Release</div>
+<div class="line">cmake --build . --target install --config Release</div>
+</div><!-- fragment --><p>This will generate Dependencies under <code>ogre-next-deps/build/ogrenext</code>. You will have to copy (or symlink) that folder into the OgreRepo and rename it to dependencies so that they the folder <code>ogre-next-deps/build/ogrenext</code> is now <code>OgreSrcRepo/Dependencies</code></p>
+<h2><a class="anchor" id="autotoc_md46"></a>
+Install SDL2 using brew</h2>
+<p>SDL2 is not built by ogre-next-deps in macOS, use brew instead:</p>
+<div class="fragment"><div class="line">brew install sdl2</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md47"></a>
 Build Ogre</h1>
+<blockquote class="doxtable">
+<p><b>Note:</b> XCode generator is supported</p>
+<p><b>Note 2:</b> Unless STATIC libs setting is used, XCode project dependencies are not properly setup thus e.g. if you try to build a sample, it won't compile RenderSystem_Metal which is needed (and possibly other components). Make sure to first build "ALL" target to build everything before trying the samples </p>
+</blockquote>
 <p>Make sure you have set the current working directory to ogre's source directory: </p><div class="fragment"><div class="line">cd ogre</div>
 </div><!-- fragment --><p>At the time of writing this guide, a build error will occurr for the SampleMorphAnimations target (unless one is building .frameworks which this guide won't). So remove the following line line or comment it out, in <code>Samples/2.0/CMakeLists.txt:130</code> that says: </p><blockquote class="doxtable">
 <p>add_subdirectory(ApiUsage/MorphAnimations) </p>
@@ -144,7 +160,7 @@ Build Ogre</h1>
 </div><!-- fragment --><p>The <code>-j2</code> tells make how many jobs will run concurrently. E.g. if you have 4 cores, use 4 instead of 2.</p>
 <p>If everything went well, you should have an sdk located in the <code>$PWD/sdk</code> directory.</p>
 <p>Open and edit <code>$PWD/sdk/plugins_tools_d.cfg</code> and <code>$PWD/sdk/plugins_tools.cfg</code> and the value of <code>PluginFolder</code> to $PWD/sdk/lib<code>and prefix all the</code>Plugin<code>values with</code>lib<code>(because we set the</code>$OGRE_PLUGIN_LIB_PREFIX` when building)</p>
-<h1><a class="anchor" id="autotoc_md47"></a>
+<h1><a class="anchor" id="autotoc_md48"></a>
 Build offline version of the docs</h1>
 <p>From the same working directory run: </p><div class="fragment"><div class="line">brew install doxygen</div>
 <div class="line">brew install Graphviz</div>

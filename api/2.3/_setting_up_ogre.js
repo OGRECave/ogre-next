@@ -20,9 +20,11 @@ var _setting_up_ogre =
     ] ],
     [ "macOS", "_setting_up_ogre_mac_o_s.html", [
       [ "Install cmake", "_setting_up_ogre_mac_o_s.html#autotoc_md44", null ],
-      [ "Install dependencies", "_setting_up_ogre_mac_o_s.html#autotoc_md45", null ],
-      [ "Build Ogre", "_setting_up_ogre_mac_o_s.html#autotoc_md46", null ],
-      [ "Build offline version of the docs", "_setting_up_ogre_mac_o_s.html#autotoc_md47", null ]
+      [ "Install dependencies", "_setting_up_ogre_mac_o_s.html#autotoc_md45", [
+        [ "Install SDL2 using brew", "_setting_up_ogre_mac_o_s.html#autotoc_md46", null ]
+      ] ],
+      [ "Build Ogre", "_setting_up_ogre_mac_o_s.html#autotoc_md47", null ],
+      [ "Build offline version of the docs", "_setting_up_ogre_mac_o_s.html#autotoc_md48", null ]
     ] ],
     [ "Android", "_setting_up_ogre_android.html", [
       [ "Requirements", "_setting_up_ogre_android.html#RequirementsAndroid", null ],

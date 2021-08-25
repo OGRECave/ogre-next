@@ -1,5 +1,6 @@
 var NAVTREEINDEX40 =
 {
+"class_ogre_1_1_controller.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,28,8],
 "class_ogre_1_1_controller.html#a3fb917fd69fdc9d6799913970039652b":[5,2,2,28,0],
 "class_ogre_1_1_controller.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,2,28,12],
 "class_ogre_1_1_controller.html#a4b16ce7b5a436c3f895bea7960bdcb07":[5,2,2,28,20],
@@ -248,6 +249,5 @@ var NAVTREEINDEX40 =
 "class_ogre_1_1_cylinder_emitter.html#a47b1c383608e0aca4859c6ecd11d9ef5":[7,0,0,191,92],
 "class_ogre_1_1_cylinder_emitter.html#a4a7903addb8535a17cf0d79cb43ce7dd":[7,0,0,191,90],
 "class_ogre_1_1_cylinder_emitter.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,191,57],
-"class_ogre_1_1_cylinder_emitter.html#a4e0b837e02c70c0cfc880f83ce6b6739":[7,0,0,191,41],
-"class_ogre_1_1_cylinder_emitter.html#a51159bb05720260843eb80fde34261fd":[7,0,0,191,21]
+"class_ogre_1_1_cylinder_emitter.html#a4e0b837e02c70c0cfc880f83ce6b6739":[7,0,0,191,41]
 };
