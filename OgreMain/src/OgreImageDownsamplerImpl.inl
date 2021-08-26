@@ -132,6 +132,116 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void DOWNSAMPLE_3D_NAME( uint8 *_dstPtr, uint8 const *_srcPtr, int32 dstWidth, int32 dstHeight,
+                             int32 dstDepth, int32 dstBytesPerRow, int32 dstBytesPerImage,
+                             int32 srcWidth, int32 srcHeight, int32 srcBytesPerRow,
+                             int32 srcBytesPerImage )
+    {
+        OGRE_UINT8 *dstPtr = reinterpret_cast<OGRE_UINT8 *>( _dstPtr );
+        OGRE_UINT8 const *srcPtr = reinterpret_cast<OGRE_UINT8 const *>( _srcPtr );
+
+        srcBytesPerRow /= sizeof( OGRE_UINT8 );
+        dstBytesPerRow /= sizeof( OGRE_UINT8 );
+
+        int32 srcBytesPerRowSkip = srcBytesPerRow - srcWidth * OGRE_TOTAL_SIZE;
+        int32 dstBytesPerRowSkip = dstBytesPerRow - dstWidth * OGRE_TOTAL_SIZE;
+
+        int32 srcBytesPerImageSkip = srcBytesPerImage - srcWidth * srcHeight * OGRE_TOTAL_SIZE;
+        int32 dstBytesPerImageSkip = dstBytesPerImage - dstWidth * dstHeight * OGRE_TOTAL_SIZE;
+
+        for( int32 z = 0; z < dstDepth; ++z )
+        {
+            const int kEndZ = std::min<int>( dstDepth - 1 - z, 1 );
+
+            for( int32 y = 0; y < dstHeight; ++y )
+            {
+                const int kEndY = std::min<int>( dstHeight - 1 - y, 1 );
+
+                for( int32 x = 0; x < dstWidth; ++x )
+                {
+#ifdef OGRE_DOWNSAMPLE_R
+                    OGRE_UINT32 accumR = 0;
+#endif
+#ifdef OGRE_DOWNSAMPLE_G
+                    OGRE_UINT32 accumG = 0;
+#endif
+#ifdef OGRE_DOWNSAMPLE_B
+                    OGRE_UINT32 accumB = 0;
+#endif
+#ifdef OGRE_DOWNSAMPLE_A
+                    OGRE_UINT32 accumA = 0;
+#endif
+                    uint32 divisor = 0u;
+
+                    const int kEndX = std::min<int>( dstWidth - 1 - x, 1 );
+
+                    for( int k_z = 0; k_z <= kEndZ; ++k_z )
+                    {
+                        for( int k_y = 0; k_y <= kEndY; ++k_y )
+                        {
+                            for( int k_x = 0; k_x <= kEndX; ++k_x )
+                            {
+                                const int baseIdx = k_z * srcBytesPerImage + k_y * srcBytesPerRow +
+                                                    k_x * OGRE_TOTAL_SIZE;
+#ifdef OGRE_DOWNSAMPLE_R
+                                OGRE_UINT32 r = srcPtr[baseIdx + OGRE_DOWNSAMPLE_R];
+                                accumR += OGRE_GAM_TO_LIN( r );
+#endif
+#ifdef OGRE_DOWNSAMPLE_G
+                                OGRE_UINT32 g = srcPtr[baseIdx + OGRE_DOWNSAMPLE_G];
+                                accumG += OGRE_GAM_TO_LIN( g );
+#endif
+#ifdef OGRE_DOWNSAMPLE_B
+                                OGRE_UINT32 b = srcPtr[baseIdx + OGRE_DOWNSAMPLE_B];
+                                accumB += OGRE_GAM_TO_LIN( b );
+#endif
+#ifdef OGRE_DOWNSAMPLE_A
+                                OGRE_UINT32 a = srcPtr[baseIdx + OGRE_DOWNSAMPLE_A];
+                                accumA += a;
+#endif
+                                ++divisor;
+                            }
+                        }
+                    }
+
+#if defined( OGRE_DOWNSAMPLE_R ) || defined( OGRE_DOWNSAMPLE_G ) || defined( OGRE_DOWNSAMPLE_B )
+                    float invDivisor = 1.0f / divisor;
+#endif
+
+#ifdef OGRE_DOWNSAMPLE_R
+                    dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>(
+                        OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
+#endif
+#ifdef OGRE_DOWNSAMPLE_G
+                    dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>(
+                        OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
+#endif
+#ifdef OGRE_DOWNSAMPLE_B
+                    dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>(
+                        OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
+#endif
+#ifdef OGRE_DOWNSAMPLE_A
+                    dstPtr[OGRE_DOWNSAMPLE_A] =
+                        static_cast<OGRE_UINT8>( ( accumA + divisor - 1u ) / divisor );
+#endif
+
+                    dstPtr += OGRE_TOTAL_SIZE;
+                    srcPtr += OGRE_TOTAL_SIZE * 2;
+                }
+
+                dstPtr += dstBytesPerRowSkip;
+                srcPtr +=
+                    ( std::max( srcWidth, 2 ) - dstWidth * 2 ) * OGRE_TOTAL_SIZE + srcBytesPerRowSkip;
+                srcPtr += srcBytesPerRow;
+            }
+
+            dstPtr += dstBytesPerImageSkip;
+            srcPtr +=
+                ( std::max( srcHeight, 2 ) - dstHeight * 2 ) * OGRE_TOTAL_SIZE + srcBytesPerImageSkip;
+            srcPtr += srcBytesPerImage;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void DOWNSAMPLE_CUBE_NAME( uint8 *_dstPtr, uint8 const **_allPtr, int32 dstWidth, int32 dstHeight,
                                int32 dstBytesPerRow, int32 srcWidth, int32 srcHeight,
                                int32 srcBytesPerRow, const uint8 kernel[5][5], const int8 kernelStartX,
@@ -589,6 +699,7 @@ namespace Ogre
 #undef OGRE_DOWNSAMPLE_G
 #undef OGRE_DOWNSAMPLE_B
 #undef DOWNSAMPLE_NAME
+#undef DOWNSAMPLE_3D_NAME
 #undef DOWNSAMPLE_CUBE_NAME
 #undef BLUR_NAME
 #undef OGRE_TOTAL_SIZE

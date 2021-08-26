@@ -362,6 +362,7 @@ namespace Ogre {
         /** Sets the proper downsampler functions to generate mipmaps
         @param format
         @param imageDownsampler2D [out]
+        @param imageDownsampler3D [out]
         @param imageDownsamplerCube [out]
         @param imageBlur2D [out]
         @param gammaCorrected
@@ -379,8 +380,10 @@ namespace Ogre {
         */
         static bool getDownsamplerFunctions( PixelFormatGpu format,
                                              void **imageDownsampler2D,
+                                             void **imageDownsampler3D,
                                              void **imageDownsamplerCube,
-                                             void **imageBlur2D, bool gammaCorrected,
+                                             void **imageBlur2D,
+                                             bool gammaCorrected,
                                              uint32 depthOrSlices,
                                              TextureTypes::TextureTypes textureType,
                                              Filter filter );

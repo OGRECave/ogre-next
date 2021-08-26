@@ -62,6 +62,25 @@ namespace Ogre
     ImageDownsampler2D downscale2x_XA88;
 
     //
+    //  3D versions
+    //
+
+    /** Bilinear 3D downsampler
+     */
+    typedef void( ImageDownsampler3D )( uint8 *dstPtr, uint8 const *srcPtr, int32 dstWidth,
+                                        int32 dstHeight, int32 dstDepth, int32 dstBytesPerRow,
+                                        int32 dstBytesPerImage, int32 srcWidth, int32 srcHeight,
+                                        int32 srcBytesPerRow, int32 srcBytesPerImage );
+
+    ImageDownsampler3D downscale3D2x_X8;
+    ImageDownsampler3D downscale3D2x_XXXA8888;
+    ImageDownsampler3D downscale3D2x_XXX888;
+    ImageDownsampler3D downscale3D2x_XX88;
+    ImageDownsampler3D downscale3D2x_X8;
+    ImageDownsampler3D downscale3D2x_A8;
+    ImageDownsampler3D downscale3D2x_XA88;
+
+    //
     //  CUBEMAP versions
     //
 
@@ -116,6 +135,17 @@ namespace Ogre
     ImageDownsampler2D downscale2x_Signed_XA88;
 
     //
+    // 3D Signed versions
+    //
+
+    ImageDownsampler3D downscale3D2x_Signed_XXXA8888;
+    ImageDownsampler3D downscale3D2x_Signed_XXX888;
+    ImageDownsampler3D downscale3D2x_Signed_XX88;
+    ImageDownsampler3D downscale3D2x_Signed_X8;
+    ImageDownsampler3D downscale3D2x_Signed_A8;
+    ImageDownsampler3D downscale3D2x_Signed_XA88;
+
+    //
     //  CUBEMAP Signed versions
     //
 
@@ -148,6 +178,17 @@ namespace Ogre
     ImageDownsampler2D downscale2x_Float32_X;
     ImageDownsampler2D downscale2x_Float32_A;
     ImageDownsampler2D downscale2x_Float32_XA;
+
+    //
+    //  3D Float32 versions
+    //
+
+    ImageDownsampler3D downscale3D2x_Float32_XXXA;
+    ImageDownsampler3D downscale3D2x_Float32_XXX;
+    ImageDownsampler3D downscale3D2x_Float32_XX;
+    ImageDownsampler3D downscale3D2x_Float32_X;
+    ImageDownsampler3D downscale3D2x_Float32_A;
+    ImageDownsampler3D downscale3D2x_Float32_XA;
 
     //
     //  CUBEMAP Float32 versions
@@ -184,6 +225,19 @@ namespace Ogre
     ImageDownsampler2D downscale2x_sRGB_A8;
     ImageDownsampler2D downscale2x_sRGB_XA88;
     ImageDownsampler2D downscale2x_sRGB_AX88;
+
+    //
+    //  3D sRGB versions
+    //
+
+    ImageDownsampler3D downscale3D2x_sRGB_XXXA8888;
+    ImageDownsampler3D downscale3D2x_sRGB_AXXX8888;
+    ImageDownsampler3D downscale3D2x_sRGB_XXX888;
+    ImageDownsampler3D downscale3D2x_sRGB_XX88;
+    ImageDownsampler3D downscale3D2x_sRGB_X8;
+    ImageDownsampler3D downscale3D2x_sRGB_A8;
+    ImageDownsampler3D downscale3D2x_sRGB_XA88;
+    ImageDownsampler3D downscale3D2x_sRGB_AX88;
 
     //
     //  CUBEMAP sRGB versions

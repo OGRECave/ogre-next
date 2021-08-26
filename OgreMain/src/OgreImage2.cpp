@@ -889,6 +889,7 @@ namespace Ogre {
                                     Filter filter )
     {
         ImageDownsampler2D *downsampler2DFunc       = 0;
+        ImageDownsampler3D *downsampler3DFunc       = 0;
         ImageDownsamplerCube *downsamplerCubeFunc   = 0;
         ImageBlur2D *separableBlur2DFunc            = 0;
 
@@ -896,6 +897,7 @@ namespace Ogre {
 
         bool canGenerateMipmaps = getDownsamplerFunctions( format,
                                                            (void**)&downsampler2DFunc,
+                                                           (void**)&downsampler3DFunc,
                                                            (void**)&downsamplerCubeFunc,
                                                            (void**)&separableBlur2DFunc,
                                                            gammaCorrected,
@@ -907,6 +909,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     bool Image2::getDownsamplerFunctions( PixelFormatGpu format,
                                           void **imageDownsampler2D,
+                                          void **imageDownsampler3D,
                                           void **imageDownsamplerCube,
                                           void **imageBlur2D,
                                           bool gammaCorrected,
@@ -917,6 +920,7 @@ namespace Ogre {
         bool retVal = true;
 
         ImageDownsampler2D *downsampler2DFunc       = 0;
+        ImageDownsampler3D *downsampler3DFunc       = 0;
         ImageDownsamplerCube *downsamplerCubeFunc   = 0;
         ImageBlur2D *separableBlur2DFunc            = 0;
 
@@ -929,12 +933,14 @@ namespace Ogre {
             if( !gammaCorrected )
             {
                 downsampler2DFunc   = downscale2x_X8;
+                downsampler3DFunc   = downscale3D2x_X8;
                 downsamplerCubeFunc = downscale2x_X8_cube;
                 separableBlur2DFunc = separableBlur_X8;
             }
             else
             {
                 downsampler2DFunc   = downscale2x_sRGB_X8;
+                downsampler3DFunc   = downscale3D2x_sRGB_X8;
                 downsamplerCubeFunc = downscale2x_sRGB_X8_cube;
                 separableBlur2DFunc = separableBlur_sRGB_X8;
             }
@@ -943,12 +949,14 @@ namespace Ogre {
             if( !gammaCorrected )
             {
                 downsampler2DFunc   = downscale2x_A8;
+                downsampler3DFunc   = downscale3D2x_A8;
                 downsamplerCubeFunc = downscale2x_A8_cube;
                 separableBlur2DFunc = separableBlur_A8;
             }
             else
             {
                 downsampler2DFunc   = downscale2x_sRGB_A8;
+                downsampler3DFunc   = downscale3D2x_sRGB_A8;
                 downsamplerCubeFunc = downscale2x_sRGB_A8_cube;
                 separableBlur2DFunc = separableBlur_sRGB_A8;
             }
@@ -958,12 +966,14 @@ namespace Ogre {
             if( !gammaCorrected )
             {
                 downsampler2DFunc   = downscale2x_XX88;
+                downsampler3DFunc   = downscale3D2x_XX88;
                 downsamplerCubeFunc = downscale2x_XX88_cube;
                 separableBlur2DFunc = separableBlur_X8;
             }
             else
             {
                 downsampler2DFunc   = downscale2x_sRGB_XX88;
+                downsampler3DFunc   = downscale3D2x_sRGB_XX88;
                 downsamplerCubeFunc = downscale2x_sRGB_XX88_cube;
                 separableBlur2DFunc = separableBlur_sRGB_X8;
             }
@@ -976,12 +986,14 @@ namespace Ogre {
             if( !gammaCorrected )
             {
                 downsampler2DFunc   = downscale2x_XXXA8888;
+                downsampler3DFunc   = downscale3D2x_XXXA8888;
                 downsamplerCubeFunc = downscale2x_XXXA8888_cube;
                 separableBlur2DFunc = separableBlur_XXXA8888;
             }
             else
             {
                 downsampler2DFunc   = downscale2x_sRGB_XXXA8888;
+                downsampler3DFunc   = downscale3D2x_sRGB_XXXA8888;
                 downsamplerCubeFunc = downscale2x_sRGB_XXXA8888_cube;
                 separableBlur2DFunc = separableBlur_sRGB_XXXA8888;
             }
@@ -989,36 +1001,43 @@ namespace Ogre {
         case PFG_R8_SNORM:
         case PFG_R8_SINT:
             downsampler2DFunc   = downscale2x_Signed_X8;
+            downsampler3DFunc   = downscale3D2x_Signed_X8;
             downsamplerCubeFunc = downscale2x_Signed_X8_cube;
             separableBlur2DFunc = separableBlur_X8;
             break;
         case PFG_RG8_SNORM: case PFG_RG8_SINT:
             downsampler2DFunc   = downscale2x_Signed_XX88;
+            downsampler3DFunc   = downscale3D2x_Signed_XX88;
             downsamplerCubeFunc = downscale2x_Signed_XX88_cube;
             separableBlur2DFunc = separableBlur_Signed_X8;
             break;
         case PFG_RGBA8_SNORM: case PFG_RGBA8_SINT:
             downsampler2DFunc   = downscale2x_Signed_XXXA8888;
+            downsampler3DFunc   = downscale3D2x_Signed_XXXA8888;
             downsamplerCubeFunc = downscale2x_Signed_XXXA8888_cube;
             separableBlur2DFunc = separableBlur_Signed_XXXA8888;
             break;
         case PFG_RGBA32_FLOAT:
             downsampler2DFunc   = downscale2x_Float32_XXXA;
+            downsampler3DFunc   = downscale3D2x_Float32_XXXA;
             downsamplerCubeFunc = downscale2x_Float32_XXXA_cube;
             separableBlur2DFunc = separableBlur_Float32_XXXA;
             break;
         case PFG_RGB32_FLOAT:
             downsampler2DFunc   = downscale2x_Float32_XXX;
+            downsampler3DFunc   = downscale3D2x_Float32_XXX;
             downsamplerCubeFunc = downscale2x_Float32_XXX_cube;
             separableBlur2DFunc = separableBlur_Float32_XXX;
             break;
         case PFG_RG32_FLOAT:
             downsampler2DFunc   = downscale2x_Float32_XX;
+            downsampler3DFunc   = downscale3D2x_Float32_XX;
             downsamplerCubeFunc = downscale2x_Float32_XX_cube;
             separableBlur2DFunc = separableBlur_Float32_XX;
             break;
         case PFG_R32_FLOAT:
             downsampler2DFunc   = downscale2x_Float32_X;
+            downsampler3DFunc   = downscale3D2x_Float32_X;
             downsamplerCubeFunc = downscale2x_Float32_X_cube;
             separableBlur2DFunc = separableBlur_Float32_X;
             break;
@@ -1027,14 +1046,16 @@ namespace Ogre {
         }
 
         *imageDownsampler2D     = (void*)downsampler2DFunc;
+        *imageDownsampler3D     = (void*)downsampler3DFunc;
         *imageDownsamplerCube   = (void*)downsamplerCubeFunc;
         *imageBlur2D            = (void*)separableBlur2DFunc;
 
-        if( (depthOrSlices == 1u && !downsampler2DFunc) ||
-            (textureType == TextureTypes::TypeCube && (!downsamplerCubeFunc ||
-                                                       filter == FILTER_GAUSSIAN_HIGH)) ||
+        if( ( depthOrSlices == 1u && !downsampler2DFunc ) ||
+            ( textureType == TextureTypes::TypeCube &&
+              ( !downsamplerCubeFunc || filter == FILTER_GAUSSIAN_HIGH ) ) ||
             textureType == TextureTypes::TypeCubeArray ||
-            textureType == TextureTypes::Type3D )
+            ( textureType == TextureTypes::Type3D &&
+              ( !downsampler3DFunc || ( filter != FILTER_BILINEAR && filter != FILTER_LINEAR ) ) ) )
         {
             retVal = false;
         }
@@ -1048,10 +1069,12 @@ namespace Ogre {
 
         // resizing dynamic images is not supported
         assert( mAutoDelete );
-        assert( (mTextureType == TextureTypes::Type2D ||
-                mTextureType == TextureTypes::TypeCube) && "Texture type not supported" );
+        assert( ( mTextureType == TextureTypes::Type2D || mTextureType == TextureTypes::TypeCube ||
+                  mTextureType == TextureTypes::Type3D ) &&
+                "Texture type not supported" );
 
         ImageDownsampler2D *downsampler2DFunc       = 0;
+        ImageDownsampler3D *downsampler3DFunc       = 0;
         ImageDownsamplerCube *downsamplerCubeFunc   = 0;
         ImageBlur2D *separableBlur2DFunc            = 0;
 
@@ -1059,6 +1082,7 @@ namespace Ogre {
 
         bool canGenerateMipmaps = getDownsamplerFunctions( mPixelFormat,
                                                            (void**)&downsampler2DFunc,
+                                                           (void**)&downsampler3DFunc,
                                                            (void**)&downsamplerCubeFunc,
                                                            (void**)&separableBlur2DFunc,
                                                            gammaCorrected,
@@ -1091,7 +1115,7 @@ namespace Ogre {
 
             TextureBox srcBox = tmpImage0.getData( 0 );
             TextureBox dstBox = this->getData( 0 );
-            memcpy( dstBox.data, srcBox.data, srcBox.bytesPerImage * srcBox.numSlices );
+            memcpy( dstBox.data, srcBox.data, srcBox.bytesPerImage * srcBox.getDepthOrSlices() );
 
             mNumMipmaps = numMipmapsRequired;
 
@@ -1108,6 +1132,7 @@ namespace Ogre {
 
         uint32 dstWidth  = mWidth;
         uint32 dstHeight = mHeight;
+        uint32 dstDepth  = mDepthOrSlices;
 
         int filterIdx = 1;
 
@@ -1132,8 +1157,10 @@ namespace Ogre {
         {
             uint32 srcWidth    = dstWidth;
             uint32 srcHeight   = dstHeight;
+            uint32 srcDepth    = dstDepth;
             dstWidth   = std::max<uint32>( 1u, dstWidth >> 1u );
             dstHeight  = std::max<uint32>( 1u, dstHeight >> 1u );
+            dstDepth   = std::max<uint32>( 1u, dstDepth >> 1u );
 
             TextureBox box0 = this->getData( i - 1u );
             TextureBox box1 = this->getData( i );
@@ -1155,6 +1182,13 @@ namespace Ogre {
                                             chosenFilter.kernelStartY, chosenFilter.kernelEndY,
                                             j );
                 }
+            }
+            else if( mTextureType == TextureTypes::Type3D )
+            {
+				( *downsampler3DFunc )( reinterpret_cast<uint8 *>( box1.data ),
+                                        reinterpret_cast<uint8 *>( box0.data ), dstWidth, dstHeight,
+                                        dstDepth, box1.bytesPerRow, box1.bytesPerImage, srcWidth,
+										srcHeight, box0.bytesPerRow, box0.bytesPerImage );
             }
             else
             {
