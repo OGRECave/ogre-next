@@ -30,7 +30,7 @@ var class_ogre_1_1_image2 =
     [ "getData", "class_ogre_1_1_image2.html#aed0b0b0963105c375ae421d0aa66c665", null ],
     [ "getDepth", "class_ogre_1_1_image2.html#a2dd16d6ae07cd2e2f703e23b3c67b70c", null ],
     [ "getDepthOrSlices", "class_ogre_1_1_image2.html#ad73330eadda6ed121b976c08f7a5af6a", null ],
-    [ "getDownsamplerFunctions", "class_ogre_1_1_image2.html#ab44613751268da44e08377f7ec2ace09", null ],
+    [ "getDownsamplerFunctions", "class_ogre_1_1_image2.html#aa0f960e9434c80b164ec5eedab59de65", null ],
     [ "getFileExtFromMagic", "class_ogre_1_1_image2.html#ac9f43ac443c5c1addef1ea6c54aad7d7", null ],
     [ "getHeight", "class_ogre_1_1_image2.html#a63e71406731e4725b7a466811968c550", null ],
     [ "getNumMipmaps", "class_ogre_1_1_image2.html#ae51bfee4a3a691205f0ec82645acf5fc", null ],
