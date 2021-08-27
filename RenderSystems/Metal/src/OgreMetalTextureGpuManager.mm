@@ -229,7 +229,8 @@ namespace Ogre
                                                  pixelFormatFamily, vaoManager, mDevice );
     }
     //-----------------------------------------------------------------------------------
-    bool MetalTextureGpuManager::checkSupport( PixelFormatGpu format, uint32 textureFlags ) const
+    bool MetalTextureGpuManager::checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes,
+                                               uint32 textureFlags ) const
     {
         OGRE_ASSERT_LOW(
             textureFlags != TextureFlags::NotTexture &&

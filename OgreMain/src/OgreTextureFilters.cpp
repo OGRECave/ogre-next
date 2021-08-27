@@ -65,7 +65,8 @@ namespace TextureFilter
                                                       defaultMipmapGeneration :
                                                       defaultMipmapGenerationCubemaps;
 
-                if( textureManager->checkSupport( finalPixelFormat, TextureFlags::AllowAutomipmaps ) )
+                if( textureManager->checkSupport( finalPixelFormat, image.getTextureType(),
+                                                  TextureFlags::AllowAutomipmaps ) )
                     retVal = mipmapGen;
                 else
                     retVal = DefaultMipmapGen::SwMode;
@@ -147,7 +148,7 @@ namespace TextureFilter
 
             const bool canDoMipmaps =
                 ( mipmapGen == DefaultMipmapGen::HwMode &&
-                  textureGpuManager->checkSupport( inOutPixelFormat,
+                  textureGpuManager->checkSupport( inOutPixelFormat, image.getTextureType(),
                                                    TextureFlags::AllowAutomipmaps ) ) ||
                 ( mipmapGen == DefaultMipmapGen::SwMode &&
                   Image2::supportsSwMipmaps(

@@ -986,7 +986,8 @@ namespace Ogre
         @return
             True if supported. False otherwise
         */
-        virtual bool checkSupport( PixelFormatGpu format, uint32 textureFlags ) const;
+        virtual bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,
+                                   uint32 textureFlags ) const;
 
     protected:
         /// Returns false if the entry was not found in the cache

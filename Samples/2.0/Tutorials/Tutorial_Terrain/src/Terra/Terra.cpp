@@ -151,7 +151,8 @@ namespace Ogre
         PixelFormatGpu pixelFormat = image.getPixelFormat();
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
         // Many Android GPUs don't support PFG_R16_UNORM so we scale it by hand
-        if( pixelFormat == PFG_R16_UNORM && !textureManager->checkSupport( PFG_R16_UNORM, 0 ) )
+        if( pixelFormat == PFG_R16_UNORM &&
+            !textureManager->checkSupport( PFG_R16_UNORM, TextureTypes::Type2D, 0 ) )
         {
             pixelFormat = PFG_R16_UINT;
             m_heightUnormScaled /= 65535.0f;
@@ -265,7 +266,8 @@ namespace Ogre
         m_normalMapTex->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount(
             m_normalMapTex->getWidth(), m_normalMapTex->getHeight() ) );
         if( textureManager->checkSupport(
-                PFG_R10G10B10A2_UNORM, TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps ) )
+                PFG_R10G10B10A2_UNORM, TextureTypes::Type2D,
+                TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps ) )
         {
             m_normalMapTex->setPixelFormat( PFG_R10G10B10A2_UNORM );
         }

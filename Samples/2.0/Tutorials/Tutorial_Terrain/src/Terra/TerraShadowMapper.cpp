@@ -132,7 +132,8 @@ namespace Ogre
                                                            PFG_RGBA16_FLOAT, PFG_RGBA8_UNORM };
             for( size_t i = 0u; i < numFormats; ++i )
             {
-                if( textureManager->checkSupport( c_formats[i], TextureFlags::Uav ) ||
+                if( textureManager->checkSupport( c_formats[i], TextureTypes::Type2D,
+                                                  TextureFlags::Uav ) ||
                     i == numFormats - 1u )
                 {
                     m_shadowMapTex->setPixelFormat( c_formats[i] );

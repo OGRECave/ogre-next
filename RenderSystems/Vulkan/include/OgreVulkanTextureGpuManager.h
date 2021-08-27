@@ -113,7 +113,8 @@ namespace Ogre
 
         bool canRestrictImageViewUsage( void ) const { return mCanRestrictImageViewUsage; }
 
-        virtual bool checkSupport( PixelFormatGpu format, uint32 textureFlags ) const;
+        virtual bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,
+                                   uint32 textureFlags ) const;
     };
 
     /** @} */

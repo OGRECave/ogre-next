@@ -233,7 +233,9 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-    bool GL3PlusTextureGpuManager::checkSupport( PixelFormatGpu format, uint32 textureFlags ) const
+    bool GL3PlusTextureGpuManager::checkSupport( PixelFormatGpu format,
+                                                 TextureTypes::TextureTypes textureType,
+                                                 uint32 textureFlags ) const
     {
         if( ( textureFlags & ( TextureFlags::AllowAutomipmaps | TextureFlags::RenderToTexture ) ) ==
             TextureFlags::AllowAutomipmaps )
@@ -243,7 +245,7 @@ namespace Ogre
             return false;
         }
 
-        return TextureGpuManager::checkSupport( format, textureFlags );
+        return TextureGpuManager::checkSupport( format, textureType, textureFlags );
     }
 #endif
 }

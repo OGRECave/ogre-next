@@ -105,6 +105,26 @@ namespace Ogre
 // Last seen: 2020-09-08
 #define OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
         static bool mAdreno5xx6xxMinCaps;
+
+/// Adreno 505 incorrectly scales down non-square 3D textures (e.g. 128x128x32).
+/// It is unknown if square 3D textures are downscaled correctly
+/// It is unknown if newer GPUs are affected thus we assume all Qualcomm chips are
+///
+/// The XY downscale is correct but the Z slice is incorrect, as it ignores
+/// a lot of slices.
+///
+/// Qualcomm has been notified of the bug
+///
+/// As of driver 512.415.0 (Android 10), this bug is still present
+///
+/// Workaround is to do mipmapping in SW, or via Compute.
+/// The flag does not have Adreno's name because it is likely
+/// to be reused for other vendors (breaking mipmaps is common...)
+///
+/// First seen: Unknown
+/// Last seen: 2021-08-27
+#define OGRE_VK_WORKAROUND_BAD_3D_BLIT
+        static bool mBad3DBlit;
 #endif
 #endif
     };

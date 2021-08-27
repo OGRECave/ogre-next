@@ -616,6 +616,9 @@ namespace Ogre
 
         if( rsc->getVendor() == GPU_QUALCOMM )
         {
+#ifdef OGRE_VK_WORKAROUND_BAD_3D_BLIT
+            Workarounds::mBad3DBlit = true;
+#endif
 #ifdef OGRE_VK_WORKAROUND_ADRENO_D32_FLOAT
             Workarounds::mAdrenoD32FloatBug = false;
             if( !rsc->getDriverVersion().hasMinVersion( 512, 415 ) )
@@ -2435,10 +2438,7 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::endCopyEncoder( void )
-    {
-        mActiveDevice->mGraphicsQueue.endCopyEncoder();
-    }
+    void VulkanRenderSystem::endCopyEncoder( void ) { mActiveDevice->mGraphicsQueue.endCopyEncoder(); }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::executeResourceTransition( const ResourceTransitionArray &rstCollection )
     {

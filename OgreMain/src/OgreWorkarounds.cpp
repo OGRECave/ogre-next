@@ -44,6 +44,9 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
     bool Workarounds::mAdreno5xx6xxMinCaps = false;
 #endif
+#ifdef OGRE_VK_WORKAROUND_BAD_3D_BLIT
+    bool Workarounds::mBad3DBlit = false;
+#endif
 
     void Workarounds::dump( void *outStrVoid )
     {
@@ -60,6 +63,9 @@ namespace Ogre
 #ifdef OGRE_VK_WORKAROUND_ADRENO_5XX_6XX_MINCAPS
         outStr += "\n - mAdreno5xx6xxMinCaps: " +
                   StringConverter::toString( Workarounds::mAdreno5xx6xxMinCaps );
+#endif
+#ifdef OGRE_VK_WORKAROUND_BAD_3D_BLIT
+        outStr += "\n - mBad3DBlit: " + StringConverter::toString( Workarounds::mBad3DBlit );
 #endif
     }
 }  // namespace Ogre

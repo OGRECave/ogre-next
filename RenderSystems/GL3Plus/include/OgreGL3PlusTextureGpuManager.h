@@ -88,7 +88,8 @@ namespace Ogre
         const GL3PlusSupport& getGlSupport(void) const          { return mSupport; }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-        virtual bool checkSupport( PixelFormatGpu format, uint32 textureFlags ) const;
+        virtual bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,
+                                   uint32 textureFlags ) const;
 #endif
     };
 
