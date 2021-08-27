@@ -211,7 +211,7 @@ var NAVTREEINDEX =
 "class_ogre_1_1_metal_render_pass_descriptor.html#a421b197ca3a38da17e2eb1531a645fa2",
 "class_ogre_1_1_metal_render_system.html#afc9a5518b9187234a985b1661e1fe659",
 "class_ogre_1_1_metal_texture.html#a367f6fe60bb211cb4c32e3825ca67e4c",
-"class_ogre_1_1_metal_texture_gpu_manager.html#a841f10a656bbd24ed92b87f616e33f74",
+"class_ogre_1_1_metal_texture_gpu_manager.html#a88267acfc47129d41a0f534d4708d355",
 "class_ogre_1_1_metal_texture_gpu_window.html#aa3c2ce1e86de183dd2e2eff87da180a5",
 "class_ogre_1_1_metal_window.html#a1da544529153a89991172ba7a83598c5",
 "class_ogre_1_1_movable_object_1_1_listener.html#a0cc50a90dbeb3d1049e923ee5866a636",

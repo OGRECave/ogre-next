@@ -33,7 +33,7 @@ var class_ogre_1_1_vulkan_texture_gpu_manager =
     [ "_waitFor", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a2c872d542fd78e2db884ff8904d4c39d", null ],
     [ "_waitForPendingGpuToCpuSyncs", "class_ogre_1_1_vulkan_texture_gpu_manager.html#ac55e0672860ad3ed3695374d9e12c7ba", null ],
     [ "canRestrictImageViewUsage", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a3484121ac12500b934c420c4b01e3f8b", null ],
-    [ "checkSupport", "class_ogre_1_1_vulkan_texture_gpu_manager.html#ac8c53fe5a9966b18b4ff8333a7b53157", null ],
+    [ "checkSupport", "class_ogre_1_1_vulkan_texture_gpu_manager.html#abf35a03ba916bc3c4359bfd164586968", null ],
     [ "createAsyncTextureTicket", "class_ogre_1_1_vulkan_texture_gpu_manager.html#ae99d3bdc921a159ad0f6aa0afd95d847", null ],
     [ "createOrRetrieveTexture", "class_ogre_1_1_vulkan_texture_gpu_manager.html#ae56bf3ef457708c156860a1b58f02025", null ],
     [ "createOrRetrieveTexture", "class_ogre_1_1_vulkan_texture_gpu_manager.html#a6c611147ab065038c4727b75dffdac65", null ],

@@ -32,7 +32,7 @@ var class_ogre_1_1_metal_texture_gpu_manager =
     [ "_updateStreamingWorkerThread", "class_ogre_1_1_metal_texture_gpu_manager.html#a4f6ee50fe51ac71c60f66e044859bf9d", null ],
     [ "_waitFor", "class_ogre_1_1_metal_texture_gpu_manager.html#a2c872d542fd78e2db884ff8904d4c39d", null ],
     [ "_waitForPendingGpuToCpuSyncs", "class_ogre_1_1_metal_texture_gpu_manager.html#ac55e0672860ad3ed3695374d9e12c7ba", null ],
-    [ "checkSupport", "class_ogre_1_1_metal_texture_gpu_manager.html#a08b7c74caed6ff42dbc441ab2c965772", null ],
+    [ "checkSupport", "class_ogre_1_1_metal_texture_gpu_manager.html#adac451c7c9cc5037372ec591b06383c0", null ],
     [ "createAsyncTextureTicket", "class_ogre_1_1_metal_texture_gpu_manager.html#ae99d3bdc921a159ad0f6aa0afd95d847", null ],
     [ "createOrRetrieveTexture", "class_ogre_1_1_metal_texture_gpu_manager.html#ae56bf3ef457708c156860a1b58f02025", null ],
     [ "createOrRetrieveTexture", "class_ogre_1_1_metal_texture_gpu_manager.html#a6c611147ab065038c4727b75dffdac65", null ],
