@@ -706,14 +706,6 @@ namespace Ogre
             accumDim += maxPixelDimension * (1u << iteration);
             ++iteration;
 
-            if( !m_terrainCells[0].empty() && m_terrainCells[0].back().getDatablock() )
-            {
-                HlmsDatablock *datablock = m_terrainCells[0].back().getDatablock();
-                OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
-                HlmsTerra *hlms = static_cast<HlmsTerra *>( datablock->getCreator() );
-                hlms->_unlinkTerra( this );
-            }
-
             for( size_t i = 0u; i < 2u; ++i )
             {
                 m_terrainCells[i].clear();
@@ -792,6 +784,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Terra::setDatablock( HlmsDatablock *datablock )
     {
+        if( !datablock && !m_terrainCells[0].empty() && m_terrainCells[0].back().getDatablock() )
+        {
+            // Unsetting the datablock. We have no way of unlinking later on. Do it now
+            HlmsDatablock *datablock = m_terrainCells[0].back().getDatablock();
+            OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
+            HlmsTerra *hlms = static_cast<HlmsTerra *>( datablock->getCreator() );
+            hlms->_unlinkTerra( this );
+        }
+
         for( size_t i = 0u; i < 2u; ++i )
         {
             std::vector<TerrainCell>::iterator itor = m_terrainCells[i].begin();
@@ -804,9 +805,12 @@ namespace Ogre
             }
         }
 
-        OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
-        HlmsTerra *hlms = static_cast<HlmsTerra *>( datablock->getCreator() );
-        hlms->_linkTerra( this );
+        if( mHlmsTerraIndex != std::numeric_limits<uint32>::max() )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
+            HlmsTerra *hlms = static_cast<HlmsTerra *>( datablock->getCreator() );
+            hlms->_linkTerra( this );
+        }
     }
     //-----------------------------------------------------------------------------------
     Ogre::TextureGpu* Terra::_getShadowMapTex(void) const
