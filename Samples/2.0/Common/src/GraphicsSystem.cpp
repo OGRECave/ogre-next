@@ -832,7 +832,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::chooseSceneManager(void)
     {
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         //Debugging multithreaded code is a PITA, disable it.
         const size_t numThreads = 1;
 #else
