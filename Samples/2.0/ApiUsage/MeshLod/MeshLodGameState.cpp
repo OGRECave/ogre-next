@@ -125,7 +125,8 @@ namespace Demo
 
         // Load V1 mesh
         Ogre::v1::MeshPtr meshV1 = Ogre::v1::MeshManager::getSingleton().load(
-            "Sinbad.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+            "Sinbad.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+            Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         // Generate LOD levels
         Ogre::LodConfig lodConfig;
