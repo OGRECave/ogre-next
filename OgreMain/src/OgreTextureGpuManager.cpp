@@ -153,6 +153,8 @@ namespace Ogre
         #endif
 #endif
 
+        // Starts as true so fullfillBudget can run at least once
+        mStreamingData.workerThreadRan = true;
         mStreamingData.bytesPreloaded = 0;
         mStreamingData.maxPerStagingTextureRequestBytes = 64u * 1024u * 1024u;
 
@@ -2884,6 +2886,8 @@ namespace Ogre
 
         mMutex.lock();
 
+        mStreamingData.workerThreadRan = true;
+
         ThreadData &workerData  = mThreadData[c_workerThread];
         ThreadData &mainData    = mThreadData[c_mainThread];
 
@@ -3192,7 +3196,11 @@ namespace Ogre
                 mTryLockMutexFailureCount = 0;
                 std::swap( mainData.objCmdBuffer, workerData.objCmdBuffer );
                 mainData.usedStagingTex.swap( workerData.usedStagingTex );
-                fullfillBudget();
+                if( mStreamingData.workerThreadRan )
+                {
+                    fullfillBudget();
+                    mStreamingData.workerThreadRan = false;
+                }
 
                 isDone = mainData.loadRequests.empty() &&
                          workerData.loadRequests.empty() &&

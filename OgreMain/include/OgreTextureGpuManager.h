@@ -434,6 +434,11 @@ namespace Ogre
             QueuedImageVec      queuedImages;           /// Used by mostly by worker thread. Needs mutex.
             UsageStatsVec       usageStats; /// Exclusively used by worker thread. No protection needed.
             UsageStatsVec       prevStats;              /// Used by both threads.
+            /// Set to true when worker thread iterates (meaning prevStats.loopCount
+            /// can be decremented).
+            /// Set to false by main thread every _update call.
+            /// Needs mutex.
+            bool                workerThreadRan;
             /// Number of bytes preloaded by worker thread. Main thread resets this counter.
             size_t              bytesPreloaded;
             /// See setWorkerThreadMinimumBudget
