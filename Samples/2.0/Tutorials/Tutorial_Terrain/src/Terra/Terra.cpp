@@ -805,7 +805,7 @@ namespace Ogre
             }
         }
 
-        if( mHlmsTerraIndex != std::numeric_limits<uint32>::max() )
+        if( mHlmsTerraIndex == std::numeric_limits<uint32>::max() )
         {
             OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
             HlmsTerra *hlms = static_cast<HlmsTerra *>( datablock->getCreator() );
