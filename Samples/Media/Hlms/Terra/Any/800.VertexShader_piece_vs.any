@@ -30,7 +30,6 @@
 		outVs.pos = mul( float4(worldPos.xyz, 1.0f), passBuf.view ).xyz;
 	@end
 	@property( !hlms_dual_paraboloid_mapping )
-		outVs_Position = mul( float4(worldPos.xyz, 1.0f), passBuf.viewProj );
 		@property( !hlms_instanced_stereo )
 			outVs_Position = mul( float4(worldPos.xyz, 1.0f), passBuf.viewProj );
 		@else
