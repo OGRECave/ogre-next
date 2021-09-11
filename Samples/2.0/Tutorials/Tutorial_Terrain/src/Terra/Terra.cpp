@@ -787,9 +787,9 @@ namespace Ogre
         if( !datablock && !m_terrainCells[0].empty() && m_terrainCells[0].back().getDatablock() )
         {
             // Unsetting the datablock. We have no way of unlinking later on. Do it now
-            HlmsDatablock *datablock = m_terrainCells[0].back().getDatablock();
-            OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( datablock->getCreator() ) );
-            HlmsTerra *hlms = static_cast<HlmsTerra *>( datablock->getCreator() );
+            HlmsDatablock *oldDatablock = m_terrainCells[0].back().getDatablock();
+            OGRE_ASSERT_HIGH( dynamic_cast<HlmsTerra *>( oldDatablock->getCreator() ) );
+            HlmsTerra *hlms = static_cast<HlmsTerra *>( oldDatablock->getCreator() );
             hlms->_unlinkTerra( this );
         }
 
