@@ -20,7 +20,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     TerraWorkspaceListener::~TerraWorkspaceListener() {}
     //-------------------------------------------------------------------------
-    void TerraWorkspaceListener::passEarlyPreExecute( CompositorPass *pass )
+    void TerraWorkspaceListener::passPreExecute( CompositorPass *pass )
     {
         const CompositorPassDef *definition = pass->getDefinition();
         if( definition->getType() != PASS_SCENE )
