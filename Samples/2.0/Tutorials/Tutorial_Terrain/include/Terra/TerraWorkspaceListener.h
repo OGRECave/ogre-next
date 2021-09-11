@@ -65,7 +65,7 @@ namespace Ogre
 
         void setHlmsTerra( HlmsTerra *hlmsTerra ) { m_hlmsTerra = hlmsTerra; }
 
-        virtual void passEarlyPreExecute( CompositorPass *pass );
+        virtual void passPreExecute( CompositorPass *pass );
         virtual void passSceneAfterShadowMaps( CompositorPassScene *pass );
     };
 
