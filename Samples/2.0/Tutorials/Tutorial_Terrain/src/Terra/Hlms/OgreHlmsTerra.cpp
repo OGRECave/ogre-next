@@ -389,6 +389,9 @@ namespace Ogre
         // Override, since shadow casting is very basic
         mSetProperties.clear();
         setProperty( "hlms_no_shadowConstantBias_decl", 1 );
+
+        TerrainCell *terrainCell = static_cast<TerrainCell *>( renderable );
+        setProperty( TerraProperty::ZUp, terrainCell->isZUp() );
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::notifyPropertiesMergedPreGenerationStep(void)
