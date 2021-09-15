@@ -114,7 +114,10 @@ namespace Ogre
             const char *origStr = mOriginal->c_str() + mStart;
             ptrdiff_t length = mEnd - mStart;
             while( *origStr == *stringCompare && *origStr && --length )
-                ++origStr, ++stringCompare;
+            {
+                ++origStr;
+                ++stringCompare;
+            }
 
             return length == 0 && *origStr == *stringCompare;
         }

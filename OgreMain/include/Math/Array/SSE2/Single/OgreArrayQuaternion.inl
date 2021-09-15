@@ -177,13 +177,13 @@ namespace Ogre
 
         // retVal = fCoeff0 * rkP + fCoeff1 * rkT;
         rkT.mChunkBase[0] = _mm_add_ps( _mm_mul_ps( rkP.mChunkBase[0], fCoeff0 ),
-                                         _mm_mul_ps( rkT.mChunkBase[0], fCoeff1 ) ),
+                                        _mm_mul_ps( rkT.mChunkBase[0], fCoeff1 ) );
         rkT.mChunkBase[1] = _mm_add_ps( _mm_mul_ps( rkP.mChunkBase[1], fCoeff0 ),
-                                         _mm_mul_ps( rkT.mChunkBase[1], fCoeff1 ) ),
+                                        _mm_mul_ps( rkT.mChunkBase[1], fCoeff1 ) );
         rkT.mChunkBase[2] = _mm_add_ps( _mm_mul_ps( rkP.mChunkBase[2], fCoeff0 ),
-                                         _mm_mul_ps( rkT.mChunkBase[2], fCoeff1 ) ),
+                                        _mm_mul_ps( rkT.mChunkBase[2], fCoeff1 ) );
         rkT.mChunkBase[3] = _mm_add_ps( _mm_mul_ps( rkP.mChunkBase[3], fCoeff0 ),
-                                         _mm_mul_ps( rkT.mChunkBase[3], fCoeff1 ) );
+                                        _mm_mul_ps( rkT.mChunkBase[3], fCoeff1 ) );
 
         rkT.normalise();
 
