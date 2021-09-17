@@ -80,6 +80,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    static const TextureGpuVec c_emptyTextureContainer;
+
     const IdString PbsProperty::useLightBuffers   = IdString("use_light_buffers");
 
     const IdString PbsProperty::HwGammaRead       = IdString( "hw_gamma_read" );
@@ -1852,7 +1854,8 @@ namespace Ogre
                 *passBufferPtr++ = (float)viewMatrix[0][i];
 
             size_t shadowMapTexIdx = 0;
-            const TextureGpuVec &contiguousShadowMapTex = shadowNode->getContiguousShadowMapTex();
+            const TextureGpuVec &contiguousShadowMapTex =
+                shadowNode ? shadowNode->getContiguousShadowMapTex() : c_emptyTextureContainer;
 
             for( int32 i=0; i<numShadowMapLights; ++i )
             {
