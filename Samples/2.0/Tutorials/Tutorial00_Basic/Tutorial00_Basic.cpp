@@ -148,8 +148,12 @@ int main( int argc, const char *argv[] )
 {
     using namespace Ogre;
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+    const String pluginsFolder = macBundlePath() + "/Contents/Resources/";
+#else
     const String pluginsFolder = "./";
-    const String writeAccessFolder = "./";
+#endif
+    const String writeAccessFolder = pluginsFolder;
 
 #ifndef OGRE_STATIC_LIB
 #    if OGRE_DEBUG_MODE && \
