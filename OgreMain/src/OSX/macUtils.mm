@@ -96,7 +96,7 @@ namespace Ogre {
     }
 
     void* mac_loadFramework(String name)
-	{
+    {
         String fullPath;
         if (name[0] != '/') { // just framework name, like "OgreTerrain"
             // path/OgreTerrain.framework/OgreTerrain
@@ -134,7 +134,7 @@ namespace Ogre {
         
         return lib;
     }
-	
+    
     String macBundlePath()
     {
         char path[PATH_MAX];
@@ -156,31 +156,31 @@ namespace Ogre {
     }
     
     String macPluginPath()
-	{
-		return macBundlePath() + "/Contents/Plugins/";
-	}
+    {
+        return macBundlePath() + "/Contents/Plugins/";
+    }
 
     String macFrameworksPath()
-	{
-		return macBundlePath() + "/Contents/Frameworks/";
-	}
-	
-	String macResourcesPath()
-	{
-		return String( NSBundle.mainBundle.resourceURL.path.UTF8String ) + "/";
-	}
-	
-	String macLogPath()
-	{
-		NSURL* libURL = [NSFileManager.defaultManager
-			URLForDirectory: NSLibraryDirectory
-			inDomain: NSUserDomainMask
-			appropriateForURL: nil
-			create: YES
-			error: nil];
-		NSURL* logURL = [libURL URLByAppendingPathComponent: @"Logs" isDirectory: YES];
-		return String( logURL.absoluteURL.path.UTF8String ) + "/";
-	}
+    {
+        return macBundlePath() + "/Contents/Frameworks/";
+    }
+    
+    String macResourcesPath()
+    {
+        return String( NSBundle.mainBundle.resourceURL.path.UTF8String ) + "/";
+    }
+    
+    String macLogPath()
+    {
+        NSURL* libURL = [NSFileManager.defaultManager
+            URLForDirectory: NSLibraryDirectory
+            inDomain: NSUserDomainMask
+            appropriateForURL: nil
+            create: YES
+            error: nil];
+        NSURL* logURL = [libURL URLByAppendingPathComponent: @"Logs" isDirectory: YES];
+        return String( logURL.absoluteURL.path.UTF8String ) + "/";
+    }
 
     String macCachePath()
     {
@@ -204,18 +204,18 @@ namespace Ogre {
         return String([tempFilePath fileSystemRepresentation]);
     }
 
-	void mac_dispatchOneEvent()
-	{
-		NSApplication* app = NSApplication.sharedApplication;
-		NSEvent* event = [app
-			nextEventMatchingMask: NSEventMaskAny
-			untilDate: nil
-			inMode: NSDefaultRunLoopMode
-			dequeue: YES];
-		
-		if (event != nil)
-		{
-			[app sendEvent: event];
-		}
-	}
+    void mac_dispatchOneEvent()
+    {
+        NSApplication* app = NSApplication.sharedApplication;
+        NSEvent* event = [app
+            nextEventMatchingMask: NSEventMaskAny
+            untilDate: nil
+            inMode: NSDefaultRunLoopMode
+            dequeue: YES];
+        
+        if (event != nil)
+        {
+            [app sendEvent: event];
+        }
+    }
 }
