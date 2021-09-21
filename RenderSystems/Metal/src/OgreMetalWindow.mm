@@ -36,6 +36,100 @@ THE SOFTWARE.
 #include "OgreDepthBuffer.h"
 #include "OgreViewport.h"
 #include "OgreStringConverter.h"
+#include "OgreWindowEventUtilities.h"
+
+#import <objc/runtime.h>
+
+@interface MetalWinListener : NSObject
+
+@end
+
+@implementation MetalWinListener
+
+- (Ogre::MetalWindow*) getMetalWindow: (NSNotification*) notification
+{
+	Ogre::MetalWindow* metalWindow = nullptr;
+	NSWindow* cocoaWindow = notification.object;
+	NSValue* assoc = objc_getAssociatedObject( cocoaWindow, @selector(windowClosed:) );
+	if (assoc != nil)
+	{
+		metalWindow = (Ogre::MetalWindow*) assoc.pointerValue;
+	}
+	return metalWindow;
+}
+
+- (void) windowMoved: (NSNotification*) notification
+{
+	Ogre::MetalWindow* metalWindow = [self getMetalWindow: notification];
+	if (metalWindow != nil)
+	{
+		auto foundRange = Ogre::WindowEventUtilities::_msListeners.equal_range( metalWindow );
+		for (auto it = foundRange.first; it != foundRange.second; ++it)
+		{
+			Ogre::WindowEventListener* listener = it->second;
+			listener->windowMoved( metalWindow );
+		}
+	}
+}
+
+- (void) windowResized: (NSNotification*) notification
+{
+	Ogre::MetalWindow* metalWindow = [self getMetalWindow: notification];
+	if (metalWindow != nil)
+	{
+		auto foundRange = Ogre::WindowEventUtilities::_msListeners.equal_range( metalWindow );
+		for (auto it = foundRange.first; it != foundRange.second; ++it)
+		{
+			Ogre::WindowEventListener* listener = it->second;
+			listener->windowResized( metalWindow );
+		}
+	}
+}
+
+- (void) windowClosed: (NSNotification*) notification
+{
+	Ogre::MetalWindow* metalWindow = [self getMetalWindow: notification];
+	if (metalWindow != nil)
+	{
+		auto foundRange = Ogre::WindowEventUtilities::_msListeners.equal_range( metalWindow );
+		for (auto it = foundRange.first; it != foundRange.second; ++it)
+		{
+			Ogre::WindowEventListener* listener = it->second;
+			listener->windowClosed( metalWindow );
+		}
+	}
+}
+
+
+@end
+
+
+static void SetupMetalWindowListeners( Ogre::MetalWindow* metalWindow, NSWindow* cocoaWindow )
+{
+	static MetalWinListener* listener = [[MetalWinListener alloc] init];
+	
+	// Make it possible to find the MetalWindow from the NSWindow
+	objc_setAssociatedObject( cocoaWindow, @selector(windowClosed:),
+		[NSValue valueWithPointer: metalWindow], OBJC_ASSOCIATION_RETAIN );
+	
+	[NSNotificationCenter.defaultCenter
+		addObserver: listener
+		selector: @selector(windowClosed:)
+		name: NSWindowWillCloseNotification
+		object: cocoaWindow];
+	
+	[NSNotificationCenter.defaultCenter
+		addObserver: listener
+		selector: @selector(windowMoved:)
+		name: NSWindowDidMoveNotification
+		object: cocoaWindow];
+	
+	[NSNotificationCenter.defaultCenter
+		addObserver: listener
+		selector: @selector(windowResized:)
+		name: NSWindowDidResizeNotification
+		object: cocoaWindow];
+}
 
 namespace Ogre
 {
@@ -278,6 +372,7 @@ namespace Ogre
             window.contentView = [[OgreMetalView alloc] initWithFrame:frame];
             
             externalWindowHandle = window;
+            SetupMetalWindowListeners( this, window );
             [window orderFront: nil];
         }
 
