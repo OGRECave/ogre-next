@@ -39,6 +39,10 @@ static void XcbProc( xcb_connection_t *xcbConnection, xcb_generic_event_t *event
 typedef Ogre::map<xcb_window_t, Ogre::Window*>::type XcbWindowMap;
 static XcbWindowMap gXcbWindowToOgre;
 #endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+#   include "OSX/macUtils.h"
+#endif
+
 
 //using namespace Ogre;
 
@@ -128,6 +132,8 @@ void WindowEventUtilities::messagePump()
         SendEventToEventTarget( event, targetWindow );
         ReleaseEvent( event );
     }
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+	mac_dispatchOneEvent();
 #endif
 }
 
