@@ -32,7 +32,7 @@ static void registerHlms( void )
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
     // Note:  macBundlePath works for iOS too. It's misnamed.
-    const String resourcePath = Ogre::macBundlePath() + "/Contents/Resources/";
+    const String resourcePath = Ogre::macResourcesPath();
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
     const String resourcePath = Ogre::macBundlePath() + "/";
 #else
@@ -149,11 +149,12 @@ int main( int argc, const char *argv[] )
     using namespace Ogre;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-    const String pluginsFolder = macBundlePath() + "/Contents/Resources/";
+    const String pluginsFolder = macResourcesPath();
+    const String writeAccessFolder = macLogPath();
 #else
     const String pluginsFolder = "./";
-#endif
     const String writeAccessFolder = pluginsFolder;
+#endif
 
 #ifndef OGRE_STATIC_LIB
 #    if OGRE_DEBUG_MODE && \

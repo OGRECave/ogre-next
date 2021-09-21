@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #import "OgreString.h"
 #import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 #import <dlfcn.h>
 
 namespace Ogre {
@@ -163,6 +164,23 @@ namespace Ogre {
 	{
 		return macBundlePath() + "/Contents/Frameworks/";
 	}
+	
+	String macResourcesPath()
+	{
+		return String( NSBundle.mainBundle.resourceURL.path.UTF8String ) + "/";
+	}
+	
+	String macLogPath()
+	{
+		NSURL* libURL = [NSFileManager.defaultManager
+			URLForDirectory: NSLibraryDirectory
+			inDomain: NSUserDomainMask
+			appropriateForURL: nil
+			create: YES
+			error: nil];
+		NSURL* logURL = [libURL URLByAppendingPathComponent: @"Logs" isDirectory: YES];
+		return String( logURL.absoluteURL.path.UTF8String ) + "/";
+	}
 
     String macCachePath()
     {
@@ -186,4 +204,18 @@ namespace Ogre {
         return String([tempFilePath fileSystemRepresentation]);
     }
 
+	void mac_dispatchOneEvent()
+	{
+		NSApplication* app = NSApplication.sharedApplication;
+		NSEvent* event = [app
+			nextEventMatchingMask: NSEventMaskAny
+			untilDate: nil
+			inMode: NSDefaultRunLoopMode
+			dequeue: YES];
+		
+		if (event != nil)
+		{
+			[app sendEvent: event];
+		}
+	}
 }

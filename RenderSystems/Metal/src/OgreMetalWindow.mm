@@ -258,7 +258,13 @@ namespace Ogre
         if( !externalWindowHandle )
         {
             NSRect frame = NSMakeRect(0.0, 0.0, mRequestedWidth, mRequestedHeight);
-            NSWindowStyleMask style = NSWindowStyleMaskResizable | NSWindowStyleMaskTitled;
+            if (mRequestedWidth == 1)
+            {
+				// just make it big enough to see
+				frame.size.width = frame.size.height = 500.0;
+            }
+            NSWindowStyleMask style = NSWindowStyleMaskResizable | NSWindowStyleMaskTitled |
+				NSWindowStyleMaskClosable;
             if( mRequestedFullscreenMode )
             {
                 frame.size = NSScreen.mainScreen.visibleFrame.size;
@@ -272,6 +278,7 @@ namespace Ogre
             window.contentView = [[OgreMetalView alloc] initWithFrame:frame];
             
             externalWindowHandle = window;
+            [window orderFront: nil];
         }
 
         NSView* externalView;
