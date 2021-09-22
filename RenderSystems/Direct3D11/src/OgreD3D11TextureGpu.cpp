@@ -76,12 +76,16 @@ namespace Ogre
     {
         if( pass == 0 )
         {
-            _setToDisplayDummyTexture();
-
-            if( !isRenderWindowSpecific() && getNextResidencyStatus() == GpuResidency::Resident)
+            // D3D11Window*::notifyDeviceRestored handles RenderWindow-specific textures
+            if( !isRenderWindowSpecific() )
             {
-                mNextResidencyStatus = mResidencyStatus;
-                scheduleTransitionTo(GpuResidency::Resident);
+                _setToDisplayDummyTexture();
+
+                if( getNextResidencyStatus() == GpuResidency::Resident)
+                {
+                    mNextResidencyStatus = mResidencyStatus;
+                    scheduleTransitionTo(GpuResidency::Resident);
+                }
             }
         }
     }
