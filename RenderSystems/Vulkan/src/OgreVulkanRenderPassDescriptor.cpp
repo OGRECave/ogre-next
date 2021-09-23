@@ -657,6 +657,27 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void VulkanRenderPassDescriptor::notifyRenderTextureNonResident( VulkanTextureGpu *texture )
+    {
+        bool bInUse = false;
+
+        const size_t numColourEntries = mNumColourEntries;
+        for( size_t i = 0u; i < numColourEntries; ++i )
+        {
+            if( mColour[i].texture == texture || mColour[i].resolveTexture == texture )
+                bInUse = true;
+        }
+
+        if( mDepth.texture == texture || mDepth.resolveTexture == texture ||
+            mStencil.texture == texture || mStencil.resolveTexture == texture )
+        {
+            bInUse = true;
+        }
+
+        if( bInUse )
+            releaseFbo();
+    }
+    //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::entriesModified( uint32 entryTypes )
     {
         RenderPassDescriptor::entriesModified( entryTypes );

@@ -2287,6 +2287,21 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::notifyRenderTextureNonResident( VulkanTextureGpu *texture )
+    {
+        RenderPassDescriptorSet::const_iterator itor = mRenderPassDescs.begin();
+        RenderPassDescriptorSet::const_iterator endt = mRenderPassDescs.end();
+
+        while( itor != endt )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<VulkanRenderPassDescriptor *>( *itor ) );
+            VulkanRenderPassDescriptor *renderPassDesc =
+                static_cast<VulkanRenderPassDescriptor *>( *itor );
+            renderPassDesc->notifyRenderTextureNonResident( texture );
+            ++itor;
+        }
+    }
+    //-------------------------------------------------------------------------
     VkRenderPass VulkanRenderSystem::getVkRenderPass( HlmsPassPso passPso, uint8 &outMrtCount )
     {
         uint8 mrtCount = 0;

@@ -315,6 +315,8 @@ namespace Ogre
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );
 
+        void notifyRenderTextureNonResident( VulkanTextureGpu *texture );
+
         virtual void endCopyEncoder( void );
         virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection );
 

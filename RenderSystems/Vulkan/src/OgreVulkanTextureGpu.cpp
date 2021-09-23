@@ -238,6 +238,12 @@ namespace Ogre
         VulkanDevice *device = textureManager->getDevice();
         device->mGraphicsQueue.notifyTextureDestroyed( this );
 
+        // RenderPassDescriptors have internal caches that need to be released
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanRenderSystem *>( textureManager->getRenderSystem() ) );
+        VulkanRenderSystem *renderSystem =
+            static_cast<VulkanRenderSystem *>( textureManager->getRenderSystem() );
+        renderSystem->notifyRenderTextureNonResident( this );
+
         if( mDefaultDisplaySrv && mOwnsSrv )
         {
             destroyView( mDefaultDisplaySrv );

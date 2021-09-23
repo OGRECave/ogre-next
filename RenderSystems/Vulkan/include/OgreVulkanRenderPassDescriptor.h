@@ -156,6 +156,7 @@ namespace Ogre
 
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );
+        void notifyRenderTextureNonResident( VulkanTextureGpu *texture );
 
         virtual void entriesModified( uint32 entryTypes );
 
