@@ -1,5 +1,7 @@
 var NAVTREEINDEX272 =
 {
+"namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434af47a81e993767e84b31d42bcbe27be16":[6,0,0,25,0,2],
+"namespace_ogre_1_1_texture_source_type.html":[6,0,0,26],
 "namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5a":[6,0,0,26,0],
 "namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa4aae1ed01eda1f2f2e4cd3289d0f3fe6":[6,0,0,26,0,1],
 "namespace_ogre_1_1_texture_source_type.html#a487889f4cfc926c4eaaf01e2f4e68c5aa602ee38ea2347d313beab4dabced99fb":[6,0,0,26,0,2],
@@ -109,8 +111,8 @@ var NAVTREEINDEX272 =
 "namespacemembers_r.html":[6,1,0,16],
 "namespacemembers_s.html":[6,1,0,17],
 "namespacemembers_t.html":[6,1,0,18],
-"namespacemembers_type.html":[6,1,3,0],
 "namespacemembers_type.html":[6,1,3],
+"namespacemembers_type.html":[6,1,3,0],
 "namespacemembers_type_a.html":[6,1,3,1],
 "namespacemembers_type_b.html":[6,1,3,2],
 "namespacemembers_type_c.html":[6,1,3,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX272 =
 "struct_ogre_1_1_bone_transform.html#a2e2a09f6de2f4597699ea494fd3848fc":[7,0,0,58,0],
 "struct_ogre_1_1_bone_transform.html#a3cace82d8cec3fab6cdd71215bf1b00b":[7,0,0,58,13],
 "struct_ogre_1_1_bone_transform.html#a467c46300a85ad91eec380344c2ed595":[7,0,0,58,8],
-"struct_ogre_1_1_bone_transform.html#a4859024201b37b69289041e4cf047abb":[7,0,0,58,7],
-"struct_ogre_1_1_bone_transform.html#a63f6498025cddb56201919dfe761b9b5":[7,0,0,58,12],
-"struct_ogre_1_1_bone_transform.html#a71c6f04fd13b1c3bdd589da60f1e4c32":[7,0,0,58,10]
+"struct_ogre_1_1_bone_transform.html#a4859024201b37b69289041e4cf047abb":[7,0,0,58,7]
 };

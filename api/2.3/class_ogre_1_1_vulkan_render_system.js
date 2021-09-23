@@ -187,6 +187,7 @@ var class_ogre_1_1_vulkan_render_system =
     [ "isStaticBufferLockable", "class_ogre_1_1_vulkan_render_system.html#a319564dc746b19bb9a1490a473227b20", null ],
     [ "loadRenderDocApi", "class_ogre_1_1_vulkan_render_system.html#ab750bf02b8afe5aefce3a4594541904d", null ],
     [ "markProfileEvent", "class_ogre_1_1_vulkan_render_system.html#af3da031863c864a60d79769dfa54a0d6", null ],
+    [ "notifyRenderTextureNonResident", "class_ogre_1_1_vulkan_render_system.html#a3e4c600e62371a2ef0dabf7393469372", null ],
     [ "notifySwapchainCreated", "class_ogre_1_1_vulkan_render_system.html#a5d7a4a22e07fc1dcf62f351359a64812", null ],
     [ "notifySwapchainDestroyed", "class_ogre_1_1_vulkan_render_system.html#a535d0eddf3d3117a6d82fe031a813361", null ],
     [ "operator delete", "class_ogre_1_1_vulkan_render_system.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],

@@ -5438,6 +5438,7 @@ var group___resources =
       [ "hasAttachment", "class_ogre_1_1_vulkan_render_pass_descriptor.html#a0c74dfa71dcd281676091a7cbc2851e2", null ],
       [ "hasSameAttachments", "class_ogre_1_1_vulkan_render_pass_descriptor.html#a43b9f2735862281373f5572912803579", null ],
       [ "hasStencilFormat", "class_ogre_1_1_vulkan_render_pass_descriptor.html#a848d2ce4ea67235be13ba62cf3a88701", null ],
+      [ "notifyRenderTextureNonResident", "class_ogre_1_1_vulkan_render_pass_descriptor.html#a6833cdf1d44f265799d4e5de3343ba78", null ],
       [ "notifySwapchainCreated", "class_ogre_1_1_vulkan_render_pass_descriptor.html#a52a6b3ba4a16d43050674d29ae7bc743", null ],
       [ "notifySwapchainDestroyed", "class_ogre_1_1_vulkan_render_pass_descriptor.html#aecefb78064dae34e9c9504053da74259", null ],
       [ "operator delete", "class_ogre_1_1_vulkan_render_pass_descriptor.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],

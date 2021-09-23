@@ -1,5 +1,7 @@
 var NAVTREEINDEX277 =
 {
+"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#a055d41115a743c79ab2bfc5b798ba390":[5,2,11,53,1,4],
+"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#a324c77640a910a09c5c6e6349d8decee":[5,2,11,53,1,5],
 "struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#a77e3ac39032e4a92eca7d1ac1e2ae350":[5,2,11,53,1,1],
 "struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#aa33b5cac7f2c55ad861cefd6c3a51daa":[5,2,11,53,1,2],
 "struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#ab474d42949e1800fb64e0b3ab378de75":[5,2,11,53,1,6],
@@ -166,14 +168,14 @@ var NAVTREEINDEX277 =
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#aac84518f8d8108d7f7875516128b3474":[5,0,0,15,0,1],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#acd53cb3f6a58dbf08f1baa12bcb03033":[5,0,0,15,0,2],
 "struct_ogre_1_1_instant_radiosity_1_1_area_of_interest.html#ad94bec02d71f91fd2f543f3488d25d61":[5,0,0,15,0,0],
-"struct_ogre_1_1_intersection_scene_query_result.html":[5,0,1,20],
 "struct_ogre_1_1_intersection_scene_query_result.html":[5,2,12,20],
+"struct_ogre_1_1_intersection_scene_query_result.html":[5,0,1,20],
 "struct_ogre_1_1_intersection_scene_query_result.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,12,20,2],
 "struct_ogre_1_1_intersection_scene_query_result.html#a1c727e879a260c37b00ce5505fe8e144":[5,0,1,20,2],
 "struct_ogre_1_1_intersection_scene_query_result.html#a421b197ca3a38da17e2eb1531a645fa2":[5,0,1,20,6],
 "struct_ogre_1_1_intersection_scene_query_result.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,12,20,6],
-"struct_ogre_1_1_intersection_scene_query_result.html#a4be37baef81876985aa1071ad5acc6dd":[5,0,1,20,9],
 "struct_ogre_1_1_intersection_scene_query_result.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,12,20,9],
+"struct_ogre_1_1_intersection_scene_query_result.html#a4be37baef81876985aa1071ad5acc6dd":[5,0,1,20,9],
 "struct_ogre_1_1_intersection_scene_query_result.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,12,20,4],
 "struct_ogre_1_1_intersection_scene_query_result.html#a595ea4c05da8aa987d3800e65d23355d":[5,0,1,20,4],
 "struct_ogre_1_1_intersection_scene_query_result.html#a7f5b38d7ff668a368bcef9886fff1941":[5,0,1,20,11],
@@ -190,8 +192,8 @@ var NAVTREEINDEX277 =
 "struct_ogre_1_1_intersection_scene_query_result.html#acb46d4b0a597156d9ba5abc39d127792":[5,0,1,20,1],
 "struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[5,2,12,20,10],
 "struct_ogre_1_1_intersection_scene_query_result.html#ae58676373c408a358f7cc01874703abc":[5,0,1,20,10],
-"struct_ogre_1_1_intersection_scene_query_result.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,12,20,8],
 "struct_ogre_1_1_intersection_scene_query_result.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,20,8],
+"struct_ogre_1_1_intersection_scene_query_result.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,12,20,8],
 "struct_ogre_1_1_irradiance_field_settings.html":[7,0,0,574],
 "struct_ogre_1_1_irradiance_field_settings.html#a133d81cee0826d5616fcf1c62b5f743c":[7,0,0,574,0],
 "struct_ogre_1_1_irradiance_field_settings.html#a27743f4fc3f8d75f559c3d2dae543320":[7,0,0,574,11],
@@ -247,7 +249,5 @@ var NAVTREEINDEX277 =
 "struct_ogre_1_1_lod_config.html#a64c98e6d6bddab00aed7338eb3039696":[7,0,0,619,8],
 "struct_ogre_1_1_lod_config.html#a7eecc87589b5a3eacfa363850c2fe4c0":[7,0,0,619,7],
 "struct_ogre_1_1_lod_config.html#a9634e8bfa3c423b7a2ad130f5db9ca61":[7,0,0,619,9],
-"struct_ogre_1_1_lod_config.html#ae2ae0ac3ec6f97efcaeb586dcf3b4d89":[7,0,0,619,3],
-"struct_ogre_1_1_lod_config.html#afde8b2012578a20adfde035aa518f13e":[7,0,0,619,1],
-"struct_ogre_1_1_lod_config_1_1_advanced.html":[7,0,0,619,0]
+"struct_ogre_1_1_lod_config.html#ae2ae0ac3ec6f97efcaeb586dcf3b4d89":[7,0,0,619,3]
 };

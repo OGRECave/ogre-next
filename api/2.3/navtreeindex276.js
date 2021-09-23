@@ -1,5 +1,7 @@
 var NAVTREEINDEX276 =
 {
+"struct_ogre_1_1_gpu_logical_buffer_struct.html#a2cdd35182b10421abcbf8fefa4b7be47":[5,2,5,4,13],
+"struct_ogre_1_1_gpu_logical_buffer_struct.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,5,4,8],
 "struct_ogre_1_1_gpu_logical_buffer_struct.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,5,4,11],
 "struct_ogre_1_1_gpu_logical_buffer_struct.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,5,4,6],
 "struct_ogre_1_1_gpu_logical_buffer_struct.html#a640a99f1ee133b137ce15e7271fdb7cc":[5,2,5,4,12],
@@ -247,7 +249,5 @@ var NAVTREEINDEX276 =
 "struct_ogre_1_1_hlms_disk_cache_1_1_cache.html#a7e78623bd0a3cf950c534aae99fac7d4":[5,2,11,53,0,1],
 "struct_ogre_1_1_hlms_disk_cache_1_1_cache.html#a935b276d0c98143261fa2627676a6648":[5,2,11,53,0,0],
 "struct_ogre_1_1_hlms_disk_cache_1_1_cache.html#aa82096b779935903472641b0d89ae904":[5,2,11,53,0,2],
-"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html":[5,2,11,53,1],
-"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#a055d41115a743c79ab2bfc5b798ba390":[5,2,11,53,1,4],
-"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html#a324c77640a910a09c5c6e6349d8decee":[5,2,11,53,1,5]
+"struct_ogre_1_1_hlms_disk_cache_1_1_pso.html":[5,2,11,53,1]
 };

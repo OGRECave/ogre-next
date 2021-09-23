@@ -1,5 +1,7 @@
 var NAVTREEINDEX275 =
 {
+"struct_ogre_1_1_driver_version.html#a2a220ab8ccde79520d30871b5453d31f":[5,2,10,2,5],
+"struct_ogre_1_1_driver_version.html#a32143ae51ec5ee29204ea2afe3e851c2":[5,2,10,2,1],
 "struct_ogre_1_1_driver_version.html#a7af2e1e38de39c9ef179a9925815417e":[5,2,10,2,2],
 "struct_ogre_1_1_driver_version.html#a81eb6896cc0c21829f6af65b6913f4cc":[5,2,10,2,6],
 "struct_ogre_1_1_driver_version.html#ac233befea948c74a75aaf937be7f78ec":[5,2,10,2,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX275 =
 "struct_ogre_1_1_gpu_constant_definition.html#ae697e9c02150de15437ba260b8cf339b":[5,2,5,3,13],
 "struct_ogre_1_1_gpu_constant_definition.html#afce533b1a68d8e3f542cfeab53a643ae":[5,2,5,3,0],
 "struct_ogre_1_1_gpu_logical_buffer_struct.html":[5,2,5,4],
-"struct_ogre_1_1_gpu_logical_buffer_struct.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,5,4,4],
-"struct_ogre_1_1_gpu_logical_buffer_struct.html#a2cdd35182b10421abcbf8fefa4b7be47":[5,2,5,4,13],
-"struct_ogre_1_1_gpu_logical_buffer_struct.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,5,4,8]
+"struct_ogre_1_1_gpu_logical_buffer_struct.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,5,4,4]
 };
