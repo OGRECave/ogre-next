@@ -184,7 +184,7 @@ void android_main( struct android_app *app )
     // Main loop
     do
     {
-        if( ALooper_pollAll( Demo::AndroidSystems::getNativeWindow() ? 1 : 0, nullptr, &events,
+        if( ALooper_pollAll( Demo::AndroidSystems::getNativeWindow() ? 0 : -1, nullptr, &events,
                              (void **)&source ) >= 0 )
         {
             if( source != NULL )
