@@ -34,16 +34,16 @@ THE SOFTWARE.
 
 @interface OgreGL3PlusView : NSOpenGLView
 {
-    Ogre::Window *window;
+    Ogre::Window *ogreWindow;
 }
 
-- (id)initWithFrame:(NSRect)f;
-- (id)initWithGLOSXWindow:(Ogre::Window*)w;
+- (id)initWithFrame:(NSRect)frameRect;
 
-- (void)setOgreWindow:(Ogre::Window*)w;
+- (void)setOgreWindow:(Ogre::Window*)newWindow;
+
 - (Ogre::Window*)ogreWindow;
 
-- (void)setFrameSize:(NSSize)s;
+- (void)setFrameSize:(NSSize)newSize;
 
 @end
 

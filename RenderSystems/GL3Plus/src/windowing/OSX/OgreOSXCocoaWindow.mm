@@ -77,10 +77,13 @@ namespace Ogre {
     };
 
     //-----------------------------------------------------------------------
+    // CocoaWindow::CocoaWindow(const String &title,
+    //     uint32 widthPt, uint32 heightPt,
+    //     bool fullscreenMode,
+    //     const NameValuePairList *miscParams) : 
     CocoaWindow::CocoaWindow(const String &title,
         uint32 widthPt, uint32 heightPt,
-        bool fullscreenMode,
-        const NameValuePairList *miscParams) : 
+        bool fullscreenMode) : 
         Window(title, widthPt, heightPt, fullscreenMode),
         mWindow(nil),
         mView(nil),
@@ -103,14 +106,12 @@ namespace Ogre {
         mContentScalingFactor(1.0)
     {
         // Set vsync by default to save battery and reduce tearing
-
-        _create(title, widthPt, heightPt, fullscreenMode, miscParams);
     }
 
     //-----------------------------------------------------------------------
     CocoaWindow::~CocoaWindow()
     {
-		[mGLContext clearDrawable];
+    		[mGLContext clearDrawable];
 
         destroy();
         
@@ -189,7 +190,7 @@ namespace Ogre {
     // }
 
     //-----------------------------------------------------------------------
-	void CocoaWindow::_create(const String &name, unsigned int widthPt, unsigned int heightPt,
+	void CocoaWindow::create(const String &name, unsigned int widthPt, unsigned int heightPt,
 	            bool fullScreen, const NameValuePairList *miscParams)
     {
         @autoreleasepool {
@@ -697,7 +698,8 @@ namespace Ogre {
         [mWindow setTitle:[NSString stringWithCString:title.c_str() encoding:NSUTF8StringEncoding]];
         mWindowTitle = title;
 
-        mView = [[OgreGL3PlusView alloc] initWithGLOSXWindow:this];
+        mView = [[OgreGL3PlusView alloc] initWithFrame:windowRect];
+        [mView setOgreWindow:this];
 
         _setWindowParameters(widthPt, heightPt);
 

@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 namespace Ogre {
 
-    class _OgrePrivate CocoaContext : public GL3PlusContext
+    class _OgrePrivate CocoaContext : public GL3PlusContext, public GeneralAllocatedObject
     {
     public:
         CocoaContext(NSOpenGLContext *context, NSOpenGLPixelFormat *pixelFormat);
@@ -56,8 +56,8 @@ namespace Ogre {
         NSOpenGLPixelFormat* getPixelFormat();
         
     private:
-        NSOpenGLContext* mNSGLContext;
-        NSOpenGLPixelFormat *mNSGLPixelFormat;
+        NSOpenGLContext* mNSGLContext{NULL};
+        NSOpenGLPixelFormat *mNSGLPixelFormat{NULL};
     };
 } // namespace Ogre
 
