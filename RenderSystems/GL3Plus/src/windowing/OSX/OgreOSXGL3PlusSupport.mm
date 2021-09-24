@@ -319,7 +319,8 @@ Window* OSXGL3PlusSupport::newWindow( const String &name, unsigned int width, un
 {
 	// Create the window, if Cocoa return a Cocoa window
     LogManager::getSingleton().logMessage("Creating a Cocoa Compatible Render System");
-    CocoaWindow *window = OGRE_NEW CocoaWindow(name, width, height, fullScreen, miscParams);
+    CocoaWindow *window = OGRE_NEW CocoaWindow(name, width, height, fullScreen);
+    window->create(name, width, height, fullScreen, miscParams);
 
     return window;
 }
