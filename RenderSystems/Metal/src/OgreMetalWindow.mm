@@ -38,6 +38,8 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 #include "OgreWindowEventUtilities.h"
 
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+
 #import <objc/runtime.h>
 
 @interface MetalWinListener : NSObject
@@ -99,8 +101,6 @@ THE SOFTWARE.
         }
     }
 }
-
-
 @end
 
 
@@ -130,6 +130,7 @@ static void SetupMetalWindowListeners( Ogre::MetalWindow* metalWindow, NSWindow*
         name: NSWindowDidResizeNotification
         object: cocoaWindow];
 }
+#endif
 
 namespace Ogre
 {
