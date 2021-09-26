@@ -77,11 +77,9 @@ namespace Ogre
         
         int _getPixelFromPoint(int viewPt) const;
         void _setWindowParameters(unsigned int widthPt, unsigned int heightPt);
-        
-    public:
-        CocoaWindow(const String &title, uint32 widthPt, uint32 heightPt, bool fullscreenMode,
-            const NameValuePairList *miscParams);
 
+    public:
+        CocoaWindow(const String &title, uint32 widthPt, uint32 heightPt, bool fullscreenMode);
         virtual ~CocoaWindow();
 
         /** @copydoc see Window::_initialize */
@@ -142,10 +140,10 @@ namespace Ogre
         bool isDeactivatedOnFocusChange() const;
         void setDeactivateOnFocusChange(bool deactivate);
 
-    private:
-        void _create(const String &name, unsigned int widthPt, unsigned int heightPt,
+        void create(const String &name, unsigned int widthPt, unsigned int heightPt,
             bool fullScreen, const NameValuePairList *miscParams);
 
+    private:
         void _createNewWindow(String title, unsigned int widthPt, unsigned int heightPt);
 
     };
