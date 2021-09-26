@@ -1,5 +1,16 @@
 var NAVTREEINDEX172 =
 {
+"class_ogre_1_1_resource_group_manager.html#a89f5ae82ae1d2f451185f2d7e051607e":[5,2,11,102,13],
+"class_ogre_1_1_resource_group_manager.html#a8eaa9df18f04d69402f7369dca5a4cca":[5,2,11,102,67],
+"class_ogre_1_1_resource_group_manager.html#a8f8027c8d44d25f2d3b18d0a8caaa42d":[5,2,11,102,21],
+"class_ogre_1_1_resource_group_manager.html#a90bbba7b33448bb46a58f0759faa657a":[5,2,11,102,76],
+"class_ogre_1_1_resource_group_manager.html#a9101eca6c6f8b53c0aed0058d8fa2598":[5,2,11,102,11],
+"class_ogre_1_1_resource_group_manager.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,11,102,58],
+"class_ogre_1_1_resource_group_manager.html#a995494b3213135be428eef21990744e5":[5,2,11,102,3],
+"class_ogre_1_1_resource_group_manager.html#a9b4ec48c9f25a6e37fa7d4cb5eac5520":[5,2,11,102,20],
+"class_ogre_1_1_resource_group_manager.html#a9bd3977c7aa43e245b522a9f9bd6c279":[5,2,11,102,83],
+"class_ogre_1_1_resource_group_manager.html#a9e7c5dfc9905d1eee64289d9dc0fa6a5":[5,2,11,102,66],
+"class_ogre_1_1_resource_group_manager.html#a9ef647369074ad1df5c732a47296b66b":[5,2,11,102,31],
 "class_ogre_1_1_resource_group_manager.html#aa040d5b0ba63c17c9e92c493575c7b9e":[5,2,11,102,33],
 "class_ogre_1_1_resource_group_manager.html#aaebc643cd50cb8ae91064ad7d33012e2":[5,2,11,102,71],
 "class_ogre_1_1_resource_group_manager.html#aafd69be90e1774f2a4b34c4e6dcaa38a":[5,2,11,102,18],
@@ -238,16 +249,5 @@ var NAVTREEINDEX172 =
 "class_ogre_1_1_ring_emitter_factory.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,937,6],
 "class_ogre_1_1_ring_emitter_factory.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,937,10],
 "class_ogre_1_1_ring_emitter_factory.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,937,8],
-"class_ogre_1_1_ring_emitter_factory.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,937,4],
-"class_ogre_1_1_ring_emitter_factory.html#adc0b5ab2657292efbdb4bc6e6e6a2462":[7,0,0,937,1],
-"class_ogre_1_1_ring_emitter_factory.html#add020512c1bc26113414c3af7277afa8":[7,0,0,937,0],
-"class_ogre_1_1_ring_emitter_factory.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,937,11],
-"class_ogre_1_1_root.html":[5,2,2,94],
-"class_ogre_1_1_root.html#a01d3244dcf290c2db36aea6b0c63616a":[5,2,2,94,6],
-"class_ogre_1_1_root.html#a06b786d8e0847dfe9cc15e1dea308fcd":[5,2,2,94,101],
-"class_ogre_1_1_root.html#a0813c15b258db16ef212dba53b72c3e4":[5,2,2,94,57],
-"class_ogre_1_1_root.html#a0a10213bc5e0af9946cc295e84331d37":[5,2,2,94,64],
-"class_ogre_1_1_root.html#a0c36540d9764ec4e41940423dd0ae88b":[5,2,2,94,100],
-"class_ogre_1_1_root.html#a0ea40f8d4eea652bc121a15fcedfaba5":[5,2,2,94,3],
-"class_ogre_1_1_root.html#a12dc2722de43cb2aa8e93845ea641358":[5,2,2,94,66]
+"class_ogre_1_1_ring_emitter_factory.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,937,4]
 };

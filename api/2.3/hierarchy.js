@@ -315,6 +315,7 @@ var hierarchy =
         ] ],
         [ "Ogre::VertexBufferPacked", "class_ogre_1_1_vertex_buffer_packed.html", null ]
       ] ],
+      [ "Ogre::CocoaContext", "class_ogre_1_1_cocoa_context.html", null ],
       [ "Ogre::Codec", "class_ogre_1_1_codec.html", [
         [ "Ogre::ImageCodec", "class_ogre_1_1_image_codec.html", [
           [ "Ogre::DDSCodec", "class_ogre_1_1_d_d_s_codec.html", null ],

@@ -1,10 +1,11 @@
 var class_ogre_1_1_cocoa_window =
 [
-    [ "CocoaWindow", "class_ogre_1_1_cocoa_window.html#aeee821de4a02d5ae86e68eb419e6726b", null ],
+    [ "CocoaWindow", "class_ogre_1_1_cocoa_window.html#af2e2ced990380fbcd36e681bca136207", null ],
     [ "~CocoaWindow", "class_ogre_1_1_cocoa_window.html#ab68df06eb40f02027ced6e54a131d6b9", null ],
     [ "_initialize", "class_ogre_1_1_cocoa_window.html#a2cbb0eab1eabc36e098f3f82fb727a80", null ],
     [ "_setPrimary", "class_ogre_1_1_cocoa_window.html#ab6a57b4b121d4f1af4e98bcc4f86e161", null ],
     [ "_setVisible", "class_ogre_1_1_cocoa_window.html#a3fb150b300ed607815b553b96269ab05", null ],
+    [ "create", "class_ogre_1_1_cocoa_window.html#a1ae3ae635cda503dedeaa4708f700c88", null ],
     [ "destroy", "class_ogre_1_1_cocoa_window.html#a533dc39d838dfb0ff1a81d6002c8a5dd", null ],
     [ "getBorderless", "class_ogre_1_1_cocoa_window.html#a67ba7307754a41632bb41c383191bba7", null ],
     [ "getCustomAttribute", "class_ogre_1_1_cocoa_window.html#a0df474e1dd41fcee6bd46c27ffdd91ee", null ],

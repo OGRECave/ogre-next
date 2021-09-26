@@ -1,5 +1,16 @@
 var NAVTREEINDEX109 =
 {
+"class_ogre_1_1_light.html#acb46d4b0a597156d9ba5abc39d127792":[5,0,1,23,100],
+"class_ogre_1_1_light.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,12,23,100],
+"class_ogre_1_1_light.html#acbfc4840224e8b6ed6e27849d3341675":[5,0,1,23,118],
+"class_ogre_1_1_light.html#acbfc4840224e8b6ed6e27849d3341675":[5,2,12,23,118],
+"class_ogre_1_1_light.html#ace79ed42960f5f2860b02bc408fbd767":[5,0,1,23,78],
+"class_ogre_1_1_light.html#ace79ed42960f5f2860b02bc408fbd767":[5,2,12,23,78],
+"class_ogre_1_1_light.html#ad23fd215ed54a72f90c2b1765dfa8cdb":[5,0,1,23,129],
+"class_ogre_1_1_light.html#ad23fd215ed54a72f90c2b1765dfa8cdb":[5,2,12,23,129],
+"class_ogre_1_1_light.html#ad2db241677e9fd1d48a3c97abeadfe07":[5,0,1,23,138],
+"class_ogre_1_1_light.html#ad2db241677e9fd1d48a3c97abeadfe07":[5,2,12,23,138],
+"class_ogre_1_1_light.html#ad42ba158cac70430c34f8a9eac94b237":[5,0,1,23,91],
 "class_ogre_1_1_light.html#ad42ba158cac70430c34f8a9eac94b237":[5,2,12,23,91],
 "class_ogre_1_1_light.html#ad4d52d64dca4df8a930a2401028f73ff":[5,0,1,23,146],
 "class_ogre_1_1_light.html#ad4d52d64dca4df8a930a2401028f73ff":[5,2,12,23,146],
@@ -238,16 +249,5 @@ var NAVTREEINDEX109 =
 "class_ogre_1_1_lod_collapse_cost_outside.html#aa5cef7538a33a82740003f63b3e9337c":[7,0,0,615,0],
 "class_ogre_1_1_lod_collapse_cost_outside.html#ab474f9fb95e3ad566d0b550a7018deb9":[7,0,0,615,6],
 "class_ogre_1_1_lod_collapse_cost_outside.html#acbd8331275592e9398b749610f6a8c9f":[7,0,0,615,4],
-"class_ogre_1_1_lod_collapse_cost_outside.html#adaecb877dc2cb42af7723807f703aad7":[7,0,0,615,2],
-"class_ogre_1_1_lod_collapse_cost_outside.html#af49fbc592c47e4b9521c03148bbbbbbf":[7,0,0,615,1],
-"class_ogre_1_1_lod_collapse_cost_profiler.html":[7,0,0,616],
-"class_ogre_1_1_lod_collapse_cost_profiler.html#a1134ac436cd2bc6d46eb316a4f74ef5a":[7,0,0,616,4],
-"class_ogre_1_1_lod_collapse_cost_profiler.html#a1fd0aae8b9143d3627f479447bc5f7c7":[7,0,0,616,3],
-"class_ogre_1_1_lod_collapse_cost_profiler.html#a233b15a24b2f61c61c45e2116a13adf0":[7,0,0,616,2],
-"class_ogre_1_1_lod_collapse_cost_profiler.html#a54c2815544dadcfeacd1e79f2ce8ba6f":[7,0,0,616,0],
-"class_ogre_1_1_lod_collapse_cost_profiler.html#a66305605b4154ec3c25e8a592f12c078":[7,0,0,616,1],
-"class_ogre_1_1_lod_collapse_cost_profiler.html#ab474f9fb95e3ad566d0b550a7018deb9":[7,0,0,616,5],
-"class_ogre_1_1_lod_collapse_cost_quadric.html":[7,0,0,617],
-"class_ogre_1_1_lod_collapse_cost_quadric.html#a1134ac436cd2bc6d46eb316a4f74ef5a":[7,0,0,617,3],
-"class_ogre_1_1_lod_collapse_cost_quadric.html#a64171ea81eb1c4c65b9a6e1a15aae1fe":[7,0,0,617,4]
+"class_ogre_1_1_lod_collapse_cost_outside.html#adaecb877dc2cb42af7723807f703aad7":[7,0,0,615,2]
 };
