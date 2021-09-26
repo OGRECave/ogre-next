@@ -1,5 +1,16 @@
 var NAVTREEINDEX64 =
 {
+"class_ogre_1_1_deflate_stream.html#a022f49c9313deffc5da4383d59d1f32d":[7,0,0,294,9],
+"class_ogre_1_1_deflate_stream.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,294,17],
+"class_ogre_1_1_deflate_stream.html#a32966ad5a814f8c72fe0affbefcc6f55":[7,0,0,294,31],
+"class_ogre_1_1_deflate_stream.html#a3a99b8b9b4ce6cce64322ba89ea45e43":[7,0,0,294,13],
+"class_ogre_1_1_deflate_stream.html#a3bf53c73a9933c5e6e1ae215cba72845":[7,0,0,294,2],
+"class_ogre_1_1_deflate_stream.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,294,21],
+"class_ogre_1_1_deflate_stream.html#a4486e6a49b36dc62ea4a948214e6d6f2":[7,0,0,294,32],
+"class_ogre_1_1_deflate_stream.html#a49bfe5809b50735b5ce49e7df9615e5a":[7,0,0,294,25],
+"class_ogre_1_1_deflate_stream.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,294,24],
+"class_ogre_1_1_deflate_stream.html#a560b07ced4d47d31315d8d7f51638a8f":[7,0,0,294,8],
+"class_ogre_1_1_deflate_stream.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,294,19],
 "class_ogre_1_1_deflate_stream.html#a5ba171261e6c5d8c2f2880e99ca5c141":[7,0,0,294,12],
 "class_ogre_1_1_deflate_stream.html#a76b15d2fcdfe255aefb0c28c444cfde0":[7,0,0,294,7],
 "class_ogre_1_1_deflate_stream.html#a7ab66addcbf428322b1caea1d9c88cea":[7,0,0,294,5],
@@ -238,16 +249,5 @@ var NAVTREEINDEX64 =
 "class_ogre_1_1_distance_lod_box_strategy.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,4,0,21],
 "class_ogre_1_1_distance_lod_box_strategy.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,4,0,19],
 "class_ogre_1_1_distance_lod_box_strategy.html#aca8fdfeda9ae762ed441aa9aaea5589a":[5,2,4,0,26],
-"class_ogre_1_1_distance_lod_box_strategy.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,4,0,15],
-"class_ogre_1_1_distance_lod_box_strategy.html#adeb7d40e283838e2f04139fc183c95d0":[5,2,4,0,9],
-"class_ogre_1_1_distance_lod_box_strategy.html#aed77c6dfbdc0fbf75bf9deaf4f2b8bfc":[5,2,4,0,24],
-"class_ogre_1_1_distance_lod_box_strategy.html#aefc779936e9fe54a627715bbc0a7f3d9":[5,2,4,0,0],
-"class_ogre_1_1_distance_lod_box_strategy.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,4,0,22],
-"class_ogre_1_1_distance_lod_box_strategy.html#aff196162af81de81c84aa38ee9a97005":[5,2,4,0,8],
-"class_ogre_1_1_distance_lod_sphere_strategy.html":[5,2,4,1],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a0632e960cea07fc780420db0614f2040":[5,2,4,1,11],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a0de7722e986cdcca067bc1773feb6065":[5,2,4,1,25],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a14e22a0257b4a4c46f87b168a250305c":[5,2,4,1,6],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,4,1,16],
-"class_ogre_1_1_distance_lod_sphere_strategy.html#a1e351a0f700ac6e6242aa3cf0b73262d":[5,2,4,1,1]
+"class_ogre_1_1_distance_lod_box_strategy.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,4,0,15]
 };

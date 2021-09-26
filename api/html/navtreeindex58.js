@@ -1,5 +1,16 @@
 var NAVTREEINDEX58 =
 {
+"class_ogre_1_1_d3_d9_video_mode.html":[7,0,0,273],
+"class_ogre_1_1_d3_d9_video_mode.html#a055a751c6ab62e8f68f55d34d074f4b9":[7,0,0,273,5],
+"class_ogre_1_1_d3_d9_video_mode.html#a2993d0fefdcad771e9649e5283d85270":[7,0,0,273,8],
+"class_ogre_1_1_d3_d9_video_mode.html#a3092cd96e44807a629e3ac45f05c683c":[7,0,0,273,1],
+"class_ogre_1_1_d3_d9_video_mode.html#a327c0921f5f515d59b9f01de46e08b88":[7,0,0,273,4],
+"class_ogre_1_1_d3_d9_video_mode.html#a349726fc8e0cf1e82dba2c831dc8bc0c":[7,0,0,273,7],
+"class_ogre_1_1_d3_d9_video_mode.html#a34a77a0c52fb29311ec6181ac8bee754":[7,0,0,273,0],
+"class_ogre_1_1_d3_d9_video_mode.html#a3f7dd41242c7c00188aad2e8489f41b8":[7,0,0,273,9],
+"class_ogre_1_1_d3_d9_video_mode.html#a4024d30689e34f0c9022cef516405028":[7,0,0,273,6],
+"class_ogre_1_1_d3_d9_video_mode.html#a70e53fa440e95ed17b85015a1e5643a6":[7,0,0,273,10],
+"class_ogre_1_1_d3_d9_video_mode.html#a84bc6e2cc34253b99afc560176038b4c":[7,0,0,273,11],
 "class_ogre_1_1_d3_d9_video_mode.html#ac4d2913efac422ca4a93ab0771373431":[7,0,0,273,2],
 "class_ogre_1_1_d3_d9_video_mode.html#af819f89d3ecd9236d1c0f9f91a71d0ba":[7,0,0,273,3],
 "class_ogre_1_1_d3_d9_video_mode_list.html":[7,0,0,274],
@@ -238,16 +249,5 @@ var NAVTREEINDEX58 =
 "class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7da218a4243be85ec9c989b777119d5ff47":[7,0,0,278,1,6],
 "class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7da2b732a317de0915527e291485ca42e82":[7,0,0,278,1,0],
 "class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7da4f559ca1853a24a28b40caae1acda604":[7,0,0,278,1,7],
-"class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7da55066351a26967068b944c2170e51af1":[7,0,0,278,1,3],
-"class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7da58fd07194714679ed3ba9857d7656f27":[7,0,0,278,1,1],
-"class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7da61729c4ae25807d6132d5bc46580ff3d":[7,0,0,278,1,4],
-"class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26":[7,0,0,278,1,8],
-"class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e":[7,0,0,278,1,11],
-"class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257":[7,0,0,278,1,10],
-"class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7":[7,0,0,278,1,9],
-"class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7dafbdd85981846de4423d48d1a0ff665e0":[7,0,0,278,1,5],
-"class_ogre_1_1_decal.html#afe1f2a1009e3f14f36e1bcc9b1b9557e":[7,0,0,278,98],
-"class_ogre_1_1_decal.html#aff35a0dcf855331bdd0fe72fe0f66824":[7,0,0,278,27],
-"class_ogre_1_1_decal_factory.html":[7,0,0,279],
-"class_ogre_1_1_decal_factory.html#a09bad51d94e39f9609259e0359a82ef7":[7,0,0,279,0]
+"class_ogre_1_1_decal.html#afe11bd546cf7315f4526488e7078cc7da55066351a26967068b944c2170e51af1":[7,0,0,278,1,3]
 };

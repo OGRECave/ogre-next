@@ -1,9 +1,8 @@
 var interface_ogre_g_l3_plus_view =
 [
-    [ "initWithFrame:", "interface_ogre_g_l3_plus_view.html#a677e8b5d5701e631ce16d7ddf1cfd42c", null ],
-    [ "initWithGLOSXWindow:", "interface_ogre_g_l3_plus_view.html#a0cc01ad55c721455ff6f1a772906c2f4", null ],
+    [ "initWithFrame:", "interface_ogre_g_l3_plus_view.html#a6b9c55e4bbc3ebaf1206ab60644d237e", null ],
     [ "ogreWindow", "interface_ogre_g_l3_plus_view.html#ae689922154677f2b3c42a1658ad4b435", null ],
-    [ "setFrameSize:", "interface_ogre_g_l3_plus_view.html#a941d76ba847b95c8fafc772bbf11179e", null ],
-    [ "setOgreWindow:", "interface_ogre_g_l3_plus_view.html#a99afb3593fa041cd9d97b7758743f9ae", null ],
-    [ "window", "interface_ogre_g_l3_plus_view.html#ac0c02e54d2a17762919764aa018d42fe", null ]
+    [ "setFrameSize:", "interface_ogre_g_l3_plus_view.html#a8519668b8cfa8711e6aead97645ba9e2", null ],
+    [ "setOgreWindow:", "interface_ogre_g_l3_plus_view.html#ab81fa2c0e71b77c1256dbe0b6aee1726", null ],
+    [ "ogreWindow", "interface_ogre_g_l3_plus_view.html#a36e45f45cd55cfc95ebfddaff4ebfe61", null ]
 ];
