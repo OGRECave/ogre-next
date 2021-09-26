@@ -181,6 +181,23 @@ namespace Ogre {
         NSURL* logURL = [libURL URLByAppendingPathComponent: @"Logs" isDirectory: YES];
         return String( logURL.absoluteURL.path.UTF8String ) + "/";
     }
+    
+    String macWriteAccessFolderPath()
+    {
+        NSURL* suppURL = [NSFileManager.defaultManager
+            URLForDirectory: NSApplicationSupportDirectory
+            inDomain: NSUserDomainMask
+            appropriateForURL: nil
+            create: YES
+            error: nil];
+        NSURL* ogreURL = [suppURL URLByAppendingPathComponent: @"Ogre"
+                                isDirectory: YES];
+        [NSFileManager.defaultManager createDirectoryAtURL: ogreURL
+        				withIntermediateDirectories: YES
+                        attributes: nil
+                        error: nil];
+        return String( ogreURL.absoluteURL.path.UTF8String ) + "/";
+    }
 
     String macCachePath()
     {
