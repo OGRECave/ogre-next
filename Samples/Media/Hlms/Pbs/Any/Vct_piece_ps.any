@@ -71,11 +71,14 @@
 			  OGRE_SAMPLER_ARG_DECL( probeSampler )
 			  OGRE_VCT_ANISO_PROBE_ARG_DECL )
 		{
-			float dist = probeParams.vctInvResolution;
+			float resolution = dot( abs( dirLS ), probeParams.vctResolution.xyz );
+			float vctInvResolution = 1.0f / resolution;
+
+			float dist = vctInvResolution;
 			float alpha = 0.0;
 			float4 color = float4( 0.0, 0.0, 0.0, 0.0 );
 
-			float diameter = max( probeParams.vctInvResolution, 2.0 * tanHalfAngle * dist );
+			float diameter = max( vctInvResolution, 2.0 * tanHalfAngle * dist );
 
 			@property( @n == 0 )
 				@property( vct_cone_dirs == 6 )
@@ -86,7 +89,7 @@
 					float lodStep	= 1.0;
 				@end
 			@else
-				float lodLevel = log2( diameter * probeParams.vctResolution );
+				float lodLevel = log2( diameter * resolution );
 			@end
 
 			@property( @n == 1 && vct_enable_specular_sdf_quality )
@@ -96,10 +99,10 @@
 			float3 uwvPos = posLS;
 
 			//The formula is:
-			//	threshold = 0.5f + invResolution * exp2( lodLevel ) * 0.5;
+			//	threshold = 0.5f + vctInvResolution * exp2( lodLevel ) * 0.5;
 			//Thus:
 			//	threshold = 0.5f + invRes * exp2( log2( diameter * probeParams.vctResolution ) ) * 0.5;
-			//	threshold = 0.5f + invRes * diameter * probeParams.vctResolution ) * 0.5;
+			//	threshold = 0.5f + invRes * diameter * probeParams.vctResolution * 0.5;
 			//	threshold = 0.5f + diameter * 0.5;
 			float threshold = 0.5f + diameter * 0.5;
 
@@ -140,20 +143,20 @@
 					float skipFactor = exp2( max( 0.0f, skipLod * 0.5f - 1.0f ) ) * (1.0f - finalOpac) +
 									   finalOpac;
 					skipFactor = lerp( skipFactor, 1.0f,
-									   min( -1.0 + finalOpac * probeParams.vctSpecularSdfFactor +
+									   min( -1.0 + finalOpac * probeParams.specularSdfFactor +
 											tanHalfAngle * 50.0f, 1.0f ) );
 					skipLod = clamp( skipLod + (1.0f - finalOpac) * 2.0f - 1.0f,
-									 1.0f, probeParams.vctSpecSdfMaxMip );
+									 1.0f, probeParams.specSdfMaxMip );
 
 					dist += diameter * 0.5f * skipFactor;
 				@else
 					dist += diameter * 0.5f;
 				@end
-				diameter = max( probeParams.vctInvResolution, 2.0 * tanHalfAngle * dist );
+				diameter = max( vctInvResolution, 2.0 * tanHalfAngle * dist );
 				@property( @n == 0 && vct_cone_dirs == 4 )
 					lodLevel += lodStep;
 				@else
-					lodLevel = log2( diameter * probeParams.vctResolution );
+					lodLevel = log2( diameter * resolution );
 				@end
 
 				threshold = 0.5f + diameter * 0.5;
@@ -193,11 +196,11 @@
 					color.xyz += scolor.xyz * a;
 					alpha += a * scolor.w;
 					dist += diameter * 0.5f;
-					diameter = max( probeParams.vctInvResolution, 2.0 * tanHalfAngle * dist );
+					diameter = max( vctInvResolution, 2.0 * tanHalfAngle * dist );
 					@property( @n == 0 && vct_cone_dirs == 4 )
 						lodLevel += lodStep;
 					@else
-						lodLevel = log2( diameter * probeParams.vctResolution );
+						lodLevel = log2( diameter * resolution );
 					@end
 
 					threshold = 0.5f + diameter * 0.5;
@@ -274,7 +277,8 @@
 		//the steps of a staircase).
 		float3 dirLS = toVctProbeSpaceDir( pixelData.geomNormal.xyz, probeParams );
 		float maxVal = max3( abs( dirLS.x ), abs( dirLS.y ), abs( dirLS.z ) ) + 1e-6f;
-		posLS += (dirLS / maxVal) * probeParams.vctInvResolution * lerp( 15.0f, 1.0f, maxVal );
+		float vctInvResolution = 1.0f / dot( abs( dirLS ), probeParams.vctResolution.xyz );
+		posLS += (dirLS / maxVal) * vctInvResolution * lerp( 15.0f, 1.0f, maxVal );
 
 		@property( vct_num_probes > 1 )
 			float3 blendv = abs( posLS * 2.0f - 1.0f );
@@ -322,15 +326,15 @@
 			}
 			@property( vct_ambient_hemisphere )
 				//Add ambient light after all cones have been weighted
-				light.xyz += lerp( probeParams.vctAmbientLowerHemi.xyz,
-								   probeParams.vctAmbientUpperHemi.xyz, ambientWD ) * light.w;
+				light.xyz += lerp( probeParams.ambientLowerHemi.xyz,
+								   probeParams.ambientUpperHemi.xyz, ambientWD ) * light.w;
 			@else
 				//Add ambient light after all cones have been weighted
-				light.xyz += probeParams.vctAmbientUpperHemi.xyz * light.w;
+				light.xyz += probeParams.ambientUpperHemi.xyz * light.w;
 			@end
 		@end
 
-		float blendWeight = probeParams.vctBlendFade * blend * probeParams.vctMultiplier;
+		float blendWeight = probeParams.blendFade * blend * probeParams.multiplier;
 
 		@property( !vct_disable_diffuse )
 			outDiffuse.xyz += light.xyz * blendWeight;
@@ -353,10 +357,10 @@
 												  probe OGRE_SAMPLER_ARG( probeSampler )
 												  OGRE_VCT_ANISO_PROBE_ARG );
 			@property( vct_ambient_hemisphere )
-				irrLight.xyz += lerp( probeParams.vctAmbientLowerHemi.xyz,
-									  probeParams.vctAmbientUpperHemi.xyz, ambientWS ) * irrLight.w;
+				irrLight.xyz += lerp( probeParams.ambientLowerHemi.xyz,
+									  probeParams.ambientUpperHemi.xyz, ambientWS ) * irrLight.w;
 			@else
-				irrLight.xyz += probeParams.vctAmbientUpperHemi.xyz * irrLight.w;
+				irrLight.xyz += probeParams.ambientUpperHemi.xyz * irrLight.w;
 			@end
 			outSpecular += float4( irrLight.xyz * blendWeight, blend );
 

@@ -1291,13 +1291,13 @@ namespace Ogre
 
         for( uint32 x=0u; x<numOctantsX; ++x )
         {
-            octant.x = x * octant.width;
+            octant.x = x;
             for( uint32 y=0u; y<numOctantsY; ++y )
             {
-                octant.y = y * octant.height;
+                octant.y = y;
                 for( uint32 z=0u; z<numOctantsZ; ++z )
                 {
-                    octant.z = z * octant.depth;
+                    octant.z = z;
 
                     Vector3 octantOrigin = Vector3( octant.x, octant.y, octant.z ) * voxelCellSize;
                     octantOrigin += voxelOrigin;
