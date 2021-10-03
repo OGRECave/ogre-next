@@ -239,8 +239,10 @@ namespace Ogre
         };
         struct BucketData
         {
+            typedef map<uint32, uint32>::type InstancesPerOctantIdxMap;
+
             FastArray<QueuedInstance>   queuedInst;
-            uint32                      numInstancesAfterCulling;
+            InstancesPerOctantIdxMap    numInstancesAfterCulling;
         };
         typedef map< VoxelizerBucket, BucketData >::type VoxelizerBucketMap;
         VoxelizerBucketMap mBuckets;

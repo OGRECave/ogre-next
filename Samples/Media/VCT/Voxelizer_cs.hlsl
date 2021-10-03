@@ -113,12 +113,14 @@ StructuredBuffer<InstanceBuffer> instanceBuffer : register(t0);
 uniform uint2 instanceStart_instanceEnd;
 uniform float3 voxelOrigin;
 uniform float3 voxelCellSize;
+uniform uint3 voxelPixelOrigin;
 
 #define p_instanceStart instanceStart_instanceEnd.x
 #define p_instanceEnd instanceStart_instanceEnd.y
 #define p_numInstances numInstances
 #define p_voxelOrigin voxelOrigin
 #define p_voxelCellSize voxelCellSize
+#define p_voxelPixelOrigin voxelPixelOrigin
 
 [numthreads(@value( threads_per_group_x ), @value( threads_per_group_y ), @value( threads_per_group_z ))]
 void main
