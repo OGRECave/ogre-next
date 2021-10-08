@@ -102,6 +102,7 @@ differences have diverged long enough.
 * [CMake 3.x](https://cmake.org/download/)
 * Git
 * For HW & SW requirements, please visit http://www.ogre3d.org/developers/requirements
+* Our source dependencies are grouped in [ogre-next-deps](https://github.com/OGRECave/ogre-next-deps) repo
 
 # Dependencies (Windows)
 
