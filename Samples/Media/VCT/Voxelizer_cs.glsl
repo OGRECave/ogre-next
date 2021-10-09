@@ -108,12 +108,14 @@ vulkan( layout( ogre_P0 ) uniform Params { )
 	uniform uint2 instanceStart_instanceEnd;
 	uniform float3 voxelOrigin;
 	uniform float3 voxelCellSize;
+	uniform uint3 voxelPixelOrigin;
 vulkan( }; )
 
 #define p_instanceStart instanceStart_instanceEnd.x
 #define p_instanceEnd instanceStart_instanceEnd.y
 #define p_voxelOrigin voxelOrigin
 #define p_voxelCellSize voxelCellSize
+#define p_voxelPixelOrigin voxelPixelOrigin
 
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;

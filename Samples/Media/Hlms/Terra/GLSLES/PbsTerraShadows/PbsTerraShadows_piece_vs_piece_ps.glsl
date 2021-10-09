@@ -28,7 +28,7 @@
     outVs.terrainShadow = mix( terraShadowData.x, 1.0, clamp( terraHeightWeight, 0.0, 1.0 ) );
 @end
 
-@property( hlms_num_shadow_map_lights )
+@property( hlms_lights_directional )
     @piece( custom_ps_preLights )fShadow *= inPs.terrainShadow;@end
 @end @property( !hlms_num_shadow_map_lights )
     @piece( custom_ps_preLights )float fShadow = inPs.terrainShadow;@end

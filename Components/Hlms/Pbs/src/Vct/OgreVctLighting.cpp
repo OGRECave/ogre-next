@@ -792,7 +792,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     size_t VctLighting::getConstBufferSize(void) const
     {
-        return 9u * 4u * sizeof(float);
+        return 10u * 4u * sizeof(float);
     }
     //-------------------------------------------------------------------------
     void VctLighting::fillConstBufferData( const Matrix4 &viewMatrix,
@@ -803,39 +803,47 @@ namespace Ogre
         const uint32 depth  = mLightVoxel[0]->getDepth();
 
         const float smallestRes = static_cast<float>( std::min( std::min( width, height ), depth ) );
-        const float invSmallestRes = 1.0f / smallestRes;
 
         const float maxMipmapCount =
                 static_cast<float>( PixelFormatGpuUtils::getMaxMipmapCount(
                                         static_cast<uint32>( smallestRes ) ) );
 
-        float mipDiff = (maxMipmapCount - 8.0f) * 0.5f;
+        const float mipDiff = (maxMipmapCount - 8.0f) * 0.5f;
 
         const float finalMultiplier     = mInvBakingMultiplier * mMultiplier;
         const float invFinalMultiplier  = 1.0f / finalMultiplier;
 
-        //float4 invRes_resolution_specSdfMaxMip_multiplier;
-        *passBufferPtr++ = invSmallestRes;
-        *passBufferPtr++ = smallestRes;
-        *passBufferPtr++ = 7.0f + mipDiff;
-        *passBufferPtr++ = finalMultiplier;
+        //float4 vctResolution;
+        *passBufferPtr++ = static_cast<float>( width );
+        *passBufferPtr++ = static_cast<float>( height );
+        *passBufferPtr++ = static_cast<float>( depth );
+        *passBufferPtr++ = 1.0f;
 
-        //float4 ambientUpperHemi_specularSdfFactor
-        *passBufferPtr++ = mUpperHemisphere[0] * invFinalMultiplier;
-        *passBufferPtr++ = mUpperHemisphere[1] * invFinalMultiplier;
-        *passBufferPtr++ = mUpperHemisphere[2] * invFinalMultiplier;
+        //float specSdfMaxMip;
+        //float specularSdfFactor;
+        //float blendFade;
+        //float multiplier;
+        *passBufferPtr++ = 7.0f + mipDiff;
         //Where did 0.1875f & 0.3125f come from? Empirically obtained.
         //At 128x128x128, values in range [24; 40] gave good results.
         //Below 24, quality became unnacceptable.
         //Past 40, performance only went down without visible changes.
         //Thus 24 / 128 and 40 / 128 = 0.1875f and 0.3125f
         *passBufferPtr++ = Math::lerp( 0.1875f, 0.3125f, mSpecularSdfQuality ) * smallestRes;
+        *passBufferPtr++ = 1.0f;
+        *passBufferPtr++ = finalMultiplier;
 
-        //float4 ambientLowerHemi_blendFade
+        //float4 ambientUpperHemi
+        *passBufferPtr++ = mUpperHemisphere[0] * invFinalMultiplier;
+        *passBufferPtr++ = mUpperHemisphere[1] * invFinalMultiplier;
+        *passBufferPtr++ = mUpperHemisphere[2] * invFinalMultiplier;
+        *passBufferPtr++ = 0.0f;
+
+        //float4 ambientLowerHemi
         *passBufferPtr++ = mLowerHemisphere[0] * invFinalMultiplier;
         *passBufferPtr++ = mLowerHemisphere[1] * invFinalMultiplier;
         *passBufferPtr++ = mLowerHemisphere[2] * invFinalMultiplier;
-        *passBufferPtr++ = 1.0f;
+        *passBufferPtr++ = 0.0f;
 
         Matrix4 xform, invXForm;
         xform.makeTransform( -mVoxelizer->getVoxelOrigin() / mVoxelizer->getVoxelSize(),

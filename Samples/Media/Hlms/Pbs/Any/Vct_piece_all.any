@@ -4,9 +4,15 @@
 @piece( DeclVctStruct )
 	struct VctProbeParams
 	{
-		float4 invRes_resolution_specSdfMaxMip_multiplier;
-		float4 ambientUpperHemi_specularSdfFactor;
-		float4 ambientLowerHemi_blendFade;
+		float4 vctResolution; // .w is padding
+
+		float specSdfMaxMip;
+		float specularSdfFactor;
+		float blendFade;
+		float multiplier;
+
+		float4 ambientUpperHemi; // .w is padding
+		float4 ambientLowerHemi; // .w is padding
 
 		float4 xform_row0;
 		float4 xform_row1;
@@ -16,17 +22,6 @@
 		float4 invXform_row1;
 		float4 invXform_row2;
 	};
-
-	#define vctInvResolution	invRes_resolution_specSdfMaxMip_multiplier.x
-	#define vctResolution		invRes_resolution_specSdfMaxMip_multiplier.y
-	#define vctSpecSdfMaxMip	invRes_resolution_specSdfMaxMip_multiplier.z
-	#define vctMultiplier		invRes_resolution_specSdfMaxMip_multiplier.w
-
-	#define vctAmbientUpperHemi ambientUpperHemi_specularSdfFactor.xyz
-	#define vctAmbientLowerHemi	ambientLowerHemi_blendFade.xyz
-
-	#define vctSpecularSdfFactor	ambientUpperHemi_specularSdfFactor.w
-	#define vctBlendFade			ambientLowerHemi_blendFade.w
 @end
 @piece( DeclVctUniform )
 	VctProbeParams vctProbeParams;

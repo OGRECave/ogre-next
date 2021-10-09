@@ -1110,7 +1110,8 @@ namespace Ogre
 //                reinterpret_cast<float*>( mInstanceBuffer->map( 0, mInstanceBuffer->getNumElements() ) );
         float * RESTRICT_ALIAS instanceBuffer = reinterpret_cast<float*>( mCpuInstanceBuffer );
         const float *instanceBufferStart = instanceBuffer;
-        FastArray<Octant>::const_iterator itor = mOctants.begin();
+        const FastArray<Octant>::const_iterator begin = mOctants.begin();
+        FastArray<Octant>::const_iterator itor = begin;
         FastArray<Octant>::const_iterator end  = mOctants.end();
 
         while( itor != end )
@@ -1169,7 +1170,11 @@ namespace Ogre
                     ++itQueuedInst;
                 }
 
-                itBucket->second.numInstancesAfterCulling = numInstancesAfterCulling;
+                if( numInstancesAfterCulling > 0u )
+                {
+                    const uint32 octantIdx = static_cast<uint32>( itor - begin );
+                    itBucket->second.numInstancesAfterCulling[octantIdx] = numInstancesAfterCulling;
+                }
 
                 ++itBucket;
             }
@@ -1295,14 +1300,14 @@ namespace Ogre
         for( uint32 x=0u; x<numOctantsX; ++x )
         {
             octant.x = x * octant.width;
-            for( uint32 y=0u; y<numOctantsY; ++y )
+            for( uint32 y = 0u; y < numOctantsY; ++y )
             {
                 octant.y = y * octant.height;
-                for( uint32 z=0u; z<numOctantsZ; ++z )
+                for( uint32 z = 0u; z < numOctantsZ; ++z )
                 {
                     octant.z = z * octant.depth;
 
-                    Vector3 octantOrigin = Vector3( octant.x, octant.y, octant.z ) * voxelCellSize;
+                    Vector3 octantOrigin = Vector3( x, y, z ) * voxelCellSize;
                     octantOrigin += voxelOrigin;
                     octant.region.setExtents( octantOrigin, octantOrigin + voxelCellSize );
                     mOctants.push_back( octant );
@@ -1432,10 +1437,12 @@ namespace Ogre
         ShaderParams::Param paramInstanceRange;
         ShaderParams::Param paramVoxelOrigin;
         ShaderParams::Param paramVoxelCellSize;
+        ShaderParams::Param paramVoxelPixelOrigin;
 
         paramInstanceRange.name	= "instanceStart_instanceEnd";
         paramVoxelOrigin.name	= "voxelOrigin";
         paramVoxelCellSize.name	= "voxelCellSize";
+        paramVoxelPixelOrigin.name="voxelPixelOrigin";
 
         paramVoxelCellSize.setManualValue( getVoxelCellSize() );
 
@@ -1443,7 +1450,8 @@ namespace Ogre
 
         OgreProfileGpuBegin( "VCT Voxelization Jobs" );
 
-        FastArray<Octant>::const_iterator itor = mOctants.begin();
+        const FastArray<Octant>::const_iterator begin = mOctants.begin();
+        FastArray<Octant>::const_iterator itor = begin;
         FastArray<Octant>::const_iterator end  = mOctants.end();
 
         while( itor != end )
@@ -1454,44 +1462,55 @@ namespace Ogre
 
             while( itBucket != enBucket )
             {
-                const VoxelizerBucket &bucket = itBucket->first;
-                bucket.job->setNumThreadGroups( octant.width / threadsPerGroup[0],
-                                                octant.height / threadsPerGroup[1],
-                                                octant.depth / threadsPerGroup[2] );
+                const uint32 octantIdx = static_cast<uint32>( itor - begin );
+                const BucketData::InstancesPerOctantIdxMap::const_iterator itNumInstances =
+                    itBucket->second.numInstancesAfterCulling.find( octantIdx );
 
-                bucket.job->setConstBuffer( 0, bucket.materialBuffer );
-
-                uint8 texUnit = 1u;
-
-                DescriptorSetTexture2::TextureSlot
-                        texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
-                if( bucket.needsTexPool )
+                if( itNumInstances != itBucket->second.numInstancesAfterCulling.end() )
                 {
-                    texSlot.texture = mVctMaterial->getTexturePool();
-                    HlmsSamplerblock samplerblock;
-                    samplerblock.setAddressingMode( TAM_WRAP );
-                    bucket.job->setTexture( texUnit, texSlot, &samplerblock );
-                    ++texUnit;
+                    const VoxelizerBucket &bucket = itBucket->first;
+                    bucket.job->setNumThreadGroups( octant.width / threadsPerGroup[0],
+                                                    octant.height / threadsPerGroup[1],
+                                                    octant.depth / threadsPerGroup[2] );
+
+                    bucket.job->setConstBuffer( 0, bucket.materialBuffer );
+
+                    uint8 texUnit = 1u;
+
+                    DescriptorSetTexture2::TextureSlot texSlot(
+                        DescriptorSetTexture2::TextureSlot::makeEmpty() );
+                    if( bucket.needsTexPool )
+                    {
+                        texSlot.texture = mVctMaterial->getTexturePool();
+                        HlmsSamplerblock samplerblock;
+                        samplerblock.setAddressingMode( TAM_WRAP );
+                        bucket.job->setTexture( texUnit, texSlot, &samplerblock );
+                        ++texUnit;
+                    }
+
+                    const uint32 numInstancesInBucket = itNumInstances->second;
+                    const uint32 instanceRange[2] = { instanceStart,
+                                                      instanceStart + numInstancesInBucket };
+                    const uint32 voxelPixelOrigin[3] = { octant.x, octant.y, octant.z };
+
+                    paramInstanceRange.setManualValue( instanceRange, 2u );
+                    paramVoxelOrigin.setManualValue( octant.region.getMinimum() );
+                    paramVoxelPixelOrigin.setManualValue( voxelPixelOrigin, 3u );
+
+                    ShaderParams &shaderParams = bucket.job->getShaderParams( "default" );
+                    shaderParams.mParams.clear();
+                    shaderParams.mParams.push_back( paramInstanceRange );
+                    shaderParams.mParams.push_back( paramVoxelOrigin );
+                    shaderParams.mParams.push_back( paramVoxelCellSize );
+                    shaderParams.mParams.push_back( paramVoxelPixelOrigin );
+                    shaderParams.setDirty();
+
+                    bucket.job->analyzeBarriers( mResourceTransitions );
+                    mRenderSystem->executeResourceTransition( mResourceTransitions );
+                    hlmsCompute->dispatch( bucket.job, 0, 0 );
+
+                    instanceStart += numInstancesInBucket;
                 }
-
-                uint32 numInstancesInBucket = itBucket->second.numInstancesAfterCulling;
-                uint32 instanceRange[2] = { instanceStart, instanceStart + numInstancesInBucket };
-
-                paramInstanceRange.setManualValue( instanceRange, 2u );
-                paramVoxelOrigin.setManualValue( voxelOrigin );
-
-                ShaderParams &shaderParams = bucket.job->getShaderParams( "default" );
-                shaderParams.mParams.clear();
-                shaderParams.mParams.push_back( paramInstanceRange );
-                shaderParams.mParams.push_back( paramVoxelOrigin );
-                shaderParams.mParams.push_back( paramVoxelCellSize );
-                shaderParams.setDirty();
-
-                bucket.job->analyzeBarriers( mResourceTransitions );
-                mRenderSystem->executeResourceTransition( mResourceTransitions );
-                hlmsCompute->dispatch( bucket.job, 0, 0 );
-
-                instanceStart += numInstancesInBucket;
 
                 ++itBucket;
             }

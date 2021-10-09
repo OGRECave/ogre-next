@@ -23,6 +23,7 @@ struct Params
 	uint2 instanceStart_instanceEnd;
 	float3 voxelOrigin;
 	float3 voxelCellSize;
+	uint3 voxelPixelOrigin;
 };
 
 // Do not use __HAVE_SIMDGROUP_BALLOT__, see GLSL comments
@@ -86,6 +87,7 @@ inline uint packUnormRGB10A2( float4 v )
 #define p_numInstances p.numInstances
 #define p_voxelOrigin p.voxelOrigin
 #define p_voxelCellSize p.voxelCellSize
+#define p_voxelPixelOrigin p.voxelPixelOrigin
 
 kernel void main_metal
 (
