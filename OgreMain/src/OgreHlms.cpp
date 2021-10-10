@@ -259,7 +259,7 @@ namespace Ogre
         },
     };
 
-    HlmsListener c_defaultListener;
+    static HlmsListener c_defaultListener;
 
     Hlms::Hlms( HlmsTypes type, const String &typeName, Archive *dataFolder,
                 ArchiveVec *libraryFolders ) :
