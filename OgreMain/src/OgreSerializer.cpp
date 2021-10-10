@@ -205,15 +205,33 @@ namespace Ogre {
         {
             uint32 * pIntToWrite = (uint32 *)malloc(sizeof(uint32) * count);
             memcpy(pIntToWrite, pInt, sizeof(uint32) * count);
-            
+
             flipToLittleEndian(pIntToWrite, sizeof(uint32), count);
             writeData(pIntToWrite, sizeof(uint32), count);
-            
+
             free(pIntToWrite);
         }
         else
         {
             writeData(pInt, sizeof(uint32), count);
+        }
+    }
+    //---------------------------------------------------------------------
+    void Serializer::writeInts64(const uint64* const pInt, size_t count = 1)
+    {
+        if(mFlipEndian)
+        {
+            uint64 * pIntToWrite = (uint64 *)malloc(sizeof(uint64) * count);
+            memcpy(pIntToWrite, pInt, sizeof(uint64) * count);
+
+            flipToLittleEndian(pIntToWrite, sizeof(uint64), count);
+            writeData(pIntToWrite, sizeof(uint64), count);
+
+            free(pIntToWrite);
+        }
+        else
+        {
+            writeData(pInt, sizeof(uint64), count);
         }
     }
     //---------------------------------------------------------------------
@@ -353,6 +371,12 @@ namespace Ogre {
     {
         stream->read(pDest, sizeof(uint32) * count);
         flipFromLittleEndian(pDest, sizeof(uint32), count);
+    }
+    //---------------------------------------------------------------------
+    void Serializer::readInts64(DataStreamPtr& stream, uint64* pDest, size_t count)
+    {
+        stream->read(pDest, sizeof(uint64) * count);
+        flipFromLittleEndian(pDest, sizeof(uint64), count);
     }
     //---------------------------------------------------------------------
     String Serializer::readString(DataStreamPtr& stream, size_t numChars)

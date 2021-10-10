@@ -58,6 +58,9 @@ namespace Ogre {
         M_HEADER                = 0x1000,
             // char*          version           : Version number check
         M_MESH                = 0x3000,
+            // Optional hash data for caches
+            M_HASH_FOR_CACHES = 0x3200,
+
             // bool skeletallyAnimated   // --removed in 2.1 (flag was never used!)
             // unsigned char numPasses. // Number of caster passes data. Must be 1 or 2.
             // string strategyName;

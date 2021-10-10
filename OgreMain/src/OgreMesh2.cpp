@@ -55,6 +55,7 @@ THE SOFTWARE.
 
 namespace Ogre {
     bool Mesh::msOptimizeForShadowMapping = false;
+    bool Mesh::msUseTimestampAsHash = false;
 
     //-----------------------------------------------------------------------
     Mesh::Mesh( ResourceManager* creator, const String& name, ResourceHandle handle,
@@ -68,6 +69,7 @@ namespace Ogre {
         mVertexBufferShadowBuffer( true ),
         mIndexBufferShadowBuffer( true )
     {
+        memset( mHashForCaches, 0, sizeof( mHashForCaches ) );
         mLodValues.push_back( LodStrategyManager::getSingleton().getDefaultStrategy()->getBaseValue() );
     }
     //-----------------------------------------------------------------------
@@ -157,7 +159,7 @@ namespace Ogre {
         mFreshFromDisk =
             ResourceGroupManager::getSingleton().openResource(
                 mName, mGroup, true, this);
- 
+
         // fully prebuffer into host RAM
         mFreshFromDisk = DataStreamPtr(OGRE_NEW MemoryDataStream(mName,mFreshFromDisk));
     }
@@ -186,6 +188,23 @@ namespace Ogre {
         }
 
         serializer.importMesh(data, this);
+
+        if( mHashForCaches[0] == 0u && mHashForCaches[1] == 0u && Mesh::msUseTimestampAsHash )
+        {
+            try
+            {
+                LogManager::getSingleton().logMessage( "Using timestamp as hash cache for Mesh " + mName,
+                                                       LML_TRIVIAL );
+                Archive *archive =
+                    ResourceGroupManager::getSingleton()._getArchiveToResource( mName, mGroup, true );
+                mHashForCaches[0] = static_cast<uint64>( archive->getModifiedTime( mName ) );
+            }
+            catch( Exception & )
+            {
+                LogManager::getSingleton().logMessage( "Using timestamp as hash cache for Mesh " + mName,
+                                                       LML_TRIVIAL );
+            }
+        }
     }
     //-----------------------------------------------------------------------
     void Mesh::unloadImpl()
@@ -418,7 +437,12 @@ namespace Ogre {
         mLodValues.push_back( lodStrategy->getBaseValue() );*/
 #endif
     }
-
+    //---------------------------------------------------------------------
+    void Mesh::_setHashForCaches( const uint64 hash[2] )
+    {
+        mHashForCaches[0] = hash[0];
+        mHashForCaches[1] = hash[1];
+    }
     //---------------------------------------------------------------------
     Real Mesh::getBoundingSphereRadius(void) const
     {
