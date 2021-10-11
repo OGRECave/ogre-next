@@ -230,6 +230,41 @@
             [
                 {}
             ]
+        },
+
+        "VCT/ImageVoxelizer" :
+		{
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "ImageVoxelizer_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "Matrix_piece_all", "ImageVoxelizer_piece_cs.any.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "uav_units" : 6,
+
+            "gl_tex_slot_start" : 6,
+			
+			"params" :
+            [
+			],
+			
+			"params_glsl" :
+            [
+                ["meshTextures",      	    [1, 2, 3], "int"],
+                ["voxelAlbedoTex",      	[2], "int"],
+                ["voxelNormalTex",  		[3], "int"],
+                ["voxelEmissiveTex",		[4], "int"],
+                ["voxelAccumVal",			[5], "int"]
+			],
+
+			"properties" :
+			{
+                "has_diffuse_tex" : 0,
+                "has_emissive_tex" : 0,
+                "emissive_is_diffuse_tex" : 0,
+                "index_32bit" : 0,
+                "compressed_vertex_format" : 0
+			}
         }
 	}
 }

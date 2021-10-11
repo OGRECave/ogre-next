@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreRenderSystem.h"
 #include "OgreSceneManager.h"
+#include "OgreStagingTexture.h"
 #include "OgreStringConverter.h"
 #include "OgreSubMesh2.h"
 #include "OgreTextureBox.h"
@@ -68,6 +69,7 @@ namespace Ogre
         mMeshMaxDepth( 64u ),
         mMeshDimensionPerPixel( 2.0f ),
         mBlankEmissive( 0 ),
+        mImageVoxelizerJob( 0 ),
         mAlbedoVox( 0 ),
         mEmissiveVox( 0 ),
         mNormalVox( 0 ),
@@ -84,19 +86,68 @@ namespace Ogre
         mAutoRegion( true ),
         mRegionToVoxelize( Aabb::BOX_ZERO ),
         mMaxRegion( Aabb::BOX_INFINITE ),
+        mCpuInstanceBuffer( 0 ),
+        mInstanceBuffer( 0 ),
         mDebugVisualizationMode( DebugVisualizationNone ),
         mDebugVoxelVisualizer( 0 )
     {
         createComputeJobs();
+
+        mBlankEmissive = mTextureGpuManager->createTexture(
+            "VctImage/BlankEmissive" + StringConverter::toString( getId() ), GpuPageOutStrategy::Discard,
+            TextureFlags::ManualTexture, TextureTypes::Type3D );
+        mBlankEmissive->setResolution( 1u, 1u, 1u );
+        mBlankEmissive->setPixelFormat( PFG_RGBA8_UNORM );
+        mBlankEmissive->scheduleTransitionTo( GpuResidency::Resident );
+
+        StagingTexture *stagingTexture =
+            mTextureGpuManager->getStagingTexture( 1u, 1u, 1u, 1u, PFG_RGBA8_UNORM, 100u );
+        stagingTexture->startMapRegion();
+        TextureBox box = stagingTexture->mapRegion( 1u, 1u, 1u, 1u, PFG_RGBA8_UNORM );
+        box.setColourAt( Ogre::ColourValue::Black, 0u, 0u, 0u, PFG_RGBA8_UNORM );
+        stagingTexture->stopMapRegion();
+        stagingTexture->upload( box, mBlankEmissive, 0u );
+        mTextureGpuManager->removeStagingTexture( stagingTexture );
     }
     //-------------------------------------------------------------------------
     VctImageVoxelizer::~VctImageVoxelizer()
     {
         setDebugVisualization( DebugVisualizationNone, 0 );
+        destroyInstanceBuffers();
         destroyVoxelTextures();
+
+        mTextureGpuManager->destroyTexture( mBlankEmissive );
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::createComputeJobs( void ) {}
+    void VctImageVoxelizer::createComputeJobs( void )
+    {
+        HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
+#if OGRE_NO_JSON
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                     "To use VctImageVoxelizer, Ogre must be build with JSON support "
+                     "and you must include the resources bundled at "
+                     "Samples/Media/VCT",
+                     "VctImageVoxelizer::createComputeJobs" );
+#endif
+        mImageVoxelizerJob = hlmsCompute->findComputeJobNoThrow( "VCT/ImageVoxelizer" );
+
+        if( !mImageVoxelizerJob )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "To use VctImageVoxelizer, you must include the resources bundled at "
+                         "Samples/Media/VCT\n"
+                         "Could not find VCT/ImageVoxelizer",
+                         "VctImageVoxelizer::createComputeJobs" );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctImageVoxelizer::clearComputeJobResources()
+    {
+        // Do not leave dangling pointers when destroying buffers, even if we later set them
+        // with a new pointer (if malloc reuses an address and the jobs weren't cleared, we're screwed)
+        mImageVoxelizerJob->clearUavBuffers();
+        mImageVoxelizerJob->clearTexBuffers();
+    }
     //-------------------------------------------------------------------------
     inline bool isPowerOf2( uint32 x ) { return ( x & ( x - 1u ) ) == 0u; }
     inline bool getNextPowerOf2( uint32 x )
@@ -140,7 +191,7 @@ namespace Ogre
     void VctImageVoxelizer::addMeshToCache( const MeshPtr &mesh, SceneManager *sceneManager )
     {
         bool bUpToDate = false;
-        String meshName = mesh->getName();
+        const String &meshName = mesh->getName();
 
         MeshCacheMap::const_iterator itor = mMeshes.find( meshName );
         if( itor != mMeshes.end() )
@@ -206,16 +257,16 @@ namespace Ogre
 
             // Copy the results to a 3D texture that is optimized for sampling
             voxelizedMesh.albedoVox = mTextureGpuManager->createTexture(
-                "VctImage/" + mesh->getName() + "/Albedo", GpuPageOutStrategy::Discard,
-                TextureFlags::ManualTexture, TextureTypes::Type3D );
+                "VctImage/" + mesh->getName() + "/Albedo" + StringConverter::toString( getId() ),
+                GpuPageOutStrategy::Discard, TextureFlags::ManualTexture, TextureTypes::Type3D );
             voxelizedMesh.normalVox = mTextureGpuManager->createTexture(
-                "VctImage/" + mesh->getName() + "/Normal", GpuPageOutStrategy::Discard,
-                TextureFlags::ManualTexture, TextureTypes::Type3D );
+                "VctImage/" + mesh->getName() + "/Normal" + StringConverter::toString( getId() ),
+                GpuPageOutStrategy::Discard, TextureFlags::ManualTexture, TextureTypes::Type3D );
             if( bHasEmissive )
             {
                 voxelizedMesh.emissiveVox = mTextureGpuManager->createTexture(
-                    "VctImage/" + mesh->getName() + "/Emissive", GpuPageOutStrategy::Discard,
-                    TextureFlags::ManualTexture, TextureTypes::Type3D );
+                    "VctImage/" + mesh->getName() + "/Emissive" + StringConverter::toString( getId() ),
+                    GpuPageOutStrategy::Discard, TextureFlags::ManualTexture, TextureTypes::Type3D );
             }
             else
             {
@@ -386,6 +437,109 @@ namespace Ogre
             if( mDebugVoxelVisualizer )
                 mDebugVoxelVisualizer->setVisible( false );
         }
+    }
+    //-------------------------------------------------------------------------
+    void VctImageVoxelizer::createInstanceBuffers( void )
+    {
+        const size_t structStride = sizeof( float ) * 4u * 6u;
+        const size_t elementCount = mItems.size() * mOctants.size();
+
+        if( !mInstanceBuffer || elementCount > mInstanceBuffer->getNumElements() )
+        {
+            destroyInstanceBuffers();
+            mInstanceBuffer = mVaoManager->createReadOnlyBuffer(
+                PFG_RGBA32_FLOAT, elementCount * structStride, BT_DEFAULT, 0, false );
+            mCpuInstanceBuffer = reinterpret_cast<float *>(
+                OGRE_MALLOC_SIMD( elementCount * structStride, MEMCATEGORY_GENERAL ) );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctImageVoxelizer::destroyInstanceBuffers( void )
+    {
+        if( mInstanceBuffer )
+        {
+            mVaoManager->destroyReadOnlyBuffer( mInstanceBuffer );
+            mInstanceBuffer = 0;
+
+            OGRE_FREE_SIMD( mCpuInstanceBuffer, MEMCATEGORY_GENERAL );
+            mCpuInstanceBuffer = 0;
+        }
+
+        clearComputeJobResources();
+    }
+    //-------------------------------------------------------------------------
+    void VctImageVoxelizer::fillInstanceBuffers( SceneManager *sceneManager )
+    {
+        OgreProfile( "VctImageVoxelizer::fillInstanceBuffers" );
+
+        createInstanceBuffers();
+
+        {
+            float *RESTRICT_ALIAS instanceBuffer = mCpuInstanceBuffer;
+
+            const size_t numItems = mItems.size();
+            const size_t numOctants = mOctants.size();
+
+            for( size_t i = 0u; i < numOctants; ++i )
+            {
+                mOctants[i].instances = 0u;
+                mOctants[i].instanceBuffer = instanceBuffer + i * numItems;
+            }
+        }
+
+        ItemArray::const_iterator itItem = mItems.begin();
+        ItemArray::const_iterator enItem = mItems.end();
+        while( itItem != enItem )
+        {
+            const Item *item = *itItem;
+
+            const Aabb worldAabb = item->getWorldAabb();
+            const Matrix4 &fullTransform = item->_getParentNodeFullTransform();
+
+            addMeshToCache( item->getMesh(), sceneManager );
+
+            FastArray<Octant>::iterator itor = mOctants.begin();
+            FastArray<Octant>::iterator endt = mOctants.end();
+
+            while( itor != endt )
+            {
+                const Aabb octantAabb = itor->region;
+
+                if( octantAabb.intersects( worldAabb ) )
+                {
+                    float *RESTRICT_ALIAS instanceBuffer = itor->instanceBuffer;
+
+                    for( size_t i = 0; i < 12u; ++i )
+                        *instanceBuffer++ = static_cast<float>( fullTransform[0][i] );
+
+#define AS_U32PTR( x ) reinterpret_cast<uint32 * RESTRICT_ALIAS>( x )
+                    *instanceBuffer++ = worldAabb.mCenter.x;
+                    *instanceBuffer++ = worldAabb.mCenter.y;
+                    *instanceBuffer++ = worldAabb.mCenter.z;
+                    *AS_U32PTR( instanceBuffer ) = 0u;
+                    ++instanceBuffer;
+
+                    *instanceBuffer++ = worldAabb.mHalfSize.x;
+                    *instanceBuffer++ = worldAabb.mHalfSize.y;
+                    *instanceBuffer++ = worldAabb.mHalfSize.z;
+                    *instanceBuffer++ = 0.0f;
+#undef AS_U32PTR
+
+                    itor->instanceBuffer = instanceBuffer;
+                    ++itor->instances;
+
+                    OGRE_ASSERT_MEDIUM( size_t( instanceBuffer - mCpuInstanceBuffer ) *
+                                            sizeof( float ) <=
+                                        mInstanceBuffer->getTotalSizeBytes() );
+                }
+
+                ++itor;
+            }
+
+            ++itItem;
+        }
+
+        mInstanceBuffer->upload( mCpuInstanceBuffer, 0u, mInstanceBuffer->getNumElements() );
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::setRegionToVoxelize( bool autoRegion, const Aabb &regionToVoxelize,

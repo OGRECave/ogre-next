@@ -91,6 +91,8 @@ namespace Ogre
 
         ItemArray mItems;
 
+        HlmsComputeJob *mImageVoxelizerJob;
+
         TextureGpu *mAlbedoVox;
         TextureGpu *mEmissiveVox;
         TextureGpu *mNormalVox;
@@ -120,9 +122,15 @@ namespace Ogre
             uint32 x, y, z;
             uint32 width, height, depth;
             Aabb region;
+
+            uint32 instances;                      // Used internally
+            float *RESTRICT_ALIAS instanceBuffer;  // Temporary
         };
 
         FastArray<Octant> mOctants;
+
+        float *mCpuInstanceBuffer;
+        ReadOnlyBufferPacked *mInstanceBuffer;
 
         ResourceTransitionArray mResourceTransitions;
 
@@ -130,10 +138,15 @@ namespace Ogre
         VoxelVisualizer *mDebugVoxelVisualizer;
 
         void createComputeJobs( void );
+        void clearComputeJobResources( void );
 
         void createVoxelTextures( void );
         void destroyVoxelTextures( void );
         void setTextureToDebugVisualizer( void );
+
+        void createInstanceBuffers( void );
+        void destroyInstanceBuffers( void );
+        void fillInstanceBuffers( SceneManager *sceneManager );
 
         void clearVoxels( void );
 

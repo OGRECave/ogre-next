@@ -53,7 +53,7 @@
 		retVal.bounds.center = instanceBuffer[instanceIdx].aabb0.xyz;
 		retVal.bounds.halfSize = instanceBuffer[instanceIdx].aabb1.xyz;
 
-		retVal.albedoTexIdx = floatBitsToUint( instanceBuffer[instanceIdx].aabb1.w );
+		retVal.albedoTexIdx = floatBitsToUint( instanceBuffer[instanceIdx].aabb0.w );
 
 		return retVal;
 	}
