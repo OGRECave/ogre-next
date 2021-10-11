@@ -75,6 +75,9 @@ namespace Ogre {
     {
         LogManager::getSingleton().logMessage("MeshSerializer writing mesh data to stream " + stream->getName() + "...");
 
+        mCalculatedHash[0] = 0u;
+        mCalculatedHash[1] = 0u;
+
         // Decide on endian mode
         determineEndianness(endianMode);
 
