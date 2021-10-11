@@ -217,15 +217,17 @@ namespace Ogre
 
         bool operator != ( const HlmsBlendblock &_r ) const
         {
-            //Don't include the ID in the comparision
-            //AND don't include mIsTransparent's first bit, which is filled
-            //automatically only for some managed objects.
+            // Don't include the ID in the comparision
+            // AND ignore alpha blend factors when not doing separate blends
+            // AND don't include mIsTransparent's first bit, which is filled
+            // automatically only for some managed objects.
             return  mAllowGlobalDefaults    != _r.mAllowGlobalDefaults ||
                     mSeparateBlend          != _r.mSeparateBlend ||
                     mSourceBlendFactor      != _r.mSourceBlendFactor ||
                     mDestBlendFactor        != _r.mDestBlendFactor ||
-                    mSourceBlendFactorAlpha != _r.mSourceBlendFactorAlpha ||
-                    mDestBlendFactorAlpha   != _r.mDestBlendFactorAlpha ||
+                    ( mSeparateBlend &&
+                      ( mSourceBlendFactorAlpha != _r.mSourceBlendFactorAlpha ||
+                        mDestBlendFactorAlpha   != _r.mDestBlendFactorAlpha ) ) ||
                     mBlendOperation         != _r.mBlendOperation ||
                     mBlendOperationAlpha    != _r.mBlendOperationAlpha ||
                     mAlphaToCoverageEnabled != _r.mAlphaToCoverageEnabled ||
