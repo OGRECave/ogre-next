@@ -2689,8 +2689,9 @@ namespace Ogre
 
             if( forwardPlus )
             {
-                forwardPlus->fillConstBufferData( sceneManager->getCurrentViewport0(), renderTarget,
-                                                  mShaderSyntax, isInstancedStereo, passBufferPtr );
+                forwardPlus->fillConstBufferData(
+                    sceneManager->getCurrentViewport0(), renderPassDesc->requiresTextureFlipping(),
+                    renderTarget->getHeight(), mShaderSyntax, isInstancedStereo, passBufferPtr );
                 passBufferPtr += forwardPlus->getConstBufferSize() >> 2u;
             }
 

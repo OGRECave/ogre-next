@@ -206,7 +206,8 @@ namespace Ogre
         @remarks
             Assumes 'passBufferPtr' is aligned to a vec4/float4 boundary.
         */
-        virtual void fillConstBufferData( Viewport *viewport, TextureGpu *renderTarget,
+        virtual void fillConstBufferData( Viewport *viewport, bool bRequiresTextureFlipping,
+                                          uint32 renderTargetHeight,
                                           IdString shaderSyntax, bool instancedStereo,
                                           float * RESTRICT_ALIAS passBufferPtr ) const = 0;
 

@@ -297,7 +297,7 @@ namespace Ogre
 
             if( (mColour[i].storeAction == StoreAction::MultisampleResolve ||
                  mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve) &&
-                mColour[i].resolveTexture )
+                mColour[i].resolveTexture && !mColour[i].resolveTexture->isRenderWindowSpecific() )
             {
                 needsMsaaResolveFbo = true;
             }
@@ -673,25 +673,35 @@ namespace Ogre
                         // Blit from multisample buffer to final buffer, triggers resolve
                         OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, mFboName ) );
                         OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, mFboMsaaResolve ) );
-                        if( !hasLayers )
+                        if( !mColour[i].resolveTexture->isRenderWindowSpecific() )
                         {
-                            OCGE( glFramebufferTexture( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                                        resolveTexture->getFinalTextureName(),
-                                                        mColour[i].mipLevel ) );
-                        }
-                        else
-                        {
-                            OCGE( glFramebufferTextureLayer( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                                             resolveTexture->getFinalTextureName(),
-                                                             mColour[i].resolveMipLevel,
-                                                             mColour[i].resolveSlice ) );
+                            if( !hasLayers )
+                            {
+                                OCGE( glFramebufferTexture( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                            resolveTexture->getFinalTextureName(),
+                                                            mColour[i].mipLevel ) );
+                            }
+                            else
+                            {
+                                OCGE( glFramebufferTextureLayer(
+                                    GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                    resolveTexture->getFinalTextureName(), mColour[i].resolveMipLevel,
+                                    mColour[i].resolveSlice ) );
+                            }
                         }
 
                         const uint32 width  = resolveTexture->getWidth();
                         const uint32 height = resolveTexture->getHeight();
 
                         OCGE( glReadBuffer( GL_COLOR_ATTACHMENT0 + i ) );
-                        OCGE( glDrawBuffer( GL_COLOR_ATTACHMENT0 + 0 ) );
+                        if( resolveTexture->isRenderWindowSpecific() )
+                        {
+                            OCGE( glDrawBuffer( GL_BACK ) );
+                        }
+                        else
+                        {
+                            OCGE( glDrawBuffer( GL_COLOR_ATTACHMENT0 + 0 ) );
+                        }
                         OCGE( glBlitFramebuffer( 0, 0, width, height, 0, 0, width, height,
                                                  GL_COLOR_BUFFER_BIT, GL_NEAREST ) );
 

@@ -488,17 +488,18 @@ namespace Ogre
             if( mColour[i].texture->getPixelFormat() == PFG_NULL )
                 continue;
 
-            OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpu *>( mColour[i].texture ) );
-            VulkanTextureGpu *textureVulkan = static_cast<VulkanTextureGpu *>( mColour[i].texture );
-
-            if( textureVulkan->isRenderWindowSpecific() )
+            if( mColour[i].texture->isRenderWindowSpecific() )
             {
                 // If the window is MSAA but not being resolved,
                 // then just behave like a regular RenderTexture
-                if( !textureVulkan->isMultisample() )
+                if( !mColour[i].texture->isMultisample() )
                     windowAttachmentIdx = attachmentIdx;
-                else if( textureVulkan == mColour[i].resolveTexture )
+                else if( mColour[i].texture == mColour[i].resolveTexture )
                     windowAttachmentIdx = attachmentIdx + 1u;
+            }
+            else if( mColour[i].resolveTexture && mColour[i].resolveTexture->isRenderWindowSpecific() )
+            {
+                windowAttachmentIdx = attachmentIdx + 1u;
             }
 
             mClearValues[attachmentIdx].color =
@@ -852,8 +853,23 @@ namespace Ogre
         size_t fboIdx = 0u;
         if( !fboDesc.mWindowImageViews.empty() )
         {
-            VulkanTextureGpuWindow *textureVulkan =
-                static_cast<VulkanTextureGpuWindow *>( mColour[0].texture );
+            VulkanTextureGpuWindow *textureVulkan = 0;
+
+            if( mColour[0].texture->isRenderWindowSpecific() )
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpuWindow *>( mColour[0].texture ) );
+                textureVulkan = static_cast<VulkanTextureGpuWindow *>( mColour[0].texture );
+            }
+            else
+            {
+                OGRE_ASSERT_LOW( mColour[0].resolveTexture &&
+                                 mColour[0].resolveTexture->isRenderWindowSpecific() &&
+                                 "There is a window as output, but is neither the main target nor the "
+                                 "resolve target!? This should be impossible " );
+                OGRE_ASSERT_HIGH( dynamic_cast<VulkanTextureGpuWindow *>( mColour[0].resolveTexture ) );
+                textureVulkan = static_cast<VulkanTextureGpuWindow *>( mColour[0].resolveTexture );
+            }
+
             fboIdx = textureVulkan->getCurrentSwapchainIdx();
 
             VkSemaphore semaphore = textureVulkan->getImageAcquiredSemaphore();

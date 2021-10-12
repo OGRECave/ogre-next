@@ -425,7 +425,8 @@ namespace Ogre
         return (2 + mNumSlices) * 4 * 4;
     }
     //-----------------------------------------------------------------------------------
-    void Forward3D::fillConstBufferData( Viewport *viewport, TextureGpu *renderTarget,
+    void Forward3D::fillConstBufferData( Viewport *viewport, bool bRequiresTextureFlipping,
+                                         uint32 renderTargetHeight,
                                          IdString shaderSyntax, bool instancedStereo,
                                          float * RESTRICT_ALIAS passBufferPtr ) const
     {
@@ -452,11 +453,11 @@ namespace Ogre
         //actually represented from the bottom up.
         //As a result we need convert our viewport height offsets to work bottom up instead of top down;
         //This is compounded by OpenGL standard being different to DirectX and Metal
-        if( !renderTarget->requiresTextureFlipping() && shaderSyntax == "glsl" && !instancedStereo )
+        if( !bRequiresTextureFlipping && shaderSyntax == "glsl" && !instancedStereo )
         {
             viewportHeightOffset =
                     static_cast<float>( (1.0 - (viewport->getTop() + viewport->getHeight())) *
-                                        renderTarget->getHeight() );
+                                        renderTargetHeight );
         }
 
         //vec4 f3dGridHWW[mNumSlices];

@@ -146,10 +146,14 @@ namespace Ogre
     {
         mRequiresTextureFlipping = false;
 
+        bool bResolvingToNonFlipping = false;
+
         for( size_t i=0; i<mNumColourEntries && !mRequiresTextureFlipping; ++i )
         {
             TextureGpu *texture = mColour[i].texture;
             mRequiresTextureFlipping = texture->requiresTextureFlipping();
+            if( mColour[i].resolveTexture )
+                bResolvingToNonFlipping = true;
         }
 
         if( !mRequiresTextureFlipping && mDepth.texture )
@@ -157,6 +161,9 @@ namespace Ogre
 
         if( !mRequiresTextureFlipping && mStencil.texture )
             mRequiresTextureFlipping = mStencil.texture->requiresTextureFlipping();
+
+        if( bResolvingToNonFlipping )
+            mRequiresTextureFlipping = false;
     }
     //-----------------------------------------------------------------------------------
     void RenderPassDescriptor::colourEntriesModified(void)
