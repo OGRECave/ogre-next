@@ -40,7 +40,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    FocusedShadowCameraSetup::FocusedShadowCameraSetup(void)
+    FocusedShadowCameraSetup::FocusedShadowCameraSetup(void) : mXYPadding( 1.5f )
     {
     }
     //-----------------------------------------------------------------------
@@ -301,8 +301,8 @@ namespace Ogre
         }
 
         //Some padding
-        vMax += 1.5f;
-        vMin -= 1.5f;
+        vMax += mXYPadding;
+        vMin -= mXYPadding;
 
         const float zPadding = 2.0f;
 

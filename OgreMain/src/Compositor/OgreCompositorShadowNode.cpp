@@ -187,12 +187,14 @@ namespace Ogre
                     {
                         FocusedShadowCameraSetup *setup = OGRE_NEW FocusedShadowCameraSetup();
                         shadowMapCamera.shadowCameraSetup = ShadowCameraSetupPtr( setup );
+                        setup->setXYPadding( itor->xyPadding );
                     }
                     break;
                 case SHADOWMAP_PSSM:
                     {
                         PSSMShadowCameraSetup *setup = OGRE_NEW PSSMShadowCameraSetup();
                         shadowMapCamera.shadowCameraSetup = ShadowCameraSetupPtr( setup );
+                        setup->setXYPadding( itor->xyPadding );
                         setup->calculateSplitPoints( itor->numSplits, 0.1f, 100.0f, 0.95f, 0.125f, 0.313f );
                         setup->setSplitPadding( itor->splitPadding );
                         setup->setNumStableSplits( itor->numStableSplits );
@@ -1103,6 +1105,7 @@ namespace Ogre
                                                          Real splitBlend, Real splitFade,
                                                          uint32 numStableSplits,
                                                          uint32 visibilityMask,
+                                                         float xyPadding,
                                                          uint8 firstRq,
                                                          uint8 lastRq )
     {
@@ -1359,6 +1362,7 @@ namespace Ogre
                         shadowNodeDef->addShadowTextureDefinition( lightIdx, j, texName,
                                                                    uvOffset, uvLength, 0 );
                 shadowTexDef->shadowMapTechnique = shadowParam.technique;
+                shadowTexDef->xyPadding = xyPadding;
                 shadowTexDef->pssmLambda = pssmLambda;
                 shadowTexDef->splitPadding = splitPadding;
                 shadowTexDef->splitBlend = splitBlend;

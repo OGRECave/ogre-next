@@ -54,6 +54,8 @@ namespace Ogre {
     */
     class _OgreExport FocusedShadowCameraSetup : public DefaultShadowCameraSetup
     {
+        float mXYPadding;
+
     public:
         /** Default constructor.
         @remarks
@@ -73,6 +75,25 @@ namespace Ogre {
                                       const Light *light, Camera *texCam, size_t iteration,
                                       const Vector2 &viewportRealSize ) const;
 
+        /**
+        @brief setXYPadding
+            FocusedShadowCameraSetup tries to make the shadow mapping camera fit
+            the casters as tight as possible to minimize aliasing. But due to various
+            math issues sometimes it ends up being too tight.
+
+            If you experience missing shadows or with gaps/holes you may need to increase
+            the padding.
+
+            Most likely you want the reverse. In particular circumstances you want maximum
+            quality thus you want to minimize this padding
+        @param pad
+            Value in range [0; inf)
+            Negative values may cause glitches
+        */
+        void setXYPadding( Real pad ) { mXYPadding = pad; }
+
+        /// See FocusedShadowCameraSetup::setXYPadding
+        Real getXYPadding() const { return mXYPadding; }
     };
 
     /** @} */

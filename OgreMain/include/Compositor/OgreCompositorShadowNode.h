@@ -404,6 +404,8 @@ namespace Ogre
             PSSM split fade. Ignored if not using PSSM.
         @param visibilityMask
             Visibility mask for all passes. See firstRq
+        @param xyPadding
+            See FocusedShadowCameraSetup::setXYPadding
         @param firstRq
             When rendering, which Render Queues to consider.
             Normally you want to set this to firstRq = 0; lastRq = 255.
@@ -428,6 +430,7 @@ namespace Ogre
             Real splitFade = 0.313f,                                             //
             uint32 numStableSplits = 0,                                          //
             uint32 visibilityMask = VisibilityFlags::RESERVED_VISIBILITY_FLAGS,  //
+            float xyPadding = 1.5f,                                              //
             uint8 firstRq = 0u,                                                  //
             uint8 lastRq = 255u );
     };

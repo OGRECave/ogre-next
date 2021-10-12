@@ -83,6 +83,9 @@ namespace Ogre
 
         ShadowMapTechniques shadowMapTechnique;
 
+        // Focused params (also applies to PSSM)
+        float xyPadding;
+
         //PSSM params
         Real                pssmLambda;
         Real                splitPadding;
@@ -110,6 +113,7 @@ namespace Ogre
             autoConstantBiasScale( 100.0f ),
             autoNormalOffsetBiasScale( 4.0f ),
             shadowMapTechnique( t ),
+            xyPadding( 1.5f ),
             pssmLambda( 0.95f ),
             splitPadding( 1.0f ),
             splitBlend( 0.125f ),
