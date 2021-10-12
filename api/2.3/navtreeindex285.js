@@ -1,7 +1,5 @@
 var NAVTREEINDEX285 =
 {
-"struct_ogre_1_1_vulkan_discard_buffer_manager_1_1_unsafe_block.html#aa674970178b2b2dc1a34736c98edd4bf":[7,0,0,1138,0,2],
-"struct_ogre_1_1_vulkan_discard_buffer_manager_1_1_unsafe_block.html#abf57a01aa22650e6f7b1795d79b479ce":[7,0,0,1138,0,1],
 "struct_ogre_1_1_vulkan_flush_only_desc_value.html":[5,2,11,137],
 "struct_ogre_1_1_vulkan_flush_only_desc_value.html#a6eb0794d7a7e0bd679d223945c5d3afb":[5,2,11,137,1],
 "struct_ogre_1_1_vulkan_flush_only_desc_value.html#a9fa884211eb40afc44170cf50118b481":[5,2,11,137,0],
@@ -249,5 +247,7 @@ var NAVTREEINDEX285 =
 "struct_ogre_1_1v1_1_1_mesh_lod_usage.html#abfaf37d771b30297bd76fab8ea565089":[5,2,11,122,4],
 "struct_ogre_1_1v1_1_1_mesh_lod_usage.html#add6133940d0337da192df6fc141211fc":[5,2,11,122,2],
 "struct_ogre_1_1v1_1_1_mesh_lod_usage.html#afcf6073ebac32962009b1a5c62d409f4":[5,2,11,122,5],
-"struct_ogre_1_1v1_1_1_static_geometry_1_1_queued_geometry.html":[5,0,1,68,4]
+"struct_ogre_1_1v1_1_1_static_geometry_1_1_queued_geometry.html":[5,0,1,68,4],
+"struct_ogre_1_1v1_1_1_static_geometry_1_1_queued_geometry.html":[5,2,12,68,4],
+"struct_ogre_1_1v1_1_1_static_geometry_1_1_queued_geometry.html#a02085d59826f2919b1b3fe2daef7edb4":[5,2,12,68,4,10]
 };

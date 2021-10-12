@@ -370,11 +370,11 @@ var NAVTREEINDEX =
 "struct_ogre_1_1_n_u_l_l_vertex_array_object.html#a1789fd786735a1e97652b0e971d5f720",
 "struct_ogre_1_1_pbs_uv_atlas_params.html",
 "struct_ogre_1_1_resource_transition.html#a32f813d9a49cc94253de6daf7b3f1bad",
-"struct_ogre_1_1_sub_mesh_1_1_source_data.html#accf328d8dec95a35255094258852d8b7",
-"struct_ogre_1_1_unlit_mobile_prop.html",
-"struct_ogre_1_1_vector_set.html#aabbc326f17698c1b404fcfed47099f19",
-"struct_ogre_1_1_vulkan_discard_buffer_manager_1_1_unsafe_block.html#aa674970178b2b2dc1a34736c98edd4bf",
-"struct_ogre_1_1v1_1_1_static_geometry_1_1_queued_geometry.html"
+"struct_ogre_1_1_t_rect.html#a007a629729ff41b80dee4f5536303a48",
+"struct_ogre_1_1_unlit_mobile_prop.html#a0b2a79affacb967c14bc9b7e561d1ea7",
+"struct_ogre_1_1_vector_set.html#ab3bb5e3be2e6a4f8b68b61c1c16028e4",
+"struct_ogre_1_1_vulkan_flush_only_desc_value.html",
+"struct_ogre_1_1v1_1_1_static_geometry_1_1_queued_geometry.html#a02085d59826f2919b1b3fe2daef7edb4"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

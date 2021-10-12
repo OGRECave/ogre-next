@@ -2196,15 +2196,13 @@ var group___effects =
         [ "addLightType", "struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a3477cb0c1aca4b963e6523efabcd9e16", null ],
         [ "atlasId", "struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#ac5eab0658ca251905ce23d5a4928f5bf", null ],
         [ "atlasStart", "struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a8f960827be8e7591f2a385f26ccdcfd1", null ],
-        [ "firstRq", "struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a04c2007933c133ae8bc1e60d2423233b", null ],
-        [ "lastRq", "struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#ab13ea8e618a1adddb325e72726c6444e", null ],
         [ "numPssmSplits", "struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a4b1dc43612d88d89b18e3bf91cef9149", null ],
         [ "resolution", "struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a3c998daa711709215e80cca254bc09b0", null ],
         [ "supportedLightTypes", "struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a7b3b106e97211c5a188d81790d5c129a", null ],
         [ "technique", "struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a6c9d59554ece092633f2ad2fbc640ee5", null ]
       ] ],
       [ "ShadowParamVec", "class_ogre_1_1_shadow_node_helper.html#a365e9a945dc2cdb574d0e1424e82113a", null ],
-      [ "createShadowNodeWithSettings", "class_ogre_1_1_shadow_node_helper.html#a38613ed6a28e3f091c61129e0271700c", null ]
+      [ "createShadowNodeWithSettings", "class_ogre_1_1_shadow_node_helper.html#ada46f211cc1d5d3175c73152620c2e29", null ]
     ] ],
     [ "ShadowTextureDefinition", "class_ogre_1_1_shadow_texture_definition.html", [
       [ "ShadowTextureDefinition", "class_ogre_1_1_shadow_texture_definition.html#a95f59e0cb3cb10ecdb6ef1c2f2ac3779", null ],

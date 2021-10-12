@@ -110,11 +110,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a8f960827be8e7591f2a385f26ccdcfd1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_shadow_node_helper_1_1_resolution.html">Resolution</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a8f960827be8e7591f2a385f26ccdcfd1">atlasStart</a> [4]</td></tr>
 <tr class="memdesc:a8f960827be8e7591f2a385f26ccdcfd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">In pixels, start of the texture (XY).  <a href="struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a8f960827be8e7591f2a385f26ccdcfd1">More...</a><br /></td></tr>
 <tr class="separator:a8f960827be8e7591f2a385f26ccdcfd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04c2007933c133ae8bc1e60d2423233b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a04c2007933c133ae8bc1e60d2423233b">firstRq</a></td></tr>
-<tr class="memdesc:a04c2007933c133ae8bc1e60d2423233b"><td class="mdescLeft">&#160;</td><td class="mdescRight">When rendering, which Render Queues to consider.  <a href="struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a04c2007933c133ae8bc1e60d2423233b">More...</a><br /></td></tr>
-<tr class="separator:a04c2007933c133ae8bc1e60d2423233b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab13ea8e618a1adddb325e72726c6444e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#ab13ea8e618a1adddb325e72726c6444e">lastRq</a></td></tr>
-<tr class="separator:ab13ea8e618a1adddb325e72726c6444e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b1dc43612d88d89b18e3bf91cef9149"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a4b1dc43612d88d89b18e3bf91cef9149">numPssmSplits</a></td></tr>
 <tr class="memdesc:a4b1dc43612d88d89b18e3bf91cef9149"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of PSSM splits. In range [2; 4]. Ignored for non-PSSM techniques.  <a href="struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a4b1dc43612d88d89b18e3bf91cef9149">More...</a><br /></td></tr>
 <tr class="separator:a4b1dc43612d88d89b18e3bf91cef9149"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,38 +175,6 @@ Public Attributes</h2></td></tr>
 
 <p>In pixels, start of the texture (XY). </p>
 <p>One for each PSSM split. When not using PSSM, entries in range [1; 4) are ignored. Be careful not to overlap within the same atlasId. </p>
-
-</div>
-</div>
-<a id="a04c2007933c133ae8bc1e60d2423233b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a04c2007933c133ae8bc1e60d2423233b">&#9670;&nbsp;</a></span>firstRq</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> Ogre::ShadowNodeHelper::ShadowParam::firstRq</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>When rendering, which Render Queues to consider. </p>
-<p>Normally you want to set this to 0; 255.</p>
-<p>However if you have a dedicated shadow map for e.g. the main player then you want to put the player in a specific RQs and tighten the Render Queue to obtain maximum coverage quality Range is [firstRq; lastRq) </p>
-
-</div>
-</div>
-<a id="ab13ea8e618a1adddb325e72726c6444e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab13ea8e618a1adddb325e72726c6444e">&#9670;&nbsp;</a></span>lastRq</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> Ogre::ShadowNodeHelper::ShadowParam::lastRq</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>
