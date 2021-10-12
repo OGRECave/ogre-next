@@ -136,9 +136,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aca733004e04779b6d0141d1e845d2b92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97751799f350a90a3a30388c82b4af4e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_forward_plus_base.html#a97751799f350a90a3a30388c82b4af4e">collectLights</a> (<a class="el" href="class_ogre_1_1_camera.html">Camera</a> *camera)=0</td></tr>
 <tr class="separator:a97751799f350a90a3a30388c82b4af4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add059707597fecd2562656fcdf4733f8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_forward_plus_base.html#add059707597fecd2562656fcdf4733f8">fillConstBufferData</a> (<a class="el" href="class_ogre_1_1_viewport.html">Viewport</a> *viewport, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *renderTarget, <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> shaderSyntax, bool instancedStereo, float *<a class="el" href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a> passBufferPtr) const =0</td></tr>
-<tr class="memdesc:add059707597fecd2562656fcdf4733f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills 'passBufferPtr' with the necessary data for <a class="el" href="class_ogre_1_1_forward_plus_base.html" title="ForwardPlusBase.">ForwardPlusBase</a> rendering.  <a href="class_ogre_1_1_forward_plus_base.html#add059707597fecd2562656fcdf4733f8">More...</a><br /></td></tr>
-<tr class="separator:add059707597fecd2562656fcdf4733f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeab20896a6afbf90a2be6f3fa0234a94"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_forward_plus_base.html#aeab20896a6afbf90a2be6f3fa0234a94">fillConstBufferData</a> (<a class="el" href="class_ogre_1_1_viewport.html">Viewport</a> *viewport, bool bRequiresTextureFlipping, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> renderTargetHeight, <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> shaderSyntax, bool instancedStereo, float *<a class="el" href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a> passBufferPtr) const =0</td></tr>
+<tr class="memdesc:aeab20896a6afbf90a2be6f3fa0234a94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills 'passBufferPtr' with the necessary data for <a class="el" href="class_ogre_1_1_forward_plus_base.html" title="ForwardPlusBase.">ForwardPlusBase</a> rendering.  <a href="class_ogre_1_1_forward_plus_base.html#aeab20896a6afbf90a2be6f3fa0234a94">More...</a><br /></td></tr>
+<tr class="separator:aeab20896a6afbf90a2be6f3fa0234a94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6450aa5b383629bf5414a15f8e7bccbf"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_forward_plus_base.html#a6450aa5b383629bf5414a15f8e7bccbf">getConstBufferSize</a> (void) const =0</td></tr>
 <tr class="memdesc:a6450aa5b383629bf5414a15f8e7bccbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the amount of bytes that fillConstBufferData is going to fill.  <a href="class_ogre_1_1_forward_plus_base.html#a6450aa5b383629bf5414a15f8e7bccbf">More...</a><br /></td></tr>
 <tr class="separator:a6450aa5b383629bf5414a15f8e7bccbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -371,8 +371,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="add059707597fecd2562656fcdf4733f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add059707597fecd2562656fcdf4733f8">&#9670;&nbsp;</a></span>fillConstBufferData()</h2>
+<a id="aeab20896a6afbf90a2be6f3fa0234a94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeab20896a6afbf90a2be6f3fa0234a94">&#9670;&nbsp;</a></span>fillConstBufferData()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -389,8 +389,14 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
-          <td class="paramname"><em>renderTarget</em>, </td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bRequiresTextureFlipping</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td>
+          <td class="paramname"><em>renderTargetHeight</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -427,7 +433,7 @@ Static Public Attributes</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_forward_plus_base.html#a6450aa5b383629bf5414a15f8e7bccbf" title="Returns the amount of bytes that fillConstBufferData is going to fill.">getConstBufferSize</a> </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>Assumes 'passBufferPtr' is aligned to a vec4/float4 boundary. </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_forward_clustered.html#ac54829600c2616ea2b40fce24f15c1f6">Ogre::ForwardClustered</a>, and <a class="el" href="class_ogre_1_1_forward3_d.html#aa62f53e44bc74fa0ae571947a4b6d311">Ogre::Forward3D</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_forward_clustered.html#aa136cc26f6e0abfc8175e8e727359f56">Ogre::ForwardClustered</a>, and <a class="el" href="class_ogre_1_1_forward3_d.html#a6a9205ee821eebf443c0a06ec7d398c6">Ogre::Forward3D</a>.</p>
 
 </div>
 </div>
