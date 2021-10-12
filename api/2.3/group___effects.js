@@ -2202,7 +2202,7 @@ var group___effects =
         [ "technique", "struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html#a6c9d59554ece092633f2ad2fbc640ee5", null ]
       ] ],
       [ "ShadowParamVec", "class_ogre_1_1_shadow_node_helper.html#a365e9a945dc2cdb574d0e1424e82113a", null ],
-      [ "createShadowNodeWithSettings", "class_ogre_1_1_shadow_node_helper.html#ada46f211cc1d5d3175c73152620c2e29", null ]
+      [ "createShadowNodeWithSettings", "class_ogre_1_1_shadow_node_helper.html#a4625121cc23dc52f31c9dc2821a08faa", null ]
     ] ],
     [ "ShadowTextureDefinition", "class_ogre_1_1_shadow_texture_definition.html", [
       [ "ShadowTextureDefinition", "class_ogre_1_1_shadow_texture_definition.html#a95f59e0cb3cb10ecdb6ef1c2f2ac3779", null ],
@@ -2235,7 +2235,8 @@ var group___effects =
       [ "splitFade", "class_ogre_1_1_shadow_texture_definition.html#a1cd3c1275e1b00eb38cbf805d25646b2", null ],
       [ "splitPadding", "class_ogre_1_1_shadow_texture_definition.html#a9b5126de096e92c457fdb3e9eb568f1b", null ],
       [ "uvLength", "class_ogre_1_1_shadow_texture_definition.html#a6b5048cef58070a4608897ab718eb9c4", null ],
-      [ "uvOffset", "class_ogre_1_1_shadow_texture_definition.html#a9415b07e2e36a433b61767818fa214d8", null ]
+      [ "uvOffset", "class_ogre_1_1_shadow_texture_definition.html#a9415b07e2e36a433b61767818fa214d8", null ],
+      [ "xyPadding", "class_ogre_1_1_shadow_texture_definition.html#ac6810d8af2224855822bb72e6b9e159c", null ]
     ] ],
     [ "TextureDefinitionBase", "class_ogre_1_1_texture_definition_base.html", [
       [ "BufferDefinition", "struct_ogre_1_1_texture_definition_base_1_1_buffer_definition.html", [

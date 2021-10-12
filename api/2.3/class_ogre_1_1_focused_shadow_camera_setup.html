@@ -122,6 +122,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8bee96cb5317cad79772e26a77ace1c4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_focused_shadow_camera_setup.html#a8bee96cb5317cad79772e26a77ace1c4">getShadowCamera</a> (const <a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sm, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *cam, const <a class="el" href="class_ogre_1_1_light.html">Light</a> *light, <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *texCam, size_t iteration, const <a class="el" href="class_ogre_1_1_vector2.html">Vector2</a> &amp;viewportRealSize) const</td></tr>
 <tr class="memdesc:a8bee96cb5317cad79772e26a77ace1c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a uniform shadow camera with a focused view.  <a href="class_ogre_1_1_focused_shadow_camera_setup.html#a8bee96cb5317cad79772e26a77ace1c4">More...</a><br /></td></tr>
 <tr class="separator:a8bee96cb5317cad79772e26a77ace1c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75ffe6687f710f915d610777b1d15ecf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_focused_shadow_camera_setup.html#a75ffe6687f710f915d610777b1d15ecf">getXYPadding</a> () const</td></tr>
+<tr class="memdesc:a75ffe6687f710f915d610777b1d15ecf"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_focused_shadow_camera_setup.html#af7283157442184a861fcd6947a63bf4d" title="setXYPadding FocusedShadowCameraSetup tries to make the shadow mapping camera fit the casters as tigh...">FocusedShadowCameraSetup::setXYPadding</a>.  <a href="class_ogre_1_1_focused_shadow_camera_setup.html#a75ffe6687f710f915d610777b1d15ecf">More...</a><br /></td></tr>
+<tr class="separator:a75ffe6687f710f915d610777b1d15ecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -145,6 +148,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4be37baef81876985aa1071ad5acc6dd"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">operator new[]</a> (size_t sz, const char *file, int line, const char *func)</td></tr>
 <tr class="memdesc:a4be37baef81876985aa1071ad5acc6dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">More...</a><br /></td></tr>
 <tr class="separator:a4be37baef81876985aa1071ad5acc6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7283157442184a861fcd6947a63bf4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_focused_shadow_camera_setup.html#af7283157442184a861fcd6947a63bf4d">setXYPadding</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> pad)</td></tr>
+<tr class="memdesc:af7283157442184a861fcd6947a63bf4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">setXYPadding <a class="el" href="class_ogre_1_1_focused_shadow_camera_setup.html" title="Implements the uniform shadow mapping algorithm in focused mode.">FocusedShadowCameraSetup</a> tries to make the shadow mapping camera fit the casters as tight as possible to minimize aliasing.  <a href="class_ogre_1_1_focused_shadow_camera_setup.html#af7283157442184a861fcd6947a63bf4d">More...</a><br /></td></tr>
+<tr class="separator:af7283157442184a861fcd6947a63bf4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -320,6 +326,33 @@ Static Public Member Functions</h2></td></tr>
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_default_shadow_camera_setup.html#a5e701a58a1dbd0a22810faec87e9a59a">Ogre::DefaultShadowCameraSetup</a>.</p>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_p_s_s_m_shadow_camera_setup.html#affbbc8885fc753e53b9ce1f9fe6e891f">Ogre::PSSMShadowCameraSetup</a>.</p>
+
+</div>
+</div>
+<a id="a75ffe6687f710f915d610777b1d15ecf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75ffe6687f710f915d610777b1d15ecf">&#9670;&nbsp;</a></span>getXYPadding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> Ogre::FocusedShadowCameraSetup::getXYPadding </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="class_ogre_1_1_focused_shadow_camera_setup.html#af7283157442184a861fcd6947a63bf4d" title="setXYPadding FocusedShadowCameraSetup tries to make the shadow mapping camera fit the casters as tigh...">FocusedShadowCameraSetup::setXYPadding</a>. </p>
 
 </div>
 </div>
@@ -740,6 +773,42 @@ template&lt;class Alloc &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="af7283157442184a861fcd6947a63bf4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7283157442184a861fcd6947a63bf4d">&#9670;&nbsp;</a></span>setXYPadding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::FocusedShadowCameraSetup::setXYPadding </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td>
+          <td class="paramname"><em>pad</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>setXYPadding <a class="el" href="class_ogre_1_1_focused_shadow_camera_setup.html" title="Implements the uniform shadow mapping algorithm in focused mode.">FocusedShadowCameraSetup</a> tries to make the shadow mapping camera fit the casters as tight as possible to minimize aliasing. </p>
+<p>But due to various math issues sometimes it ends up being too tight.</p>
+<p>If you experience missing shadows or with gaps/holes you may need to increase the padding.</p>
+<p>Most likely you want the reverse. In particular circumstances you want maximum quality thus you want to minimize this padding </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pad</td><td>Value in range [0; inf) Negative values may cause glitches </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

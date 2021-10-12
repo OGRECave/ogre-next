@@ -1,5 +1,14 @@
 var NAVTREEINDEX278 =
 {
+"struct_ogre_1_1_light_list_info.html#a47a753763c071eaac993cbea365963b1":[5,2,2,62,4],
+"struct_ogre_1_1_light_list_info.html#a5748ac07e1e8d1a0be2458ae3024eadf":[5,2,2,62,1],
+"struct_ogre_1_1_light_list_info.html#a85ea9f122b2b6eea2d1bd3b4b05dacd1":[5,2,2,62,2],
+"struct_ogre_1_1_light_list_info.html#ab20c71fb5b48f76f2c0da904583cb59c":[5,2,2,62,0],
+"struct_ogre_1_1_linear_resampler.html":[5,2,3,12],
+"struct_ogre_1_1_linear_resampler.html#acad0869b5293daea8acb677d8dc8a864":[5,2,3,12,0],
+"struct_ogre_1_1_linear_resampler___byte.html":[5,2,3,13],
+"struct_ogre_1_1_linear_resampler___byte.html#a421a196b3a71ac9ffc50be486698185e":[5,2,3,13,0],
+"struct_ogre_1_1_linear_resampler___float32.html":[5,2,3,14],
 "struct_ogre_1_1_linear_resampler___float32.html#a1f12b5861535684bc775e7f682dd2f97":[5,2,3,14,0],
 "struct_ogre_1_1_lod_config.html":[7,0,0,619],
 "struct_ogre_1_1_lod_config.html#a1344213f8ee863fab847136e13dc1195":[7,0,0,619,2],
@@ -240,14 +249,5 @@ var NAVTREEINDEX278 =
 "struct_ogre_1_1_n_u_l_l_vao_manager_1_1_block.html#a217cd182708d69317e3c6e4c33178462":[7,0,0,754,0,0],
 "struct_ogre_1_1_n_u_l_l_vao_manager_1_1_block.html#a98b0b37c0a93a0e2ce3bdd83a677f1b2":[7,0,0,754,0,2],
 "struct_ogre_1_1_n_u_l_l_vao_manager_1_1_block.html#a9ac8c0d34f0681c58d265e47349c41ab":[7,0,0,754,0,1],
-"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html":[7,0,0,754,1],
-"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#a195d638ac120b710ee243ba48676bd96":[7,0,0,754,1,2],
-"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#a44e42083526c6f92545361c36b181db2":[7,0,0,754,1,6],
-"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#a74e575b576b618161db20a779ced37cb":[7,0,0,754,1,0],
-"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#a94dd2552740eb0bcca8dc2ce2efe46b8":[7,0,0,754,1,5],
-"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#ae805bcdfeb0fec276d5be78169212fe8":[7,0,0,754,1,4],
-"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#af5c486a598e4b9cd990aa9d8f196b913":[7,0,0,754,1,1],
-"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#afce0c7cc75a31b0ad7697b6681304aee":[7,0,0,754,1,3],
-"struct_ogre_1_1_n_u_l_l_vertex_array_object.html":[7,0,0,755],
-"struct_ogre_1_1_n_u_l_l_vertex_array_object.html#a14df76751f4a475ee711ae7a0a2e1a97":[7,0,0,755,12]
+"struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html":[7,0,0,754,1]
 };

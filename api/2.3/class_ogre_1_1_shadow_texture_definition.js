@@ -30,5 +30,6 @@ var class_ogre_1_1_shadow_texture_definition =
     [ "splitFade", "class_ogre_1_1_shadow_texture_definition.html#a1cd3c1275e1b00eb38cbf805d25646b2", null ],
     [ "splitPadding", "class_ogre_1_1_shadow_texture_definition.html#a9b5126de096e92c457fdb3e9eb568f1b", null ],
     [ "uvLength", "class_ogre_1_1_shadow_texture_definition.html#a6b5048cef58070a4608897ab718eb9c4", null ],
-    [ "uvOffset", "class_ogre_1_1_shadow_texture_definition.html#a9415b07e2e36a433b61767818fa214d8", null ]
+    [ "uvOffset", "class_ogre_1_1_shadow_texture_definition.html#a9415b07e2e36a433b61767818fa214d8", null ],
+    [ "xyPadding", "class_ogre_1_1_shadow_texture_definition.html#ac6810d8af2224855822bb72e6b9e159c", null ]
 ];
