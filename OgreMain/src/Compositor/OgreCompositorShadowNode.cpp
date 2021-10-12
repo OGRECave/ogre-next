@@ -1119,6 +1119,7 @@ namespace Ogre
         size_t numExtraShadowMapsForPssmSplits = 0;
         size_t numTargetPasses = 0;
         ResolutionVec atlasResolutions;
+        FastArray<size_t> passesPerAtlas;
 
         const RenderSystem *renderSystem = compositorManager->getRenderSystem();
 
@@ -1136,6 +1137,14 @@ namespace Ogre
 
         while( itor != end )
         {
+            if( itor->firstRq >= itor->lastRq )
+            {
+                OGRE_EXCEPT(
+                    Exception::ERR_INVALIDPARAMS,
+                    "We must satisfy firstRq < lastRq. If unsure, set firstRq = 0u & lastRq = 255u",
+                    "CompositorShadowNode::createShadowNodeWithSettings" );
+            }
+
             if( itor->technique == SHADOWMAP_PSSM )
             {
                 if( itor->supportedLightTypes != directionalMask )
@@ -1162,11 +1171,17 @@ namespace Ogre
             }
 
             if( itor->atlasId >= atlasResolutions.size() )
+            {
                 atlasResolutions.resize( itor->atlasId + 1u );
+                passesPerAtlas.resize( itor->atlasId + 1u, 0u );
+            }
 
             Resolution &resolution = atlasResolutions[itor->atlasId];
 
             const size_t numSplits = itor->technique == SHADOWMAP_PSSM ? itor->numPssmSplits : 1u;
+
+            passesPerAtlas[itor->atlasId] += numSplits;
+
             for( size_t i=0; i<numSplits; ++i )
             {
                 if( itor->resolution[i].x == 0 || itor->resolution[i].y == 0 )
@@ -1359,6 +1374,10 @@ namespace Ogre
         for( size_t atlasId=0; atlasId<numTextures; ++atlasId )
         {
             const String texName = "atlas" + StringConverter::toString( atlasId );
+
+            const bool bMergeClearAndRender = passesPerAtlas[atlasId] <= 1u;
+
+            if( !bMergeClearAndRender )
             {
                 //Atlas clear pass
                 CompositorTargetDef *targetDef = shadowNodeDef->addTargetPass( texName );
@@ -1391,7 +1410,15 @@ namespace Ogre
                         CompositorPassSceneDef *passScene =
                                 static_cast<CompositorPassSceneDef*>( passDef );
 
+                        if( bMergeClearAndRender )
+                        {
+                            passScene->setAllLoadActions( LoadAction::Clear );
+                            passScene->mClearDepth = 1.0f;
+                        }
+
                         passScene->mShadowMapIdx = shadowMapIdx;
+                        passScene->mFirstRQ = shadowParam.firstRq;
+                        passScene->mLastRQ = shadowParam.lastRq;
                         passScene->mIncludeOverlays = false;
                         passScene->mVisibilityMask = visibilityMask;
                         ++shadowMapIdx;
@@ -1430,6 +1457,8 @@ namespace Ogre
                             passScene->mClearDepth = 1.0f;
                             passScene->mCameraCubemapReorient = true;
                             passScene->mShadowMapIdx = shadowMapIdx;
+                            passScene->mFirstRQ = shadowParam.firstRq;
+                            passScene->mLastRQ = shadowParam.lastRq;
                             passScene->mIncludeOverlays = false;
                             passScene->mVisibilityMask = visibilityMask;
                         }

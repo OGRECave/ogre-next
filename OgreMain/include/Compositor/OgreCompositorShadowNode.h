@@ -367,6 +367,15 @@ namespace Ogre
             /// You can have all shadow maps share the same shadow map if you want.
             /// Don't leave gaps (e.g. use atlasId = 0 and atlasId = 2, but not atlasId = 1)
             uint8 atlasId;
+            /// When rendering, which Render Queues to consider.
+            /// Normally you want to set this to 0; 255.
+            ///
+            /// However if you have a dedicated shadow map for e.g. the main player
+            /// then you want to put the player in a specific RQs and tighten
+            /// the Render Queue to obtain maximum coverage quality
+            /// Range is [firstRq; lastRq)
+            uint8 firstRq;
+            uint8 lastRq;
             /// In pixels, start of the texture (XY). One for each PSSM split.
             /// When not using PSSM, entries in range [1; 4) are ignored.
             /// Be careful not to overlap within the same atlasId.
