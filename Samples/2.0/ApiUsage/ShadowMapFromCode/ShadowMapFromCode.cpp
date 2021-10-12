@@ -58,9 +58,6 @@ namespace Demo
             shadowParam.atlasStart[2].x = 1024u;
             shadowParam.atlasStart[2].y = 2048u;
 
-            shadowParam.firstRq = 0u;
-            shadowParam.lastRq = 255u;
-
             shadowParam.supportedLightTypes = 0u;
             shadowParam.addLightType( Ogre::Light::LT_DIRECTIONAL );
             shadowParams.push_back( shadowParam );

@@ -1102,12 +1102,22 @@ namespace Ogre
                                                          Real pssmLambda, Real splitPadding,
                                                          Real splitBlend, Real splitFade,
                                                          uint32 numStableSplits,
-                                                         uint32 visibilityMask )
+                                                         uint32 visibilityMask,
+                                                         uint8 firstRq,
+                                                         uint8 lastRq )
     {
         typedef map<uint64, uint32>::type ResolutionsToEsmMap;
 
         ResolutionsToEsmMap resolutionsToEsmMap;
         const bool supportsCompute = capabilities->hasCapability( RSC_COMPUTE_PROGRAM );
+
+        if( firstRq >= lastRq )
+        {
+            OGRE_EXCEPT(
+                Exception::ERR_INVALIDPARAMS,
+                "We must satisfy firstRq < lastRq. If unsure, set firstRq = 0u & lastRq = 255u",
+                "CompositorShadowNode::createShadowNodeWithSettings" );
+        }
 
         const uint32 spotMask           = 1u << Light::LT_SPOTLIGHT;
         const uint32 directionalMask    = 1u << Light::LT_DIRECTIONAL;
@@ -1137,14 +1147,6 @@ namespace Ogre
 
         while( itor != end )
         {
-            if( itor->firstRq >= itor->lastRq )
-            {
-                OGRE_EXCEPT(
-                    Exception::ERR_INVALIDPARAMS,
-                    "We must satisfy firstRq < lastRq. If unsure, set firstRq = 0u & lastRq = 255u",
-                    "CompositorShadowNode::createShadowNodeWithSettings" );
-            }
-
             if( itor->technique == SHADOWMAP_PSSM )
             {
                 if( itor->supportedLightTypes != directionalMask )
@@ -1417,8 +1419,8 @@ namespace Ogre
                         }
 
                         passScene->mShadowMapIdx = shadowMapIdx;
-                        passScene->mFirstRQ = shadowParam.firstRq;
-                        passScene->mLastRQ = shadowParam.lastRq;
+                        passScene->mFirstRQ = firstRq;
+                        passScene->mLastRQ = lastRq;
                         passScene->mIncludeOverlays = false;
                         passScene->mVisibilityMask = visibilityMask;
                         ++shadowMapIdx;
@@ -1457,8 +1459,8 @@ namespace Ogre
                             passScene->mClearDepth = 1.0f;
                             passScene->mCameraCubemapReorient = true;
                             passScene->mShadowMapIdx = shadowMapIdx;
-                            passScene->mFirstRQ = shadowParam.firstRq;
-                            passScene->mLastRQ = shadowParam.lastRq;
+                            passScene->mFirstRQ = firstRq;
+                            passScene->mLastRQ = lastRq;
                             passScene->mIncludeOverlays = false;
                             passScene->mVisibilityMask = visibilityMask;
                         }
