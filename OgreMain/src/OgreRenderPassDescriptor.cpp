@@ -163,7 +163,7 @@ namespace Ogre
             mRequiresTextureFlipping = mStencil.texture->requiresTextureFlipping();
 
         if( bResolvingToNonFlipping )
-            mRequiresTextureFlipping = false;
+            mRequiresTextureFlipping = mColour[0].resolveTexture->requiresTextureFlipping();
     }
     //-----------------------------------------------------------------------------------
     void RenderPassDescriptor::colourEntriesModified(void)
