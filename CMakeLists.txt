@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -8,8 +8,8 @@
 #-------------------------------------------------------------------
 
 ######################################################################
-# OGRE BUILD SYSTEM
-# Welcome to the CMake build system for OGRE.
+# OGRE-Next BUILD SYSTEM
+# Welcome to the CMake build system for OGRE-Next.
 # This is the main file where we prepare the general build environment
 # and provide build configuration options.
 ######################################################################
