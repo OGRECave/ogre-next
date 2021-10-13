@@ -38,7 +38,7 @@ if(WIN32)
   set(CMAKE_SUPPRESS_REGENERATION true)
 endif()
 
-project(OGRE)
+project(OGRE-Next)
 
 # Find actual Ogre root
 if (WIN32 OR APPLE)

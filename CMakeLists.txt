@@ -49,7 +49,7 @@ if (APPLE AND NOT ANDROID)
 endif ()
 
 
-project(OGRE)
+project(OGRE-Next)
 
 # Include necessary submodules
 set(CMAKE_MODULE_PATH
