@@ -189,7 +189,10 @@ shared by other datablocks, so you will be changing them as well as side
 effect) and it would probably work. But it will definitely fail on D3D11
 render system.  
 
-Refer to the following pages for block references:
+Refer to the following pages for block parameter references:
+- @subpage hlmsblendblockref
+- @subpage hlmsdatablockref
+- @subpage hlmsmacroblockref
 - @subpage hlmssamplerref
 
 ## Datablocks {#HlmsBlocksDatablocks}
