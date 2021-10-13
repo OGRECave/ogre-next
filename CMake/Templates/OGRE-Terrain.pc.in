@@ -4,7 +4,7 @@ libdir=${prefix}/@OGRE_LIB_DIRECTORY@
 includedir=${prefix}/include
 
 Name: OGRE-Terrain
-Description: Outdoor terrain component for OGRE
+Description: Outdoor terrain component for OGRE-Next
 Version: @OGRE_VERSION@
 Requires: OGRE = @OGRE_VERSION@ @OGRE_PAGING_ADDITIONAL_PACKAGES@
 Libs: -L${libdir} -lOgreTerrain@OGRE_LIB_SUFFIX@
