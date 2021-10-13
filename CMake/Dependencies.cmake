@@ -13,7 +13,7 @@
 
 # OGRE_DEPENDENCIES_DIR can be used to specify a single base
 # folder where the required dependencies may be found.
-set(OGRE_DEPENDENCIES_DIR "" CACHE PATH "Path to prebuilt OGRE dependencies")
+set(OGRE_DEPENDENCIES_DIR "" CACHE PATH "Path to prebuilt OGRE-Next dependencies")
 include(FindPkgMacros)
 getenv_path(OGRE_DEPENDENCIES_DIR)
 if(OGRE_BUILD_PLATFORM_EMSCRIPTEN)
