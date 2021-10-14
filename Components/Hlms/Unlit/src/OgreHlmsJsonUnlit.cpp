@@ -178,8 +178,20 @@ namespace Ogre
 		{
 			char tmpBuffer[64];
 			LwString blockName(LwString::FromEmptyPointer(tmpBuffer, sizeof(tmpBuffer)));
-			blockName.a("diffuse_map", i);
-			itor = json.FindMember(blockName.c_str());
+			
+			itor = json.MemberEnd();
+			if (i == 0) // Special case for "diffuse_map0" check for "diffuse_map" as well.
+			{
+				blockName.a("diffuse_map");
+				itor = json.FindMember(blockName.c_str());
+			}
+			
+			if(itor == json.MemberEnd()) // Case for diffuse_map1 -> diffuse_map15
+			{
+				blockName.a("diffuse_map", i);
+				itor = json.FindMember(blockName.c_str());
+			}			
+			
 			if (itor != json.MemberEnd())
 			{
 				const rapidjson::Value &subobj = itor->value;
