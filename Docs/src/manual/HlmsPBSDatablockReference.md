@@ -1,7 +1,8 @@
 
-Reference Guide: HLMS Datablock {#hlmsdatablockref}
+Reference Guide: HLMS PBS Datablock {#hlmspbsdatablockref}
 ===============================
 
+- Reference for a datablock for the PBS HLMS implementation
 - A Datablock is a "material" from the user's perspective. It is the only mutable block. It holds data (i.e. material properties) that will be passed directly to the shaders, and also holds which Macroblock, Blendblocks and Samplerblocks are assigned to it.
 - Datablocks are located in Json material filename: `[name].material.json`
 - When loading a texture, if no sampler is provided, a default one from the HLMS is supplied
@@ -23,7 +24,7 @@ Reference Guide: HLMS Datablock {#hlmsdatablockref}
 ## Parameter: blendblock {#dbParamBlendBlock}
 - Sets the blendblock definition
 - Two value variations:
-    - Type 1: Value is type string, the name of a blendblock definition. Example: `"blendblock" : "[blendblock_name]"`
+    - Type 1: Value is type string, the name of a blendblock definition. Example: `"blendblock" : "blendblock_name"`
     - Type 2: Value is type string array:
         - First array value is the name of a blendblock definition
         - Second array value is the name of a blendblock definition for shadows
@@ -249,7 +250,7 @@ Reference Guide: HLMS Datablock {#hlmsdatablockref}
     - `metallic`: Metallic workflow. The texture is used as a metallic texture and expected to be monochrome. Fresnel setting should not be used.
 - **DEFAULT="specular_ogre"**
 
-# Example Datablock Definition: {#dbExample}
+# Example PBS Datablock Definition: {#dbExample}
 ```
 { 
     "pbs" : 

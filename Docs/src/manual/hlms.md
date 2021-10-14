@@ -191,7 +191,9 @@ render system.
 
 Refer to the following pages for block parameter references:
 - @subpage hlmsblendblockref
-- @subpage hlmsdatablockref
+- @subpage hlmspbsdatablockref
+- @subpage hlmsunlitdatablockref
+- @subpage hlmsterradatablockref
 - @subpage hlmsmacroblockref
 - @subpage hlmssamplerref
 
