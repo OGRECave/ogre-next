@@ -238,32 +238,39 @@ var manual =
       ] ],
       [ "Post-processing the command buffer", "commandbuffer.html#CommandBufferPostProcessing", null ]
     ] ],
+    [ "Tunning memory consumption and resources", "_tuning_memory_resources.html", [
+      [ "Grouping textures by type", "_tuning_memory_resources.html#GroupingTexturesByType", null ],
+      [ "Dynamic vs Default buffers", "_tuning_memory_resources.html#DynamicVsDefaultBuffers", null ],
+      [ "Tweaking default memory consumption by VaoManager", "_tuning_memory_resources.html#TweakingVaoManager", [
+        [ "Vulkan and <tt>TEXTURES_OPTIMAL</tt>", "_tuning_memory_resources.html#autotoc_md23", null ]
+      ] ]
+    ] ],
     [ "What's new in Ogre 2.2", "_ogre22_changes.html", [
-      [ "Load Store semantics", "_ogre22_changes.html#autotoc_md23", [
-        [ "Now that we’ve explained how TBDRs work, we can explain load and store actions", "_ogre22_changes.html#autotoc_md24", null ]
+      [ "Load Store semantics", "_ogre22_changes.html#autotoc_md24", [
+        [ "Now that we’ve explained how TBDRs work, we can explain load and store actions", "_ogre22_changes.html#autotoc_md25", null ]
       ] ],
-      [ "More control over MSAA", "_ogre22_changes.html#autotoc_md25", null ],
-      [ "Porting to Ogre 2.2 from 2.1", "_ogre22_changes.html#autotoc_md26", [
-        [ "PixelFormats", "_ogre22_changes.html#autotoc_md27", [
-          [ "Common pixel format equivalencies", "_ogre22_changes.html#autotoc_md28", null ]
+      [ "More control over MSAA", "_ogre22_changes.html#autotoc_md26", null ],
+      [ "Porting to Ogre 2.2 from 2.1", "_ogre22_changes.html#autotoc_md27", [
+        [ "PixelFormats", "_ogre22_changes.html#autotoc_md28", [
+          [ "Common pixel format equivalencies", "_ogre22_changes.html#autotoc_md29", null ]
         ] ],
-        [ "Useful code snippets", "_ogre22_changes.html#autotoc_md29", [
-          [ "Create a TextureGpu based on a file", "_ogre22_changes.html#autotoc_md30", null ],
-          [ "Create a TextureGpu based that you manually fill", "_ogre22_changes.html#autotoc_md31", null ],
-          [ "Uploading data to a TextureGpu", "_ogre22_changes.html#autotoc_md32", null ],
-          [ "Upload streaming", "_ogre22_changes.html#autotoc_md33", null ],
-          [ "Downloading data from TextureGpu into CPU", "_ogre22_changes.html#autotoc_md34", null ],
-          [ "Downloading streaming", "_ogre22_changes.html#autotoc_md35", null ]
+        [ "Useful code snippets", "_ogre22_changes.html#autotoc_md30", [
+          [ "Create a TextureGpu based on a file", "_ogre22_changes.html#autotoc_md31", null ],
+          [ "Create a TextureGpu based that you manually fill", "_ogre22_changes.html#autotoc_md32", null ],
+          [ "Uploading data to a TextureGpu", "_ogre22_changes.html#autotoc_md33", null ],
+          [ "Upload streaming", "_ogre22_changes.html#autotoc_md34", null ],
+          [ "Downloading data from TextureGpu into CPU", "_ogre22_changes.html#autotoc_md35", null ],
+          [ "Downloading streaming", "_ogre22_changes.html#autotoc_md36", null ]
         ] ]
       ] ],
-      [ "Difference between depth, numSlices and depthOrSlices", "_ogre22_changes.html#autotoc_md36", null ],
-      [ "Memory layout of textures and images", "_ogre22_changes.html#autotoc_md37", null ],
-      [ "Troubleshooting errors", "_ogre22_changes.html#autotoc_md38", null ],
-      [ "RenderPassDescriptors", "_ogre22_changes.html#autotoc_md39", null ],
-      [ "DescriptorSetTexture & co.", "_ogre22_changes.html#autotoc_md40", null ],
-      [ "Does 2.2 interoperate well with the HLMS texture arrays?", "_ogre22_changes.html#autotoc_md41", null ],
-      [ "Hlms porting", "_ogre22_changes.html#autotoc_md42", null ],
-      [ "Things to watch out when porting", "_ogre22_changes.html#autotoc_md43", null ]
+      [ "Difference between depth, numSlices and depthOrSlices", "_ogre22_changes.html#autotoc_md37", null ],
+      [ "Memory layout of textures and images", "_ogre22_changes.html#autotoc_md38", null ],
+      [ "Troubleshooting errors", "_ogre22_changes.html#autotoc_md39", null ],
+      [ "RenderPassDescriptors", "_ogre22_changes.html#autotoc_md40", null ],
+      [ "DescriptorSetTexture & co.", "_ogre22_changes.html#autotoc_md41", null ],
+      [ "Does 2.2 interoperate well with the HLMS texture arrays?", "_ogre22_changes.html#autotoc_md42", null ],
+      [ "Hlms porting", "_ogre22_changes.html#autotoc_md43", null ],
+      [ "Things to watch out when porting", "_ogre22_changes.html#autotoc_md44", null ]
     ] ],
     [ "Behavor of StagingTexture in D3D11", "_behavor_staging_texture_d3_d11.html", [
       [ "Attempting to be contiguous", "_behavor_staging_texture_d3_d11.html#autotoc_md6", null ],
