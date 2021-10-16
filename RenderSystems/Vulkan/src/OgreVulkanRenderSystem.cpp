@@ -549,6 +549,13 @@ namespace Ogre
             rsc->setMaxSupportedAnisotropy( deviceLimits.maxSamplerAnisotropy );
         }
 
+        {
+            uint32 numTexturesInTextureDescriptor[NumShaderTypes + 1];
+            for( size_t i = 0u; i < NumShaderTypes + 1; ++i )
+                numTexturesInTextureDescriptor[i] = deviceLimits.maxPerStageDescriptorSampledImages;
+            rsc->setNumTexturesInTextureDescriptor( numTexturesInTextureDescriptor );
+        }
+
         rsc->setCapability( RSC_STORE_AND_MULTISAMPLE_RESOLVE );
         rsc->setCapability( RSC_TEXTURE_GATHER );
 

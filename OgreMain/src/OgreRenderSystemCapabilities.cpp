@@ -64,6 +64,10 @@ namespace Ogre {
         mMaxThreadsPerThreadgroupAxis[0] = 1024u;
         mMaxThreadsPerThreadgroupAxis[1] = 1024u;
         mMaxThreadsPerThreadgroupAxis[2] = 64u;
+
+        // OpenGL & Vulkan guarantee at least 16. D3D11 at least 128. Metal 31
+        for( size_t i = 0u; i < NumShaderTypes + 1u; ++i )
+            mNumTexturesInTextureDescriptor[i] = 16u;
     }
     //-----------------------------------------------------------------------
     RenderSystemCapabilities::~RenderSystemCapabilities()

@@ -405,6 +405,12 @@ namespace Ogre
         /// The number of vertices a geometry program can emit in a single run
         int mGeometryProgramNumOutputVertices;
 
+        /// Max number of textures per shader stage that can be fit in
+        /// DescriptorSetTexture and DescriptorSetTexture2
+        ///
+        /// mNumTexturesInTextureDescriptor[NumShaderTypes] is compute
+        uint32 mNumTexturesInTextureDescriptor[NumShaderTypes + 1u];
+
 
         /// The list of supported shader profiles
         ShaderProfiles mSupportedShaderProfiles;
@@ -577,6 +583,27 @@ namespace Ogre
         ushort getNumMultiRenderTargets(void) const
         {
             return mNumMultiRenderTargets;
+        }
+
+        /** Max number of textures per shader stage that can be fit in
+            DescriptorSetTexture and DescriptorSetTexture2
+
+            mNumTexturesInTextureDescriptor[NumShaderTypes] is compute
+        @remarks
+            With some APIs Ogre will bind the textures to all stages.
+            Hence if you're using Vertex & Pixel shaders and vertex
+            supports 16 but pixel supports 32, you can only use 16.
+            This combo is pretty rare though.
+        */
+        uint32 getNumTexturesInTextureDescriptor( ShaderType shaderType ) const
+        {
+            return mNumTexturesInTextureDescriptor[shaderType];
+        }
+
+        void setNumTexturesInTextureDescriptor( uint32 values[NumShaderTypes + 1] )
+        {
+            for( int i = 0u; i < NumShaderTypes + 1; ++i )
+                mNumTexturesInTextureDescriptor[i] = values[i];
         }
 
         /** Returns true if capability is render system specific

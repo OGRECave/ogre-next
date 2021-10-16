@@ -474,6 +474,41 @@ namespace Ogre {
         rsc->setMaximumResolutions( static_cast<ushort>(maxRes2d), static_cast<ushort>(maxRes3d),
                                     static_cast<ushort>(maxResCube) );
 
+        {
+            uint32 numTexturesInTextureDescriptor[NumShaderTypes + 1];
+            GLenum imageUnitEnums[NumShaderTypes + 1] = { GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,           //
+                                                          GL_MAX_TEXTURE_IMAGE_UNITS,                  //
+                                                          GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS,         //
+                                                          GL_MAX_TESS_CONTROL_TEXTURE_IMAGE_UNITS,     //
+                                                          GL_MAX_TESS_EVALUATION_TEXTURE_IMAGE_UNITS,  //
+                                                          GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS };
+
+            if( !mGLSupport->checkExtension( "GL_ARB_tessellation_shader" ) && !hasGL40 )
+            {
+                imageUnitEnums[HullShader] = 0;
+                imageUnitEnums[DomainShader] = 0;
+            }
+            if( !mGLSupport->checkExtension( "GL_ARB_compute_shader" ) && !mHasGL43 )
+            {
+                imageUnitEnums[NumShaderTypes] = 0;
+            }
+
+            for( size_t i = 0u; i < NumShaderTypes + 1u; ++i )
+            {
+                if( imageUnitEnums[i] )
+                {
+                    GLint value;
+                    glGetIntegerv( imageUnitEnums[i], &value );
+                    numTexturesInTextureDescriptor[i] = static_cast<uint32>( value );
+                }
+                else
+                {
+                    numTexturesInTextureDescriptor[i] = 0u;
+                }
+            }
+            rsc->setNumTexturesInTextureDescriptor( numTexturesInTextureDescriptor );
+        }
+
         // Point size
         GLfloat psRange[2] = {0.0, 0.0};
         OGRE_CHECK_GL_ERROR(glGetFloatv(GL_POINT_SIZE_RANGE, psRange));

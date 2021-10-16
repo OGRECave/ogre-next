@@ -409,6 +409,27 @@ namespace Ogre
         rsc->setCapability( RSC_TYPED_UAV_LOADS );
 #endif
 
+        {
+            uint32 numTexturesInTextureDescriptor[NumShaderTypes + 1];
+            for( size_t i = 0u; i < NumShaderTypes + 1; ++i )
+            {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+                // There is a discrepancy. Apple docs say:
+                //  MTLGPUFamilyApple4 (A11 + iOS 13) supports 96 texture units
+                //  MTLFeatureSet_iOS_GPUFamily4_v1 (A11 + iOS 12) supports 31 texture units
+                //
+                // Basically same HW but different OS. This is actually possible.
+                //
+                // TODO: Query MTLGPUFamilyApple4, MTLGPUFamilyApple5 and onwards on iOS 13+
+                numTexturesInTextureDescriptor[i] = 31u;
+#else
+                numTexturesInTextureDescriptor[i] = 128u;
+#endif
+            }
+            numTexturesInTextureDescriptor[HullShader] = 0u;
+            numTexturesInTextureDescriptor[DomainShader] = 0u;
+            rsc->setNumTexturesInTextureDescriptor( numTexturesInTextureDescriptor );
+        }
         //rsc->setCapability(RSC_ATOMIC_COUNTERS);
 
         rsc->addShaderProfile( "metal" );
