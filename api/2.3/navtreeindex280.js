@@ -1,5 +1,7 @@
 var NAVTREEINDEX280 =
 {
+"struct_ogre_1_1_pbs_property.html#ad8fbdb45aaf5fc17490007c20a2589f8":[5,0,0,20,53],
+"struct_ogre_1_1_pbs_property.html#ad9a39c3d8effd030d15d4fd4b674e939":[5,0,0,20,98],
 "struct_ogre_1_1_pbs_property.html#adbedfac31e7a2716f7aaa62d57f9a02d":[5,0,0,20,80],
 "struct_ogre_1_1_pbs_property.html#ade836dc4057a0012a4768a5ecf6a1942":[5,0,0,20,43],
 "struct_ogre_1_1_pbs_property.html#ae10517a315c24a8b2f664c1b137034ae":[5,0,0,20,3],
@@ -146,8 +148,8 @@ var NAVTREEINDEX280 =
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a17af5a6b49fcd71ca726daf1dd67af98":[5,0,1,35,0],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a58ba184768924a39ab195dcf96472f65":[5,2,12,35,2],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a58ba184768924a39ab195dcf96472f65":[5,0,1,35,2],
-"struct_ogre_1_1_ray_scene_query_result_entry.html#acc6655f373532d7b9d3017acab7535a9":[5,2,12,35,3],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#acc6655f373532d7b9d3017acab7535a9":[5,0,1,35,3],
+"struct_ogre_1_1_ray_scene_query_result_entry.html#acc6655f373532d7b9d3017acab7535a9":[5,2,12,35,3],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#af3e8eed523c4215c5733a9886db7ec29":[5,0,1,35,1],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#af3e8eed523c4215c5733a9886db7ec29":[5,2,12,35,1],
 "struct_ogre_1_1_render_pass_colour_target.html":[5,2,11,94],
@@ -247,7 +249,5 @@ var NAVTREEINDEX280 =
 "struct_ogre_1_1_rendering_metrics.html#a8e6d2e09bd08cfaed88d20ae40a236fa":[5,2,2,93,0],
 "struct_ogre_1_1_rendering_metrics.html#a9122bced949f770c78d83be40a95793a":[5,2,2,93,4],
 "struct_ogre_1_1_rendering_metrics.html#ab4abfdaf1472a2146853cfd2113cbb21":[5,2,2,93,3],
-"struct_ogre_1_1_rendering_metrics.html#aec6cb495fca1733334602271d043cfff":[5,2,2,93,6],
-"struct_ogre_1_1_rendering_metrics.html#af3f28bc50e4dc72e47ff1099fbbb47a2":[5,2,2,93,2],
-"struct_ogre_1_1_resource_group_manager_1_1_resource_declaration.html":[5,2,11,102,0]
+"struct_ogre_1_1_rendering_metrics.html#aec6cb495fca1733334602271d043cfff":[5,2,2,93,6]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX278 =
 {
+"struct_ogre_1_1_light_closest.html#aab0691f8197b06e2c28bc74dbf9b6522":[5,2,2,61,0],
+"struct_ogre_1_1_light_closest.html#aabcad38af292fdfc1e2179c1a9be4ac3":[5,2,2,61,6],
 "struct_ogre_1_1_light_closest.html#aac9b931e3ccda0855b8b424732d57d5e":[5,2,2,61,1],
 "struct_ogre_1_1_light_closest.html#aed0c94b9023439bf8fb67600270e9908":[5,2,2,61,4],
 "struct_ogre_1_1_light_closest.html#af692c6045bf99f42a763b4de27cece53":[5,2,2,61,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX278 =
 "struct_ogre_1_1_metal_vao_manager_1_1_stride_changer.html#a91ac53290072a2c628b8f476040c7fbe":[7,0,0,716,1,2],
 "struct_ogre_1_1_metal_vao_manager_1_1_stride_changer.html#ae053aca9b00f744daf379195801bb7b1":[7,0,0,716,1,4],
 "struct_ogre_1_1_metal_vao_manager_1_1_stride_changer.html#aefa3ea5b9b764e82085c4e5afd9a4674":[7,0,0,716,1,5],
-"struct_ogre_1_1_movable_object_lod_changed_event.html":[5,2,4,8],
-"struct_ogre_1_1_movable_object_lod_changed_event.html#af1634e44ab330c287488365219d7f4bd":[5,2,4,8,1],
-"struct_ogre_1_1_movable_object_lod_changed_event.html#af49dc1c7f039fa4d999e9621bfdf72de":[5,2,4,8,0]
+"struct_ogre_1_1_movable_object_lod_changed_event.html":[5,2,4,8]
 };
