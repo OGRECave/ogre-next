@@ -39,6 +39,7 @@
 	{
 		ogre_float4x3 worldTransform;
 		uint albedoTexIdx;
+		float lodLevel;
 		Aabb bounds;
 	};
 
@@ -54,6 +55,7 @@
 		retVal.bounds.halfSize = instanceBuffer[instanceIdx].aabb1.xyz;
 
 		retVal.albedoTexIdx = floatBitsToUint( instanceBuffer[instanceIdx].aabb0.w );
+		retVal.lodLevel = instanceBuffer[instanceIdx].aabb1.w;
 
 		return retVal;
 	}
@@ -81,7 +83,7 @@
 							   float oldNumHits )
 	{
 		return newAccumValues / ( numHits + oldNumHits ) +
-			   oldAveragedValue * ( oldNumTris / ( numTris + oldNumTris ) );
+			   oldAveragedValue * ( oldNumHits / ( numHits + oldNumHits ) );
 	}
 @end
 
@@ -121,12 +123,16 @@
 			uint normalTexIdx = instance.albedoTexIdx + 1u;
 			uint emissiveIdx = instance.albedoTexIdx + 2u;
 
-			float3 instanceUvw = mul( instance.worldTransform, float4( voxelAabb.center, 1.0f ) ).xyz;
+			float3 instanceUvw = mul( float4( voxelAabb.center, 1.0f ), instance.worldTransform ).xyz;
 
-			float4 instanceAlbedo = OGRE_Sample( meshTextures[albedoTexIdx], instanceUvw, lodLevel );
-			float3 instanceEmissive =
-				OGRE_Sample( meshTextures[emissiveIdx], instanceUvw, lodLevel ).xyz;
-			float3 instanceNormal = OGRE_Sample( meshTextures[normalTexIdx], instanceUvw, lodLevel );
+			float4 instanceAlbedo = OGRE_SampleLevel( meshTextures[albedoTexIdx], trilinearSampler,
+													  instanceUvw, instance.lodLevel );
+			float3 instanceEmissive = OGRE_SampleLevel( meshTextures[emissiveIdx], trilinearSampler,
+														instanceUvw, instance.lodLevel )
+										  .xyz;
+			float3 instanceNormal = OGRE_SampleLevel( meshTextures[normalTexIdx], trilinearSampler,
+													  instanceUvw, instance.lodLevel )
+										.xyz;
 
 			if( instanceUvw.x >= 0.0f && instanceUvw.x <= 1.0f &&  //
 				instanceUvw.y >= 0.0f && instanceUvw.y <= 1.0f &&  //

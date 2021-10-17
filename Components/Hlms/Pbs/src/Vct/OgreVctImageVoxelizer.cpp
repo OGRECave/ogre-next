@@ -140,6 +140,9 @@ namespace Ogre
                          "Could not find VCT/ImageVoxelizer",
                          "VctImageVoxelizer::createComputeJobs" );
         }
+
+        if( mVaoManager->readOnlyIsTexBuffer() )
+            mImageVoxelizerJob->setGlTexSlotStart( 4u );
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::clearComputeJobResources()
@@ -151,13 +154,12 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     inline bool isPowerOf2( uint32 x ) { return ( x & ( x - 1u ) ) == 0u; }
-    inline bool getNextPowerOf2( uint32 x )
+    inline uint32 getNextPowerOf2( uint32 x )
     {
         if( isPowerOf2( x ) )
             return x;
 
-        x = x << 1u;
-        x = x & ~( x - 1u );
+        x = 1u << ( 32u - Bitwise::clz32( x ) );
         return x;
     }
     inline uint32 calculateMeshResolution( uint32 width, const float actualLength,
@@ -230,6 +232,7 @@ namespace Ogre
         {
             VctVoxelizer voxelizer( Ogre::Id::generateNewId<Ogre::VctVoxelizer>(), mRenderSystem,
                                     mHlmsManager, true );
+            voxelizer._setNeedsAllMipmaps( true );
 
             Item *tmpItem = sceneManager->createItem( mesh );
             sceneManager->getRootSceneNode()->attachObject( tmpItem );
@@ -426,7 +429,7 @@ namespace Ogre
         else
             uavSlot.pixelFormat = PFG_R32_UINT;
         uavSlot.access = ResourceAccess::ReadWrite;
-        mImageVoxelizerJob->_setUavTexture( 1u, uavSlot );
+        mImageVoxelizerJob->_setUavTexture( 0u, uavSlot );
 
         uavSlot.texture = mNormalVox;
         if( hasTypedUavs )
@@ -434,7 +437,7 @@ namespace Ogre
         else
             uavSlot.pixelFormat = PFG_R32_UINT;
         uavSlot.access = ResourceAccess::ReadWrite;
-        mImageVoxelizerJob->_setUavTexture( 2u, uavSlot );
+        mImageVoxelizerJob->_setUavTexture( 1u, uavSlot );
 
         uavSlot.texture = mEmissiveVox;
         if( hasTypedUavs )
@@ -442,12 +445,12 @@ namespace Ogre
         else
             uavSlot.pixelFormat = PFG_R32_UINT;
         uavSlot.access = ResourceAccess::ReadWrite;
-        mImageVoxelizerJob->_setUavTexture( 3u, uavSlot );
+        mImageVoxelizerJob->_setUavTexture( 2u, uavSlot );
 
         uavSlot.texture = mAccumValVox;
         uavSlot.pixelFormat = mAccumValVox->getPixelFormat();
         uavSlot.access = ResourceAccess::ReadWrite;
-        mImageVoxelizerJob->_setUavTexture( 4u, uavSlot );
+        mImageVoxelizerJob->_setUavTexture( 3u, uavSlot );
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::setTextureToDebugVisualizer( void )
@@ -557,12 +560,14 @@ namespace Ogre
         // Our compute shaders assume units slots are uint8
         const uint32 maxTexturesInCompute =
             std::min( caps->getNumTexturesInTextureDescriptor( NumShaderTypes ), 255u ) -
-            c_reservedTexSlots;
+            ( c_reservedTexSlots + mImageVoxelizerJob->getGlTexSlotStart() );
 
         Mesh *lastMesh = 0;
         uint32 numSeenMeshes = 0u;
         uint32 textureIdx = uint32_t( -3 );
         BatchInstances *batchInstances = 0;
+        const Vector3 voxelCellSize = getVoxelCellSize();
+        Vector3 meshResolution( Vector3::UNIT_SCALE );
 
         const size_t numOctants = mOctants.size();
         Octant *octants = mOctants.begin();
@@ -597,9 +602,10 @@ namespace Ogre
                 ++numSeenMeshes;
 
                 textureIdx += 3u;
-                if( textureIdx + 3u >= maxTexturesInCompute )
+                if( textureIdx + 3u >= maxTexturesInCompute || textureIdx == 0u )
                 {
                     // We've run out of texture units! This is a batch breaker!
+                    // (we may also be here if this is the first batch)
                     textureIdx = 0u;
 
                     mBatches.push_back( Batch() );
@@ -611,7 +617,17 @@ namespace Ogre
                 mBatches.back().textures.push_back( cacheEntry.albedoVox );
                 mBatches.back().textures.push_back( cacheEntry.normalVox );
                 mBatches.back().textures.push_back( cacheEntry.emissiveVox );
+
+                meshResolution =
+                    Vector3( cacheEntry.albedoVox->getWidth(), cacheEntry.albedoVox->getHeight(),
+                             cacheEntry.albedoVox->getDepthOrSlices() );
             }
+
+            const Vector3 invMeshCellSize = meshResolution / worldAabb.getSize();
+            const Vector3 ratio3 = voxelCellSize * invMeshCellSize;
+            const float ratio = std::min( ratio3.x, std::min( ratio3.y, ratio3.z ) );
+
+            const float lodLevel = std::max( Math::Log2( ratio ), 0.0f );
 
             for( size_t i = 0u; i < numOctants; ++i )
             {
@@ -634,7 +650,7 @@ namespace Ogre
                     *instanceBuffer++ = worldAabb.mHalfSize.x;
                     *instanceBuffer++ = worldAabb.mHalfSize.y;
                     *instanceBuffer++ = worldAabb.mHalfSize.z;
-                    *instanceBuffer++ = 0.0f;
+                    *instanceBuffer++ = lodLevel;
 #undef AS_U32PTR
 
                     octants[i].instanceBuffer = instanceBuffer;

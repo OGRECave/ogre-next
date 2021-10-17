@@ -114,6 +114,7 @@ namespace Ogre
         mGpuPartitionedSubMeshes( 0 ),
         mMeshAabb( 0 ),
         mNeedsAlbedoMipmaps( correctAreaLightShadows ),
+        mNeedsAllMipmaps( false ),
         mNumVerticesCompressed( 0 ),
         mNumVerticesUncompressed( 0 ),
         mNumIndices16( 0 ),
@@ -840,7 +841,7 @@ namespace Ogre
             if( !hasTypedUavs )
                 texFlags |= TextureFlags::Reinterpretable;
 
-            if( mNeedsAlbedoMipmaps )
+            if( mNeedsAlbedoMipmaps || mNeedsAllMipmaps )
                 texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
 
             mAlbedoVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
@@ -849,7 +850,8 @@ namespace Ogre
                                                             GpuPageOutStrategy::Discard,
                                                             texFlags, TextureTypes::Type3D );
 
-            texFlags &= ~(uint32)(TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps);
+            if( !mNeedsAllMipmaps )
+                texFlags &= ~uint32( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
 
             mEmissiveVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
                                                               StringConverter::toString( getId() ) +
@@ -861,6 +863,9 @@ namespace Ogre
                                                             "/Normal",
                                                             GpuPageOutStrategy::Discard,
                                                             texFlags, TextureTypes::Type3D );
+
+            texFlags &= ~uint32( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
+
             mAccumValVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
                                                               StringConverter::toString( getId() ) +
                                                               "/AccumVal",
@@ -889,7 +894,10 @@ namespace Ogre
                 textures[i]->setResolution( mWidth, mHeight, mDepth );
             else
                 textures[i]->setResolution( mWidth >> 1u, mHeight, mDepth );
-            textures[i]->setNumMipmaps( mNeedsAlbedoMipmaps && i == 0u ? numMipmaps : 1u );
+            if( ( ( mNeedsAlbedoMipmaps && i == 0u ) || mNeedsAllMipmaps ) && i < 3u )
+                textures[i]->setNumMipmaps( numMipmaps );
+            else
+                textures[i]->setNumMipmaps( 1u );
             textures[i]->scheduleTransitionTo( GpuResidency::Resident );
         }
 
@@ -1521,8 +1529,13 @@ namespace Ogre
         //This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
 
-        if( mNeedsAlbedoMipmaps )
+        if( mNeedsAlbedoMipmaps || mNeedsAllMipmaps )
             mAlbedoVox->_autogenerateMipmaps();
+        if( mNeedsAllMipmaps )
+        {
+            mEmissiveVox->_autogenerateMipmaps();
+            mNormalVox->_autogenerateMipmaps();
+        }
 
         OgreProfileGpuEnd( "VCT build" );
     }

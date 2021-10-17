@@ -16,29 +16,24 @@
 	#define ogre_U1 binding = 1
 @end
 
+
+ReadOnlyBufferF( @value( texture0_slot ), InstanceBuffer, instanceBuffer );
 vulkan_layout( ogre_t1 ) uniform texture3D meshTextures[3];
 
 vulkan( layout( ogre_s1 ) uniform sampler trilinearSampler );
 
-layout( vulkan( ogre_u2 ) vk_comma @insertpiece(uav2_pf_type) )
+layout( vulkan( ogre_u0 ) vk_comma @insertpiece(uav0_pf_type) )
 uniform restrict image3D voxelAlbedoTex;
-layout( vulkan( ogre_u3 ) vk_comma @insertpiece(uav3_pf_type) )
+layout( vulkan( ogre_u1 ) vk_comma @insertpiece(uav1_pf_type) )
 uniform restrict image3D voxelNormalTex;
-layout( vulkan( ogre_u4 ) vk_comma @insertpiece(uav4_pf_type) )
+layout( vulkan( ogre_u2 ) vk_comma @insertpiece(uav2_pf_type) )
 uniform restrict image3D voxelEmissiveTex;
-layout( vulkan( ogre_u5 ) vk_comma @insertpiece(uav5_pf_type) )
+layout( vulkan( ogre_u3 ) vk_comma @insertpiece(uav3_pf_type) )
 uniform restrict uimage3D voxelAccumVal;
 
 layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),
 		local_size_z = @value( threads_per_group_z ) ) in;
-
-@property( syntax == glsl )
-	ReadOnlyBufferF( 6, InstanceBuffer, instanceBuffer );
-@else
-	ReadOnlyBufferF( 0, InstanceBuffer, instanceBuffer );
-@end
-
 
 @insertpiece( HeaderCS )
 

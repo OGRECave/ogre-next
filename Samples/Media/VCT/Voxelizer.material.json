@@ -237,10 +237,10 @@
             "threads_per_group" : [4, 4, 4],
 
             "source" : "ImageVoxelizer_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "Matrix_piece_all", "ImageVoxelizer_piece_cs.any.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "Matrix_piece_all", "ImageVoxelizer_piece_cs.any"],
             "inform_shader_of_texture_data_change" : true,
 
-			"uav_units" : 5,
+			"uav_units" : 4,
 			
 			"params" :
             [
@@ -254,7 +254,7 @@
                 ["voxelEmissiveTex",		[3], "int"],
                 ["voxelAccumVal",			[4], "int"]
 			],
-            
+
             "textures" :
             [
                 {}

@@ -207,6 +207,7 @@ namespace Ogre
         UavBufferPacked *mMeshAabb;
 
         bool    mNeedsAlbedoMipmaps;
+        bool    mNeedsAllMipmaps;
 
         uint32 mNumVerticesCompressed;
         uint32 mNumVerticesUncompressed;
@@ -311,6 +312,8 @@ namespace Ogre
         VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager,
                       bool correctAreaLightShadows );
         ~VctVoxelizer();
+
+        void _setNeedsAllMipmaps( bool bNeedsAllMipmaps ) { mNeedsAllMipmaps = bNeedsAllMipmaps; }
 
         /**
         @param item
