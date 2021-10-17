@@ -583,6 +583,11 @@ namespace Ogre
                             setProperty( propName.c_str(), 1 );
                             propName.resize( texturePropSize );
                         }
+
+                        propName.a( "_slot" );  // texture0_slot
+                        setProperty( propName.c_str(),
+                                     static_cast<int32>( slotIdx + getGlTexSlotStart() ) );
+                        propName.resize( texturePropSize );
                     }
 
                     ++itor;
