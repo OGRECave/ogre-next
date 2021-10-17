@@ -106,6 +106,8 @@ namespace Ogre
         id<MTLTexture> getDisplayTextureName(void) const    { return mDisplayTextureName; }
         id<MTLTexture> getFinalTextureName(void) const      { return mFinalTextureName; }
         id<MTLTexture> getMsaaFramebufferName(void) const   { return mMsaaFramebufferName; }
+
+        virtual void getCustomAttribute( IdString name, void *pData ) override;
     };
 
     class _OgreMetalExport MetalTextureGpuRenderTarget : public MetalTextureGpu

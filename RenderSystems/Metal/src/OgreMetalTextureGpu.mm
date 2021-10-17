@@ -398,6 +398,20 @@ namespace Ogre
             //TODO
         }
     }
+
+    //-----------------------------------------------------------------------------------
+    void MetalTextureGpu::getCustomAttribute( IdString name, void *pData )
+    {
+        if( name == msFinalTextureBuffer )
+        {
+            *static_cast<void**>(pData) = (void*)CFBridgingRetain(mFinalTextureName);
+        }
+        else if( name == msMsaaTextureBuffer )
+        {
+            *static_cast<void**>(pData) = (void*)CFBridgingRetain(mMsaaFramebufferName);
+        }
+    }
+
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
