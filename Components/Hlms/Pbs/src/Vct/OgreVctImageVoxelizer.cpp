@@ -54,10 +54,10 @@ THE SOFTWARE.
 
 #include "OgreProfiler.h"
 
-#define TODO_deal_no_index_buffer
-
 namespace Ogre
 {
+    static const uint8 c_reservedTexSlots = 1u;
+
     VctImageVoxelizer::VctImageVoxelizer( IdType id, RenderSystem *renderSystem,
                                           HlmsManager *hlmsManager, bool correctAreaLightShadows ) :
         IdObject( id ),
@@ -326,7 +326,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::addItem( Item *item )
     {
-        if( mItems.empty() && mItems.back() != item )
+        if( !mItems.empty() && mItems.back() != item )
             mItemOrderDirty = true;
         mItems.push_back( item );
     }
@@ -416,6 +416,38 @@ namespace Ogre
             setTextureToDebugVisualizer();
             mDebugVoxelVisualizer->setVisible( true );
         }
+
+        DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+        uavSlot.access = ResourceAccess::ReadWrite;
+
+        uavSlot.texture = mAlbedoVox;
+        if( hasTypedUavs )
+            uavSlot.pixelFormat = mAlbedoVox->getPixelFormat();
+        else
+            uavSlot.pixelFormat = PFG_R32_UINT;
+        uavSlot.access = ResourceAccess::ReadWrite;
+        mImageVoxelizerJob->_setUavTexture( 1u, uavSlot );
+
+        uavSlot.texture = mNormalVox;
+        if( hasTypedUavs )
+            uavSlot.pixelFormat = mNormalVox->getPixelFormat();
+        else
+            uavSlot.pixelFormat = PFG_R32_UINT;
+        uavSlot.access = ResourceAccess::ReadWrite;
+        mImageVoxelizerJob->_setUavTexture( 2u, uavSlot );
+
+        uavSlot.texture = mEmissiveVox;
+        if( hasTypedUavs )
+            uavSlot.pixelFormat = mEmissiveVox->getPixelFormat();
+        else
+            uavSlot.pixelFormat = PFG_R32_UINT;
+        uavSlot.access = ResourceAccess::ReadWrite;
+        mImageVoxelizerJob->_setUavTexture( 3u, uavSlot );
+
+        uavSlot.texture = mAccumValVox;
+        uavSlot.pixelFormat = mAccumValVox->getPixelFormat();
+        uavSlot.access = ResourceAccess::ReadWrite;
+        mImageVoxelizerJob->_setUavTexture( 4u, uavSlot );
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::setTextureToDebugVisualizer( void )
@@ -469,6 +501,11 @@ namespace Ogre
                 PFG_RGBA32_FLOAT, elementCount * structStride, BT_DEFAULT, 0, false );
             mCpuInstanceBuffer = reinterpret_cast<float *>(
                 OGRE_MALLOC_SIMD( elementCount * structStride, MEMCATEGORY_GENERAL ) );
+
+            DescriptorSetTexture2::BufferSlot bufferSlot(
+                DescriptorSetTexture2::BufferSlot::makeEmpty() );
+            bufferSlot.buffer = mInstanceBuffer;
+            mImageVoxelizerJob->setTexBuffer( 0u, bufferSlot );
         }
     }
     //-------------------------------------------------------------------------
@@ -517,11 +554,13 @@ namespace Ogre
         const RenderSystemCapabilities *caps =
             sceneManager->getDestinationRenderSystem()->getCapabilities();
 
-        const uint32 reservedTexSlots = 0u;
+        // Our compute shaders assume units slots are uint8
         const uint32 maxTexturesInCompute =
-            caps->getNumTexturesInTextureDescriptor( NumShaderTypes ) - reservedTexSlots;
+            std::min( caps->getNumTexturesInTextureDescriptor( NumShaderTypes ), 255u ) -
+            c_reservedTexSlots;
 
         Mesh *lastMesh = 0;
+        uint32 numSeenMeshes = 0u;
         uint32 textureIdx = uint32_t( -3 );
         BatchInstances *batchInstances = 0;
 
@@ -555,6 +594,7 @@ namespace Ogre
 
                 // New texture idx!
                 lastMesh = item->getMesh().get();
+                ++numSeenMeshes;
 
                 textureIdx += 3u;
                 if( textureIdx + 3u >= maxTexturesInCompute )
@@ -610,6 +650,14 @@ namespace Ogre
         }
 
         mInstanceBuffer->upload( mCpuInstanceBuffer, 0u, mInstanceBuffer->getNumElements() );
+
+        const uint32 texSlotsForMeshes = std::min( numSeenMeshes * 3u, maxTexturesInCompute );
+
+        if( texSlotsForMeshes > mImageVoxelizerJob->getNumTexUnits() )
+        {
+            mImageVoxelizerJob->setNumTexUnits(
+                static_cast<uint8>( texSlotsForMeshes + c_reservedTexSlots ) );
+        }
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::setRegionToVoxelize( bool autoRegion, const Aabb &regionToVoxelize,
@@ -732,7 +780,7 @@ namespace Ogre
 
         createVoxelTextures();
 
-        const bool hasTypedUavs = mRenderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
+        fillInstanceBuffers( sceneManager );
 
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
         clearVoxels();
@@ -765,13 +813,19 @@ namespace Ogre
             trilinearSampler = mHlmsManager->getSamplerblock( refSampler );
         }
 
+        ShaderParams &shaderParams = mImageVoxelizerJob->getShaderParams( "default" );
+
         BatchArray::const_iterator itBatch = mBatches.begin();
         BatchArray::const_iterator enBatch = mBatches.end();
 
         while( itBatch != enBatch )
         {
             {
-                size_t texIdx = 0u;
+                // texIdx starts at 1 because mInstanceBuffer goes at 0; and whether
+                // that consumes a tex slot or not is a rabbit hole
+                // (depends on VaoManager::readOnlyIsTexBuffer AND the API used) so we
+                // just assume we always consume 1
+                size_t texIdx = 1u;
                 DescriptorSetTexture2::TextureSlot texSlot(
                     DescriptorSetTexture2::TextureSlot::makeEmpty() );
                 FastArray<TextureGpu *>::const_iterator itTex = itBatch->textures.begin();
@@ -806,6 +860,17 @@ namespace Ogre
                     paramInstanceRange.setManualValue( instanceRange, 2u );
                     paramVoxelOrigin.setManualValue( octant.region.getMinimum() );
                     paramVoxelPixelOrigin.setManualValue( voxelPixelOrigin, 3u );
+
+                    shaderParams.mParams.clear();
+                    shaderParams.mParams.push_back( paramInstanceRange );
+                    shaderParams.mParams.push_back( paramVoxelOrigin );
+                    shaderParams.mParams.push_back( paramVoxelCellSize );
+                    shaderParams.mParams.push_back( paramVoxelPixelOrigin );
+                    shaderParams.setDirty();
+
+                    mImageVoxelizerJob->analyzeBarriers( mResourceTransitions );
+                    mRenderSystem->executeResourceTransition( mResourceTransitions );
+                    hlmsCompute->dispatch( mImageVoxelizerJob, 0, 0 );
                 }
             }
 
