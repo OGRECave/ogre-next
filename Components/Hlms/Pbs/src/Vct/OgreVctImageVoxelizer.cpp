@@ -69,6 +69,7 @@ namespace Ogre
         mMeshMaxDepth( 64u ),
         mMeshDimensionPerPixel( 2.0f ),
         mBlankEmissive( 0 ),
+        mItemOrderDirty( false ),
         mImageVoxelizerJob( 0 ),
         mAlbedoVox( 0 ),
         mEmissiveVox( 0 ),
@@ -188,7 +189,8 @@ namespace Ogre
         return false;
     }
 
-    void VctImageVoxelizer::addMeshToCache( const MeshPtr &mesh, SceneManager *sceneManager )
+    const VctImageVoxelizer::VoxelizedMesh &VctImageVoxelizer::addMeshToCache(
+        const MeshPtr &mesh, SceneManager *sceneManager )
     {
         bool bUpToDate = false;
         const String &meshName = mesh->getName();
@@ -300,9 +302,13 @@ namespace Ogre
             }
 
             mMeshes[meshName] = voxelizedMesh;
+            itor = mMeshes.find( meshName );
+            mMeshes.insert( std::pair<IdString, VoxelizedMesh>( meshName, voxelizedMesh ) );
 
             sceneManager->destroyItem( tmpItem );
         }
+
+        return itor->second;
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::setCacheResolution( uint32 width, uint32 height, uint32 depth,
@@ -318,7 +324,12 @@ namespace Ogre
         mMeshDimensionPerPixel = dimension;
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::addItem( Item *item ) { mItems.push_back( item ); }
+    void VctImageVoxelizer::addItem( Item *item )
+    {
+        if( mItems.empty() && mItems.back() != item )
+            mItemOrderDirty = true;
+        mItems.push_back( item );
+    }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::removeItem( Item *item )
     {
@@ -326,10 +337,17 @@ namespace Ogre
         if( itor == mItems.end() )
             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "", "VctImageVoxelizer::removeItem" );
 
-        efficientVectorRemove( mItems, itor );
+        if( mItemOrderDirty )
+            efficientVectorRemove( mItems, itor );
+        else
+            mItems.erase( itor );
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::removeAllItems( void ) { mItems.clear(); }
+    void VctImageVoxelizer::removeAllItems( void )
+    {
+        mItems.clear();
+        mItemOrderDirty = false;
+    }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::createVoxelTextures( void )
     {
@@ -468,6 +486,12 @@ namespace Ogre
         clearComputeJobResources();
     }
     //-------------------------------------------------------------------------
+    inline bool OrderItemsByMesh( const Item *_left, const Item *_right )
+    {
+        // Handles are deterministic unlike Mesh ptrs (unless ResourceGroupManager is threaded)
+        return _left->getMesh()->getHandle() < _right->getMesh()->getHandle();
+    }
+    //-------------------------------------------------------------------------
     void VctImageVoxelizer::fillInstanceBuffers( SceneManager *sceneManager )
     {
         OgreProfile( "VctImageVoxelizer::fillInstanceBuffers" );
@@ -481,11 +505,28 @@ namespace Ogre
             const size_t numOctants = mOctants.size();
 
             for( size_t i = 0u; i < numOctants; ++i )
-            {
-                mOctants[i].instances = 0u;
                 mOctants[i].instanceBuffer = instanceBuffer + i * numItems;
-            }
         }
+
+        if( mItemOrderDirty )
+        {
+            std::sort( mItems.begin(), mItems.end(), OrderItemsByMesh );
+            mItemOrderDirty = false;
+        }
+
+        const RenderSystemCapabilities *caps =
+            sceneManager->getDestinationRenderSystem()->getCapabilities();
+
+        const uint32 reservedTexSlots = 0u;
+        const uint32 maxTexturesInCompute =
+            caps->getNumTexturesInTextureDescriptor( NumShaderTypes ) - reservedTexSlots;
+
+        Mesh *lastMesh = 0;
+        uint32 textureIdx = uint32_t( -3 );
+        BatchInstances *batchInstances = 0;
+
+        const size_t numOctants = mOctants.size();
+        Octant *octants = mOctants.begin();
 
         ItemArray::const_iterator itItem = mItems.begin();
         ItemArray::const_iterator enItem = mItems.end();
@@ -494,29 +535,60 @@ namespace Ogre
             const Item *item = *itItem;
 
             const Aabb worldAabb = item->getWorldAabb();
-            const Matrix4 &fullTransform = item->_getParentNodeFullTransform();
 
-            addMeshToCache( item->getMesh(), sceneManager );
+            const Node *parentNode = item->getParentNode();
 
-            FastArray<Octant>::iterator itor = mOctants.begin();
-            FastArray<Octant>::iterator endt = mOctants.end();
+            const Vector3 itemPos = parentNode->_getDerivedPosition();
+            const Quaternion itemRot = parentNode->_getDerivedOrientation();
+            const Vector3 itemScale = parentNode->_getDerivedScale();
+            const Aabb localAabb = item->getLocalAabb();  // Must be local, not world
 
-            while( itor != endt )
+            Matrix4 worldToUvw;
+
+            worldToUvw.makeInverseTransform(
+                itemPos + localAabb.getMinimum() / ( itemScale * localAabb.getSize() ),
+                itemScale * localAabb.getSize(), itemRot );
+
+            if( lastMesh != item->getMesh().get() )
             {
-                const Aabb octantAabb = itor->region;
+                const VoxelizedMesh &cacheEntry = addMeshToCache( item->getMesh(), sceneManager );
+
+                // New texture idx!
+                lastMesh = item->getMesh().get();
+
+                textureIdx += 3u;
+                if( textureIdx + 3u >= maxTexturesInCompute )
+                {
+                    // We've run out of texture units! This is a batch breaker!
+                    textureIdx = 0u;
+
+                    mBatches.push_back( Batch() );
+                    const uint32 offset = static_cast<uint32>( itItem - mItems.begin() );
+                    mBatches.back().instances.resize( numOctants, BatchInstances( offset ) );
+                    batchInstances = mBatches.back().instances.begin();
+                }
+
+                mBatches.back().textures.push_back( cacheEntry.albedoVox );
+                mBatches.back().textures.push_back( cacheEntry.normalVox );
+                mBatches.back().textures.push_back( cacheEntry.emissiveVox );
+            }
+
+            for( size_t i = 0u; i < numOctants; ++i )
+            {
+                const Aabb octantAabb = octants[i].region;
 
                 if( octantAabb.intersects( worldAabb ) )
                 {
-                    float *RESTRICT_ALIAS instanceBuffer = itor->instanceBuffer;
+                    float *RESTRICT_ALIAS instanceBuffer = octants[i].instanceBuffer;
 
                     for( size_t i = 0; i < 12u; ++i )
-                        *instanceBuffer++ = static_cast<float>( fullTransform[0][i] );
+                        *instanceBuffer++ = static_cast<float>( worldToUvw[0][i] );
 
 #define AS_U32PTR( x ) reinterpret_cast<uint32 * RESTRICT_ALIAS>( x )
                     *instanceBuffer++ = worldAabb.mCenter.x;
                     *instanceBuffer++ = worldAabb.mCenter.y;
                     *instanceBuffer++ = worldAabb.mCenter.z;
-                    *AS_U32PTR( instanceBuffer ) = 0u;
+                    *AS_U32PTR( instanceBuffer ) = textureIdx % maxTexturesInCompute;
                     ++instanceBuffer;
 
                     *instanceBuffer++ = worldAabb.mHalfSize.x;
@@ -525,15 +597,13 @@ namespace Ogre
                     *instanceBuffer++ = 0.0f;
 #undef AS_U32PTR
 
-                    itor->instanceBuffer = instanceBuffer;
-                    ++itor->instances;
+                    octants[i].instanceBuffer = instanceBuffer;
+                    ++batchInstances[i].numInstances;
 
                     OGRE_ASSERT_MEDIUM( size_t( instanceBuffer - mCpuInstanceBuffer ) *
                                             sizeof( float ) <=
                                         mInstanceBuffer->getTotalSizeBytes() );
                 }
-
-                ++itor;
             }
 
             ++itItem;
@@ -669,33 +739,82 @@ namespace Ogre
 
         // const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
 
-        const Vector3 voxelOrigin = getVoxelOrigin();
-
         ShaderParams::Param paramInstanceRange;
         ShaderParams::Param paramVoxelOrigin;
         ShaderParams::Param paramVoxelCellSize;
+        ShaderParams::Param paramVoxelPixelOrigin;
 
         paramInstanceRange.name = "instanceStart_instanceEnd";
         paramVoxelOrigin.name = "voxelOrigin";
         paramVoxelCellSize.name = "voxelCellSize";
+        paramVoxelPixelOrigin.name = "voxelPixelOrigin";
 
         paramVoxelCellSize.setManualValue( getVoxelCellSize() );
 
-        uint32 instanceStart = 0;
+        OgreProfileGpuBegin( "VCT Image Voxelization Jobs" );
 
-        OgreProfileGpuBegin( "VCT Voxelization Jobs" );
+        const uint32 *threadsPerGroup = mImageVoxelizerJob->getThreadsPerGroup();
 
-        FastArray<Octant>::const_iterator itor = mOctants.begin();
-        FastArray<Octant>::const_iterator endt = mOctants.end();
+        const size_t numOctants = mOctants.size();
 
-        while( itor != endt )
+        HlmsSamplerblock const *trilinearSampler = 0;
         {
-            const Octant &octant = *itor;
-
-            ++itor;
+            HlmsSamplerblock refSampler;
+            refSampler.setAddressingMode( TAM_CLAMP );
+            refSampler.setFiltering( TFO_TRILINEAR );
+            trilinearSampler = mHlmsManager->getSamplerblock( refSampler );
         }
 
-        OgreProfileGpuEnd( "VCT Voxelization Jobs" );
+        BatchArray::const_iterator itBatch = mBatches.begin();
+        BatchArray::const_iterator enBatch = mBatches.end();
+
+        while( itBatch != enBatch )
+        {
+            {
+                size_t texIdx = 0u;
+                DescriptorSetTexture2::TextureSlot texSlot(
+                    DescriptorSetTexture2::TextureSlot::makeEmpty() );
+                FastArray<TextureGpu *>::const_iterator itTex = itBatch->textures.begin();
+                FastArray<TextureGpu *>::const_iterator enTex = itBatch->textures.end();
+
+                while( itTex != enTex )
+                {
+                    texSlot.texture = *itTex;
+                    mHlmsManager->addReference( trilinearSampler );
+                    mImageVoxelizerJob->_setSamplerblock( static_cast<uint8>( texIdx ),
+                                                          trilinearSampler );
+                    mImageVoxelizerJob->setTexture( static_cast<uint8>( texIdx ), texSlot );
+                    ++texIdx;
+                    ++itTex;
+                }
+            }
+
+            for( size_t i = 0u; i < numOctants; ++i )
+            {
+                if( itBatch->instances[i].numInstances > 0u )
+                {
+                    const Octant &octant = mOctants[i];
+
+                    mImageVoxelizerJob->setNumThreadGroups( octant.width / threadsPerGroup[0],
+                                                            octant.height / threadsPerGroup[1],
+                                                            octant.depth / threadsPerGroup[2] );
+
+                    const uint32 instanceRange[2] = { itBatch->instances[i].instanceOffset,
+                                                      itBatch->instances[i].numInstances };
+                    const uint32 voxelPixelOrigin[3] = { octant.x, octant.y, octant.z };
+
+                    paramInstanceRange.setManualValue( instanceRange, 2u );
+                    paramVoxelOrigin.setManualValue( octant.region.getMinimum() );
+                    paramVoxelPixelOrigin.setManualValue( voxelPixelOrigin, 3u );
+                }
+            }
+
+            ++itBatch;
+        }
+
+        mHlmsManager->destroySamplerblock( trilinearSampler );
+
+        OgreProfileGpuEnd( "VCT Image Voxelization Jobs" );
 
         // This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );

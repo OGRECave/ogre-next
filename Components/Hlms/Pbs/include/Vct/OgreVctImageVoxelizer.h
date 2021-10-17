@@ -74,6 +74,25 @@ namespace Ogre
 
         typedef map<IdString, VoxelizedMesh>::type MeshCacheMap;
 
+        struct BatchInstances
+        {
+            uint32 instanceOffset;
+            uint32 numInstances;
+            BatchInstances( uint32 _instanceOffset ) :
+                instanceOffset( _instanceOffset ),
+                numInstances( 0u )
+            {
+            }
+            BatchInstances() : instanceOffset( 0u ), numInstances( 0u ) {}
+        };
+
+        struct Batch
+        {
+            FastArray<BatchInstances> instances;  // one per octant
+            FastArray<TextureGpu *> textures;
+        };
+
+        typedef FastArray<Batch> BatchArray;
         typedef FastArray<Item *> ItemArray;
 
         uint32 mMeshWidth;
@@ -89,7 +108,18 @@ namespace Ogre
         /// texture for all those meshes instead of wasting ton of RAM.
         TextureGpu *mBlankEmissive;
 
+        /// We split dispatch in batches because not all APIs/GPUs support
+        /// binding (or dynamically indexing) enough textures per dispatch.
+        ///
+        /// On Desktop GPUs running Vulkan we'll likely have just one batch
+        /// since we can bind all mesh textures at once and index them
+        /// dynamically inside the compute shader
+        ///
+        /// On other API/GPUs we may need to split the dispatch into multiple
+        /// ones; the worst case scenario we'll have 1 batch per mesh in scene.
+        BatchArray mBatches;
         ItemArray mItems;
+        bool mItemOrderDirty;
 
         HlmsComputeJob *mImageVoxelizerJob;
 
@@ -123,7 +153,6 @@ namespace Ogre
             uint32 width, height, depth;
             Aabb region;
 
-            uint32 instances;                      // Used internally
             float *RESTRICT_ALIAS instanceBuffer;  // Temporary
         };
 
@@ -162,8 +191,10 @@ namespace Ogre
             Mesh to voxelize
         @param sceneManager
             We need it to temporarily create an Item
+        @returns
+            Entry to VoxelizedMesh in cache
         */
-        void addMeshToCache( const MeshPtr &mesh, SceneManager *sceneManager );
+        const VoxelizedMesh &addMeshToCache( const MeshPtr &mesh, SceneManager *sceneManager );
 
         /**
         @brief setCacheResolution

@@ -1432,8 +1432,6 @@ namespace Ogre
 
         const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
 
-        const Vector3 voxelOrigin = getVoxelOrigin();
-
         ShaderParams::Param paramInstanceRange;
         ShaderParams::Param paramVoxelOrigin;
         ShaderParams::Param paramVoxelCellSize;
