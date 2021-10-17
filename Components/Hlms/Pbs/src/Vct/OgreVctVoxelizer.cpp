@@ -1369,8 +1369,6 @@ namespace Ogre
             return;
         }
 
-        mRenderSystem->endRenderPassDescriptor();
-
         buildMeshBuffers();
 
         createVoxelTextures();

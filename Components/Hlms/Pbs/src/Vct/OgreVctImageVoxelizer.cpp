@@ -117,6 +117,20 @@ namespace Ogre
         destroyInstanceBuffers();
         destroyVoxelTextures();
 
+        // Destroy cache
+        MeshCacheMap::const_iterator itor = mMeshes.begin();
+        MeshCacheMap::const_iterator endt = mMeshes.end();
+
+        while( itor != endt )
+        {
+            mTextureGpuManager->destroyTexture( itor->second.albedoVox );
+            mTextureGpuManager->destroyTexture( itor->second.normalVox );
+            if( itor->second.emissiveVox != mBlankEmissive )
+                mTextureGpuManager->destroyTexture( itor->second.emissiveVox );
+            ++itor;
+        }
+        mMeshes.clear();
+
         mTextureGpuManager->destroyTexture( mBlankEmissive );
     }
     //-------------------------------------------------------------------------
@@ -221,6 +235,15 @@ namespace Ogre
                         "WARNING: Mesh '" + mesh->getName() + "' assuming cache entry is not stale",
                         LML_CRITICAL );
                 }
+                else
+                {
+                    // Erase entry
+                    mTextureGpuManager->destroyTexture( itor->second.albedoVox );
+                    mTextureGpuManager->destroyTexture( itor->second.normalVox );
+                    if( itor->second.emissiveVox != mBlankEmissive )
+                        mTextureGpuManager->destroyTexture( itor->second.emissiveVox );
+                    itor = mMeshes.erase( itor );
+                }
             }
             else if( itor->second.hash[0] == hash[0] && itor->second.hash[1] == hash[1] )
             {
@@ -304,9 +327,7 @@ namespace Ogre
                 }
             }
 
-            mMeshes[meshName] = voxelizedMesh;
-            itor = mMeshes.find( meshName );
-            mMeshes.insert( std::pair<IdString, VoxelizedMesh>( meshName, voxelizedMesh ) );
+            itor = mMeshes.insert( std::pair<IdString, VoxelizedMesh>( meshName, voxelizedMesh ) ).first;
 
             sceneManager->destroyItem( tmpItem );
         }
@@ -554,6 +575,8 @@ namespace Ogre
             mItemOrderDirty = false;
         }
 
+        mBatches.clear();
+
         const RenderSystemCapabilities *caps =
             sceneManager->getDestinationRenderSystem()->getCapabilities();
 
@@ -589,9 +612,8 @@ namespace Ogre
 
             Matrix4 worldToUvw;
 
-            worldToUvw.makeInverseTransform(
-                itemPos + localAabb.getMinimum() / ( itemScale * localAabb.getSize() ),
-                itemScale * localAabb.getSize(), itemRot );
+            worldToUvw.makeInverseTransform( itemPos + localAabb.getMinimum() * itemScale,
+                                             itemScale * localAabb.getSize(), itemRot );
 
             if( lastMesh != item->getMesh().get() )
             {
@@ -637,8 +659,8 @@ namespace Ogre
                 {
                     float *RESTRICT_ALIAS instanceBuffer = octants[i].instanceBuffer;
 
-                    for( size_t i = 0; i < 12u; ++i )
-                        *instanceBuffer++ = static_cast<float>( worldToUvw[0][i] );
+                    for( size_t j = 0; j < 12u; ++j )
+                        *instanceBuffer++ = static_cast<float>( worldToUvw[0][j] );
 
 #define AS_U32PTR( x ) reinterpret_cast<uint32 * RESTRICT_ALIAS>( x )
                     *instanceBuffer++ = worldAabb.mCenter.x;
@@ -692,9 +714,9 @@ namespace Ogre
         mRegionToVoxelize = Aabb::BOX_NULL;
 
         ItemArray::const_iterator itor = mItems.begin();
-        ItemArray::const_iterator end = mItems.end();
+        ItemArray::const_iterator endt = mItems.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             Item *item = *itor;
             mRegionToVoxelize.merge( item->getWorldAabb() );
@@ -791,8 +813,6 @@ namespace Ogre
             clearVoxels();
             return;
         }
-
-        mRenderSystem->endRenderPassDescriptor();
 
         createVoxelTextures();
 
