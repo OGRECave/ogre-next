@@ -97,7 +97,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VctVoxelizer::VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager,
                                 bool correctAreaLightShadows ) :
-        IdObject( id ),
+        VctVoxelizerSourceBase( id, renderSystem, hlmsManager ),
         mAabbWorldSpaceJob( 0 ),
         mTotalNumInstances( 0 ),
         mCpuInstanceBuffer( 0 ),
@@ -121,26 +121,12 @@ namespace Ogre
         mNumIndices32( 0 ),
         mDefaultIndexCountSplit( 2001u
                                  /*std::numeric_limits<uint32>::max()*/ ),
-        mAlbedoVox( 0 ),
-        mEmissiveVox( 0 ),
-        mNormalVox( 0 ),
-        mAccumValVox( 0 ),
-        mRenderSystem( renderSystem ),
-        mVaoManager( renderSystem->getVaoManager() ),
-        mHlmsManager( hlmsManager ),
-        mTextureGpuManager( renderSystem->getTextureGpuManager() ),
         mComputeTools( new ComputeTools( hlmsManager->getComputeHlms() ) ),
         mVctMaterial( new VctMaterial( id, renderSystem->getVaoManager(),
                                        Root::getSingleton().getCompositorManager2(),
                                        renderSystem->getTextureGpuManager() ) ),
-        mWidth( 128u ),
-        mHeight( 128u ),
-        mDepth( 128u ),
         mAutoRegion( true ),
-        mRegionToVoxelize( Aabb::BOX_ZERO ),
-        mMaxRegion( Aabb::BOX_INFINITE ),
-        mDebugVisualizationMode( DebugVisualizationNone ),
-        mDebugVoxelVisualizer( 0 )
+        mMaxRegion( Aabb::BOX_INFINITE )
     {
         memset( mComputeJobs, 0, sizeof(mComputeJobs) );
         memset( mAabbCalculator, 0, sizeof(mAabbCalculator) );
@@ -908,39 +894,6 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::setTextureToDebugVisualizer(void)
-    {
-        TextureGpu *trackedTex = mAlbedoVox;
-        switch( mDebugVisualizationMode )
-        {
-        default:
-        case DebugVisualizationAlbedo: trackedTex = mAlbedoVox; break;
-        case DebugVisualizationNormal: trackedTex = mNormalVox; break;
-        case DebugVisualizationEmissive: trackedTex = mEmissiveVox; break;
-        }
-        mDebugVoxelVisualizer->setTrackingVoxel( mAlbedoVox, trackedTex,
-                                                 mDebugVisualizationMode == DebugVisualizationEmissive );
-    }
-    //-------------------------------------------------------------------------
-    void VctVoxelizer::destroyVoxelTextures(void)
-    {
-        if( mAlbedoVox )
-        {
-            mTextureGpuManager->destroyTexture( mAlbedoVox );
-            mTextureGpuManager->destroyTexture( mEmissiveVox );
-            mTextureGpuManager->destroyTexture( mNormalVox );
-            mTextureGpuManager->destroyTexture( mAccumValVox );
-
-            mAlbedoVox = 0;
-            mEmissiveVox = 0;
-            mNormalVox = 0;
-            mAccumValVox = 0;
-
-            if( mDebugVoxelVisualizer )
-                mDebugVoxelVisualizer->setVisible( false );
-        }
-    }
-    //-------------------------------------------------------------------------
     void VctVoxelizer::setRegionToVoxelize( bool autoRegion, const Aabb &regionToVoxelize,
                                             const Aabb &maxRegion )
     {
@@ -1536,76 +1489,5 @@ namespace Ogre
         }
 
         OgreProfileGpuEnd( "VCT build" );
-    }
-    //-------------------------------------------------------------------------
-    void VctVoxelizer::setDebugVisualization( VctVoxelizer::DebugVisualizationMode mode,
-                                              SceneManager *sceneManager )
-    {
-        if( mDebugVoxelVisualizer )
-        {
-            SceneNode *sceneNode = mDebugVoxelVisualizer->getParentSceneNode();
-            sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
-            OGRE_DELETE mDebugVoxelVisualizer;
-            mDebugVoxelVisualizer = 0;
-        }
-
-        mDebugVisualizationMode = mode;
-
-        if( mode != DebugVisualizationNone )
-        {
-            SceneNode *rootNode = sceneManager->getRootSceneNode( SCENE_STATIC );
-            SceneNode *visNode = rootNode->createChildSceneNode( SCENE_STATIC );
-
-            mDebugVoxelVisualizer =
-                    OGRE_NEW VoxelVisualizer( Ogre::Id::generateNewId<Ogre::MovableObject>(),
-                                              &sceneManager->_getEntityMemoryManager( SCENE_STATIC ),
-                                              sceneManager, 0u );
-
-            setTextureToDebugVisualizer();
-
-            visNode->setPosition( getVoxelOrigin() );
-            visNode->setScale( getVoxelCellSize() );
-            visNode->attachObject( mDebugVoxelVisualizer );
-        }
-    }
-    //-------------------------------------------------------------------------
-    VctVoxelizer::DebugVisualizationMode VctVoxelizer::getDebugVisualizationMode(void) const
-    {
-        return mDebugVisualizationMode;
-    }
-    //-------------------------------------------------------------------------
-    Vector3 VctVoxelizer::getVoxelOrigin(void) const
-    {
-        return mRegionToVoxelize.getMinimum();
-    }
-    //-------------------------------------------------------------------------
-    Vector3 VctVoxelizer::getVoxelCellSize(void) const
-    {
-        return mRegionToVoxelize.getSize() / getVoxelResolution();
-    }
-    //-------------------------------------------------------------------------
-    Vector3 VctVoxelizer::getVoxelSize(void) const
-    {
-        return mRegionToVoxelize.getSize();
-    }
-    //-------------------------------------------------------------------------
-    Vector3 VctVoxelizer::getVoxelResolution(void) const
-    {
-        return Vector3( mWidth, mHeight, mDepth );
-    }
-    //-------------------------------------------------------------------------
-    TextureGpuManager* VctVoxelizer::getTextureGpuManager(void)
-    {
-        return mTextureGpuManager;
-    }
-    //-------------------------------------------------------------------------
-    RenderSystem* VctVoxelizer::getRenderSystem(void)
-    {
-        return mRenderSystem;
-    }
-    //-------------------------------------------------------------------------
-    HlmsManager* VctVoxelizer::getHlmsManager(void)
-    {
-        return mHlmsManager;
     }
 }

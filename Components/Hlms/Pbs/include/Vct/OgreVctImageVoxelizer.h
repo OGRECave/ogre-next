@@ -28,12 +28,12 @@ THE SOFTWARE.
 #ifndef _OgreVctImageVoxelizer_H_
 #define _OgreVctImageVoxelizer_H_
 
-#include "OgreHlmsPbsPrerequisites.h"
+#include "OgreVctVoxelizerSourceBase.h"
 
-#include "Math/Simple/OgreAabb.h"
-#include "OgreId.h"
 #include "OgreIdString.h"
-#include "Vao/OgreVertexBufferDownloadHelper.h"
+#include "OgreResourceTransition.h"
+
+#include <ogrestd/map.h>
 
 #include "OgreHeaderPrefix.h"
 
@@ -51,17 +51,8 @@ namespace Ogre
             2. At build time, VctImageVoxelizer builds the voxel of the whole scene
                by iterating each mesh using those cached texture versions like a collage.
     */
-    class _OgreHlmsPbsExport VctImageVoxelizer : public IdObject
+    class _OgreHlmsPbsExport VctImageVoxelizer : public VctVoxelizerSourceBase
     {
-    public:
-        enum DebugVisualizationMode
-        {
-            DebugVisualizationAlbedo,
-            DebugVisualizationNormal,
-            DebugVisualizationEmissive,
-            DebugVisualizationNone
-        };
-
     protected:
         struct VoxelizedMesh
         {
@@ -123,27 +114,12 @@ namespace Ogre
 
         HlmsComputeJob *mImageVoxelizerJob;
 
-        TextureGpu *mAlbedoVox;
-        TextureGpu *mEmissiveVox;
-        TextureGpu *mNormalVox;
-        TextureGpu *mAccumValVox;
-
-        RenderSystem *mRenderSystem;
-        VaoManager *mVaoManager;
-        HlmsManager *mHlmsManager;
-        TextureGpuManager *mTextureGpuManager;
-
         ComputeTools *mComputeTools;
-
-        uint32 mSceneWidth;
-        uint32 mSceneHeight;
-        uint32 mSceneDepth;
 
         bool mNeedsAlbedoMipmaps;
 
         /// Whether mRegionToVoxelize is manually set or autocalculated
         bool mAutoRegion;
-        Aabb mRegionToVoxelize;
         /// Limit to mRegionToVoxelize in case mAutoRegion is true
         Aabb mMaxRegion;
 
@@ -163,15 +139,10 @@ namespace Ogre
 
         ResourceTransitionArray mResourceTransitions;
 
-        DebugVisualizationMode mDebugVisualizationMode;
-        VoxelVisualizer *mDebugVoxelVisualizer;
-
         void createComputeJobs( void );
         void clearComputeJobResources( void );
 
         void createVoxelTextures( void );
-        void destroyVoxelTextures( void );
-        void setTextureToDebugVisualizer( void );
 
         void createInstanceBuffers( void );
         void destroyInstanceBuffers( void );
@@ -277,23 +248,6 @@ namespace Ogre
         void setSceneResolution( uint32 width, uint32 height, uint32 depth );
 
         void build( SceneManager *sceneManager );
-
-        void setDebugVisualization( VctImageVoxelizer::DebugVisualizationMode mode,
-                                    SceneManager *sceneManager );
-        VctImageVoxelizer::DebugVisualizationMode getDebugVisualizationMode( void ) const;
-
-        Vector3 getVoxelOrigin( void ) const;
-        Vector3 getVoxelCellSize( void ) const;
-        Vector3 getVoxelSize( void ) const;
-        Vector3 getVoxelResolution( void ) const;
-
-        TextureGpu *getAlbedoVox( void ) { return mAlbedoVox; }
-        TextureGpu *getNormalVox( void ) { return mNormalVox; }
-        TextureGpu *getEmissiveVox( void ) { return mEmissiveVox; }
-
-        TextureGpuManager *getTextureGpuManager( void );
-        RenderSystem *getRenderSystem( void );
-        HlmsManager *getHlmsManager( void );
     };
 }  // namespace Ogre
 

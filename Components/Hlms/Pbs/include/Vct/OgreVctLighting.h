@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define _OgreVctLighting_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
+
 #include "OgreId.h"
 #include "OgreShaderParams.h"
 #include "OgreResourceTransition.h"
@@ -38,7 +39,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class VctVoxelizer;
+    class VctVoxelizerSourceBase;
     class VoxelVisualizer;
     struct ShaderVctLight;
 
@@ -71,7 +72,8 @@ namespace Ogre
         /// because GPUs like GCN round memory consumption to the next power of 2).
         TextureGpu              *mLightVoxel[4];
         HlmsSamplerblock const  *mSamplerblockTrilinear;
-        VctVoxelizer    *mVoxelizer;
+
+        VctVoxelizerSourceBase  *mVoxelizer;
         bool            mVoxelizerTexturesChanged;
         bool            mVoxelizerListenersRemoved;
 
@@ -175,7 +177,7 @@ namespace Ogre
         void runBounce( uint32 bounceIteration );
 
     public:
-        VctLighting( IdType id, VctVoxelizer *voxelizer, bool bAnisotropic );
+        VctLighting( IdType id, VctVoxelizerSourceBase *voxelizer, bool bAnisotropic );
         virtual ~VctLighting();
 
         /** This function allows VctLighting::update to pass numBounces > 0 as argument.
@@ -318,7 +320,7 @@ namespace Ogre
         const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
                                                             { return mSamplerblockTrilinear; }
 
-        const VctVoxelizer* getVoxelizer(void) const        { return mVoxelizer; }
+        const VctVoxelizerSourceBase* getVoxelizer(void) const      { return mVoxelizer; }
 
         //TextureGpuListener overloads
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,

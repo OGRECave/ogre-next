@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Vct/OgreVctLighting.h"
-#include "Vct/OgreVctVoxelizer.h"
+
+#include "Vct/OgreVctVoxelizerSourceBase.h"
 #include "Vct/OgreVoxelVisualizer.h"
 
 #include "OgreHlmsManager.h"
@@ -70,7 +71,7 @@ namespace Ogre
 
     const uint16 VctLighting::msDistanceThresholdCustomParam = 3876u;
 
-    VctLighting::VctLighting( IdType id, VctVoxelizer *voxelizer, bool bAnisotropic ) :
+    VctLighting::VctLighting( IdType id, VctVoxelizerSourceBase *voxelizer, bool bAnisotropic ) :
         IdObject( id ),
         mSamplerblockTrilinear( 0 ),
         mVoxelizer( voxelizer ),
