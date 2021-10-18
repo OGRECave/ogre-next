@@ -592,6 +592,10 @@ namespace Ogre {
         else
             mLodValues = MovableObject::c_DefaultLodMesh;
 
+        const uint64 *hash = mesh->getHashForCaches();
+        mHashForCaches[0] = hash[0];
+        mHashForCaches[1] = hash[1];
+
         mIsManual = true;
         setToLoaded();
     }
