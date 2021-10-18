@@ -64,9 +64,9 @@ namespace Ogre
         mMeshWidth( 64u ),
         mMeshHeight( 64u ),
         mMeshDepth( 64u ),
-        mMeshMaxWidth( 128u ),
-        mMeshMaxHeight( 128u ),
-        mMeshMaxDepth( 128u ),
+        mMeshMaxWidth( 64u ),
+        mMeshMaxHeight( 64u ),
+        mMeshMaxDepth( 64u ),
         mMeshDimensionPerPixel( 2.0f ),
         mBlankEmissive( 0 ),
         mItemOrderDirty( false ),
@@ -603,9 +603,32 @@ namespace Ogre
             const Vector3 ratio3 = voxelCellSize * invMeshCellSize;
             const float ratio = std::min( ratio3.x, std::min( ratio3.y, ratio3.z ) );
 
+            const float rawLodLevel = Math::Log2( ratio );
+
             // Bias by -0.5f because it produces far better results (it's too blocky otherwise)
             // We can't bias more because otherwise holes appear as we skip entire pixels
-            const float lodLevel = std::max( Math::Log2( ratio ) - 0.5f, 0.0f );
+            const float lodLevel = std::max( rawLodLevel - 0.5f, 0.0f );
+
+            // The values in alphaExponent are arbitrary (i.e. empirically obtained).
+            //
+            // The problem is when e.g. interpolating a 64x64x64 LOD voxelized mesh
+            // into a 128x128x128 scene; the result tends to become very "fat" (i.e.
+            // 1 block of the voxelized mesh is worth 2x2 blocks of scene mesh)
+            //
+            // To thin out the result we perform pow( instanceAlbedo.w, alphaExponent )
+            //
+            // There is a strong correlation between lod level and wall (wrong) thickness
+            // thus we use LOD to derive alphaExponent.
+            //
+            // rawLodLevel contains the LOD level we would have to sample if we had
+            // more resolution available in the mesh, i.e. if LOD 0 of a mesh is 64x64x64
+            // then LOD -1 would be 128x128x128
+            //
+            // We clamp at -5 to prevent this value from exploding (it's an exponent!)
+            // x3.0f is arbitrary; and we clamp at 1 to avoid thickening instanceAlbedo.w
+            // instead of thinning it
+            const float alphaExponent =
+                std::max( lodLevel - std::max( rawLodLevel, -5.0f ) * 3.0f, 1.0f );
 
             for( size_t i = 0u; i < numOctants; ++i )
             {
@@ -622,7 +645,8 @@ namespace Ogre
                     *instanceBuffer++ = worldAabb.mCenter.x;
                     *instanceBuffer++ = worldAabb.mCenter.y;
                     *instanceBuffer++ = worldAabb.mCenter.z;
-                    *AS_U32PTR( instanceBuffer ) = textureIdx % maxTexturesInCompute;
+                    *AS_U32PTR( instanceBuffer ) = ( textureIdx % maxTexturesInCompute ) |
+                                                   ( uint32( alphaExponent * 10000.0f ) << 8u );
                     ++instanceBuffer;
 
                     *instanceBuffer++ = worldAabb.mHalfSize.x;

@@ -39,6 +39,7 @@
 	{
 		ogre_float4x3 worldTransform;
 		uint albedoTexIdx;
+		float alphaExponent;
 		float lodLevel;
 		Aabb bounds;
 	};
@@ -54,7 +55,9 @@
 		retVal.bounds.center = instanceBuffer[instanceIdx].aabb0.xyz;
 		retVal.bounds.halfSize = instanceBuffer[instanceIdx].aabb1.xyz;
 
-		retVal.albedoTexIdx = floatBitsToUint( instanceBuffer[instanceIdx].aabb0.w );
+		retVal.albedoTexIdx = floatBitsToUint( instanceBuffer[instanceIdx].aabb0.w ) & 0xFFu;
+		retVal.alphaExponent =
+			float( floatBitsToUint( instanceBuffer[instanceIdx].aabb0.w ) >> 8u ) / 10000.0f;
 		retVal.lodLevel = instanceBuffer[instanceIdx].aabb1.w;
 
 		return retVal;
@@ -145,7 +148,7 @@
 					0.0f )
 			{
 				voxelAlbedo.xyz += instanceAlbedo.xyz / instanceAlbedo.w;
-				voxelAlbedo.w += instanceAlbedo.w;
+				voxelAlbedo.w += pow( instanceAlbedo.w, instance.alphaExponent );
 				voxelEmissive.xyz += instanceEmissive.xyz / instanceAlbedo.w;
 
 				instanceNormal = normalize( instanceNormal );
