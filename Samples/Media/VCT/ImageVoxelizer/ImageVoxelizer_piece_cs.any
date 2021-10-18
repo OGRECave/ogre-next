@@ -133,6 +133,7 @@
 			float3 instanceNormal = OGRE_SampleLevel( meshTextures[normalTexIdx], trilinearSampler,
 													  instanceUvw, instance.lodLevel )
 										.xyz;
+			instanceNormal = ( instanceNormal * 2.0f ) - 1.0f;
 
 			if( instanceUvw.x >= 0.0f && instanceUvw.x <= 1.0f &&  //
 				instanceUvw.y >= 0.0f && instanceUvw.y <= 1.0f &&  //
@@ -143,8 +144,9 @@
 						abs( instanceEmissive.z ) >
 					0.0f )
 			{
-				voxelAlbedo += instanceAlbedo;
-				voxelEmissive.xyz += instanceEmissive.xyz;
+				voxelAlbedo.xyz += instanceAlbedo.xyz / instanceAlbedo.w;
+				voxelAlbedo.w += instanceAlbedo.w;
+				voxelEmissive.xyz += instanceEmissive.xyz / instanceAlbedo.w;
 
 				instanceNormal = normalize( instanceNormal );
 

@@ -64,9 +64,9 @@ namespace Ogre
         mMeshWidth( 64u ),
         mMeshHeight( 64u ),
         mMeshDepth( 64u ),
-        mMeshMaxWidth( 64u ),
-        mMeshMaxHeight( 64u ),
-        mMeshMaxDepth( 64u ),
+        mMeshMaxWidth( 128u ),
+        mMeshMaxHeight( 128u ),
+        mMeshMaxDepth( 128u ),
         mMeshDimensionPerPixel( 2.0f ),
         mBlankEmissive( 0 ),
         mItemOrderDirty( false ),
@@ -192,7 +192,7 @@ namespace Ogre
     }
 
     const VctImageVoxelizer::VoxelizedMesh &VctImageVoxelizer::addMeshToCache(
-        const MeshPtr &mesh, SceneManager *sceneManager )
+        const MeshPtr &mesh, SceneManager *sceneManager, const Item *refItem )
     {
         bool bUpToDate = false;
         const String &meshName = mesh->getName();
@@ -244,6 +244,14 @@ namespace Ogre
             voxelizer._setNeedsAllMipmaps( true );
 
             Item *tmpItem = sceneManager->createItem( mesh );
+
+            if( refItem )
+            {
+                const size_t numSubItems = tmpItem->getNumSubItems();
+                for( size_t i = 0u; i < numSubItems; ++i )
+                    tmpItem->getSubItem( i )->setDatablock( refItem->getSubItem( i )->getDatablock() );
+            }
+
             sceneManager->getRootSceneNode()->attachObject( tmpItem );
 
             Aabb aabb = tmpItem->getLocalAabb();
@@ -563,7 +571,7 @@ namespace Ogre
 
             if( lastMesh != item->getMesh().get() )
             {
-                const VoxelizedMesh &cacheEntry = addMeshToCache( item->getMesh(), sceneManager );
+                const VoxelizedMesh &cacheEntry = addMeshToCache( item->getMesh(), sceneManager, item );
 
                 // New texture idx!
                 lastMesh = item->getMesh().get();
@@ -595,7 +603,9 @@ namespace Ogre
             const Vector3 ratio3 = voxelCellSize * invMeshCellSize;
             const float ratio = std::min( ratio3.x, std::min( ratio3.y, ratio3.z ) );
 
-            const float lodLevel = std::max( Math::Log2( ratio ), 0.0f );
+            // Bias by -0.5f because it produces far better results (it's too blocky otherwise)
+            // We can't bias more because otherwise holes appear as we skip entire pixels
+            const float lodLevel = std::max( Math::Log2( ratio ) - 0.5f, 0.0f );
 
             for( size_t i = 0u; i < numOctants; ++i )
             {
@@ -720,8 +730,13 @@ namespace Ogre
         OgreProfileGpuBegin( "VCT Voxelization Clear" );
         float fClearValue[4];
         uint32 uClearValue[4];
+        float fClearNormals[4];
         memset( fClearValue, 0, sizeof( fClearValue ) );
         memset( uClearValue, 0, sizeof( uClearValue ) );
+        fClearNormals[0] = 0.5f;
+        fClearNormals[1] = 0.5f;
+        fClearNormals[2] = 0.5f;
+        fClearNormals[3] = 0.0f;
 
         mResourceTransitions.clear();
         mComputeTools->prepareForUavClear( mResourceTransitions, mAlbedoVox );
@@ -732,7 +747,7 @@ namespace Ogre
 
         mComputeTools->clearUavFloat( mAlbedoVox, fClearValue );
         mComputeTools->clearUavFloat( mEmissiveVox, fClearValue );
-        mComputeTools->clearUavFloat( mNormalVox, fClearValue );
+        mComputeTools->clearUavFloat( mNormalVox, fClearNormals );
         mComputeTools->clearUavUint( mAccumValVox, uClearValue );
         OgreProfileGpuEnd( "VCT Voxelization Clear" );
     }

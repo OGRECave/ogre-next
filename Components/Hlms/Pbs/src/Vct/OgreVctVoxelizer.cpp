@@ -1282,8 +1282,13 @@ namespace Ogre
         OgreProfileGpuBegin( "VCT Voxelization Clear" );
         float fClearValue[4];
         uint32 uClearValue[4];
+        float fClearNormals[4];
         memset( fClearValue, 0, sizeof(fClearValue) );
         memset( uClearValue, 0, sizeof(uClearValue) );
+        fClearNormals[0] = 0.5f;
+        fClearNormals[1] = 0.5f;
+        fClearNormals[2] = 0.5f;
+        fClearNormals[3] = 0.0f;
 
         mResourceTransitions.clear();
         mComputeTools->prepareForUavClear( mResourceTransitions, mAlbedoVox );
@@ -1294,7 +1299,7 @@ namespace Ogre
 
         mComputeTools->clearUavFloat( mAlbedoVox, fClearValue );
         mComputeTools->clearUavFloat( mEmissiveVox, fClearValue );
-        mComputeTools->clearUavFloat( mNormalVox, fClearValue );
+        mComputeTools->clearUavFloat( mNormalVox, fClearNormals );
         mComputeTools->clearUavUint( mAccumValVox, uClearValue );
         OgreProfileGpuEnd( "VCT Voxelization Clear" );
     }

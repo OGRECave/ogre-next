@@ -162,10 +162,13 @@ namespace Ogre
             Mesh to voxelize
         @param sceneManager
             We need it to temporarily create an Item
+        @param refItem
+            Reference Item in case we need to copy its materials. Can be nullptr
         @returns
             Entry to VoxelizedMesh in cache
         */
-        const VoxelizedMesh &addMeshToCache( const MeshPtr &mesh, SceneManager *sceneManager );
+        const VoxelizedMesh &addMeshToCache( const MeshPtr &mesh, SceneManager *sceneManager,
+                                             const Item *refItem );
 
         /**
         @brief setCacheResolution
