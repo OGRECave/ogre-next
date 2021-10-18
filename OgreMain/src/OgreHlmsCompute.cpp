@@ -280,6 +280,22 @@ namespace Ogre
             Hash hashVal;
             OGRE_HASH128_FUNC( outString.c_str(), outString.size(), IdString::Seed, &hashVal );
 
+            const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
+
+            if( capabilities->hasCapability( RSC_EXPLICIT_API ) )
+            {
+                // If two shaders have the exact same source code but different
+                // Root Layout, we should treat them differently
+                RootLayout rootLayout;
+                memset( &rootLayout, 0, sizeof( rootLayout ) );
+                rootLayout.mCompute = true;
+                job->setupRootLayout( rootLayout );
+
+                Hash hashValTmp[2] = { hashVal, Hash() };
+                OGRE_HASH128_FUNC( &rootLayout, sizeof( rootLayout ), IdString::Seed, &hashValTmp[1] );
+                OGRE_HASH128_FUNC( hashValTmp, sizeof( hashValTmp ), IdString::Seed, &hashVal );
+            }
+
             CompiledShaderMap::const_iterator itor = mCompiledShaderCache.find( hashVal );
             if( itor != mCompiledShaderCache.end() )
             {
