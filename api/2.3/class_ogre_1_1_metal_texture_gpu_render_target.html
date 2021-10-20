@@ -172,8 +172,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acfce629e8215f50fb4ffc2207b950510"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc59aec11b770b8fc317dea50313d052"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7">ResourceLayout::Layout</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#acc59aec11b770b8fc317dea50313d052">getCurrentLayout</a> (void) const</td></tr>
 <tr class="separator:acc59aec11b770b8fc317dea50313d052"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaecbe86d69c49a223a92070acbd309fc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#aaecbe86d69c49a223a92070acbd309fc">getCustomAttribute</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> name, void *pData)</td></tr>
-<tr class="separator:aaecbe86d69c49a223a92070acbd309fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdb9b936912f1f2e46dea8735619ea14"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_texture_gpu.html#afdb9b936912f1f2e46dea8735619ea14">getCustomAttribute</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> name, void *pData) <a class="el" href="_ogre_vulkan_glslang_header_8h.html#a421c2a84099be332814e021bcf72c6cf">override</a></td></tr>
+<tr class="separator:afdb9b936912f1f2e46dea8735619ea14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a472f6a92131325af1a8f5ba2b78b86eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre_1_1_resource_layout.html#a7ce11be54143fb01a34d6b7529ba3dc7">ResourceLayout::Layout</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#a472f6a92131325af1a8f5ba2b78b86eb">getDefaultLayout</a> (bool bIgnoreDiscardableFlag=false) const</td></tr>
 <tr class="separator:a472f6a92131325af1a8f5ba2b78b86eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72fc34cf0b95593aa41df1370f5da312"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#a72fc34cf0b95593aa41df1370f5da312">getDepth</a> (void) const</td></tr>
@@ -1353,8 +1353,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aaecbe86d69c49a223a92070acbd309fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaecbe86d69c49a223a92070acbd309fc">&#9670;&nbsp;</a></span>getCustomAttribute()</h2>
+<a id="afdb9b936912f1f2e46dea8735619ea14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdb9b936912f1f2e46dea8735619ea14">&#9670;&nbsp;</a></span>getCustomAttribute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1363,7 +1363,7 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::TextureGpu::getCustomAttribute </td>
+          <td class="memname">virtual void Ogre::MetalTextureGpu::getCustomAttribute </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1382,12 +1382,14 @@ Static Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_texture_gpu_window.html#a4f981756a34b86387f5a745d7f1a181d">Ogre::VulkanTextureGpuWindow</a>, <a class="el" href="class_ogre_1_1_metal_texture_gpu_window.html#ab2695e8f4f208b95547ccf1dcd93837f">Ogre::MetalTextureGpuWindow</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html#a512cc522becaa23ca6d0189da2a99f5a">Ogre::GL3PlusTextureGpuHeadlessWindow</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_texture_gpu_window.html#adae1ce0fb5460b2097d702562f9e2c89">Ogre::GL3PlusTextureGpuWindow</a>, <a class="el" href="class_ogre_1_1_g_l3_plus_texture_gpu.html#a9cf89e55f18c75154a841da462e9606c">Ogre::GL3PlusTextureGpu</a>, <a class="el" href="class_ogre_1_1_d3_d11_texture_gpu_window.html#a55f2f486a1dfd3ab07fdf927c51f84ea">Ogre::D3D11TextureGpuWindow</a>, and <a class="el" href="class_ogre_1_1_d3_d11_texture_gpu.html#a1f897bb3028c54f77c26a153176b5392">Ogre::D3D11TextureGpu</a>.</p>
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_texture_gpu.html#aaecbe86d69c49a223a92070acbd309fc">Ogre::TextureGpu</a>.</p>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_metal_texture_gpu_window.html#ab2695e8f4f208b95547ccf1dcd93837f">Ogre::MetalTextureGpuWindow</a>.</p>
 
 </div>
 </div>

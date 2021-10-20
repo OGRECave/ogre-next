@@ -28,7 +28,7 @@ var class_ogre_1_1_metal_texture_gpu =
     [ "copyParametersFrom", "class_ogre_1_1_metal_texture_gpu.html#a1a1403e76b6775c08d2cb7b0c7d1398d", null ],
     [ "copyTo", "class_ogre_1_1_metal_texture_gpu.html#acfce629e8215f50fb4ffc2207b950510", null ],
     [ "getCurrentLayout", "class_ogre_1_1_metal_texture_gpu.html#acc59aec11b770b8fc317dea50313d052", null ],
-    [ "getCustomAttribute", "class_ogre_1_1_metal_texture_gpu.html#aaecbe86d69c49a223a92070acbd309fc", null ],
+    [ "getCustomAttribute", "class_ogre_1_1_metal_texture_gpu.html#afdb9b936912f1f2e46dea8735619ea14", null ],
     [ "getDefaultLayout", "class_ogre_1_1_metal_texture_gpu.html#a472f6a92131325af1a8f5ba2b78b86eb", null ],
     [ "getDepth", "class_ogre_1_1_metal_texture_gpu.html#a72fc34cf0b95593aa41df1370f5da312", null ],
     [ "getDepthBufferPoolId", "class_ogre_1_1_metal_texture_gpu.html#ad9e5b1428a5fc4fdfaca35292509c716", null ],
