@@ -1304,6 +1304,9 @@ namespace Ogre
             bufferOffset, requestedSize, 1u, ( uint32 )( sizeBytes - requestedSize ), bufferType,
             initialData, keepAsShadow, mVkRenderSystem, this, bufferInterface );
 
+        if( initialData )
+            bufferInterface->_firstUpload( initialData, 0, requestedSize );
+
         return retVal;
     }
     //-----------------------------------------------------------------------------------
