@@ -353,6 +353,9 @@ namespace Ogre
         /// @copydoc RenderSystem::markProfileEvent
         virtual void markProfileEvent( const String &eventName );
 
+        virtual void debugAnnotationPush( const String &event );
+        virtual void debugAnnotationPop( void );
+
         virtual void initGPUProfiling(void);
         virtual void deinitGPUProfiling(void);
         virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );

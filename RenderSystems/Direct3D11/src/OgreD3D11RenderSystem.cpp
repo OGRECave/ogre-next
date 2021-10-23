@@ -3805,6 +3805,32 @@ namespace Ogre
 #endif
     }
     //---------------------------------------------------------------------
+    void D3D11RenderSystem::debugAnnotationPush( const String &eventName )
+    {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( mDevice.GetProfiler() )
+        {
+            wchar_t wideName[256];  // Let avoid heap memory allocation if we are in profiling code.
+            bool wideNameOk =
+                !eventName.empty() &&
+                0 != MultiByteToWideChar( CP_ACP, 0, eventName.data(), eventName.length() + 1, wideName,
+                                          ARRAYSIZE( wideName ) );
+            mDevice.GetProfiler()->BeginEvent( wideNameOk ? wideName
+                                                         : L"<too long or empty event name>" );
+        }
+#endif
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::debugAnnotationPop()
+    {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if(mDevice.GetProfiler())
+        {
+            mDevice.GetProfiler()->EndEvent();
+        }
+#endif
+    }
+    //---------------------------------------------------------------------
     void D3D11RenderSystem::initGPUProfiling(void)
     {
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY

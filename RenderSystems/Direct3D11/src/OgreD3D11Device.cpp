@@ -56,7 +56,7 @@ namespace Ogre
             mImmediateContext->ClearState();
             mImmediateContext->Flush();
         }
-#if OGRE_D3D11_PROFILING
+#if OGRE_D3D11_PROFILING || OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         mPerf.Reset();
 #endif
         mInfoQueue.Reset();
@@ -135,7 +135,7 @@ namespace Ogre
             if( mD3D11Device1 )
                 mD3D11Device1->GetImmediateContext1( mImmediateContext1.ReleaseAndGetAddressOf() );
 
-#if OGRE_D3D11_PROFILING
+#if OGRE_D3D11_PROFILING || OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
             hr = mImmediateContext.As(&mPerf);
             if(FAILED(hr) || !mPerf->GetStatus())
                 mPerf.Reset();

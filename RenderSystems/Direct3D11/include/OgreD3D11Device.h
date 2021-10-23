@@ -45,7 +45,7 @@ namespace Ogre
         LARGE_INTEGER                   mDriverVersion;
         ComPtr<IDXGIFactoryN>           mDXGIFactory;
         ComPtr<IDXGIFactory2>           mDXGIFactory2;
-#if OGRE_D3D11_PROFILING
+#if OGRE_D3D11_PROFILING || OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         ComPtr<ID3DUserDefinedAnnotation> mPerf;
 #endif
 
@@ -67,7 +67,7 @@ namespace Ogre
         IDXGIFactoryN* GetDXGIFactory()              { return mDXGIFactory.Get(); }
         IDXGIFactory2* GetDXGIFactory2()             { return mDXGIFactory2.Get(); }
         LARGE_INTEGER GetDriverVersion()             { return mDriverVersion; }
-#if OGRE_D3D11_PROFILING
+#if OGRE_D3D11_PROFILING || OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         ID3DUserDefinedAnnotation* GetProfiler()     { return mPerf.Get(); }
 #endif
         
