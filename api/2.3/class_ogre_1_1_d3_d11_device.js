@@ -20,6 +20,7 @@ var class_ogre_1_1_d3_d11_device =
     [ "getExceptionsErrorLevel", "class_ogre_1_1_d3_d11_device.html#aa55de85d75c8371d7b715c4587dc3d03", null ],
     [ "GetImmediateContext", "class_ogre_1_1_d3_d11_device.html#a86c223b4068315041655b3c9d786e901", null ],
     [ "GetImmediateContext1", "class_ogre_1_1_d3_d11_device.html#a7234816d2cff20d2752dbabd519657eb", null ],
+    [ "GetProfiler", "class_ogre_1_1_d3_d11_device.html#a08f919a9fe6b298e19b3504ce4aaaee3", null ],
     [ "IsDeviceLost", "class_ogre_1_1_d3_d11_device.html#a7295d2296a79004b9d8399e9ad4861b0", null ],
     [ "isError", "class_ogre_1_1_d3_d11_device.html#a62ecb45be1388beebbabfb8141701b82", null ],
     [ "isNull", "class_ogre_1_1_d3_d11_device.html#a14b403c6913876281b89a8304256db11", null ],

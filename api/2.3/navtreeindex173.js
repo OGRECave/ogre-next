@@ -1,5 +1,6 @@
 var NAVTREEINDEX173 =
 {
+"class_ogre_1_1_ring_emitter.html#ae356913ccefbebc4f0119a0599a406fc":[7,0,0,936,92],
 "class_ogre_1_1_ring_emitter.html#ae3e13925bde11db245f6c9bbf5031a93":[7,0,0,936,36],
 "class_ogre_1_1_ring_emitter.html#ae4ef39376340b5fc531e5e807e0e0e52":[7,0,0,936,27],
 "class_ogre_1_1_ring_emitter.html#ae71153b3e6cdfcfeb3b49388f603b13b":[7,0,0,936,83],
@@ -248,6 +249,5 @@ var NAVTREEINDEX173 =
 "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba55da7c9771a98e7c96c3900028f02703":[5,2,2,95,0,3],
 "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba65ef64423bae408d90e0af0166bac152":[5,2,2,95,0,6],
 "class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba69f87eaf2ef88aabef0d5d11666b6705":[5,2,2,95,0,10],
-"class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a":[5,2,2,95,0,4],
-"class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba946e7d147a09d8db65b6143d1d348c99":[5,2,2,95,0,7]
+"class_ogre_1_1_runtime_assertion_exception.html#a9bdf9b8a0a83b95818d676848beaa29ba932168f4c4ae1a90391233de8a21ab1a":[5,2,2,95,0,4]
 };

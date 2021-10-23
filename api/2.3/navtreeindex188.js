@@ -1,5 +1,6 @@
 var NAVTREEINDEX188 =
 {
+"class_ogre_1_1_terrain_auto_update_lod_by_distance.html#a665518d7780157d43317459027216837":[5,1,2,2,1],
 "class_ogre_1_1_terrain_auto_update_lod_by_distance.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,1,2,2,2],
 "class_ogre_1_1_terrain_auto_update_lod_by_distance.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,1,2,2,5],
 "class_ogre_1_1_terrain_auto_update_lod_by_distance.html#ab78a921e54419be677839cdf15d1f0b8":[5,1,2,2,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX188 =
 "class_ogre_1_1_terrain_material_generator_1_1_profile.html#a008853c9b897c24b0cc23b7037ce4200":[5,1,2,11,0,8],
 "class_ogre_1_1_terrain_material_generator_1_1_profile.html#a0c47702015bcc5ad4a4920d02a67da2b":[5,1,2,11,0,3],
 "class_ogre_1_1_terrain_material_generator_1_1_profile.html#a0f8e8543ce925703ccc57298a9b59ffa":[5,1,2,11,0,2],
-"class_ogre_1_1_terrain_material_generator_1_1_profile.html#a1c727e879a260c37b00ce5505fe8e144":[5,1,2,11,0,12],
-"class_ogre_1_1_terrain_material_generator_1_1_profile.html#a421b197ca3a38da17e2eb1531a645fa2":[5,1,2,11,0,16]
+"class_ogre_1_1_terrain_material_generator_1_1_profile.html#a1c727e879a260c37b00ce5505fe8e144":[5,1,2,11,0,12]
 };
