@@ -455,6 +455,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5306bcbd9bc9cea046118189bcf01b55"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_render_system_capabilities.html">RenderSystemCapabilities</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a5306bcbd9bc9cea046118189bcf01b55">createRenderSystemCapabilities</a> () const</td></tr>
 <tr class="memdesc:a5306bcbd9bc9cea046118189bcf01b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a>.  <a href="class_ogre_1_1_g_l_e_s2_render_system.html#a5306bcbd9bc9cea046118189bcf01b55">More...</a><br /></td></tr>
 <tr class="separator:a5306bcbd9bc9cea046118189bcf01b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcb3669378e8730fe2c48d7fa6d8a3c1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#afcb3669378e8730fe2c48d7fa6d8a3c1">debugAnnotationPop</a> (void)</td></tr>
+<tr class="separator:afcb3669378e8730fe2c48d7fa6d8a3c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af880df1d878f28b0aea0f1f818ea940d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#af880df1d878f28b0aea0f1f818ea940d">debugAnnotationPush</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;event)</td></tr>
+<tr class="memdesc:af880df1d878f28b0aea0f1f818ea940d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifically meant to mark passes in RenderDoc.  <a href="class_ogre_1_1_render_system.html#af880df1d878f28b0aea0f1f818ea940d">More...</a><br /></td></tr>
+<tr class="separator:af880df1d878f28b0aea0f1f818ea940d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36c09238187a99e601a24b65854474d4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_render_system.html#a36c09238187a99e601a24b65854474d4">deinitGPUProfiling</a> (void)</td></tr>
 <tr class="separator:a36c09238187a99e601a24b65854474d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4c60bf4c5d4347fd2b9346a90545e2b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system.html#ac4c60bf4c5d4347fd2b9346a90545e2b">destroyHardwareOcclusionQuery</a> (<a class="el" href="class_ogre_1_1_hardware_occlusion_query.html">HardwareOcclusionQuery</a> *hq)</td></tr>
@@ -5678,6 +5683,67 @@ Friends</h2></td></tr>
 <p>See <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a>. </p>
 
 <p>Implements <a class="el" href="class_ogre_1_1_render_system.html#a4cd432497387d2c630a95ad9c0cd9772">Ogre::RenderSystem</a>.</p>
+
+</div>
+</div>
+<a id="afcb3669378e8730fe2c48d7fa6d8a3c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcb3669378e8730fe2c48d7fa6d8a3c1">&#9670;&nbsp;</a></span>debugAnnotationPop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::RenderSystem::debugAnnotationPop </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#aa250ba63e8d4d717f658b03633871b93">Ogre::VulkanRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#a412f794308f7cd37cb6231a49cec9914">Ogre::GL3PlusRenderSystem</a>.</p>
+
+</div>
+</div>
+<a id="af880df1d878f28b0aea0f1f818ea940d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af880df1d878f28b0aea0f1f818ea940d">&#9670;&nbsp;</a></span>debugAnnotationPush()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::RenderSystem::debugAnnotationPush </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Specifically meant to mark passes in RenderDoc. </p>
+<p>See <a href="https://renderdoc.org/docs/how/how_annotate_capture.html">https://renderdoc.org/docs/how/how_annotate_capture.html</a></p>
+<p>In many cases it will use the same interface as beginProfileEvent / endProfileEvent</p>
+<p>Note: For security &amp; performance reasons this feature is only enabled when OGRE_DEBUG_MODE &gt;= OGRE_DEBUG_MEDIUM </p>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_vulkan_render_system.html#aac8365ded0bafcff47fe81daa985cb6c">Ogre::VulkanRenderSystem</a>, and <a class="el" href="class_ogre_1_1_g_l3_plus_render_system.html#add1e1e0fdabb8abdc8cb0ab58e566a16">Ogre::GL3PlusRenderSystem</a>.</p>
 
 </div>
 </div>

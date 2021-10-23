@@ -1,5 +1,11 @@
 var NAVTREEINDEX82 =
 {
+"class_ogre_1_1_g_l3_plus_texture_gpu.html#a4a698f48957f6d466fbddcbf2e80becd":[7,0,0,413,46],
+"class_ogre_1_1_g_l3_plus_texture_gpu.html#a4b8b1fafde32b5190ac4660a9ffa2adc":[7,0,0,413,26],
+"class_ogre_1_1_g_l3_plus_texture_gpu.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,413,98],
+"class_ogre_1_1_g_l3_plus_texture_gpu.html#a4c0edfcf7c6354c686d2ff580e7a5011":[7,0,0,413,82],
+"class_ogre_1_1_g_l3_plus_texture_gpu.html#a4c626ccabbd6c853ee1490358b9ca490":[7,0,0,413,14],
+"class_ogre_1_1_g_l3_plus_texture_gpu.html#a4d4ea058e8a05f5d1949fe952ad00063":[7,0,0,413,42],
 "class_ogre_1_1_g_l3_plus_texture_gpu.html#a4d6bc1fdda7b86b12d3b3656ec53ce77":[7,0,0,413,1],
 "class_ogre_1_1_g_l3_plus_texture_gpu.html#a4de8595b73e911c15ce9e8066926380d":[7,0,0,413,70],
 "class_ogre_1_1_g_l3_plus_texture_gpu.html#a4ebc3bec47d599f4d0f7a9cde67bd4d3":[7,0,0,413,77],
@@ -243,11 +249,5 @@ var NAVTREEINDEX82 =
 "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a68dec5d2c3187c3d7be56d9c5cc55fc4":[5,2,11,34,6],
 "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a6c5e2eb9a28ee786a4b5ac39d8a0aeda":[5,2,11,34,23],
 "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a6c611147ab065038c4727b75dffdac65":[5,2,11,34,22],
-"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a6de9d156bb0ef5a625f0f8a6f08a9b19":[5,2,11,34,75],
-"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a763c9420839cf914f7a5c1901c53539b":[5,2,11,34,73],
-"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a7dc898578da3113affb78ed60f209b71":[5,2,11,34,31],
-"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a7f0b80da6f85051ce2010de3386c63b6":[5,2,11,34,39],
-"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a8245eaae1dd17bb1804bda6b5579046f":[5,2,11,34,28],
-"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a8278157117fb77bf258134bdbdc95124":[5,2,11,34,1],
-"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,11,34,57]
+"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a6de9d156bb0ef5a625f0f8a6f08a9b19":[5,2,11,34,75]
 };

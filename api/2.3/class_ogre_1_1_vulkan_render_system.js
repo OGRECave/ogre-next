@@ -118,6 +118,8 @@ var class_ogre_1_1_vulkan_render_system =
     [ "createHardwareOcclusionQuery", "class_ogre_1_1_vulkan_render_system.html#a61a20c8a2cb2512d2fdee171dc7260c4", null ],
     [ "createRenderPassDescriptor", "class_ogre_1_1_vulkan_render_system.html#ab245618df9bea38ebcd36e6ad42c27d1", null ],
     [ "createRenderSystemCapabilities", "class_ogre_1_1_vulkan_render_system.html#af38cf754dd60fa46d3a9dedec57892ab", null ],
+    [ "debugAnnotationPop", "class_ogre_1_1_vulkan_render_system.html#aa250ba63e8d4d717f658b03633871b93", null ],
+    [ "debugAnnotationPush", "class_ogre_1_1_vulkan_render_system.html#aac8365ded0bafcff47fe81daa985cb6c", null ],
     [ "debugCallback", "class_ogre_1_1_vulkan_render_system.html#ad651a154511b80b523e4be43c95c4d53", null ],
     [ "deinitGPUProfiling", "class_ogre_1_1_vulkan_render_system.html#aab91ba8d7167630b0528b8f3d1c0cbf1", null ],
     [ "destroyHardwareOcclusionQuery", "class_ogre_1_1_vulkan_render_system.html#ac4c60bf4c5d4347fd2b9346a90545e2b", null ],

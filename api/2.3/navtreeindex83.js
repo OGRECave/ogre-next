@@ -1,5 +1,11 @@
 var NAVTREEINDEX83 =
 {
+"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a763c9420839cf914f7a5c1901c53539b":[5,2,11,34,73],
+"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a7dc898578da3113affb78ed60f209b71":[5,2,11,34,31],
+"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a7f0b80da6f85051ce2010de3386c63b6":[5,2,11,34,39],
+"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a8245eaae1dd17bb1804bda6b5579046f":[5,2,11,34,28],
+"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a8278157117fb77bf258134bdbdc95124":[5,2,11,34,1],
+"class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,11,34,57],
 "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a83d7383e2379c98d83f3fac0c636ad48":[5,2,11,34,24],
 "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a841f10a656bbd24ed92b87f616e33f74":[5,2,11,34,32],
 "class_ogre_1_1_g_l3_plus_texture_gpu_manager.html#a89a4bb400a24d0e3ea9a9299192fa51d":[5,2,11,34,7],
@@ -243,11 +249,5 @@ var NAVTREEINDEX83 =
 "class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a88170d5ed9c9d2dc6e886217aaf1f6a5":[7,0,0,417,62],
 "class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a8a72f255c8c54a6cf81feda5512a6796":[7,0,0,417,33],
 "class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a8d6f53b830403f10c121ad44c925ee0d":[7,0,0,417,14],
-"class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a8ec57ce0ef0c682416c3a6b6d13a095a":[7,0,0,417,117],
-"class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a9034d26bf967a6a9ab6a03f3f2a75a88":[7,0,0,417,103],
-"class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a9078e54f74753c91de4a74462bdff406":[7,0,0,417,85],
-"class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a93baf8152625edecb31e20bac225ed96":[7,0,0,417,34],
-"class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,417,92],
-"class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a96a804ee415094f7a8350b351cd7adea":[7,0,0,417,31],
-"class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a96c0f33134c2401b0e711506c8055623":[7,0,0,417,61]
+"class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a8ec57ce0ef0c682416c3a6b6d13a095a":[7,0,0,417,117]
 };

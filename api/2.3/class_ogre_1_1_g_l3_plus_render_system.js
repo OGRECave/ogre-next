@@ -118,6 +118,8 @@ var class_ogre_1_1_g_l3_plus_render_system =
     [ "createHardwareOcclusionQuery", "class_ogre_1_1_g_l3_plus_render_system.html#a68001b2a4d1497e1c061145a88582649", null ],
     [ "createRenderPassDescriptor", "class_ogre_1_1_g_l3_plus_render_system.html#a2a30d272901982ae1b6d5882f185dc8d", null ],
     [ "createRenderSystemCapabilities", "class_ogre_1_1_g_l3_plus_render_system.html#a42809b6d8c221fb2b904e031773cc3b7", null ],
+    [ "debugAnnotationPop", "class_ogre_1_1_g_l3_plus_render_system.html#a412f794308f7cd37cb6231a49cec9914", null ],
+    [ "debugAnnotationPush", "class_ogre_1_1_g_l3_plus_render_system.html#add1e1e0fdabb8abdc8cb0ab58e566a16", null ],
     [ "deinitGPUProfiling", "class_ogre_1_1_g_l3_plus_render_system.html#ae7d980dd3192a026338f408d1518ea6f", null ],
     [ "destroyHardwareOcclusionQuery", "class_ogre_1_1_g_l3_plus_render_system.html#ac4c60bf4c5d4347fd2b9346a90545e2b", null ],
     [ "destroyRenderPassDescriptor", "class_ogre_1_1_g_l3_plus_render_system.html#a60e5ffa2ec8f2709435c3d11e8a321f6", null ],
