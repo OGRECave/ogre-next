@@ -264,6 +264,8 @@ namespace Ogre
                 mMeshDepth, aabb.getSize().z, mMeshDimensionPerPixel.z, mMeshMaxDepth );
             voxelizer.setResolution( actualWidth, actualHeight, actualDepth );
 
+            tmpItem->getWorldAabbUpdated();  // Force AABB calculation
+
             voxelizer.addItem( tmpItem, false );
             voxelizer.autoCalculateRegion();
             voxelizer.dividideOctants( 1u, 1u, 1u );
