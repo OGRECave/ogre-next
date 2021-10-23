@@ -15,7 +15,7 @@
 
 
 ReadOnlyBufferF( @value( texture0_slot ), InstanceBuffer, instanceBuffer );
-vulkan_layout( ogre_t1 ) uniform texture3D meshTextures[3];
+vulkan_layout( ogre_t1 ) uniform texture3D meshTextures[15];
 
 vulkan( layout( ogre_s1 ) uniform sampler trilinearSampler );
 
