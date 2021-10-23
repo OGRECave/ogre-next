@@ -36,9 +36,9 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "Compositor/Pass/OgreCompositorPass.h"
 
+#include "OgreLogManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreViewport.h"
-#include "OgreLogManager.h"
 
 #include "OgreProfiler.h"
 #include "OgreRenderSystem.h"
@@ -470,10 +470,22 @@ namespace Ogre
             OgreProfileGpuBeginDynamic( mDefinition->mProfilingId );
         }
 #endif
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        {
+            RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            renderSystem->debugAnnotationPush( mDefinition->mProfilingId );
+        }
+#endif
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::profilingEnd( void )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        {
+            RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            renderSystem->debugAnnotationPop();
+        }
+#endif
         if( mDefinition->mFlushCommandBuffers )
         {
             RenderSystem *renderSystem = mParentNode->getRenderSystem();

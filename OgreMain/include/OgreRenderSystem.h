@@ -1390,6 +1390,16 @@ namespace Ogre
         */
         virtual void markProfileEvent( const String &event ) = 0;
 
+        /// Specifically meant to mark passes in RenderDoc.
+        /// See https://renderdoc.org/docs/how/how_annotate_capture.html
+        ///
+        /// In many cases it will use the same interface as beginProfileEvent / endProfileEvent
+        ///
+        /// Note: For security & performance reasons this feature is only enabled when
+        /// OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        virtual void debugAnnotationPush( const String &event ) {}
+        virtual void debugAnnotationPop( void ) {}
+
         virtual void initGPUProfiling(void) = 0;
         virtual void deinitGPUProfiling(void) = 0;
         virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache ) = 0;

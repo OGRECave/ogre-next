@@ -26,6 +26,8 @@ abstract target cubemap_target
 		//be unable to detect for each pass shadows should be recalculated,
 		//so force it.
 		shadows LocalCubemapsShadowNode recalculate
+
+		profiling_id "Cubemap face pass"
 	}
 
 	//Render sky (see TutorialSky_Postprocess)
@@ -98,6 +100,8 @@ compositor_node LocalCubemapProbeRendererNode
 		{
 			input cubemap
 			output ibl_output
+
+			profiling_id "Mipmap IBL Specular Gen"
 		}
 	}
 }
@@ -137,6 +141,8 @@ compositor_node LocalCubemapsRenderingNode
 			//We could also use visibility_mask for that.
 			rq_first	0
 			rq_last		250
+
+			profiling_id "Main Render"
 		}
 
 		//Render overlays
@@ -151,6 +157,8 @@ compositor_node LocalCubemapsRenderingNode
 			//the previous render_scene pass
 			shadows		LocalCubemapsShadowNode reuse
 			rq_first	251
+
+			profiling_id "Overlays"
 		}
 
 		//Render sky (see TutorialSky_Postprocess)

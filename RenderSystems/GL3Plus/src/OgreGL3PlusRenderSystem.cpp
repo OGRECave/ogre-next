@@ -3685,6 +3685,25 @@ namespace Ogre {
         }
     }
 
+    void GL3PlusRenderSystem::debugAnnotationPush( const String &event )
+    {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( mHasGL43 || mGLSupport->checkExtension("GL_KHR_debug") )
+        {
+            glPushDebugGroup( GL_DEBUG_SOURCE_APPLICATION, 0, static_cast<GLsizei>( event.size() ),
+                              event.c_str() );
+        }
+#endif
+    }
+
+    void GL3PlusRenderSystem::debugAnnotationPop( void )
+    {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( mHasGL43 || mGLSupport->checkExtension("GL_KHR_debug") )
+            glPopDebugGroup();
+#endif
+    }
+
     void GL3PlusRenderSystem::initGPUProfiling(void)
     {
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY

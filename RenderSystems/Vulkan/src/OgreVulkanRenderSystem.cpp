@@ -192,6 +192,11 @@ namespace Ogre
         CreateDebugReportCallback( 0 ),
         DestroyDebugReportCallback( 0 ),
         mDebugReportCallback( 0 )
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        ,
+        CmdBeginDebugUtilsLabelEXT( 0 ),
+        CmdEndDebugUtilsLabelEXT( 0 )
+#endif
     {
         memset( &mGlobalTable, 0, sizeof( mGlobalTable ) );
         mGlobalTable.reset();
@@ -778,6 +783,10 @@ namespace Ogre
             if( extensionName == VK_EXT_DEBUG_REPORT_EXTENSION_NAME )
                 reqInstanceExtensions.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
 #endif
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+            if( extensionName == VK_EXT_DEBUG_UTILS_EXTENSION_NAME )
+                reqInstanceExtensions.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+#endif
         }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -834,6 +843,43 @@ namespace Ogre
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         addInstanceDebugCallback();
+#endif
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        bool bAllow_VK_EXT_debug_utils = false;
+        loadRenderDocApi();
+        if( mRenderDocApi )
+        {
+            // RenderDoc fixes VK_EXT_debug_utils even in older SDKs
+            bAllow_VK_EXT_debug_utils = true;
+        }
+        else
+        {
+            // vkEnumerateInstanceVersion is available since Vulkan 1.1
+            PFN_vkEnumerateInstanceVersion enumerateInstanceVersion =
+                (PFN_vkEnumerateInstanceVersion)vkGetInstanceProcAddr( mVkInstance,
+                                                                       "vkEnumerateInstanceVersion" );
+            if( enumerateInstanceVersion )
+            {
+                uint32_t apiVersion;
+                result = enumerateInstanceVersion( &apiVersion );
+                if( result == VK_SUCCESS && apiVersion >= VK_MAKE_VERSION( 1, 1, 114 ) )
+                {
+                    // Loader version < 1.1.114 is blacklisted as it will just crash.
+                    // See https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/258
+                    bAllow_VK_EXT_debug_utils = true;
+                }
+            }
+        }
+
+        if( bAllow_VK_EXT_debug_utils )
+        {
+            // Use VK_EXT_debug_utils.
+            CmdBeginDebugUtilsLabelEXT = (PFN_vkCmdBeginDebugUtilsLabelEXT)vkGetInstanceProcAddr(
+                mVkInstance, "vkCmdBeginDebugUtilsLabelEXT" );
+            CmdEndDebugUtilsLabelEXT = (PFN_vkCmdEndDebugUtilsLabelEXT)vkGetInstanceProcAddr(
+                mVkInstance, "vkCmdEndDebugUtilsLabelEXT" );
+        }
 #endif
     }
     //-------------------------------------------------------------------------
@@ -2009,6 +2055,29 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::markProfileEvent( const String &event ) {}
     //-------------------------------------------------------------------------
+    void VulkanRenderSystem::debugAnnotationPush( const String &event )
+    {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( !CmdBeginDebugUtilsLabelEXT )
+            return;  // VK_EXT_debug_utils not available
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        VkDebugUtilsLabelEXT markerInfo;
+        makeVkStruct( markerInfo, VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT );
+        markerInfo.pLabelName = event.c_str();
+        CmdBeginDebugUtilsLabelEXT( cmdBuffer, &markerInfo );
+#endif
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::debugAnnotationPop( void )
+    {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( !CmdEndDebugUtilsLabelEXT )
+            return;  // VK_EXT_debug_utils not available
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        CmdEndDebugUtilsLabelEXT( cmdBuffer );
+#endif
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::initGPUProfiling( void ) {}
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::deinitGPUProfiling( void ) {}
@@ -3066,9 +3135,9 @@ namespace Ogre
         // 1. The active render encoder is valid and will be subsequently used for drawing.
         //      We need to set the stencil reference value on this encoder. We do this below.
         // 2. The active render is invalid or is about to go away.
-        //      In this case, we need to set the stencil reference value on the new encoder when it is
-        //      created (In this case, the setStencilReferenceValue below in this wasted,
-        //      but it is inexpensive).
+        //      In this case, we need to set the stencil reference value on the new encoder when it
+        //      is created (In this case, the setStencilReferenceValue below in this wasted, but it
+        //      is inexpensive).
 
         // Save this info so we can transfer it into a new encoder if necessary
         mStencilEnabled = stencilParams.enabled;

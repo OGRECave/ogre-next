@@ -116,6 +116,8 @@ namespace Ogre
         //Shadow nodes usually should be unaffected by these masks.
         passDef->mExecutionMask         = 0xFF;
         passDef->mViewportModifierMask  = 0x00;
+
+        passDef->mProfilingId = "Shadow Node " + passDef->mProfilingId;
     }
     //-----------------------------------------------------------------------------------
     void CompositorShadowNodeDef::_validateAndFinish(void)

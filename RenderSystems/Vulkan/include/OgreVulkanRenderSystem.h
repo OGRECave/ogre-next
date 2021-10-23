@@ -134,6 +134,11 @@ namespace Ogre
         PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;
         VkDebugReportCallbackEXT mDebugReportCallback;
 
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        PFN_vkCmdBeginDebugUtilsLabelEXT CmdBeginDebugUtilsLabelEXT;
+        PFN_vkCmdEndDebugUtilsLabelEXT CmdEndDebugUtilsLabelEXT;
+#endif
+
         /// Declared here to avoid constant reallocations
         FastArray<VkImageMemoryBarrier> mImageBarriers;
 
@@ -288,6 +293,9 @@ namespace Ogre
         virtual void beginProfileEvent( const String &eventName );
         virtual void endProfileEvent( void );
         virtual void markProfileEvent( const String &event );
+
+        virtual void debugAnnotationPush( const String &event );
+        virtual void debugAnnotationPop( void );
 
         virtual void initGPUProfiling( void );
         virtual void deinitGPUProfiling( void );
