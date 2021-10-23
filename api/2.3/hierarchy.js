@@ -49,6 +49,7 @@ var hierarchy =
     [ "Ogre::ComPtr< ID3D11Texture3D >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComPtr< ID3D11UnorderedAccessView >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComPtr< ID3D11VertexShader >", "class_ogre_1_1_com_ptr.html", null ],
+    [ "Ogre::ComPtr< ID3DUserDefinedAnnotation >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComPtr< IDXGIAdapterN >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComPtr< IDXGIFactory2 >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComPtr< IDXGIFactoryN >", "class_ogre_1_1_com_ptr.html", null ],
