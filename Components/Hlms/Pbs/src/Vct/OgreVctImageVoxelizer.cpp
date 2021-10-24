@@ -1029,10 +1029,16 @@ namespace Ogre
 
             while( itor != endt )
             {
-                octant.y += itor->y;
-                octant.height -= itor->height - itor->y;
-                octant.z += itor->z;
-                octant.depth -= itor->depth - itor->z;
+                if( itor->diffAxis == 1u )
+                {
+                    octant.y += itor->y;
+                    octant.height -= itor->height - itor->y;
+                }
+                else  // if( octant.diffAxis == 0u )
+                {
+                    octant.z += itor->z;
+                    octant.depth -= itor->depth - itor->z;
+                }
                 ++itor;
             }
 
