@@ -71,6 +71,7 @@ namespace Ogre
         mBlankEmissive( 0 ),
         mItemOrderDirty( false ),
         mImageVoxelizerJob( 0 ),
+        mPartialClearJob( 0 ),
         mComputeTools( new ComputeTools( hlmsManager->getComputeHlms() ) ),
         mFullBuildDone( false ),
         mNeedsAlbedoMipmaps( correctAreaLightShadows ),
@@ -147,6 +148,17 @@ namespace Ogre
 
         if( mVaoManager->readOnlyIsTexBuffer() )
             mImageVoxelizerJob->setGlTexSlotStart( 4u );
+
+        mPartialClearJob = hlmsCompute->findComputeJobNoThrow( "VCT/VoxelPartialClear" );
+
+        if( !mPartialClearJob )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "To use VctImageVoxelizer, you must include the resources bundled at "
+                         "Samples/Media/VCT\n"
+                         "Could not find VCT/VoxelPartialClear",
+                         "VctImageVoxelizer::createComputeJobs" );
+        }
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::clearComputeJobResources()
@@ -746,6 +758,7 @@ namespace Ogre
         mAutoRegion = autoRegion;
         mRegionToVoxelize = regionToVoxelize;
         mMaxRegion = maxRegion;
+        mOctants.clear();
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::autoCalculateRegion()
@@ -811,7 +824,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::clearVoxels( const bool bAccumOnly )
+    void VctImageVoxelizer::clearVoxels( const bool bPartialClear )
     {
         OgreProfileGpuBegin( "VCT Voxelization Clear" );
         float fClearValue[4];
@@ -825,20 +838,81 @@ namespace Ogre
         fClearNormals[3] = 0.0f;
 
         mResourceTransitions.clear();
-        if( !bAccumOnly )
+        if( !bPartialClear )
         {
             mComputeTools->prepareForUavClear( mResourceTransitions, mAlbedoVox );
             mComputeTools->prepareForUavClear( mResourceTransitions, mEmissiveVox );
             mComputeTools->prepareForUavClear( mResourceTransitions, mNormalVox );
         }
+        else
+        {
+            DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+            uavSlot.access = ResourceAccess::Write;
+
+            uavSlot.texture = mAlbedoVox;
+            mPartialClearJob->_setUavTexture( 0u, uavSlot );
+            uavSlot.texture = mEmissiveVox;
+            mPartialClearJob->_setUavTexture( 1u, uavSlot );
+            uavSlot.texture = mNormalVox;
+            mPartialClearJob->_setUavTexture( 2u, uavSlot );
+
+            mPartialClearJob->analyzeBarriers( mResourceTransitions, false );
+        }
         mComputeTools->prepareForUavClear( mResourceTransitions, mAccumValVox );
         mRenderSystem->executeResourceTransition( mResourceTransitions );
 
-        if( !bAccumOnly )
+        if( !bPartialClear )
         {
             mComputeTools->clearUavFloat( mAlbedoVox, fClearValue );
             mComputeTools->clearUavFloat( mEmissiveVox, fClearValue );
             mComputeTools->clearUavFloat( mNormalVox, fClearNormals );
+        }
+        else
+        {
+            ShaderParams &shaderParams = mPartialClearJob->getShaderParams( "default" );
+
+            ShaderParams::Param paramStartOffset;
+            ShaderParams::Param paramPixelsToClear;
+
+            paramStartOffset.name = "startOffset";
+            paramPixelsToClear.name = "pixelsToClear";
+
+            FastArray<Octant>::const_iterator itor = mOctants.begin();
+            FastArray<Octant>::const_iterator endt = mOctants.end();
+
+            while( itor != endt )
+            {
+                const Octant &octant = *itor;
+
+                if( octant.diffAxis == 0u )
+                    mPartialClearJob->setThreadsPerGroup( 8u, 8u, 1u );
+                else if( octant.diffAxis == 1u )
+                    mPartialClearJob->setThreadsPerGroup( 8u, 1u, 8u );
+                else  // if( octant.diffAxis == 2u )
+                    mPartialClearJob->setThreadsPerGroup( 1u, 8u, 8u );
+
+                paramStartOffset.setManualValue( &octant.x, 3u );
+                paramPixelsToClear.setManualValue( &octant.width, 3u );
+
+                const uint32 *threadsPerGroup = mPartialClearJob->getThreadsPerGroup();
+
+                mPartialClearJob->setNumThreadGroups(
+                    static_cast<uint32>( alignToNextMultiple( octant.width, threadsPerGroup[0] ) ) /
+                        threadsPerGroup[0],
+                    static_cast<uint32>( alignToNextMultiple( octant.height, threadsPerGroup[1] ) ) /
+                        threadsPerGroup[1],
+                    static_cast<uint32>( alignToNextMultiple( octant.depth, threadsPerGroup[2] ) ) /
+                        threadsPerGroup[2] );
+
+                shaderParams.mParams.clear();
+                shaderParams.mParams.push_back( paramStartOffset );
+                shaderParams.mParams.push_back( paramPixelsToClear );
+                shaderParams.setDirty();
+
+                HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
+                hlmsCompute->dispatch( mPartialClearJob, 0, 0 );
+                ++itor;
+            }
         }
         mComputeTools->clearUavUint( mAccumValVox, uClearValue );
         OgreProfileGpuEnd( "VCT Voxelization Clear" );
@@ -992,6 +1066,7 @@ namespace Ogre
 
         if( mItems.empty() )
         {
+            createVoxelTextures();
             clearVoxels( false );
             return;
         }
@@ -1003,8 +1078,6 @@ namespace Ogre
 
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
         clearVoxels( false );
-
-        // const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
 
         ShaderParams::Param paramInstanceRange;
         ShaderParams::Param paramVoxelOrigin;
@@ -1114,18 +1187,19 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::buildRelative( SceneManager *sceneManager, const int32 diffX,
-                                           const int32 diffY, const int32 diffZ )
+                                           const int32 diffY, const int32 diffZ,
+                                           const uint32 numOctantsX, const uint32 numOctantsY,
+                                           const uint32 numOctantsZ )
     {
         if( !mFullBuildDone )
         {
+            dividideOctants( numOctantsX, numOctantsY, numOctantsZ );
             build( sceneManager );
             return;
         }
 
         OgreProfile( "VctImageVoxelizer::buildRelative" );
         OgreProfileGpuBegin( "VCT buildRelative" );
-
-        OGRE_ASSERT_LOW( !mOctants.empty() );
 
         mRenderSystem->endRenderPassDescriptor();
 
@@ -1165,17 +1239,17 @@ namespace Ogre
             BarrierSolver &solver = mRenderSystem->getBarrierSolver();
 
             mResourceTransitions.clear();
-            solver.resolveTransition( mResourceTransitions, mAlbedoVoxAlt, ResourceLayout::CopyDst,
+            solver.resolveTransition( mResourceTransitions, mAlbedoVoxAlt, ResourceLayout::CopySrc,
                                       ResourceAccess::Read, 0u );
-            solver.resolveTransition( mResourceTransitions, mEmissiveVoxAlt, ResourceLayout::CopyDst,
+            solver.resolveTransition( mResourceTransitions, mEmissiveVoxAlt, ResourceLayout::CopySrc,
                                       ResourceAccess::Read, 0u );
-            solver.resolveTransition( mResourceTransitions, mNormalVoxAlt, ResourceLayout::CopyDst,
+            solver.resolveTransition( mResourceTransitions, mNormalVoxAlt, ResourceLayout::CopySrc,
                                       ResourceAccess::Read, 0u );
-            solver.resolveTransition( mResourceTransitions, mAlbedoVox, ResourceLayout::CopySrc,
+            solver.resolveTransition( mResourceTransitions, mAlbedoVox, ResourceLayout::CopyDst,
                                       ResourceAccess::Write, 0u );
-            solver.resolveTransition( mResourceTransitions, mEmissiveVox, ResourceLayout::CopySrc,
+            solver.resolveTransition( mResourceTransitions, mEmissiveVox, ResourceLayout::CopyDst,
                                       ResourceAccess::Write, 0u );
-            solver.resolveTransition( mResourceTransitions, mNormalVox, ResourceLayout::CopySrc,
+            solver.resolveTransition( mResourceTransitions, mNormalVox, ResourceLayout::CopyDst,
                                       ResourceAccess::Write, 0u );
 
             mRenderSystem->executeResourceTransition( mResourceTransitions );
@@ -1191,14 +1265,12 @@ namespace Ogre
                                    CopyEncTransitionMode::AlreadyInLayoutThenManual );
         }
 
-        clearVoxels( true );
-
         mOctants.swap( mTmpOctants );
         setOffsetOctants( diffX, diffY, diffZ );
 
-        fillInstanceBuffers( sceneManager );
+        clearVoxels( true );
 
-        // const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
+        fillInstanceBuffers( sceneManager );
 
         ShaderParams::Param paramInstanceRange;
         ShaderParams::Param paramVoxelOrigin;

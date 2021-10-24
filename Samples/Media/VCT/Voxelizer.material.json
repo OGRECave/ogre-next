@@ -259,6 +259,24 @@
             [
                 {}
             ]
-        }
+        },
+
+		"VCT/VoxelPartialClear" :
+		{
+			"threads_per_group" : [4, 4, 4],
+
+			"source" : "VoxelPartialClear_cs",
+			"pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "VoxelPartialClear_piece_cs.any"],
+			"inform_shader_of_texture_data_change" : true,
+
+			"uav_units" : 3,
+
+			"params_glsl" :
+			[
+				["dstTex0",      	        [0], "int"],
+				["dstTex1",  		        [1], "int"],
+				["dstTex2",	        	    [2], "int"]
+			]
+		}
 	}
 }

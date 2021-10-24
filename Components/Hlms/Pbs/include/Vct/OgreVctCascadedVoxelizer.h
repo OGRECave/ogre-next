@@ -58,6 +58,10 @@ namespace Ogre
         /// The area around the camera to voxelize.
         /// The camera is at the center of this AABB
         Vector3 areaHalfSize;
+        /// See VctImageVoxelizer::dividideOctants
+        /// These are the values passed to it when we have to
+        /// perform a full rebuild
+        uint32 octantSubdivision[3];
 
         /// Valid ptr after VctCascadedVoxelizer::init
         ///
@@ -131,7 +135,7 @@ namespace Ogre
         void setCameraPosition( const Vector3 &cameraPosition );
         const Vector3 &getCameraPosition( void ) const { return mCameraPosition; }
 
-        VctLighting *getVctLighting( size_t idx );
+        VctLighting *getVctLighting( size_t idx ) { return mCascades[idx]; }
     };
 }  // namespace Ogre
 

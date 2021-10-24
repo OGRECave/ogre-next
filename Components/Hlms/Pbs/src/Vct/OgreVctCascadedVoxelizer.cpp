@@ -51,6 +51,9 @@ namespace Ogre
         resolution[0] = 16u;
         resolution[1] = 16u;
         resolution[2] = 16u;
+        octantSubdivision[0] = 1u;
+        octantSubdivision[1] = 1u;
+        octantSubdivision[2] = 1u;
     }
     //-------------------------------------------------------------------------
     VctCascadedVoxelizer::VctCascadedVoxelizer() :
@@ -243,7 +246,9 @@ namespace Ogre
                 cascade.voxelizer->setRegionToVoxelize(
                     false, Aabb( quantToVec3( newPos, voxelCellSize ), cascade.areaHalfSize ) );
                 cascade.voxelizer->buildRelative( sceneManager, newPos.x - oldPos.x, newPos.y - oldPos.y,
-                                                  newPos.z - oldPos.z );
+                                                  newPos.z - oldPos.z, cascade.octantSubdivision[0],
+                                                  cascade.octantSubdivision[1],
+                                                  cascade.octantSubdivision[2] );
 
                 mCascades[i]->update( sceneManager, cascade.numBounces, cascade.thinWallCounter,
                                       cascade.bAutoMultiplier, cascade.rayMarchStepScale,
@@ -252,5 +257,6 @@ namespace Ogre
         }
 
         mLastCameraPosition = mCameraPosition;
+        mFirstBuild = false;
     }
 }  // namespace Ogre

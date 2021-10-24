@@ -113,6 +113,7 @@ namespace Ogre
         bool mItemOrderDirty;
 
         HlmsComputeJob *mImageVoxelizerJob;
+        HlmsComputeJob *mPartialClearJob;
 
         ComputeTools *mComputeTools;
 
@@ -161,7 +162,7 @@ namespace Ogre
         void destroyInstanceBuffers( void );
         void fillInstanceBuffers( SceneManager *sceneManager );
 
-        void clearVoxels( const bool bAccumOnly );
+        void clearVoxels( const bool bPartialClear );
 
         void setOffsetOctants( const int32 diffX, const int32 diffY, const int32 diffZ );
 
@@ -267,8 +268,27 @@ namespace Ogre
 
         void build( SceneManager *sceneManager );
 
+        /** If the camera has moved by 1 voxel to the right (i.e. diffX = 1) we will
+            "translate" the voxels by 1 and then partially rebuild those sections
+        @remarks
+            Do not call this function if diffX/diffY/diffZ are all == 0.
+        @param sceneManager
+        @param diffX
+            How many voxels to translate to the left/right
+        @param diffY
+            How many voxels to translate up/down
+        @param diffZ
+            How many voxels to translate to the forward/backwards
+        @param numOctantsX
+            If we must perform a full rebuild, then the parameter passed to dividideOctants
+        @param numOctantsY
+            See numOctantsX
+        @param numOctantsZ
+            See numOctantsX
+        */
         void buildRelative( SceneManager *sceneManager, const int32 diffX, const int32 diffY,
-                            const int32 diffZ );
+                            const int32 diffZ, const uint32 numOctantsX, const uint32 numOctantsY,
+                            const uint32 numOctantsZ );
     };
 }  // namespace Ogre
 
