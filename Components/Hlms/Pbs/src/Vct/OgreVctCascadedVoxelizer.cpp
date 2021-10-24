@@ -36,8 +36,6 @@ THE SOFTWARE.
 #include "Vct/OgreVctImageVoxelizer.h"
 #include "Vct/OgreVctLighting.h"
 
-#define TODO_firstUpdate_mLastCameraPosition_bogus
-
 namespace Ogre
 {
     VctCascadeSetting::VctCascadeSetting() :
@@ -55,7 +53,12 @@ namespace Ogre
         resolution[2] = 16u;
     }
     //-------------------------------------------------------------------------
-    VctCascadedVoxelizer::VctCascadedVoxelizer() : mCameraPosition( Vector3::ZERO ) {}
+    VctCascadedVoxelizer::VctCascadedVoxelizer() :
+        mCameraPosition( Vector3::ZERO ),
+        mLastCameraPosition( Vector3::ZERO ),
+        mFirstBuild( true )
+    {
+    }
     //-------------------------------------------------------------------------
     VctCascadedVoxelizer::~VctCascadedVoxelizer() {}
     //-------------------------------------------------------------------------
@@ -119,6 +122,8 @@ namespace Ogre
                 false,
                 Aabb( quantToVec3( quantCamPos, voxelCellSize ), mCascadeSettings[i].areaHalfSize ) );
         }
+
+        mFirstBuild = true;
     }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::setCameraPosition( const Vector3 &cameraPosition )
@@ -218,10 +223,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::update( SceneManager *sceneManager )
     {
-        TODO_firstUpdate_mLastCameraPosition_bogus;
-        const Vector3 cameraDiff = mCameraPosition - mLastCameraPosition;
-        Vector3 cameraAbsDiff( cameraDiff );
-        cameraAbsDiff.makeAbs();
+        const bool bFirstBuild = mFirstBuild;
 
         const size_t numCascades = mCascadeSettings.size();
         for( size_t i = 0u; i < numCascades; ++i )
@@ -235,7 +237,7 @@ namespace Ogre
             const Grid3D newPos = quantizePosition( mCameraPosition, voxelCellSize );
             const Grid3D oldPos = quantizePosition( mLastCameraPosition, voxelCellSize );
 
-            if( newPos.x != oldPos.x || newPos.y != oldPos.y || newPos.z != oldPos.z )
+            if( newPos.x != oldPos.x || newPos.y != oldPos.y || newPos.z != oldPos.z || bFirstBuild )
             {
                 // Dirty. Must be updated
                 cascade.voxelizer->setRegionToVoxelize(

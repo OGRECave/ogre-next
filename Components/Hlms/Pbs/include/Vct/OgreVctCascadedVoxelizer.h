@@ -83,6 +83,8 @@ namespace Ogre
         Vector3 mCameraPosition;
         Vector3 mLastCameraPosition;
 
+        bool mFirstBuild;
+
         bool isInitialized( void ) const;
 
     public:
