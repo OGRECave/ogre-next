@@ -1,16 +1,10 @@
-// Heavily modified version based on voxelization shader written by mattatz
-//	https://github.com/mattatz/unity-voxel
-// Original work Copyright (c) 2018 mattatz under MIT license.
-//
-// mattatz's work is a full voxelization algorithm.
-// We only need to voxelize the shell (aka the contour),
-// not to fill the entire voxel.
-//
-// Adapted for Ogre and for use for Voxel Cone Tracing by
-// Matias N. Goldberg Copyright (c) 2019
+// Scene voxelizer based on stitching 3D voxel meshes
+// Matias N. Goldberg Copyright (c) 2021-present
 
 #include "/media/matias/Datos/SyntaxHighlightingMisc.h"
 
+// These defines are ignored since they're not part of any piece,
+// but they make syntax highlighters happy
 #define p_instanceStart 0
 #define p_instanceEnd 5
 #define p_voxelOrigin float3( 0, 0, 0 )

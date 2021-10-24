@@ -72,12 +72,18 @@ namespace Ogre
         mItemOrderDirty( false ),
         mImageVoxelizerJob( 0 ),
         mComputeTools( new ComputeTools( hlmsManager->getComputeHlms() ) ),
+        mFullBuildDone( false ),
         mNeedsAlbedoMipmaps( correctAreaLightShadows ),
         mAutoRegion( true ),
         mMaxRegion( Aabb::BOX_INFINITE ),
         mCpuInstanceBuffer( 0 ),
-        mInstanceBuffer( 0 )
+        mInstanceBuffer( 0 ),
+        mAlbedoVoxAlt( 0 ),
+        mEmissiveVoxAlt( 0 ),
+        mNormalVoxAlt( 0 ),
+        mReferenceAlbedoVoxAlt( 0 )
     {
+        memset( mNewRowVoxelizerJob, 0, sizeof( mNewRowVoxelizerJob ) );
         createComputeJobs();
 
         mBlankEmissive = mTextureGpuManager->createTexture(
@@ -99,6 +105,17 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VctImageVoxelizer::~VctImageVoxelizer()
     {
+        for( size_t i = 0u; i < 2u; ++i )
+        {
+            if( mNewRowVoxelizerJob[0][i] )
+            {
+                HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
+                hlmsCompute->destroyComputeJob( mNewRowVoxelizerJob[0][i]->getName() );
+                hlmsCompute->destroyComputeJob( mNewRowVoxelizerJob[1][i]->getName() );
+                hlmsCompute->destroyComputeJob( mNewRowVoxelizerJob[2][i]->getName() );
+            }
+        }
+
         setDebugVisualization( DebugVisualizationNone, 0 );
         destroyInstanceBuffers();
         destroyVoxelTextures();
@@ -371,8 +388,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::createVoxelTextures( void )
     {
-        if( mAlbedoVox && mAlbedoVox->getWidth() == mWidth && mAlbedoVox->getHeight() == mHeight &&
-            mAlbedoVox->getDepth() == mDepth )
+        if( mAlbedoVox )
         {
             mAccumValVox->scheduleTransitionTo( GpuResidency::Resident );
             return;
@@ -429,12 +445,111 @@ namespace Ogre
             textures[i]->setNumMipmaps( mNeedsAlbedoMipmaps && i == 0u ? numMipmaps : 1u );
             textures[i]->scheduleTransitionTo( GpuResidency::Resident );
         }
+    }
+    //-------------------------------------------------------------------------
+    void VctImageVoxelizer::createAltVoxelTextures( void )
+    {
+        if( mAlbedoVoxAlt )
+            return;
 
+        const bool hasTypedUavs = mRenderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
+
+        uint32 texFlags = TextureFlags::Uav;
+        if( !hasTypedUavs )
+            texFlags |= TextureFlags::Reinterpretable;
+
+        if( mNeedsAlbedoMipmaps )
+            texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
+
+        mAlbedoVoxAlt = mTextureGpuManager->createTexture(
+            "VctImageVoxelizer" + StringConverter::toString( getId() ) + "/AlbedoALT",
+            GpuPageOutStrategy::Discard, texFlags, TextureTypes::Type3D );
+        mReferenceAlbedoVoxAlt = mAlbedoVoxAlt;
+
+        texFlags &= ~( uint32 )( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
+
+        mEmissiveVoxAlt = mTextureGpuManager->createTexture(
+            "VctImageVoxelizer" + StringConverter::toString( getId() ) + "/EmissiveALT",
+            GpuPageOutStrategy::Discard, texFlags, TextureTypes::Type3D );
+        mNormalVoxAlt = mTextureGpuManager->createTexture(
+            "VctImageVoxelizer" + StringConverter::toString( getId() ) + "/NormalALT",
+            GpuPageOutStrategy::Discard, texFlags, TextureTypes::Type3D );
+
+        mAlbedoVoxAlt->copyParametersFrom( mAlbedoVox );
+        mEmissiveVoxAlt->copyParametersFrom( mEmissiveVox );
+        mNormalVoxAlt->copyParametersFrom( mNormalVox );
+
+        mAlbedoVoxAlt->scheduleTransitionTo( GpuResidency::Resident );
+        mEmissiveVoxAlt->scheduleTransitionTo( GpuResidency::Resident );
+        mNormalVoxAlt->scheduleTransitionTo( GpuResidency::Resident );
+
+        for( size_t i = 0u; i < 2u; ++i )
+        {
+            if( mNewRowVoxelizerJob[0][i] )
+            {
+                mNewRowVoxelizerJob[0][i] = mImageVoxelizerJob->clone(
+                    "VCT/ImageVoxelizer/DisplX/" + StringConverter::toString( getId() ) );
+                mNewRowVoxelizerJob[1][i] = mImageVoxelizerJob->clone(
+                    "VCT/ImageVoxelizer/DisplY" + StringConverter::toString( getId() ) );
+                mNewRowVoxelizerJob[2][i] = mImageVoxelizerJob->clone(
+                    "VCT/ImageVoxelizer/DisplZ" + StringConverter::toString( getId() ) );
+
+                mNewRowVoxelizerJob[0][i]->setThreadsPerGroup( 8u, 8u, 1u );
+                mNewRowVoxelizerJob[1][i]->setThreadsPerGroup( 8u, 1u, 8u );
+                mNewRowVoxelizerJob[2][i]->setThreadsPerGroup( 1u, 8u, 8u );
+            }
+
+            DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+            uavSlot.access = ResourceAccess::ReadWrite;
+
+            uavSlot.texture = i == 0u ? mAlbedoVoxAlt : mAlbedoVox;
+            if( hasTypedUavs )
+                uavSlot.pixelFormat = mAlbedoVox->getPixelFormat();
+            else
+                uavSlot.pixelFormat = PFG_R32_UINT;
+            uavSlot.access = ResourceAccess::ReadWrite;
+            mNewRowVoxelizerJob[0][i]->_setUavTexture( 0u, uavSlot );
+            mNewRowVoxelizerJob[1][i]->_setUavTexture( 0u, uavSlot );
+            mNewRowVoxelizerJob[2][i]->_setUavTexture( 0u, uavSlot );
+
+            uavSlot.texture = i == 0u ? mNormalVoxAlt : mNormalVox;
+            if( hasTypedUavs )
+                uavSlot.pixelFormat = mNormalVox->getPixelFormat();
+            else
+                uavSlot.pixelFormat = PFG_R32_UINT;
+            uavSlot.access = ResourceAccess::ReadWrite;
+            mNewRowVoxelizerJob[0][i]->_setUavTexture( 1u, uavSlot );
+            mNewRowVoxelizerJob[1][i]->_setUavTexture( 1u, uavSlot );
+            mNewRowVoxelizerJob[2][i]->_setUavTexture( 1u, uavSlot );
+
+            uavSlot.texture = i == 0u ? mEmissiveVoxAlt : mEmissiveVox;
+            if( hasTypedUavs )
+                uavSlot.pixelFormat = mEmissiveVox->getPixelFormat();
+            else
+                uavSlot.pixelFormat = PFG_R32_UINT;
+            uavSlot.access = ResourceAccess::ReadWrite;
+            mNewRowVoxelizerJob[0][i]->_setUavTexture( 2u, uavSlot );
+            mNewRowVoxelizerJob[1][i]->_setUavTexture( 2u, uavSlot );
+            mNewRowVoxelizerJob[2][i]->_setUavTexture( 2u, uavSlot );
+
+            uavSlot.texture = mAccumValVox;
+            uavSlot.pixelFormat = mAccumValVox->getPixelFormat();
+            uavSlot.access = ResourceAccess::ReadWrite;
+            mNewRowVoxelizerJob[0][i]->_setUavTexture( 3u, uavSlot );
+            mNewRowVoxelizerJob[1][i]->_setUavTexture( 3u, uavSlot );
+            mNewRowVoxelizerJob[2][i]->_setUavTexture( 3u, uavSlot );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctImageVoxelizer::setVoxelTexturesToJobs( void )
+    {
         if( mDebugVoxelVisualizer )
         {
             setTextureToDebugVisualizer();
             mDebugVoxelVisualizer->setVisible( true );
         }
+
+        const bool hasTypedUavs = mRenderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
 
         DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
         uavSlot.access = ResourceAccess::ReadWrite;
@@ -467,6 +582,23 @@ namespace Ogre
         uavSlot.pixelFormat = mAccumValVox->getPixelFormat();
         uavSlot.access = ResourceAccess::ReadWrite;
         mImageVoxelizerJob->_setUavTexture( 3u, uavSlot );
+    }
+    //-------------------------------------------------------------------------
+    void VctImageVoxelizer::destroyVoxelTextures( void )
+    {
+        if( mAlbedoVox )
+        {
+            mTextureGpuManager->destroyTexture( mAlbedoVoxAlt );
+            mTextureGpuManager->destroyTexture( mEmissiveVoxAlt );
+            mTextureGpuManager->destroyTexture( mNormalVoxAlt );
+
+            mAlbedoVoxAlt = 0;
+            mEmissiveVoxAlt = 0;
+            mNormalVoxAlt = 0;
+            mReferenceAlbedoVoxAlt = 0;
+        }
+
+        VctVoxelizerSourceBase::destroyVoxelTextures();
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::createInstanceBuffers( void )
@@ -751,7 +883,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::clearVoxels( void )
+    void VctImageVoxelizer::clearVoxels( const bool bAccumOnly )
     {
         OgreProfileGpuBegin( "VCT Voxelization Clear" );
         float fClearValue[4];
@@ -765,17 +897,146 @@ namespace Ogre
         fClearNormals[3] = 0.0f;
 
         mResourceTransitions.clear();
-        mComputeTools->prepareForUavClear( mResourceTransitions, mAlbedoVox );
-        mComputeTools->prepareForUavClear( mResourceTransitions, mEmissiveVox );
-        mComputeTools->prepareForUavClear( mResourceTransitions, mNormalVox );
+        if( !bAccumOnly )
+        {
+            mComputeTools->prepareForUavClear( mResourceTransitions, mAlbedoVox );
+            mComputeTools->prepareForUavClear( mResourceTransitions, mEmissiveVox );
+            mComputeTools->prepareForUavClear( mResourceTransitions, mNormalVox );
+        }
         mComputeTools->prepareForUavClear( mResourceTransitions, mAccumValVox );
         mRenderSystem->executeResourceTransition( mResourceTransitions );
 
-        mComputeTools->clearUavFloat( mAlbedoVox, fClearValue );
-        mComputeTools->clearUavFloat( mEmissiveVox, fClearValue );
-        mComputeTools->clearUavFloat( mNormalVox, fClearNormals );
+        if( !bAccumOnly )
+        {
+            mComputeTools->clearUavFloat( mAlbedoVox, fClearValue );
+            mComputeTools->clearUavFloat( mEmissiveVox, fClearValue );
+            mComputeTools->clearUavFloat( mNormalVox, fClearNormals );
+        }
         mComputeTools->clearUavUint( mAccumValVox, uClearValue );
         OgreProfileGpuEnd( "VCT Voxelization Clear" );
+    }
+    //-------------------------------------------------------------------------
+    /**
+    @brief VctImageVoxelizer::setOffsetOctants
+        When displacing a scene VCT, we often only do it by a single row of 1 x height x depth
+        Or maybe two rows or more if the camera jumped too much.
+
+        We may generate up to 3 octants into mOctants
+
+        That way we only recalculate the new rows, not the whole thing
+    */
+    void VctImageVoxelizer::setOffsetOctants( const int32 diffX, const int32 diffY, const int32 diffZ )
+    {
+        mOctants.clear();
+        if( diffZ != 0 )
+        {
+            Octant octant;
+
+            octant.x = 0u;
+            octant.y = 0u;
+            octant.width = mWidth;
+            octant.height = mHeight;
+
+            if( diffZ > 0 )
+            {
+                octant.z = 0u;
+                octant.depth = static_cast<uint32>( diffZ );
+            }
+            else
+            {
+                octant.z = mDepth - static_cast<uint32>( -diffZ );
+                octant.depth = static_cast<uint32>( -diffZ );
+            }
+
+            const Vector3 voxelCellSize = getVoxelCellSize();
+            const Vector3 voxelOrigin = getVoxelOrigin();
+            octant.region.setExtents(
+                voxelOrigin + voxelCellSize * Vector3( octant.x, octant.y, octant.z ),
+                voxelOrigin + voxelCellSize * Vector3( octant.x + octant.width, octant.y + octant.height,
+                                                       octant.z + octant.depth ) );
+
+            mOctants.push_back( octant );
+        }
+        if( diffY != 0 )
+        {
+            Octant octant;
+
+            octant.x = 0u;
+            octant.z = 0u;
+            octant.width = mWidth;
+            octant.depth = mDepth;
+
+            if( diffY > 0 )
+            {
+                octant.y = 0u;
+                octant.height = static_cast<uint32>( diffY );
+            }
+            else
+            {
+                octant.y = mHeight - static_cast<uint32>( -diffY );
+                octant.height = static_cast<uint32>( -diffY );
+            }
+
+            FastArray<Octant>::const_iterator itor = mOctants.begin();
+            FastArray<Octant>::const_iterator endt = mOctants.end();
+
+            while( itor != endt )
+            {
+                octant.z += itor->z;
+                octant.depth -= itor->depth - itor->z;
+                ++itor;
+            }
+
+            const Vector3 voxelCellSize = getVoxelCellSize();
+            const Vector3 voxelOrigin = getVoxelOrigin();
+            octant.region.setExtents(
+                voxelOrigin + voxelCellSize * Vector3( octant.x, octant.y, octant.z ),
+                voxelOrigin + voxelCellSize * Vector3( octant.x + octant.width, octant.y + octant.height,
+                                                       octant.z + octant.depth ) );
+
+            mOctants.push_back( octant );
+        }
+        if( diffX != 0 )
+        {
+            Octant octant;
+
+            octant.y = 0u;
+            octant.z = 0u;
+            octant.height = mHeight;
+            octant.depth = mDepth;
+
+            if( diffX > 0 )
+            {
+                octant.x = 0u;
+                octant.width = static_cast<uint32>( diffX );
+            }
+            else
+            {
+                octant.x = mWidth - static_cast<uint32>( -diffX );
+                octant.width = static_cast<uint32>( -diffX );
+            }
+
+            FastArray<Octant>::const_iterator itor = mOctants.begin();
+            FastArray<Octant>::const_iterator endt = mOctants.end();
+
+            while( itor != endt )
+            {
+                octant.y += itor->y;
+                octant.height -= itor->height - itor->y;
+                octant.z += itor->z;
+                octant.depth -= itor->depth - itor->z;
+                ++itor;
+            }
+
+            const Vector3 voxelCellSize = getVoxelCellSize();
+            const Vector3 voxelOrigin = getVoxelOrigin();
+            octant.region.setExtents(
+                voxelOrigin + voxelCellSize * Vector3( octant.x, octant.y, octant.z ),
+                voxelOrigin + voxelCellSize * Vector3( octant.x + octant.width, octant.y + octant.height,
+                                                       octant.z + octant.depth ) );
+
+            mOctants.push_back( octant );
+        }
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::setSceneResolution( uint32 width, uint32 height, uint32 depth )
@@ -795,18 +1056,26 @@ namespace Ogre
 
         mRenderSystem->endRenderPassDescriptor();
 
+        if( mAlbedoVoxAlt != mReferenceAlbedoVoxAlt )
+        {
+            std::swap( mAlbedoVox, mAlbedoVoxAlt );
+            std::swap( mEmissiveVox, mEmissiveVoxAlt );
+            std::swap( mNormalVox, mNormalVoxAlt );
+        }
+
         if( mItems.empty() )
         {
-            clearVoxels();
+            clearVoxels( false );
             return;
         }
 
         createVoxelTextures();
+        setVoxelTexturesToJobs();
 
         fillInstanceBuffers( sceneManager );
 
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
-        clearVoxels();
+        clearVoxels( false );
 
         // const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
 
@@ -910,6 +1179,204 @@ namespace Ogre
         if( mNeedsAlbedoMipmaps )
             mAlbedoVox->_autogenerateMipmaps();
 
+        mFullBuildDone = true;
+
         OgreProfileGpuEnd( "VCT build" );
+    }
+    //-------------------------------------------------------------------------
+    void VctImageVoxelizer::buildRelative( SceneManager *sceneManager, const int32 diffX,
+                                           const int32 diffY, const int32 diffZ )
+    {
+        if( !mFullBuildDone )
+        {
+            build( sceneManager );
+            return;
+        }
+
+        OgreProfile( "VctImageVoxelizer::buildRelative" );
+        OgreProfileGpuBegin( "VCT buildRelative" );
+
+        OGRE_ASSERT_LOW( !mOctants.empty() );
+
+        mRenderSystem->endRenderPassDescriptor();
+
+        createVoxelTextures();
+        createAltVoxelTextures();
+        std::swap( mAlbedoVox, mAlbedoVoxAlt );
+        std::swap( mEmissiveVox, mEmissiveVoxAlt );
+        std::swap( mNormalVox, mNormalVoxAlt );
+
+        {
+            size_t jobIdx = 0u;
+            if( mAlbedoVoxAlt == mReferenceAlbedoVoxAlt )
+                jobIdx = 1u;
+
+            const TextureBox refBox = mAlbedoVox->getEmptyBox( 0u );
+            TextureBox dstBox( refBox );
+            TextureBox srcBox( refBox );
+
+            dstBox.x += static_cast<uint32>( std::max( diffX, 0 ) );
+            dstBox.y += static_cast<uint32>( std::max( diffY, 0 ) );
+            dstBox.z += static_cast<uint32>( std::max( diffZ, 0 ) );
+            dstBox.width -= dstBox.x;
+            dstBox.height -= dstBox.y;
+            dstBox.depth -= dstBox.z;
+
+            srcBox.x += static_cast<uint32>( std::max( -diffX, 0 ) );
+            srcBox.y += static_cast<uint32>( std::max( -diffY, 0 ) );
+            srcBox.z += static_cast<uint32>( std::max( -diffZ, 0 ) );
+            srcBox.width -= srcBox.x;
+            srcBox.height -= srcBox.y;
+            srcBox.depth -= srcBox.z;
+
+            srcBox.width = std::min( srcBox.width, dstBox.width );
+            srcBox.height = std::min( srcBox.height, dstBox.height );
+            srcBox.depth = std::min( srcBox.depth, dstBox.depth );
+            dstBox.width = srcBox.width;
+            dstBox.height = srcBox.height;
+            dstBox.depth = srcBox.depth;
+
+            BarrierSolver &solver = mRenderSystem->getBarrierSolver();
+
+            mResourceTransitions.clear();
+            solver.resolveTransition( mResourceTransitions, mAlbedoVoxAlt, ResourceLayout::CopyDst,
+                                      ResourceAccess::Read, 0u );
+            solver.resolveTransition( mResourceTransitions, mEmissiveVoxAlt, ResourceLayout::CopyDst,
+                                      ResourceAccess::Read, 0u );
+            solver.resolveTransition( mResourceTransitions, mNormalVoxAlt, ResourceLayout::CopyDst,
+                                      ResourceAccess::Read, 0u );
+            solver.resolveTransition( mResourceTransitions, mAlbedoVox, ResourceLayout::CopySrc,
+                                      ResourceAccess::Write, 0u );
+            solver.resolveTransition( mResourceTransitions, mEmissiveVox, ResourceLayout::CopySrc,
+                                      ResourceAccess::Write, 0u );
+            solver.resolveTransition( mResourceTransitions, mNormalVox, ResourceLayout::CopySrc,
+                                      ResourceAccess::Write, 0u );
+
+            mRenderSystem->executeResourceTransition( mResourceTransitions );
+
+            mAlbedoVoxAlt->copyTo( mAlbedoVox, dstBox, 0u, srcBox, 0u, false,
+                                   CopyEncTransitionMode::AlreadyInLayoutThenManual,
+                                   CopyEncTransitionMode::AlreadyInLayoutThenManual );
+            mEmissiveVoxAlt->copyTo( mEmissiveVox, dstBox, 0u, srcBox, 0u, false,
+                                     CopyEncTransitionMode::AlreadyInLayoutThenManual,
+                                     CopyEncTransitionMode::AlreadyInLayoutThenManual );
+            mNormalVoxAlt->copyTo( mNormalVox, dstBox, 0u, srcBox, 0u, false,
+                                   CopyEncTransitionMode::AlreadyInLayoutThenManual,
+                                   CopyEncTransitionMode::AlreadyInLayoutThenManual );
+        }
+
+        clearVoxels( true );
+
+        mOctants.swap( mTmpOctants );
+        setOffsetOctants( diffX, diffY, diffZ );
+
+        fillInstanceBuffers( sceneManager );
+
+        // const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
+
+        ShaderParams::Param paramInstanceRange;
+        ShaderParams::Param paramVoxelOrigin;
+        ShaderParams::Param paramVoxelCellSize;
+        ShaderParams::Param paramVoxelPixelOrigin;
+
+        paramInstanceRange.name = "instanceStart_instanceEnd";
+        paramVoxelOrigin.name = "voxelOrigin";
+        paramVoxelCellSize.name = "voxelCellSize";
+        paramVoxelPixelOrigin.name = "voxelPixelOrigin";
+
+        paramVoxelCellSize.setManualValue( getVoxelCellSize() );
+
+        OgreProfileGpuBegin( "VCT Image Voxelization Jobs" );
+
+        const uint32 *threadsPerGroup = mImageVoxelizerJob->getThreadsPerGroup();
+
+        const size_t numOctants = mOctants.size();
+
+        HlmsSamplerblock const *trilinearSampler = 0;
+        {
+            HlmsSamplerblock refSampler;
+            refSampler.setAddressingMode( TAM_CLAMP );
+            refSampler.setFiltering( TFO_TRILINEAR );
+            trilinearSampler = mHlmsManager->getSamplerblock( refSampler );
+        }
+
+        HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
+        ShaderParams &shaderParams = mImageVoxelizerJob->getShaderParams( "default" );
+
+        BatchArray::const_iterator itBatch = mBatches.begin();
+        BatchArray::const_iterator enBatch = mBatches.end();
+
+        while( itBatch != enBatch )
+        {
+            {
+                // texIdx starts at 1 because mInstanceBuffer goes at 0; and whether
+                // that consumes a tex slot or not is a rabbit hole
+                // (depends on VaoManager::readOnlyIsTexBuffer AND the API used) so we
+                // just assume we always consume 1
+                size_t texIdx = 1u;
+                DescriptorSetTexture2::TextureSlot texSlot(
+                    DescriptorSetTexture2::TextureSlot::makeEmpty() );
+                FastArray<TextureGpu *>::const_iterator itTex = itBatch->textures.begin();
+                FastArray<TextureGpu *>::const_iterator enTex = itBatch->textures.end();
+
+                while( itTex != enTex )
+                {
+                    texSlot.texture = *itTex;
+                    mHlmsManager->addReference( trilinearSampler );
+                    mImageVoxelizerJob->_setSamplerblock( static_cast<uint8>( texIdx ),
+                                                          trilinearSampler );
+                    mImageVoxelizerJob->setTexture( static_cast<uint8>( texIdx ), texSlot );
+                    ++texIdx;
+                    ++itTex;
+                }
+            }
+
+            for( size_t i = 0u; i < numOctants; ++i )
+            {
+                if( itBatch->instances[i].numInstances > 0u )
+                {
+                    const Octant &octant = mOctants[i];
+
+                    mImageVoxelizerJob->setNumThreadGroups( octant.width / threadsPerGroup[0],
+                                                            octant.height / threadsPerGroup[1],
+                                                            octant.depth / threadsPerGroup[2] );
+
+                    const uint32 instanceRange[2] = { itBatch->instances[i].instanceOffset,
+                                                      itBatch->instances[i].numInstances };
+                    const uint32 voxelPixelOrigin[3] = { octant.x, octant.y, octant.z };
+
+                    paramInstanceRange.setManualValue( instanceRange, 2u );
+                    paramVoxelOrigin.setManualValue( octant.region.getMinimum() );
+                    paramVoxelPixelOrigin.setManualValue( voxelPixelOrigin, 3u );
+
+                    shaderParams.mParams.clear();
+                    shaderParams.mParams.push_back( paramInstanceRange );
+                    shaderParams.mParams.push_back( paramVoxelOrigin );
+                    shaderParams.mParams.push_back( paramVoxelCellSize );
+                    shaderParams.mParams.push_back( paramVoxelPixelOrigin );
+                    shaderParams.setDirty();
+
+                    mImageVoxelizerJob->analyzeBarriers( mResourceTransitions );
+                    mRenderSystem->executeResourceTransition( mResourceTransitions );
+                    hlmsCompute->dispatch( mImageVoxelizerJob, 0, 0 );
+                }
+            }
+
+            ++itBatch;
+        }
+
+        mHlmsManager->destroySamplerblock( trilinearSampler );
+
+        OgreProfileGpuEnd( "VCT Image Voxelization Jobs" );
+
+        // This texture is no longer needed, it's not used for the injection phase. Save memory.
+        mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
+
+        if( mNeedsAlbedoMipmaps )
+            mAlbedoVox->_autogenerateMipmaps();
+
+        mOctants.swap( mTmpOctants );
+
+        OgreProfileGpuEnd( "VCT buildRelative" );
     }
 }  // namespace Ogre

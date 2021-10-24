@@ -75,12 +75,12 @@ namespace Ogre
 
         Aabb mRegionToVoxelize;
 
-        void destroyVoxelTextures( void );
+        virtual void destroyVoxelTextures( void );
         void setTextureToDebugVisualizer( void );
 
     public:
         VctVoxelizerSourceBase( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager );
-        ~VctVoxelizerSourceBase();
+        virtual ~VctVoxelizerSourceBase();
 
         void setDebugVisualization( VctVoxelizerSourceBase::DebugVisualizationMode mode,
                                     SceneManager *sceneManager );

@@ -113,9 +113,21 @@ namespace Ogre
         bool mItemOrderDirty;
 
         HlmsComputeJob *mImageVoxelizerJob;
+        /// When calling buildRelative we only need to regenerate the new
+        /// rows (up to 3 rows if the camera moved to much in all XYZ directions)
+        ///
+        /// These are all clones of mImageVoxelizerJob but with different threads_per_group
+        ///
+        /// There's two of them because
+        ///     [i][0] is for writing to mAlbedoVoxAlt
+        ///     [i][1] is for writing to mAlbedoVox
+        /// We could use 1 instead of 2; but that would invalidate the caches
+        /// every time we swap the textures
+        HlmsComputeJob *mNewRowVoxelizerJob[3][2];
 
         ComputeTools *mComputeTools;
 
+        bool mFullBuildDone;  /// When false, buildRelative must call build
         bool mNeedsAlbedoMipmaps;
 
         /// Whether mRegionToVoxelize is manually set or autocalculated
@@ -133,9 +145,20 @@ namespace Ogre
         };
 
         FastArray<Octant> mOctants;
+        FastArray<Octant> mTmpOctants;
 
         float *mCpuInstanceBuffer;
         ReadOnlyBufferPacked *mInstanceBuffer;
+
+        /// When buildRelative is called, we need to move the voxels
+        /// and we can't due it in-place (race condition) so we
+        /// move it to to a copy and swap the pointers
+        TextureGpu *mAlbedoVoxAlt;
+        TextureGpu *mEmissiveVoxAlt;
+        TextureGpu *mNormalVoxAlt;
+        /// Pointer to the original mAlbedoVoxAlt; so we can tell whether
+        /// mAlbedoVox & mAlbedoVoxAlt are swapped
+        TextureGpu *mReferenceAlbedoVoxAlt;
 
         ResourceTransitionArray mResourceTransitions;
 
@@ -143,17 +166,22 @@ namespace Ogre
         void clearComputeJobResources( void );
 
         void createVoxelTextures( void );
+        void createAltVoxelTextures( void );
+        void setVoxelTexturesToJobs( void );
+        virtual void destroyVoxelTextures( void );
 
         void createInstanceBuffers( void );
         void destroyInstanceBuffers( void );
         void fillInstanceBuffers( SceneManager *sceneManager );
 
-        void clearVoxels( void );
+        void clearVoxels( const bool bAccumOnly );
+
+        void setOffsetOctants( const int32 diffX, const int32 diffY, const int32 diffZ );
 
     public:
         VctImageVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager,
                            bool correctAreaLightShadows );
-        ~VctImageVoxelizer();
+        virtual ~VctImageVoxelizer();
 
         /**
         @brief addMeshToCache
@@ -251,6 +279,9 @@ namespace Ogre
         void setSceneResolution( uint32 width, uint32 height, uint32 depth );
 
         void build( SceneManager *sceneManager );
+
+        void buildRelative( SceneManager *sceneManager, const int32 diffX, const int32 diffY,
+                            const int32 diffZ );
     };
 }  // namespace Ogre
 

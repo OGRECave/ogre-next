@@ -8,12 +8,6 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-@property( syntax == glsl )
-	#define ogre_U0 binding = 0
-	#define ogre_U1 binding = 1
-@end
-
-
 ReadOnlyBufferF( @value( texture0_slot ), InstanceBuffer, instanceBuffer );
 vulkan_layout( ogre_t1 ) uniform texture3D meshTextures[15];
 
