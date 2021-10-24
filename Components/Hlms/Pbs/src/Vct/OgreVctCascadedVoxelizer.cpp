@@ -240,8 +240,8 @@ namespace Ogre
                 // Dirty. Must be updated
                 cascade.voxelizer->setRegionToVoxelize(
                     false, Aabb( quantToVec3( newPos, voxelCellSize ), cascade.areaHalfSize ) );
-                // cascade.voxelizer->buildRelative( sceneManager, newPos.x - oldPos.x,
-                //                                newPos.y - oldPos.y, newPos.z - oldPos.z );
+                cascade.voxelizer->buildRelative( sceneManager, newPos.x - oldPos.x, newPos.y - oldPos.y,
+                                                  newPos.z - oldPos.z );
 
                 mCascades[i]->update( sceneManager, cascade.numBounces, cascade.thinWallCounter,
                                       cascade.bAutoMultiplier, cascade.rayMarchStepScale,

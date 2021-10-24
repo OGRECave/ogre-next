@@ -113,17 +113,6 @@ namespace Ogre
         bool mItemOrderDirty;
 
         HlmsComputeJob *mImageVoxelizerJob;
-        /// When calling buildRelative we only need to regenerate the new
-        /// rows (up to 3 rows if the camera moved to much in all XYZ directions)
-        ///
-        /// These are all clones of mImageVoxelizerJob but with different threads_per_group
-        ///
-        /// There's two of them because
-        ///     [i][0] is for writing to mAlbedoVoxAlt
-        ///     [i][1] is for writing to mAlbedoVox
-        /// We could use 1 instead of 2; but that would invalidate the caches
-        /// every time we swap the textures
-        HlmsComputeJob *mNewRowVoxelizerJob[3][2];
 
         ComputeTools *mComputeTools;
 
@@ -142,6 +131,7 @@ namespace Ogre
             Aabb region;
 
             float *RESTRICT_ALIAS instanceBuffer;  // Temporary
+            uint32 diffAxis;                       // Used in buildRelative
         };
 
         FastArray<Octant> mOctants;
@@ -156,9 +146,6 @@ namespace Ogre
         TextureGpu *mAlbedoVoxAlt;
         TextureGpu *mEmissiveVoxAlt;
         TextureGpu *mNormalVoxAlt;
-        /// Pointer to the original mAlbedoVoxAlt; so we can tell whether
-        /// mAlbedoVox & mAlbedoVoxAlt are swapped
-        TextureGpu *mReferenceAlbedoVoxAlt;
 
         ResourceTransitionArray mResourceTransitions;
 

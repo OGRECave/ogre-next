@@ -80,10 +80,8 @@ namespace Ogre
         mInstanceBuffer( 0 ),
         mAlbedoVoxAlt( 0 ),
         mEmissiveVoxAlt( 0 ),
-        mNormalVoxAlt( 0 ),
-        mReferenceAlbedoVoxAlt( 0 )
+        mNormalVoxAlt( 0 )
     {
-        memset( mNewRowVoxelizerJob, 0, sizeof( mNewRowVoxelizerJob ) );
         createComputeJobs();
 
         mBlankEmissive = mTextureGpuManager->createTexture(
@@ -105,17 +103,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VctImageVoxelizer::~VctImageVoxelizer()
     {
-        for( size_t i = 0u; i < 2u; ++i )
-        {
-            if( mNewRowVoxelizerJob[0][i] )
-            {
-                HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
-                hlmsCompute->destroyComputeJob( mNewRowVoxelizerJob[0][i]->getName() );
-                hlmsCompute->destroyComputeJob( mNewRowVoxelizerJob[1][i]->getName() );
-                hlmsCompute->destroyComputeJob( mNewRowVoxelizerJob[2][i]->getName() );
-            }
-        }
-
         setDebugVisualization( DebugVisualizationNone, 0 );
         destroyInstanceBuffers();
         destroyVoxelTextures();
@@ -464,7 +451,6 @@ namespace Ogre
         mAlbedoVoxAlt = mTextureGpuManager->createTexture(
             "VctImageVoxelizer" + StringConverter::toString( getId() ) + "/AlbedoALT",
             GpuPageOutStrategy::Discard, texFlags, TextureTypes::Type3D );
-        mReferenceAlbedoVoxAlt = mAlbedoVoxAlt;
 
         texFlags &= ~( uint32 )( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
 
@@ -482,63 +468,6 @@ namespace Ogre
         mAlbedoVoxAlt->scheduleTransitionTo( GpuResidency::Resident );
         mEmissiveVoxAlt->scheduleTransitionTo( GpuResidency::Resident );
         mNormalVoxAlt->scheduleTransitionTo( GpuResidency::Resident );
-
-        for( size_t i = 0u; i < 2u; ++i )
-        {
-            if( mNewRowVoxelizerJob[0][i] )
-            {
-                mNewRowVoxelizerJob[0][i] = mImageVoxelizerJob->clone(
-                    "VCT/ImageVoxelizer/DisplX/" + StringConverter::toString( getId() ) );
-                mNewRowVoxelizerJob[1][i] = mImageVoxelizerJob->clone(
-                    "VCT/ImageVoxelizer/DisplY" + StringConverter::toString( getId() ) );
-                mNewRowVoxelizerJob[2][i] = mImageVoxelizerJob->clone(
-                    "VCT/ImageVoxelizer/DisplZ" + StringConverter::toString( getId() ) );
-
-                mNewRowVoxelizerJob[0][i]->setThreadsPerGroup( 8u, 8u, 1u );
-                mNewRowVoxelizerJob[1][i]->setThreadsPerGroup( 8u, 1u, 8u );
-                mNewRowVoxelizerJob[2][i]->setThreadsPerGroup( 1u, 8u, 8u );
-            }
-
-            DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
-            uavSlot.access = ResourceAccess::ReadWrite;
-
-            uavSlot.texture = i == 0u ? mAlbedoVoxAlt : mAlbedoVox;
-            if( hasTypedUavs )
-                uavSlot.pixelFormat = mAlbedoVox->getPixelFormat();
-            else
-                uavSlot.pixelFormat = PFG_R32_UINT;
-            uavSlot.access = ResourceAccess::ReadWrite;
-            mNewRowVoxelizerJob[0][i]->_setUavTexture( 0u, uavSlot );
-            mNewRowVoxelizerJob[1][i]->_setUavTexture( 0u, uavSlot );
-            mNewRowVoxelizerJob[2][i]->_setUavTexture( 0u, uavSlot );
-
-            uavSlot.texture = i == 0u ? mNormalVoxAlt : mNormalVox;
-            if( hasTypedUavs )
-                uavSlot.pixelFormat = mNormalVox->getPixelFormat();
-            else
-                uavSlot.pixelFormat = PFG_R32_UINT;
-            uavSlot.access = ResourceAccess::ReadWrite;
-            mNewRowVoxelizerJob[0][i]->_setUavTexture( 1u, uavSlot );
-            mNewRowVoxelizerJob[1][i]->_setUavTexture( 1u, uavSlot );
-            mNewRowVoxelizerJob[2][i]->_setUavTexture( 1u, uavSlot );
-
-            uavSlot.texture = i == 0u ? mEmissiveVoxAlt : mEmissiveVox;
-            if( hasTypedUavs )
-                uavSlot.pixelFormat = mEmissiveVox->getPixelFormat();
-            else
-                uavSlot.pixelFormat = PFG_R32_UINT;
-            uavSlot.access = ResourceAccess::ReadWrite;
-            mNewRowVoxelizerJob[0][i]->_setUavTexture( 2u, uavSlot );
-            mNewRowVoxelizerJob[1][i]->_setUavTexture( 2u, uavSlot );
-            mNewRowVoxelizerJob[2][i]->_setUavTexture( 2u, uavSlot );
-
-            uavSlot.texture = mAccumValVox;
-            uavSlot.pixelFormat = mAccumValVox->getPixelFormat();
-            uavSlot.access = ResourceAccess::ReadWrite;
-            mNewRowVoxelizerJob[0][i]->_setUavTexture( 3u, uavSlot );
-            mNewRowVoxelizerJob[1][i]->_setUavTexture( 3u, uavSlot );
-            mNewRowVoxelizerJob[2][i]->_setUavTexture( 3u, uavSlot );
-        }
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::setVoxelTexturesToJobs( void )
@@ -595,7 +524,6 @@ namespace Ogre
             mAlbedoVoxAlt = 0;
             mEmissiveVoxAlt = 0;
             mNormalVoxAlt = 0;
-            mReferenceAlbedoVoxAlt = 0;
         }
 
         VctVoxelizerSourceBase::destroyVoxelTextures();
@@ -937,6 +865,8 @@ namespace Ogre
             octant.width = mWidth;
             octant.height = mHeight;
 
+            octant.diffAxis = 0u;
+
             if( diffZ > 0 )
             {
                 octant.z = 0u;
@@ -965,6 +895,8 @@ namespace Ogre
             octant.z = 0u;
             octant.width = mWidth;
             octant.depth = mDepth;
+
+            octant.diffAxis = 1u;
 
             if( diffY > 0 )
             {
@@ -1004,6 +936,8 @@ namespace Ogre
             octant.z = 0u;
             octant.height = mHeight;
             octant.depth = mDepth;
+
+            octant.diffAxis = 2u;
 
             if( diffX > 0 )
             {
@@ -1056,13 +990,6 @@ namespace Ogre
 
         mRenderSystem->endRenderPassDescriptor();
 
-        if( mAlbedoVoxAlt != mReferenceAlbedoVoxAlt )
-        {
-            std::swap( mAlbedoVox, mAlbedoVoxAlt );
-            std::swap( mEmissiveVox, mEmissiveVoxAlt );
-            std::swap( mNormalVox, mNormalVoxAlt );
-        }
-
         if( mItems.empty() )
         {
             clearVoxels( false );
@@ -1104,6 +1031,8 @@ namespace Ogre
             refSampler.setFiltering( TFO_TRILINEAR );
             trilinearSampler = mHlmsManager->getSamplerblock( refSampler );
         }
+
+        mImageVoxelizerJob->setThreadsPerGroup( 4u, 4u, 4u );
 
         ShaderParams &shaderParams = mImageVoxelizerJob->getShaderParams( "default" );
 
@@ -1205,12 +1134,9 @@ namespace Ogre
         std::swap( mAlbedoVox, mAlbedoVoxAlt );
         std::swap( mEmissiveVox, mEmissiveVoxAlt );
         std::swap( mNormalVox, mNormalVoxAlt );
+        setVoxelTexturesToJobs();
 
         {
-            size_t jobIdx = 0u;
-            if( mAlbedoVoxAlt == mReferenceAlbedoVoxAlt )
-                jobIdx = 1u;
-
             const TextureBox refBox = mAlbedoVox->getEmptyBox( 0u );
             TextureBox dstBox( refBox );
             TextureBox srcBox( refBox );
@@ -1336,6 +1262,13 @@ namespace Ogre
                 if( itBatch->instances[i].numInstances > 0u )
                 {
                     const Octant &octant = mOctants[i];
+
+                    if( octant.diffAxis == 0u )
+                        mImageVoxelizerJob->setThreadsPerGroup( 8u, 8u, 1u );
+                    else if( octant.diffAxis == 1u )
+                        mImageVoxelizerJob->setThreadsPerGroup( 8u, 1u, 8u );
+                    else  // if( octant.diffAxis == 2u )
+                        mImageVoxelizerJob->setThreadsPerGroup( 1u, 8u, 8u );
 
                     mImageVoxelizerJob->setNumThreadGroups( octant.width / threadsPerGroup[0],
                                                             octant.height / threadsPerGroup[1],
