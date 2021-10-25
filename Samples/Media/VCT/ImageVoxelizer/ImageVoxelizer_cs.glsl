@@ -33,6 +33,9 @@ vulkan( layout( ogre_P0 ) uniform Params { )
 	uniform float3 voxelOrigin;
 	uniform float3 voxelCellSize;
 	uniform uint3 voxelPixelOrigin;
+	@property( check_out_of_bounds )
+		uniform uint3 pixelsToWrite;
+	@end
 vulkan( }; )
 
 #define p_instanceStart instanceStart_instanceEnd.x
@@ -40,6 +43,7 @@ vulkan( }; )
 #define p_voxelOrigin voxelOrigin
 #define p_voxelCellSize voxelCellSize
 #define p_voxelPixelOrigin voxelPixelOrigin
+#define p_pixelsToWrite pixelsToWrite
 
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;

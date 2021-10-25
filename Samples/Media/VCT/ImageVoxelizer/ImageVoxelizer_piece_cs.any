@@ -9,6 +9,7 @@
 #define p_instanceEnd 5
 #define p_voxelOrigin float3( 0, 0, 0 )
 #define p_voxelCellSize float3( 1.0, 1.0, 1.0 )
+#define p_pixelsToWrite uint3( 1u, 1u, 1u )
 
 @piece( PreBindingsHeaderCS )
 	struct InstanceBuffer
@@ -91,6 +92,15 @@
 //in uint  gl_LocalInvocationIndex;
 
 @piece( BodyCS )
+	@property( check_out_of_bounds )
+		if( gl_GlobalInvocationID.x >= p_pixelsToWrite.x ||  //
+			gl_GlobalInvocationID.y >= p_pixelsToWrite.y ||  //
+			gl_GlobalInvocationID.z >= p_pixelsToWrite.z )
+		{
+			return;
+		}
+	@end
+
 	Aabb voxelAabb;
 	voxelAabb.center = p_voxelOrigin + p_voxelCellSize * ( float3( gl_GlobalInvocationID.xyz ) + 0.5f );
 	voxelAabb.halfSize = p_voxelCellSize * 0.5f;

@@ -1116,6 +1116,9 @@ namespace Ogre
 
         mImageVoxelizerJob->setThreadsPerGroup( 4u, 4u, 4u );
 
+        if( mImageVoxelizerJob->getProperty( "check_out_of_bounds" ) != 0 )
+            mImageVoxelizerJob->setProperty( "check_out_of_bounds", 0 );
+
         ShaderParams &shaderParams = mImageVoxelizerJob->getShaderParams( "default" );
 
         BatchArray::const_iterator itBatch = mBatches.begin();
@@ -1285,11 +1288,13 @@ namespace Ogre
         ShaderParams::Param paramVoxelOrigin;
         ShaderParams::Param paramVoxelCellSize;
         ShaderParams::Param paramVoxelPixelOrigin;
+        ShaderParams::Param paramPixelsToWrite;
 
         paramInstanceRange.name = "instanceStart_instanceEnd";
         paramVoxelOrigin.name = "voxelOrigin";
         paramVoxelCellSize.name = "voxelCellSize";
         paramVoxelPixelOrigin.name = "voxelPixelOrigin";
+        paramPixelsToWrite.name = "pixelsToWrite";
 
         paramVoxelCellSize.setManualValue( getVoxelCellSize() );
 
@@ -1306,6 +1311,9 @@ namespace Ogre
             refSampler.setFiltering( TFO_TRILINEAR );
             trilinearSampler = mHlmsManager->getSamplerblock( refSampler );
         }
+
+        if( mImageVoxelizerJob->getProperty( "check_out_of_bounds" ) == 0 )
+            mImageVoxelizerJob->setProperty( "check_out_of_bounds", 1 );
 
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
         ShaderParams &shaderParams = mImageVoxelizerJob->getShaderParams( "default" );
@@ -1351,9 +1359,13 @@ namespace Ogre
                     else  // if( octant.diffAxis == 2u )
                         mImageVoxelizerJob->setThreadsPerGroup( 1u, 8u, 8u );
 
-                    mImageVoxelizerJob->setNumThreadGroups( octant.width / threadsPerGroup[0],
-                                                            octant.height / threadsPerGroup[1],
-                                                            octant.depth / threadsPerGroup[2] );
+                    mImageVoxelizerJob->setNumThreadGroups(
+                        static_cast<uint32>( alignToNextMultiple( octant.width, threadsPerGroup[0] ) ) /
+                            threadsPerGroup[0],
+                        static_cast<uint32>( alignToNextMultiple( octant.height, threadsPerGroup[1] ) ) /
+                            threadsPerGroup[1],
+                        static_cast<uint32>( alignToNextMultiple( octant.depth, threadsPerGroup[2] ) ) /
+                            threadsPerGroup[2] );
 
                     const uint32 instanceRange[2] = { itBatch->instances[i].instanceOffset,
                                                       itBatch->instances[i].numInstances };
@@ -1362,12 +1374,14 @@ namespace Ogre
                     paramInstanceRange.setManualValue( instanceRange, 2u );
                     paramVoxelOrigin.setManualValue( octant.region.getMinimum() );
                     paramVoxelPixelOrigin.setManualValue( voxelPixelOrigin, 3u );
+                    paramPixelsToWrite.setManualValue( &octant.width, 3u );
 
                     shaderParams.mParams.clear();
                     shaderParams.mParams.push_back( paramInstanceRange );
                     shaderParams.mParams.push_back( paramVoxelOrigin );
                     shaderParams.mParams.push_back( paramVoxelCellSize );
                     shaderParams.mParams.push_back( paramVoxelPixelOrigin );
+                    shaderParams.mParams.push_back( paramPixelsToWrite );
                     shaderParams.setDirty();
 
                     mImageVoxelizerJob->analyzeBarriers( mResourceTransitions );
