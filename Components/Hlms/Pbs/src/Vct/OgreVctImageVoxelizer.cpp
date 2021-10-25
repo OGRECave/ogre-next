@@ -943,12 +943,12 @@ namespace Ogre
 
             if( diffZ > 0 )
             {
-                octant.z = 0u;
+                octant.z = mDepth - static_cast<uint32>( diffZ );
                 octant.depth = static_cast<uint32>( diffZ );
             }
             else
             {
-                octant.z = mDepth - static_cast<uint32>( -diffZ );
+                octant.z = 0u;
                 octant.depth = static_cast<uint32>( -diffZ );
             }
 
@@ -974,12 +974,12 @@ namespace Ogre
 
             if( diffY > 0 )
             {
-                octant.y = 0u;
+                octant.y = mHeight - static_cast<uint32>( diffY );
                 octant.height = static_cast<uint32>( diffY );
             }
             else
             {
-                octant.y = mHeight - static_cast<uint32>( -diffY );
+                octant.y = 0u;
                 octant.height = static_cast<uint32>( -diffY );
             }
 
@@ -988,8 +988,9 @@ namespace Ogre
 
             while( itor != endt )
             {
-                octant.z += itor->z;
-                octant.depth -= itor->depth - itor->z;
+                if( itor->z == 0u )
+                    octant.z += itor->depth;
+                octant.depth -= itor->depth;
                 ++itor;
             }
 
@@ -1015,12 +1016,12 @@ namespace Ogre
 
             if( diffX > 0 )
             {
-                octant.x = 0u;
+                octant.x = mWidth - static_cast<uint32>( diffX );
                 octant.width = static_cast<uint32>( diffX );
             }
             else
             {
-                octant.x = mWidth - static_cast<uint32>( -diffX );
+                octant.x = 0u;
                 octant.width = static_cast<uint32>( -diffX );
             }
 
@@ -1031,13 +1032,15 @@ namespace Ogre
             {
                 if( itor->diffAxis == 1u )
                 {
-                    octant.y += itor->y;
-                    octant.height -= itor->height - itor->y;
+                    if( itor->y == 0u )
+                        octant.y += itor->height;
+                    octant.height -= itor->height;
                 }
                 else  // if( octant.diffAxis == 0u )
                 {
-                    octant.z += itor->z;
-                    octant.depth -= itor->depth - itor->z;
+                    if( itor->z == 0u )
+                        octant.z += itor->depth;
+                    octant.depth -= itor->depth;
                 }
                 ++itor;
             }
@@ -1221,16 +1224,16 @@ namespace Ogre
             TextureBox dstBox( refBox );
             TextureBox srcBox( refBox );
 
-            dstBox.x += static_cast<uint32>( std::max( diffX, 0 ) );
-            dstBox.y += static_cast<uint32>( std::max( diffY, 0 ) );
-            dstBox.z += static_cast<uint32>( std::max( diffZ, 0 ) );
+            dstBox.x += static_cast<uint32>( std::max( -diffX, 0 ) );
+            dstBox.y += static_cast<uint32>( std::max( -diffY, 0 ) );
+            dstBox.z += static_cast<uint32>( std::max( -diffZ, 0 ) );
             dstBox.width -= dstBox.x;
             dstBox.height -= dstBox.y;
             dstBox.depth -= dstBox.z;
 
-            srcBox.x += static_cast<uint32>( std::max( -diffX, 0 ) );
-            srcBox.y += static_cast<uint32>( std::max( -diffY, 0 ) );
-            srcBox.z += static_cast<uint32>( std::max( -diffZ, 0 ) );
+            srcBox.x += static_cast<uint32>( std::max( diffX, 0 ) );
+            srcBox.y += static_cast<uint32>( std::max( diffY, 0 ) );
+            srcBox.z += static_cast<uint32>( std::max( diffZ, 0 ) );
             srcBox.width -= srcBox.x;
             srcBox.height -= srcBox.y;
             srcBox.depth -= srcBox.z;
