@@ -10,6 +10,7 @@
 #define p_voxelOrigin float3( 0, 0, 0 )
 #define p_voxelCellSize float3( 1.0, 1.0, 1.0 )
 #define p_pixelsToWrite uint3( 1u, 1u, 1u )
+// #define gl_WorkGroupSize float3( @value( threads_per_group_x ), @value( threads_per_group_y ), @value( threads_per_group_z ) )
 
 @piece( PreBindingsHeaderCS )
 	struct InstanceBuffer
@@ -107,8 +108,8 @@
 
 	Aabb groupVoxelAabb;
 	groupVoxelAabb.center =
-		p_voxelOrigin + 4.0f * p_voxelCellSize * ( float3( gl_WorkGroupID.xyz ) + 0.5f );
-	groupVoxelAabb.halfSize = 4.0f * p_voxelCellSize * 0.5f;
+		p_voxelOrigin + float3( gl_WorkGroupSize ) * p_voxelCellSize * ( float3( gl_WorkGroupID.xyz ) + 0.5f );
+	groupVoxelAabb.halfSize = float3( gl_WorkGroupSize ) * p_voxelCellSize * 0.5f;
 
 	bool doubleSided = false;
 	float accumHits = 0;
