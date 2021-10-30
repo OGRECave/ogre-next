@@ -793,11 +793,25 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctLighting::resetTexturesFromBuildRelative( void )
     {
+        if( mDebugVoxelVisualizer )
+        {
+            Node *visNode = mDebugVoxelVisualizer->getParentNode();
+            visNode->setPosition( mVoxelizer->getVoxelOrigin() );
+            visNode->setScale( mVoxelizer->getVoxelCellSize() );
+
+            // The visualizer is static so force-update its transform manually
+            visNode->_getFullTransformUpdated();
+            mDebugVoxelVisualizer->getWorldAabbUpdated();
+        }
+
         if( mVoxelizerTexturesChanged )
         {
             checkTextures();
             return;
         }
+
+        if( getAllowMultipleBounces() )
+            setupBounceTextures();
 
         if( mAnisotropic )
         {
