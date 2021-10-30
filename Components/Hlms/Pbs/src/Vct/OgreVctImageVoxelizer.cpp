@@ -1151,6 +1151,17 @@ namespace Ogre
                 }
             }
 
+            // Analyze barriers once per batch; since all octants can be run in parallel
+            mResourceTransitions.clear();
+            for( size_t i = 0u; i < numOctants && mResourceTransitions.empty(); ++i )
+            {
+                if( itBatch->instances[i].numInstances > 0u )
+                {
+                    mImageVoxelizerJob->analyzeBarriers( mResourceTransitions );
+                    mRenderSystem->executeResourceTransition( mResourceTransitions );
+                }
+            }
+
             for( size_t i = 0u; i < numOctants; ++i )
             {
                 if( itBatch->instances[i].numInstances > 0u )
@@ -1178,8 +1189,6 @@ namespace Ogre
                     shaderParams.mParams.push_back( paramVoxelPixelOrigin );
                     shaderParams.setDirty();
 
-                    mImageVoxelizerJob->analyzeBarriers( mResourceTransitions );
-                    mRenderSystem->executeResourceTransition( mResourceTransitions );
                     hlmsCompute->dispatch( mImageVoxelizerJob, 0, 0 );
                 }
             }
