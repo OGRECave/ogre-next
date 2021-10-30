@@ -791,6 +791,23 @@ namespace Ogre
         return memcmp( mUpperHemisphere, mLowerHemisphere, sizeof(mUpperHemisphere) ) != 0;
     }
     //-------------------------------------------------------------------------
+    void VctLighting::resetTexturesFromBuildRelative( void )
+    {
+        if( mVoxelizerTexturesChanged )
+        {
+            checkTextures();
+            return;
+        }
+
+        if( mAnisotropic )
+        {
+            DescriptorSetTexture2::TextureSlot texSlot(
+                DescriptorSetTexture2::TextureSlot::makeEmpty() );
+            texSlot.texture = mVoxelizer->getNormalVox();
+            mAnisoGeneratorStep0->setTexture( 1, texSlot );
+        }
+    }
+    //-------------------------------------------------------------------------
     size_t VctLighting::getConstBufferSize(void) const
     {
         return 10u * 4u * sizeof(float);

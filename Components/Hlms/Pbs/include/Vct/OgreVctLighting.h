@@ -270,6 +270,12 @@ namespace Ogre
                      float thinWallCounter=1.0f, bool autoMultiplier=true,
                      float rayMarchStepScale=1.0f, uint32 lightMask=0xffffffff );
 
+        /// When VctImageVoxelizer::buildRelative is called; voxelizer's textures
+        /// (albedo, normal, emissive) may be swapped for a copy.
+        ///
+        /// This function notifies us that buildRelative to update some of our references
+        void resetTexturesFromBuildRelative( void );
+
         bool needsAmbientHemisphere() const;
 
         size_t getConstBufferSize(void) const;

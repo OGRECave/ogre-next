@@ -250,6 +250,17 @@ namespace Ogre
                                                   cascade.octantSubdivision[1],
                                                   cascade.octantSubdivision[2] );
 
+                if( !mCascades[i] )
+                {
+                    mCascades[i] = new VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
+                                                    cascade.voxelizer, true );
+                    mCascades[i]->setAllowMultipleBounces( cascade.numBounces > 0u );
+                }
+                else
+                {
+                    mCascades[i]->resetTexturesFromBuildRelative();
+                }
+
                 mCascades[i]->update( sceneManager, cascade.numBounces, cascade.thinWallCounter,
                                       cascade.bAutoMultiplier, cascade.rayMarchStepScale,
                                       cascade.lightMask );
