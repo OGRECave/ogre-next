@@ -594,7 +594,7 @@ namespace Ogre
             const size_t numOctants = mOctants.size();
 
             for( size_t i = 0u; i < numOctants; ++i )
-                mOctants[i].instanceBuffer = instanceBuffer + i * numItems;
+                mOctants[i].instanceBuffer = instanceBuffer + i * numItems * 4u * 5u;
         }
 
         if( mItemOrderDirty )
@@ -802,7 +802,7 @@ namespace Ogre
         octant.depth = mDepth / numOctantsZ;
 
         const Vector3 voxelOrigin = mRegionToVoxelize.getMinimum();
-        const Vector3 voxelCellSize =
+        const Vector3 octantCellSize =
             mRegionToVoxelize.getSize() / Vector3( numOctantsX, numOctantsY, numOctantsZ );
 
         for( uint32 x = 0u; x < numOctantsX; ++x )
@@ -815,9 +815,9 @@ namespace Ogre
                 {
                     octant.z = z * octant.depth;
 
-                    Vector3 octantOrigin = Vector3( octant.x, octant.y, octant.z ) * voxelCellSize;
+                    Vector3 octantOrigin = Vector3( x, y, z ) * octantCellSize;
                     octantOrigin += voxelOrigin;
-                    octant.region.setExtents( octantOrigin, octantOrigin + voxelCellSize );
+                    octant.region.setExtents( octantOrigin, octantOrigin + octantCellSize );
                     mOctants.push_back( octant );
                 }
             }
@@ -1121,6 +1121,8 @@ namespace Ogre
 
         ShaderParams &shaderParams = mImageVoxelizerJob->getShaderParams( "default" );
 
+        const size_t numItems = mItems.size();
+
         BatchArray::const_iterator itBatch = mBatches.begin();
         BatchArray::const_iterator enBatch = mBatches.end();
 
@@ -1159,8 +1161,10 @@ namespace Ogre
                                                             octant.height / threadsPerGroup[1],
                                                             octant.depth / threadsPerGroup[2] );
 
-                    const uint32 instanceRange[2] = { itBatch->instances[i].instanceOffset,
-                                                      itBatch->instances[i].numInstances };
+                    const uint32 instanceRange[2] = {
+                        itBatch->instances[i].instanceOffset + static_cast<uint32>( i * numItems ),
+                        itBatch->instances[i].numInstances + static_cast<uint32>( i * numItems )
+                    };
                     const uint32 voxelPixelOrigin[3] = { octant.x, octant.y, octant.z };
 
                     paramInstanceRange.setManualValue( instanceRange, 2u );
@@ -1207,6 +1211,21 @@ namespace Ogre
         {
             dividideOctants( numOctantsX, numOctantsY, numOctantsZ );
             build( sceneManager );
+
+            if( mDebugVoxelVisualizer )
+            {
+                mRenderSystem->endCopyEncoder();
+                setTextureToDebugVisualizer();
+
+                Node *visNode = mDebugVoxelVisualizer->getParentNode();
+                visNode->setPosition( getVoxelOrigin() );
+                visNode->setScale( getVoxelCellSize() );
+
+                // The visualizer is static so force-update its transform manually
+                visNode->_getFullTransformUpdated();
+                mDebugVoxelVisualizer->getWorldAabbUpdated();
+            }
+
             return;
         }
 
@@ -1318,6 +1337,8 @@ namespace Ogre
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
         ShaderParams &shaderParams = mImageVoxelizerJob->getShaderParams( "default" );
 
+        const size_t numItems = mItems.size();
+
         BatchArray::const_iterator itBatch = mBatches.begin();
         BatchArray::const_iterator enBatch = mBatches.end();
 
@@ -1367,8 +1388,10 @@ namespace Ogre
                         static_cast<uint32>( alignToNextMultiple( octant.depth, threadsPerGroup[2] ) ) /
                             threadsPerGroup[2] );
 
-                    const uint32 instanceRange[2] = { itBatch->instances[i].instanceOffset,
-                                                      itBatch->instances[i].numInstances };
+                    const uint32 instanceRange[2] = {
+                        itBatch->instances[i].instanceOffset + static_cast<uint32>( i * numItems ),
+                        itBatch->instances[i].numInstances + static_cast<uint32>( i * numItems )
+                    };
                     const uint32 voxelPixelOrigin[3] = { octant.x, octant.y, octant.z };
 
                     paramInstanceRange.setManualValue( instanceRange, 2u );
