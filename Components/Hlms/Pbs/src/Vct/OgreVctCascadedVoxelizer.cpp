@@ -117,8 +117,8 @@ namespace Ogre
                                                                mCascadeSettings[i].resolution[1],
                                                                mCascadeSettings[i].resolution[2] );
 
-            const Vector3 voxelCellSize =
-                mCascadeSettings[i].areaHalfSize / mCascadeSettings[i].voxelizer->getVoxelResolution();
+            const Vector3 voxelCellSize = 2.0f * mCascadeSettings[i].areaHalfSize /
+                                          mCascadeSettings[i].voxelizer->getVoxelResolution();
             const Grid3D quantCamPos = quantizePosition( mCameraPosition, voxelCellSize );
 
             mCascadeSettings[i].voxelizer->setRegionToVoxelize(
@@ -236,7 +236,7 @@ namespace Ogre
             // Do not use cascade.voxelizer->getVoxelCellSize() because it is bound to
             // floating point precision errors. This way is always consistent
             const Vector3 voxelCellSize =
-                mCascadeSettings[i].areaHalfSize / cascade.voxelizer->getVoxelResolution();
+                2.0f * mCascadeSettings[i].areaHalfSize / cascade.voxelizer->getVoxelResolution();
             const Grid3D newPos = quantizePosition( mCameraPosition, voxelCellSize );
             const Grid3D oldPos = quantizePosition( mLastCameraPosition, voxelCellSize );
 
