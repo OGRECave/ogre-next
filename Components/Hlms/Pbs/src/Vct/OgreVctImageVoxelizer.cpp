@@ -1405,6 +1405,20 @@ namespace Ogre
 
         mOctants.swap( mTmpOctants );
 
+        if( mDebugVoxelVisualizer )
+        {
+            mRenderSystem->endCopyEncoder();
+            setTextureToDebugVisualizer();
+
+            Node *visNode = mDebugVoxelVisualizer->getParentNode();
+            visNode->setPosition( getVoxelOrigin() );
+            visNode->setScale( getVoxelCellSize() );
+
+            // The visualizer is static so force-update its transform manually
+            visNode->_getFullTransformUpdated();
+            mDebugVoxelVisualizer->getWorldAabbUpdated();
+        }
+
         OgreProfileGpuEnd( "VCT buildRelative" );
     }
 }  // namespace Ogre

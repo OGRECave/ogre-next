@@ -80,6 +80,18 @@ namespace Ogre
             trackedTex = mEmissiveVox;
             break;
         }
+
+        BarrierSolver &solver = mRenderSystem->getBarrierSolver();
+        ResourceTransitionArray resourceTransitions;
+        solver.resolveTransition( resourceTransitions, mAlbedoVox, ResourceLayout::Texture,
+                                  ResourceAccess::Read, 1u << VertexShader );
+        if( mAlbedoVox != trackedTex )
+        {
+            solver.resolveTransition( resourceTransitions, trackedTex, ResourceLayout::Texture,
+                                      ResourceAccess::Read, 1u << VertexShader );
+        }
+        mRenderSystem->executeResourceTransition( resourceTransitions );
+
         mDebugVoxelVisualizer->setTrackingVoxel( mAlbedoVox, trackedTex,
                                                  mDebugVisualizationMode == DebugVisualizationEmissive );
     }
