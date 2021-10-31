@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "Vct/OgreVctImageVoxelizer.h"
 #include "Vct/OgreVctLighting.h"
+#include "Vct/OgreVoxelizedMeshCache.h"
 
 namespace Ogre
 {
@@ -59,11 +60,12 @@ namespace Ogre
     VctCascadedVoxelizer::VctCascadedVoxelizer() :
         mCameraPosition( Vector3::ZERO ),
         mLastCameraPosition( Vector3::ZERO ),
+        mMeshCache( 0 ),
         mFirstBuild( true )
     {
     }
     //-------------------------------------------------------------------------
-    VctCascadedVoxelizer::~VctCascadedVoxelizer() {}
+    VctCascadedVoxelizer::~VctCascadedVoxelizer() { delete mMeshCache; }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::reserveNumCascades( size_t numCascades )
     {
@@ -107,11 +109,17 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::init( RenderSystem *renderSystem, HlmsManager *hlmsManager )
     {
+        OGRE_ASSERT_LOW( !mMeshCache && "VctCascadedVoxelizer::init already called!" );
+
+        mMeshCache = new VoxelizedMeshCache( Ogre::Id::generateNewId<VoxelizedMeshCache>(),
+                                             renderSystem->getTextureGpuManager() );
+
         const size_t numCascades = mCascadeSettings.size();
         for( size_t i = 0u; i < numCascades; ++i )
         {
-            mCascadeSettings[i].voxelizer = new VctImageVoxelizer(
-                Ogre::Id::generateNewId<VctImageVoxelizer>(), renderSystem, hlmsManager, true );
+            mCascadeSettings[i].voxelizer =
+                new VctImageVoxelizer( Ogre::Id::generateNewId<VctImageVoxelizer>(), renderSystem,
+                                       hlmsManager, mMeshCache, true );
 
             mCascadeSettings[i].voxelizer->setSceneResolution( mCascadeSettings[i].resolution[0],
                                                                mCascadeSettings[i].resolution[1],

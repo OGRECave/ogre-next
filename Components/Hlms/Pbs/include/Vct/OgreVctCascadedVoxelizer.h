@@ -35,6 +35,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     class VctImageVoxelizer;
+    class VoxelizedMeshCache;
 
     /// Contains VctLighting settings about each cascade that cannot be
     /// set by setting them directly via VctCascadedVoxelizer::getVctLighting
@@ -86,6 +87,8 @@ namespace Ogre
 
         Vector3 mCameraPosition;
         Vector3 mLastCameraPosition;
+
+        VoxelizedMeshCache *mMeshCache;
 
         bool mFirstBuild;
 

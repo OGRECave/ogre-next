@@ -40,6 +40,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     class VoxelVisualizer;
+    class VoxelizedMeshCache;
 
     /**
     @class VctImageVoxelizer
@@ -54,17 +55,6 @@ namespace Ogre
     class _OgreHlmsPbsExport VctImageVoxelizer : public VctVoxelizerSourceBase
     {
     protected:
-        struct VoxelizedMesh
-        {
-            uint64 hash[2];
-            String meshName;
-            TextureGpu *albedoVox;
-            TextureGpu *normalVox;
-            TextureGpu *emissiveVox;
-        };
-
-        typedef map<IdString, VoxelizedMesh>::type MeshCacheMap;
-
         struct BatchInstances
         {
             uint32 instanceOffset;
@@ -86,18 +76,7 @@ namespace Ogre
         typedef FastArray<Batch> BatchArray;
         typedef FastArray<Item *> ItemArray;
 
-        uint32 mMeshWidth;
-        uint32 mMeshHeight;
-        uint32 mMeshDepth;
-        uint32 mMeshMaxWidth;
-        uint32 mMeshMaxHeight;
-        uint32 mMeshMaxDepth;
-        Ogre::Vector3 mMeshDimensionPerPixel;
-
-        MeshCacheMap mMeshes;
-        /// Many meshes have no emissive at all, thus just use a 1x1x1 emissive
-        /// texture for all those meshes instead of wasting ton of RAM.
-        TextureGpu *mBlankEmissive;
+        VoxelizedMeshCache *mMeshCache;
 
         /// We split dispatch in batches because not all APIs/GPUs support
         /// binding (or dynamically indexing) enough textures per dispatch.
@@ -168,63 +147,8 @@ namespace Ogre
 
     public:
         VctImageVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager,
-                           bool correctAreaLightShadows );
+                           VoxelizedMeshCache *meshCache, bool correctAreaLightShadows );
         virtual ~VctImageVoxelizer();
-
-        /**
-        @brief addMeshToCache
-            Checks if the mesh is already cached. If it's not, it gets voxelized.
-        @param mesh
-            Mesh to voxelize
-        @param sceneManager
-            We need it to temporarily create an Item
-        @param refItem
-            Reference Item in case we need to copy its materials. Can be nullptr
-        @returns
-            Entry to VoxelizedMesh in cache
-        */
-        const VoxelizedMesh &addMeshToCache( const MeshPtr &mesh, SceneManager *sceneManager,
-                                             const Item *refItem );
-
-        /**
-        @brief setCacheResolution
-            When building the mesh cache, meshes must be voxelized at some arbitrary resolution
-            This function lets you specify how many voxels per volume in units.
-
-            e.g. if you call
-            @code
-                imageVoxelizer->setCacheResolution( 32u, 32u, 32u, maxWidth, maxHeight, maxDepth
-                                                    Ogre::Vector3( 1.0f, 1.0f, 1.0f ) );
-            @endcode
-
-            And the mesh AABB is 2x2x2 in units, then we will voxelize at 64x64x64 voxels
-            (unless this resolution exceeds maxWidth/maxHeight/maxDepth)
-
-        @remarks
-            This setting can be changed individually for each mesh.
-            Call it as often as you need. e.g. a literal cube mesh
-            only needs 1x1x1 of resolution.
-
-        @param width
-            The width in pixels per dimension.x in units
-            i.e. the width / dimension.x
-        @param height
-            The height in pixels per dimension.y in units
-            i.e. the height / dimension.y
-        @param depth
-            The height in pixels per dimension.z in units
-            i.e. the depth / dimension.z
-        @param maxWidth
-            Width can never exceed this value
-        @param maxHeight
-            Height can never exceed this value
-        @param maxDepth
-            Depth can never exceed this value
-        @param dimension
-            Units to cover (see previous parameters)
-        */
-        void setCacheResolution( uint32 width, uint32 height, uint32 depth, uint32 maxWidth,
-                                 uint32 maxHeight, uint32 maxDepth, const Ogre::Vector3 &dimension );
 
         /** Adds an item to voxelize.
         @param item
