@@ -167,7 +167,8 @@
 
             "properties" :
             {
-                "vct_anisotropic" : 0
+                "vct_anisotropic" : 0,
+                "hlms_num_vct_cascades" : 1
             },
 
             "params" :
