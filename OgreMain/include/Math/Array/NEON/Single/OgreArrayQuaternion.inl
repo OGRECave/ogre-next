@@ -177,11 +177,11 @@ namespace Ogre
 
         // retVal = fCoeff0 * rkP + fCoeff1 * rkT;
         rkT.mChunkBase[0] = vaddq_f32( vmulq_f32( rkP.mChunkBase[0], fCoeff0 ),
-                                         vmulq_f32( rkT.mChunkBase[0], fCoeff1 ) ),
+                                         vmulq_f32( rkT.mChunkBase[0], fCoeff1 ) );
         rkT.mChunkBase[1] = vaddq_f32( vmulq_f32( rkP.mChunkBase[1], fCoeff0 ),
-                                         vmulq_f32( rkT.mChunkBase[1], fCoeff1 ) ),
+                                         vmulq_f32( rkT.mChunkBase[1], fCoeff1 ) );
         rkT.mChunkBase[2] = vaddq_f32( vmulq_f32( rkP.mChunkBase[2], fCoeff0 ),
-                                         vmulq_f32( rkT.mChunkBase[2], fCoeff1 ) ),
+                                         vmulq_f32( rkT.mChunkBase[2], fCoeff1 ) );
         rkT.mChunkBase[3] = vaddq_f32( vmulq_f32( rkP.mChunkBase[3], fCoeff0 ),
                                          vmulq_f32( rkT.mChunkBase[3], fCoeff1 ) );
 
