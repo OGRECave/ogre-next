@@ -144,6 +144,12 @@ namespace Ogre
         @return
             TextureBox to write to. Please note TextureBox::data may be null. If so, that
             means we don't have enough space to fulfill your request.
+
+            You MUST use TextureBox::atFromOffsettedOrigin rather than TextureBox::at
+            (or account for the offset at some point)
+
+            Most APIs will return the value starting at 0 0 0
+            But D3D11 will NOT.
         */
         TextureBox mapRegion( uint32 width, uint32 height, uint32 depth, uint32 slices,
                               PixelFormatGpu pixelFormat );
