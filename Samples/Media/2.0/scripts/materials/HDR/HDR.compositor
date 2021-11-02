@@ -93,9 +93,9 @@ compositor_node HdrPostprocessingNode
 			load		{ all dont_care }
 			material	HDR/DownScale01_SumLumStart
 			input		0	rt0
-		}
 
-		profiling_id "Start Luminance"
+			profiling_id "Start Luminance"
+		}
 	}
 
 	target rtIter1
@@ -105,9 +105,9 @@ compositor_node HdrPostprocessingNode
 			load		{ all dont_care }
 			material	HDR/DownScale02_SumLumIterative
 			input		0	rtIter0
-		}
 
-		profiling_id "Iterate Luminance"
+			profiling_id "Iterate Luminance"
+		}
 	}
 
 	target rtIter2
