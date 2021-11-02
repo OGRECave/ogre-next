@@ -479,7 +479,9 @@ Public Member Functions</h2></td></tr>
 
 <p>Can be called from worker thread, but not from multiple threads at the same time, also you can't call anything else either. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>You must have called startMapRegion before. Textures that are bigger than 2048x2048 can only map one slice at a time due to limitations in the D3D11 API. </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="struct_ogre_1_1_texture_box.html" title="For cubemaps, the face is in sliceStart, (see CubemapSide::CubemapSide) For cubemap arrays,...">TextureBox</a> to write to. Please note <a class="el" href="struct_ogre_1_1_texture_box.html#abd49325e3605351af777bfea9b56ba24" title="Pointer is never owned by us.">TextureBox::data</a> may be null. If so, that means we don't have enough space to fulfill your request. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="struct_ogre_1_1_texture_box.html" title="For cubemaps, the face is in sliceStart, (see CubemapSide::CubemapSide) For cubemap arrays,...">TextureBox</a> to write to. Please note <a class="el" href="struct_ogre_1_1_texture_box.html#abd49325e3605351af777bfea9b56ba24" title="Pointer is never owned by us.">TextureBox::data</a> may be null. If so, that means we don't have enough space to fulfill your request.</dd></dl>
+<p>You MUST use <a class="el" href="struct_ogre_1_1_texture_box.html#ad847c9af8c06cb208dfed687440d336e">TextureBox::atFromOffsettedOrigin</a> rather than <a class="el" href="struct_ogre_1_1_texture_box.html#aaf292792396ed63db078a51909579468" title="x, y &amp; z are in pixels.">TextureBox::at</a> (or account for the offset at some point)</p>
+<p>Most APIs will return the value starting at 0 0 0 But D3D11 will NOT. </p>
 
 </div>
 </div>
