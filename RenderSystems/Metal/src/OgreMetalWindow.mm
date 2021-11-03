@@ -139,6 +139,7 @@ namespace Ogre
         Window( title, width, height, fullscreenMode ),
         mClosed( false ),
         mHidden( false ),
+        mIsExternal( false ),
         mHwGamma( true ),
         mMetalLayer( 0 ),
         mCurrentDrawable( 0 ),
@@ -348,6 +349,7 @@ namespace Ogre
         if( externalWindowHandle && [externalWindowHandle isKindOfClass:[OgreMetalView class]] )
         {
             mMetalView = (OgreMetalView*)externalWindowHandle;
+            mIsExternal = true;
         }
         else
         {
@@ -382,6 +384,10 @@ namespace Ogre
             SetupMetalWindowListeners( this, window );
             if( !mHidden )
                 [window orderFront: nil];
+        }
+        else
+        {
+            mIsExternal = true;
         }
 
         NSView* externalView;
@@ -525,12 +531,17 @@ namespace Ogre
     void MetalWindow::setHidden( bool hidden )
     {
         mHidden = hidden;
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        if (hidden)
-            [mWindow orderOut:nil];
-        else
-            [mWindow makeKeyAndOrderFront:nil];
+        if( !mIsExternal )
+        {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+            [mMetalView.window setHidden:hidden];
+#else
+            if( hidden )
+                [mWindow orderOut:nil];
+            else
+                [mWindow makeKeyAndOrderFront:nil];
 #endif
+        }
     }
     //-------------------------------------------------------------------------
     bool MetalWindow::isHidden(void) const
