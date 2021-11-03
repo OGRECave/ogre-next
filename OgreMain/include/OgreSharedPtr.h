@@ -384,6 +384,9 @@ namespace Ogre {
 namespace std
 {
     #if __cplusplus < 201103L && OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
+        #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        #error "Apple Platforms must use at least C++11"
+        #endif
     namespace tr1
     {
     #endif
