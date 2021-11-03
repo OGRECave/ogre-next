@@ -150,7 +150,7 @@ int main( int argc, const char *argv[] )
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
     const String pluginsFolder = macResourcesPath();
-    const String writeAccessFolder = macLogPath();
+    const String writeAccessFolder = macWriteAccessFolderPath();
 #else
     const String pluginsFolder = "./";
     const String writeAccessFolder = pluginsFolder;
