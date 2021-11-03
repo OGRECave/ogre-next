@@ -42,6 +42,7 @@ namespace Ogre
     class MetalWindow : public Window
     {
         bool    mClosed;
+        bool    mHidden;
         bool    mHwGamma;
 
         CAMetalLayer        *mMetalLayer;
