@@ -7,8 +7,8 @@
 @insertpiece( DefaultTerraHeaderPS )
 
 // START UNIFORM STRUCT DECLARATION
-@insertpiece( custom_ps_uniformStructDeclaration )
 // END UNIFORM STRUCT DECLARATION
+
 struct PS_INPUT
 {
 	@insertpiece( Terra_VStoPS_block )
