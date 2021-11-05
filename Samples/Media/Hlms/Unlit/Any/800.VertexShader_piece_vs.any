@@ -108,7 +108,9 @@
 		@property( syntax != metal )
 			outVs.drawId = finalDrawId;
 		@else
-			outVs.materialId = (ushort)worldMaterialIdx[finalDrawId].x;
+			@property( !lower_gpu_overhead )
+				outVs.materialId = (ushort)worldMaterialIdx[finalDrawId].x;
+			@end
 		@end
 	@end
 

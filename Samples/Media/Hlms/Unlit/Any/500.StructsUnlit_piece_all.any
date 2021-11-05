@@ -94,7 +94,9 @@
 		@property( syntax != metal )
 			FLAT_INTERPOLANT( uint drawId, @counter(texcoord) );
 		@else
-			FLAT_INTERPOLANT( ushort materialId, @counter(texcoord) );
+			@property( !lower_gpu_overhead )
+				FLAT_INTERPOLANT( ushort materialId, @counter(texcoord) );
+			@end
 		@end
 		@property( hlms_colour )
 			INTERPOLANT( float4 colour, @counter(texcoord) );
