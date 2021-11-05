@@ -244,10 +244,11 @@ namespace Ogre
                 if( mColour[i].texture->isMultisample() )
                 {
                     MetalTextureGpu *resolveTexture = 0;
-                    if( mColour[i].resolveTexture )
+                    if( mColour[i].resolveTexture &&
+                        !mColour[i].resolveTexture->isRenderWindowSpecific() )
                     {
-                        assert( dynamic_cast<MetalTextureGpu*>( mColour[i].resolveTexture ) );
-                        resolveTexture = static_cast<MetalTextureGpu*>( mColour[i].resolveTexture );
+                        OGRE_ASSERT_HIGH( dynamic_cast<MetalTextureGpu *>( mColour[i].resolveTexture ) );
+                        resolveTexture = static_cast<MetalTextureGpu *>( mColour[i].resolveTexture );
                     }
 
                     if( !mColour[i].texture->hasMsaaExplicitResolves() )
@@ -255,7 +256,7 @@ namespace Ogre
                     else
                         mColourAttachment[i].texture = textureMetal->getFinalTextureName();
 
-                    if( mColour[i].resolveTexture )
+                    if( resolveTexture )
                         mColourAttachment[i].resolveTexture = resolveTexture->getFinalTextureName();
                 }
                 else
@@ -535,18 +536,33 @@ namespace Ogre
         for( size_t i=0; i<mNumColourEntries; ++i )
             passDesc.colorAttachments[i] = mColourAttachment[i];
 
-        if( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() )
+        if( mNumColourEntries > 0 &&
+            ( mColour[0].texture->isRenderWindowSpecific() ||
+              ( mColour[0].resolveTexture && mColour[0].resolveTexture->isRenderWindowSpecific() ) ) )
         {
-            //The RenderWindow's MetalDrawable changes every frame. We need a
-            //hard copy since the previous descriptor may still be in flight.
-            //Also ensure we do not retain current drawable's texture beyond the frame.
+            // The RenderWindow's MetalDrawable changes every frame. We need a
+            // hard copy since the previous descriptor may still be in flight.
+            // Also ensure we do not retain current drawable's texture beyond the frame.
             passDesc.colorAttachments[0] = [mColourAttachment[0] copy];
-            MetalTextureGpuWindow *textureMetal =
-                    static_cast<MetalTextureGpuWindow*>( mColour[0].texture );
-            textureMetal->nextDrawable();
-            if( textureMetal->isMultisample() )
+            MetalTextureGpuWindow *textureMetal = 0;
+
+            if( mColour[0].texture->isRenderWindowSpecific() )
             {
-                passDesc.colorAttachments[0].texture = textureMetal->getMsaaFramebufferName();
+                OGRE_ASSERT_HIGH( dynamic_cast<MetalTextureGpuWindow *>( mColour[0].texture ) );
+                textureMetal = static_cast<MetalTextureGpuWindow *>( mColour[0].texture );
+            }
+            else
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<MetalTextureGpuWindow *>( mColour[0].resolveTexture ) );
+                textureMetal = static_cast<MetalTextureGpuWindow *>( mColour[0].resolveTexture );
+            }
+
+            textureMetal->nextDrawable();
+            if( mColour[0].texture->isMultisample() )
+            {
+                if( mColour[0].texture->isRenderWindowSpecific() )
+                    passDesc.colorAttachments[0].texture = textureMetal->getMsaaFramebufferName();
+
                 passDesc.colorAttachments[0].resolveTexture = textureMetal->getFinalTextureName();
                 if( mColour[0].storeAction == StoreAction::DontCare ||
                     mColour[0].storeAction == StoreAction::Store ||
@@ -641,7 +657,7 @@ namespace Ogre
             static bool warnedOnce = false;
             if( !warnedOnce || cannotInterrupt )
             {
-                mNumCallstackEntries = backtrace( mCallstackBacktrace, 32 );
+                mNumCallstackEntries = static_cast<size_t>( backtrace( mCallstackBacktrace, 32 ) );
                 warnedOnce = true;
             }
 #endif
@@ -675,13 +691,29 @@ namespace Ogre
             }
         }
 
-        if( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() )
+        if( mNumColourEntries > 0 &&
+            ( mColour[0].texture->isRenderWindowSpecific() ||
+              ( mColour[0].resolveTexture && mColour[0].resolveTexture->isRenderWindowSpecific() ) ) )
         {
-            //RenderWindows are a special case. Do not retain.
+            // RenderWindows are a special case. We don't retain them so
+            // mResolveColourAttachm doesn't have their ptrs.
             passDesc.colorAttachments[0] = [passDesc copy];
-            MetalTextureGpuWindow *textureMetal =
-                    static_cast<MetalTextureGpuWindow*>( mColour[0].texture );
-            passDesc.colorAttachments[0].texture = textureMetal->getMsaaFramebufferName();
+
+            MetalTextureGpuWindow *textureMetal = 0;
+
+            if( mColour[0].texture->isRenderWindowSpecific() )
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<MetalTextureGpuWindow *>( mColour[0].texture ) );
+                textureMetal = static_cast<MetalTextureGpuWindow *>( mColour[0].texture );
+            }
+            else
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<MetalTextureGpuWindow *>( mColour[0].resolveTexture ) );
+                textureMetal = static_cast<MetalTextureGpuWindow *>( mColour[0].resolveTexture );
+            }
+
+            if( mColour[0].texture->isRenderWindowSpecific() )
+                passDesc.colorAttachments[0].texture = textureMetal->getMsaaFramebufferName();
             passDesc.colorAttachments[0].resolveTexture = textureMetal->getFinalTextureName();
         }
 
