@@ -126,8 +126,7 @@ namespace Ogre
             "}";
 #endif
 
-    MetalVaoManager::MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device,
-                                      const NameValuePairList *params ) :
+    MetalVaoManager::MetalVaoManager( MetalDevice *device, const NameValuePairList *params ) :
         VaoManager( params ),
         mVaoNames( 1 ),
         mSemaphoreFlushed( true ),
@@ -189,8 +188,6 @@ namespace Ogre
         mReadOnlyBufferMaxSize = mTexBufferMaxSize;
 
         mSupportsPersistentMapping  = true;
-
-        mDynamicBufferMultiplier = dynamicBufferMultiplier;
 
         const uint32 maxNumInstances = 4096u * 2u;
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS

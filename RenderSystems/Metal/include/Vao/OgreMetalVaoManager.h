@@ -269,8 +269,7 @@ namespace Ogre
                                              size_t newPoolIdx, BufferPacked *buffer );
 
     public:
-        MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device,
-                         const NameValuePairList *params );
+        MetalVaoManager( MetalDevice *device, const NameValuePairList *params );
         virtual ~MetalVaoManager();
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,

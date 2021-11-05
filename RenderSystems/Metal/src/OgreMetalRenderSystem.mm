@@ -529,15 +529,25 @@ namespace Ogre
             LogManager::getSingleton().stream() << "Metal: Requested \"" << mDeviceName <<
                 "\", selected \"" << selectedDeviceName << "\"";
 
+            uint8 dynamicBufferMultiplier = 3u;
+
             if( miscParams )
             {
                 NameValuePairList::const_iterator itOption = miscParams->find( "reverse_depth" );
                 if( itOption != miscParams->end() )
                     mReverseDepth = StringConverter::parseBool( itOption->second, true );
+
+                itOption = miscParams->find( "VaoManager::mDynamicBufferMultiplier" );
+                if( itOption != miscParams->end() )
+                {
+                    const uint32 newBufMult =
+                        StringConverter::parseUnsignedInt( itOption->second, dynamicBufferMultiplier );
+                    dynamicBufferMultiplier = static_cast<uint8>( newBufMult );
+                    OGRE_ASSERT_LOW( dynamicBufferMultiplier > 0u );
+                }
             }
 
-            const long c_inFlightCommandBuffers = 3;
-            mMainGpuSyncSemaphore = dispatch_semaphore_create(c_inFlightCommandBuffers);
+            mMainGpuSyncSemaphore = dispatch_semaphore_create( dynamicBufferMultiplier );
             mMainSemaphoreAlreadyWaited = false;
             mBeginFrameOnceStarted = false;
             mRealCapabilities = createRenderSystemCapabilities();
@@ -550,7 +560,10 @@ namespace Ogre
 
             initialiseFromRenderSystemCapabilities( mCurrentCapabilities, 0 );
 
-            mVaoManager = OGRE_NEW MetalVaoManager( c_inFlightCommandBuffers, &mDevice, miscParams );
+            mVaoManager = OGRE_NEW MetalVaoManager( &mDevice, miscParams );
+            // If the assert fails, probably the default value of dynamicBufferMultiplier
+            // does not match the VaoManager's
+            OGRE_ASSERT_LOW( mVaoManager->getDynamicBufferMultiplier() == dynamicBufferMultiplier );
             mHardwareBufferManager = new v1::MetalHardwareBufferManager( &mDevice, mVaoManager );
             mTextureGpuManager = OGRE_NEW MetalTextureGpuManager( mVaoManager, this, &mDevice );
 
