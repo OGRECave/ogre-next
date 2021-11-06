@@ -40,9 +40,9 @@ vulkan( }; )
 #define p_voxelCellSize voxelCellSize
 #define p_invVoxelResolution invVoxelResolution
 #define p_iterationDampening iterationDampening
-#define p_vctStartBias startBias.x
-#define p_vctInvStartBias invStartBias.y
-#define p_vctCascadeMaxLod cascadeMaxLod.z
+#define p_vctStartBias startBias
+#define p_vctInvStartBias invStartBias
+#define p_vctCascadeMaxLod cascadeMaxLod
 #define p_vctFromPrevLodToNext fromPrevLodToNext
 #define p_vctFromPreviousProbeToNext fromPreviousProbeToNext
 

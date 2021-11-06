@@ -3,7 +3,7 @@
 
 @piece( HeaderCS )
 	@property( vct_anisotropic )
-		#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_Texture3D_float4 probeX, OGRE_Texture3D_float4 probeY, OGRE_Texture3D_float4 probeZ
+		#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_Texture3D_float4 probeX[@value( hlms_num_vct_cascades )], OGRE_Texture3D_float4 probeY[@value( hlms_num_vct_cascades )], OGRE_Texture3D_float4 probeZ[@value( hlms_num_vct_cascades )]
 		#define OGRE_VCT_ANISO_PROBE_ARG , probeX, probeY, probeZ
 		#define OGRE_VCT_ANISO_ROOT_PROBE_ARG , vctProbeX, vctProbeY, vctProbeZ
 	@else
@@ -117,6 +117,7 @@
 		return result;
 	}
 
+@property( hlms_num_vct_cascades > 1 )
 	/** Converts pos from Local Space of probeIdx - 1 into the Local Space of probeIdx
 	\param posLS
 		Position in local space of probeIdx - 1
@@ -129,7 +130,9 @@
 	{
 		return posLS * p_vctFromPreviousProbeToNext[probeIdx - 1][0].xyz +
 			   p_vctFromPreviousProbeToNext[probeIdx - 1][1].xyz;
+		return float3( 0, 0, 0 );
 	}
+@end
 
 	INLINE void computeVctProbe
 	(
@@ -180,21 +183,23 @@
 				posLS, dir, coneAngleTan, p_vctStartBias[0], p_vctInvStartBias[0], p_vctCascadeMaxLod[0],
 				0.0f, 0, probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
 
-			for( int j = 1; j < @value( hlms_num_vct_cascades ) && result.alpha < 0.95f; ++j )
-			{
-				float3 newPosLS =
-					fromVctProbeToNext( result.posLS, j PARAMS_ARG ) - dir * p_vctStartBias[j];
+			@property( hlms_num_vct_cascades > 1 )
+				for( int j = 1; j < @value( hlms_num_vct_cascades ) && result.alpha < 0.95f; ++j )
+				{
+					float3 newPosLS =
+						fromVctProbeToNext( result.posLS, j PARAMS_ARG ) - dir * p_vctStartBias[j];
 
-				VctResult newRes = voxelConeTraceDiff(
-					newPosLS, dir, coneAngleTan, p_vctStartBias[j], p_vctInvStartBias[j],
-					p_vctCascadeMaxLod[j], result.lodLevel * p_vctFromPrevLodToNext[j - 1], j,
-					probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
+					VctResult newRes = voxelConeTraceDiff(
+						newPosLS, dir, coneAngleTan, p_vctStartBias[j], p_vctInvStartBias[j],
+						p_vctCascadeMaxLod[j], result.lodLevel * p_vctFromPrevLodToNext[j - 1], j,
+						probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
 
-				result.colour += newRes.colour;
-				result.alpha += newRes.alpha;
-				result.lodLevel = lodLevel;
-				result.posLS = newRes.posLS;
-			}
+					result.colour += newRes.colour;
+					result.alpha += newRes.alpha;
+					result.lodLevel = lodLevel;
+					result.posLS = newRes.posLS;
+				}
+			@end
 
 			light += coneWeights[i] * result.colour;
 		}
@@ -216,7 +221,7 @@
 
 	float4 albedoVal = OGRE_Load3D( voxelAlbedoTex, gl_GlobalInvocationID.xyz, 0 );
 	float4 normalVal = OGRE_Load3D( voxelNormalTex, gl_GlobalInvocationID.xyz, 0 );
-	float4 currentLight = OGRE_Load3D( vctProbe, gl_GlobalInvocationID.xyz, 0 );
+	float4 currentLight = OGRE_Load3D( vctProbes[0], gl_GlobalInvocationID.xyz, 0 );
 
 	if( anyInvocationARB( albedoVal.a > 0 ) )
 	{

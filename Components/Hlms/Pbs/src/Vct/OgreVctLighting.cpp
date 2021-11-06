@@ -95,7 +95,11 @@ namespace Ogre
         mBounceVoxelCellSize( 0 ),
         mBounceInvVoxelResolution( 0 ),
         mBounceIterationDampening( 0 ),
-        mBounceStartBiasInvBias( 0 ),
+        mBounceStartBias( 0 ),
+        mBounceInvBias( 0 ),
+        mBounceCascadeMaxLod( 0 ),
+        mBounceFromPrevLodToNext( 0 ),
+        mBounceFromPreviousProbeToNext( 0 ),
         mBounceShaderParams( 0 ),
         mSpecularSdfQuality( 0.875f ),
         mMultiplier( 1.0f ),
@@ -141,7 +145,16 @@ namespace Ogre
         mBounceVoxelCellSize        = mBounceShaderParams->findParameter( "voxelCellSize" );
         mBounceInvVoxelResolution   = mBounceShaderParams->findParameter( "invVoxelResolution" );
         mBounceIterationDampening   = mBounceShaderParams->findParameter( "iterationDampening" );
-        mBounceStartBiasInvBias     = mBounceShaderParams->findParameter( "startBias_invStartBias" );
+        mBounceStartBias = mBounceShaderParams->findParameter( "startBias" );
+        mBounceInvBias = mBounceShaderParams->findParameter( "invStartBias" );
+        mBounceCascadeMaxLod = mBounceShaderParams->findParameter( "cascadeMaxLod" );
+
+        if( !mExtraCascades.empty() )
+        {
+            mBounceFromPrevLodToNext = mBounceShaderParams->findParameter( "fromPrevLodToNext" );
+            mBounceFromPreviousProbeToNext =
+                mBounceShaderParams->findParameter( "fromPreviousProbeToNext" );
+        }
 
         createTextures();
     }
@@ -534,7 +547,14 @@ namespace Ogre
         mBounceInvVoxelResolution->setManualValue( 1.0f / mVoxelizer->getVoxelResolution() );
         //mBounceIterationDampening->setManualValue( 1.0f / (Math::PI * (bounceIteration * 0.5f + 1.0f)) );
         mBounceIterationDampening->setManualValue( 1.0f / (float)Math::PI );
-        mBounceStartBiasInvBias->setManualValue( Vector2( invSmallestRes, smallestRes ) );
+        mBounceStartBias->setManualValue( smallestRes );
+        mBounceInvBias->setManualValue( invSmallestRes );
+        mBounceCascadeMaxLod->setManualValue( 256.0f );
+        if( !mExtraCascades.empty() )
+        {
+            mBounceFromPrevLodToNext->setManualValue( 0.0f );
+            mBounceFromPreviousProbeToNext->setManualValue( 0.0f );
+        }
         mBounceShaderParams->setDirty();
 
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();

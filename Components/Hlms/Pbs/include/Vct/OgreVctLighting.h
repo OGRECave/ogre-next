@@ -31,8 +31,8 @@ THE SOFTWARE.
 #include "OgreHlmsPbsPrerequisites.h"
 
 #include "OgreId.h"
-#include "OgreShaderParams.h"
 #include "OgreResourceTransition.h"
+#include "OgreShaderParams.h"
 #include "OgreTextureGpuListener.h"
 
 #include "OgreHeaderPrefix.h"
@@ -47,6 +47,7 @@ namespace Ogre
     {
     public:
         static const uint16 msDistanceThresholdCustomParam;
+
     protected:
         /// When mAnisotropic == false, mLightVoxel[0] contains all the mips.
         ///
@@ -102,6 +103,9 @@ namespace Ogre
         float mDefaultLightDistThreshold;
         bool    mAnisotropic;
 
+        /// When we do multiple bounces, cascades can be used to improve accuracy
+        FastArray<VctLighting> mExtraCascades;
+
         ShaderParams::Param *mNumLights;
         ShaderParams::Param *mRayMarchStepSize;
         ShaderParams::Param *mVoxelCellSize;
@@ -112,7 +116,11 @@ namespace Ogre
         ShaderParams::Param *mBounceVoxelCellSize;
         ShaderParams::Param *mBounceInvVoxelResolution;
         ShaderParams::Param *mBounceIterationDampening;
-        ShaderParams::Param *mBounceStartBiasInvBias;
+        ShaderParams::Param *mBounceStartBias;
+        ShaderParams::Param *mBounceInvBias;
+        ShaderParams::Param *mBounceCascadeMaxLod;
+        ShaderParams::Param *mBounceFromPrevLodToNext;        /// Used when cascades > 1
+        ShaderParams::Param *mBounceFromPreviousProbeToNext;  /// Used when cascades > 1
         ShaderParams        *mBounceShaderParams;
 
         ResourceTransitionArray mResourceTransitions;
