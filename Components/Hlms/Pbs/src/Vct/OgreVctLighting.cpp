@@ -33,9 +33,10 @@ THE SOFTWARE.
 #include "Vct/OgreVctVoxelizerSourceBase.h"
 #include "Vct/OgreVoxelVisualizer.h"
 
-#include "OgreHlmsManager.h"
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
+#include "OgreHlmsManager.h"
+#include "OgreShaderPrimitives.h"
 
 #include "OgreTextureGpuManager.h"
 #include "OgreStringConverter.h"
@@ -71,6 +72,10 @@ namespace Ogre
 
     const uint16 VctLighting::msDistanceThresholdCustomParam = 3876u;
 
+    static const IdString NumVctCascadesProp = "hlms_num_vct_cascades";
+
+    static const size_t c_maxCascades = 8u;
+
     VctLighting::VctLighting( IdType id, VctVoxelizerSourceBase *voxelizer, bool bAnisotropic ) :
         IdObject( id ),
         mSamplerblockTrilinear( 0 ),
@@ -98,7 +103,6 @@ namespace Ogre
         mBounceStartBias( 0 ),
         mBounceInvBias( 0 ),
         mBounceCascadeMaxLod( 0 ),
-        mBounceFromPrevLodToNext( 0 ),
         mBounceFromPreviousProbeToNext( 0 ),
         mBounceShaderParams( 0 ),
         mSpecularSdfQuality( 0.875f ),
@@ -142,19 +146,16 @@ namespace Ogre
         mLightVctBounceInject = hlmsCompute->findComputeJob( "VCT/LightVctBounceInject" );
 
         mBounceShaderParams = &mLightVctBounceInject->getShaderParams( "default" );
-        mBounceVoxelCellSize        = mBounceShaderParams->findParameter( "voxelCellSize" );
-        mBounceInvVoxelResolution   = mBounceShaderParams->findParameter( "invVoxelResolution" );
-        mBounceIterationDampening   = mBounceShaderParams->findParameter( "iterationDampening" );
-        mBounceStartBias = mBounceShaderParams->findParameter( "startBias" );
-        mBounceInvBias = mBounceShaderParams->findParameter( "invStartBias" );
-        mBounceCascadeMaxLod = mBounceShaderParams->findParameter( "cascadeMaxLod" );
 
-        if( !mExtraCascades.empty() )
-        {
-            mBounceFromPrevLodToNext = mBounceShaderParams->findParameter( "fromPrevLodToNext" );
-            mBounceFromPreviousProbeToNext =
-                mBounceShaderParams->findParameter( "fromPreviousProbeToNext" );
-        }
+        mLocalBounceShaderParams.reserve( 7u );
+
+        mBounceVoxelCellSize = addLocalBounceShaderParam( "voxelCellSize" );
+        mBounceInvVoxelResolution = addLocalBounceShaderParam( "invVoxelResolution" );
+        mBounceIterationDampening = addLocalBounceShaderParam( "iterationDampening" );
+        mBounceStartBias = addLocalBounceShaderParam( "startBias" );
+        mBounceInvBias = addLocalBounceShaderParam( "invStartBias" );
+        mBounceCascadeMaxLod = addLocalBounceShaderParam( "cascadeMaxLod" );
+        mBounceFromPreviousProbeToNext = addLocalBounceShaderParam( "fromPreviousProbeToNext" );
 
         createTextures();
     }
@@ -186,6 +187,14 @@ namespace Ogre
         }
 
         destroyTextures();
+    }
+    //-------------------------------------------------------------------------
+    ShaderParams::Param *VctLighting::addLocalBounceShaderParam( const char *name )
+    {
+        mLocalBounceShaderParams.push_back( ShaderParams::Param() );
+        ShaderParams::Param *retVal = &mLocalBounceShaderParams.back();
+        retVal->name = name;
+        return retVal;
     }
     //-------------------------------------------------------------------------
     float VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
@@ -534,29 +543,104 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctLighting::runBounce( uint32 bounceIteration )
     {
-        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
-
-        const uint32 width  = mLightVoxel[0]->getWidth();
-        const uint32 height = mLightVoxel[0]->getHeight();
-        const uint32 depth  = mLightVoxel[0]->getDepth();
-
-        const float smallestRes = static_cast<float>( std::min( std::min( width, height ), depth ) );
-        const float invSmallestRes = 1.0f / smallestRes;
-
         mBounceVoxelCellSize->setManualValue( mVoxelizer->getVoxelCellSize() );
         mBounceInvVoxelResolution->setManualValue( 1.0f / mVoxelizer->getVoxelResolution() );
-        //mBounceIterationDampening->setManualValue( 1.0f / (Math::PI * (bounceIteration * 0.5f + 1.0f)) );
+        // mBounceIterationDampening->setManualValue( 1.0f /
+        //                                           ( Math::PI * ( bounceIteration * 0.5f + 1.0f ) ) );
         mBounceIterationDampening->setManualValue( 1.0f / (float)Math::PI );
-        mBounceStartBias->setManualValue( smallestRes );
-        mBounceInvBias->setManualValue( invSmallestRes );
-        mBounceCascadeMaxLod->setManualValue( 256.0f );
+
+        const size_t numCascades = mExtraCascades.size() + 1u;
+
+        OGRE_ASSERT_LOW( numCascades < c_maxCascades && "VctLighting: Up to 16 cascades are supported" );
+
+        float startBias[c_maxCascades];
+        float invStartBias[c_maxCascades];
+        float cascadeMaxLod[c_maxCascades];
+        float4 fromPreviousProbeToNext[c_maxCascades][2];
+
+        for( size_t i = 0u; i < numCascades; ++i )
+        {
+            const VctLighting *cascade = 0;
+            if( i == 0u )
+                cascade = this;
+            else
+                cascade = mExtraCascades[i - 1u];
+
+            const TextureGpu *lightVoxelTexture = cascade->mLightVoxel[0];
+
+            const uint32 width = lightVoxelTexture->getWidth();
+            const uint32 height = lightVoxelTexture->getHeight();
+            const uint32 depth = lightVoxelTexture->getDepth();
+
+            const float smallestRes = static_cast<float>( std::min( std::min( width, height ), depth ) );
+            const float invSmallestRes = 1.0f / smallestRes;
+
+            startBias[i] = invSmallestRes;
+            invStartBias[i] = smallestRes;
+
+            uint8 cascadeNumMipmaps = 0u;
+
+            if( cascade->mLightVoxel[1] )
+            {
+                // Anisotropic has the number of mipmaps calculated
+                cascadeNumMipmaps = cascade->mLightVoxel[1]->getNumMipmaps();
+            }
+            else
+            {
+                cascadeNumMipmaps = cascade->mLightVoxel[0]->getNumMipmaps();
+            }
+
+            if( i == numCascades - 1u )
+                cascadeMaxLod[i] = 256.0f;
+            else
+            {
+                const VctLighting *nextCascade = mExtraCascades[i];
+
+                const Vector3 cascadeVoxelCellSize = cascade->mVoxelizer->getVoxelCellSize();
+                const Vector3 nextCascadeVoxelCellSize = nextCascade->mVoxelizer->getVoxelCellSize();
+
+                const Vector3 currToNextFactor = nextCascadeVoxelCellSize / cascadeVoxelCellSize;
+                const float maxFactor =
+                    std::max( currToNextFactor.x, std::max( currToNextFactor.y, currToNextFactor.z ) );
+
+                cascadeMaxLod[i] = std::min<float>( Math::Log2( maxFactor ), cascadeNumMipmaps );
+            }
+
+            if( i > 0u )
+            {
+                const VctLighting *prevCascade = mExtraCascades[i - 1u];
+                const Vector3 cascadeVoxelSize = cascade->mVoxelizer->getVoxelSize();
+                fromPreviousProbeToNext[i][0] =
+                    Vector4( prevCascade->mVoxelizer->getVoxelSize() / cascadeVoxelSize );
+                fromPreviousProbeToNext[i][1] = Vector4( ( prevCascade->mVoxelizer->getVoxelOrigin() -
+                                                           cascade->mVoxelizer->getVoxelOrigin() ) /
+                                                         cascadeVoxelSize );
+            }
+        }
+
+        {
+            const int32 numCascadesI32 = static_cast<int32>( numCascades );
+            if( mLightVctBounceInject->getProperty( NumVctCascadesProp ) != numCascadesI32 )
+                mLightVctBounceInject->setProperty( NumVctCascadesProp, numCascadesI32 );
+        }
+
+        mBounceStartBias->setManualValue( startBias, static_cast<uint32>( numCascades ) );
+        mBounceInvBias->setManualValue( invStartBias, static_cast<uint32>( numCascades ) );
+        mBounceCascadeMaxLod->setManualValue( cascadeMaxLod, static_cast<uint32>( numCascades ) );
         if( !mExtraCascades.empty() )
         {
-            mBounceFromPrevLodToNext->setManualValue( 0.0f );
-            mBounceFromPreviousProbeToNext->setManualValue( 0.0f );
+            mBounceFromPreviousProbeToNext->setManualValueEx(
+                &fromPreviousProbeToNext[0]->x, static_cast<uint32>( numCascades * 2u * 4u ) );
         }
+        else
+        {
+            mBounceFromPreviousProbeToNext->setManualValue( 0.0f );
+            mBounceFromPreviousProbeToNext->isDirty = false;
+        }
+        mBounceShaderParams->mParams.swap( mLocalBounceShaderParams );
         mBounceShaderParams->setDirty();
 
+        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
         mLightVctBounceInject->analyzeBarriers( mResourceTransitions );
         renderSystem->executeResourceTransition( mResourceTransitions );
@@ -587,7 +671,16 @@ namespace Ogre
             mLightVoxel[0]->_autogenerateMipmaps();
             renderSystem->endCopyEncoder();
         }
+
+        mBounceShaderParams->mParams.swap( mLocalBounceShaderParams );
     }
+    //-------------------------------------------------------------------------
+    void VctLighting::reserveExtraCascades( size_t numExtraCascades )
+    {
+        mExtraCascades.reserve( numExtraCascades );
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::addCascade( VctLighting *cascade ) { mExtraCascades.push_back( cascade ); }
     //-------------------------------------------------------------------------
     void VctLighting::setAllowMultipleBounces( bool bAllowMultipleBounces )
     {

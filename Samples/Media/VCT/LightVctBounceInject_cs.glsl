@@ -32,8 +32,10 @@ vulkan( layout( ogre_P0 ) uniform Params { )
 	uniform float invStartBias[@value( hlms_num_vct_cascades )];
 	uniform float cascadeMaxLod[@value( hlms_num_vct_cascades )];
 	@property( hlms_num_vct_cascades > 1 )
-		uniform float fromPrevLodToNext[@value( hlms_num_vct_cascades ) - 1];
-		uniform float4 fromPreviousProbeToNext[@value( hlms_num_vct_cascades ) - 1][3];
+		uniform float4 fromPreviousProbeToNext[@value( hlms_num_vct_cascades ) - 1][2];
+	@else
+		// Unused, but declare them to shut up warnings of setting non-existant params
+		uniform float4 fromPreviousProbeToNext[1][2];
 	@end
 vulkan( }; )
 
@@ -43,7 +45,6 @@ vulkan( }; )
 #define p_vctStartBias startBias
 #define p_vctInvStartBias invStartBias
 #define p_vctCascadeMaxLod cascadeMaxLod
-#define p_vctFromPrevLodToNext fromPrevLodToNext
 #define p_vctFromPreviousProbeToNext fromPreviousProbeToNext
 
 @insertpiece( HeaderCS )

@@ -178,7 +178,9 @@
                 ["iterationDampening",      [1],        "float"],
                 ["startBias",               [1],        "float"],
                 ["invStartBias",            [1],        "float"],
-                ["cascadeMaxLod",           [256],      "float"]
+                ["cascadeMaxLod",           [256],      "float"],
+
+                ["fromPreviousProbeToNext", [1],        "float"]
             ],
 
             "params_glsl" :

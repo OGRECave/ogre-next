@@ -175,10 +175,6 @@
 			float3 dir = mul( TBN, cone_dirs[i] );
 			dir = normalize( dir );
 
-			/*VctResult result = voxelConeTraceDiff(
-				posLS, dir, coneAngleTan, p_vctStartBias, p_vctInvStartBias, 16.0f,
-				0.0f, 0, probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );*/
-
 			VctResult result = voxelConeTraceDiff(
 				posLS, dir, coneAngleTan, p_vctStartBias[0], p_vctInvStartBias[0], p_vctCascadeMaxLod[0],
 				0.0f, 0, probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
@@ -191,7 +187,8 @@
 
 					VctResult newRes = voxelConeTraceDiff(
 						newPosLS, dir, coneAngleTan, p_vctStartBias[j], p_vctInvStartBias[j],
-						p_vctCascadeMaxLod[j], result.lodLevel * p_vctFromPrevLodToNext[j - 1], j,
+						p_vctCascadeMaxLod[j],
+						max( result.lodLevel - p_vctCascadeMaxLod[j - 1], 0.0f ), j,
 						probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
 
 					result.colour += newRes.colour;

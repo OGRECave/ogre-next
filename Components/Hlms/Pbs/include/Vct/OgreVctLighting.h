@@ -104,7 +104,7 @@ namespace Ogre
         bool    mAnisotropic;
 
         /// When we do multiple bounces, cascades can be used to improve accuracy
-        FastArray<VctLighting> mExtraCascades;
+        FastArray<VctLighting*> mExtraCascades;
 
         ShaderParams::Param *mNumLights;
         ShaderParams::Param *mRayMarchStepSize;
@@ -113,13 +113,14 @@ namespace Ogre
         ShaderParams::Param *mInvVoxelResolution;
         ShaderParams        *mShaderParams;
 
+        typedef vector<ShaderParams::Param>::type ParamVec;
+        ParamVec mLocalBounceShaderParams;
         ShaderParams::Param *mBounceVoxelCellSize;
         ShaderParams::Param *mBounceInvVoxelResolution;
         ShaderParams::Param *mBounceIterationDampening;
         ShaderParams::Param *mBounceStartBias;
         ShaderParams::Param *mBounceInvBias;
         ShaderParams::Param *mBounceCascadeMaxLod;
-        ShaderParams::Param *mBounceFromPrevLodToNext;        /// Used when cascades > 1
         ShaderParams::Param *mBounceFromPreviousProbeToNext;  /// Used when cascades > 1
         ShaderParams        *mBounceShaderParams;
 
@@ -172,6 +173,8 @@ namespace Ogre
 
         VoxelVisualizer *mDebugVoxelVisualizer;
 
+        ShaderParams::Param *addLocalBounceShaderParam( const char *name );
+
         float addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                         const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
 
@@ -187,6 +190,16 @@ namespace Ogre
     public:
         VctLighting( IdType id, VctVoxelizerSourceBase *voxelizer, bool bAnisotropic );
         virtual ~VctLighting();
+
+        /// Used by VctCascadedVoxelizer. By having extra cascade info, we can
+        /// calculate multiple bounces with extra info
+        ///
+        /// This function calls mExtraCascades.reserve
+        void reserveExtraCascades( size_t numExtraCascades );
+
+        /// Used by VctCascadedVoxelizer. By having extra cascade info, we can
+        /// calculate multiple bounces with extra info
+        void addCascade( VctLighting *cascade );
 
         /** This function allows VctLighting::update to pass numBounces > 0 as argument.
             Note however, that multiple bounces requires creating another RGBA32_UNORM texture

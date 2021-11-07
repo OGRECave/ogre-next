@@ -237,7 +237,9 @@ namespace Ogre
         const bool bFirstBuild = mFirstBuild;
 
         const size_t numCascades = mCascadeSettings.size();
-        for( size_t i = 0u; i < numCascades; ++i )
+
+        // Iterate in reverse because multipe bounces needs the information of the higher cascades
+        for( size_t i = numCascades; --i; )
         {
             VctCascadeSetting &cascade = mCascadeSettings[i];
 
@@ -263,6 +265,15 @@ namespace Ogre
                     mCascades[i] = new VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
                                                     cascade.voxelizer, true );
                     mCascades[i]->setAllowMultipleBounces( cascade.numBounces > 0u );
+
+                    const size_t numExtraCascades = numCascades - i - 1u;
+                    if( numExtraCascades > 0u )
+                    {
+                        mCascades[i]->reserveExtraCascades( numExtraCascades );
+
+                        for( size_t j = i; j < numCascades; ++j )
+                            mCascades[i]->addCascade( mCascades[j] );
+                    }
                 }
                 else
                 {
