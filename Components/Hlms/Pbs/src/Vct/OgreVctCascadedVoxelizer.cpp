@@ -264,16 +264,17 @@ namespace Ogre
                 {
                     mCascades[i] = new VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
                                                     cascade.voxelizer, true );
-                    mCascades[i]->setAllowMultipleBounces( cascade.numBounces > 0u );
 
                     const size_t numExtraCascades = numCascades - i - 1u;
                     if( numExtraCascades > 0u )
                     {
                         mCascades[i]->reserveExtraCascades( numExtraCascades );
 
-                        for( size_t j = i; j < numCascades; ++j )
+                        for( size_t j = i + 1u; j < numCascades; ++j )
                             mCascades[i]->addCascade( mCascades[j] );
                     }
+
+                    mCascades[i]->setAllowMultipleBounces( cascade.numBounces > 0u );
                 }
                 else
                 {
