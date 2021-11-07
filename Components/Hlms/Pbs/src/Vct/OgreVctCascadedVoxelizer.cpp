@@ -239,7 +239,7 @@ namespace Ogre
         const size_t numCascades = mCascadeSettings.size();
 
         // Iterate in reverse because multipe bounces needs the information of the higher cascades
-        for( size_t i = numCascades; --i; )
+        for( size_t i = numCascades; i--; )
         {
             VctCascadeSetting &cascade = mCascadeSettings[i];
 
