@@ -176,9 +176,7 @@
                 ["voxelCellSize",           [1,1,1],    "float"],
                 ["invVoxelResolution",      [1,1,1],    "float"],
                 ["iterationDampening",      [1],        "float"],
-                ["startBias",               [1],        "float"],
-                ["invStartBias",            [1],        "float"],
-                ["cascadeMaxLod",           [256],      "float"],
+                ["startBias_invStartBias_cascadeMaxLod",[1, 1, 256, 0],        "float"],
 
                 ["fromPreviousProbeToNext", [1],        "float"]
             ],

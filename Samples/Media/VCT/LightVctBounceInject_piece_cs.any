@@ -24,13 +24,17 @@
 	(
 		float3 posLS,
 		float3 dirLS, float tanHalfAngle,
-		float vctStartBias, float vctInvStartBias, float maxLod, float startingLodLevel,
+		float4 localStartBias_invStartBias_cascadeMaxLod, float startingLodLevel,
 		int probeIdx,
 		OGRE_Texture3D_float4 probes[@value( hlms_num_vct_cascades )]
 		OGRE_SAMPLER_ARG_DECL( probeSampler )
 		OGRE_VCT_ANISO_PROBE_ARG_DECL
 	)
 	{
+		float vctStartBias = localStartBias_invStartBias_cascadeMaxLod.x;
+		float vctInvStartBias = localStartBias_invStartBias_cascadeMaxLod.y;
+		float maxLod = localStartBias_invStartBias_cascadeMaxLod.z;
+
 		float dist = vctStartBias;
 		float alpha = 0.0;
 		float3 color = float3( 0.0, 0.0, 0.0 );
@@ -176,24 +180,25 @@
 			dir = normalize( dir );
 
 			VctResult result = voxelConeTraceDiff(
-				posLS, dir, coneAngleTan, p_vctStartBias[0], p_vctInvStartBias[0], p_vctCascadeMaxLod[0],
+				posLS, dir, coneAngleTan, p_vctStartBias_invStartBias_cascadeMaxLod[0],
 				0.0f, 0, probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
 
 			@property( hlms_num_vct_cascades > 1 )
 				for( int j = 1; j < @value( hlms_num_vct_cascades ) && result.alpha < 0.95f; ++j )
 				{
-					float3 newPosLS =
-						fromVctProbeToNext( result.posLS, j PARAMS_ARG ) - dir * p_vctStartBias[j];
+					float startBias = p_vctStartBias_invStartBias_cascadeMaxLod[j].x;
+					float prevCascadeMaxLod = p_vctStartBias_invStartBias_cascadeMaxLod[j - 1].z;
+
+					float3 newPosLS = fromVctProbeToNext( result.posLS, j PARAMS_ARG ) - dir * startBias;
 
 					VctResult newRes = voxelConeTraceDiff(
-						newPosLS, dir, coneAngleTan, p_vctStartBias[j], p_vctInvStartBias[j],
-						p_vctCascadeMaxLod[j],
-						max( result.lodLevel - p_vctCascadeMaxLod[j - 1], 0.0f ), j,
+						newPosLS, dir, coneAngleTan, p_vctStartBias_invStartBias_cascadeMaxLod[j],
+						max( result.lodLevel - prevCascadeMaxLod, 0.0f ), j,
 						probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
 
 					result.colour += newRes.colour;
 					result.alpha += newRes.alpha;
-					result.lodLevel = lodLevel;
+					result.lodLevel = newRes.lodLevel;
 					result.posLS = newRes.posLS;
 				}
 			@end

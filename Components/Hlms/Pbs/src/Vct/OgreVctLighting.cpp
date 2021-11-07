@@ -100,9 +100,7 @@ namespace Ogre
         mBounceVoxelCellSize( 0 ),
         mBounceInvVoxelResolution( 0 ),
         mBounceIterationDampening( 0 ),
-        mBounceStartBias( 0 ),
-        mBounceInvBias( 0 ),
-        mBounceCascadeMaxLod( 0 ),
+        mBounceStartBiasInvBiasCascadeMaxLod( 0 ),
         mBounceFromPreviousProbeToNext( 0 ),
         mBounceShaderParams( 0 ),
         mSpecularSdfQuality( 0.875f ),
@@ -152,9 +150,8 @@ namespace Ogre
         mBounceVoxelCellSize = addLocalBounceShaderParam( "voxelCellSize" );
         mBounceInvVoxelResolution = addLocalBounceShaderParam( "invVoxelResolution" );
         mBounceIterationDampening = addLocalBounceShaderParam( "iterationDampening" );
-        mBounceStartBias = addLocalBounceShaderParam( "startBias" );
-        mBounceInvBias = addLocalBounceShaderParam( "invStartBias" );
-        mBounceCascadeMaxLod = addLocalBounceShaderParam( "cascadeMaxLod" );
+        mBounceStartBiasInvBiasCascadeMaxLod =
+            addLocalBounceShaderParam( "startBias_invStartBias_cascadeMaxLod" );
         mBounceFromPreviousProbeToNext = addLocalBounceShaderParam( "fromPreviousProbeToNext" );
 
         createTextures();
@@ -496,6 +493,17 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctLighting::setupBounceTextures(void)
     {
+        const size_t numExtraCascades = mExtraCascades.size();
+
+        uint8 numNeededTexUnits;
+        if( mAnisotropic )
+            numNeededTexUnits = 6u + 4u * static_cast<uint8>( numExtraCascades );
+        else
+            numNeededTexUnits = 3u + static_cast<uint8>( numExtraCascades );
+
+        if( mLightVctBounceInject->getNumTexUnits() != numNeededTexUnits )
+            mLightVctBounceInject->setNumTexUnits( numNeededTexUnits );
+
         DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
         texSlot.texture = mVoxelizer->getAlbedoVox();
         mLightVctBounceInject->setTexture( 0, texSlot );
@@ -504,12 +512,26 @@ namespace Ogre
         texSlot.texture = mLightVoxel[0];
         mLightVctBounceInject->setTexture( 2, texSlot, mSamplerblockTrilinear );
 
+        uint8 texSlotIdx = 3u;
+
+        for( size_t cascadeIdx = 0u; cascadeIdx < numExtraCascades; ++cascadeIdx )
+        {
+            texSlot.texture = mExtraCascades[cascadeIdx]->mLightVoxel[0];
+            mLightVctBounceInject->setTexture( texSlotIdx++, texSlot, mSamplerblockTrilinear );
+        }
+
         if( mAnisotropic )
         {
             for( uint8 i=0u; i<3u; ++i )
             {
                 texSlot.texture = mLightVoxel[i+1u];
-                mLightVctBounceInject->setTexture( i+3u, texSlot, mSamplerblockTrilinear );
+                mLightVctBounceInject->setTexture( texSlotIdx++, texSlot, mSamplerblockTrilinear );
+
+                for( size_t cascadeIdx = 0u; cascadeIdx < numExtraCascades; ++cascadeIdx )
+                {
+                    texSlot.texture = mExtraCascades[cascadeIdx]->mLightVoxel[i + 1u];
+                    mLightVctBounceInject->setTexture( texSlotIdx++, texSlot, mSamplerblockTrilinear );
+                }
             }
         }
 
@@ -523,6 +545,8 @@ namespace Ogre
     void VctLighting::generateAnisotropicMips()
     {
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
+        renderSystem->debugAnnotationPush( "VctLighting Anisotropic Mips" );
+
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
 
         mAnisoGeneratorStep0->analyzeBarriers( mResourceTransitions );
@@ -539,10 +563,14 @@ namespace Ogre
             hlmsCompute->dispatch( *itor, 0, 0 );
             ++itor;
         }
+        renderSystem->debugAnnotationPop();
     }
     //-------------------------------------------------------------------------
     void VctLighting::runBounce( uint32 bounceIteration )
     {
+        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
+        renderSystem->debugAnnotationPush( "VctLighting Bounce" );
+
         mBounceVoxelCellSize->setManualValue( mVoxelizer->getVoxelCellSize() );
         mBounceInvVoxelResolution->setManualValue( 1.0f / mVoxelizer->getVoxelResolution() );
         // mBounceIterationDampening->setManualValue( 1.0f /
@@ -553,14 +581,12 @@ namespace Ogre
 
         OGRE_ASSERT_LOW( numCascades < c_maxCascades && "VctLighting: Up to 16 cascades are supported" );
 
-        float startBias[c_maxCascades];
-        float invStartBias[c_maxCascades];
-        float cascadeMaxLod[c_maxCascades];
+        float4 startBias_invStartBias_cascadeMaxLod[c_maxCascades];
         float4 fromPreviousProbeToNext[c_maxCascades][2];
 
         for( size_t i = 0u; i < numCascades; ++i )
         {
-            const VctLighting *cascade = 0;
+            const VctLighting *cascade;
             if( i == 0u )
                 cascade = this;
             else
@@ -575,8 +601,8 @@ namespace Ogre
             const float smallestRes = static_cast<float>( std::min( std::min( width, height ), depth ) );
             const float invSmallestRes = 1.0f / smallestRes;
 
-            startBias[i] = invSmallestRes;
-            invStartBias[i] = smallestRes;
+            startBias_invStartBias_cascadeMaxLod[i].x = invSmallestRes;  // startBias
+            startBias_invStartBias_cascadeMaxLod[i].y = smallestRes;     // invStartBias
 
             uint8 cascadeNumMipmaps = 0u;
 
@@ -591,7 +617,9 @@ namespace Ogre
             }
 
             if( i == numCascades - 1u )
-                cascadeMaxLod[i] = 256.0f;
+            {
+                startBias_invStartBias_cascadeMaxLod[i].z = 256.0f; // cascadeMaxLod
+            }
             else
             {
                 const VctLighting *nextCascade = mExtraCascades[i];
@@ -603,18 +631,26 @@ namespace Ogre
                 const float maxFactor =
                     std::max( currToNextFactor.x, std::max( currToNextFactor.y, currToNextFactor.z ) );
 
-                cascadeMaxLod[i] = std::min<float>( Math::Log2( maxFactor ), cascadeNumMipmaps );
+                // cascadeMaxLod
+                startBias_invStartBias_cascadeMaxLod[i].z =
+                    std::min<float>( Math::Log2( maxFactor ), cascadeNumMipmaps );
             }
 
             if( i > 0u )
             {
-                const VctLighting *prevCascade = mExtraCascades[i - 1u];
+                const VctLighting *prevCascade;
+                if( i == 1u )
+                    prevCascade = this;
+                else
+                    prevCascade = mExtraCascades[i - 2u];
+
                 const Vector3 cascadeVoxelSize = cascade->mVoxelizer->getVoxelSize();
-                fromPreviousProbeToNext[i][0] =
+                fromPreviousProbeToNext[i - 1u][0] =
                     Vector4( prevCascade->mVoxelizer->getVoxelSize() / cascadeVoxelSize );
-                fromPreviousProbeToNext[i][1] = Vector4( ( prevCascade->mVoxelizer->getVoxelOrigin() -
-                                                           cascade->mVoxelizer->getVoxelOrigin() ) /
-                                                         cascadeVoxelSize );
+                fromPreviousProbeToNext[i - 1u][1] =
+                    Vector4( ( prevCascade->mVoxelizer->getVoxelOrigin() -
+                               cascade->mVoxelizer->getVoxelOrigin() ) /
+                             cascadeVoxelSize );
             }
         }
 
@@ -624,13 +660,12 @@ namespace Ogre
                 mLightVctBounceInject->setProperty( NumVctCascadesProp, numCascadesI32 );
         }
 
-        mBounceStartBias->setManualValue( startBias, static_cast<uint32>( numCascades ) );
-        mBounceInvBias->setManualValue( invStartBias, static_cast<uint32>( numCascades ) );
-        mBounceCascadeMaxLod->setManualValue( cascadeMaxLod, static_cast<uint32>( numCascades ) );
+        mBounceStartBiasInvBiasCascadeMaxLod->setManualValue( &startBias_invStartBias_cascadeMaxLod[0].x,
+                                                              static_cast<uint32>( numCascades * 4u ) );
         if( !mExtraCascades.empty() )
         {
             mBounceFromPreviousProbeToNext->setManualValueEx(
-                &fromPreviousProbeToNext[0]->x, static_cast<uint32>( numCascades * 2u * 4u ) );
+                &fromPreviousProbeToNext[0]->x, static_cast<uint32>( ( numCascades - 1u ) * 2u * 4u ) );
         }
         else
         {
@@ -640,7 +675,6 @@ namespace Ogre
         mBounceShaderParams->mParams.swap( mLocalBounceShaderParams );
         mBounceShaderParams->setDirty();
 
-        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
         mLightVctBounceInject->analyzeBarriers( mResourceTransitions );
         renderSystem->executeResourceTransition( mResourceTransitions );
@@ -668,11 +702,15 @@ namespace Ogre
 
         if( mLightVoxel[0]->getNumMipmaps() > 1u )
         {
+            renderSystem->debugAnnotationPush( "VctLighting::runBounce regular mipmaps" );
             mLightVoxel[0]->_autogenerateMipmaps();
             renderSystem->endCopyEncoder();
+            renderSystem->debugAnnotationPop();
         }
 
         mBounceShaderParams->mParams.swap( mLocalBounceShaderParams );
+
+        renderSystem->debugAnnotationPop();
     }
     //-------------------------------------------------------------------------
     void VctLighting::reserveExtraCascades( size_t numExtraCascades )
@@ -778,6 +816,8 @@ namespace Ogre
 
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
 
+        renderSystem->debugAnnotationPush( "VctLighting Update" );
+
         mLightInjectionJob->setConstBuffer( 0, mLightsConstBuffer );
 
         DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
@@ -882,8 +922,10 @@ namespace Ogre
 
         if( mLightVoxel[0]->getNumMipmaps() > 1u )
         {
+            renderSystem->debugAnnotationPush( "VctLighting::update regular mipmaps" );
             mLightVoxel[0]->_autogenerateMipmaps();
             renderSystem->endCopyEncoder();
+            renderSystem->debugAnnotationPop();
         }
 
         if( numBounces > 0u )
@@ -897,6 +939,8 @@ namespace Ogre
             for( uint32 i=0u; i<numBounces; ++i )
                 runBounce( i );
         }
+
+        renderSystem->debugAnnotationPop();
     }
     //-------------------------------------------------------------------------
     bool VctLighting::needsAmbientHemisphere() const

@@ -5,14 +5,22 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
+@pset( vctTexUnit, 2 )
+
 vulkan_layout( ogre_t0 ) uniform texture3D voxelAlbedoTex;
 vulkan_layout( ogre_t1 ) uniform texture3D voxelNormalTex;
-vulkan_layout( ogre_t2 ) uniform texture3D vctProbes[@value( hlms_num_vct_cascades )];
+vulkan_layout( ogre_t@value(vctTexUnit) ) uniform texture3D vctProbes[@value( hlms_num_vct_cascades )];
+@add( vctTexUnit, hlms_num_vct_cascades )
 
 @property( vct_anisotropic )
-	vulkan_layout( ogre_t3 ) uniform texture3D vctProbeX[@value( hlms_num_vct_cascades )];
-	vulkan_layout( ogre_t4 ) uniform texture3D vctProbeY[@value( hlms_num_vct_cascades )];
-	vulkan_layout( ogre_t5 ) uniform texture3D vctProbeZ[@value( hlms_num_vct_cascades )];
+	vulkan_layout( ogre_t@value(vctTexUnit) ) uniform texture3D vctProbeX[@value( hlms_num_vct_cascades )];
+	@add( vctTexUnit, hlms_num_vct_cascades )
+
+	vulkan_layout( ogre_t@value(vctTexUnit) ) uniform texture3D vctProbeY[@value( hlms_num_vct_cascades )];
+	@add( vctTexUnit, hlms_num_vct_cascades )
+
+	vulkan_layout( ogre_t@value(vctTexUnit) ) uniform texture3D vctProbeZ[@value( hlms_num_vct_cascades )];
+	@add( vctTexUnit, hlms_num_vct_cascades )
 @end
 
 vulkan( layout( ogre_s2 ) uniform sampler vctProbeSampler );
@@ -28,9 +36,9 @@ vulkan( layout( ogre_P0 ) uniform Params { )
 	uniform float3 voxelCellSize;
 	uniform float3 invVoxelResolution;
 	uniform float iterationDampening;
-	uniform float startBias[@value( hlms_num_vct_cascades )];
-	uniform float invStartBias[@value( hlms_num_vct_cascades )];
-	uniform float cascadeMaxLod[@value( hlms_num_vct_cascades )];
+
+	uniform float4 startBias_invStartBias_cascadeMaxLod[@value( hlms_num_vct_cascades )];
+
 	@property( hlms_num_vct_cascades > 1 )
 		uniform float4 fromPreviousProbeToNext[@value( hlms_num_vct_cascades ) - 1][2];
 	@else
@@ -42,9 +50,7 @@ vulkan( }; )
 #define p_voxelCellSize voxelCellSize
 #define p_invVoxelResolution invVoxelResolution
 #define p_iterationDampening iterationDampening
-#define p_vctStartBias startBias
-#define p_vctInvStartBias invStartBias
-#define p_vctCascadeMaxLod cascadeMaxLod
+#define p_vctStartBias_invStartBias_cascadeMaxLod startBias_invStartBias_cascadeMaxLod
 #define p_vctFromPreviousProbeToNext fromPreviousProbeToNext
 
 @insertpiece( HeaderCS )
