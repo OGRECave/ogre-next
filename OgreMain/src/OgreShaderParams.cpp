@@ -58,23 +58,47 @@ namespace Ogre
                 {
                     if( !itor->isAutomatic )
                     {
-                        if( itor->mp.elementType == ElementInt )
+                        if( !itor->isEx )
                         {
-                            params->setNamedConstant( itor->name,
-                                                      reinterpret_cast<const int*>(itor->mp.dataBytes),
-                                                      itor->mp.dataSizeBytes / sizeof(int), 1 );
+                            switch( itor->mp.elementType )
+                            {
+                            case ElementInt:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const int *>( itor->mp.dataBytes ),
+                                    itor->mp.dataSizeBytes / sizeof( int ), 1 );
+                                break;
+                            case ElementUInt:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const uint *>( itor->mp.dataBytes ),
+                                    itor->mp.dataSizeBytes / sizeof( uint ), 1 );
+                                break;
+                            case ElementFloat:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const float *>( itor->mp.dataBytes ),
+                                    itor->mp.dataSizeBytes / sizeof( float ), 1 );
+                                break;
+                            }
                         }
-                        else if( itor->mp.elementType == ElementUInt )
+                        else
                         {
-                            params->setNamedConstant( itor->name,
-                                                      reinterpret_cast<const uint*>(itor->mp.dataBytes),
-                                                      itor->mp.dataSizeBytes / sizeof(uint), 1 );
-                        }
-                        else if( itor->mp.elementType == ElementFloat )
-                        {
-                            params->setNamedConstant( itor->name,
-                                                      reinterpret_cast<const float*>(itor->mp.dataBytes),
-                                                      itor->mp.dataSizeBytes / sizeof(float), 1 );
+                            switch( itor->mpEx.elementType )
+                            {
+                            case ElementInt:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const int *>( itor->mpEx.dataBytes ),
+                                    itor->mpEx.dataSizeBytes / sizeof( int ), 1 );
+                                break;
+                            case ElementUInt:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const uint *>( itor->mpEx.dataBytes ),
+                                    itor->mpEx.dataSizeBytes / sizeof( uint ), 1 );
+                                break;
+                            case ElementFloat:
+                                params->setNamedConstant(
+                                    itor->name, reinterpret_cast<const float *>( itor->mpEx.dataBytes ),
+                                    itor->mpEx.dataSizeBytes / sizeof( float ), 1 );
+                                break;
+                            }
                         }
                     }
                     else
@@ -148,6 +172,7 @@ namespace Ogre
     void ShaderParams::Param::setManualValue( const Vector2 &value )
     {
         this->isAutomatic   = false;
+        this->isEx          = false;
         this->isDirty       = true;
         mp.elementType = ElementFloat;
         mp.dataSizeBytes = sizeof(float) * 2u;
@@ -162,6 +187,7 @@ namespace Ogre
     void ShaderParams::Param::setManualValue( const Vector3 &value )
     {
         this->isAutomatic   = false;
+        this->isEx          = false;
         this->isDirty       = true;
         mp.elementType = ElementFloat;
         mp.dataSizeBytes = sizeof(float) * 3u;
@@ -176,6 +202,7 @@ namespace Ogre
     void ShaderParams::Param::setManualValue( const Vector4 &value )
     {
         this->isAutomatic   = false;
+        this->isEx          = false;
         this->isDirty       = true;
         mp.elementType = ElementFloat;
         mp.dataSizeBytes = sizeof(float) * 4u;
@@ -190,6 +217,7 @@ namespace Ogre
     void ShaderParams::Param::setManualValue( const Matrix3 &_value )
     {
         this->isAutomatic   = false;
+        this->isEx          = false;
         this->isDirty       = true;
         mp.elementType = ElementFloat;
         mp.dataSizeBytes = sizeof(float) * 9u;
@@ -203,6 +231,7 @@ namespace Ogre
     void ShaderParams::Param::setManualValue( const Matrix4 &_value )
     {
         this->isAutomatic   = false;
+        this->isEx          = false;
         this->isDirty       = true;
         mp.elementType = ElementFloat;
         mp.dataSizeBytes = sizeof(float) * 16u;
@@ -220,9 +249,10 @@ namespace Ogre
     void ShaderParams::Param::setManualValue( T value, uint32 numValues, ElementType elementType )
     {
         this->isAutomatic   = false;
+        this->isEx          = false;
         this->isDirty       = true;
         mp.elementType = elementType;
-        mp.dataSizeBytes = std::min( 4u * numValues, 64u ); //Don't overflow
+        mp.dataSizeBytes = static_cast<uint8>( std::min( 4u * numValues, 64u ) );  // Don't overflow
         memcpy( mp.dataBytes, value, mp.dataSizeBytes );
     }
     //-----------------------------------------------------------------------------------
@@ -254,5 +284,33 @@ namespace Ogre
     void ShaderParams::Param::setManualValue( const uint32 *value, uint32 numValues )
     {
         setManualValue( value, numValues, ElementUInt );
+    }
+    //-----------------------------------------------------------------------------------
+    template <typename T>
+    void ShaderParams::Param::setManualValueEx( const T *value, uint32 numValues,
+                                                ElementType elementType )
+    {
+        this->isAutomatic = false;
+        this->isEx = true;
+        this->isDirty = true;
+        mpEx.elementType = elementType;
+        mpEx.dataSizeBytes = static_cast<uint16>( std::min<uint32>(
+            sizeof( T ) * numValues, std::numeric_limits<uint16>::max() ) );  // Don't overflow
+        mpEx.dataBytes = value;
+    }
+    //-----------------------------------------------------------------------------------
+    void ShaderParams::Param::setManualValueEx( const float *value, uint32 numValues )
+    {
+        setManualValueEx( value, numValues, ElementFloat );
+    }
+    //-----------------------------------------------------------------------------------
+    void ShaderParams::Param::setManualValueEx( const int32 *value, uint32 numValues )
+    {
+        setManualValueEx( value, numValues, ElementInt );
+    }
+    //-----------------------------------------------------------------------------------
+    void ShaderParams::Param::setManualValueEx( const uint32 *value, uint32 numValues )
+    {
+        setManualValueEx( value, numValues, ElementUInt );
     }
 }
