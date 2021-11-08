@@ -1,5 +1,15 @@
 var NAVTREEINDEX113 =
 {
+"class_ogre_1_1_material_manager.html#a8b2aa864d83fe5e423c3ebd4f2295b63":[5,2,5,15,13],
+"class_ogre_1_1_material_manager.html#a8d14d2e8450b0886c6b72c9996200b17":[5,2,5,15,60],
+"class_ogre_1_1_material_manager.html#a8effa67ee128c4edecb7db1c3a318bf7":[5,2,5,15,26],
+"class_ogre_1_1_material_manager.html#a93b40c858020f2bbbcebcd4dc72a6321":[5,2,5,15,70],
+"class_ogre_1_1_material_manager.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,5,15,44],
+"class_ogre_1_1_material_manager.html#a94962d0929fdc88c25d35672ff2c1ff0":[5,2,5,15,68],
+"class_ogre_1_1_material_manager.html#a94dd6caf97604ba7ce310dd8f22dcb96":[5,2,5,15,8],
+"class_ogre_1_1_material_manager.html#a95decc3900f547bb68b74ba28d3013e0":[5,2,5,15,64],
+"class_ogre_1_1_material_manager.html#a9dcc9da5760fcd3b39b4566fe308ad6b":[5,2,5,15,62],
+"class_ogre_1_1_material_manager.html#aa273e1a7543272d0d9b21de7a55c1b7a":[5,2,5,15,30],
 "class_ogre_1_1_material_manager.html#aa3ff9558e8fa8187f510472a58093b6f":[5,2,5,15,66],
 "class_ogre_1_1_material_manager.html#aa7bd4f02b31fba693d3bea6492fe20a8":[5,2,5,15,65],
 "class_ogre_1_1_material_manager.html#aa8b761abb06d74347e9636550307ccd9":[5,2,5,15,23],
@@ -239,15 +249,5 @@ var NAVTREEINDEX113 =
 "class_ogre_1_1_mathlib_c.html#aece951671fa819827d2e0f8237e44366":[7,0,0,661,9],
 "class_ogre_1_1_mathlib_c.html#af15e32a44041d30f3990f8b2b8a55fc3":[7,0,0,661,19],
 "class_ogre_1_1_mathlib_c.html#af2c7b7597f22fe3b66fc551e0bc10361":[7,0,0,661,55],
-"class_ogre_1_1_mathlib_c.html#af80e2d0f31e17c8237cd8d4bee5977c2":[7,0,0,661,0],
-"class_ogre_1_1_matrix3.html":[5,2,6,15],
-"class_ogre_1_1_matrix3.html#a04f1bcba696c41cae099b5229789772b":[5,2,6,15,2],
-"class_ogre_1_1_matrix3.html#a0589b1275b7822abd410b13477156d4d":[5,2,6,15,26],
-"class_ogre_1_1_matrix3.html#a05c722c341f21dd2ffc36fb1414e284b":[5,2,6,15,27],
-"class_ogre_1_1_matrix3.html#a06269d2ba63c85aea763595e44738f79":[5,2,6,15,14],
-"class_ogre_1_1_matrix3.html#a0ecaa32a22cc18ca76dc74377005e7e1":[5,2,6,15,0],
-"class_ogre_1_1_matrix3.html#a14cdac95b9c0c688bbeacdf63128fa90":[5,2,6,15,4],
-"class_ogre_1_1_matrix3.html#a157ff70e8bd3a611389182497988e3f2":[5,2,6,15,40],
-"class_ogre_1_1_matrix3.html#a1efb2981c1a759e607e1431321d95524":[5,2,6,15,32],
-"class_ogre_1_1_matrix3.html#a209f31aa2e25d9b3d55d64d2d8304382":[5,2,6,15,9]
+"class_ogre_1_1_mathlib_c.html#af80e2d0f31e17c8237cd8d4bee5977c2":[7,0,0,661,0]
 };

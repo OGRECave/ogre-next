@@ -238,6 +238,18 @@ var manual =
       ] ],
       [ "Post-processing the command buffer", "commandbuffer.html#CommandBufferPostProcessing", null ]
     ] ],
+    [ "Terra System", "_terra_system.html", [
+      [ "Vertex-bufferless rendering", "_terra_system.html#autotoc_md45", null ],
+      [ "Vertex Trick in Terra", "_terra_system.html#autotoc_md46", null ],
+      [ "Terra cells", "_terra_system.html#autotoc_md47", [
+        [ "First layer, the 4x4 block", "_terra_system.html#autotoc_md48", null ],
+        [ "Outer layers", "_terra_system.html#autotoc_md49", null ]
+      ] ],
+      [ "Skirts", "_terra_system.html#autotoc_md50", null ],
+      [ "Shadows", "_terra_system.html#autotoc_md51", null ],
+      [ "Shading", "_terra_system.html#autotoc_md52", null ],
+      [ "Why is it not a component?", "_terra_system.html#autotoc_md53", null ]
+    ] ],
     [ "Tunning memory consumption and resources", "_tuning_memory_resources.html", [
       [ "Grouping textures by type", "_tuning_memory_resources.html#GroupingTexturesByType", null ],
       [ "Dynamic vs Default buffers", "_tuning_memory_resources.html#DynamicVsDefaultBuffers", null ],

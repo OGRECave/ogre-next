@@ -1,5 +1,15 @@
 var NAVTREEINDEX53 =
 {
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#a9ec1d985ef5286ca5c069373705e4187":[7,0,0,248,0],
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#aa6ee76edb7111f8feefbb1f73aae50be":[7,0,0,248,45],
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#aabfaa3d20b4ad5f0ad0b30ccaf6f2ef7":[7,0,0,248,53],
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#ab6a57b4b121d4f1af4e98bcc4f86e161":[7,0,0,248,3],
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,248,38],
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#abd8fcac87f23696935285791299f21ce":[7,0,0,248,19],
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#abffec246be83d1df9c7a8c6ecb0249ea":[7,0,0,248,54],
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#ac344214fa2a1ead13bb78f73712f69a3":[7,0,0,248,52],
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,248,36],
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,248,32],
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#ad15462609bf45808fb04668cc1c28c78":[7,0,0,248,16],
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#ad31d3601f5dcd10458a0cfc530fff042":[7,0,0,248,49],
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#ad923d33063acb2a613fa243d4b1fbc78":[7,0,0,248,1],
@@ -33,8 +43,8 @@ var NAVTREEINDEX53 =
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[7,0,0,249,0,9],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[7,0,0,249,1,4],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[7,0,0,249,1,9],
-"class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[7,0,0,249,0,7],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[7,0,0,249,0,2],
+"class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[7,0,0,249,0,7],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[7,0,0,249,1,2],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea821faf32a09ac92606a6585fc61e24f7":[7,0,0,249,1,7],
 "class_ogre_1_1_d3_d9_depth_buffer.html#a9854c57374adef41216bae68544a5b7eac3e2a2eeb9d97edbf973e52499d190ec":[7,0,0,249,0,1],
@@ -239,15 +249,5 @@ var NAVTREEINDEX53 =
 "class_ogre_1_1_d3_d9_gpu_fragment_program.html#a7f28e93a74c00e9557dfb778e2f8eeef":[7,0,0,254,59],
 "class_ogre_1_1_d3_d9_gpu_fragment_program.html#a7ffe6edc1d1ccb636a75cb185959bf0c":[7,0,0,254,30],
 "class_ogre_1_1_d3_d9_gpu_fragment_program.html#a802ab2a65944ff76a739fd93ca449c96":[7,0,0,254,85],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a82174dc4f4a0645332483ced7904c2f6":[7,0,0,254,89],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,254,68],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a83ff552868d41fa0daa9180913456c9e":[7,0,0,254,60],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a843c706f65d219c1d04b8aeacc4bd3c8":[7,0,0,254,92],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a848bf4164963cf8c0435c972eb717e0f":[7,0,0,254,96],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a84c3904bfaeeb1166dbca41e0c9f3b29":[7,0,0,254,86],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a88eea9caf28dc6c73d8594b75b4adc45":[7,0,0,254,27],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a893c7a150edb48a25e5df700cfc194eb":[7,0,0,254,5],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a8d55f1d5ce61a1b796d8d86dd3c69fdb":[7,0,0,254,66],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a8eb34a9034aab62fd537c021a79e3366":[7,0,0,254,56],
-"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a8f541900f7e1f73f4c313a732199029a":[7,0,0,254,52]
+"class_ogre_1_1_d3_d9_gpu_fragment_program.html#a82174dc4f4a0645332483ced7904c2f6":[7,0,0,254,89]
 };

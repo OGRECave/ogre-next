@@ -1,5 +1,15 @@
 var NAVTREEINDEX42 =
 {
+"class_ogre_1_1_d3_d11_compat_buffer_interface.html#a896a242a4185faac264405fada1cacb9":[7,0,0,198,10],
+"class_ogre_1_1_d3_d11_compat_buffer_interface.html#a8ee65a080430653dbfab11003cf21975":[7,0,0,198,9],
+"class_ogre_1_1_d3_d11_compat_buffer_interface.html#abc183c59ca908d4dc53149add87a0237":[7,0,0,198,12],
+"class_ogre_1_1_d3_d11_compat_buffer_interface.html#abe9a1f581c681de4e5e8cccb59666095":[7,0,0,198,7],
+"class_ogre_1_1_d3_d11_compat_buffer_interface.html#af65b169423266f9a98fe9e7eeb2f3f8b":[7,0,0,198,2],
+"class_ogre_1_1_d3_d11_compat_buffer_interface.html#af9a3e5572f34ef709c944186462c9d29":[7,0,0,198,5],
+"class_ogre_1_1_d3_d11_const_buffer_packed.html":[7,0,0,199],
+"class_ogre_1_1_d3_d11_const_buffer_packed.html#a087111d602caab019259df5f5b8ff14f":[7,0,0,199,27],
+"class_ogre_1_1_d3_d11_const_buffer_packed.html#a0c6fb3d387685e50e2b5069164b95e6b":[7,0,0,199,41],
+"class_ogre_1_1_d3_d11_const_buffer_packed.html#a155f9b4ef9bc20239691a869d4daa08d":[7,0,0,199,24],
 "class_ogre_1_1_d3_d11_const_buffer_packed.html#a162e23ff6f3cb7f90ed129d3906c14e4":[7,0,0,199,15],
 "class_ogre_1_1_d3_d11_const_buffer_packed.html#a182c622002342d4caea90d32aa68e620":[7,0,0,199,0],
 "class_ogre_1_1_d3_d11_const_buffer_packed.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,199,30],
@@ -61,8 +71,8 @@ var NAVTREEINDEX42 =
 "class_ogre_1_1_d3_d11_depth_buffer.html#a8613232e2085296584239b2f50fce88b":[7,0,0,200,11],
 "class_ogre_1_1_d3_d11_depth_buffer.html#a9332e2fcee1d7c7756ee84c2c8294c63":[7,0,0,200,12],
 "class_ogre_1_1_d3_d11_depth_buffer.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,200,24],
-"class_ogre_1_1_d3_d11_depth_buffer.html#a9854c57374adef41216bae68544a5b7e":[7,0,0,200,1],
 "class_ogre_1_1_d3_d11_depth_buffer.html#a9854c57374adef41216bae68544a5b7e":[7,0,0,200,0],
+"class_ogre_1_1_d3_d11_depth_buffer.html#a9854c57374adef41216bae68544a5b7e":[7,0,0,200,1],
 "class_ogre_1_1_d3_d11_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[7,0,0,200,0,4],
 "class_ogre_1_1_d3_d11_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[7,0,0,200,0,9],
 "class_ogre_1_1_d3_d11_depth_buffer.html#a9854c57374adef41216bae68544a5b7ea7a8510a299dfa497275c3d5c5442a8a0":[7,0,0,200,1,4],
@@ -239,15 +249,5 @@ var NAVTREEINDEX42 =
 "class_ogre_1_1_d3_d11_depth_texture_target.html#a15f59cd1b4a2b2e65fcee349d78ae490":[7,0,0,202,1],
 "class_ogre_1_1_d3_d11_depth_texture_target.html#a15f59cd1b4a2b2e65fcee349d78ae490a18416c60c9b82d928db766bef672ecea":[7,0,0,202,1,6],
 "class_ogre_1_1_d3_d11_depth_texture_target.html#a15f59cd1b4a2b2e65fcee349d78ae490a19ef0adeaa177d49fc4ca4c9b87adec1":[7,0,0,202,1,5],
-"class_ogre_1_1_d3_d11_depth_texture_target.html#a15f59cd1b4a2b2e65fcee349d78ae490a1f0cd329c7ff6d5d81b2162c65d04afa":[7,0,0,202,1,1],
-"class_ogre_1_1_d3_d11_depth_texture_target.html#a15f59cd1b4a2b2e65fcee349d78ae490a5ee29312d754f2244987dc0d1f5894e8":[7,0,0,202,1,2],
-"class_ogre_1_1_d3_d11_depth_texture_target.html#a15f59cd1b4a2b2e65fcee349d78ae490a6df94556ae07dfa0384808dca8dedb64":[7,0,0,202,1,0],
-"class_ogre_1_1_d3_d11_depth_texture_target.html#a15f59cd1b4a2b2e65fcee349d78ae490aba6283bc81ca4e5e6cd2b85497a2cc2f":[7,0,0,202,1,4],
-"class_ogre_1_1_d3_d11_depth_texture_target.html#a15f59cd1b4a2b2e65fcee349d78ae490ac08101cb24d35c29eb7064886081e386":[7,0,0,202,1,3],
-"class_ogre_1_1_d3_d11_depth_texture_target.html#a1799514a8ad7958919ca48c654a47e8e":[7,0,0,202,11],
-"class_ogre_1_1_d3_d11_depth_texture_target.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,202,46],
-"class_ogre_1_1_d3_d11_depth_texture_target.html#a24b847657d58db6ab5e14f7972e38a5d":[7,0,0,202,64],
-"class_ogre_1_1_d3_d11_depth_texture_target.html#a279914cf4611a750e94b6fb54bc1b2d1":[7,0,0,202,61],
-"class_ogre_1_1_d3_d11_depth_texture_target.html#a32f2e646a09dcdaef810ea402bc92155":[7,0,0,202,17],
-"class_ogre_1_1_d3_d11_depth_texture_target.html#a3311232930a950aa1065db8d0380dad2":[7,0,0,202,2]
+"class_ogre_1_1_d3_d11_depth_texture_target.html#a15f59cd1b4a2b2e65fcee349d78ae490a1f0cd329c7ff6d5d81b2162c65d04afa":[7,0,0,202,1,1]
 };

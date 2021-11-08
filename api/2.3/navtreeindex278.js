@@ -1,5 +1,15 @@
 var NAVTREEINDEX278 =
 {
+"struct_ogre_1_1_irradiance_field_settings.html#a3871b731f4ee54e880c3af30f19ba250":[7,0,0,574,15],
+"struct_ogre_1_1_irradiance_field_settings.html#a3f0445be193f7e44196dee0e229315f3":[7,0,0,574,10],
+"struct_ogre_1_1_irradiance_field_settings.html#a438d8eb7abd29c25ce46558cb9daf985":[7,0,0,574,6],
+"struct_ogre_1_1_irradiance_field_settings.html#a702ce55bc9852c5529a1613e4a00dc21":[7,0,0,574,12],
+"struct_ogre_1_1_irradiance_field_settings.html#a7f88ebc8d2b4f70d42c03543fc217121":[7,0,0,574,4],
+"struct_ogre_1_1_irradiance_field_settings.html#a8cf9c5686ef28c086cda7c5c5722ed12":[7,0,0,574,1],
+"struct_ogre_1_1_irradiance_field_settings.html#a91ad0d174575cbcff49a14d72bfc3019":[7,0,0,574,13],
+"struct_ogre_1_1_irradiance_field_settings.html#aa43bc7bfd44d3fca9bce405e1d9e4e55":[7,0,0,574,2],
+"struct_ogre_1_1_irradiance_field_settings.html#ab24a7fe8334e5e82ebb6335c0a51604d":[7,0,0,574,3],
+"struct_ogre_1_1_irradiance_field_settings.html#ab63f827bd84743d23ca9638c9870cf65":[7,0,0,574,8],
 "struct_ogre_1_1_irradiance_field_settings.html#ab7bfe67c1073974636773e2c88388838":[7,0,0,574,5],
 "struct_ogre_1_1_irradiance_field_settings.html#ab9bd18b1c51c273dbcfd37437a9894d7":[7,0,0,574,14],
 "struct_ogre_1_1_irradiance_field_settings.html#ac9d89490c778a2dc326136ac9dd74d44":[7,0,0,574,16],
@@ -239,15 +249,5 @@ var NAVTREEINDEX278 =
 "struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a1d62911bfc305a871b5b5e2ba15d7701":[7,0,0,686,0,3],
 "struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a5853113de9c4c7ee4d3df7e28be6f729":[7,0,0,686,0,0],
 "struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a648e8ae541d77f60907e09d11093ed77":[7,0,0,686,0,4],
-"struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a6f72772c23311005c30bda5f1f45b543":[7,0,0,686,0,1],
-"struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a88709353f3c121f08e43392024c70aaa":[7,0,0,686,0,2],
-"struct_ogre_1_1_metal_frame_buffer_desc_value.html":[5,2,11,82],
-"struct_ogre_1_1_metal_frame_buffer_desc_value.html#a03f95c4da0730becc4e7c249c3586c24":[5,2,11,82,0],
-"struct_ogre_1_1_metal_frame_buffer_desc_value.html#a09a561ec6313a5f6914c72de168864d3":[5,2,11,82,1],
-"struct_ogre_1_1_metal_hlms_pso.html":[5,2,11,83],
-"struct_ogre_1_1_metal_hlms_pso.html#a0649b518d6c05f67c1732d3397d0118d":[5,2,11,83,1],
-"struct_ogre_1_1_metal_hlms_pso.html#a21a589c1c396cde06dfd44fc5dcde90c":[5,2,11,83,2],
-"struct_ogre_1_1_metal_hlms_pso.html#a444bd473001c353401f49fb338fa0511":[5,2,11,83,4],
-"struct_ogre_1_1_metal_hlms_pso.html#aca67378e57a9a5295769dd68c4c732e0":[5,2,11,83,3],
-"struct_ogre_1_1_metal_hlms_pso.html#ad68072a4e988548a4c4868e9816c449d":[5,2,11,83,0]
+"struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a6f72772c23311005c30bda5f1f45b543":[7,0,0,686,0,1]
 };
