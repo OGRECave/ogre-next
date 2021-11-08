@@ -297,6 +297,8 @@ namespace Ogre
 
         bool needsAmbientHemisphere() const;
 
+        size_t getNumCascades( void ) const { return mExtraCascades.size() + 1u; }
+
         size_t getConstBufferSize(void) const;
 
         void fillConstBufferData( const Matrix4 &viewMatrix,
@@ -341,6 +343,7 @@ namespace Ogre
         void setAmbient( const ColourValue& upperHemisphere, const ColourValue& lowerHemisphere );
 
         TextureGpu** getLightVoxelTextures(void)            { return mLightVoxel; }
+        TextureGpu **getLightVoxelTextures( const size_t cascadeIdx );
         uint32 getNumVoxelTextures(void) const              { return mAnisotropic ? 4u : 1u; }
         const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
                                                             { return mSamplerblockTrilinear; }

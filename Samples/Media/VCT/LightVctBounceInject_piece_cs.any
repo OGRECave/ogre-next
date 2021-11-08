@@ -68,6 +68,8 @@
 			nextPosLS = posLS + dist * dirLS;               // Advance forward
 			diameter = 2.0 * tanHalfAngle * dist;           // Calculate next LOD & next fwd step
 			lodLevel = log2( diameter * vctInvStartBias );  // Calculate next LOD
+
+			threshold = 0.5f + diameter * 0.5;
 		}
 
 		@property( vct_anisotropic )
@@ -109,6 +111,8 @@
 				nextPosLS = posLS + dist * dirLS;               // Advance forward
 				diameter = 2.0 * tanHalfAngle * dist;           // Calculate next LOD & next fwd step
 				lodLevel = log2( diameter * vctInvStartBias );  // Calculate next LOD
+
+				threshold = 0.5f + diameter * 0.5;
 			}
 		@end
 

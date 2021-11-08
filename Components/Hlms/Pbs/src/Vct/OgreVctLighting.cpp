@@ -979,9 +979,11 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    size_t VctLighting::getConstBufferSize(void) const
+    size_t VctLighting::getConstBufferSize( void ) const
     {
-        return 10u * 4u * sizeof(float);
+        size_t retVal = 10u * 4u * sizeof( float );
+        retVal += ( 4u + 4u * 2u ) * sizeof( float ) * mExtraCascades.size();
+        return retVal;
     }
     //-------------------------------------------------------------------------
     void VctLighting::fillConstBufferData( const Matrix4 &viewMatrix,
@@ -1002,11 +1004,83 @@ namespace Ogre
         const float finalMultiplier     = mInvBakingMultiplier * mMultiplier;
         const float invFinalMultiplier  = 1.0f / finalMultiplier;
 
-        //float4 vctResolution;
-        *passBufferPtr++ = static_cast<float>( width );
-        *passBufferPtr++ = static_cast<float>( height );
-        *passBufferPtr++ = static_cast<float>( depth );
-        *passBufferPtr++ = 1.0f;
+        const size_t numCascades = mExtraCascades.size() + 1u;
+
+        // float4 vctResolution_cascadeMaxLod;
+        for( size_t i = 0u; i < numCascades; ++i )
+        {
+            const VctLighting *cascade;
+            if( i == 0u )
+                cascade = this;
+            else
+                cascade = mExtraCascades[i - 1u];
+
+            const TextureGpu *cascadeLightVoxel = cascade->mLightVoxel[0];
+            const uint32 widthCascade = cascadeLightVoxel->getWidth();
+            const uint32 heightCascade = cascadeLightVoxel->getHeight();
+            const uint32 depthCascade = cascadeLightVoxel->getDepth();
+
+            uint8 cascadeNumMipmaps = 0u;
+
+            if( cascade->mLightVoxel[1] )
+            {
+                // Anisotropic has the number of mipmaps calculated
+                cascadeNumMipmaps = cascade->mLightVoxel[1]->getNumMipmaps();
+            }
+            else
+            {
+                cascadeNumMipmaps = cascadeLightVoxel->getNumMipmaps();
+            }
+
+            *passBufferPtr++ = static_cast<float>( widthCascade );
+            *passBufferPtr++ = static_cast<float>( heightCascade );
+            *passBufferPtr++ = static_cast<float>( depthCascade );
+            if( i == numCascades - 1u )
+            {
+                *passBufferPtr++ = 256.0f;  // cascadeMaxLod
+            }
+            else
+            {
+                const VctLighting *nextCascade = mExtraCascades[i];
+
+                const Vector3 cascadeVoxelCellSize = cascade->mVoxelizer->getVoxelCellSize();
+                const Vector3 nextCascadeVoxelCellSize = nextCascade->mVoxelizer->getVoxelCellSize();
+
+                const Vector3 currToNextFactor = nextCascadeVoxelCellSize / cascadeVoxelCellSize;
+                const float maxFactor =
+                    std::max( currToNextFactor.x, std::max( currToNextFactor.y, currToNextFactor.z ) );
+
+                *passBufferPtr++ =
+                    std::min<float>( Math::Log2( maxFactor ), cascadeNumMipmaps );  // cascadeMaxLod
+            }
+        }
+
+        // float4 fromPreviousProbeToNext[numCascades - 1u][2]
+        for( size_t i = 1u; i < numCascades; ++i )
+        {
+            const VctLighting *cascade = mExtraCascades[i - 1u];
+            const VctLighting *prevCascade;
+            if( i == 1u )
+                prevCascade = this;
+            else
+                prevCascade = mExtraCascades[i - 2u];
+
+            const Vector3 cascadeVoxelSize = cascade->mVoxelizer->getVoxelSize();
+            const Vector3 vScale = prevCascade->mVoxelizer->getVoxelSize() / cascadeVoxelSize;
+            const Vector3 vPos =
+                ( prevCascade->mVoxelizer->getVoxelOrigin() - cascade->mVoxelizer->getVoxelOrigin() ) /
+                cascadeVoxelSize;
+
+            *passBufferPtr++ = static_cast<float>( vScale.x );
+            *passBufferPtr++ = static_cast<float>( vScale.y );
+            *passBufferPtr++ = static_cast<float>( vScale.z );
+            *passBufferPtr++ = 0.0f;
+
+            *passBufferPtr++ = static_cast<float>( vPos.x );
+            *passBufferPtr++ = static_cast<float>( vPos.y );
+            *passBufferPtr++ = static_cast<float>( vPos.z );
+            *passBufferPtr++ = 0.0f;
+        }
 
         //float specSdfMaxMip;
         //float specularSdfFactor;
@@ -1114,6 +1188,14 @@ namespace Ogre
             mUpperHemisphere[i] = static_cast<float>( upperHemisphere[i] );
             mLowerHemisphere[i] = static_cast<float>( lowerHemisphere[i] );
         }
+    }
+    //-------------------------------------------------------------------------
+    TextureGpu **VctLighting::getLightVoxelTextures( const size_t cascadeIdx )
+    {
+        if( cascadeIdx == 0u )
+            return mLightVoxel;
+        else
+            return mExtraCascades[cascadeIdx - 1u]->mLightVoxel;
     }
     //-------------------------------------------------------------------------
     void VctLighting::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
