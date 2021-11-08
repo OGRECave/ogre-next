@@ -241,10 +241,10 @@ namespace Ogre
             }
         }
 
-        void copyFrom( void *srcData, uint32 _width, uint32 _height, uint32 _bytesPerRow )
+        void copyFrom( const void *srcData, uint32 _width, uint32 _height, uint32 _bytesPerRow )
         {
             TextureBox box( _width, _height, 1u, 1u, 0, _bytesPerRow, _bytesPerRow * _height );
-            box.data = srcData;
+            box.data = const_cast<void*>( srcData );
             copyFrom( box );
         }
 
