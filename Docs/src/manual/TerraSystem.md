@@ -167,6 +167,15 @@ Point & spot lights use traditional shadow maps. They often have much higher qua
 
  For example the [Ignition project customized blending](https://github.com/ignitionrobotics/ign-rendering/blob/056023a9f8f139925035b0e62db3837ad9a3f8e3/ogre2/src/media/Hlms/Terra/Any/800.PixelShader_piece_ps.any#L133) to more closely match that of their Terrain Component from Ogre1.
 
+ With enough artistic work it can be made to look nice:
+ 
+ ![](TerraSample01.jpg)
+ ![](TerraSample02.jpg)
+ ![](TerraSample03.jpg)
+ ![](TerraSample04.jpg)
+
+ Examples of Terra in real world use are [Racecraft](https://store.steampowered.com/app/346610/Racecraft/), [Alliance Air War](https://apps.apple.com/us/app/alliance-air-war/id1059604202), [Sunset Rangers](https://store.steampowered.com/app/559340/Sunset_Rangers/).
+
  ## Why is it not a component?
 
  Terrain rendering often needs heavy customizations to suit the user needs.
