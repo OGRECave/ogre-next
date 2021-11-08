@@ -5,7 +5,7 @@ var struct_ogre_1_1_texture_box =
     [ "at", "struct_ogre_1_1_texture_box.html#aaf292792396ed63db078a51909579468", null ],
     [ "atFromOffsettedOrigin", "struct_ogre_1_1_texture_box.html#ad847c9af8c06cb208dfed687440d336e", null ],
     [ "copyFrom", "struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726", null ],
-    [ "copyFrom", "struct_ogre_1_1_texture_box.html#ac8cb10968cf40820a8ac59f2f710e857", null ],
+    [ "copyFrom", "struct_ogre_1_1_texture_box.html#a772e2aa3672867d6c7f75bba4d7b9f09", null ],
     [ "equalSize", "struct_ogre_1_1_texture_box.html#a02f10a0bd29f00fe3e15586afcce7b7b", null ],
     [ "fullyContains", "struct_ogre_1_1_texture_box.html#a4b329783406d9ef1469abdf153ffe7c9", null ],
     [ "getColourAt", "struct_ogre_1_1_texture_box.html#aa03bb44178bbe534762593ef6748b8d8", null ],
