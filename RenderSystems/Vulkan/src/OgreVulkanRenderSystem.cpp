@@ -1516,10 +1516,31 @@ namespace Ogre
         VulkanRootLayout *rootLayout = computeShader->getRootLayout();
         computeInfo.layout = rootLayout->createVulkanHandles();
 
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        mValidationError = false;
+#endif
+
         VkPipeline vulkanPso = 0u;
         VkResult result = vkCreateComputePipelines( mActiveDevice->mDevice, VK_NULL_HANDLE, 1u,
                                                     &computeInfo, 0, &vulkanPso );
         checkVkResult( result, "vkCreateComputePipelines" );
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( mValidationError )
+        {
+            LogManager::getSingleton().logMessage( "Validation error:" );
+
+            if( newPso->computeShader )
+            {
+                VulkanProgram *shader =
+                    static_cast<VulkanProgram *>( newPso->computeShader->_getBindingDelegate() );
+
+                String debugDump;
+                shader->debugDump( debugDump );
+                LogManager::getSingleton().logMessage( debugDump );
+            }
+        }
+#endif
 
         VulkanHlmsPso *pso = new VulkanHlmsPso( vulkanPso, rootLayout );
         newPso->rsData = pso;
