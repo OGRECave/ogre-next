@@ -47,6 +47,9 @@ differences have diverged long enough.
  * Clang 3.3 or newer
  * GCC 5 or newer
  * VS2008 or newer
+ 
+## Samples
+For a list of samples and their demonstrated features, refer to the [samples section in the manual.](https://ogrecave.github.io/ogre-next/api/2.3/_samples.html) 
 
 # Who's using it?
 
