@@ -246,8 +246,8 @@ var NAVTREEINDEX15 =
 "_s_s_e2_2_single_2_ogre_array_sphere_8h.html":[8,0,42],
 "_s_s_e2_2_single_2_ogre_array_vector3_8h.html":[8,0,46],
 "_s_s_e2_2_single_2_ogre_boolean_mask_8h.html":[8,0,70],
-"_setting_up_ogre.html":[2],
-"_setting_up_ogre_android.html":[2,4],
-"_setting_up_ogre_android.html#BuildingSamplesAndroid":[2,4,2],
-"_setting_up_ogre_android.html#DownloadingOgreAndroid":[2,4,1]
+"_samples.html":[1,0],
+"_samples.html#SMAA":[1,0,47],
+"_samples.html#animationtagpoints":[1,0,5],
+"_samples.html#arealighapprox":[1,0,6]
 };
