@@ -28,29 +28,34 @@ if(DOXYGEN_FOUND)
 	PATTERN "src" EXCLUDE
       )
     endif ()
-    
-	file(GLOB MANUAL
-			${OGRE_SOURCE_DIR}/Docs/src/manual/*.md
-			${OGRE_SOURCE_DIR}/Docs/src/SettingUpOgre/*.md
-			${OGRE_SOURCE_DIR}/Docs/src/UsingOgre/*.md
-		)
-    
-    set(CMAKE_DOXYGEN_INPUT_LIST 
+
+	# THIS IS DONE IN STAGES SO THAT WE CAN CONTROL THE ORDER IN WHICH THE ITEMS ARE DISPLAYED IN THE DOXYGEN TREE VIEW.
+	file(GLOB MANUAL ${OGRE_SOURCE_DIR}/Docs/src/Samples/*.md )
+	file(GLOB TEMP1 ${OGRE_SOURCE_DIR}/Docs/src/SettingUpOgre/*.md )
+	file(GLOB TEMP2 ${OGRE_SOURCE_DIR}/Docs/src/UsingOgre/*.md )
+	file(GLOB TEMP3 ${OGRE_SOURCE_DIR}/Docs/src/Manual/*.md )
+
+	list(APPEND MANUAL ${TEMP1})
+	list(APPEND MANUAL ${TEMP2})
+	list(APPEND MANUAL ${TEMP3})
+		
+	set(CMAKE_DOXYGEN_INPUT_LIST 
         \"${OGRE_SOURCE_DIR}/OgreMain
         ${OGRE_SOURCE_DIR}/Components
         ${OGRE_SOURCE_DIR}/Plugins
         ${OGRE_SOURCE_DIR}/RenderSystems
         ${OGRE_SOURCE_DIR}/Docs/src/apimainpage.md
         ${MANUAL}\")
+		
     string(REPLACE ";" "\" \\\n\"" CMAKE_DOXYGEN_INPUT_LIST "${CMAKE_DOXYGEN_INPUT_LIST}")
-	configure_file(${OGRE_TEMPLATES_DIR}/html.cfg.in ${OGRE_BINARY_DIR}/html.cfg)
+	configure_file(${OGRE_TEMPLATES_DIR}/doxygen.cfg.in ${OGRE_BINARY_DIR}/doxygen.cfg)
 	add_custom_target(OgreDoc COMMAND 
-        ${DOXYGEN_EXECUTABLE} ${OGRE_BINARY_DIR}/html.cfg
-        DEPENDS ${OGRE_BINARY_DIR}/html.cfg
+        ${DOXYGEN_EXECUTABLE} ${OGRE_BINARY_DIR}/doxygen.cfg
+        DEPENDS ${OGRE_BINARY_DIR}/doxygen.cfg
         WORKING_DIRECTORY ${OGRE_SOURCE_DIR}/Docs/src/ 
         COMMENT "Building documentation" VERBATIM)
-	file(MAKE_DIRECTORY ${OGRE_BINARY_DIR}/api/)
+	file(MAKE_DIRECTORY ${OGRE_BINARY_DIR}/APIDocumentation/)
 	if (OGRE_INSTALL_DOCS)
-		install(DIRECTORY ${OGRE_BINARY_DIR}/api DESTINATION ${OGRE_DOCS_PATH})
+		install(DIRECTORY ${OGRE_BINARY_DIR}/APIDocumentation DESTINATION ${OGRE_DOCS_PATH})
 	endif()
 endif()

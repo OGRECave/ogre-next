@@ -1,4 +1,4 @@
-Tunning memory consumption and resources {#TuningMemoryResources}
+Tunning Memory Consumption And Resources {#TuningMemoryResources}
 ========================================
 
 @tableofcontents

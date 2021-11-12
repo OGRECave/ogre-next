@@ -1,6 +1,4 @@
-# API Reference Start Page {#mainpage}
-
-# Introduction
+# Introduction {#mainpage}
 
 ## What is this?
 This is the complete API reference for <a href="www.ogre3d.org"><b>OGRE</b></a> (<b>O</b>bject-Oriented <b>G</b>raphics <b>R</b>endering <b>E</b>ngine) version **2.1**. Contained within are the 

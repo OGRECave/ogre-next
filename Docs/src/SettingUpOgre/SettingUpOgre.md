@@ -1,4 +1,4 @@
-# Setting Up Ogre {#SettingUpOgre}
+# Setting Up & Building Ogre {#SettingUpOgre}
 
 - @subpage SettingUpOgreWindows
 - @subpage SettingUpOgreLinux
