@@ -3,7 +3,7 @@ Reference Guide: HLMS Blendblock {#hlmsblendblockref}
 ================================
 
 - Blendblocks are like Macroblocks, but they hold alpha blending operation information (blend factors: One, One_Minus_Src_Alpha; blending modes: add, substract, min, max. etc). They're analogous to D3D11_BLEND_DESC. We also sort by blendblocks to reduce state changes.
-- Blendblocks are located in json material filename: `[name].material.json`
+- Blendblocks are located in JSON material filename: `[name].material.json`
 - A blend block contains settings that rarely change, and thus are common to many materials. The reasons this structure isn't joined with HlmsMacroblock is that: The D3D11 API makes this distinction (much higher API overhead if we change i.e. depth settings) due to D3D11_RASTERIZER_DESC.
 - This block contains information of whether the material is transparent. Transparent materials are sorted differently than opaque ones.
 - Up to 32 different blend blocks are allowed.

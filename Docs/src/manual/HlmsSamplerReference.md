@@ -3,7 +3,7 @@ Reference Guide: HLMS Samplerblock {#hlmssamplerref}
 ==================================
 
 - Samplerblocks hold information about texture units, like filtering options, addressing modes (wrap, clamp, etc), Lod bias, anisotropy, border colour, etc. They're analogous to D3D11_SAMPLER_DESC.
-- Samplers are located in json material filename: `[name].material.json`
+- Samplers are located in JSON material filename: `[name].material.json`
 - A sampler block contains settings that go hand in hand with a texture, and thus are common to many textures. This is very analogous to D3D11_SAMPLER_DESC.
 - Up to 32 different sampler blocks are allowed.
 - All parameters are optional. Defaults are provided.

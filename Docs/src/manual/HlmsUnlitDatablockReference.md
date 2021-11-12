@@ -4,7 +4,7 @@ Reference Guide: HLMS Unlit Datablock {#hlmsunlitdatablockref}
 
 - Reference for a datablock for the Unlit HLMS implementation
 - A Datablock is a "material" from the user's perspective. It is the only mutable block. It holds data (i.e. material properties) that will be passed directly to the shaders, and also holds which Macroblock, Blendblocks and Samplerblocks are assigned to it.
-- Datablocks are located in Json material filename: `[name].material.json`
+- Datablocks are located in JSON material filename: `[name].material.json`
 - When loading a texture, if no sampler is provided, a default one from the HLMS is supplied
 - All parameters are optional. Defaults are provided.
 

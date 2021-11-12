@@ -3,7 +3,7 @@ Reference Guide: HLMS Macroblock {#hlmsmacroblockref}
 ================================
 
 - Named like that because most entities end up using the macroblock. Except for transparents, we sort by macroblock first. These contain information like depth check & depth write, culling mode, polygon mode (point, wireframe, solid). They're quite analogous to D3D11_RASTERIZER_DESC. And not without reason: under the hood Macroblocks hold a ID3D11RasterizerState, and thanks to render queue's sorting, we change them as little as possible. In other words, reduce API overhead. On GL backends, we just change the individual states on each block change. Macroblocks can be shared by many Datablocks.
-- Macroblocks are located in json material filename: `[name].material.json`
+- Macroblocks are located in JSON material filename: `[name].material.json`
 - A macro block contains settings that will rarely change, and thus are common to many materials.
 - This is very analogous to D3D11_RASTERIZER_DESC.
 - Up to 32 different blocks are allowed.
