@@ -48,10 +48,10 @@ if(DOXYGEN_FOUND)
         ${MANUAL}\")
 		
     string(REPLACE ";" "\" \\\n\"" CMAKE_DOXYGEN_INPUT_LIST "${CMAKE_DOXYGEN_INPUT_LIST}")
-	configure_file(${OGRE_TEMPLATES_DIR}/doxygen.cfg.in ${OGRE_BINARY_DIR}/doxygen.cfg)
+	configure_file(${OGRE_TEMPLATES_DIR}/html.cfg.in ${OGRE_BINARY_DIR}/html.cfg)
 	add_custom_target(OgreDoc COMMAND 
-        ${DOXYGEN_EXECUTABLE} ${OGRE_BINARY_DIR}/doxygen.cfg
-        DEPENDS ${OGRE_BINARY_DIR}/doxygen.cfg
+        ${DOXYGEN_EXECUTABLE} ${OGRE_BINARY_DIR}/html.cfg
+        DEPENDS ${OGRE_BINARY_DIR}/html.cfg
         WORKING_DIRECTORY ${OGRE_SOURCE_DIR}/Docs/src/ 
         COMMENT "Building documentation" VERBATIM)
 	file(MAKE_DIRECTORY ${OGRE_BINARY_DIR}/APIDocumentation/)
