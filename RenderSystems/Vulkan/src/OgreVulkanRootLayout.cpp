@@ -525,22 +525,22 @@ namespace Ogre
             }
             else
             {
-                for( size_t i = 0u; i < BakedDescriptorSets::NumBakedDescriptorSets; ++i )
+                for( size_t j = 0u; j < BakedDescriptorSets::NumBakedDescriptorSets; ++j )
                 {
                     const DescBindingRange &bindRanges =
-                        descBindingRanges[i + DescBindingTypes::ReadOnlyBuffer];
+                        descBindingRanges[j + DescBindingTypes::ReadOnlyBuffer];
                     if( bindRanges.isInUse() )
                     {
-                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[i] &&
+                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[j] &&
                                             "No DescriptorSetTexture/Sampler/Uav bound when expected!" );
-                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[i]->descriptorCount ==
+                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[j]->descriptorCount ==
                                                 bindRanges.getNumUsedSlots() &&
                                             "DescriptorSetTexture/Sampler/Uav provided is incompatible "
                                             "with active RootLayout. e.g. you can't bind a set of "
                                             "7 textures when the shader expects 4" );
 
                         VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
-                        writeDescSet = *table.bakedDescriptorSets[i];
+                        writeDescSet = *table.bakedDescriptorSets[j];
                         writeDescSet.dstSet = descSet;
                         writeDescSet.dstBinding = currBinding;
                         currBinding += writeDescSet.descriptorCount;
