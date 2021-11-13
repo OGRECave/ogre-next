@@ -113,6 +113,10 @@ namespace Ogre
         /// @copydoc VulkanRootLayout::copyFrom
         void copyFrom( const RootLayout &rootLayout );
 
+        /// Performs outRootLayout.copyFrom( this )
+        /// This function is necessary because RootLayout is a protected base class
+        void copyTo( RootLayout &outRootLayout );
+
         /// @copydoc VulkanRootLayout::parseRootLayout
         void parseRootLayout( const char *rootLayout, const bool bCompute, const String &filename );
 
@@ -174,6 +178,19 @@ namespace Ogre
         */
         void bind( VulkanDevice *device, VulkanVaoManager *vaoManager,
                    const VulkanGlobalBindingTable &table );
+
+        /** O( N ) search to find DescBindingRange via its flattened vulkan binding idx
+            (i.e. reverse search)
+        @param bindingIdx
+        @param outType [out]
+            The type located. Not touched if not found
+        @param outRelativeSlotIndex [out]
+            The slot index expressed in the respective DescBindingTypes. Not touched if not found
+        @return
+            False if not found
+        */
+        bool findBindingIndex( uint32 bindingIdx, DescBindingTypes::DescBindingTypes &outType,
+                               size_t &outRelativeSlotIndex ) const;
 
         /// Two root layouts can be incompatible. If so, we return nullptr
         ///

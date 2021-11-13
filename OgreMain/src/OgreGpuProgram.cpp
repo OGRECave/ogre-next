@@ -74,7 +74,8 @@ namespace Ogre
         mType = t;
     }
     //-----------------------------------------------------------------------------
-    void GpuProgram::setRootLayout( GpuProgramType t, const RootLayout &rootLayout )
+    void GpuProgram::setRootLayout( GpuProgramType t, const RootLayout &rootLayout,
+                                    bool /*bReflectArrayRootLayouts*/ )
     {
         setType( t );
 
@@ -143,7 +144,7 @@ namespace Ogre
             descBindingRange[DescBindingTypes::ParamBuffer].end = NumShaderTypes;
         }
 
-        setRootLayout( mType, rootLayout );
+        setRootLayout( mType, rootLayout, true );
     }
     //-----------------------------------------------------------------------------
     void GpuProgram::setReplaceVersionMacro( bool bReplace ) {}

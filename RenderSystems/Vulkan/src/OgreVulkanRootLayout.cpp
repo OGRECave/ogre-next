@@ -92,6 +92,8 @@ namespace Ogre
         RootLayout::copyFrom( rootLayout );
     }
     //-------------------------------------------------------------------------
+    void VulkanRootLayout::copyTo( RootLayout &outRootLayout ) { outRootLayout.copyFrom( *this ); }
+    //-------------------------------------------------------------------------
     void VulkanRootLayout::parseRootLayout( const char *rootLayout, const bool bCompute,
                                             const String &filename )
     {
@@ -565,6 +567,41 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    bool VulkanRootLayout::findBindingIndex( const uint32 bindingIdx,
+                                             DescBindingTypes::DescBindingTypes &outType,
+                                             size_t &outRelativeSlotIndex ) const
+    {
+        size_t currBindingIdx = 0u;
+        for( size_t i = 0u; i < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
+        {
+            for( size_t j = 0u; j < DescBindingTypes::NumDescBindingTypes; ++j )
+            {
+                if( mDescBindingRanges[i][j].isInUse() )
+                {
+                    if( bindingIdx <= currBindingIdx )
+                    {
+                        outType = static_cast<DescBindingTypes::DescBindingTypes>( j );
+                        outRelativeSlotIndex =
+                            currBindingIdx - bindingIdx + mDescBindingRanges[i][j].start;
+                        return true;
+                    }
+
+                    currBindingIdx += mDescBindingRanges[i][j].getNumUsedSlots();
+
+                    if( bindingIdx < currBindingIdx )
+                    {
+                        outType = static_cast<DescBindingTypes::DescBindingTypes>( j );
+                        outRelativeSlotIndex =
+                            currBindingIdx - bindingIdx + mDescBindingRanges[i][j].start;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+    //-------------------------------------------------------------------------
     VulkanRootLayout *VulkanRootLayout::findBest( VulkanRootLayout *a, VulkanRootLayout *b )
     {
         if( !b )
@@ -575,6 +612,30 @@ namespace Ogre
             return a;
 
         VulkanRootLayout *best = 0;
+
+        for( size_t i = DescBindingTypes::ParamBuffer + 1u; i < DescBindingTypes::NumDescBindingTypes;
+             ++i )
+        {
+            VulkanRootLayout *newBest = 0;
+            if( !a->mArrayRanges[i].empty() )
+                newBest = a;
+
+            if( !b->mArrayRanges[i].empty() )
+                newBest = b;
+
+            if( newBest )
+            {
+                if( best && best != newBest )
+                {
+                    // In theory we could try merging and remove duplicates and perhaps arrive return
+                    // a 3rd RootLayout that is compatible but that's a lot of work. It's easier to let
+                    // the user specify a custom RootLayout in the source code for both shaders
+                    return 0;  // a and b are incompatible
+                }
+
+                best = newBest;
+            }
+        }
 
         for( size_t i = 0u; i < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
         {
