@@ -164,6 +164,12 @@ namespace Ogre
                 {
                     uint32 emulatedSlot = mDescBindingRanges[i][j].start;
                     const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
+
+                    FastArray<uint32>::const_iterator arrayRangesEnd = mArrayRanges[j].end();
+                    FastArray<uint32>::const_iterator arrayRanges =
+                        std::lower_bound( mArrayRanges[j].begin(), arrayRangesEnd,
+                                          ArrayDesc( static_cast<uint16>( emulatedSlot ), 0u ).toKey() );
+
                     for( size_t k = 0u; k < numSlots; ++k )
                     {
                         textStr.resize( prefixSize1 );  // #define ogre_B
@@ -181,8 +187,25 @@ namespace Ogre
                             textStr.a( bindingIdx, "\n" );
                         }
 
-                        ++bindingIdx;
-                        ++emulatedSlot;
+                        bool bIsArray = false;
+                        if( arrayRanges != arrayRangesEnd )
+                        {
+                            const ArrayDesc arrayDesc = ArrayDesc::fromKey( *arrayRanges );
+                            if( arrayDesc.bindingIdx == emulatedSlot )
+                            {
+                                bindingIdx += arrayDesc.arraySize;
+                                emulatedSlot += arrayDesc.arraySize;
+                                k += arrayDesc.arraySize - 1u;
+                                ++arrayRanges;
+                                bIsArray = true;
+                            }
+                        }
+
+                        if( !bIsArray )
+                        {
+                            ++bindingIdx;
+                            ++emulatedSlot;
+                        }
 
                         macroStr += textStr.c_str();
                     }
@@ -212,13 +235,30 @@ namespace Ogre
 
             for( size_t j = 0u; j < DescBindingTypes::NumDescBindingTypes; ++j )
             {
+                const uint16 descSlotStart = mDescBindingRanges[i][j].start;
+                const FastArray<uint32>::const_iterator arrayRangesBeg = mArrayRanges[j].begin();
+                const FastArray<uint32>::const_iterator arrayRangesEnd = mArrayRanges[j].end();
+
+                FastArray<uint32>::const_iterator arrayRanges = std::lower_bound(
+                    arrayRangesBeg, arrayRangesEnd, ArrayDesc( descSlotStart, 0u ).toKey() );
+
                 const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
                 for( size_t k = 0u; k < numSlots; ++k )
                 {
                     rootLayoutDesc[i][bindingIdx].binding = static_cast<uint32_t>( bindingIdx );
                     rootLayoutDesc[i][bindingIdx].descriptorType = static_cast<VkDescriptorType>(
                         toVkDescriptorType( static_cast<DescBindingTypes::DescBindingTypes>( j ) ) );
+
                     rootLayoutDesc[i][bindingIdx].descriptorCount = 1u;
+                    if( arrayRanges != arrayRangesEnd )
+                    {
+                        const ArrayDesc arrayDesc = ArrayDesc::fromKey( *arrayRanges );
+                        if( arrayDesc.bindingIdx == descSlotStart )
+                        {
+                            rootLayoutDesc[i][bindingIdx].descriptorCount = arrayDesc.arraySize;
+                            ++arrayRanges;
+                        }
+                    }
                     rootLayoutDesc[i][bindingIdx].stageFlags =
                         mCompute ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_ALL_GRAPHICS;
 

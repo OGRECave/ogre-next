@@ -138,7 +138,7 @@ namespace Ogre
                         const size_t numIncompatTypes = 2u;
                         DescBindingTypes::DescBindingTypes incompatTypes[numIncompatTypes] = {
                             DescBindingTypes::TexBuffer, DescBindingTypes::Texture
-                            //DescBindingTypes::UavBuffer, DescBindingTypes::UavTexture
+                            // DescBindingTypes::UavBuffer, DescBindingTypes::UavTexture
                         };
 
                         for( size_t k = 0u; k < numIncompatTypes; ++k )
@@ -258,7 +258,8 @@ namespace Ogre
         }
 
         // Check range[set = 0] does not overlap with range[set = 1] and comes before set = 1
-        // TODO: Do we really need this restriction? Even so, this restriction keeps things sane?
+        // This restriction is not really necessary by Vulkan/D3D12, but it keeps things sane
+        // as the macros ogre_tN and co. are monotonically increasing and thus easy to understand
         for( size_t i = 0u; i < DescBindingTypes::NumDescBindingTypes; ++i )
         {
             for( size_t j = 0u; j < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS - 1u; ++j )
@@ -281,6 +282,59 @@ namespace Ogre
                                  "Error at file " + filename + ":\n" + tmpStr.c_str(),
                                  "RootLayout::validate" );
                 }
+            }
+
+            FastArray<uint32>::const_iterator itor = mArrayRanges[i].begin();
+            FastArray<uint32>::const_iterator endt = mArrayRanges[i].end();
+
+            while( itor != endt )
+            {
+                bool bContained = false;
+                const ArrayDesc arrayDesc = ArrayDesc::fromKey( *itor );
+                for( size_t j = 0u; j < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS - 1u; ++j )
+                {
+                    if( arrayDesc.bindingIdx >= mDescBindingRanges[j][i].start &&
+                        arrayDesc.bindingIdx < mDescBindingRanges[j][i].end )
+                    {
+                        bContained = true;
+
+                        if( arrayDesc.bindingIdx + arrayDesc.arraySize > mDescBindingRanges[j][i].end )
+                        {
+                            char tmpBuffer[1024];
+                            LwString tmpStr(
+                                LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+                            tmpStr.a( "Array in Descriptor out of bounds! Set ", (uint32)j,
+                                      " specifies ", c_rootLayoutVarNames[i], " in range [",
+                                      mDescBindingRanges[j][i].start );
+                            tmpStr.a(
+                                "; ", mDescBindingRanges[i][j].end,
+                                ") but mArrayRanges which should be inside that range is in range [",
+                                arrayDesc.bindingIdx, "; ", arrayDesc.bindingIdx + arrayDesc.arraySize,
+                                ")" );
+
+                            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                         "Error at file " + filename + ":\n" + tmpStr.c_str(),
+                                         "RootLayout::validate" );
+                        }
+                    }
+                }
+
+                if( !bContained )
+                {
+                    char tmpBuffer[256];
+                    LwString tmpStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+                    tmpStr.a(
+                        "mArrayRanges for ", c_rootLayoutVarNames[i], " has range [",
+                        arrayDesc.bindingIdx, "; ", arrayDesc.bindingIdx + arrayDesc.arraySize,
+                        ") but that range is nowhere to be found in no set of mDescBindingRanges" );
+
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Error at file " + filename + ":\n" + tmpStr.c_str(),
+                                 "RootLayout::validate" );
+                }
+
+                ++itor;
             }
         }
     }
@@ -380,6 +434,31 @@ namespace Ogre
                 }
             }
         }
+    }
+    //-------------------------------------------------------------------------
+    void RootLayout::addArrayBinding( DescBindingTypes::DescBindingTypes bindingType,
+                                      ArrayDesc arrayDesc )
+    {
+        OGRE_ASSERT_LOW( bindingType != DescBindingTypes::ParamBuffer );
+        OGRE_ASSERT_LOW( arrayDesc.arraySize > 0u );
+
+        if( !mArrayRanges[bindingType].empty() )
+        {
+            const ArrayDesc lastElem = ArrayDesc::fromKey( mArrayRanges[bindingType].back() );
+            if( arrayDesc.bindingIdx <= lastElem.bindingIdx )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Elements must be added in order",
+                             "RootLayout::addArrayBinding" );
+            }
+
+            if( lastElem.bindingIdx + lastElem.arraySize > arrayDesc.bindingIdx )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Elements must not overlap",
+                             "RootLayout::addArrayBinding" );
+            }
+        }
+
+        mArrayRanges[bindingType].push_back( arrayDesc.toKey() );
     }
     //-------------------------------------------------------------------------
     void RootLayout::copyFrom( const RootLayout &other )
