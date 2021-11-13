@@ -471,6 +471,8 @@ namespace Ogre
             for( size_t j = 0u; j < DescBindingTypes::NumDescBindingTypes; ++j )
                 this->mDescBindingRanges[i][j] = other.mDescBindingRanges[i][j];
         }
+        for( size_t i = 0u; i < DescBindingTypes::NumDescBindingTypes; ++i )
+            this->mArrayRanges[i] = other.mArrayRanges[i];
     }
     //-------------------------------------------------------------------------
     void RootLayout::parseRootLayout( const char *rootLayout, const bool bCompute,

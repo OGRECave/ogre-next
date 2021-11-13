@@ -659,6 +659,23 @@ namespace Ogre
             }
         }
 
+        for( size_t i = 0u; i < DescBindingTypes::NumDescBindingTypes; ++i )
+        {
+            if( this->mArrayRanges[i].size() != other.mArrayRanges[i].size() )
+            {
+                return this->mArrayRanges[i].size() < other.mArrayRanges[i].size();
+            }
+            else
+            {
+                const size_t numArrayRanges = this->mArrayRanges[i].size();
+                for( size_t j = 0u; j < numArrayRanges; ++i )
+                {
+                    if( this->mArrayRanges[i][j] != other.mArrayRanges[i][j] )
+                        return this->mArrayRanges[i][j] < other.mArrayRanges[i][j];
+                }
+            }
+        }
+
         // If we're here then a and b are equals, thus a < b returns false
         return false;
     }
