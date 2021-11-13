@@ -509,6 +509,38 @@ namespace Ogre
                 parseSet( itor->value, i, filename );
         }
 
+        {
+            // Add the elements which are arrays (i.e. call addArrayBinding)
+            rapidjson::Value::ConstMemberIterator itor;
+
+            itor = d.FindMember( "arrays" );
+            if( itor != d.MemberEnd() && itor->value.IsObject() )
+            {
+                const rapidjson::Value &descArrays = itor->value;
+
+                for( size_t i = DescBindingTypes::ParamBuffer + 1u;
+                     i < DescBindingTypes::NumDescBindingTypes; ++i )
+                {
+                    itor = descArrays.FindMember( c_rootLayoutVarNames[i] );
+                    if( itor != descArrays.MemberEnd() && itor->value.IsArray() )
+                    {
+                        const size_t numArrays = itor->value.Size();
+                        for( size_t j = 0u; j < numArrays; ++j )
+                        {
+                            if( itor->value[j].IsArray() && itor->value[j].Size() == 2u &&
+                                itor->value[j][0].IsUint() && itor->value[j][1].IsUint() )
+                            {
+                                addArrayBinding(
+                                    static_cast<DescBindingTypes::DescBindingTypes>( i ),
+                                    ArrayDesc( static_cast<uint16>( itor->value[j][0].GetUint() ),
+                                               static_cast<uint16>( itor->value[j][1].GetUint() ) ) );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         try
         {
             validate( filename );
@@ -600,6 +632,50 @@ namespace Ogre
 
             jsonStr.a( "\n\t}" );
         }
+
+        bool bHasArrays = false;
+        for( size_t i = DescBindingTypes::ParamBuffer + 1u;
+             i < DescBindingTypes::NumDescBindingTypes && !bHasArrays; ++i )
+        {
+            if( !mArrayRanges[i].empty() )
+                bHasArrays = true;
+        }
+
+        if( bHasArrays )
+        {
+            jsonStr.a( ",\n\t\"arrays\" :\n\t{" );
+            bool firstEntryWritten01 = false;
+            for( size_t i = DescBindingTypes::ParamBuffer + 1u;
+                 i < DescBindingTypes::NumDescBindingTypes; ++i )
+            {
+                if( !mArrayRanges[i].empty() )
+                {
+                    if( firstEntryWritten01 )
+                        jsonStr.a( "," );
+
+                    jsonStr.a( "\n\t\t\"", c_rootLayoutVarNames[i], "\" : [" );
+
+                    bool firstEntryWritten02 = false;
+                    FastArray<uint32>::const_iterator itor = mArrayRanges[i].begin();
+                    FastArray<uint32>::const_iterator endt = mArrayRanges[i].end();
+
+                    while( itor != endt )
+                    {
+                        if( firstEntryWritten02 )
+                            jsonStr.a( "," );
+                        const ArrayDesc arrayDesc = ArrayDesc::fromKey( *itor );
+                        jsonStr.a( "[", arrayDesc.bindingIdx, ", ", arrayDesc.arraySize, ']' );
+                        firstEntryWritten02 = false;
+                        ++itor;
+                    }
+
+                    jsonStr.a( "]" );
+                    firstEntryWritten01 = true;
+                }
+            }
+            jsonStr.a( "\n\t}" );
+        }
+
         jsonStr.a( "\n}\n" );
 
         flushLwString( jsonStr, outJson );

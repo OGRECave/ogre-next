@@ -436,6 +436,8 @@ namespace Ogre
 
             Then we MUST call addArrayBinding( Texture, ArrayDesc( 4, 2 ) );
             since arrays are treated differently
+
+            Arrays of length = 1 don't need to call this function.
         @remarks
             Calls must be done in order (i.e. increasing setIdx and bindingIdx)
             Bindings cannot overlap (i.e. last.bindingIdx + last.arraySize <= new.bindingIdx)
@@ -464,6 +466,11 @@ namespace Ogre
                         "uav_buffers" : [0, 16]
                         "uav_textures" : [16, 32],
                         "baked" : false
+                    },
+
+                    "arrays" :
+                    {
+                        "tex_buffers" : [[4, 5], [10, 2]],
                     }
                 }
             @endcode
