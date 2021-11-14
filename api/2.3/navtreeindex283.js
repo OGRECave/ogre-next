@@ -1,5 +1,14 @@
 var NAVTREEINDEX283 =
 {
+"struct_ogre_1_1_texture_box.html#a692a130ff0f0e88c854e5e8a35d5555b":[7,0,0,1059,1],
+"struct_ogre_1_1_texture_box.html#a772e2aa3672867d6c7f75bba4d7b9f09":[7,0,0,1059,5],
+"struct_ogre_1_1_texture_box.html#a7b4127c17633b98c6957f5362438f726":[7,0,0,1059,4],
+"struct_ogre_1_1_texture_box.html#a809d00c601a80d541f98feb6046740f4":[7,0,0,1059,17],
+"struct_ogre_1_1_texture_box.html#a82a89d85d9c84525aafdafd91bc5eb1b":[7,0,0,1059,22],
+"struct_ogre_1_1_texture_box.html#a919cdc92f89a0984772fe567f87e442c":[7,0,0,1059,19],
+"struct_ogre_1_1_texture_box.html#a950fb6c5ec5662c455d5f438cb7e2157":[7,0,0,1059,26],
+"struct_ogre_1_1_texture_box.html#a9bec8d99d1e107540d9f245c4a6774a0":[7,0,0,1059,28],
+"struct_ogre_1_1_texture_box.html#a9d6ef5c969147039156938a5e060fce6":[7,0,0,1059,15],
 "struct_ogre_1_1_texture_box.html#aa03bb44178bbe534762593ef6748b8d8":[7,0,0,1059,8],
 "struct_ogre_1_1_texture_box.html#aaf292792396ed63db078a51909579468":[7,0,0,1059,2],
 "struct_ogre_1_1_texture_box.html#ab7342f1a0cee195f763b0ba8edf75d4a":[7,0,0,1059,21],
@@ -237,17 +246,8 @@ var NAVTREEINDEX283 =
 "struct_ogre_1_1_unlit_property_1_1_diffuse_map_ptr.html#aec650b44d996e845b3b86ccb3a69e5e1":[7,0,0,1085,0,1],
 "struct_ogre_1_1_update_lod_request.html":[5,2,12,56],
 "struct_ogre_1_1_update_lod_request.html":[5,0,1,56],
-"struct_ogre_1_1_update_lod_request.html#a0e98b3dbbac76a171614fcd1000a600e":[5,2,12,56,5],
 "struct_ogre_1_1_update_lod_request.html#a0e98b3dbbac76a171614fcd1000a600e":[5,0,1,56,5],
+"struct_ogre_1_1_update_lod_request.html#a0e98b3dbbac76a171614fcd1000a600e":[5,2,12,56,5],
 "struct_ogre_1_1_update_lod_request.html#a1d3f5565a1f0cef3c484ac9898121dd6":[5,0,1,56,6],
-"struct_ogre_1_1_update_lod_request.html#a1d3f5565a1f0cef3c484ac9898121dd6":[5,2,12,56,6],
-"struct_ogre_1_1_update_lod_request.html#a284f5d9b223893111d554206d4908ffe":[5,2,12,56,0],
-"struct_ogre_1_1_update_lod_request.html#a284f5d9b223893111d554206d4908ffe":[5,0,1,56,0],
-"struct_ogre_1_1_update_lod_request.html#a62752fab01670dfd49c6ef4f5d1e63b2":[5,2,12,56,7],
-"struct_ogre_1_1_update_lod_request.html#a62752fab01670dfd49c6ef4f5d1e63b2":[5,0,1,56,7],
-"struct_ogre_1_1_update_lod_request.html#a785836c919376a0e04aa8a424dc66a50":[5,2,12,56,2],
-"struct_ogre_1_1_update_lod_request.html#a785836c919376a0e04aa8a424dc66a50":[5,0,1,56,2],
-"struct_ogre_1_1_update_lod_request.html#aa6ad88ce48e6124bca076d46f489e0b4":[5,0,1,56,11],
-"struct_ogre_1_1_update_lod_request.html#aa6ad88ce48e6124bca076d46f489e0b4":[5,2,12,56,11],
-"struct_ogre_1_1_update_lod_request.html#ab273fe7d1f1eee28cbc7a7f991ac08d1":[5,2,12,56,9]
+"struct_ogre_1_1_update_lod_request.html#a1d3f5565a1f0cef3c484ac9898121dd6":[5,2,12,56,6]
 };

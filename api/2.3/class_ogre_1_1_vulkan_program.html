@@ -422,9 +422,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0fe31b36d3d2825793a21b2cb343b74c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_program.html#a0fe31b36d3d2825793a21b2cb343b74c">setReplaceVersionMacro</a> (bool bReplace)</td></tr>
 <tr class="memdesc:a0fe31b36d3d2825793a21b2cb343b74c"><td class="mdescLeft">&#160;</td><td class="mdescRight">When true:  <a href="class_ogre_1_1_vulkan_program.html#a0fe31b36d3d2825793a21b2cb343b74c">More...</a><br /></td></tr>
 <tr class="separator:a0fe31b36d3d2825793a21b2cb343b74c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac488ebde793bb4764b2bc0a3b918d106"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_program.html#ac488ebde793bb4764b2bc0a3b918d106">setRootLayout</a> (<a class="el" href="group___resources.html#gad08e89fa63e81d061ea9e2f37664976e">GpuProgramType</a> type, const <a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;rootLayout)</td></tr>
-<tr class="memdesc:ac488ebde793bb4764b2bc0a3b918d106"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> programmatically, thus the shader source won't be parsed looking for one We will call validate()  <a href="class_ogre_1_1_vulkan_program.html#ac488ebde793bb4764b2bc0a3b918d106">More...</a><br /></td></tr>
-<tr class="separator:ac488ebde793bb4764b2bc0a3b918d106"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a788110b193bbdc2f33581736d2e6fdbf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_program.html#a788110b193bbdc2f33581736d2e6fdbf">setRootLayout</a> (<a class="el" href="group___resources.html#gad08e89fa63e81d061ea9e2f37664976e">GpuProgramType</a> type, const <a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;rootLayout, bool bReflectArrayRootLayouts)</td></tr>
+<tr class="memdesc:a788110b193bbdc2f33581736d2e6fdbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> programmatically, thus the shader source won't be parsed looking for one We will call validate()  <a href="class_ogre_1_1_vulkan_program.html#a788110b193bbdc2f33581736d2e6fdbf">More...</a><br /></td></tr>
+<tr class="separator:a788110b193bbdc2f33581736d2e6fdbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af337509a5342cb707df4df78337756ae"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_gpu_program.html#af337509a5342cb707df4df78337756ae">setSkeletalAnimationIncluded</a> (bool included)</td></tr>
 <tr class="memdesc:af337509a5342cb707df4df78337756ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether a vertex program includes the required instructions to perform skeletal animation.  <a href="class_ogre_1_1_gpu_program.html#af337509a5342cb707df4df78337756ae">More...</a><br /></td></tr>
 <tr class="separator:af337509a5342cb707df4df78337756ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -3689,8 +3689,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="ac488ebde793bb4764b2bc0a3b918d106"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac488ebde793bb4764b2bc0a3b918d106">&#9670;&nbsp;</a></span>setRootLayout()</h2>
+<a id="a788110b193bbdc2f33581736d2e6fdbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a788110b193bbdc2f33581736d2e6fdbf">&#9670;&nbsp;</a></span>setRootLayout()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3708,7 +3708,13 @@ template&lt;class Alloc &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;&#160;</td>
-          <td class="paramname"><em>rootLayout</em>&#160;</td>
+          <td class="paramname"><em>rootLayout</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bReflectArrayRootLayouts</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -3725,9 +3731,16 @@ template&lt;class Alloc &gt; </div>
 
 <p>Sets a <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> programmatically, thus the shader source won't be parsed looking for one We will call validate() </p>
 <p>Do not alter the type after calling this function.</p>
-<p>This setting will be cleared if the program gets unloaded </p>
+<p>This setting will be cleared if the program gets unloaded</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bReflectArrayRootLayouts</td><td>When true (default), reflect the shader to see if the <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> needs patching to include array bindings</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>When false, we assume the <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> doesn't need patching and array bindings are correct. Failure to do this right may result in shader compiler errors OR everything appears fine but Vulkan Validation Layers detect it </p>
 
-<p>Reimplemented from <a class="el" href="class_ogre_1_1_gpu_program.html#adf97e56ab636784432fa469f3539caab">Ogre::GpuProgram</a>.</p>
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_gpu_program.html#a2739e5ceecf90bf85ea0689c559090c6">Ogre::GpuProgram</a>.</p>
 
 </div>
 </div>

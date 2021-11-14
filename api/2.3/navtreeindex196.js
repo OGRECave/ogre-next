@@ -1,5 +1,6 @@
 var NAVTREEINDEX196 =
 {
+"class_ogre_1_1_vector2.html#a54198b2714496715f6f9ec24c1194cad":[5,2,6,33,0],
 "class_ogre_1_1_vector2.html#a5ab254f7ff686ec09b10986fc9ae3a6f":[5,2,6,33,13],
 "class_ogre_1_1_vector2.html#a5c7b2c591b9d7cf49e14478a17633dd6":[5,2,6,33,33],
 "class_ogre_1_1_vector2.html#a5d03107cd2bb133eaef217a8493cbb56":[5,2,6,33,46],
@@ -248,6 +249,5 @@ var NAVTREEINDEX196 =
 "class_ogre_1_1_vertex_buffer_packed.html#ae8843e826003eeb5927766af6c55f5d8":[7,0,0,1104,1],
 "class_ogre_1_1_vertex_buffer_packed.html#af98ad9606c188cc815fc647a21f20498":[7,0,0,1104,14],
 "class_ogre_1_1_vertex_buffer_packed.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,1104,34],
-"class_ogre_1_1_vertex_shadow_map_helper.html":[7,0,0,1107],
-"class_ogre_1_1_vertex_shadow_map_helper.html#a46b1cd79af6fa1946049b4a4d2448cd2":[7,0,0,1107,2]
+"class_ogre_1_1_vertex_shadow_map_helper.html":[7,0,0,1107]
 };

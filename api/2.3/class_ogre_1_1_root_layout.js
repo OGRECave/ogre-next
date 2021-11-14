@@ -1,6 +1,8 @@
 var class_ogre_1_1_root_layout =
 [
+    [ "ArrayDesc", "struct_ogre_1_1_root_layout_1_1_array_desc.html", "struct_ogre_1_1_root_layout_1_1_array_desc" ],
     [ "RootLayout", "class_ogre_1_1_root_layout.html#a3941a0c37152b3559a25a4af3689ad03", null ],
+    [ "addArrayBinding", "class_ogre_1_1_root_layout.html#a1650e2afb8299250021f4e7e6279da1f", null ],
     [ "copyFrom", "class_ogre_1_1_root_layout.html#a919a8b9d39ca3e26a2072975a1e360a3", null ],
     [ "dump", "class_ogre_1_1_root_layout.html#aa948ba479d75b0920922eb309a1e7a27", null ],
     [ "findParamsBuffer", "class_ogre_1_1_root_layout.html#a0d927a71ab1acfa3931b1188a6e1480a", null ],

@@ -121,7 +121,7 @@ var class_ogre_1_1_metal_program =
     [ "setPrefabRootLayout", "class_ogre_1_1_metal_program.html#a56813acb2feeded63abaff6f9e8eed41", null ],
     [ "setPreprocessorDefines", "class_ogre_1_1_metal_program.html#a4bdaa2e491cfedeb32e4127a17f049e9", null ],
     [ "setReplaceVersionMacro", "class_ogre_1_1_metal_program.html#a0723cad43b2bfee112cc73a92c886d0d", null ],
-    [ "setRootLayout", "class_ogre_1_1_metal_program.html#adf97e56ab636784432fa469f3539caab", null ],
+    [ "setRootLayout", "class_ogre_1_1_metal_program.html#a2739e5ceecf90bf85ea0689c559090c6", null ],
     [ "setShaderReflectionPairHint", "class_ogre_1_1_metal_program.html#a97b740cd61afc1bb962b2d241eb38915", null ],
     [ "setSkeletalAnimationIncluded", "class_ogre_1_1_metal_program.html#af337509a5342cb707df4df78337756ae", null ],
     [ "setSource", "class_ogre_1_1_metal_program.html#a300833abd29aa42acb5e6c48ae7c40ea", null ],

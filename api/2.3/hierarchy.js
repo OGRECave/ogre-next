@@ -2068,6 +2068,7 @@ var hierarchy =
     [ "Ogre::RootLayout", "class_ogre_1_1_root_layout.html", [
       [ "Ogre::VulkanRootLayout", "class_ogre_1_1_vulkan_root_layout.html", null ]
     ] ],
+    [ "Ogre::RootLayout::ArrayDesc", "struct_ogre_1_1_root_layout_1_1_array_desc.html", null ],
     [ "Ogre::RotationalSpline", "class_ogre_1_1_rotational_spline.html", null ],
     [ "Ogre::RqBits", "class_ogre_1_1_rq_bits.html", null ],
     [ "Ogre::RTShader::FunctionInvocation::FunctionInvocationCompare", "struct_ogre_1_1_r_t_shader_1_1_function_invocation_1_1_function_invocation_compare.html", null ],

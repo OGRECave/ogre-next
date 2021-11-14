@@ -118,7 +118,7 @@ var class_ogre_1_1_vulkan_program =
     [ "setPrefabRootLayout", "class_ogre_1_1_vulkan_program.html#a56813acb2feeded63abaff6f9e8eed41", null ],
     [ "setPreprocessorDefines", "class_ogre_1_1_vulkan_program.html#a36ab19ee6cd2675003e392affd9289b1", null ],
     [ "setReplaceVersionMacro", "class_ogre_1_1_vulkan_program.html#a0fe31b36d3d2825793a21b2cb343b74c", null ],
-    [ "setRootLayout", "class_ogre_1_1_vulkan_program.html#ac488ebde793bb4764b2bc0a3b918d106", null ],
+    [ "setRootLayout", "class_ogre_1_1_vulkan_program.html#a788110b193bbdc2f33581736d2e6fdbf", null ],
     [ "setSkeletalAnimationIncluded", "class_ogre_1_1_vulkan_program.html#af337509a5342cb707df4df78337756ae", null ],
     [ "setSource", "class_ogre_1_1_vulkan_program.html#a300833abd29aa42acb5e6c48ae7c40ea", null ],
     [ "setSource", "class_ogre_1_1_vulkan_program.html#a94c9ce889770e95c0cdc541f8675f06f", null ],

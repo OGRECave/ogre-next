@@ -86,6 +86,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_root_layout.html',''); 
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_ogre_1_1_root_layout-members.html">List of all members</a>  </div>
@@ -107,10 +108,18 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_root_layout.html',''); 
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_root_layout_1_1_array_desc.html">ArrayDesc</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3941a0c37152b3559a25a4af3689ad03"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root_layout.html#a3941a0c37152b3559a25a4af3689ad03">RootLayout</a> ()</td></tr>
 <tr class="separator:a3941a0c37152b3559a25a4af3689ad03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1650e2afb8299250021f4e7e6279da1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root_layout.html#a1650e2afb8299250021f4e7e6279da1f">addArrayBinding</a> (<a class="el" href="namespace_ogre_1_1_desc_binding_types.html#af97aae360aa16970ee0873372c96c6be">DescBindingTypes::DescBindingTypes</a> bindingType, <a class="el" href="struct_ogre_1_1_root_layout_1_1_array_desc.html">ArrayDesc</a> arrayDesc)</td></tr>
+<tr class="memdesc:a1650e2afb8299250021f4e7e6279da1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells the <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> that the element at setIdx and bindingIdx is an array of size arraySize.  <a href="class_ogre_1_1_root_layout.html#a1650e2afb8299250021f4e7e6279da1f">More...</a><br /></td></tr>
+<tr class="separator:a1650e2afb8299250021f4e7e6279da1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a919a8b9d39ca3e26a2072975a1e360a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root_layout.html#a919a8b9d39ca3e26a2072975a1e360a3">copyFrom</a> (const <a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;other)</td></tr>
 <tr class="memdesc:a919a8b9d39ca3e26a2072975a1e360a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies all our parameters from 'other' Does NOT call <a class="el" href="class_ogre_1_1_root_layout.html#a3de2623ecb78001c7df226de5975002d">validate()</a>  <a href="class_ogre_1_1_root_layout.html#a919a8b9d39ca3e26a2072975a1e360a3">More...</a><br /></td></tr>
 <tr class="separator:a919a8b9d39ca3e26a2072975a1e360a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -447,6 +456,47 @@ For best performance, &lt;b&gt;the last set index should be the one that changes
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1650e2afb8299250021f4e7e6279da1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1650e2afb8299250021f4e7e6279da1f">&#9670;&nbsp;</a></span>addArrayBinding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::RootLayout::addArrayBinding </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre_1_1_desc_binding_types.html#af97aae360aa16970ee0873372c96c6be">DescBindingTypes::DescBindingTypes</a>&#160;</td>
+          <td class="paramname"><em>bindingType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_ogre_1_1_root_layout_1_1_array_desc.html">ArrayDesc</a>&#160;</td>
+          <td class="paramname"><em>arrayDesc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tells the <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> that the element at setIdx and bindingIdx is an array of size arraySize. </p>
+<p>The purpose of this function is that we can specify mDescBindingRanges[0][<a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a>] = [4, 6] and have: </p><pre class="fragment">vulkan_layout( ogre_t4 ) uniform texture2D myTexA;
+vulkan_layout( ogre_t5 ) uniform texture2D myTexB;
+</pre><p> However if we wish to have: </p><pre class="fragment">vulkan_layout( ogre_t4 ) uniform texture2D myTexA[2];
+</pre><p> ogre_t5 is occupied </p><pre class="fragment">        Then we MUST call addArrayBinding( Texture, ArrayDesc( 4, 2 ) );
+        since arrays are treated differently
+
+        Arrays of length = 1 don't need to call this function.
+    @remarks
+        Calls must be done in order (i.e. increasing setIdx and bindingIdx)
+        Bindings cannot overlap (i.e. last.bindingIdx + last.arraySize &lt;= new.bindingIdx)
+        Will throw if this condition is not satisfied
+</pre> 
+</div>
+</div>
 <a id="a919a8b9d39ca3e26a2072975a1e360a3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a919a8b9d39ca3e26a2072975a1e360a3">&#9670;&nbsp;</a></span>copyFrom()</h2>
 
@@ -608,6 +658,11 @@ For best performance, &lt;b&gt;the last set index should be the one that changes
 <div class="line">        <span class="stringliteral">&quot;uav_buffers&quot;</span> : [0, 16]</div>
 <div class="line">        <span class="stringliteral">&quot;uav_textures&quot;</span> : [16, 32],</div>
 <div class="line">        <span class="stringliteral">&quot;baked&quot;</span> : <span class="keyword">false</span></div>
+<div class="line">    },</div>
+<div class="line"> </div>
+<div class="line">    <span class="stringliteral">&quot;arrays&quot;</span> :</div>
+<div class="line">    {</div>
+<div class="line">        <span class="stringliteral">&quot;tex_buffers&quot;</span> : [[4, 5], [10, 2]],</div>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>has_params can establish which shader stages allow parameters.</p><ul>
