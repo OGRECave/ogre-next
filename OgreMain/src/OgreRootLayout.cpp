@@ -475,6 +475,51 @@ namespace Ogre
             this->mArrayRanges[i] = other.mArrayRanges[i];
     }
     //-------------------------------------------------------------------------
+    void RootLayout::validateArrayBindings( const RootLayout &groundTruth, const String &filename ) const
+    {
+        for( size_t i = DescBindingTypes::ParamBuffer + 1u; i < DescBindingTypes::NumDescBindingTypes;
+             ++i )
+        {
+            FastArray<uint32>::const_iterator itor = groundTruth.mArrayRanges[i].begin();
+            FastArray<uint32>::const_iterator endt = groundTruth.mArrayRanges[i].end();
+
+            while( itor != endt )
+            {
+                FastArray<uint32>::const_iterator itFind =
+                    std::lower_bound( mArrayRanges[i].begin(), mArrayRanges[i].end(), *itor );
+
+                if( itFind == mArrayRanges[i].end() || *itFind != *itor )
+                {
+                    String dumpStr;
+                    dumpStr = "Error in " + filename +
+                              " the Root Layout does not contain arrays declared in the  shader.\n"
+                              "Fix the Root layout, or set "
+                              "GpuProgram::setRootLayout(bReflectArrayRootLayouts=true) or "
+                              "set uses_array_bindings = true\n\n"
+                              "Original Root Layout:\n";
+                    dump( dumpStr );
+
+                    dumpStr +=
+                        "\n\nAuto-generated Root Layout from shader data:\n"
+                        "## ROOT LAYOUT BEGIN\n";
+                    groundTruth.dump( dumpStr );
+                    dumpStr += "\n## ROOT LAYOUT END";
+
+                    LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
+
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Error at file " + filename + ":\n" +
+                                     "The Root Layout does not contain arrays declared in the "
+                                     "shader.\n"
+                                     "See log for more info.",
+                                 "RootLayout::validateArrayBindings" );
+                }
+
+                ++itor;
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
     void RootLayout::parseRootLayout( const char *rootLayout, const bool bCompute,
                                       const String &filename )
     {
@@ -550,8 +595,11 @@ namespace Ogre
         catch( Exception & )
         {
             String dumpStr;
-            dumpStr = "Error in " + filename + " with its Root Layout:\n";
+            dumpStr = "Error in " + filename +
+                      " with its Root Layout:\n"
+                      "## ROOT LAYOUT BEGIN\n";
             dump( dumpStr );
+            dumpStr += "\n## ROOT LAYOUT END";
             LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
             throw;
         }

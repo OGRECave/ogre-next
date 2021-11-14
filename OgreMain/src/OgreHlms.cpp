@@ -2093,7 +2093,7 @@ namespace Ogre
         {
             RootLayout rootLayout;
             setupRootLayout( rootLayout );
-            gp->setRootLayout( gp->getType(), rootLayout, false );
+            gp->setRootLayout( gp->getType(), rootLayout );
         }
 
         if( mShaderTargets[shaderType] )

@@ -164,6 +164,12 @@ namespace Ogre
             String doGet( const void *target ) const;
             void doSet( void *target, const String &val );
         };
+        class _OgreExport CmdUsesArrayBindings : public ParamCommand
+        {
+        public:
+            String doGet( const void *target ) const;
+            void doSet( void *target, const String &val );
+        };
         // Command object for setting / getting parameters
         static CmdType msTypeCmd;
         static CmdSyntax msSyntaxCmd;
@@ -178,6 +184,7 @@ namespace Ogre
         static CmdAdjacency msAdjacencyCmd;
         static CmdComputeGroupDims msComputeGroupDimsCmd;
         static CmdRootLayout msRootLayout;
+        static CmdUsesArrayBindings msUsesArrayBindings;
         /// The type of the program
         GpuProgramType mType;
         /// The name of the file to load source from (may be blank)
@@ -319,19 +326,26 @@ namespace Ogre
         /// Do not alter the type after calling this function.
         ///
         /// This setting will be cleared if the program gets unloaded
-        ///
-        /// @param bReflectArrayRootLayouts
-        ///     When true (default), reflect the shader to see if the RootLayout
-        ///     needs patching to include array bindings
-        ///
-        ///     When false, we assume the RootLayout doesn't need patching
-        ///     and array bindings are correct. Failure to do this right
-        ///     may result in shader compiler errors OR everything appears
-        ///     fine but Vulkan Validation Layers detect it
-        virtual void setRootLayout( GpuProgramType t, const RootLayout &rootLayout,
-                                    bool bReflectArrayRootLayouts );
+        virtual void setRootLayout( GpuProgramType t, const RootLayout &rootLayout );
 
         virtual void unsetRootLayout( void );
+
+        /** Set to true to reflects the shader looking for array bindings
+            (e.g. uniform texture2D myTex[123]) to patch the Root Layout
+
+        @param bReflectArrayRootLayouts
+            When true (default), reflect the shader to see if the RootLayout
+            needs patching to include array bindings
+
+            When false, we assume the RootLayout doesn't need patching
+            and array bindings are correct. Failure to do this right
+            may result in shader compiler errors OR everything appears
+            fine but Vulkan Validation Layers detect it
+
+            In debug builds we will validate and reflect anyway to
+            detect wrong usage
+        */
+        virtual void setAutoReflectArrayBindingsInRootLayout( bool bReflectArrayRootLayouts );
 
         /// Sets a prefab root layout, **mostly meant for low level materials** (e.g. postprocessing)
         /// so that users don't have to deal with Root Layouts unless they exceed defaults

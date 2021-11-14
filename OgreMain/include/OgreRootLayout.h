@@ -451,6 +451,17 @@ namespace Ogre
         */
         void copyFrom( const RootLayout &other );
 
+        /** Validates that the array bindings in groundTruth.mArrayRanges are included
+            in this->mArrayRanges.
+
+            Will throw otherwise
+        @param groundTruth
+            Root Layout to compare against. Its data should've been obtrained through reflection
+        @param filename
+            Filename for logging purposes if errors are found
+        */
+        void validateArrayBindings( const RootLayout &groundTruth, const String &filename ) const;
+
         /** Parses a root layout definition from a JSON string
             The JSON string:
 

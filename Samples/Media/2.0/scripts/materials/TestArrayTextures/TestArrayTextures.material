@@ -6,7 +6,7 @@ vertex_program Ogre/Compositor/High/Quad_vs_VK glslvk
 	root_layout high
 }
 
-vertex_program Ogre/Compositor/High/Quad_vs unified : Ogre/Compositor/Quad_vs
+vertex_program Ogre/Compositor/High/Quad_vs unified
 {
 	delegate Ogre/Compositor/Quad_vs_GLSL
 	delegate Ogre/Compositor/High/Quad_vs_VK
@@ -37,6 +37,7 @@ fragment_program Tests/ArrayTextures_ps_VK glslvk
 {
 	source TestArrayTextures_ps.glsl
 	root_layout high
+	uses_array_bindings true
 }
 
 fragment_program Tests/ArrayTextures_ps_HLSL hlsl

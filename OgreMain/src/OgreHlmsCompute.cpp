@@ -316,7 +316,9 @@ namespace Ogre
                     RootLayout rootLayout;
                     rootLayout.mCompute = true;
                     job->setupRootLayout( rootLayout );
-                    gp->setRootLayout( gp->getType(), rootLayout, true );
+                    gp->setRootLayout( gp->getType(), rootLayout );
+                    if( getProperty( "uses_array_bindings" ) )
+                        gp->setAutoReflectArrayBindingsInRootLayout( true );
                 }
 
                 if( mComputeShaderTarget )

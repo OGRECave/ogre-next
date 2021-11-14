@@ -74,6 +74,7 @@ namespace Ogre
         mRootLayout( 0 ),
         mProgramManager( programManager )
     {
+        memset( mArrayedSlots, 0, sizeof( mArrayedSlots ) );
     }
     //-------------------------------------------------------------------------
     VulkanRootLayout::~VulkanRootLayout()
@@ -195,7 +196,7 @@ namespace Ogre
                             const ArrayDesc arrayDesc = ArrayDesc::fromKey( *arrayRanges );
                             if( arrayDesc.bindingIdx == emulatedSlot )
                             {
-                                bindingIdx += arrayDesc.arraySize;
+                                ++bindingIdx;
                                 emulatedSlot += arrayDesc.arraySize;
                                 k += arrayDesc.arraySize - 1u;
                                 ++arrayRanges;
@@ -278,7 +279,6 @@ namespace Ogre
                     }
                     rootLayoutDesc[i][bindingIdx].pImmutableSamplers = 0;
 
-
                     if( arrayRanges != arrayRangesEnd )
                     {
                         const ArrayDesc arrayDesc = ArrayDesc::fromKey( *arrayRanges );
@@ -286,8 +286,9 @@ namespace Ogre
                         {
                             rootLayoutDesc[i][bindingIdx].descriptorCount = arrayDesc.arraySize;
                             ++arrayRanges;
-                            bindingSlot += arrayDesc.arraySize - 1u;
                             k += arrayDesc.arraySize - 1u;
+
+                            mArrayedSlots[i][j] += arrayDesc.arraySize - 1u;
                         }
                     }
 
@@ -318,14 +319,15 @@ namespace Ogre
     inline void VulkanRootLayout::bindCommon( VkWriteDescriptorSet &writeDescSet,
                                               size_t &numWriteDescSets, uint32 &currBinding,
                                               VkDescriptorSet descSet,
-                                              const DescBindingRange &bindRanges )
+                                              const DescBindingRange &bindRanges,
+                                              const uint32 arrayedSlots )
     {
         makeVkStruct( writeDescSet, VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET );
         writeDescSet.dstSet = descSet;
         writeDescSet.dstBinding = currBinding;
         writeDescSet.dstArrayElement = 0u;
         writeDescSet.descriptorCount = static_cast<uint32_t>( bindRanges.getNumUsedSlots() );
-        currBinding += bindRanges.getNumUsedSlots();
+        currBinding += bindRanges.getNumUsedSlots() - arrayedSlots;
         ++numWriteDescSets;
     }
     //-------------------------------------------------------------------------
@@ -343,7 +345,7 @@ namespace Ogre
         if( mCompute )
         {
             VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
-            bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+            bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges, 0u );
             writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
             writeDescSet.pBufferInfo = &table.paramsBuffer[GPT_COMPUTE_PROGRAM];
         }
@@ -374,6 +376,7 @@ namespace Ogre
                                                     size_t &numWriteDescSets, uint32 &currBinding,
                                                     VkDescriptorSet descSet,
                                                     const DescBindingRange *descBindingRanges,
+                                                    const uint32 *arrayedSlots,
                                                     const VulkanGlobalBindingTable &table )
     {
         const DescBindingRange &bindRanges = descBindingRanges[DescBindingTypes::ConstBuffer];
@@ -382,7 +385,8 @@ namespace Ogre
             return;
 
         VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
-        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges,
+                    arrayedSlots[DescBindingTypes::ConstBuffer] );
         writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         writeDescSet.pBufferInfo = &table.constBuffers[bindRanges.start];
     }
@@ -391,6 +395,7 @@ namespace Ogre
                                                        size_t &numWriteDescSets, uint32 &currBinding,
                                                        VkDescriptorSet descSet,
                                                        const DescBindingRange *descBindingRanges,
+                                                       const uint32 *arrayedSlots,
                                                        const VulkanGlobalBindingTable &table )
     {
         const DescBindingRange &bindRanges = descBindingRanges[DescBindingTypes::ReadOnlyBuffer];
@@ -399,7 +404,8 @@ namespace Ogre
             return;
 
         VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
-        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges,
+                    arrayedSlots[DescBindingTypes::ReadOnlyBuffer] );
         writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
         writeDescSet.pBufferInfo = &table.readOnlyBuffers[bindRanges.start];
     }
@@ -408,6 +414,7 @@ namespace Ogre
                                                   size_t &numWriteDescSets, uint32 &currBinding,
                                                   VkDescriptorSet descSet,
                                                   const DescBindingRange *descBindingRanges,
+                                                  const uint32 *arrayedSlots,
                                                   const VulkanGlobalBindingTable &table )
     {
         const DescBindingRange &bindRanges = descBindingRanges[DescBindingTypes::TexBuffer];
@@ -416,7 +423,8 @@ namespace Ogre
             return;
 
         VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
-        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges,
+                    arrayedSlots[DescBindingTypes::TexBuffer] );
         writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
         writeDescSet.pTexelBufferView = &table.texBuffers[bindRanges.start];
     }
@@ -425,6 +433,7 @@ namespace Ogre
                                                 size_t &numWriteDescSets, uint32 &currBinding,
                                                 VkDescriptorSet descSet,
                                                 const DescBindingRange *descBindingRanges,
+                                                const uint32 *arrayedSlots,
                                                 const VulkanGlobalBindingTable &table )
     {
         const DescBindingRange &bindRanges = descBindingRanges[DescBindingTypes::Texture];
@@ -433,7 +442,8 @@ namespace Ogre
             return;
 
         VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
-        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges,
+                    arrayedSlots[DescBindingTypes::Texture] );
         writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
         writeDescSet.pImageInfo = &table.textures[bindRanges.start];
     }
@@ -442,6 +452,7 @@ namespace Ogre
                                                 size_t &numWriteDescSets, uint32 &currBinding,
                                                 VkDescriptorSet descSet,
                                                 const DescBindingRange *descBindingRanges,
+                                                const uint32 *arrayedSlots,
                                                 const VulkanGlobalBindingTable &table )
     {
         const DescBindingRange &bindRanges = descBindingRanges[DescBindingTypes::Sampler];
@@ -450,7 +461,8 @@ namespace Ogre
             return;
 
         VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
-        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges );
+        bindCommon( writeDescSet, numWriteDescSets, currBinding, descSet, bindRanges,
+                    arrayedSlots[DescBindingTypes::Sampler] );
         writeDescSet.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
         writeDescSet.pImageInfo = &table.samplers[bindRanges.start];
     }
@@ -512,6 +524,7 @@ namespace Ogre
             VkDescriptorSet descSet = mPools[i]->allocate( device, mSets[i] );
 
             const DescBindingRange *descBindingRanges = mDescBindingRanges[i];
+            const uint32 *arrayedSlots = mArrayedSlots[i];
 
             size_t numWriteDescSets = 0u;
             uint32 currBinding = 0u;
@@ -524,15 +537,15 @@ namespace Ogre
                 bindParamsBuffer( writeDescSets, numWriteDescSets, currBinding, descSet,
                                   descBindingRanges, table );
                 bindConstBuffers( writeDescSets, numWriteDescSets, currBinding, descSet,
-                                  descBindingRanges, table );
+                                  descBindingRanges, arrayedSlots, table );
                 bindReadOnlyBuffers( writeDescSets, numWriteDescSets, currBinding, descSet,
-                                     descBindingRanges, table );
+                                     descBindingRanges, arrayedSlots, table );
                 bindTexBuffers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
-                                table );
+                                arrayedSlots, table );
                 bindTextures( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
-                              table );
+                              arrayedSlots, table );
                 bindSamplers( writeDescSets, numWriteDescSets, currBinding, descSet, descBindingRanges,
-                              table );
+                              arrayedSlots, table );
             }
             else
             {
@@ -554,7 +567,8 @@ namespace Ogre
                         writeDescSet = *table.bakedDescriptorSets[j];
                         writeDescSet.dstSet = descSet;
                         writeDescSet.dstBinding = currBinding;
-                        currBinding += writeDescSet.descriptorCount;
+                        currBinding += writeDescSet.descriptorCount -
+                                       arrayedSlots[j + DescBindingTypes::ReadOnlyBuffer];
                         ++numWriteDescSets;
                     }
                 }
@@ -585,26 +599,71 @@ namespace Ogre
         {
             if( mDescBindingRanges[setIdx][i].isInUse() )
             {
-                if( targetBindingIdx <= currBindingIdx )
+                if( mArrayRanges[i].empty() )
                 {
-                    outType = static_cast<DescBindingTypes::DescBindingTypes>( i );
-                    outRelativeSlotIndex =
-                        currBindingIdx - targetBindingIdx + mDescBindingRanges[setIdx][i].start;
-                    return true;
+                    // Fast path, N emulated binding = N binding slot
+                    if( targetBindingIdx <= currBindingIdx )
+                    {
+                        outType = static_cast<DescBindingTypes::DescBindingTypes>( i );
+                        outRelativeSlotIndex =
+                            currBindingIdx - targetBindingIdx + mDescBindingRanges[setIdx][i].start;
+                        return true;
+                    }
+
+                    const size_t nextBindingIdx =
+                        currBindingIdx + mDescBindingRanges[setIdx][i].getNumUsedSlots();
+
+                    if( targetBindingIdx < nextBindingIdx )
+                    {
+                        outType = static_cast<DescBindingTypes::DescBindingTypes>( i );
+                        outRelativeSlotIndex =
+                            targetBindingIdx - currBindingIdx + mDescBindingRanges[setIdx][i].start;
+                        return true;
+                    }
+
+                    currBindingIdx = nextBindingIdx;
                 }
-
-                const size_t nextBindingIdx =
-                    currBindingIdx + mDescBindingRanges[setIdx][i].getNumUsedSlots();
-
-                if( targetBindingIdx < nextBindingIdx )
+                else
                 {
-                    outType = static_cast<DescBindingTypes::DescBindingTypes>( i );
-                    outRelativeSlotIndex =
-                        targetBindingIdx - currBindingIdx + mDescBindingRanges[setIdx][i].start;
-                    return true;
-                }
+                    // Slow path, N emulated bindings > M binding slots
+                    uint32 emulatedSlot = mDescBindingRanges[setIdx][i].start;
+                    const size_t numSlots = mDescBindingRanges[setIdx][i].getNumUsedSlots();
 
-                currBindingIdx = nextBindingIdx;
+                    FastArray<uint32>::const_iterator arrayRangesEnd = mArrayRanges[i].end();
+                    FastArray<uint32>::const_iterator arrayRanges =
+                        std::lower_bound( mArrayRanges[i].begin(), arrayRangesEnd,
+                                          ArrayDesc( static_cast<uint16>( emulatedSlot ), 0u ).toKey() );
+
+                    for( size_t k = 0u; k < numSlots; ++k )
+                    {
+                        if( currBindingIdx == targetBindingIdx )
+                        {
+                            outType = static_cast<DescBindingTypes::DescBindingTypes>( i );
+                            outRelativeSlotIndex = emulatedSlot;
+                            return true;
+                        }
+
+                        bool bIsArray = false;
+                        if( arrayRanges != arrayRangesEnd )
+                        {
+                            const ArrayDesc arrayDesc = ArrayDesc::fromKey( *arrayRanges );
+                            if( arrayDesc.bindingIdx == emulatedSlot )
+                            {
+                                ++currBindingIdx;
+                                emulatedSlot += arrayDesc.arraySize;
+                                k += arrayDesc.arraySize - 1u;
+                                ++arrayRanges;
+                                bIsArray = true;
+                            }
+                        }
+
+                        if( !bIsArray )
+                        {
+                            ++currBindingIdx;
+                            ++emulatedSlot;
+                        }
+                    }
+                }
             }
         }
 
