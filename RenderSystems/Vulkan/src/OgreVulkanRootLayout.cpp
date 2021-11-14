@@ -234,6 +234,7 @@ namespace Ogre
             rootLayoutDesc[i].resize( calculateNumBindings( i ) );
 
             size_t bindingIdx = 0u;
+            size_t bindingSlot = 0u;
 
             for( size_t j = 0u; j < DescBindingTypes::NumDescBindingTypes; ++j )
             {
@@ -247,20 +248,11 @@ namespace Ogre
                 const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
                 for( size_t k = 0u; k < numSlots; ++k )
                 {
-                    rootLayoutDesc[i][bindingIdx].binding = static_cast<uint32_t>( bindingIdx );
+                    rootLayoutDesc[i][bindingIdx].binding = static_cast<uint32_t>( bindingSlot );
                     rootLayoutDesc[i][bindingIdx].descriptorType = static_cast<VkDescriptorType>(
                         toVkDescriptorType( static_cast<DescBindingTypes::DescBindingTypes>( j ) ) );
 
                     rootLayoutDesc[i][bindingIdx].descriptorCount = 1u;
-                    if( arrayRanges != arrayRangesEnd )
-                    {
-                        const ArrayDesc arrayDesc = ArrayDesc::fromKey( *arrayRanges );
-                        if( arrayDesc.bindingIdx == descSlotStart )
-                        {
-                            rootLayoutDesc[i][bindingIdx].descriptorCount = arrayDesc.arraySize;
-                            ++arrayRanges;
-                        }
-                    }
                     rootLayoutDesc[i][bindingIdx].stageFlags =
                         mCompute ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_ALL_GRAPHICS;
 
@@ -286,9 +278,26 @@ namespace Ogre
                     }
                     rootLayoutDesc[i][bindingIdx].pImmutableSamplers = 0;
 
+
+                    if( arrayRanges != arrayRangesEnd )
+                    {
+                        const ArrayDesc arrayDesc = ArrayDesc::fromKey( *arrayRanges );
+                        if( arrayDesc.bindingIdx == descSlotStart + k )
+                        {
+                            rootLayoutDesc[i][bindingIdx].descriptorCount = arrayDesc.arraySize;
+                            ++arrayRanges;
+                            bindingSlot += arrayDesc.arraySize - 1u;
+                            k += arrayDesc.arraySize - 1u;
+                        }
+                    }
+
                     ++bindingIdx;
+                    ++bindingSlot;
                 }
             }
+
+            // If there's arrays, we created more descriptors than needed. Trim them
+            rootLayoutDesc[i].resizePOD( bindingIdx );
 
             mSets[i] = mProgramManager->getCachedSet( rootLayoutDesc[i] );
         }
@@ -567,35 +576,35 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    bool VulkanRootLayout::findBindingIndex( const uint32 bindingIdx,
+    bool VulkanRootLayout::findBindingIndex( const uint32 setIdx, const uint32 targetBindingIdx,
                                              DescBindingTypes::DescBindingTypes &outType,
                                              size_t &outRelativeSlotIndex ) const
     {
         size_t currBindingIdx = 0u;
-        for( size_t i = 0u; i < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
+        for( size_t i = 0u; i < DescBindingTypes::NumDescBindingTypes; ++i )
         {
-            for( size_t j = 0u; j < DescBindingTypes::NumDescBindingTypes; ++j )
+            if( mDescBindingRanges[setIdx][i].isInUse() )
             {
-                if( mDescBindingRanges[i][j].isInUse() )
+                if( targetBindingIdx <= currBindingIdx )
                 {
-                    if( bindingIdx <= currBindingIdx )
-                    {
-                        outType = static_cast<DescBindingTypes::DescBindingTypes>( j );
-                        outRelativeSlotIndex =
-                            currBindingIdx - bindingIdx + mDescBindingRanges[i][j].start;
-                        return true;
-                    }
-
-                    currBindingIdx += mDescBindingRanges[i][j].getNumUsedSlots();
-
-                    if( bindingIdx < currBindingIdx )
-                    {
-                        outType = static_cast<DescBindingTypes::DescBindingTypes>( j );
-                        outRelativeSlotIndex =
-                            currBindingIdx - bindingIdx + mDescBindingRanges[i][j].start;
-                        return true;
-                    }
+                    outType = static_cast<DescBindingTypes::DescBindingTypes>( i );
+                    outRelativeSlotIndex =
+                        currBindingIdx - targetBindingIdx + mDescBindingRanges[setIdx][i].start;
+                    return true;
                 }
+
+                const size_t nextBindingIdx =
+                    currBindingIdx + mDescBindingRanges[setIdx][i].getNumUsedSlots();
+
+                if( targetBindingIdx < nextBindingIdx )
+                {
+                    outType = static_cast<DescBindingTypes::DescBindingTypes>( i );
+                    outRelativeSlotIndex =
+                        targetBindingIdx - currBindingIdx + mDescBindingRanges[setIdx][i].start;
+                    return true;
+                }
+
+                currBindingIdx = nextBindingIdx;
             }
         }
 
@@ -729,7 +738,7 @@ namespace Ogre
             else
             {
                 const size_t numArrayRanges = this->mArrayRanges[i].size();
-                for( size_t j = 0u; j < numArrayRanges; ++i )
+                for( size_t j = 0u; j < numArrayRanges; ++j )
                 {
                     if( this->mArrayRanges[i][j] != other.mArrayRanges[i][j] )
                         return this->mArrayRanges[i][j] < other.mArrayRanges[i][j];

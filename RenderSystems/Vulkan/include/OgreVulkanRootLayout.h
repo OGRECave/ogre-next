@@ -181,7 +181,8 @@ namespace Ogre
 
         /** O( N ) search to find DescBindingRange via its flattened vulkan binding idx
             (i.e. reverse search)
-        @param bindingIdx
+        @param setIdx
+        @param targetBindingIdx
         @param outType [out]
             The type located. Not touched if not found
         @param outRelativeSlotIndex [out]
@@ -189,7 +190,8 @@ namespace Ogre
         @return
             False if not found
         */
-        bool findBindingIndex( uint32 bindingIdx, DescBindingTypes::DescBindingTypes &outType,
+        bool findBindingIndex( const uint32 setIdx, const uint32 targetBindingIdx,
+                               DescBindingTypes::DescBindingTypes &outType,
                                size_t &outRelativeSlotIndex ) const;
 
         /// Two root layouts can be incompatible. If so, we return nullptr

@@ -654,6 +654,8 @@ namespace Ogre
                 {
                     if( firstEntryWritten01 )
                         jsonStr.a( "," );
+                    else
+                        flushLwString( jsonStr, outJson );
 
                     jsonStr.a( "\n\t\t\"", c_rootLayoutVarNames[i], "\" : [" );
 
@@ -664,10 +666,10 @@ namespace Ogre
                     while( itor != endt )
                     {
                         if( firstEntryWritten02 )
-                            jsonStr.a( "," );
+                            jsonStr.a( ", " );
                         const ArrayDesc arrayDesc = ArrayDesc::fromKey( *itor );
-                        jsonStr.a( "[", arrayDesc.bindingIdx, ", ", arrayDesc.arraySize, ']' );
-                        firstEntryWritten02 = false;
+                        jsonStr.a( "[", arrayDesc.bindingIdx, ", ", arrayDesc.arraySize, "]" );
+                        firstEntryWritten02 = true;
                         ++itor;
                     }
 

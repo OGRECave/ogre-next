@@ -1165,10 +1165,10 @@ namespace Ogre
 
                     size_t slotIdx;
                     DescBindingTypes::DescBindingTypes bindingType;
-                    const bool bFound =
-                        mRootLayout->findBindingIndex( binding->binding, bindingType, slotIdx );
+                    const bool bFound = mRootLayout->findBindingIndex( binding->set, binding->binding,
+                                                                       bindingType, slotIdx );
 
-                    if( bFound )
+                    if( !bFound )
                     {
                         LogManager::getSingleton().logMessage(
                             "Error: set = " + StringConverter::toString( binding->set ) +
@@ -1194,6 +1194,7 @@ namespace Ogre
                         {
                             // We have at least one array. We'll need a root layout. Copy it now.
                             mRootLayout->copyTo( tmpRootLayout );
+                            bRootLayoutCopied = true;
                         }
 
                         tmpRootLayout.addArrayBinding(
