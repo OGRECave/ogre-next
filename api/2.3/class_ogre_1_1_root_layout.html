@@ -120,9 +120,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1650e2afb8299250021f4e7e6279da1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root_layout.html#a1650e2afb8299250021f4e7e6279da1f">addArrayBinding</a> (<a class="el" href="namespace_ogre_1_1_desc_binding_types.html#af97aae360aa16970ee0873372c96c6be">DescBindingTypes::DescBindingTypes</a> bindingType, <a class="el" href="struct_ogre_1_1_root_layout_1_1_array_desc.html">ArrayDesc</a> arrayDesc)</td></tr>
 <tr class="memdesc:a1650e2afb8299250021f4e7e6279da1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells the <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> that the element at setIdx and bindingIdx is an array of size arraySize.  <a href="class_ogre_1_1_root_layout.html#a1650e2afb8299250021f4e7e6279da1f">More...</a><br /></td></tr>
 <tr class="separator:a1650e2afb8299250021f4e7e6279da1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a919a8b9d39ca3e26a2072975a1e360a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root_layout.html#a919a8b9d39ca3e26a2072975a1e360a3">copyFrom</a> (const <a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;other)</td></tr>
-<tr class="memdesc:a919a8b9d39ca3e26a2072975a1e360a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies all our parameters from 'other' Does NOT call <a class="el" href="class_ogre_1_1_root_layout.html#a3de2623ecb78001c7df226de5975002d">validate()</a>  <a href="class_ogre_1_1_root_layout.html#a919a8b9d39ca3e26a2072975a1e360a3">More...</a><br /></td></tr>
-<tr class="separator:a919a8b9d39ca3e26a2072975a1e360a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a681f252194d5a7035f1f7fc9e9899342"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root_layout.html#a681f252194d5a7035f1f7fc9e9899342">copyFrom</a> (const <a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;other, bool bIncludeArrayBindings=true)</td></tr>
+<tr class="memdesc:a681f252194d5a7035f1f7fc9e9899342"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies all our parameters from 'other' Does NOT call <a class="el" href="class_ogre_1_1_root_layout.html#a3de2623ecb78001c7df226de5975002d">validate()</a>  <a href="class_ogre_1_1_root_layout.html#a681f252194d5a7035f1f7fc9e9899342">More...</a><br /></td></tr>
+<tr class="separator:a681f252194d5a7035f1f7fc9e9899342"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa948ba479d75b0920922eb309a1e7a27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root_layout.html#aa948ba479d75b0920922eb309a1e7a27">dump</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;outJson) const</td></tr>
 <tr class="memdesc:aa948ba479d75b0920922eb309a1e7a27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dumps the current <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> to a JSON string.  <a href="class_ogre_1_1_root_layout.html#aa948ba479d75b0920922eb309a1e7a27">More...</a><br /></td></tr>
 <tr class="separator:aa948ba479d75b0920922eb309a1e7a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -500,8 +500,8 @@ vulkan_layout( ogre_t5 ) uniform texture2D myTexB;
 </pre> 
 </div>
 </div>
-<a id="a919a8b9d39ca3e26a2072975a1e360a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a919a8b9d39ca3e26a2072975a1e360a3">&#9670;&nbsp;</a></span>copyFrom()</h2>
+<a id="a681f252194d5a7035f1f7fc9e9899342"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a681f252194d5a7035f1f7fc9e9899342">&#9670;&nbsp;</a></span>copyFrom()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -510,8 +510,18 @@ vulkan_layout( ogre_t5 ) uniform texture2D myTexB;
           <td class="memname">void Ogre::RootLayout::copyFrom </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;&#160;</td>
-          <td class="paramname"><em>other</em></td><td>)</td>
+          <td class="paramname"><em>other</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bIncludeArrayBindings</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -520,6 +530,7 @@ vulkan_layout( ogre_t5 ) uniform texture2D myTexB;
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">other</td><td></td></tr>
+    <tr><td class="paramname">bIncludeArrayBindings</td><td>When false, mArrayRanges are not included </td></tr>
   </table>
   </dd>
 </dl>
