@@ -24,5 +24,6 @@ var class_ogre_1_1_vulkan_root_layout =
     [ "operator new[]", "class_ogre_1_1_vulkan_root_layout.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_vulkan_root_layout.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "operator<", "class_ogre_1_1_vulkan_root_layout.html#a361b85faf30f42c8ac64156cfe5a95a3", null ],
-    [ "parseRootLayout", "class_ogre_1_1_vulkan_root_layout.html#abf9d8c87c8aefe908e3214d60a2d7d9c", null ]
+    [ "parseRootLayout", "class_ogre_1_1_vulkan_root_layout.html#abf9d8c87c8aefe908e3214d60a2d7d9c", null ],
+    [ "validateArrayBindings", "class_ogre_1_1_vulkan_root_layout.html#a8ace64a521d831703a6f6881f0d1e318", null ]
 ];

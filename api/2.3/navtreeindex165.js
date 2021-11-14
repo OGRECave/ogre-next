@@ -1,5 +1,14 @@
 var NAVTREEINDEX165 =
 {
+"class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler_factory.html#ae3f721960f23b73933bd7ad128f8fa77":[5,2,9,59,7],
+"class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler_factory.html#aecf70f6c8cd27a00a908cde455bed349":[5,2,9,59,2],
+"class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler_factory.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,9,59,25],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html":[5,2,9,60],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,9,60,8],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a33a8df75aa637178e60fc1fcac452ef2":[5,2,9,60,19],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a4063d9deca7c2f65c667947fae0eab73":[5,2,9,60,16],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,9,60,12],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a43f3f0854dd21c6400076169ef123073":[5,2,9,60,18],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a4b43c261946926ebbc6456deccc6697a":[5,2,9,60,1],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,9,60,15],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a580ea41c2f497850cc20c8df19da5a1a":[5,2,9,60,5],
@@ -240,14 +249,5 @@ var NAVTREEINDEX165 =
 "class_ogre_1_1_radial_density_mask.html#a2fb81e428dc82c0ec6f989aa3987d008a76e83a37eed491f98709308902a42f63":[5,2,11,93,0,0],
 "class_ogre_1_1_radial_density_mask.html#a2fb81e428dc82c0ec6f989aa3987d008aa48ecd698c3b41bb26542690b3e33359":[5,2,11,93,0,2],
 "class_ogre_1_1_radial_density_mask.html#a30bc78c3281679b74e35d1fb984badc6":[5,2,11,93,18],
-"class_ogre_1_1_radial_density_mask.html#a36d3f85ceee7ae6404ba456e42ea49e9":[5,2,11,93,15],
-"class_ogre_1_1_radial_density_mask.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,11,93,11],
-"class_ogre_1_1_radial_density_mask.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,11,93,14],
-"class_ogre_1_1_radial_density_mask.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,11,93,9],
-"class_ogre_1_1_radial_density_mask.html#a6e2b4c4ffcb238d2113ef68610a64d02":[5,2,11,93,17],
-"class_ogre_1_1_radial_density_mask.html#a6ff0bdd6fe731ae5369da97c9ecdf6c6":[5,2,11,93,1],
-"class_ogre_1_1_radial_density_mask.html#a76ee9b2d8f6621b74d5195d7034b7217":[5,2,11,93,4],
-"class_ogre_1_1_radial_density_mask.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,11,93,5],
-"class_ogre_1_1_radial_density_mask.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,11,93,8],
-"class_ogre_1_1_radial_density_mask.html#a9f79590a0bb4198c76a4f57b963dff65":[5,2,11,93,3]
+"class_ogre_1_1_radial_density_mask.html#a36d3f85ceee7ae6404ba456e42ea49e9":[5,2,11,93,15]
 };

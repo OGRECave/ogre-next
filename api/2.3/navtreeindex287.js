@@ -1,5 +1,18 @@
 var NAVTREEINDEX287 =
 {
+"struct_x_visual_info.html#abf417495dc5c291f1958a2860d76c6c3":[7,0,41,2],
+"struct_x_visual_info.html#ae03ec0eebe882d81329e35a900206d43":[7,0,41,0],
+"struct_x_w_m_hints.html":[7,0,43],
+"struct_x_w_m_hints.html#a3068092365e9d011f50007c3bedb9e92":[7,0,43,2],
+"struct_x_w_m_hints.html#a68d5db68e391b3c029b55cd374f3ad09":[7,0,43,0],
+"struct_x_w_m_hints.html#a968f523b25ec15b3d9da48158ded9961":[7,0,43,1],
+"struct_x_window_attributes.html":[7,0,42],
+"struct_x_window_attributes.html#a3aa56e3c09a9e70a85a76306067afb5b":[7,0,42,4],
+"struct_x_window_attributes.html#a44a3c09222cdb8a1cedd41c7731e581a":[7,0,42,0],
+"struct_x_window_attributes.html#a91f82bf8c5f24831d54f0e8f925456b5":[7,0,42,2],
+"struct_x_window_attributes.html#aa21f585b094bf093a8b41db91ff23867":[7,0,42,1],
+"struct_x_window_attributes.html#aea82c1660444377ca478712690c77a19":[7,0,42,3],
+"structbsp__brush__t.html":[7,0,5],
 "structbsp__brush__t.html#a0525b4ebc88b426a24ba4ef2a64d1f9e":[7,0,5,0],
 "structbsp__brush__t.html#aa8f2e483aa9cb18168e6d146cc7fb1b2":[7,0,5,1],
 "structbsp__brush__t.html#aca3a9ac86ba907ac43e055d4505f072b":[7,0,5,2],

@@ -1,9 +1,17 @@
 var NAVTREEINDEX97 =
 {
+"class_ogre_1_1_high_level_gpu_program.html#ae356913ccefbebc4f0119a0599a406fc":[5,2,11,42,89],
+"class_ogre_1_1_high_level_gpu_program.html#ae3e13925bde11db245f6c9bbf5031a93":[5,2,11,42,33],
+"class_ogre_1_1_high_level_gpu_program.html#ae4d9c0afca2284a5e0972bdf8b6ff543":[5,2,11,42,78],
+"class_ogre_1_1_high_level_gpu_program.html#ae86e7c238ce5730eb88347e932024b10":[5,2,11,42,54],
+"class_ogre_1_1_high_level_gpu_program.html#af0be69f3df55f71c0bded2e36c89dfa6":[5,2,11,42,30],
+"class_ogre_1_1_high_level_gpu_program.html#af12e7c538f0d185ad3d2353ac1c96664":[5,2,11,42,23],
+"class_ogre_1_1_high_level_gpu_program.html#af337509a5342cb707df4df78337756ae":[5,2,11,42,94],
+"class_ogre_1_1_high_level_gpu_program.html#af6e304605bb08740ca7bc21fd94b450e":[5,2,11,42,58],
 "class_ogre_1_1_high_level_gpu_program.html#af843c9fdc4918e9201e8381ed2a1617e":[5,2,11,42,38],
 "class_ogre_1_1_high_level_gpu_program.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,11,42,71],
 "class_ogre_1_1_high_level_gpu_program.html#afcb4a61b965600a67ca2c2f060821db9":[5,2,11,42,5],
-"class_ogre_1_1_high_level_gpu_program.html#afdadf659ccac4facdc86e55a266eebcf":[5,2,11,42,84],
+"class_ogre_1_1_high_level_gpu_program.html#afdadf659ccac4facdc86e55a266eebcf":[5,2,11,42,85],
 "class_ogre_1_1_high_level_gpu_program_1_1_cmd_enable_include_header.html":[5,2,11,42,0],
 "class_ogre_1_1_high_level_gpu_program_1_1_cmd_enable_include_header.html#a10eae9f9581faf21371af037f416c0f5":[5,2,11,42,0,1],
 "class_ogre_1_1_high_level_gpu_program_1_1_cmd_enable_include_header.html#a55bd2958569bb1417ef3fd1a365b0eba":[5,2,11,42,0,0],
@@ -241,13 +249,5 @@ var NAVTREEINDEX97 =
 "class_ogre_1_1_hlms_buffer_manager.html#af34ff1ef7360108d8bfce45bac74f97a":[5,0,0,3,5],
 "class_ogre_1_1_hlms_buffer_manager.html#af3bc3991b51fbbccd0633d07148a7ae6":[5,0,0,3,4],
 "class_ogre_1_1_hlms_buffer_manager.html#af4ccf5764c93956803fdc7063290e037":[5,0,0,3,14],
-"class_ogre_1_1_hlms_buffer_manager.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,0,3,58],
-"class_ogre_1_1_hlms_compute.html":[5,0,0,4],
-"class_ogre_1_1_hlms_compute.html#a002b6cca591aa0d14cec171eced03cf7":[5,0,0,4,27],
-"class_ogre_1_1_hlms_compute.html#a02d3d6b937ffe865b634f2a39e8317bb":[5,0,0,4,5],
-"class_ogre_1_1_hlms_compute.html#a08706c1a8e3ff7de71df4d1b5e60f086":[5,0,0,4,42],
-"class_ogre_1_1_hlms_compute.html#a08a6b62227293cc6b9aa2cdba2d1824f":[5,0,0,4,46],
-"class_ogre_1_1_hlms_compute.html#a128775f130a0541cde12245710aeec97":[5,0,0,4,3],
-"class_ogre_1_1_hlms_compute.html#a144d4a10a6e3a7a1c580d72913ec1cd8":[5,0,0,4,78],
-"class_ogre_1_1_hlms_compute.html#a18c6bad1d5c7c5112fae2c6a33b8b2e1":[5,0,0,4,45]
+"class_ogre_1_1_hlms_buffer_manager.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,0,3,58]
 };

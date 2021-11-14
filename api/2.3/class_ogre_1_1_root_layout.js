@@ -9,6 +9,7 @@ var class_ogre_1_1_root_layout =
     [ "getDescBindingRanges", "class_ogre_1_1_root_layout.html#a83511b2f2434c25a1c52674873bf9ebc", null ],
     [ "parseRootLayout", "class_ogre_1_1_root_layout.html#a4951d6514a0a8e570ce20d489fcce7fb", null ],
     [ "validate", "class_ogre_1_1_root_layout.html#a3de2623ecb78001c7df226de5975002d", null ],
+    [ "validateArrayBindings", "class_ogre_1_1_root_layout.html#a8ace64a521d831703a6f6881f0d1e318", null ],
     [ "mBaked", "class_ogre_1_1_root_layout.html#a394d744f62c9cd35003cbadf91c79ca2", null ],
     [ "mCompute", "class_ogre_1_1_root_layout.html#af64a14dcf0778e201691f84fc3d57351", null ],
     [ "mDescBindingRanges", "class_ogre_1_1_root_layout.html#a203ae6402ca5eeee926f9b3a4e4c344f", null ],

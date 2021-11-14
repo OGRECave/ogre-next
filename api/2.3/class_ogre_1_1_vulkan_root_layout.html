@@ -165,6 +165,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a361b85faf30f42c8ac64156cfe5a95a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf9d8c87c8aefe908e3214d60a2d7d9c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html#abf9d8c87c8aefe908e3214d60a2d7d9c">parseRootLayout</a> (const char *rootLayout, const bool bCompute, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename)</td></tr>
 <tr class="separator:abf9d8c87c8aefe908e3214d60a2d7d9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ace64a521d831703a6f6881f0d1e318"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html#a8ace64a521d831703a6f6881f0d1e318">validateArrayBindings</a> (const <a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;groundTruth, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename) const</td></tr>
+<tr class="memdesc:a8ace64a521d831703a6f6881f0d1e318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates that the array bindings in groundTruth.mArrayRanges are included in this-&gt;mArrayRanges.  <a href="class_ogre_1_1_vulkan_root_layout.html#a8ace64a521d831703a6f6881f0d1e318">More...</a><br /></td></tr>
+<tr class="separator:a8ace64a521d831703a6f6881f0d1e318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -180,6 +183,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a0d927a71ab1acfa3931b1188a6e1480a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root_layout.html#a0d927a71ab1acfa3931b1188a6e1480a">findParamsBuffer</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> shaderStage, size_t &amp;outSetIdx, size_t &amp;outBindingIdx) const</td></tr>
 <tr class="memdesc:a0d927a71ab1acfa3931b1188a6e1480a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the set and binding idx of the params buffer.  <a href="class_ogre_1_1_root_layout.html#a0d927a71ab1acfa3931b1188a6e1480a">More...</a><br /></td></tr>
 <tr class="separator:a0d927a71ab1acfa3931b1188a6e1480a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ace64a521d831703a6f6881f0d1e318"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root_layout.html#a8ace64a521d831703a6f6881f0d1e318">validateArrayBindings</a> (const <a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;groundTruth, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename) const</td></tr>
+<tr class="memdesc:a8ace64a521d831703a6f6881f0d1e318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates that the array bindings in groundTruth.mArrayRanges are included in this-&gt;mArrayRanges.  <a href="class_ogre_1_1_root_layout.html#a8ace64a521d831703a6f6881f0d1e318">More...</a><br /></td></tr>
+<tr class="separator:a8ace64a521d831703a6f6881f0d1e318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af0d0e6f18e612dc23ba3fc66a91fe169"></a>
@@ -1013,6 +1019,29 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p></p>
+
+</div>
+</div>
+<a id="a8ace64a521d831703a6f6881f0d1e318"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ace64a521d831703a6f6881f0d1e318">&#9670;&nbsp;</a></span>validateArrayBindings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::RootLayout::validateArrayBindings</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Validates that the array bindings in groundTruth.mArrayRanges are included in this-&gt;mArrayRanges. </p>
+<p>Will throw otherwise </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">groundTruth</td><td><a class="el" href="class_ogre_1_1_root.html" title="The root class of the Ogre system.">Root</a> Layout to compare against. Its data should've been obtrained through reflection </td></tr>
+    <tr><td class="paramname">filename</td><td>Filename for logging purposes if errors are found </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
