@@ -204,6 +204,7 @@ if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
 endif()
 
 if( OGRE_BUILD_TESTS )
+	add_subdirectory(Tests/ArrayTextures)
 	add_subdirectory(Tests/MemoryCleanup)
 	add_subdirectory(Tests/NearFarProjection)
 	add_subdirectory(Tests/Restart)
