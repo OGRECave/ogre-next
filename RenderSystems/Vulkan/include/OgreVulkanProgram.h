@@ -92,6 +92,7 @@ namespace Ogre
 
         virtual void setRootLayout( GpuProgramType type, const RootLayout &rootLayout );
         virtual void unsetRootLayout( void );
+        virtual void setAutoReflectArrayBindingsInRootLayout( bool bReflectArrayRootLayouts );
 
         /// Sets the preprocessor defines use to compile the program.
         void setPreprocessorDefines( const String &defines ) { mPreprocessorDefines = defines; }
@@ -108,7 +109,7 @@ namespace Ogre
         void debugDump( String &outString );
 
         /// Compile source into shader object
-        bool compile( const bool checkErrors = false );
+        bool compile( const bool checkErrors, const bool bReflectingArrays = false );
 
         void fillPipelineShaderStageCi( VkPipelineShaderStageCreateInfo &pssCi );
 
@@ -138,7 +139,8 @@ namespace Ogre
 
         uint32 getEshLanguage( void ) const;
 
-        void extractRootLayoutFromSource( void );
+        /// Returns true if successfully extracted Root Layout from source
+        bool extractRootLayoutFromSource( void );
 
         static void initGlslResources( TBuiltInResource &resources );
 
@@ -172,6 +174,22 @@ namespace Ogre
 
         void gatherVertexInputs( SpvReflectShaderModule &module );
 
+        /** Reflects the SPIRV looking for array bindings (e.g. uniform texture2D myTex[123])
+            to patch the Root Layout
+
+            See GpuProgram::setAutoReflectArrayBindingsInRootLayout
+        @param bValidating
+            When true, we won't patch Root Layout but rather warn if the Root Layout
+            is wrong (doesn't match declared arrays)
+        */
+        void gatherArrayedDescs( const bool bValidating );
+
+        /// In order to compile a shader, we need a RootLayout.
+        /// However if the shader uses arrayed bindings (e.g. uniform texture2D myArray[5])
+        /// we must patch the RootLayout, creating a derivative
+        void gatherArrayedDescs( const FastArray<SpvReflectDescriptorSet *> &sets,
+                                 const bool bValidating );
+
     private:
         VulkanDevice *mDevice;
 
@@ -185,6 +203,7 @@ namespace Ogre
         uint8 mNumSystemGenVertexInputs;  // System-generated inputs like gl_VertexIndex
 
         bool mCustomRootLayout;
+        bool mReflectArrayRootLayouts;
         bool mReplaceVersionMacro;
 
         /// Flag indicating if shader object successfully compiled

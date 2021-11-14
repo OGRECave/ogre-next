@@ -1,0 +1,27 @@
+compositor_node Tests/ArrayTextures
+{
+	in 0 rt_output
+
+	target rt_output
+	{
+		pass render_quad
+		{
+			material Tests/ArrayTextures
+		}
+
+		pass render_scene
+		{
+			lod_update_list	off
+
+			//Render Overlays
+			overlays	on
+			rq_first	254
+			rq_last		255
+		}
+	}
+}
+
+workspace Tests/ArrayTexturesWorkspace
+{
+	connect_output Tests/ArrayTextures 0
+}

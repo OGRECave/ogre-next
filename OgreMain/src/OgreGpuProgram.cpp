@@ -55,6 +55,7 @@ namespace Ogre
     GpuProgram::CmdAdjacency GpuProgram::msAdjacencyCmd;
     GpuProgram::CmdComputeGroupDims GpuProgram::msComputeGroupDimsCmd;
     GpuProgram::CmdRootLayout GpuProgram::msRootLayout;
+    GpuProgram::CmdUsesArrayBindings GpuProgram::msUsesArrayBindings;
     
 
     //-----------------------------------------------------------------------------
@@ -105,6 +106,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------
     void GpuProgram::unsetRootLayout( void ) {}
+    //-----------------------------------------------------------------------------
+    void GpuProgram::setAutoReflectArrayBindingsInRootLayout( bool /*bReflectArrayRootLayouts*/ ) {}
     //-----------------------------------------------------------------------------
     void GpuProgram::setPrefabRootLayout( const PrefabRootLayout::PrefabRootLayout &prefab )
     {
@@ -473,6 +476,10 @@ namespace Ogre
             ParameterDef("root_layout",
                          "Accepted values are standard, high, max & none. See PrefabRootLayout", PT_STRING),
             &msRootLayout);
+        dict->addParameter(
+            ParameterDef("uses_array_bindings",
+                         "If your shader uses arrays of bindings (e.g. uniform texture2D myTex[123]) then set this to true for Vulkan", PT_STRING),
+            &msUsesArrayBindings);
             
     }
 
@@ -679,6 +686,16 @@ namespace Ogre
             t->setPrefabRootLayout( PrefabRootLayout::Standard );
         else if( val == "none" )
             t->setPrefabRootLayout( PrefabRootLayout::None );
+    }
+    //-----------------------------------------------------------------------
+    String GpuProgram::CmdUsesArrayBindings::doGet(const void* target) const
+    {
+        return "Cannot retrieve uses_array_bindings";
+    }
+    void GpuProgram::CmdUsesArrayBindings::doSet( void *target, const String &val )
+    {
+        GpuProgram *t = static_cast<GpuProgram *>( target );
+        t->setAutoReflectArrayBindingsInRootLayout( StringConverter::parseBool( val ) );
     }
 }
 

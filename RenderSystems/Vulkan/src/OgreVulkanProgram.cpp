@@ -115,6 +115,7 @@ namespace Ogre
         mShaderModule( 0 ),
         mNumSystemGenVertexInputs( 0u ),
         mCustomRootLayout( false ),
+        mReflectArrayRootLayouts( false ),
         mReplaceVersionMacro( false ),
         mCompiled( false ),
         mConstantsBytesToWrite( 0 )
@@ -167,10 +168,10 @@ namespace Ogre
         return EShLangFragment;
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::extractRootLayoutFromSource( void )
+    bool VulkanProgram::extractRootLayoutFromSource( void )
     {
         if( mRootLayout )
-            return;  // Programmatically specified
+            return false;  // Programmatically specified
 
         const String rootLayoutHeader = "## ROOT LAYOUT BEGIN";
         const String rootLayoutFooter = "## ROOT LAYOUT END";
@@ -181,7 +182,7 @@ namespace Ogre
             LogManager::getSingleton().logMessage( "Error " + mName + ": failed to find required '" +
                                                    rootLayoutHeader + "'" );
             mCompileError = true;
-            return;
+            return false;
         }
         posStart += rootLayoutHeader.size();
         const size_t posEnd = mSource.find( "## ROOT LAYOUT END", posStart );
@@ -190,13 +191,14 @@ namespace Ogre
             LogManager::getSingleton().logMessage( "Error " + mName + ": failed to find required '" +
                                                    rootLayoutFooter + "'" );
             mCompileError = true;
-            return;
+            return false;
         }
 
         VulkanGpuProgramManager *vulkanProgramManager =
             static_cast<VulkanGpuProgramManager *>( VulkanGpuProgramManager::getSingletonPtr() );
         mRootLayout = vulkanProgramManager->getRootLayout(
             mSource.substr( posStart, posEnd - posStart ).c_str(), mType == GPT_COMPUTE_PROGRAM, mName );
+        return true;
     }
     //-----------------------------------------------------------------------
     void VulkanProgram::initGlslResources( TBuiltInResource &resources )
@@ -462,7 +464,13 @@ namespace Ogre
     void VulkanProgram::unsetRootLayout( void )
     {
         mRootLayout = 0;
+        mReflectArrayRootLayouts = false;
         mCustomRootLayout = false;
+    }
+    //-----------------------------------------------------------------------
+    void VulkanProgram::setAutoReflectArrayBindingsInRootLayout( bool bReflectArrayRootLayouts )
+    {
+        mReflectArrayRootLayouts = bReflectArrayRootLayouts;
     }
     //-----------------------------------------------------------------------
     void VulkanProgram::setReplaceVersionMacro( bool bReplace ) { mReplaceVersionMacro = bReplace; }
@@ -496,20 +504,31 @@ namespace Ogre
     void VulkanProgram::debugDump( String &outString )
     {
         outString += mName;
-        outString += "\n";
+        outString += "\n## ROOT LAYOUT BEGIN\n";
         mRootLayout->dump( outString );
-        outString += "\n";
+        outString += "\n## ROOT LAYOUT END\n";
         getPreamble( outString );
         outString += "\n";
         outString += mSource;
     }
     //-----------------------------------------------------------------------
-    bool VulkanProgram::compile( const bool checkErrors )
+    bool VulkanProgram::compile( const bool checkErrors, const bool bReflectingArrays )
     {
         mCompiled = false;
         mCompileError = false;
 
-        extractRootLayoutFromSource();
+        const bool bRootLayoutExtracted = extractRootLayoutFromSource();
+        if( !bRootLayoutExtracted && mReflectArrayRootLayouts && !bReflectingArrays )
+        {
+            // We will have to compile twice to know if there are arrays and where they are
+            // so we can patch our root layout. After that we can compile the final shader
+            //
+            // Without this step, we can't force bindings to be consecutive which can cause
+            // driver & tool bugs see https://github.com/baldurk/renderdoc/issues/2410
+            compile( checkErrors, true );
+            if( mCompiled )
+                gatherArrayedDescs( false );
+        }
 
         const EShLanguage stage = static_cast<EShLanguage>( getEshLanguage() );
         glslang::TShader shader( stage );
@@ -604,14 +623,23 @@ namespace Ogre
         {
             spv::SpvBuildLogger logger;
             glslang::SpvOptions opts;
+
+            if( bReflectingArrays )
+            {
+                opts.disableOptimizer = true;
+                opts.generateDebugInfo = false;
+            }
+            else
+            {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH && OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
-            opts.disableOptimizer = true;
-            opts.generateDebugInfo = true;
+                opts.disableOptimizer = true;
+                opts.generateDebugInfo = true;
 #else
-            opts.disableOptimizer = false;
-            opts.optimizeSize = true;
-            opts.generateDebugInfo = false;
+                opts.disableOptimizer = false;
+                opts.optimizeSize = true;
+                opts.generateDebugInfo = false;
 #endif
+            }
             glslang::GlslangToSpv( *intermediate, mSpirv, &logger, &opts );
 
             LogManager::getSingleton().logMessage(
@@ -620,14 +648,18 @@ namespace Ogre
 
         mCompiled = !mCompileError;
 
+        if( bReflectingArrays )
+            return mCompiled;
+
         if( !mCompileError )
             LogManager::getSingleton().logMessage( "Shader " + mName + " compiled successfully." );
 
         if( !mCompiled && checkErrors )
         {
             String dumpStr;
+            dumpStr += "\n## ROOT LAYOUT BEGIN\n";
             mRootLayout->dump( dumpStr );
-            dumpStr += "\n";
+            dumpStr += "\n## ROOT LAYOUT END\n";
             getPreamble( dumpStr );
 
             LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
@@ -669,6 +701,11 @@ namespace Ogre
             FreeModuleOnDestructor modulePtr( &module );
             gatherVertexInputs( module );
         }
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( ( bRootLayoutExtracted || !mReflectArrayRootLayouts ) && !bReflectingArrays )
+            gatherArrayedDescs( true );
+#endif
 
         return mCompiled;
     }
@@ -749,11 +786,14 @@ namespace Ogre
         if( mSpirv.empty() )
             return;
 
+        // const_cast to get around the fact that buildConstantDefinitions() is const.
+        VulkanProgram *vp = const_cast<VulkanProgram *>( this );
+
         size_t paramSetIdx = 0u;
         size_t paramBindingIdx = 0u;
         if( !mRootLayout->findParamsBuffer( mType, paramSetIdx, paramBindingIdx ) )
         {
-            // Root layout does not specify a params buffer. Nothing to do here.
+            // Root layout does not specify a params buffer. Nothing to do here
             return;
         }
 
@@ -792,9 +832,6 @@ namespace Ogre
                              " error code: " + getSpirvReflectError( result ),
                          "VulkanDescriptors::generateDescriptorSet" );
         }
-
-        // const_cast to get around the fact that buildConstantDefinitions() is const.
-        VulkanProgram *vp = const_cast<VulkanProgram *>( this );
 
         const SpvReflectDescriptorBinding *descBinding =
             findBinding( sets, paramSetIdx, paramBindingIdx );
@@ -1083,6 +1120,155 @@ namespace Ogre
             else
                 mVertexInputs.insert( VertexInputByLocationIdxMap::value_type( attrIdx, attrDesc ) );
             ++itor;
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    void VulkanProgram::gatherArrayedDescs( const bool bValidating )
+    {
+        OgreProfileExhaustive( "VulkanProgram::gatherArrayedDescs" );
+
+        SpvReflectShaderModule module;
+        memset( &module, 0, sizeof( module ) );
+        SpvReflectResult result =
+            spvReflectCreateShaderModule( mSpirv.size() * sizeof( uint32 ), &mSpirv[0], &module );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "spvReflectCreateShaderModule failed on shader " + mName +
+                             " error code: " + getSpirvReflectError( result ),
+                         "VulkanDescriptors::generateDescriptorSet" );
+        }
+
+        // Ensure module gets freed if we throw
+        FreeModuleOnDestructor modulePtr( &module );
+
+        uint32 numDescSets = 0;
+        result = spvReflectEnumerateDescriptorSets( &module, &numDescSets, 0 );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "spvReflectEnumerateDescriptorSets failed on shader " + mName +
+                             " error code: " + getSpirvReflectError( result ),
+                         "VulkanDescriptors::generateDescriptorSet" );
+        }
+
+        FastArray<SpvReflectDescriptorSet *> sets;
+        sets.resize( numDescSets );
+        result = spvReflectEnumerateDescriptorSets( &module, &numDescSets, sets.begin() );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "spvReflectEnumerateDescriptorSets failed on shader " + mName +
+                             " error code: " + getSpirvReflectError( result ),
+                         "VulkanDescriptors::generateDescriptorSet" );
+        }
+
+        gatherArrayedDescs( sets, bValidating );
+    }
+    //-----------------------------------------------------------------------
+    void VulkanProgram::gatherArrayedDescs( const FastArray<SpvReflectDescriptorSet *> &sets,
+                                            const bool bValidating )
+    {
+        OgreProfileExhaustive( "VulkanProgram::gatherArrayedDescs::SpvReflectDescriptorSet" );
+
+        bool bRootLayoutCopied = false;
+        RootLayout tmpRootLayout;
+
+        FastArray<SpvReflectDescriptorSet *>::const_iterator itor = sets.begin();
+        FastArray<SpvReflectDescriptorSet *>::const_iterator endt = sets.end();
+
+        while( itor != endt )
+        {
+            const SpvReflectDescriptorSet *set = *itor;
+
+            const size_t numBindings = set->binding_count;
+
+            for( size_t i = 0u; i < numBindings; ++i )
+            {
+                const SpvReflectDescriptorBinding *binding = set->bindings[i];
+                size_t arraySize = 0u;
+                if( binding->type_description->type_flags & SPV_REFLECT_TYPE_FLAG_ARRAY )
+                {
+                    const size_t numDims = binding->array.dims_count;
+                    arraySize = binding->array.dims[0];
+                    for( size_t dim = 1u; dim < numDims; ++dim )
+                        arraySize *= binding->array.dims[dim];
+                }
+
+                // Arrays of == 1 don't matter
+                if( arraySize > 1u )
+                {
+                    size_t slotIdx;
+                    DescBindingTypes::DescBindingTypes bindingType;
+                    const bool bFound = mRootLayout->findBindingIndex( binding->set, binding->binding,
+                                                                       bindingType, slotIdx );
+
+                    if( !bFound )
+                    {
+                        LogManager::getSingleton().logMessage(
+                            "Error: set = " + StringConverter::toString( binding->set ) +
+                                " binding = " + StringConverter::toString( binding->binding ),
+                            LML_CRITICAL );
+
+                        String dumpStr;
+                        dumpStr += "\n## ROOT LAYOUT BEGIN\n";
+                        mRootLayout->dump( dumpStr );
+                        dumpStr += "\n## ROOT LAYOUT END\n";
+                        getPreamble( dumpStr );
+
+                        LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
+
+                        OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
+                                     "Shader " + mName +
+                                         " has an array binding at a binding idx that is not in the "
+                                         "Root Layout.\nThis should not happen. Check log for more info",
+                                     "VulkanProgram::gatherArrayedDescs" );
+                    }
+                    else
+                    {
+                        if( !bRootLayoutCopied )
+                        {
+                            // We have at least one array. We'll need a root layout. Copy it now.
+                            mRootLayout->copyTo( tmpRootLayout, false );
+                            bRootLayoutCopied = true;
+                        }
+
+                        tmpRootLayout.addArrayBinding(
+                            bindingType, RootLayout::ArrayDesc( static_cast<uint16>( slotIdx ),
+                                                                static_cast<uint16>( arraySize ) ) );
+                    }
+                }
+            }
+
+            ++itor;
+        }
+
+        if( bRootLayoutCopied && !bValidating )
+        {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
+            try
+            {
+                // In OGRE_DEBUG_NONE we assume programmatically generated
+                // root layouts are well formed to speed up compilation
+                tmpRootLayout.validate( mName );
+            }
+            catch( Exception & )
+            {
+                String dumpStr;
+                dumpStr = "Error in " + mName + " with its Root Layout:\n";
+                tmpRootLayout.dump( dumpStr );
+                LogManager::getSingleton().logMessage( dumpStr, LML_CRITICAL );
+                throw;
+            }
+#endif
+            VulkanGpuProgramManager *vulkanProgramManager =
+                static_cast<VulkanGpuProgramManager *>( VulkanGpuProgramManager::getSingletonPtr() );
+            mRootLayout = vulkanProgramManager->getRootLayout( tmpRootLayout );
+        }
+        else if( bRootLayoutCopied && bValidating )
+        {
+            mRootLayout->validateArrayBindings( tmpRootLayout, mName );
         }
     }
     //-----------------------------------------------------------------------

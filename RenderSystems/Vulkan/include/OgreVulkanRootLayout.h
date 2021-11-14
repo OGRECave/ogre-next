@@ -70,11 +70,31 @@ namespace Ogre
         /// There's one VulkanDescriptorPool per binding set
         FastArray<VulkanDescriptorPool *> mPools;
 
+        /// When mArrayRanges is not empty, there's more emulated slots than bindings slots
+        /// So when we're filling descriptors via VkWriteDescriptorSet/vkUpdateDescriptorSets
+        /// we must substracts the amount of slots that belong to arrays
+        ///
+        /// In other words this variable tracks how many slots have been "taken away" by arrays
+        ///
+        /// e.g. if there is ONLY this array:
+        ///     uniform texture2D myTex[2];
+        /// then mArrayedSlots = 1;
+        ///
+        /// If there's only this array:
+        ///     uniform texture2D myTex[5];
+        /// then mArrayedSlots = 4;
+        ///
+        /// If there's only these 2 arrays:
+        ///     uniform texture2D myTexA[3];
+        ///     uniform texture2D myTexB[4];
+        /// then mArrayedSlots = 8;
+        uint32 mArrayedSlots[OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS][DescBindingTypes::NumDescBindingTypes];
+
         VulkanGpuProgramManager *mProgramManager;
 
         inline void bindCommon( VkWriteDescriptorSet &writeDescSet, size_t &numWriteDescSets,
                                 uint32 &currBinding, VkDescriptorSet descSet,
-                                const DescBindingRange &bindRanges );
+                                const DescBindingRange &bindRanges, const uint32 arrayedSlots );
         inline void bindParamsBuffer( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                       uint32 &currBinding, VkDescriptorSet descSet,
                                       const DescBindingRange *descBindingRanges,
@@ -82,22 +102,24 @@ namespace Ogre
         inline void bindConstBuffers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                       uint32 &currBinding, VkDescriptorSet descSet,
                                       const DescBindingRange *descBindingRanges,
+                                      const uint32 *arrayedSlots,
                                       const VulkanGlobalBindingTable &table );
         inline void bindReadOnlyBuffers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                          uint32 &currBinding, VkDescriptorSet descSet,
                                          const DescBindingRange *descBindingRanges,
+                                         const uint32 *arrayedSlots,
                                          const VulkanGlobalBindingTable &table );
         inline void bindTexBuffers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                     uint32 &currBinding, VkDescriptorSet descSet,
                                     const DescBindingRange *descBindingRanges,
-                                    const VulkanGlobalBindingTable &table );
+                                    const uint32 *arrayedSlots, const VulkanGlobalBindingTable &table );
         inline void bindTextures( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                   uint32 &currBinding, VkDescriptorSet descSet,
-                                  const DescBindingRange *descBindingRanges,
+                                  const DescBindingRange *descBindingRanges, const uint32 *arrayedSlots,
                                   const VulkanGlobalBindingTable &table );
         inline void bindSamplers( VkWriteDescriptorSet *writeDescSets, size_t &numWriteDescSets,
                                   uint32 &currBinding, VkDescriptorSet descSet,
-                                  const DescBindingRange *descBindingRanges,
+                                  const DescBindingRange *descBindingRanges, const uint32 *arrayedSlots,
                                   const VulkanGlobalBindingTable &table );
 
         uint32 calculateFirstDirtySet( const VulkanGlobalBindingTable &table ) const;
@@ -109,9 +131,14 @@ namespace Ogre
         using RootLayout::dump;
         using RootLayout::findParamsBuffer;
         using RootLayout::getDescBindingRanges;
+        using RootLayout::validateArrayBindings;
 
         /// @copydoc VulkanRootLayout::copyFrom
-        void copyFrom( const RootLayout &rootLayout );
+        void copyFrom( const RootLayout &rootLayout, bool bIncludeArrayBindings = true );
+
+        /// Performs outRootLayout.copyFrom( this )
+        /// This function is necessary because RootLayout is a protected base class
+        void copyTo( RootLayout &outRootLayout, bool bIncludeArrayBindings );
 
         /// @copydoc VulkanRootLayout::parseRootLayout
         void parseRootLayout( const char *rootLayout, const bool bCompute, const String &filename );
@@ -174,6 +201,21 @@ namespace Ogre
         */
         void bind( VulkanDevice *device, VulkanVaoManager *vaoManager,
                    const VulkanGlobalBindingTable &table );
+
+        /** O( N ) search to find DescBindingRange via its flattened vulkan binding idx
+            (i.e. reverse search)
+        @param setIdx
+        @param targetBindingIdx
+        @param outType [out]
+            The type located. Not touched if not found
+        @param outRelativeSlotIndex [out]
+            The slot index expressed in the respective DescBindingTypes. Not touched if not found
+        @return
+            False if not found
+        */
+        bool findBindingIndex( const uint32 setIdx, const uint32 targetBindingIdx,
+                               DescBindingTypes::DescBindingTypes &outType,
+                               size_t &outRelativeSlotIndex ) const;
 
         /// Two root layouts can be incompatible. If so, we return nullptr
         ///
