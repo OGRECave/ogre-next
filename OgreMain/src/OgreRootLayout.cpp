@@ -461,7 +461,7 @@ namespace Ogre
         mArrayRanges[bindingType].push_back( arrayDesc.toKey() );
     }
     //-------------------------------------------------------------------------
-    void RootLayout::copyFrom( const RootLayout &other )
+    void RootLayout::copyFrom( const RootLayout &other, bool bIncludeArrayBindings )
     {
         this->mCompute = other.mCompute;
         this->mParamsBuffStages = other.mParamsBuffStages;
@@ -471,8 +471,12 @@ namespace Ogre
             for( size_t j = 0u; j < DescBindingTypes::NumDescBindingTypes; ++j )
                 this->mDescBindingRanges[i][j] = other.mDescBindingRanges[i][j];
         }
-        for( size_t i = 0u; i < DescBindingTypes::NumDescBindingTypes; ++i )
-            this->mArrayRanges[i] = other.mArrayRanges[i];
+
+        if( bIncludeArrayBindings )
+        {
+            for( size_t i = 0u; i < DescBindingTypes::NumDescBindingTypes; ++i )
+                this->mArrayRanges[i] = other.mArrayRanges[i];
+        }
     }
     //-------------------------------------------------------------------------
     void RootLayout::validateArrayBindings( const RootLayout &groundTruth, const String &filename ) const

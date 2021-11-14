@@ -87,13 +87,16 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanRootLayout::copyFrom( const RootLayout &rootLayout )
+    void VulkanRootLayout::copyFrom( const RootLayout &rootLayout, bool bIncludeArrayBindings )
     {
         OGRE_ASSERT_LOW( !mRootLayout && "Cannot call parseRootLayout after createVulkanHandles" );
-        RootLayout::copyFrom( rootLayout );
+        RootLayout::copyFrom( rootLayout, bIncludeArrayBindings );
     }
     //-------------------------------------------------------------------------
-    void VulkanRootLayout::copyTo( RootLayout &outRootLayout ) { outRootLayout.copyFrom( *this ); }
+    void VulkanRootLayout::copyTo( RootLayout &outRootLayout, bool bIncludeArrayBindings )
+    {
+        outRootLayout.copyFrom( *this, bIncludeArrayBindings );
+    }
     //-------------------------------------------------------------------------
     void VulkanRootLayout::parseRootLayout( const char *rootLayout, const bool bCompute,
                                             const String &filename )

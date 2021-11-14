@@ -448,8 +448,10 @@ namespace Ogre
         /** Copies all our parameters from 'other'
             Does NOT call validate()
         @param other
+        @param bIncludeArrayBindings
+            When false, mArrayRanges are not included
         */
-        void copyFrom( const RootLayout &other );
+        void copyFrom( const RootLayout &other, bool bIncludeArrayBindings = true );
 
         /** Validates that the array bindings in groundTruth.mArrayRanges are included
             in this->mArrayRanges.

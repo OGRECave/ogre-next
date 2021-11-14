@@ -1223,7 +1223,7 @@ namespace Ogre
                         if( !bRootLayoutCopied )
                         {
                             // We have at least one array. We'll need a root layout. Copy it now.
-                            mRootLayout->copyTo( tmpRootLayout );
+                            mRootLayout->copyTo( tmpRootLayout, false );
                             bRootLayoutCopied = true;
                         }
 
