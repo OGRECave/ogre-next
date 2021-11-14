@@ -319,7 +319,17 @@ namespace Ogre
         /// Do not alter the type after calling this function.
         ///
         /// This setting will be cleared if the program gets unloaded
-        virtual void setRootLayout( GpuProgramType t, const RootLayout &rootLayout );
+        ///
+        /// @param bReflectArrayRootLayouts
+        ///     When true (default), reflect the shader to see if the RootLayout
+        ///     needs patching to include array bindings
+        ///
+        ///     When false, we assume the RootLayout doesn't need patching
+        ///     and array bindings are correct. Failure to do this right
+        ///     may result in shader compiler errors OR everything appears
+        ///     fine but Vulkan Validation Layers detect it
+        virtual void setRootLayout( GpuProgramType t, const RootLayout &rootLayout,
+                                    bool bReflectArrayRootLayouts );
 
         virtual void unsetRootLayout( void );
 

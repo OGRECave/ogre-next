@@ -90,7 +90,8 @@ namespace Ogre
         bool getPassSurfaceAndLightStates( void ) const;
         bool getPassFogStates( void ) const;
 
-        virtual void setRootLayout( GpuProgramType type, const RootLayout &rootLayout );
+        virtual void setRootLayout( GpuProgramType type, const RootLayout &rootLayout,
+                                    bool bReflectArrayRootLayouts );
         virtual void unsetRootLayout( void );
 
         /// Sets the preprocessor defines use to compile the program.
@@ -172,6 +173,13 @@ namespace Ogre
 
         void gatherVertexInputs( SpvReflectShaderModule &module );
 
+        void gatherArrayedDescs( void );
+
+        /// In order to compile a shader, we need a RootLayout.
+        /// However if the shader uses arrayed bindings (e.g. uniform texture2D myArray[5])
+        /// we must patch the RootLayout, creating a derivative
+        void gatherArrayedDescs( const FastArray<SpvReflectDescriptorSet *> &sets );
+
     private:
         VulkanDevice *mDevice;
 
@@ -185,6 +193,7 @@ namespace Ogre
         uint8 mNumSystemGenVertexInputs;  // System-generated inputs like gl_VertexIndex
 
         bool mCustomRootLayout;
+        bool mReflectArrayRootLayouts;
         bool mReplaceVersionMacro;
 
         /// Flag indicating if shader object successfully compiled

@@ -92,6 +92,8 @@ namespace Ogre
         RootLayout::copyFrom( rootLayout );
     }
     //-------------------------------------------------------------------------
+    void VulkanRootLayout::copyTo( RootLayout &outRootLayout ) { outRootLayout.copyFrom( *this ); }
+    //-------------------------------------------------------------------------
     void VulkanRootLayout::parseRootLayout( const char *rootLayout, const bool bCompute,
                                             const String &filename )
     {
@@ -164,6 +166,12 @@ namespace Ogre
                 {
                     uint32 emulatedSlot = mDescBindingRanges[i][j].start;
                     const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
+
+                    FastArray<uint32>::const_iterator arrayRangesEnd = mArrayRanges[j].end();
+                    FastArray<uint32>::const_iterator arrayRanges =
+                        std::lower_bound( mArrayRanges[j].begin(), arrayRangesEnd,
+                                          ArrayDesc( static_cast<uint16>( emulatedSlot ), 0u ).toKey() );
+
                     for( size_t k = 0u; k < numSlots; ++k )
                     {
                         textStr.resize( prefixSize1 );  // #define ogre_B
@@ -181,8 +189,25 @@ namespace Ogre
                             textStr.a( bindingIdx, "\n" );
                         }
 
-                        ++bindingIdx;
-                        ++emulatedSlot;
+                        bool bIsArray = false;
+                        if( arrayRanges != arrayRangesEnd )
+                        {
+                            const ArrayDesc arrayDesc = ArrayDesc::fromKey( *arrayRanges );
+                            if( arrayDesc.bindingIdx == emulatedSlot )
+                            {
+                                bindingIdx += arrayDesc.arraySize;
+                                emulatedSlot += arrayDesc.arraySize;
+                                k += arrayDesc.arraySize - 1u;
+                                ++arrayRanges;
+                                bIsArray = true;
+                            }
+                        }
+
+                        if( !bIsArray )
+                        {
+                            ++bindingIdx;
+                            ++emulatedSlot;
+                        }
 
                         macroStr += textStr.c_str();
                     }
@@ -209,15 +234,24 @@ namespace Ogre
             rootLayoutDesc[i].resize( calculateNumBindings( i ) );
 
             size_t bindingIdx = 0u;
+            size_t bindingSlot = 0u;
 
             for( size_t j = 0u; j < DescBindingTypes::NumDescBindingTypes; ++j )
             {
+                const uint16 descSlotStart = mDescBindingRanges[i][j].start;
+                const FastArray<uint32>::const_iterator arrayRangesBeg = mArrayRanges[j].begin();
+                const FastArray<uint32>::const_iterator arrayRangesEnd = mArrayRanges[j].end();
+
+                FastArray<uint32>::const_iterator arrayRanges = std::lower_bound(
+                    arrayRangesBeg, arrayRangesEnd, ArrayDesc( descSlotStart, 0u ).toKey() );
+
                 const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
                 for( size_t k = 0u; k < numSlots; ++k )
                 {
-                    rootLayoutDesc[i][bindingIdx].binding = static_cast<uint32_t>( bindingIdx );
+                    rootLayoutDesc[i][bindingIdx].binding = static_cast<uint32_t>( bindingSlot );
                     rootLayoutDesc[i][bindingIdx].descriptorType = static_cast<VkDescriptorType>(
                         toVkDescriptorType( static_cast<DescBindingTypes::DescBindingTypes>( j ) ) );
+
                     rootLayoutDesc[i][bindingIdx].descriptorCount = 1u;
                     rootLayoutDesc[i][bindingIdx].stageFlags =
                         mCompute ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_ALL_GRAPHICS;
@@ -244,9 +278,26 @@ namespace Ogre
                     }
                     rootLayoutDesc[i][bindingIdx].pImmutableSamplers = 0;
 
+
+                    if( arrayRanges != arrayRangesEnd )
+                    {
+                        const ArrayDesc arrayDesc = ArrayDesc::fromKey( *arrayRanges );
+                        if( arrayDesc.bindingIdx == descSlotStart + k )
+                        {
+                            rootLayoutDesc[i][bindingIdx].descriptorCount = arrayDesc.arraySize;
+                            ++arrayRanges;
+                            bindingSlot += arrayDesc.arraySize - 1u;
+                            k += arrayDesc.arraySize - 1u;
+                        }
+                    }
+
                     ++bindingIdx;
+                    ++bindingSlot;
                 }
             }
+
+            // If there's arrays, we created more descriptors than needed. Trim them
+            rootLayoutDesc[i].resizePOD( bindingIdx );
 
             mSets[i] = mProgramManager->getCachedSet( rootLayoutDesc[i] );
         }
@@ -485,22 +536,22 @@ namespace Ogre
             }
             else
             {
-                for( size_t i = 0u; i < BakedDescriptorSets::NumBakedDescriptorSets; ++i )
+                for( size_t j = 0u; j < BakedDescriptorSets::NumBakedDescriptorSets; ++j )
                 {
                     const DescBindingRange &bindRanges =
-                        descBindingRanges[i + DescBindingTypes::ReadOnlyBuffer];
+                        descBindingRanges[j + DescBindingTypes::ReadOnlyBuffer];
                     if( bindRanges.isInUse() )
                     {
-                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[i] &&
+                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[j] &&
                                             "No DescriptorSetTexture/Sampler/Uav bound when expected!" );
-                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[i]->descriptorCount ==
+                        OGRE_ASSERT_MEDIUM( table.bakedDescriptorSets[j]->descriptorCount ==
                                                 bindRanges.getNumUsedSlots() &&
                                             "DescriptorSetTexture/Sampler/Uav provided is incompatible "
                                             "with active RootLayout. e.g. you can't bind a set of "
                                             "7 textures when the shader expects 4" );
 
                         VkWriteDescriptorSet &writeDescSet = writeDescSets[numWriteDescSets];
-                        writeDescSet = *table.bakedDescriptorSets[i];
+                        writeDescSet = *table.bakedDescriptorSets[j];
                         writeDescSet.dstSet = descSet;
                         writeDescSet.dstBinding = currBinding;
                         currBinding += writeDescSet.descriptorCount;
@@ -525,6 +576,41 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    bool VulkanRootLayout::findBindingIndex( const uint32 setIdx, const uint32 targetBindingIdx,
+                                             DescBindingTypes::DescBindingTypes &outType,
+                                             size_t &outRelativeSlotIndex ) const
+    {
+        size_t currBindingIdx = 0u;
+        for( size_t i = 0u; i < DescBindingTypes::NumDescBindingTypes; ++i )
+        {
+            if( mDescBindingRanges[setIdx][i].isInUse() )
+            {
+                if( targetBindingIdx <= currBindingIdx )
+                {
+                    outType = static_cast<DescBindingTypes::DescBindingTypes>( i );
+                    outRelativeSlotIndex =
+                        currBindingIdx - targetBindingIdx + mDescBindingRanges[setIdx][i].start;
+                    return true;
+                }
+
+                const size_t nextBindingIdx =
+                    currBindingIdx + mDescBindingRanges[setIdx][i].getNumUsedSlots();
+
+                if( targetBindingIdx < nextBindingIdx )
+                {
+                    outType = static_cast<DescBindingTypes::DescBindingTypes>( i );
+                    outRelativeSlotIndex =
+                        targetBindingIdx - currBindingIdx + mDescBindingRanges[setIdx][i].start;
+                    return true;
+                }
+
+                currBindingIdx = nextBindingIdx;
+            }
+        }
+
+        return false;
+    }
+    //-------------------------------------------------------------------------
     VulkanRootLayout *VulkanRootLayout::findBest( VulkanRootLayout *a, VulkanRootLayout *b )
     {
         if( !b )
@@ -535,6 +621,30 @@ namespace Ogre
             return a;
 
         VulkanRootLayout *best = 0;
+
+        for( size_t i = DescBindingTypes::ParamBuffer + 1u; i < DescBindingTypes::NumDescBindingTypes;
+             ++i )
+        {
+            VulkanRootLayout *newBest = 0;
+            if( !a->mArrayRanges[i].empty() )
+                newBest = a;
+
+            if( !b->mArrayRanges[i].empty() )
+                newBest = b;
+
+            if( newBest )
+            {
+                if( best && best != newBest )
+                {
+                    // In theory we could try merging and remove duplicates and perhaps arrive return
+                    // a 3rd RootLayout that is compatible but that's a lot of work. It's easier to let
+                    // the user specify a custom RootLayout in the source code for both shaders
+                    return 0;  // a and b are incompatible
+                }
+
+                best = newBest;
+            }
+        }
 
         for( size_t i = 0u; i < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )
         {
@@ -616,6 +726,23 @@ namespace Ogre
                     return this->mDescBindingRanges[i][j].start < other.mDescBindingRanges[i][j].start;
                 if( this->mDescBindingRanges[i][j].end != other.mDescBindingRanges[i][j].end )
                     return this->mDescBindingRanges[i][j].end < other.mDescBindingRanges[i][j].end;
+            }
+        }
+
+        for( size_t i = 0u; i < DescBindingTypes::NumDescBindingTypes; ++i )
+        {
+            if( this->mArrayRanges[i].size() != other.mArrayRanges[i].size() )
+            {
+                return this->mArrayRanges[i].size() < other.mArrayRanges[i].size();
+            }
+            else
+            {
+                const size_t numArrayRanges = this->mArrayRanges[i].size();
+                for( size_t j = 0u; j < numArrayRanges; ++j )
+                {
+                    if( this->mArrayRanges[i][j] != other.mArrayRanges[i][j] )
+                        return this->mArrayRanges[i][j] < other.mArrayRanges[i][j];
+                }
             }
         }
 
