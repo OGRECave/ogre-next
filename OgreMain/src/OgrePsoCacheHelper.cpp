@@ -100,7 +100,7 @@ namespace Ogre
                                                                    mRenderableCache.end(), entry );
 
         if( itor == mRenderableCache.end() ||
-            itor->psoRenderableKey.equalExcludePassData( entry.psoRenderableKey ) )
+            !itor->psoRenderableKey.equalExcludePassData( entry.psoRenderableKey ) )
         {
             entry.hashToMainCache = mRenderableHashCounter++;
             const size_t idx = itor - mRenderableCache.begin();
