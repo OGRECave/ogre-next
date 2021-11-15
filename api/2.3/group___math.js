@@ -1063,7 +1063,6 @@ var group___math =
     [ "Matrix3", "class_ogre_1_1_matrix3.html", [
       [ "Matrix3", "class_ogre_1_1_matrix3.html#a0ecaa32a22cc18ca76dc74377005e7e1", null ],
       [ "Matrix3", "class_ogre_1_1_matrix3.html#a705a22877d9f0a33724887e577486b41", null ],
-      [ "Matrix3", "class_ogre_1_1_matrix3.html#a04f1bcba696c41cae099b5229789772b", null ],
       [ "Matrix3", "class_ogre_1_1_matrix3.html#a3653fb657419f82d71f7ae06df0dd9f5", null ],
       [ "Determinant", "class_ogre_1_1_matrix3.html#a14cdac95b9c0c688bbeacdf63128fa90", null ],
       [ "EigenSolveSymmetric", "class_ogre_1_1_matrix3.html#a7894ad662322338045ae796e418e9df2", null ],
@@ -1086,7 +1085,6 @@ var group___math =
       [ "operator+", "class_ogre_1_1_matrix3.html#ae3ce939cbbd12eefa0e33933eb2a20cd", null ],
       [ "operator-", "class_ogre_1_1_matrix3.html#abaa901cecc2dce7aacd5dfcc6f5d4f78", null ],
       [ "operator-", "class_ogre_1_1_matrix3.html#ae2e8712b996aab5c818418978b1796d2", null ],
-      [ "operator=", "class_ogre_1_1_matrix3.html#af1d37de5c682f78870aae007ee71a360", null ],
       [ "operator==", "class_ogre_1_1_matrix3.html#a0589b1275b7822abd410b13477156d4d", null ],
       [ "operator[]", "class_ogre_1_1_matrix3.html#a05c722c341f21dd2ffc36fb1414e284b", null ],
       [ "operator[]", "class_ogre_1_1_matrix3.html#a8043454ea50049c6849d60ead7dbd7a7", null ],

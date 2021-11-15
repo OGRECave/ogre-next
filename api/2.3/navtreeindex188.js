@@ -1,7 +1,5 @@
 var NAVTREEINDEX188 =
 {
-"class_ogre_1_1_terrain.html#aefb36415178b8e15aac901f87b61d3da":[5,1,2,0,208],
-"class_ogre_1_1_terrain.html#af0c198af3449240a57dc63380e38a9fe":[5,1,2,0,141],
 "class_ogre_1_1_terrain.html#af1d0140678c18a013ac45aa544c00bfd":[5,1,2,0,48],
 "class_ogre_1_1_terrain.html#af1dc74d66c4f3867a484d09cf2063fbc":[5,1,2,0,178],
 "class_ogre_1_1_terrain.html#af262cfa185a0d3659fb8fc5636d9b73c":[5,1,2,0,14],
@@ -249,5 +247,7 @@ var NAVTREEINDEX188 =
 "class_ogre_1_1_terrain_layer_blend_map.html#ae9713419de094e337f0dcef41dd9302d":[5,1,2,6,17],
 "class_ogre_1_1_terrain_layer_blend_map.html#aeb38f19289a5824a92f3d86d4d0c34f8":[5,1,2,6,13],
 "class_ogre_1_1_terrain_layer_blend_map.html#afa2943846ba6a2b5824a12857139cf5e":[5,1,2,6,27],
-"class_ogre_1_1_terrain_layer_blend_map.html#afc1e25e221980f7b3ce696dfc22223ca":[5,1,2,6,10]
+"class_ogre_1_1_terrain_layer_blend_map.html#afc1e25e221980f7b3ce696dfc22223ca":[5,1,2,6,10],
+"class_ogre_1_1_terrain_lod_manager.html":[5,1,2,10],
+"class_ogre_1_1_terrain_lod_manager.html#a055673a4c5e1a24639a18b795604233e":[5,1,2,10,12]
 };

@@ -1,7 +1,5 @@
 var NAVTREEINDEX158 =
 {
-"class_ogre_1_1_quaternion.html#a390c026412bb0e687f20cfe1bc0ada66":[5,2,6,22,33],
-"class_ogre_1_1_quaternion.html#a3c41f8bb4147db31ff9674a70de1aad5":[5,2,6,22,49],
 "class_ogre_1_1_quaternion.html#a3ccc60338011887023b397a02a7f3336":[5,2,6,22,5],
 "class_ogre_1_1_quaternion.html#a441b8d52549e1dedec27420325a313ef":[5,2,6,22,52],
 "class_ogre_1_1_quaternion.html#a44f3c000c8f1ea2759c2e724e04bf86b":[5,2,6,22,58],
@@ -249,5 +247,7 @@ var NAVTREEINDEX158 =
 "class_ogre_1_1_r_t_shader_1_1_const_parameter.html#aeacadad2424b2f76c78a6c7b86c31ead":[5,2,9,3,12],
 "class_ogre_1_1_r_t_shader_1_1_const_parameter.html#aefb06f44383244d59e3832f691d9f7b6":[5,2,9,3,8],
 "class_ogre_1_1_r_t_shader_1_1_const_parameter.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,9,3,21],
-"class_ogre_1_1_r_t_shader_1_1_dual_quaternion_skinning.html":[5,2,9,4]
+"class_ogre_1_1_r_t_shader_1_1_dual_quaternion_skinning.html":[5,2,9,4],
+"class_ogre_1_1_r_t_shader_1_1_dual_quaternion_skinning.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,9,4,9],
+"class_ogre_1_1_r_t_shader_1_1_dual_quaternion_skinning.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,9,4,13]
 };

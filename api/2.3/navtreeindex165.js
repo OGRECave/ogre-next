@@ -1,7 +1,5 @@
 var NAVTREEINDEX165 =
 {
-"class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler_factory.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,9,59,25],
-"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html":[5,2,9,60],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,9,60,8],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a33a8df75aa637178e60fc1fcac452ef2":[5,2,9,60,19],
 "class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html#a4063d9deca7c2f65c667947fae0eab73":[5,2,9,60,16],
@@ -249,5 +247,7 @@ var NAVTREEINDEX165 =
 "class_ogre_1_1_radial_density_mask.html#a30bc78c3281679b74e35d1fb984badc6":[5,2,11,93,18],
 "class_ogre_1_1_radial_density_mask.html#a36d3f85ceee7ae6404ba456e42ea49e9":[5,2,11,93,15],
 "class_ogre_1_1_radial_density_mask.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,11,93,11],
-"class_ogre_1_1_radial_density_mask.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,11,93,14]
+"class_ogre_1_1_radial_density_mask.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,11,93,14],
+"class_ogre_1_1_radial_density_mask.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,11,93,9],
+"class_ogre_1_1_radial_density_mask.html#a6e2b4c4ffcb238d2113ef68610a64d02":[5,2,11,93,17]
 };

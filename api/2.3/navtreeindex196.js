@@ -1,7 +1,5 @@
 var NAVTREEINDEX196 =
 {
-"class_ogre_1_1_vector2.html#a3ffc15c2ad86866acd071c0748126fbb":[5,2,6,33,52],
-"class_ogre_1_1_vector2.html#a408be4c5539e93a4272e05249bafe0be":[5,2,6,33,14],
 "class_ogre_1_1_vector2.html#a42fdbb90fb53a06fcdcba4476887fc09":[5,2,6,33,29],
 "class_ogre_1_1_vector2.html#a474b8e307428e71d6948ccda972d2c25":[5,2,6,33,48],
 "class_ogre_1_1_vector2.html#a4dfc4f888f19a62dc6099699d0029e72":[5,2,6,33,18],
@@ -249,5 +247,7 @@ var NAVTREEINDEX196 =
 "class_ogre_1_1_vertex_buffer_packed.html#abfd4f48dd60d5dfac42753bfe26b8a0e":[7,0,0,1104,20],
 "class_ogre_1_1_vertex_buffer_packed.html#ac2e92dbc03099c677c0dbcacb6d3abc9":[7,0,0,1104,16],
 "class_ogre_1_1_vertex_buffer_packed.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,1104,31],
-"class_ogre_1_1_vertex_buffer_packed.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,1104,27]
+"class_ogre_1_1_vertex_buffer_packed.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,1104,27],
+"class_ogre_1_1_vertex_buffer_packed.html#aceb93f9fe49eedbdbc91ea6eb5feed56":[7,0,0,1104,4],
+"class_ogre_1_1_vertex_buffer_packed.html#ae8843e826003eeb5927766af6c55f5d8":[7,0,0,1104,1]
 };

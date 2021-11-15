@@ -1,7 +1,5 @@
 var NAVTREEINDEX164 =
 {
-"class_ogre_1_1_r_t_shader_1_1_shader_generator.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,9,48,50],
-"class_ogre_1_1_r_t_shader_1_1_shader_generator.html#a42471c8fb86f593c64b89b50a84dd7b8":[5,2,9,48,35],
 "class_ogre_1_1_r_t_shader_1_1_shader_generator.html#a4724bbbba4c2e18a7306f98cdfa8ffe1":[5,2,9,48,1],
 "class_ogre_1_1_r_t_shader_1_1_shader_generator.html#a47ee9a6c65fcefe23a2067a4028937c2":[5,2,9,48,15],
 "class_ogre_1_1_r_t_shader_1_1_shader_generator.html#a4853e5eea4d5e3c1d0e09e40d9424da1":[5,2,9,48,42],
@@ -249,5 +247,7 @@ var NAVTREEINDEX164 =
 "class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler_factory.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,9,59,18],
 "class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler_factory.html#ae1478cf71297ae57d26114b79e7610c0":[5,2,9,59,6],
 "class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler_factory.html#ae3f721960f23b73933bd7ad128f8fa77":[5,2,9,59,7],
-"class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler_factory.html#aecf70f6c8cd27a00a908cde455bed349":[5,2,9,59,2]
+"class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler_factory.html#aecf70f6c8cd27a00a908cde455bed349":[5,2,9,59,2],
+"class_ogre_1_1_r_t_shader_1_1_texture_atlas_sampler_factory.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,9,59,25],
+"class_ogre_1_1_r_t_shader_1_1_triplanar_texturing.html":[5,2,9,60]
 };

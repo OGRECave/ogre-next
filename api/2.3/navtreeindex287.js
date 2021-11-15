@@ -1,7 +1,5 @@
 var NAVTREEINDEX287 =
 {
-"struct_x_window_attributes.html":[7,0,42],
-"struct_x_window_attributes.html#a3aa56e3c09a9e70a85a76306067afb5b":[7,0,42,4],
 "struct_x_window_attributes.html#a44a3c09222cdb8a1cedd41c7731e581a":[7,0,42,0],
 "struct_x_window_attributes.html#a91f82bf8c5f24831d54f0e8f925456b5":[7,0,42,2],
 "struct_x_window_attributes.html#aa21f585b094bf093a8b41db91ff23867":[7,0,42,1],
