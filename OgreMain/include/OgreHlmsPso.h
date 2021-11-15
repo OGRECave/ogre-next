@@ -159,10 +159,15 @@ namespace Ogre
 
         void        *rsData;        /// Render-System specific data
 
-        //No constructor on purpose. Performance implications
-        //(could get called every object when looking up!)
-        //see Hlms::getShaderCache. Use initialize instead.
-        //HlmsPso();
+        HlmsPso()
+        {
+            initialize();
+        }
+
+        HlmsPso( const HlmsPso &_r )
+        {
+            *this = _r;
+        }
 
         void initialize()
         {
