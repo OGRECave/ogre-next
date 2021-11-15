@@ -1,11 +1,5 @@
 var NAVTREEINDEX205 =
 {
-"class_ogre_1_1_vulkan_texture_gpu_manager.html#ab2012775609f389c5f205ee089a0c8b8":[5,2,11,143,61],
-"class_ogre_1_1_vulkan_texture_gpu_manager.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,11,143,69],
-"class_ogre_1_1_vulkan_texture_gpu_manager.html#ab9065d7ce750a69d07f0d315d623b2cc":[5,2,11,143,81],
-"class_ogre_1_1_vulkan_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a":[5,2,11,143,86],
-"class_ogre_1_1_vulkan_texture_gpu_manager.html#abe21fe76416e68bcfc8fe57f2655e868":[5,2,11,143,75],
-"class_ogre_1_1_vulkan_texture_gpu_manager.html#abf35a03ba916bc3c4359bfd164586968":[5,2,11,143,20],
 "class_ogre_1_1_vulkan_texture_gpu_manager.html#ac3acc55349bfe208b1ae576ff63ce669":[5,2,11,143,54],
 "class_ogre_1_1_vulkan_texture_gpu_manager.html#ac3b9a6f92929930e55371e15d4b00eaf":[5,2,11,143,30],
 "class_ogre_1_1_vulkan_texture_gpu_manager.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,11,143,67],
@@ -249,5 +243,11 @@ var NAVTREEINDEX205 =
 "class_ogre_1_1_vulkan_texture_gpu_window.html#a80ab4a439e06b33cba80b1af7afd01c2":[7,0,0,1166,46],
 "class_ogre_1_1_vulkan_texture_gpu_window.html#a8143270ab5936e1c7814453923578182":[7,0,0,1166,9],
 "class_ogre_1_1_vulkan_texture_gpu_window.html#a829c17e22a5acd6ec583c3d2520db784":[7,0,0,1166,51],
-"class_ogre_1_1_vulkan_texture_gpu_window.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,1166,106]
+"class_ogre_1_1_vulkan_texture_gpu_window.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,1166,106],
+"class_ogre_1_1_vulkan_texture_gpu_window.html#a84ae217889a61a5f3db96ab2fdf44851":[7,0,0,1166,32],
+"class_ogre_1_1_vulkan_texture_gpu_window.html#a85f9670da9031ec138caf8b3e910b37e":[7,0,0,1166,23],
+"class_ogre_1_1_vulkan_texture_gpu_window.html#a88170d5ed9c9d2dc6e886217aaf1f6a5":[7,0,0,1166,75],
+"class_ogre_1_1_vulkan_texture_gpu_window.html#a8ec57ce0ef0c682416c3a6b6d13a095a":[7,0,0,1166,136],
+"class_ogre_1_1_vulkan_texture_gpu_window.html#a8f0edacbcb6b52f7db50913446ffbee8":[7,0,0,1166,96],
+"class_ogre_1_1_vulkan_texture_gpu_window.html#a8f4c85a7b1b420e55bef520948b70a1a":[7,0,0,1166,83]
 };

@@ -1,6 +1,5 @@
 var NAVTREEINDEX157 =
 {
-"class_ogre_1_1_property.html#a595ea4c05da8aa987d3800e65d23355d":[5,1,1,1,13],
 "class_ogre_1_1_property.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,1,1,1,9],
 "class_ogre_1_1_property.html#a910c8a9a23043851e69ad773a0fc5899":[5,1,1,1,7],
 "class_ogre_1_1_property.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,1,1,1,12],
@@ -235,19 +234,20 @@ var NAVTREEINDEX157 =
 "class_ogre_1_1_quake3_shader_manager.html#af2d238e94a372c870e1348ce91f9ad10":[7,0,0,887,0],
 "class_ogre_1_1_quake3_shader_manager.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,887,17],
 "class_ogre_1_1_quaternion.html":[5,2,6,22],
-"class_ogre_1_1_quaternion.html#a0528f264ccc686c5315981d19b75aa0e":[5,2,6,22,35],
-"class_ogre_1_1_quaternion.html#a074aea0da7fabfde89d204a1f0f0121b":[5,2,6,22,33],
+"class_ogre_1_1_quaternion.html#a0528f264ccc686c5315981d19b75aa0e":[5,2,6,22,34],
+"class_ogre_1_1_quaternion.html#a074aea0da7fabfde89d204a1f0f0121b":[5,2,6,22,32],
 "class_ogre_1_1_quaternion.html#a1140011dc0793a81c55f2d078c8c964c":[5,2,6,22,4],
 "class_ogre_1_1_quaternion.html#a15c912e62c9abcb3335de205cdf30c2d":[5,2,6,22,16],
 "class_ogre_1_1_quaternion.html#a16987149991882e148170fe3f1c7da4b":[5,2,6,22,21],
 "class_ogre_1_1_quaternion.html#a1ca81bd9d57e43cf23582c898e5fdd34":[5,2,6,22,6],
-"class_ogre_1_1_quaternion.html#a214b1811f4b821e4b616d64a51c26275":[5,2,6,22,37],
+"class_ogre_1_1_quaternion.html#a214b1811f4b821e4b616d64a51c26275":[5,2,6,22,36],
 "class_ogre_1_1_quaternion.html#a24b15dc994247753b7a8064b6a13e2d6":[5,2,6,22,29],
-"class_ogre_1_1_quaternion.html#a25fb3bc0f11e6a676fb5c47347a79579":[5,2,6,22,39],
-"class_ogre_1_1_quaternion.html#a2a92fc4c7d55783c70ef6f633f3cac89":[5,2,6,22,52],
-"class_ogre_1_1_quaternion.html#a2fb2913d70c7c4ea6e0799187746401b":[5,2,6,22,42],
+"class_ogre_1_1_quaternion.html#a25fb3bc0f11e6a676fb5c47347a79579":[5,2,6,22,38],
+"class_ogre_1_1_quaternion.html#a2a92fc4c7d55783c70ef6f633f3cac89":[5,2,6,22,51],
+"class_ogre_1_1_quaternion.html#a2fb2913d70c7c4ea6e0799187746401b":[5,2,6,22,41],
 "class_ogre_1_1_quaternion.html#a2fd01476d5136662031156707b2b3879":[5,2,6,22,27],
-"class_ogre_1_1_quaternion.html#a31ec84a931236554c0c17e37bf5ace97":[5,2,6,22,58],
-"class_ogre_1_1_quaternion.html#a32c5680516b41bc4ba3159bf4d4abaf1":[5,2,6,22,56],
-"class_ogre_1_1_quaternion.html#a353aafd21ec10c8c07f04472ae6c32b8":[5,2,6,22,22]
+"class_ogre_1_1_quaternion.html#a31ec84a931236554c0c17e37bf5ace97":[5,2,6,22,57],
+"class_ogre_1_1_quaternion.html#a32c5680516b41bc4ba3159bf4d4abaf1":[5,2,6,22,55],
+"class_ogre_1_1_quaternion.html#a353aafd21ec10c8c07f04472ae6c32b8":[5,2,6,22,22],
+"class_ogre_1_1_quaternion.html#a365bc3b10308318721199a829db03887":[5,2,6,22,11]
 };

@@ -1,6 +1,5 @@
 var NAVTREEINDEX91 =
 {
-"class_ogre_1_1_g_l_s_l_separable_program_manager.html#ad9526d0bac6df03edd3024201fbbe2b0":[7,0,0,470,0],
 "class_ogre_1_1_g_l_s_l_separable_program_manager.html#addf75eb70c7a0333e877c33736d6d94b":[7,0,0,470,6],
 "class_ogre_1_1_g_l_s_l_separable_program_manager.html#ae9bfb7357473c64d7851f32df59b56d2":[7,0,0,470,10],
 "class_ogre_1_1_g_l_s_l_separable_program_manager.html#aecff959d2e0572b8ff15bac08caa2593":[7,0,0,470,5],
@@ -249,5 +248,6 @@ var NAVTREEINDEX91 =
 "class_ogre_1_1_g_l_s_l_shader_manager.html#aa97ecb7825ee46c6be15313b6592ee16":[7,0,0,473,53],
 "class_ogre_1_1_g_l_s_l_shader_manager.html#ab1c354fd2294c7c50b3f3e9ce42543f7":[7,0,0,473,30],
 "class_ogre_1_1_g_l_s_l_shader_manager.html#ab36c09e4bb69c2324053a1cd5c26483c":[7,0,0,473,42],
-"class_ogre_1_1_g_l_s_l_shader_manager.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,473,62]
+"class_ogre_1_1_g_l_s_l_shader_manager.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,473,62],
+"class_ogre_1_1_g_l_s_l_shader_manager.html#abbb523a827bc6ea90d3b5ec80f0cf770":[7,0,0,473,89]
 };

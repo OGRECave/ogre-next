@@ -21,7 +21,6 @@ var class_ogre_1_1_radian =
     [ "operator<", "class_ogre_1_1_radian.html#a24c502ed700ae70138c521c14f8102b3", null ],
     [ "operator<=", "class_ogre_1_1_radian.html#a2cc76b722fcf4b67d242359f5ad95718", null ],
     [ "operator=", "group___math.html#gafab8ce89cde3034f3cc5c2537d5ea6fd", null ],
-    [ "operator=", "class_ogre_1_1_radian.html#a3762e26668e58d4225b9a5a9326b47b4", null ],
     [ "operator=", "class_ogre_1_1_radian.html#a4eb5fdad21a84b38f56e21b939588845", null ],
     [ "operator==", "class_ogre_1_1_radian.html#abcab875d3abb099a962157bc6d3ff5f7", null ],
     [ "operator>", "class_ogre_1_1_radian.html#a6b34aca5c2b5cbc483dde8f22d3de0a1", null ],

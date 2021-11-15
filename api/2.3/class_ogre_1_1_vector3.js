@@ -41,7 +41,6 @@ var class_ogre_1_1_vector3 =
     [ "operator/=", "class_ogre_1_1_vector3.html#ad8b5fad0c40ae5dd087bbade10b8403e", null ],
     [ "operator<", "class_ogre_1_1_vector3.html#a9831cfbc0d6de6ddd8722908d2d0f732", null ],
     [ "operator=", "class_ogre_1_1_vector3.html#a554fbfe97d222e9e7669faf168104f06", null ],
-    [ "operator=", "class_ogre_1_1_vector3.html#ab5de4a9f833c4427a3b2105fcd6f96ad", null ],
     [ "operator==", "class_ogre_1_1_vector3.html#a28a2bdc8a0bdd14aaa8101d7e7235d0b", null ],
     [ "operator>", "class_ogre_1_1_vector3.html#ae7e7bd521456f7302c5d5357908e90aa", null ],
     [ "operator[]", "class_ogre_1_1_vector3.html#ab5a34a541047cf3b7aa223d77ee8f126", null ],

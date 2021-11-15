@@ -20,7 +20,6 @@ var class_ogre_1_1_degree =
     [ "operator/=", "class_ogre_1_1_degree.html#a502f121976cd95de2817ddb9b9ac1730", null ],
     [ "operator<", "class_ogre_1_1_degree.html#a1b21b5dd134a959f2ff0b4fc36bf2519", null ],
     [ "operator<=", "class_ogre_1_1_degree.html#ace8f3be58aeb1dcb44fe9d9865fb47c6", null ],
-    [ "operator=", "class_ogre_1_1_degree.html#a1fa8bd1b85a6346de4570c8c7580988f", null ],
     [ "operator=", "class_ogre_1_1_degree.html#a88066c650a6e3e2033a9d74820569063", null ],
     [ "operator=", "class_ogre_1_1_degree.html#a70c2e6332981d0932d3ee75b8460cb7d", null ],
     [ "operator==", "class_ogre_1_1_degree.html#a7bc078c3f3df2ec10ac2d058d29e6e7d", null ],

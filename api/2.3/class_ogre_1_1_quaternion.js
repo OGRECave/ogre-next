@@ -31,7 +31,6 @@ var class_ogre_1_1_quaternion =
     [ "operator+", "class_ogre_1_1_quaternion.html#aac3debd2245b0dcefff4ce2fda46eef1", null ],
     [ "operator-", "class_ogre_1_1_quaternion.html#a24b15dc994247753b7a8064b6a13e2d6", null ],
     [ "operator-", "class_ogre_1_1_quaternion.html#a98993e6f63209a39149d132623bbf41b", null ],
-    [ "operator=", "class_ogre_1_1_quaternion.html#a6367b543cf0d073d893139dd503b4fbd", null ],
     [ "operator==", "class_ogre_1_1_quaternion.html#af292a9ed18e3da0bda0fbe114f60cdec", null ],
     [ "operator[]", "class_ogre_1_1_quaternion.html#a074aea0da7fabfde89d204a1f0f0121b", null ],
     [ "operator[]", "class_ogre_1_1_quaternion.html#a390c026412bb0e687f20cfe1bc0ada66", null ],

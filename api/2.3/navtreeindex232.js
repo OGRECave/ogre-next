@@ -1,11 +1,5 @@
 var NAVTREEINDEX232 =
 {
-"class_ogre_1_1v1_1_1_mesh_serializer.html#a76ca1dd9112785e2896592f6dd5f44b7":[5,2,11,124,19],
-"class_ogre_1_1v1_1_1_mesh_serializer.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,11,124,9],
-"class_ogre_1_1v1_1_1_mesh_serializer.html#a914c3551873f8d1ebbbb535ed7405a4d":[5,2,11,124,4],
-"class_ogre_1_1v1_1_1_mesh_serializer.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,11,124,12],
-"class_ogre_1_1v1_1_1_mesh_serializer.html#a97e2d1657984b220b2dec2baf0b5546a":[5,2,11,124,1],
-"class_ogre_1_1v1_1_1_mesh_serializer.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,11,124,16],
 "class_ogre_1_1v1_1_1_mesh_serializer.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,11,124,14],
 "class_ogre_1_1v1_1_1_mesh_serializer.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,11,124,10],
 "class_ogre_1_1v1_1_1_mesh_serializer.html#acd36bd5b05e9096e387d78d9977f9415":[5,2,11,124,8],
@@ -249,5 +243,11 @@ var NAVTREEINDEX232 =
 "class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#a616686687f3ebc57f10abef0c634dd20":[7,0,0,3,112,17],
 "class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#a6717ccc1b2544d276a9aff141ffaab8d":[7,0,0,3,112,22],
 "class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#a6e2232c4f8180cc54500da6f713a09d4":[7,0,0,3,112,18],
-"class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31eb":[7,0,0,3,112,0]
+"class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31eb":[7,0,0,3,112,0],
+"class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31eba2b12eec76abb4c56344b6c6ff1cdb65f":[7,0,0,3,112,0,1],
+"class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31ebaefbef8f3135135145a860b8647faba4c":[7,0,0,3,112,0,0],
+"class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#a76b2f5feb458d7de2e8f79a1900b3124":[7,0,0,3,112,16],
+"class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#a78d100749d4bc2d491fa77ab3b92d5b7":[7,0,0,3,112,34],
+"class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,3,112,24],
+"class_ogre_1_1v1_1_1_metal_hardware_buffer_manager.html#a837b8d79883d0776fde7a0ccc3a4c905":[7,0,0,3,112,12]
 };

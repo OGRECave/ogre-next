@@ -1,6 +1,5 @@
 var NAVTREEINDEX108 =
 {
-"class_ogre_1_1_item_factory.html#a9452dc469d5f5033fcf521cb0396965d":[5,0,1,22,0],
 "class_ogre_1_1_item_factory.html#a9452dc469d5f5033fcf521cb0396965d":[5,2,12,22,0],
 "class_ogre_1_1_item_factory.html#ab78a921e54419be677839cdf15d1f0b8":[5,0,1,22,12],
 "class_ogre_1_1_item_factory.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,12,22,12],
@@ -106,8 +105,8 @@ var NAVTREEINDEX108 =
 "class_ogre_1_1_light.html#a1427f0b635a4186cd6083a9bab879fa2":[5,0,1,23,154],
 "class_ogre_1_1_light.html#a164483d42186628f7e14833b2df7a7a7":[5,0,1,23,67],
 "class_ogre_1_1_light.html#a164483d42186628f7e14833b2df7a7a7":[5,2,12,23,67],
-"class_ogre_1_1_light.html#a1659111f4eb55f3b3227e87c8bfce8d9":[5,2,12,23,125],
 "class_ogre_1_1_light.html#a1659111f4eb55f3b3227e87c8bfce8d9":[5,0,1,23,125],
+"class_ogre_1_1_light.html#a1659111f4eb55f3b3227e87c8bfce8d9":[5,2,12,23,125],
 "class_ogre_1_1_light.html#a19bf2951b97744064509c13068143f3d":[5,0,1,23,86],
 "class_ogre_1_1_light.html#a19bf2951b97744064509c13068143f3d":[5,2,12,23,86],
 "class_ogre_1_1_light.html#a1a048b8ace0a21cd2ed2c3008941ce3d":[5,0,1,23,44],
@@ -116,8 +115,8 @@ var NAVTREEINDEX108 =
 "class_ogre_1_1_light.html#a1a93c6cee2acca8aaf140e0430a1edce":[5,2,12,23,33],
 "class_ogre_1_1_light.html#a1c727e879a260c37b00ce5505fe8e144":[5,0,1,23,101],
 "class_ogre_1_1_light.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,12,23,101],
-"class_ogre_1_1_light.html#a1cab92f6d67cb87f2ca99d04e897093c":[5,2,12,23,123],
 "class_ogre_1_1_light.html#a1cab92f6d67cb87f2ca99d04e897093c":[5,0,1,23,123],
+"class_ogre_1_1_light.html#a1cab92f6d67cb87f2ca99d04e897093c":[5,2,12,23,123],
 "class_ogre_1_1_light.html#a20900182d64a3aebaddbb34e9717badc":[5,0,1,23,80],
 "class_ogre_1_1_light.html#a20900182d64a3aebaddbb34e9717badc":[5,2,12,23,80],
 "class_ogre_1_1_light.html#a2182f2c4ae3cde6611cb3587c9e5c207":[5,0,1,23,79],
@@ -249,5 +248,6 @@ var NAVTREEINDEX108 =
 "class_ogre_1_1_light.html#a6ffba71e5b797689b61ff0e285449491":[5,0,1,23,72],
 "class_ogre_1_1_light.html#a6ffba71e5b797689b61ff0e285449491":[5,2,12,23,72],
 "class_ogre_1_1_light.html#a76edaa89bb1889e8f31767bee5913b8c":[5,0,1,23,62],
-"class_ogre_1_1_light.html#a76edaa89bb1889e8f31767bee5913b8c":[5,2,12,23,62]
+"class_ogre_1_1_light.html#a76edaa89bb1889e8f31767bee5913b8c":[5,2,12,23,62],
+"class_ogre_1_1_light.html#a77198e02dd65dd368ea4e6af88a93fda":[5,2,12,23,132]
 };
