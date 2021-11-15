@@ -366,16 +366,16 @@ var NAVTREEINDEX =
 "struct_ogre_1_1_desc_binding_range.html#a5c9c25c91be3a22e606d7e811d7200b6",
 "struct_ogre_1_1_g_l3_plus_vertex_array_object.html#ab583af81783365aa86ae439e11989711",
 "struct_ogre_1_1_hlms_base_prop.html#a8b9e26636b627ad785c4cdef979e3779",
-"struct_ogre_1_1_hlms_texture_pack.html#a60468bc4cd9cffabdbb855f4a4a34cdb",
-"struct_ogre_1_1_lw_string_1_1_float.html#ad593bbf5c32819d9c0cd976318b3040d",
-"struct_ogre_1_1_pbs_property.html#a2a4bb081db8a662e8a19c6d080241c5a",
-"struct_ogre_1_1_render_pass_colour_target.html#ad9d95f288a643f41ce3d35022565cc50",
-"struct_ogre_1_1_shader_params_1_1_param.html#ae48e8fd44f516d25afdc3c67886b78a1",
-"struct_ogre_1_1_texture_box.html#a43ac3ca52051d95d126b12b621559cae",
-"struct_ogre_1_1_update_lod_request.html",
-"struct_ogre_1_1_volume_1_1_chunk_request.html#a985f7346115226c2f0a1f8e81cdbb5af",
-"struct_ogre_1_1is_pod_like_3_01long_01_4.html",
-"struct_x_window_attributes.html#a44a3c09222cdb8a1cedd41c7731e581a"
+"struct_ogre_1_1_hlms_texture_pack.html#a46305e4cfc1ac40abb6a53a6470aac3b",
+"struct_ogre_1_1_lw_string_1_1_float.html#a9368637d8d9f4b9c67f9e9d3a51b60ba",
+"struct_ogre_1_1_pbs_property.html#a1f7d89aa19b43dd351694df06b72442c",
+"struct_ogre_1_1_render_pass_colour_target.html#a7f41bdeafb1eb3a2e78ed102e0769626",
+"struct_ogre_1_1_shader_params_1_1_param.html#ab83852d923f92e5d5326370774d2925b",
+"struct_ogre_1_1_texture_box.html#a3f726ad08fe218f22bfe6cbd7b6dfb1f",
+"struct_ogre_1_1_unlit_property_1_1_diffuse_map_ptr.html#aec650b44d996e845b3b86ccb3a69e5e1",
+"struct_ogre_1_1_volume_1_1_chunk_request.html#a731afb5118648be0ea56bf4d025ff1b1",
+"struct_ogre_1_1is_pod_like_3_01int_01_4.html",
+"struct_x_window_attributes.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

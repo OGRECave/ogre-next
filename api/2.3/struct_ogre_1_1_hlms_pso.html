@@ -101,13 +101,17 @@ $(document).ready(function(){initNavTree('struct_ogre_1_1_hlms_pso.html',''); in
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ae3c4a072a6d27bbcf03326ff18179741"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#ae3c4a072a6d27bbcf03326ff18179741">HlmsPso</a> ()</td></tr>
+<tr class="memdesc:ae3c4a072a6d27bbcf03326ff18179741"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render-System specific data.  <a href="struct_ogre_1_1_hlms_pso.html#ae3c4a072a6d27bbcf03326ff18179741">More...</a><br /></td></tr>
+<tr class="separator:ae3c4a072a6d27bbcf03326ff18179741"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52cdf4434222602ce1a7b90c9f7be51f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a52cdf4434222602ce1a7b90c9f7be51f">HlmsPso</a> (const <a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> &amp;_r)</td></tr>
+<tr class="separator:a52cdf4434222602ce1a7b90c9f7be51f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab280462ceebbe20620eddd7f8371e629"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#ab280462ceebbe20620eddd7f8371e629">equalExcludePassData</a> (const <a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> &amp;_r) const</td></tr>
 <tr class="memdesc:ab280462ceebbe20620eddd7f8371e629"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares if this == _r but only accounting data that is independent of a pass (and is typically part of a renderable with a material already assigned).  <a href="struct_ogre_1_1_hlms_pso.html#ab280462ceebbe20620eddd7f8371e629">More...</a><br /></td></tr>
 <tr class="separator:ab280462ceebbe20620eddd7f8371e629"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a089aa9ad52c10e6416313f03a8a4ab9a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a089aa9ad52c10e6416313f03a8a4ab9a">equalNonPod</a> (const <a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> &amp;_r) const</td></tr>
 <tr class="separator:a089aa9ad52c10e6416313f03a8a4ab9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5dd6c4910676b36f7d1846bb12ddfc26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a5dd6c4910676b36f7d1846bb12ddfc26">initialize</a> ()</td></tr>
-<tr class="memdesc:a5dd6c4910676b36f7d1846bb12ddfc26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render-System specific data.  <a href="struct_ogre_1_1_hlms_pso.html#a5dd6c4910676b36f7d1846bb12ddfc26">More...</a><br /></td></tr>
 <tr class="separator:a5dd6c4910676b36f7d1846bb12ddfc26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96f75c799a4f17cc425c4a1372f16ae5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_hlms_pso.html#a96f75c799a4f17cc425c4a1372f16ae5">lessNonPod</a> (const <a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> &amp;_r) const</td></tr>
 <tr class="separator:a96f75c799a4f17cc425c4a1372f16ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,7 +157,63 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Defines a PipelineStateObject as required by Vulkan, Metal &amp; DX12. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Some RenderSystem-specific quirks: In OpenGL, vertex-input data (vertexElements, operationType, enablePrimitiveRestart) is ignored, and controlled via the <a class="el" href="struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i...">VertexArrayObject</a> pointer.</dd></dl>
 <p>In the other APIs, vertex-input data is use, and <a class="el" href="struct_ogre_1_1_vertex_array_object.html" title="Vertex array objects (Vaos) are immutable objects that describe a combination of vertex buffers and i...">VertexArrayObject</a> pointers only control which vertex and index buffers are bound to the device. </p><dl class="section user"><dt></dt><dd>Padding bytes should be zeroed/copied for properly testing via memcmp. </dd></dl>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae3c4a072a6d27bbcf03326ff18179741"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3c4a072a6d27bbcf03326ff18179741">&#9670;&nbsp;</a></span>HlmsPso() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::HlmsPso::HlmsPso </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Render-System specific data. </p>
+
+<p class="reference">References <a class="el" href="struct_ogre_1_1_hlms_pso.html#a5dd6c4910676b36f7d1846bb12ddfc26">initialize()</a>.</p>
+
+</div>
+</div>
+<a id="a52cdf4434222602ce1a7b90c9f7be51f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52cdf4434222602ce1a7b90c9f7be51f">&#9670;&nbsp;</a></span>HlmsPso() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ogre::HlmsPso::HlmsPso </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_hlms_pso.html">HlmsPso</a> &amp;&#160;</td>
+          <td class="paramname"><em>_r</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab280462ceebbe20620eddd7f8371e629"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab280462ceebbe20620eddd7f8371e629">&#9670;&nbsp;</a></span>equalExcludePassData()</h2>
 
@@ -237,9 +297,9 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Render-System specific data. </p>
-
 <p class="reference">References <a class="el" href="struct_ogre_1_1_hlms_pso.html#a93a9e99f2c2db6997d8083b740bd6419">operationType</a>, and <a class="el" href="group___general.html#gga0ef99399e9e670e7bb69dc373968a666a8fdc32a1dcb791c1e60f1a2b97f634ff">Ogre::OT_POINT_LIST</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_hlms_pso.html#ae3c4a072a6d27bbcf03326ff18179741">HlmsPso()</a>.</p>
 
 </div>
 </div>
