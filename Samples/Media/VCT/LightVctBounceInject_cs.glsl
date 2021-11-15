@@ -7,6 +7,11 @@
 
 @pset( vctTexUnit, 2 )
 
+/// Enable uses_array_bindings when there is more than one cascade
+/// (hlms_num_vct_cascades can't be 0)
+/// uses_array_bindings = hlms_num_vct_cascades - 1
+@psub( uses_array_bindings, hlms_num_vct_cascades, 1 )
+
 vulkan_layout( ogre_t0 ) uniform texture3D voxelAlbedoTex;
 vulkan_layout( ogre_t1 ) uniform texture3D voxelNormalTex;
 vulkan_layout( ogre_t@value(vctTexUnit) ) uniform texture3D vctProbes[@value( hlms_num_vct_cascades )];

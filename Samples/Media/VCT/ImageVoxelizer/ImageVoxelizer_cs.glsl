@@ -8,8 +8,10 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
+@pset( uses_array_bindings, 1 )
+
 ReadOnlyBufferF( @value( texture0_slot ), InstanceBuffer, instanceBuffer );
-vulkan_layout( ogre_t1 ) uniform texture3D meshTextures[15];
+vulkan_layout( ogre_t1 ) uniform texture3D meshTextures[12];
 
 vulkan( layout( ogre_s1 ) uniform sampler trilinearSampler );
 

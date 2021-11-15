@@ -549,6 +549,28 @@ namespace Ogre
             poseRanges[DescBindingTypes::TexBuffer].end = static_cast<uint16>( poseBufReg + 1 );
         }
 
+        const int32 numVctProbes = getProperty( PbsProperty::VctNumProbes );
+
+        if( numVctProbes > 1 )
+        {
+            int32 vctProbeIdx = getProperty( "vctProbes" );
+
+            rootLayout.addArrayBinding( DescBindingTypes::Texture,
+                                        RootLayout::ArrayDesc( static_cast<uint16>( vctProbeIdx ),
+                                                               static_cast<uint16>( numVctProbes ) ) );
+            if( getProperty( PbsProperty::VctAnisotropic ) )
+            {
+                for( int32 i = 0; i < 3; ++i )
+                {
+                    vctProbeIdx += numVctProbes;
+                    rootLayout.addArrayBinding(
+                        DescBindingTypes::Texture,
+                        RootLayout::ArrayDesc( static_cast<uint16>( vctProbeIdx ),
+                                               static_cast<uint16>( numVctProbes ) ) );
+                }
+            }
+        }
+
         mListener->setupRootLayout( rootLayout, mSetProperties );
     }
     //-----------------------------------------------------------------------------------
