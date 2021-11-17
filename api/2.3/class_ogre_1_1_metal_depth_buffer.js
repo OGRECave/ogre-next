@@ -1,5 +1,11 @@
 var class_ogre_1_1_metal_depth_buffer =
 [
+    [ "DepthFormatsMask", "class_ogre_1_1_metal_depth_buffer.html#a5b113673ee58204611c3435ee59b7225", [
+      [ "DFM_D32", "class_ogre_1_1_metal_depth_buffer.html#a5b113673ee58204611c3435ee59b7225aa6724a255845f99abc25abaff6ac6183", null ],
+      [ "DFM_D24", "class_ogre_1_1_metal_depth_buffer.html#a5b113673ee58204611c3435ee59b7225a73a587e516857ae5f3b0d019b712476d", null ],
+      [ "DFM_D16", "class_ogre_1_1_metal_depth_buffer.html#a5b113673ee58204611c3435ee59b7225a5d34cd4789c64c96712df4ea09ef8d09", null ],
+      [ "DFM_S8", "class_ogre_1_1_metal_depth_buffer.html#a5b113673ee58204611c3435ee59b7225a5beda99101555b15ed1a2e4d66c9efe0", null ]
+    ] ],
     [ "PoolId", "class_ogre_1_1_metal_depth_buffer.html#a9854c57374adef41216bae68544a5b7e", [
       [ "POOL_NO_DEPTH", "class_ogre_1_1_metal_depth_buffer.html#a9854c57374adef41216bae68544a5b7eaf7d0cd0ab7352ada29807625962ab90c", null ],
       [ "POOL_MANUAL_USAGE", "class_ogre_1_1_metal_depth_buffer.html#a9854c57374adef41216bae68544a5b7eac3e2a2eeb9d97edbf973e52499d190ec", null ],
@@ -51,6 +57,7 @@ var class_ogre_1_1_metal_depth_buffer =
     [ "operator new", "class_ogre_1_1_metal_depth_buffer.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_metal_depth_buffer.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_metal_depth_buffer.html#a4be37baef81876985aa1071ad5acc6dd", null ],
+    [ "AvailableDepthFormats", "class_ogre_1_1_metal_depth_buffer.html#aab0756add3d02bac99eab8e030434def", null ],
     [ "DefaultDepthBufferFormat", "class_ogre_1_1_metal_depth_buffer.html#a0ad586d8d280dd4b81b35321c0dbdca0", null ],
     [ "mDepthAttachmentDesc", "class_ogre_1_1_metal_depth_buffer.html#a38a9a2e81d9bd2648ea7411d2b493598", null ],
     [ "mStencilAttachmentDesc", "class_ogre_1_1_metal_depth_buffer.html#a9945399461629b5f0f8b3b2400d54ead", null ]

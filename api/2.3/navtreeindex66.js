@@ -1,5 +1,17 @@
 var NAVTREEINDEX66 =
 {
+"class_ogre_1_1_default_sphere_scene_query.html#aed7b296e80ea3acebc493842727e8db3":[5,0,1,16,8],
+"class_ogre_1_1_default_sphere_scene_query.html#aed7b296e80ea3acebc493842727e8db3":[5,2,12,16,8],
+"class_ogre_1_1_default_sphere_scene_query.html#aee3c881aad0e146950d8fd5cf3791469":[5,0,1,16,2],
+"class_ogre_1_1_default_sphere_scene_query.html#aee3c881aad0e146950d8fd5cf3791469":[5,2,12,16,2],
+"class_ogre_1_1_default_sphere_scene_query.html#af3abfea7c8d18bfb4b3783699e084068":[5,0,1,16,4],
+"class_ogre_1_1_default_sphere_scene_query.html#af3abfea7c8d18bfb4b3783699e084068":[5,2,12,16,4],
+"class_ogre_1_1_default_sphere_scene_query.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,16,20],
+"class_ogre_1_1_default_sphere_scene_query.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,12,16,20],
+"class_ogre_1_1_default_texture_gpu_manager_listener.html":[5,2,11,13],
+"class_ogre_1_1_default_texture_gpu_manager_listener.html#a1427f0b635a4186cd6083a9bab879fa2":[5,2,11,13,4],
+"class_ogre_1_1_default_texture_gpu_manager_listener.html#a1481a146fb95328ef24c37360113b7a9":[5,2,11,13,2],
+"class_ogre_1_1_default_texture_gpu_manager_listener.html#a3db2bc04b98d831355854e2f9f761225":[5,2,11,13,3],
 "class_ogre_1_1_default_texture_gpu_manager_listener.html#a43bc8ed3f0b0d3a3d9942f7c98e1e8a0":[5,2,11,13,5],
 "class_ogre_1_1_default_texture_gpu_manager_listener.html#a6cd999371b5fa732e24d149872be2f45":[5,2,11,13,7],
 "class_ogre_1_1_default_texture_gpu_manager_listener.html#ae16e3450868d702f4a9d65035bf926f3":[5,2,11,13,1],
@@ -237,17 +249,5 @@ var NAVTREEINDEX66 =
 "class_ogre_1_1_deflector_plane_affector.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,303,20],
 "class_ogre_1_1_deflector_plane_affector.html#a5f401d9023e7bb484ff3ff49e70c9510":[7,0,0,303,5],
 "class_ogre_1_1_deflector_plane_affector.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,303,16],
-"class_ogre_1_1_deflector_plane_affector.html#a93370ae652e024c098b5e9fb9331b3c4":[7,0,0,303,13],
-"class_ogre_1_1_deflector_plane_affector.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,303,19],
-"class_ogre_1_1_deflector_plane_affector.html#a9a9f808a17f812d4fbdeccf25253de0f":[7,0,0,303,3],
-"class_ogre_1_1_deflector_plane_affector.html#ab38dc9df81b23a9b041b56d7329cb5b9":[7,0,0,303,15],
-"class_ogre_1_1_deflector_plane_affector.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,303,23],
-"class_ogre_1_1_deflector_plane_affector.html#ab94db6d30ca0174ad693d14dd2d97da0":[7,0,0,303,32],
-"class_ogre_1_1_deflector_plane_affector.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,303,21],
-"class_ogre_1_1_deflector_plane_affector.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,303,17],
-"class_ogre_1_1_deflector_plane_affector.html#ace884b65b722ead9b920b9abf27bf815":[7,0,0,303,27],
-"class_ogre_1_1_deflector_plane_affector.html#ad4b984bfbf148ddb3310b3d0ba8a9d5d":[7,0,0,303,12],
-"class_ogre_1_1_deflector_plane_affector.html#ad6a78b0183d6ca01b0d874072f516216":[7,0,0,303,29],
-"class_ogre_1_1_deflector_plane_affector.html#ad886dbce8b80a8e8d914b9c3cf9e893c":[7,0,0,303,4],
-"class_ogre_1_1_deflector_plane_affector.html#ae356913ccefbebc4f0119a0599a406fc":[7,0,0,303,28]
+"class_ogre_1_1_deflector_plane_affector.html#a93370ae652e024c098b5e9fb9331b3c4":[7,0,0,303,13]
 };

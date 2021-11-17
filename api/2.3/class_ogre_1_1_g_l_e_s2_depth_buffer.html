@@ -110,6 +110,12 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_g_l_e_s2_depth_buffer.h
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a5b113673ee58204611c3435ee59b7225"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_depth_buffer.html#a5b113673ee58204611c3435ee59b7225">DepthFormatsMask</a> { <a class="el" href="class_ogre_1_1_depth_buffer.html#a5b113673ee58204611c3435ee59b7225aa6724a255845f99abc25abaff6ac6183">DFM_D32</a> = 1u &lt;&lt; 0u
+, <a class="el" href="class_ogre_1_1_depth_buffer.html#a5b113673ee58204611c3435ee59b7225a73a587e516857ae5f3b0d019b712476d">DFM_D24</a> = 1u &lt;&lt; 1u
+, <a class="el" href="class_ogre_1_1_depth_buffer.html#a5b113673ee58204611c3435ee59b7225a5d34cd4789c64c96712df4ea09ef8d09">DFM_D16</a> = 1u &lt;&lt; 2u
+, <a class="el" href="class_ogre_1_1_depth_buffer.html#a5b113673ee58204611c3435ee59b7225a5beda99101555b15ed1a2e4d66c9efe0">DFM_S8</a> = 1u &lt;&lt; 3u
+ }</td></tr>
+<tr class="separator:a5b113673ee58204611c3435ee59b7225"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9854c57374adef41216bae68544a5b7e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7e">PoolId</a> { <br />
 &#160;&#160;<a class="el" href="class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7eaf7d0cd0ab7352ada29807625962ab90c">POOL_NO_DEPTH</a> = 0
 , <a class="el" href="class_ogre_1_1_depth_buffer.html#a9854c57374adef41216bae68544a5b7eac3e2a2eeb9d97edbf973e52499d190ec">POOL_MANUAL_USAGE</a> = 0
@@ -220,12 +226,43 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
+<tr class="memitem:aab0756add3d02bac99eab8e030434def"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_depth_buffer.html#aab0756add3d02bac99eab8e030434def">AvailableDepthFormats</a></td></tr>
+<tr class="memdesc:aab0756add3d02bac99eab8e030434def"><td class="mdescLeft">&#160;</td><td class="mdescRight">During initialization DefaultDepthBufferFormat is overriden with a supported format.  <a href="class_ogre_1_1_depth_buffer.html#aab0756add3d02bac99eab8e030434def">More...</a><br /></td></tr>
+<tr class="separator:aab0756add3d02bac99eab8e030434def"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ad586d8d280dd4b81b35321c0dbdca0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="group___image.html#ga71f09fe41a1db41186262f1aa5814a18">PixelFormatGpu</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_depth_buffer.html#a0ad586d8d280dd4b81b35321c0dbdca0">DefaultDepthBufferFormat</a></td></tr>
 <tr class="separator:a0ad586d8d280dd4b81b35321c0dbdca0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>OpenGL supports 2 different methods: FBO &amp; Copy. Each one has it's own limitations. Non-FBO methods are solved using "dummy" DepthBuffers. That is, a <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer.">DepthBuffer</a> pointer is attached to the <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> (for the sake of consistency) but it doesn't actually contain a Depth surface/renderbuffer (mDepthBuffer &amp; mStencilBuffer are null pointers all the time) Those dummy DepthBuffers are identified thanks to their GL context. Note that FBOs don't allow sharing with the main window's depth buffer. Therefore even when FBO is enabled, a dummy <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer.">DepthBuffer</a> is still used to manage the windows. </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a5b113673ee58204611c3435ee59b7225"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b113673ee58204611c3435ee59b7225">&#9670;&nbsp;</a></span>DepthFormatsMask</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ogre_1_1_depth_buffer.html#a5b113673ee58204611c3435ee59b7225">Ogre::DepthBuffer::DepthFormatsMask</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a5b113673ee58204611c3435ee59b7225aa6724a255845f99abc25abaff6ac6183"></a>DFM_D32&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5b113673ee58204611c3435ee59b7225a73a587e516857ae5f3b0d019b712476d"></a>DFM_D24&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5b113673ee58204611c3435ee59b7225a5d34cd4789c64c96712df4ea09ef8d09"></a>DFM_D16&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5b113673ee58204611c3435ee59b7225a5beda99101555b15ed1a2e4d66c9efe0"></a>DFM_S8&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <a id="a9854c57374adef41216bae68544a5b7e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9854c57374adef41216bae68544a5b7e">&#9670;&nbsp;</a></span>PoolId <span class="overload">[1/2]</span></h2>
 
@@ -1321,6 +1358,36 @@ template&lt;class Alloc &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="aab0756add3d02bac99eab8e030434def"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab0756add3d02bac99eab8e030434def">&#9670;&nbsp;</a></span>AvailableDepthFormats</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> Ogre::DepthBuffer::AvailableDepthFormats</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>During initialization DefaultDepthBufferFormat is overriden with a supported format. </p>
+<p>This can be troublesome when creating the first render window, as you cannot tell <a class="el" href="namespace_ogre.html">Ogre</a> which format do you wish to use for that window.</p>
+<p>That's where AvailableDepthFormats comes in:</p>
+<p>Before initialization user can set this mask to inform which formats they want to use. <a class="el" href="namespace_ogre.html">Ogre</a> will go from best format to worst until a supported one is found. The default value is all bits set.</p>
+<p>Set this to 0 to never use depth buffers. If you only wish render windows to not use depth buffers, then create the window with miscParam["depth_buffer"] = "no";</p>
+<p>After initialization the mask is left untouched</p>
+<p>See <a class="el" href="class_ogre_1_1_depth_buffer.html#a5b113673ee58204611c3435ee59b7225">DepthBuffer::DepthFormatsMask</a> </p>
+
+</div>
+</div>
 <a id="a0ad586d8d280dd4b81b35321c0dbdca0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ad586d8d280dd4b81b35321c0dbdca0">&#9670;&nbsp;</a></span>DefaultDepthBufferFormat</h2>
 
