@@ -2737,9 +2737,11 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, Window *primary)
+    void MetalRenderSystem::initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
+                                                                    Window *primary )
     {
-        DepthBuffer::DefaultDepthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
+        selectDepthBufferFormat( DepthBuffer::DFM_D32 | DepthBuffer::DFM_D24 | DepthBuffer::DFM_D16 |
+                                 DepthBuffer::DFM_S8 );
         mShaderManager = OGRE_NEW MetalGpuProgramManager( &mDevice );
         mMetalProgramFactory = new MetalProgramFactory( &mDevice );
         HighLevelGpuProgramManager::getSingleton().addFactory( mMetalProgramFactory );

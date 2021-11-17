@@ -1691,7 +1691,14 @@ namespace Ogre
         //NVIDIA's preference? Dunno, they don't tell. But at least the quality
         //will be consistent.
         if( mFeatureLevel >= D3D_FEATURE_LEVEL_11_0 )
-            DepthBuffer::DefaultDepthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
+        {
+            selectDepthBufferFormat( DepthBuffer::DFM_D32 | DepthBuffer::DFM_D24 |
+                                     DepthBuffer::DFM_D16 | DepthBuffer::DFM_S8 );
+        }
+        else
+        {
+            selectDepthBufferFormat( DepthBuffer::DFM_D24 | DepthBuffer::DFM_D16 | DepthBuffer::DFM_S8 );
+        }
     }
     //-----------------------------------------------------------------------
     void D3D11RenderSystem::handleDeviceLost()
