@@ -1010,26 +1010,43 @@ namespace Ogre
             vaoManager->initDrawIdVertexBuffer();
 
             FastArray<PixelFormatGpu> depthFormatCandidates( 5u );
-            if( PixelFormatGpuUtils::isStencil( DepthBuffer::DefaultDepthBufferFormat ) )
+            if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_S8 )
             {
-                depthFormatCandidates.push_back( PFG_D32_FLOAT_S8X24_UINT );
-                depthFormatCandidates.push_back( PFG_D24_UNORM_S8_UINT );
-                depthFormatCandidates.push_back( PFG_D32_FLOAT );
-                depthFormatCandidates.push_back( PFG_D24_UNORM );
-                depthFormatCandidates.push_back( PFG_D16_UNORM );
+                if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_D32 )
+                    depthFormatCandidates.push_back( PFG_D32_FLOAT_S8X24_UINT );
+                if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_D24 )
+                    depthFormatCandidates.push_back( PFG_D24_UNORM_S8_UINT );
+                if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_D32 )
+                    depthFormatCandidates.push_back( PFG_D32_FLOAT );
+                if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_D24 )
+                    depthFormatCandidates.push_back( PFG_D24_UNORM );
+                if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_D16 )
+                    depthFormatCandidates.push_back( PFG_D16_UNORM );
             }
             else
             {
-                depthFormatCandidates.push_back( PFG_D32_FLOAT );
-                depthFormatCandidates.push_back( PFG_D24_UNORM );
-                depthFormatCandidates.push_back( PFG_D32_FLOAT_S8X24_UINT );
-                depthFormatCandidates.push_back( PFG_D24_UNORM_S8_UINT );
-                depthFormatCandidates.push_back( PFG_D16_UNORM );
+                if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_D32 )
+                    depthFormatCandidates.push_back( PFG_D32_FLOAT );
+                if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_D32 )
+                    depthFormatCandidates.push_back( PFG_D32_FLOAT_S8X24_UINT );
+                if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_D24 )
+                    depthFormatCandidates.push_back( PFG_D24_UNORM );
+                if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_D24 )
+                    depthFormatCandidates.push_back( PFG_D24_UNORM_S8_UINT );
+                if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_D16 )
+                    depthFormatCandidates.push_back( PFG_D16_UNORM );
             }
 
-            DepthBuffer::DefaultDepthBufferFormat = findSupportedFormat(
-                mDevice->mPhysicalDevice, depthFormatCandidates, VK_IMAGE_TILING_OPTIMAL,
-                VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
+            if( !depthFormatCandidates.empty() )
+            {
+                DepthBuffer::DefaultDepthBufferFormat = findSupportedFormat(
+                    mDevice->mPhysicalDevice, depthFormatCandidates, VK_IMAGE_TILING_OPTIMAL,
+                    VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
+            }
+            else
+            {
+                DepthBuffer::DefaultDepthBufferFormat = PFG_NULL;
+            }
 
             VulkanTextureGpuManager *textureGpuManager = OGRE_NEW VulkanTextureGpuManager(
                 vaoManager, this, mDevice, bCanRestrictImageViewUsage );

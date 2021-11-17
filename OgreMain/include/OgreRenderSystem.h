@@ -788,6 +788,9 @@ namespace Ogre
         virtual void endRenderPassDescriptor(void);
 
     protected:
+        /// Reads DepthBuffer::AvailableDepthFormats and alters DepthBuffer::DefaultDepthBufferFormat
+        void selectDepthBufferFormat( const uint8 supportedFormats );
+
         virtual TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
                                                   PixelFormatGpu depthBufferFormat, uint16 poolId );
 

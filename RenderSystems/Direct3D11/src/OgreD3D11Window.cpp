@@ -182,13 +182,17 @@ namespace Ogre
         D3D11TextureGpuManager *textureManager =
                 static_cast<D3D11TextureGpuManager*>( textureGpuManager );
 
-        mTexture        = textureManager->createTextureGpuWindow( mUseFlipMode, this );
-        mDepthBuffer    = textureManager->createWindowDepthBuffer();
+        mTexture = textureManager->createTextureGpuWindow( mUseFlipMode, this );
+        if( DepthBuffer::DefaultDepthBufferFormat != PFG_NULL )
+            mDepthBuffer = textureManager->createWindowDepthBuffer();
 
         mTexture->setPixelFormat( _getRenderFormat() );
-        mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
-        if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
-            mStencilBuffer = mDepthBuffer;
+        if( mDepthBuffer )
+        {
+            mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
+            if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
+                mStencilBuffer = mDepthBuffer;
+        }
 
         if( mDepthBuffer )
         {
@@ -243,7 +247,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::_destroySizeDependedD3DResources()
     {
-        if( mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
+        if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
             mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
         if( mTexture->getResidencyStatus() != GpuResidency::OnStorage )
             mTexture->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
@@ -307,10 +311,12 @@ namespace Ogre
         texWindow->_setBackbuffer( mpBackBufferInterim ? mpBackBufferInterim.Get() : mpBackBuffer.Get() );
 
         mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
-        mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
+        if( mDepthBuffer )
+            mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
 
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
-        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+        if( mDepthBuffer )
+            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
     }
     //--------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::setFsaa( const String &fsaa )

@@ -608,6 +608,34 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
+    void RenderSystem::selectDepthBufferFormat( const uint8 supportedFormats )
+    {
+        if( ( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_D32 ) &&
+            ( supportedFormats & DepthBuffer::DFM_D32 ) )
+        {
+            if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_S8 )
+                DepthBuffer::DefaultDepthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
+            else
+                DepthBuffer::DefaultDepthBufferFormat = PFG_D32_FLOAT;
+        }
+        else if( DepthBuffer::AvailableDepthFormats & ( DepthBuffer::DFM_D32 | DepthBuffer::DFM_D24 ) &&
+                 ( supportedFormats & DepthBuffer::DFM_D24 ) )
+        {
+            if( DepthBuffer::AvailableDepthFormats & DepthBuffer::DFM_S8 )
+                DepthBuffer::DefaultDepthBufferFormat = PFG_D24_UNORM_S8_UINT;
+            else
+                DepthBuffer::DefaultDepthBufferFormat = PFG_D24_UNORM;
+        }
+        else if( DepthBuffer::AvailableDepthFormats &
+                     ( DepthBuffer::DFM_D32 | DepthBuffer::DFM_D24 | DepthBuffer::DFM_D16 ) &&
+                 ( supportedFormats & DepthBuffer::DFM_D16 ) )
+        {
+            DepthBuffer::DefaultDepthBufferFormat = PFG_D16_UNORM;
+        }
+        else
+            DepthBuffer::DefaultDepthBufferFormat = PFG_NULL;
+    }
+    //---------------------------------------------------------------------
     TextureGpu* RenderSystem::createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
                                                     PixelFormatGpu depthBufferFormat, uint16 poolId )
     {

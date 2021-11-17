@@ -879,9 +879,15 @@ namespace Ogre {
             //NVIDIA's preference? Dunno, they don't tell. But at least the quality
             //will be consistent.
             if( mDriverVersion.hasMinVersion( 4, 0 ) )
-                DepthBuffer::DefaultDepthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
+            {
+                selectDepthBufferFormat( DepthBuffer::DFM_D32 | DepthBuffer::DFM_D24 |
+                                         DepthBuffer::DFM_D16 | DepthBuffer::DFM_S8 );
+            }
             else
-                DepthBuffer::DefaultDepthBufferFormat = PFG_D24_UNORM_S8_UINT;
+            {
+                selectDepthBufferFormat( DepthBuffer::DFM_D24 | DepthBuffer::DFM_D16 |
+                                         DepthBuffer::DFM_S8 );
+            }
 
             mTextureGpuManager = OGRE_NEW GL3PlusTextureGpuManager( mVaoManager, this, *mGLSupport );
 
