@@ -77,10 +77,6 @@ namespace Ogre
         {
             memcpy(m,arr,9*sizeof(Real));
         }
-        inline Matrix3 (const Matrix3& rkMatrix)
-        {
-            memcpy(m,rkMatrix.m,9*sizeof(Real));
-        }
         Matrix3 (Real fEntry00, Real fEntry01, Real fEntry02,
                     Real fEntry10, Real fEntry11, Real fEntry12,
                     Real fEntry20, Real fEntry21, Real fEntry22)
@@ -131,13 +127,6 @@ namespace Ogre
         Vector3 GetColumn (size_t iCol) const;
         void SetColumn(size_t iCol, const Vector3& vec);
         void FromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis);
-
-        /// Assignment and comparison
-        inline Matrix3& operator= (const Matrix3& rkMatrix)
-        {
-            memcpy(m,rkMatrix.m,9*sizeof(Real));
-            return *this;
-        }
 
         /** Tests 2 matrices for equality.
          */

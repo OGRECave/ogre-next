@@ -174,7 +174,7 @@ namespace Ogre
     {
         if (mRandProvider)
             return mRandProvider->getRandomUnit();
-        else return Real(rand()) / RAND_MAX;
+        else return Real(rand()) / Real(RAND_MAX);
     }
     
     //-----------------------------------------------------------------------

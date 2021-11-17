@@ -456,13 +456,17 @@ namespace Ogre
                 static_cast<MetalTextureGpuManager*>( textureGpuManager );
 
         mTexture        = textureManager->createTextureGpuWindow( this );
-        mDepthBuffer    = textureManager->createWindowDepthBuffer();
+        if( DepthBuffer::DefaultDepthBufferFormat != PFG_NULL )
+            mDepthBuffer = textureManager->createWindowDepthBuffer();
 
         mTexture->setPixelFormat( mHwGamma ? PFG_BGRA8_UNORM_SRGB : PFG_BGRA8_UNORM );
-        mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
+        if( mDepthBuffer )
+        {
+            mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
 
-        if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
-            mStencilBuffer = mDepthBuffer;
+            if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
+                mStencilBuffer = mDepthBuffer;
+        }
 
         if( mDepthBuffer )
         {
@@ -477,11 +481,13 @@ namespace Ogre
         mSampleDescription = textureManager->getRenderSystem()->validateSampleDescription(
             mRequestedSampleDescription, mTexture->getPixelFormat() );
         mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
-        mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
+        if( mDepthBuffer )
+            mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
 
         setResolutionFromView();
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
-        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        if( mDepthBuffer )
+            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
     }
     //-------------------------------------------------------------------------
     void MetalWindow::reposition( int32 left, int32 top )

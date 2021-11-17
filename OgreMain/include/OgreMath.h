@@ -54,7 +54,6 @@ namespace Ogre
         explicit Radian ( Real r=0 ) : mRad(r) {}
         Radian ( const Degree& d );
         Radian& operator = ( const Real& f ) { mRad = f; return *this; }
-        Radian& operator = ( const Radian& r ) { mRad = r.mRad; return *this; }
         Radian& operator = ( const Degree& d );
 
         Real valueDegrees() const; // see bottom of this file
@@ -100,7 +99,6 @@ namespace Ogre
         explicit Degree ( Real d=0 ) : mDeg(d) {}
         Degree ( const Radian& r ) : mDeg(r.valueDegrees()) {}
         Degree& operator = ( const Real& f ) { mDeg = f; return *this; }
-        Degree& operator = ( const Degree& d ) { mDeg = d.mDeg; return *this; }
         Degree& operator = ( const Radian& r ) { mDeg = r.valueDegrees(); return *this; }
 
         Real valueDegrees() const { return mDeg; }

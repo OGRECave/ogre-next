@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE
-	(Object-oriented Graphics Rendering Engine)
+    (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2014 Torus Knot Software Ltd
@@ -32,5 +32,6 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-	PixelFormatGpu DepthBuffer::DefaultDepthBufferFormat = PFG_D24_UNORM_S8_UINT;
-}
+    PixelFormatGpu DepthBuffer::DefaultDepthBufferFormat = PFG_D24_UNORM_S8_UINT;
+    uint8 DepthBuffer::AvailableDepthFormats = 0xFF;
+}  // namespace Ogre

@@ -168,14 +168,6 @@ namespace Ogre {
         */
         Vector3 zAxis(void) const;
 
-        inline Quaternion& operator= (const Quaternion& rkQ)
-        {
-            w = rkQ.w;
-            x = rkQ.x;
-            y = rkQ.y;
-            z = rkQ.z;
-            return *this;
-        }
         Quaternion operator+ (const Quaternion& rkQ) const;
         Quaternion operator- (const Quaternion& rkQ) const;
         Quaternion operator* (const Quaternion& rkQ) const;

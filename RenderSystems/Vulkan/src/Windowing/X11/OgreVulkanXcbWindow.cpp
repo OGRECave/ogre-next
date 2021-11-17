@@ -227,17 +227,22 @@ namespace Ogre
             static_cast<VulkanTextureGpuManager *>( textureGpuManager );
 
         mTexture = textureManager->createTextureGpuWindow( this );
-        mDepthBuffer = textureManager->createWindowDepthBuffer();
+        if( DepthBuffer::DefaultDepthBufferFormat != PFG_NULL )
+            mDepthBuffer = textureManager->createWindowDepthBuffer();
         mStencilBuffer = 0;
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
         mTexture->setPixelFormat( chooseSurfaceFormat( mHwGamma ) );
-        mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
-        if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
-            mStencilBuffer = mDepthBuffer;
+        if( mDepthBuffer )
+        {
+            mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
+            if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
+                mStencilBuffer = mDepthBuffer;
+        }
 
         mTexture->setSampleDescription( mRequestedSampleDescription );
-        mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
+        if( mDepthBuffer )
+            mDepthBuffer->setSampleDescription( mRequestedSampleDescription );
         mSampleDescription = mRequestedSampleDescription;
 
         if( mDepthBuffer )

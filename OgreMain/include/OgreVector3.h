@@ -133,19 +133,6 @@ namespace Ogre
             return &x;
         }
 
-        /** Assigns the value of the other vector.
-            @param
-                rkVector The other vector
-        */
-        inline Vector3& operator = ( const Vector3& rkVector )
-        {
-            x = rkVector.x;
-            y = rkVector.y;
-            z = rkVector.z;
-
-            return *this;
-        }
-
         inline Vector3& operator = ( const Real fScaler )
         {
             x = fScaler;

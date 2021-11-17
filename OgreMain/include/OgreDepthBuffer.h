@@ -92,7 +92,36 @@ namespace Ogre
             POOL_INVALID        = 65535
         };
 
+        enum DepthFormatsMask
+        {
+            DFM_D32 = 1u << 0u,
+            DFM_D24 = 1u << 1u,
+            DFM_D16 = 1u << 2u,
+            DFM_S8 = 1u << 3u
+        };
+
         static PixelFormatGpu DefaultDepthBufferFormat;
+
+        /// During initialization DefaultDepthBufferFormat is overriden with a supported format
+        ///
+        /// This can be troublesome when creating the first render window, as you cannot tell
+        /// Ogre which format do you wish to use for that window.
+        ///
+        /// That's where AvailableDepthFormats comes in:
+        ///
+        /// Before initialization user can set this mask to inform which formats
+        /// they want to use. Ogre will go from best format to worst until a
+        /// supported one is found.
+        /// The default value is all bits set.
+        ///
+        /// Set this to 0 to never use depth buffers.
+        /// If you only wish render windows to not use depth buffers, then
+        /// create the window with miscParam["depth_buffer"] = "no";
+        ///
+        /// After initialization the mask is left untouched
+        ///
+        /// See DepthBuffer::DepthFormatsMask
+        static uint8 AvailableDepthFormats;
     };
 
     /** @} */
