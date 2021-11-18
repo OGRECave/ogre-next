@@ -28,6 +28,7 @@ THE SOFTWARE.
 #ifndef __STBICodec_H__
 #define __STBICodec_H__
 
+#include "ogrestd/list.h"
 #include "OgreImageCodec2.h"
 
 namespace Ogre {
@@ -62,8 +63,8 @@ namespace Ogre {
         /// @copydoc Codec::decode
         DecodeResult decode(DataStreamPtr& input) const;
 
-        
-        virtual String getType() const;        
+
+        virtual String getType() const;
 
         /// @copydoc Codec::magicNumberToFileExt
         String magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const;
