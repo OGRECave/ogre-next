@@ -682,6 +682,14 @@ namespace Ogre {
         /** @See _getDerivedScaleUpdated remarks. @See _getFullTransform */
         virtual_l2 const Matrix4& _getFullTransformUpdated(void);
 
+        /** Helper method to update the Node and all children.
+        @note
+            Updates this node and all children to incorporate transforms etc.
+            Ogre never call it, preferring full update of all transforms, but there could be
+            situations when scene modifications are known and so small that full update is inefficient.
+        */
+        void _updateChildren();
+
         /** Sets a listener for this Node.
         @remarks
             Note for size and performance reasons only one listener per node is

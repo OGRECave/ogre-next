@@ -297,6 +297,27 @@ namespace Ogre {
         return mTransform.mDerivedTransform[mTransform.mIndex];
     }
     //-----------------------------------------------------------------------
+    void Node::_updateChildren()
+    {
+        updateFromParentImpl();
+
+        // Call listener (note, this method only called if there's something to do)
+        if (mListener)
+        {
+            mListener->nodeUpdated(this);
+        }
+        
+        //Keep propagating changes to our children
+        NodeVec::iterator itor = mChildren.begin();
+        NodeVec::iterator end  = mChildren.end();
+
+        while( itor != end )
+        {
+            (*itor)->_updateChildren();
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------
     void Node::_updateFromParent(void)
     {
         if( mParent )
