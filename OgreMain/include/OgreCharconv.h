@@ -48,7 +48,7 @@ THE SOFTWARE.
 #elif defined(_GLIBCXX_RELEASE) && _GLIBCXX_HOSTED && \
     (_GLIBCXX_RELEASE > 8 || _GLIBCXX_RELEASE == __GNUC__ && (__GNUC__ * 100 + __GNUC_MINOR__) >= 801)
 #define OGRE_HAS_CHARCONV
-#if (_GLIBCXX_RELEASE > 11 || _GLIBCXX_RELEASE == __GNUC__ && (__GNUC__ * 100 + __GNUC_MINOR__) >= 1101)
+#if ((_GLIBCXX_RELEASE > 11 || _GLIBCXX_RELEASE == __GNUC__ && (__GNUC__ * 100 + __GNUC_MINOR__) >= 1101) && !__MINGW32__ && !__MINGW64__)
 #define OGRE_HAS_CHARCONV_FLOAT
 #endif
 #endif
