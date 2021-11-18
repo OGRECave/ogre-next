@@ -33,6 +33,7 @@ var class_ogre_1_1_tag_point =
     [ "_setNullNodeMemoryManager", "class_ogre_1_1_tag_point.html#af098e0fdbfba92cb06f6431d33d0b4a6", null ],
     [ "_setParentBone", "class_ogre_1_1_tag_point.html#a0e31e052ed4eded936856eea23be9ed7", null ],
     [ "_unsetParentBone", "class_ogre_1_1_tag_point.html#a698283098b0bdb75a49bf4a0fe6b0ec9", null ],
+    [ "_updateChildren", "class_ogre_1_1_tag_point.html#a625500757d216e51c48fbf09a52a36f7", null ],
     [ "addChild", "class_ogre_1_1_tag_point.html#af01698919040092766a3a4bfab8e7ceb", null ],
     [ "attachObject", "class_ogre_1_1_tag_point.html#afc15c981be15167edc61d7d4453a089d", null ],
     [ "convertLocalToWorldDirection", "class_ogre_1_1_tag_point.html#a4764d25d695ab8bc5ad9bf378ae70786", null ],

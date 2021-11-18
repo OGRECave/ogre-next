@@ -26,6 +26,7 @@ var class_ogre_1_1_node =
     [ "_setDerivedOrientation", "class_ogre_1_1_node.html#a383a4f0494151b534ac76ec0aecbb6a1", null ],
     [ "_setDerivedPosition", "class_ogre_1_1_node.html#aa61f161b03f1a80bc5974b2804171062", null ],
     [ "_setNullNodeMemoryManager", "class_ogre_1_1_node.html#af098e0fdbfba92cb06f6431d33d0b4a6", null ],
+    [ "_updateChildren", "class_ogre_1_1_node.html#a625500757d216e51c48fbf09a52a36f7", null ],
     [ "addChild", "class_ogre_1_1_node.html#af01698919040092766a3a4bfab8e7ceb", null ],
     [ "convertLocalToWorldDirection", "class_ogre_1_1_node.html#a4764d25d695ab8bc5ad9bf378ae70786", null ],
     [ "convertLocalToWorldDirectionUpdated", "class_ogre_1_1_node.html#ac892e2e5a007c0f91112823d73ce5b38", null ],

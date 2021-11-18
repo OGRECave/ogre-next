@@ -1,5 +1,6 @@
 var NAVTREEINDEX98 =
 {
+"class_ogre_1_1_hlms_buffer_manager.html#a8d20fe298661833fbbc087c5af5bfbe1":[5,0,0,3,35],
 "class_ogre_1_1_hlms_buffer_manager.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,0,0,3,53],
 "class_ogre_1_1_hlms_buffer_manager.html#a9a1b12239e46b90448d960ed784148d8":[5,0,0,3,17],
 "class_ogre_1_1_hlms_buffer_manager.html#a9be0f56ad3a2e3568112812a44c05b2c":[5,0,0,3,23],
@@ -248,6 +249,5 @@ var NAVTREEINDEX98 =
 "class_ogre_1_1_hlms_disk_cache.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,11,53,17],
 "class_ogre_1_1_hlms_disk_cache.html#a213cec23c928050df22266c795a1fd37":[5,2,11,53,10],
 "class_ogre_1_1_hlms_disk_cache.html#a21415b99a02e9ce4db47723849a0b27b":[5,2,11,53,26],
-"class_ogre_1_1_hlms_disk_cache.html#a31d8d520055ba11c04c601851f1b20ec":[5,2,11,53,28],
-"class_ogre_1_1_hlms_disk_cache.html#a3875a13af0c3350f4562d7bfb2d056b6":[5,2,11,53,30]
+"class_ogre_1_1_hlms_disk_cache.html#a31d8d520055ba11c04c601851f1b20ec":[5,2,11,53,28]
 };

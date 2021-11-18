@@ -191,6 +191,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af098e0fdbfba92cb06f6431d33d0b4a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#af098e0fdbfba92cb06f6431d33d0b4a6">_setNullNodeMemoryManager</a> (void)</td></tr>
 <tr class="memdesc:af098e0fdbfba92cb06f6431d33d0b4a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manually set the mNodeMemoryManager to a null ptr.  <a href="class_ogre_1_1_node.html#af098e0fdbfba92cb06f6431d33d0b4a6">More...</a><br /></td></tr>
 <tr class="separator:af098e0fdbfba92cb06f6431d33d0b4a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a625500757d216e51c48fbf09a52a36f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#a625500757d216e51c48fbf09a52a36f7">_updateChildren</a> ()</td></tr>
+<tr class="memdesc:a625500757d216e51c48fbf09a52a36f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to update the <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> and all children.  <a href="class_ogre_1_1_node.html#a625500757d216e51c48fbf09a52a36f7">More...</a><br /></td></tr>
+<tr class="separator:a625500757d216e51c48fbf09a52a36f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af01698919040092766a3a4bfab8e7ceb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_node.html#af01698919040092766a3a4bfab8e7ceb">addChild</a> (<a class="el" href="class_ogre_1_1_node.html">Node</a> *child)</td></tr>
 <tr class="memdesc:af01698919040092766a3a4bfab8e7ceb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a (precreated) child scene node to this node.  <a href="class_ogre_1_1_node.html#af01698919040092766a3a4bfab8e7ceb">More...</a><br /></td></tr>
 <tr class="separator:af01698919040092766a3a4bfab8e7ceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1209,6 +1212,34 @@ Public Attributes</h2></td></tr>
 
 <p>Manually set the mNodeMemoryManager to a null ptr. </p>
 <dl class="section remark"><dt>Remarks</dt><dd><a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> doesn't follow the rule of three. This function is useful when you make multiple hard copies but only the destructor must release the mTransform only slots once. </dd></dl>
+
+</div>
+</div>
+<a id="a625500757d216e51c48fbf09a52a36f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a625500757d216e51c48fbf09a52a36f7">&#9670;&nbsp;</a></span>_updateChildren()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Node::_updateChildren </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Helper method to update the <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> and all children. </p>
+<dl class="section note"><dt>Note</dt><dd>Updates this node and all children to incorporate transforms etc. <a class="el" href="namespace_ogre.html">Ogre</a> never call it, preferring full update of all transforms, but there could be situations when scene modifications are known and so small that full update is inefficient. </dd></dl>
 
 </div>
 </div>

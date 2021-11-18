@@ -31,6 +31,7 @@ var class_ogre_1_1_bsp_scene_node =
     [ "_setDerivedPosition", "class_ogre_1_1_bsp_scene_node.html#aa61f161b03f1a80bc5974b2804171062", null ],
     [ "_setNullNodeMemoryManager", "class_ogre_1_1_bsp_scene_node.html#af098e0fdbfba92cb06f6431d33d0b4a6", null ],
     [ "_update", "class_ogre_1_1_bsp_scene_node.html#a1ee88a2f5a1f7fe70c4ea39a245aa6a1", null ],
+    [ "_updateChildren", "class_ogre_1_1_bsp_scene_node.html#a625500757d216e51c48fbf09a52a36f7", null ],
     [ "addChild", "class_ogre_1_1_bsp_scene_node.html#af01698919040092766a3a4bfab8e7ceb", null ],
     [ "attachObject", "class_ogre_1_1_bsp_scene_node.html#afc15c981be15167edc61d7d4453a089d", null ],
     [ "convertLocalToWorldDirection", "class_ogre_1_1_bsp_scene_node.html#a4764d25d695ab8bc5ad9bf378ae70786", null ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX114 =
 {
+"class_ogre_1_1_math.html#aa4bfd3e13afc2ea06f7342a05a4c1164":[5,2,6,14,22],
 "class_ogre_1_1_math.html#aa6562b753755c2e21200b7d4479c2dcd":[5,2,6,14,71],
 "class_ogre_1_1_math.html#aa75e7aa666b0ef3a847416b5646ca955":[5,2,6,14,20],
 "class_ogre_1_1_math.html#ab1ee8b71699ce68bd8cf91113ead793e":[5,2,6,14,76],
@@ -248,6 +249,5 @@ var NAVTREEINDEX114 =
 "class_ogre_1_1_mesh.html#a02d5ed61b0b9c6bc5d3426a5fa99ac90":[5,2,11,73,86],
 "class_ogre_1_1_mesh.html#a0389e214a82832a0c11d91babbc0d65f":[5,2,11,73,94],
 "class_ogre_1_1_mesh.html#a05554a4e54cbb820a243f5b9f5967cc8":[5,2,11,73,19],
-"class_ogre_1_1_mesh.html#a0617d9f04ca03bd25f4bde201e6ac13b":[5,2,11,73,49],
-"class_ogre_1_1_mesh.html#a0646fba8aa0242c6b389d73f47ebe41b":[5,2,11,73,41]
+"class_ogre_1_1_mesh.html#a0617d9f04ca03bd25f4bde201e6ac13b":[5,2,11,73,49]
 };

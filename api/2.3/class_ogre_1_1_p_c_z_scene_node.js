@@ -33,6 +33,7 @@ var class_ogre_1_1_p_c_z_scene_node =
     [ "_setDerivedPosition", "class_ogre_1_1_p_c_z_scene_node.html#aa61f161b03f1a80bc5974b2804171062", null ],
     [ "_setNullNodeMemoryManager", "class_ogre_1_1_p_c_z_scene_node.html#af098e0fdbfba92cb06f6431d33d0b4a6", null ],
     [ "_update", "class_ogre_1_1_p_c_z_scene_node.html#a2400498d4d82a3b910405f31f2a05f9c", null ],
+    [ "_updateChildren", "class_ogre_1_1_p_c_z_scene_node.html#a625500757d216e51c48fbf09a52a36f7", null ],
     [ "addChild", "class_ogre_1_1_p_c_z_scene_node.html#af01698919040092766a3a4bfab8e7ceb", null ],
     [ "addZoneToVisitingZonesMap", "class_ogre_1_1_p_c_z_scene_node.html#a67be92d9316b6c88c8bfeec5ca72550d", null ],
     [ "allowedToVisit", "class_ogre_1_1_p_c_z_scene_node.html#a2c91f1000535fd11c872b93d43917dc5", null ],

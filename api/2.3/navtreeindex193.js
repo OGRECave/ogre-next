@@ -1,5 +1,13 @@
 var NAVTREEINDEX193 =
 {
+"class_ogre_1_1_texture_manager.html#a1af003cd1d6fb4c671afe2e97a5bd536":[5,2,11,117,38],
+"class_ogre_1_1_texture_manager.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,11,117,45],
+"class_ogre_1_1_texture_manager.html#a1db642a9eef36b32dbdea28d19e8ea0d":[5,2,11,117,40],
+"class_ogre_1_1_texture_manager.html#a1fe343406d15d5367cfc4f86ba589b55":[5,2,11,117,74],
+"class_ogre_1_1_texture_manager.html#a2a5f6c92d4f91eb1eaa0ccf9b73f8c83":[5,2,11,117,26],
+"class_ogre_1_1_texture_manager.html#a2cf457c70ea86892b1bec52028c96237":[5,2,11,117,72],
+"class_ogre_1_1_texture_manager.html#a3083fb17ce51843aecdc0382d2d717f6":[5,2,11,117,42],
+"class_ogre_1_1_texture_manager.html#a3a55789d982b34bdd9daa27650360653":[5,2,11,117,34],
 "class_ogre_1_1_texture_manager.html#a3b27a21f192919d78c14bccea5184736":[5,2,11,117,14],
 "class_ogre_1_1_texture_manager.html#a3cc7b930d37bc9fc156f7a2cadb572a3":[5,2,11,117,21],
 "class_ogre_1_1_texture_manager.html#a3f92489910e40e3756606a35618d7b06":[5,2,11,117,59],
@@ -241,13 +249,5 @@ var NAVTREEINDEX193 =
 "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7da704ea118c7e9f0b1598b528bdcbe1b26":[5,2,5,20,5,8],
 "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e":[5,2,5,20,5,11],
 "class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257":[5,2,5,20,5,10],
-"class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7":[5,2,5,20,5,9],
-"class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7dafbdd85981846de4423d48d1a0ff665e0":[5,2,5,20,5,5],
-"class_ogre_1_1_texture_unit_state.html#affd8342a0a86bc34f727dc6b4b21f565":[5,2,5,20,96],
-"class_ogre_1_1_texture_unit_translator.html":[5,2,2,126],
-"class_ogre_1_1_texture_unit_translator.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,126,3],
-"class_ogre_1_1_texture_unit_translator.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,2,126,7],
-"class_ogre_1_1_texture_unit_translator.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,2,126,10],
-"class_ogre_1_1_texture_unit_translator.html#a4c62e9168358685818c6d354bb06fae7":[5,2,2,126,0],
-"class_ogre_1_1_texture_unit_translator.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,2,126,5]
+"class_ogre_1_1_texture_unit_state.html#afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7":[5,2,5,20,5,9]
 };
