@@ -205,6 +205,8 @@ namespace Ogre
                             size_t cleanupThreshold=100, size_t maxHardLimit=MAX_MEMORY_SLOTS,
                             RebaseListener *rebaseListener=0 );
 
+        virtual ~ArrayMemoryManager();
+
         /** Initializes mMemoryPools. Once it has been called, destroy() __must__ be called.
             @See destroy
         @remarks

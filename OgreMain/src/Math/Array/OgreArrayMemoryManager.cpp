@@ -90,6 +90,10 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    ArrayMemoryManager::~ArrayMemoryManager()
+    {
+    }
+    //-----------------------------------------------------------------------------------
     void ArrayMemoryManager::initialize()
     {
         assert( mUsedMemory == 0 && "Calling initialize twice"
