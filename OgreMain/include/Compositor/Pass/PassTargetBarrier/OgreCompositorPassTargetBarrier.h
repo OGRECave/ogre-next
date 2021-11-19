@@ -53,8 +53,6 @@ namespace Ogre
     */
     class _OgreExport CompositorPassTargetBarrier : public CompositorPass
     {
-        CompositorPassTargetBarrierDef const *mDefinition;
-
     protected:
         FastArray<CompositorPass *> mPasses;
 

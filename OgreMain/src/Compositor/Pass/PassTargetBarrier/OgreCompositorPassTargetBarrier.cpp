@@ -48,8 +48,7 @@ namespace Ogre
     CompositorPassTargetBarrier::CompositorPassTargetBarrier(
         const CompositorPassTargetBarrierDef *definition, CompositorNode *parentNode,
         const size_t numPasses ) :
-        CompositorPass( definition, parentNode ),
-        mDefinition( definition )
+        CompositorPass( definition, parentNode )
     {
         initialize( 0, true );
         mPasses.reserve( numPasses );
