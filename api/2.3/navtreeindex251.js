@@ -1,5 +1,6 @@
 var NAVTREEINDEX251 =
 {
+"class_ogre_1_1v1_1_1_vertex_declaration.html#a4aa40b314c50be0d9bf8bc0cbd5b5f1a":[5,2,10,48,3],
 "class_ogre_1_1v1_1_1_vertex_declaration.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,10,48,31],
 "class_ogre_1_1v1_1_1_vertex_declaration.html#a4c47fb37f8b41861b669163b7a121509":[5,2,10,48,14],
 "class_ogre_1_1v1_1_1_vertex_declaration.html#a51c632faa6ff085c80e60d93de04d934":[5,2,10,48,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX251 =
 "class_ogre_1_1v1_1_1_vulkan_hardware_index_buffer.html#ac2eb1c27dbb54c6cd3a3c1e71368e8df":[7,0,0,3,173,8],
 "class_ogre_1_1v1_1_1_vulkan_hardware_index_buffer.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,3,173,28],
 "class_ogre_1_1v1_1_1_vulkan_hardware_index_buffer.html#ac6d97282de4e5937ff00cf2ff14860a8":[7,0,0,3,173,20],
-"class_ogre_1_1v1_1_1_vulkan_hardware_index_buffer.html#ac9a7bf368aa7c755fe7acd9fc936753c":[7,0,0,3,173,38],
-"class_ogre_1_1v1_1_1_vulkan_hardware_index_buffer.html#ac9cbd2da85d59fe5ef6d5fa348052cd8":[7,0,0,3,173,19]
+"class_ogre_1_1v1_1_1_vulkan_hardware_index_buffer.html#ac9a7bf368aa7c755fe7acd9fc936753c":[7,0,0,3,173,38]
 };

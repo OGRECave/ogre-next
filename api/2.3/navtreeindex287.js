@@ -1,5 +1,6 @@
 var NAVTREEINDEX287 =
 {
+"struct_ogre_1_1v1_1_1_vertex_pose_key_frame_1_1_pose_ref.html#ae84042b7177ea6d85dbdd8f18f643eb4":[5,2,0,31,0,2],
 "struct_ogre_1_1v1_1_1_vertex_shadow_map_helper_1_1_geometry.html":[7,0,0,3,169,0],
 "struct_ogre_1_1v1_1_1_vertex_shadow_map_helper_1_1_geometry.html#a0d167fc51f54d1612b1b4b8a2972f95e":[7,0,0,3,169,0,0],
 "struct_ogre_1_1v1_1_1_vertex_shadow_map_helper_1_1_geometry.html#a47dcb28c4075b4f52878ca96e0b73069":[7,0,0,3,169,0,1],

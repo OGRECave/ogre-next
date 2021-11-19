@@ -1,5 +1,6 @@
 var NAVTREEINDEX153 =
 {
+"class_ogre_1_1_pass_translator.html#a0359452063bcbdc46c2b5fd5002f257a":[5,2,2,78,0],
 "class_ogre_1_1_pass_translator.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,78,3],
 "class_ogre_1_1_pass_translator.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,2,78,7],
 "class_ogre_1_1_pass_translator.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,2,78,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX153 =
 "class_ogre_1_1_planar_reflections.html#a3a58842a57fece487fd4601d1845f8f2":[5,0,0,23,23],
 "class_ogre_1_1_planar_reflections.html#a44003f3183c9912fc8bd0dbe08130dc4":[5,0,0,23,10],
 "class_ogre_1_1_planar_reflections.html#a50aeb6eec3120373b6d5316909128235":[5,0,0,23,7],
-"class_ogre_1_1_planar_reflections.html#a6b97bf4ca49cb975146865babaebd38c":[5,0,0,23,13],
-"class_ogre_1_1_planar_reflections.html#a7c96969df4853b0d5c1e3f0c6adae41a":[5,0,0,23,25]
+"class_ogre_1_1_planar_reflections.html#a6b97bf4ca49cb975146865babaebd38c":[5,0,0,23,13]
 };
