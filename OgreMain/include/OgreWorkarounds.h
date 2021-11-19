@@ -35,14 +35,8 @@ namespace Ogre
 {
     struct _OgreExport Workarounds
     {
-        /**
-        @param outStr
-            String wrapped as a void*. Usage:
+        static void dump( String &outStr );
 
-            Ogre::String str;
-            Workarounds::dump( (void *)&str );
-        */
-        static void dump( void *outStr );
 #ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
 
 //PowerVR SGX 540 does not correctly transpose matrices in glProgramUniformMatrix4fvEXT,

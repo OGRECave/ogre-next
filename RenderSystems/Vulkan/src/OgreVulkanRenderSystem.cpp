@@ -1092,7 +1092,7 @@ namespace Ogre
             resetAllBindings();
 
             String workaroundsStr;
-            Workarounds::dump( (void *)&workaroundsStr );
+            Workarounds::dump( workaroundsStr );
             if( !workaroundsStr.empty() )
             {
                 workaroundsStr = "Workarounds applied:" + workaroundsStr;

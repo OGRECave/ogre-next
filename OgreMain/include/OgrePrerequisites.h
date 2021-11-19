@@ -28,7 +28,6 @@ THE SOFTWARE
 
 // Platform-specific stuff
 #include "OgrePlatform.h"
-#include "OgreWorkarounds.h"
 
 #include <string>
 
@@ -649,6 +648,7 @@ namespace Ogre
 }
 
 #include "OgreAssert.h"
+#include "OgreWorkarounds.h"
 
 #endif // __OgrePrerequisites_H__
 
