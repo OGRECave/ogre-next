@@ -116,7 +116,7 @@ namespace Ogre
         }
         else
         {
-            this->setVisible( mTrackedObject->isVisible() );
+            this->setVisible( mTrackedObject->getVisible() );
             Aabb trackedAabb = mTrackedObject->getWorldAabb();
             mParentNode->setPosition( trackedAabb.mCenter );
             mParentNode->setScale( trackedAabb.mHalfSize );
