@@ -696,6 +696,8 @@ namespace Ogre
             case OT_TRIANGLE_FAN:
                 stats.mFaceCount += ( vao->mPrimCount - 2u ) * instancesPerDraw;
                 break;
+            default:
+                break;
             }
 
             stats.mVertexCount += vao->mPrimCount * instancesPerDraw;
@@ -842,6 +844,8 @@ namespace Ogre
             case OT_TRIANGLE_STRIP:
             case OT_TRIANGLE_FAN:
                 stats.mFaceCount += ( primCount - 2u ) * instancesPerDraw;
+                break;
+            default:
                 break;
             }
 

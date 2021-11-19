@@ -636,6 +636,8 @@ namespace Ogre
             assert( dynamic_cast<IndirectBufferPacked*>( bufferPacked ) );
             destroyIndirectBufferImpl( static_cast<IndirectBufferPacked*>( bufferPacked ) );
             break;
+        default:
+            assert(false); // unreachable
         }
     }
     //-----------------------------------------------------------------------------------
