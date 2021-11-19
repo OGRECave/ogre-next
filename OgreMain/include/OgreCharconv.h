@@ -91,7 +91,7 @@ namespace Ogre
 	template<char SEP = ' ', typename... Args>
 	to_chars_result to_chars_all(char* first, char* last, Args... args) {
 		to_chars_result res = { first, errc() };
-		return (... && ((res.ptr == first || res.ptr < last && (*res.ptr++ = SEP)) && (res = to_chars(res.ptr, last, args), res.ec == errc())))
+		return (... && ((res.ptr == first || (res.ptr < last && (*res.ptr++ = SEP))) && (res = to_chars(res.ptr, last, args), res.ec == errc())))
 			? res : to_chars_result{ last, errc::value_too_large };
 	}
 }
