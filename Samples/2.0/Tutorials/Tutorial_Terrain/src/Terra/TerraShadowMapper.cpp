@@ -59,8 +59,10 @@ namespace Ogre
         m_jobParamXYStep( 0 ),
         m_jobParamIsStep( 0 ),
         m_jobParamHeightDelta( 0 ),
+        m_jobParamResolutionShift( 0 ),
         m_terraId( std::numeric_limits<IdType>::max() ),
         m_minimizeMemoryConsumption( false ),
+        m_lowResShadow( false ),
         m_sharedResources( 0 ),
         m_sceneManager( sceneManager ),
         m_compositorManager( compositorManager )
@@ -106,12 +108,13 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void ShadowMapper::createShadowMap( IdType id, TextureGpu *heightMapTex )
+    void ShadowMapper::createShadowMap( IdType id, TextureGpu *heightMapTex, bool bLowResShadow )
     {
         destroyShadowMap();
 
         m_terraId = id;
         m_heightMapTex = heightMapTex;
+        m_lowResShadow = bLowResShadow;
 
         VaoManager *vaoManager = m_sceneManager->getDestinationRenderSystem()->getVaoManager();
 
@@ -149,7 +152,15 @@ namespace Ogre
                              GpuPageOutStrategy::SaveToSystemRam,
                              TextureFlags::Uav,
                              TextureTypes::Type2D );
-        m_shadowMapTex->setResolution( m_heightMapTex->getWidth(), m_heightMapTex->getHeight() );
+
+        uint32 width = m_heightMapTex->getWidth();
+        uint32 height = m_heightMapTex->getHeight();
+        if( bLowResShadow )
+        {
+            width >>= 2u;
+            height >>= 2u;
+        }
+        m_shadowMapTex->setResolution( width, height );
 
         {
             // Check for something that is supported. If they all fail, we assume the driver
@@ -178,8 +189,12 @@ namespace Ogre
         m_jobParamXYStep = shaderParams.findParameter( "xyStep" );
         m_jobParamIsStep = shaderParams.findParameter( "isSteep" );
         m_jobParamHeightDelta = shaderParams.findParameter( "heightDelta" );
+        m_jobParamResolutionShift = shaderParams.findParameter( "resolutionShift" );
 
-        setGaussianFilterParams( 8, 0.5f );
+        if( bLowResShadow )
+            setGaussianFilterParams( 4, 0.5f );
+        else
+            setGaussianFilterParams( 8, 0.5f );
     }
     //-----------------------------------------------------------------------------------
     void ShadowMapper::destroyShadowMap(void)
@@ -346,6 +361,11 @@ namespace Ogre
         //Values greater than 1.0 (or less than -1.0) are pointless anyway.
         heightDelta = std::max( -1.0f, std::min( 1.0f, heightDelta ) );
         m_jobParamHeightDelta->setManualValue( heightDelta );
+
+        if( m_lowResShadow )
+            m_jobParamResolutionShift->setManualValue( static_cast<uint32>( 2u ) );
+        else
+            m_jobParamResolutionShift->setManualValue( static_cast<uint32>( 0u ) );
 
         //y0 is not needed anymore, and we need it to be either 0 or heightOrWidth for the
         //algorithm to work correctly (depending on the sign of xyStep[1]). So do this now.

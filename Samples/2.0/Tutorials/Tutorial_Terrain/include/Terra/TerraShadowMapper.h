@@ -55,9 +55,11 @@ namespace Ogre
         ShaderParams::Param *m_jobParamXYStep;
         ShaderParams::Param *m_jobParamIsStep;
         ShaderParams::Param *m_jobParamHeightDelta;
+        ShaderParams::Param *m_jobParamResolutionShift;
 
         IdType m_terraId;
         bool m_minimizeMemoryConsumption;
+        bool m_lowResShadow;
         TerraSharedResources *m_sharedResources;
 
         //Ogre stuff
@@ -148,7 +150,16 @@ namespace Ogre
         */
         void setMinimizeMemoryConsumption( bool bMinimizeMemoryConsumption );
 
-        void createShadowMap( IdType id, TextureGpu *heightMapTex );
+        /**
+        @param id
+            If for generating unique names
+        @param heightMapTex
+            The original heightmap we'll be raymarching for
+        @param bLowResShadow
+            When true we'll create the shadow map at width / 4 x height / 4
+            This consumes a lot less BW and memory, which can be critical in older mobile
+        */
+        void createShadowMap( IdType id, TextureGpu *heightMapTex, bool bLowResShadow );
         void destroyShadowMap(void);
         void updateShadowMap( const Vector3 &lightDir, const Vector2 &xzDimensions, float heightScale );
 

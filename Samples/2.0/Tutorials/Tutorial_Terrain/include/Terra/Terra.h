@@ -130,7 +130,8 @@ namespace Ogre
         void createHeightmapTexture( const Image2 &image, const String &imageName );
 
         /// Calls createHeightmapTexture, loads image data to our CPU-side buffers
-        void createHeightmap( Image2 &image, const String &imageName, bool bMinimizeMemoryConsumption );
+        void createHeightmap( Image2 &image, const String &imageName, bool bMinimizeMemoryConsumption,
+                              bool bLowResShadow );
 
         void createNormalTexture(void);
         void destroyNormalTexture(void);
@@ -204,12 +205,14 @@ namespace Ogre
         @param center
         @param dimensions
         @param bMinimizeMemoryConsumption
-            See ShadowMapper::_setMinimizeMemoryConsumption
+            See ShadowMapper::setMinimizeMemoryConsumption
+        @param bLowResShadow
+            See ShadowMapper::createShadowMap
         */
         void load( const String &texName, const Vector3 &center, const Vector3 &dimensions,
-                   bool bMinimizeMemoryConsumption );
-        void load( Image2 &image, Vector3 center, Vector3 dimensions,
-                   bool bMinimizeMemoryConsumption, const String &imageName = BLANKSTRING );
+                   bool bMinimizeMemoryConsumption, bool bLowResShadow );
+        void load( Image2 &image, Vector3 center, Vector3 dimensions, bool bMinimizeMemoryConsumption,
+                   bool bLowResShadow, const String &imageName = BLANKSTRING );
 
         /** Gets the interpolated height at the given location.
             If outside the bounds, it leaves the height untouched.

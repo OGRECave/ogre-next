@@ -211,8 +211,8 @@ namespace Ogre
         stagingTexture = 0;
     }
     //-----------------------------------------------------------------------------------
-    void Terra::createHeightmap( Image2 &image, const String &imageName,
-                                 bool bMinimizeMemoryConsumption )
+    void Terra::createHeightmap( Image2 &image, const String &imageName, bool bMinimizeMemoryConsumption,
+                                 bool bLowResShadow )
     {
         m_width = image.getWidth();
         m_depth = image.getHeight();
@@ -275,7 +275,7 @@ namespace Ogre
         m_shadowMapper = new ShadowMapper( mManager, m_compositorManager );
         m_shadowMapper->_setSharedResources( m_sharedResources );
         m_shadowMapper->setMinimizeMemoryConsumption( bMinimizeMemoryConsumption );
-        m_shadowMapper->createShadowMap( getId(), m_heightMapTex );
+        m_shadowMapper->createShadowMap( getId(), m_heightMapTex, bLowResShadow );
 
         calculateOptimumSkirtSize();
     }
@@ -660,16 +660,16 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void Terra::load( const String &texName, const Vector3 &center, const Vector3 &dimensions,
-                      bool bMinimizeMemoryConsumption )
+                      bool bMinimizeMemoryConsumption, bool bLowResShadow )
     {
         Ogre::Image2 image;
         image.load( texName, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
 
-        load( image, center, dimensions, bMinimizeMemoryConsumption, texName );
+        load( image, center, dimensions, bMinimizeMemoryConsumption, bLowResShadow, texName );
     }
     //-----------------------------------------------------------------------------------
-    void Terra::load( Image2 &image, Vector3 center, Vector3 dimensions,
-                      bool bMinimizeMemoryConsumption, const String &imageName )
+    void Terra::load( Image2 &image, Vector3 center, Vector3 dimensions, bool bMinimizeMemoryConsumption,
+                      bool bLowResShadow, const String &imageName )
     {
         // Use sign-preserving because origin in XZ plane is always from
         // bottom-left to top-right.
@@ -681,7 +681,7 @@ namespace Ogre
         m_xzInvDimensions = 1.0f / m_xzDimensions;
         m_height = dimensions.y;
         m_basePixelDimension = 64u;
-        createHeightmap( image, imageName, bMinimizeMemoryConsumption );
+        createHeightmap( image, imageName, bMinimizeMemoryConsumption, bLowResShadow );
 
         {
             //Find out how many TerrainCells we need. I think this might be

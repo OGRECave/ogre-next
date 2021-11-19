@@ -36,12 +36,14 @@ cbuffer PerGroupDataBuffer : register(b1)
 //Rendering uniforms
 uniform float heightDelta;
 
+uniform uint resolutionShift;
+
 float2 calcShadow( int2 xyPos, float2 prevHeight )
 {
 	prevHeight.x -= heightDelta;
 	prevHeight.y = prevHeight.y * 0.985 - heightDelta; //Used for the penumbra region
 
-	float currHeight = heightMap.Load( int3( xyPos, 0 ) );
+	float currHeight = heightMap.Load( int3( xyPos << int( resolutionShift ), 0 ) );
 
 	float shadowValue = smoothstep( prevHeight.y, prevHeight.x, currHeight + 0.001 );
 	prevHeight.x = currHeight >= prevHeight.x ? currHeight : prevHeight.x;
