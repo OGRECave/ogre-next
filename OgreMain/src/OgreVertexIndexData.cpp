@@ -812,11 +812,6 @@ namespace v1 {
         {
         }
 
-        inline Triangle( const Triangle& t )
-            : a( t.a ), b( t.b ), c( t.c )
-        {
-        }
-
         inline bool sharesEdge(const Triangle& t) const
         {
             return( (a == t.a && b == t.c) ||

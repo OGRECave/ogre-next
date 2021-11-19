@@ -72,20 +72,6 @@ namespace Ogre
         ArrayReal       mChunkBase[12];
 
         ArrayMatrixAf4x3() {}
-        ArrayMatrixAf4x3( const ArrayMatrixAf4x3 &copy )
-        {
-            //Using a loop minimizes instruction count (better i-cache)
-            //Doing 4 at a time per iteration maximizes instruction pairing
-            //Unrolling the whole loop is i-cache unfriendly and
-            //becomes unmaintainable (16 lines!?)
-            for( size_t i=0; i<12; i+=4 )
-            {
-                mChunkBase[i  ] = copy.mChunkBase[i  ];
-                mChunkBase[i+1] = copy.mChunkBase[i+1];
-                mChunkBase[i+2] = copy.mChunkBase[i+2];
-                mChunkBase[i+3] = copy.mChunkBase[i+3];
-            }
-        }
 
         /// Sets all packed matrices to the same value as the scalar input matrix
         void setAll( const Matrix4 &m )

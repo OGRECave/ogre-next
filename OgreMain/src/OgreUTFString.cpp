@@ -238,11 +238,6 @@ namespace Ogre {
 
     }
     //--------------------------------------------------------------------------
-    UTFString::_const_fwd_iterator::_const_fwd_iterator( const _const_fwd_iterator& i )
-    {
-        _become( i );
-    }
-    //--------------------------------------------------------------------------
     UTFString::_const_fwd_iterator::_const_fwd_iterator( const _fwd_iterator& i )
     {
         _become( i );

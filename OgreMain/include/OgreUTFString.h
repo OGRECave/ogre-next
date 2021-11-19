@@ -291,7 +291,6 @@ namespace Ogre {
     class _OgreExport _const_fwd_iterator: public _base_iterator { /* i don't know why the beautifier is freaking out on this line */
         public:
             _const_fwd_iterator();
-            _const_fwd_iterator( const _const_fwd_iterator& i );
             _const_fwd_iterator( const _fwd_iterator& i );
 
             //! pre-increment

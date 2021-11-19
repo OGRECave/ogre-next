@@ -190,11 +190,15 @@ namespace Ogre
     private:
         // Forbidden calls
         // Assignment.
+#if __cplusplus >= 201103L
+        LwConstString& operator = ( const LwConstString &other ) = delete;
+#else
         LwConstString& operator = ( const LwConstString &other )
         {
             assert( false && "Can't call asignment operator!" );
             return *this;
         }
+#endif
     };
 }
 
