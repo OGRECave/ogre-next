@@ -328,6 +328,13 @@ namespace Ogre {
             // and once for fragment program params.
             if (fromProgType == currentUniform->mSourceProgType)
             {
+                // IMPORTANT: If you get a dangling pointer at currentUniform->mConstantDef
+                // (e.g. detected via ASAN) then see GLSLShader::MonolithicCacheStatus
+                // If you loaded -> unloaded -> modifed code -> loaded again
+                // then you need to set MCS_INVALIDATE (which is a workaround)
+                //
+                // The Monolithic cache is not from perfect and ideally should be moved
+                // to GL3PlusPso.
                 const GpuConstantDefinition* def = currentUniform->mConstantDef;
                 if (def->variability & mask)
                 {

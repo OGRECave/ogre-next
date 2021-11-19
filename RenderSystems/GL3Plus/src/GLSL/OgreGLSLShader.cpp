@@ -66,6 +66,7 @@ namespace Ogre {
         , mCompiled(0)
         , mColumnMajorMatrices(true)
         , mReplaceVersionMacro(false)
+        , mMonolithicCacheStatus(MCS_EMPTY)
     {
         if (createParamDictionary("GLSLShader"))
         {
@@ -146,6 +147,19 @@ namespace Ogre {
 
     void GLSLShader::loadFromSource(void)
     {
+        if( mMonolithicCacheStatus == MCS_INVALIDATE )
+        {
+            // Must change ID. The previous set in the cache has dangling stuff.
+            // And we will let it leak.
+            // Since it's extremely uncommon to load -> modify -> unload -> load
+            // we don't care about the leak. Most common case is changing options
+            // and reloading a few low level material shaders
+            //
+            // TODO: Monolithic stuff would belong to GL3HlmsPso
+            mShaderID = ++mShaderCount;
+        }
+        mMonolithicCacheStatus = MCS_VALID;
+
         // Preprocess the GLSL shader in order to get a clean source
         CPreprocessor cpp;
 
@@ -581,6 +595,16 @@ namespace Ogre {
         }
     }
 
+    void GLSLShader::setPreprocessorDefines( const String &defines )
+    {
+        if( mMonolithicCacheStatus == MCS_EMPTY || defines != mPreprocessorDefines )
+        {
+            mPreprocessorDefines = defines;
+
+            if( mMonolithicCacheStatus == MCS_VALID )
+                mMonolithicCacheStatus = MCS_INVALIDATE;
+        }
+    }
 
     const String& GLSLShader::getLanguage(void) const
     {

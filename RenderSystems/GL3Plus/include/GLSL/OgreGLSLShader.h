@@ -162,7 +162,7 @@ namespace Ogre {
         void attachChildShader(const String& name);
 
         /// Sets the preprocessor defines use to compile the program.
-        void setPreprocessorDefines(const String& defines) { mPreprocessorDefines = defines; }
+        void setPreprocessorDefines(const String& defines);
         /// Sets the preprocessor defines use to compile the program.
         const String& getPreprocessorDefines(void) const { return mPreprocessorDefines; }
 
@@ -258,10 +258,22 @@ namespace Ogre {
         // /// @copydoc Resource::loadImpl
         // void loadImpl(void) {}
 
+        enum MonolithicCacheStatus
+        {
+            /// This shader hasn't been compiled yet
+            MCS_EMPTY,
+            /// This shader has been compiled only once
+            MCS_VALID,
+            /// This shader has been compiled, then unloaded and then its source modified
+            /// We must change the cache ID if we get loaded again
+            MCS_INVALIDATE
+        };
+
         /// OGRE assigned shader ID.
         GLuint mShaderID;
 
     private:
+
         /// GL handle for shader object.
         GLuint mGLShaderHandle;
 
@@ -285,6 +297,7 @@ namespace Ogre {
         bool mColumnMajorMatrices;
 
         bool mReplaceVersionMacro;
+        uint8 mMonolithicCacheStatus;
 
         typedef vector< GLSLShader* >::type GLSLShaderContainer;
         typedef GLSLShaderContainer::iterator GLSLShaderContainerIterator;
