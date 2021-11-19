@@ -150,11 +150,8 @@ var group___math =
     ] ],
     [ "ArrayMatrixAf4x3", "class_ogre_1_1_array_matrix_af4x3.html", [
       [ "ArrayMatrixAf4x3", "class_ogre_1_1_array_matrix_af4x3.html#abae10b4f1afe6de2cdf9899cb805f9d9", null ],
-      [ "ArrayMatrixAf4x3", "class_ogre_1_1_array_matrix_af4x3.html#a64b6d19402c7352a27322ff223fd8744", null ],
       [ "ArrayMatrixAf4x3", "class_ogre_1_1_array_matrix_af4x3.html#abae10b4f1afe6de2cdf9899cb805f9d9", null ],
-      [ "ArrayMatrixAf4x3", "class_ogre_1_1_array_matrix_af4x3.html#a64b6d19402c7352a27322ff223fd8744", null ],
       [ "ArrayMatrixAf4x3", "class_ogre_1_1_array_matrix_af4x3.html#abae10b4f1afe6de2cdf9899cb805f9d9", null ],
-      [ "ArrayMatrixAf4x3", "class_ogre_1_1_array_matrix_af4x3.html#a64b6d19402c7352a27322ff223fd8744", null ],
       [ "createAllFromMatrix4", "class_ogre_1_1_array_matrix_af4x3.html#a1b1b5ad7c56d85c51462c3cd7ae7abac", null ],
       [ "createAllFromMatrix4", "class_ogre_1_1_array_matrix_af4x3.html#a1b1b5ad7c56d85c51462c3cd7ae7abac", null ],
       [ "createAllFromMatrix4", "class_ogre_1_1_array_matrix_af4x3.html#a1b1b5ad7c56d85c51462c3cd7ae7abac", null ],

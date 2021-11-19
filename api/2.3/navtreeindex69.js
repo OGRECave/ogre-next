@@ -1,8 +1,5 @@
 var NAVTREEINDEX69 =
 {
-"class_ogre_1_1_e_g_l_window.html#ab757d8a24dead55af8e773a036ee141d":[7,0,0,327,135],
-"class_ogre_1_1_e_g_l_window.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,327,99],
-"class_ogre_1_1_e_g_l_window.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,327,100],
 "class_ogre_1_1_e_g_l_window.html#ab82d2cf13a93ae6406cee9d2d044aa06":[7,0,0,327,46],
 "class_ogre_1_1_e_g_l_window.html#abb4fa5e6970515a4d6cb9a16501557b5":[7,0,0,327,63],
 "class_ogre_1_1_e_g_l_window.html#abb8787baa99c92944f4fddac7c53cc6d":[7,0,0,327,3],
@@ -43,8 +40,8 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_e_g_l_window.html#af8615122f9bc57a80ffc8c73a75d2852":[7,0,0,327,134],
 "class_ogre_1_1_e_g_l_window.html#af8854efa9b905e9becd10e062a53ae3a":[7,0,0,327,79],
 "class_ogre_1_1_e_g_l_window.html#af8ca9d240bd48662c37dbdf8fa881bad":[7,0,0,327,119],
-"class_ogre_1_1_e_g_l_window.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,327,102],
 "class_ogre_1_1_e_g_l_window.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,327,101],
+"class_ogre_1_1_e_g_l_window.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,327,102],
 "class_ogre_1_1_e_g_l_window.html#afd829eb1b4b17d7881a49adbd9206edb":[7,0,0,327,110],
 "class_ogre_1_1_e_t_c_codec.html":[5,2,3,3],
 "class_ogre_1_1_e_t_c_codec.html#a02d7a0bbacc0ec3464919574bd9248f3":[5,2,3,3,29],
@@ -249,5 +246,8 @@ var NAVTREEINDEX69 =
 "class_ogre_1_1_ellipsoid_emitter.html#a64d38a64642017c5ca73213b129aa8d8":[7,0,0,328,47],
 "class_ogre_1_1_ellipsoid_emitter.html#a659edec094aae09a7f1325e7e8fbc29a":[7,0,0,328,87],
 "class_ogre_1_1_ellipsoid_emitter.html#a6607b5a35ab594e8e5e01df766cd5462":[7,0,0,328,28],
-"class_ogre_1_1_ellipsoid_emitter.html#a666a8c8c660ffc55ff338b59a416f682":[7,0,0,328,9]
+"class_ogre_1_1_ellipsoid_emitter.html#a666a8c8c660ffc55ff338b59a416f682":[7,0,0,328,9],
+"class_ogre_1_1_ellipsoid_emitter.html#a674566db12d25f32513a382a4118b5da":[7,0,0,328,62],
+"class_ogre_1_1_ellipsoid_emitter.html#a691070e7cdb1ca6d61e687ca3c510123":[7,0,0,328,10],
+"class_ogre_1_1_ellipsoid_emitter.html#a6a2bc4941c3c346f6d9936e447dde3c9":[7,0,0,328,65]
 };

@@ -110,12 +110,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abae10b4f1afe6de2cdf9899cb805f9d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abae10b4f1afe6de2cdf9899cb805f9d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_matrix_af4x3.html#abae10b4f1afe6de2cdf9899cb805f9d9">ArrayMatrixAf4x3</a> ()</td></tr>
 <tr class="separator:abae10b4f1afe6de2cdf9899cb805f9d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64b6d19402c7352a27322ff223fd8744"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_matrix_af4x3.html#a64b6d19402c7352a27322ff223fd8744">ArrayMatrixAf4x3</a> (const <a class="el" href="class_ogre_1_1_array_matrix_af4x3.html">ArrayMatrixAf4x3</a> &amp;copy)</td></tr>
-<tr class="separator:a64b6d19402c7352a27322ff223fd8744"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64b6d19402c7352a27322ff223fd8744"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_matrix_af4x3.html#a64b6d19402c7352a27322ff223fd8744">ArrayMatrixAf4x3</a> (const <a class="el" href="class_ogre_1_1_array_matrix_af4x3.html">ArrayMatrixAf4x3</a> &amp;copy)</td></tr>
-<tr class="separator:a64b6d19402c7352a27322ff223fd8744"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64b6d19402c7352a27322ff223fd8744"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_matrix_af4x3.html#a64b6d19402c7352a27322ff223fd8744">ArrayMatrixAf4x3</a> (const <a class="el" href="class_ogre_1_1_array_matrix_af4x3.html">ArrayMatrixAf4x3</a> &amp;copy)</td></tr>
-<tr class="separator:a64b6d19402c7352a27322ff223fd8744"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc523942e11e9163478332fdcd45ec35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_array_matrix_af4x3.html#adc523942e11e9163478332fdcd45ec35">decomposition</a> (<a class="el" href="class_ogre_1_1_array_vector3.html">ArrayVector3</a> &amp;position, <a class="el" href="class_ogre_1_1_array_vector3.html">ArrayVector3</a> &amp;scale, <a class="el" href="class_ogre_1_1_array_quaternion.html">ArrayQuaternion</a> &amp;orientation) const</td></tr>
 <tr class="memdesc:adc523942e11e9163478332fdcd45ec35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decompose a <a class="el" href="class_ogre_1_1_matrix4.html" title="Class encapsulating a standard 4x4 homogeneous matrix.">Matrix4</a> to orientation / scale / position.  <a href="class_ogre_1_1_array_matrix_af4x3.html#adc523942e11e9163478332fdcd45ec35">More...</a><br /></td></tr>
 <tr class="separator:adc523942e11e9163478332fdcd45ec35"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -276,7 +270,7 @@ Friends</h2></td></tr>
 <dl class="section remark"><dt>Remarks</dt><dd><a class="el" href="class_ogre_1_1_array_matrix4.html" title="Cache-friendly container of 4x4 matrices represented as a SoA array.">ArrayMatrix4</a> is a SIMD &amp; cache-friendly version of <a class="el" href="class_ogre_1_1_matrix4.html" title="Class encapsulating a standard 4x4 homogeneous matrix.">Matrix4</a>. An operation on an <a class="el" href="class_ogre_1_1_array_matrix4.html" title="Cache-friendly container of 4x4 matrices represented as a SoA array.">ArrayMatrix4</a> is done on 4 vectors at a time (the actual amount is defined by ARRAY_PACKED_REALS) Assuming ARRAY_PACKED_REALS == 4, the memory layout will be as following: mChunkBase mChunkBase + 4 a00b00c00d00 a01b01c01d01 Extracting one <a class="el" href="class_ogre_1_1_matrix4.html" title="Class encapsulating a standard 4x4 homogeneous matrix.">Matrix4</a> needs 256 bytes, which needs 4 line fetches for common cache lines of 64 bytes. Make sure extractions are made sequentially to avoid cache trashing and excessive bandwidth consumption, and prefer working on @See <a class="el" href="class_ogre_1_1_array_vector3.html" title="Cache-friendly array of 3-dimensional represented as a SoA array.">ArrayVector3</a> &amp; @See <a class="el" href="class_ogre_1_1_array_quaternion.html" title="Cache-friendly array of Quaternion represented as a SoA array.">ArrayQuaternion</a> instead Architectures where the cache line == 32 bytes may want to set ARRAY_PACKED_REALS = 2 depending on their needs </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="abae10b4f1afe6de2cdf9899cb805f9d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abae10b4f1afe6de2cdf9899cb805f9d9">&#9670;&nbsp;</a></span>ArrayMatrixAf4x3() <span class="overload">[1/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abae10b4f1afe6de2cdf9899cb805f9d9">&#9670;&nbsp;</a></span>ArrayMatrixAf4x3() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -297,39 +291,11 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a64b6d19402c7352a27322ff223fd8744"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64b6d19402c7352a27322ff223fd8744">&#9670;&nbsp;</a></span>ArrayMatrixAf4x3() <span class="overload">[2/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Ogre::ArrayMatrixAf4x3::ArrayMatrixAf4x3 </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_array_matrix_af4x3.html">ArrayMatrixAf4x3</a> &amp;&#160;</td>
-          <td class="paramname"><em>copy</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_array_matrix_af4x3.html#aac3841269af026e2c3fe9062d8fc6d7a">mChunkBase</a>.</p>
 
 </div>
 </div>
 <a id="abae10b4f1afe6de2cdf9899cb805f9d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abae10b4f1afe6de2cdf9899cb805f9d9">&#9670;&nbsp;</a></span>ArrayMatrixAf4x3() <span class="overload">[3/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abae10b4f1afe6de2cdf9899cb805f9d9">&#9670;&nbsp;</a></span>ArrayMatrixAf4x3() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -350,39 +316,11 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a64b6d19402c7352a27322ff223fd8744"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64b6d19402c7352a27322ff223fd8744">&#9670;&nbsp;</a></span>ArrayMatrixAf4x3() <span class="overload">[4/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Ogre::ArrayMatrixAf4x3::ArrayMatrixAf4x3 </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_array_matrix_af4x3.html">ArrayMatrixAf4x3</a> &amp;&#160;</td>
-          <td class="paramname"><em>copy</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_array_matrix_af4x3.html#aac3841269af026e2c3fe9062d8fc6d7a">mChunkBase</a>.</p>
 
 </div>
 </div>
 <a id="abae10b4f1afe6de2cdf9899cb805f9d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abae10b4f1afe6de2cdf9899cb805f9d9">&#9670;&nbsp;</a></span>ArrayMatrixAf4x3() <span class="overload">[5/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abae10b4f1afe6de2cdf9899cb805f9d9">&#9670;&nbsp;</a></span>ArrayMatrixAf4x3() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -403,34 +341,6 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a64b6d19402c7352a27322ff223fd8744"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64b6d19402c7352a27322ff223fd8744">&#9670;&nbsp;</a></span>ArrayMatrixAf4x3() <span class="overload">[6/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Ogre::ArrayMatrixAf4x3::ArrayMatrixAf4x3 </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_array_matrix_af4x3.html">ArrayMatrixAf4x3</a> &amp;&#160;</td>
-          <td class="paramname"><em>copy</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_array_matrix_af4x3.html#aac3841269af026e2c3fe9062d8fc6d7a">mChunkBase</a>.</p>
 
 </div>
 </div>
@@ -2130,8 +2040,6 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_array_matrix_af4x3.html#a64b6d19402c7352a27322ff223fd8744">ArrayMatrixAf4x3()</a>.</p>
 
 </div>
 </div>

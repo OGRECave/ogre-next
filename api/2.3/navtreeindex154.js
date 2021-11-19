@@ -1,8 +1,5 @@
 var NAVTREEINDEX154 =
 {
-"class_ogre_1_1_planar_reflections.html#a50aeb6eec3120373b6d5316909128235":[5,0,0,23,7],
-"class_ogre_1_1_planar_reflections.html#a6b97bf4ca49cb975146865babaebd38c":[5,0,0,23,13],
-"class_ogre_1_1_planar_reflections.html#a7c96969df4853b0d5c1e3f0c6adae41a":[5,0,0,23,25],
 "class_ogre_1_1_planar_reflections.html#a893c5a907aa1a9137733da536fd81c72":[5,0,0,23,11],
 "class_ogre_1_1_planar_reflections.html#a97c05aeec8d1c4307a78d98e45a5cbc1":[5,0,0,23,2],
 "class_ogre_1_1_planar_reflections.html#aa9c304509b595687e7af5ae0d513973a":[5,0,0,23,4],
@@ -139,8 +136,8 @@ var NAVTREEINDEX154 =
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a64ec2cc49a15be1446603390cf2d5536":[5,0,1,31,15],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,12,31,5],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,0,1,31,5],
-"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a84aeb5d693cf9235080fc84031ec881f":[5,2,12,31,0],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a84aeb5d693cf9235080fc84031ec881f":[5,0,1,31,0],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a84aeb5d693cf9235080fc84031ec881f":[5,2,12,31,0],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,12,31,8],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,0,1,31,8],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,12,31,12],
@@ -249,5 +246,8 @@ var NAVTREEINDEX154 =
 "class_ogre_1_1_point_emitter.html#a98d3f921cd9061414149636172557d71":[7,0,0,858,20],
 "class_ogre_1_1_point_emitter.html#a9d26a5cb04855bc93abe837dc7cb83ac":[7,0,0,858,69],
 "class_ogre_1_1_point_emitter.html#aa4cc84bb842666d1a69d25375dac5d12":[7,0,0,858,89],
-"class_ogre_1_1_point_emitter.html#aa4df69c38e5bd02eea6cd9439f9da04a":[7,0,0,858,98]
+"class_ogre_1_1_point_emitter.html#aa4df69c38e5bd02eea6cd9439f9da04a":[7,0,0,858,98],
+"class_ogre_1_1_point_emitter.html#aa9d9846fd83ec7e272d3e5b663270800":[7,0,0,858,78],
+"class_ogre_1_1_point_emitter.html#aae174ed689d7748e3047bb4242440993":[7,0,0,858,83],
+"class_ogre_1_1_point_emitter.html#ab39d2d327c694ef553fc3159b680d1db":[7,0,0,858,34]
 };
