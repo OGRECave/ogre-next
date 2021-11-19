@@ -8339,7 +8339,7 @@ namespace Ogre{
             }
 
             const size_t shadowMapIdx = StringConverter::parseUnsignedInt(
-                        targetPassName, std::numeric_limits<size_t>::max() );
+                        targetPassName, std::numeric_limits<unsigned>::max() );
 
             if( shadowMapIdx >= nodeDef->getNumShadowTextureDefinitions() )
             {
