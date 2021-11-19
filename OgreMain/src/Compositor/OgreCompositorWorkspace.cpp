@@ -847,15 +847,13 @@ namespace Ogre
             ++itor;
         }
 
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = mListeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = mListeners.end();
+        CompositorWorkspaceListenerVec::const_iterator itor2 = mListeners.begin();
+        CompositorWorkspaceListenerVec::const_iterator end2  = mListeners.end();
 
-            while( itor != end )
-            {
-                (*itor)->workspacePosUpdate( this );
-                ++itor;
-            }
+        while( itor2 != end2 )
+        {
+            (*itor2)->workspacePosUpdate( this );
+            ++itor2;
         }
     }
     //-----------------------------------------------------------------------------------
