@@ -988,7 +988,7 @@ namespace v1
     void MeshManager::unshareVertices( Mesh *mesh )
     {
         // Retrieve data to copy bone assignments
-        const Mesh::VertexBoneAssignmentList& boneAssignments = mesh->getBoneAssignments();
+        //const Mesh::VertexBoneAssignmentList& boneAssignments = mesh->getBoneAssignments();
 
         // Access shared vertices
         VertexData* sharedVertexData = mesh->sharedVertexData[VpNormal];

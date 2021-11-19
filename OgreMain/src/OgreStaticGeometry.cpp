@@ -1018,12 +1018,12 @@ namespace v1 {
     void StaticGeometry::MaterialBucket::addRenderables(RenderQueue* queue, uint8 group, size_t materialLod)
     {
         // Get region
-        Region *region = mParent->getParent();
+        //Region *region = mParent->getParent();
 
         // Determine the current material technique
         mTechnique = mMaterial->getBestTechnique( 0 );
-        GeometryBucketList::iterator i, iend;
-        iend =  mGeometryBucketList.end();
+        //GeometryBucketList::iterator i, iend;
+        //iend =  mGeometryBucketList.end();
         //TODO: RENDER QUEUE
         //TODO: mCurrentMeshLod
         /*for (i = mGeometryBucketList.begin(); i != iend; ++i)

@@ -1157,7 +1157,7 @@ namespace Ogre {
         {
             uint32 srcWidth    = dstWidth;
             uint32 srcHeight   = dstHeight;
-            uint32 srcDepth    = dstDepth;
+            //uint32 srcDepth    = dstDepth;
             dstWidth   = std::max<uint32>( 1u, dstWidth >> 1u );
             dstHeight  = std::max<uint32>( 1u, dstHeight >> 1u );
             dstDepth   = std::max<uint32>( 1u, dstDepth >> 1u );

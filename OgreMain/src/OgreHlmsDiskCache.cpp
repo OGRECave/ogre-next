@@ -215,12 +215,10 @@ namespace Ogre
 
             while( itor != end )
             {
-                uint32 renderableHash =
-                        static_cast<uint32 >(
-                            hlms->addRenderableCache( itor->renderableCache.setProperties,
-                                                      itor->renderableCache.pieces ) );
+                //uint32 renderableHash = static_cast<uint32>( hlms->addRenderableCache(
+                //        itor->renderableCache.setProperties, itor->renderableCache.pieces ) );
 
-                uint32 passHash = 0;
+                //uint32 passHash = 0;
                 {
                     assert( hlms->mPassCache.size() <= (uint32)HlmsBits::PassMask &&
                             "Too many passes combinations, we'll overflow "
@@ -238,7 +236,7 @@ namespace Ogre
                         it = hlms->mPassCache.end() - 1u;
                     }
 
-                    passHash = (uint32)(it - hlms->mPassCache.begin()) << (uint32)HlmsBits::PassShift;
+                    //passHash = (uint32)(it - hlms->mPassCache.begin()) << (uint32)HlmsBits::PassShift;
                 }
 
                 //const uint32 finalHash = renderableHash | passHash;

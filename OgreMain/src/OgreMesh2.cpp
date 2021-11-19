@@ -133,7 +133,7 @@ namespace Ogre {
         // The loading process accesses LOD usages directly, so
         // transformation of user values must occur after loading is complete.
 
-        LodStrategy *lodStrategy = LodStrategyManager::getSingleton().getDefaultStrategy();
+        //LodStrategy *lodStrategy = LodStrategyManager::getSingleton().getDefaultStrategy();
 
         /*assert( mLodValues.size() == mMeshLodUsageList.size()  );
         LodValueArray::iterator lodValueIt = mLodValues.begin();

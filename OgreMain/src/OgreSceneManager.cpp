@@ -4028,7 +4028,7 @@ void SceneManager::_resumeRendering(SceneManager::RenderContext* context)
 {
     delete mRenderQueue;
     mRenderQueue = context->renderQueue;
-    Ogre::Viewport* vp = context->viewport;
+    //Ogre::Viewport* vp = context->viewport;
     const Ogre::Camera* camera = context->camerasInProgress.renderingCamera;
 
     // Tell params about viewport
