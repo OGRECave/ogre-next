@@ -2090,8 +2090,12 @@ namespace Ogre
         [mActiveRenderEncoder setCullMode:metalPso->cullMode];
         if( @available( iOS 11.0, * ) )
         {
-            [mActiveRenderEncoder setDepthClipMode:pso->macroblock->mDepthClamp ? MTLDepthClipModeClamp
-                                                                                : MTLDepthClipModeClip];
+            if( mCurrentCapabilities->hasCapability( RSC_DEPTH_CLAMP ) )
+            {
+                [mActiveRenderEncoder setDepthClipMode:pso->macroblock->mDepthClamp
+                                                           ? MTLDepthClipModeClamp
+                                                           : MTLDepthClipModeClip];
+            }
         }
 
         if( mPso != metalPso )
