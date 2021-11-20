@@ -25,7 +25,7 @@
 		float3 posLS,
 		float3 dirLS, float tanHalfAngle,
 		float4 localStartBias_invStartBias_cascadeMaxLod, float startingLodLevel,
-		int probeIdx,
+		float startingAlpha, int probeIdx,
 		OGRE_Texture3D_float4 probes[@value( hlms_num_vct_cascades )]
 		OGRE_SAMPLER_ARG_DECL( probeSampler )
 		OGRE_VCT_ANISO_PROBE_ARG_DECL
@@ -36,7 +36,7 @@
 		float maxLod = localStartBias_invStartBias_cascadeMaxLod.z;
 
 		float dist = vctStartBias;
-		float alpha = 0.0;
+		float alpha = startingAlpha;
 		float3 color = float3( 0.0, 0.0, 0.0 );
 
 		float diameter = max( vctStartBias, 2.0 * tanHalfAngle * dist );
@@ -184,8 +184,8 @@
 			dir = normalize( dir );
 
 			VctResult result = voxelConeTraceDiff(
-				posLS, dir, coneAngleTan, p_vctStartBias_invStartBias_cascadeMaxLod[0],
-				0.0f, 0, probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
+				posLS, dir, coneAngleTan, p_vctStartBias_invStartBias_cascadeMaxLod[0], 0.0f, 0.0f, 0,
+				probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
 
 			@property( hlms_num_vct_cascades > 1 )
 				for( int j = 1; j < @value( hlms_num_vct_cascades ) && result.alpha < 0.95f; ++j )
@@ -197,10 +197,12 @@
 
 					VctResult newRes = voxelConeTraceDiff(
 						newPosLS, dir, coneAngleTan, p_vctStartBias_invStartBias_cascadeMaxLod[j],
-						max( result.lodLevel - prevCascadeMaxLod, 0.0f ), j,
+						max( result.lodLevel - prevCascadeMaxLod, 0.0f ), result.alpha, j,
 						probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
 
-					result.colour += newRes.colour;
+					// See VctCascadedVoxelizer::update comments on ( 1.0 - result.alpha )
+					result.colour += newRes.colour * p_vctFromPreviousProbeToNext[j - 1][0].w *
+									 ( 1.0 - result.alpha );
 					result.alpha += newRes.alpha;
 					result.lodLevel = newRes.lodLevel;
 					result.posLS = newRes.posLS;

@@ -78,7 +78,7 @@
 		@end
 			( VctProbeParams probeParams, float3 posLS,
 			  float3 dirLS, float tanHalfAngle,
-			  float startingLodLevel, int probeIdx,
+			  float startingLodLevel, float startingAlpha, int probeIdx,
 		  @property( use_parallax_correct_cubemaps && @n == 1 )
 			  OGRE_OUT_REF( float3, vctSpecPosLS ),
 		  @end
@@ -92,7 +92,7 @@
 			float maxLod = probeParams.vctResolution_cascadeMaxLod[probeIdx].w;
 
 			float dist = vctInvResolution;
-			float alpha = 0.0;
+			float alpha = startingAlpha;
 			float3 color = float3( 0.0, 0.0, 0.0 );
 
 			float diameter = max( vctInvResolution, 2.0 * tanHalfAngle * dist );
@@ -327,8 +327,9 @@
 		posLS += (dirLS / maxVal) * vctInvResolution * lerp( 15.0f, 1.0f, maxVal );
 
 		@property( vct_num_probes > 1 )
-			float3 blendv = abs( posLS * 2.0f - 1.0f );
-			float blend = saturate( 1.0f - max3( blendv.x, blendv.y, blendv.z ) );
+			/*float3 blendv = abs( posLS * 2.0f - 1.0f );
+			float blend = saturate( 1.0f - max3( blendv.x, blendv.y, blendv.z ) );*/
+			float blend = 1.0f;
 		@else
 			float blend = 1.0f;
 		@end
@@ -366,10 +367,9 @@
 			{
 				float3 dir = toVctProbeSpaceDir( mul( TBN, cone_dirs[i] ), probeParams );
 
-				VctResult result = voxelConeTraceDiff( probeParams, posLS, dir, coneAngleTan, 0.0f, 0,
-													   probes OGRE_SAMPLER_ARG( probeSampler )
-														   OGRE_VCT_ANISO_PROBE_ARG );
-
+				VctResult result = voxelConeTraceDiff(
+					probeParams, posLS, dir, coneAngleTan, 0.0f, 0.0f, 0,
+                    probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG );
 
 				@property( vct_num_probes > 1 )
 					for( int j = 1; j < @value( vct_num_probes ) && result.alpha < 0.95f; ++j )
@@ -382,13 +382,16 @@
 						float3 newPosLS =
 							fromVctProbeToNext( result.posLS, j, probeParams ) - dir * startBias;
 
-						VctResult newRes =
-							voxelConeTraceDiff( probeParams, newPosLS, dir, coneAngleTan,
-												max( result.lodLevel - prevCascadeMaxLod, 0.0f ), j,
-												probes OGRE_SAMPLER_ARG( probeSampler )
-													OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
+						VctResult newRes = voxelConeTraceDiff(
+							probeParams, newPosLS, dir, coneAngleTan,
+							max( result.lodLevel - prevCascadeMaxLod, 0.0f ), result.alpha, j,
+							probes OGRE_SAMPLER_ARG( probeSampler )
+								OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
 
-						result.colour += newRes.colour;
+						// See VctCascadedVoxelizer::update comments on ( 1.0 - result.alpha )
+						result.colour += newRes.colour *
+										 probeParams.fromPreviousProbeToNext[j - 1][0].w *
+										 ( 1.0 - result.alpha );
 						result.alpha += newRes.alpha;
 						result.lodLevel = newRes.lodLevel;
 						result.posLS = newRes.posLS;

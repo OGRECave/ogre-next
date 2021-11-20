@@ -238,6 +238,9 @@ namespace Ogre
 
         const size_t numCascades = mCascadeSettings.size();
 
+        const Vector3 voxelCellSizeC0 = 2.0f * mCascadeSettings[0].areaHalfSize /
+                                        mCascadeSettings[0].voxelizer->getVoxelResolution();
+
         // Iterate in reverse because multipe bounces needs the information of the higher cascades
         for( size_t i = numCascades; i--; )
         {
@@ -246,11 +249,14 @@ namespace Ogre
             // Do not use cascade.voxelizer->getVoxelCellSize() because it is bound to
             // floating point precision errors. This way is always consistent
             const Vector3 voxelCellSize =
-                2.0f * mCascadeSettings[i].areaHalfSize / cascade.voxelizer->getVoxelResolution();
+                2.0f * cascade.areaHalfSize / cascade.voxelizer->getVoxelResolution();
             const Grid3D newPos = quantizePosition( mCameraPosition, voxelCellSize );
             const Grid3D oldPos = quantizePosition( mLastCameraPosition, voxelCellSize );
 
-            if( newPos.x != oldPos.x || newPos.y != oldPos.y || newPos.z != oldPos.z || bFirstBuild )
+            if( abs( newPos.x - oldPos.x ) >= 1 ||  //
+                abs( newPos.y - oldPos.y ) >= 1 ||  //
+                abs( newPos.z - oldPos.z ) >= 1 ||  //
+                bFirstBuild )
             {
                 // Dirty. Must be updated
                 cascade.voxelizer->setRegionToVoxelize(
@@ -281,7 +287,40 @@ namespace Ogre
                     mCascades[i]->resetTexturesFromBuildRelative();
                 }
 
-                mCascades[i]->update( sceneManager, cascade.numBounces, cascade.thinWallCounter,
+                const Real volumeCi = voxelCellSize.x * voxelCellSize.y * voxelCellSize.z;
+                const Real volumeC0 = voxelCellSizeC0.x * voxelCellSizeC0.y * voxelCellSizeC0.z;
+
+                const Real factor = std::pow( volumeCi / volumeC0, Real( 1.0f / 3.0f ) );
+
+                // OK so we have two issues that result in cascades getting darker:
+                //
+                //  - As cell volume increases, we get darker results; this makes
+                //    makes higher cascades to get darker (i.e. i is brighter than i+1).
+                //  - Cascade[i] may have more lighting information than Cascade[i+1]
+                //    because of its finer resolution. The also makes higher cascades
+                //    to get darker
+                //
+                // We need to stabilize brightness of all cascades otherwise there will be a
+                // stark contrast when cascade i ends and i+1 starts.
+                //
+                // We do it in 3 ways:
+                //
+                //      1. Increasing num bounces to i + 1.
+                //         More bounces, means brighter cascade (done here)
+                //      2. Amplify the cascade i + 1's multiplier (done here)
+                //      3. De-amplify cascade i + 1 when we have enough lighting information
+                //         accumulated (via 1.0 - result.alpha). Done in shader
+                //
+                // We need all 3 because 1 & 2 will also amplify cascade i due to cascade
+                // i using lighting information from i + 1 when bouncing.
+                const uint32 numBounces =
+                    cascade.numBounces == 0u ? 0u
+                                             : static_cast<uint32>( std::round( std::sqrt(
+                                                   ( ( cascade.numBounces + 1u ) * factor ) - 1.0f ) ) );
+
+                mCascades[i]->mMultiplier = factor;
+
+                mCascades[i]->update( sceneManager, numBounces, cascade.thinWallCounter,
                                       cascade.bAutoMultiplier, cascade.rayMarchStepScale,
                                       cascade.lightMask );
             }

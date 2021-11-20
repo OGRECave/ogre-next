@@ -644,9 +644,11 @@ namespace Ogre
                 else
                     prevCascade = mExtraCascades[i - 2u];
 
+                const float cascadeFinalMultiplier = cascade->mMultiplier / this->mMultiplier;
+
                 const Vector3 cascadeVoxelSize = cascade->mVoxelizer->getVoxelSize();
-                fromPreviousProbeToNext[i - 1u][0] =
-                    Vector4( prevCascade->mVoxelizer->getVoxelSize() / cascadeVoxelSize );
+                fromPreviousProbeToNext[i - 1u][0] = Vector4(
+                    prevCascade->mVoxelizer->getVoxelSize() / cascadeVoxelSize, cascadeFinalMultiplier );
                 fromPreviousProbeToNext[i - 1u][1] =
                     Vector4( ( prevCascade->mVoxelizer->getVoxelOrigin() -
                                cascade->mVoxelizer->getVoxelOrigin() ) /
@@ -1071,10 +1073,13 @@ namespace Ogre
                 ( prevCascade->mVoxelizer->getVoxelOrigin() - cascade->mVoxelizer->getVoxelOrigin() ) /
                 cascadeVoxelSize;
 
+            const float cascadeFinalMultiplier =
+                cascade->mInvBakingMultiplier * cascade->mMultiplier / finalMultiplier;
+
             *passBufferPtr++ = static_cast<float>( vScale.x );
             *passBufferPtr++ = static_cast<float>( vScale.y );
             *passBufferPtr++ = static_cast<float>( vScale.z );
-            *passBufferPtr++ = 0.0f;
+            *passBufferPtr++ = cascadeFinalMultiplier;
 
             *passBufferPtr++ = static_cast<float>( vPos.x );
             *passBufferPtr++ = static_cast<float>( vPos.y );

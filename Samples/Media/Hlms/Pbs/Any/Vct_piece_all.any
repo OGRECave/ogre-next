@@ -8,6 +8,7 @@
 		// .w = cascadeMaxLod
 		float4 vctResolution_cascadeMaxLod[@value( vct_num_probes )];
 @property( vct_num_probes > 1 )
+		// fromPreviousProbeToNext[probeIdx-1][0].w = cascadeFinalMultiplier
 		float4 fromPreviousProbeToNext[@value( vct_num_probes ) - 1][2];
 @end
 
