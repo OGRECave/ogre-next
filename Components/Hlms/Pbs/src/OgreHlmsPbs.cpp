@@ -1409,13 +1409,18 @@ namespace Ogre
 #endif
         if( mVctLighting )
         {
-            TextureGpu **lightVoxelTexs = mVctLighting->getLightVoxelTextures();
+            const size_t numCascades = mVctLighting->getNumCascades();
             const size_t numVctTextures = mVctLighting->getNumVoxelTextures();
-            for( size_t i = 0; i < numVctTextures; ++i )
+
+            for( size_t cascadeIdx = 0; cascadeIdx < numCascades; ++cascadeIdx )
             {
-                barrierSolver.resolveTransition( resourceTransitions, lightVoxelTexs[i],
-                                                 ResourceLayout::Texture, ResourceAccess::Read,
-                                                 1u << PixelShader );
+                TextureGpu **lightVoxelTexs = mVctLighting->getLightVoxelTextures( cascadeIdx );
+                for( size_t i = 0; i < numVctTextures; ++i )
+                {
+                    barrierSolver.resolveTransition( resourceTransitions, lightVoxelTexs[i],
+                                                     ResourceLayout::Texture, ResourceAccess::Read,
+                                                     1u << PixelShader );
+                }
             }
         }
 
@@ -3025,7 +3030,7 @@ namespace Ogre
                             mVctLighting->getBindTrilinearSamplerblock();
                     for( size_t i=0; i<numVctTextures; ++i )
                     {
-                        for( size_t cascadeIdx=0; cascadeIdx<numCascades; ++cascadeIdx )
+                        for( size_t cascadeIdx = 0; cascadeIdx < numCascades; ++cascadeIdx )
                         {
                             TextureGpu **lightVoxelTexs =
                                 mVctLighting->getLightVoxelTextures( cascadeIdx );

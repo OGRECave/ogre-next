@@ -47,19 +47,26 @@ namespace Ogre
         rayMarchStepScale( 1.0f ),
         lightMask( 0xffffffff ),
         areaHalfSize( Vector3::ZERO ),
-        voxelizer( 0 )
+        voxelizer( 0 ),
+        lastCameraPosition( Vector3::ZERO )
     {
-        resolution[0] = 16u;
-        resolution[1] = 16u;
-        resolution[2] = 16u;
-        octantSubdivision[0] = 1u;
-        octantSubdivision[1] = 1u;
-        octantSubdivision[2] = 1u;
+        for( int i = 0; i < 3; ++i )
+        {
+            resolution[i] = 16u;
+            octantSubdivision[i] = 1u;
+            cameraStepSize[i] = 4;
+        }
     }
+    //-------------------------------------------------------------------------
+    Vector3 VctCascadeSetting::getVoxelCellSize( void ) const
+    {
+        return 2.0f * this->areaHalfSize / Vector3( resolution[0], resolution[1], resolution[2] );
+    }
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     VctCascadedVoxelizer::VctCascadedVoxelizer() :
         mCameraPosition( Vector3::ZERO ),
-        mLastCameraPosition( Vector3::ZERO ),
         mMeshCache( 0 ),
         mFirstBuild( true )
     {
@@ -78,6 +85,47 @@ namespace Ogre
         OGRE_ASSERT_LOW( !cascadeSetting.voxelizer );
         mCascadeSettings.push_back( cascadeSetting );
         mCascades.push_back( (VctLighting *)0 );
+    }
+    //-------------------------------------------------------------------------
+    void VctCascadedVoxelizer::autoCalculateStepSizes( const int32 stepSize )
+    {
+        autoCalculateStepSizes( stepSize, stepSize, stepSize );
+    }
+    //-------------------------------------------------------------------------
+    void VctCascadedVoxelizer::autoCalculateStepSizes( const int32 stepSizeX, const int32 stepSizeY,
+                                                       const int32 stepSizeZ )
+    {
+        if( mCascadeSettings.empty() )
+            return;
+
+        VctCascadeSetting &lastCascade = mCascadeSettings.back();
+        lastCascade.cameraStepSize[0] = stepSizeX;
+        lastCascade.cameraStepSize[1] = stepSizeY;
+        lastCascade.cameraStepSize[2] = stepSizeZ;
+
+        const Vector3 lastVoxelCellSize = lastCascade.getVoxelCellSize();
+
+        const size_t numCascades = mCascadeSettings.size() - 1u;
+        for( size_t i = numCascades; i--; )
+        {
+            const Vector3 voxelCellSize = mCascadeSettings[i].getVoxelCellSize();
+            const Vector3 factor = lastVoxelCellSize / voxelCellSize;
+
+            mCascadeSettings[i].cameraStepSize[0] =
+                static_cast<int32>( std::ceil( stepSizeX * factor.x ) );
+            mCascadeSettings[i].cameraStepSize[1] =
+                static_cast<int32>( std::ceil( stepSizeY * factor.y ) );
+            mCascadeSettings[i].cameraStepSize[2] =
+                static_cast<int32>( std::ceil( stepSizeZ * factor.z ) );
+
+            for( int j = 0; j < 3; ++j )
+            {
+                // Step size should be <= resolution / 2
+                mCascadeSettings[i].cameraStepSize[j] =
+                    std::min( mCascadeSettings[i].cameraStepSize[0],
+                              static_cast<int32>( mCascadeSettings[i].resolution[j] >> 1u ) );
+            }
+        }
     }
     //-------------------------------------------------------------------------
     struct Grid3D
@@ -125,8 +173,7 @@ namespace Ogre
                                                                mCascadeSettings[i].resolution[1],
                                                                mCascadeSettings[i].resolution[2] );
 
-            const Vector3 voxelCellSize = 2.0f * mCascadeSettings[i].areaHalfSize /
-                                          mCascadeSettings[i].voxelizer->getVoxelResolution();
+            const Vector3 voxelCellSize = mCascadeSettings[i].getVoxelCellSize();
             const Grid3D quantCamPos = quantizePosition( mCameraPosition, voxelCellSize );
 
             mCascadeSettings[i].voxelizer->setRegionToVoxelize(
@@ -238,24 +285,20 @@ namespace Ogre
 
         const size_t numCascades = mCascadeSettings.size();
 
-        const Vector3 voxelCellSizeC0 = 2.0f * mCascadeSettings[0].areaHalfSize /
-                                        mCascadeSettings[0].voxelizer->getVoxelResolution();
+        const Vector3 voxelCellSizeC0 = mCascadeSettings[0].getVoxelCellSize();
 
         // Iterate in reverse because multipe bounces needs the information of the higher cascades
         for( size_t i = numCascades; i--; )
         {
             VctCascadeSetting &cascade = mCascadeSettings[i];
 
-            // Do not use cascade.voxelizer->getVoxelCellSize() because it is bound to
-            // floating point precision errors. This way is always consistent
-            const Vector3 voxelCellSize =
-                2.0f * cascade.areaHalfSize / cascade.voxelizer->getVoxelResolution();
+            const Vector3 voxelCellSize = cascade.getVoxelCellSize();
             const Grid3D newPos = quantizePosition( mCameraPosition, voxelCellSize );
-            const Grid3D oldPos = quantizePosition( mLastCameraPosition, voxelCellSize );
+            const Grid3D oldPos = quantizePosition( cascade.lastCameraPosition, voxelCellSize );
 
-            if( abs( newPos.x - oldPos.x ) >= 1 ||  //
-                abs( newPos.y - oldPos.y ) >= 1 ||  //
-                abs( newPos.z - oldPos.z ) >= 1 ||  //
+            if( abs( newPos.x - oldPos.x ) >= cascade.cameraStepSize[0] ||  //
+                abs( newPos.y - oldPos.y ) >= cascade.cameraStepSize[1] ||  //
+                abs( newPos.z - oldPos.z ) >= cascade.cameraStepSize[2] ||  //
                 bFirstBuild )
             {
                 // Dirty. Must be updated
@@ -323,10 +366,11 @@ namespace Ogre
                 mCascades[i]->update( sceneManager, numBounces, cascade.thinWallCounter,
                                       cascade.bAutoMultiplier, cascade.rayMarchStepScale,
                                       cascade.lightMask );
+
+                cascade.lastCameraPosition = mCameraPosition;
             }
         }
 
-        mLastCameraPosition = mCameraPosition;
         mFirstBuild = false;
     }
 }  // namespace Ogre

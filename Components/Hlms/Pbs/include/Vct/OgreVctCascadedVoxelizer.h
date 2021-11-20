@@ -64,6 +64,18 @@ namespace Ogre
         /// perform a full rebuild
         uint32 octantSubdivision[3];
 
+        /// How much we let the camera move before updating the cascade
+        /// Value is in range [1; inf)
+        /// Unit is in quantized steps. i.e. stepSize = 2.0 * areaHalfSize / resolution
+        ///
+        /// If set to 1, after the camera moves stepSize, we will move the cascades
+        /// If set to 2, after the camera moves 2 * stepSize, we will move the cascades
+        ///
+        ///	Small step sizes may cause too much brightness jumping as VCT may not be stable
+        /// Very big step sizes may cause periodic performance spikes or sudden changes
+        /// in brightness
+        int32 cameraStepSize[3];
+
         /// Valid ptr after VctCascadedVoxelizer::init
         ///
         /// You can call:
@@ -71,7 +83,31 @@ namespace Ogre
         ///     - VctImageVoxelizer::setCacheResolution
         VctImageVoxelizer *voxelizer;
 
+        Vector3 lastCameraPosition;
+
         VctCascadeSetting();
+
+        void setResolution( uint32 res )
+        {
+            for( int i = 0; i < 3; ++i )
+                this->resolution[i] = res;
+        }
+
+        void setCameraStepSize( int32 stepSize )
+        {
+            for( int i = 0; i < 3; ++i )
+                this->cameraStepSize[i] = stepSize;
+        }
+
+        void setOctantSubdivision( uint32 subdiv )
+        {
+            for( int i = 0; i < 3; ++i )
+                this->octantSubdivision[i] = subdiv;
+        }
+
+        // Same as doing voxelizer->getVoxelCellSize() but is much better on floating point
+        // precision errors. This method is always consistent for all cascades
+        Vector3 getVoxelCellSize( void ) const;
     };
 
     /**
@@ -86,7 +122,6 @@ namespace Ogre
         FastArray<VctLighting *> mCascades;
 
         Vector3 mCameraPosition;
-        Vector3 mLastCameraPosition;
 
         VoxelizedMeshCache *mMeshCache;
 
@@ -105,6 +140,16 @@ namespace Ogre
         /// Adds a new cascade. VctCascadeSetting::voxelizer must be nullptr
         /// Cannot be called after VctCascadedVoxelizer::init
         void addCascade( const VctCascadeSetting &cascadeSetting );
+
+        /// See other overload. This one sets the same value to all axes
+        void autoCalculateStepSizes( const int32 stepSize );
+
+        /// Alters each cascade's step size. The last cascade is set to stepSize.
+        ///
+        /// The rest of the cascades are set to step sizes that are >= stepSize
+        /// automatically
+        void autoCalculateStepSizes( const int32 stepSizeX, const int32 stepSizeY,
+                                     const int32 stepSizeZ );
 
         size_t getNumCascades( void ) const { return mCascadeSettings.size(); }
         VctCascadeSetting &getCascade( size_t idx ) { return mCascadeSettings[idx]; }
