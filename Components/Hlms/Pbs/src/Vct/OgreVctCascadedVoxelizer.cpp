@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "Vct/OgreVctCascadedVoxelizer.h"
 
+#include "Compositor/OgreCompositorManager2.h"
 #include "Math/Array/OgreBooleanMask.h"
 #include "OgreItem.h"
 #include "OgreSceneManager.h"
@@ -47,6 +48,7 @@ namespace Ogre
         rayMarchStepScale( 1.0f ),
         lightMask( 0xffffffff ),
         areaHalfSize( Vector3::ZERO ),
+        cameraStepSize( Vector3::UNIT_SCALE ),
         voxelizer( 0 ),
         lastCameraPosition( Vector3::ZERO )
     {
@@ -54,7 +56,6 @@ namespace Ogre
         {
             resolution[i] = 16u;
             octantSubdivision[i] = 1u;
-            cameraStepSize[i] = 4;
         }
     }
     //-------------------------------------------------------------------------
@@ -68,11 +69,17 @@ namespace Ogre
     VctCascadedVoxelizer::VctCascadedVoxelizer() :
         mCameraPosition( Vector3::ZERO ),
         mMeshCache( 0 ),
+        mSceneManager( 0 ),
+        mCompositorManager( 0 ),
         mFirstBuild( true )
     {
     }
     //-------------------------------------------------------------------------
-    VctCascadedVoxelizer::~VctCascadedVoxelizer() { delete mMeshCache; }
+    VctCascadedVoxelizer::~VctCascadedVoxelizer()
+    {
+        setAutoUpdate( 0, 0 );
+        delete mMeshCache;
+    }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::reserveNumCascades( size_t numCascades )
     {
@@ -87,21 +94,13 @@ namespace Ogre
         mCascades.push_back( (VctLighting *)0 );
     }
     //-------------------------------------------------------------------------
-    void VctCascadedVoxelizer::autoCalculateStepSizes( const int32 stepSize )
-    {
-        autoCalculateStepSizes( stepSize, stepSize, stepSize );
-    }
-    //-------------------------------------------------------------------------
-    void VctCascadedVoxelizer::autoCalculateStepSizes( const int32 stepSizeX, const int32 stepSizeY,
-                                                       const int32 stepSizeZ )
+    void VctCascadedVoxelizer::autoCalculateStepSizes( const Vector3 stepSize )
     {
         if( mCascadeSettings.empty() )
             return;
 
         VctCascadeSetting &lastCascade = mCascadeSettings.back();
-        lastCascade.cameraStepSize[0] = stepSizeX;
-        lastCascade.cameraStepSize[1] = stepSizeY;
-        lastCascade.cameraStepSize[2] = stepSizeZ;
+        lastCascade.cameraStepSize = stepSize;
 
         const Vector3 lastVoxelCellSize = lastCascade.getVoxelCellSize();
 
@@ -111,20 +110,13 @@ namespace Ogre
             const Vector3 voxelCellSize = mCascadeSettings[i].getVoxelCellSize();
             const Vector3 factor = lastVoxelCellSize / voxelCellSize;
 
-            mCascadeSettings[i].cameraStepSize[0] =
-                static_cast<int32>( std::ceil( stepSizeX * factor.x ) );
-            mCascadeSettings[i].cameraStepSize[1] =
-                static_cast<int32>( std::ceil( stepSizeY * factor.y ) );
-            mCascadeSettings[i].cameraStepSize[2] =
-                static_cast<int32>( std::ceil( stepSizeZ * factor.z ) );
+            mCascadeSettings[i].cameraStepSize = stepSize * factor;
 
-            for( int j = 0; j < 3; ++j )
-            {
-                // Step size should be <= resolution / 2
-                mCascadeSettings[i].cameraStepSize[j] =
-                    std::min( mCascadeSettings[i].cameraStepSize[0],
-                              static_cast<int32>( mCascadeSettings[i].resolution[j] >> 1u ) );
-            }
+            Ogre::Vector3 res( mCascadeSettings[i].resolution[0], mCascadeSettings[i].resolution[1],
+                               mCascadeSettings[i].resolution[2] );
+            // Step size should be <= resolution / 2 (it must be <= resolution;
+            // but we use half to avoid potential glitches / distortion)
+            mCascadeSettings[i].cameraStepSize.makeFloor( res * 0.5f );
         }
     }
     //-------------------------------------------------------------------------
@@ -178,7 +170,8 @@ namespace Ogre
 
             mCascadeSettings[i].voxelizer->setRegionToVoxelize(
                 false,
-                Aabb( quantToVec3( quantCamPos, voxelCellSize ), mCascadeSettings[i].areaHalfSize ) );
+                Aabb( quantToVec3( quantCamPos, voxelCellSize * mCascadeSettings[i].cameraStepSize ),
+                      mCascadeSettings[i].areaHalfSize ) );
         }
 
         mFirstBuild = true;
@@ -188,6 +181,25 @@ namespace Ogre
     {
         mCameraPosition = cameraPosition;
     }
+    //-------------------------------------------------------------------------
+    void VctCascadedVoxelizer::setAutoUpdate( CompositorManager2 *compositorManager,
+                                              SceneManager *sceneManager )
+    {
+        if( compositorManager && !mCompositorManager )
+        {
+            mSceneManager = sceneManager;
+            mCompositorManager = compositorManager;
+            compositorManager->addListener( this );
+        }
+        else if( !compositorManager && mCompositorManager )
+        {
+            mCompositorManager->removeListener( this );
+            mSceneManager = 0;
+            mCompositorManager = 0;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctCascadedVoxelizer::allWorkspacesBeforeBeginUpdate( void ) { update( mSceneManager ); }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::removeAllItems()
     {
@@ -199,6 +211,8 @@ namespace Ogre
             itor->voxelizer->removeAllItems();
             ++itor;
         }
+
+        mFirstBuild = true;
     }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::addAllItems( SceneManager *sceneManager,
@@ -253,6 +267,8 @@ namespace Ogre
                 }
             }
         }
+
+        mFirstBuild = true;
     }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::addItem( Item *item )
@@ -265,6 +281,8 @@ namespace Ogre
             itor->voxelizer->addItem( item );
             ++itor;
         }
+
+        mFirstBuild = true;
     }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::removeItem( Item *item )
@@ -277,6 +295,8 @@ namespace Ogre
             itor->voxelizer->removeItem( item );
             ++itor;
         }
+
+        mFirstBuild = true;
     }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::update( SceneManager *sceneManager )
@@ -293,12 +313,14 @@ namespace Ogre
             VctCascadeSetting &cascade = mCascadeSettings[i];
 
             const Vector3 voxelCellSize = cascade.getVoxelCellSize();
-            const Grid3D newPos = quantizePosition( mCameraPosition, voxelCellSize );
-            const Grid3D oldPos = quantizePosition( cascade.lastCameraPosition, voxelCellSize );
+            const Grid3D newPos =
+                quantizePosition( mCameraPosition, voxelCellSize * cascade.cameraStepSize );
+            const Grid3D oldPos =
+                quantizePosition( cascade.lastCameraPosition, voxelCellSize * cascade.cameraStepSize );
 
-            if( abs( newPos.x - oldPos.x ) >= cascade.cameraStepSize[0] ||  //
-                abs( newPos.y - oldPos.y ) >= cascade.cameraStepSize[1] ||  //
-                abs( newPos.z - oldPos.z ) >= cascade.cameraStepSize[2] ||  //
+            if( newPos.x != oldPos.x ||  //
+                newPos.y != oldPos.y ||  //
+                newPos.z != oldPos.z ||  //
                 bFirstBuild )
             {
                 // Dirty. Must be updated

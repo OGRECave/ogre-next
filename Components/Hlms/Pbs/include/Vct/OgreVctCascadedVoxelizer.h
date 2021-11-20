@@ -30,6 +30,8 @@ THE SOFTWARE.
 
 #include "Vct/OgreVctVoxelizerSourceBase.h"
 
+#include "Compositor/OgreCompositorWorkspaceListener.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -66,15 +68,17 @@ namespace Ogre
 
         /// How much we let the camera move before updating the cascade
         /// Value is in range [1; inf)
-        /// Unit is in quantized steps. i.e. stepSize = 2.0 * areaHalfSize / resolution
+        /// Camera is evaluated in quantized steps. i.e.
+        ///     stepSize = cameraStepSize * 2.0 * areaHalfSize / resolution
+        ///     stepSize = cameraStepSize * getVoxelCellSize()
         ///
-        /// If set to 1, after the camera moves stepSize, we will move the cascades
-        /// If set to 2, after the camera moves 2 * stepSize, we will move the cascades
+        /// If cameraStepSize = 1, after the camera moves stepSize, we will move the cascades
+        /// If cameraStepSize = 2, after the camera moves 2 * stepSize, we will move the cascades
         ///
         ///	Small step sizes may cause too much brightness jumping as VCT may not be stable
         /// Very big step sizes may cause periodic performance spikes or sudden changes
         /// in brightness
-        int32 cameraStepSize[3];
+        Vector3 cameraStepSize;
 
         /// Valid ptr after VctCascadedVoxelizer::init
         ///
@@ -93,12 +97,6 @@ namespace Ogre
                 this->resolution[i] = res;
         }
 
-        void setCameraStepSize( int32 stepSize )
-        {
-            for( int i = 0; i < 3; ++i )
-                this->cameraStepSize[i] = stepSize;
-        }
-
         void setOctantSubdivision( uint32 subdiv )
         {
             for( int i = 0; i < 3; ++i )
@@ -115,7 +113,7 @@ namespace Ogre
         This class manages multiple cascades of Voxels and each cascade can be
         composed of VctImageVoxelizer
     */
-    class _OgreHlmsPbsExport VctCascadedVoxelizer
+    class _OgreHlmsPbsExport VctCascadedVoxelizer : public CompositorWorkspaceListener
     {
     protected:
         FastArray<VctCascadeSetting> mCascadeSettings;
@@ -125,13 +123,16 @@ namespace Ogre
 
         VoxelizedMeshCache *mMeshCache;
 
+        SceneManager *mSceneManager;
+        CompositorManager2 *mCompositorManager;
+
         bool mFirstBuild;
 
         bool isInitialized( void ) const;
 
     public:
         VctCascadedVoxelizer();
-        ~VctCascadedVoxelizer();
+        virtual ~VctCascadedVoxelizer();
 
         /// Tells beforehand how many cascades there will be.
         /// It's not necessary to call this, but recommended
@@ -141,15 +142,11 @@ namespace Ogre
         /// Cannot be called after VctCascadedVoxelizer::init
         void addCascade( const VctCascadeSetting &cascadeSetting );
 
-        /// See other overload. This one sets the same value to all axes
-        void autoCalculateStepSizes( const int32 stepSize );
-
         /// Alters each cascade's step size. The last cascade is set to stepSize.
         ///
         /// The rest of the cascades are set to step sizes that are >= stepSize
         /// automatically
-        void autoCalculateStepSizes( const int32 stepSizeX, const int32 stepSizeY,
-                                     const int32 stepSizeZ );
+        void autoCalculateStepSizes( const Vector3 stepSize );
 
         size_t getNumCascades( void ) const { return mCascadeSettings.size(); }
         VctCascadeSetting &getCascade( size_t idx ) { return mCascadeSettings[idx]; }
@@ -178,7 +175,23 @@ namespace Ogre
         /// Removes the given item to the voxelizer in all cascades
         void removeItem( Item *item );
 
+        /// You can call this directly with sceneManager, but we assume all objects
+        /// are already updated (i.e. SceneManager::updateSceneGraph already called)
+        ///
+        /// See VctCascadedVoxelizer::setAutoUpdate
         void update( SceneManager *sceneManager );
+
+        /// Register against the CompositorManager to call VctCascadedVoxelizer::update
+        /// automatically when the CompositorManager is about to render (recommended)
+        ///
+        /// You still must call setCameraPosition every frame though (or whenever the camera
+        /// changes)
+        ///
+        /// Set to nullptr to disable auto update
+        void setAutoUpdate( CompositorManager2 *compositorManager, SceneManager *sceneManager );
+
+        /// CompositorWorkspaceListener override
+        virtual void allWorkspacesBeforeBeginUpdate( void );
 
         void setCameraPosition( const Vector3 &cameraPosition );
         const Vector3 &getCameraPosition( void ) const { return mCameraPosition; }
