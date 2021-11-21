@@ -475,7 +475,7 @@ namespace Demo
         /*mGraphicsSystem->getCamera()->setPosition( mGraphicsSystem->getCamera()->getPosition() +
                                                    Ogre::Vector3( -0.6f, -0.1f, 0.1f ) );*/
 
-         createCornellScene();
+        createCornellScene();
         // createStressScene();
         // createSibenikScene();
 

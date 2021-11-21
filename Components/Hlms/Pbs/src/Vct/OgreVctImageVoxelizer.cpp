@@ -384,12 +384,12 @@ namespace Ogre
                 PFG_RGBA32_FLOAT, elementCount * structStride, BT_DEFAULT, 0, false );
             mCpuInstanceBuffer = reinterpret_cast<float *>(
                 OGRE_MALLOC_SIMD( elementCount * structStride, MEMCATEGORY_GENERAL ) );
-
-            DescriptorSetTexture2::BufferSlot bufferSlot(
-                DescriptorSetTexture2::BufferSlot::makeEmpty() );
-            bufferSlot.buffer = mInstanceBuffer;
-            mImageVoxelizerJob->setTexBuffer( 0u, bufferSlot );
         }
+
+        // Always set because we may not be the only VctImageVoxelizer using the same job
+        DescriptorSetTexture2::BufferSlot bufferSlot( DescriptorSetTexture2::BufferSlot::makeEmpty() );
+        bufferSlot.buffer = mInstanceBuffer;
+        mImageVoxelizerJob->setTexBuffer( 0u, bufferSlot );
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::destroyInstanceBuffers( void )
@@ -657,6 +657,7 @@ namespace Ogre
     void VctImageVoxelizer::clearVoxels( const bool bPartialClear )
     {
         OgreProfileGpuBegin( "VCT Voxelization Clear" );
+        mRenderSystem->debugAnnotationPush( "VCT Voxelization Clear" );
         float fClearValue[4];
         uint32 uClearValue[4];
         float fClearNormals[4];
@@ -745,6 +746,7 @@ namespace Ogre
             }
         }
         mComputeTools->clearUavUint( mAccumValVox, uClearValue );
+        mRenderSystem->debugAnnotationPop();
         OgreProfileGpuEnd( "VCT Voxelization Clear" );
     }
     //-------------------------------------------------------------------------
@@ -910,6 +912,8 @@ namespace Ogre
             return;
         }
 
+        mRenderSystem->debugAnnotationPush( "VctImageVoxelizer::build" );
+
         createVoxelTextures();
         setVoxelTexturesToJobs();
 
@@ -1026,10 +1030,15 @@ namespace Ogre
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
 
         if( mNeedsAlbedoMipmaps )
+        {
+            mRenderSystem->debugAnnotationPush( "Albedo Regular mipmaps" );
             mAlbedoVox->_autogenerateMipmaps();
+            mRenderSystem->debugAnnotationPop();
+        }
 
         mFullBuildDone = true;
 
+        mRenderSystem->debugAnnotationPop();
         OgreProfileGpuEnd( "VCT build" );
     }
     //-------------------------------------------------------------------------
@@ -1064,6 +1073,8 @@ namespace Ogre
         OgreProfileGpuBegin( "VCT buildRelative" );
 
         mRenderSystem->endRenderPassDescriptor();
+
+        mRenderSystem->debugAnnotationPush( "VctImageVoxelizer::buildRelative" );
 
         createVoxelTextures();
         createAltVoxelTextures();
@@ -1247,7 +1258,11 @@ namespace Ogre
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
 
         if( mNeedsAlbedoMipmaps )
+        {
+            mRenderSystem->debugAnnotationPush( "Albedo Regular mipmaps" );
             mAlbedoVox->_autogenerateMipmaps();
+            mRenderSystem->debugAnnotationPop();
+        }
 
         mOctants.swap( mTmpOctants );
 
@@ -1264,6 +1279,8 @@ namespace Ogre
             visNode->_getFullTransformUpdated();
             mDebugVoxelVisualizer->getWorldAabbUpdated();
         }
+
+        mRenderSystem->debugAnnotationPop();
 
         OgreProfileGpuEnd( "VCT buildRelative" );
     }

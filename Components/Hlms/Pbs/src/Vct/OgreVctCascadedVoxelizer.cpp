@@ -112,6 +112,12 @@ namespace Ogre
 
             mCascadeSettings[i].cameraStepSize = stepSize * factor;
 
+            // Must be integer and >= 1
+            mCascadeSettings[i].cameraStepSize.x = std::ceil( mCascadeSettings[i].cameraStepSize.x );
+            mCascadeSettings[i].cameraStepSize.y = std::ceil( mCascadeSettings[i].cameraStepSize.y );
+            mCascadeSettings[i].cameraStepSize.z = std::ceil( mCascadeSettings[i].cameraStepSize.z );
+            mCascadeSettings[i].cameraStepSize.makeCeil( Vector3::UNIT_SCALE );
+
             Ogre::Vector3 res( mCascadeSettings[i].resolution[0], mCascadeSettings[i].resolution[1],
                                mCascadeSettings[i].resolution[2] );
             // Step size should be <= resolution / 2 (it must be <= resolution;
@@ -173,8 +179,7 @@ namespace Ogre
 
             mCascadeSettings[i].voxelizer->setRegionToVoxelize(
                 false,
-                Aabb( quantToVec3( quantCamPos, voxelCellSize * mCascadeSettings[i].cameraStepSize ),
-                      mCascadeSettings[i].areaHalfSize ) );
+                Aabb( quantToVec3( quantCamPos, voxelCellSize ), mCascadeSettings[i].areaHalfSize ) );
         }
 
         mFirstBuild = true;
@@ -316,17 +321,20 @@ namespace Ogre
             VctCascadeSetting &cascade = mCascadeSettings[i];
 
             const Vector3 voxelCellSize = cascade.getVoxelCellSize();
-            const Grid3D newPos =
+            const Grid3D newPosSized =
                 quantizePosition( mCameraPosition, voxelCellSize * cascade.cameraStepSize );
-            const Grid3D oldPos =
+            const Grid3D oldPosSized =
                 quantizePosition( cascade.lastCameraPosition, voxelCellSize * cascade.cameraStepSize );
 
-            if( newPos.x != oldPos.x ||  //
-                newPos.y != oldPos.y ||  //
-                newPos.z != oldPos.z ||  //
+            if( newPosSized.x != oldPosSized.x ||  //
+                newPosSized.y != oldPosSized.y ||  //
+                newPosSized.z != oldPosSized.z ||  //
                 bFirstBuild )
             {
                 // Dirty. Must be updated
+                const Grid3D newPos = quantizePosition( mCameraPosition, voxelCellSize );
+                const Grid3D oldPos = quantizePosition( cascade.lastCameraPosition, voxelCellSize );
+
                 cascade.voxelizer->setRegionToVoxelize(
                     false, Aabb( quantToVec3( newPos, voxelCellSize ), cascade.areaHalfSize ) );
                 cascade.voxelizer->buildRelative( sceneManager, newPos.x - oldPos.x, newPos.y - oldPos.y,
