@@ -799,11 +799,18 @@ namespace Ogre
         HlmsPropertyVec::iterator it = std::lower_bound( mSetProperties.begin(), mSetProperties.end(),
                                                          p, OrderPropertyByIdString );
         if( it == mSetProperties.end() || it->keyName != p.keyName )
+        {
             mSetProperties.insert( it, p );
+            mPsoCacheHash = std::numeric_limits<size_t>::max();
+        }
         else
-            *it = p;
-
-        mPsoCacheHash = -1;
+        {
+            if( it->value != value )
+            {
+                *it = p;
+                mPsoCacheHash = std::numeric_limits<size_t>::max();
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     int32 HlmsComputeJob::getProperty( IdString key, int32 defaultVal ) const

@@ -64,6 +64,7 @@ namespace Ogre
         VctVoxelizerSourceBase( id, renderSystem, hlmsManager ),
         mMeshCache( meshCache ),
         mItemOrderDirty( false ),
+        mTexMeshesPerBatch( 0u ),
         mImageVoxelizerJob( 0 ),
         mPartialClearJob( 0 ),
         mComputeTools( new ComputeTools( hlmsManager->getComputeHlms() ) ),
@@ -121,6 +122,34 @@ namespace Ogre
                          "Could not find VCT/VoxelPartialClear",
                          "VctImageVoxelizer::createComputeJobs" );
         }
+
+        const RenderSystemCapabilities *caps = mHlmsManager->getRenderSystem()->getCapabilities();
+
+        uint32 maxTexturesInCompute = caps->getNumTexturesInTextureDescriptor( NumShaderTypes ) -
+                                      ( c_reservedTexSlots + mImageVoxelizerJob->getGlTexSlotStart() );
+
+        // Discretize to avoid shader variant explosion and keep number of empty slots under control(*)
+        // Given API + GPU support we should either land in 15 (GL) or 30 (GL/Metal/Vk/D3D11)
+        // If maxTexturesInCompute < 9; that should not happen or it's a broken GPU
+        //
+        // Also our compute shaders assume units slots are uint8, so we have to clamp <= 255
+        //
+        // (*) This keeps CPU overhead in check. Also D3D11 can't do dynamic texture selection
+        // thus the resulting shader ends up being an if-ladder. Therefore too many textures
+        // can hurt GPU performance a lot in that API.
+        if( maxTexturesInCompute >= 30u )
+            maxTexturesInCompute = 30u;
+        else if( maxTexturesInCompute >= 15u )
+            maxTexturesInCompute = 15u;
+        else if( maxTexturesInCompute >= 9u )
+            maxTexturesInCompute = 9u;
+
+        mImageVoxelizerJob->setProperty( "tex_meshes_per_batch",
+                                         static_cast<int32>( maxTexturesInCompute ) );
+        mTexMeshesPerBatch = maxTexturesInCompute;
+
+        mImageVoxelizerJob->setNumTexUnits(
+            static_cast<uint8>( mTexMeshesPerBatch + c_reservedTexSlots ) );
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::clearComputeJobResources()
@@ -381,17 +410,10 @@ namespace Ogre
 
         mBatches.clear();
 
-        const RenderSystemCapabilities *caps =
-            sceneManager->getDestinationRenderSystem()->getCapabilities();
-
-        // Our compute shaders assume units slots are uint8
-        const uint32 maxTexturesInCompute =
-            std::min( caps->getNumTexturesInTextureDescriptor( NumShaderTypes ), 255u ) -
-            ( c_reservedTexSlots + mImageVoxelizerJob->getGlTexSlotStart() );
-
         Mesh *lastMesh = 0;
         uint32 numSeenMeshes = 0u;
         uint32 textureIdx = uint32_t( -3 );
+        const uint32 texMeshesPerBatch = mTexMeshesPerBatch;
         BatchInstances *batchInstances = 0;
         const Vector3 voxelCellSize = getVoxelCellSize();
         Vector3 meshResolution( Vector3::UNIT_SCALE );
@@ -429,7 +451,7 @@ namespace Ogre
                 ++numSeenMeshes;
 
                 textureIdx += 3u;
-                if( textureIdx + 3u >= maxTexturesInCompute || textureIdx == 0u )
+                if( textureIdx + 3u >= texMeshesPerBatch || textureIdx == 0u )
                 {
                     // We've run out of texture units! This is a batch breaker!
                     // (we may also be here if this is the first batch)
@@ -496,7 +518,7 @@ namespace Ogre
                     *instanceBuffer++ = worldAabb.mCenter.x;
                     *instanceBuffer++ = worldAabb.mCenter.y;
                     *instanceBuffer++ = worldAabb.mCenter.z;
-                    *AS_U32PTR( instanceBuffer ) = ( textureIdx % maxTexturesInCompute ) |
+                    *AS_U32PTR( instanceBuffer ) = ( textureIdx % texMeshesPerBatch ) |
                                                    ( uint32( alphaExponent * 10000.0f ) << 8u );
                     ++instanceBuffer;
 
@@ -520,13 +542,12 @@ namespace Ogre
 
         mInstanceBuffer->upload( mCpuInstanceBuffer, 0u, mInstanceBuffer->getNumElements() );
 
-        const uint32 texSlotsForMeshes = std::min( numSeenMeshes * 3u, maxTexturesInCompute );
-
-        if( texSlotsForMeshes > mImageVoxelizerJob->getNumTexUnits() )
-        {
-            mImageVoxelizerJob->setNumTexUnits(
-                static_cast<uint8>( texSlotsForMeshes + c_reservedTexSlots ) );
-        }
+        // If we have too few meshes, put dummies in unused slots
+        // Note: numSeenMeshes * 3u >= texMeshesPerBatch is possible
+        DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
+        texSlot.texture = mMeshCache->getBlankEmissive();
+        for( size_t i = numSeenMeshes * 3u; i < texMeshesPerBatch; ++i )
+            mImageVoxelizerJob->setTexture( static_cast<uint8>( c_reservedTexSlots + i ), texSlot );
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::setRegionToVoxelize( bool autoRegion, const Aabb &regionToVoxelize,

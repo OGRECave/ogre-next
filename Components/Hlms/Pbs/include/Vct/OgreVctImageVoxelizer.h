@@ -91,6 +91,7 @@ namespace Ogre
         ItemArray mItems;
         bool mItemOrderDirty;
 
+        uint32 mTexMeshesPerBatch; // 3 * meshes per batch
         HlmsComputeJob *mImageVoxelizerJob;
         HlmsComputeJob *mPartialClearJob;
 

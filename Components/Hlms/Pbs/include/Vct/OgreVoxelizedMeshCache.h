@@ -134,6 +134,8 @@ namespace Ogre
         */
         void setCacheResolution( uint32 width, uint32 height, uint32 depth, uint32 maxWidth,
                                  uint32 maxHeight, uint32 maxDepth, const Ogre::Vector3 &dimension );
+
+        TextureGpu *getBlankEmissive( void ) { return mBlankEmissive; }
     };
 }  // namespace Ogre
 
