@@ -58,6 +58,8 @@
 			   abs( nextPosLS.z - 0.5f ) <= threshold
 			   VCT_ANISOTROPIC_EARLY_OUT ) // Either another cascade will handle, or aniso will
 		{
+			threshold = 0.5f + diameter * 0.5;
+
 			float4 sampleColour = OGRE_SampleLevel( probes[probeIdx], probeSampler, nextPosLS, lodLevel );
 
 			float a = ( 1.0f - alpha );  // Calc. the % left of light we are able to gather
@@ -68,8 +70,6 @@
 			nextPosLS = posLS + dist * dirLS;               // Advance forward
 			diameter = 2.0 * tanHalfAngle * dist;           // Calculate next LOD & next fwd step
 			lodLevel = log2( diameter * vctInvStartBias );  // Calculate next LOD
-
-			threshold = 0.5f + diameter * 0.5;
 		}
 
 		@property( vct_anisotropic )
@@ -86,6 +86,8 @@
 				   abs( nextPosLS.y - 0.5f ) <= threshold &&
 				   abs( nextPosLS.z - 0.5f ) <= threshold )
 			{
+				threshold = 0.5f + diameter * 0.5;
+
 				float3 sampleUVW = nextPosLS;
 				sampleUVW.x = saturate( sampleUVW.x ) * 0.5;
 
@@ -111,8 +113,6 @@
 				nextPosLS = posLS + dist * dirLS;               // Advance forward
 				diameter = 2.0 * tanHalfAngle * dist;           // Calculate next LOD & next fwd step
 				lodLevel = log2( diameter * vctInvStartBias );  // Calculate next LOD
-
-				threshold = 0.5f + diameter * 0.5;
 			}
 		@end
 

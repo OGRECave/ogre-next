@@ -121,6 +121,9 @@
 			//	threshold = 0.5f + invRes * exp2( log2( diameter * probeParams.vctResolution ) ) * 0.5;
 			//	threshold = 0.5f + invRes * diameter * probeParams.vctResolution * 0.5;
 			//	threshold = 0.5f + diameter * 0.5;
+			//
+			// Another way to look at it, is an AABB vs AABB test where A is
+			// a cube in [0; 1] and B is a cube centered in nextPosLS and halfSize = diameter * 0.5
 			float threshold = 0.5f + diameter * 0.5;
 
 			@property( !vct_anisotropic )
@@ -134,6 +137,8 @@
 					abs( nextPosLS - 0.5f ).z <= threshold
 				   VCT_ANISOTROPIC_EARLY_OUT ) // Either another cascade will handle, or aniso will
 			{
+				threshold = 0.5f + diameter * 0.5;
+
 				float4 sampleColour =
 					OGRE_SampleLevel( probes[probeIdx], probeSampler, nextPosLS, lodLevel );
 
@@ -183,8 +188,6 @@
 				@else
 					lodLevel = log2( diameter * resolution ); // Calculate next LOD
 				@end
-
-				threshold = 0.5f + diameter * 0.5;
 			}
 
 			@property( vct_anisotropic )
@@ -201,6 +204,8 @@
 					   abs( nextPosLS.y - 0.5f ) <= threshold &&
 					   abs( nextPosLS.z - 0.5f ) <= threshold )
 				{
+					threshold = 0.5f + diameter * 0.5;
+
 					float3 sampleUVW = nextPosLS;
 					sampleUVW.x = saturate( sampleUVW.x ) * 0.5;
 
@@ -231,8 +236,6 @@
 					@else
 						lodLevel = log2( diameter * resolution ); // Calculate next LOD
 					@end
-
-					threshold = 0.5f + diameter * 0.5;
 				}
 			@end
 
