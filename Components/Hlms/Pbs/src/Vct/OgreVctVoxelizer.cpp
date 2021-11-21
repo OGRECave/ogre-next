@@ -1035,7 +1035,7 @@ namespace Ogre
         const size_t elementCount = alignToNextMultiple( instanceCount * mOctants.size(),
                                                          mAabbWorldSpaceJob->getThreadsPerGroupX() );
 
-        if( !mInstanceBuffer || elementCount > mInstanceBuffer->getNumElements() )
+        if( !mInstanceBuffer || ( elementCount * structStride ) > mInstanceBuffer->getTotalSizeBytes() )
         {
             destroyInstanceBuffers();
             mInstanceBuffer = mVaoManager->createUavBuffer( elementCount, structStride,

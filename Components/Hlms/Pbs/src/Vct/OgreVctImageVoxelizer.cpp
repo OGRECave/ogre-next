@@ -136,6 +136,8 @@ namespace Ogre
         if( !mItems.empty() && mItems.back() != item )
             mItemOrderDirty = true;
         mItems.push_back( item );
+
+        mFullBuildDone = false;
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::removeItem( Item *item )
@@ -148,12 +150,15 @@ namespace Ogre
             efficientVectorRemove( mItems, itor );
         else
             mItems.erase( itor );
+
+        mFullBuildDone = false;
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::removeAllItems( void )
     {
         mItems.clear();
         mItemOrderDirty = false;
+        mFullBuildDone = false;
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::createVoxelTextures( void )
@@ -317,7 +322,7 @@ namespace Ogre
         const size_t structStride = sizeof( float ) * 4u * 6u;
         const size_t elementCount = mItems.size() * mOctants.size();
 
-        if( !mInstanceBuffer || elementCount > mInstanceBuffer->getNumElements() )
+        if( !mInstanceBuffer || ( elementCount * structStride ) > mInstanceBuffer->getTotalSizeBytes() )
         {
             destroyInstanceBuffers();
             mInstanceBuffer = mVaoManager->createReadOnlyBuffer(
