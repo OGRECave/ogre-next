@@ -51,7 +51,6 @@ namespace Ogre
         bool bCorrectAreaLightShadows;
 
         bool bAutoMultiplier;     /// @see VctLighting::update
-        uint32 numBounces;        /// @see VctLighting::update
         float thinWallCounter;    /// @see VctLighting::update
         float rayMarchStepScale;  /// @see VctLighting::update
         uint32 lightMask;         /// @see VctLighting::update
@@ -126,6 +125,8 @@ namespace Ogre
         SceneManager *mSceneManager;
         CompositorManager2 *mCompositorManager;
 
+        uint32 mNumBounces;  /// @see VctLighting::update
+
         bool mFirstBuild;
 
         bool isInitialized( void ) const;
@@ -151,9 +152,18 @@ namespace Ogre
         size_t getNumCascades( void ) const { return mCascadeSettings.size(); }
         VctCascadeSetting &getCascade( size_t idx ) { return mCascadeSettings[idx]; }
 
-        /// Call this function after adding all cascades.
-        /// You can no longer add cascades after this
-        void init( RenderSystem *renderSystem, HlmsManager *hlmsManager );
+        /** Call this function after adding all cascades.
+            You can no longer add cascades after this
+        @param numBounces
+            Number of bounces for cascade 0. The rest of the cascades are autocalculated
+            to maintain even brightness levels.
+
+            Range is [0; inf) but a value of 0 is strongly discouraged if you have more than 1 cascade
+            as you can end up with very uneven brightness levels between cascades
+
+            See VctLighting::update
+        */
+        void init( RenderSystem *renderSystem, HlmsManager *hlmsManager, uint32 numBounces );
 
         /// Removes all items from all cascades
         void removeAllItems();

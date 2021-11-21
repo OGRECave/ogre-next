@@ -43,7 +43,6 @@ namespace Ogre
     VctCascadeSetting::VctCascadeSetting() :
         bCorrectAreaLightShadows( false ),
         bAutoMultiplier( true ),
-        numBounces( 2u ),
         thinWallCounter( 1.0f ),
         rayMarchStepScale( 1.0f ),
         lightMask( 0xffffffff ),
@@ -71,6 +70,7 @@ namespace Ogre
         mMeshCache( 0 ),
         mSceneManager( 0 ),
         mCompositorManager( 0 ),
+        mNumBounces( 2u ),
         mFirstBuild( true )
     {
     }
@@ -147,9 +147,12 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    void VctCascadedVoxelizer::init( RenderSystem *renderSystem, HlmsManager *hlmsManager )
+    void VctCascadedVoxelizer::init( RenderSystem *renderSystem, HlmsManager *hlmsManager,
+                                     uint32 numBounces )
     {
         OGRE_ASSERT_LOW( !mMeshCache && "VctCascadedVoxelizer::init already called!" );
+
+        mNumBounces = numBounces;
 
         mMeshCache = new VoxelizedMeshCache( Ogre::Id::generateNewId<VoxelizedMeshCache>(),
                                              renderSystem->getTextureGpuManager() );
@@ -345,7 +348,7 @@ namespace Ogre
                             mCascades[i]->addCascade( mCascades[j] );
                     }
 
-                    mCascades[i]->setAllowMultipleBounces( cascade.numBounces > 0u );
+                    mCascades[i]->setAllowMultipleBounces( mNumBounces > 0u );
                 }
                 else
                 {
@@ -379,9 +382,9 @@ namespace Ogre
                 // We need all 3 because 1 & 2 will also amplify cascade i due to cascade
                 // i using lighting information from i + 1 when bouncing.
                 const uint32 numBounces =
-                    cascade.numBounces == 0u ? 0u
-                                             : static_cast<uint32>( std::round( std::sqrt(
-                                                   ( ( cascade.numBounces + 1u ) * factor ) - 1.0f ) ) );
+                    mNumBounces == 0u ? 0u
+                                      : static_cast<uint32>( std::round(
+                                            std::sqrt( ( ( mNumBounces + 1u ) * factor ) - 1.0f ) ) );
 
                 mCascades[i]->mMultiplier = factor;
 

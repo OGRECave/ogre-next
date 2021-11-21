@@ -488,13 +488,12 @@ namespace Demo
         // cascadeSetting.setOctantSubdivision( 2u );
 
         cascadeSetting.areaHalfSize = 5.0f;
-        cascadeSetting.numBounces = 2u;
         mCascadedVoxelizer->addCascade( cascadeSetting );
         cascadeSetting.areaHalfSize = 30.0f;
         cascadeSetting.setResolution( 128u );
         mCascadedVoxelizer->addCascade( cascadeSetting );
         mCascadedVoxelizer->autoCalculateStepSizes( Ogre::Vector3( 8.0f ) );
-        mCascadedVoxelizer->init( root->getRenderSystem(), root->getHlmsManager() );
+        mCascadedVoxelizer->init( root->getRenderSystem(), root->getHlmsManager(), 2u );
         mCascadedVoxelizer->addAllItems( sceneManager, 0xffffffff, false );
         mCascadedVoxelizer->setCameraPosition( mGraphicsSystem->getCamera()->getDerivedPosition() );
         sceneManager->updateSceneGraph();
