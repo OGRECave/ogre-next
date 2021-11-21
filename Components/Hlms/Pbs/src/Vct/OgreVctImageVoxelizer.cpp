@@ -656,8 +656,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::clearVoxels( const bool bPartialClear )
     {
-        OgreProfileGpuBegin( "VCT Voxelization Clear" );
-        mRenderSystem->debugAnnotationPush( "VCT Voxelization Clear" );
+        OgreProfileGpuBegin( "IVCT Voxelization Clear" );
+        mRenderSystem->debugAnnotationPush( "IVCT Voxelization Clear" );
         float fClearValue[4];
         uint32 uClearValue[4];
         float fClearNormals[4];
@@ -747,7 +747,7 @@ namespace Ogre
         }
         mComputeTools->clearUavUint( mAccumValVox, uClearValue );
         mRenderSystem->debugAnnotationPop();
-        OgreProfileGpuEnd( "VCT Voxelization Clear" );
+        OgreProfileGpuEnd( "IVCT Voxelization Clear" );
     }
     //-------------------------------------------------------------------------
     /**
@@ -899,7 +899,7 @@ namespace Ogre
     void VctImageVoxelizer::build( SceneManager *sceneManager )
     {
         OgreProfile( "VctImageVoxelizer::build" );
-        OgreProfileGpuBegin( "VCT build" );
+        OgreProfileGpuBegin( "IVCT build" );
 
         OGRE_ASSERT_LOW( !mOctants.empty() );
 
@@ -934,7 +934,7 @@ namespace Ogre
 
         paramVoxelCellSize.setManualValue( getVoxelCellSize() );
 
-        OgreProfileGpuBegin( "VCT Image Voxelization Jobs" );
+        OgreProfileGpuBegin( "IVCT Image Voxelization Jobs" );
 
         const uint32 *threadsPerGroup = mImageVoxelizerJob->getThreadsPerGroup();
 
@@ -1024,7 +1024,7 @@ namespace Ogre
             ++itBatch;
         }
 
-        OgreProfileGpuEnd( "VCT Image Voxelization Jobs" );
+        OgreProfileGpuEnd( "IVCT Image Voxelization Jobs" );
 
         // This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
@@ -1039,7 +1039,7 @@ namespace Ogre
         mFullBuildDone = true;
 
         mRenderSystem->debugAnnotationPop();
-        OgreProfileGpuEnd( "VCT build" );
+        OgreProfileGpuEnd( "IVCT build" );
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::buildRelative( SceneManager *sceneManager, const int32 diffX,
@@ -1070,7 +1070,7 @@ namespace Ogre
         }
 
         OgreProfile( "VctImageVoxelizer::buildRelative" );
-        OgreProfileGpuBegin( "VCT buildRelative" );
+        OgreProfileGpuBegin( "IVCT buildRelative" );
 
         mRenderSystem->endRenderPassDescriptor();
 
@@ -1159,7 +1159,7 @@ namespace Ogre
 
         paramVoxelCellSize.setManualValue( getVoxelCellSize() );
 
-        OgreProfileGpuBegin( "VCT Image Voxelization Jobs" );
+        OgreProfileGpuBegin( "IVCT Image Voxelization Jobs" );
 
         const uint32 *threadsPerGroup = mImageVoxelizerJob->getThreadsPerGroup();
 
@@ -1252,7 +1252,7 @@ namespace Ogre
             ++itBatch;
         }
 
-        OgreProfileGpuEnd( "VCT Image Voxelization Jobs" );
+        OgreProfileGpuEnd( "IVCT Image Voxelization Jobs" );
 
         // This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
@@ -1282,6 +1282,6 @@ namespace Ogre
 
         mRenderSystem->debugAnnotationPop();
 
-        OgreProfileGpuEnd( "VCT buildRelative" );
+        OgreProfileGpuEnd( "IVCT buildRelative" );
     }
 }  // namespace Ogre
