@@ -942,6 +942,9 @@ namespace Ogre
                 runBounce( i );
         }
 
+        if( mDebugVoxelVisualizer )
+            mDebugVoxelVisualizer->setTrackingVoxel( mLightVoxel[0], mLightVoxel[0], true );
+
         renderSystem->debugAnnotationPop();
     }
     //-------------------------------------------------------------------------
