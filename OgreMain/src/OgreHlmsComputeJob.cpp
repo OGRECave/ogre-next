@@ -993,6 +993,29 @@ namespace Ogre
         return mUavSlots[slotIdx].getBuffer().buffer;
     }
     //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::setNumSamplerUnits( uint8 numSlots )
+    {
+        destroyDescriptorSamplers();
+
+        if( numSlots < mSamplerSlots.size() )
+        {
+            HlmsManager *hlmsManager = mCreator->getHlmsManager();
+            FastArray<const HlmsSamplerblock *>::const_iterator itor = mSamplerSlots.begin() + numSlots;
+            FastArray<const HlmsSamplerblock *>::const_iterator endt = mSamplerSlots.end();
+
+            while( itor != endt )
+            {
+                if( *itor )
+                    hlmsManager->destroySamplerblock( *itor );
+                ++itor;
+            }
+        }
+
+        mSamplerSlots.resize( numSlots );
+        if( mInformHlmsOfTextureData )
+            mPsoCacheHash = -1;
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setGlTexSlotStart( uint8 texSlotStart ) { mGlTexSlotStart = texSlotStart; }
     //-----------------------------------------------------------------------------------
     uint8 HlmsComputeJob::getGlTexSlotStart( void ) const
@@ -1024,8 +1047,8 @@ namespace Ogre
             bufferSlot = newSlot;
             destroyDescriptorTextures();    //Descriptor is dirty
 
-            //Remove sampler
-            if( mSamplerSlots[slotIdx] )
+            // Remove sampler
+            if( slotIdx < mSamplerSlots.size() && mSamplerSlots[slotIdx] )
             {
                 destroyDescriptorSamplers();    //Sampler descriptors are also dirty
 
@@ -1037,7 +1060,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setTexture( uint8 slotIdx, const DescriptorSetTexture2::TextureSlot &newSlot,
-                                     const HlmsSamplerblock *refParams )
+                                     const HlmsSamplerblock *refParams, bool bSetSampler )
     {
         OGRE_ASSERT_LOW( slotIdx < mTexSlots.size() );
 
@@ -1067,9 +1090,14 @@ namespace Ogre
             destroyDescriptorTextures();    //Descriptor is dirty
         }
 
-        //Set explicit sampler, or create a default one if needed.
-        if( refParams || (!mSamplerSlots[slotIdx] && newSlot.texture) )
+        // Set explicit sampler, or create a default one if needed.
+        if( refParams || ( slotIdx < mSamplerSlots.size() && !mSamplerSlots[slotIdx] &&
+                           newSlot.texture && bSetSampler ) )
         {
+            OGRE_ASSERT_LOW( slotIdx < mSamplerSlots.size() &&
+                             "Called setNumSamplerUnits but now trying to specify a texture with "
+                             "sampler out of bounds" );
+
             const HlmsSamplerblock *oldSamplerblock = mSamplerSlots[slotIdx];
             if( refParams )
                 mSamplerSlots[slotIdx] = hlmsManager->getSamplerblock( *refParams );

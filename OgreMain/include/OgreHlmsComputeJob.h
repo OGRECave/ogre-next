@@ -308,6 +308,18 @@ namespace Ogre
         TextureGpu *getUavTexture( uint8 slotIdx ) const;
         UavBufferPacked* getUavBuffer( uint8 slotIdx ) const;
 
+        /// This value is overriden by setNumTexUnits to be compatible with OpenGL
+        ///
+        /// However you can later override this behavior to minimize the number of
+        /// samplers by shrinking (or enlarging?) the sampler units.
+        ///
+        /// This is an advanced function. Don't use it unless you're careful
+        /// not to assume 1 tex unit = 1 sampler unit
+        void setNumSamplerUnits( uint8 numSlots );
+
+        /// See setNumSamplerUnits
+        size_t getNumSamplerUnits( void ) const { return mSamplerSlots.size(); }
+
         /** By default HlmsComputeJob::setTexture and HlmsComputeJob::setTexBuffer are in range
             [0; getNumTexUnits)
 
@@ -375,9 +387,13 @@ namespace Ogre
             Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
             When null, we leave the previously set samplerblock (if a texture is being set, and if no
             samplerblock was set, we'll create a default one)
+        @param bSetSampler
+            If true, samplerblock will behave as described.
+            When false and samplerblock is nullptr, we won't touch the samplerblock.
+            Only use this with APIs that have separate texturse & sampler (e.g. everyone except GL)
         */
         void setTexture( uint8 slotIdx, const DescriptorSetTexture2::TextureSlot &newSlot,
-                         const HlmsSamplerblock *refParams=0 );
+                         const HlmsSamplerblock *refParams = 0, bool bSetSampler = true );
 
         /** Sets a samplerblock based on reference parameters
         @param slotIdx

@@ -150,6 +150,32 @@ namespace Ogre
 
         mImageVoxelizerJob->setNumTexUnits(
             static_cast<uint8>( mTexMeshesPerBatch + c_reservedTexSlots ) );
+
+        // Samplers need to be set only once for all texture slots that need it
+        HlmsSamplerblock const *trilinearSampler = 0;
+        {
+            HlmsSamplerblock refSampler;
+            refSampler.setAddressingMode( TAM_CLAMP );
+            refSampler.setFiltering( TFO_TRILINEAR );
+            trilinearSampler = mHlmsManager->getSamplerblock( refSampler );
+        }
+
+        const bool bSetSampler = !caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
+
+        if( !bSetSampler )
+        {
+            mImageVoxelizerJob->setNumSamplerUnits( c_reservedTexSlots + 1u );
+        }
+
+        const uint32 samplersToSet = bSetSampler ? mTexMeshesPerBatch : 1u;
+        for( size_t i = 0u; i < samplersToSet; ++i )
+        {
+            mHlmsManager->addReference( trilinearSampler );
+            mImageVoxelizerJob->_setSamplerblock( static_cast<uint8>( i + c_reservedTexSlots ),
+                                                  trilinearSampler );
+        }
+
+        mHlmsManager->destroySamplerblock( trilinearSampler );
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::clearComputeJobResources()
@@ -542,12 +568,18 @@ namespace Ogre
 
         mInstanceBuffer->upload( mCpuInstanceBuffer, 0u, mInstanceBuffer->getNumElements() );
 
+        const RenderSystemCapabilities *caps = mHlmsManager->getRenderSystem()->getCapabilities();
+        const bool bSetSampler = !caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
+
         // If we have too few meshes, put dummies in unused slots
         // Note: numSeenMeshes * 3u >= texMeshesPerBatch is possible
         DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
         texSlot.texture = mMeshCache->getBlankEmissive();
         for( size_t i = numSeenMeshes * 3u; i < texMeshesPerBatch; ++i )
-            mImageVoxelizerJob->setTexture( static_cast<uint8>( c_reservedTexSlots + i ), texSlot );
+        {
+            mImageVoxelizerJob->setTexture( static_cast<uint8>( c_reservedTexSlots + i ), texSlot, 0,
+                                            bSetSampler );
+        }
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::setRegionToVoxelize( bool autoRegion, const Aabb &regionToVoxelize,
@@ -904,20 +936,15 @@ namespace Ogre
 
         const size_t numOctants = mOctants.size();
 
-        HlmsSamplerblock const *trilinearSampler = 0;
-        {
-            HlmsSamplerblock refSampler;
-            refSampler.setAddressingMode( TAM_CLAMP );
-            refSampler.setFiltering( TFO_TRILINEAR );
-            trilinearSampler = mHlmsManager->getSamplerblock( refSampler );
-        }
-
         mImageVoxelizerJob->setThreadsPerGroup( 4u, 4u, 4u );
 
         if( mImageVoxelizerJob->getProperty( "check_out_of_bounds" ) != 0 )
             mImageVoxelizerJob->setProperty( "check_out_of_bounds", 0 );
 
         ShaderParams &shaderParams = mImageVoxelizerJob->getShaderParams( "default" );
+
+        const RenderSystemCapabilities *caps = mHlmsManager->getRenderSystem()->getCapabilities();
+        const bool bSetSampler = !caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
 
         const size_t numItems = mItems.size();
 
@@ -940,10 +967,9 @@ namespace Ogre
                 while( itTex != enTex )
                 {
                     texSlot.texture = *itTex;
-                    mHlmsManager->addReference( trilinearSampler );
-                    mImageVoxelizerJob->_setSamplerblock( static_cast<uint8>( texIdx ),
-                                                          trilinearSampler );
-                    mImageVoxelizerJob->setTexture( static_cast<uint8>( texIdx ), texSlot );
+                    // Sampler is nullptr because it was already set at init
+                    mImageVoxelizerJob->setTexture( static_cast<uint8>( texIdx ), texSlot, 0,
+                                                    bSetSampler );
                     ++texIdx;
                     ++itTex;
                 }
@@ -993,8 +1019,6 @@ namespace Ogre
 
             ++itBatch;
         }
-
-        mHlmsManager->destroySamplerblock( trilinearSampler );
 
         OgreProfileGpuEnd( "VCT Image Voxelization Jobs" );
 
@@ -1130,19 +1154,14 @@ namespace Ogre
 
         const size_t numOctants = mOctants.size();
 
-        HlmsSamplerblock const *trilinearSampler = 0;
-        {
-            HlmsSamplerblock refSampler;
-            refSampler.setAddressingMode( TAM_CLAMP );
-            refSampler.setFiltering( TFO_TRILINEAR );
-            trilinearSampler = mHlmsManager->getSamplerblock( refSampler );
-        }
-
         if( mImageVoxelizerJob->getProperty( "check_out_of_bounds" ) == 0 )
             mImageVoxelizerJob->setProperty( "check_out_of_bounds", 1 );
 
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
         ShaderParams &shaderParams = mImageVoxelizerJob->getShaderParams( "default" );
+
+        const RenderSystemCapabilities *caps = mHlmsManager->getRenderSystem()->getCapabilities();
+        const bool bSetSampler = !caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
 
         const size_t numItems = mItems.size();
 
@@ -1165,10 +1184,9 @@ namespace Ogre
                 while( itTex != enTex )
                 {
                     texSlot.texture = *itTex;
-                    mHlmsManager->addReference( trilinearSampler );
-                    mImageVoxelizerJob->_setSamplerblock( static_cast<uint8>( texIdx ),
-                                                          trilinearSampler );
-                    mImageVoxelizerJob->setTexture( static_cast<uint8>( texIdx ), texSlot );
+                    // Sampler is nullptr because it was already set at init
+                    mImageVoxelizerJob->setTexture( static_cast<uint8>( texIdx ), texSlot, 0,
+                                                    bSetSampler );
                     ++texIdx;
                     ++itTex;
                 }
@@ -1222,8 +1240,6 @@ namespace Ogre
 
             ++itBatch;
         }
-
-        mHlmsManager->destroySamplerblock( trilinearSampler );
 
         OgreProfileGpuEnd( "VCT Image Voxelization Jobs" );
 
