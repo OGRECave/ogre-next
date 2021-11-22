@@ -3203,14 +3203,17 @@ namespace Ogre
         return passPso;
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit )
+    void Hlms::setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit,
+                              int32 numTexUnits )
     {
+        OGRE_ASSERT_MEDIUM( numTexUnits < 16u );
+
         const uint32 startIdx = static_cast<uint32>( mTextureNameStrings.size() );
         char const *copyName = texName;
         while( *copyName != '\0' )
             mTextureNameStrings.push_back( *copyName++ );
         mTextureNameStrings.push_back( '\0' );
-        mTextureRegs[shaderType].push_back( TextureRegs( startIdx, texUnit ) );
+        mTextureRegs[shaderType].push_back( TextureRegs( startIdx, texUnit, numTexUnits ) );
 
         setProperty( texName, texUnit );
     }
@@ -3234,14 +3237,22 @@ namespace Ogre
             {
                 GpuProgramParametersSharedPtr params = shaders[i]->getDefaultParameters();
 
-                TextureRegsVec::const_iterator itor = mTextureRegs[i].begin();
-                TextureRegsVec::const_iterator end  = mTextureRegs[i].end();
+                int texUnits[16];
 
-                while( itor != end )
+                TextureRegsVec::const_iterator itor = mTextureRegs[i].begin();
+                TextureRegsVec::const_iterator endt = mTextureRegs[i].end();
+
+                while( itor != endt )
                 {
                     const char *paramNameC = &mTextureNameStrings[itor->strNameIdxStart];
                     paramName = paramNameC;
-                    params->setNamedConstant( paramName, static_cast<int>( itor->texUnit ) );
+
+                    const int texUnitStart = itor->texUnit;
+                    const int numTexUnits = itor->numTexUnits;
+                    for( int i = 0u; i < numTexUnits; ++i )
+                        texUnits[i] = texUnitStart + i;
+                    params->setNamedConstant( paramName, texUnits, static_cast<size_t>( numTexUnits ),
+                                              1u );
                     ++itor;
                 }
             }

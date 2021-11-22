@@ -180,6 +180,7 @@ namespace Ogre
         void destroyTextures(void);
         void checkTextures(void);
         void setupBounceTextures(void);
+        void setupGlslTextureUnits( void );
 
         void generateAnisotropicMips(void);
 

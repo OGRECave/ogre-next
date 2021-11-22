@@ -158,13 +158,6 @@
 
             "uav_units" : 1,
 
-            "textures" :
-            [
-                {},
-                {},
-                {}
-            ],
-
             "properties" :
             {
                 "vct_anisotropic" : 0,
@@ -185,7 +178,6 @@
             [
                 ["voxelAlbedoTex",          [0], "int"],
                 ["voxelNormalTex",          [1], "int"],
-                ["vctProbe",                [2], "int"],
 
                 ["lightVoxel",              [0], "int"]
             ]

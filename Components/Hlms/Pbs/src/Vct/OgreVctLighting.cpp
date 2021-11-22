@@ -504,6 +504,8 @@ namespace Ogre
         if( mLightVctBounceInject->getNumTexUnits() != numNeededTexUnits )
             mLightVctBounceInject->setNumTexUnits( numNeededTexUnits );
 
+        setupGlslTextureUnits();
+
         DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
         texSlot.texture = mVoxelizer->getAlbedoVox();
         mLightVctBounceInject->setTexture( 0, texSlot );
@@ -540,6 +542,41 @@ namespace Ogre
         uavSlot.texture = mLightBounce;
         uavSlot.pixelFormat = PFG_RGBA8_UNORM;
         mLightVctBounceInject->_setUavTexture( 0, uavSlot );
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::setupGlslTextureUnits( void )
+    {
+        const size_t numExtraCascades = mExtraCascades.size();
+        size_t numNeededTexUnits;
+        if( mAnisotropic )
+            numNeededTexUnits = 6u + 4u * numExtraCascades;
+        else
+            numNeededTexUnits = 3u + numExtraCascades;
+
+        ShaderParams &glslShaderParams = mLightVctBounceInject->getShaderParams( "glsl" );
+        if( glslShaderParams.mParams.size() != numNeededTexUnits )
+        {
+            glslShaderParams.mParams.resize( 2u );
+
+            ShaderParams::Param param;
+            int32 texSlotIdx = 2u;
+
+            const char *names[4] = { "vctProbes", "vctProbeX", "vctProbeY", "vctProbeZ" };
+
+            const uint32 numTextureVariables = mAnisotropic ? 4u : 1u;
+
+            for( size_t i = 0u; i < numTextureVariables; ++i )
+            {
+                param.name = names[i];
+                int32 textureUnitsTmp[16];
+                for( size_t cascadeIdx = 0u; cascadeIdx < numExtraCascades + 1u; ++cascadeIdx )
+                    textureUnitsTmp[cascadeIdx] = texSlotIdx++;
+                param.setManualValue( textureUnitsTmp, static_cast<uint32>( numExtraCascades + 1u ) );
+                glslShaderParams.mParams.push_back( param );
+            }
+
+            glslShaderParams.setDirty();
+        }
     }
     //-------------------------------------------------------------------------
     void VctLighting::generateAnisotropicMips()
@@ -760,43 +797,18 @@ namespace Ogre
             {
                 mLightVctBounceInject->setProperty( "vct_anisotropic", 1 );
                 mLightVctBounceInject->setNumTexUnits( 6u );
-                ShaderParams &glslShaderParams = mLightVctBounceInject->getShaderParams( "glsl" );
-
-                ShaderParams::Param param;
-                if( !glslShaderParams.findParameter( "vctProbeX" ) )
-                {
-                    param.name = "vctProbeX";
-                    param.setManualValue( (int32)3 );
-                    glslShaderParams.mParams.push_back( param );
-                }
-                if( !glslShaderParams.findParameter( "vctProbeY" ) )
-                {
-                    param.name = "vctProbeY";
-                    param.setManualValue( (int32)4 );
-                    glslShaderParams.mParams.push_back( param );
-                }
-                if( !glslShaderParams.findParameter( "vctProbeZ" ) )
-                {
-                    param.name = "vctProbeZ";
-                    param.setManualValue( (int32)5 );
-                    glslShaderParams.mParams.push_back( param );
-                }
-                glslShaderParams.setDirty();
             }
             else
             {
                 mLightVctBounceInject->setProperty( "vct_anisotropic", 0 );
                 mLightVctBounceInject->setNumTexUnits( 3u );
-                ShaderParams &glslShaderParams = mLightVctBounceInject->getShaderParams( "glsl" );
-                glslShaderParams.removeParameterNoThrow( "vctProbeX" );
-                glslShaderParams.removeParameterNoThrow( "vctProbeY" );
-                glslShaderParams.removeParameterNoThrow( "vctProbeZ" );
-                glslShaderParams.setDirty();
             }
         }
 
         if( bAllowMultipleBounces )
             setupBounceTextures();
+        else
+            setupGlslTextureUnits();
     }
     //-------------------------------------------------------------------------
     bool VctLighting::getAllowMultipleBounces(void) const

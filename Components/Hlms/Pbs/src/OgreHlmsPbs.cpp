@@ -1210,15 +1210,15 @@ namespace Ogre
 
         if( numVctProbes > 0 )
         {
-            setTextureReg( PixelShader, "vctProbes", texUnit );
+            setTextureReg( PixelShader, "vctProbes", texUnit, numVctProbes );
             texUnit += numVctProbes;
             if( getProperty( PbsProperty::VctAnisotropic ) )
             {
-                setTextureReg( PixelShader, "vctProbeX", texUnit );
+                setTextureReg( PixelShader, "vctProbeX", texUnit, numVctProbes );
                 texUnit += numVctProbes;
-                setTextureReg( PixelShader, "vctProbeY", texUnit );
+                setTextureReg( PixelShader, "vctProbeY", texUnit, numVctProbes );
                 texUnit += numVctProbes;
-                setTextureReg( PixelShader, "vctProbeZ", texUnit );
+                setTextureReg( PixelShader, "vctProbeZ", texUnit, numVctProbes );
                 texUnit += numVctProbes;
             }
         }
