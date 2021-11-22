@@ -86,10 +86,10 @@
 			  OGRE_SAMPLER_ARG_DECL( probeSampler )
 			  OGRE_VCT_ANISO_PROBE_ARG_DECL )
 		{
-			float resolution =
-				dot( abs( dirLS ), probeParams.vctResolution_cascadeMaxLod[probeIdx].xyz );
-			float vctInvResolution = 1.0f / resolution;
-			float maxLod = probeParams.vctResolution_cascadeMaxLod[probeIdx].w;
+			float vctInvResolution =
+				dot( abs( dirLS ), probeParams.vctInvResolution_cascadeMaxLod[probeIdx].xyz );
+			float resolution = 1.0f / vctInvResolution;
+			float maxLod = probeParams.vctInvResolution_cascadeMaxLod[probeIdx].w;
 
 			float dist = vctInvResolution;
 			float alpha = startingAlpha;
@@ -325,8 +325,7 @@
 		// the steps of a staircase).
 		float3 dirLS = toVctProbeSpaceDir( pixelData.geomNormal.xyz, probeParams );
 		float maxVal = max3( abs( dirLS.x ), abs( dirLS.y ), abs( dirLS.z ) ) + 1e-6f;
-		float vctInvResolution =
-			1.0f / dot( abs( dirLS ), probeParams.vctResolution_cascadeMaxLod[0].xyz );
+		float vctInvResolution = dot( abs( dirLS ), probeParams.vctInvResolution_cascadeMaxLod[0].xyz );
 		posLS += (dirLS / maxVal) * vctInvResolution * lerp( 15.0f, 1.0f, maxVal );
 
 		@property( vct_num_probes > 1 )
@@ -377,10 +376,9 @@
 				@property( vct_num_probes > 1 )
 					for( int j = 1; j < @value( vct_num_probes ) && result.alpha < 0.95f; ++j )
 					{
-						float resolution =
-							dot( abs( dirLS ), probeParams.vctResolution_cascadeMaxLod[j].xyz );
-						float startBias = 1.0f / resolution;
-						float prevCascadeMaxLod = probeParams.vctResolution_cascadeMaxLod[j - 1].w;
+						float startBias =
+							dot( abs( dirLS ), probeParams.vctInvResolution_cascadeMaxLod[j].xyz );
+						float prevCascadeMaxLod = probeParams.vctInvResolution_cascadeMaxLod[j - 1].w;
 
 						float3 newPosLS =
 							fromVctProbeToNext( result.posLS, j, probeParams ) - dir * startBias;

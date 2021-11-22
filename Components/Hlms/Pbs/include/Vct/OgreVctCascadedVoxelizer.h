@@ -128,8 +128,11 @@ namespace Ogre
         uint32 mNumBounces;  /// @see VctLighting::update
 
         bool mFirstBuild;
+        bool mConsistentCascadeSteps;
 
         bool isInitialized( void ) const;
+
+        bool needsRebuild( const VctCascadeSetting &cascade ) const;
 
     public:
         VctCascadedVoxelizer();
@@ -151,6 +154,46 @@ namespace Ogre
 
         size_t getNumCascades( void ) const { return mCascadeSettings.size(); }
         VctCascadeSetting &getCascade( size_t idx ) { return mCascadeSettings[idx]; }
+
+        /** Selects how we determine when we need to (partially) rebuild the voxels
+            based on camera movement.
+
+        @remarks
+            If camera movement is deterministic, output is always deterministic
+            regardless of this setting
+
+            This value can be changed at any point and switch back and forth
+
+        @param bConsistentCascadeSteps
+            True:
+            Results can feel very determnistic because it is predictable.
+
+            Camera position is quantized in voxelCellSize * cascade.cameraStepSize.
+            This means the camera position is in a 'cell' or 'grid'.
+
+            When the camera position moves onto another grid, we partially revoxelize
+            results.
+
+            Advantage: A camera at pos XYZ will always have the same results
+
+            Disadvantage: if the camera jumps back and forth between voxels,
+            revoxelizations will trigger frequently causing obvious frequent jumps in brightness
+
+            False:
+            Revoxelization happens after the camera has travelled cascade.cameraStepSize cells
+            away from the last point of voxelization.
+
+            Advantage: Infrequent revoxelizations. If camera movement is restricted around
+            the last voxelization point, we will never revoxelize.
+
+            Disadvantage: Taking a picture at pos XYZ, then going away, and taking another
+            picture at same pos XYZ may not result in the same brightness / image;
+            which can make it feel unpredictable or non-deterministic.
+            This can be workarounded by temporarily setting setConsistentCascadeSteps( true )
+            then back false after taking the picture
+        */
+        void setConsistentCascadeSteps( bool bConsistentCascadeSteps );
+        bool getConsistentCascadeSteps( void ) const { return mConsistentCascadeSteps; }
 
         /** Call this function after adding all cascades.
             You can no longer add cascades after this

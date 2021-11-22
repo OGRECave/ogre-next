@@ -71,7 +71,8 @@ namespace Ogre
         mSceneManager( 0 ),
         mCompositorManager( 0 ),
         mNumBounces( 2u ),
-        mFirstBuild( true )
+        mFirstBuild( true ),
+        mConsistentCascadeSteps( false )
     {
     }
     //-------------------------------------------------------------------------
@@ -151,6 +152,11 @@ namespace Ogre
         retVal.z = position.z * voxelCellSize.z;
 
         return retVal;
+    }
+    //-------------------------------------------------------------------------
+    void VctCascadedVoxelizer::setConsistentCascadeSteps( bool bConsistentCascadeSteps )
+    {
+        mConsistentCascadeSteps = bConsistentCascadeSteps;
     }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::init( RenderSystem *renderSystem, HlmsManager *hlmsManager,
@@ -307,6 +313,32 @@ namespace Ogre
         mFirstBuild = true;
     }
     //-------------------------------------------------------------------------
+    bool VctCascadedVoxelizer::needsRebuild( const VctCascadeSetting &cascade ) const
+    {
+        if( mConsistentCascadeSteps )
+        {
+            const Vector3 voxelCellSize = cascade.getVoxelCellSize();
+            const Grid3D newPosSized =
+                quantizePosition( mCameraPosition, voxelCellSize * cascade.cameraStepSize );
+            const Grid3D oldPosSized =
+                quantizePosition( cascade.lastCameraPosition, voxelCellSize * cascade.cameraStepSize );
+
+            return newPosSized.x != oldPosSized.x ||  //
+                   newPosSized.y != oldPosSized.y ||  //
+                   newPosSized.z != oldPosSized.z;
+        }
+        else
+        {
+            const Vector3 voxelCellSize = cascade.getVoxelCellSize();
+            const Grid3D newPos = quantizePosition( mCameraPosition, voxelCellSize );
+            const Grid3D oldPos = quantizePosition( cascade.lastCameraPosition, voxelCellSize );
+
+            return abs( newPos.x - oldPos.x ) >= cascade.cameraStepSize.x ||  //
+                   abs( newPos.y - oldPos.y ) >= cascade.cameraStepSize.y ||  //
+                   abs( newPos.z - oldPos.z ) >= cascade.cameraStepSize.z;
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::update( SceneManager *sceneManager )
     {
         const bool bFirstBuild = mFirstBuild;
@@ -320,18 +352,12 @@ namespace Ogre
         {
             VctCascadeSetting &cascade = mCascadeSettings[i];
 
-            const Vector3 voxelCellSize = cascade.getVoxelCellSize();
-            const Grid3D newPosSized =
-                quantizePosition( mCameraPosition, voxelCellSize * cascade.cameraStepSize );
-            const Grid3D oldPosSized =
-                quantizePosition( cascade.lastCameraPosition, voxelCellSize * cascade.cameraStepSize );
+            const bool bNeedsRebuild = needsRebuild( cascade );
 
-            if( newPosSized.x != oldPosSized.x ||  //
-                newPosSized.y != oldPosSized.y ||  //
-                newPosSized.z != oldPosSized.z ||  //
-                bFirstBuild )
+            if( bNeedsRebuild || bFirstBuild )
             {
                 // Dirty. Must be updated
+                const Vector3 voxelCellSize = cascade.getVoxelCellSize();
                 const Grid3D newPos = quantizePosition( mCameraPosition, voxelCellSize );
                 const Grid3D oldPos = quantizePosition( cascade.lastCameraPosition, voxelCellSize );
 

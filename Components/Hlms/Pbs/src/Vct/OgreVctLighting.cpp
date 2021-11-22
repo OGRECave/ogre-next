@@ -1011,7 +1011,7 @@ namespace Ogre
 
         const size_t numCascades = mExtraCascades.size() + 1u;
 
-        // float4 vctResolution_cascadeMaxLod;
+        // float4 vctInvResolution_cascadeMaxLod;
         for( size_t i = 0u; i < numCascades; ++i )
         {
             const VctLighting *cascade;
@@ -1037,9 +1037,9 @@ namespace Ogre
                 cascadeNumMipmaps = cascadeLightVoxel->getNumMipmaps();
             }
 
-            *passBufferPtr++ = static_cast<float>( widthCascade );
-            *passBufferPtr++ = static_cast<float>( heightCascade );
-            *passBufferPtr++ = static_cast<float>( depthCascade );
+            *passBufferPtr++ = 1.0f / static_cast<float>( widthCascade );
+            *passBufferPtr++ = 1.0f / static_cast<float>( heightCascade );
+            *passBufferPtr++ = 1.0f / static_cast<float>( depthCascade );
             if( i == numCascades - 1u )
             {
                 *passBufferPtr++ = 256.0f;  // cascadeMaxLod
