@@ -167,7 +167,9 @@ namespace Ogre
             mImageVoxelizerJob->setNumSamplerUnits( c_reservedTexSlots + 1u );
         }
 
-        const uint32 samplersToSet = bSetSampler ? mTexMeshesPerBatch : 1u;
+        const uint32 texMeshesPerBatch = mTexMeshesPerBatch;
+
+        const uint32 samplersToSet = bSetSampler ? texMeshesPerBatch : 1u;
         for( size_t i = 0u; i < samplersToSet; ++i )
         {
             mHlmsManager->addReference( trilinearSampler );
@@ -176,6 +178,18 @@ namespace Ogre
         }
 
         mHlmsManager->destroySamplerblock( trilinearSampler );
+
+        if( mMeshCache->mGlslTexUnits.size() != texMeshesPerBatch )
+        {
+            ShaderParams &glslShaderParams = mImageVoxelizerJob->getShaderParams( "glsl" );
+            ShaderParams::Param *meshTexturesParam = glslShaderParams.findParameter( "meshTextures" );
+            mMeshCache->mGlslTexUnits.resizePOD( texMeshesPerBatch );
+            for( size_t i = 0u; i < texMeshesPerBatch; ++i )
+                mMeshCache->mGlslTexUnits[i] = static_cast<int32>( i + c_reservedTexSlots );
+            meshTexturesParam->setManualValueEx(
+                mMeshCache->mGlslTexUnits.begin(),
+                static_cast<uint32>( mMeshCache->mGlslTexUnits.size() ) );
+        }
     }
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::clearComputeJobResources()

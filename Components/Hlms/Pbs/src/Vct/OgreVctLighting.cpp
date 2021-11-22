@@ -553,6 +553,8 @@ namespace Ogre
         else
             numNeededTexUnits = 3u + numExtraCascades;
 
+        // This code assumes there's 2 textures at the beginning that always stays the same
+        // the rest of them are dynamically generated
         ShaderParams &glslShaderParams = mLightVctBounceInject->getShaderParams( "glsl" );
         if( glslShaderParams.mParams.size() != numNeededTexUnits )
         {

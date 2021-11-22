@@ -76,6 +76,12 @@ namespace Ogre
         TextureGpu *mBlankEmissive;
 
     public:
+        /// The number of texture units GL can handle may exceed the hard limit in
+        /// ShaderParams::ManualParam::dataBytes so we need to use EX and store
+        /// the data here
+        FastArray<int32> mGlslTexUnits;
+
+    public:
         VoxelizedMeshCache( IdType id, TextureGpuManager *textureManager );
         ~VoxelizedMeshCache();
 
