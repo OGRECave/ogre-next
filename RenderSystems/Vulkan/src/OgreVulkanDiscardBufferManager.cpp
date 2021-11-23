@@ -269,7 +269,7 @@ namespace Ogre
     {
         alignment = std::max<uint16>( 4u, alignment );  // Prevent alignments lower than 4 bytes.
         VulkanDiscardBuffer *retVal =
-            OGRE_NEW VulkanDiscardBuffer( bufferSize, alignment, mVaoManager, mDevice, this );
+            OGRE_NEW VulkanDiscardBuffer( bufferSize, alignment, mVaoManager, this );
         mDiscardBuffers.push_back( retVal );
         _getBlock( retVal );
         retVal->mBuffer = mBuffer.mVboName;
@@ -307,10 +307,9 @@ namespace Ogre
     }
 
     VulkanDiscardBuffer::VulkanDiscardBuffer( size_t bufferSize, uint16 alignment,
-                                              VaoManager *vaoManager, VulkanDevice *device,
+                                              VaoManager *vaoManager,
                                               VulkanDiscardBufferManager *owner ) :
         mBuffer( 0 ),
-        mDevice( device ),
         mBlockPrePadding( 0 ),
         mBufferOffset( 0 ),
         mBufferSize( bufferSize ),
