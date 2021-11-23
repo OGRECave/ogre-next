@@ -1,6 +1,6 @@
 var class_ogre_1_1_vulkan_discard_buffer =
 [
-    [ "VulkanDiscardBuffer", "class_ogre_1_1_vulkan_discard_buffer.html#ac221d67b23a295e82dbf60676ee3148d", null ],
+    [ "VulkanDiscardBuffer", "class_ogre_1_1_vulkan_discard_buffer.html#aeecd14c4ca5c244c304c6b215d4f9b5a", null ],
     [ "getAlignment", "class_ogre_1_1_vulkan_discard_buffer.html#a5bc4c00a860c1186340952677df45df3", null ],
     [ "getBlockSize", "class_ogre_1_1_vulkan_discard_buffer.html#a5752c6192c1afac51655659d98876968", null ],
     [ "getBlockStart", "class_ogre_1_1_vulkan_discard_buffer.html#a7526bacc6ea6e5bab1d6617af20d71a7", null ],

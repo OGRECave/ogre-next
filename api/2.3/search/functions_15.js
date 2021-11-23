@@ -66,7 +66,7 @@ var searchData=
   ['vulkandescriptorsettexture2_28497',['VulkanDescriptorSetTexture2',['../struct_ogre_1_1_vulkan_descriptor_set_texture2.html#ae4b414b26f26a512ea8493115bdf131d',1,'Ogre::VulkanDescriptorSetTexture2']]],
   ['vulkandescriptorsetuav_28498',['VulkanDescriptorSetUav',['../struct_ogre_1_1_vulkan_descriptor_set_uav.html#a3422fbcc7996c81dad577cfa4081d3fe',1,'Ogre::VulkanDescriptorSetUav']]],
   ['vulkandevice_28499',['VulkanDevice',['../struct_ogre_1_1_vulkan_device.html#a99a35ff646d43bb6b35d192074e877e6',1,'Ogre::VulkanDevice']]],
-  ['vulkandiscardbuffer_28500',['VulkanDiscardBuffer',['../class_ogre_1_1_vulkan_discard_buffer.html#ac221d67b23a295e82dbf60676ee3148d',1,'Ogre::VulkanDiscardBuffer']]],
+  ['vulkandiscardbuffer_28500',['VulkanDiscardBuffer',['../class_ogre_1_1_vulkan_discard_buffer.html#aeecd14c4ca5c244c304c6b215d4f9b5a',1,'Ogre::VulkanDiscardBuffer']]],
   ['vulkandiscardbuffermanager_28501',['VulkanDiscardBufferManager',['../class_ogre_1_1_vulkan_discard_buffer_manager.html#a2d144ca837c29108dfdc82daea54e887',1,'Ogre::VulkanDiscardBufferManager']]],
   ['vulkandynamicbuffer_28502',['VulkanDynamicBuffer',['../class_ogre_1_1_vulkan_dynamic_buffer.html#a345e4583a228d36d78bb7ddc9ae55f1d',1,'Ogre::VulkanDynamicBuffer']]],
   ['vulkanflushonlydescvalue_28503',['VulkanFlushOnlyDescValue',['../struct_ogre_1_1_vulkan_flush_only_desc_value.html#a9fa884211eb40afc44170cf50118b481',1,'Ogre::VulkanFlushOnlyDescValue']]],
