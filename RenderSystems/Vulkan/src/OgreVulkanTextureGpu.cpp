@@ -253,9 +253,6 @@ namespace Ogre
 
         if( !hasAutomaticBatching() )
         {
-            VulkanTextureGpuManager *textureManager =
-                static_cast<VulkanTextureGpuManager *>( mTextureManager );
-            VulkanDevice *device = textureManager->getDevice();
             if( mFinalTextureName )
             {
                 VkMemoryRequirements memRequirements;
