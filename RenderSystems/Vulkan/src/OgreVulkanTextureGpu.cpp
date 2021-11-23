@@ -419,7 +419,12 @@ namespace Ogre
             return ResourceLayout::Undefined;
         case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL:
         case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL:
+        case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL:
+        case VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL:
             return ResourceLayout::RenderTarget;
+        case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL:
+        case VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL:
+            return ResourceLayout::RenderTargetReadOnly;
         case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
             return ResourceLayout::PresentReady;
         case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
