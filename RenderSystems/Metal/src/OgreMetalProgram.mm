@@ -319,6 +319,8 @@ namespace Ogre {
             if( error )
                 errorDesc = [error localizedDescription].UTF8String;
 
+            mCompileError = true;
+
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Failed to create pipeline state for reflection, error " +
                          errorDesc, "MetalProgram::analyzeComputeParameters" );
@@ -393,6 +395,8 @@ namespace Ogre {
             String errorDesc;
             if( error )
                 errorDesc = [error localizedDescription].UTF8String;
+
+            mCompileError = true;
 
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Failed to create pipeline state for reflection, error " +
@@ -608,15 +612,22 @@ namespace Ogre {
         if( !mLibrary )
             return;
 
-        if( mType != GPT_COMPUTE_PROGRAM )
+        try
         {
-            //You think this is a code smell? How about making BUILDconstantDefinitions const???
-            //It's an oxymoron.
-            const_cast<MetalProgram*>(this)->analyzeRenderParameters();
+            if( mType != GPT_COMPUTE_PROGRAM )
+            {
+                //You think this is a code smell? How about making BUILDconstantDefinitions const???
+                //It's an oxymoron.
+                const_cast<MetalProgram*>(this)->analyzeRenderParameters();
+            }
+            else
+            {
+                const_cast<MetalProgram*>(this)->analyzeComputeParameters();
+            }
         }
-        else
+        catch( RenderingAPIException &e )
         {
-            const_cast<MetalProgram*>(this)->analyzeComputeParameters();
+            LogManager::getSingleton().logMessage( e.getFullDescription() );
         }
     }
     //-----------------------------------------------------------------------
