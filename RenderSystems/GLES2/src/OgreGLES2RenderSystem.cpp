@@ -1801,15 +1801,11 @@ namespace Ogre {
         // Create variables related to instancing.
         v1::HardwareVertexBufferSharedPtr globalInstanceVertexBuffer;
         v1::VertexDeclaration* globalVertexDeclaration = 0;
-        bool hasInstanceData = false;
-        size_t numberOfInstances = 0;
+        size_t numberOfInstances = 1;
         if(hasMinGLVersion(3, 0) || checkExtension("GL_EXT_instanced_arrays"))
         {
             globalInstanceVertexBuffer = getGlobalInstanceVertexBuffer();
             globalVertexDeclaration = getGlobalInstanceVertexBufferVertexDeclaration();
-            hasInstanceData = (op.useGlobalInstancingVertexBufferIsAvailable &&
-                                !globalInstanceVertexBuffer.isNull() && (globalVertexDeclaration != NULL))
-                                || op.vertexData->vertexBufferBinding->getHasInstanceData();
 
             numberOfInstances = op.numberOfInstances;
 
@@ -1902,7 +1898,7 @@ namespace Ogre {
                                   mDerivedDepthBiasSlopeScale);
                 }
 
-                if(hasInstanceData && (hasMinGLVersion(3, 0) || checkExtension("GL_EXT_instanced_arrays")))
+                if(numberOfInstances > 1)
                 {
                     OGRE_CHECK_GL_ERROR(glDrawElementsInstancedEXT(primType, static_cast<GLsizei>(op.indexData->indexCount), indexType, pBufferData, static_cast<GLsizei>(numberOfInstances)));
                 }
@@ -1925,7 +1921,7 @@ namespace Ogre {
                                   mDerivedDepthBiasSlopeScale);
                 }
 
-                if(hasInstanceData && (hasMinGLVersion(3, 0) || checkExtension("GL_EXT_instanced_arrays")))
+                if(numberOfInstances > 1)
                 {
                     OGRE_CHECK_GL_ERROR(glDrawArraysInstancedEXT(primType, 0, static_cast<GLsizei>(op.vertexData->vertexCount), static_cast<GLsizei>(numberOfInstances)));
                 }

@@ -2856,10 +2856,6 @@ namespace Ogre
         v1::HardwareVertexBufferSharedPtr globalInstanceVertexBuffer = getGlobalInstanceVertexBuffer();
         v1::VertexDeclaration* globalVertexDeclaration = getGlobalInstanceVertexBufferVertexDeclaration();
 
-        bool hasInstanceData = (op.useGlobalInstancingVertexBufferIsAvailable &&
-                    !globalInstanceVertexBuffer.isNull() && globalVertexDeclaration != NULL)
-                || op.vertexData->vertexBufferBinding->getHasInstanceData();
-
         size_t numberOfInstances = op.numberOfInstances;
 
         if (op.useGlobalInstancingVertexBufferIsAvailable)
@@ -3010,7 +3006,7 @@ namespace Ogre
             {
                 if(op.useIndexes)
                 {
-                    if(hasInstanceData)
+                    if(numberOfInstances > 1)
                     {
                         mDevice.GetImmediateContext()->DrawIndexedInstanced(
                             static_cast<UINT>(op.indexData->indexCount),
@@ -3033,7 +3029,7 @@ namespace Ogre
                     {
                         mDevice.GetImmediateContext()->DrawAuto();
                     }
-                    else if(hasInstanceData)
+                    else if(numberOfInstances > 1)
                     {
                         mDevice.GetImmediateContext()->DrawInstanced(
                             static_cast<UINT>(op.vertexData->vertexCount),
@@ -3055,7 +3051,7 @@ namespace Ogre
                     if(!op.useIndexes && op.vertexData->vertexCount == -1) // -1 is a sign to use DrawAuto
                         errorDescription.append(" auto");
                     else
-                        errorDescription.append(op.useIndexes ? " indexed" : "").append(hasInstanceData ? " instanced" : "");
+                        errorDescription.append(op.useIndexes ? " indexed" : "").append(numberOfInstances > 1 ? " instanced" : "");
                     errorDescription.append("\nError Description:").append(mDevice.getErrorDescription());
                     errorDescription.append("\nActive OGRE shaders:")
                         .append(mPso->vertexShader ? ("\nVS = " + mPso->vertexShader->getName()).c_str() : "")

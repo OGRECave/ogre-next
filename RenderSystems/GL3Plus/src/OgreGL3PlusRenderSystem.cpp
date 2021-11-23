@@ -2610,9 +2610,6 @@ namespace Ogre {
         // Create variables related to instancing.
         v1::HardwareVertexBufferSharedPtr globalInstanceVertexBuffer = getGlobalInstanceVertexBuffer();
         v1::VertexDeclaration* globalVertexDeclaration = getGlobalInstanceVertexBufferVertexDeclaration();
-        bool hasInstanceData = (op.useGlobalInstancingVertexBufferIsAvailable &&
-                                !globalInstanceVertexBuffer.isNull() && (globalVertexDeclaration != NULL))
-            || op.vertexData->vertexBufferBinding->getHasInstanceData();
 
         size_t numberOfInstances = op.numberOfInstances;
 
@@ -2813,7 +2810,7 @@ namespace Ogre {
                                   mDerivedDepthBiasSlopeScale);
                 }
 
-                if(hasInstanceData)
+                if(numberOfInstances > 1)
                 {
                     OGRE_CHECK_GL_ERROR(glDrawElementsInstancedBaseVertex(primType, op.indexData->indexCount, indexType, pBufferData, numberOfInstances, op.vertexData->vertexStart));
                 }
@@ -2836,7 +2833,7 @@ namespace Ogre {
                                   mDerivedDepthBiasSlopeScale);
                 }
 
-                if (hasInstanceData)
+                if (numberOfInstances > 1)
                 {
                     OGRE_CHECK_GL_ERROR(glDrawArraysInstanced(primType, 0, op.vertexData->vertexCount, numberOfInstances));
                 }

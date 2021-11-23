@@ -1898,7 +1898,6 @@ namespace Ogre
         RenderSystem::_render( op );
 
         const size_t numberOfInstances = op.numberOfInstances;
-        const bool hasInstanceData = mCurrentVertexBuffer->vertexBufferBinding->getHasInstanceData();
 
         VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
 
