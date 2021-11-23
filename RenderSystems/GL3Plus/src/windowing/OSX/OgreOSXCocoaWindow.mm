@@ -699,7 +699,7 @@ namespace Ogre {
         mWindowTitle = title;
 
         mView = [[OgreGL3PlusView alloc] initWithFrame:windowRect];
-        [mView setOgreWindow:this];
+        [(OgreGL3PlusView*)mView setOgreWindow:this];
 
         _setWindowParameters(widthPt, heightPt);
 
