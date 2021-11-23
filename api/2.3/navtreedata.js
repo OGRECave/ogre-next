@@ -340,7 +340,7 @@ var NAVTREEINDEX =
 "class_ogre_1_1v1_1_1_tag_point.html#a0244945288b15d4b8fa79cedf162c84c",
 "class_ogre_1_1v1_1_1_text_area_overlay_element.html#ab07aba898809f819567965cceda0922e",
 "class_ogre_1_1v1_1_1_vertex_declaration.html#a4aa40b314c50be0d9bf8bc0cbd5b5f1a",
-"class_ogre_1_1v1_1_1_vulkan_hardware_index_buffer.html#ac9cbd2da85d59fe5ef6d5fa348052cd8",
+"class_ogre_1_1v1_1_1_vulkan_hardware_index_buffer.html#acb46d4b0a597156d9ba5abc39d127792",
 "class_ogre_1_1v1_1_1_wire_bounding_box.html#a9a72ade896561e23c32cf8659f1640e4",
 "functions_func_z.html",
 "group___effects.html#gga6f176e5de375550ba7f1c8dccde8345aa3237339678fe18c0dfdda0de205da6ae",
