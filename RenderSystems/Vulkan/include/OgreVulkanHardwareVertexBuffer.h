@@ -63,11 +63,11 @@ namespace v1
         virtual void writeData( size_t offset, size_t length, const void *pSource,
                                 bool discardWholeBuffer = false ) override;
         virtual void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset,
-                               size_t length, bool discardWholeBuffer = false );
+                               size_t length, bool discardWholeBuffer = false ) override;
 
-        virtual void _updateFromShadow( void );
+        virtual void _updateFromShadow( void ) override;
 
-        virtual void *getRenderSystemData( void );
+        virtual void *getRenderSystemData( void ) override;
     };
 }
 }
