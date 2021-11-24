@@ -2297,7 +2297,7 @@ namespace Ogre
 
                     if( i >= shadowCastingDirLights && i < numDirectionalLights )
                     {
-                        if( i < realNumDirectionalLights )
+                        if( i < (int32)realNumDirectionalLights )
                         {
                             while( affectedLights[nonShadowLightIdx] )
                                 ++nonShadowLightIdx;
@@ -2402,7 +2402,7 @@ namespace Ogre
                 //No shadow maps, only send directional lights
                 const LightListInfo &globalLightList = sceneManager->getGlobalLightList();
 
-                for( int32 i=0; i<realNumDirectionalLights; ++i )
+                for( int32 i = 0; i < (int32)realNumDirectionalLights; ++i )
                 {
                     assert( globalLightList.lights[i]->getType() == Light::LT_DIRECTIONAL );
 
