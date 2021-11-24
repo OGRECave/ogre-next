@@ -143,8 +143,12 @@ namespace Ogre
         mClosed = true;
         mFocused = false;
 
-        if( !mIsExternal )
+        if( mHwnd && !mIsExternal )
+        {
             WindowEventUtilities::_removeRenderWindow( this );
+            DestroyWindow( mHwnd );
+        }
+        mHwnd = 0;
 
         if( mFullscreenMode )
         {
