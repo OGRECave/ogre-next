@@ -195,6 +195,9 @@ namespace Ogre
                 for (size_t i1 = 1; i1 + 1 < numIndices; ++i1)
                     addTriangle(data, indices[0], indices[i1], indices[i1 + 1], lookup, submeshID);
                 break;
+
+            default:
+                break;
             }
         }
         else
@@ -217,6 +220,9 @@ namespace Ogre
             case OT_TRIANGLE_FAN: // (0,1,2),(0,2,3),(0,3,4),...
                 for (size_t i1 = 1; i1 + 1 < numIndices; ++i1)
                     addTriangle(data, indices[0], indices[i1], indices[i1 + 1], lookup, submeshID);
+                break;
+
+            default:
                 break;
             }
         }
