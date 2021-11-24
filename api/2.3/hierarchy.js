@@ -577,13 +577,6 @@ var hierarchy =
         [ "Ogre::v1::Rectangle2DFactory", "class_ogre_1_1v1_1_1_rectangle2_d_factory.html", null ],
         [ "Ogre::v1::RibbonTrailFactory", "class_ogre_1_1v1_1_1_ribbon_trail_factory.html", null ]
       ] ],
-      [ "Ogre::MultiSourceVertexBufferPool", "class_ogre_1_1_multi_source_vertex_buffer_pool.html", [
-        [ "Ogre::GL3PlusMultiSourceVertexBufferPool", "class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html", null ],
-        [ "Ogre::GLES2MultiSourceVertexBufferPool", "class_ogre_1_1_g_l_e_s2_multi_source_vertex_buffer_pool.html", null ],
-        [ "Ogre::MetalMultiSourceVertexBufferPool", "class_ogre_1_1_metal_multi_source_vertex_buffer_pool.html", null ],
-        [ "Ogre::NULLMultiSourceVertexBufferPool", "class_ogre_1_1_n_u_l_l_multi_source_vertex_buffer_pool.html", null ],
-        [ "Ogre::VulkanMultiSourceVertexBufferPool", "class_ogre_1_1_vulkan_multi_source_vertex_buffer_pool.html", null ]
-      ] ],
       [ "Ogre::Node", "class_ogre_1_1_node.html", [
         [ "Ogre::SceneNode", "class_ogre_1_1_scene_node.html", [
           [ "Ogre::BspSceneNode", "class_ogre_1_1_bsp_scene_node.html", null ],

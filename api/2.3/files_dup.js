@@ -802,9 +802,7 @@ var files_dup =
     [ "OgreGL3PlusMappings.h", "_ogre_g_l3_plus_mappings_8h.html", [
       [ "GL3PlusMappings", "class_ogre_1_1_g_l3_plus_mappings.html", "class_ogre_1_1_g_l3_plus_mappings" ]
     ] ],
-    [ "OgreGL3PlusMultiSourceVertexBufferPool.h", "_ogre_g_l3_plus_multi_source_vertex_buffer_pool_8h.html", [
-      [ "GL3PlusMultiSourceVertexBufferPool", "class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool.html", "class_ogre_1_1_g_l3_plus_multi_source_vertex_buffer_pool" ]
-    ] ],
+    [ "OgreGL3PlusMultiSourceVertexBufferPool.h", "_ogre_g_l3_plus_multi_source_vertex_buffer_pool_8h.html", null ],
     [ "OgreGL3PlusNullTexture.h", "_ogre_g_l3_plus_null_texture_8h.html", [
       [ "GL3PlusNullTexture", "class_ogre_1_1_g_l3_plus_null_texture.html", "class_ogre_1_1_g_l3_plus_null_texture" ],
       [ "GL3PlusNullTextureTarget", "class_ogre_1_1_g_l3_plus_null_texture_target.html", "class_ogre_1_1_g_l3_plus_null_texture_target" ],
@@ -958,9 +956,7 @@ var files_dup =
     [ "OgreGLES2HlmsSamplerblock.h", "_ogre_g_l_e_s2_hlms_samplerblock_8h.html", null ],
     [ "OgreGLES2ManagedResource.h", "_ogre_g_l_e_s2_managed_resource_8h.html", "_ogre_g_l_e_s2_managed_resource_8h" ],
     [ "OgreGLES2ManagedResourceManager.h", "_ogre_g_l_e_s2_managed_resource_manager_8h.html", null ],
-    [ "OgreGLES2MultiSourceVertexBufferPool.h", "_ogre_g_l_e_s2_multi_source_vertex_buffer_pool_8h.html", [
-      [ "GLES2MultiSourceVertexBufferPool", "class_ogre_1_1_g_l_e_s2_multi_source_vertex_buffer_pool.html", "class_ogre_1_1_g_l_e_s2_multi_source_vertex_buffer_pool" ]
-    ] ],
+    [ "OgreGLES2MultiSourceVertexBufferPool.h", "_ogre_g_l_e_s2_multi_source_vertex_buffer_pool_8h.html", null ],
     [ "OgreGLES2NullTexture.h", "_ogre_g_l_e_s2_null_texture_8h.html", [
       [ "GLES2NullTexture", "class_ogre_1_1_g_l_e_s2_null_texture.html", "class_ogre_1_1_g_l_e_s2_null_texture" ],
       [ "GLES2NullTextureTarget", "class_ogre_1_1_g_l_e_s2_null_texture_target.html", "class_ogre_1_1_g_l_e_s2_null_texture_target" ],
@@ -1453,9 +1449,7 @@ var files_dup =
     [ "OgreMetalMultiRenderTarget.h", "_ogre_metal_multi_render_target_8h.html", [
       [ "MetalMultiRenderTarget", "class_ogre_1_1_metal_multi_render_target.html", "class_ogre_1_1_metal_multi_render_target" ]
     ] ],
-    [ "OgreMetalMultiSourceVertexBufferPool.h", "_ogre_metal_multi_source_vertex_buffer_pool_8h.html", [
-      [ "MetalMultiSourceVertexBufferPool", "class_ogre_1_1_metal_multi_source_vertex_buffer_pool.html", "class_ogre_1_1_metal_multi_source_vertex_buffer_pool" ]
-    ] ],
+    [ "OgreMetalMultiSourceVertexBufferPool.h", "_ogre_metal_multi_source_vertex_buffer_pool_8h.html", null ],
     [ "OgreMetalNullTexture.h", "_ogre_metal_null_texture_8h.html", [
       [ "MetalNullTexture", "class_ogre_1_1_metal_null_texture.html", "class_ogre_1_1_metal_null_texture" ],
       [ "MetalNullTextureTarget", "class_ogre_1_1_metal_null_texture_target.html", "class_ogre_1_1_metal_null_texture_target" ],
@@ -1531,9 +1525,7 @@ var files_dup =
     [ "OgreMonitorInfo.h", "_ogre_monitor_info_8h.html", null ],
     [ "OgreMovableObject.h", "_ogre_movable_object_8h.html", "_ogre_movable_object_8h" ],
     [ "OgreMovablePlane.h", "_ogre_movable_plane_8h.html", null ],
-    [ "OgreMultiSourceVertexBufferPool.h", "_ogre_multi_source_vertex_buffer_pool_8h.html", [
-      [ "MultiSourceVertexBufferPool", "class_ogre_1_1_multi_source_vertex_buffer_pool.html", "class_ogre_1_1_multi_source_vertex_buffer_pool" ]
-    ] ],
+    [ "OgreMultiSourceVertexBufferPool.h", "_ogre_multi_source_vertex_buffer_pool_8h.html", null ],
     [ "OgreNaClGLContext.h", "_ogre_na_cl_g_l_context_8h.html", [
       [ "NaClGLContext", "class_ogre_1_1_na_cl_g_l_context.html", "class_ogre_1_1_na_cl_g_l_context" ]
     ] ],
@@ -1567,9 +1559,7 @@ var files_dup =
     [ "OgreNULLHardwarePixelBuffer.h", "_ogre_n_u_l_l_hardware_pixel_buffer_8h.html", [
       [ "NULLHardwarePixelBuffer", "class_ogre_1_1v1_1_1_n_u_l_l_hardware_pixel_buffer.html", "class_ogre_1_1v1_1_1_n_u_l_l_hardware_pixel_buffer" ]
     ] ],
-    [ "OgreNULLMultiSourceVertexBufferPool.h", "_ogre_n_u_l_l_multi_source_vertex_buffer_pool_8h.html", [
-      [ "NULLMultiSourceVertexBufferPool", "class_ogre_1_1_n_u_l_l_multi_source_vertex_buffer_pool.html", "class_ogre_1_1_n_u_l_l_multi_source_vertex_buffer_pool" ]
-    ] ],
+    [ "OgreNULLMultiSourceVertexBufferPool.h", "_ogre_n_u_l_l_multi_source_vertex_buffer_pool_8h.html", null ],
     [ "OgreNULLPlugin.h", "_ogre_n_u_l_l_plugin_8h.html", [
       [ "NULLPlugin", "class_ogre_1_1_n_u_l_l_plugin.html", "class_ogre_1_1_n_u_l_l_plugin" ]
     ] ],
@@ -2323,9 +2313,7 @@ var files_dup =
     [ "OgreVulkanMappings.h", "_ogre_vulkan_mappings_8h.html", [
       [ "VulkanMappings", "class_ogre_1_1_vulkan_mappings.html", "class_ogre_1_1_vulkan_mappings" ]
     ] ],
-    [ "OgreVulkanMultiSourceVertexBufferPool.h", "_ogre_vulkan_multi_source_vertex_buffer_pool_8h.html", [
-      [ "VulkanMultiSourceVertexBufferPool", "class_ogre_1_1_vulkan_multi_source_vertex_buffer_pool.html", "class_ogre_1_1_vulkan_multi_source_vertex_buffer_pool" ]
-    ] ],
+    [ "OgreVulkanMultiSourceVertexBufferPool.h", "_ogre_vulkan_multi_source_vertex_buffer_pool_8h.html", null ],
     [ "OgreVulkanPixelFormatToShaderType.h", "_ogre_vulkan_pixel_format_to_shader_type_8h.html", [
       [ "VulkanPixelFormatToShaderType", "class_ogre_1_1_vulkan_pixel_format_to_shader_type.html", "class_ogre_1_1_vulkan_pixel_format_to_shader_type" ]
     ] ],

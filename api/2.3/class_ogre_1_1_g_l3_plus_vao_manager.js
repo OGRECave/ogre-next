@@ -19,7 +19,6 @@ var class_ogre_1_1_g_l3_plus_vao_manager =
     [ "createConstBuffer", "class_ogre_1_1_g_l3_plus_vao_manager.html#a952ab60d93451fc2ea18e14bbc31c309", null ],
     [ "createIndexBuffer", "class_ogre_1_1_g_l3_plus_vao_manager.html#a0f791867304e682175612237b3bfd470", null ],
     [ "createIndirectBuffer", "class_ogre_1_1_g_l3_plus_vao_manager.html#ad5ec74188530974bc3c28f3d1ab2982f", null ],
-    [ "createMultiSourceVertexBufferPool", "class_ogre_1_1_g_l3_plus_vao_manager.html#a167879924fcc223de12f276c61be0c88", null ],
     [ "createReadOnlyBuffer", "class_ogre_1_1_g_l3_plus_vao_manager.html#a9f95d947d7dae2068089fe00a03eb37d", null ],
     [ "createStagingBuffer", "class_ogre_1_1_g_l3_plus_vao_manager.html#a4e8851d90bc61865477947731455440b", null ],
     [ "createStagingTexture", "class_ogre_1_1_g_l3_plus_vao_manager.html#afe72cf8783a9d2438c978550a68366f5", null ],

@@ -1,12 +1,11 @@
 var class_ogre_1_1_vertex_buffer_packed =
 [
-    [ "VertexBufferPacked", "class_ogre_1_1_vertex_buffer_packed.html#a4bdee5959eb17d46691eafb9e7fa4533", null ],
+    [ "VertexBufferPacked", "class_ogre_1_1_vertex_buffer_packed.html#a7ffd1af2ee2464958d4c83ec4e531772", null ],
     [ "~VertexBufferPacked", "class_ogre_1_1_vertex_buffer_packed.html#ae8843e826003eeb5927766af6c55f5d8", null ],
     [ "_getFinalBufferStart", "class_ogre_1_1_vertex_buffer_packed.html#aac73dd5b3bfea12dca1c5a64e6e95c7a", null ],
     [ "_getInternalBufferStart", "class_ogre_1_1_vertex_buffer_packed.html#a481ad7b97cb88501c5777f4703ff2320", null ],
     [ "_getInternalNumElements", "class_ogre_1_1_vertex_buffer_packed.html#aceb93f9fe49eedbdbc91ea6eb5feed56", null ],
     [ "_getInternalTotalSizeBytes", "class_ogre_1_1_vertex_buffer_packed.html#a8fe6a1ecb4b3ab2b2a5208e9daeb4168", null ],
-    [ "_getSourceIndex", "class_ogre_1_1_vertex_buffer_packed.html#a4e0bfb1d4be31bec1ea00e25f6473f6c", null ],
     [ "_setBufferInterface", "class_ogre_1_1_vertex_buffer_packed.html#a7cfd9629389ccf2aedec4b37f5a1b403", null ],
     [ "_setShadowCopy", "class_ogre_1_1_vertex_buffer_packed.html#a564935579f2252627f46dff29142e7ff", null ],
     [ "advanceFrame", "class_ogre_1_1_vertex_buffer_packed.html#a1f35a4a63b023187026b9abc1c897a71", null ],
@@ -16,8 +15,6 @@ var class_ogre_1_1_vertex_buffer_packed =
     [ "getBufferType", "class_ogre_1_1_vertex_buffer_packed.html#a50080eb729acd0c995606d512d5633c9", null ],
     [ "getBytesPerElement", "class_ogre_1_1_vertex_buffer_packed.html#af98ad9606c188cc815fc647a21f20498", null ],
     [ "getMappingState", "class_ogre_1_1_vertex_buffer_packed.html#a542b46fc7a7cf5fe524cfc7b4b389ba9", null ],
-    [ "getMultiSourceId", "class_ogre_1_1_vertex_buffer_packed.html#ac2e92dbc03099c677c0dbcacb6d3abc9", null ],
-    [ "getMultiSourcePool", "class_ogre_1_1_vertex_buffer_packed.html#a3328aca11adb08e03723c1ec61f9ca3d", null ],
     [ "getNumElements", "class_ogre_1_1_vertex_buffer_packed.html#a69984ccd67bf7c801cc33dd20780b581", null ],
     [ "getOriginalBufferType", "class_ogre_1_1_vertex_buffer_packed.html#a2c72e5f40faf94c5d0de1ab8e740bb7e", null ],
     [ "getShadowCopy", "class_ogre_1_1_vertex_buffer_packed.html#abfd4f48dd60d5dfac42753bfe26b8a0e", null ],

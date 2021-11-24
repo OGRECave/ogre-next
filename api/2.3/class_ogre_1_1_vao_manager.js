@@ -15,7 +15,6 @@ var class_ogre_1_1_vao_manager =
     [ "createConstBuffer", "class_ogre_1_1_vao_manager.html#a952ab60d93451fc2ea18e14bbc31c309", null ],
     [ "createIndexBuffer", "class_ogre_1_1_vao_manager.html#a0f791867304e682175612237b3bfd470", null ],
     [ "createIndirectBuffer", "class_ogre_1_1_vao_manager.html#ad5ec74188530974bc3c28f3d1ab2982f", null ],
-    [ "createMultiSourceVertexBufferPool", "class_ogre_1_1_vao_manager.html#a167879924fcc223de12f276c61be0c88", null ],
     [ "createReadOnlyBuffer", "class_ogre_1_1_vao_manager.html#a9f95d947d7dae2068089fe00a03eb37d", null ],
     [ "createStagingBuffer", "class_ogre_1_1_vao_manager.html#ae9f1ac357be2baf213594f302d8c90d8", null ],
     [ "createTexBuffer", "class_ogre_1_1_vao_manager.html#a15deceadb9ee88de12fd801464e4b09b", null ],
