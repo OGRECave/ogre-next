@@ -265,8 +265,10 @@ namespace Ogre {
     class ManualObject;
     class MovableObject;
     class MovablePlane;
+#ifdef _OGRE_MULTISOURCE_VBO
     class MultiSourceVertexBufferPool;
-	class Node;
+#endif
+    class Node;
     class NodeMemoryManager;
     struct ObjectData;
     class ObjectMemoryManager;

@@ -43,7 +43,9 @@ THE SOFTWARE.
 #include "OgreBitwise.h"
 
 #include "Vao/OgreVaoManager.h"
+#ifdef _OGRE_MULTISOURCE_VBO
 #include "Vao/OgreMultiSourceVertexBufferPool.h"
+#endif
 #include "Vao/OgreVertexArrayObject.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreAsyncTicket.h"
@@ -909,6 +911,7 @@ namespace Ogre {
                                  "Meshes with multiple vertex buffer sources aren't yet supported."
                                  " Load it as v1 mesh and import it to a v2 mesh",
                                  "MeshSerializerImpl::createSubMeshVao" );
+#ifdef _OGRE_MULTISOURCE_VBO
                     /*TODO: Support this, also grab an existing pool that can
                     handle our request before trying to create a new one.
                     MultiSourceVertexBufferPool *multiSourcePool = mVaoManager->
@@ -923,6 +926,7 @@ namespace Ogre {
                         multiSourcePool->createVertexBuffers( vertexBuffers, subMeshLod.numVertices,
                                                               initialData, true );
                     }*/
+#endif
                 }
             }
             else

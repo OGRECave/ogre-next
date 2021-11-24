@@ -98,10 +98,12 @@ namespace Ogre
 
         virtual void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer ) = 0;
 
+#ifdef _OGRE_MULTISOURCE_VBO
         virtual MultiSourceVertexBufferPool* createMultiSourceVertexBufferPoolImpl(
                                                     const VertexElement2VecVec &vertexElementsBySource,
                                                     size_t maxNumVertices, size_t totalBytesPerVertex,
                                                     BufferType bufferType ) = 0;
+#endif
 
         virtual IndexBufferPacked* createIndexBufferImpl( size_t numElements,
                                                           uint32 bytesPerElement,
@@ -299,9 +301,11 @@ namespace Ogre
                                                 size_t numVertices, BufferType bufferType,
                                                 void *initialData, bool keepAsShadow );
 
+#ifdef _OGRE_MULTISOURCE_VBO
         MultiSourceVertexBufferPool* createMultiSourceVertexBufferPool(
                                 const VertexElement2VecVec &vertexElementsBySource,
                                 size_t maxNumVertices, BufferType bufferType );
+#endif
 
         /** Destroys the given vertex buffer created with createVertexBuffer.
             NOTE: Vertex Buffers created by a MultiSourceVertexBufferPool

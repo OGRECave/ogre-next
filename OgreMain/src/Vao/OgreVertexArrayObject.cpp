@@ -41,7 +41,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     VertexBufferPacked VertexArrayObject::msDummyVertexBuffer( 0, 0, 1, 0, BT_DEFAULT, 0, false, 0,
-                                                               0, VertexElement2Vec(), 0, 0, 0 );
+                                                               0, VertexElement2Vec() );
 
     typedef vector<VertexBufferPacked*>::type VertexBufferPackedVec;
 

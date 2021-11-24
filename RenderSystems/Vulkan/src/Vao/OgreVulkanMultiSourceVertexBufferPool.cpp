@@ -26,8 +26,10 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "Vao/OgreVulkanMultiSourceVertexBufferPool.h"
+#include "OgreVulkanPrerequisites.h"
 
+#ifdef _OGRE_MULTISOURCE_VBO
+#include "Vao/OgreVulkanMultiSourceVertexBufferPool.h"
 #include "Vao/OgreVertexBufferPacked.h"
 #include "Vao/OgreVulkanBufferInterface.h"
 
@@ -124,3 +126,5 @@ namespace Ogre
                        numVertices );
     }
 }  // namespace Ogre
+
+#endif

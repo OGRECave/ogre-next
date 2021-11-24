@@ -38,16 +38,17 @@ namespace Ogre
                                             BufferType bufferType,
                                             void *initialData, bool keepAsShadow,
                                             VaoManager *vaoManager, BufferInterface *bufferInterface,
-                                            const VertexElement2Vec &vertexElements,
-                                            size_t multiSourceId,
-                                            MultiSourceVertexBufferPool *multiSourcePool,
-                                            uint8 sourceIdx ) :
+                                            const VertexElement2Vec &vertexElements
+#ifdef _OGRE_MULTISOURCE_VBO
+        , size_t multiSourceId, MultiSourceVertexBufferPool *multiSourcePool, uint8 sourceIdx
+#endif
+    ) :
         BufferPacked( internalBufferStartBytes, numElements, bytesPerElement, numElementsPadding,
                       bufferType, initialData, keepAsShadow, vaoManager, bufferInterface ),
-        mVertexElements( vertexElements ),
-        mMultiSourceId( multiSourceId ),
-        mMultiSourcePool( multiSourcePool ),
-        mSourceIdx( sourceIdx )
+        mVertexElements( vertexElements )
+#ifdef _OGRE_MULTISOURCE_VBO
+        , mMultiSourceId( multiSourceId ), mMultiSourcePool( multiSourcePool ), mSourceIdx( sourceIdx )
+#endif
     {
     }
     //-----------------------------------------------------------------------------------

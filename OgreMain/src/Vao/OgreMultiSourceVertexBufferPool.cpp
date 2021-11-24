@@ -27,6 +27,8 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
+#ifdef _OGRE_MULTISOURCE_VBO
 #include "Vao/OgreMultiSourceVertexBufferPool.h"
 #include "Vao/OgreVaoManager.h"
 
@@ -122,3 +124,4 @@ namespace Ogre
     }
 }
 
+#endif

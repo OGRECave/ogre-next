@@ -151,12 +151,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VaoManager::destroyVertexBuffer( VertexBufferPacked *vertexBuffer )
     {
+#ifdef _OGRE_MULTISOURCE_VBO
         if( vertexBuffer->getMultiSourcePool() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Vertex Buffer belongs to a Multisource pool, not this VaoManager",
                          "VaoManager::destroyVertexBuffer" );
         }
+#endif
 
         BufferPackedSet::iterator itor = mBuffers[ BP_TYPE_VERTEX ].find( vertexBuffer );
 
@@ -409,6 +411,7 @@ namespace Ogre
                                                             IndexBufferPacked *indexBuffer,
                                                             OperationType opType )
     {
+#ifdef _OGRE_MULTISOURCE_VBO
         if( vertexBuffers.size() > 1 )
         {
             size_t multiSourceId                            = vertexBuffers[0]->getMultiSourceId();
@@ -441,6 +444,7 @@ namespace Ogre
                 ++itor;
             }
         }
+#endif
 
         VertexArrayObject *retVal;
         retVal = createVertexArrayObjectImpl( vertexBuffers, indexBuffer, opType );

@@ -26,6 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include "OgreNULLPrerequisites.h"
+
+#ifdef _OGRE_MULTISOURCE_VBO
 #include "Vao/OgreNULLMultiSourceVertexBufferPool.h"
 #include "Vao/OgreNULLBufferInterface.h"
 #include "Vao/OgreVertexBufferPacked.h"
@@ -130,3 +133,4 @@ namespace Ogre
     }
 }
 
+#endif

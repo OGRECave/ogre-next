@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
+#ifdef _OGRE_MULTISOURCE_VBO
 #include "Vao/OgreMultiSourceVertexBufferPool.h"
 #include "Vao/OgreVulkanVaoManager.h"
 
@@ -71,4 +72,5 @@ namespace Ogre
     };
 }  // namespace Ogre
 
+#endif
 #endif

@@ -33,7 +33,9 @@ THE SOFTWARE.
 #include "Vao/OgreMetalConstBufferPacked.h"
 #include "Vao/OgreMetalTexBufferPacked.h"
 #include "Vao/OgreMetalUavBufferPacked.h"
+#ifdef _OGRE_MULTISOURCE_VBO
 #include "Vao/OgreMetalMultiSourceVertexBufferPool.h"
+#endif
 #include "Vao/OgreMetalDynamicBuffer.h"
 #include "Vao/OgreMetalAsyncTicket.h"
 
@@ -694,7 +696,7 @@ namespace Ogre
                                                         bufferOffset, numElements, bytesPerElement,
                                                         (sizeBytes - requestedSize) / bytesPerElement,
                                                         bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface, vElements, 0, 0, 0 );
+                                                        this, bufferInterface, vElements );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -714,6 +716,7 @@ namespace Ogre
                        vertexBuffer->getBufferType() );
     }
     //-----------------------------------------------------------------------------------
+#ifdef _OGRE_MULTISOURCE_VBO
     MultiSourceVertexBufferPool* MetalVaoManager::createMultiSourceVertexBufferPoolImpl(
                                                 const VertexElement2VecVec &vertexElementsBySource,
                                                 size_t maxNumVertices, size_t totalBytesPerVertex,
@@ -733,6 +736,7 @@ namespace Ogre
                                                           maxNumVertices, bufferType,
                                                           bufferOffset, this );
     }
+#endif
     //-----------------------------------------------------------------------------------
     IndexBufferPacked* MetalVaoManager::createIndexBufferImpl( size_t numElements,
                                                                  uint32 bytesPerElement,
@@ -1127,12 +1131,14 @@ namespace Ogre
                 vertexBinding.vertexElements    = (*itor)->getVertexElements();
                 vertexBinding.instancingDivisor = 0;
 
+#ifdef _OGRE_MULTISOURCE_VBO
                 /*const MultiSourceVertexBufferPool *multiSourcePool = (*itor)->getMultiSourcePool();
                 if( multiSourcePool )
                 {
                     vertexBinding.offset = multiSourcePool->getBytesOffsetToSource(
                                                             (*itor)->_getSourceIndex() );
                 }*/
+#endif
 
                 vao.vertexBuffers.push_back( vertexBinding );
 

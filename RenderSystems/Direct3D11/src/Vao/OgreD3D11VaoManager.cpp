@@ -35,7 +35,9 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11ReadOnlyBufferPacked.h"
 #include "Vao/OgreD3D11TexBufferPacked.h"
 #include "Vao/OgreD3D11UavBufferPacked.h"
+#ifdef _OGRE_MULTISOURCE_VBO
 //#include "Vao/OgreD3D11MultiSourceVertexBufferPool.h"
+#endif
 #include "Vao/OgreD3D11DynamicBuffer.h"
 #include "Vao/OgreD3D11AsyncTicket.h"
 
@@ -740,7 +742,7 @@ namespace Ogre
         VertexBufferPacked *retVal = OGRE_NEW VertexBufferPacked(
                                                         bufferOffset, numElements, bytesPerElement, 0,
                                                         bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface, vElements, 0, 0, 0 );
+                                                        this, bufferInterface, vElements );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData );
@@ -996,6 +998,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+#ifdef _OGRE_MULTISOURCE_VBO
     MultiSourceVertexBufferPool* D3D11VaoManager::createMultiSourceVertexBufferPoolImpl(
                                                 const VertexElement2VecVec &vertexElementsBySource,
                                                 size_t maxNumVertices, size_t totalBytesPerVertex,
@@ -1018,6 +1021,7 @@ namespace Ogre
                                                           maxNumVertices, bufferType,
                                                           bufferOffset, this );*/
     }
+#endif
     //-----------------------------------------------------------------------------------
     IndexBufferPacked* D3D11VaoManager::createIndexBufferImpl( size_t numElements,
                                                                  uint32 bytesPerElement,
@@ -1545,12 +1549,14 @@ namespace Ogre
                 vertexBinding.offset            = 0;
                 vertexBinding.instancingDivisor = 0;
 
+#ifdef _OGRE_MULTISOURCE_VBO
                 /*const MultiSourceVertexBufferPool *multiSourcePool = (*itor)->getMultiSourcePool();
                 if( multiSourcePool )
                 {
                     vertexBinding.offset = multiSourcePool->getBytesOffsetToSource(
                                                             (*itor)->_getSourceIndex() );
                 }*/
+#endif
 
                 vao.vertexBuffers.push_back( vertexBinding );
 

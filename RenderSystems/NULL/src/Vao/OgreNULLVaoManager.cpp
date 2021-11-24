@@ -33,7 +33,9 @@ THE SOFTWARE.
 #include "Vao/OgreNULLConstBufferPacked.h"
 #include "Vao/OgreNULLTexBufferPacked.h"
 #include "Vao/OgreNULLUavBufferPacked.h"
+#ifdef _OGRE_MULTISOURCE_VBO
 #include "Vao/OgreNULLMultiSourceVertexBufferPool.h"
+#endif
 #include "Vao/OgreNULLAsyncTicket.h"
 
 #include "Vao/OgreIndirectBufferPacked.h"
@@ -98,7 +100,7 @@ namespace Ogre
         VertexBufferPacked *retVal = OGRE_NEW VertexBufferPacked(
                                                         0, numElements, bytesPerElement, 0,
                                                         bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface, vElements, 0, 0, 0 );
+                                                        this, bufferInterface, vElements );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -110,6 +112,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+#ifdef _OGRE_MULTISOURCE_VBO
     MultiSourceVertexBufferPool* NULLVaoManager::createMultiSourceVertexBufferPoolImpl(
                                                 const VertexElement2VecVec &vertexElementsBySource,
                                                 size_t maxNumVertices, size_t totalBytesPerVertex,
@@ -119,6 +122,7 @@ namespace Ogre
                                                             maxNumVertices, bufferType,
                                                             0, this );
     }
+#endif
     //-----------------------------------------------------------------------------------
     IndexBufferPacked* NULLVaoManager::createIndexBufferImpl( size_t numElements,
                                                                  uint32 bytesPerElement,

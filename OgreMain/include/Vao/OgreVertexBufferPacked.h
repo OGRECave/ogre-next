@@ -89,6 +89,7 @@ namespace Ogre
     protected:
         VertexElement2Vec mVertexElements;
 
+#ifdef _OGRE_MULTISOURCE_VBO
         /// Multisource VertexArrayObjects is when VertexArrayObject::mVertexBuffers.size() is greater
         /// than 1 (i.e. have position in one vertex buffer, UVs in another.)
         /// A VertexBuffer created for multisource can be used/bound for rendering with just one buffer
@@ -104,20 +105,25 @@ namespace Ogre
         size_t                      mMultiSourceId;
         MultiSourceVertexBufferPool *mMultiSourcePool;
         uint8                       mSourceIdx;
+#endif
 
     public:
         VertexBufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
                             uint32 numElementsPadding, BufferType bufferType,
                             void *initialData, bool keepAsShadow,
                             VaoManager *vaoManager, BufferInterface *bufferInterface,
-                            const VertexElement2Vec &vertexElements, size_t multiSourceId,
-                            MultiSourceVertexBufferPool *multiSourcePool, uint8 sourceIdx );
+                            const VertexElement2Vec &vertexElements
+#ifdef _OGRE_MULTISOURCE_VBO
+        , size_t multiSourceId = 0, MultiSourceVertexBufferPool *multiSourcePool = 0, uint8 sourceIdx = 0
+#endif
+        );
         ~VertexBufferPacked();
 
         virtual BufferPackedTypes getBufferPackedType(void) const   { return BP_TYPE_VERTEX; }
 
         const VertexElement2Vec& getVertexElements(void) const  { return mVertexElements; }
 
+#ifdef _OGRE_MULTISOURCE_VBO
         size_t getMultiSourceId(void)                           { return mMultiSourceId; }
 
         /// Return value may be null
@@ -129,6 +135,7 @@ namespace Ogre
         /// and pool). This value is for internal use.
         /// Always 0 for non-multisource vertex buffers.
         uint8 _getSourceIndex(void) const                       { return mSourceIdx; }
+#endif
     };
 
     typedef vector<VertexBufferPacked*>::type VertexBufferPackedVec;

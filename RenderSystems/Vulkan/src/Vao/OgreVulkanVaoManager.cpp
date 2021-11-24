@@ -38,7 +38,9 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanBufferInterface.h"
 #include "Vao/OgreVulkanConstBufferPacked.h"
 #include "Vao/OgreVulkanDynamicBuffer.h"
+#ifdef _OGRE_MULTISOURCE_VBO
 #include "Vao/OgreVulkanMultiSourceVertexBufferPool.h"
+#endif
 #include "Vao/OgreVulkanReadOnlyBufferPacked.h"
 #include "Vao/OgreVulkanStagingBuffer.h"
 #include "Vao/OgreVulkanTexBufferPacked.h"
@@ -1210,7 +1212,7 @@ namespace Ogre
 
         VertexBufferPacked *retVal = OGRE_NEW VertexBufferPacked(
             bufferOffset, numElements, bytesPerElement, 0, bufferType, initialData, keepAsShadow, this,
-            bufferInterface, vElements, 0, 0, 0 );
+            bufferInterface, vElements );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -1229,6 +1231,7 @@ namespace Ogre
                        false );
     }
     //-----------------------------------------------------------------------------------
+#ifdef _OGRE_MULTISOURCE_VBO
     MultiSourceVertexBufferPool *VulkanVaoManager::createMultiSourceVertexBufferPoolImpl(
         const VertexElement2VecVec &vertexElementsBySource, size_t maxNumVertices,
         size_t totalBytesPerVertex, BufferType bufferType )
@@ -1236,6 +1239,7 @@ namespace Ogre
         return OGRE_NEW VulkanMultiSourceVertexBufferPool( 0, vertexElementsBySource, maxNumVertices,
                                                            bufferType, 0, this );
     }
+#endif
     //-----------------------------------------------------------------------------------
     IndexBufferPacked *VulkanVaoManager::createIndexBufferImpl( size_t numElements,
                                                                 uint32 bytesPerElement,

@@ -26,6 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include "OgreMetalPrerequisites.h"
+
+#ifdef _OGRE_MULTISOURCE_VBO
 #include "Vao/OgreMetalMultiSourceVertexBufferPool.h"
 #include "Vao/OgreMetalBufferInterface.h"
 #include "Vao/OgreVertexBufferPacked.h"
@@ -131,3 +134,4 @@ namespace Ogre
     }
 }
 
+#endif

@@ -198,10 +198,12 @@ namespace Ogre
 
         virtual void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer );
 
+#ifdef _OGRE_MULTISOURCE_VBO
         virtual MultiSourceVertexBufferPool* createMultiSourceVertexBufferPoolImpl(
                                             const VertexElement2VecVec &vertexElementsBySource,
                                             size_t maxNumVertices, size_t totalBytesPerVertex,
                                             BufferType bufferType );
+#endif
 
         virtual IndexBufferPacked* createIndexBufferImpl( size_t numElements,
                                                           uint32 bytesPerElement,
