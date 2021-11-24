@@ -54,7 +54,6 @@ namespace Ogre
         mNativeWindow( 0 ),
         mVisible( true ),
         mHidden( false ),
-        mIsTopLevel( true ),
         mIsExternal( false )
     {
     }

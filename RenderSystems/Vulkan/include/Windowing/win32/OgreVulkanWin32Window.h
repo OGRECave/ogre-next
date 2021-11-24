@@ -45,7 +45,6 @@ namespace Ogre
         bool mSizing;
         bool mHidden;
         bool mVisible;
-        bool mIsTopLevel;
         DWORD mWindowedWinStyle;    // Windowed mode window style flags.
         DWORD mFullscreenWinStyle;  // Fullscreen mode window style flags.
 

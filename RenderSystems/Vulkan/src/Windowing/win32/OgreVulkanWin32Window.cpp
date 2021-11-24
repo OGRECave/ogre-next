@@ -68,7 +68,6 @@ namespace Ogre
         mSizing( false ),
         mHidden( false ),
         mVisible( true ),
-        mIsTopLevel( true ),
         mWindowedWinStyle( 0 ),
         mFullscreenWinStyle( 0 )
     {
@@ -579,9 +578,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanWin32Window::reposition( int32 left, int32 top )
     {
-        if( mClosed || !mIsTopLevel )
-            return;
-
         if( mHwnd && !mRequestedFullscreenMode )
         {
             SetWindowPos( mHwnd, 0, top, left, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );

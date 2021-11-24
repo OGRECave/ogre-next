@@ -47,7 +47,6 @@ namespace Ogre
 
         bool mVisible;
         bool mHidden;
-        bool mIsTopLevel;
         bool mIsExternal;
 
     public:
