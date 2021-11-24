@@ -642,7 +642,7 @@ namespace Ogre
             const bool isNewEntry = itor == mMeshesV2.end();
             //Force no compression, even if the entry was already there
             QueuedMesh &queuedMesh = mMeshesV2[mesh];
-            const bool wasCompressed = queuedMesh.bCompressed;
+            //const bool wasCompressed = queuedMesh.bCompressed;
             queuedMesh.bCompressed = false;
 
             if( isNewEntry )
@@ -1432,7 +1432,7 @@ namespace Ogre
 
         const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
 
-        const Vector3 voxelOrigin = getVoxelOrigin();
+        //const Vector3 voxelOrigin = getVoxelOrigin();
 
         ShaderParams::Param paramInstanceRange;
         ShaderParams::Param paramVoxelOrigin;

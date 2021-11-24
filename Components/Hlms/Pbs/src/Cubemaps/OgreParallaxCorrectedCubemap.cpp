@@ -912,7 +912,7 @@ namespace Ogre
     void ParallaxCorrectedCubemap::updateExpensiveCollectedDirtyProbes( uint16 iterationThreshold )
     {
         RenderSystem *renderSystem = mSceneManager->getDestinationRenderSystem();
-        HlmsManager *hlmsManager = mRoot->getHlmsManager();
+        //HlmsManager *hlmsManager = mRoot->getHlmsManager();
 
         const uint32 oldVisibilityMask = mSceneManager->getVisibilityMask();
         mSceneManager->setVisibilityMask( 0xffffffff );
