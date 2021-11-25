@@ -398,6 +398,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     ResourceLayout::Layout VulkanTextureGpu::getCurrentLayout( void ) const
     {
+        // These are usually counterpart of VulkanMappings::get.
+        // Otherwise there could be asserts triggering in our validations
         switch( mCurrLayout )
         {
         case VK_IMAGE_LAYOUT_UNDEFINED:
@@ -419,12 +421,7 @@ namespace Ogre
             return ResourceLayout::Undefined;
         case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL:
         case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL:
-        case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL:
-        case VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL:
             return ResourceLayout::RenderTarget;
-        case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL:
-        case VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL:
-            return ResourceLayout::RenderTargetReadOnly;
         case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
             return ResourceLayout::PresentReady;
         case VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR:
@@ -432,6 +429,17 @@ namespace Ogre
         case VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT:
         case VK_IMAGE_LAYOUT_MAX_ENUM:
             return ResourceLayout::Undefined;
+
+        case VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL:
+        case VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL:
+            // We literally never set these layouts. This case is here to silence the compiler
+            OGRE_ASSERT_MEDIUM( false && "Unimplemented. How are you here?" );
+            return ResourceLayout::RenderTarget;
+        case VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL:
+        case VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL:
+            // We literally never set these layouts. This case is here to silence the compiler
+            OGRE_ASSERT_MEDIUM( false && "Unimplemented. How are you here?" );
+            return ResourceLayout::RenderTargetReadOnly;
         }
     }
     //-----------------------------------------------------------------------------------
