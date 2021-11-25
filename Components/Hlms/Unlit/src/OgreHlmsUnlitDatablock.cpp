@@ -125,8 +125,6 @@ namespace Ogre
             }
         }
 
-        HlmsManager *hlmsManager = mCreator->getHlmsManager();
-
         for( size_t i=0; i<sizeof( c_diffuseMap ) / sizeof( String ); ++i )
         {
             if( Hlms::findParamInVec( params, c_diffuseMap[i], paramVal ) )
