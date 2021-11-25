@@ -65,7 +65,11 @@ namespace Ogre
 #       endif
 #   endif
 #elif defined ( OGRE_GCC_VISIBILITY )
-#    define _OgreNULLExport  __attribute__ ((visibility("default")))
+#   if !defined( OGRE_STATIC_LIB )
+#       define _OgreNULLExport __attribute__ ((visibility("default")))
+#   else
+#       define _OgreNULLExport __attribute__ ((visibility("hidden")))
+#   endif
 #else
 #    define _OgreNULLExport
 #endif

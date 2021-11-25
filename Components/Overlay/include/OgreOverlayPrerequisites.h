@@ -64,7 +64,11 @@ namespace Ogre
 #       endif
 #   endif
 #elif defined ( OGRE_GCC_VISIBILITY )
-#   define _OgreOverlayExport __attribute__ ((visibility("default")))
+#   if !defined( OGRE_STATIC_LIB )
+#       define _OgreOverlayExport __attribute__ ((visibility("default")))
+#   else
+#       define _OgreOverlayExport __attribute__ ((visibility("hidden")))
+#   endif
 #else
 #   define _OgreOverlayExport
 #endif 

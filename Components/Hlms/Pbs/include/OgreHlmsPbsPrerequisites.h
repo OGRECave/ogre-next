@@ -45,7 +45,11 @@ THE SOFTWARE.
 #       endif
 #   endif
 #elif defined ( OGRE_GCC_VISIBILITY )
-#   define _OgreHlmsPbsExport __attribute__ ((visibility("default")))
+#   if !defined( OGRE_STATIC_LIB )
+#       define _OgreHlmsPbsExport __attribute__ ((visibility("default")))
+#   else
+#       define _OgreHlmsPbsExport __attribute__ ((visibility("hidden")))
+#   endif
 #else
 #   define _OgreHlmsPbsExport
 #endif 

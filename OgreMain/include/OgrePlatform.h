@@ -301,8 +301,12 @@ THE SOFTWARE.
 
 // Enable GCC symbol visibility
 #   if defined( OGRE_GCC_VISIBILITY )
-#       define _OgreExport  __attribute__ ((visibility("default")))
 #       define _OgrePrivate __attribute__ ((visibility("hidden")))
+#       if !defined( OGRE_STATIC_LIB )
+#           define _OgreExport  __attribute__ ((visibility("default")))
+#       else
+#           define _OgreExport  __attribute__ ((visibility("hidden")))
+#       endif
 #   else
 #       define _OgreExport
 #       define _OgrePrivate

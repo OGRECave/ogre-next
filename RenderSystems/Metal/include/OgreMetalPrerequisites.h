@@ -90,7 +90,11 @@ namespace Ogre
 }
 
 #if defined ( OGRE_GCC_VISIBILITY )
-#    define _OgreMetalExport  __attribute__ ((visibility("default")))
+#   if !defined( OGRE_STATIC_LIB )
+#       define _OgreMetalExport __attribute__ ((visibility("default")))
+#   else
+#       define _OgreMetalExport __attribute__ ((visibility("hidden")))
+#   endif
 #else
 #    define _OgreMetalExport
 #endif
