@@ -1434,8 +1434,11 @@ namespace Ogre {
                     "Setting Frustrum orientation mode is not supported",
                     __FUNCTION__);
 #endif
-        mOrientationMode = orientationMode;
-        invalidateFrustum();
+        if( mOrientationMode != orientationMode )
+        {
+            mOrientationMode = orientationMode;
+            invalidateFrustum();
+        }
     }
     //---------------------------------------------------------------------
     OrientationMode Frustum::getOrientationMode() const
