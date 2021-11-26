@@ -1417,8 +1417,12 @@ namespace Ogre {
         if( mRenderDocApi )
             return true;  // Already loaded
 
-#    if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#    if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+#        if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
         void *mod = dlopen( "librenderdoc.so", RTLD_NOW | RTLD_NOLOAD );
+#        else
+        void *mod = dlopen( "libVkLayer_GLES_RenderDoc.so", RTLD_NOW | RTLD_NOLOAD );
+#        endif
         if( mod )
         {
             pRENDERDOC_GetAPI RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)dlsym( mod, "RENDERDOC_GetAPI" );
