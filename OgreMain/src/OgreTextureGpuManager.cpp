@@ -1662,7 +1662,30 @@ namespace Ogre
             }
 
             if( !providedByListener )
-                archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
+            {
+                try
+                {
+                    archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
+                }
+                catch( Exception &e )
+                {
+                    // Log the exception (probably file not found)
+                    LogManager::getSingleton().logMessage( e.getFullDescription() );
+                    texture->notifyAllListenersTextureChanged( TextureGpuListener::ExceptionThrown, &e );
+
+                    archive = 0;
+
+                    if( !image )
+                    {
+                        image = new Image2();
+                        // Continue loading using a fallback
+                        image->loadDynamicImage( mErrorFallbackTexData, 2u, 2u, 1u,
+                                                 texture->getTextureType(), PFG_RGBA8_UNORM_SRGB, false,
+                                                 1u );
+                        autoDeleteImage = true;
+                    }
+                }
+            }
         }
 
         if( !skipMetadataCache && !toSysRam && !reuploadOnly &&
