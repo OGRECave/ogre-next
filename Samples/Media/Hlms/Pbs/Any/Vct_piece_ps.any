@@ -236,10 +236,6 @@
 				}
 			@end
 
-		@property( use_parallax_correct_cubemaps && @n == 1 )
-			vctSpecPosLS = nextPosLS;
-		@end
-
 			VctResult result;
 			result.colour = color;
 			result.alpha = alpha;
@@ -417,9 +413,6 @@
 
 		//Irradiance / specular
 		@property( !vct_disable_specular )
-			@property( use_parallax_correct_cubemaps )
-				float3 vctSpecPosLS;
-			@end
 			float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
 			// 1 / (1 - 0.02) = 1.020408163
 			float vctRoughness = (pixelData.perceptualRoughness - 0.02) * 1.020408163f;
@@ -429,7 +422,7 @@
 													 probes OGRE_SAMPLER_ARG( probeSampler )
 													 OGRE_VCT_ANISO_PROBE_ARG );
 
-			float specAlpha = ( 1.0f - irrLight.alpha / 0.95f );
+			float specAlpha = ( 1.0f - min( 1.0f, irrLight.alpha / 0.95f ) );
 
 			@property( vct_ambient_hemisphere )
 				irrLight.colour.xyz += lerp( probeParams.ambientLowerHemi.xyz,
