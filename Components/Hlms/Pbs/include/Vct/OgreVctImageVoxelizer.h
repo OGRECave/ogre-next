@@ -119,7 +119,9 @@ namespace Ogre
         FastArray<Octant> mTmpOctants;
 
         float *mCpuInstanceBuffer;
-        ReadOnlyBufferPacked *mInstanceBuffer;
+        /// Actually ReadOnlyBufferPacked is enough, but currently our only path
+        /// to get structured buffers on D3D11 is through UavBufferPacked
+        UavBufferPacked *mInstanceBuffer;
 
         /// When buildRelative is called, we need to move the voxels
         /// and we can't due it in-place (race condition) so we

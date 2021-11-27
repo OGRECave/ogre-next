@@ -128,6 +128,8 @@ namespace Ogre
         uint32 maxTexturesInCompute = caps->getNumTexturesInTextureDescriptor( NumShaderTypes ) -
                                       ( c_reservedTexSlots + mImageVoxelizerJob->getGlTexSlotStart() );
 
+        const bool bIsD3D11 = hlmsCompute->getShaderSyntax() == HlmsBaseProp::Hlsl;
+
         // Discretize to avoid shader variant explosion and keep number of empty slots under control(*)
         // Given API + GPU support we should either land in 15 (GL) or 30 (GL/Metal/Vk/D3D11)
         // If maxTexturesInCompute < 9; that should not happen or it's a broken GPU
@@ -136,10 +138,10 @@ namespace Ogre
         //
         // (*) This keeps CPU overhead in check. Also D3D11 can't do dynamic texture selection
         // thus the resulting shader ends up being an if-ladder. Therefore too many textures
-        // can hurt GPU performance a lot in that API.
-        if( maxTexturesInCompute >= 30u )
+        // can hurt GPU performance a lot in that API (also compiler will fail to unroll).
+        if( maxTexturesInCompute >= 30u && !bIsD3D11 )
             maxTexturesInCompute = 30u;
-        else if( maxTexturesInCompute >= 15u )
+        else if( maxTexturesInCompute >= 15u && !bIsD3D11 )
             maxTexturesInCompute = 15u;
         else if( maxTexturesInCompute >= 9u )
             maxTexturesInCompute = 9u;
@@ -388,21 +390,21 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::createInstanceBuffers( void )
     {
-        const size_t structStride = sizeof( float ) * 4u * 6u;
+        const size_t structStride = sizeof( float ) * 4u * 5u;
         const size_t elementCount = mItems.size() * mOctants.size();
 
         if( !mInstanceBuffer || ( elementCount * structStride ) > mInstanceBuffer->getTotalSizeBytes() )
         {
             destroyInstanceBuffers();
-            mInstanceBuffer = mVaoManager->createReadOnlyBuffer(
-                PFG_RGBA32_FLOAT, elementCount * structStride, BT_DEFAULT, 0, false );
+            mInstanceBuffer = mVaoManager->createUavBuffer( elementCount, structStride,
+                                                            BB_FLAG_UAV | BB_FLAG_READONLY, 0, false );
             mCpuInstanceBuffer = reinterpret_cast<float *>(
                 OGRE_MALLOC_SIMD( elementCount * structStride, MEMCATEGORY_GENERAL ) );
         }
 
         // Always set because we may not be the only VctImageVoxelizer using the same job
         DescriptorSetTexture2::BufferSlot bufferSlot( DescriptorSetTexture2::BufferSlot::makeEmpty() );
-        bufferSlot.buffer = mInstanceBuffer;
+        bufferSlot.buffer = mInstanceBuffer->getAsReadOnlyBufferView();
         mImageVoxelizerJob->setTexBuffer( 0u, bufferSlot );
     }
     //-------------------------------------------------------------------------
@@ -410,7 +412,7 @@ namespace Ogre
     {
         if( mInstanceBuffer )
         {
-            mVaoManager->destroyReadOnlyBuffer( mInstanceBuffer );
+            mVaoManager->destroyUavBuffer( mInstanceBuffer );
             mInstanceBuffer = 0;
 
             OGRE_FREE_SIMD( mCpuInstanceBuffer, MEMCATEGORY_GENERAL );
@@ -491,7 +493,7 @@ namespace Ogre
                 ++numSeenMeshes;
 
                 textureIdx += 3u;
-                if( textureIdx + 3u >= texMeshesPerBatch || textureIdx == 0u )
+                if( textureIdx + 3u > texMeshesPerBatch || textureIdx == 0u )
                 {
                     // We've run out of texture units! This is a batch breaker!
                     // (we may also be here if this is the first batch)
