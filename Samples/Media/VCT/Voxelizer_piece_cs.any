@@ -426,9 +426,12 @@
 							float3 triNormal = tri_barycentric_normal( voxelAabb.center, tri );
 							triNormal = normalize( triNormal );
 
+							bool bIsZeroLength = dot( voxelNormal, voxelNormal ) <= 1e-6f;
+
 							//voxelNormal is not normalized for properly blend-averaging in multiple
 							//passes. But we need it normalized for this check to work
-							float cosAngle = dot( normalize( voxelNormal.xyz ), triNormal );
+							float cosAngle =
+								bIsZeroLength ? 1.0f : dot( normalize( voxelNormal.xyz ), triNormal );
 							float cos120 = -0.5f;
 							/*Rewrote as ternary operator because it was glitching in iOS Metal
 							if( cosAngle <= cos120 )
