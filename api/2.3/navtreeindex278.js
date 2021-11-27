@@ -1,5 +1,7 @@
 var NAVTREEINDEX278 =
 {
+"struct_ogre_1_1_irradiance_field_settings.html#a133d81cee0826d5616fcf1c62b5f743c":[7,0,0,572,0],
+"struct_ogre_1_1_irradiance_field_settings.html#a27743f4fc3f8d75f559c3d2dae543320":[7,0,0,572,11],
 "struct_ogre_1_1_irradiance_field_settings.html#a3871b731f4ee54e880c3af30f19ba250":[7,0,0,572,15],
 "struct_ogre_1_1_irradiance_field_settings.html#a3f0445be193f7e44196dee0e229315f3":[7,0,0,572,10],
 "struct_ogre_1_1_irradiance_field_settings.html#a438d8eb7abd29c25ce46558cb9daf985":[7,0,0,572,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX278 =
 "struct_ogre_1_1_metal_device.html#af65992cbbeb31fb99eaae7bc4276fab8":[7,0,0,680,12],
 "struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html":[7,0,0,684,0],
 "struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a1d62911bfc305a871b5b5e2ba15d7701":[7,0,0,684,0,3],
-"struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a5853113de9c4c7ee4d3df7e28be6f729":[7,0,0,684,0,0],
-"struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a648e8ae541d77f60907e09d11093ed77":[7,0,0,684,0,4],
-"struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a6f72772c23311005c30bda5f1f45b543":[7,0,0,684,0,1]
+"struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html#a5853113de9c4c7ee4d3df7e28be6f729":[7,0,0,684,0,0]
 };

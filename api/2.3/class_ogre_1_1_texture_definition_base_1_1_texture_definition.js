@@ -13,6 +13,7 @@ var class_ogre_1_1_texture_definition_base_1_1_texture_definition =
     [ "operator new", "class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#a4be37baef81876985aa1071ad5acc6dd", null ],
+    [ "bTargetOrientation", "class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#a96e2662b207abc55230fe9ab194408a0", null ],
     [ "depthBufferFormat", "class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#ab94a5e618410cf0289cbe2ff35460189", null ],
     [ "depthBufferId", "class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#ac503eb3c801b258a02b134ed4a898b39", null ],
     [ "depthOrSlices", "class_ogre_1_1_texture_definition_base_1_1_texture_definition.html#a7fb3219537c3efb604cdbbf053bf8f4b", null ],

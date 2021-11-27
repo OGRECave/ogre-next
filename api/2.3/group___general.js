@@ -2734,6 +2734,7 @@ var group___general =
       [ "ID_TARGET_HEIGHT", "group___general.html#ggaeac3f87f851f50e636b4058b7122f14ca287cd8b1ae9a1b2503bf20f5c07772b7", null ],
       [ "ID_TARGET_WIDTH_SCALED", "group___general.html#ggaeac3f87f851f50e636b4058b7122f14ca6094d89684428e1e68d4574727262d69", null ],
       [ "ID_TARGET_HEIGHT_SCALED", "group___general.html#ggaeac3f87f851f50e636b4058b7122f14ca79d0730d5a52d8f35a311715605aaaee", null ],
+      [ "ID_TARGET_ORIENTATION_MODE", "group___general.html#ggaeac3f87f851f50e636b4058b7122f14cadf9ac85c11433a792de1d59472264b64", null ],
       [ "ID_TARGET_FORMAT", "group___general.html#ggaeac3f87f851f50e636b4058b7122f14cabbcfc2651045781ac2f42b5e21810c01", null ],
       [ "ID_NO_GAMMA", "group___general.html#ggaeac3f87f851f50e636b4058b7122f14ca954c223ebe14be9ae196829145d16ffb", null ],
       [ "ID_NO_FSAA", "group___general.html#ggaeac3f87f851f50e636b4058b7122f14ca02452805e94dad9c3a043949be110679", null ],
