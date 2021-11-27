@@ -14,7 +14,7 @@
 	@end
 	@property( syntax == hlsl )
 		Texture3D vctProbes[@value( vct_num_probes )]		: register(t@value(vctProbes));
-		SamplerState vctProbeSampler	: register(s@value(vctProbe));
+		SamplerState vctProbeSampler	: register(s@value(vctProbes));
 		@property( vct_anisotropic )
 			Texture3D vctProbeX[@value( vct_num_probes )]	: register(t@value(vctProbeX));
 			Texture3D vctProbeY[@value( vct_num_probes )]	: register(t@value(vctProbeY));
@@ -23,7 +23,7 @@
 	@end
 	@property( syntax == metal )
 		, array<texture3d<float> vctProbes, @value( vct_num_probes )>	[[texture(@value(vctProbes))]]
-		, sampler vctProbeSampler			[[sampler(@value(vctProbe))]]
+		, sampler vctProbeSampler			[[sampler(@value(vctProbes))]]
 		@property( vct_anisotropic )
 			, array<texture3d<float> vctProbeX, @value( vct_num_probes )>	[[texture(@value(vctProbeX))]]
 			, array<texture3d<float> vctProbeY, @value( vct_num_probes )>	[[texture(@value(vctProbeY))]]

@@ -143,6 +143,8 @@ namespace Ogre
             maxTexturesInCompute = 30u;
         else if( maxTexturesInCompute >= 15u && !bIsD3D11 )
             maxTexturesInCompute = 15u;
+        else if( maxTexturesInCompute >= 12u )
+            maxTexturesInCompute = 12u;
         else if( maxTexturesInCompute >= 9u )
             maxTexturesInCompute = 9u;
 
@@ -1018,8 +1020,8 @@ namespace Ogre
 
                     const uint32 instanceRange[2] = {
                         itBatch->instances[i].instanceOffset + static_cast<uint32>( i * numItems ),
-						itBatch->instances[i].instanceOffset + itBatch->instances[i].numInstances +
-							static_cast<uint32>( i * numItems )
+                        itBatch->instances[i].instanceOffset + itBatch->instances[i].numInstances +
+                            static_cast<uint32>( i * numItems )
                     };
                     const uint32 voxelPixelOrigin[3] = { octant.x, octant.y, octant.z };
 
@@ -1243,8 +1245,8 @@ namespace Ogre
 
                     const uint32 instanceRange[2] = {
                         itBatch->instances[i].instanceOffset + static_cast<uint32>( i * numItems ),
-						itBatch->instances[i].instanceOffset + itBatch->instances[i].numInstances +
-							static_cast<uint32>( i * numItems )
+                        itBatch->instances[i].instanceOffset + itBatch->instances[i].numInstances +
+                            static_cast<uint32>( i * numItems )
                     };
                     const uint32 voxelPixelOrigin[3] = { octant.x, octant.y, octant.z };
 
