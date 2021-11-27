@@ -358,6 +358,7 @@ namespace Ogre {
                     getByName( mShaderReflectionPairHint );
             if( shader.isNull() )
             {
+                mCompileError = true;
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                              "Shader reflection hint '" + mShaderReflectionPairHint +
                              "' not found for pixel shader '" + mName + "'",
@@ -365,12 +366,24 @@ namespace Ogre {
             }
             if( shader->getType() != GPT_VERTEX_PROGRAM )
             {
+                mCompileError = true;
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Shader reflection hint '" + mShaderReflectionPairHint +
                              "' for pixel shader '" + mName + "' must be a vertex shader.",
                              "MetalProgram::analyzeRenderParameters" );
             }
+
             shader->load();
+
+            if( shader->hasCompileError() )
+            {
+                mCompileError = true;
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Shader reflection hint '" + mShaderReflectionPairHint +
+                                 "' for pixel shader '" + mName + "' had a compiler error.",
+                             "MetalProgram::analyzeRenderParameters" );
+            }
+
             assert( dynamic_cast<MetalProgram*>( shader->_getBindingDelegate() ) );
             MetalProgram *vertexShader = static_cast<MetalProgram*>( shader->_getBindingDelegate() );
             autoFillDummyVertexAttributesForShader( vertexShader->getMetalFunction(), psd );
