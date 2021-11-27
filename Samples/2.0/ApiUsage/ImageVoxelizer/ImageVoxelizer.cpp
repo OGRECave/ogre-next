@@ -94,5 +94,8 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char *MainEntryPoints::getWindowTitle( void ) { return "Voxelizer"; }
+    const char *MainEntryPoints::getWindowTitle( void )
+    {
+        return "CIVCT: Cascaded Image Voxel Cone Tracing (Real Time Global Illumination Technique)";
+    }
 }  // namespace Demo

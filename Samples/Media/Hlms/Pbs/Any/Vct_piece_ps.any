@@ -79,9 +79,6 @@
 			( VctProbeParams probeParams, float3 posLS,
 			  float3 dirLS, float tanHalfAngle,
 			  float startingLodLevel, float startingAlpha, int probeIdx,
-		  @property( use_parallax_correct_cubemaps && @n == 1 )
-			  OGRE_OUT_REF( float3, vctSpecPosLS ),
-		  @end
 			  OGRE_Texture3D_float4 probes[@value( vct_num_probes )]
 			  OGRE_SAMPLER_ARG_DECL( probeSampler )
 			  OGRE_VCT_ANISO_PROBE_ARG_DECL )
@@ -427,23 +424,24 @@
 			// 1 / (1 - 0.02) = 1.020408163
 			float vctRoughness = (pixelData.roughness - 0.02) * 1.020408163f;
 			float specConeAngleTan = max( 0.0f, tan( vctRoughness * 0.5f * M_PI * 0.99f ) );
-			float4 irrLight = voxelConeTraceSpec( probeParams, posLS, reflVecLS,
-												  specConeAngleTan,
-											  @property( use_parallax_correct_cubemaps )
-												  vctSpecPosLS,
-											  @end
-												  probe OGRE_SAMPLER_ARG( probeSampler )
-												  OGRE_VCT_ANISO_PROBE_ARG );
+			VctResult irrLight = voxelConeTraceSpec( probeParams, posLS, reflVecLS,
+													 specConeAngleTan, 0.0f, 0.0f, 0,
+													 probes OGRE_SAMPLER_ARG( probeSampler )
+													 OGRE_VCT_ANISO_PROBE_ARG );
+
+			float specAlpha = ( 1.0f - irrLight.alpha / 0.95f );
+
 			@property( vct_ambient_hemisphere )
-				irrLight.xyz += lerp( probeParams.ambientLowerHemi.xyz,
-									  probeParams.ambientUpperHemi.xyz, ambientWS ) * irrLight.w;
+				irrLight.colour.xyz += lerp( probeParams.ambientLowerHemi.xyz,
+											 probeParams.ambientUpperHemi.xyz, ambientWS ) *
+									   specAlpha;
 			@else
-				irrLight.xyz += probeParams.ambientUpperHemi.xyz * irrLight.w;
+				irrLight.colour.xyz += probeParams.ambientUpperHemi.xyz * specAlpha;
 			@end
-			outSpecular += float4( irrLight.xyz * blendWeight, blend );
+			outSpecular += float4( irrLight.colour.xyz * blendWeight, blend );
 
 			@property( use_parallax_correct_cubemaps )
-				vctSpecPosVS = fromVctToViewSpace( vctSpecPosLS, probeParams );
+				vctSpecPosVS = fromVctToViewSpace( irrLight.posLS.xyz, probeParams );
 			@end
 		@else
 			outSpecular.w += blend;
