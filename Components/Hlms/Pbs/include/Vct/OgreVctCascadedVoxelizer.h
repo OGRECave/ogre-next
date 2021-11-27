@@ -243,6 +243,10 @@ namespace Ogre
         /// Set to nullptr to disable auto update
         void setAutoUpdate( CompositorManager2 *compositorManager, SceneManager *sceneManager );
 
+        /// Returns the mesh cache (shared by all cascades) in case you want to add a mesh
+        /// manually with custom settings
+        VoxelizedMeshCache *getMeshCache( void ) { return mMeshCache; }
+
         /// CompositorWorkspaceListener override
         virtual void allWorkspacesBeforeBeginUpdate( void );
 

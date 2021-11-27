@@ -422,7 +422,7 @@
 			@end
 			float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
 			// 1 / (1 - 0.02) = 1.020408163
-			float vctRoughness = (pixelData.roughness - 0.02) * 1.020408163f;
+			float vctRoughness = (pixelData.perceptualRoughness - 0.02) * 1.020408163f;
 			float specConeAngleTan = max( 0.0f, tan( vctRoughness * 0.5f * M_PI * 0.99f ) );
 			VctResult irrLight = voxelConeTraceSpec( probeParams, posLS, reflVecLS,
 													 specConeAngleTan, 0.0f, 0.0f, 0,

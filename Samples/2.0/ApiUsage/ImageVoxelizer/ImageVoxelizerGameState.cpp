@@ -20,6 +20,7 @@
 #include "Vct/OgreVctCascadedVoxelizer.h"
 #include "Vct/OgreVctImageVoxelizer.h"
 #include "Vct/OgreVctLighting.h"
+#include "Vct/OgreVoxelizedMeshCache.h"
 
 #include "Utils/MeshUtils.h"
 #include "Utils/TestUtils.h"
@@ -375,6 +376,16 @@ namespace Demo
         sceneNode->setScale( Ogre::Vector3( 0.1f ) );
         sceneNode->setPosition( 0, item->getWorldAabbUpdated().mHalfSize.y, 0 );
         mItems.push_back( item );
+
+        // Sibenik is a very big mesh. We want to add it with 128x128x128
+        Ogre::VoxelizedMeshCache *meshCache = mCascadedVoxelizer->getMeshCache();
+        meshCache->setCacheResolution( 128u, 128u, 128u, 128u, 128u, 128u, Ogre::Vector3::UNIT_SCALE );
+        meshCache->addMeshToCache( item->getMesh(), sceneManager,
+                                   sceneManager->getDestinationRenderSystem(),
+                                   mGraphicsSystem->getRoot()->getHlmsManager(), item );
+
+        // Set back some sane defaults
+        meshCache->setCacheResolution( 64u, 64u, 64u, 64u, 64u, 64u, Ogre::Vector3( 2.0f ) );
     }
     //-----------------------------------------------------------------------------------
     void ImageVoxelizerGameState::createStressScene( void )
@@ -474,11 +485,6 @@ namespace Demo
         mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0.0f, 1.8f, 4.03f ) );
         /*mGraphicsSystem->getCamera()->setPosition( mGraphicsSystem->getCamera()->getPosition() +
                                                    Ogre::Vector3( -0.6f, -0.1f, 0.1f ) );*/
-
-        createCornellScene();
-        // createStressScene();
-        // createSibenikScene();
-
         // voxelizeScene();
 
         mCascadedVoxelizer = new Ogre::VctCascadedVoxelizer();
@@ -494,7 +500,13 @@ namespace Demo
         cascadeSetting.setResolution( 128u );
         mCascadedVoxelizer->addCascade( cascadeSetting );
         mCascadedVoxelizer->autoCalculateStepSizes( Ogre::Vector3( 4.0f ) );
+
         mCascadedVoxelizer->init( root->getRenderSystem(), root->getHlmsManager(), 2u );
+
+        createCornellScene();
+        // createStressScene();
+        // createSibenikScene();
+
         mCascadedVoxelizer->addAllItems( sceneManager, 0xffffffff, false );
         mCascadedVoxelizer->setCameraPosition( mGraphicsSystem->getCamera()->getDerivedPosition() );
         sceneManager->updateSceneGraph();
