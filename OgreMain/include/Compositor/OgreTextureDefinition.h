@@ -102,6 +102,7 @@ namespace Ogre
             uint32 height;          //0 means adapt to target height
             uint32 depthOrSlices;   //Can never be 0.
             uint8 numMipmaps;       //1u to disable mipmaps, 0 to generate until the max
+            bool bTargetOrientation;//If true, follows same getOrientationMode as target
             float widthFactor;  //multiple of target width to use (if width = 0)
             float heightFactor; //multiple of target height to use (if height = 0)
             /// Use PFG_UNKNOWN to use same format as main target
@@ -135,7 +136,7 @@ namespace Ogre
 
             TextureDefinition( IdString _name ) : name(_name), textureType( TextureTypes::Type2D ),
                     width( 0 ), height( 0 ), depthOrSlices( 1u ), numMipmaps( 1u ),
-                    widthFactor( 1.0f ), heightFactor( 1.0f ),
+                    bTargetOrientation( false ), widthFactor( 1.0f ), heightFactor( 1.0f ),
                     format( PFG_UNKNOWN ), fsaa( "1" ),
                     textureFlags( TextureFlags::RenderToTexture | TextureFlags::DiscardableContent ),
                     depthBufferId( 1u ), preferDepthTexture( false ), depthBufferFormat( PFG_UNKNOWN ) {}

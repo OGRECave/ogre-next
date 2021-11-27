@@ -335,13 +335,12 @@ namespace Ogre
         {
             if( textureDef.width == 0 )
             {
-                width = static_cast<uint32>( ceilf( finalTarget->getWidth() *
-                                                    textureDef.widthFactor ) );
+                width = static_cast<uint32>( ceilf( finalTarget->getWidth() * textureDef.widthFactor ) );
             }
             if( textureDef.height == 0 )
             {
-                height = static_cast<uint32>( ceilf( finalTarget->getHeight() *
-                                                     textureDef.heightFactor ) );
+                height =
+                    static_cast<uint32>( ceilf( finalTarget->getHeight() * textureDef.heightFactor ) );
             }
         }
 
@@ -351,6 +350,8 @@ namespace Ogre
 
         tex->_setSourceType( TextureSourceType::Compositor );
         tex->setResolution( width, height, textureDef.depthOrSlices );
+        if( textureDef.bTargetOrientation )
+            tex->setOrientationMode( finalTarget->getOrientationMode() );
         if( textureDef.format != PFG_UNKNOWN )
             tex->setPixelFormat( textureDef.format );
         else

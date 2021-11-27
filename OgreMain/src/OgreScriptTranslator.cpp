@@ -6268,7 +6268,9 @@ namespace Ogre{
         bool preferDepthTexture = false;
         uint8 numMipmaps = 1u;
         bool noAutomipmaps = false;
-        PixelFormatGpu format;
+        PixelFormatGpu format = PFG_COUNT;
+
+        bool bUseTargetOrientationMode = false;
 
         bool hasWidthScaleSet = false;
         bool hasHeightScaleSet = false;
@@ -6285,6 +6287,9 @@ namespace Ogre{
 
             switch(atom->id)
             {
+            case ID_TARGET_ORIENTATION_MODE:
+                bUseTargetOrientationMode = true;
+                break;
             case ID_TARGET_WIDTH:
                 width = 0;
                 widthSet = true;
@@ -6503,6 +6508,7 @@ namespace Ogre{
         td->textureType     = textureType;
         td->width           = width;
         td->height          = height;
+        td->bTargetOrientation = bUseTargetOrientationMode;
         td->depthOrSlices   = depthOrSlices;
         td->numMipmaps      = numMipmaps;
         td->widthFactor     = widthFactor;

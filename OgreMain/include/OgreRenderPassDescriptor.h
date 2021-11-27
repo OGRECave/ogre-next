@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreRenderPassDescriptor_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreColourValue.h"
 #include "OgreIdString.h"
 

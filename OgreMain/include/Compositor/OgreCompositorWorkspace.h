@@ -105,6 +105,7 @@ namespace Ogre
         CompositorChannelVec    mExternalRenderTargets;
         uint                    mCurrentWidth;
         uint                    mCurrentHeight;
+        OrientationMode         mCurrentOrientationMode;
 
         uint8                   mExecutionMask;
         uint8                   mViewportModifierMask;

@@ -946,8 +946,8 @@ namespace Ogre
         assert( PixelFormatGpuUtils::isDepth( this->mPixelFormat ) );
         assert( !PixelFormatGpuUtils::isDepth( colourTarget->mPixelFormat ) );
 
-        if( this->mWidth == colourTarget->mWidth &&
-            this->mHeight == colourTarget->mHeight &&
+        if( this->getInternalWidth() == colourTarget->getInternalWidth() &&
+            this->getInternalHeight() == colourTarget->getInternalHeight() &&
             this->getSampleDescription() == colourTarget->getSampleDescription() &&
             this->isRenderWindowSpecific() == colourTarget->isRenderWindowSpecific() )
         {

@@ -95,6 +95,7 @@ namespace Ogre
 
         mCurrentWidth   = finalTarget->getWidth();
         mCurrentHeight  = finalTarget->getHeight();
+        mCurrentOrientationMode = finalTarget->getOrientationMode();
 
         //Some RenderSystems assume we start the frame with empty pointer.
         if( finalTarget )
@@ -760,12 +761,14 @@ namespace Ogre
         //is active now, so that our calls go to the right device.
         mRenderSys->_setCurrentDeviceFromTexture( finalTarget );
 
-        if( mCurrentWidth != finalTarget->getWidth() || mCurrentHeight != finalTarget->getHeight() )
+        if( mCurrentWidth != finalTarget->getWidth() || mCurrentHeight != finalTarget->getHeight() ||
+            mCurrentOrientationMode != finalTarget->getOrientationMode() )
         {
             //Main RenderTarget reference changed resolution. Some nodes may need to rebuild
             //their textures if they're based on mRenderWindow's resolution.
             mCurrentWidth   = finalTarget->getWidth();
             mCurrentHeight  = finalTarget->getHeight();
+            mCurrentOrientationMode  = finalTarget->getOrientationMode();
 
             {
                 CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
