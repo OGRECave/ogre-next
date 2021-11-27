@@ -1018,7 +1018,8 @@ namespace Ogre
 
                     const uint32 instanceRange[2] = {
                         itBatch->instances[i].instanceOffset + static_cast<uint32>( i * numItems ),
-                        itBatch->instances[i].numInstances + static_cast<uint32>( i * numItems )
+						itBatch->instances[i].instanceOffset + itBatch->instances[i].numInstances +
+							static_cast<uint32>( i * numItems )
                     };
                     const uint32 voxelPixelOrigin[3] = { octant.x, octant.y, octant.z };
 
@@ -1242,7 +1243,8 @@ namespace Ogre
 
                     const uint32 instanceRange[2] = {
                         itBatch->instances[i].instanceOffset + static_cast<uint32>( i * numItems ),
-                        itBatch->instances[i].numInstances + static_cast<uint32>( i * numItems )
+						itBatch->instances[i].instanceOffset + itBatch->instances[i].numInstances +
+							static_cast<uint32>( i * numItems )
                     };
                     const uint32 voxelPixelOrigin[3] = { octant.x, octant.y, octant.z };
 
