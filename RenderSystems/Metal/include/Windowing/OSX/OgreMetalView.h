@@ -32,7 +32,9 @@ THE SOFTWARE.
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
 #import <AppKit/AppKit.h>
+#include "OgreMetalPrerequisites.h"
 
+_OgreMetalExport
 @interface OgreMetalView : NSView
 
 // view has a handle to the metal device when created
