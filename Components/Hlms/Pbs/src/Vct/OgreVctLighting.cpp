@@ -691,7 +691,8 @@ namespace Ogre
                 fromPreviousProbeToNext[i - 1u][1] =
                     Vector4( ( prevCascade->mVoxelizer->getVoxelOrigin() -
                                cascade->mVoxelizer->getVoxelOrigin() ) /
-                             cascadeVoxelSize );
+                                 cascadeVoxelSize,
+                             1.0f / cascadeNumMipmaps );
             }
         }
 
@@ -1093,6 +1094,19 @@ namespace Ogre
             const float cascadeFinalMultiplier =
                 cascade->mInvBakingMultiplier * cascade->mMultiplier / finalMultiplier;
 
+            float cascadeNumMipmaps = 0u;
+
+            if( cascade->mLightVoxel[1] )
+            {
+                // Anisotropic has the number of mipmaps calculated
+                cascadeNumMipmaps = static_cast<float>( cascade->mLightVoxel[1]->getNumMipmaps() );
+            }
+            else
+            {
+                const TextureGpu *cascadeLightVoxel = cascade->mLightVoxel[0];
+                cascadeNumMipmaps = static_cast<float>( cascadeLightVoxel->getNumMipmaps() );
+            }
+
             *passBufferPtr++ = static_cast<float>( vScale.x );
             *passBufferPtr++ = static_cast<float>( vScale.y );
             *passBufferPtr++ = static_cast<float>( vScale.z );
@@ -1101,7 +1115,12 @@ namespace Ogre
             *passBufferPtr++ = static_cast<float>( vPos.x );
             *passBufferPtr++ = static_cast<float>( vPos.y );
             *passBufferPtr++ = static_cast<float>( vPos.z );
-            *passBufferPtr++ = 0.0f;
+            // HACK: This is so hacky it hurts: cascadeNumMipmaps^3 empirically looks reasonably
+            // good for brightness. We need a better way to equalize specular. Specular
+            // brightness equalization depends on:
+            //      - Roughness (as it affects lighting)
+            //      - Cell Size Volume
+            *passBufferPtr++ = 1.0f / ( cascadeNumMipmaps * cascadeNumMipmaps * cascadeNumMipmaps );
         }
 
         //float specSdfMaxMip;

@@ -86,7 +86,11 @@
 			float vctInvResolution =
 				dot( abs( dirLS ), probeParams.vctInvResolution_cascadeMaxLod[probeIdx].xyz );
 			float resolution = 1.0f / vctInvResolution;
-			float maxLod = probeParams.vctInvResolution_cascadeMaxLod[probeIdx].w;
+			@property( @n == 0 )
+				float maxLod = probeParams.vctInvResolution_cascadeMaxLod[probeIdx].w;
+			@else
+				float maxLod = 256.0f;
+			@end
 
 			float dist = vctInvResolution;
 			float alpha = startingAlpha;
@@ -224,7 +228,12 @@
 
 					color += sampleColour.xyz * a;     // Accumulate colour
 					alpha += a * sampleColour.w;       // Accumulate opacity
-					dist += diameter * 0.5f;           // Advance forward
+					@property( vct_num_probes <= 1 )
+						dist += diameter * 0.5f;	   // Advance forward
+					@else
+						// HACK: A high LOD with CIVCT we otherwise get many glitches
+						dist += diameter * 1.0f;	   // Advance forward
+					@end
 					nextPosLS = posLS + dist * dirLS;  // Advance forward
 					// Calculate next LOD & next fwd step
 					diameter = max( vctInvResolution, 2.0 * tanHalfAngle * dist );
@@ -414,7 +423,7 @@
 		@property( !vct_disable_specular )
 			float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
 			// 1 / (1 - 0.02) = 1.020408163
-			float vctRoughness = (pixelData.perceptualRoughness - 0.02) * 1.020408163f;
+			float vctRoughness = (pixelData.perceptualRoughness - 0.02f) * 1.020408163f;
 			float specConeAngleTan = max( 0.0f, tan( vctRoughness * 0.5f * M_PI * 0.99f ) );
 			VctResult irrLight = voxelConeTraceSpec( probeParams, posLS, reflVecLS,
 													 specConeAngleTan, 0.0f, 0.0f, 0,
@@ -437,9 +446,14 @@
 						max( irrLight.lodLevel - prevCascadeMaxLod, 0.0f ), irrLight.alpha, j,
 						probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
 
+					float cascadeFinalMultiplier = probeParams.fromPreviousProbeToNext[j - 1][0].w;
+					float invNumLods3 = probeParams.fromPreviousProbeToNext[j - 1][1].w;
+
+					float strength =
+						lerp( 0.5f, cascadeFinalMultiplier, ( newRes.lodLevel * invNumLods3 ) );
+
 					// See VctCascadedVoxelizer::update comments on ( 1.0 - irrLight.alpha )
-					irrLight.colour += newRes.colour * probeParams.fromPreviousProbeToNext[j - 1][0].w *
-									   ( 1.0 - irrLight.alpha );
+					irrLight.colour += newRes.colour * strength * ( 1.0 - irrLight.alpha );
 					irrLight.alpha += newRes.alpha;
 					irrLight.lodLevel = newRes.lodLevel;
 					irrLight.posLS = newRes.posLS;
