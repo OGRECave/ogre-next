@@ -136,6 +136,9 @@ namespace Ogre
         void clearComputeJobResources( void );
 
     public:
+        /// Swaps mAlbedoVox & mAlbedoVoxAlt (and co.) if needed back to their originals.
+        /// This is needed during shutdown since VctLighting otherwise will try to remove
+        /// itself as a listener from mAlbedoVoxAlt
         void restoreSwappedVoxelTextures( void );
 
     protected:
