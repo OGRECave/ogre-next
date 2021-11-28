@@ -528,10 +528,8 @@ namespace Demo
     {
         delete mIrradianceField;
         mIrradianceField = 0;
-        delete mVctLighting;
-        mVctLighting = 0;
-        delete mVoxelizer;
-        mVoxelizer = 0;
+        delete mCascadedVoxelizer;
+        mCascadedVoxelizer = 0;
 
         {
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();

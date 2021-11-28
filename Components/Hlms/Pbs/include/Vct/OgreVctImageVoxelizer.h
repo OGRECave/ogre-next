@@ -91,7 +91,7 @@ namespace Ogre
         ItemArray mItems;
         bool mItemOrderDirty;
 
-        uint32 mTexMeshesPerBatch; // 3 * meshes per batch
+        uint32 mTexMeshesPerBatch;  // 3 * meshes per batch
         HlmsComputeJob *mImageVoxelizerJob;
         HlmsComputeJob *mPartialClearJob;
 
@@ -135,6 +135,10 @@ namespace Ogre
         void createComputeJobs( void );
         void clearComputeJobResources( void );
 
+    public:
+        void restoreSwappedVoxelTextures( void );
+
+    protected:
         void createVoxelTextures( void );
         void createAltVoxelTextures( void );
         void setVoxelTexturesToJobs( void );

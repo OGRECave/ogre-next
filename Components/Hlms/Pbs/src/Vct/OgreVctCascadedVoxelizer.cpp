@@ -79,6 +79,22 @@ namespace Ogre
     VctCascadedVoxelizer::~VctCascadedVoxelizer()
     {
         setAutoUpdate( 0, 0 );
+
+        const size_t numCascades = mCascadeSettings.size();
+
+        for( size_t i = 0u; i < numCascades; ++i )
+        {
+            if( mCascadeSettings[i].voxelizer )
+            {
+                mCascadeSettings[i].voxelizer->restoreSwappedVoxelTextures();
+                if( mCascades[i] )
+                    mCascades[i]->resetTexturesFromBuildRelative();
+
+                delete mCascades[i];
+                delete mCascadeSettings[i].voxelizer;
+            }
+        }
+
         delete mMeshCache;
     }
     //-------------------------------------------------------------------------

@@ -234,6 +234,21 @@ namespace Ogre
         mFullBuildDone = false;
     }
     //-------------------------------------------------------------------------
+    void VctImageVoxelizer::restoreSwappedVoxelTextures( void )
+    {
+        if( mAlbedoVox && mAlbedoVoxAlt )
+        {
+            const IdString mainTexName =
+                "VctImageVoxelizer" + StringConverter::toString( getId() ) + "/Albedo";
+            if( mAlbedoVox->getName() != mainTexName )
+            {
+                std::swap( mAlbedoVox, mAlbedoVoxAlt );
+                std::swap( mEmissiveVox, mEmissiveVoxAlt );
+                std::swap( mNormalVox, mNormalVoxAlt );
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctImageVoxelizer::createVoxelTextures( void )
     {
         if( mAlbedoVox )
@@ -376,7 +391,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctImageVoxelizer::destroyVoxelTextures( void )
     {
-        if( mAlbedoVox )
+        if( mAlbedoVoxAlt )
         {
             mTextureGpuManager->destroyTexture( mAlbedoVoxAlt );
             mTextureGpuManager->destroyTexture( mEmissiveVoxAlt );
