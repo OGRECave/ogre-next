@@ -288,7 +288,6 @@
 		{
 			return posLS * probeParams.fromPreviousProbeToNext[probeIdx - 1][0].xyz +
 				   probeParams.fromPreviousProbeToNext[probeIdx - 1][1].xyz;
-			return float3( 0, 0, 0 );
 		}
 	@end
 
@@ -421,6 +420,31 @@
 													 specConeAngleTan, 0.0f, 0.0f, 0,
 													 probes OGRE_SAMPLER_ARG( probeSampler )
 													 OGRE_VCT_ANISO_PROBE_ARG );
+
+
+			@property( vct_num_probes > 1 )
+				for( int j = 1; j < @value( vct_num_probes ) && irrLight.alpha < 0.95f; ++j )
+				{
+					float startBias =
+						dot( abs( reflVecLS ), probeParams.vctInvResolution_cascadeMaxLod[j].xyz );
+					float prevCascadeMaxLod = probeParams.vctInvResolution_cascadeMaxLod[j - 1].w;
+
+					float3 newPosLS =
+						fromVctProbeToNext( irrLight.posLS, j, probeParams ) - reflVecLS * startBias;
+
+					VctResult newRes = voxelConeTraceSpec(
+						probeParams, newPosLS, reflVecLS, specConeAngleTan,
+						max( irrLight.lodLevel - prevCascadeMaxLod, 0.0f ), irrLight.alpha, j,
+						probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
+
+					// See VctCascadedVoxelizer::update comments on ( 1.0 - irrLight.alpha )
+					irrLight.colour += newRes.colour * probeParams.fromPreviousProbeToNext[j - 1][0].w *
+									   ( 1.0 - irrLight.alpha );
+					irrLight.alpha += newRes.alpha;
+					irrLight.lodLevel = newRes.lodLevel;
+					irrLight.posLS = newRes.posLS;
+				}
+			@end
 
 			float specAlpha = ( 1.0f - min( 1.0f, irrLight.alpha / 0.95f ) );
 
