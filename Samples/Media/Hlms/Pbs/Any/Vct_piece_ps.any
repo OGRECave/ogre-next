@@ -504,19 +504,6 @@
 					 vctProbes OGRE_SAMPLER_ARG( vctProbeSampler )
 					 OGRE_VCT_ANISO_ROOT_PROBE_ARG );
 
-	@property( vct_num_probes > 1 )
-		//We've added multiple probes together that are overlapping. Average them
-		//based on their influnce (i.e. proximity to probe's center)
-		if( vctSpecular.w > 0 )
-		{
-			float accumProbeInfluenceBorderBlend = 1.0f / vctSpecular.w;
-			@property( !vct_disable_diffuse )
-				vctDiffuse.xyz *= accumProbeInfluenceBorderBlend;
-			@end
-			vctSpecular.xyz *= accumProbeInfluenceBorderBlend;
-		}
-	@end
-
 	@property( !vct_disable_diffuse )
 		pixelData.envColourD.xyz += vctDiffuse.xyz;
 	@end
