@@ -2613,11 +2613,25 @@ namespace Ogre
             data = loadRequest.loadingListener->grouplessResourceLoading( loadRequest.name );
         else if( !loadRequest.image )
         {
-            data = loadRequest.archive->open( loadRequest.name );
-            if( loadRequest.loadingListener )
+            try 
             {
-                loadRequest.loadingListener->grouplessResourceOpened( loadRequest.name,
-                                                                      loadRequest.archive, data );
+                data = loadRequest.archive->open( loadRequest.name );
+                if( loadRequest.loadingListener )
+                {
+                    loadRequest.loadingListener->grouplessResourceOpened( loadRequest.name,
+                                                                          loadRequest.archive, data );
+                }
+            }
+            catch( Exception &e )
+            {
+                // Log the exception
+                LogManager::getSingleton().logMessage( e.getFullDescription() );
+                // Tell the main thread this happened
+                ObjCmdBuffer::ExceptionThrown *exceptionCmd =
+                    commandBuffer->addCommand<ObjCmdBuffer::ExceptionThrown>();
+                new( exceptionCmd ) ObjCmdBuffer::ExceptionThrown( loadRequest.texture, e );
+
+                data.reset();
             }
         }
 
@@ -2632,7 +2646,8 @@ namespace Ogre
             {
                 try
                 {
-                    img->load( data );
+                    if( !data.isNull()  )
+                        img->load( data );
                 }
                 catch( Exception &e )
                 {
@@ -2642,6 +2657,12 @@ namespace Ogre
                     ObjCmdBuffer::ExceptionThrown *exceptionCmd = commandBuffer->addCommand<
                                                                   ObjCmdBuffer::ExceptionThrown>();
                     new (exceptionCmd) ObjCmdBuffer::ExceptionThrown( loadRequest.texture, e );
+
+                    data.reset();
+                }
+
+                if( data.isNull() )
+                {
                     //Continue loading using a fallback
                     img->loadDynamicImage( mErrorFallbackTexData, 2u, 2u, 1u,
                                            loadRequest.texture->getTextureType(),
