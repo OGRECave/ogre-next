@@ -34,11 +34,7 @@
 
 @piece( DeclVctFuncs )
 	@property( vct_anisotropic )
-		@property( syntax != metal )
-			#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_Texture3D_float4 probeX[@value( vct_num_probes )], OGRE_Texture3D_float4 probeY[@value( vct_num_probes )], OGRE_Texture3D_float4 probeZ[@value( vct_num_probes )]
-		@else
-			#define OGRE_VCT_ANISO_PROBE_ARG_DECL , array<OGRE_Texture3D_float4 probeX, @value( vct_num_probes ) >, array<OGRE_Texture3D_float4 probeY, @value( vct_num_probes )>, array<OGRE_Texture3D_float4 probeZ, @value( vct_num_probes )>
-		@end
+		#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_ArrayTex( OGRE_Texture3D_float4, probeX, @value( vct_num_probes ) ), OGRE_ArrayTex( OGRE_Texture3D_float4, probeY, @value( vct_num_probes ) ), OGRE_ArrayTex( OGRE_Texture3D_float4, probeZ, @value( vct_num_probes ) )
 		#define OGRE_VCT_ANISO_PROBE_ARG , probeX, probeY, probeZ
 		#define OGRE_VCT_ANISO_ROOT_PROBE_ARG , vctProbeX, vctProbeY, vctProbeZ
 	@else
