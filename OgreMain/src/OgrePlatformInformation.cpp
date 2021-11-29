@@ -476,58 +476,6 @@ namespace Ogre {
         return "X86";
     }
 
-#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-    static uint _detectCpuFeatures(void)
-    {
-        uint features = 0;
-#if OGRE_CPU == OGRE_CPU_ARM
-        uint64_t cpufeatures = android_getCpuFeatures();
-        if (cpufeatures & ANDROID_CPU_ARM_FEATURE_NEON)
-        {
-            features |= PlatformInformation::CPU_FEATURE_NEON;
-        }
-        
-        if (cpufeatures & ANDROID_CPU_ARM_FEATURE_VFPv3) 
-        {
-            features |= PlatformInformation::CPU_FEATURE_VFP;
-        }
-#elif OGRE_CPU == OGRE_CPU_X86
-        // see https://developer.android.com/ndk/guides/abis.html
-        features |= PlatformInformation::CPU_FEATURE_SSE;
-        features |= PlatformInformation::CPU_FEATURE_SSE2;
-        features |= PlatformInformation::CPU_FEATURE_SSE3;
-#endif
-        return features;
-    }
-    //---------------------------------------------------------------------
-    static String _detectCpuIdentifier(void)
-    {
-        String cpuID;
-        AndroidCpuFamily cpuInfo = android_getCpuFamily();
-        
-        switch (cpuInfo) {
-            case ANDROID_CPU_FAMILY_ARM:
-            {
-                if (android_getCpuFeatures() & ANDROID_CPU_ARM_FEATURE_ARMv7) 
-                {
-                    cpuID = "ARMv7";
-                }
-                else
-                {
-                    cpuID = "Unknown ARM";
-                }
-            }
-            break;
-            case ANDROID_CPU_FAMILY_X86:
-                cpuID = "Unknown X86";
-                break;   
-            default:
-                cpuID = "Unknown";
-                break;
-        }
-        return cpuID;
-    }
-    
 #elif OGRE_CPU == OGRE_CPU_ARM  // OGRE_CPU == OGRE_CPU_ARM
 
     //---------------------------------------------------------------------
@@ -535,16 +483,22 @@ namespace Ogre {
     {
         // Use preprocessor definitions to determine architecture and CPU features
         uint features = 0;
-#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
-        // ARM64 always has NEON
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64 || OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+        // ARM64 always has NEON. Windows on Arm requires Neon support even in 32bit mode.
         features |= PlatformInformation::CPU_FEATURE_NEON;
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         int hasNEON = 0;
         size_t len = sizeof(size_t);
         sysctlbyname("hw.optional.neon", &hasNEON, &len, NULL, 0);
-
         if(hasNEON)
             features |= PlatformInformation::CPU_FEATURE_NEON;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+        if( android_getCpuFamily() == ANDROID_CPU_FAMILY_ARM )
+        {
+            uint64_t cpufeatures = android_getCpuFeatures();
+            if( cpufeatures & ANDROID_CPU_ARM_FEATURE_NEON )
+                features |= PlatformInformation::CPU_FEATURE_NEON;
+        }
 #endif
 
         return features;
@@ -603,6 +557,12 @@ namespace Ogre {
                 cpuID = "Unknown ARM";
                 break;
         }
+#elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
+        cpuID = "ARM64v8";
+#else
+        cpuID = ( android_getCpuFeatures() & ANDROID_CPU_ARM_FEATURE_ARMv7 ) ? "ARMv7" : "Unknown ARM";
+#endif
 #endif
         return cpuID;
     }
@@ -622,7 +582,11 @@ namespace Ogre {
     //---------------------------------------------------------------------
     static String _detectCpuIdentifier(void)
     {
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
+        String cpuID = "MIPS64";
+#else
         String cpuID = "MIPS";
+#endif
 
         return cpuID;
     }

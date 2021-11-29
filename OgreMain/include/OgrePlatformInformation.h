@@ -74,7 +74,6 @@ namespace Ogre {
             CPU_FEATURE_PRO         = 1 << 10,
             CPU_FEATURE_HTT         = 1 << 11,
 #elif OGRE_CPU == OGRE_CPU_ARM
-            CPU_FEATURE_VFP         = 1 << 12,
             CPU_FEATURE_NEON        = 1 << 13,
 #elif OGRE_CPU == OGRE_CPU_MIPS
             CPU_FEATURE_MSA         = 1 << 14,
