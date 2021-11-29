@@ -110,6 +110,8 @@ inline float3x3 toMat3x3( float3x4 m )
 
 #define OGRE_Texture3D_float4 texture3d<float>
 
+#define OGRE_ArrayTex( declType, varName, arrayCount ) array<declType, arrayCount> varName
+
 #define OGRE_SAMPLER_ARG_DECL( samplerName ) , sampler samplerName
 #define OGRE_SAMPLER_ARG( samplerName ) , samplerName
 

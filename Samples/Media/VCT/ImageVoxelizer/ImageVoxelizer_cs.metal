@@ -33,7 +33,8 @@ inline bool emulatedAnyInvocationARB( bool value, ushort gl_LocalInvocationIndex
 
 @insertpiece( PreBindingsHeaderCS )
 
-@insertpiece( HeaderCS )
+#define PARAMS_ARG_DECL , device InstanceBuffer *instanceBuffer, constant Params &p
+#define PARAMS_ARG , instanceBuffer, p
 
 struct Params
 {
@@ -52,6 +53,8 @@ struct Params
 #define p_voxelCellSize p.voxelCellSize
 #define p_voxelPixelOrigin p.voxelPixelOrigin
 #define p_pixelsToWrite p.pixelsToWrite
+
+@insertpiece( HeaderCS )
 
 kernel void main_metal
 (

@@ -3,7 +3,7 @@
 
 @piece( HeaderCS )
 	@property( vct_anisotropic )
-		#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_Texture3D_float4 probeX[@value( hlms_num_vct_cascades )], OGRE_Texture3D_float4 probeY[@value( hlms_num_vct_cascades )], OGRE_Texture3D_float4 probeZ[@value( hlms_num_vct_cascades )]
+		#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_ArrayTex( OGRE_Texture3D_float4, probeX, @value( hlms_num_vct_cascades ) ), OGRE_ArrayTex( OGRE_Texture3D_float4, probeY, @value( hlms_num_vct_cascades ) ), OGRE_ArrayTex( OGRE_Texture3D_float4, probeZ, @value( hlms_num_vct_cascades ) )
 		#define OGRE_VCT_ANISO_PROBE_ARG , probeX, probeY, probeZ
 		#define OGRE_VCT_ANISO_ROOT_PROBE_ARG , vctProbeX, vctProbeY, vctProbeZ
 	@else
@@ -26,7 +26,7 @@
 		float3 dirLS, float tanHalfAngle,
 		float4 localStartBias_invStartBias_cascadeMaxLod, float startingLodLevel,
 		float startingAlpha, int probeIdx,
-		OGRE_Texture3D_float4 probes[@value( hlms_num_vct_cascades )]
+		OGRE_ArrayTex( OGRE_Texture3D_float4, probes, @value( hlms_num_vct_cascades ) )
 		OGRE_SAMPLER_ARG_DECL( probeSampler )
 		OGRE_VCT_ANISO_PROBE_ARG_DECL
 	)
@@ -146,7 +146,7 @@
 	(
 		OGRE_INOUT_REF( float3, outDiffuse ),
 		float3 posLS, float3 geomNormal, float3x3 TBN,
-		OGRE_Texture3D_float4 probes[@value( hlms_num_vct_cascades )]
+		OGRE_ArrayTex( OGRE_Texture3D_float4, probes, @value( hlms_num_vct_cascades ) )
 		OGRE_SAMPLER_ARG_DECL( probeSampler )
 		OGRE_VCT_ANISO_PROBE_ARG_DECL
 		PARAMS_ARG_DECL
@@ -174,7 +174,6 @@
 
 		float coneWeights[6] = OGRE_ARRAY_START( float ) 0.25, 0.15, 0.15, 0.15, 0.15, 0.15 OGRE_ARRAY_END;
 		float coneAngleTan = 0.577;
-		float minRefTan = 0.0;
 
 		//Radiance / diffuse
 		float3 light = float3( 0.0f, 0.0f, 0.0f );
@@ -185,7 +184,7 @@
 
 			VctResult result = voxelConeTraceDiff(
 				posLS, dir, coneAngleTan, p_vctStartBias_invStartBias_cascadeMaxLod[0], 0.0f, 0.0f, 0,
-				probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
+				probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG );
 
 			@property( hlms_num_vct_cascades > 1 )
 				for( int j = 1; j < @value( hlms_num_vct_cascades ) && result.alpha < 0.95f; ++j )
@@ -198,7 +197,7 @@
 					VctResult newRes = voxelConeTraceDiff(
 						newPosLS, dir, coneAngleTan, p_vctStartBias_invStartBias_cascadeMaxLod[j],
 						max( result.lodLevel - prevCascadeMaxLod, 0.0f ), result.alpha, j,
-						probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
+						probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG );
 
 					// See VctCascadedVoxelizer::update comments on ( 1.0 - result.alpha )
 					result.colour += newRes.colour * p_vctFromPreviousProbeToNext[j - 1][0].w *

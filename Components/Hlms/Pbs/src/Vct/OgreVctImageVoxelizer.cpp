@@ -148,6 +148,9 @@ namespace Ogre
         else if( maxTexturesInCompute >= 9u )
             maxTexturesInCompute = 9u;
 
+        // Force it to be multiple of 3 (otherwise we get crashes)
+        maxTexturesInCompute = ( maxTexturesInCompute / 3u ) * 3u;
+
         mImageVoxelizerJob->setProperty( "tex_meshes_per_batch",
                                          static_cast<int32>( maxTexturesInCompute ) );
         mTexMeshesPerBatch = maxTexturesInCompute;
