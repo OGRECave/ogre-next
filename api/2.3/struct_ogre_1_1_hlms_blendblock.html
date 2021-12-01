@@ -117,6 +117,7 @@ Public Types</h2></td></tr>
 , <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1ab123af15a502fc3bdb0f281a2e425fe4">BlendChannelAlpha</a> = 0x08
 , <br />
 &#160;&#160;<a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1a89410fa1818738772d4b91cd088a21d9">BlendChannelAll</a>
+, <a class="el" href="struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1ac8d76a4ebf8091387f274324723e12d3">BlendChannelForceDisabled</a> = 0x10
 <br />
  }</td></tr>
 <tr class="separator:a893b37752fa27b00400cf4e2ab4cf4c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -209,6 +210,11 @@ Public Attributes</h2></td></tr>
 <tr><td class="fieldname"><a id="a893b37752fa27b00400cf4e2ab4cf4c1ae7be1138987febe83dc15887b4bae057"></a>BlendChannelBlue&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a893b37752fa27b00400cf4e2ab4cf4c1ab123af15a502fc3bdb0f281a2e425fe4"></a>BlendChannelAlpha&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a893b37752fa27b00400cf4e2ab4cf4c1a89410fa1818738772d4b91cd088a21d9"></a>BlendChannelAll&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a893b37752fa27b00400cf4e2ab4cf4c1ac8d76a4ebf8091387f274324723e12d3"></a>BlendChannelForceDisabled&#160;</td><td class="fielddoc"><p>Setting mBlendChannelMask = 0 will skip all channels (i.e. </p>
+<p>only depth and stencil) But pixel shader may still run due to side effects (e.g. pixel discard/alpha testing UAV outputs). Some drivers may not optimize this case due to the amount of checks needed to see if the PS has side effects or not.</p>
+<p>When force-disabled, we will not set a pixel shader, thus you can be certain it's running as optimized as it can be. However beware if you rely on discard/alpha testing or any other side effect, it will not render correctly</p>
+<p>Note: BlendChannelForceDisabled will be ignored if any of the other flags are set </p>
+</td></tr>
 </table>
 
 </div>

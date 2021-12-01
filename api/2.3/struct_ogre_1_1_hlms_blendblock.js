@@ -5,7 +5,8 @@ var struct_ogre_1_1_hlms_blendblock =
       [ "BlendChannelGreen", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1a8bede65d7286a8222e3be931d02e4daf", null ],
       [ "BlendChannelBlue", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1ae7be1138987febe83dc15887b4bae057", null ],
       [ "BlendChannelAlpha", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1ab123af15a502fc3bdb0f281a2e425fe4", null ],
-      [ "BlendChannelAll", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1a89410fa1818738772d4b91cd088a21d9", null ]
+      [ "BlendChannelAll", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1a89410fa1818738772d4b91cd088a21d9", null ],
+      [ "BlendChannelForceDisabled", "struct_ogre_1_1_hlms_blendblock.html#a893b37752fa27b00400cf4e2ab4cf4c1ac8d76a4ebf8091387f274324723e12d3", null ]
     ] ],
     [ "HlmsBlendblock", "struct_ogre_1_1_hlms_blendblock.html#a920ff67adb5aaa2238ce71994d7f9c7e", null ],
     [ "calculateSeparateBlendMode", "struct_ogre_1_1_hlms_blendblock.html#acaab72f26e7b41ab1082508d86a7ac0f", null ],
