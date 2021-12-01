@@ -154,7 +154,19 @@ namespace Ogre
             BlendChannelBlue    = 0x04,
             BlendChannelAlpha   = 0x08,
             BlendChannelAll     = BlendChannelRed | BlendChannelGreen |
-                                    BlendChannelBlue | BlendChannelAlpha
+                                    BlendChannelBlue | BlendChannelAlpha,
+
+            /// Setting mBlendChannelMask = 0 will skip all channels (i.e. only depth and stencil)
+            /// But pixel shader may still run due to side effects (e.g. pixel discard/alpha testing
+            /// UAV outputs). Some drivers may not optimize this case due to the amount of checks
+            /// needed to see if the PS has side effects or not.
+            ///
+            /// When force-disabled, we will not set a pixel shader, thus you can be certain
+            /// it's running as optimized as it can be. However beware if you rely on
+            /// discard/alpha testing or any other side effect, it will not render correctly
+            ///
+            /// Note: BlendChannelForceDisabled will be ignored if any of the other flags are set
+            BlendChannelForceDisabled= 0x10
         };
 
         bool                mAlphaToCoverageEnabled;

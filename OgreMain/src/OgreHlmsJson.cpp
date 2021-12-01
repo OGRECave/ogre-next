@@ -354,14 +354,21 @@ namespace Ogre
         {
             uint8 mask = 0;
             const char *blendmask = itor->value.GetString();
-            if( strchr( blendmask, 'r' ) )
-                mask |= HlmsBlendblock::BlendChannelRed;
-            if( strchr( blendmask, 'g' ) )
-                mask |= HlmsBlendblock::BlendChannelGreen;
-            if( strchr( blendmask, 'b' ) )
-                mask |= HlmsBlendblock::BlendChannelBlue;
-            if( strchr( blendmask, 'a' ) )
-                mask |= HlmsBlendblock::BlendChannelAlpha;
+            if( !strcmp( blendmask, "force_disabled" ) )
+            {
+                mask = HlmsBlendblock::BlendChannelForceDisabled;
+            }
+            else
+            {
+                if( strchr( blendmask, 'r' ) )
+                    mask |= HlmsBlendblock::BlendChannelRed;
+                if( strchr( blendmask, 'g' ) )
+                    mask |= HlmsBlendblock::BlendChannelGreen;
+                if( strchr( blendmask, 'b' ) )
+                    mask |= HlmsBlendblock::BlendChannelBlue;
+                if( strchr( blendmask, 'a' ) )
+                    mask |= HlmsBlendblock::BlendChannelAlpha;
+            }
 
             blendblock.mBlendChannelMask = mask;
         }
@@ -887,14 +894,21 @@ namespace Ogre
         outString += blendblock->mAlphaToCoverageEnabled ? "true" : "false";
 
         outString += ",\n\t\t\t\"blendmask\" : \"";
-        if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelRed )
-            outString += 'r';
-        if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelGreen )
-            outString += 'g';
-        if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelBlue )
-            outString += 'b';
-        if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelAlpha )
-            outString += 'a';
+        if( blendblock->mBlendChannelMask == HlmsBlendblock::BlendChannelForceDisabled )
+        {
+            outString += "force_disabled";
+        }
+        else
+        {
+            if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelRed )
+                outString += 'r';
+            if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelGreen )
+                outString += 'g';
+            if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelBlue )
+                outString += 'b';
+            if( blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelAlpha )
+                outString += 'a';
+        }
         outString += "\"";
 
         outString += ",\n\t\t\t\"separate_blend\" : ";

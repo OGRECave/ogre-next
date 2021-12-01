@@ -1581,7 +1581,8 @@ namespace Ogre
             [psd setVertexFunction:vertexShader->getMetalFunction()];
         }
 
-        if( !newPso->pixelShader.isNull() )
+        if( !newPso->pixelShader.isNull() &&
+            newPso->blendblock->mBlendChannelMask != HlmsBlendblock::BlendChannelForceDisabled )
         {
             pixelShader = static_cast<MetalProgram*>( newPso->pixelShader->_getBindingDelegate() );
             [psd setFragmentFunction:pixelShader->getMetalFunction()];

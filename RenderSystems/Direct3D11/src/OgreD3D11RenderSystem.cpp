@@ -2290,10 +2290,11 @@ namespace Ogre
                 }
             }
         }
-        if( !block->pixelShader.isNull() )
+        if( !block->pixelShader.isNull() &&
+            block->blendblock->mBlendChannelMask != HlmsBlendblock::BlendChannelForceDisabled )
         {
-            pso->pixelShader = static_cast<D3D11HLSLProgram*>( block->pixelShader->
-                                                               _getBindingDelegate() );
+            pso->pixelShader =
+                static_cast<D3D11HLSLProgram *>( block->pixelShader->_getBindingDelegate() );
         }
 
         if( pso->vertexShader )
@@ -2385,7 +2386,8 @@ namespace Ogre
         blendDesc.IndependentBlendEnable = false;
         blendDesc.RenderTarget[0].BlendEnable = newBlock->mBlendOperation;
 
-        blendDesc.RenderTarget[0].RenderTargetWriteMask = newBlock->mBlendChannelMask;
+        blendDesc.RenderTarget[0].RenderTargetWriteMask =
+            newBlock->mBlendChannelMask & HlmsBlendblock::BlendChannelAll;
 
         if( newBlock->mSeparateBlend )
         {
@@ -2406,7 +2408,8 @@ namespace Ogre
                 blendDesc.RenderTarget[0].BlendOp = blendDesc.RenderTarget[0].BlendOpAlpha =
                         D3D11Mappings::get( newBlock->mBlendOperation );
 
-                blendDesc.RenderTarget[0].RenderTargetWriteMask = newBlock->mBlendChannelMask;
+                blendDesc.RenderTarget[0].RenderTargetWriteMask =
+                    newBlock->mBlendChannelMask & HlmsBlendblock::BlendChannelAll;
             }
         }
         else
@@ -2425,7 +2428,8 @@ namespace Ogre
                 blendDesc.RenderTarget[0].BlendOp = D3D11Mappings::get( newBlock->mBlendOperation );
                 blendDesc.RenderTarget[0].BlendOpAlpha = D3D11Mappings::get( newBlock->mBlendOperationAlpha );
 
-                blendDesc.RenderTarget[0].RenderTargetWriteMask = newBlock->mBlendChannelMask;
+                blendDesc.RenderTarget[0].RenderTargetWriteMask =
+                    newBlock->mBlendChannelMask & HlmsBlendblock::BlendChannelAll;
             }
         }
 

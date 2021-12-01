@@ -1781,10 +1781,10 @@ namespace Ogre {
             pso->domainShader = static_cast<GLSLShader*>( newBlock->tesselationDomainShader->
                                                           _getBindingDelegate() );
         }
-        if( !newBlock->pixelShader.isNull() )
+        if( !newBlock->pixelShader.isNull() &&
+            newBlock->blendblock->mBlendChannelMask != HlmsBlendblock::BlendChannelForceDisabled )
         {
-            pso->pixelShader = static_cast<GLSLShader*>( newBlock->pixelShader->
-                                                         _getBindingDelegate() );
+            pso->pixelShader = static_cast<GLSLShader *>( newBlock->pixelShader->_getBindingDelegate() );
         }
 
         newBlock->rsData = pso;

@@ -2720,7 +2720,8 @@ namespace Ogre
             rootLayout = VulkanRootLayout::findBest( rootLayout, shader->getRootLayout() );
         }
 
-        if( !newPso->pixelShader.isNull() )
+        if( !newPso->pixelShader.isNull() &&
+            newPso->blendblock->mBlendChannelMask != HlmsBlendblock::BlendChannelForceDisabled )
         {
             pixelShader = static_cast<VulkanProgram *>( newPso->pixelShader->_getBindingDelegate() );
             pixelShader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
@@ -2759,7 +2760,8 @@ namespace Ogre
                     ->getRootLayout()
                     ->dump( shaderNames );
             }
-            if( newPso->pixelShader )
+            if( newPso->pixelShader &&
+                newPso->blendblock->mBlendChannelMask != HlmsBlendblock::BlendChannelForceDisabled )
             {
                 shaderNames += newPso->pixelShader->getName() + "\n";
                 static_cast<VulkanProgram *>( newPso->pixelShader->_getBindingDelegate() )
@@ -2922,7 +2924,8 @@ namespace Ogre
                 blendStates[0].alphaBlendOp = blendStates[0].colorBlendOp;
             }
         }
-        blendStates[0].colorWriteMask = newPso->blendblock->mBlendChannelMask;
+        blendStates[0].colorWriteMask =
+            newPso->blendblock->mBlendChannelMask & HlmsBlendblock::BlendChannelAll;
 
         for( int i = 1; i < mrtCount; ++i )
             blendStates[i] = blendStates[0];
