@@ -1,5 +1,7 @@
 var NAVTREEINDEX287 =
 {
+"structbsp__shader__t.html#a9eac62663f32b081217e959edd6fb636":[7,0,14,2],
+"structbsp__shader__t.html#ae8ba6377142a114ac142993ec7a9d376":[7,0,14,1],
 "structbsp__vertex__t.html":[7,0,15],
 "structbsp__vertex__t.html#a1527a0c3c7cac11d2a97ab7e2e6de5a2":[7,0,15,2],
 "structbsp__vertex__t.html#a1c93b7872b649d78b0c079918b879752":[7,0,15,3],
