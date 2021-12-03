@@ -451,6 +451,7 @@ namespace Ogre
             StringConverter::toString( properties.deviceID, 0, ' ', std::ios::hex ) );
 
         rsc->setDeviceName( properties.deviceName );
+        rsc->setDeviceId( properties.deviceID );
 
         switch( properties.vendorID )
         {
@@ -640,6 +641,9 @@ namespace Ogre
             Workarounds::mAdreno5xx6xxMinCaps = false;
 
             const uint32 c_adreno5xx6xxDeviceIds[] = {
+                0x4010800,  // 418
+                0x4030002,  // 430
+
                 0x5000400,  // 504
                 0x5000500,  // 505
                 0x5000600,  // 506
@@ -655,10 +659,12 @@ namespace Ogre
                 0x6010501,  // 615
                 0x6010600,  // 616
                 0x6010800,  // 618
+                0x6010900,  // 619
                 0x6020001,  // 620
                 0x6030001,  // 630
                 0x6040001,  // 640
                 0x6050002,  // 650
+                // 0x6060001 // 660 (doesn't need workaround)
             };
 
             const size_t numDevIds =

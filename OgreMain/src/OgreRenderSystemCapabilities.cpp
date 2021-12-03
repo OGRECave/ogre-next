@@ -37,6 +37,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     RenderSystemCapabilities::RenderSystemCapabilities()
         : mVendor(GPU_UNKNOWN)
+        , mDeviceId(0)
         , mNumWorldMatrices(0)
         , mNumTextureUnits(0)
         , mStencilBufferBitDepth(0)

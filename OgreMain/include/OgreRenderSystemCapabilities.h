@@ -345,6 +345,8 @@ namespace Ogre
         DriverVersion mDriverVersion;
         /// GPU Vendor
         GPUVendor mVendor;
+        /// GPU device ID. If 0 RenderSystem or API didn't fill it
+        uint32 mDeviceId;
 
         static StringVector msGPUVendorStrings;
         static void initVendorStrings();
@@ -481,6 +483,16 @@ namespace Ogre
         void setVendor(GPUVendor v)
         {
             mVendor = v;
+        }
+
+        uint32 getDeviceId() const
+        {
+            return mDeviceId;
+        }
+
+        void setDeviceId( uint32 deviceId )
+        {
+            mDeviceId = deviceId;
         }
 
         /// Parse and set vendor
