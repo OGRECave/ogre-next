@@ -92,7 +92,7 @@
 		#define SampleRoughness( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
 	@end
 	@property( emissive_map )
-		#define SampleEmissive( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+		#define SampleEmissive( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) @property( emissive_map_grayscale ).rrr@end
 	@end
 	@property( use_envprobe_map )
         #define SampleEnvProbe( tex, sampler, uv, lod ) OGRE_SampleLevel( tex, sampler, uv, lod )
