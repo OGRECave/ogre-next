@@ -95,6 +95,7 @@ namespace Ogre
     const IdString PbsProperty::NumTextures     = IdString( "num_textures" );
     const IdString PbsProperty::NumSamplers     = IdString( "num_samplers" );
     const IdString PbsProperty::DiffuseMapGrayscale = IdString( "diffuse_map_grayscale" );
+    const IdString PbsProperty::EmissiveMapGrayscale= IdString( "emissive_map_grayscale" );
     const char *PbsProperty::DiffuseMap         = "diffuse_map";
     const char *PbsProperty::NormalMapTex       = "normal_map_tex";
     const char *PbsProperty::SpecularMap        = "specular_map";
@@ -718,6 +719,16 @@ namespace Ogre
             {
                 if( datablock->getUseDiffuseMapAsGrayscale() )
                     setProperty( PbsProperty::DiffuseMapGrayscale, 1 );
+            }
+
+            if( datablock->getTexture( PBSM_EMISSIVE ) && getProperty( PbsProperty::EmissiveMap ) )
+            {
+                TextureGpu *emissiveTexture = datablock->getTexture( PBSM_EMISSIVE );
+                if( PixelFormatGpuUtils::getNumberOfComponents( emissiveTexture->getPixelFormat() ) ==
+                    1u )
+                {
+                    setProperty( PbsProperty::EmissiveMapGrayscale, 1 );
+                }
             }
 
             //Save the name of the cubemap for hazard prevention
