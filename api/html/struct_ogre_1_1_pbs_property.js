@@ -36,6 +36,7 @@ var struct_ogre_1_1_pbs_property =
     [ "EmissiveAsLightmap", "struct_ogre_1_1_pbs_property.html#acf839df80167d42ca7ad66eeeb4f5c9e", null ],
     [ "EmissiveConstant", "struct_ogre_1_1_pbs_property.html#af505fde61a3446efa22bd8fc0ee627c8", null ],
     [ "EmissiveMap", "struct_ogre_1_1_pbs_property.html#aa0b9c855539fd6f083759303448e88ed", null ],
+    [ "EmissiveMapGrayscale", "struct_ogre_1_1_pbs_property.html#a7239909c415fb7175b45193f545c15ac", null ],
     [ "EnableCubemapsAuto", "struct_ogre_1_1_pbs_property.html#ac83d2147eb56005444619f423f1db88f", null ],
     [ "EnvMapScale", "struct_ogre_1_1_pbs_property.html#a04fcad673e38920530d9300fe0b748f7", null ],
     [ "EnvProbeMap", "struct_ogre_1_1_pbs_property.html#a736968f893dc525c0637b8ee8c85f063", null ],
