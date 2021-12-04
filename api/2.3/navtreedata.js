@@ -368,14 +368,14 @@ var NAVTREEINDEX =
 "struct_ogre_1_1_hlms_bits.html#aa95210cbd33619cba7e5b8b22fb291f5",
 "struct_ogre_1_1_intersection_scene_query_result.html#afa2943846ba6a2b5824a12857139cf5e",
 "struct_ogre_1_1_metal_discard_buffer_manager_1_1_unsafe_block.html",
-"struct_ogre_1_1_pbs_property.html#aa0b9c855539fd6f083759303448e88ed",
-"struct_ogre_1_1_render_target_view_def.html#a865c94e28bf61e18445c9d26510356fe",
-"struct_ogre_1_1_static_face_group.html#a42cad07e5dea1a57a10304dcd7b7810b",
-"struct_ogre_1_1_texture_gpu_manager_1_1_metadata_cache_entry.html#a79727d48f596ffa229092104fe8014a3",
-"struct_ogre_1_1_vector_range.html#a130b2ab82901906a7b3de6fd3f1473c1",
-"struct_ogre_1_1_vulkan_descriptor_set_texture.html#a78fe2b034d40771b0e4e2af7dc1ef214",
-"struct_ogre_1_1v1_1_1_cb_render_op.html#a656e06c9cacf13d04ee4f63c38725faf",
-"structbsp__shader__t.html#a9eac62663f32b081217e959edd6fb636"
+"struct_ogre_1_1_pbs_property.html#aa00d5f0944e6c9afda83f945852b10b3",
+"struct_ogre_1_1_render_target_view_def.html#a7a631d43a8220fee8e293850fedd3776",
+"struct_ogre_1_1_static_face_group.html#a3f73219edf1201e9a3c769f9ccc672bf",
+"struct_ogre_1_1_texture_gpu_manager_1_1_metadata_cache_entry.html#a45bf4d1c2b649c99da47df91e95c83b9",
+"struct_ogre_1_1_vector_range.html#a12f3e5595661db66972b72ba51cce989",
+"struct_ogre_1_1_vulkan_descriptor_set_texture.html#a3db8e141fdcb1884063a2180ac583940",
+"struct_ogre_1_1v1_1_1_cb_render_op.html#a1b56c03e7afca205eddf3f9ee408fed1",
+"structbsp__shader__t.html#a23bd87c3f59d74b4f129bc0afc45afe7"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
