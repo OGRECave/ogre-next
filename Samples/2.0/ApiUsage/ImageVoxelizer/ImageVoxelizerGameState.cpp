@@ -33,12 +33,11 @@ namespace Demo
 
     ImageVoxelizerGameState::ImageVoxelizerGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
-        mVoxelizer( 0 ),
-        mVctLighting( 0 ),
+        mCurrCascadeIdx( 0u ),
         mCascadedVoxelizer( 0 ),
         mThinWallCounter( 1.0f ),
         mDebugVisualizationMode( Ogre::VctImageVoxelizer::DebugVisualizationNone ),
-        mNumBounces( 0u ),
+        mNumBounces( 2u ),
         mCurrentScene( SceneCornell ),
         mTestUtils( 0 )
     {
@@ -59,18 +58,21 @@ namespace Demo
         }
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
+        Ogre::VctImageVoxelizer *voxelizer = mCascadedVoxelizer->getCascade( mCurrCascadeIdx ).voxelizer;
+        Ogre::VctLighting *vctLighting = mCascadedVoxelizer->getVctLighting( mCurrCascadeIdx );
+
         if( mDebugVisualizationMode <= Ogre::VctImageVoxelizer::DebugVisualizationNone )
         {
-            mVctLighting->setDebugVisualization( false, sceneManager );
-            mVoxelizer->setDebugVisualization(
+            vctLighting->setDebugVisualization( false, sceneManager );
+            voxelizer->setDebugVisualization(
                 static_cast<Ogre::VctImageVoxelizer::DebugVisualizationMode>( mDebugVisualizationMode ),
                 sceneManager );
         }
         else
         {
-            mVoxelizer->setDebugVisualization( Ogre::VctImageVoxelizer::DebugVisualizationNone,
-                                               sceneManager );
-            mVctLighting->setDebugVisualization( true, sceneManager );
+            voxelizer->setDebugVisualization( Ogre::VctImageVoxelizer::DebugVisualizationNone,
+                                              sceneManager );
+            vctLighting->setDebugVisualization( true, sceneManager );
         }
 
         const bool showItems =
@@ -133,7 +135,7 @@ namespace Demo
             break;
         case VctOnly:
             hlmsPbs->setIrradianceField( 0 );
-            hlmsPbs->setVctLighting( mVctLighting );
+            hlmsPbs->setVctLighting( mCascadedVoxelizer->getVctLighting( 0u ) );
             break;
         case NumGiModes:
             break;
@@ -163,14 +165,12 @@ namespace Demo
             break;
         }
 
-        mCascadedVoxelizer->removeAllItems();
         mCascadedVoxelizer->addAllItems( mGraphicsSystem->getSceneManager(), 0xffffffff, false );
-        // voxelizeScene();
     }
     //-----------------------------------------------------------------------------------
     void ImageVoxelizerGameState::destroyCurrentScene( void )
     {
-        mVoxelizer->removeAllItems();
+        mCascadedVoxelizer->removeAllItems();
         mThinWallCounter = 1.0f;
 
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
@@ -340,7 +340,7 @@ namespace Demo
         light->setDirection( Ogre::Vector3( -1, -1, -1 ).normalisedCopy() );
 
         mCameraController = new CameraController( mGraphicsSystem, false );
-        mCameraController->mCameraBaseSpeed *= 0.01f;
+        // mCameraController->mCameraBaseSpeed *= 0.01f;
 
         TutorialGameState::createScene01();
 
@@ -372,7 +372,7 @@ namespace Demo
         Ogre::VctCascadeSetting cascadeSetting;
         // cascadeSetting.setOctantSubdivision( 2u );
 
-        cascadeSetting.cameraStepSize = 1.0f; // Will be overriden by autoCalculateStepSizes
+        cascadeSetting.cameraStepSize = 1.0f;  // Will be overriden by autoCalculateStepSizes
 
         // Cascades are much more stable and consistent between each other if
         // cascade[i].areaHalfSize / cascade[i].resolution is multiple of the
@@ -391,7 +391,7 @@ namespace Demo
         mCascadedVoxelizer->addCascade( cascadeSetting );
         mCascadedVoxelizer->autoCalculateStepSizes( Ogre::Vector3( 4.0f ) );
 
-        mCascadedVoxelizer->init( root->getRenderSystem(), root->getHlmsManager(), 2u );
+        mCascadedVoxelizer->init( root->getRenderSystem(), root->getHlmsManager(), mNumBounces, true );
 
         createCornellScene();
         // createStressScene();
@@ -404,15 +404,13 @@ namespace Demo
         mCascadedVoxelizer->setAutoUpdate( mGraphicsSystem->getRoot()->getCompositorManager2(),
                                            mGraphicsSystem->getSceneManager() );
 
-        mVoxelizer = mCascadedVoxelizer->getCascade( 0u ).voxelizer;
-        mVctLighting = mCascadedVoxelizer->getVctLighting( 0u );
-        mVctLighting->mSpecularSdfQuality = 20.0f;
+        // mVctLighting->mSpecularSdfQuality = 20.0f;
 
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
         Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
-        hlmsPbs->setVctLighting( mVctLighting );
+        hlmsPbs->setVctLighting( mCascadedVoxelizer->getVctLighting( 0u ) );
     }
     //-----------------------------------------------------------------------------------
     void ImageVoxelizerGameState::destroyScene( void )
@@ -500,12 +498,13 @@ namespace Demo
         outText += visualizationModes[mDebugVisualizationMode];
         outText += "\nF3 to toggle VCT quality [";
         outText += hlmsPbs->getVctFullConeCount() ? "High]" : "Low]";
-        if( mVctLighting )
+        if( mCascadedVoxelizer->getVctLighting( 0u ) )
         {
             // mVctLighting may be nullptr if GI mode started as
             // IfdOnly with mUseRasterIrradianceField = true
             outText += "\nF4 to toggle Anisotropic VCT [";
-            outText += mVctLighting->isAnisotropic() ? "Anisotropic]" : "Isotropic]";
+            outText += mCascadedVoxelizer->getVctLighting( 0u )->isAnisotropic() ? "Anisotropic]"
+                                                                                 : "Isotropic]";
 
             outText += "\n[Shift+] F5 to increase/decrease num indirect bounces [";
             outText += Ogre::StringConverter::toString( mNumBounces );
@@ -544,19 +543,19 @@ namespace Demo
         {
             toggletVctQuality();
         }
-        else if( arg.keysym.sym == SDLK_F4 && mVctLighting )
+        else if( arg.keysym.sym == SDLK_F4 )
         {
-            mVctLighting->setAnisotropic( !mVctLighting->isAnisotropic() );
-            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces, mThinWallCounter );
+            mCascadedVoxelizer->setNewSettings( mCascadedVoxelizer->getNumBounces(),
+                                                !mCascadedVoxelizer->isAnisotropic() );
         }
-        else if( arg.keysym.sym == SDLK_F5 && mVctLighting )
+        else if( arg.keysym.sym == SDLK_F5 )
         {
             if( !( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) )
                 ++mNumBounces;
             else if( mNumBounces > 0u )
                 --mNumBounces;
 
-            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces, mThinWallCounter );
+            mCascadedVoxelizer->setNewSettings( mNumBounces, mCascadedVoxelizer->isAnisotropic() );
         }
         else if( arg.keysym.sym == SDLK_F6 )
         {

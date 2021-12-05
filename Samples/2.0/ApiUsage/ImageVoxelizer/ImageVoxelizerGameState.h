@@ -45,8 +45,7 @@ namespace Demo
             NumGiModes
         };
 
-        Ogre::VctImageVoxelizer *mVoxelizer;
-        Ogre::VctLighting *mVctLighting;
+        size_t mCurrCascadeIdx;  /// Which cascade the controls are currently tweaking
         Ogre::VctCascadedVoxelizer *mCascadedVoxelizer;
         float mThinWallCounter;
 

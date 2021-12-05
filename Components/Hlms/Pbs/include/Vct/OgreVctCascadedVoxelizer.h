@@ -126,6 +126,7 @@ namespace Ogre
         CompositorManager2 *mCompositorManager;
 
         uint32 mNumBounces;  /// @see VctLighting::update
+        bool mAnisotropic;   /// @see VctLighting::update
 
         bool mFirstBuild;
         bool mConsistentCascadeSteps;
@@ -205,8 +206,21 @@ namespace Ogre
             as you can end up with very uneven brightness levels between cascades
 
             See VctLighting::update
+        @param bAnisotropic
+            Whether we should use anisotropic VCT
         */
-        void init( RenderSystem *renderSystem, HlmsManager *hlmsManager, uint32 numBounces );
+        void init( RenderSystem *renderSystem, HlmsManager *hlmsManager, uint32 numBounces,
+                   bool bAnisotropic );
+
+        /// Sets new settings after having called init.
+        void setNewSettings( uint32 numBounces, bool bAnisotropic );
+
+        /// Returns number of bounces for cascade 0. The others are calculated automatically
+        /// See VctCascadedVoxelizer::init
+        uint32 getNumBounces( void ) const { return mNumBounces; }
+
+        /// Returns if we're using anisotropic VCT
+        bool isAnisotropic( void ) const { return mAnisotropic; }
 
         /// Removes all items from all cascades
         void removeAllItems();

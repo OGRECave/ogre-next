@@ -71,6 +71,7 @@ namespace Ogre
         mSceneManager( 0 ),
         mCompositorManager( 0 ),
         mNumBounces( 2u ),
+        mAnisotropic( true ),
         mFirstBuild( true ),
         mConsistentCascadeSteps( false )
     {
@@ -176,11 +177,12 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::init( RenderSystem *renderSystem, HlmsManager *hlmsManager,
-                                     uint32 numBounces )
+                                     uint32 numBounces, bool bAnisotropic )
     {
         OGRE_ASSERT_LOW( !mMeshCache && "VctCascadedVoxelizer::init already called!" );
 
         mNumBounces = numBounces;
+        mAnisotropic = bAnisotropic;
 
         mMeshCache = new VoxelizedMeshCache( Ogre::Id::generateNewId<VoxelizedMeshCache>(),
                                              renderSystem->getTextureGpuManager() );
@@ -204,6 +206,29 @@ namespace Ogre
                 Aabb( quantToVec3( quantCamPos, voxelCellSize ), mCascadeSettings[i].areaHalfSize ) );
         }
 
+        mFirstBuild = true;
+    }
+    //-------------------------------------------------------------------------
+    void VctCascadedVoxelizer::setNewSettings( uint32 numBounces, bool bAnisotropic )
+    {
+        if( mNumBounces == numBounces && mAnisotropic == bAnisotropic )
+            return;
+
+        const size_t numCascades = mCascades.size();
+
+        // Iterate in reverse because multipe bounces needs the information of the higher cascades
+        for( size_t i = numCascades; i--; )
+        {
+            VctLighting *vctLighting = mCascades[i];
+            if( vctLighting )
+            {
+                vctLighting->setAnisotropic( bAnisotropic );
+                vctLighting->setAllowMultipleBounces( numBounces > 0u );
+            }
+        }
+
+        mNumBounces = numBounces;
+        mAnisotropic = bAnisotropic;
         mFirstBuild = true;
     }
     //-------------------------------------------------------------------------
@@ -387,7 +412,7 @@ namespace Ogre
                 if( !mCascades[i] )
                 {
                     mCascades[i] = new VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
-                                                    cascade.voxelizer, true );
+                                                    cascade.voxelizer, mAnisotropic );
 
                     const size_t numExtraCascades = numCascades - i - 1u;
                     if( numExtraCascades > 0u )

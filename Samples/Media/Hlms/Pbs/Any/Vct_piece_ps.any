@@ -85,7 +85,7 @@
 			@property( @n == 0 )
 				float maxLod = probeParams.vctInvResolution_cascadeMaxLod[probeIdx].w;
 			@else
-				float maxLod = 256.0f;
+				float maxLod = 11.0f; // 2048x2048x2048 is max possible res
 			@end
 
 			float dist = vctInvResolution;
@@ -134,12 +134,15 @@
 					abs( nextPosLS - 0.5f ).z <= threshold
 				   VCT_ANISOTROPIC_EARLY_OUT ) // Either another cascade will handle, or aniso will
 			{
+				// Saturate to avoid going further than [-1.5; 1.5] outside the voxel's box
+				// Btw for some reason it can really go very far outside box because
+				// threshold grows too much/too big; thus we keep a near infinite-loop
 				threshold = 0.5f + diameter * 0.5;
 
 				float4 sampleColour =
 					OGRE_SampleLevel( probes[probeIdx], probeSampler, nextPosLS, lodLevel );
 
-				@property( @n == 1 && vct_enable_specular_sdf_quality )
+				@property( @n == 1 && vct_enable_specular_sdf_quality && 0 )
 					// Advance forward using SDF-like formula:
 					//
 					// When roughness is close to 0.02, specular cone tracing becomes path tracing.
@@ -168,9 +171,9 @@
 					skipLod = clamp( skipLod + (1.0f - finalOpac) * 2.0f - 1.0f,
 									 1.0f, probeParams.specSdfMaxMip );
 
-					dist += diameter * 0.5f * skipFactor; // Advance forward
+					dist += diameter * 0.5f * skipFactor;	// Advance forward
 				@else
-					dist += diameter * 0.5f; // Advance forward
+					dist += diameter * 0.5f;				// Advance forward
 				@end
 
 				float a = ( 1.0f - alpha );  // Calc. the % left of light we are able to gather
@@ -224,12 +227,7 @@
 
 					color += sampleColour.xyz * a;     // Accumulate colour
 					alpha += a * sampleColour.w;       // Accumulate opacity
-					@property( vct_num_probes <= 1 )
-						dist += diameter * 0.5f;	   // Advance forward
-					@else
-						// HACK: A high LOD with CIVCT we otherwise get many glitches
-						dist += diameter * 1.0f;	   // Advance forward
-					@end
+					dist += diameter * 0.5f;		   // Advance forward
 					nextPosLS = posLS + dist * dirLS;  // Advance forward
 					// Calculate next LOD & next fwd step
 					diameter = max( vctInvResolution, 2.0 * tanHalfAngle * dist );
@@ -446,7 +444,7 @@
 					float invNumLods3 = probeParams.fromPreviousProbeToNext[j - 1][1].w;
 
 					float strength =
-						lerp( 0.5f, cascadeFinalMultiplier, ( newRes.lodLevel * invNumLods3 ) );
+						lerp( 0.5f, cascadeFinalMultiplier, saturate( newRes.lodLevel * invNumLods3 ) );
 
 					// See VctCascadedVoxelizer::update comments on ( 1.0 - irrLight.alpha )
 					irrLight.colour += newRes.colour * strength * ( 1.0 - irrLight.alpha );
