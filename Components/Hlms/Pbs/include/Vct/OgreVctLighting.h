@@ -173,6 +173,8 @@ namespace Ogre
 
         ShaderParams::Param *addLocalBounceShaderParam( const char *name );
 
+        void restoreSwappedTextures( void );
+
         float addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                         const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
 

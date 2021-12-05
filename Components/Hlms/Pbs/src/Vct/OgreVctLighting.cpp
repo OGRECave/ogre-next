@@ -194,6 +194,32 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
+    void VctLighting::restoreSwappedTextures( void )
+    {
+        if( mLightVoxel[0] && mLightBounce )
+        {
+            char tmpBuffer[128];
+            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+            texName.a( "VctLightingBounce/Id", getId() );
+
+            if( mLightBounce->getName() != texName.c_str() )
+            {
+                std::swap( mLightVoxel[0], mLightBounce );
+
+                DescriptorSetTexture2::TextureSlot texSlot(
+                    DescriptorSetTexture2::TextureSlot::makeEmpty() );
+                texSlot.texture = mLightVoxel[0];
+                mLightVctBounceInject->setTexture( 2, texSlot, mSamplerblockTrilinear );
+
+                if( mAnisoGeneratorStep0 )
+                {
+                    texSlot.texture = mLightVoxel[0];
+                    mAnisoGeneratorStep0->setTexture( 0, texSlot );
+                }
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
     float VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                                  const Vector3 &voxelOrigin, const Vector3 &invVoxelSize )
     {
@@ -444,6 +470,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctLighting::destroyTextures()
     {
+        restoreSwappedTextures();
+
         TextureGpuManager *textureManager = mVoxelizer->getTextureGpuManager();
         for( size_t i=0; i<sizeof(mLightVoxel) / sizeof(mLightVoxel[0]); ++i )
         {
@@ -794,6 +822,7 @@ namespace Ogre
         }
         else
         {
+            restoreSwappedTextures();
             textureManager->destroyTexture( mLightBounce );
             mLightBounce = 0;
         }

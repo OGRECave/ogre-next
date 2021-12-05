@@ -222,8 +222,10 @@ namespace Ogre
             VctLighting *vctLighting = mCascades[i];
             if( vctLighting )
             {
-                vctLighting->setAnisotropic( bAnisotropic );
+                // setAllowMultipleBounces must be called first or else mAnisoGeneratorStep0
+                // may wreak havoc
                 vctLighting->setAllowMultipleBounces( numBounces > 0u );
+                vctLighting->setAnisotropic( bAnisotropic );
             }
         }
 
