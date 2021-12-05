@@ -554,9 +554,13 @@ namespace Ogre
             numNeededTexUnits = 3u + numExtraCascades;
 
         // This code assumes there's 2 textures at the beginning that always stays the same
-        // the rest of them are dynamically generated
+        // the rest of them are dynamically generated.
+        //
+        // We also need to check if another VctLighting instance set a different number of cascades
         ShaderParams &glslShaderParams = mLightVctBounceInject->getShaderParams( "glsl" );
-        if( glslShaderParams.mParams.size() != numNeededTexUnits )
+        if( glslShaderParams.mParams.size() != numNeededTexUnits ||
+            glslShaderParams.mParams[3].mp.dataSizeBytes !=
+                ( numExtraCascades + 1u ) * sizeof( uint32 ) )
         {
             glslShaderParams.mParams.resize( 2u );
 
