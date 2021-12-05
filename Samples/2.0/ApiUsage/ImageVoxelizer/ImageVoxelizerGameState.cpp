@@ -37,10 +37,7 @@ namespace Demo
         mVctLighting( 0 ),
         mCascadedVoxelizer( 0 ),
         mThinWallCounter( 1.0f ),
-        mIrradianceField( 0 ),
-        mUseRasterIrradianceField( false ),
         mDebugVisualizationMode( Ogre::VctImageVoxelizer::DebugVisualizationNone ),
-        mIfdDebugVisualizationMode( Ogre::IrradianceField::DebugVisualizationNone ),
         mNumBounces( 0u ),
         mCurrentScene( SceneCornell ),
         mTestUtils( 0 )
@@ -104,35 +101,10 @@ namespace Demo
         Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
         const bool hasVct = hlmsPbs->getVctLighting() != 0;
-        const bool hasIfd = hlmsPbs->getIrradianceField() != 0;
-        if( hasVct && hasIfd )
-            return IfdVct;
-        else if( hasIfd )
-            return IfdOnly;
-        else if( hasVct )
+        if( hasVct )
             return VctOnly;
         else
             return NoGI;
-    }
-    //-----------------------------------------------------------------------------------
-    void ImageVoxelizerGameState::cycleIfdProbeVisualizationMode( bool bPrev )
-    {
-        if( !bPrev )
-        {
-            mIfdDebugVisualizationMode = ( mIfdDebugVisualizationMode + 1u ) %
-                                         ( Ogre::IrradianceField::DebugVisualizationNone + 1u );
-        }
-        else
-        {
-            mIfdDebugVisualizationMode = ( mIfdDebugVisualizationMode +
-                                           Ogre::IrradianceField::DebugVisualizationNone + 1u - 1u ) %
-                                         ( Ogre::IrradianceField::DebugVisualizationNone + 1u );
-        }
-        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
-
-        mIrradianceField->setDebugVisualization(
-            static_cast<Ogre::IrradianceField::DebugVisualizationMode>( mIfdDebugVisualizationMode ),
-            sceneManager, 5u );
     }
     //-----------------------------------------------------------------------------------
     void ImageVoxelizerGameState::cycleIrradianceField( bool bPrev )
@@ -153,111 +125,19 @@ namespace Demo
                                                                    NumGiModes );
         }
 
-        if( giMode != IfdOnly && giMode != IfdVct )
-        {
-            // Disable IFD visualization while not in use
-            mIrradianceField->setDebugVisualization( Ogre::IrradianceField::DebugVisualizationNone, 0,
-                                                     mIrradianceField->getDebugTessellation() );
-        }
-        else
-        {
-            // Restore IFD visualization if it was in use
-            mIrradianceField->setDebugVisualization(
-                static_cast<Ogre::IrradianceField::DebugVisualizationMode>( mIfdDebugVisualizationMode ),
-                mGraphicsSystem->getSceneManager(), 5u );
-        }
-
         switch( giMode )
         {
         case NoGI:
             hlmsPbs->setIrradianceField( 0 );
             hlmsPbs->setVctLighting( 0 );
             break;
-        case IfdOnly:
-            hlmsPbs->setIrradianceField( mIrradianceField );
-            hlmsPbs->setVctLighting( 0 );
-            break;
         case VctOnly:
             hlmsPbs->setIrradianceField( 0 );
-            hlmsPbs->setVctLighting( mVctLighting );
-            break;
-        case IfdVct:
-            hlmsPbs->setIrradianceField( mIrradianceField );
             hlmsPbs->setVctLighting( mVctLighting );
             break;
         case NumGiModes:
             break;
         }
-    }
-    //-----------------------------------------------------------------------------------
-    void ImageVoxelizerGameState::voxelizeScene( void )
-    {
-        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
-        sceneManager->updateSceneGraph();
-
-        mVoxelizer->removeAllItems();
-
-        Ogre::IrradianceFieldSettings ifSettings;
-        Ogre::Aabb fieldAabb( Ogre::Aabb::BOX_NULL );
-
-        if( needsVoxels() )
-        {
-            Ogre::FastArray<Ogre::Item *>::const_iterator itor = mItems.begin();
-            Ogre::FastArray<Ogre::Item *>::const_iterator endt = mItems.end();
-
-            while( itor != endt )
-                mVoxelizer->addItem( *itor++ );
-
-            mVoxelizer->autoCalculateRegion();
-            mVoxelizer->dividideOctants( 1u, 1u, 1u );
-
-            mVoxelizer->build( sceneManager );
-            g_frame = 0;
-
-            if( !mVctLighting )
-            {
-                mVctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
-                                                      mVoxelizer, true );
-                mVctLighting->setAllowMultipleBounces( true );
-
-                Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-
-                assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-                Ogre::HlmsPbs *hlmsPbs =
-                    static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
-                hlmsPbs->setVctLighting( mVctLighting );
-            }
-
-            mVctLighting->update( sceneManager, mNumBounces, mThinWallCounter );
-
-            fieldAabb.setExtents( mVoxelizer->getVoxelOrigin(),
-                                  mVoxelizer->getVoxelOrigin() + mVoxelizer->getVoxelSize() );
-        }
-
-        if( ( getGiMode() == IfdOnly || getGiMode() == IfdVct ) && mUseRasterIrradianceField )
-        {
-            Ogre::FastArray<Ogre::Item *>::const_iterator itor = mItems.begin();
-            Ogre::FastArray<Ogre::Item *>::const_iterator endt = mItems.end();
-
-            while( itor != endt )
-            {
-                fieldAabb.merge( ( *itor )->getWorldAabb() );
-                ++itor;
-            }
-
-            /*for( int i=0;i<3;++i)
-                ifSettings.mNumProbes[i] = 1u;
-            ifSettings.mIrradianceResolution = 16u;
-            ifSettings.mDepthProbeResolution = 32u;*/
-
-            // Generate IFD via raster
-            ifSettings.mRasterParams.mWorkspaceName = "IrradianceFieldRasterWorkspace";
-            ifSettings.mRasterParams.mCameraNear = 0.01f;
-            ifSettings.mRasterParams.mCameraFar = fieldAabb.getSize().length() * 2.0f;
-        }
-
-        mIrradianceField->initialize( ifSettings, fieldAabb.getMinimum(), fieldAabb.getSize(),
-                                      mVctLighting );
     }
     //-----------------------------------------------------------------------------------
     void ImageVoxelizerGameState::cycleScenes( bool bPrev )
@@ -526,8 +406,6 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void ImageVoxelizerGameState::destroyScene( void )
     {
-        delete mIrradianceField;
-        mIrradianceField = 0;
         delete mCascadedVoxelizer;
         mCascadedVoxelizer = 0;
 
@@ -549,9 +427,8 @@ namespace Demo
     {
         if( mGraphicsSystem->getRenderWindow()->isVisible() )
         {
+#if 0
             Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
-
-#if 1
             if( g_frame == 3 )
             {
                 /*mGraphicsSystem->getCamera()->setPosition( mGraphicsSystem->getCamera()->getPosition()
@@ -577,16 +454,9 @@ namespace Demo
             ++g_frame;
         }
 
-        if( getGiMode() == IfdVct || getGiMode() == IfdOnly )
-            mIrradianceField->update( mUseRasterIrradianceField ? 4u : 200u );
         TutorialGameState::update( timeSinceLast );
 
         mCascadedVoxelizer->setCameraPosition( mGraphicsSystem->getCamera()->getDerivedPosition() );
-    }
-    //-----------------------------------------------------------------------------------
-    bool ImageVoxelizerGameState::needsVoxels( void ) const
-    {
-        return !( getGiMode() == IfdOnly && mUseRasterIrradianceField );
     }
     //-----------------------------------------------------------------------------------
     void ImageVoxelizerGameState::generateDebugText( float timeSinceLast, Ogre::String &outText )
@@ -612,13 +482,6 @@ namespace Demo
             "[Cornell]",
             "[Sibenik]",
             "[Stress Test]",
-        };
-
-        static const Ogre::String ifdProbeVisualizationModes[] =
-        {
-            "[Irradiance]",
-            "[Depth]",
-            "[None]"
         };
         // clang-format on
 
@@ -646,29 +509,11 @@ namespace Demo
         case NoGI:
             outText += "No GI]";
             break;
-        case IfdOnly:
-            outText += "IFD]";
-            break;
         case VctOnly:
             outText += "VCT]";
             break;
-        case IfdVct:
-            outText += "IFD+VCT]";
-            break;
         case NumGiModes:
             break;
-        }
-
-        if( giMode == IfdVct || giMode == IfdOnly )
-        {
-            outText += "\nF8 to generate IFD via rasterization ";
-            outText += mUseRasterIrradianceField ? "[Raster]" : "[Voxels]";
-        }
-
-        if( giMode == IfdVct || giMode == IfdOnly )
-        {
-            outText += "\n[Shift+] F9 to cycle IFD debug visualization ";
-            outText += ifdProbeVisualizationModes[mIfdDebugVisualizationMode];
         }
     }
     //-----------------------------------------------------------------------------------
@@ -701,7 +546,6 @@ namespace Demo
                 --mNumBounces;
 
             mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces, mThinWallCounter );
-            mIrradianceField->reset();
         }
         else if( arg.keysym.sym == SDLK_F6 )
         {
@@ -710,21 +554,6 @@ namespace Demo
         else if( arg.keysym.sym == SDLK_F7 )
         {
             cycleIrradianceField( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) );
-        }
-        else if( arg.keysym.sym == SDLK_F8 )
-        {
-            const ImageVoxelizerGameState::GiMode giMode = getGiMode();
-            if( giMode == IfdVct || giMode == IfdOnly )
-            {
-                mUseRasterIrradianceField = !mUseRasterIrradianceField;
-                voxelizeScene();
-            }
-        }
-        else if( arg.keysym.sym == SDLK_F9 )
-        {
-            const ImageVoxelizerGameState::GiMode giMode = getGiMode();
-            if( giMode == IfdVct || giMode == IfdOnly )
-                cycleIfdProbeVisualizationMode( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) );
         }
         else
         {
