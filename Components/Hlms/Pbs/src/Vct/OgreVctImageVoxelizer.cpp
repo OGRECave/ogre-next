@@ -562,8 +562,11 @@ namespace Ogre
             // We clamp at -5 to prevent this value from exploding (it's an exponent!)
             // x3.0f is arbitrary; and we clamp at 1 to avoid thickening instanceAlbedo.w
             // instead of thinning it
+            //
+            // We then multiply it by 0.5 to produce some thinning, since it looks better
+            // (maintains overall brightness more even)
             const float alphaExponent =
-                std::max( lodLevel - std::max( rawLodLevel, -5.0f ) * 3.0f, 1.0f );
+                std::max( lodLevel - std::max( rawLodLevel, -5.0f ) * 3.0f, 1.0f ) * 0.5f;
 
             for( size_t i = 0u; i < numOctants; ++i )
             {

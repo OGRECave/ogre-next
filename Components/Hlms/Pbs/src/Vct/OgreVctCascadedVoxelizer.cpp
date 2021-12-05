@@ -421,22 +421,16 @@ namespace Ogre
                 // We need to stabilize brightness of all cascades otherwise there will be a
                 // stark contrast when cascade i ends and i+1 starts.
                 //
-                // We do it in 3 ways:
+                // We do it in 2 ways:
                 //
                 //      1. Increasing num bounces to i + 1.
                 //         More bounces, means brighter cascade (done here)
-                //      2. Amplify the cascade i + 1's multiplier (done here)
-                //      3. De-amplify cascade i + 1 when we have enough lighting information
+                //      2. De-amplify cascade i + 1 when we have enough lighting information
                 //         accumulated (via 1.0 - result.alpha). Done in shader
-                //
-                // We need all 3 because 1 & 2 will also amplify cascade i due to cascade
-                // i using lighting information from i + 1 when bouncing.
                 const uint32 numBounces =
                     mNumBounces == 0u ? 0u
                                       : static_cast<uint32>( std::round(
                                             std::sqrt( ( ( mNumBounces + 1u ) * factor ) - 1.0f ) ) );
-
-                mCascades[i]->mMultiplier = factor;
 
                 mCascades[i]->update( sceneManager, numBounces, cascade.thinWallCounter,
                                       cascade.bAutoMultiplier, cascade.rayMarchStepScale,

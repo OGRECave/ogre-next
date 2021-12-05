@@ -370,14 +370,24 @@ namespace Demo
         mCascadedVoxelizer = new Ogre::VctCascadedVoxelizer();
         mCascadedVoxelizer->reserveNumCascades( 2u );
         Ogre::VctCascadeSetting cascadeSetting;
-        cascadeSetting.setResolution( 128u );
         // cascadeSetting.setOctantSubdivision( 2u );
 
+        cascadeSetting.cameraStepSize = 1.0f; // Will be overriden by autoCalculateStepSizes
+
+        // Cascades are much more stable and consistent between each other if
+        // cascade[i].areaHalfSize / cascade[i].resolution is multiple of the
+        // previous cascade (also best match if that multiple is 2 or 4)
         cascadeSetting.areaHalfSize = 5.0f;
-        cascadeSetting.cameraStepSize = 1.0f;
-        mCascadedVoxelizer->addCascade( cascadeSetting );
-        cascadeSetting.areaHalfSize = 30.0f;
         cascadeSetting.setResolution( 128u );
+        mCascadedVoxelizer->addCascade( cascadeSetting );
+        cascadeSetting.areaHalfSize = 10.0f;
+        cascadeSetting.setResolution( 128u );
+        mCascadedVoxelizer->addCascade( cascadeSetting );
+        cascadeSetting.areaHalfSize = 15.0f;
+        cascadeSetting.setResolution( 64u );
+        mCascadedVoxelizer->addCascade( cascadeSetting );
+        cascadeSetting.areaHalfSize = 60.0f;
+        cascadeSetting.setResolution( 64u );
         mCascadedVoxelizer->addCascade( cascadeSetting );
         mCascadedVoxelizer->autoCalculateStepSizes( Ogre::Vector3( 4.0f ) );
 
@@ -396,6 +406,7 @@ namespace Demo
 
         mVoxelizer = mCascadedVoxelizer->getCascade( 0u ).voxelizer;
         mVctLighting = mCascadedVoxelizer->getVctLighting( 0u );
+        mVctLighting->mSpecularSdfQuality = 20.0f;
 
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 

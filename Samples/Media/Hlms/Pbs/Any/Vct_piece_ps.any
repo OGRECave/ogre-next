@@ -465,7 +465,10 @@
 			@else
 				irrLight.colour.xyz += probeParams.ambientUpperHemi.xyz * specAlpha;
 			@end
-			outSpecular += float4( irrLight.colour.xyz * blendWeight, blend );
+
+			// 0.31831 = 1 / PI, but I'm not sure why is it even needed. It's clearly
+			// overbrightened when it's not there
+			outSpecular += float4( irrLight.colour.xyz * blendWeight * 0.31831f, blend );
 
 			@property( use_parallax_correct_cubemaps )
 				vctSpecPosVS = fromVctToViewSpace( irrLight.posLS.xyz, probeParams );
