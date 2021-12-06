@@ -77,7 +77,22 @@ namespace Demo
                                          GraphicsSystem **outGraphicsSystem,
                                          GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
-        ImageVoxelizerGameState *gfxGameState = new ImageVoxelizerGameState( "" );
+        ImageVoxelizerGameState *gfxGameState = new ImageVoxelizerGameState(
+            "Cascaded Image Voxel Cone Tracing (CIVCT) is a general purpose Global Illumination\n"
+            "technique. At the cost of higher VRAM usage to store voxelized versions of each mesh\n"
+            "IVCT is able to revoxelize the entire scene *extremely fast*; making it suitable\n"
+            "for both highly dynamic camera movement and dynamic objects (optional)\n"
+            "\n"
+            "By using multiple cascades of IVCT, we're able to cover large amount of volume\n"
+            "around the camera; focusing most quality and VRAM over close objects while dedicating\n"
+            "fewer resources to more distance objects; although that sometimes can cause brightness\n"
+            "differences at the cascade borders and sudden changes as the camera moves\n"
+            "\n"
+            "This technique has its own set of artifacts and needs careful tweaking of the cascades\n"
+            "Its quality is lower than that of standard VCT or even IFD.\n"
+            "\n"
+            "However its main advantage is that it's extremely easy to setup and adapts to most scenes\n"
+            "(indoor, outdoor, etc) while providing real time Global Illumination" );
 
         ImageVoxelizerGraphicsSystem *graphicsSystem = new ImageVoxelizerGraphicsSystem( gfxGameState );
 

@@ -47,6 +47,7 @@ namespace Demo
 
         size_t mCurrCascadeIdx;  /// Which cascade the controls are currently tweaking
         Ogre::VctCascadedVoxelizer *mCascadedVoxelizer;
+        float mStepSize;
         float mThinWallCounter;
 
         Ogre::uint32 mDebugVisualizationMode;
@@ -58,10 +59,11 @@ namespace Demo
 
         TestUtils *mTestUtils;
 
+        void cycleCascade( bool bPrev );
         void cycleVisualizationMode( bool bPrev );
         void toggletVctQuality( void );
         GiMode getGiMode( void ) const;
-        void cycleIrradianceField( bool bPrev );
+        void cycleGiModes( bool bPrev );
 
         void cycleScenes( bool bPrev );
         void destroyCurrentScene( void );

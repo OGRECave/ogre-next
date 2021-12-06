@@ -223,6 +223,8 @@ namespace Ogre
         void buildRelative( SceneManager *sceneManager, const int32 diffX, const int32 diffY,
                             const int32 diffZ, const uint32 numOctantsX, const uint32 numOctantsY,
                             const uint32 numOctantsZ );
+
+        void forceFullBuild( void ) { mFullBuildDone = false; }
     };
 }  // namespace Ogre
 

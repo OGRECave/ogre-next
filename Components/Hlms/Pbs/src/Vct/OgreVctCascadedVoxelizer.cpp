@@ -174,6 +174,17 @@ namespace Ogre
     void VctCascadedVoxelizer::setConsistentCascadeSteps( bool bConsistentCascadeSteps )
     {
         mConsistentCascadeSteps = bConsistentCascadeSteps;
+        if( mConsistentCascadeSteps )
+        {
+            mFirstBuild = true;
+
+            const size_t numCascades = mCascadeSettings.size();
+            for( size_t i = numCascades; i--; )
+            {
+                if( mCascadeSettings[i].voxelizer )
+                    mCascadeSettings[i].voxelizer->forceFullBuild();
+            }
+        }
     }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::init( RenderSystem *renderSystem, HlmsManager *hlmsManager,

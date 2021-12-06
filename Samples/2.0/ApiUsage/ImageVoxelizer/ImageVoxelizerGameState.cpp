@@ -35,12 +35,41 @@ namespace Demo
         TutorialGameState( helpDescription ),
         mCurrCascadeIdx( 0u ),
         mCascadedVoxelizer( 0 ),
+        mStepSize( 4.0f ),
         mThinWallCounter( 1.0f ),
         mDebugVisualizationMode( Ogre::VctImageVoxelizer::DebugVisualizationNone ),
         mNumBounces( 2u ),
         mCurrentScene( SceneCornell ),
         mTestUtils( 0 )
     {
+    }
+    //-----------------------------------------------------------------------------------
+    void ImageVoxelizerGameState::cycleCascade( bool bPrev )
+    {
+        // Turn off current visualizations
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
+        Ogre::VctImageVoxelizer *voxelizer = mCascadedVoxelizer->getCascade( mCurrCascadeIdx ).voxelizer;
+        Ogre::VctLighting *vctLighting = mCascadedVoxelizer->getVctLighting( mCurrCascadeIdx );
+
+        vctLighting->setDebugVisualization( false, sceneManager );
+        voxelizer->setDebugVisualization( Ogre::VctImageVoxelizer::DebugVisualizationNone,
+                                          sceneManager );
+
+        // Cycle cascade
+        if( !bPrev )
+        {
+            mCurrCascadeIdx = ( mCurrCascadeIdx + 1u ) % mCascadedVoxelizer->getNumCascades();
+        }
+        else
+        {
+            mCurrCascadeIdx = ( mCurrCascadeIdx + mCascadedVoxelizer->getNumCascades() - 1u ) %
+                              mCascadedVoxelizer->getNumCascades();
+        }
+
+        // Turn on visualizations again, but for the new cascade (if any enabled)
+        ++mDebugVisualizationMode;
+        cycleVisualizationMode( true );
     }
     //-----------------------------------------------------------------------------------
     void ImageVoxelizerGameState::cycleVisualizationMode( bool bPrev )
@@ -80,8 +109,8 @@ namespace Demo
             mDebugVisualizationMode == Ogre::VctImageVoxelizer::DebugVisualizationEmissive;
 
         Ogre::FastArray<Ogre::Item *>::const_iterator itor = mItems.begin();
-        Ogre::FastArray<Ogre::Item *>::const_iterator end = mItems.end();
-        while( itor != end )
+        Ogre::FastArray<Ogre::Item *>::const_iterator endt = mItems.end();
+        while( itor != endt )
         {
             ( *itor )->setVisible( showItems );
             ++itor;
@@ -109,7 +138,7 @@ namespace Demo
             return NoGI;
     }
     //-----------------------------------------------------------------------------------
-    void ImageVoxelizerGameState::cycleIrradianceField( bool bPrev )
+    void ImageVoxelizerGameState::cycleGiModes( bool bPrev )
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
@@ -389,7 +418,7 @@ namespace Demo
         cascadeSetting.areaHalfSize = 60.0f;
         cascadeSetting.setResolution( 64u );
         mCascadedVoxelizer->addCascade( cascadeSetting );
-        mCascadedVoxelizer->autoCalculateStepSizes( Ogre::Vector3( 4.0f ) );
+        mCascadedVoxelizer->autoCalculateStepSizes( Ogre::Vector3( mStepSize ) );
 
         mCascadedVoxelizer->init( root->getRenderSystem(), root->getHlmsManager(), mNumBounces, true );
 
@@ -525,6 +554,16 @@ namespace Demo
         case NumGiModes:
             break;
         }
+        outText += "\n[Shift+] F8 to cycle cascade [";
+        outText += Ogre::StringConverter::toString( mCurrCascadeIdx );
+        outText += "/";
+        outText += Ogre::StringConverter::toString( mCascadedVoxelizer->getNumCascades() - 1u );
+        outText += "]\n[Shift+] F9 to alter camera update step size [";
+        outText += Ogre::StringConverter::toString( mStepSize );
+        outText += "]";
+        outText += "]\nF10 consistent cascade steps [";
+        outText += mCascadedVoxelizer->getConsistentCascadeSteps() ? "Yes]" : "No]";
+        outText += "]";
     }
     //-----------------------------------------------------------------------------------
     void ImageVoxelizerGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -563,7 +602,24 @@ namespace Demo
         }
         else if( arg.keysym.sym == SDLK_F7 )
         {
-            cycleIrradianceField( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) );
+            cycleGiModes( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) );
+        }
+        else if( arg.keysym.sym == SDLK_F8 )
+        {
+            cycleCascade( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) );
+        }
+        else if( arg.keysym.sym == SDLK_F9 )
+        {
+            if( !( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) )
+                ++mStepSize;
+            else if( mStepSize > 1.0f )
+                --mStepSize;
+            mCascadedVoxelizer->autoCalculateStepSizes( Ogre::Vector3( mStepSize ) );
+        }
+        else if( arg.keysym.sym == SDLK_F10 )
+        {
+            mCascadedVoxelizer->setConsistentCascadeSteps(
+                !mCascadedVoxelizer->getConsistentCascadeSteps() );
         }
         else
         {
