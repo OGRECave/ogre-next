@@ -35,7 +35,7 @@ namespace Demo
         TutorialGameState( helpDescription ),
         mCurrCascadeIdx( 0u ),
         mCascadedVoxelizer( 0 ),
-        mStepSize( 4.0f ),
+        mStepSize( 3.0f ),
         mThinWallCounter( 1.0f ),
         mDebugVisualizationMode( Ogre::VctImageVoxelizer::DebugVisualizationNone ),
         mNumBounces( 2u ),
@@ -369,7 +369,7 @@ namespace Demo
         light->setDirection( Ogre::Vector3( -1, -1, -1 ).normalisedCopy() );
 
         mCameraController = new CameraController( mGraphicsSystem, false );
-        // mCameraController->mCameraBaseSpeed *= 0.01f;
+        mCameraController->mCameraBaseSpeed *= 0.01f;
 
         TutorialGameState::createScene01();
 
