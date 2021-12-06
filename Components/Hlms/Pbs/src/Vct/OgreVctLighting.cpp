@@ -529,8 +529,16 @@ namespace Ogre
         else
             numNeededTexUnits = 3u + static_cast<uint8>( numExtraCascades );
 
+        HlmsManager *hlmsManager = mVoxelizer->getHlmsManager();
+        const RenderSystemCapabilities *caps = hlmsManager->getRenderSystem()->getCapabilities();
+        const bool bSetSampler = !caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
+
         if( mLightVctBounceInject->getNumTexUnits() != numNeededTexUnits )
+        {
             mLightVctBounceInject->setNumTexUnits( numNeededTexUnits );
+            if( !bSetSampler )
+                mLightVctBounceInject->setNumSamplerUnits( 3u );
+        }
 
         setupGlslTextureUnits();
 
@@ -542,25 +550,45 @@ namespace Ogre
         texSlot.texture = mLightVoxel[0];
         mLightVctBounceInject->setTexture( 2, texSlot, mSamplerblockTrilinear );
 
+
         uint8 texSlotIdx = 3u;
 
         for( size_t cascadeIdx = 0u; cascadeIdx < numExtraCascades; ++cascadeIdx )
         {
             texSlot.texture = mExtraCascades[cascadeIdx]->mLightVoxel[0];
-            mLightVctBounceInject->setTexture( texSlotIdx++, texSlot, mSamplerblockTrilinear );
+            mLightVctBounceInject->setTexture( texSlotIdx++, texSlot, 0, false );
+            if( bSetSampler )
+            {
+                // Only OpenGL needs this sampler set
+                hlmsManager->addReference( mSamplerblockTrilinear );
+                mLightVctBounceInject->_setSamplerblock( texSlotIdx - 1u, mSamplerblockTrilinear );
+            }
         }
 
         if( mAnisotropic )
         {
             for( uint8 i=0u; i<3u; ++i )
             {
-                texSlot.texture = mLightVoxel[i+1u];
-                mLightVctBounceInject->setTexture( texSlotIdx++, texSlot, mSamplerblockTrilinear );
+                texSlot.texture = mLightVoxel[i + 1u];
+                mLightVctBounceInject->setTexture( texSlotIdx++, texSlot, 0, false );
+                if( bSetSampler )
+                {
+                    // Only OpenGL needs this sampler set
+                    hlmsManager->addReference( mSamplerblockTrilinear );
+                    mLightVctBounceInject->_setSamplerblock( texSlotIdx - 1u, mSamplerblockTrilinear );
+                }
 
                 for( size_t cascadeIdx = 0u; cascadeIdx < numExtraCascades; ++cascadeIdx )
                 {
                     texSlot.texture = mExtraCascades[cascadeIdx]->mLightVoxel[i + 1u];
-                    mLightVctBounceInject->setTexture( texSlotIdx++, texSlot, mSamplerblockTrilinear );
+                    mLightVctBounceInject->setTexture( texSlotIdx++, texSlot, 0, false );
+                    if( bSetSampler )
+                    {
+                        // Only OpenGL needs this sampler set
+                        hlmsManager->addReference( mSamplerblockTrilinear );
+                        mLightVctBounceInject->_setSamplerblock( texSlotIdx - 1u,
+                                                                 mSamplerblockTrilinear );
+                    }
                 }
             }
         }
