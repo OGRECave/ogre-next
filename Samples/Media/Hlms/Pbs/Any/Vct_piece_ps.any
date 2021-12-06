@@ -142,7 +142,7 @@
 				float4 sampleColour =
 					OGRE_SampleLevel( probes[probeIdx], probeSampler, nextPosLS, lodLevel );
 
-				@property( @n == 1 && vct_enable_specular_sdf_quality && 0 )
+				@property( @n == 1 && vct_enable_specular_sdf_quality && vct_num_probes <= 1 )
 					// Advance forward using SDF-like formula:
 					//
 					// When roughness is close to 0.02, specular cone tracing becomes path tracing.
