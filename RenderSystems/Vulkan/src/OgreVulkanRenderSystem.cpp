@@ -2819,6 +2819,8 @@ namespace Ogre
         viewportStateCi.viewportCount = 1u;
         viewportStateCi.scissorCount = 1u;
 
+        const float biasSign = mReverseDepth ? 1.0f : -1.0f;
+
         VkPipelineRasterizationStateCreateInfo rasterState;
         makeVkStruct( rasterState, VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO );
         rasterState.polygonMode = VulkanMappings::get( newPso->macroblock->mPolygonMode );
@@ -2826,9 +2828,9 @@ namespace Ogre
         rasterState.frontFace = VK_FRONT_FACE_CLOCKWISE;
         rasterState.depthClampEnable = newPso->macroblock->mDepthClamp;
         rasterState.depthBiasEnable = newPso->macroblock->mDepthBiasConstant != 0.0f;
-        rasterState.depthBiasConstantFactor = newPso->macroblock->mDepthBiasConstant;
+        rasterState.depthBiasConstantFactor = newPso->macroblock->mDepthBiasConstant * biasSign;
         rasterState.depthBiasClamp = 0.0f;
-        rasterState.depthBiasSlopeFactor = newPso->macroblock->mDepthBiasSlopeScale;
+        rasterState.depthBiasSlopeFactor = newPso->macroblock->mDepthBiasSlopeScale * biasSign;
         rasterState.lineWidth = 1.0f;
 
         VkPipelineMultisampleStateCreateInfo mssCi;
