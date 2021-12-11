@@ -1,6 +1,5 @@
 var NAVTREEINDEX113 =
 {
-"class_ogre_1_1_material.html#ac074b3eb66c45685be8fb4b0ebbebcd6":[5,2,5,14,82],
 "class_ogre_1_1_material.html#ac0fd7b4c5684270dc61e57ef6ddef4f2":[5,2,5,14,97],
 "class_ogre_1_1_material.html#ac1363fecebbacd68cdbf0f8ddef39c06":[5,2,5,14,86],
 "class_ogre_1_1_material.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,5,14,66],
@@ -247,7 +246,8 @@ var NAVTREEINDEX113 =
 "class_ogre_1_1_math_1_1_random_value_provider.html":[5,2,6,14,0],
 "class_ogre_1_1_math_1_1_random_value_provider.html#a4eae6d750fa52bb50e13291aad808f34":[5,2,6,14,0,1],
 "class_ogre_1_1_math_1_1_random_value_provider.html#a5f20429fc283dba60a65455f32f96278":[5,2,6,14,0,0],
-"class_ogre_1_1_mathlib_c.html":[7,0,0,659],
-"class_ogre_1_1_mathlib_c.html#a02049fb867cd3392b4205e2e62f353be":[7,0,0,659,53],
-"class_ogre_1_1_mathlib_c.html#a0cf741936ab604ef7354cfbbd55544f2":[7,0,0,659,2]
+"class_ogre_1_1_mathlib_c.html":[7,0,0,655],
+"class_ogre_1_1_mathlib_c.html#a02049fb867cd3392b4205e2e62f353be":[7,0,0,655,53],
+"class_ogre_1_1_mathlib_c.html#a0cf741936ab604ef7354cfbbd55544f2":[7,0,0,655,2],
+"class_ogre_1_1_mathlib_c.html#a0ebeebd74661e5f1019fa2d2ee3ed272":[7,0,0,655,51]
 };

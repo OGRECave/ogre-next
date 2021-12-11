@@ -14452,51 +14452,51 @@
 <path fill="none" stroke="midnightblue" d="M381.83,-2831.85C385.18,-2829.42 388.27,-2826.65 391,-2823.5 472.62,-2729.37 342.57,-2637.11 427,-2545.5 431.71,-2540.39 437.43,-2536.47 443.68,-2533.49"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="379.73,-2829.03 373.03,-2837.23 383.39,-2835 379.73,-2829.03"/>
 </g>
-<!-- Node1426 -->
+<!-- Node1421 -->
 <g id="node937" class="node">
-<title>Node1426</title>
+<title>Node1421</title>
 <g id="a_node937"><a xlink:href="class_ogre_1_1_log_listener.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="39.5,-13247 39.5,-13266 133.5,-13266 133.5,-13247 39.5,-13247"/>
 <text text-anchor="middle" x="86.5" y="-13254" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::LogListener</text>
 </a>
 </g>
 </g>
-<!-- Node1426&#45;&gt;Node218 -->
+<!-- Node1421&#45;&gt;Node218 -->
 <g id="edge961" class="edge">
-<title>Node1426&#45;&gt;Node218</title>
+<title>Node1421&#45;&gt;Node218</title>
 <path fill="none" stroke="midnightblue" d="M143.87,-13254.37C172.41,-13253.29 207.14,-13251.97 236.5,-13250.86"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="143.51,-13250.88 133.65,-13254.75 143.78,-13257.87 143.51,-13250.88"/>
 </g>
-<!-- Node1432 -->
+<!-- Node1427 -->
 <g id="node938" class="node">
-<title>Node1432</title>
+<title>Node1427</title>
 <g id="a_node938"><a xlink:href="class_ogre_1_1_manual_resource_loader.html" target="_top" xlink:title="Interface describing a manual resource loader.">
 <polygon fill="none" stroke="black" points="227.5,-14649 227.5,-14668 372.5,-14668 372.5,-14649 227.5,-14649"/>
 <text text-anchor="middle" x="300" y="-14656" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ManualResourceLoader</text>
 </a>
 </g>
 </g>
-<!-- Node1432&#45;&gt;Node748 -->
+<!-- Node1427&#45;&gt;Node748 -->
 <g id="edge962" class="edge">
-<title>Node1432&#45;&gt;Node748</title>
+<title>Node1427&#45;&gt;Node748</title>
 <path fill="none" stroke="midnightblue" d="M382.63,-14659.26C410.22,-14659.52 440.22,-14659.8 464.76,-14660.02"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="382.62,-14655.76 372.59,-14659.17 382.56,-14662.76 382.62,-14655.76"/>
 </g>
-<!-- Node1432&#45;&gt;Node756 -->
+<!-- Node1427&#45;&gt;Node756 -->
 <g id="edge964" class="edge">
-<title>Node1432&#45;&gt;Node756</title>
+<title>Node1427&#45;&gt;Node756</title>
 <path fill="none" stroke="midnightblue" d="M367.88,-14647.3C397.07,-14642.41 430.93,-14636.74 458.91,-14632.06"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="367.05,-14643.89 357.77,-14648.99 368.21,-14650.79 367.05,-14643.89"/>
 </g>
-<!-- Node1432&#45;&gt;Node1164 -->
+<!-- Node1427&#45;&gt;Node1164 -->
 <g id="edge963" class="edge">
-<title>Node1432&#45;&gt;Node1164</title>
+<title>Node1427&#45;&gt;Node1164</title>
 <path fill="none" stroke="#8b1a1a" d="M381.37,-14668.8C384.94,-14671.24 388.19,-14674.12 391,-14677.5 443.65,-14740.83 378.48,-16092.95 427,-16159.5 434.33,-16169.55 445.15,-16176.36 456.74,-16180.98"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="383,-14665.7 372.56,-14663.88 379.58,-14671.81 383,-14665.7"/>
 </g>
-<!-- Node1435 -->
+<!-- Node1430 -->
 <g id="node939" class="node">
-<title>Node1435</title>
+<title>Node1430</title>
 <g id="a_node939"><a xlink:href="class_ogre_1_1_material_serializer_1_1_listener.html" target="_top" xlink:title="Class that allows listening in on the various stages of material serialization process.">
 <polygon fill="none" stroke="black" points="28.5,-449.5 28.5,-479.5 144.5,-479.5 144.5,-449.5 28.5,-449.5"/>
 <text text-anchor="start" x="36.5" y="-467.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::MaterialSerializer</text>
@@ -14504,225 +14504,225 @@
 </a>
 </g>
 </g>
-<!-- Node1435&#45;&gt;Node618 -->
+<!-- Node1430&#45;&gt;Node618 -->
 <g id="edge965" class="edge">
-<title>Node1435&#45;&gt;Node618</title>
+<title>Node1430&#45;&gt;Node618</title>
 <path fill="none" stroke="midnightblue" d="M154.87,-464.5C179,-464.5 206.21,-464.5 230.43,-464.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="154.73,-461 144.73,-464.5 154.73,-468 154.73,-461"/>
 </g>
-<!-- Node1451 -->
+<!-- Node1446 -->
 <g id="node940" class="node">
-<title>Node1451</title>
+<title>Node1446</title>
 <g id="a_node940"><a xlink:href="class_ogre_1_1_metal_render_target_common.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="435,-12266 435,-12285 599,-12285 599,-12266 435,-12266"/>
 <text text-anchor="middle" x="517" y="-12273" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::MetalRenderTargetCommon</text>
 </a>
 </g>
 </g>
-<!-- Node1451&#45;&gt;Node687 -->
+<!-- Node1446&#45;&gt;Node687 -->
 <g id="edge966" class="edge">
-<title>Node1451&#45;&gt;Node687</title>
+<title>Node1446&#45;&gt;Node687</title>
 <path fill="none" stroke="midnightblue" d="M604.14,-12291.55C605.13,-12292.49 606.09,-12293.47 607,-12294.5 665.49,-12360.43 584.58,-12623.5 643,-12689.5 649.53,-12696.87 658.17,-12701.77 667.49,-12704.96"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="605.94,-12288.52 595.87,-12285.24 601.7,-12294.09 605.94,-12288.52"/>
 </g>
-<!-- Node1461 -->
+<!-- Node1456 -->
 <g id="node941" class="node">
-<title>Node1461</title>
+<title>Node1456</title>
 <g id="a_node941"><a xlink:href="class_ogre_1_1_node_1_1_listener.html" target="_top" xlink:title="Listener which gets called back on Node events.">
 <polygon fill="none" stroke="black" points="464.5,-15941 464.5,-15960 569.5,-15960 569.5,-15941 464.5,-15941"/>
 <text text-anchor="middle" x="517" y="-15948" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Node::Listener</text>
 </a>
 </g>
 </g>
-<!-- Node1461&#45;&gt;Node459 -->
+<!-- Node1456&#45;&gt;Node459 -->
 <g id="edge967" class="edge">
-<title>Node1461&#45;&gt;Node459</title>
+<title>Node1456&#45;&gt;Node459</title>
 <path fill="none" stroke="midnightblue" d="M579.53,-15945.01C610.96,-15942.21 648.81,-15938.83 678.8,-15936.16"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="579.21,-15941.53 569.56,-15945.9 579.83,-15948.5 579.21,-15941.53"/>
 </g>
-<!-- Node1642 -->
+<!-- Node1637 -->
 <g id="node942" class="node">
-<title>Node1642</title>
+<title>Node1637</title>
 <g id="a_node942"><a xlink:href="class_ogre_1_1_plane.html" target="_top" xlink:title="Defines a plane in 3D space.">
 <polygon fill="none" stroke="black" points="266.5,-14915 266.5,-14934 333.5,-14934 333.5,-14915 266.5,-14915"/>
 <text text-anchor="middle" x="300" y="-14922" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Plane</text>
 </a>
 </g>
 </g>
-<!-- Node1642&#45;&gt;Node449 -->
+<!-- Node1637&#45;&gt;Node449 -->
 <g id="edge968" class="edge">
-<title>Node1642&#45;&gt;Node449</title>
+<title>Node1637&#45;&gt;Node449</title>
 <path fill="none" stroke="midnightblue" d="M343.82,-14926.46C360.67,-14929.41 378.85,-14935.66 391,-14948.5 444.97,-15005.55 371.61,-15065.82 427,-15121.5 437.03,-15131.58 451.01,-15136.92 464.92,-15139.61"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="343.96,-14922.95 333.57,-14925.02 342.98,-14929.88 343.96,-14922.95"/>
 </g>
-<!-- Node1643 -->
+<!-- Node1638 -->
 <g id="node943" class="node">
-<title>Node1643</title>
+<title>Node1638</title>
 <g id="a_node943"><a xlink:href="class_ogre_1_1_p_c_plane.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="477,-15093 477,-15112 557,-15112 557,-15093 477,-15093"/>
 <text text-anchor="middle" x="517" y="-15100" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::PCPlane</text>
 </a>
 </g>
 </g>
-<!-- Node1642&#45;&gt;Node1643 -->
+<!-- Node1637&#45;&gt;Node1638 -->
 <g id="edge969" class="edge">
-<title>Node1642&#45;&gt;Node1643</title>
+<title>Node1637&#45;&gt;Node1638</title>
 <path fill="none" stroke="midnightblue" d="M343.8,-14926.93C360.47,-14929.96 378.54,-14936.15 391,-14948.5 433.59,-14990.69 384.46,-15036.25 427,-15078.5 440.06,-15091.47 459.34,-15097.63 476.63,-15100.48"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="344.06,-14923.43 333.65,-14925.42 343.03,-14930.35 344.06,-14923.43"/>
 </g>
-<!-- Node1662 -->
+<!-- Node1657 -->
 <g id="node944" class="node">
-<title>Node1662</title>
+<title>Node1657</title>
 <g id="a_node944"><a xlink:href="class_ogre_1_1_ray_scene_query_listener.html" target="_top" xlink:title="Alternative listener class for dealing with RaySceneQuery.">
 <polygon fill="none" stroke="black" points="226.5,-2605 226.5,-2624 373.5,-2624 373.5,-2605 226.5,-2605"/>
 <text text-anchor="middle" x="300" y="-2612" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RaySceneQueryListener</text>
 </a>
 </g>
 </g>
-<!-- Node1662&#45;&gt;Node777 -->
+<!-- Node1657&#45;&gt;Node777 -->
 <g id="edge970" class="edge">
-<title>Node1662&#45;&gt;Node777</title>
+<title>Node1657&#45;&gt;Node777</title>
 <path fill="none" stroke="midnightblue" d="M382.77,-2601.29C385.67,-2599.57 388.42,-2597.65 391,-2595.5 423.45,-2568.43 394.58,-2534.61 427,-2507.5 436.58,-2499.49 448.72,-2494.62 460.93,-2491.71"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="381.07,-2598.23 373.73,-2605.87 384.23,-2604.48 381.07,-2598.23"/>
 </g>
-<!-- Node1664 -->
+<!-- Node1659 -->
 <g id="node945" class="node">
-<title>Node1664</title>
+<title>Node1659</title>
 <g id="a_node945"><a xlink:href="class_ogre_1_1_renderable.html" target="_top" xlink:title="Abstract class defining the interface all renderable objects must implement.">
 <polygon fill="none" stroke="black" points="254.5,-15675 254.5,-15694 345.5,-15694 345.5,-15675 254.5,-15675"/>
 <text text-anchor="middle" x="300" y="-15682" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Renderable</text>
 </a>
 </g>
 </g>
-<!-- Node1664&#45;&gt;Node433 -->
+<!-- Node1659&#45;&gt;Node433 -->
 <g id="edge973" class="edge">
-<title>Node1664&#45;&gt;Node433</title>
+<title>Node1659&#45;&gt;Node433</title>
 <path fill="none" stroke="midnightblue" d="M356.14,-15684.44C369.46,-15681.62 382.34,-15676.01 391,-15665.5 470.1,-15569.55 351.1,-13526 427,-13427.5 435.03,-13417.08 447.05,-13410.76 459.68,-13407"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="355.25,-15681.04 345.93,-15686.08 356.36,-15687.95 355.25,-15681.04"/>
 </g>
-<!-- Node1664&#45;&gt;Node439 -->
+<!-- Node1659&#45;&gt;Node439 -->
 <g id="edge971" class="edge">
-<title>Node1664&#45;&gt;Node439</title>
+<title>Node1659&#45;&gt;Node439</title>
 <path fill="none" stroke="midnightblue" d="M333.28,-15698.52C353.15,-15708.87 377.34,-15724.9 391,-15746.5 444.65,-15831.36 357.82,-15896.75 427,-15969.5 439.96,-15983.12 460.1,-15988.19 477.95,-15989.71"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="334.74,-15695.34 324.23,-15694.04 331.64,-15701.61 334.74,-15695.34"/>
 </g>
-<!-- Node1664&#45;&gt;Node443 -->
+<!-- Node1659&#45;&gt;Node443 -->
 <g id="edge972" class="edge">
-<title>Node1664&#45;&gt;Node443</title>
+<title>Node1659&#45;&gt;Node443</title>
 <path fill="none" stroke="midnightblue" d="M332.33,-15698.7C352.03,-15709.2 376.4,-15725.33 391,-15746.5 429.19,-15801.87 378.73,-15846.65 427,-15893.5 435.05,-15901.31 445.48,-15906.25 456.35,-15909.31"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="333.88,-15695.56 323.38,-15694.14 330.7,-15701.8 333.88,-15695.56"/>
 </g>
-<!-- Node1664&#45;&gt;Node455 -->
+<!-- Node1659&#45;&gt;Node455 -->
 <g id="edge974" class="edge">
-<title>Node1664&#45;&gt;Node455</title>
+<title>Node1659&#45;&gt;Node455</title>
 <path fill="none" stroke="midnightblue" d="M333.83,-15698.62C353.7,-15708.93 377.68,-15724.89 391,-15746.5 452.44,-15846.19 347.29,-15921.72 427,-16007.5 437.43,-16018.73 452.74,-16024.17 467.72,-16026.61"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="335.28,-15695.43 324.77,-15694.15 332.19,-15701.71 335.28,-15695.43"/>
 </g>
-<!-- Node1664&#45;&gt;Node456 -->
+<!-- Node1659&#45;&gt;Node456 -->
 <g id="edge977" class="edge">
-<title>Node1664&#45;&gt;Node456</title>
+<title>Node1659&#45;&gt;Node456</title>
 <path fill="none" stroke="midnightblue" d="M355.88,-15684.5C388.71,-15684.5 430.24,-15684.5 462.77,-15684.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="355.55,-15681 345.55,-15684.5 355.55,-15688 355.55,-15681"/>
 </g>
-<!-- Node1664&#45;&gt;Node457 -->
+<!-- Node1659&#45;&gt;Node457 -->
 <g id="edge978" class="edge">
-<title>Node1664&#45;&gt;Node457</title>
+<title>Node1659&#45;&gt;Node457</title>
 <path fill="none" stroke="midnightblue" d="M355.68,-15674.83C392.75,-15668.28 440.95,-15659.76 474.79,-15653.78"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="354.79,-15671.44 345.55,-15676.63 356,-15678.33 354.79,-15671.44"/>
 </g>
-<!-- Node1664&#45;&gt;Node458 -->
+<!-- Node1659&#45;&gt;Node458 -->
 <g id="edge979" class="edge">
-<title>Node1664&#45;&gt;Node458</title>
+<title>Node1659&#45;&gt;Node458</title>
 <path fill="none" stroke="midnightblue" d="M331.04,-15698.69C350.63,-15709.35 375.38,-15725.66 391,-15746.5 421.6,-15787.32 389.02,-15821.44 427,-15855.5 435.47,-15863.1 446.21,-15867.92 457.29,-15870.93"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="332.66,-15695.59 322.18,-15694.06 329.42,-15701.79 332.66,-15695.59"/>
 </g>
-<!-- Node1664&#45;&gt;Node460 -->
+<!-- Node1659&#45;&gt;Node460 -->
 <g id="edge980" class="edge">
-<title>Node1664&#45;&gt;Node460</title>
+<title>Node1659&#45;&gt;Node460</title>
 <path fill="none" stroke="midnightblue" d="M355.94,-15678.38C367.99,-15675.57 380.33,-15671.47 391,-15665.5 411.3,-15654.14 406.71,-15638.89 427,-15627.5 437.61,-15621.55 449.89,-15617.46 461.87,-15614.65"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="355.01,-15675 345.92,-15680.46 356.43,-15681.86 355.01,-15675"/>
 </g>
-<!-- Node1664&#45;&gt;Node464 -->
+<!-- Node1659&#45;&gt;Node464 -->
 <g id="edge984" class="edge">
-<title>Node1664&#45;&gt;Node464</title>
+<title>Node1659&#45;&gt;Node464</title>
 <path fill="none" stroke="midnightblue" d="M355.8,-15694.19C388.38,-15699.94 429.55,-15707.22 461.99,-15712.95"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="356,-15690.67 345.55,-15692.37 354.79,-15697.56 356,-15690.67"/>
 </g>
-<!-- Node1664&#45;&gt;Node465 -->
+<!-- Node1659&#45;&gt;Node465 -->
 <g id="edge985" class="edge">
-<title>Node1664&#45;&gt;Node465</title>
+<title>Node1659&#45;&gt;Node465</title>
 <path fill="none" stroke="midnightblue" d="M333.96,-15698.54C353.87,-15708.82 377.87,-15724.77 391,-15746.5 460.24,-15861.05 336.73,-15946.67 427,-16045.5 432.97,-16052.03 440.58,-16056.62 448.84,-16059.79"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="335.39,-15695.34 324.87,-15694.08 332.31,-15701.63 335.39,-15695.34"/>
 </g>
-<!-- Node1664&#45;&gt;Node969 -->
+<!-- Node1659&#45;&gt;Node969 -->
 <g id="edge981" class="edge">
-<title>Node1664&#45;&gt;Node969</title>
+<title>Node1659&#45;&gt;Node969</title>
 <path fill="none" stroke="midnightblue" d="M356.15,-15684.45C369.47,-15681.63 382.34,-15676.01 391,-15665.5 475.83,-15562.47 342.28,-13366.62 427,-13263.5 433.02,-13256.18 441.1,-13251.24 449.96,-13247.98"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="355.25,-15681.04 345.94,-15686.09 356.37,-15687.96 355.25,-15681.04"/>
 </g>
-<!-- Node1664&#45;&gt;Node1044 -->
+<!-- Node1659&#45;&gt;Node1044 -->
 <g id="edge982" class="edge">
-<title>Node1664&#45;&gt;Node1044</title>
+<title>Node1659&#45;&gt;Node1044</title>
 <path fill="none" stroke="midnightblue" d="M356.15,-15684.45C369.47,-15681.63 382.35,-15676.01 391,-15665.5 477.16,-15560.83 344.32,-13332.94 427,-13225.5 434.73,-13215.45 446.17,-13209.22 458.28,-13205.42"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="355.25,-15681.05 345.94,-15686.09 356.37,-15687.96 355.25,-15681.05"/>
 </g>
-<!-- Node1664&#45;&gt;Node1048 -->
+<!-- Node1659&#45;&gt;Node1048 -->
 <g id="edge983" class="edge">
-<title>Node1664&#45;&gt;Node1048</title>
+<title>Node1659&#45;&gt;Node1048</title>
 <path fill="none" stroke="midnightblue" d="M355.84,-15683.78C369.04,-15680.94 381.92,-15675.48 391,-15665.5 485.83,-15561.28 332.84,-15455.34 427,-15350.5 434.2,-15342.49 443.85,-15337.32 454.14,-15334.05"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="355.04,-15680.36 345.75,-15685.47 356.19,-15687.27 355.04,-15680.36"/>
 </g>
-<!-- Node1664&#45;&gt;Node1062 -->
+<!-- Node1659&#45;&gt;Node1062 -->
 <g id="edge986" class="edge">
-<title>Node1664&#45;&gt;Node1062</title>
+<title>Node1659&#45;&gt;Node1062</title>
 <path fill="none" stroke="midnightblue" d="M356.15,-15684.45C369.47,-15681.63 382.35,-15676.01 391,-15665.5 478.88,-15558.72 342.68,-13286.11 427,-13176.5 433.85,-13167.6 443.61,-13161.69 454.17,-13157.81"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="355.26,-15681.05 345.94,-15686.09 356.37,-15687.96 355.26,-15681.05"/>
 </g>
-<!-- Node1664&#45;&gt;Node1068 -->
+<!-- Node1659&#45;&gt;Node1068 -->
 <g id="edge987" class="edge">
-<title>Node1664&#45;&gt;Node1068</title>
+<title>Node1659&#45;&gt;Node1068</title>
 <path fill="none" stroke="midnightblue" d="M356.17,-15684.47C369.5,-15681.65 382.36,-15676.03 391,-15665.5 446.84,-15597.44 371.24,-12564.62 427,-12496.5 436.91,-12484.4 452.46,-12478.81 467.81,-12476.52"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="355.28,-15681.07 345.96,-15686.11 356.39,-15687.98 355.28,-15681.07"/>
 </g>
-<!-- Node1665 -->
+<!-- Node1660 -->
 <g id="node946" class="node">
-<title>Node1665</title>
+<title>Node1660</title>
 <g id="a_node946"><a xlink:href="class_ogre_1_1_renderable_animated.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="451,-15751 451,-15770 583,-15770 583,-15751 451,-15751"/>
 <text text-anchor="middle" x="517" y="-15758" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RenderableAnimated</text>
 </a>
 </g>
 </g>
-<!-- Node1664&#45;&gt;Node1665 -->
+<!-- Node1659&#45;&gt;Node1660 -->
 <g id="edge975" class="edge">
-<title>Node1664&#45;&gt;Node1665</title>
+<title>Node1659&#45;&gt;Node1660</title>
 <path fill="none" stroke="midnightblue" d="M355.66,-15694.57C367.73,-15698.01 380.14,-15702.55 391,-15708.5 410.03,-15718.93 407.71,-15731.55 427,-15741.5 434.58,-15745.41 442.93,-15748.52 451.37,-15750.98"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="356.21,-15691.1 345.65,-15691.94 354.43,-15697.87 356.21,-15691.1"/>
 </g>
-<!-- Node1665&#45;&gt;Node876 -->
+<!-- Node1660&#45;&gt;Node876 -->
 <g id="edge976" class="edge">
-<title>Node1665&#45;&gt;Node876</title>
+<title>Node1660&#45;&gt;Node876</title>
 <path fill="none" stroke="midnightblue" d="M592.58,-15752.64C597.98,-15749.77 602.9,-15746.12 607,-15741.5 664.66,-15676.6 585.42,-15417.47 643,-15352.5 655.13,-15338.81 674.55,-15333.67 692.07,-15332.12"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="590.88,-15749.56 583.11,-15756.76 593.67,-15755.98 590.88,-15749.56"/>
 </g>
-<!-- Node1672 -->
+<!-- Node1667 -->
 <g id="node947" class="node">
-<title>Node1672</title>
+<title>Node1667</title>
 <g id="a_node947"><a xlink:href="class_ogre_1_1_render_queue_listener.html" target="_top" xlink:title="Abstract interface which classes must implement if they wish to receive events from the render queue.">
 <polygon fill="none" stroke="black" points="18,-15637 18,-15656 155,-15656 155,-15637 18,-15637"/>
 <text text-anchor="middle" x="86.5" y="-15644" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RenderQueueListener</text>
 </a>
 </g>
 </g>
-<!-- Node1672&#45;&gt;Node1058 -->
+<!-- Node1667&#45;&gt;Node1058 -->
 <g id="edge988" class="edge">
-<title>Node1672&#45;&gt;Node1058</title>
+<title>Node1667&#45;&gt;Node1058</title>
 <path fill="none" stroke="midnightblue" d="M165.18,-15646.5C189.27,-15646.5 215.45,-15646.5 238.22,-15646.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="165,-15643 155,-15646.5 165,-15650 165,-15643"/>
 </g>
-<!-- Node1673 -->
+<!-- Node1668 -->
 <g id="node948" class="node">
-<title>Node1673</title>
+<title>Node1668</title>
 <g id="a_node948"><a xlink:href="class_ogre_1_1_render_system_1_1_listener.html" target="_top" xlink:title="Defines a listener on the custom events that this render system can raise.">
 <polygon fill="none" stroke="black" points="33.5,-15710.5 33.5,-15740.5 139.5,-15740.5 139.5,-15710.5 33.5,-15710.5"/>
 <text text-anchor="start" x="41.5" y="-15728.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RenderSystem</text>
@@ -14730,90 +14730,90 @@
 </a>
 </g>
 </g>
-<!-- Node1673&#45;&gt;Node340 -->
+<!-- Node1668&#45;&gt;Node340 -->
 <g id="edge990" class="edge">
-<title>Node1673&#45;&gt;Node340</title>
+<title>Node1668&#45;&gt;Node340</title>
 <path fill="none" stroke="midnightblue" d="M149.61,-15732.58C233.53,-15742.73 374.61,-15762.13 391,-15779.5 484.37,-15878.46 335.34,-15982.95 427,-16083.5 432.22,-16089.22 438.7,-16093.45 445.76,-16096.54"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="150.01,-15729.1 139.67,-15731.38 149.18,-15736.05 150.01,-15729.1"/>
 </g>
-<!-- Node1673&#45;&gt;Node650 -->
+<!-- Node1668&#45;&gt;Node650 -->
 <g id="edge989" class="edge">
-<title>Node1673&#45;&gt;Node650</title>
+<title>Node1668&#45;&gt;Node650</title>
 <path fill="none" stroke="midnightblue" d="M131.79,-15705.44C147.74,-15695.79 164.01,-15682.55 173,-15665.5 213.5,-15588.68 159.02,-12610.51 209,-12539.5 260.95,-12465.69 539.56,-12398.51 607,-12458.5 658.32,-12504.15 596.81,-12714.66 643,-12765.5 646.36,-12769.2 650.26,-12772.28 654.51,-12774.82"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="129.97,-15702.45 123.01,-15710.43 133.43,-15708.53 129.97,-15702.45"/>
 </g>
-<!-- Node1673&#45;&gt;Node1058 -->
+<!-- Node1668&#45;&gt;Node1058 -->
 <g id="edge992" class="edge">
-<title>Node1673&#45;&gt;Node1058</title>
+<title>Node1668&#45;&gt;Node1058</title>
 <path fill="none" stroke="midnightblue" d="M122.2,-15705.45C145.97,-15692.45 178.58,-15676.03 209,-15665.5 219.86,-15661.74 231.74,-15658.59 243.19,-15656.01"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="120.27,-15702.51 113.22,-15710.42 123.67,-15708.64 120.27,-15702.51"/>
 </g>
-<!-- Node1673&#45;&gt;Node1163 -->
+<!-- Node1668&#45;&gt;Node1163 -->
 <g id="edge991" class="edge">
-<title>Node1673&#45;&gt;Node1163</title>
+<title>Node1668&#45;&gt;Node1163</title>
 <path fill="none" stroke="midnightblue" d="M108.2,-15748.41C128.35,-15772.12 158.04,-15811.15 173,-15850.5 218.05,-15969.02 140.97,-16026.51 209,-16133.5 223.69,-16156.6 251.47,-16172.04 272.3,-16180.96"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="110.71,-15745.95 101.51,-15740.68 105.41,-15750.53 110.71,-15745.95"/>
 </g>
-<!-- Node1678 -->
+<!-- Node1673 -->
 <g id="node949" class="node">
-<title>Node1678</title>
+<title>Node1673</title>
 <g id="a_node949"><a xlink:href="class_ogre_1_1_render_target_listener.html" target="_top" xlink:title="A interface class defining a listener which can be used to receive notifications of RenderTarget even...">
 <polygon fill="none" stroke="black" points="232,-15789 232,-15808 368,-15808 368,-15789 232,-15789"/>
 <text text-anchor="middle" x="300" y="-15796" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RenderTargetListener</text>
 </a>
 </g>
 </g>
-<!-- Node1678&#45;&gt;Node340 -->
+<!-- Node1673&#45;&gt;Node340 -->
 <g id="edge993" class="edge">
-<title>Node1678&#45;&gt;Node340</title>
+<title>Node1673&#45;&gt;Node340</title>
 <path fill="none" stroke="midnightblue" d="M377.65,-15807.23C382.59,-15809.96 387.13,-15813.33 391,-15817.5 472.2,-15904.9 345.9,-15996.01 427,-16083.5 432.26,-16089.18 438.77,-16093.38 445.86,-16096.46"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="378.92,-15803.97 368.37,-15803 376.02,-15810.34 378.92,-15803.97"/>
 </g>
-<!-- Node1683 -->
+<!-- Node1678 -->
 <g id="node950" class="node">
-<title>Node1683</title>
+<title>Node1678</title>
 <g id="a_node950"><a xlink:href="class_ogre_1_1_resource_1_1_listener.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="238.5,-15029 238.5,-15048 361.5,-15048 361.5,-15029 238.5,-15029"/>
 <text text-anchor="middle" x="300" y="-15036" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Resource::Listener</text>
 </a>
 </g>
 </g>
-<!-- Node1683&#45;&gt;Node366 -->
+<!-- Node1678&#45;&gt;Node366 -->
 <g id="edge994" class="edge">
-<title>Node1683&#45;&gt;Node366</title>
+<title>Node1678&#45;&gt;Node366</title>
 <path fill="none" stroke="midnightblue" d="M323.45,-15022.87C345.34,-15006.12 377.3,-14977.34 391,-14943.5 424.91,-14859.74 370.15,-11760.74 427,-11690.5 433.97,-11681.88 443.79,-11676.48 454.37,-11673.18"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="321.28,-15020.12 315.32,-15028.88 325.44,-15025.74 321.28,-15020.12"/>
 </g>
-<!-- Node1683&#45;&gt;Node445 -->
+<!-- Node1678&#45;&gt;Node445 -->
 <g id="edge995" class="edge">
-<title>Node1683&#45;&gt;Node445</title>
+<title>Node1678&#45;&gt;Node445</title>
 <path fill="none" stroke="midnightblue" d="M371.49,-15048.52C378.82,-15051.99 385.56,-15056.54 391,-15062.5 455.12,-15132.78 361.14,-15204.85 427,-15273.5 441.99,-15289.12 466.42,-15293.46 485.9,-15294.12"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="372.53,-15045.17 361.95,-15044.7 369.93,-15051.67 372.53,-15045.17"/>
 </g>
-<!-- Node1683&#45;&gt;Node461 -->
+<!-- Node1678&#45;&gt;Node461 -->
 <g id="edge996" class="edge">
-<title>Node1683&#45;&gt;Node461</title>
+<title>Node1678&#45;&gt;Node461</title>
 <path fill="none" stroke="midnightblue" d="M371.28,-15048.72C378.65,-15052.15 385.45,-15056.64 391,-15062.5 444.97,-15119.55 371.61,-15179.82 427,-15235.5 439.81,-15248.38 459.08,-15253.52 476.41,-15255.28"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="372.3,-15045.35 361.71,-15044.92 369.71,-15051.86 372.3,-15045.35"/>
 </g>
-<!-- Node1691 -->
+<!-- Node1686 -->
 <g id="node951" class="node">
-<title>Node1691</title>
+<title>Node1686</title>
 <g id="a_node951"><a xlink:href="class_ogre_1_1_root_layout.html" target="_top" xlink:title="The RootLayout class.">
 <polygon fill="none" stroke="black" points="40.5,-50 40.5,-69 132.5,-69 132.5,-50 40.5,-50"/>
 <text text-anchor="middle" x="86.5" y="-57" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RootLayout</text>
 </a>
 </g>
 </g>
-<!-- Node1691&#45;&gt;Node939 -->
+<!-- Node1686&#45;&gt;Node939 -->
 <g id="edge997" class="edge">
-<title>Node1691&#45;&gt;Node939</title>
+<title>Node1686&#45;&gt;Node939</title>
 <path fill="none" stroke="#8b1a1a" d="M142.73,-60.28C172.2,-60.7 208.5,-61.22 238.7,-61.64"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="142.66,-56.78 132.61,-60.14 142.56,-63.78 142.66,-56.78"/>
 </g>
-<!-- Node1707 -->
+<!-- Node1702 -->
 <g id="node952" class="node">
-<title>Node1707</title>
+<title>Node1702</title>
 <g id="a_node952"><a xlink:href="class_ogre_1_1_scene_manager_1_1_listener.html" target="_top" xlink:title="Class that allows listening in on the various stages of SceneManager processing, so that custom behav...">
 <polygon fill="none" stroke="black" points="33,-16207.5 33,-16237.5 140,-16237.5 140,-16207.5 33,-16207.5"/>
 <text text-anchor="start" x="41" y="-16225.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::SceneManager</text>
@@ -14821,219 +14821,219 @@
 </a>
 </g>
 </g>
-<!-- Node1707&#45;&gt;Node879 -->
+<!-- Node1702&#45;&gt;Node879 -->
 <g id="edge998" class="edge">
-<title>Node1707&#45;&gt;Node879</title>
+<title>Node1702&#45;&gt;Node879</title>
 <path fill="none" stroke="midnightblue" d="M150.28,-16224.28C187.43,-16225.33 233.1,-16226.63 263.95,-16227.51"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="150.15,-16220.78 140.05,-16223.99 149.95,-16227.77 150.15,-16220.78"/>
 </g>
-<!-- Node1711 -->
+<!-- Node1706 -->
 <g id="node953" class="node">
-<title>Node1711</title>
+<title>Node1706</title>
 <g id="a_node953"><a xlink:href="class_ogre_1_1_scene_query_listener.html" target="_top" xlink:title="This optional class allows you to receive per&#45;result callbacks from SceneQuery executions instead of ...">
 <polygon fill="none" stroke="black" points="234.5,-1886 234.5,-1905 365.5,-1905 365.5,-1886 234.5,-1886"/>
 <text text-anchor="middle" x="300" y="-1893" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::SceneQueryListener</text>
 </a>
 </g>
 </g>
-<!-- Node1711&#45;&gt;Node782 -->
+<!-- Node1706&#45;&gt;Node782 -->
 <g id="edge999" class="edge">
-<title>Node1711&#45;&gt;Node782</title>
+<title>Node1706&#45;&gt;Node782</title>
 <path fill="none" stroke="midnightblue" d="M375.12,-1884.35C380.68,-1882.18 386.05,-1879.58 391,-1876.5 413.03,-1862.77 404.98,-1844.26 427,-1830.5 435.31,-1825.31 444.81,-1821.52 454.44,-1818.75"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="373.91,-1881.07 365.6,-1887.64 376.19,-1887.68 373.91,-1881.07"/>
 </g>
-<!-- Node1724 -->
+<!-- Node1719 -->
 <g id="node954" class="node">
-<title>Node1724</title>
+<title>Node1719</title>
 <g id="a_node954"><a xlink:href="class_ogre_1_1_script_loader.html" target="_top" xlink:title="Abstract class defining the interface used by classes which wish to perform script loading to define ...">
 <polygon fill="none" stroke="black" points="37.5,-15292 37.5,-15311 135.5,-15311 135.5,-15292 37.5,-15292"/>
 <text text-anchor="middle" x="86.5" y="-15299" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ScriptLoader</text>
 </a>
 </g>
 </g>
-<!-- Node1724&#45;&gt;Node415 -->
+<!-- Node1719&#45;&gt;Node415 -->
 <g id="edge1000" class="edge">
-<title>Node1724&#45;&gt;Node415</title>
+<title>Node1719&#45;&gt;Node415</title>
 <path fill="none" stroke="midnightblue" d="M145.39,-15299.34C156.02,-15296.25 165.96,-15291.03 173,-15282.5 263.51,-15172.87 139.2,-14127.35 209,-14003.5 222.42,-13979.7 250.1,-13964.1 271.24,-13955.14"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="144.46,-15295.97 135.5,-15301.63 146.03,-15302.79 144.46,-15295.97"/>
 </g>
-<!-- Node1724&#45;&gt;Node556 -->
+<!-- Node1719&#45;&gt;Node556 -->
 <g id="edge1001" class="edge">
-<title>Node1724&#45;&gt;Node556</title>
+<title>Node1719&#45;&gt;Node556</title>
 <path fill="none" stroke="midnightblue" d="M145.64,-15312.77C178.35,-15319.11 218.73,-15326.94 249.85,-15332.97"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="146.24,-15309.32 135.76,-15310.85 144.91,-15316.19 146.24,-15309.32"/>
 </g>
-<!-- Node1724&#45;&gt;Node585 -->
+<!-- Node1719&#45;&gt;Node585 -->
 <g id="edge1002" class="edge">
-<title>Node1724&#45;&gt;Node585</title>
+<title>Node1719&#45;&gt;Node585</title>
 <path fill="none" stroke="midnightblue" d="M145.55,-15310.02C155.11,-15312.82 164.62,-15316.55 173,-15321.5 193.59,-15333.67 188.28,-15349.55 209,-15361.5 215.78,-15365.41 223.26,-15368.52 230.93,-15370.99"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="146.17,-15306.56 135.61,-15307.42 144.39,-15313.34 146.17,-15306.56"/>
 </g>
-<!-- Node1724&#45;&gt;Node736 -->
+<!-- Node1719&#45;&gt;Node736 -->
 <g id="edge1003" class="edge">
-<title>Node1724&#45;&gt;Node736</title>
+<title>Node1719&#45;&gt;Node736</title>
 <path fill="none" stroke="midnightblue" d="M145.68,-15299.2C156.18,-15296.1 166,-15290.91 173,-15282.5 245.3,-15195.57 136.24,-14352.05 209,-14265.5 216.71,-14256.33 227.62,-14250.91 239.21,-14247.81"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="144.83,-15295.81 135.9,-15301.51 146.44,-15302.62 144.83,-15295.81"/>
 </g>
-<!-- Node1724&#45;&gt;Node798 -->
+<!-- Node1719&#45;&gt;Node798 -->
 <g id="edge1004" class="edge">
-<title>Node1724&#45;&gt;Node798</title>
+<title>Node1719&#45;&gt;Node798</title>
 <path fill="none" stroke="midnightblue" d="M145.66,-15307.59C155.53,-15310.63 165.11,-15315.07 173,-15321.5 202.59,-15345.63 179.15,-15375.69 209,-15399.5 214.74,-15404.08 221.33,-15407.63 228.27,-15410.37"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="146.32,-15304.14 135.76,-15304.98 144.54,-15310.91 146.32,-15304.14"/>
 </g>
-<!-- Node1724&#45;&gt;Node1057 -->
+<!-- Node1719&#45;&gt;Node1057 -->
 <g id="edge1005" class="edge">
-<title>Node1724&#45;&gt;Node1057</title>
+<title>Node1719&#45;&gt;Node1057</title>
 <path fill="none" stroke="midnightblue" d="M145.77,-15302.33C173.68,-15302.72 207.16,-15303.2 235.7,-15303.6"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="145.81,-15298.83 135.76,-15302.18 145.71,-15305.83 145.81,-15298.83"/>
 </g>
-<!-- Node1776 -->
+<!-- Node1771 -->
 <g id="node955" class="node">
-<title>Node1776</title>
+<title>Node1771</title>
 <g id="a_node955"><a xlink:href="class_ogre_1_1_string_interface.html" target="_top" xlink:title="Class defining the common interface which classes can use to present a reflection&#45;style,...">
 <polygon fill="none" stroke="black" points="33.5,-13437 33.5,-13456 139.5,-13456 139.5,-13437 33.5,-13437"/>
 <text text-anchor="middle" x="86.5" y="-13444" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::StringInterface</text>
 </a>
 </g>
 </g>
-<!-- Node1776&#45;&gt;Node451 -->
+<!-- Node1771&#45;&gt;Node451 -->
 <g id="edge1009" class="edge">
-<title>Node1776&#45;&gt;Node451</title>
+<title>Node1771&#45;&gt;Node451</title>
 <path fill="none" stroke="midnightblue" d="M91.67,-13466.16C105.99,-13534.56 153.31,-13768.63 173,-13964.5 178.44,-14018.65 173.35,-14902.37 209,-14943.5 262.84,-15005.62 332.44,-14918.8 391,-14976.5 450.05,-15034.68 368.86,-15100.42 427,-15159.5 436.53,-15169.18 449.7,-15174.51 462.99,-15177.3"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="95.08,-13465.38 89.6,-13456.31 88.23,-13466.82 95.08,-13465.38"/>
 </g>
-<!-- Node1776&#45;&gt;Node521 -->
+<!-- Node1771&#45;&gt;Node521 -->
 <g id="edge1008" class="edge">
-<title>Node1776&#45;&gt;Node521</title>
+<title>Node1771&#45;&gt;Node521</title>
 <path fill="none" stroke="midnightblue" d="M100.25,-13428.1C120.33,-13397.89 158.53,-13335.17 173,-13275.5 192.17,-13196.45 158.48,-10411.25 209,-10347.5 269.36,-10271.34 393.31,-10265.17 463.85,-10268.58"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="97.12,-13426.47 94.42,-13436.72 102.92,-13430.39 97.12,-13426.47"/>
 </g>
-<!-- Node1776&#45;&gt;Node529 -->
+<!-- Node1771&#45;&gt;Node529 -->
 <g id="edge1007" class="edge">
-<title>Node1776&#45;&gt;Node529</title>
+<title>Node1771&#45;&gt;Node529</title>
 <path fill="none" stroke="midnightblue" d="M99.25,-13428.35C118.24,-13398.04 155.32,-13334.61 173,-13275.5 212.11,-13144.73 168.69,-13100.91 209,-12970.5 229.5,-12904.17 275.29,-12833.22 292.39,-12808.03"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="96.18,-13426.66 93.77,-13436.98 102.09,-13430.41 96.18,-13426.66"/>
 </g>
-<!-- Node1776&#45;&gt;Node557 -->
+<!-- Node1771&#45;&gt;Node557 -->
 <g id="edge1010" class="edge">
-<title>Node1776&#45;&gt;Node557</title>
+<title>Node1771&#45;&gt;Node557</title>
 <path fill="none" stroke="midnightblue" d="M99.84,-13427.99C119.34,-13397.63 156.74,-13334.71 173,-13275.5 202.27,-13168.93 147.12,-12871.07 209,-12779.5 220.59,-12762.35 240.85,-12751.64 259.22,-12745.08"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="96.71,-13426.37 94.18,-13436.66 102.58,-13430.19 96.71,-13426.37"/>
 </g>
-<!-- Node1776&#45;&gt;Node702 -->
+<!-- Node1771&#45;&gt;Node702 -->
 <g id="edge1011" class="edge">
-<title>Node1776&#45;&gt;Node702</title>
+<title>Node1771&#45;&gt;Node702</title>
 <path fill="none" stroke="midnightblue" d="M149.67,-13446.5C184.79,-13446.5 227.69,-13446.5 258.48,-13446.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="149.51,-13443 139.51,-13446.5 149.51,-13450 149.51,-13443"/>
 </g>
-<!-- Node1776&#45;&gt;Node1048 -->
+<!-- Node1771&#45;&gt;Node1048 -->
 <g id="edge1012" class="edge">
-<title>Node1776&#45;&gt;Node1048</title>
+<title>Node1771&#45;&gt;Node1048</title>
 <path fill="none" stroke="midnightblue" d="M91.71,-13466.16C106.14,-13534.55 153.78,-13768.58 173,-13964.5 179.11,-14026.79 169.38,-15042.05 209,-15090.5 261.61,-15154.85 333.19,-15073.78 391,-15133.5 447.14,-15191.49 370.24,-15254.12 427,-15311.5 434.44,-15319.03 444.09,-15323.91 454.27,-15327.03"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="95.12,-13465.37 89.62,-13456.31 88.27,-13466.82 95.12,-13465.37"/>
 </g>
-<!-- Node1777 -->
+<!-- Node1772 -->
 <g id="node956" class="node">
-<title>Node1777</title>
+<title>Node1772</title>
 <g id="a_node956"><a xlink:href="class_ogre_1_1_external_texture_source.html" target="_top" xlink:title="IMPORTANT: Plugins must override default dictionary name! Base class that texture plugins derive from...">
 <polygon fill="none" stroke="black" points="230,-14573 230,-14592 370,-14592 370,-14573 230,-14573"/>
 <text text-anchor="middle" x="300" y="-14580" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::ExternalTextureSource</text>
 </a>
 </g>
 </g>
-<!-- Node1776&#45;&gt;Node1777 -->
+<!-- Node1771&#45;&gt;Node1772 -->
 <g id="edge1006" class="edge">
-<title>Node1776&#45;&gt;Node1777</title>
+<title>Node1771&#45;&gt;Node1772</title>
 <path fill="none" stroke="midnightblue" d="M91.51,-13466.18C105.28,-13534.64 151.04,-13768.87 173,-13964.5 180.44,-14030.76 165.47,-14513 209,-14563.5 214.63,-14570.03 221.89,-14574.65 229.84,-14577.88"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="94.93,-13465.43 89.51,-13456.32 88.06,-13466.82 94.93,-13465.43"/>
 </g>
-<!-- Node1794 -->
+<!-- Node1789 -->
 <g id="node957" class="node">
-<title>Node1794</title>
+<title>Node1789</title>
 <g id="a_node957"><a xlink:href="class_ogre_1_1_texture_gpu_listener.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="22.5,-13974 22.5,-13993 150.5,-13993 150.5,-13974 22.5,-13974"/>
 <text text-anchor="middle" x="86.5" y="-13981" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::TextureGpuListener</text>
 </a>
 </g>
 </g>
-<!-- Node1794&#45;&gt;Node225 -->
+<!-- Node1789&#45;&gt;Node225 -->
 <g id="edge1013" class="edge">
-<title>Node1794&#45;&gt;Node225</title>
+<title>Node1789&#45;&gt;Node225</title>
 <path fill="none" stroke="midnightblue" d="M91.09,-13963.93C100.82,-13916.72 132.33,-13796.11 209,-13736.5 216.82,-13730.42 226.13,-13726.17 235.75,-13723.23"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="87.64,-13963.31 89.16,-13973.79 94.51,-13964.65 87.64,-13963.31"/>
 </g>
-<!-- Node1794&#45;&gt;Node305 -->
+<!-- Node1789&#45;&gt;Node305 -->
 <g id="edge1014" class="edge">
-<title>Node1794&#45;&gt;Node305</title>
+<title>Node1789&#45;&gt;Node305</title>
 <path fill="none" stroke="midnightblue" d="M91.85,-13963.85C106.76,-13895.51 155.78,-13661.6 173,-13465.5 203.3,-13120.36 153.87,-10689.55 209,-10347.5 251.45,-10084.12 342.73,-10037.88 391,-9775.5 403.97,-9705.02 380.68,-9186.18 427,-9131.5 433.24,-9124.13 441.57,-9119.13 450.62,-9115.8"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="88.42,-13963.18 89.69,-13973.69 95.26,-13964.68 88.42,-13963.18"/>
 </g>
-<!-- Node1794&#45;&gt;Node406 -->
+<!-- Node1789&#45;&gt;Node406 -->
 <g id="edge1017" class="edge">
-<title>Node1794&#45;&gt;Node406</title>
+<title>Node1789&#45;&gt;Node406</title>
 <path fill="none" stroke="midnightblue" d="M98.74,-13965.15C117.65,-13935.93 158.75,-13879.23 209,-13850.5 218.43,-13845.11 229.2,-13841.24 239.93,-13838.47"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="95.58,-13963.6 93.19,-13973.92 101.49,-13967.34 95.58,-13963.6"/>
 </g>
-<!-- Node1794&#45;&gt;Node411 -->
+<!-- Node1789&#45;&gt;Node411 -->
 <g id="edge1019" class="edge">
-<title>Node1794&#45;&gt;Node411</title>
+<title>Node1789&#45;&gt;Node411</title>
 <path fill="none" stroke="midnightblue" d="M87.66,-14003.33C88.98,-14110.09 100.93,-14615.43 209,-14715.5 241.44,-14745.54 359.92,-14748.05 439.84,-14746.05"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="91.16,-14003.25 87.56,-13993.28 84.16,-14003.32 91.16,-14003.25"/>
 </g>
-<!-- Node1794&#45;&gt;Node438 -->
+<!-- Node1789&#45;&gt;Node438 -->
 <g id="edge1015" class="edge">
-<title>Node1794&#45;&gt;Node438</title>
+<title>Node1789&#45;&gt;Node438</title>
 <path fill="none" stroke="midnightblue" d="M88.59,-14003.49C96.05,-14137.4 141.38,-14900.98 209,-14976.5 264.44,-15038.42 333.19,-14959.78 391,-15019.5 447.14,-15077.49 370.24,-15140.12 427,-15197.5 441.56,-15212.21 464.52,-15216.84 483.48,-15217.86"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="92.06,-14002.92 88.02,-13993.12 85.07,-14003.3 92.06,-14002.92"/>
 </g>
-<!-- Node1794&#45;&gt;Node446 -->
+<!-- Node1789&#45;&gt;Node446 -->
 <g id="edge1018" class="edge">
-<title>Node1794&#45;&gt;Node446</title>
+<title>Node1789&#45;&gt;Node446</title>
 <path fill="none" stroke="midnightblue" d="M89.08,-14003.09C97.92,-14113.21 142.05,-14666.28 173,-15118.5 177.45,-15183.47 165.74,-15654.82 209,-15703.5 263.6,-15764.95 319.93,-15695.18 391,-15736.5 412.55,-15749.03 405.65,-15766.64 427,-15779.5 444.46,-15790.01 466.92,-15794.76 484.91,-15796.87"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="92.56,-14002.78 88.27,-13993.09 85.59,-14003.34 92.56,-14002.78"/>
 </g>
-<!-- Node1794&#45;&gt;Node704 -->
+<!-- Node1789&#45;&gt;Node704 -->
 <g id="edge1016" class="edge">
-<title>Node1794&#45;&gt;Node704</title>
+<title>Node1789&#45;&gt;Node704</title>
 <path fill="none" stroke="midnightblue" d="M160.89,-13980.25C256.4,-13976.01 418.98,-13968.8 485.88,-13965.84"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="160.56,-13976.76 150.73,-13980.7 160.87,-13983.75 160.56,-13976.76"/>
 </g>
-<!-- Node1794&#45;&gt;Node908 -->
+<!-- Node1789&#45;&gt;Node908 -->
 <g id="edge1020" class="edge">
-<title>Node1794&#45;&gt;Node908</title>
+<title>Node1789&#45;&gt;Node908</title>
 <path fill="none" stroke="midnightblue" d="M95.29,-13964.51C111.03,-13928.63 150.24,-13851.04 209,-13812.5 216.74,-13807.42 225.6,-13803.67 234.66,-13800.9"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="92.01,-13963.26 91.31,-13973.83 98.45,-13966.01 92.01,-13963.26"/>
 </g>
-<!-- Node1794&#45;&gt;Node914 -->
+<!-- Node1789&#45;&gt;Node914 -->
 <g id="edge1023" class="edge">
-<title>Node1794&#45;&gt;Node914</title>
+<title>Node1789&#45;&gt;Node914</title>
 <path fill="none" stroke="midnightblue" d="M92.96,-13963.86C105.7,-13921.87 141.57,-13823.27 209,-13774.5 218.58,-13767.57 230.14,-13763.07 241.73,-13760.15"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="89.54,-13963.1 90.09,-13973.68 96.25,-13965.06 89.54,-13963.1"/>
 </g>
-<!-- Node1794&#45;&gt;Node1342 -->
+<!-- Node1789&#45;&gt;Node1342 -->
 <g id="edge1024" class="edge">
-<title>Node1794&#45;&gt;Node1342</title>
+<title>Node1789&#45;&gt;Node1342</title>
 <path fill="none" stroke="midnightblue" d="M88.99,-14003.24C102.01,-14175.91 196.52,-15423.36 209,-15437.5 220.09,-15450.07 237.23,-15455.53 253.58,-15457.59"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="92.46,-14002.78 88.22,-13993.07 85.48,-14003.3 92.46,-14002.78"/>
 </g>
-<!-- Node1795 -->
+<!-- Node1790 -->
 <g id="node958" class="node">
-<title>Node1795</title>
+<title>Node1790</title>
 <g id="a_node958"><a xlink:href="class_ogre_1_1_texture_gpu_manager_listener.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="217.5,-14763 217.5,-14782 382.5,-14782 382.5,-14763 217.5,-14763"/>
 <text text-anchor="middle" x="300" y="-14770" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::TextureGpuManagerListener</text>
 </a>
 </g>
 </g>
-<!-- Node1794&#45;&gt;Node1795 -->
+<!-- Node1789&#45;&gt;Node1790 -->
 <g id="edge1021" class="edge">
-<title>Node1794&#45;&gt;Node1795</title>
+<title>Node1789&#45;&gt;Node1790</title>
 <path fill="none" stroke="midnightblue" d="M87.82,-14003.2C90,-14111.55 105.81,-14634.08 209,-14748.5 214.63,-14754.74 221.69,-14759.44 229.36,-14762.96"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="91.32,-14002.98 87.64,-13993.05 84.32,-14003.11 91.32,-14002.98"/>
 </g>
-<!-- Node1796 -->
+<!-- Node1791 -->
 <g id="node959" class="node">
-<title>Node1796</title>
+<title>Node1791</title>
 <g id="a_node959"><a xlink:href="class_ogre_1_1_default_texture_gpu_manager_listener.html" target="_top" xlink:title="This is a Default implementation of TextureGpuManagerListener based on heuristics.">
 <polygon fill="none" stroke="black" points="436.5,-14815.5 436.5,-14845.5 597.5,-14845.5 597.5,-14815.5 436.5,-14815.5"/>
 <text text-anchor="start" x="444.5" y="-14833.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::DefaultTextureGpuManager</text>
@@ -15041,51 +15041,51 @@
 </a>
 </g>
 </g>
-<!-- Node1795&#45;&gt;Node1796 -->
+<!-- Node1790&#45;&gt;Node1791 -->
 <g id="edge1022" class="edge">
-<title>Node1795&#45;&gt;Node1796</title>
+<title>Node1790&#45;&gt;Node1791</title>
 <path fill="none" stroke="midnightblue" d="M363.3,-14784.27C372.64,-14786.43 382.12,-14788.86 391,-14791.5 407.45,-14796.4 410.72,-14800.06 427,-14805.5 437.35,-14808.96 448.48,-14812.34 459.25,-14815.45"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="363.76,-14780.79 353.24,-14782.02 362.23,-14787.62 363.76,-14780.79"/>
 </g>
-<!-- Node1808 -->
+<!-- Node1803 -->
 <g id="node960" class="node">
-<title>Node1808</title>
+<title>Node1803</title>
 <g id="a_node960"><a xlink:href="class_ogre_1_1_uniform_scalable_task.html" target="_top" xlink:title="A uniform task is a highly parallelizable task that can be divided in many threads where all threads ...">
 <polygon fill="none" stroke="black" points="232,-5240 232,-5259 368,-5259 368,-5240 232,-5240"/>
 <text text-anchor="middle" x="300" y="-5247" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::UniformScalableTask</text>
 </a>
 </g>
 </g>
-<!-- Node1808&#45;&gt;Node361 -->
+<!-- Node1803&#45;&gt;Node361 -->
 <g id="edge1025" class="edge">
-<title>Node1808&#45;&gt;Node361</title>
+<title>Node1803&#45;&gt;Node361</title>
 <path fill="none" stroke="midnightblue" d="M378.36,-5252.02C404.4,-5252.87 433,-5253.8 457.35,-5254.59"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="378.25,-5248.51 368.14,-5251.69 378.02,-5255.51 378.25,-5248.51"/>
 </g>
-<!-- Node1813 -->
+<!-- Node1808 -->
 <g id="node961" class="node">
-<title>Node1813</title>
+<title>Node1808</title>
 <g id="a_node961"><a xlink:href="class_ogre_1_1v1_1_1_animation_container.html" target="_top" xlink:title="An animation container interface, which allows generic access to sibling animations.">
 <polygon fill="none" stroke="black" points="229,-13898 229,-13917 371,-13917 371,-13898 229,-13898"/>
 <text text-anchor="middle" x="300" y="-13905" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::AnimationContainer</text>
 </a>
 </g>
 </g>
-<!-- Node1813&#45;&gt;Node730 -->
+<!-- Node1808&#45;&gt;Node730 -->
 <g id="edge1026" class="edge">
-<title>Node1813&#45;&gt;Node730</title>
+<title>Node1808&#45;&gt;Node730</title>
 <path fill="none" stroke="midnightblue" d="M380.29,-13897.06C384.2,-13894.67 387.81,-13891.84 391,-13888.5 459.71,-13816.51 358.37,-13739.57 427,-13667.5 439.53,-13654.34 458.76,-13649.17 476.15,-13647.47"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="378.66,-13893.96 371.33,-13901.61 381.83,-13900.2 378.66,-13893.96"/>
 </g>
-<!-- Node1813&#45;&gt;Node732 -->
+<!-- Node1808&#45;&gt;Node732 -->
 <g id="edge1027" class="edge">
-<title>Node1813&#45;&gt;Node732</title>
+<title>Node1808&#45;&gt;Node732</title>
 <path fill="none" stroke="midnightblue" d="M380.29,-13897.42C384.23,-13894.94 387.85,-13892 391,-13888.5 494.75,-13773.28 323.38,-13656.84 427,-13541.5 437.66,-13529.63 453.77,-13524.17 469.36,-13521.91"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="378.5,-13894.4 371.22,-13902.1 381.71,-13900.62 378.5,-13894.4"/>
 </g>
-<!-- Node1820 -->
+<!-- Node1815 -->
 <g id="node962" class="node">
-<title>Node1820</title>
+<title>Node1815</title>
 <g id="a_node962"><a xlink:href="class_ogre_1_1v1_1_1_hardware_buffer_licensee.html" target="_top" xlink:title="Abstract interface representing a &#39;licensee&#39; of a hardware buffer copy.">
 <polygon fill="none" stroke="black" points="24,-0.5 24,-30.5 149,-30.5 149,-0.5 24,-0.5"/>
 <text text-anchor="start" x="32" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::v1::HardwareBuffer</text>
@@ -15093,15 +15093,15 @@
 </a>
 </g>
 </g>
-<!-- Node1820&#45;&gt;Node1070 -->
+<!-- Node1815&#45;&gt;Node1070 -->
 <g id="edge1028" class="edge">
-<title>Node1820&#45;&gt;Node1070</title>
+<title>Node1815&#45;&gt;Node1070</title>
 <path fill="none" stroke="midnightblue" d="M159.32,-17.54C178.91,-18.09 200.25,-18.7 220.21,-19.26"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="159.34,-14.04 149.24,-17.25 159.14,-21.03 159.34,-14.04"/>
 </g>
-<!-- Node1923 -->
+<!-- Node1918 -->
 <g id="node963" class="node">
-<title>Node1923</title>
+<title>Node1918</title>
 <g id="a_node963"><a xlink:href="class_ogre_1_1_work_queue_1_1_request_handler.html" target="_top" xlink:title="Interface definition for a handler of requests.">
 <polygon fill="none" stroke="black" points="19.5,-16099.5 19.5,-16129.5 153.5,-16129.5 153.5,-16099.5 19.5,-16099.5"/>
 <text text-anchor="start" x="27.5" y="-16117.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::WorkQueue::Request</text>
@@ -15109,75 +15109,75 @@
 </a>
 </g>
 </g>
-<!-- Node1923&#45;&gt;Node502 -->
+<!-- Node1918&#45;&gt;Node502 -->
 <g id="edge1030" class="edge">
-<title>Node1923&#45;&gt;Node502</title>
+<title>Node1918&#45;&gt;Node502</title>
 <path fill="none" stroke="midnightblue" d="M162.59,-16097.95C166.3,-16095.77 169.8,-16093.29 173,-16090.5 203.29,-16064.06 177.86,-16032.93 209,-16007.5 225.2,-15994.27 248.39,-15989.6 267.17,-15988.2"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="160.94,-16094.87 153.64,-16102.55 164.13,-16101.09 160.94,-16094.87"/>
 </g>
-<!-- Node1923&#45;&gt;Node518 -->
+<!-- Node1918&#45;&gt;Node518 -->
 <g id="edge1035" class="edge">
-<title>Node1923&#45;&gt;Node518</title>
+<title>Node1918&#45;&gt;Node518</title>
 <path fill="none" stroke="midnightblue" d="M163.75,-16128C178.71,-16130.2 194.31,-16132.19 209,-16133.5 286.66,-16140.43 375.78,-16141.72 437.93,-16141.56"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="163.93,-16124.49 153.52,-16126.45 162.88,-16131.41 163.93,-16124.49"/>
 </g>
-<!-- Node1923&#45;&gt;Node734 -->
+<!-- Node1918&#45;&gt;Node734 -->
 <g id="edge1031" class="edge">
-<title>Node1923&#45;&gt;Node734</title>
+<title>Node1918&#45;&gt;Node734</title>
 <path fill="none" stroke="midnightblue" d="M163.41,-16098.71C185.95,-16094.02 210.46,-16088.92 232.36,-16084.36"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="162.63,-16095.3 153.55,-16100.76 164.05,-16102.15 162.63,-16095.3"/>
 </g>
-<!-- Node1923&#45;&gt;Node879 -->
+<!-- Node1918&#45;&gt;Node879 -->
 <g id="edge1032" class="edge">
-<title>Node1923&#45;&gt;Node879</title>
+<title>Node1918&#45;&gt;Node879</title>
 <path fill="none" stroke="midnightblue" d="M148.55,-16133.75C157.3,-16138.09 165.77,-16143.3 173,-16149.5 196.59,-16169.76 183.68,-16191.45 209,-16209.5 224.87,-16220.81 246.05,-16225.65 263.88,-16227.63"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="149.91,-16130.52 139.37,-16129.53 146.99,-16136.88 149.91,-16130.52"/>
 </g>
-<!-- Node1923&#45;&gt;Node885 -->
+<!-- Node1918&#45;&gt;Node885 -->
 <g id="edge1033" class="edge">
-<title>Node1923&#45;&gt;Node885</title>
+<title>Node1918&#45;&gt;Node885</title>
 <path fill="none" stroke="midnightblue" d="M162.79,-16098.54C166.47,-16096.21 169.91,-16093.54 173,-16090.5 212.98,-16051.14 167.75,-16007.53 209,-15969.5 220.27,-15959.11 235.75,-15953.84 250.68,-15951.31"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="160.94,-16095.55 153.82,-16103.4 164.28,-16101.71 160.94,-16095.55"/>
 </g>
-<!-- Node1923&#45;&gt;Node888 -->
+<!-- Node1918&#45;&gt;Node888 -->
 <g id="edge1034" class="edge">
-<title>Node1923&#45;&gt;Node888</title>
+<title>Node1918&#45;&gt;Node888</title>
 <path fill="none" stroke="midnightblue" d="M163.07,-16096.18C166.52,-16094.45 169.85,-16092.56 173,-16090.5 194.14,-16076.67 187.48,-16059.75 209,-16046.5 217.45,-16041.3 227.09,-16037.44 236.84,-16034.59"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="161.41,-16093.09 153.73,-16100.38 164.29,-16099.47 161.41,-16093.09"/>
 </g>
-<!-- Node1924 -->
+<!-- Node1919 -->
 <g id="node964" class="node">
-<title>Node1924</title>
+<title>Node1919</title>
 <g id="a_node964"><a xlink:href="class_ogre_1_1_lod_work_queue_worker.html" target="_top" xlink:title="Processes requests.">
 <polygon fill="none" stroke="black" points="230,-16257 230,-16276 370,-16276 370,-16257 230,-16257"/>
 <text text-anchor="middle" x="300" y="-16264" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::LodWorkQueueWorker</text>
 </a>
 </g>
 </g>
-<!-- Node1923&#45;&gt;Node1924 -->
+<!-- Node1918&#45;&gt;Node1919 -->
 <g id="edge1029" class="edge">
-<title>Node1923&#45;&gt;Node1924</title>
+<title>Node1918&#45;&gt;Node1919</title>
 <path fill="none" stroke="#8b1a1a" d="M152.62,-16134.2C160.12,-16138.4 167.16,-16143.44 173,-16149.5 205.21,-16182.9 173.91,-16217.13 209,-16247.5 215.04,-16252.73 222.15,-16256.63 229.69,-16259.54"/>
 <polygon fill="#8b1a1a" stroke="#8b1a1a" points="154.15,-16131.06 143.65,-16129.66 150.99,-16137.3 154.15,-16131.06"/>
 </g>
-<!-- Node1925 -->
+<!-- Node1920 -->
 <g id="node965" class="node">
-<title>Node1925</title>
+<title>Node1920</title>
 <g id="a_node965"><a xlink:href="class_ogre_1_1_volume_1_1_chunk_handler.html" target="_top" xlink:title="Handles the WorkQueue management of the chunks.">
 <polygon fill="none" stroke="black" points="229.5,-16105 229.5,-16124 370.5,-16124 370.5,-16105 229.5,-16105"/>
 <text text-anchor="middle" x="300" y="-16112" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Volume::ChunkHandler</text>
 </a>
 </g>
 </g>
-<!-- Node1923&#45;&gt;Node1925 -->
+<!-- Node1918&#45;&gt;Node1920 -->
 <g id="edge1036" class="edge">
-<title>Node1923&#45;&gt;Node1925</title>
+<title>Node1918&#45;&gt;Node1920</title>
 <path fill="none" stroke="midnightblue" d="M163.61,-16114.5C185.09,-16114.5 208.35,-16114.5 229.43,-16114.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="163.55,-16111 153.55,-16114.5 163.55,-16118 163.55,-16111"/>
 </g>
-<!-- Node1926 -->
+<!-- Node1921 -->
 <g id="node966" class="node">
-<title>Node1926</title>
+<title>Node1921</title>
 <g id="a_node966"><a xlink:href="class_ogre_1_1_work_queue_1_1_response_handler.html" target="_top" xlink:title="Interface definition for a handler of responses.">
 <polygon fill="none" stroke="black" points="16,-15987.5 16,-16017.5 157,-16017.5 157,-15987.5 16,-15987.5"/>
 <text text-anchor="start" x="24" y="-16005.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::WorkQueue::Response</text>
@@ -15185,126 +15185,126 @@
 </a>
 </g>
 </g>
-<!-- Node1926&#45;&gt;Node502 -->
+<!-- Node1921&#45;&gt;Node502 -->
 <g id="edge1038" class="edge">
-<title>Node1926&#45;&gt;Node502</title>
+<title>Node1921&#45;&gt;Node502</title>
 <path fill="none" stroke="midnightblue" d="M167.22,-15997.22C202.03,-15994.92 240.86,-15992.35 267.29,-15990.6"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="166.79,-15993.74 157.05,-15997.9 167.26,-16000.73 166.79,-15993.74"/>
 </g>
-<!-- Node1926&#45;&gt;Node518 -->
+<!-- Node1921&#45;&gt;Node518 -->
 <g id="edge1043" class="edge">
-<title>Node1926&#45;&gt;Node518</title>
+<title>Node1921&#45;&gt;Node518</title>
 <path fill="none" stroke="midnightblue" d="M116.29,-15981.44C174.89,-15941.36 309.34,-15863.86 391,-15931.5 457.19,-15986.33 366.93,-16060.03 427,-16121.5 430.64,-16125.23 434.83,-16128.31 439.35,-16130.85"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="114.09,-15978.71 107.89,-15987.29 118.09,-15984.45 114.09,-15978.71"/>
 </g>
-<!-- Node1926&#45;&gt;Node734 -->
+<!-- Node1921&#45;&gt;Node734 -->
 <g id="edge1039" class="edge">
-<title>Node1926&#45;&gt;Node734</title>
+<title>Node1921&#45;&gt;Node734</title>
 <path fill="none" stroke="midnightblue" d="M137.19,-16020.96C159.09,-16028.87 185.21,-16037.99 209,-16045.5 219.83,-16048.91 231.46,-16052.33 242.65,-16055.49"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="138.36,-16017.66 127.76,-16017.54 135.97,-16024.24 138.36,-16017.66"/>
 </g>
-<!-- Node1926&#45;&gt;Node879 -->
+<!-- Node1921&#45;&gt;Node879 -->
 <g id="edge1040" class="edge">
-<title>Node1926&#45;&gt;Node879</title>
+<title>Node1921&#45;&gt;Node879</title>
 <path fill="none" stroke="midnightblue" d="M149.68,-16022.29C158.51,-16027.36 166.71,-16033.68 173,-16041.5 220.84,-16101.02 154.92,-16155.59 209,-16209.5 223.25,-16223.71 245.27,-16228.53 263.97,-16229.77"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="151.17,-16019.12 140.69,-16017.61 147.94,-16025.33 151.17,-16019.12"/>
 </g>
-<!-- Node1926&#45;&gt;Node885 -->
+<!-- Node1921&#45;&gt;Node885 -->
 <g id="edge1041" class="edge">
-<title>Node1926&#45;&gt;Node885</title>
+<title>Node1921&#45;&gt;Node885</title>
 <path fill="none" stroke="midnightblue" d="M149.95,-15984.8C168.86,-15979.64 189.73,-15974.15 209,-15969.5 222.66,-15966.21 237.57,-15962.93 251.24,-15960.05"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="148.98,-15981.44 140.26,-15987.47 150.83,-15988.19 148.98,-15981.44"/>
 </g>
-<!-- Node1926&#45;&gt;Node888 -->
+<!-- Node1921&#45;&gt;Node888 -->
 <g id="edge1042" class="edge">
-<title>Node1926&#45;&gt;Node888</title>
+<title>Node1921&#45;&gt;Node888</title>
 <path fill="none" stroke="midnightblue" d="M167.16,-16011.54C190.23,-16014.16 215.07,-16016.98 236.9,-16019.45"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="167.38,-16008.04 157.05,-16010.39 166.59,-16015 167.38,-16008.04"/>
 </g>
-<!-- Node1926&#45;&gt;Node1925 -->
+<!-- Node1921&#45;&gt;Node1920 -->
 <g id="edge1044" class="edge">
-<title>Node1926&#45;&gt;Node1925</title>
+<title>Node1921&#45;&gt;Node1920</title>
 <path fill="none" stroke="midnightblue" d="M142.01,-16021.86C152.95,-16027.21 163.88,-16033.73 173,-16041.5 194.96,-16060.2 185.12,-16079.32 209,-16095.5 215.21,-16099.71 222.18,-16103.01 229.41,-16105.6"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="143.4,-16018.65 132.85,-16017.64 140.47,-16025.01 143.4,-16018.65"/>
 </g>
-<!-- Node1927 -->
+<!-- Node1922 -->
 <g id="node967" class="node">
-<title>Node1927</title>
+<title>Node1922</title>
 <g id="a_node967"><a xlink:href="class_ogre_1_1_lod_work_queue_injector.html" target="_top" xlink:title="Injects the output of a request to the mesh in a thread safe way.">
 <polygon fill="none" stroke="black" points="229,-15865 229,-15884 371,-15884 371,-15865 229,-15865"/>
 <text text-anchor="middle" x="300" y="-15872" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::LodWorkQueueInjector</text>
 </a>
 </g>
 </g>
-<!-- Node1926&#45;&gt;Node1927 -->
+<!-- Node1921&#45;&gt;Node1922 -->
 <g id="edge1037" class="edge">
-<title>Node1926&#45;&gt;Node1927</title>
+<title>Node1921&#45;&gt;Node1922</title>
 <path fill="none" stroke="midnightblue" d="M107.88,-15979.86C130.4,-15956.2 168.82,-15919.64 209,-15898.5 220.88,-15892.25 234.52,-15887.53 247.52,-15884.01"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="105.15,-15977.66 100.88,-15987.35 110.26,-15982.44 105.15,-15977.66"/>
 </g>
-<!-- Node1928 -->
+<!-- Node1923 -->
 <g id="node968" class="node">
-<title>Node1928</title>
+<title>Node1923</title>
 <g id="a_node968"><a xlink:href="class_ogre_1_1_pool.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="20.5,-274 20.5,-293 152.5,-293 152.5,-274 20.5,-274"/>
 <text text-anchor="middle" x="86.5" y="-281" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Pool&lt; ResourcePtr &gt;</text>
 </a>
 </g>
 </g>
-<!-- Node1928&#45;&gt;Node758 -->
+<!-- Node1923&#45;&gt;Node758 -->
 <g id="edge1045" class="edge">
-<title>Node1928&#45;&gt;Node758</title>
+<title>Node1923&#45;&gt;Node758</title>
 <path fill="none" stroke="midnightblue" d="M162.91,-285.28C188.04,-285.88 215.67,-286.53 239.43,-287.09"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="162.76,-281.78 152.68,-285.04 162.6,-288.78 162.76,-281.78"/>
 </g>
-<!-- Node1929 -->
+<!-- Node1924 -->
 <g id="node969" class="node">
-<title>Node1929</title>
+<title>Node1924</title>
 <g id="a_node969"><a xlink:title=" ">
 <polygon fill="none" stroke="#bfbfbf" points="33,-15204 33,-15223 140,-15223 140,-15204 33,-15204"/>
 <text text-anchor="middle" x="86.5" y="-15211" font-family="Helvetica,sans-Serif" font-size="10.00">pp::Graphics3DClient</text>
 </a>
 </g>
 </g>
-<!-- Node1929&#45;&gt;Node1268 -->
+<!-- Node1924&#45;&gt;Node1268 -->
 <g id="edge1046" class="edge">
-<title>Node1929&#45;&gt;Node1268</title>
+<title>Node1924&#45;&gt;Node1268</title>
 <path fill="none" stroke="midnightblue" d="M143.34,-15225.36C153.29,-15227.82 163.5,-15230.56 173,-15233.5 189.4,-15238.58 192.55,-15242.6 209,-15247.5 221.09,-15251.1 234.29,-15254.29 246.76,-15256.98"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="144.06,-15221.94 133.52,-15223.01 142.43,-15228.74 144.06,-15221.94"/>
 </g>
-<!-- Node1997 -->
+<!-- Node1992 -->
 <g id="node970" class="node">
-<title>Node1997</title>
+<title>Node1992</title>
 <g id="a_node970"><a xlink:title=" ">
 <polygon fill="none" stroke="#bfbfbf" points="481.5,-12506 481.5,-12525 552.5,-12525 552.5,-12506 481.5,-12506"/>
 <text text-anchor="middle" x="517" y="-12513" font-family="Helvetica,sans-Serif" font-size="10.00">SigC::Object</text>
 </a>
 </g>
 </g>
-<!-- Node1997&#45;&gt;Node698 -->
+<!-- Node1992&#45;&gt;Node698 -->
 <g id="edge1047" class="edge">
-<title>Node1997&#45;&gt;Node698</title>
+<title>Node1992&#45;&gt;Node698</title>
 <path fill="none" stroke="midnightblue" d="M562.61,-12514.92C578.94,-12517.13 596.08,-12522.75 607,-12535.5 684.39,-12625.81 565.23,-12979.52 643,-13069.5 653.02,-13081.09 668.26,-13086.59 683.26,-13088.96"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="562.9,-12511.44 552.61,-12513.96 562.22,-12518.4 562.9,-12511.44"/>
 </g>
-<!-- Node1998 -->
+<!-- Node1993 -->
 <g id="node971" class="node">
-<title>Node1998</title>
+<title>Node1993</title>
 <g id="a_node971"><a xlink:title=" ">
 <polygon fill="none" stroke="#bfbfbf" points="39,-16371 39,-16390 134,-16390 134,-16371 39,-16371"/>
 <text text-anchor="middle" x="86.5" y="-16378" font-family="Helvetica,sans-Serif" font-size="10.00">SimpleRenderable</text>
 </a>
 </g>
 </g>
-<!-- Node1998&#45;&gt;Node1233 -->
+<!-- Node1993&#45;&gt;Node1233 -->
 <g id="edge1048" class="edge">
-<title>Node1998&#45;&gt;Node1233</title>
+<title>Node1993&#45;&gt;Node1233</title>
 <path fill="none" stroke="midnightblue" d="M144.21,-16380.5C176.01,-16380.5 215.41,-16380.5 246.49,-16380.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="144.18,-16377 134.18,-16380.5 144.18,-16384 144.18,-16377"/>
 </g>
-<!-- Node1999 -->
+<!-- Node1994 -->
 <g id="node972" class="node">
-<title>Node1999</title>
+<title>Node1994</title>
 <g id="a_node972"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="452.5,-3743.5 452.5,-3773.5 581.5,-3773.5 581.5,-3743.5 452.5,-3743.5"/>
 <text text-anchor="start" x="460.5" y="-3761.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Absolute</text>
@@ -15312,15 +15312,15 @@
 </a>
 </g>
 </g>
-<!-- Node1999&#45;&gt;Node428 -->
+<!-- Node1994&#45;&gt;Node428 -->
 <g id="edge1049" class="edge">
-<title>Node1999&#45;&gt;Node428</title>
+<title>Node1994&#45;&gt;Node428</title>
 <path fill="none" stroke="midnightblue" d="M591.78,-3750.88C616.77,-3748.3 644.41,-3745.44 668.44,-3742.96"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="591.21,-3747.42 581.62,-3751.93 591.93,-3754.38 591.21,-3747.42"/>
 </g>
-<!-- Node2000 -->
+<!-- Node1995 -->
 <g id="node973" class="node">
-<title>Node2000</title>
+<title>Node1995</title>
 <g id="a_node973"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="24.5,-13197.5 24.5,-13227.5 148.5,-13227.5 148.5,-13197.5 24.5,-13197.5"/>
 <text text-anchor="start" x="32.5" y="-13215.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Archive</text>
@@ -15328,15 +15328,15 @@
 </a>
 </g>
 </g>
-<!-- Node2000&#45;&gt;Node224 -->
+<!-- Node1995&#45;&gt;Node224 -->
 <g id="edge1050" class="edge">
-<title>Node2000&#45;&gt;Node224</title>
+<title>Node1995&#45;&gt;Node224</title>
 <path fill="none" stroke="midnightblue" d="M158.67,-13210.82C186.3,-13210.16 217.45,-13209.43 243.38,-13208.81"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="158.59,-13207.32 148.67,-13211.05 158.75,-13214.32 158.59,-13207.32"/>
 </g>
-<!-- Node2001 -->
+<!-- Node1996 -->
 <g id="node974" class="node">
-<title>Node2001</title>
+<title>Node1996</title>
 <g id="a_node974"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="225.5,-14362.5 225.5,-14392.5 374.5,-14392.5 374.5,-14362.5 225.5,-14362.5"/>
 <text text-anchor="start" x="233.5" y="-14380.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; BspResource</text>
@@ -15344,15 +15344,15 @@
 </a>
 </g>
 </g>
-<!-- Node2001&#45;&gt;Node737 -->
+<!-- Node1996&#45;&gt;Node737 -->
 <g id="edge1051" class="edge">
-<title>Node2001&#45;&gt;Node737</title>
+<title>Node1996&#45;&gt;Node737</title>
 <path fill="none" stroke="midnightblue" d="M383.93,-14358.04C386.37,-14356.63 388.74,-14355.12 391,-14353.5 414.45,-14336.7 403.14,-14315.7 427,-14299.5 433.27,-14295.24 440.32,-14291.91 447.64,-14289.31"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="382.09,-14355.05 374.77,-14362.72 385.27,-14361.29 382.09,-14355.05"/>
 </g>
-<!-- Node2002 -->
+<!-- Node1997 -->
 <g id="node975" class="node">
-<title>Node2002</title>
+<title>Node1997</title>
 <g id="a_node975"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="20.5,-13148.5 20.5,-13178.5 152.5,-13178.5 152.5,-13148.5 20.5,-13148.5"/>
 <text text-anchor="start" x="28.5" y="-13166.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Controller</text>
@@ -15360,15 +15360,15 @@
 </a>
 </g>
 </g>
-<!-- Node2002&#45;&gt;Node326 -->
+<!-- Node1997&#45;&gt;Node326 -->
 <g id="edge1052" class="edge">
-<title>Node2002&#45;&gt;Node326</title>
+<title>Node1997&#45;&gt;Node326</title>
 <path fill="none" stroke="midnightblue" d="M162.91,-13161.72C188.04,-13161.12 215.67,-13160.47 239.43,-13159.91"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="162.6,-13158.22 152.68,-13161.96 162.76,-13165.22 162.6,-13158.22"/>
 </g>
-<!-- Node2003 -->
+<!-- Node1998 -->
 <g id="node976" class="node">
-<title>Node2003</title>
+<title>Node1998</title>
 <g id="a_node976"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="12,-13099.5 12,-13129.5 161,-13129.5 161,-13099.5 12,-13099.5"/>
 <text text-anchor="start" x="20" y="-13117.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; D3D11Stereo</text>
@@ -15376,15 +15376,15 @@
 </a>
 </g>
 </g>
-<!-- Node2003&#45;&gt;Node329 -->
+<!-- Node1998&#45;&gt;Node329 -->
 <g id="edge1053" class="edge">
-<title>Node2003&#45;&gt;Node329</title>
+<title>Node1998&#45;&gt;Node329</title>
 <path fill="none" stroke="midnightblue" d="M171.22,-13114.5C188.45,-13114.5 206.51,-13114.5 223.44,-13114.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="171.18,-13111 161.18,-13114.5 171.18,-13118 171.18,-13111"/>
 </g>
-<!-- Node2004 -->
+<!-- Node1999 -->
 <g id="node977" class="node">
-<title>Node2004</title>
+<title>Node1999</title>
 <g id="a_node977"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="15,-13050.5 15,-13080.5 158,-13080.5 158,-13050.5 15,-13050.5"/>
 <text text-anchor="start" x="23" y="-13068.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; D3D9Stereo</text>
@@ -15392,15 +15392,15 @@
 </a>
 </g>
 </g>
-<!-- Node2004&#45;&gt;Node338 -->
+<!-- Node1999&#45;&gt;Node338 -->
 <g id="edge1054" class="edge">
-<title>Node2004&#45;&gt;Node338</title>
+<title>Node1999&#45;&gt;Node338</title>
 <path fill="none" stroke="midnightblue" d="M168.29,-13069.7C187.21,-13070.69 207.25,-13071.73 225.82,-13072.69"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="168.39,-13066.2 158.22,-13069.18 168.03,-13073.19 168.39,-13066.2"/>
 </g>
-<!-- Node2005 -->
+<!-- Node2000 -->
 <g id="node978" class="node">
-<title>Node2005</title>
+<title>Node2000</title>
 <g id="a_node978"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="452.5,-5660.5 452.5,-5690.5 581.5,-5690.5 581.5,-5660.5 452.5,-5660.5"/>
 <text text-anchor="start" x="460.5" y="-5678.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Distance</text>
@@ -15408,15 +15408,15 @@
 </a>
 </g>
 </g>
-<!-- Node2005&#45;&gt;Node425 -->
+<!-- Node2000&#45;&gt;Node425 -->
 <g id="edge1055" class="edge">
-<title>Node2005&#45;&gt;Node425</title>
+<title>Node2000&#45;&gt;Node425</title>
 <path fill="none" stroke="midnightblue" d="M590.98,-5664.13C597.01,-5660.85 602.51,-5656.71 607,-5651.5 652.42,-5598.8 631.6,-5409.13 643,-5340.5 669.47,-5181.15 717.19,-4989.82 728.53,-4945.15"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="589.44,-5660.99 581.81,-5668.34 592.36,-5667.35 589.44,-5660.99"/>
 </g>
-<!-- Node2006 -->
+<!-- Node2001 -->
 <g id="node979" class="node">
-<title>Node2006</title>
+<title>Node2001</title>
 <g id="a_node979"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="452.5,-4779.5 452.5,-4809.5 581.5,-4809.5 581.5,-4779.5 452.5,-4779.5"/>
 <text text-anchor="start" x="460.5" y="-4797.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Distance</text>
@@ -15424,30 +15424,30 @@
 </a>
 </g>
 </g>
-<!-- Node2006&#45;&gt;Node426 -->
+<!-- Node2001&#45;&gt;Node426 -->
 <g id="edge1056" class="edge">
-<title>Node2006&#45;&gt;Node426</title>
+<title>Node2001&#45;&gt;Node426</title>
 <path fill="none" stroke="midnightblue" d="M591.6,-4802.1C610.42,-4804.05 630.76,-4806.15 649.92,-4808.13"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="591.93,-4798.62 581.62,-4801.07 591.21,-4805.58 591.93,-4798.62"/>
 </g>
-<!-- Node2007 -->
+<!-- Node2002 -->
 <g id="node980" class="node">
-<title>Node2007</title>
+<title>Node2002</title>
 <g id="a_node980"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="3,-13012 3,-13031 170,-13031 170,-13012 3,-13012"/>
 <text text-anchor="middle" x="86.5" y="-13019" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; DynLibManager &gt;</text>
 </a>
 </g>
 </g>
-<!-- Node2007&#45;&gt;Node356 -->
+<!-- Node2002&#45;&gt;Node356 -->
 <g id="edge1057" class="edge">
-<title>Node2007&#45;&gt;Node356</title>
+<title>Node2002&#45;&gt;Node356</title>
 <path fill="none" stroke="midnightblue" d="M180.23,-13028.95C202.26,-13030.72 225.05,-13032.56 244.71,-13034.14"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="180.43,-13025.46 170.18,-13028.15 179.87,-13032.44 180.43,-13025.46"/>
 </g>
-<!-- Node2008 -->
+<!-- Node2003 -->
 <g id="node981" class="node">
-<title>Node2008</title>
+<title>Node2003</title>
 <g id="a_node981"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="24,-12962.5 24,-12992.5 149,-12992.5 149,-12962.5 24,-12962.5"/>
 <text text-anchor="start" x="32" y="-12980.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; External</text>
@@ -15455,15 +15455,15 @@
 </a>
 </g>
 </g>
-<!-- Node2008&#45;&gt;Node357 -->
+<!-- Node2003&#45;&gt;Node357 -->
 <g id="edge1058" class="edge">
-<title>Node2008&#45;&gt;Node357</title>
+<title>Node2003&#45;&gt;Node357</title>
 <path fill="none" stroke="midnightblue" d="M159.5,-12983.29C182.21,-12985.11 207.24,-12987.12 229.75,-12988.93"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="159.49,-12979.78 149.24,-12982.46 158.93,-12986.75 159.49,-12979.78"/>
 </g>
-<!-- Node2009 -->
+<!-- Node2004 -->
 <g id="node982" class="node">
-<title>Node2009</title>
+<title>Node2004</title>
 <g id="a_node982"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="16.5,-596.5 16.5,-626.5 156.5,-626.5 156.5,-596.5 16.5,-596.5"/>
 <text text-anchor="start" x="24.5" y="-614.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; FFPRender</text>
@@ -15471,30 +15471,30 @@
 </a>
 </g>
 </g>
-<!-- Node2009&#45;&gt;Node586 -->
+<!-- Node2004&#45;&gt;Node586 -->
 <g id="edge1059" class="edge">
-<title>Node2009&#45;&gt;Node586</title>
+<title>Node2004&#45;&gt;Node586</title>
 <path fill="none" stroke="midnightblue" d="M166.81,-607.75C187.57,-606.77 209.78,-605.72 229.95,-604.76"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="166.58,-604.26 156.75,-608.23 166.91,-611.25 166.58,-604.26"/>
 </g>
-<!-- Node2010 -->
+<!-- Node2005 -->
 <g id="node983" class="node">
-<title>Node2010</title>
+<title>Node2005</title>
 <g id="a_node983"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="222,-14199 222,-14218 378,-14218 378,-14199 222,-14199"/>
 <text text-anchor="middle" x="300" y="-14206" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; FontManager &gt;</text>
 </a>
 </g>
 </g>
-<!-- Node2010&#45;&gt;Node738 -->
+<!-- Node2005&#45;&gt;Node738 -->
 <g id="edge1060" class="edge">
-<title>Node2010&#45;&gt;Node738</title>
+<title>Node2005&#45;&gt;Node738</title>
 <path fill="none" stroke="midnightblue" d="M388.24,-14206.88C415.2,-14206.38 443.92,-14205.84 467.29,-14205.41"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="387.95,-14203.38 378.01,-14207.07 388.08,-14210.38 387.95,-14203.38"/>
 </g>
-<!-- Node2021 -->
+<!-- Node2016 -->
 <g id="node984" class="node">
-<title>Node2021</title>
+<title>Node2016</title>
 <g id="a_node984"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="227,-14485.5 227,-14515.5 373,-14515.5 373,-14485.5 227,-14485.5"/>
 <text text-anchor="start" x="235" y="-14503.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; GpuProgram</text>
@@ -15502,15 +15502,15 @@
 </a>
 </g>
 </g>
-<!-- Node2021&#45;&gt;Node739 -->
+<!-- Node2016&#45;&gt;Node739 -->
 <g id="edge1061" class="edge">
-<title>Node2021&#45;&gt;Node739</title>
+<title>Node2016&#45;&gt;Node739</title>
 <path fill="none" stroke="midnightblue" d="M380.93,-14517.64C396.22,-14520.91 412.1,-14524.31 427,-14527.5 441.37,-14530.57 457.04,-14533.92 471.18,-14536.94"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="381.49,-14514.18 370.98,-14515.51 380.02,-14521.02 381.49,-14514.18"/>
 </g>
-<!-- Node2023 -->
+<!-- Node2018 -->
 <g id="node985" class="node">
-<title>Node2023</title>
+<title>Node2018</title>
 <g id="a_node985"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="233.5,-5884.5 233.5,-5914.5 366.5,-5914.5 366.5,-5884.5 233.5,-5884.5"/>
 <text text-anchor="start" x="241.5" y="-5902.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Hardware</text>
@@ -15518,15 +15518,15 @@
 </a>
 </g>
 </g>
-<!-- Node2023&#45;&gt;Node1027 -->
+<!-- Node2018&#45;&gt;Node1027 -->
 <g id="edge1062" class="edge">
-<title>Node2023&#45;&gt;Node1027</title>
+<title>Node2018&#45;&gt;Node1027</title>
 <path fill="none" stroke="midnightblue" d="M376.66,-5909.35C402.1,-5912.67 430.17,-5916.32 454.4,-5919.48"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="377.04,-5905.87 366.68,-5908.05 376.14,-5912.82 377.04,-5905.87"/>
 </g>
-<!-- Node2024 -->
+<!-- Node2019 -->
 <g id="node986" class="node">
-<title>Node2024</title>
+<title>Node2019</title>
 <g id="a_node986"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="233.5,-7398.5 233.5,-7428.5 366.5,-7428.5 366.5,-7398.5 233.5,-7398.5"/>
 <text text-anchor="start" x="241.5" y="-7416.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Hardware</text>
@@ -15534,15 +15534,15 @@
 </a>
 </g>
 </g>
-<!-- Node2024&#45;&gt;Node641 -->
+<!-- Node2019&#45;&gt;Node641 -->
 <g id="edge1063" class="edge">
-<title>Node2024&#45;&gt;Node641</title>
+<title>Node2019&#45;&gt;Node641</title>
 <path fill="none" stroke="midnightblue" d="M375.67,-7425.31C381.54,-7428.74 386.81,-7433.06 391,-7438.5 480.62,-7554.76 336.94,-9964.58 427,-10080.5 433.09,-10088.34 441.45,-10093.78 450.62,-10097.54"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="377.21,-7422.17 366.7,-7420.91 374.13,-7428.45 377.21,-7422.17"/>
 </g>
-<!-- Node2025 -->
+<!-- Node2020 -->
 <g id="node987" class="node">
-<title>Node2025</title>
+<title>Node2020</title>
 <g id="a_node987"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="232.5,-14149.5 232.5,-14179.5 367.5,-14179.5 367.5,-14149.5 232.5,-14149.5"/>
 <text text-anchor="start" x="240.5" y="-14167.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; HighLevel</text>
@@ -15550,15 +15550,15 @@
 </a>
 </g>
 </g>
-<!-- Node2025&#45;&gt;Node746 -->
+<!-- Node2020&#45;&gt;Node746 -->
 <g id="edge1064" class="edge">
-<title>Node2025&#45;&gt;Node746</title>
+<title>Node2020&#45;&gt;Node746</title>
 <path fill="none" stroke="midnightblue" d="M377.7,-14163.07C400.11,-14162.66 424.47,-14162.2 446.41,-14161.79"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="377.49,-14159.58 367.55,-14163.26 377.62,-14166.58 377.49,-14159.58"/>
 </g>
-<!-- Node2026 -->
+<!-- Node2021 -->
 <g id="node988" class="node">
-<title>Node2026</title>
+<title>Node2021</title>
 <g id="a_node988"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="15,-810.5 15,-840.5 158,-840.5 158,-810.5 15,-810.5"/>
 <text text-anchor="start" x="23" y="-828.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; LodStrategy</text>
@@ -15566,15 +15566,15 @@
 </a>
 </g>
 </g>
-<!-- Node2026&#45;&gt;Node430 -->
+<!-- Node2021&#45;&gt;Node430 -->
 <g id="edge1065" class="edge">
-<title>Node2026&#45;&gt;Node430</title>
+<title>Node2021&#45;&gt;Node430</title>
 <path fill="none" stroke="midnightblue" d="M168.36,-814.8C189.97,-811.93 213.05,-808.88 233.7,-806.14"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="167.67,-811.36 158.22,-816.14 168.59,-818.29 167.67,-811.36"/>
 </g>
-<!-- Node2027 -->
+<!-- Node2022 -->
 <g id="node989" class="node">
-<title>Node2027</title>
+<title>Node2022</title>
 <g id="a_node989"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="21.5,-15859.5 21.5,-15889.5 151.5,-15889.5 151.5,-15859.5 21.5,-15859.5"/>
 <text text-anchor="start" x="29.5" y="-15877.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; LodWork</text>
@@ -15582,15 +15582,15 @@
 </a>
 </g>
 </g>
-<!-- Node2027&#45;&gt;Node1927 -->
+<!-- Node2022&#45;&gt;Node1922 -->
 <g id="edge1066" class="edge">
-<title>Node2027&#45;&gt;Node1927</title>
+<title>Node2022&#45;&gt;Node1922</title>
 <path fill="none" stroke="midnightblue" d="M161.74,-15874.5C183.56,-15874.5 207.36,-15874.5 228.92,-15874.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="161.53,-15871 151.53,-15874.5 161.53,-15878 161.53,-15871"/>
 </g>
-<!-- Node2028 -->
+<!-- Node2023 -->
 <g id="node990" class="node">
-<title>Node2028</title>
+<title>Node2023</title>
 <g id="a_node990"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="21.5,-16256.5 21.5,-16286.5 151.5,-16286.5 151.5,-16256.5 21.5,-16256.5"/>
 <text text-anchor="start" x="29.5" y="-16274.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; LodWork</text>
@@ -15598,30 +15598,30 @@
 </a>
 </g>
 </g>
-<!-- Node2028&#45;&gt;Node1924 -->
+<!-- Node2023&#45;&gt;Node1919 -->
 <g id="edge1067" class="edge">
-<title>Node2028&#45;&gt;Node1924</title>
+<title>Node2023&#45;&gt;Node1919</title>
 <path fill="none" stroke="midnightblue" d="M161.54,-16269.75C183.67,-16269.23 207.85,-16268.65 229.66,-16268.14"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="161.45,-16266.25 151.53,-16269.99 161.61,-16273.25 161.45,-16266.25"/>
 </g>
-<!-- Node2029 -->
+<!-- Node2024 -->
 <g id="node991" class="node">
-<title>Node2029</title>
+<title>Node2024</title>
 <g id="a_node991"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="10,-772 10,-791 163,-791 163,-772 10,-772"/>
 <text text-anchor="middle" x="86.5" y="-779" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; LogManager &gt;</text>
 </a>
 </g>
 </g>
-<!-- Node2029&#45;&gt;Node432 -->
+<!-- Node2024&#45;&gt;Node432 -->
 <g id="edge1068" class="edge">
-<title>Node2029&#45;&gt;Node432</title>
+<title>Node2024&#45;&gt;Node432</title>
 <path fill="none" stroke="midnightblue" d="M173.41,-772.56C200.14,-769.78 228.63,-766.82 251.71,-764.42"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="172.84,-769.1 163.26,-773.62 173.57,-776.07 172.84,-769.1"/>
 </g>
-<!-- Node2030 -->
+<!-- Node2025 -->
 <g id="node992" class="node">
-<title>Node2030</title>
+<title>Node2025</title>
 <g id="a_node992"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="237.5,-14061.5 237.5,-14091.5 362.5,-14091.5 362.5,-14061.5 237.5,-14061.5"/>
 <text text-anchor="start" x="245.5" y="-14079.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Material</text>
@@ -15629,36 +15629,36 @@
 </a>
 </g>
 </g>
-<!-- Node2030&#45;&gt;Node747 -->
+<!-- Node2025&#45;&gt;Node747 -->
 <g id="edge1069" class="edge">
-<title>Node2030&#45;&gt;Node747</title>
+<title>Node2025&#45;&gt;Node747</title>
 <path fill="none" stroke="midnightblue" d="M372.67,-14089.83C402.88,-14095.45 437.34,-14101.87 464.9,-14106.99"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="373.08,-14086.35 362.61,-14087.96 371.8,-14093.23 373.08,-14086.35"/>
 </g>
-<!-- Node2033 -->
+<!-- Node2028 -->
 <g id="node993" class="node">
-<title>Node2033</title>
+<title>Node2028</title>
 <g id="a_node993"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="219.5,-14611 219.5,-14630 380.5,-14630 380.5,-14611 219.5,-14611"/>
 <text text-anchor="middle" x="300" y="-14618" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; MeshManager &gt;</text>
 </a>
 </g>
 </g>
-<!-- Node2033&#45;&gt;Node748 -->
+<!-- Node2028&#45;&gt;Node748 -->
 <g id="edge1070" class="edge">
-<title>Node2033&#45;&gt;Node748</title>
+<title>Node2028&#45;&gt;Node748</title>
 <path fill="none" stroke="midnightblue" d="M362.48,-14631.94C394.85,-14637.96 434.09,-14645.26 464.8,-14650.97"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="362.7,-14628.42 352.22,-14630.03 361.42,-14635.3 362.7,-14628.42"/>
 </g>
-<!-- Node2033&#45;&gt;Node756 -->
+<!-- Node2028&#45;&gt;Node756 -->
 <g id="edge1071" class="edge">
-<title>Node2033&#45;&gt;Node756</title>
+<title>Node2028&#45;&gt;Node756</title>
 <path fill="none" stroke="midnightblue" d="M390.95,-14621.34C413.33,-14621.54 436.76,-14621.76 457.21,-14621.95"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="390.78,-14617.84 380.75,-14621.24 390.72,-14624.83 390.78,-14617.84"/>
 </g>
-<!-- Node2034 -->
+<!-- Node2029 -->
 <g id="node994" class="node">
-<title>Node2034</title>
+<title>Node2029</title>
 <g id="a_node994"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="228,-14012.5 228,-14042.5 372,-14042.5 372,-14012.5 228,-14012.5"/>
 <text text-anchor="start" x="236" y="-14030.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; OldSkeleton</text>
@@ -15666,15 +15666,15 @@
 </a>
 </g>
 </g>
-<!-- Node2034&#45;&gt;Node757 -->
+<!-- Node2029&#45;&gt;Node757 -->
 <g id="edge1072" class="edge">
-<title>Node2034&#45;&gt;Node757</title>
+<title>Node2029&#45;&gt;Node757</title>
 <path fill="none" stroke="midnightblue" d="M368.05,-14045.04C387.07,-14049.87 407.82,-14055.02 427,-14059.5 440.85,-14062.74 455.96,-14066.04 469.73,-14068.97"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="368.83,-14041.62 358.28,-14042.54 367.1,-14048.41 368.83,-14041.62"/>
 </g>
-<!-- Node2035 -->
+<!-- Node2030 -->
 <g id="node995" class="node">
-<title>Node2035</title>
+<title>Node2030</title>
 <g id="a_node995"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="24.5,-15242.5 24.5,-15272.5 148.5,-15272.5 148.5,-15242.5 24.5,-15242.5"/>
 <text text-anchor="start" x="32.5" y="-15260.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Overlay</text>
@@ -15682,15 +15682,15 @@
 </a>
 </g>
 </g>
-<!-- Node2035&#45;&gt;Node1057 -->
+<!-- Node2030&#45;&gt;Node1057 -->
 <g id="edge1073" class="edge">
-<title>Node2035&#45;&gt;Node1057</title>
+<title>Node2030&#45;&gt;Node1057</title>
 <path fill="none" stroke="midnightblue" d="M158.75,-15274.15C175.24,-15277.94 192.72,-15281.91 209,-15285.5 223.35,-15288.67 239,-15292.01 253.18,-15295"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="159.17,-15270.66 148.64,-15271.82 157.6,-15277.48 159.17,-15270.66"/>
 </g>
-<!-- Node2036 -->
+<!-- Node2031 -->
 <g id="node996" class="node">
-<title>Node2036</title>
+<title>Node2031</title>
 <g id="a_node996"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="24.5,-15330.5 24.5,-15360.5 148.5,-15360.5 148.5,-15330.5 24.5,-15330.5"/>
 <text text-anchor="start" x="32.5" y="-15348.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Particle</text>
@@ -15698,15 +15698,15 @@
 </a>
 </g>
 </g>
-<!-- Node2036&#45;&gt;Node556 -->
+<!-- Node2031&#45;&gt;Node556 -->
 <g id="edge1074" class="edge">
-<title>Node2036&#45;&gt;Node556</title>
+<title>Node2031&#45;&gt;Node556</title>
 <path fill="none" stroke="midnightblue" d="M158.88,-15344.49C180.75,-15344.18 204.82,-15343.84 226.75,-15343.52"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="158.62,-15340.99 148.67,-15344.63 158.72,-15347.99 158.62,-15340.99"/>
 </g>
-<!-- Node2037 -->
+<!-- Node2032 -->
 <g id="node997" class="node">
-<title>Node2037</title>
+<title>Node2032</title>
 <g id="a_node997"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="7.5,-722.5 7.5,-752.5 165.5,-752.5 165.5,-722.5 7.5,-722.5"/>
 <text text-anchor="start" x="15.5" y="-740.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; PCZoneFactory</text>
@@ -15714,30 +15714,30 @@
 </a>
 </g>
 </g>
-<!-- Node2037&#45;&gt;Node501 -->
+<!-- Node2032&#45;&gt;Node501 -->
 <g id="edge1075" class="edge">
-<title>Node2037&#45;&gt;Node501</title>
+<title>Node2032&#45;&gt;Node501</title>
 <path fill="none" stroke="midnightblue" d="M176.02,-730.8C192.81,-729.53 210.2,-728.22 226.42,-726.99"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="175.36,-727.34 165.65,-731.59 175.89,-734.32 175.36,-727.34"/>
 </g>
-<!-- Node2038 -->
+<!-- Node2033 -->
 <g id="node998" class="node">
-<title>Node2038</title>
+<title>Node2033</title>
 <g id="a_node998"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="22,-646 22,-665 151,-665 151,-646 22,-646"/>
 <text text-anchor="middle" x="86.5" y="-653" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Profiler &gt;</text>
 </a>
 </g>
 </g>
-<!-- Node2038&#45;&gt;Node577 -->
+<!-- Node2033&#45;&gt;Node577 -->
 <g id="edge1076" class="edge">
-<title>Node2038&#45;&gt;Node577</title>
+<title>Node2033&#45;&gt;Node577</title>
 <path fill="none" stroke="midnightblue" d="M161.39,-652.01C196.22,-650.36 236.12,-648.47 263.96,-647.16"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="161.07,-648.52 151.24,-652.49 161.4,-655.51 161.07,-648.52"/>
 </g>
-<!-- Node2039 -->
+<!-- Node2034 -->
 <g id="node999" class="node">
-<title>Node2039</title>
+<title>Node2034</title>
 <g id="a_node999"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="22.5,-547.5 22.5,-577.5 150.5,-577.5 150.5,-547.5 22.5,-547.5"/>
 <text text-anchor="start" x="30.5" y="-565.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Program</text>
@@ -15745,15 +15745,15 @@
 </a>
 </g>
 </g>
-<!-- Node2039&#45;&gt;Node598 -->
+<!-- Node2034&#45;&gt;Node598 -->
 <g id="edge1077" class="edge">
-<title>Node2039&#45;&gt;Node598</title>
+<title>Node2034&#45;&gt;Node598</title>
 <path fill="none" stroke="midnightblue" d="M160.72,-560.77C179.12,-560.33 198.96,-559.86 217.73,-559.42"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="160.58,-557.27 150.67,-561.01 160.75,-564.27 160.58,-557.27"/>
 </g>
-<!-- Node2040 -->
+<!-- Node2035 -->
 <g id="node1000" class="node">
-<title>Node2040</title>
+<title>Node2035</title>
 <g id="a_node1000"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="22.5,-498.5 22.5,-528.5 150.5,-528.5 150.5,-498.5 22.5,-498.5"/>
 <text text-anchor="start" x="30.5" y="-516.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Program</text>
@@ -15761,15 +15761,15 @@
 </a>
 </g>
 </g>
-<!-- Node2040&#45;&gt;Node615 -->
+<!-- Node2035&#45;&gt;Node615 -->
 <g id="edge1078" class="edge">
-<title>Node2040&#45;&gt;Node615</title>
+<title>Node2035&#45;&gt;Node615</title>
 <path fill="none" stroke="midnightblue" d="M160.83,-513.5C181.21,-513.5 203.37,-513.5 223.85,-513.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="160.67,-510 150.67,-513.5 160.67,-517 160.67,-510"/>
 </g>
-<!-- Node2041 -->
+<!-- Node2036 -->
 <g id="node1001" class="node">
-<title>Node2041</title>
+<title>Node2036</title>
 <g id="a_node1001"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="9,-15379.5 9,-15409.5 164,-15409.5 164,-15379.5 9,-15379.5"/>
 <text text-anchor="start" x="17" y="-15397.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Quake3Shader</text>
@@ -15777,15 +15777,15 @@
 </a>
 </g>
 </g>
-<!-- Node2041&#45;&gt;Node585 -->
+<!-- Node2036&#45;&gt;Node585 -->
 <g id="edge1079" class="edge">
-<title>Node2041&#45;&gt;Node585</title>
+<title>Node2036&#45;&gt;Node585</title>
 <path fill="none" stroke="midnightblue" d="M174.51,-15388.74C192.27,-15387.56 210.76,-15386.34 227.88,-15385.21"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="173.9,-15385.27 164.16,-15389.43 174.36,-15392.26 173.9,-15385.27"/>
 </g>
-<!-- Node2042 -->
+<!-- Node2037 -->
 <g id="node1002" class="node">
-<title>Node2042</title>
+<title>Node2037</title>
 <g id="a_node1002"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="9,-361.5 9,-391.5 164,-391.5 164,-361.5 9,-361.5"/>
 <text text-anchor="start" x="17" y="-379.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; RenderSystem</text>
@@ -15793,15 +15793,15 @@
 </a>
 </g>
 </g>
-<!-- Node2042&#45;&gt;Node664 -->
+<!-- Node2037&#45;&gt;Node664 -->
 <g id="edge1080" class="edge">
-<title>Node2042&#45;&gt;Node664</title>
+<title>Node2037&#45;&gt;Node664</title>
 <path fill="none" stroke="midnightblue" d="M174.4,-376.5C190.14,-376.5 206.46,-376.5 221.9,-376.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="174.16,-373 164.16,-376.5 174.16,-380 174.16,-373"/>
 </g>
-<!-- Node2043 -->
+<!-- Node2038 -->
 <g id="node1003" class="node">
-<title>Node2043</title>
+<title>Node2038</title>
 <g id="a_node1003"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="20.5,-16050.5 20.5,-16080.5 152.5,-16080.5 152.5,-16050.5 20.5,-16050.5"/>
 <text text-anchor="start" x="28.5" y="-16068.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Resource</text>
@@ -15809,15 +15809,15 @@
 </a>
 </g>
 </g>
-<!-- Node2043&#45;&gt;Node734 -->
+<!-- Node2038&#45;&gt;Node734 -->
 <g id="edge1081" class="edge">
-<title>Node2043&#45;&gt;Node734</title>
+<title>Node2038&#45;&gt;Node734</title>
 <path fill="none" stroke="midnightblue" d="M162.92,-16067.28C185.54,-16067.82 210.18,-16068.4 232.21,-16068.92"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="162.76,-16063.78 152.68,-16067.04 162.6,-16070.78 162.76,-16063.78"/>
 </g>
-<!-- Node2044 -->
+<!-- Node2039 -->
 <g id="node1004" class="node">
-<title>Node2044</title>
+<title>Node2039</title>
 <g id="a_node1004"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="20.5,-312.5 20.5,-342.5 152.5,-342.5 152.5,-312.5 20.5,-312.5"/>
 <text text-anchor="start" x="28.5" y="-330.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Resource</text>
@@ -15825,30 +15825,30 @@
 </a>
 </g>
 </g>
-<!-- Node2044&#45;&gt;Node735 -->
+<!-- Node2039&#45;&gt;Node735 -->
 <g id="edge1082" class="edge">
-<title>Node2044&#45;&gt;Node735</title>
+<title>Node2039&#45;&gt;Node735</title>
 <path fill="none" stroke="midnightblue" d="M162.68,-329.28C183.36,-329.77 205.75,-330.3 226.29,-330.78"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="162.76,-325.78 152.68,-329.04 162.6,-332.78 162.76,-325.78"/>
 </g>
-<!-- Node2045 -->
+<!-- Node2040 -->
 <g id="node1005" class="node">
-<title>Node2045</title>
+<title>Node2040</title>
 <g id="a_node1005"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="27,-236 27,-255 146,-255 146,-236 27,-236"/>
 <text text-anchor="middle" x="86.5" y="-243" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Root &gt;</text>
 </a>
 </g>
 </g>
-<!-- Node2045&#45;&gt;Node759 -->
+<!-- Node2040&#45;&gt;Node759 -->
 <g id="edge1083" class="edge">
-<title>Node2045&#45;&gt;Node759</title>
+<title>Node2040&#45;&gt;Node759</title>
 <path fill="none" stroke="midnightblue" d="M156.15,-245.18C194.24,-245 239.68,-244.78 268.91,-244.64"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="156.12,-241.68 146.13,-245.22 156.15,-248.68 156.12,-241.68"/>
 </g>
-<!-- Node2046 -->
+<!-- Node2041 -->
 <g id="node1006" class="node">
-<title>Node2046</title>
+<title>Node2041</title>
 <g id="a_node1006"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="8.5,-186.5 8.5,-216.5 164.5,-216.5 164.5,-186.5 8.5,-186.5"/>
 <text text-anchor="start" x="16.5" y="-204.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; SceneManager</text>
@@ -15856,15 +15856,15 @@
 </a>
 </g>
 </g>
-<!-- Node2046&#45;&gt;Node765 -->
+<!-- Node2041&#45;&gt;Node765 -->
 <g id="edge1084" class="edge">
-<title>Node2046&#45;&gt;Node765</title>
+<title>Node2041&#45;&gt;Node765</title>
 <path fill="none" stroke="midnightblue" d="M174.78,-202.33C190.19,-202.47 206.13,-202.62 221.25,-202.76"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="174.79,-198.83 164.75,-202.23 174.72,-205.83 174.79,-198.83"/>
 </g>
-<!-- Node2047 -->
+<!-- Node2042 -->
 <g id="node1007" class="node">
-<title>Node2047</title>
+<title>Node2042</title>
 <g id="a_node1007"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="445,-3225.5 445,-3255.5 589,-3255.5 589,-3225.5 445,-3225.5"/>
 <text text-anchor="start" x="453" y="-3243.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; ScreenRatio</text>
@@ -15872,15 +15872,15 @@
 </a>
 </g>
 </g>
-<!-- Node2047&#45;&gt;Node429 -->
+<!-- Node2042&#45;&gt;Node429 -->
 <g id="edge1085" class="edge">
-<title>Node2047&#45;&gt;Node429</title>
+<title>Node2042&#45;&gt;Node429</title>
 <path fill="none" stroke="midnightblue" d="M598.13,-3259.85C601.22,-3261.57 604.19,-3263.45 607,-3265.5 670.76,-3311.94 711.24,-3401.92 725.37,-3437.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="599.69,-3256.71 589.18,-3255.38 596.56,-3262.98 599.69,-3256.71"/>
 </g>
-<!-- Node2048 -->
+<!-- Node2043 -->
 <g id="node1008" class="node">
-<title>Node2048</title>
+<title>Node2043</title>
 <g id="a_node1008"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="9,-15428.5 9,-15458.5 164,-15458.5 164,-15428.5 9,-15428.5"/>
 <text text-anchor="start" x="17" y="-15446.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; ScriptCompiler</text>
@@ -15888,30 +15888,30 @@
 </a>
 </g>
 </g>
-<!-- Node2048&#45;&gt;Node798 -->
+<!-- Node2043&#45;&gt;Node798 -->
 <g id="edge1086" class="edge">
-<title>Node2048&#45;&gt;Node798</title>
+<title>Node2043&#45;&gt;Node798</title>
 <path fill="none" stroke="midnightblue" d="M174.32,-15433.24C192.26,-15431.12 210.95,-15428.91 228.23,-15426.86"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="173.68,-15429.79 164.16,-15434.44 174.5,-15436.74 173.68,-15429.79"/>
 </g>
-<!-- Node2049 -->
+<!-- Node2044 -->
 <g id="node1009" class="node">
-<title>Node2049</title>
+<title>Node2044</title>
 <g id="a_node1009"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="0,-411 0,-430 173,-430 173,-411 0,-411"/>
 <text text-anchor="middle" x="86.5" y="-418" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; ShaderGenerator &gt;</text>
 </a>
 </g>
 </g>
-<!-- Node2049&#45;&gt;Node619 -->
+<!-- Node2044&#45;&gt;Node619 -->
 <g id="edge1087" class="edge">
-<title>Node2049&#45;&gt;Node619</title>
+<title>Node2044&#45;&gt;Node619</title>
 <path fill="none" stroke="midnightblue" d="M183.33,-420.5C194.9,-420.5 206.62,-420.5 217.95,-420.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="183.22,-417 173.22,-420.5 183.22,-424 183.22,-417"/>
 </g>
-<!-- Node2050 -->
+<!-- Node2045 -->
 <g id="node1010" class="node">
-<title>Node2050</title>
+<title>Node2045</title>
 <g id="a_node1010"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="22,-137.5 22,-167.5 151,-167.5 151,-137.5 22,-137.5"/>
 <text text-anchor="start" x="30" y="-155.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Skeleton</text>
@@ -15919,15 +15919,15 @@
 </a>
 </g>
 </g>
-<!-- Node2050&#45;&gt;Node858 -->
+<!-- Node2045&#45;&gt;Node858 -->
 <g id="edge1088" class="edge">
-<title>Node2050&#45;&gt;Node858</title>
+<title>Node2045&#45;&gt;Node858</title>
 <path fill="none" stroke="midnightblue" d="M161.43,-155.3C187.44,-156.28 216.27,-157.37 240.79,-158.3"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="161.37,-151.79 151.24,-154.91 161.1,-158.79 161.37,-151.79"/>
 </g>
-<!-- Node2051 -->
+<!-- Node2046 -->
 <g id="node1011" class="node">
-<title>Node2051</title>
+<title>Node2046</title>
 <g id="a_node1011"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="26,-88.5 26,-118.5 147,-118.5 147,-88.5 26,-88.5"/>
 <text text-anchor="start" x="34" y="-106.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Terrain</text>
@@ -15935,15 +15935,15 @@
 </a>
 </g>
 </g>
-<!-- Node2051&#45;&gt;Node884 -->
+<!-- Node2046&#45;&gt;Node884 -->
 <g id="edge1089" class="edge">
-<title>Node2051&#45;&gt;Node884</title>
+<title>Node2046&#45;&gt;Node884</title>
 <path fill="none" stroke="midnightblue" d="M157.45,-106.48C181.69,-107.51 208.77,-108.66 232.7,-109.68"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="157.4,-102.97 147.26,-106.04 157.1,-109.97 157.4,-102.97"/>
 </g>
-<!-- Node2052 -->
+<!-- Node2047 -->
 <g id="node1012" class="node">
-<title>Node2052</title>
+<title>Node2047</title>
 <g id="a_node1012"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="238.5,-7349.5 238.5,-7379.5 361.5,-7379.5 361.5,-7349.5 238.5,-7349.5"/>
 <text text-anchor="start" x="246.5" y="-7367.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Texture</text>
@@ -15951,15 +15951,15 @@
 </a>
 </g>
 </g>
-<!-- Node2052&#45;&gt;Node646 -->
+<!-- Node2047&#45;&gt;Node646 -->
 <g id="edge1090" class="edge">
-<title>Node2052&#45;&gt;Node646</title>
+<title>Node2047&#45;&gt;Node646</title>
 <path fill="none" stroke="midnightblue" d="M371.04,-7373.85C378.77,-7377.6 385.73,-7382.67 391,-7389.5 480.59,-7505.71 337.58,-9914.16 427,-10030.5 431.6,-10036.48 437.51,-10041.11 444.09,-10044.68"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="372.26,-7370.56 361.68,-7370.03 369.62,-7377.05 372.26,-7370.56"/>
 </g>
-<!-- Node2053 -->
+<!-- Node2048 -->
 <g id="node1013" class="node">
-<title>Node2053</title>
+<title>Node2048</title>
 <g id="a_node1013"><a xlink:href="class_ogre_1_1_singleton.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="238.5,-14313.5 238.5,-14343.5 361.5,-14343.5 361.5,-14313.5 238.5,-14313.5"/>
 <text text-anchor="start" x="246.5" y="-14331.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::Singleton&lt; Texture</text>
@@ -15967,24 +15967,24 @@
 </a>
 </g>
 </g>
-<!-- Node2053&#45;&gt;Node749 -->
+<!-- Node2048&#45;&gt;Node749 -->
 <g id="edge1091" class="edge">
-<title>Node2053&#45;&gt;Node749</title>
+<title>Node2048&#45;&gt;Node749</title>
 <path fill="none" stroke="midnightblue" d="M371.23,-14313.47C378.16,-14310.68 384.89,-14307.39 391,-14303.5 411.74,-14290.3 405.87,-14274.06 427,-14261.5 437.19,-14255.45 449.04,-14251.31 460.72,-14248.48"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="369.87,-14310.24 361.69,-14316.96 372.28,-14316.81 369.87,-14310.24"/>
 </g>
-<!-- Node2099 -->
+<!-- Node2094 -->
 <g id="node1014" class="node">
-<title>Node2099</title>
+<title>Node2094</title>
 <g id="a_node1014"><a xlink:title=" ">
 <polygon fill="none" stroke="#bfbfbf" points="470.5,-14499 470.5,-14518 563.5,-14518 563.5,-14499 470.5,-14499"/>
 <text text-anchor="middle" x="517" y="-14506" font-family="Helvetica,sans-Serif" font-size="10.00">VertexDeclaration</text>
 </a>
 </g>
 </g>
-<!-- Node2099&#45;&gt;Node1198 -->
+<!-- Node2094&#45;&gt;Node1198 -->
 <g id="edge1092" class="edge">
-<title>Node2099&#45;&gt;Node1198</title>
+<title>Node2094&#45;&gt;Node1198</title>
 <path fill="none" stroke="midnightblue" d="M573.69,-14502.52C585.24,-14499.69 596.95,-14495.55 607,-14489.5 628.35,-14476.64 623.02,-14461.4 643,-14446.5 659.94,-14433.87 681.73,-14424.42 699.39,-14418.1"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="572.66,-14499.16 563.61,-14504.68 574.13,-14506 572.66,-14499.16"/>
 </g>

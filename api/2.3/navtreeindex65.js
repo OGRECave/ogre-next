@@ -1,6 +1,5 @@
 var NAVTREEINDEX65 =
 {
-"class_ogre_1_1_default_scene_manager.html#ac260d69fc30ba1f9f43b9ac5818f8fe5":[5,0,1,13,164],
 "class_ogre_1_1_default_scene_manager.html#ac260d69fc30ba1f9f43b9ac5818f8fe5":[5,2,12,13,164],
 "class_ogre_1_1_default_scene_manager.html#ac2c5d8b2de0d61c371d551f3650246d1":[5,0,1,13,179],
 "class_ogre_1_1_default_scene_manager.html#ac2c5d8b2de0d61c371d551f3650246d1":[5,2,12,13,179],
@@ -249,5 +248,6 @@ var NAVTREEINDEX65 =
 "class_ogre_1_1_default_sphere_scene_query.html#aec3aa0b8b16c41fae990ee78150f8d2a":[5,0,1,16,26],
 "class_ogre_1_1_default_sphere_scene_query.html#aec3aa0b8b16c41fae990ee78150f8d2a":[5,2,12,16,26],
 "class_ogre_1_1_default_sphere_scene_query.html#aed7b296e80ea3acebc493842727e8db3":[5,0,1,16,8],
-"class_ogre_1_1_default_sphere_scene_query.html#aed7b296e80ea3acebc493842727e8db3":[5,2,12,16,8]
+"class_ogre_1_1_default_sphere_scene_query.html#aed7b296e80ea3acebc493842727e8db3":[5,2,12,16,8],
+"class_ogre_1_1_default_sphere_scene_query.html#aee3c881aad0e146950d8fd5cf3791469":[5,0,1,16,2]
 };

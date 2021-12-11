@@ -1668,12 +1668,6 @@ var hierarchy =
     [ "Ogre::isPodLike< unsigned char >", "struct_ogre_1_1is_pod_like_3_01unsigned_01char_01_4.html", null ],
     [ "Ogre::isPodLike< unsigned long >", "struct_ogre_1_1is_pod_like_3_01unsigned_01long_01_4.html", null ],
     [ "Ogre::isPodLike< unsigned short >", "struct_ogre_1_1is_pod_like_3_01unsigned_01short_01_4.html", null ],
-    [ "Ogre::iterator_range< T >", "class_ogre_1_1iterator__range.html", [
-      [ "Ogre::ConstMapRange< T >", "struct_ogre_1_1_const_map_range.html", null ],
-      [ "Ogre::ConstVectorRange< T >", "struct_ogre_1_1_const_vector_range.html", null ],
-      [ "Ogre::MapRange< T >", "struct_ogre_1_1_map_range.html", null ],
-      [ "Ogre::VectorRange< T >", "struct_ogre_1_1_vector_range.html", null ]
-    ] ],
     [ "Ogre::IteratorWrapper< T, IteratorType, ValType >", "class_ogre_1_1_iterator_wrapper.html", [
       [ "Ogre::MapIteratorWrapper< T, T::iterator >", "class_ogre_1_1_map_iterator_wrapper.html", [
         [ "Ogre::MapIterator< T >", "class_ogre_1_1_map_iterator.html", null ]

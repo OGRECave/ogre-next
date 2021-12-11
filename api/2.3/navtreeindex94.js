@@ -1,6 +1,5 @@
 var NAVTREEINDEX94 =
 {
-"class_ogre_1_1_gpu_program_manager.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,11,38,62],
 "class_ogre_1_1_gpu_program_manager.html#abbb523a827bc6ea90d3b5ec80f0cf770":[5,2,11,38,87],
 "class_ogre_1_1_gpu_program_manager.html#abc20acc2d57fd224b218a07d802e8c1a":[5,2,11,38,40],
 "class_ogre_1_1_gpu_program_manager.html#abfb0022b18d022a7605f0d19a966f00f":[5,2,11,38,71],
@@ -249,5 +248,6 @@ var NAVTREEINDEX94 =
 "class_ogre_1_1_gpu_program_parameters.html#a707d1d61ad8afe4e43548c7a9d76a061":[5,2,5,8,110],
 "class_ogre_1_1_gpu_program_parameters.html#a73446046fdeb72e5ffc137b4b7407415":[5,2,5,8,147],
 "class_ogre_1_1_gpu_program_parameters.html#a761a3744ae68c7528811840d88fa5afe":[5,2,5,8,118],
-"class_ogre_1_1_gpu_program_parameters.html#a790f2419a84bb60b2eaf04fb10bba726":[5,2,5,8,96]
+"class_ogre_1_1_gpu_program_parameters.html#a790f2419a84bb60b2eaf04fb10bba726":[5,2,5,8,96],
+"class_ogre_1_1_gpu_program_parameters.html#a7caa3c97cdf876b9e220ac37f2119fef":[5,2,5,8,70]
 };

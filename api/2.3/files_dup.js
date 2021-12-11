@@ -1223,13 +1223,6 @@ var files_dup =
     ] ],
     [ "OgreIrradianceVolume.h", "_ogre_irradiance_volume_8h.html", null ],
     [ "OgreItem.h", "_ogre_item_8h.html", null ],
-    [ "OgreIteratorRange.h", "_ogre_iterator_range_8h.html", [
-      [ "ConstMapRange", "struct_ogre_1_1_const_map_range.html", "struct_ogre_1_1_const_map_range" ],
-      [ "ConstVectorRange", "struct_ogre_1_1_const_vector_range.html", "struct_ogre_1_1_const_vector_range" ],
-      [ "iterator_range", "class_ogre_1_1iterator__range.html", "class_ogre_1_1iterator__range" ],
-      [ "MapRange", "struct_ogre_1_1_map_range.html", "struct_ogre_1_1_map_range" ],
-      [ "VectorRange", "struct_ogre_1_1_vector_range.html", "struct_ogre_1_1_vector_range" ]
-    ] ],
     [ "OgreIteratorWrapper.h", "_ogre_iterator_wrapper_8h.html", [
       [ "ConstMapIterator", "class_ogre_1_1_const_map_iterator.html", "class_ogre_1_1_const_map_iterator" ],
       [ "ConstVectorIterator", "class_ogre_1_1_const_vector_iterator.html", "class_ogre_1_1_const_vector_iterator" ],
