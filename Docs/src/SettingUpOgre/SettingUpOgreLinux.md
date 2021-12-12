@@ -26,6 +26,8 @@ cd Ogre/Dependencies
 mkdir build
 cd build
 cmake ../
+# Optionally configure build to use distro packages freeimage, freetype, and zlib if installed
+# cmake -D OGREDEPS_BUILD_FREEIMAGE=0 -D OGREDEPS_BUILD_FREETYPE=0 -D OGREDEPS_BUILD_ZLIB=0 ../
 cd build
 make
 make install```
