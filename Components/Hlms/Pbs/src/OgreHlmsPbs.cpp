@@ -3344,9 +3344,10 @@ namespace Ogre
                 // According to this https://forums.ogre3d.org/viewtopic.php?f=25&t=95040#p545057
                 // "macOS uses an old OpenGL version which doesn't use baseVertex"
         #ifdef __APPLE__
-                size_t baseVertex = 0;
+                uint32 baseVertex = 0;
         #else
-                size_t baseVertex = vao->getBaseVertexBuffer()->_getFinalBufferStart();
+                uint32 baseVertex =
+                    static_cast<uint32>( vao->getBaseVertexBuffer()->_getFinalBufferStart() );
         #endif
                 memcpy( currentMappedTexBuffer, &baseVertex, sizeof( baseVertex ) );
                 size_t numVertices = vao->getBaseVertexBuffer()->getNumElements();
