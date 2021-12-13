@@ -31,12 +31,13 @@ THE SOFTWARE.
 #include "IrradianceField/OgreIfdProbeVisualizer.h"
 #include "IrradianceField/OgreIrradianceFieldRaster.h"
 #include "Vct/OgreVctLighting.h"
-#include "Vct/OgreVctVoxelizer.h"
+#include "Vct/OgreVctVoxelizerSourceBase.h"
 
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "OgreRoot.h"
 
+#include "OgreBitwise.h"
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
@@ -457,7 +458,7 @@ namespace Ogre
         mIfGenParams.numProbes_threadsPerRow.z = mSettings.mNumProbes[2];
         mIfGenParams.numProbes_threadsPerRow.w = 0u;
 
-        const VctVoxelizer *voxelizer = mVctLighting->getVoxelizer();
+        const VctVoxelizerSourceBase *voxelizer = mVctLighting->getVoxelizer();
         Matrix4 irrProbeToVctTransform;
         irrProbeToVctTransform.makeTransform(
             ( mFieldOrigin - voxelizer->getVoxelOrigin() ) / voxelizer->getVoxelSize(),

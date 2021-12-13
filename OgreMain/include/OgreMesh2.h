@@ -117,6 +117,8 @@ namespace Ogre {
         String          mLodStrategyName;
         LodValueArray   mLodValues;
 
+        uint64 mHashForCaches[2];
+
         VaoManager      *mVaoManager;
 
         BufferType mVertexBufferDefaultType;
@@ -359,6 +361,21 @@ namespace Ogre {
         /** Removes all LOD data from this Mesh. */
         void removeLodLevels(void);
 
+        /// Explicitly set a hash for caches. See Mesh::getHashForCaches
+        void _setHashForCaches( const uint64 hash[2] );
+
+        /// Returns an array of [2] containing a hash for use in caches.
+        /// A value of { 0, 0 } should be treated as not initialized.
+        ///
+        /// How this cache is calculated is unknown and could just be a filesystem timestamp
+        /// rather than a checksum.
+        ///
+        /// When callers see that:
+        ///     getCacheHash()[i] != savedHash[i]
+        ///
+        /// they should treat as if the mesh has changed and the cache entry became stale
+        const uint64 *getHashForCaches( void ) const { return mHashForCaches; }
+
         /** Sets the policy for the vertex buffers to be used when loading
             this Mesh.
         @remarks
@@ -458,6 +475,14 @@ namespace Ogre {
         /// @see Ogre::Mesh::msOptimizeForShadowMapping for the v2 version
         /// @see Ogre::v1::Mesh::msOptimizeForShadowMapping for the v1 version
         static bool msOptimizeForShadowMapping;
+
+        /// If a mesh file didn't save hash information (see Mesh::getHashForCaches)
+        /// and msUseTimestampAsHash == true; then we use the file last modified timestamp
+        /// as hash (it's better than nothing).
+        ///
+        /// By default this is disabled since it's often not needed and can't
+        /// hurt loading times with unnecessary disk access
+        static bool msUseTimestampAsHash;
 
         void prepareForShadowMapping( bool forceSameBuffers );
 

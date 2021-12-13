@@ -1,39 +1,40 @@
+#include "/media/matias/Datos/SyntaxHighlightingMisc.h"
 
 @property( vct_num_probes )
 
 @piece( DeclVctTextures )
 	@property( syntax == glsl || syntax == glslvk )
-		vulkan_layout( ogre_t@value(vctProbe) ) uniform texture3D vctProbe;
-		vulkan( layout( ogre_s@value(vctProbe) ) uniform sampler vctProbeSampler );
+		vulkan_layout( ogre_t@value(vctProbes) ) uniform texture3D vctProbes[@value( vct_num_probes )];
+		vulkan( layout( ogre_s@value(vctProbes) ) uniform sampler vctProbeSampler );
 		@property( vct_anisotropic )
-			vulkan_layout( ogre_t@value(vctProbeX) ) uniform texture3D vctProbeX;
-			vulkan_layout( ogre_t@value(vctProbeY) ) uniform texture3D vctProbeY;
-			vulkan_layout( ogre_t@value(vctProbeZ) ) uniform texture3D vctProbeZ;
+			vulkan_layout( ogre_t@value(vctProbeX) ) uniform texture3D vctProbeX[@value( vct_num_probes )];
+			vulkan_layout( ogre_t@value(vctProbeY) ) uniform texture3D vctProbeY[@value( vct_num_probes )];
+			vulkan_layout( ogre_t@value(vctProbeZ) ) uniform texture3D vctProbeZ[@value( vct_num_probes )];
 		@end
 	@end
 	@property( syntax == hlsl )
-		Texture3D vctProbe				: register(t@value(vctProbe));
-		SamplerState vctProbeSampler	: register(s@value(vctProbe));
+		Texture3D vctProbes[@value( vct_num_probes )]		: register(t@value(vctProbes));
+		SamplerState vctProbeSampler	: register(s@value(vctProbes));
 		@property( vct_anisotropic )
-			Texture3D vctProbeX				: register(t@value(vctProbeX));
-			Texture3D vctProbeY				: register(t@value(vctProbeY));
-			Texture3D vctProbeZ				: register(t@value(vctProbeZ));
+			Texture3D vctProbeX[@value( vct_num_probes )]	: register(t@value(vctProbeX));
+			Texture3D vctProbeY[@value( vct_num_probes )]	: register(t@value(vctProbeY));
+			Texture3D vctProbeZ[@value( vct_num_probes )]	: register(t@value(vctProbeZ));
 		@end
 	@end
 	@property( syntax == metal )
-		, texture3d<float> vctProbe		[[texture(@value(vctProbe))]]
-		, sampler vctProbeSampler		[[sampler(@value(vctProbe))]]
+		, array<texture3d<float> vctProbes, @value( vct_num_probes )>	[[texture(@value(vctProbes))]]
+		, sampler vctProbeSampler			[[sampler(@value(vctProbes))]]
 		@property( vct_anisotropic )
-			, texture3d<float> vctProbeX	[[texture(@value(vctProbeX))]]
-			, texture3d<float> vctProbeY	[[texture(@value(vctProbeY))]]
-			, texture3d<float> vctProbeZ	[[texture(@value(vctProbeZ))]]
+			, array<texture3d<float> vctProbeX, @value( vct_num_probes )>	[[texture(@value(vctProbeX))]]
+			, array<texture3d<float> vctProbeY, @value( vct_num_probes )>	[[texture(@value(vctProbeY))]]
+			, array<texture3d<float> vctProbeZ, @value( vct_num_probes )>	[[texture(@value(vctProbeZ))]]
 		@end
 	@end
 @end
 
 @piece( DeclVctFuncs )
 	@property( vct_anisotropic )
-		#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_Texture3D_float4 probeX, OGRE_Texture3D_float4 probeY, OGRE_Texture3D_float4 probeZ
+		#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_ArrayTex( OGRE_Texture3D_float4, probeX, @value( vct_num_probes ) ), OGRE_ArrayTex( OGRE_Texture3D_float4, probeY, @value( vct_num_probes ) ), OGRE_ArrayTex( OGRE_Texture3D_float4, probeZ, @value( vct_num_probes ) )
 		#define OGRE_VCT_ANISO_PROBE_ARG , probeX, probeY, probeZ
 		#define OGRE_VCT_ANISO_ROOT_PROBE_ARG , vctProbeX, vctProbeY, vctProbeZ
 	@else
@@ -41,6 +42,14 @@
 		#define OGRE_VCT_ANISO_PROBE_ARG
 		#define OGRE_VCT_ANISO_ROOT_PROBE_ARG
 	@end
+
+	struct VctResult
+	{
+		float3 colour;
+		float alpha;
+		float lodLevel;
+		float3 posLS;
+	};
 
 	/// Generates a TBN matrix when no tangent information is present using
 	/// DDX information.
@@ -59,34 +68,38 @@
 
 	@foreach( 2, n )
 		@property( @n == 0 )
-			INLINE float4 voxelConeTraceDiff
+			INLINE VctResult voxelConeTraceDiff
 		@else
-			INLINE float4 voxelConeTraceSpec
+			INLINE VctResult voxelConeTraceSpec
 		@end
 			( VctProbeParams probeParams, float3 posLS,
 			  float3 dirLS, float tanHalfAngle,
-		  @property( use_parallax_correct_cubemaps && @n == 1 )
-			  OGRE_OUT_REF( float3, vctSpecPosLS ),
-		  @end
-			  OGRE_Texture3D_float4 probe
+			  float startingLodLevel, float startingAlpha, int probeIdx,
+			  OGRE_Texture3D_float4 probes[@value( vct_num_probes )]
 			  OGRE_SAMPLER_ARG_DECL( probeSampler )
 			  OGRE_VCT_ANISO_PROBE_ARG_DECL )
 		{
-			float resolution = dot( abs( dirLS ), probeParams.vctResolution.xyz );
-			float vctInvResolution = 1.0f / resolution;
+			float vctInvResolution =
+				dot( abs( dirLS ), probeParams.vctInvResolution_cascadeMaxLod[probeIdx].xyz );
+			float resolution = 1.0f / vctInvResolution;
+			@property( @n == 0 )
+				float maxLod = probeParams.vctInvResolution_cascadeMaxLod[probeIdx].w;
+			@else
+				float maxLod = 11.0f; // 2048x2048x2048 is max possible res
+			@end
 
 			float dist = vctInvResolution;
-			float alpha = 0.0;
-			float4 color = float4( 0.0, 0.0, 0.0, 0.0 );
+			float alpha = startingAlpha;
+			float3 color = float3( 0.0, 0.0, 0.0 );
 
 			float diameter = max( vctInvResolution, 2.0 * tanHalfAngle * dist );
 
 			@property( @n == 0 )
 				@property( vct_cone_dirs == 6 )
-					float lodLevel	= 0.0;
+					float lodLevel	= startingLodLevel;
 					float lodStep	= 0.71;
 				@else
-					float lodLevel	= 1.0;
+					float lodLevel	= startingLodLevel;
 					float lodStep	= 1.0;
 				@end
 			@else
@@ -97,7 +110,7 @@
 				float skipLod = 1;
 			@end
 
-			float3 uwvPos = posLS;
+			float3 nextPosLS = posLS + dist * dirLS;
 
 			//The formula is:
 			//	threshold = 0.5f + vctInvResolution * exp2( lodLevel ) * 0.5;
@@ -105,42 +118,51 @@
 			//	threshold = 0.5f + invRes * exp2( log2( diameter * probeParams.vctResolution ) ) * 0.5;
 			//	threshold = 0.5f + invRes * diameter * probeParams.vctResolution * 0.5;
 			//	threshold = 0.5f + diameter * 0.5;
+			//
+			// Another way to look at it, is an AABB vs AABB test where A is
+			// a cube in [0; 1] and B is a cube centered in nextPosLS and halfSize = diameter * 0.5
 			float threshold = 0.5f + diameter * 0.5;
 
 			@property( !vct_anisotropic )
-				#define VCT_ANISOTROPIC_EARLY_OUT
+				#define VCT_ANISOTROPIC_EARLY_OUT && lodLevel < maxLod
 			@else
 				#define VCT_ANISOTROPIC_EARLY_OUT && lodLevel <= 0.5
 			@end
-			while( alpha < 0.95 &&
-					abs(uwvPos - 0.5).x < threshold &&
-					abs(uwvPos - 0.5).y < threshold &&
-					abs(uwvPos - 0.5).z < threshold VCT_ANISOTROPIC_EARLY_OUT )
+			while( alpha < 0.95 && // Abort once we've gathered enough light
+					abs( nextPosLS - 0.5f ).x <= threshold && // Out of bounds
+					abs( nextPosLS - 0.5f ).y <= threshold &&
+					abs( nextPosLS - 0.5f ).z <= threshold
+				   VCT_ANISOTROPIC_EARLY_OUT ) // Either another cascade will handle, or aniso will
 			{
-				uwvPos = posLS + dist * dirLS;
-				float4 scolor = OGRE_SampleLevel( probe, probeSampler, uwvPos, lodLevel );
-				float a = (1.0f - alpha);
-				color.xyz += scolor.xyz * a;
-				alpha += a * scolor.w;
+				// Saturate to avoid going further than [-1.5; 1.5] outside the voxel's box
+				// Btw for some reason it can really go very far outside box because
+				// threshold grows too much/too big; thus we keep a near infinite-loop
+				threshold = 0.5f + diameter * 0.5;
 
-				@property( @n == 1 && vct_enable_specular_sdf_quality )
-					//When roughness is close to 0.02, specular cone tracing becomes path tracing.
-					//This is very slow. However we can greatly speed it up by skipping gaps of empty
-					//voxels.
+				float4 sampleColour =
+					OGRE_SampleLevel( probes[probeIdx], probeSampler, nextPosLS, lodLevel );
+
+				@property( @n == 1 && vct_enable_specular_sdf_quality && vct_num_probes <= 1 )
+					// Advance forward using SDF-like formula:
 					//
-					//We use the alpha (opacity) component of the higher mips to approximate
-					//the SDF (Signed Distance Field) and thus know how much to skip. This is
-					//theoretically wrong, but not very wrong because the mips are very close to
-					//its true SDF representation thus in it works practice.
+					// When roughness is close to 0.02, specular cone tracing becomes path tracing.
+					// This is very slow. However we can greatly speed it up by skipping gaps of empty
+					// voxels.
 					//
-					//Some of these formulas have been empirically tuned to match a good
-					//performance/quality ratio
+					// We use the alpha (opacity) component of the higher mips to approximate
+					// the SDF (Signed Distance Field) and thus know how much to skip. This is
+					// theoretically wrong, but not very wrong because the mips are very close to
+					// its true SDF representation thus in it works practice.
 					//
-					//Once the roughness is higher, this formula starts hurting quality (produces
-					//noticeable artifacts) and thus we disable it.
+					// Some of these formulas have been empirically tuned to match a good
+					// performance/quality ratio
 					//
-					//This formula has tweakable parameters to leverage performance vs quality
-					float finalOpac = OGRE_SampleLevel( probe, probeSampler, uwvPos, skipLod ).w;
+					// Once the roughness is higher, this formula starts hurting quality (produces
+					// noticeable artifacts) and thus we disable it.
+					//
+					// This formula has tweakable parameters to leverage performance vs quality
+					float finalOpac =
+						OGRE_SampleLevel( probes[probeIdx], probeSampler, nextPosLS, skipLod ).w;
 					float skipFactor = exp2( max( 0.0f, skipLod * 0.5f - 1.0f ) ) * (1.0f - finalOpac) +
 									   finalOpac;
 					skipFactor = lerp( skipFactor, 1.0f,
@@ -149,18 +171,23 @@
 					skipLod = clamp( skipLod + (1.0f - finalOpac) * 2.0f - 1.0f,
 									 1.0f, probeParams.specSdfMaxMip );
 
-					dist += diameter * 0.5f * skipFactor;
+					dist += diameter * 0.5f * skipFactor;	// Advance forward
 				@else
-					dist += diameter * 0.5f;
-				@end
-				diameter = max( vctInvResolution, 2.0 * tanHalfAngle * dist );
-				@property( @n == 0 && vct_cone_dirs == 4 )
-					lodLevel += lodStep;
-				@else
-					lodLevel = log2( diameter * resolution );
+					dist += diameter * 0.5f;				// Advance forward
 				@end
 
-				threshold = 0.5f + diameter * 0.5;
+				float a = ( 1.0f - alpha );  // Calc. the % left of light we are able to gather
+
+				color += sampleColour.xyz * a;     // Accumulate colour
+				alpha += a * sampleColour.w;       // Accumulate opacity
+				nextPosLS = posLS + dist * dirLS;  // Advance forward
+				// Calculate next LOD & next fwd step
+				diameter = max( vctInvResolution, 2.0 * tanHalfAngle * dist );
+				@property( @n == 0 && vct_cone_dirs == 4 )
+					lodLevel += lodStep;			// Calculate next LOD
+				@else
+					lodLevel = log2( diameter * resolution ); // Calculate next LOD
+				@end
 			}
 
 			@property( vct_anisotropic )
@@ -171,50 +198,54 @@
 
 				float3 dirLSSquared = dirLS.xyz * dirLS.xyz;
 
-				while( alpha < 0.95 &&
-						abs(uwvPos - 0.5).x < threshold &&
-						abs(uwvPos - 0.5).y < threshold &&
-						abs(uwvPos - 0.5).z < threshold )
+				while( alpha < 0.95 && // Abort once we've gathered enough light
+					   lodLevel < maxLod && // Past maxLod, another cascade will handle this
+					   abs( nextPosLS.x - 0.5f ) <= threshold && // Out of bounds
+					   abs( nextPosLS.y - 0.5f ) <= threshold &&
+					   abs( nextPosLS.z - 0.5f ) <= threshold )
 				{
-					uwvPos = posLS + dist * dirLS;
-					float3 sampleUVW = uwvPos;
+					threshold = 0.5f + diameter * 0.5;
+
+					float3 sampleUVW = nextPosLS;
 					sampleUVW.x = saturate( sampleUVW.x ) * 0.5;
 
-					float4 xColor = OGRE_SampleLevel( probeX, probeSampler,
+					float4 xColor = OGRE_SampleLevel( probeX[probeIdx], probeSampler,
 													  sampleUVW + float3( isNegative.x, 0, 0 ),
 													  lodLevel );
-					float4 yColor = OGRE_SampleLevel( probeY, probeSampler,
+					float4 yColor = OGRE_SampleLevel( probeY[probeIdx], probeSampler,
 													  sampleUVW + float3( isNegative.y, 0, 0 ),
 													  lodLevel );
-					float4 zColor = OGRE_SampleLevel( probeZ, probeSampler,
+					float4 zColor = OGRE_SampleLevel( probeZ[probeIdx], probeSampler,
 													  sampleUVW + float3( isNegative.z, 0, 0 ),
 													  lodLevel );
 
-					float4 scolor = dirLSSquared.x * xColor +
-									dirLSSquared.y * yColor +
-									dirLSSquared.z * zColor;
-					float a = (1.0f - alpha);
-					color.xyz += scolor.xyz * a;
-					alpha += a * scolor.w;
-					dist += diameter * 0.5f;
+					float4 sampleColour = dirLSSquared.x * xColor +  //
+										  dirLSSquared.y * yColor +  //
+										  dirLSSquared.z * zColor;
+
+					float a = ( 1.0f - alpha );  // Calc. the % left of light we are able to gather
+
+					color += sampleColour.xyz * a;     // Accumulate colour
+					alpha += a * sampleColour.w;       // Accumulate opacity
+					dist += diameter * 0.5f;		   // Advance forward
+					nextPosLS = posLS + dist * dirLS;  // Advance forward
+					// Calculate next LOD & next fwd step
 					diameter = max( vctInvResolution, 2.0 * tanHalfAngle * dist );
 					@property( @n == 0 && vct_cone_dirs == 4 )
-						lodLevel += lodStep;
+						lodLevel += lodStep; // Calculate next LOD
 					@else
-						lodLevel = log2( diameter * resolution );
+						lodLevel = log2( diameter * resolution ); // Calculate next LOD
 					@end
-
-					threshold = 0.5f + diameter * 0.5;
 				}
 			@end
 
-			color.w = 1.0f - min( 1.0f, alpha / 0.95f );
+			VctResult result;
+			result.colour = color;
+			result.alpha = alpha;
+			result.lodLevel = lodLevel;
+			result.posLS = nextPosLS;
 
-		@property( use_parallax_correct_cubemaps && @n == 1 )
-			vctSpecPosLS = uwvPos;
-		@end
-
-			return color;
+			return result;
 		}
 	@end
 
@@ -246,6 +277,23 @@
 		return posVS;
 	}
 
+
+	@property( vct_num_probes > 1 )
+		/** Converts pos from Local Space of probeIdx - 1 into the Local Space of probeIdx
+		\param posLS
+			Position in local space of probeIdx - 1
+		\param probeIdx
+			Probe Index to convert to
+		\return
+			Position in local space of probeIdx
+		*/
+		INLINE float3 fromVctProbeToNext( float3 posLS, int probeIdx, VctProbeParams probeParams )
+		{
+			return posLS * probeParams.fromPreviousProbeToNext[probeIdx - 1][0].xyz +
+				   probeParams.fromPreviousProbeToNext[probeIdx - 1][1].xyz;
+		}
+	@end
+
 	#define M_PI 3.141592654f
 
 	INLINE void computeVctProbe
@@ -259,31 +307,26 @@
 		OGRE_INOUT_REF( float3, vctSpecPosVS ),
 	@end
 		VctProbeParams probeParams,
-		OGRE_Texture3D_float4 probe OGRE_SAMPLER_ARG_DECL( probeSampler )
+		OGRE_Texture3D_float4 probes[@value( vct_num_probes )]
+		OGRE_SAMPLER_ARG_DECL( probeSampler )
 		OGRE_VCT_ANISO_PROBE_ARG_DECL
 	)
 	{
 		float3 posLS = toVctProbeSpacePos( pos, probeParams );
 
-		if( posLS.x < 0.0 || posLS.x > 1.0 ||
-			posLS.y < 0.0 || posLS.y > 1.0 ||
-			posLS.z < 0.0 || posLS.z > 1.0 )
-		{
-			return;
-		}
-
-		//Bias away from current position in order to avoid self-occlusion (specular reflections
-		//won't work otherwise). When the geometry is facing diagonally to the axes, we want that
-		//bias to be stronger as aliasing can still cause oclussion (i.e. imagine the ray hitting
-		//the steps of a staircase).
+		// Bias away from current position in order to avoid self-occlusion (specular reflections
+		// won't work otherwise). When the geometry is facing diagonally to the axes, we want that
+		// bias to be stronger as aliasing can still cause oclussion (i.e. imagine the ray hitting
+		// the steps of a staircase).
 		float3 dirLS = toVctProbeSpaceDir( pixelData.geomNormal.xyz, probeParams );
 		float maxVal = max3( abs( dirLS.x ), abs( dirLS.y ), abs( dirLS.z ) ) + 1e-6f;
-		float vctInvResolution = 1.0f / dot( abs( dirLS ), probeParams.vctResolution.xyz );
+		float vctInvResolution = dot( abs( dirLS ), probeParams.vctInvResolution_cascadeMaxLod[0].xyz );
 		posLS += (dirLS / maxVal) * vctInvResolution * lerp( 15.0f, 1.0f, maxVal );
 
 		@property( vct_num_probes > 1 )
-			float3 blendv = abs( posLS * 2.0f - 1.0f );
-			float blend = saturate( 1.0f - max3( blendv.x, blendv.y, blendv.z ) );
+			/*float3 blendv = abs( posLS * 2.0f - 1.0f );
+			float blend = saturate( 1.0f - max3( blendv.x, blendv.y, blendv.z ) );*/
+			float blend = 1.0f;
 		@else
 			float blend = 1.0f;
 		@end
@@ -320,10 +363,39 @@
 			for( int i=0; i<@value( vct_cone_dirs ); ++i )
 			{
 				float3 dir = toVctProbeSpaceDir( mul( TBN, cone_dirs[i] ), probeParams );
-				light += coneWeights[i] * voxelConeTraceDiff( probeParams, posLS, dir,
-															  coneAngleTan,
-															  probe OGRE_SAMPLER_ARG( probeSampler )
-															  OGRE_VCT_ANISO_PROBE_ARG );
+
+				VctResult result = voxelConeTraceDiff(
+					probeParams, posLS, dir, coneAngleTan, 0.0f, 0.0f, 0,
+                    probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG );
+
+				@property( vct_num_probes > 1 )
+					for( int j = 1; j < @value( vct_num_probes ) && result.alpha < 0.95f; ++j )
+					{
+						float startBias =
+							dot( abs( dirLS ), probeParams.vctInvResolution_cascadeMaxLod[j].xyz );
+						float prevCascadeMaxLod = probeParams.vctInvResolution_cascadeMaxLod[j - 1].w;
+
+						float3 newPosLS =
+							fromVctProbeToNext( result.posLS, j, probeParams ) - dir * startBias;
+
+						VctResult newRes = voxelConeTraceDiff(
+							probeParams, newPosLS, dir, coneAngleTan,
+							max( result.lodLevel - prevCascadeMaxLod, 0.0f ), result.alpha, j,
+							probes OGRE_SAMPLER_ARG( probeSampler )
+								OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
+
+						// See VctCascadedVoxelizer::update comments on ( 1.0 - result.alpha )
+						result.colour += newRes.colour *
+										 probeParams.fromPreviousProbeToNext[j - 1][0].w *
+										 ( 1.0 - result.alpha );
+						result.alpha += newRes.alpha;
+						result.lodLevel = newRes.lodLevel;
+						result.posLS = newRes.posLS;
+					}
+				@end
+
+				light.xyz += coneWeights[i] * result.colour;
+				light.w += coneWeights[i] * ( 1.0f - min( 1.0f, result.alpha / 0.95f ) );
 			}
 			@property( vct_ambient_hemisphere )
 				//Add ambient light after all cones have been weighted
@@ -343,30 +415,61 @@
 
 		//Irradiance / specular
 		@property( !vct_disable_specular )
-			@property( use_parallax_correct_cubemaps )
-				float3 vctSpecPosLS;
-			@end
 			float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
 			// 1 / (1 - 0.02) = 1.020408163
-			float vctRoughness = (pixelData.roughness - 0.02) * 1.020408163f;
+			float vctRoughness = (pixelData.perceptualRoughness - 0.02f) * 1.020408163f;
 			float specConeAngleTan = max( 0.0f, tan( vctRoughness * 0.5f * M_PI * 0.99f ) );
-			float4 irrLight = voxelConeTraceSpec( probeParams, posLS, reflVecLS,
-												  specConeAngleTan,
-											  @property( use_parallax_correct_cubemaps )
-												  vctSpecPosLS,
-											  @end
-												  probe OGRE_SAMPLER_ARG( probeSampler )
-												  OGRE_VCT_ANISO_PROBE_ARG );
-			@property( vct_ambient_hemisphere )
-				irrLight.xyz += lerp( probeParams.ambientLowerHemi.xyz,
-									  probeParams.ambientUpperHemi.xyz, ambientWS ) * irrLight.w;
-			@else
-				irrLight.xyz += probeParams.ambientUpperHemi.xyz * irrLight.w;
+			VctResult irrLight = voxelConeTraceSpec( probeParams, posLS, reflVecLS,
+													 specConeAngleTan, 0.0f, 0.0f, 0,
+													 probes OGRE_SAMPLER_ARG( probeSampler )
+													 OGRE_VCT_ANISO_PROBE_ARG );
+
+
+			@property( vct_num_probes > 1 )
+				for( int j = 1; j < @value( vct_num_probes ) && irrLight.alpha < 0.95f; ++j )
+				{
+					float startBias =
+						dot( abs( reflVecLS ), probeParams.vctInvResolution_cascadeMaxLod[j].xyz );
+					float prevCascadeMaxLod = probeParams.vctInvResolution_cascadeMaxLod[j - 1].w;
+
+					float3 newPosLS =
+						fromVctProbeToNext( irrLight.posLS, j, probeParams ) - reflVecLS * startBias;
+
+					VctResult newRes = voxelConeTraceSpec(
+						probeParams, newPosLS, reflVecLS, specConeAngleTan,
+						max( irrLight.lodLevel - prevCascadeMaxLod, 0.0f ), irrLight.alpha, j,
+						probes OGRE_SAMPLER_ARG( probeSampler ) OGRE_VCT_ANISO_PROBE_ARG PARAMS_ARG );
+
+					float cascadeFinalMultiplier = probeParams.fromPreviousProbeToNext[j - 1][0].w;
+					float invNumLods3 = probeParams.fromPreviousProbeToNext[j - 1][1].w;
+
+					float strength =
+						lerp( 0.5f, cascadeFinalMultiplier, saturate( newRes.lodLevel * invNumLods3 ) );
+
+					// See VctCascadedVoxelizer::update comments on ( 1.0 - irrLight.alpha )
+					irrLight.colour += newRes.colour * strength * ( 1.0 - irrLight.alpha );
+					irrLight.alpha += newRes.alpha;
+					irrLight.lodLevel = newRes.lodLevel;
+					irrLight.posLS = newRes.posLS;
+				}
 			@end
-			outSpecular += float4( irrLight.xyz * blendWeight, blend );
+
+			float specAlpha = ( 1.0f - min( 1.0f, irrLight.alpha / 0.95f ) );
+
+			@property( vct_ambient_hemisphere )
+				irrLight.colour.xyz += lerp( probeParams.ambientLowerHemi.xyz,
+											 probeParams.ambientUpperHemi.xyz, ambientWS ) *
+									   specAlpha;
+			@else
+				irrLight.colour.xyz += probeParams.ambientUpperHemi.xyz * specAlpha;
+			@end
+
+			// 0.31831 = 1 / PI, but I'm not sure why is it even needed. It's clearly
+			// overbrightened when it's not there
+			outSpecular += float4( irrLight.colour.xyz * blendWeight * 0.31831f, blend );
 
 			@property( use_parallax_correct_cubemaps )
-				vctSpecPosVS = fromVctToViewSpace( vctSpecPosLS, probeParams );
+				vctSpecPosVS = fromVctToViewSpace( irrLight.posLS.xyz, probeParams );
 			@end
 		@else
 			outSpecular.w += blend;
@@ -433,21 +536,8 @@
 					 vctSpecPosVS,
 				@end
 					 passBuf.vctProbeParams,
-					 vctProbe OGRE_SAMPLER_ARG( vctProbeSampler )
+					 vctProbes OGRE_SAMPLER_ARG( vctProbeSampler )
 					 OGRE_VCT_ANISO_ROOT_PROBE_ARG );
-
-	@property( vct_num_probes > 1 )
-		//We've added multiple probes together that are overlapping. Average them
-		//based on their influnce (i.e. proximity to probe's center)
-		if( vctSpecular.w > 0 )
-		{
-			float accumProbeInfluenceBorderBlend = 1.0f / vctSpecular.w;
-			@property( !vct_disable_diffuse )
-				vctDiffuse.xyz *= accumProbeInfluenceBorderBlend;
-			@end
-			vctSpecular.xyz *= accumProbeInfluenceBorderBlend;
-		}
-	@end
 
 	@property( !vct_disable_diffuse )
 		pixelData.envColourD.xyz += vctDiffuse.xyz;

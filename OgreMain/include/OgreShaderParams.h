@@ -74,16 +74,26 @@ namespace Ogre
             /// Gets reinterpret_cast'ed based on elementType
             uint32      dataBytes[16];
         };
+        struct ManualParamEx
+        {
+            ElementType elementType;
+            /// Size in bytes from dataBytes
+            uint16 dataSizeBytes;
+            /// Pointer to externally owned memory. We won't free it.
+            void const *dataBytes;
+        };
         struct _OgreExport Param
         {
             String  name;
             bool    isAutomatic;
+            bool    isEx;
             bool    isDirty;
 
             union
             {
                 AutoParam ap;
                 ManualParam mp;
+                ManualParamEx mpEx;
             };
 
             template <typename T>
@@ -121,7 +131,7 @@ namespace Ogre
             template <typename T>
             void getManualValue( T &value ) const
             {
-                assert( !isAutomatic && sizeof(T) <= mp.dataSizeBytes );
+                assert( !isAutomatic && !isEx && sizeof(T) <= mp.dataSizeBytes );
                 memcpy( &value, mp.dataBytes, sizeof(T) );
             }
             /// See other overload.
@@ -135,6 +145,24 @@ namespace Ogre
                 getManualValue( retVal );
                 return retVal;
             }
+
+
+            template <typename T>
+            void setManualValueEx( const T *value, uint32 numValues, ElementType elementType );
+
+            /** Shortcut for setting an array with a custom pointer. We won't free it.
+                Caller is responsible for keeping the pointer alive while
+                this Params hold it.
+            @remarks
+                This version is meant to be used when setManualValue's limit of 16 values
+                is not enough for you.
+
+                Remember to call @see ShaderParams::setDirty otherwise
+                changes won't take effect.
+            */
+            void setManualValueEx( const float *value, uint32 numValues );
+            void setManualValueEx( const int32 *value, uint32 numValues );
+            void setManualValueEx( const uint32 *value, uint32 numValues );
         };
 
         typedef vector<Param>::type ParamVec;

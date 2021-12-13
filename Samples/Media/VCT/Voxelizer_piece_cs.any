@@ -449,7 +449,7 @@
 		}
 	}
 
-	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz + p_voxelPixelOrigin );
+	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz + ushort3( p_voxelPixelOrigin ) );
 
 	@property( syntax != hlsl || typed_uav_load )
 		float4 origAlbedo	= OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw );

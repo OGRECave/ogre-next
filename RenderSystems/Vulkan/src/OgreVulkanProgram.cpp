@@ -975,9 +975,16 @@ namespace Ogre
             if( blockVariable.type_description->type_flags & SPV_REFLECT_TYPE_FLAG_ARRAY )
             {
                 def.elementSize = blockVariable.array.stride / sizeof( float );
-                // I have no idea why blockVariable.array.dims_count != 1u
-                OGRE_ASSERT_LOW( blockVariable.array.dims_count == 1u );
-                def.arraySize = blockVariable.array.dims[0];
+                // When blockVariable.array.dims_count == 1 we're dealing with 1D array, e.g.:
+                //      uniform vec2 myArray[4];
+                // When blockVariable.array.dims_count == 2 we're dealing with 2D array, e.g.:
+                //      uniform vec2 myArray2[4][5];
+                // and so on. We'll treat it as a large 1D array e.g. myArray2[4*5]
+                OGRE_ASSERT_LOW( blockVariable.array.dims_count >= 1u );
+                size_t arraySize = blockVariable.array.dims[0];
+                for( size_t i = 1u; i < blockVariable.array.dims_count; ++i )
+                    arraySize *= blockVariable.array.dims[i];
+                def.arraySize = arraySize;
             }
             else
             {
@@ -1022,7 +1029,7 @@ namespace Ogre
             }
 
             String varName = blockVariable.name;
-            if( blockVariable.array.dims_count )
+            if( blockVariable.array.dims_count == 1u )
                 vp->mConstantDefs->generateConstantDefinitionArrayEntries( varName, def );
 
             mConstantDefs->map.insert( GpuConstantDefinitionMap::value_type( varName, def ) );

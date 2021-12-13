@@ -550,6 +550,28 @@ namespace Ogre
             poseRanges[DescBindingTypes::TexBuffer].end = static_cast<uint16>( poseBufReg + 1 );
         }
 
+        const int32 numVctProbes = getProperty( PbsProperty::VctNumProbes );
+
+        if( numVctProbes > 1 )
+        {
+            int32 vctProbeIdx = getProperty( "vctProbes" );
+
+            rootLayout.addArrayBinding( DescBindingTypes::Texture,
+                                        RootLayout::ArrayDesc( static_cast<uint16>( vctProbeIdx ),
+                                                               static_cast<uint16>( numVctProbes ) ) );
+            if( getProperty( PbsProperty::VctAnisotropic ) )
+            {
+                for( int32 i = 0; i < 3; ++i )
+                {
+                    vctProbeIdx += numVctProbes;
+                    rootLayout.addArrayBinding(
+                        DescBindingTypes::Texture,
+                        RootLayout::ArrayDesc( static_cast<uint16>( vctProbeIdx ),
+                                               static_cast<uint16>( numVctProbes ) ) );
+                }
+            }
+        }
+
         mListener->setupRootLayout( rootLayout, mSetProperties );
     }
     //-----------------------------------------------------------------------------------
@@ -1066,7 +1088,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsPbs::notifyPropertiesMergedPreGenerationStep(void)
     {
-        const bool hasVct = getProperty( PbsProperty::VctNumProbes ) > 0;
+        const int32 numVctProbes = getProperty( PbsProperty::VctNumProbes );
+        const bool hasVct = numVctProbes > 0;
         if( getProperty( HlmsBaseProp::DecalsNormals ) ||
             hasVct )
         {
@@ -1196,14 +1219,18 @@ namespace Ogre
         if( !casterPass && getProperty( PbsProperty::IrradianceVolumes ) )
             setTextureReg( PixelShader, "irradianceVolume", texUnit++ );
 
-        if( getProperty( PbsProperty::VctNumProbes ) > 0 )
+        if( numVctProbes > 0 )
         {
-            setTextureReg( PixelShader, "vctProbe", texUnit++ );
+            setTextureReg( PixelShader, "vctProbes", texUnit, numVctProbes );
+            texUnit += numVctProbes;
             if( getProperty( PbsProperty::VctAnisotropic ) )
             {
-                setTextureReg( PixelShader, "vctProbeX", texUnit++ );
-                setTextureReg( PixelShader, "vctProbeY", texUnit++ );
-                setTextureReg( PixelShader, "vctProbeZ", texUnit++ );
+                setTextureReg( PixelShader, "vctProbeX", texUnit, numVctProbes );
+                texUnit += numVctProbes;
+                setTextureReg( PixelShader, "vctProbeY", texUnit, numVctProbes );
+                texUnit += numVctProbes;
+                setTextureReg( PixelShader, "vctProbeZ", texUnit, numVctProbes );
+                texUnit += numVctProbes;
             }
         }
 
@@ -1393,13 +1420,18 @@ namespace Ogre
 #endif
         if( mVctLighting )
         {
-            TextureGpu **lightVoxelTexs = mVctLighting->getLightVoxelTextures();
+            const size_t numCascades = mVctLighting->getNumCascades();
             const size_t numVctTextures = mVctLighting->getNumVoxelTextures();
-            for( size_t i = 0; i < numVctTextures; ++i )
+
+            for( size_t cascadeIdx = 0; cascadeIdx < numCascades; ++cascadeIdx )
             {
-                barrierSolver.resolveTransition( resourceTransitions, lightVoxelTexs[i],
-                                                 ResourceLayout::Texture, ResourceAccess::Read,
-                                                 1u << PixelShader );
+                TextureGpu **lightVoxelTexs = mVctLighting->getLightVoxelTextures( cascadeIdx );
+                for( size_t i = 0; i < numVctTextures; ++i )
+                {
+                    barrierSolver.resolveTransition( resourceTransitions, lightVoxelTexs[i],
+                                                     ResourceLayout::Texture, ResourceAccess::Read,
+                                                     1u << PixelShader );
+                }
             }
         }
 
@@ -1597,7 +1629,8 @@ namespace Ogre
 
             if( mVctLighting )
             {
-                setProperty( PbsProperty::VctNumProbes, 1 );
+                setProperty( PbsProperty::VctNumProbes,
+                             static_cast<int32>( mVctLighting->getNumCascades() ) );
                 setProperty( PbsProperty::VctConeDirs, mVctFullConeCount ? 6 : 4 );
                 setProperty( PbsProperty::VctAnisotropic, mVctLighting->isAnisotropic() );
                 setProperty( PbsProperty::VctEnableSpecularSdfQuality,
@@ -2808,7 +2841,10 @@ namespace Ogre
             if( mIrradianceVolume )
                 mTexUnitSlotStart += 1;
             if( mVctLighting )
-                mTexUnitSlotStart += mVctLighting->getNumVoxelTextures();
+            {
+                mTexUnitSlotStart +=
+                    mVctLighting->getNumVoxelTextures() * mVctLighting->getNumCascades();
+            }
             if( mIrradianceField )
                 mTexUnitSlotStart += 2u;
             if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
@@ -2999,15 +3035,20 @@ namespace Ogre
 
                 if( mVctLighting )
                 {
-                    TextureGpu **lightVoxelTexs = mVctLighting->getLightVoxelTextures();
+                    const size_t numCascades = mVctLighting->getNumCascades();
                     const size_t numVctTextures = mVctLighting->getNumVoxelTextures();
                     const HlmsSamplerblock *samplerblock =
                             mVctLighting->getBindTrilinearSamplerblock();
                     for( size_t i=0; i<numVctTextures; ++i )
                     {
-                        *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, lightVoxelTexs[i],
-                                                                             samplerblock );
-                        ++texUnit;
+                        for( size_t cascadeIdx = 0; cascadeIdx < numCascades; ++cascadeIdx )
+                        {
+                            TextureGpu **lightVoxelTexs =
+                                mVctLighting->getLightVoxelTextures( cascadeIdx );
+                            *commandBuffer->addCommand<CbTexture>() =
+                                CbTexture( texUnit, lightVoxelTexs[i], samplerblock );
+                            ++texUnit;
+                        }
                     }
                 }
 

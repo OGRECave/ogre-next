@@ -163,10 +163,15 @@ namespace Ogre
 
         struct TextureRegs
         {
-            uint32  strNameIdxStart;
-            int32   texUnit;
-            TextureRegs( uint32 _strNameIdxStart, int32 _texUnit ) :
-                strNameIdxStart( _strNameIdxStart ), texUnit( _texUnit ) {}
+            uint32 strNameIdxStart;
+            int32 texUnit;
+            int32 numTexUnits;
+            TextureRegs( uint32 _strNameIdxStart, int32 _texUnit, int32 _numTexUnits ) :
+                strNameIdxStart( _strNameIdxStart ),
+                texUnit( _texUnit ),
+                numTexUnits( _numTexUnits )
+            {
+            }
         };
         typedef vector<char>::type TextureNameStrings;
         typedef vector<TextureRegs>::type TextureRegsVec;
@@ -435,7 +440,8 @@ namespace Ogre
         /// so that the template can use it (e.g. D3D11, Metal).
         ///
         /// In OpenGL, applyTextureRegisters will later be called so the params are set
-        void setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit );
+        void setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit,
+                            int32 numTexUnits = 1u );
 
         /// See Hlms::setTextureReg
         ///

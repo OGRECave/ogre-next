@@ -106,6 +106,7 @@ namespace Ogre {
 
         // Internal methods
         virtual void writeSubMeshNameTable(const Mesh* pMesh);
+        virtual void writeMeshHashForCaches(const Mesh* pMesh);
         virtual void writeMesh(const Mesh* pMesh);
         virtual void writeSubMesh( const SubMesh* s, const LodLevelVertexBufferTable &lodVertexTable );
         virtual void writeSubMeshLod( const VertexArrayObject *vao, uint8 lodLevel, uint8 lodSource );
@@ -131,6 +132,7 @@ namespace Ogre {
         virtual size_t calcSubMeshLodSize( const VertexArrayObject *vao, bool skipVertexBuffer );
         virtual size_t calcGeometrySize(const VertexBufferPackedVec &vertexData );
         virtual size_t calcVertexDeclSize(const VertexBufferPackedVec &vertexData);
+        size_t calcHashForCachesSize( void );
         virtual size_t calcSkeletonLinkSize(const String& skelName);
         virtual size_t calcSubMeshLodOperationSize(const VertexArrayObject *vao);
         virtual size_t calcSubMeshNameTableSize(const Mesh* pMesh);
@@ -151,6 +153,7 @@ namespace Ogre {
 
         virtual void readTextureLayer(DataStreamPtr& stream, Mesh* pMesh, MaterialPtr& pMat);
         virtual void readSubMeshNameTable(DataStreamPtr& stream, Mesh* pMesh);
+        virtual void readHashForCaches(DataStreamPtr& stream, Mesh* pMesh);
         virtual void readMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener);
         virtual void readSubMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener, uint8 numVaoPasses);
         virtual void readSubMeshLod( DataStreamPtr& stream, Mesh *pMesh,
@@ -197,6 +200,17 @@ namespace Ogre {
         /// This function can be overloaded to disable validation in debug builds.
         virtual void enableValidation();
 
+        /// Appends the given data to mCalculatedHash
+        void addToHash( const void *data, size_t sizeBytes );
+
+        template<typename T> void addToHash( T value )
+        {
+            OGRE_ALIGNED_DECL( T, alignedValue, 8 );
+            alignedValue = value;
+            addToHash( reinterpret_cast<const void *>( &alignedValue ), sizeof( T ) );
+        }
+
+        uint64 mCalculatedHash[2]; // Calculated when exporting
         ushort exportedLodCount; // Needed to limit exported Edge data, when exporting
         VaoManager *mVaoManager;
     };

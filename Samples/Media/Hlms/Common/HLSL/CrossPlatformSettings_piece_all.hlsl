@@ -95,6 +95,8 @@
 
 #define OGRE_Texture3D_float4 Texture3D
 
+#define OGRE_ArrayTex( declType, varName, arrayCount ) declType varName[arrayCount]
+
 #define OGRE_SAMPLER_ARG_DECL( samplerName ) , SamplerState samplerName
 #define OGRE_SAMPLER_ARG( samplerName ) , samplerName
 

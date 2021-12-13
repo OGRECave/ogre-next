@@ -29,16 +29,17 @@ THE SOFTWARE.
 #define _OgreVctLighting_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
+
 #include "OgreId.h"
-#include "OgreShaderParams.h"
 #include "OgreResourceTransition.h"
+#include "OgreShaderParams.h"
 #include "OgreTextureGpuListener.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
-    class VctVoxelizer;
+    class VctVoxelizerSourceBase;
     class VoxelVisualizer;
     struct ShaderVctLight;
 
@@ -46,6 +47,7 @@ namespace Ogre
     {
     public:
         static const uint16 msDistanceThresholdCustomParam;
+
     protected:
         /// When mAnisotropic == false, mLightVoxel[0] contains all the mips.
         ///
@@ -71,7 +73,8 @@ namespace Ogre
         /// because GPUs like GCN round memory consumption to the next power of 2).
         TextureGpu              *mLightVoxel[4];
         HlmsSamplerblock const  *mSamplerblockTrilinear;
-        VctVoxelizer    *mVoxelizer;
+
+        VctVoxelizerSourceBase  *mVoxelizer;
         bool            mVoxelizerTexturesChanged;
         bool            mVoxelizerListenersRemoved;
 
@@ -100,6 +103,9 @@ namespace Ogre
         float mDefaultLightDistThreshold;
         bool    mAnisotropic;
 
+        /// When we do multiple bounces, cascades can be used to improve accuracy
+        FastArray<VctLighting*> mExtraCascades;
+
         ShaderParams::Param *mNumLights;
         ShaderParams::Param *mRayMarchStepSize;
         ShaderParams::Param *mVoxelCellSize;
@@ -107,10 +113,13 @@ namespace Ogre
         ShaderParams::Param *mInvVoxelResolution;
         ShaderParams        *mShaderParams;
 
+        typedef vector<ShaderParams::Param>::type ParamVec;
+        ParamVec mLocalBounceShaderParams;
         ShaderParams::Param *mBounceVoxelCellSize;
         ShaderParams::Param *mBounceInvVoxelResolution;
         ShaderParams::Param *mBounceIterationDampening;
-        ShaderParams::Param *mBounceStartBiasInvBias;
+        ShaderParams::Param *mBounceStartBiasInvBiasCascadeMaxLod;
+        ShaderParams::Param *mBounceFromPreviousProbeToNext;  /// Used when cascades > 1
         ShaderParams        *mBounceShaderParams;
 
         ResourceTransitionArray mResourceTransitions;
@@ -162,6 +171,10 @@ namespace Ogre
 
         VoxelVisualizer *mDebugVoxelVisualizer;
 
+        ShaderParams::Param *addLocalBounceShaderParam( const char *name );
+
+        void restoreSwappedTextures( void );
+
         float addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                         const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
 
@@ -169,14 +182,25 @@ namespace Ogre
         void destroyTextures(void);
         void checkTextures(void);
         void setupBounceTextures(void);
+        void setupGlslTextureUnits( void );
 
         void generateAnisotropicMips(void);
 
         void runBounce( uint32 bounceIteration );
 
     public:
-        VctLighting( IdType id, VctVoxelizer *voxelizer, bool bAnisotropic );
+        VctLighting( IdType id, VctVoxelizerSourceBase *voxelizer, bool bAnisotropic );
         virtual ~VctLighting();
+
+        /// Used by VctCascadedVoxelizer. By having extra cascade info, we can
+        /// calculate multiple bounces with extra info
+        ///
+        /// This function calls mExtraCascades.reserve
+        void reserveExtraCascades( size_t numExtraCascades );
+
+        /// Used by VctCascadedVoxelizer. By having extra cascade info, we can
+        /// calculate multiple bounces with extra info
+        void addCascade( VctLighting *cascade );
 
         /** This function allows VctLighting::update to pass numBounces > 0 as argument.
             Note however, that multiple bounces requires creating another RGBA32_UNORM texture
@@ -268,7 +292,15 @@ namespace Ogre
                      float thinWallCounter=1.0f, bool autoMultiplier=true,
                      float rayMarchStepScale=1.0f, uint32 lightMask=0xffffffff );
 
+        /// When VctImageVoxelizer::buildRelative is called; voxelizer's textures
+        /// (albedo, normal, emissive) may be swapped for a copy.
+        ///
+        /// This function notifies us that buildRelative to update some of our references
+        void resetTexturesFromBuildRelative( void );
+
         bool needsAmbientHemisphere() const;
+
+        size_t getNumCascades( void ) const { return mExtraCascades.size() + 1u; }
 
         size_t getConstBufferSize(void) const;
 
@@ -314,11 +346,12 @@ namespace Ogre
         void setAmbient( const ColourValue& upperHemisphere, const ColourValue& lowerHemisphere );
 
         TextureGpu** getLightVoxelTextures(void)            { return mLightVoxel; }
+        TextureGpu **getLightVoxelTextures( const size_t cascadeIdx );
         uint32 getNumVoxelTextures(void) const              { return mAnisotropic ? 4u : 1u; }
         const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
                                                             { return mSamplerblockTrilinear; }
 
-        const VctVoxelizer* getVoxelizer(void) const        { return mVoxelizer; }
+        const VctVoxelizerSourceBase* getVoxelizer(void) const      { return mVoxelizer; }
 
         //TextureGpuListener overloads
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,

@@ -82,6 +82,7 @@ namespace v1 {
         mAnimationTypesDirty(true),
         mPosesIncludeNormals(false)
     {
+        memset( mHashForCaches, 0, sizeof( mHashForCaches ) );
         memset( sharedVertexData, 0, sizeof(sharedVertexData) );
 
         // Init first (manual) lod
@@ -303,6 +304,23 @@ namespace v1 {
         }
 
         serializer.importMesh(data, this);
+
+        if( mHashForCaches[0] == 0u && mHashForCaches[1] == 0u && Ogre::Mesh::msUseTimestampAsHash )
+        {
+            try
+            {
+                LogManager::getSingleton().logMessage( "Using timestamp as hash cache for Mesh " + mName,
+                                                       LML_TRIVIAL );
+                Archive *archive =
+                    ResourceGroupManager::getSingleton()._getArchiveToResource( mName, mGroup, true );
+                mHashForCaches[0] = static_cast<uint64>( archive->getModifiedTime( mName ) );
+            }
+            catch( Exception & )
+            {
+                LogManager::getSingleton().logMessage( "Using timestamp as hash cache for Mesh " + mName,
+                                                       LML_TRIVIAL );
+            }
+        }
 
         /* check all submeshes to see if their materials should be
            updated.  If the submesh has texture aliases that match those

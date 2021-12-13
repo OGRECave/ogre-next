@@ -4,7 +4,14 @@
 @piece( DeclVctStruct )
 	struct VctProbeParams
 	{
-		float4 vctResolution; // .w is padding
+		// .xyz vctResolution
+		// .w = cascadeMaxLod
+		float4 vctInvResolution_cascadeMaxLod[@value( vct_num_probes )];
+@property( vct_num_probes > 1 )
+		// fromPreviousProbeToNext[probeIdx-1][0].w = cascadeFinalMultiplier
+		// fromPreviousProbeToNext[probeIdx-1][1].w = invNumLods
+		float4 fromPreviousProbeToNext[@value( vct_num_probes ) - 1][2];
+@end
 
 		float specSdfMaxMip;
 		float specularSdfFactor;

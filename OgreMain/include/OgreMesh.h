@@ -146,6 +146,7 @@ namespace v1 {
         SkeletonPtr mOldSkeleton;
         SkeletonDefPtr mSkeleton;
 
+        uint64 mHashForCaches[2];
        
         VertexBoneAssignmentList mBoneAssignments;
 
@@ -556,6 +557,18 @@ namespace v1 {
 
         /** Removes all LOD data from this Mesh. */
         void removeLodLevels(void);
+
+        /// Returns an array of [2] containing a hash for use in caches.
+        /// A value of { 0, 0 } should be treated as not initialized.
+        ///
+        /// How this cache is calculated is unknown and could just be a filesystem timestamp
+        /// rather than a checksum.
+        ///
+        /// When callers see that:
+        ///     getCacheHash()[i] != savedHash[i]
+        ///
+        /// they should treat as if the mesh has changed and the cache entry became stale
+        const uint64 *getHashForCaches( void ) const { return mHashForCaches; }
 
         /** Sets the manager for the vertex and index buffers to be used when loading
             this Mesh.

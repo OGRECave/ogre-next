@@ -127,6 +127,7 @@ namespace Ogre
                 //Automatic param
                 ShaderParams::Param param;
                 param.isAutomatic   = true;
+                param.isEx          = false;
                 param.isDirty       = true;
                 param.name = paramName;
 
@@ -196,6 +197,7 @@ namespace Ogre
             {
                 ShaderParams::Param param;
                 param.isAutomatic   = false;
+                param.isEx          = false;
                 param.isDirty       = true;
                 param.name = paramName;
 

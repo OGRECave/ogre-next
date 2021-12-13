@@ -89,7 +89,8 @@ namespace Ogre {
         void writeFloats(const float* const pfloat, size_t count);
         void writeFloats(const double* const pfloat, size_t count);
         void writeShorts(const uint16* const pShort, size_t count);
-        void writeInts(const uint32* const pInt, size_t count); 
+        void writeInts(const uint32* const pInt, size_t count);
+        void writeInts64(const uint64* const pInt, size_t count);
         void writeBools(const bool* const pLong, size_t count);
         void writeObject(const Vector3& vec);
         void writeObject(const Quaternion& q);
@@ -106,6 +107,7 @@ namespace Ogre {
         void readFloats(DataStreamPtr& stream, double* pDest, size_t count);
         void readShorts(DataStreamPtr& stream, uint16* pDest, size_t count);
         void readInts(DataStreamPtr& stream, uint32* pDest, size_t count);
+        void readInts64(DataStreamPtr& stream, uint64* pDest, size_t count);
         void readObject(DataStreamPtr& stream, Vector3& pDest);
         void readObject(DataStreamPtr& stream, Quaternion& pDest);
 

@@ -114,8 +114,8 @@ kernel void main_metal
 	ushort gl_LocalInvocationIndex	[[thread_index_in_threadgroup]]
 )
 {
-	#if !defined(__HAVE_SIMDGROUP_BALLOT__)
+	//#if !defined(__HAVE_SIMDGROUP_BALLOT__)
 		threadgroup ushort g_emulatedGroupVote[64];
-	#endif
+	//#endif
 	@insertpiece( BodyCS )
 }

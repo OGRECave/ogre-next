@@ -191,6 +191,8 @@
 
 #define OGRE_Texture3D_float4 texture3D
 
+#define OGRE_ArrayTex( declType, varName, arrayCount ) declType varName[arrayCount]
+
 #define FLAT_INTERPOLANT( decl, bindingPoint ) flat decl
 #define INTERPOLANT( decl, bindingPoint ) decl
 

@@ -20,14 +20,22 @@ struct Params
 	float3 voxelCellSize;
 	float3 invVoxelResolution;
 	float iterationDampening;
-	float2 startBias_invStartBias;
+
+	float4 startBias_invStartBias_cascadeMaxLod[@value( hlms_num_vct_cascades )];
+
+	@property( hlms_num_vct_cascades > 1 )
+		float4 fromPreviousProbeToNext[@value( hlms_num_vct_cascades ) - 1][2];
+	@else
+		// Unused, but declare them to shut up warnings of setting non-existant params
+		float4 fromPreviousProbeToNext[1][2];
+	@end
 };
 
 #define p_voxelCellSize p.voxelCellSize
 #define p_invVoxelResolution p.invVoxelResolution
 #define p_iterationDampening p.iterationDampening
-#define p_vctStartBias p.startBias_invStartBias.x
-#define p_vctInvStartBias p.startBias_invStartBias.y
+#define p_vctStartBias_invStartBias_cascadeMaxLod p.startBias_invStartBias_cascadeMaxLod
+#define p_vctFromPreviousProbeToNext p.fromPreviousProbeToNext
 
 @insertpiece( HeaderCS )
 
@@ -37,16 +45,24 @@ struct Params
 //in uvec3 gl_GlobalInvocationID;
 //in uint  gl_LocalInvocationIndex;
 
+@pset( vctTexUnit, 2 )
+
 kernel void main_metal
 (
 	texture3d<float> voxelAlbedoTex		[[texture(0)]],
 	texture3d<float> voxelNormalTex		[[texture(1)]],
-	texture3d<float> vctProbe			[[texture(2)]],
+	array< texture3d<float>, @value( hlms_num_vct_cascades ) > vctProbes	[[texture(@value(vctTexUnit))]],
+	@add( vctTexUnit, hlms_num_vct_cascades )
 
 	@property( vct_anisotropic )
-		texture3d<float> vctProbeX			[[texture(3)]],
-		texture3d<float> vctProbeY			[[texture(4)]],
-		texture3d<float> vctProbeZ			[[texture(5)]],
+		array< texture3d<float>, @value( hlms_num_vct_cascades ) > vctProbeX	[[texture(@value(vctTexUnit))]],
+		@add( vctTexUnit, hlms_num_vct_cascades )
+
+		array< texture3d<float>, @value( hlms_num_vct_cascades ) > vctProbeY	[[texture(@value(vctTexUnit))]],
+		@add( vctTexUnit, hlms_num_vct_cascades )
+
+		array< texture3d<float>, @value( hlms_num_vct_cascades ) > vctProbeZ	[[texture(@value(vctTexUnit))]],
+		@add( vctTexUnit, hlms_num_vct_cascades )
 	@end
 
 	sampler vctProbeSampler				[[sampler(2)]],

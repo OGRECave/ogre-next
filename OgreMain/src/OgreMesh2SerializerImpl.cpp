@@ -41,6 +41,7 @@ THE SOFTWARE.
 #include "OgreLodStrategyManager.h"
 #include "OgreDistanceLodStrategy.h"
 #include "OgreBitwise.h"
+#include "Hash/MurmurHash3.h"
 
 #include "Vao/OgreVaoManager.h"
 #ifdef _OGRE_MULTISOURCE_VBO
@@ -75,6 +76,9 @@ namespace Ogre {
         DataStreamPtr stream, Endian endianMode)
     {
         LogManager::getSingleton().logMessage("MeshSerializer writing mesh data to stream " + stream->getName() + "...");
+
+        mCalculatedHash[0] = 0u;
+        mCalculatedHash[1] = 0u;
 
         // Decide on endian mode
         determineEndianness(endianMode);
@@ -221,6 +225,11 @@ namespace Ogre {
         writeSubMeshNameTable(pMesh);
         LogManager::getSingleton().logMessage("Submesh name table exported.");
 
+        // Write submesh name table
+        LogManager::getSingleton().logMessage("Exporting hash for caches...");
+        writeMeshHashForCaches(pMesh);
+        LogManager::getSingleton().logMessage("Exporting hash for caches exported.");
+
         // Write edge lists
         /*if (pMesh->isEdgeListBuilt())
         {
@@ -263,6 +272,13 @@ namespace Ogre {
             ++it;
         }
         popInnerChunk(mStream);
+    }
+    //---------------------------------------------------------------------
+    void MeshSerializerImpl::writeMeshHashForCaches( const Mesh * )
+    {
+        // Header
+        writeChunkHeader( M_HASH_FOR_CACHES, calcHashForCachesSize() );
+        writeInts64( mCalculatedHash, 2u );
     }
     //---------------------------------------------------------------------
     void MeshSerializerImpl::writeSubMesh( const SubMesh* s,
@@ -359,6 +375,8 @@ namespace Ogre {
 
         writeInts(&indexCount, 1);
 
+        addToHash(indexCount);
+
         if (indexCount > 0)
         {
             // bool indexes32Bit
@@ -372,11 +390,13 @@ namespace Ogre {
             {
                 const uint32* pIdx32 = static_cast<const uint32*>(pIdx);
                 writeInts(pIdx32, indexCount);
+                addToHash(pIdx32, indexCount * sizeof(uint32));
             }
             else
             {
                 const uint16* pIdx16 = static_cast<const uint16*>(pIdx);
                 writeShorts(pIdx16, indexCount);
+                addToHash(pIdx16, indexCount * sizeof(uint16));
             }
             asyncTicket->unmap();
         }
@@ -392,6 +412,10 @@ namespace Ogre {
         uint8 numSources = static_cast<uint8>( vertexData.size() );
         if( !vertexData.empty() )
             vertexCount = static_cast<uint32>( vertexData[VpNormal]->getNumElements() );
+
+
+        addToHash(vertexCount);
+        addToHash(numSources);
 
         writeInts(&vertexCount, 1);
         writeData(&numSources, 1, 1);
@@ -424,6 +448,8 @@ namespace Ogre {
                         uint8 semantic  = itElement->mSemantic;
                         writeData( &type, 1, 1 );
                         writeData( &semantic, 1, 1 );
+                        addToHash(type);
+                        addToHash(semantic);
 
                         ++itElement;
                     }
@@ -452,6 +478,8 @@ namespace Ogre {
                                                     0, vertexData[i]->getNumElements() );
 
                 const void* data = asyncTicket->map();
+
+                addToHash(data, vertexData[i]->getTotalSizeBytes());
 
                 if (mFlipEndian)
                 {
@@ -524,6 +552,8 @@ namespace Ogre {
         {
             size += calcSkeletonLinkSize(pMesh->getSkeletonName());
         }
+
+        size += calcHashForCachesSize();
         
         size += calcBoundsInfoSize(pMesh);
 
@@ -711,6 +741,13 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
+    void MeshSerializerImpl::readHashForCaches(DataStreamPtr& stream, Mesh* pMesh)
+    {
+        uint64 hash[2];
+        readInts64( stream, hash, 2u );
+        pMesh->_setHashForCaches( hash );
+    }
+    //---------------------------------------------------------------------
     void MeshSerializerImpl::readMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener)
     {
         // Read the strategy to be used for this mesh
@@ -731,7 +768,8 @@ namespace Ogre {
                  streamID == M_MESH_SKELETON_LINK ||
                  streamID == M_MESH_BOUNDS ||
                  streamID == M_SUBMESH_NAME_TABLE ||
-                 streamID == M_MESH_LOD_LEVEL /*||
+                 streamID == M_MESH_LOD_LEVEL ||
+                 streamID == M_HASH_FOR_CACHES /*||
                  streamID == M_EDGE_LISTS ||
                  streamID == M_POSES ||
                  streamID == M_ANIMATIONS*/))
@@ -752,6 +790,9 @@ namespace Ogre {
                     break;
                 case M_SUBMESH_NAME_TABLE:
                     readSubMeshNameTable(stream, pMesh);
+                    break;
+                case M_HASH_FOR_CACHES:
+                    readHashForCaches(stream, pMesh);
                     break;
                 /*case M_EDGE_LISTS:
                     readEdgeList(stream, pMesh);
@@ -777,7 +818,6 @@ namespace Ogre {
             }
             popInnerChunk(stream);
         }
-
     }
     //---------------------------------------------------------------------
     void MeshSerializerImpl::readSubMesh( DataStreamPtr& stream, Mesh* pMesh,
@@ -1182,6 +1222,13 @@ namespace Ogre {
         MaterialPtr& pMat)
     {
         // Material definition section phased out of 1.1
+    }
+    //---------------------------------------------------------------------
+    size_t MeshSerializerImpl::calcHashForCachesSize( void )
+    {
+        size_t size = MSTREAM_OVERHEAD_SIZE;
+        size += sizeof( uint64 ) * 2u;
+        return size;
     }
     //---------------------------------------------------------------------
     size_t MeshSerializerImpl::calcSkeletonLinkSize(const String& skelName)
@@ -2224,6 +2271,14 @@ namespace Ogre {
 #endif
     }
 
+    void MeshSerializerImpl::addToHash( const void *data, size_t sizeBytes )
+    {
+        uint64 hash[2][2];
+        hash[0][0] = mCalculatedHash[0];
+        hash[0][1] = mCalculatedHash[1];
+        MurmurHash3_x64_128( data, static_cast<int>( sizeBytes ), IdString::Seed, hash[1] );
+        MurmurHash3_x64_128( hash, sizeof( hash ), IdString::Seed, mCalculatedHash );
+    }
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------

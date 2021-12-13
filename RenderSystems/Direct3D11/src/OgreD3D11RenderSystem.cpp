@@ -3093,6 +3093,16 @@ namespace Ogre
                                                  pso.mNumThreadGroups[1],
                                                  pso.mNumThreadGroups[2] );
 
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+        if( mDevice.isError() )
+        {
+            String msg = mDevice.getErrorDescription();
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Error after _dispatch: CS '" + pso.computeShader->getName() + "' " + msg,
+                         __FUNCTION__ );
+        }
+#endif
+
         assert( mMaxBoundUavCS < 8u );
         ID3D11UnorderedAccessView *nullUavViews[8];
         memset( nullUavViews, 0, sizeof( nullUavViews ) );

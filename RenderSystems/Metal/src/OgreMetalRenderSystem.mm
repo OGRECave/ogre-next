@@ -421,13 +421,20 @@ namespace Ogre
                 // Basically same HW but different OS. This is actually possible.
                 //
                 // TODO: Query MTLGPUFamilyApple4, MTLGPUFamilyApple5 and onwards on iOS 13+
-                numTexturesInTextureDescriptor[i] = 31u;
+                // numTexturesInTextureDescriptor[i] = 31u;
+
+                // TODO: Actual limit became OGRE_METAL_UAV_SLOT_START since it otherwise
+                // overlaps
+                numTexturesInTextureDescriptor[i] = OGRE_METAL_UAV_SLOT_START;
 #else
-                numTexturesInTextureDescriptor[i] = 128u;
+                // numTexturesInTextureDescriptor[i] = 128u;
+                numTexturesInTextureDescriptor[i] = OGRE_METAL_UAV_SLOT_START;
 #endif
             }
             numTexturesInTextureDescriptor[HullShader] = 0u;
             numTexturesInTextureDescriptor[DomainShader] = 0u;
+            // Compute Shader has a different start
+            numTexturesInTextureDescriptor[NumShaderTypes] = OGRE_METAL_CS_UAV_SLOT_START;
             rsc->setNumTexturesInTextureDescriptor( numTexturesInTextureDescriptor );
         }
         //rsc->setCapability(RSC_ATOMIC_COUNTERS);

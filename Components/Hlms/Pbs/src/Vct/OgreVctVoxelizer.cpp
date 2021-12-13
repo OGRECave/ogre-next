@@ -97,7 +97,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VctVoxelizer::VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager,
                                 bool correctAreaLightShadows ) :
-        IdObject( id ),
+        VctVoxelizerSourceBase( id, renderSystem, hlmsManager ),
         mAabbWorldSpaceJob( 0 ),
         mTotalNumInstances( 0 ),
         mCpuInstanceBuffer( 0 ),
@@ -114,32 +114,19 @@ namespace Ogre
         mGpuPartitionedSubMeshes( 0 ),
         mMeshAabb( 0 ),
         mNeedsAlbedoMipmaps( correctAreaLightShadows ),
+        mNeedsAllMipmaps( false ),
         mNumVerticesCompressed( 0 ),
         mNumVerticesUncompressed( 0 ),
         mNumIndices16( 0 ),
         mNumIndices32( 0 ),
         mDefaultIndexCountSplit( 2001u
                                  /*std::numeric_limits<uint32>::max()*/ ),
-        mAlbedoVox( 0 ),
-        mEmissiveVox( 0 ),
-        mNormalVox( 0 ),
-        mAccumValVox( 0 ),
-        mRenderSystem( renderSystem ),
-        mVaoManager( renderSystem->getVaoManager() ),
-        mHlmsManager( hlmsManager ),
-        mTextureGpuManager( renderSystem->getTextureGpuManager() ),
         mComputeTools( new ComputeTools( hlmsManager->getComputeHlms() ) ),
         mVctMaterial( new VctMaterial( id, renderSystem->getVaoManager(),
                                        Root::getSingleton().getCompositorManager2(),
                                        renderSystem->getTextureGpuManager() ) ),
-        mWidth( 128u ),
-        mHeight( 128u ),
-        mDepth( 128u ),
         mAutoRegion( true ),
-        mRegionToVoxelize( Aabb::BOX_ZERO ),
-        mMaxRegion( Aabb::BOX_INFINITE ),
-        mDebugVisualizationMode( DebugVisualizationNone ),
-        mDebugVoxelVisualizer( 0 )
+        mMaxRegion( Aabb::BOX_INFINITE )
     {
         memset( mComputeJobs, 0, sizeof(mComputeJobs) );
         memset( mAabbCalculator, 0, sizeof(mAabbCalculator) );
@@ -840,7 +827,7 @@ namespace Ogre
             if( !hasTypedUavs )
                 texFlags |= TextureFlags::Reinterpretable;
 
-            if( mNeedsAlbedoMipmaps )
+            if( mNeedsAlbedoMipmaps || mNeedsAllMipmaps )
                 texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
 
             mAlbedoVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
@@ -849,7 +836,8 @@ namespace Ogre
                                                             GpuPageOutStrategy::Discard,
                                                             texFlags, TextureTypes::Type3D );
 
-            texFlags &= ~(uint32)(TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps);
+            if( !mNeedsAllMipmaps )
+                texFlags &= ~uint32( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
 
             mEmissiveVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
                                                               StringConverter::toString( getId() ) +
@@ -861,6 +849,9 @@ namespace Ogre
                                                             "/Normal",
                                                             GpuPageOutStrategy::Discard,
                                                             texFlags, TextureTypes::Type3D );
+
+            texFlags &= ~uint32( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
+
             mAccumValVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
                                                               StringConverter::toString( getId() ) +
                                                               "/AccumVal",
@@ -889,7 +880,10 @@ namespace Ogre
                 textures[i]->setResolution( mWidth, mHeight, mDepth );
             else
                 textures[i]->setResolution( mWidth >> 1u, mHeight, mDepth );
-            textures[i]->setNumMipmaps( mNeedsAlbedoMipmaps && i == 0u ? numMipmaps : 1u );
+            if( ( ( mNeedsAlbedoMipmaps && i == 0u ) || mNeedsAllMipmaps ) && i < 3u )
+                textures[i]->setNumMipmaps( numMipmaps );
+            else
+                textures[i]->setNumMipmaps( 1u );
             textures[i]->scheduleTransitionTo( GpuResidency::Resident );
         }
 
@@ -897,39 +891,6 @@ namespace Ogre
         {
             setTextureToDebugVisualizer();
             mDebugVoxelVisualizer->setVisible( true );
-        }
-    }
-    //-------------------------------------------------------------------------
-    void VctVoxelizer::setTextureToDebugVisualizer(void)
-    {
-        TextureGpu *trackedTex = mAlbedoVox;
-        switch( mDebugVisualizationMode )
-        {
-        default:
-        case DebugVisualizationAlbedo: trackedTex = mAlbedoVox; break;
-        case DebugVisualizationNormal: trackedTex = mNormalVox; break;
-        case DebugVisualizationEmissive: trackedTex = mEmissiveVox; break;
-        }
-        mDebugVoxelVisualizer->setTrackingVoxel( mAlbedoVox, trackedTex,
-                                                 mDebugVisualizationMode == DebugVisualizationEmissive );
-    }
-    //-------------------------------------------------------------------------
-    void VctVoxelizer::destroyVoxelTextures(void)
-    {
-        if( mAlbedoVox )
-        {
-            mTextureGpuManager->destroyTexture( mAlbedoVox );
-            mTextureGpuManager->destroyTexture( mEmissiveVox );
-            mTextureGpuManager->destroyTexture( mNormalVox );
-            mTextureGpuManager->destroyTexture( mAccumValVox );
-
-            mAlbedoVox = 0;
-            mEmissiveVox = 0;
-            mNormalVox = 0;
-            mAccumValVox = 0;
-
-            if( mDebugVoxelVisualizer )
-                mDebugVoxelVisualizer->setVisible( false );
         }
     }
     //-------------------------------------------------------------------------
@@ -1074,7 +1035,7 @@ namespace Ogre
         const size_t elementCount = alignToNextMultiple( instanceCount * mOctants.size(),
                                                          mAabbWorldSpaceJob->getThreadsPerGroupX() );
 
-        if( !mInstanceBuffer || elementCount > mInstanceBuffer->getNumElements() )
+        if( !mInstanceBuffer || ( elementCount * structStride ) > mInstanceBuffer->getTotalSizeBytes() )
         {
             destroyInstanceBuffers();
             mInstanceBuffer = mVaoManager->createUavBuffer( elementCount, structStride,
@@ -1321,8 +1282,13 @@ namespace Ogre
         OgreProfileGpuBegin( "VCT Voxelization Clear" );
         float fClearValue[4];
         uint32 uClearValue[4];
+        float fClearNormals[4];
         memset( fClearValue, 0, sizeof(fClearValue) );
         memset( uClearValue, 0, sizeof(uClearValue) );
+        fClearNormals[0] = 0.5f;
+        fClearNormals[1] = 0.5f;
+        fClearNormals[2] = 0.5f;
+        fClearNormals[3] = 0.0f;
 
         mResourceTransitions.clear();
         mComputeTools->prepareForUavClear( mResourceTransitions, mAlbedoVox );
@@ -1333,7 +1299,7 @@ namespace Ogre
 
         mComputeTools->clearUavFloat( mAlbedoVox, fClearValue );
         mComputeTools->clearUavFloat( mEmissiveVox, fClearValue );
-        mComputeTools->clearUavFloat( mNormalVox, fClearValue );
+        mComputeTools->clearUavFloat( mNormalVox, fClearNormals );
         mComputeTools->clearUavUint( mAccumValVox, uClearValue );
         OgreProfileGpuEnd( "VCT Voxelization Clear" );
     }
@@ -1360,8 +1326,6 @@ namespace Ogre
             clearVoxels();
             return;
         }
-
-        mRenderSystem->endRenderPassDescriptor();
 
         buildMeshBuffers();
 
@@ -1431,8 +1395,6 @@ namespace Ogre
         clearVoxels();
 
         const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
-
-        //const Vector3 voxelOrigin = getVoxelOrigin();
 
         ShaderParams::Param paramInstanceRange;
         ShaderParams::Param paramVoxelOrigin;
@@ -1523,80 +1485,14 @@ namespace Ogre
         //This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
 
-        if( mNeedsAlbedoMipmaps )
+        if( mNeedsAlbedoMipmaps || mNeedsAllMipmaps )
             mAlbedoVox->_autogenerateMipmaps();
+        if( mNeedsAllMipmaps )
+        {
+            mEmissiveVox->_autogenerateMipmaps();
+            mNormalVox->_autogenerateMipmaps();
+        }
 
         OgreProfileGpuEnd( "VCT build" );
-    }
-    //-------------------------------------------------------------------------
-    void VctVoxelizer::setDebugVisualization( VctVoxelizer::DebugVisualizationMode mode,
-                                              SceneManager *sceneManager )
-    {
-        if( mDebugVoxelVisualizer )
-        {
-            SceneNode *sceneNode = mDebugVoxelVisualizer->getParentSceneNode();
-            sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
-            OGRE_DELETE mDebugVoxelVisualizer;
-            mDebugVoxelVisualizer = 0;
-        }
-
-        mDebugVisualizationMode = mode;
-
-        if( mode != DebugVisualizationNone )
-        {
-            SceneNode *rootNode = sceneManager->getRootSceneNode( SCENE_STATIC );
-            SceneNode *visNode = rootNode->createChildSceneNode( SCENE_STATIC );
-
-            mDebugVoxelVisualizer =
-                    OGRE_NEW VoxelVisualizer( Ogre::Id::generateNewId<Ogre::MovableObject>(),
-                                              &sceneManager->_getEntityMemoryManager( SCENE_STATIC ),
-                                              sceneManager, 0u );
-
-            setTextureToDebugVisualizer();
-
-            visNode->setPosition( getVoxelOrigin() );
-            visNode->setScale( getVoxelCellSize() );
-            visNode->attachObject( mDebugVoxelVisualizer );
-        }
-    }
-    //-------------------------------------------------------------------------
-    VctVoxelizer::DebugVisualizationMode VctVoxelizer::getDebugVisualizationMode(void) const
-    {
-        return mDebugVisualizationMode;
-    }
-    //-------------------------------------------------------------------------
-    Vector3 VctVoxelizer::getVoxelOrigin(void) const
-    {
-        return mRegionToVoxelize.getMinimum();
-    }
-    //-------------------------------------------------------------------------
-    Vector3 VctVoxelizer::getVoxelCellSize(void) const
-    {
-        return mRegionToVoxelize.getSize() / getVoxelResolution();
-    }
-    //-------------------------------------------------------------------------
-    Vector3 VctVoxelizer::getVoxelSize(void) const
-    {
-        return mRegionToVoxelize.getSize();
-    }
-    //-------------------------------------------------------------------------
-    Vector3 VctVoxelizer::getVoxelResolution(void) const
-    {
-        return Vector3( mWidth, mHeight, mDepth );
-    }
-    //-------------------------------------------------------------------------
-    TextureGpuManager* VctVoxelizer::getTextureGpuManager(void)
-    {
-        return mTextureGpuManager;
-    }
-    //-------------------------------------------------------------------------
-    RenderSystem* VctVoxelizer::getRenderSystem(void)
-    {
-        return mRenderSystem;
-    }
-    //-------------------------------------------------------------------------
-    HlmsManager* VctVoxelizer::getHlmsManager(void)
-    {
-        return mHlmsManager;
     }
 }

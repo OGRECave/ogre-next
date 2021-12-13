@@ -28,9 +28,8 @@ THE SOFTWARE.
 #ifndef _OgreVctVoxelizer_H_
 #define _OgreVctVoxelizer_H_
 
-#include "OgreHlmsPbsPrerequisites.h"
-#include "OgreId.h"
-#include "Math/Simple/OgreAabb.h"
+#include "OgreVctVoxelizerSourceBase.h"
+
 #include "Vao/OgreVertexBufferDownloadHelper.h"
 
 #ifdef OGRE_FORCE_VCT_VOXELIZER_DETERMINISTIC
@@ -42,7 +41,6 @@ THE SOFTWARE.
 namespace Ogre
 {
     class VctMaterial;
-    class VoxelVisualizer;
 
     namespace VoxelizerJobSetting
     {
@@ -112,16 +110,8 @@ namespace Ogre
            cull each octant of the voxel; thus avoiding having all voxels try to check
            for all instances (performance optimization).
     */
-    class _OgreHlmsPbsExport VctVoxelizer : public IdObject
+    class _OgreHlmsPbsExport VctVoxelizer : public VctVoxelizerSourceBase
     {
-    public:
-        enum DebugVisualizationMode
-        {
-            DebugVisualizationAlbedo,
-            DebugVisualizationNormal,
-            DebugVisualizationEmissive,
-            DebugVisualizationNone
-        };
     protected:
         struct MappedBuffers
         {
@@ -207,6 +197,7 @@ namespace Ogre
         UavBufferPacked *mMeshAabb;
 
         bool    mNeedsAlbedoMipmaps;
+        bool    mNeedsAllMipmaps;
 
         uint32 mNumVerticesCompressed;
         uint32 mNumVerticesUncompressed;
@@ -214,16 +205,6 @@ namespace Ogre
         uint32 mNumIndices32;
 
         uint32 mDefaultIndexCountSplit;
-
-        TextureGpu  *mAlbedoVox;
-        TextureGpu  *mEmissiveVox;
-        TextureGpu  *mNormalVox;
-        TextureGpu  *mAccumValVox;
-
-        RenderSystem*mRenderSystem;
-        VaoManager  *mVaoManager;
-        HlmsManager *mHlmsManager;
-        TextureGpuManager *mTextureGpuManager;
 
         ComputeTools *mComputeTools;
 
@@ -249,13 +230,8 @@ namespace Ogre
 
         VctMaterial *mVctMaterial;
 
-        uint32  mWidth;
-        uint32  mHeight;
-        uint32  mDepth;
-
         /// Whether mRegionToVoxelize is manually set or autocalculated
         bool    mAutoRegion;
-        Aabb    mRegionToVoxelize;
         /// Limit to mRegionToVoxelize in case mAutoRegion is true
         Aabb    mMaxRegion;
 
@@ -269,9 +245,6 @@ namespace Ogre
         FastArray<Octant> mOctants;
 
         ResourceTransitionArray mResourceTransitions;
-
-        DebugVisualizationMode  mDebugVisualizationMode;
-        VoxelVisualizer         *mDebugVoxelVisualizer;
 
         /** 16-bit buffer values must always be even since the UAV buffer
             is internally packed uint32 and BufferPacked::copyTo doesn't
@@ -294,8 +267,6 @@ namespace Ogre
 
         void buildMeshBuffers(void);
         void createVoxelTextures(void);
-        void destroyVoxelTextures(void);
-        void setTextureToDebugVisualizer(void);
 
         void placeItemsInBuckets(void);
         size_t countSubMeshPartitionsIn( Item *item ) const;
@@ -311,6 +282,8 @@ namespace Ogre
         VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager,
                       bool correctAreaLightShadows );
         ~VctVoxelizer();
+
+        void _setNeedsAllMipmaps( bool bNeedsAllMipmaps ) { mNeedsAllMipmaps = bNeedsAllMipmaps; }
 
         /**
         @param item
@@ -373,23 +346,6 @@ namespace Ogre
         void setResolution( uint32 width, uint32 height, uint32 depth );
 
         void build( SceneManager *sceneManager );
-
-        void setDebugVisualization( VctVoxelizer::DebugVisualizationMode mode,
-                                    SceneManager *sceneManager );
-        VctVoxelizer::DebugVisualizationMode getDebugVisualizationMode(void) const;
-
-        Vector3 getVoxelOrigin(void) const;
-        Vector3 getVoxelCellSize(void) const;
-        Vector3 getVoxelSize(void) const;
-        Vector3 getVoxelResolution(void) const;
-
-        TextureGpu* getAlbedoVox(void)          { return mAlbedoVox; }
-        TextureGpu* getNormalVox(void)          { return mNormalVox; }
-        TextureGpu* getEmissiveVox(void)        { return mEmissiveVox; }
-
-        TextureGpuManager* getTextureGpuManager(void);
-        RenderSystem* getRenderSystem(void);
-        HlmsManager* getHlmsManager(void);
     };
 }
 
