@@ -18,3 +18,5 @@ painful and traumatic as possible.
 - @subpage TuningMemoryResources
 - @subpage Ogre22Changes
 - @subpage BehavorStagingTextureD3D11
+- @subpage Ogre23Changes
+- @subpage RootLayouts
