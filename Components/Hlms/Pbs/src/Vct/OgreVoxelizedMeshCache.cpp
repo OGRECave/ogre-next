@@ -45,6 +45,10 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
+    inline float roundf( float x ) { return x >= 0.0f ? floorf( x + 0.5f ) : ceilf( x - 0.5f ); }
+#endif
+
     VoxelizedMeshCache::VoxelizedMeshCache( IdType id, TextureGpuManager *textureManager ) :
         IdObject( id ),
         mMeshWidth( 64u ),
@@ -107,7 +111,7 @@ namespace Ogre
     inline uint32 calculateMeshResolution( uint32 width, const float actualLength,
                                            const float referenceLength, uint32 maxWidth )
     {
-        uint32 finalRes = static_cast<uint32>( std::round( width * actualLength / referenceLength ) );
+        uint32 finalRes = static_cast<uint32>( roundf( width * actualLength / referenceLength ) );
         finalRes = getNextPowerOf2( finalRes );
         finalRes = std::min( finalRes, maxWidth );
         return finalRes;
@@ -142,7 +146,7 @@ namespace Ogre
 
         TextureGpuManager *textureManager = mBlankEmissive->getTextureManager();
 
-        MeshCacheMap::const_iterator itor = mMeshes.find( meshName );
+        MeshCacheMap::iterator itor = mMeshes.find( meshName );
         if( itor != mMeshes.end() )
         {
             const uint64 *hash = mesh->getHashForCaches();
@@ -173,7 +177,9 @@ namespace Ogre
                     textureManager->destroyTexture( itor->second.normalVox );
                     if( itor->second.emissiveVox != mBlankEmissive )
                         textureManager->destroyTexture( itor->second.emissiveVox );
-                    itor = mMeshes.erase( itor );
+
+                    MeshCacheMap::iterator toErase = itor++;
+                    mMeshes.erase( toErase );
                 }
             }
             else if( itor->second.hash[0] == hash[0] && itor->second.hash[1] == hash[1] )

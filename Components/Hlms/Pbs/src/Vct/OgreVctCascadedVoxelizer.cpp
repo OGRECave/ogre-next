@@ -40,6 +40,10 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
+    inline float roundf( float x ) { return x >= 0.0f ? floorf( x + 0.5f ) : ceilf( x - 0.5f ); }
+#endif
+
     VctCascadeSetting::VctCascadeSetting() :
         bCorrectAreaLightShadows( false ),
         bAutoMultiplier( true ),
@@ -467,7 +471,7 @@ namespace Ogre
                 //         accumulated (via 1.0 - result.alpha). Done in shader
                 const uint32 numBounces =
                     mNumBounces == 0u ? 0u
-                                      : static_cast<uint32>( std::round(
+                                      : static_cast<uint32>( roundf(
                                             std::sqrt( ( ( mNumBounces + 1u ) * factor ) - 1.0f ) ) );
 
                 mCascades[i]->update( sceneManager, numBounces, cascade.thinWallCounter,
