@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['setting_20up_20ogre_35769',['Setting Up Ogre',['../_setting_up_ogre.html',1,'']]]
+  ['root_20layouts_35775',['Root Layouts',['../_root_layouts.html',1,'manual']]]
 ];

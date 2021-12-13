@@ -1,5 +1,14 @@
 var NAVTREEINDEX5 =
 {
+"_ogre_gpu_program_8h.html#gad08e89fa63e81d061ea9e2f37664976e":[8,0,450,0],
+"_ogre_gpu_program_8h.html#ggad08e89fa63e81d061ea9e2f37664976ea3d96c54ace718f26c66067503efd56a3":[8,0,450,0,0],
+"_ogre_gpu_program_8h.html#ggad08e89fa63e81d061ea9e2f37664976ea670018be566e85e99ad45105bfda8993":[8,0,450,0,4],
+"_ogre_gpu_program_8h.html#ggad08e89fa63e81d061ea9e2f37664976ea78fc6b12cad0b4a28e86c802ee50bcdd":[8,0,450,0,2],
+"_ogre_gpu_program_8h.html#ggad08e89fa63e81d061ea9e2f37664976ea81238638cb2fdf78cc0860b6c4c16a4b":[8,0,450,0,5],
+"_ogre_gpu_program_8h.html#ggad08e89fa63e81d061ea9e2f37664976eac9a00b013e9075bc061b0585cf9a6c3b":[8,0,450,0,1],
+"_ogre_gpu_program_8h.html#ggad08e89fa63e81d061ea9e2f37664976eaea74d7930cd8f25545bd629b91f210dd":[8,0,450,0,3],
+"_ogre_gpu_program_manager_8h.html":[8,0,451],
+"_ogre_gpu_program_params_8h.html":[8,0,452],
 "_ogre_gpu_program_params_8h.html#ga0f6f75258759920f3879eb1b4b590121":[8,0,452,6],
 "_ogre_gpu_program_params_8h.html#ga167c785d87088b52526f1f079024fcda":[8,0,452,10],
 "_ogre_gpu_program_params_8h.html#ga2275e636e8d9bbe23e350ef676e289b5":[8,0,452,5],
@@ -240,14 +249,5 @@ var NAVTREEINDEX5 =
 "_ogre_hlms_pbs_prerequisites_8h.html#ad5d5ade8ee86f3897553ceaec74dff0d":[8,0,492,0],
 "_ogre_hlms_pbs_prerequisites_8h.html#ae13b0f0b5217cbcc8aa6107daac70dae":[8,0,492,2],
 "_ogre_hlms_pbs_prerequisites_8h.html#ae13b0f0b5217cbcc8aa6107daac70daea1b085ed2dfd79e68afe0c1137bd2f24e":[8,0,492,2,3],
-"_ogre_hlms_pbs_prerequisites_8h.html#ae13b0f0b5217cbcc8aa6107daac70daeacba5463bf2848b1537559137ed6adff3":[8,0,492,2,14],
-"_ogre_hlms_pso_8h.html":[8,0,493],
-"_ogre_hlms_samplerblock_8h.html":[8,0,494],
-"_ogre_hlms_samplerblock_8h.html#gac224d1943fe269a125e10f02c8b8bc8a":[8,0,494,0],
-"_ogre_hlms_samplerblock_8h.html#ggac224d1943fe269a125e10f02c8b8bc8aa3bb58c51abf3cfc17a3a161a8ad2e69c":[8,0,494,0,0],
-"_ogre_hlms_samplerblock_8h.html#ggac224d1943fe269a125e10f02c8b8bc8aa8ad58884b0f975a9d78e7443d528e2cd":[8,0,494,0,1],
-"_ogre_hlms_samplerblock_8h.html#ggac224d1943fe269a125e10f02c8b8bc8aa9bc1de22adfff89e291721e6c88b9fcd":[8,0,494,0,2],
-"_ogre_hlms_samplerblock_8h.html#ggac224d1943fe269a125e10f02c8b8bc8aae61fc07694a322d4957aec8f21e495ec":[8,0,494,0,4],
-"_ogre_hlms_samplerblock_8h.html#ggac224d1943fe269a125e10f02c8b8bc8aaf51237eefd747d734a75e050bbb2a173":[8,0,494,0,3],
-"_ogre_hlms_texture_base_class_8h.html":[8,0,495]
+"_ogre_hlms_pbs_prerequisites_8h.html#ae13b0f0b5217cbcc8aa6107daac70daeacba5463bf2848b1537559137ed6adff3":[8,0,492,2,14]
 };

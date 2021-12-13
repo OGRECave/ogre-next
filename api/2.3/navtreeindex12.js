@@ -1,5 +1,14 @@
 var NAVTREEINDEX12 =
 {
+"_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6beab47a8e4d5684fcd9d3e6aea8884cf5e8":[8,0,822,4,7],
+"_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6beac9488e21d6dd2a1a3ea05f0ca76a3cbc":[8,0,822,4,0],
+"_ogre_root_layout_8h.html#af97aae360aa16970ee0873372c96c6beadd0d59b5d7779947d9218f971e7b224c":[8,0,822,4,1],
+"_ogre_rotation_affector_8h.html":[8,0,823],
+"_ogre_rotation_affector_factory_8h.html":[8,0,824],
+"_ogre_rotational_spline_8h.html":[8,0,825],
+"_ogre_s_d_l_g_l_support_8h.html":[8,0,842],
+"_ogre_s_d_l_prerequisites_8h.html":[8,0,843],
+"_ogre_s_d_l_window_8h.html":[8,0,844],
 "_ogre_s_i_m_d_helper_8h.html":[8,0,898],
 "_ogre_s_t_b_i_codec_8h.html":[8,0,923],
 "_ogre_scale_affector_8h.html":[8,0,827],
@@ -240,14 +249,5 @@ var NAVTREEINDEX12 =
 "_ogre_skeleton_animation_def_8h.html#a47aa3be163bca4f89016c19f24e3e626":[8,0,905,1],
 "_ogre_skeleton_def_8h.html":[8,0,907],
 "_ogre_skeleton_file_format_8h.html":[8,0,908],
-"_ogre_skeleton_file_format_8h.html#ga5b37bdf2f67384dbd81643164545f7bd":[8,0,908,0],
-"_ogre_skeleton_file_format_8h.html#gga5b37bdf2f67384dbd81643164545f7bda60d951d9cd1e76668758a78eaa75e3af":[8,0,908,0,3],
-"_ogre_skeleton_file_format_8h.html#gga5b37bdf2f67384dbd81643164545f7bda691013153a33fde3a543deed39382c20":[8,0,908,0,6],
-"_ogre_skeleton_file_format_8h.html#gga5b37bdf2f67384dbd81643164545f7bda7ed2511945645204fe9f7423e32aea49":[8,0,908,0,0],
-"_ogre_skeleton_file_format_8h.html#gga5b37bdf2f67384dbd81643164545f7bda869ed880064984ab52e95a922efec6cd":[8,0,908,0,8],
-"_ogre_skeleton_file_format_8h.html#gga5b37bdf2f67384dbd81643164545f7bdaa559ee7367718e8c9ffdfd1af83c9ca8":[8,0,908,0,4],
-"_ogre_skeleton_file_format_8h.html#gga5b37bdf2f67384dbd81643164545f7bdaacf798731cab07af608a45eb331faa01":[8,0,908,0,2],
-"_ogre_skeleton_file_format_8h.html#gga5b37bdf2f67384dbd81643164545f7bdad777591f3958da3716318eb820bbcab8":[8,0,908,0,1],
-"_ogre_skeleton_file_format_8h.html#gga5b37bdf2f67384dbd81643164545f7bdaebf5354fd4093986740b6f7a0b9c998e":[8,0,908,0,7],
-"_ogre_skeleton_file_format_8h.html#gga5b37bdf2f67384dbd81643164545f7bdaedacebfaa34fe1ed9b95efb6210e13e1":[8,0,908,0,5]
+"_ogre_skeleton_file_format_8h.html#ga5b37bdf2f67384dbd81643164545f7bd":[8,0,908,0]
 };

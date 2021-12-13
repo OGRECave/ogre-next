@@ -294,16 +294,16 @@ var manual =
       [ "Post-processing the command buffer", "commandbuffer.html#CommandBufferPostProcessing", null ]
     ] ],
     [ "Terra System", "_terra_system.html", [
-      [ "Vertex-bufferless rendering", "_terra_system.html#autotoc_md45", null ],
-      [ "Vertex Trick in Terra", "_terra_system.html#autotoc_md46", null ],
-      [ "Terra cells", "_terra_system.html#autotoc_md47", [
-        [ "First layer, the 4x4 block", "_terra_system.html#autotoc_md48", null ],
-        [ "Outer layers", "_terra_system.html#autotoc_md49", null ]
+      [ "Vertex-bufferless rendering", "_terra_system.html#autotoc_md56", null ],
+      [ "Vertex Trick in Terra", "_terra_system.html#autotoc_md57", null ],
+      [ "Terra cells", "_terra_system.html#autotoc_md58", [
+        [ "First layer, the 4x4 block", "_terra_system.html#autotoc_md59", null ],
+        [ "Outer layers", "_terra_system.html#autotoc_md60", null ]
       ] ],
-      [ "Skirts", "_terra_system.html#autotoc_md50", null ],
-      [ "Shadows", "_terra_system.html#autotoc_md51", null ],
-      [ "Shading", "_terra_system.html#autotoc_md52", null ],
-      [ "Why is it not a component?", "_terra_system.html#autotoc_md53", null ]
+      [ "Skirts", "_terra_system.html#autotoc_md61", null ],
+      [ "Shadows", "_terra_system.html#autotoc_md62", null ],
+      [ "Shading", "_terra_system.html#autotoc_md63", null ],
+      [ "Why is it not a component?", "_terra_system.html#autotoc_md64", null ]
     ] ],
     [ "Tunning memory consumption and resources", "_tuning_memory_resources.html", [
       [ "Grouping textures by type", "_tuning_memory_resources.html#GroupingTexturesByType", null ],
@@ -343,5 +343,37 @@ var manual =
       [ "Attempting to be contiguous", "_behavor_staging_texture_d3_d11.html#autotoc_md6", null ],
       [ "Slicing in 3", "_behavor_staging_texture_d3_d11.html#autotoc_md7", null ],
       [ "Slicing in the middle", "_behavor_staging_texture_d3_d11.html#autotoc_md8", null ]
+    ] ],
+    [ "What's new in Ogre 2.3", "_ogre23_changes.html", [
+      [ "Switch importV1 to createByImportingV1", "_ogre23_changes.html#autotoc_md45", null ],
+      [ "Shadow's Normal Offset Bias", "_ogre23_changes.html#autotoc_md46", null ],
+      [ "Unlit vertex and pixel shaders unified", "_ogre23_changes.html#autotoc_md47", null ],
+      [ "Added HlmsMacroblock::mDepthClamp", "_ogre23_changes.html#autotoc_md48", null ],
+      [ "Added shadow pancaking", "_ogre23_changes.html#autotoc_md49", null ],
+      [ "Other relevant information when porting", "_ogre23_changes.html#autotoc_md50", [
+        [ "Do not call notifyDataIsReady more than needed", "_ogre23_changes.html#autotoc_md51", null ],
+        [ "Global changes for Vulkan compatibility:", "_ogre23_changes.html#autotoc_md52", null ]
+      ] ]
+    ] ],
+    [ "Root Layouts", "_root_layouts.html", [
+      [ "Old APIs (i.e. D3D11 and GL)", "_root_layouts.html#RootLayoutsOldAPIs", null ],
+      [ "New APIs and Root Layouts", "_root_layouts.html#RootLayoutsNewAPIs", null ],
+      [ "Setting up root layouts", "_root_layouts.html#RootLayoutsSettingUp", [
+        [ "Could you have used e.g. \"const_buffers\" : [0,7] instead of [4,7]?", "_root_layouts.html#autotoc_md53", null ]
+      ] ],
+      [ "Declaring Root Layouts in shaders", "_root_layouts.html#RootLayoutsDeclaringInShaders", null ],
+      [ "Baked sets", "_root_layouts.html#RootLayoutsBakedSets", null ],
+      [ "Prefab Root Layouts for low level materials", "_root_layouts.html#RootLayoutPrefabs", null ],
+      [ "Arrays of Textures", "_root_layouts.html#RootLayoutsArraysOfTextures", [
+        [ "C++", "_root_layouts.html#RootLayoutsAoTCpp", null ],
+        [ "Inline shader declaration", "_root_layouts.html#RootLayoutsAoTInlineShader", null ],
+        [ "Automatic", "_root_layouts.html#RootLayoutsAoTAuto", null ],
+        [ "Making GLSL shaders compatible with both Vulkan and OpenGL", "_root_layouts.html#RootLayoutsGLSLForGLandVK", [
+          [ "Example:", "_root_layouts.html#RootLayoutsGLSLForGLandVKExample", [
+            [ "OpenGL", "_root_layouts.html#autotoc_md54", null ],
+            [ "Vulkan", "_root_layouts.html#autotoc_md55", null ]
+          ] ]
+        ] ]
+      ] ]
     ] ]
 ];
