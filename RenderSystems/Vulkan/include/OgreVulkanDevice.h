@@ -69,6 +69,9 @@ namespace Ogre
         VkPhysicalDeviceFeatures mDeviceFeatures;
         FastArray<VkQueueFamilyProperties> mQueueProps;
 
+        /// Extensions requested when created. Sorted
+        FastArray<IdString> mDeviceExtensions;
+
         VulkanVaoManager *mVaoManager;
         VulkanRenderSystem *mRenderSystem;
 
@@ -101,6 +104,8 @@ namespace Ogre
 
         void createDevice( FastArray<const char *> &extensions, uint32 maxComputeQueues,
                            uint32 maxTransferQueues );
+
+        bool hasDeviceExtension( const IdString extension ) const;
 
         void initQueues( void );
 

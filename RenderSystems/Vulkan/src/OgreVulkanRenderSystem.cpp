@@ -502,6 +502,9 @@ namespace Ogre
         if( mActiveDevice->mDeviceFeatures.imageCubeArray )
             rsc->setCapability( RSC_TEXTURE_CUBE_MAP_ARRAY );
 
+        if( mActiveDevice->hasDeviceExtension( VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME ) )
+            rsc->setCapability( RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER );
+
         if( mActiveDevice->mDeviceFeatures.depthClamp )
             rsc->setCapability( RSC_DEPTH_CLAMP );
 
@@ -584,6 +587,7 @@ namespace Ogre
         rsc->setCapability( RSC_STENCIL_WRAP );
         rsc->setCapability( RSC_USER_CLIP_PLANES );
         rsc->setCapability( RSC_VERTEX_FORMAT_UBYTE4 );
+        rsc->setCapability( RSC_VERTEX_TEXTURE_FETCH );
         rsc->setCapability( RSC_INFINITE_FAR_PLANE );
         rsc->setCapability( RSC_TEXTURE_3D );
         rsc->setCapability( RSC_NON_POWER_OF_2_TEXTURES );
@@ -959,11 +963,6 @@ namespace Ogre
             mDevice = new VulkanDevice( mVkInstance, mVulkanSupport->getSelectedDeviceIdx(), this );
             mActiveDevice = mDevice;
 
-            mRealCapabilities = createRenderSystemCapabilities();
-            mCurrentCapabilities = mRealCapabilities;
-
-            initialiseFromRenderSystemCapabilities( mCurrentCapabilities, 0 );
-
             mNativeShadingLanguageVersion = 450;
 
             bool bCanRestrictImageViewUsage = false;
@@ -989,6 +988,8 @@ namespace Ogre
                     }
                     else if( extensionName == VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME )
                         deviceExtensions.push_back( VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME );
+                    else if( extensionName == VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME )
+                        deviceExtensions.push_back( VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME );
                 }
             }
 
@@ -1006,6 +1007,11 @@ namespace Ogre
 #endif
 
             mDevice->createDevice( deviceExtensions, 0u, 0u );
+
+            mRealCapabilities = createRenderSystemCapabilities();
+            mCurrentCapabilities = mRealCapabilities;
+
+            initialiseFromRenderSystemCapabilities( mCurrentCapabilities, 0 );
 
             VulkanVaoManager *vaoManager = OGRE_NEW VulkanVaoManager( mDevice, this, miscParams );
             mVaoManager = vaoManager;

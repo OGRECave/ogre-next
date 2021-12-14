@@ -306,10 +306,34 @@ namespace Ogre
 
         createInfo.pEnabledFeatures = &mDeviceFeatures;
 
+        {
+            mDeviceExtensions.clear();
+            mDeviceExtensions.reserve( extensions.size() );
+
+            FastArray<const char *>::const_iterator itor = extensions.begin();
+            FastArray<const char *>::const_iterator endt = extensions.end();
+
+            while( itor != endt )
+            {
+                LogManager::getSingleton().logMessage( "Requesting Extension: " + String( *itor ) );
+                mDeviceExtensions.push_back( *itor );
+                ++itor;
+            }
+
+            std::sort( mDeviceExtensions.begin(), mDeviceExtensions.end() );
+        }
+
         VkResult result = vkCreateDevice( mPhysicalDevice, &createInfo, NULL, &mDevice );
         checkVkResult( result, "vkCreateDevice" );
 
         initUtils( mDevice );
+    }
+    //-------------------------------------------------------------------------
+    bool VulkanDevice::hasDeviceExtension( const IdString extension ) const
+    {
+        FastArray<IdString>::const_iterator itor =
+            std::lower_bound( mDeviceExtensions.begin(), mDeviceExtensions.end(), extension );
+        return itor != mDeviceExtensions.end() && *itor == extension;
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::initQueues( void )
