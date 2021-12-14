@@ -924,9 +924,10 @@ namespace Ogre
                     hlmsManager->destroySamplerblock( *itor );
                 ++itor;
             }
-
-            removeListenerFromTextures( mTexSlots, numSlots, mTexSlots.size() );
         }
+
+        if( numSlots < mTexSlots.size() )
+            removeListenerFromTextures( mTexSlots, numSlots, mTexSlots.size() );
 
         mSamplerSlots.resize( numSlots );
         mTexSlots.resize( numSlots );
