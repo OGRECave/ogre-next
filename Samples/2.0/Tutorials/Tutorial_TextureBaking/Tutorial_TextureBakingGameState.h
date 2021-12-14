@@ -31,6 +31,8 @@ namespace Demo
         Ogre::CompositorWorkspace   *mBakedWorkspace;
         Ogre::CompositorWorkspace   *mShowBakedTexWorkspace;
 
+        Ogre::ResourceTransitionArray mResourceTransitions;
+
         Ogre::Item      *mFloorRender;
         Ogre::Item      *mFloorBaked;
 

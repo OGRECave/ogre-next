@@ -280,6 +280,20 @@ namespace Demo
         mBakedWorkspace->_update();
         mBakedWorkspace->_endUpdate( false );
 
+        {
+            // We must tell Vulkan the texture will be used as a Texture; now that we're done
+            // rendering to it. There are better places to do this
+            // (i.e. HlmsPbs::analyzeBarriers, a CompositorWorkspace listener)
+            // where barriers can be grouped together. But this works for the tutorial
+            Ogre::RenderSystem *renderSystem = sceneManager->getDestinationRenderSystem();
+            Ogre::BarrierSolver &barrierSolver = renderSystem->getBarrierSolver();
+            mResourceTransitions.clear();
+            barrierSolver.resolveTransition( mResourceTransitions, mBakedResult,
+                                             Ogre::ResourceLayout::Texture, Ogre::ResourceAccess::Read,
+                                             1u << Ogre::PixelShader );
+            renderSystem->executeResourceTransition( mResourceTransitions );
+        }
+
         sceneManager->clearFrameData();
 
         sceneManager->setVisibilityMask( oldMask );
