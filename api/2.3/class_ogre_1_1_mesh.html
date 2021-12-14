@@ -179,6 +179,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8a78f8b8a9e4d96ec3b1182f9dcc3b97"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#a8a78f8b8a9e4d96ec3b1182f9dcc3b97">_setBounds</a> (const <a class="el" href="struct_ogre_1_1_aabb.html">Aabb</a> &amp;bounds, bool pad=true)</td></tr>
 <tr class="memdesc:a8a78f8b8a9e4d96ec3b1182f9dcc3b97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manually set the bounding box for this <a class="el" href="class_ogre_1_1_mesh.html" title="Resource holding data about 3D mesh.">Mesh</a>.  <a href="class_ogre_1_1_mesh.html#a8a78f8b8a9e4d96ec3b1182f9dcc3b97">More...</a><br /></td></tr>
 <tr class="separator:a8a78f8b8a9e4d96ec3b1182f9dcc3b97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a193d6556289c597ae0c44d56e773bc18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#a193d6556289c597ae0c44d56e773bc18">_setHashForCaches</a> (const <a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> hash[2])</td></tr>
+<tr class="memdesc:a193d6556289c597ae0c44d56e773bc18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly set a hash for caches. See <a class="el" href="class_ogre_1_1_mesh.html#aefb3e4d83bbea7b4d30410efce8bc9ac" title="Returns an array of [2] containing a hash for use in caches.">Mesh::getHashForCaches</a>.  <a href="class_ogre_1_1_mesh.html#a193d6556289c597ae0c44d56e773bc18">More...</a><br /></td></tr>
+<tr class="separator:a193d6556289c597ae0c44d56e773bc18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb7b4cf2de4c641b5122ac88fdd47c97"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#afb7b4cf2de4c641b5122ac88fdd47c97">_setLodInfo</a> (unsigned short numLevels)</td></tr>
 <tr class="memdesc:afb7b4cf2de4c641b5122ac88fdd47c97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal methods for loading LOD, do not use.  <a href="class_ogre_1_1_mesh.html#afb7b4cf2de4c641b5122ac88fdd47c97">More...</a><br /></td></tr>
 <tr class="separator:afb7b4cf2de4c641b5122ac88fdd47c97"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -238,6 +241,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a382919945c07a6a13136889ad3fbf578"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2298551707debaf774d577e643ee856a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#aeb9f62c8e6c4239315286c63321722b2">ResourceHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource.html#a2298551707debaf774d577e643ee856a">getHandle</a> (void) const</td></tr>
 <tr class="separator:a2298551707debaf774d577e643ee856a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefb3e4d83bbea7b4d30410efce8bc9ac"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#aefb3e4d83bbea7b4d30410efce8bc9ac">getHashForCaches</a> (void) const</td></tr>
+<tr class="memdesc:aefb3e4d83bbea7b4d30410efce8bc9ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an array of [2] containing a hash for use in caches.  <a href="class_ogre_1_1_mesh.html#aefb3e4d83bbea7b4d30410efce8bc9ac">More...</a><br /></td></tr>
+<tr class="separator:aefb3e4d83bbea7b4d30410efce8bc9ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab51a8de8aa523bfae15b7347452f8b87"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9">BufferType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#ab51a8de8aa523bfae15b7347452f8b87">getIndexBufferDefaultType</a> (void) const</td></tr>
 <tr class="memdesc:ab51a8de8aa523bfae15b7347452f8b87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the usage setting for this meshes index buffers.  <a href="class_ogre_1_1_mesh.html#ab51a8de8aa523bfae15b7347452f8b87">More...</a><br /></td></tr>
 <tr class="separator:ab51a8de8aa523bfae15b7347452f8b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -430,6 +436,9 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:a6f201fa17002cc71492edb7da0b69b53"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#a6f201fa17002cc71492edb7da0b69b53">msOptimizeForShadowMapping</a></td></tr>
 <tr class="memdesc:a6f201fa17002cc71492edb7da0b69b53"><td class="mdescLeft">&#160;</td><td class="mdescRight">When this bool is false, prepareForShadowMapping will use the same Vaos for both regular and shadow mapping rendering.  <a href="class_ogre_1_1_mesh.html#a6f201fa17002cc71492edb7da0b69b53">More...</a><br /></td></tr>
 <tr class="separator:a6f201fa17002cc71492edb7da0b69b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9d1d491d2473e762d8ee442ed9bbff4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_mesh.html#aa9d1d491d2473e762d8ee442ed9bbff4">msUseTimestampAsHash</a></td></tr>
+<tr class="memdesc:aa9d1d491d2473e762d8ee442ed9bbff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">If a mesh file didn't save hash information (see <a class="el" href="class_ogre_1_1_mesh.html#aefb3e4d83bbea7b4d30410efce8bc9ac" title="Returns an array of [2] containing a hash for use in caches.">Mesh::getHashForCaches</a>) and msUseTimestampAsHash == true; then we use the file last modified timestamp as hash (it's better than nothing).  <a href="class_ogre_1_1_mesh.html#aa9d1d491d2473e762d8ee442ed9bbff4">More...</a><br /></td></tr>
+<tr class="separator:aa9d1d491d2473e762d8ee442ed9bbff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -916,6 +925,26 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a193d6556289c597ae0c44d56e773bc18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a193d6556289c597ae0c44d56e773bc18">&#9670;&nbsp;</a></span>_setHashForCaches()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Mesh::_setHashForCaches </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a>&#160;</td>
+          <td class="paramname"><em>hash</em>[2]</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Explicitly set a hash for caches. See <a class="el" href="class_ogre_1_1_mesh.html#aefb3e4d83bbea7b4d30410efce8bc9ac" title="Returns an array of [2] containing a hash for use in caches.">Mesh::getHashForCaches</a>. </p>
 
 </div>
 </div>
@@ -1528,6 +1557,38 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1v1_1_1_old_skeleton_instance.html#afc756583e198afc2c39872c03b14f2f3">Ogre::v1::OldSkeletonInstance</a>.</p>
+
+</div>
+</div>
+<a id="aefb3e4d83bbea7b4d30410efce8bc9ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefb3e4d83bbea7b4d30410efce8bc9ac">&#9670;&nbsp;</a></span>getHashForCaches()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a>* Ogre::Mesh::getHashForCaches </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns an array of [2] containing a hash for use in caches. </p>
+<p>A value of { 0, 0 } should be treated as not initialized.</p>
+<p>How this cache is calculated is unknown and could just be a filesystem timestamp rather than a checksum.</p>
+<p>When callers see that: getCacheHash()[i] != savedHash[i]</p>
+<p>they should treat as if the mesh has changed and the cache entry became stale </p>
 
 </div>
 </div>
@@ -3524,6 +3585,31 @@ Meshes can optionally be assigned a skeleton which can be used to animate the me
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_mesh.html#a6f201fa17002cc71492edb7da0b69b53" title="When this bool is false, prepareForShadowMapping will use the same Vaos for both regular and shadow m...">Ogre::Mesh::msOptimizeForShadowMapping</a> for the v2 version </dd>
 <dd>
 <a class="el" href="class_ogre_1_1v1_1_1_mesh.html#ae01d3bddf8aac16dc4d8f5923843fa98">Ogre::v1::Mesh::msOptimizeForShadowMapping</a> for the <a class="el" href="namespace_ogre_1_1v1.html">v1</a> version </dd></dl>
+
+</div>
+</div>
+<a id="aa9d1d491d2473e762d8ee442ed9bbff4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9d1d491d2473e762d8ee442ed9bbff4">&#9670;&nbsp;</a></span>msUseTimestampAsHash</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::Mesh::msUseTimestampAsHash</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If a mesh file didn't save hash information (see <a class="el" href="class_ogre_1_1_mesh.html#aefb3e4d83bbea7b4d30410efce8bc9ac" title="Returns an array of [2] containing a hash for use in caches.">Mesh::getHashForCaches</a>) and msUseTimestampAsHash == true; then we use the file last modified timestamp as hash (it's better than nothing). </p>
+<p>By default this is disabled since it's often not needed and can't hurt loading times with unnecessary disk access </p>
 
 </div>
 </div>

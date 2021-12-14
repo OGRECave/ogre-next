@@ -1,5 +1,10 @@
 var NAVTREEINDEX16 =
 {
+"_root_layouts.html":[1,16],
+"_root_layouts.html#RootLayoutPrefabs":[1,16,5],
+"_root_layouts.html#RootLayoutsAoTAuto":[1,16,6,2],
+"_root_layouts.html#RootLayoutsAoTCpp":[1,16,6,0],
+"_root_layouts.html#RootLayoutsAoTInlineShader":[1,16,6,1],
 "_root_layouts.html#RootLayoutsArraysOfTextures":[1,16,6],
 "_root_layouts.html#RootLayoutsBakedSets":[1,16,4],
 "_root_layouts.html#RootLayoutsDeclaringInShaders":[1,16,3],
@@ -244,10 +249,5 @@ var NAVTREEINDEX16 =
 "class_ogre_1_1_a_s_t_c_codec.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,3,0,19],
 "class_ogre_1_1_a_s_t_c_codec.html#acc4ee751f92b6e54051393e74e0a2884":[5,2,3,0,9],
 "class_ogre_1_1_a_s_t_c_codec.html#ad5d492ef5f8b9d5f813d53484507baf7":[5,2,3,0,5],
-"class_ogre_1_1_a_s_t_c_codec.html#ad9072a8530d43873924eb02ebae91569":[5,2,3,0,17],
-"class_ogre_1_1_a_s_t_c_codec.html#ae5b74cfd0cb797a2ac139b4adb7ac557":[5,2,3,0,15],
-"class_ogre_1_1_a_s_t_c_codec.html#af1c042a5f0846bff06d46cd0ad2ad0a4":[5,2,3,0,7],
-"class_ogre_1_1_a_s_t_c_codec.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,3,0,26],
-"class_ogre_1_1_absolute_pixel_count_lod_strategy.html":[7,0,0,7],
-"class_ogre_1_1_absolute_pixel_count_lod_strategy.html#a0834dd85d740a9f6783e10a70dfccc1b":[7,0,0,7,1]
+"class_ogre_1_1_a_s_t_c_codec.html#ad9072a8530d43873924eb02ebae91569":[5,2,3,0,17]
 };

@@ -90,6 +90,7 @@ var class_ogre_1_1v1_1_1_patch_mesh =
     [ "getGroup", "class_ogre_1_1v1_1_1_patch_mesh.html#a382919945c07a6a13136889ad3fbf578", null ],
     [ "getHandle", "class_ogre_1_1v1_1_1_patch_mesh.html#a2298551707debaf774d577e643ee856a", null ],
     [ "getHardwareBufferManager", "class_ogre_1_1v1_1_1_patch_mesh.html#a55221a7d8dac04b8efbd6b07c77cae41", null ],
+    [ "getHashForCaches", "class_ogre_1_1v1_1_1_patch_mesh.html#ab2988292ef8e025496c79e35115cfbd3", null ],
     [ "getIndexBufferUsage", "class_ogre_1_1v1_1_1_patch_mesh.html#acdf31ade7816b993211b9a4ce72a56c2", null ],
     [ "getLoadingState", "class_ogre_1_1v1_1_1_patch_mesh.html#a1e90ade99935ef70ec5b199243bf995b", null ],
     [ "getLodIndex", "class_ogre_1_1v1_1_1_patch_mesh.html#afe9fec3370d8303c9bac766621c3ba86", null ],

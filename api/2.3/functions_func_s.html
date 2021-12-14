@@ -413,7 +413,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 , <a class="el" href="class_ogre_1_1cbitset_n.html#ae7d31f2b12b62bd3019acc43f479b630">Ogre::cbitsetN&lt; _N, _internalDataType, _bits, _mask &gt;</a>
 </li>
 <li>SetAll()
-: <a class="el" href="class_ogre_1_1_mathlib_c.html#ad4fa9fd62f40d834e897958ce74e0453">Ogre::MathlibC</a>
+: <a class="el" href="class_ogre_1_1_mathlib_c.html#a6b61d7ad589596fc7a57d9fdd693e5e1">Ogre::MathlibC</a>
 </li>
 <li>setAllClearColours()
 : <a class="el" href="class_ogre_1_1_compositor_pass_def.html#a08c66aa1c72aef43599f360cfc6ada68">Ogre::CompositorPassDef</a>
@@ -577,6 +577,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>setAutoUpdate()
 : <a class="el" href="class_ogre_1_1v1_1_1_billboard_set.html#a0dd63b0312e4b70eb03d44e014b63499">Ogre::v1::BillboardSet</a>
+, <a class="el" href="class_ogre_1_1_vct_cascaded_voxelizer.html#a1a33c28cef079393cb0331b8a8b1321d">Ogre::VctCascadedVoxelizer</a>
 </li>
 <li>setAutoUpdateLod()
 : <a class="el" href="class_ogre_1_1_terrain_group.html#ab9136e3fb9fd9b6e1421ad454fe7d53c">Ogre::TerrainGroup</a>
@@ -717,8 +718,14 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setBuildParametersFromReflection()
 : <a class="el" href="class_ogre_1_1_gpu_program.html#a91663e447c0a4addd142cc2be5c1800b">Ogre::GpuProgram</a>
 </li>
+<li>setCacheResolution()
+: <a class="el" href="class_ogre_1_1_voxelized_mesh_cache.html#ad7b6e52800896fef7f4af2f669ee7988">Ogre::VoxelizedMeshCache</a>
+</li>
 <li>setCalcMode()
 : <a class="el" href="class_ogre_1_1_r_t_shader_1_1_f_f_p_fog.html#ae1b22380673f8f4a4ccadfc350f3ae0f">Ogre::RTShader::FFPFog</a>
+</li>
+<li>setCameraPosition()
+: <a class="el" href="class_ogre_1_1_vct_cascaded_voxelizer.html#a4fd028a077a340e10cfe6746a18cd380">Ogre::VctCascadedVoxelizer</a>
 </li>
 <li>setCapability()
 : <a class="el" href="class_ogre_1_1_render_system_capabilities.html#ae4d12b08dc193773222f9938c54d452c">Ogre::RenderSystemCapabilities</a>
@@ -794,7 +801,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setClearColour()
 : <a class="el" href="class_ogre_1_1_g_l3_plus_render_pass_descriptor.html#a2de172a47876cca124507b6af0af5f9e">Ogre::GL3PlusRenderPassDescriptor</a>
 , <a class="el" href="class_ogre_1_1_metal_render_pass_descriptor.html#a3b2f67e2fb6aa87c6310183306b66cdb">Ogre::MetalRenderPassDescriptor</a>
-, <a class="el" href="class_ogre_1_1_render_pass_descriptor.html#a362bc09082a320d70530f8a05802ea9f">Ogre::RenderPassDescriptor</a>
+, <a class="el" href="class_ogre_1_1_render_pass_descriptor.html#a79e426cbbf1b7bf9539bac1f3fa851f1">Ogre::RenderPassDescriptor</a>
 , <a class="el" href="class_ogre_1_1_vulkan_render_pass_descriptor.html#aa3130271c2aa6d5c3c4d4be7ebe1ce0d">Ogre::VulkanRenderPassDescriptor</a>
 </li>
 <li>setClearDepth()
@@ -829,7 +836,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setColour()
 : <a class="el" href="class_ogre_1_1_hlms_unlit_datablock.html#a51315b66b94e10cbef5e2f41bcf6ba51">Ogre::HlmsUnlitDatablock</a>
 , <a class="el" href="class_ogre_1_1_hlms_unlit_mobile_datablock.html#a2773f74c256cba687055b5396ac443d7">Ogre::HlmsUnlitMobileDatablock</a>
-, <a class="el" href="class_ogre_1_1_particle_emitter.html#a7f442353f518bf6caae127dac6d0b6ee">Ogre::ParticleEmitter</a>
+, <a class="el" href="class_ogre_1_1_particle_emitter.html#a857218f119755b72b9d3afbc1d896446">Ogre::ParticleEmitter</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_billboard.html#a8f6ee89c231201e62993d1052164740d">Ogre::v1::Billboard</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_overlay_element.html#a780983ea5bff7fd812fce662b6a017b7">Ogre::v1::OverlayElement</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_text_area_overlay_element.html#ab4076d8872bc3d5dbd5800ab0ddeb0a7">Ogre::v1::TextAreaOverlayElement</a>
@@ -961,8 +968,11 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setConsecutive()
 : <a class="el" href="class_ogre_1_1_pixel_box.html#a69fea3b4fed6726ee578519ec05bd246">Ogre::PixelBox</a>
 </li>
+<li>setConsistentCascadeSteps()
+: <a class="el" href="class_ogre_1_1_vct_cascaded_voxelizer.html#a59b14aa1217ae1991b14906b8642247e">Ogre::VctCascadedVoxelizer</a>
+</li>
 <li>setConstant()
-: <a class="el" href="class_ogre_1_1_gpu_program_parameters.html#ad39c979a9091a08c3932240bdb601815">Ogre::GpuProgramParameters</a>
+: <a class="el" href="class_ogre_1_1_gpu_program_parameters.html#a8256ff15f5b4aef94fd1697edb0dff0e">Ogre::GpuProgramParameters</a>
 </li>
 <li>setConstantFromTime()
 : <a class="el" href="class_ogre_1_1_gpu_program_parameters.html#a1f9b47a8a0af4fd4c8d4275817fa1d10">Ogre::GpuProgramParameters</a>
@@ -1002,7 +1012,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_texture_unit_state.html#a2a9fa08e6d82aa6a2572c0b11f1e4587">Ogre::TextureUnitState</a>
 </li>
 <li>setCubicTextureName()
-: <a class="el" href="class_ogre_1_1_texture_unit_state.html#aef7c395bc62173060141717a79681a97">Ogre::TextureUnitState</a>
+: <a class="el" href="class_ogre_1_1_texture_unit_state.html#ae19baf627a3dffd5795985bb16f4967b">Ogre::TextureUnitState</a>
 </li>
 <li>setCullIndividually()
 : <a class="el" href="class_ogre_1_1_particle_system.html#a3819fad31a2b507060becb0768b2992c">Ogre::ParticleSystem</a>
@@ -1126,7 +1136,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setDebugVisualization()
 : <a class="el" href="class_ogre_1_1_irradiance_field.html#a8f0e6e27854fea48c83bb374962b1efd">Ogre::IrradianceField</a>
 , <a class="el" href="class_ogre_1_1_vct_lighting.html#a28d80d34c961bcefd21614e4541805d0">Ogre::VctLighting</a>
-, <a class="el" href="class_ogre_1_1_vct_voxelizer.html#a223e41d03610a5312dd228a61a5f80c1">Ogre::VctVoxelizer</a>
+, <a class="el" href="class_ogre_1_1_vct_voxelizer_source_base.html#af8b649bc09c0bfb2bc200bba692f0f89">Ogre::VctVoxelizerSourceBase</a>
 </li>
 <li>setDecalsDiffuse()
 : <a class="el" href="class_ogre_1_1_scene_manager.html#a994566fb8e67589ebb8bb81b6442acf5">Ogre::SceneManager</a>
@@ -1278,7 +1288,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setDiffuse()
 : <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#ac4412e3f296a62c4020fed17ce810248">Ogre::HlmsPbsDatablock</a>
 , <a class="el" href="class_ogre_1_1_hlms_pbs_mobile_datablock.html#abba8a775a7c089cec52d9c072d0ae1ee">Ogre::HlmsPbsMobileDatablock</a>
-, <a class="el" href="class_ogre_1_1_material.html#aebf26724438956ed04cdc0834f088567">Ogre::Material</a>
+, <a class="el" href="class_ogre_1_1_material.html#ac074b3eb66c45685be8fb4b0ebbebcd6">Ogre::Material</a>
 , <a class="el" href="class_ogre_1_1_pass.html#ae371bb189752872dfa2e02694f6841f1">Ogre::Pass</a>
 , <a class="el" href="class_ogre_1_1_technique.html#a177ced7bb28cba1562a6d036a1b692f9">Ogre::Technique</a>
 </li>
@@ -2140,6 +2150,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setManualValue()
 : <a class="el" href="struct_ogre_1_1_shader_params_1_1_param.html#a64c539e0d28cacd0572c6949cd20f936">Ogre::ShaderParams::Param</a>
 </li>
+<li>setManualValueEx()
+: <a class="el" href="struct_ogre_1_1_shader_params_1_1_param.html#a2988f945b750d414d3c8e04edc7a2734">Ogre::ShaderParams::Param</a>
+</li>
 <li>setMaterial()
 : <a class="el" href="class_ogre_1_1_item.html#abb5eeb4bcb562a35bfbf6095ee5039d8">Ogre::Item</a>
 , <a class="el" href="class_ogre_1_1_renderable.html#a173800458c92ecefcff9d037be54afea">Ogre::Renderable</a>
@@ -2191,7 +2204,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_particle_emitter.html#a9194f48e306289c7f3c7f77374febb01">Ogre::ParticleEmitter</a>
 </li>
 <li>setMaximum()
-: <a class="el" href="class_ogre_1_1_axis_aligned_box.html#a76ad2dc729fbee83db77e0fa1eb101ed">Ogre::AxisAlignedBox</a>
+: <a class="el" href="class_ogre_1_1_axis_aligned_box.html#ae61ad12fad9545d49554ac6fcb9da224">Ogre::AxisAlignedBox</a>
 </li>
 <li>setMaximumResolutions()
 : <a class="el" href="class_ogre_1_1_render_system_capabilities.html#a9711b0aac1cd00105a18d08546a91bef">Ogre::RenderSystemCapabilities</a>
@@ -2304,13 +2317,13 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 , <a class="el" href="class_ogre_1_1_texture_unit_state.html#abad476c32cafd8defc6f3c6da71dd2cb">Ogre::TextureUnitState</a>
 </li>
 <li>setNamedAutoConstant()
-: <a class="el" href="class_ogre_1_1_gpu_program_parameters.html#a123cf81ee91123f9b978de694e9e3e3b">Ogre::GpuProgramParameters</a>
+: <a class="el" href="class_ogre_1_1_gpu_program_parameters.html#aea35597f193303287577318a36258f53">Ogre::GpuProgramParameters</a>
 </li>
 <li>setNamedAutoConstantReal()
 : <a class="el" href="class_ogre_1_1_gpu_program_parameters.html#a1c6fb2ccd401c240f7e66b4d1f4a330e">Ogre::GpuProgramParameters</a>
 </li>
 <li>setNamedConstant()
-: <a class="el" href="class_ogre_1_1_gpu_program_parameters.html#a3abe6e9e9e8028d6587ee6e61e27812f">Ogre::GpuProgramParameters</a>
+: <a class="el" href="class_ogre_1_1_gpu_program_parameters.html#a26c43a2d9831cf72a23ed949abf37eee">Ogre::GpuProgramParameters</a>
 , <a class="el" href="class_ogre_1_1_gpu_shared_parameters.html#a88315ac3a68d42fe43f524f6c4a307d2">Ogre::GpuSharedParameters</a>
 </li>
 <li>setNamedConstantFromTime()
@@ -2333,6 +2346,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>setNewRadius()
 : <a class="el" href="class_ogre_1_1_radial_density_mask.html#adc6f9d4c6aaa769d7ab06ae50560227c">Ogre::RadialDensityMask</a>
+</li>
+<li>setNewSettings()
+: <a class="el" href="class_ogre_1_1_vct_cascaded_voxelizer.html#ad2e61f6284d065f11c78063a9a0c4d46">Ogre::VctCascadedVoxelizer</a>
 </li>
 <li>setNext()
 : <a class="el" href="class_ogre_1_1_name_generator.html#a3b110d2ac699bf0ec00b5559f98527cd">Ogre::NameGenerator</a>
@@ -2422,6 +2438,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setNumProbes()
 : <a class="el" href="class_ogre_1_1_pcc_per_pixel_grid_placement.html#a93392f3dbbd10f324dbeed2806b55135">Ogre::PccPerPixelGridPlacement</a>
 </li>
+<li>setNumSamplerUnits()
+: <a class="el" href="class_ogre_1_1_hlms_compute_job.html#a20e88e59682a6c89874f6c19b1aa89f9">Ogre::HlmsComputeJob</a>
+</li>
 <li>setNumShadowTextureDefinitions()
 : <a class="el" href="class_ogre_1_1_compositor_shadow_node_def.html#ac104383e2903732544b0dcaefd730329">Ogre::CompositorShadowNodeDef</a>
 </li>
@@ -2461,6 +2480,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setOctant()
 : <a class="el" href="class_ogre_1_1_octree_node.html#a805155c7f24dd78fe15101dcf7878e98">Ogre::OctreeNode</a>
 , <a class="el" href="class_ogre_1_1_octree_zone_data.html#a12bad4625e23d23236a263ceb3cb94c6">Ogre::OctreeZoneData</a>
+</li>
+<li>setOctantSubdivision()
+: <a class="el" href="struct_ogre_1_1_vct_cascade_setting.html#afbfc7af951a572da7eccff17d63c6a5f">Ogre::VctCascadeSetting</a>
 </li>
 <li>setOctreeVisible()
 : <a class="el" href="class_ogre_1_1_volume_1_1_chunk.html#a8245f38abd50264c00473d4c54a8d56b">Ogre::Volume::Chunk</a>
@@ -2612,7 +2634,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_particle_system.html#aa0e2cb40912f330b101b373c84ae1f83">Ogre::ParticleSystem</a>
 </li>
 <li>setParticleVelocity()
-: <a class="el" href="class_ogre_1_1_particle_emitter.html#a659edec094aae09a7f1325e7e8fbc29a">Ogre::ParticleEmitter</a>
+: <a class="el" href="class_ogre_1_1_particle_emitter.html#a8d8c2e2e39187abc715d911cfa802780">Ogre::ParticleEmitter</a>
 </li>
 <li>setPassIterationCount()
 : <a class="el" href="class_ogre_1_1_pass.html#a28ff8c16ee57201651da61e649ea216b">Ogre::Pass</a>
@@ -2693,11 +2715,11 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>setPosition()
 : <a class="el" href="class_ogre_1_1_bone.html#acffff29a8144a59719964f38894c31b6">Ogre::Bone</a>
-, <a class="el" href="class_ogre_1_1_camera.html#abb5bad7918a07b1e7408f183b177d1a0">Ogre::Camera</a>
-, <a class="el" href="class_ogre_1_1_node.html#a4b19d272c8b485831fb8987fa3b936b1">Ogre::Node</a>
+, <a class="el" href="class_ogre_1_1_camera.html#a65b42920567de7259aa5ff8481a67ec6">Ogre::Camera</a>
+, <a class="el" href="class_ogre_1_1_node.html#a9ea731e0b03a84dec688dd05739ca108">Ogre::Node</a>
 , <a class="el" href="class_ogre_1_1_particle_emitter.html#aae174ed689d7748e3047bb4242440993">Ogre::ParticleEmitter</a>
 , <a class="el" href="class_ogre_1_1_terrain.html#aa87ddbb08f493d0901594fe6e3f4cafe">Ogre::Terrain</a>
-, <a class="el" href="class_ogre_1_1v1_1_1_billboard.html#a40dbb8de5303c016991fd0eaacfcba65">Ogre::v1::Billboard</a>
+, <a class="el" href="class_ogre_1_1v1_1_1_billboard.html#a82edd331937552fe5c88d6c73d75d091">Ogre::v1::Billboard</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#acb6fa3e62e74d6c35d3154c79393a41b">Ogre::v1::OldNode</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_overlay_element.html#a66a67e7173f045cba01fd43f56cfaa99">Ogre::v1::OverlayElement</a>
 </li>
@@ -2837,7 +2859,8 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1v1_1_1_static_geometry.html#a97d8ef0d832488bd80346b55dcd08794">Ogre::v1::StaticGeometry</a>
 </li>
 <li>setRegionToVoxelize()
-: <a class="el" href="class_ogre_1_1_vct_voxelizer.html#af30e2aff9ae2155aacb9552eee27b35b">Ogre::VctVoxelizer</a>
+: <a class="el" href="class_ogre_1_1_vct_image_voxelizer.html#a1b73e0855ee130c8e7522ef8cfb6fca5">Ogre::VctImageVoxelizer</a>
+, <a class="el" href="class_ogre_1_1_vct_voxelizer.html#af30e2aff9ae2155aacb9552eee27b35b">Ogre::VctVoxelizer</a>
 </li>
 <li>setRelativeOrigin()
 : <a class="el" href="class_ogre_1_1_scene_manager.html#a3ee0d5d307652b51bc7a405907a85368">Ogre::SceneManager</a>
@@ -2914,6 +2937,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>setResolution()
 : <a class="el" href="class_ogre_1_1_texture_gpu.html#af79e22c90559d13385d75dc19970806d">Ogre::TextureGpu</a>
+, <a class="el" href="struct_ogre_1_1_vct_cascade_setting.html#a6aa0f58e6a7a8dbecb6dbd93369c606f">Ogre::VctCascadeSetting</a>
 , <a class="el" href="class_ogre_1_1_vct_voxelizer.html#a47eabebe58c2532c9115e9022b9d462d">Ogre::VctVoxelizer</a>
 </li>
 <li>setResolveStageFlags()
@@ -2991,7 +3015,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_bone.html#acc74fd3fd8c209fa6c2520ff2a553c64">Ogre::Bone</a>
 , <a class="el" href="class_ogre_1_1_matrix4.html#a754a168ea4d55d40c9a24ef33eb41c95">Ogre::Matrix4</a>
 , <a class="el" href="class_ogre_1_1_node.html#af62a3dc794cf46ef1c023353e1eccbfc">Ogre::Node</a>
-, <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a08ae372f89e723e3263c83e50a3cc6f1">Ogre::v1::OldNode</a>
+, <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#aff774bd0981ffdf2370b1d6851eb3712">Ogre::v1::OldNode</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_overlay.html#a475deef82c73ba45209b847a65b0aad3">Ogre::v1::Overlay</a>
 , <a class="el" href="class_ogre_1_1v1_1_1_transform_key_frame.html#ace87c1b3dc6e1718bbd89c2da1e341f1">Ogre::v1::TransformKeyFrame</a>
 </li>
@@ -3007,6 +3031,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>setSceneNodeAsParentOfBone()
 : <a class="el" href="class_ogre_1_1_skeleton_instance.html#a688c8d85bb2bd4f747fd780872089250">Ogre::SkeletonInstance</a>
+</li>
+<li>setSceneResolution()
+: <a class="el" href="class_ogre_1_1_vct_image_voxelizer.html#a867070de2762d5ca93dea67c5eb7cad2">Ogre::VctImageVoxelizer</a>
 </li>
 <li>setSchemeName()
 : <a class="el" href="class_ogre_1_1_technique.html#a43b6c4e9e48c4e56f96633b916ee90a3">Ogre::Technique</a>
@@ -3149,7 +3176,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_terrain_global_options.html#a1edb0e8e24ef3f8d7ef698b88eb97613">Ogre::TerrainGlobalOptions</a>
 </li>
 <li>setSky()
-: <a class="el" href="class_ogre_1_1_scene_manager.html#ab8c1c6962ad94e28ac4a202f1fd16772">Ogre::SceneManager</a>
+: <a class="el" href="class_ogre_1_1_scene_manager.html#a3dc2f4478ab8741bdcf02c9008ef7809">Ogre::SceneManager</a>
 </li>
 <li>setSkyZone()
 : <a class="el" href="class_ogre_1_1_p_c_z_scene_manager.html#aab8c479c11d401a917e3471fbfc49bfe">Ogre::PCZSceneManager</a>
@@ -3202,7 +3229,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 , <a class="el" href="class_ogre_1_1_technique.html#a7f58112618978a38cb9396936a54586a">Ogre::Technique</a>
 </li>
 <li>setSpecularColour()
-: <a class="el" href="class_ogre_1_1_light.html#a07c50eb182b14e404d34c3a1bcae9664">Ogre::Light</a>
+: <a class="el" href="class_ogre_1_1_light.html#a614988755dcedf910f7df90fafe6158e">Ogre::Light</a>
 </li>
 <li>setSpeedFactor()
 : <a class="el" href="class_ogre_1_1_particle_system.html#afd8ec707603e16d1b0eec2e734486947">Ogre::ParticleSystem</a>
@@ -3379,7 +3406,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1v1_1_1_billboard.html#a47db950110cad75aa5608308fb16dabf">Ogre::v1::Billboard</a>
 </li>
 <li>setTexture()
-: <a class="el" href="class_ogre_1_1_hlms_compute_job.html#a9f9fc0afc2c8b327d9a00e8fc296b163">Ogre::HlmsComputeJob</a>
+: <a class="el" href="class_ogre_1_1_hlms_compute_job.html#ae8398ec1818d61b21005293c32173739">Ogre::HlmsComputeJob</a>
 , <a class="el" href="class_ogre_1_1_hlms_pbs_datablock.html#a4c5eb8d3bea9b3b472c6f9b3c26e4499">Ogre::HlmsPbsDatablock</a>
 , <a class="el" href="class_ogre_1_1_hlms_pbs_mobile_datablock.html#aa5c8a271d29bb48ee5abfd4c1f63a691">Ogre::HlmsPbsMobileDatablock</a>
 , <a class="el" href="class_ogre_1_1_hlms_unlit_datablock.html#a3c66c8b9950f741e9130d54d767f6e1d">Ogre::HlmsUnlitDatablock</a>
@@ -3738,7 +3765,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1v1_1_1_panel_overlay_element.html#af59d2b59dd76057f31e19cde6456c176">Ogre::v1::PanelOverlayElement</a>
 </li>
 <li>setValue()
-: <a class="el" href="class_ogre_1_1_animable_value.html#ac9f25ae01ac3b9cec80df9e7e930bac9">Ogre::AnimableValue</a>
+: <a class="el" href="class_ogre_1_1_animable_value.html#a7bf19d59335bc397010e009eaf593288">Ogre::AnimableValue</a>
 , <a class="el" href="class_ogre_1_1bitset64.html#a9ac806c945156cea08091858d2d5a83a">Ogre::bitset64</a>
 , <a class="el" href="class_ogre_1_1cbitset_n.html#a5df41b65723a789e579d2b6260e5f6e0">Ogre::cbitsetN&lt; _N, _internalDataType, _bits, _mask &gt;</a>
 , <a class="el" href="class_ogre_1_1_controller_value.html#ab719e69a47857662b71041b9c74e546b">Ogre::ControllerValue&lt; T &gt;</a>
@@ -3925,8 +3952,8 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_scene_query.html#aec3aa0b8b16c41fae990ee78150f8d2a">Ogre::SceneQuery</a>
 </li>
 <li>setWorldGeometry()
-: <a class="el" href="class_ogre_1_1_bsp_scene_manager.html#a4444e8e94c01206790db4bfad8c487ea">Ogre::BspSceneManager</a>
-, <a class="el" href="class_ogre_1_1_scene_manager.html#accb0fdfbd1f61aa4d3d6e1f4625e1f9c">Ogre::SceneManager</a>
+: <a class="el" href="class_ogre_1_1_bsp_scene_manager.html#a91c52dc16409d813d917981aeaf5359b">Ogre::BspSceneManager</a>
+, <a class="el" href="class_ogre_1_1_scene_manager.html#a9b7ebcecf64452f59211f45d4ec33576">Ogre::SceneManager</a>
 </li>
 <li>setWorldGeometryRenderQueue()
 : <a class="el" href="class_ogre_1_1_p_c_z_scene_manager.html#a222a1701e1a9453b0143ea9a0076cca0">Ogre::PCZSceneManager</a>
@@ -4126,7 +4153,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_texture_filter_1_1_filter_base.html#a037eeaf32c0d8df71ba2f8ea4f4cbc75">Ogre::TextureFilter::FilterBase</a>
 </li>
 <li>Sin()
-: <a class="el" href="class_ogre_1_1_math.html#a87fdeb1d010d7297868125ff624b496d">Ogre::Math</a>
+: <a class="el" href="class_ogre_1_1_math.html#aa6562b753755c2e21200b7d4479c2dcd">Ogre::Math</a>
 </li>
 <li>Sin4()
 : <a class="el" href="class_ogre_1_1_mathlib_c.html#a3c6672b2e6b4420e0e70fa2f5786a719">Ogre::MathlibC</a>
@@ -4209,8 +4236,8 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_pixel_box.html#a7b382662d5c73f2df65754a0c271555c">Ogre::PixelBox</a>
 </li>
 <li>Slot()
-: <a class="el" href="struct_ogre_1_1_descriptor_set_texture2_1_1_slot.html#ad90ec782bd82bcad462499d7e408f911">Ogre::DescriptorSetTexture2::Slot</a>
-, <a class="el" href="struct_ogre_1_1_descriptor_set_uav_1_1_slot.html#ac4bf826a62c0bee95ec1ba3387684bf3">Ogre::DescriptorSetUav::Slot</a>
+: <a class="el" href="struct_ogre_1_1_descriptor_set_texture2_1_1_slot.html#a4ca5ecff604b3f0278f7165fd8ba8003">Ogre::DescriptorSetTexture2::Slot</a>
+, <a class="el" href="struct_ogre_1_1_descriptor_set_uav_1_1_slot.html#a3cd09401c35633a1857850b8a477e714">Ogre::DescriptorSetUav::Slot</a>
 </li>
 <li>slotToBlockIdx()
 : <a class="el" href="class_ogre_1_1_skeleton_def.html#a64089161b0d29f174cba0bb18e208f51">Ogre::SkeletonDef</a>
@@ -4450,7 +4477,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_simple_matrix_af4x3.html#a020f1887f5bcd35a547f1c9e2027a9e2">Ogre::SimpleMatrixAf4x3</a>
 </li>
 <li>store4x3()
-: <a class="el" href="class_ogre_1_1_simple_matrix_af4x3.html#a1e9d1874ff85181954a0abd62df06096">Ogre::SimpleMatrixAf4x3</a>
+: <a class="el" href="class_ogre_1_1_simple_matrix_af4x3.html#a4d32af8e371b41ec23dec4b4a0958188">Ogre::SimpleMatrixAf4x3</a>
 </li>
 <li>storeEdges()
 : <a class="el" href="class_ogre_1_1_polygon.html#a6c6bde3911911e1bdf7ff2ed93209eda">Ogre::Polygon</a>
@@ -4485,7 +4512,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 , <a class="el" href="struct_ogre_1_1_g_l3_plus_vao_manager_1_1_stride_changer.html#a99da356a32eb6005bc4c8d766feae727">Ogre::GL3PlusVaoManager::StrideChanger</a>
 , <a class="el" href="struct_ogre_1_1_g_l_e_s2_vao_manager_1_1_stride_changer.html#a0ce974427297e0914b92b66f47e21b75">Ogre::GLES2VaoManager::StrideChanger</a>
 , <a class="el" href="struct_ogre_1_1_metal_vao_manager_1_1_stride_changer.html#a15bb50f04860a091c3527db0b3ce1931">Ogre::MetalVaoManager::StrideChanger</a>
-, <a class="el" href="struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#af5c486a598e4b9cd990aa9d8f196b913">Ogre::NULLVaoManager::StrideChanger</a>
+, <a class="el" href="struct_ogre_1_1_n_u_l_l_vao_manager_1_1_stride_changer.html#a74e575b576b618161db20a779ced37cb">Ogre::NULLVaoManager::StrideChanger</a>
 , <a class="el" href="struct_ogre_1_1_vulkan_vao_manager_1_1_stride_changer.html#aee6e98995ca7e619e155ddab43c76836">Ogre::VulkanVaoManager::StrideChanger</a>
 </li>
 <li>StringInterface()
@@ -4643,7 +4670,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="class_ogre_1_1_android_e_g_l_support.html#a5437bee6dd8c3593db1d77466ac90fc1">Ogre::AndroidEGLSupport</a>
 , <a class="el" href="class_ogre_1_1_e_g_l_support.html#a43d180a4897f40c624a7213fadb15798">Ogre::EGLSupport</a>
 , <a class="el" href="class_ogre_1_1_emscripten_e_g_l_support.html#a5e73ea509dea2778aa69d40e8857502f">Ogre::EmscriptenEGLSupport</a>
-, <a class="el" href="class_ogre_1_1_g_l_x_g_l_support.html#a0910933ba2bb1ba1ee770b402dd33625">Ogre::GLXGLSupport</a>
+, <a class="el" href="class_ogre_1_1_g_l_x_g_l_support.html#a51176a39c9c323825b912f6d5f050f3a">Ogre::GLXGLSupport</a>
 , <a class="el" href="class_ogre_1_1_na_cl_g_l_support.html#ae635bdaffdd6cb360f59ef813292d687">Ogre::NaClGLSupport</a>
 , <a class="el" href="class_ogre_1_1_vulkan_xcb_window.html#a5c0fc2686c6ae1721340fed3687fb8aa">Ogre::VulkanXcbWindow</a>
 , <a class="el" href="class_ogre_1_1_win32_e_g_l_support.html#aee71411b493ff1737308b311577f04da">Ogre::Win32EGLSupport</a>

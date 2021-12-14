@@ -1,5 +1,10 @@
 var NAVTREEINDEX35 =
 {
+"class_ogre_1_1_compositor_pass_ibl_specular_def.html":[5,2,1,12],
+"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a03f4a196d4bc9d62b967019c5bf7c5ac":[5,2,1,12,54],
+"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a08c66aa1c72aef43599f360cfc6ada68":[5,2,1,12,18],
+"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a0b4a4fd4f44297517eff18d830d52b9f":[5,2,1,12,39],
+"class_ogre_1_1_compositor_pass_ibl_specular_def.html#a0fdf3a38961c32069cde61f23d7ff674":[5,2,1,12,45],
 "class_ogre_1_1_compositor_pass_ibl_specular_def.html#a114c9c278a29353ebe78cc7d7e3fce6f":[5,2,1,12,0],
 "class_ogre_1_1_compositor_pass_ibl_specular_def.html#a19d4bd88e211650df13db9ffd314e680":[5,2,1,12,1],
 "class_ogre_1_1_compositor_pass_ibl_specular_def.html#a1c2ec91e26d3a0792c113570885b47a5":[5,2,1,12,48],
@@ -244,10 +249,5 @@ var NAVTREEINDEX35 =
 "class_ogre_1_1_compositor_pass_quad_def.html#acb4b5b4edffa1281c16b859a9df00b7c":[5,2,1,16,38],
 "class_ogre_1_1_compositor_pass_quad_def.html#ad7fab9725642fc9f33db037e4de914e2":[5,2,1,16,56],
 "class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9":[5,2,1,16,3],
-"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9a00f58cc6fbcb836a80e7c16f8710b353":[5,2,1,16,3,2],
-"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9a239c724fd1311ee5d1233d0880864d14":[5,2,1,16,3,5],
-"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9a54cf847890ead396a9b17ec9158046d4":[5,2,1,16,3,3],
-"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9a777963435f79cab3f762f2997813581a":[5,2,1,16,3,4],
-"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9aa9d652cfc683852f1bcb71a6a566e210":[5,2,1,16,3,6],
-"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9ab3b1383fb726c7e84da6b51d8ece1b5d":[5,2,1,16,3,0]
+"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9a00f58cc6fbcb836a80e7c16f8710b353":[5,2,1,16,3,2]
 };

@@ -77,6 +77,8 @@ var hierarchy =
       ] ]
     ] ],
     [ "Ogre::FastArray< AGSDX11ReturnedParams >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Batch >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< BatchInstances >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< BoneTransform >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< bool >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< BuildLightListRequest >", "class_ogre_1_1_fast_array.html", null ],
@@ -88,6 +90,7 @@ var hierarchy =
     [ "Ogre::FastArray< DownloadData >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< EGLDeviceEXT >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< float >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< int32 >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Interface >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Item * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Light * >", "class_ogre_1_1_fast_array.html", null ],
@@ -111,6 +114,8 @@ var hierarchy =
     [ "Ogre::FastArray< Ogre::SampleDescription >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::SkeletonInstance * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::TextureGpu * >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::VctCascadeSetting >", "class_ogre_1_1_fast_array.html", null ],
+    [ "Ogre::FastArray< Ogre::VctLighting * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::VulkanDescriptorPool * >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::VulkanQueue >", "class_ogre_1_1_fast_array.html", null ],
     [ "Ogre::FastArray< Ogre::VulkanQueue::PerFrameData >", "class_ogre_1_1_fast_array.html", null ],
@@ -1401,7 +1406,8 @@ var hierarchy =
       [ "Ogre::ParallaxCorrectedCubemapBase", "class_ogre_1_1_parallax_corrected_cubemap_base.html", [
         [ "Ogre::ParallaxCorrectedCubemap", "class_ogre_1_1_parallax_corrected_cubemap.html", null ],
         [ "Ogre::ParallaxCorrectedCubemapAuto", "class_ogre_1_1_parallax_corrected_cubemap_auto.html", null ]
-      ] ]
+      ] ],
+      [ "Ogre::VctCascadedVoxelizer", "class_ogre_1_1_vct_cascaded_voxelizer.html", null ]
     ] ],
     [ "Ogre::ComPtr< T >", "class_ogre_1_1_com_ptr.html", null ],
     [ "Ogre::ComPtr< T >::SafeBoolHelper", "struct_ogre_1_1_com_ptr_1_1_safe_bool_helper.html", null ],
@@ -1643,7 +1649,11 @@ var hierarchy =
       [ "Ogre::SceneManager", "class_ogre_1_1_scene_manager.html", null ],
       [ "Ogre::VctLighting", "class_ogre_1_1_vct_lighting.html", null ],
       [ "Ogre::VctMaterial", "class_ogre_1_1_vct_material.html", null ],
-      [ "Ogre::VctVoxelizer", "class_ogre_1_1_vct_voxelizer.html", null ]
+      [ "Ogre::VctVoxelizerSourceBase", "class_ogre_1_1_vct_voxelizer_source_base.html", [
+        [ "Ogre::VctImageVoxelizer", "class_ogre_1_1_vct_image_voxelizer.html", null ],
+        [ "Ogre::VctVoxelizer", "class_ogre_1_1_vct_voxelizer.html", null ]
+      ] ],
+      [ "Ogre::VoxelizedMeshCache", "class_ogre_1_1_voxelized_mesh_cache.html", null ]
     ] ],
     [ "Ogre::IdString", "struct_ogre_1_1_id_string.html", null ],
     [ "Ogre::InstantRadiosity", "class_ogre_1_1_instant_radiosity.html", null ],
@@ -2105,6 +2115,7 @@ var hierarchy =
     [ "Ogre::Segment", "class_ogre_1_1_segment.html", null ],
     [ "Ogre::ShaderParams::AutoParam", "struct_ogre_1_1_shader_params_1_1_auto_param.html", null ],
     [ "Ogre::ShaderParams::ManualParam", "struct_ogre_1_1_shader_params_1_1_manual_param.html", null ],
+    [ "Ogre::ShaderParams::ManualParamEx", "struct_ogre_1_1_shader_params_1_1_manual_param_ex.html", null ],
     [ "Ogre::ShaderParams::Param", "struct_ogre_1_1_shader_params_1_1_param.html", null ],
     [ "Ogre::ShadowNodeHelper", "class_ogre_1_1_shadow_node_helper.html", null ],
     [ "Ogre::ShadowNodeHelper::Resolution", "struct_ogre_1_1_shadow_node_helper_1_1_resolution.html", null ],
@@ -2257,6 +2268,7 @@ var hierarchy =
     [ "Ogre::v1::VertexShadowMapHelper::Geometry", "struct_ogre_1_1v1_1_1_vertex_shadow_map_helper_1_1_geometry.html", null ],
     [ "Ogre::v1::VulkanHardwareBufferCommon", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_common.html", null ],
     [ "Ogre::VaoManager::MemoryStatsEntry", "struct_ogre_1_1_vao_manager_1_1_memory_stats_entry.html", null ],
+    [ "Ogre::VctCascadeSetting", "struct_ogre_1_1_vct_cascade_setting.html", null ],
     [ "Ogre::VctMaterial::DatablockConversionResult", "struct_ogre_1_1_vct_material_1_1_datablock_conversion_result.html", null ],
     [ "Ogre::Vector2", "class_ogre_1_1_vector2.html", null ],
     [ "Ogre::Vector3", "class_ogre_1_1_vector3.html", null ],
@@ -2298,6 +2310,7 @@ var hierarchy =
       ] ]
     ] ],
     [ "Ogre::Volume::Vertex", "struct_ogre_1_1_volume_1_1_vertex.html", null ],
+    [ "Ogre::VoxelizedMeshCache::VoxelizedMesh", "struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html", null ],
     [ "Ogre::VoxelizerBucket", "struct_ogre_1_1_voxelizer_bucket.html", null ],
     [ "Ogre::VrData", "struct_ogre_1_1_vr_data.html", null ],
     [ "Ogre::VulkanConstantDefinitionBindingParam", "struct_ogre_1_1_vulkan_constant_definition_binding_param.html", null ],

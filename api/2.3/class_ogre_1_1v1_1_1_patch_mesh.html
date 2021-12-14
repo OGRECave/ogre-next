@@ -343,6 +343,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2298551707debaf774d577e643ee856a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55221a7d8dac04b8efbd6b07c77cae41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html">HardwareBufferManagerBase</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_mesh.html#a55221a7d8dac04b8efbd6b07c77cae41">getHardwareBufferManager</a> ()</td></tr>
 <tr class="separator:a55221a7d8dac04b8efbd6b07c77cae41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2988292ef8e025496c79e35115cfbd3"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_mesh.html#ab2988292ef8e025496c79e35115cfbd3">getHashForCaches</a> (void) const</td></tr>
+<tr class="memdesc:ab2988292ef8e025496c79e35115cfbd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an array of [2] containing a hash for use in caches.  <a href="class_ogre_1_1v1_1_1_mesh.html#ab2988292ef8e025496c79e35115cfbd3">More...</a><br /></td></tr>
+<tr class="separator:ab2988292ef8e025496c79e35115cfbd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdf31ade7816b993211b9a4ce72a56c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_mesh.html#acdf31ade7816b993211b9a4ce72a56c2">getIndexBufferUsage</a> (void) const</td></tr>
 <tr class="memdesc:acdf31ade7816b993211b9a4ce72a56c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the usage setting for this meshes index buffers.  <a href="class_ogre_1_1v1_1_1_mesh.html#acdf31ade7816b993211b9a4ce72a56c2">More...</a><br /></td></tr>
 <tr class="separator:acdf31ade7816b993211b9a4ce72a56c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -3107,6 +3110,38 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab2988292ef8e025496c79e35115cfbd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2988292ef8e025496c79e35115cfbd3">&#9670;&nbsp;</a></span>getHashForCaches()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a>* Ogre::v1::Mesh::getHashForCaches </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns an array of [2] containing a hash for use in caches. </p>
+<p>A value of { 0, 0 } should be treated as not initialized.</p>
+<p>How this cache is calculated is unknown and could just be a filesystem timestamp rather than a checksum.</p>
+<p>When callers see that: getCacheHash()[i] != savedHash[i]</p>
+<p>they should treat as if the mesh has changed and the cache entry became stale </p>
 
 </div>
 </div>

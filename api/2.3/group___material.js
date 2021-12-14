@@ -232,6 +232,7 @@ var group___material =
       [ "getGlTexSlotStart", "class_ogre_1_1_hlms_compute_job.html#aa8a79ed26036667b0a1f0e27b1e5c6ee", null ],
       [ "getName", "class_ogre_1_1_hlms_compute_job.html#a11591653841ac96f3c46dcfd72e2e5e9", null ],
       [ "getNameStr", "class_ogre_1_1_hlms_compute_job.html#ac605bf73c4444102ceb71b01249a7a90", null ],
+      [ "getNumSamplerUnits", "class_ogre_1_1_hlms_compute_job.html#a5111386e6bfd433aee3e7d75418f95c4", null ],
       [ "getNumTexUnits", "class_ogre_1_1_hlms_compute_job.html#a7777cbf1ece29f3f4ab6d67291e6fb94", null ],
       [ "getNumThreadGroups", "class_ogre_1_1_hlms_compute_job.html#af85a5e4af87470de288837c2ae12f363", null ],
       [ "getNumThreadGroupsX", "class_ogre_1_1_hlms_compute_job.html#a41730ed273c03f4b565d8152f26c526b", null ],
@@ -264,6 +265,7 @@ var group___material =
       [ "setConstBuffer", "class_ogre_1_1_hlms_compute_job.html#a27bc9875aa0f3a2f23d7a8c8e3a6e469", null ],
       [ "setGlTexSlotStart", "class_ogre_1_1_hlms_compute_job.html#a29709c020f2dbe9fd7bac1df927f5bc0", null ],
       [ "setInformHlmsOfTextureData", "class_ogre_1_1_hlms_compute_job.html#aea1aec87cba9ef66ee4b82267de4fb84", null ],
+      [ "setNumSamplerUnits", "class_ogre_1_1_hlms_compute_job.html#a20e88e59682a6c89874f6c19b1aa89f9", null ],
       [ "setNumTexUnits", "class_ogre_1_1_hlms_compute_job.html#a0998857be120bb37963c7cb593f9bfdc", null ],
       [ "setNumThreadGroups", "class_ogre_1_1_hlms_compute_job.html#a80c6b47d60cba7f70ba182d1fc8d9d62", null ],
       [ "setNumThreadGroupsBasedOn", "class_ogre_1_1_hlms_compute_job.html#a7ad8078ce6528c5604e2a61bb516c000", null ],
@@ -272,7 +274,7 @@ var group___material =
       [ "setProperty", "class_ogre_1_1_hlms_compute_job.html#a7b558bb23efecb99c9976312caff06c2", null ],
       [ "setSamplerblock", "class_ogre_1_1_hlms_compute_job.html#a708b1694992ac7ea73e3310fbb9b478b", null ],
       [ "setTexBuffer", "class_ogre_1_1_hlms_compute_job.html#ab6119b9bf4d187fcbcbb98e0988a09d2", null ],
-      [ "setTexture", "class_ogre_1_1_hlms_compute_job.html#a9f9fc0afc2c8b327d9a00e8fc296b163", null ],
+      [ "setTexture", "class_ogre_1_1_hlms_compute_job.html#ae8398ec1818d61b21005293c32173739", null ],
       [ "setThreadsPerGroup", "class_ogre_1_1_hlms_compute_job.html#a1b6c36a6b27927381afeea6965b148b4", null ],
       [ "setupRootLayout", "class_ogre_1_1_hlms_compute_job.html#aa18bf6a908f4f13fc8d0063a88bc0575", null ],
       [ "shouldStayLoaded", "class_ogre_1_1_hlms_compute_job.html#a1427f0b635a4186cd6083a9bab879fa2", null ],
@@ -1232,6 +1234,11 @@ var group___material =
         [ "dataSizeBytes", "struct_ogre_1_1_shader_params_1_1_manual_param.html#a1320e0b6cc0a86e1e6360f4b32173e40", null ],
         [ "elementType", "struct_ogre_1_1_shader_params_1_1_manual_param.html#ad3c1b40f03373dff27823554d2ffa935", null ]
       ] ],
+      [ "ManualParamEx", "struct_ogre_1_1_shader_params_1_1_manual_param_ex.html", [
+        [ "dataBytes", "struct_ogre_1_1_shader_params_1_1_manual_param_ex.html#a49b917c271ea3b0b46b6da50c8d4f9bd", null ],
+        [ "dataSizeBytes", "struct_ogre_1_1_shader_params_1_1_manual_param_ex.html#a13528eb335f8064e9a84cd7c83a5492b", null ],
+        [ "elementType", "struct_ogre_1_1_shader_params_1_1_manual_param_ex.html#a8802f287351b1847ea18f24fe924add8", null ]
+      ] ],
       [ "Param", "struct_ogre_1_1_shader_params_1_1_param.html", [
         [ "getManualValue", "struct_ogre_1_1_shader_params_1_1_param.html#a450dd434d655d8fa6ef9ad86e5d1066b", null ],
         [ "getManualValue", "struct_ogre_1_1_shader_params_1_1_param.html#abeff2dc30e617ce4d180a9d519fe2eda", null ],
@@ -1247,10 +1254,16 @@ var group___material =
         [ "setManualValue", "struct_ogre_1_1_shader_params_1_1_param.html#a1c72c84bbfea954d5ea0cc36dafb7985", null ],
         [ "setManualValue", "struct_ogre_1_1_shader_params_1_1_param.html#ab83852d923f92e5d5326370774d2925b", null ],
         [ "setManualValue", "struct_ogre_1_1_shader_params_1_1_param.html#a86601d21b2ab9ceece7d2a4042b111e7", null ],
+        [ "setManualValueEx", "struct_ogre_1_1_shader_params_1_1_param.html#a2988f945b750d414d3c8e04edc7a2734", null ],
+        [ "setManualValueEx", "struct_ogre_1_1_shader_params_1_1_param.html#aaf26d82268e49ba45e3c8ff32dd247ca", null ],
+        [ "setManualValueEx", "struct_ogre_1_1_shader_params_1_1_param.html#a75363c6cdd25a2ad00c0f6397055e7a2", null ],
+        [ "setManualValueEx", "struct_ogre_1_1_shader_params_1_1_param.html#a6a0d27bb2426374235c7caa2c5146191", null ],
         [ "ap", "struct_ogre_1_1_shader_params_1_1_param.html#a770d8a5b4fecc84cca568f5dbb08f9a9", null ],
         [ "isAutomatic", "struct_ogre_1_1_shader_params_1_1_param.html#a73986afabd847c162e084f60cce86a27", null ],
         [ "isDirty", "struct_ogre_1_1_shader_params_1_1_param.html#a30cb737c947db1fe515815be72f19c42", null ],
+        [ "isEx", "struct_ogre_1_1_shader_params_1_1_param.html#a8086a794aefa26bdc20819f49ebc3772", null ],
         [ "mp", "struct_ogre_1_1_shader_params_1_1_param.html#aecc3ba3ceac4e80b17b3471260b8942e", null ],
+        [ "mpEx", "struct_ogre_1_1_shader_params_1_1_param.html#a3b874d31c951ff796727ef1d85e9ea74", null ],
         [ "name", "struct_ogre_1_1_shader_params_1_1_param.html#a7f3e1c3d619e62d1c4067063bb38c9de", null ]
       ] ],
       [ "ParamVec", "class_ogre_1_1_shader_params.html#a32bd59e412c4d5caf320bd4d0c97debe", null ],

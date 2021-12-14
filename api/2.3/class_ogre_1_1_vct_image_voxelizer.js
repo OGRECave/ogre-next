@@ -1,0 +1,37 @@
+var class_ogre_1_1_vct_image_voxelizer =
+[
+    [ "DebugVisualizationMode", "class_ogre_1_1_vct_image_voxelizer.html#a81d9aa7659e492c2e3c9fd08dca322c9", [
+      [ "DebugVisualizationAlbedo", "class_ogre_1_1_vct_image_voxelizer.html#a81d9aa7659e492c2e3c9fd08dca322c9a52a37b012fb6f0a5d66d270e87a2f3c0", null ],
+      [ "DebugVisualizationNormal", "class_ogre_1_1_vct_image_voxelizer.html#a81d9aa7659e492c2e3c9fd08dca322c9a77aa9415bc2c0d2bae69c7eed3b758f1", null ],
+      [ "DebugVisualizationEmissive", "class_ogre_1_1_vct_image_voxelizer.html#a81d9aa7659e492c2e3c9fd08dca322c9a4121b680dcfb911290c619e178db860c", null ],
+      [ "DebugVisualizationNone", "class_ogre_1_1_vct_image_voxelizer.html#a81d9aa7659e492c2e3c9fd08dca322c9a95f7e42a500bed2bc953377d46852678", null ]
+    ] ],
+    [ "VctImageVoxelizer", "class_ogre_1_1_vct_image_voxelizer.html#acec9f231f99329be140217bf4b56902b", null ],
+    [ "~VctImageVoxelizer", "class_ogre_1_1_vct_image_voxelizer.html#af5ef4dbfe33896567d0400b06769b090", null ],
+    [ "addItem", "class_ogre_1_1_vct_image_voxelizer.html#adf2b5318f28edb0e7e0d102abb4ea200", null ],
+    [ "autoCalculateRegion", "class_ogre_1_1_vct_image_voxelizer.html#a9e9d6a701188ebad524e9d77f066d871", null ],
+    [ "build", "class_ogre_1_1_vct_image_voxelizer.html#aa48b31bd0e72742be0f30776c6bbb723", null ],
+    [ "buildRelative", "class_ogre_1_1_vct_image_voxelizer.html#a30e956bfbbf67fcd5ea7fe0dea8333e1", null ],
+    [ "dividideOctants", "class_ogre_1_1_vct_image_voxelizer.html#a55558c477a3c49a1c1f1aba61db14a78", null ],
+    [ "forceFullBuild", "class_ogre_1_1_vct_image_voxelizer.html#a3dfade72a1ca42801fed1e887f7c3555", null ],
+    [ "getAlbedoVox", "class_ogre_1_1_vct_image_voxelizer.html#a778c9daea3873b3f02f9aabecdd6c5e9", null ],
+    [ "getDebugVisualizationMode", "class_ogre_1_1_vct_image_voxelizer.html#af9a1cd11f34676b4ef13f3254cbbea3c", null ],
+    [ "getEmissiveVox", "class_ogre_1_1_vct_image_voxelizer.html#a24b1a0e0272f954fa306c008ac6a0a27", null ],
+    [ "getHlmsManager", "class_ogre_1_1_vct_image_voxelizer.html#aea68b3198bdb3acc43ac6aad982460eb", null ],
+    [ "getId", "class_ogre_1_1_vct_image_voxelizer.html#ab152c8f646a835c2f88585ad4fe0413a", null ],
+    [ "getNormalVox", "class_ogre_1_1_vct_image_voxelizer.html#a0f94db4cf7bd7bf6fbd65da29516fcf9", null ],
+    [ "getRenderSystem", "class_ogre_1_1_vct_image_voxelizer.html#a76ffb91e297346ba6b5b4a3dc4ae9481", null ],
+    [ "getTextureGpuManager", "class_ogre_1_1_vct_image_voxelizer.html#a00f49586ca07e0225a078be39549c97a", null ],
+    [ "getVoxelCellSize", "class_ogre_1_1_vct_image_voxelizer.html#afc7e7be68b57ea410b4cb57ec7ddc80b", null ],
+    [ "getVoxelOrigin", "class_ogre_1_1_vct_image_voxelizer.html#aa9fb146b475e13fd80f1b5e8a4beb00a", null ],
+    [ "getVoxelResolution", "class_ogre_1_1_vct_image_voxelizer.html#a74224ea25b439cc81afc63746a31f3d0", null ],
+    [ "getVoxelSize", "class_ogre_1_1_vct_image_voxelizer.html#aec43c2bc20b2e6635eaf3d341c8a94f5", null ],
+    [ "operator()", "class_ogre_1_1_vct_image_voxelizer.html#a57e0523432c6e5133ff4fc251111a60e", null ],
+    [ "operator()", "class_ogre_1_1_vct_image_voxelizer.html#a0ae22596b5bd2a3faf2958ab3d109d1f", null ],
+    [ "removeAllItems", "class_ogre_1_1_vct_image_voxelizer.html#aae99ad29d73eba95d315a27120692496", null ],
+    [ "removeItem", "class_ogre_1_1_vct_image_voxelizer.html#ac67b1811288e24c859d763ca76fc382b", null ],
+    [ "restoreSwappedVoxelTextures", "class_ogre_1_1_vct_image_voxelizer.html#a85a7d6b1cc90da20e392438cfb453eb6", null ],
+    [ "setDebugVisualization", "class_ogre_1_1_vct_image_voxelizer.html#af8b649bc09c0bfb2bc200bba692f0f89", null ],
+    [ "setRegionToVoxelize", "class_ogre_1_1_vct_image_voxelizer.html#a1b73e0855ee130c8e7522ef8cfb6fca5", null ],
+    [ "setSceneResolution", "class_ogre_1_1_vct_image_voxelizer.html#a867070de2762d5ca93dea67c5eb7cad2", null ]
+];

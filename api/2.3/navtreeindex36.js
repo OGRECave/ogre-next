@@ -1,5 +1,10 @@
 var NAVTREEINDEX36 =
 {
+"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9a239c724fd1311ee5d1233d0880864d14":[5,2,1,16,3,5],
+"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9a54cf847890ead396a9b17ec9158046d4":[5,2,1,16,3,3],
+"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9a777963435f79cab3f762f2997813581a":[5,2,1,16,3,4],
+"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9aa9d652cfc683852f1bcb71a6a566e210":[5,2,1,16,3,6],
+"class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9ab3b1383fb726c7e84da6b51d8ece1b5d":[5,2,1,16,3,0],
 "class_ogre_1_1_compositor_pass_quad_def.html#ad8aef1ad03925bb5348dd6b0c008c0d9ae5c58ec954fdd48002b374a815ebe56e":[5,2,1,16,3,1],
 "class_ogre_1_1_compositor_pass_quad_def.html#add4535f7f6261397a7720f3b4b41b759":[5,2,1,16,41],
 "class_ogre_1_1_compositor_pass_quad_def.html#adf943c28ea67c3d52d2e02058eeedbc1":[5,2,1,16,37],
@@ -244,10 +249,5 @@ var NAVTREEINDEX36 =
 "class_ogre_1_1_compositor_pass_stencil_def.html#a08c66aa1c72aef43599f360cfc6ada68":[5,2,1,22,15],
 "class_ogre_1_1_compositor_pass_stencil_def.html#a0fdf3a38961c32069cde61f23d7ff674":[5,2,1,22,35],
 "class_ogre_1_1_compositor_pass_stencil_def.html#a114c9c278a29353ebe78cc7d7e3fce6f":[5,2,1,22,0],
-"class_ogre_1_1_compositor_pass_stencil_def.html#a1c2ec91e26d3a0792c113570885b47a5":[5,2,1,22,40],
-"class_ogre_1_1_compositor_pass_stencil_def.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,1,22,7],
-"class_ogre_1_1_compositor_pass_stencil_def.html#a1e9e560eddce4c5ac862789a1a752909":[5,2,1,22,34],
-"class_ogre_1_1_compositor_pass_stencil_def.html#a21846bc14de26a0e4c70e24b6ee6cb33":[5,2,1,22,1],
-"class_ogre_1_1_compositor_pass_stencil_def.html#a313d390f851cc3f0ac463ea78fe5e860":[5,2,1,22,37],
-"class_ogre_1_1_compositor_pass_stencil_def.html#a368fcc3ba3874f5ae9f4eaf8eb46652e":[5,2,1,22,33]
+"class_ogre_1_1_compositor_pass_stencil_def.html#a1c2ec91e26d3a0792c113570885b47a5":[5,2,1,22,40]
 };

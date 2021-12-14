@@ -31,6 +31,7 @@ var class_ogre_1_1_mesh =
     [ "_notifySkeleton", "class_ogre_1_1_mesh.html#ad615b40fc38d2e860fa72b868ab4d91e", null ],
     [ "_setBoundingSphereRadius", "class_ogre_1_1_mesh.html#a536a5cf66af30c4be1752a76083950a1", null ],
     [ "_setBounds", "class_ogre_1_1_mesh.html#a8a78f8b8a9e4d96ec3b1182f9dcc3b97", null ],
+    [ "_setHashForCaches", "class_ogre_1_1_mesh.html#a193d6556289c597ae0c44d56e773bc18", null ],
     [ "_setLodInfo", "class_ogre_1_1_mesh.html#afb7b4cf2de4c641b5122ac88fdd47c97", null ],
     [ "_setVaoManager", "class_ogre_1_1_mesh.html#a30306bd1ff8ccb94f9704b375f9c0457", null ],
     [ "_updateBoundsFromVertexBuffers", "class_ogre_1_1_mesh.html#a9345131a9086bfd19b2c3217bdea0b97", null ],
@@ -52,6 +53,7 @@ var class_ogre_1_1_mesh =
     [ "getCreator", "class_ogre_1_1_mesh.html#a741224f735dfd9ce324a4e8e621d868c", null ],
     [ "getGroup", "class_ogre_1_1_mesh.html#a382919945c07a6a13136889ad3fbf578", null ],
     [ "getHandle", "class_ogre_1_1_mesh.html#a2298551707debaf774d577e643ee856a", null ],
+    [ "getHashForCaches", "class_ogre_1_1_mesh.html#aefb3e4d83bbea7b4d30410efce8bc9ac", null ],
     [ "getIndexBufferDefaultType", "class_ogre_1_1_mesh.html#ab51a8de8aa523bfae15b7347452f8b87", null ],
     [ "getLoadingState", "class_ogre_1_1_mesh.html#a1e90ade99935ef70ec5b199243bf995b", null ],
     [ "getLodIndex", "class_ogre_1_1_mesh.html#a7f9ca8326e29a4bd5243dcad86772744", null ],
@@ -117,5 +119,6 @@ var class_ogre_1_1_mesh =
     [ "MeshSerializerImpl", "class_ogre_1_1_mesh.html#a48305c54a01e0c7a3376ea0a077c467f", null ],
     [ "SubMesh", "class_ogre_1_1_mesh.html#a1d5fbbc16bf26f6a94d018b087d4db7e", null ],
     [ "msOptimizeForShadowMapping", "class_ogre_1_1_mesh.html#a6f201fa17002cc71492edb7da0b69b53", null ],
+    [ "msUseTimestampAsHash", "class_ogre_1_1_mesh.html#aa9d1d491d2473e762d8ee442ed9bbff4", null ],
     [ "OGRE_AUTO_MUTEX", "class_ogre_1_1_mesh.html#a104d9db8bfcff1f37b29157bbe070f7a", null ]
 ];

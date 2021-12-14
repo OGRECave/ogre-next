@@ -181,6 +181,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a11591653841ac96f3c46dcfd72e2e5e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac605bf73c4444102ceb71b01249a7a90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#ac605bf73c4444102ceb71b01249a7a90">getNameStr</a> (void) const</td></tr>
 <tr class="separator:ac605bf73c4444102ceb71b01249a7a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5111386e6bfd433aee3e7d75418f95c4"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#a5111386e6bfd433aee3e7d75418f95c4">getNumSamplerUnits</a> (void) const</td></tr>
+<tr class="memdesc:a5111386e6bfd433aee3e7d75418f95c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">See setNumSamplerUnits.  <a href="class_ogre_1_1_hlms_compute_job.html#a5111386e6bfd433aee3e7d75418f95c4">More...</a><br /></td></tr>
+<tr class="separator:a5111386e6bfd433aee3e7d75418f95c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7777cbf1ece29f3f4ab6d67291e6fb94"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#a7777cbf1ece29f3f4ab6d67291e6fb94">getNumTexUnits</a> (void) const</td></tr>
 <tr class="separator:a7777cbf1ece29f3f4ab6d67291e6fb94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af85a5e4af87470de288837c2ae12f363"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#af85a5e4af87470de288837c2ae12f363">getNumThreadGroups</a> (void) const</td></tr>
@@ -251,11 +254,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a27bc9875aa0f3a2f23d7a8c8e3a6e469"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a const/uniform bufferat the given slot ID.  <a href="class_ogre_1_1_hlms_compute_job.html#a27bc9875aa0f3a2f23d7a8c8e3a6e469">More...</a><br /></td></tr>
 <tr class="separator:a27bc9875aa0f3a2f23d7a8c8e3a6e469"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29709c020f2dbe9fd7bac1df927f5bc0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#a29709c020f2dbe9fd7bac1df927f5bc0">setGlTexSlotStart</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texSlotStart)</td></tr>
-<tr class="memdesc:a29709c020f2dbe9fd7bac1df927f5bc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">By default <a class="el" href="class_ogre_1_1_hlms_compute_job.html#a9f9fc0afc2c8b327d9a00e8fc296b163" title="Sets a texture buffer at the given slot ID.">HlmsComputeJob::setTexture</a> and <a class="el" href="class_ogre_1_1_hlms_compute_job.html#ab6119b9bf4d187fcbcbb98e0988a09d2" title="Sets a texture buffer at the given slot ID.">HlmsComputeJob::setTexBuffer</a> are in range [0; getNumTexUnits)  <a href="class_ogre_1_1_hlms_compute_job.html#a29709c020f2dbe9fd7bac1df927f5bc0">More...</a><br /></td></tr>
+<tr class="memdesc:a29709c020f2dbe9fd7bac1df927f5bc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">By default <a class="el" href="class_ogre_1_1_hlms_compute_job.html#ae8398ec1818d61b21005293c32173739" title="Sets a texture buffer at the given slot ID.">HlmsComputeJob::setTexture</a> and <a class="el" href="class_ogre_1_1_hlms_compute_job.html#ab6119b9bf4d187fcbcbb98e0988a09d2" title="Sets a texture buffer at the given slot ID.">HlmsComputeJob::setTexBuffer</a> are in range [0; getNumTexUnits)  <a href="class_ogre_1_1_hlms_compute_job.html#a29709c020f2dbe9fd7bac1df927f5bc0">More...</a><br /></td></tr>
 <tr class="separator:a29709c020f2dbe9fd7bac1df927f5bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea1aec87cba9ef66ee4b82267de4fb84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#aea1aec87cba9ef66ee4b82267de4fb84">setInformHlmsOfTextureData</a> (bool bInformHlms)</td></tr>
 <tr class="memdesc:aea1aec87cba9ef66ee4b82267de4fb84"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> has the ability to pass data to the shader source code via its syntax system to add hardcoded values.  <a href="class_ogre_1_1_hlms_compute_job.html#aea1aec87cba9ef66ee4b82267de4fb84">More...</a><br /></td></tr>
 <tr class="separator:aea1aec87cba9ef66ee4b82267de4fb84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20e88e59682a6c89874f6c19b1aa89f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#a20e88e59682a6c89874f6c19b1aa89f9">setNumSamplerUnits</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> numSlots)</td></tr>
+<tr class="memdesc:a20e88e59682a6c89874f6c19b1aa89f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This value is overriden by setNumTexUnits to be compatible with OpenGL.  <a href="class_ogre_1_1_hlms_compute_job.html#a20e88e59682a6c89874f6c19b1aa89f9">More...</a><br /></td></tr>
+<tr class="separator:a20e88e59682a6c89874f6c19b1aa89f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0998857be120bb37963c7cb593f9bfdc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#a0998857be120bb37963c7cb593f9bfdc">setNumTexUnits</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> numSlots)</td></tr>
 <tr class="memdesc:a0998857be120bb37963c7cb593f9bfdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates 'numSlots' number of slots before they can be set.  <a href="class_ogre_1_1_hlms_compute_job.html#a0998857be120bb37963c7cb593f9bfdc">More...</a><br /></td></tr>
 <tr class="separator:a0998857be120bb37963c7cb593f9bfdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -280,9 +286,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab6119b9bf4d187fcbcbb98e0988a09d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#ab6119b9bf4d187fcbcbb98e0988a09d2">setTexBuffer</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> slotIdx, const <a class="el" href="struct_ogre_1_1_descriptor_set_texture2_1_1_buffer_slot.html">DescriptorSetTexture2::BufferSlot</a> &amp;newSlot)</td></tr>
 <tr class="memdesc:ab6119b9bf4d187fcbcbb98e0988a09d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a texture buffer at the given slot ID.  <a href="class_ogre_1_1_hlms_compute_job.html#ab6119b9bf4d187fcbcbb98e0988a09d2">More...</a><br /></td></tr>
 <tr class="separator:ab6119b9bf4d187fcbcbb98e0988a09d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f9fc0afc2c8b327d9a00e8fc296b163"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#a9f9fc0afc2c8b327d9a00e8fc296b163">setTexture</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> slotIdx, const <a class="el" href="struct_ogre_1_1_descriptor_set_texture2_1_1_texture_slot.html">DescriptorSetTexture2::TextureSlot</a> &amp;newSlot, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *refParams=0)</td></tr>
-<tr class="memdesc:a9f9fc0afc2c8b327d9a00e8fc296b163"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a texture buffer at the given slot ID.  <a href="class_ogre_1_1_hlms_compute_job.html#a9f9fc0afc2c8b327d9a00e8fc296b163">More...</a><br /></td></tr>
-<tr class="separator:a9f9fc0afc2c8b327d9a00e8fc296b163"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8398ec1818d61b21005293c32173739"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#ae8398ec1818d61b21005293c32173739">setTexture</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> slotIdx, const <a class="el" href="struct_ogre_1_1_descriptor_set_texture2_1_1_texture_slot.html">DescriptorSetTexture2::TextureSlot</a> &amp;newSlot, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *refParams=0, bool bSetSampler=true)</td></tr>
+<tr class="memdesc:ae8398ec1818d61b21005293c32173739"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a texture buffer at the given slot ID.  <a href="class_ogre_1_1_hlms_compute_job.html#ae8398ec1818d61b21005293c32173739">More...</a><br /></td></tr>
+<tr class="separator:ae8398ec1818d61b21005293c32173739"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b6c36a6b27927381afeea6965b148b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#a1b6c36a6b27927381afeea6965b148b4">setThreadsPerGroup</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> threadsPerGroupX, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> threadsPerGroupY, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> threadsPerGroupZ)</td></tr>
 <tr class="memdesc:a1b6c36a6b27927381afeea6965b148b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the number of threads per group.  <a href="class_ogre_1_1_hlms_compute_job.html#a1b6c36a6b27927381afeea6965b148b4">More...</a><br /></td></tr>
 <tr class="separator:a1b6c36a6b27927381afeea6965b148b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -859,6 +865,34 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5111386e6bfd433aee3e7d75418f95c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5111386e6bfd433aee3e7d75418f95c4">&#9670;&nbsp;</a></span>getNumSamplerUnits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Ogre::HlmsComputeJob::getNumSamplerUnits </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>See setNumSamplerUnits. </p>
 
 </div>
 </div>
@@ -1784,7 +1818,7 @@ template&lt;class Alloc &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>By default <a class="el" href="class_ogre_1_1_hlms_compute_job.html#a9f9fc0afc2c8b327d9a00e8fc296b163" title="Sets a texture buffer at the given slot ID.">HlmsComputeJob::setTexture</a> and <a class="el" href="class_ogre_1_1_hlms_compute_job.html#ab6119b9bf4d187fcbcbb98e0988a09d2" title="Sets a texture buffer at the given slot ID.">HlmsComputeJob::setTexBuffer</a> are in range [0; getNumTexUnits) </p>
+<p>By default <a class="el" href="class_ogre_1_1_hlms_compute_job.html#ae8398ec1818d61b21005293c32173739" title="Sets a texture buffer at the given slot ID.">HlmsComputeJob::setTexture</a> and <a class="el" href="class_ogre_1_1_hlms_compute_job.html#ab6119b9bf4d187fcbcbb98e0988a09d2" title="Sets a texture buffer at the given slot ID.">HlmsComputeJob::setTexBuffer</a> are in range [0; getNumTexUnits) </p>
 <p>However this allows you to offset the range to [texSlotStart; texSlotStart + getNumTexUnits)</p>
 <p>This is useful when ReadOnlyBuffers are bound via setTexBuffers, because in OpenGL these will map to uav buffer slots, thus overlapping/conflicting with UAVs </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1819,6 +1853,28 @@ template&lt;class Alloc &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a20e88e59682a6c89874f6c19b1aa89f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20e88e59682a6c89874f6c19b1aa89f9">&#9670;&nbsp;</a></span>setNumSamplerUnits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::HlmsComputeJob::setNumSamplerUnits </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td>
+          <td class="paramname"><em>numSlots</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This value is overriden by setNumTexUnits to be compatible with OpenGL. </p>
+<p>However you can later override this behavior to minimize the number of samplers by shrinking (or enlarging?) the sampler units.</p>
+<p>This is an advanced function. Don't use it unless you're careful not to assume 1 tex unit = 1 sampler unit </p>
 
 </div>
 </div>
@@ -2122,8 +2178,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a9f9fc0afc2c8b327d9a00e8fc296b163"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f9fc0afc2c8b327d9a00e8fc296b163">&#9670;&nbsp;</a></span>setTexture()</h2>
+<a id="ae8398ec1818d61b21005293c32173739"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8398ec1818d61b21005293c32173739">&#9670;&nbsp;</a></span>setTexture()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2144,7 +2200,13 @@ template&lt;class Alloc &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> *&#160;</td>
-          <td class="paramname"><em>refParams</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>refParams</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bSetSampler</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2167,6 +2229,7 @@ template&lt;class Alloc &gt; </div>
 <p>Must be in range [0; getNumTexUnits) regardless of what getTexSlotStart is </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">samplerblock</td><td>Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters. When null, we leave the previously set samplerblock (if a texture is being set, and if no samplerblock was set, we'll create a default one) </td></tr>
+    <tr><td class="paramname">bSetSampler</td><td>If true, samplerblock will behave as described. When false and samplerblock is nullptr, we won't touch the samplerblock. Only use this with APIs that have separate texturse &amp; sampler (e.g. everyone except GL) </td></tr>
   </table>
   </dd>
 </dl>

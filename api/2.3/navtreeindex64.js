@@ -1,5 +1,10 @@
 var NAVTREEINDEX64 =
 {
+"class_ogre_1_1_default_scene_manager.html#a510ca285623d4a9aeeb86036c34c57a3":[5,2,12,13,161],
+"class_ogre_1_1_default_scene_manager.html#a51db39cc4fa15b28086a1793d42fc827":[5,0,1,13,6],
+"class_ogre_1_1_default_scene_manager.html#a51db39cc4fa15b28086a1793d42fc827":[5,2,12,13,6],
+"class_ogre_1_1_default_scene_manager.html#a51db39cc4fa15b28086a1793d42fc827a8f99da7404ae8c16199dde8d34367b1a":[5,0,1,13,6,1],
+"class_ogre_1_1_default_scene_manager.html#a51db39cc4fa15b28086a1793d42fc827a8f99da7404ae8c16199dde8d34367b1a":[5,2,12,13,6,1],
 "class_ogre_1_1_default_scene_manager.html#a51db39cc4fa15b28086a1793d42fc827a8fd3e7fb8fab382a9d29e6e081ae556a":[5,0,1,13,6,0],
 "class_ogre_1_1_default_scene_manager.html#a51db39cc4fa15b28086a1793d42fc827a8fd3e7fb8fab382a9d29e6e081ae556a":[5,2,12,13,6,0],
 "class_ogre_1_1_default_scene_manager.html#a5296f5ef84626c2a1be3b01b798b6dd5":[5,0,1,13,86],
@@ -244,10 +249,5 @@ var NAVTREEINDEX64 =
 "class_ogre_1_1_default_scene_manager.html#ab3e151b6d94feb6648b8c817ba485238":[5,2,12,13,105],
 "class_ogre_1_1_default_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbf":[5,0,1,13,7],
 "class_ogre_1_1_default_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbf":[5,2,12,13,7],
-"class_ogre_1_1_default_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbfa0f94148c2cfe190f3ea04374af220eba":[5,0,1,13,7,2],
-"class_ogre_1_1_default_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbfa0f94148c2cfe190f3ea04374af220eba":[5,2,12,13,7,2],
-"class_ogre_1_1_default_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbfa25b0181d24b783ab75da2520305d292a":[5,0,1,13,7,1],
-"class_ogre_1_1_default_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbfa25b0181d24b783ab75da2520305d292a":[5,2,12,13,7,1],
-"class_ogre_1_1_default_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbfaf0fb654fb98508a564c17d3d5b2feee3":[5,0,1,13,7,0],
-"class_ogre_1_1_default_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbfaf0fb654fb98508a564c17d3d5b2feee3":[5,2,12,13,7,0]
+"class_ogre_1_1_default_scene_manager.html#ab4c2ff4f6c76f7fe0a8eae76f2a84cbfa0f94148c2cfe190f3ea04374af220eba":[5,0,1,13,7,2]
 };

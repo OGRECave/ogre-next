@@ -1980,6 +1980,7 @@ var files_dup =
     [ "OgreShaderParams.h", "_ogre_shader_params_8h.html", [
       [ "AutoParam", "struct_ogre_1_1_shader_params_1_1_auto_param.html", "struct_ogre_1_1_shader_params_1_1_auto_param" ],
       [ "ManualParam", "struct_ogre_1_1_shader_params_1_1_manual_param.html", "struct_ogre_1_1_shader_params_1_1_manual_param" ],
+      [ "ManualParamEx", "struct_ogre_1_1_shader_params_1_1_manual_param_ex.html", "struct_ogre_1_1_shader_params_1_1_manual_param_ex" ],
       [ "Param", "struct_ogre_1_1_shader_params_1_1_param.html", "struct_ogre_1_1_shader_params_1_1_param" ]
     ] ],
     [ "OgreShaderPrerequisites.h", "_ogre_shader_prerequisites_8h.html", "_ogre_shader_prerequisites_8h" ],
@@ -2171,6 +2172,13 @@ var files_dup =
     ] ],
     [ "OgreUserObjectBindings.h", "_ogre_user_object_bindings_8h.html", null ],
     [ "OgreVaoManager.h", "_ogre_vao_manager_8h.html", "_ogre_vao_manager_8h" ],
+    [ "OgreVctCascadedVoxelizer.h", "_ogre_vct_cascaded_voxelizer_8h.html", [
+      [ "VctCascadedVoxelizer", "class_ogre_1_1_vct_cascaded_voxelizer.html", "class_ogre_1_1_vct_cascaded_voxelizer" ],
+      [ "VctCascadeSetting", "struct_ogre_1_1_vct_cascade_setting.html", "struct_ogre_1_1_vct_cascade_setting" ]
+    ] ],
+    [ "OgreVctImageVoxelizer.h", "_ogre_vct_image_voxelizer_8h.html", [
+      [ "VctImageVoxelizer", "class_ogre_1_1_vct_image_voxelizer.html", "class_ogre_1_1_vct_image_voxelizer" ]
+    ] ],
     [ "OgreVctLighting.h", "_ogre_vct_lighting_8h.html", [
       [ "VctLighting", "class_ogre_1_1_vct_lighting.html", "class_ogre_1_1_vct_lighting" ]
     ] ],
@@ -2179,6 +2187,9 @@ var files_dup =
       [ "DatablockConversionResult", "struct_ogre_1_1_vct_material_1_1_datablock_conversion_result.html", "struct_ogre_1_1_vct_material_1_1_datablock_conversion_result" ]
     ] ],
     [ "OgreVctVoxelizer.h", "_ogre_vct_voxelizer_8h.html", "_ogre_vct_voxelizer_8h" ],
+    [ "OgreVctVoxelizerSourceBase.h", "_ogre_vct_voxelizer_source_base_8h.html", [
+      [ "VctVoxelizerSourceBase", "class_ogre_1_1_vct_voxelizer_source_base.html", "class_ogre_1_1_vct_voxelizer_source_base" ]
+    ] ],
     [ "OgreVector2.h", "_ogre_vector2_8h.html", null ],
     [ "OgreVector3.h", "_ogre_vector3_8h.html", null ],
     [ "OgreVector4.h", "_ogre_vector4_8h.html", null ],
@@ -2248,6 +2259,10 @@ var files_dup =
     ] ],
     [ "OgreVolumeTextureSource.h", "_ogre_volume_texture_source_8h.html", [
       [ "TextureSource", "class_ogre_1_1_volume_1_1_texture_source.html", "class_ogre_1_1_volume_1_1_texture_source" ]
+    ] ],
+    [ "OgreVoxelizedMeshCache.h", "_ogre_voxelized_mesh_cache_8h.html", [
+      [ "VoxelizedMeshCache", "class_ogre_1_1_voxelized_mesh_cache.html", "class_ogre_1_1_voxelized_mesh_cache" ],
+      [ "VoxelizedMesh", "struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh.html", "struct_ogre_1_1_voxelized_mesh_cache_1_1_voxelized_mesh" ]
     ] ],
     [ "OgreVoxelVisualizer.h", "_ogre_voxel_visualizer_8h.html", [
       [ "VoxelVisualizer", "class_ogre_1_1_voxel_visualizer.html", "class_ogre_1_1_voxel_visualizer" ]

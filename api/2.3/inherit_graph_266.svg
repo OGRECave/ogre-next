@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="class_ogre_1_1_g_l_e_s2_dynamic_buffer.html" target="_top" xlink:title="GL3+ doesn&#39;t support mapping the same buffer twice even if the regions don&#39;t overlap.">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1_g_l3_plus_surface_desc.html" target="_top" xlink:title="GL surface descriptor.">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-19.5 137,-19.5 137,-0.5 0,-0.5"/>
-<text text-anchor="middle" x="68.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GLES2DynamicBuffer</text>
+<text text-anchor="middle" x="68.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::GL3PlusSurfaceDesc</text>
 </a>
 </g>
 </g>

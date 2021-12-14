@@ -1,5 +1,15 @@
 var NAVTREEINDEX174 =
 {
+"class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end.html#a524dd9f9e5340301ae1ec6f1342f7f19":[7,0,0,931,2,1],
+"class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_end.html#a7a59375bf9a638306ce3846763770384":[7,0,0,931,2,0],
+"class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_start.html":[7,0,0,931,3],
+"class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_start.html#a0fd6875815da11f3bef9adb71d9bb668":[7,0,0,931,3,1],
+"class_ogre_1_1_rotation_affector_1_1_cmd_rotation_speed_range_start.html#a8613bc4e610c2fbad888dd496e615617":[7,0,0,931,3,0],
+"class_ogre_1_1_rotation_affector_factory.html":[7,0,0,932],
+"class_ogre_1_1_rotation_affector_factory.html#a073f267f4efff156cac2d0a2ef40f7dd":[7,0,0,932,0],
+"class_ogre_1_1_rotation_affector_factory.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,932,3],
+"class_ogre_1_1_rotation_affector_factory.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,932,7],
+"class_ogre_1_1_rotation_affector_factory.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,932,10],
 "class_ogre_1_1_rotation_affector_factory.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,932,5],
 "class_ogre_1_1_rotation_affector_factory.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,932,1],
 "class_ogre_1_1_rotation_affector_factory.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,932,4],
@@ -239,15 +249,5 @@ var NAVTREEINDEX174 =
 "class_ogre_1_1_s_t_l_allocator.html#ac80a6c2569f5812937287072c04d23ea":[5,2,7,10,13],
 "class_ogre_1_1_s_t_l_allocator.html#ad4101ccdcdc6c5336a2ebd5169c55ff9":[5,2,7,10,20],
 "class_ogre_1_1_s_t_l_allocator.html#ad6ebf2ce6e910595ef613fc955e6df10":[5,2,7,10,18],
-"class_ogre_1_1_s_t_l_allocator.html#af0eca020577a396b472cf5c2c3ae2a58":[5,2,7,10,5],
-"class_ogre_1_1_s_t_l_allocator.html#af5221070699c31f29ff62f889ffd9b32":[5,2,7,10,8],
-"class_ogre_1_1_s_t_l_allocator.html#af82f6b541d4c320854df346e04ab62ce":[5,2,7,10,4],
-"class_ogre_1_1_s_t_l_allocator.html#af85d3e2726cef7ec1f1d24f2ed3b0675":[5,2,7,10,11],
-"class_ogre_1_1_s_t_l_allocator.html#afc5b83dfdc2263f0c6dbebe62c4681a9":[5,2,7,10,19],
-"class_ogre_1_1_scale_affector.html":[7,0,0,937],
-"class_ogre_1_1_scale_affector.html#a01a6e571941916969316ab23c5ee4739":[7,0,0,937,9],
-"class_ogre_1_1_scale_affector.html#a0f55da0550a7e1ab70a1c8bf598a3e20":[7,0,0,937,8],
-"class_ogre_1_1_scale_affector.html#a1bea65fa2b3c2ac5a9f3be59b46a80e8":[7,0,0,937,4],
-"class_ogre_1_1_scale_affector.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,937,14],
-"class_ogre_1_1_scale_affector.html#a239eb66889918db7523043fa9e705cd7":[7,0,0,937,25]
+"class_ogre_1_1_s_t_l_allocator.html#af0eca020577a396b472cf5c2c3ae2a58":[5,2,7,10,5]
 };

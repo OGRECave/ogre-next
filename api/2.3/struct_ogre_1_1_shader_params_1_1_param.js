@@ -14,9 +14,15 @@ var struct_ogre_1_1_shader_params_1_1_param =
     [ "setManualValue", "struct_ogre_1_1_shader_params_1_1_param.html#a1c72c84bbfea954d5ea0cc36dafb7985", null ],
     [ "setManualValue", "struct_ogre_1_1_shader_params_1_1_param.html#ab83852d923f92e5d5326370774d2925b", null ],
     [ "setManualValue", "struct_ogre_1_1_shader_params_1_1_param.html#a86601d21b2ab9ceece7d2a4042b111e7", null ],
+    [ "setManualValueEx", "struct_ogre_1_1_shader_params_1_1_param.html#a2988f945b750d414d3c8e04edc7a2734", null ],
+    [ "setManualValueEx", "struct_ogre_1_1_shader_params_1_1_param.html#aaf26d82268e49ba45e3c8ff32dd247ca", null ],
+    [ "setManualValueEx", "struct_ogre_1_1_shader_params_1_1_param.html#a75363c6cdd25a2ad00c0f6397055e7a2", null ],
+    [ "setManualValueEx", "struct_ogre_1_1_shader_params_1_1_param.html#a6a0d27bb2426374235c7caa2c5146191", null ],
     [ "ap", "struct_ogre_1_1_shader_params_1_1_param.html#a770d8a5b4fecc84cca568f5dbb08f9a9", null ],
     [ "isAutomatic", "struct_ogre_1_1_shader_params_1_1_param.html#a73986afabd847c162e084f60cce86a27", null ],
     [ "isDirty", "struct_ogre_1_1_shader_params_1_1_param.html#a30cb737c947db1fe515815be72f19c42", null ],
+    [ "isEx", "struct_ogre_1_1_shader_params_1_1_param.html#a8086a794aefa26bdc20819f49ebc3772", null ],
     [ "mp", "struct_ogre_1_1_shader_params_1_1_param.html#aecc3ba3ceac4e80b17b3471260b8942e", null ],
+    [ "mpEx", "struct_ogre_1_1_shader_params_1_1_param.html#a3b874d31c951ff796727ef1d85e9ea74", null ],
     [ "name", "struct_ogre_1_1_shader_params_1_1_param.html#a7f3e1c3d619e62d1c4067063bb38c9de", null ]
 ];

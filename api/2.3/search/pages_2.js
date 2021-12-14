@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['changes_3a_20objects_2c_20scene_20_26_20nodes_35763',['Changes: Objects, Scene &amp; Nodes',['../_ogre20_changes.html',1,'manual']]],
-  ['compositor_35764',['Compositor',['../compositor.html',1,'manual']]]
+  ['changes_3a_20objects_2c_20scene_20_26_20nodes_35902',['Changes: Objects, Scene &amp; Nodes',['../_ogre20_changes.html',1,'manual']]],
+  ['compositor_35903',['Compositor',['../compositor.html',1,'manual']]]
 ];

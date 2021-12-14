@@ -3,6 +3,7 @@ var _ogre_mesh_file_format_8h =
     [ "MeshChunkID", "_ogre_mesh_file_format_8h.html#ga7b904fc5463a8ef1e61f6de39b603fc4", [
       [ "M_HEADER", "_ogre_mesh_file_format_8h.html#gga7b904fc5463a8ef1e61f6de39b603fc4ae377c85390fc6c2cb7d57009bbcb48a3", null ],
       [ "M_MESH", "_ogre_mesh_file_format_8h.html#gga7b904fc5463a8ef1e61f6de39b603fc4a7e30f93c634e73eccf5841247edcf394", null ],
+      [ "M_HASH_FOR_CACHES", "_ogre_mesh_file_format_8h.html#gga7b904fc5463a8ef1e61f6de39b603fc4acc94147ebc96d37fad2ce0b9f490dc8f", null ],
       [ "M_SUBMESH", "_ogre_mesh_file_format_8h.html#gga7b904fc5463a8ef1e61f6de39b603fc4a2ea0d2c7c324fa5745b325a9e1c4cbb8", null ],
       [ "M_SUBMESH_TEXTURE_ALIAS", "_ogre_mesh_file_format_8h.html#gga7b904fc5463a8ef1e61f6de39b603fc4a36e136a0ae3018f1bdb14cb8ee355b2a", null ],
       [ "M_SUBMESH_LOD", "_ogre_mesh_file_format_8h.html#gga7b904fc5463a8ef1e61f6de39b603fc4a01f2b01f3e06759d098d315355aa704d", null ],
