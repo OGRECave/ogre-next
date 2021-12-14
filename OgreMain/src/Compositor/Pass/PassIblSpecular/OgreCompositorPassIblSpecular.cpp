@@ -342,7 +342,10 @@ namespace Ogre
             {
                 // If output has no mipmaps, do a fast path copy
                 if( mOutputTexture->getNumMipmaps() > 1u )
-                    mInputTexture->_autogenerateMipmaps();
+                {
+                    mInputTexture->_autogenerateMipmaps(
+                        CopyEncTransitionMode::AlreadyInLayoutThenManual );
+                }
 
                 {
                     // Prepare mInputTexture for copying. We have to do it here because analyzeBarriers
@@ -359,10 +362,13 @@ namespace Ogre
 
                 for( uint8 mip = 0u; mip < outNumMips; ++mip )
                 {
+                    const CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
+                        mip == 0u ? CopyEncTransitionMode::AlreadyInLayoutThenAuto
+                                  : CopyEncTransitionMode::Auto;
+
                     TextureBox emptyBox = mOutputTexture->getEmptyBox( mip );
                     mInputTexture->copyTo( mOutputTexture, emptyBox, mip, emptyBox, mip, true,
-                                           CopyEncTransitionMode::AlreadyInLayoutThenAuto,
-                                           CopyEncTransitionMode::AlreadyInLayoutThenAuto );
+                                           transitionMode, transitionMode );
                 }
             }
         }
