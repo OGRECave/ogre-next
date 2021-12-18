@@ -407,6 +407,9 @@ namespace Ogre
 
         /// This function gets called right before starting parsing all templates, and after
         /// the renderable properties have been merged with the pass properties.
+        ///
+        /// Warning: For the HlmsDiskCache to work properly, this function should not rely
+        /// on member variables or other state. All state info should come from getProperty()
         virtual void notifyPropertiesMergedPreGenerationStep(void);
 
         virtual HlmsDatablock* createDatablockImpl( IdString datablockName,
