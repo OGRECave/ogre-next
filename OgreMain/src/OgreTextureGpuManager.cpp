@@ -1612,10 +1612,20 @@ namespace Ogre
                     if( !image )
                     {
                         image = new Image2();
+
+                        PixelFormatGpu fallbackFormat = PFG_RGBA8_UNORM_SRGB;
+
+                        // Filters will complain if they need to run but Image2::getAutoDelete
+                        // returns false. So we tell them it's already in the
+                        // format they expect
+                        if( filters & TextureFilter::TypeLeaveChannelR )
+                            fallbackFormat = PFG_R8_UNORM;
+                        else if( filters & TextureFilter::TypePrepareForNormalMapping )
+                            fallbackFormat = PFG_RG8_SNORM;
+
                         // Continue loading using a fallback
                         image->loadDynamicImage( mErrorFallbackTexData, 2u, 2u, 1u,
-                                                 texture->getTextureType(), PFG_RGBA8_UNORM_SRGB, false,
-                                                 1u );
+                                                 texture->getTextureType(), fallbackFormat, false, 1u );
                         autoDeleteImage = true;
                     }
                 }
@@ -2553,10 +2563,21 @@ namespace Ogre
                     ObjCmdBuffer::ExceptionThrown *exceptionCmd = commandBuffer->addCommand<
                                                                   ObjCmdBuffer::ExceptionThrown>();
                     new (exceptionCmd) ObjCmdBuffer::ExceptionThrown( loadRequest.texture, e );
-                    //Continue loading using a fallback
+
+                    PixelFormatGpu fallbackFormat = PFG_RGBA8_UNORM_SRGB;
+
+                    // Filters will complain if they need to run but Image2::getAutoDelete
+                    // returns false. So we tell them it's already in the
+                    // format they expect
+                    if( loadRequest.filters & TextureFilter::TypeLeaveChannelR )
+                        fallbackFormat = PFG_R8_UNORM;
+                    else if( loadRequest.filters & TextureFilter::TypePrepareForNormalMapping )
+                        fallbackFormat = PFG_RG8_SNORM;
+
+                    // Continue loading using a fallback
                     img->loadDynamicImage( mErrorFallbackTexData, 2u, 2u, 1u,
-                                           loadRequest.texture->getTextureType(),
-                                           PFG_RGBA8_UNORM_SRGB, false, 1u );
+                                           loadRequest.texture->getTextureType(), fallbackFormat, false,
+                                           1u );
                 }
             }
         }
