@@ -279,6 +279,20 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    inline Vector4 HlmsJsonPbs::parseVector4Array( const rapidjson::Value &jsonArray )
+    {
+        Vector4 retVal( Vector4::ZERO );
+
+        const rapidjson::SizeType arraySize = std::min( 4u, jsonArray.Size() );
+        for( rapidjson::SizeType i=0; i<arraySize; ++i )
+        {
+            if( jsonArray[i].IsNumber() )
+                retVal[i] = static_cast<float>( jsonArray[i].GetDouble() );
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     inline ColourValue HlmsJsonPbs::parseColourValueArray( const rapidjson::Value &jsonArray,
                                                            const ColourValue &defaultValue )
     {
@@ -535,6 +549,22 @@ namespace Ogre
         {
             const rapidjson::Value &subobj = itor->value;
             loadTexture( subobj, blocks, PBSM_REFLECTION, pbsDatablock, resourceGroup );
+        }
+
+        itor = json.FindMember( "user_values" );
+        if( itor != json.MemberEnd() && itor->value.IsObject() )
+        {
+            const rapidjson::Value &subobj = itor->value;
+            for( int i = 0; i < 3; ++i )
+            {
+                itor = subobj.FindMember( StringConverter::toString( i ).c_str() );
+
+                if( itor != subobj.MemberEnd() && itor->value.IsArray() )
+                {
+                    pbsDatablock->setUserValue( static_cast<uint8>( i ),
+                                                parseVector4Array( itor->value ) );
+                }
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -881,6 +911,40 @@ namespace Ogre
 
         if( pbsDatablock->getTexture( PBSM_REFLECTION ) )
             saveTexture( "reflection", PBSM_REFLECTION, pbsDatablock, outString );
+
+        bool bHasUserValues = false;
+        for( int i = 0; i < 3 && !bHasUserValues; ++i )
+        {
+            const Vector4 userValue = pbsDatablock->getUserValue( static_cast<uint8>( i ) );
+            if( userValue != Vector4::ZERO )
+                bHasUserValues = true;
+        }
+
+        if( bHasUserValues )
+        {
+            outString += ",\n\t\t\t\"user_values\" :\n\t\t\t{";
+
+            bool bFirstElement = true;
+            for( int i = 0; i < 3; ++i )
+            {
+                const Vector4 userValue = pbsDatablock->getUserValue( static_cast<uint8>( i ) );
+
+                if( userValue != Vector4::ZERO )
+                {
+                    char tmpBuffer[64];
+                    LwString keyName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+
+                    if( !bFirstElement )
+                        keyName.a( "," );
+                    keyName.a( "\n\t\t\t\t\"", i, "\" : " );
+                    outString += keyName.c_str();
+                    HlmsJson::toStr( userValue, outString );
+
+                    bFirstElement = false;
+                }
+            }
+            outString += "\n\t\t\t}";
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonPbs::collectSamplerblocks( const HlmsDatablock *datablock,
