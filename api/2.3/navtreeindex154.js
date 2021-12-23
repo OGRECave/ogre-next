@@ -1,5 +1,6 @@
 var NAVTREEINDEX154 =
 {
+"class_ogre_1_1_plane_bounded_volume_list_scene_query.html":[5,0,1,30],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3a":[5,2,12,30,0],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3a":[5,0,1,30,0],
 "class_ogre_1_1_plane_bounded_volume_list_scene_query.html#a0a75b5ed976da2f9023382f4c4514b3aa018493b6c87271e0c8ba014f058cffd3":[5,2,12,30,0,2],
@@ -98,8 +99,8 @@ var NAVTREEINDEX154 =
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,12,31,6],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19":[5,2,12,31,3],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19":[5,0,1,31,3],
-"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,12,31,13],
 "class_ogre_1_1_plane_optimal_shadow_camera_setup.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,31,13],
+"class_ogre_1_1_plane_optimal_shadow_camera_setup.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,12,31,13],
 "class_ogre_1_1_platform_information.html":[5,2,2,79],
 "class_ogre_1_1_platform_information.html#a9c975bf5f74c9c085a7ff073cacf6834":[5,2,2,79,3],
 "class_ogre_1_1_platform_information.html#aae9beb453c6df1f32ad9949536a3f40f":[5,2,2,79,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX154 =
 "class_ogre_1_1_polygon.html#a1530c1d4761371c423916f4b497d612e":[5,2,6,21,3],
 "class_ogre_1_1_polygon.html#a2326d35755fe008fb437c208c6b007d6":[5,2,6,21,6],
 "class_ogre_1_1_polygon.html#a268cd4fc6b3eab7805436795dc36d146":[5,2,6,21,14],
-"class_ogre_1_1_polygon.html#a2e9e0c2abd6c18c910b7b75ab01f1513":[5,2,6,21,1],
-"class_ogre_1_1_polygon.html#a4ecd1e0336a4e27b0c09ae3f75a1da72":[5,2,6,21,19]
+"class_ogre_1_1_polygon.html#a2e9e0c2abd6c18c910b7b75ab01f1513":[5,2,6,21,1]
 };

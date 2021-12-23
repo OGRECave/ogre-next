@@ -120,9 +120,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ada33922fe192a6a3172db620012d7d98"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_dyn_lib.html#ada33922fe192a6a3172db620012d7d98">getSymbol</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;strName) const  throw ()</td></tr>
 <tr class="memdesc:ada33922fe192a6a3172db620012d7d98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the address of the given symbol from the loaded library.  <a href="class_ogre_1_1_dyn_lib.html#ada33922fe192a6a3172db620012d7d98">More...</a><br /></td></tr>
 <tr class="separator:ada33922fe192a6a3172db620012d7d98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a038546cd3a5b9d9385b14aa3e0a8179b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_dyn_lib.html#a038546cd3a5b9d9385b14aa3e0a8179b">load</a> ()</td></tr>
-<tr class="memdesc:a038546cd3a5b9d9385b14aa3e0a8179b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the library.  <a href="class_ogre_1_1_dyn_lib.html#a038546cd3a5b9d9385b14aa3e0a8179b">More...</a><br /></td></tr>
-<tr class="separator:a038546cd3a5b9d9385b14aa3e0a8179b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37872366675875c9348f25382466b426"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_dyn_lib.html#a37872366675875c9348f25382466b426">isLoaded</a> (void) const</td></tr>
+<tr class="memdesc:a37872366675875c9348f25382466b426"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if it's successfully loaded.  <a href="class_ogre_1_1_dyn_lib.html#a37872366675875c9348f25382466b426">More...</a><br /></td></tr>
+<tr class="separator:a37872366675875c9348f25382466b426"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed519654fe1914dd948c8edf20f23322"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_dyn_lib.html#aed519654fe1914dd948c8edf20f23322">load</a> (const bool bOptional)</td></tr>
+<tr class="memdesc:aed519654fe1914dd948c8edf20f23322"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the library.  <a href="class_ogre_1_1_dyn_lib.html#aed519654fe1914dd948c8edf20f23322">More...</a><br /></td></tr>
+<tr class="separator:aed519654fe1914dd948c8edf20f23322"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -259,8 +262,28 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a038546cd3a5b9d9385b14aa3e0a8179b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a038546cd3a5b9d9385b14aa3e0a8179b">&#9670;&nbsp;</a></span>load()</h2>
+<a id="a37872366675875c9348f25382466b426"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37872366675875c9348f25382466b426">&#9670;&nbsp;</a></span>isLoaded()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::DynLib::isLoaded </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if it's successfully loaded. </p>
+
+</div>
+</div>
+<a id="aed519654fe1914dd948c8edf20f23322"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed519654fe1914dd948c8edf20f23322">&#9670;&nbsp;</a></span>load()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -268,13 +291,20 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::DynLib::load </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>bOptional</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Load the library. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bOptional</td><td>When true, we will skip it if it fails to initialize </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

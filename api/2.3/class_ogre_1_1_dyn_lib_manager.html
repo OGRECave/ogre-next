@@ -115,9 +115,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae4db053cd33fd5a0c2362f1068588000"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_dyn_lib_manager.html#ae4db053cd33fd5a0c2362f1068588000">~DynLibManager</a> ()</td></tr>
 <tr class="memdesc:ae4db053cd33fd5a0c2362f1068588000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor.  <a href="class_ogre_1_1_dyn_lib_manager.html#ae4db053cd33fd5a0c2362f1068588000">More...</a><br /></td></tr>
 <tr class="separator:ae4db053cd33fd5a0c2362f1068588000"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4a3f7e3900012a73848d2f7e1dccd17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_dyn_lib.html">DynLib</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_dyn_lib_manager.html#af4a3f7e3900012a73848d2f7e1dccd17">load</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename)</td></tr>
-<tr class="memdesc:af4a3f7e3900012a73848d2f7e1dccd17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the passed library.  <a href="class_ogre_1_1_dyn_lib_manager.html#af4a3f7e3900012a73848d2f7e1dccd17">More...</a><br /></td></tr>
-<tr class="separator:af4a3f7e3900012a73848d2f7e1dccd17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a454ac9ced7a765c0e2f6a51d7ae20c96"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_dyn_lib.html">DynLib</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_dyn_lib_manager.html#a454ac9ced7a765c0e2f6a51d7ae20c96">load</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;filename, const bool bOptional)</td></tr>
+<tr class="memdesc:a454ac9ced7a765c0e2f6a51d7ae20c96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the passed library.  <a href="class_ogre_1_1_dyn_lib_manager.html#a454ac9ced7a765c0e2f6a51d7ae20c96">More...</a><br /></td></tr>
+<tr class="separator:a454ac9ced7a765c0e2f6a51d7ae20c96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -269,8 +269,8 @@ Should never be called as the singleton is automatically created during the crea
 
 </div>
 </div>
-<a id="af4a3f7e3900012a73848d2f7e1dccd17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af4a3f7e3900012a73848d2f7e1dccd17">&#9670;&nbsp;</a></span>load()</h2>
+<a id="a454ac9ced7a765c0e2f6a51d7ae20c96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a454ac9ced7a765c0e2f6a51d7ae20c96">&#9670;&nbsp;</a></span>load()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -279,8 +279,18 @@ Should never be called as the singleton is automatically created during the crea
           <td class="memname"><a class="el" href="class_ogre_1_1_dyn_lib.html">DynLib</a>* Ogre::DynLibManager::load </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>bOptional</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -289,6 +299,7 @@ Should never be called as the singleton is automatically created during the crea
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>The name of the library. The extension can be omitted. </td></tr>
+    <tr><td class="paramname">bOptional</td><td>When true, we will skip it if it fails to initialize </td></tr>
   </table>
   </dd>
 </dl>

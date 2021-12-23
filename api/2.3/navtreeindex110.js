@@ -1,5 +1,6 @@
 var NAVTREEINDEX110 =
 {
+"class_ogre_1_1_light_factory.html#ad4e5a3107760c39b3742113c336bff8d":[5,0,1,24,1],
 "class_ogre_1_1_light_factory.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,12,24,13],
 "class_ogre_1_1_light_factory.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,24,13],
 "class_ogre_1_1_light_profiles.html":[7,0,0,599],
@@ -248,6 +249,5 @@ var NAVTREEINDEX110 =
 "class_ogre_1_1_lod_strategy_manager.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,4,7,14],
 "class_ogre_1_1_lod_strategy_manager.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,4,7,17],
 "class_ogre_1_1_lod_strategy_manager.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,4,7,12],
-"class_ogre_1_1_lod_strategy_manager.html#a6d44c74b5079b3e5b4246b093f477561":[5,2,4,7,19],
-"class_ogre_1_1_lod_strategy_manager.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,4,7,8]
+"class_ogre_1_1_lod_strategy_manager.html#a6d44c74b5079b3e5b4246b093f477561":[5,2,4,7,19]
 };

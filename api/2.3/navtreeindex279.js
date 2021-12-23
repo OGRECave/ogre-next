@@ -1,5 +1,6 @@
 var NAVTREEINDEX279 =
 {
+"struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a45430c40a1beecf29b83ea08f06ef88b":[7,0,0,618,0,3],
 "struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a575926e31feb1cc9bfebab8a13fded97":[7,0,0,618,0,2],
 "struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#a5b697e26b5de9178966bcbf3206235e8":[7,0,0,618,0,0],
 "struct_ogre_1_1_lod_input_buffer_1_1_submesh.html#acd6671985bd3fb61fbc47c564de0449d":[7,0,0,618,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX279 =
 "struct_ogre_1_1_pbs_mobile_property.html#af30d8396e2b8b1a89d0eed7603eaf99b":[5,0,0,18,10],
 "struct_ogre_1_1_pbs_mobile_property.html#af729dadaf551555b72028246c51c6320":[5,0,0,18,40],
 "struct_ogre_1_1_pbs_mobile_property.html#af7a447b87acd9e16459b7cf527664b87":[5,0,0,18,35],
-"struct_ogre_1_1_pbs_mobile_property.html#af85e38d2b9f17811ec5b9487a047244e":[5,0,0,18,47],
-"struct_ogre_1_1_pbs_mobile_property.html#afdff4727843f9b1f4c457ca1309fa098":[5,0,0,18,41]
+"struct_ogre_1_1_pbs_mobile_property.html#af85e38d2b9f17811ec5b9487a047244e":[5,0,0,18,47]
 };

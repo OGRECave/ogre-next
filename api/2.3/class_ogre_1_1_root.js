@@ -67,7 +67,7 @@ var class_ogre_1_1_root =
     [ "isBlendIndicesGpuRedundant", "class_ogre_1_1_root.html#a0a10213bc5e0af9946cc295e84331d37", null ],
     [ "isBlendWeightsGpuRedundant", "class_ogre_1_1_root.html#ab5b391ac4b40774d1d77a339140bc954", null ],
     [ "isInitialised", "class_ogre_1_1_root.html#a12dc2722de43cb2aa8e93845ea641358", null ],
-    [ "loadPlugin", "class_ogre_1_1_root.html#af0744e85bddb05885a91809bcdf8f864", null ],
+    [ "loadPlugin", "class_ogre_1_1_root.html#af76e54e04109e274e5e4a06d53119e47", null ],
     [ "openFileStream", "class_ogre_1_1_root.html#a613d2b3b64f75260b30a5fa0a8761846", null ],
     [ "operator delete", "class_ogre_1_1_root.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_root.html#acb46d4b0a597156d9ba5abc39d127792", null ],

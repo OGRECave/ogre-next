@@ -4,7 +4,7 @@ var class_ogre_1_1_dyn_lib_manager =
     [ "~DynLibManager", "class_ogre_1_1_dyn_lib_manager.html#ae4db053cd33fd5a0c2362f1068588000", null ],
     [ "getSingleton", "class_ogre_1_1_dyn_lib_manager.html#a8ed0226ad6fbb09423a3641f0dfd2b7b", null ],
     [ "getSingletonPtr", "class_ogre_1_1_dyn_lib_manager.html#a34d606f2c393f90e6d2fb29194a53be7", null ],
-    [ "load", "class_ogre_1_1_dyn_lib_manager.html#af4a3f7e3900012a73848d2f7e1dccd17", null ],
+    [ "load", "class_ogre_1_1_dyn_lib_manager.html#a454ac9ced7a765c0e2f6a51d7ae20c96", null ],
     [ "operator delete", "class_ogre_1_1_dyn_lib_manager.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_dyn_lib_manager.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_dyn_lib_manager.html#a1c727e879a260c37b00ce5505fe8e144", null ],
