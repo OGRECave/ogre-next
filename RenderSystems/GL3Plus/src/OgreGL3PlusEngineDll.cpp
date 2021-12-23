@@ -38,7 +38,7 @@ namespace Ogre
 #    if __cplusplus >= 201103L
     extern "C" void _OgreGL3PlusExport dllStartPlugin( void ) noexcept( false )
 #    else
-    extern "C" void _OgreD3D11Export dllStartPlugin( void ) throw( Exception )
+    extern "C" void _OgreGL3PlusExport dllStartPlugin( void ) throw( Exception )
 #    endif
     {
         plugin = OGRE_NEW GL3PlusPlugin();
