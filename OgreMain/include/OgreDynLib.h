@@ -99,13 +99,17 @@ namespace Ogre {
         ~DynLib();
 
         /** Load the library
+        @param bOptional When true, we will skip it if it fails to initialize
         */
-        void load();
+        void load( const bool bOptional );
         /** Unload the library
         */
         void unload();
         /// Get the name of the library
         const String& getName(void) const { return mName; }
+
+        /// Returns true if it's successfully loaded
+        bool isLoaded(void) const;
 
         /**
             Returns the address of the given symbol from the loaded library.

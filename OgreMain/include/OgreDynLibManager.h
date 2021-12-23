@@ -72,8 +72,10 @@ namespace Ogre {
         /** Loads the passed library.
         @param filename
             The name of the library. The extension can be omitted.
+        @param bOptional
+            When true, we will skip it if it fails to initialize
         */
-        DynLib* load(const String& filename);
+        DynLib *load( const String &filename, const bool bOptional );
 
         /** Unloads the passed library.
         @param lib

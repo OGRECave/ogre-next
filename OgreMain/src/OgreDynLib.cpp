@@ -68,7 +68,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void DynLib::load()
+    void DynLib::load( const bool bOptional )
     {
         // Log library load
         LogManager::getSingleton().logMessage("Loading library " + mName);
@@ -105,11 +105,21 @@ namespace Ogre {
         }
 #endif
         if( !mInst )
-            OGRE_EXCEPT(
-                Exception::ERR_INTERNAL_ERROR, 
-                "Could not load dynamic library " + mName + 
-                ".  System Error: " + dynlibError(),
-                "DynLib::load" );
+        {
+            if( !bOptional )
+            {
+                OGRE_EXCEPT(
+                    Exception::ERR_INTERNAL_ERROR,
+                    "Could not load dynamic library " + mName + ".  System Error: " + dynlibError(),
+                    "DynLib::load" );
+            }
+            else
+            {
+                LogManager::getSingleton().logMessage( "Could not load optional dynamic library " +
+                                                           mName + ".  System Error: " + dynlibError(),
+                                                       LML_CRITICAL );
+            }
+        }
     }
 
     //-----------------------------------------------------------------------
@@ -118,17 +128,19 @@ namespace Ogre {
         // Log library unload
         LogManager::getSingleton().logMessage("Unloading library " + mName);
 
-        if( DYNLIB_UNLOAD( mInst ) )
+        if( mInst )
         {
-            OGRE_EXCEPT(
-                Exception::ERR_INTERNAL_ERROR, 
-                "Could not unload dynamic library " + mName +
-                ".  System Error: " + dynlibError(),
-                "DynLib::unload");
+            if( DYNLIB_UNLOAD( mInst ) )
+            {
+                OGRE_EXCEPT(
+                    Exception::ERR_INTERNAL_ERROR,
+                    "Could not unload dynamic library " + mName + ".  System Error: " + dynlibError(),
+                    "DynLib::unload" );
+            }
         }
-
     }
-
+    //-----------------------------------------------------------------------
+    bool DynLib::isLoaded( void ) const { return mInst != NULL; }
     //-----------------------------------------------------------------------
     void* DynLib::getSymbol( const String& strName ) const throw()
     {
@@ -185,7 +197,11 @@ namespace Ogre {
 #endif
         return ret;
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
-        return String(dlerror());
+        const char *errorStr = dlerror();
+        if( errorStr )
+            return String( errorStr );
+        else
+            return String( "" );
 #else
         return String("");
 #endif

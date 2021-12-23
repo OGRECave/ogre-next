@@ -48,9 +48,9 @@ macro( findPluginAndSetPath BUILD_TYPE CFG_VARIABLE LIBRARY_NAME )
 	if( EXISTS ${REAL_LIB_PATH} )
 		# DLL Exists, set the variable for Plugins.cfg
 		if( ${BUILD_TYPE} STREQUAL "Debug" )
-			set( ${CFG_VARIABLE} "Plugin=${LIBRARY_NAME}_d" )
+			set( ${CFG_VARIABLE} "PluginOptional=${LIBRARY_NAME}_d" )
 		else()
-			set( ${CFG_VARIABLE} "Plugin=${LIBRARY_NAME}" )
+			set( ${CFG_VARIABLE} "PluginOptional=${LIBRARY_NAME}" )
 		endif()
 
 		# Copy the DLLs to the folders.

@@ -1203,23 +1203,22 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void Root::loadPlugins( const String& pluginsfile )
     {
-        StringVector pluginList;
-        String pluginDir;
         ConfigFile cfg;
 
-        try {
+        try
+        {
             cfg.load( pluginsfile );
         }
-        catch (Exception)
+        catch( Exception )
         {
-            LogManager::getSingleton().logMessage(pluginsfile + " not found, automatic plugin loading disabled.");
+            LogManager::getSingleton().logMessage( pluginsfile +
+                                                   " not found, automatic plugin loading disabled." );
             return;
         }
 
-        pluginDir = cfg.getSetting("PluginFolder"); // Ignored on Mac OS X, uses Resources/ directory
-        pluginList = cfg.getMultiSetting("Plugin");
-
-        if (!pluginDir.empty() && *pluginDir.rbegin() != '/' && *pluginDir.rbegin() != '\\')
+        String pluginDir =
+            cfg.getSetting( "PluginFolder" );  // Ignored on Mac OS X, uses Resources/ directory
+        if( !pluginDir.empty() && *pluginDir.rbegin() != '/' && *pluginDir.rbegin() != '\\' )
         {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
             pluginDir += "\\";
@@ -1228,11 +1227,22 @@ namespace Ogre {
 #endif
         }
 
-        for( StringVector::iterator it = pluginList.begin(); it != pluginList.end(); ++it )
         {
-            loadPlugin(pluginDir + (*it));
+            // First load optional plugins (which tend to be all RenderSystems)
+            const StringVector pluginList = cfg.getMultiSetting( "PluginOptional" );
+            for( StringVector::const_iterator it = pluginList.begin(); it != pluginList.end(); ++it )
+            {
+                loadPlugin( pluginDir + ( *it ), true );
+            }
         }
-
+        {
+            // Then load non-optional plugins (which tend to depend on RenderSystems)
+            const StringVector pluginList = cfg.getMultiSetting( "Plugin" );
+            for( StringVector::const_iterator it = pluginList.begin(); it != pluginList.end(); ++it )
+            {
+                loadPlugin( pluginDir + ( *it ), false );
+            }
+        }
     }
     //-----------------------------------------------------------------------
     void Root::shutdownPlugins(void)
@@ -1256,18 +1266,21 @@ namespace Ogre {
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_NACL && OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
         // unload dynamic libs first
-        for (PluginLibList::reverse_iterator i = mPluginLibs.rbegin(); i != mPluginLibs.rend(); ++i)
+        for( PluginLibList::reverse_iterator i = mPluginLibs.rbegin(); i != mPluginLibs.rend(); ++i )
         {
-            // Call plugin shutdown
-            #ifdef __GNUC__
-            __extension__
-            #endif
-            DLL_STOP_PLUGIN pFunc = reinterpret_cast<DLL_STOP_PLUGIN>((*i)->getSymbol("dllStopPlugin"));
-            // this will call uninstallPlugin
-            pFunc();
+            if( ( *i )->isLoaded() )
+            {
+                // Call plugin shutdown
+#    ifdef __GNUC__
+                __extension__
+#    endif
+                    DLL_STOP_PLUGIN pFunc =
+                        reinterpret_cast<DLL_STOP_PLUGIN>( ( *i )->getSymbol( "dllStopPlugin" ) );
+                // this will call uninstallPlugin
+                pFunc();
+            }
             // Unload library & destroy
-            DynLibManager::getSingleton().unload(*i);
-
+            DynLibManager::getSingleton().unload( *i );
         }
         mPluginLibs.clear();
 
@@ -1459,29 +1472,52 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    void Root::loadPlugin(const String& pluginName)
+    void Root::loadPlugin( const String &pluginName, const bool bOptional )
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_NACL && OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
         // Load plugin library
-        DynLib* lib = DynLibManager::getSingleton().load( pluginName );
+        DynLib* lib = DynLibManager::getSingleton().load( pluginName, bOptional );
+
         // Store for later unload
         // Check for existence, because if called 2+ times DynLibManager returns existing entry
         if (std::find(mPluginLibs.begin(), mPluginLibs.end(), lib) == mPluginLibs.end())
         {
             mPluginLibs.push_back(lib);
 
-            // Call startup function
-                        #ifdef __GNUC__
-                        __extension__
-                        #endif
-            DLL_START_PLUGIN pFunc = (DLL_START_PLUGIN)lib->getSymbol("dllStartPlugin");
+            if( lib->isLoaded() )
+            {
+                // Call startup function
+#    ifdef __GNUC__
+                __extension__
+#    endif
+                    DLL_START_PLUGIN pFunc = (DLL_START_PLUGIN)lib->getSymbol( "dllStartPlugin" );
 
-            if (!pFunc)
-                OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, "Cannot find symbol dllStartPlugin in library " + pluginName,
-                    "Root::loadPlugin");
+                if( !pFunc )
+                {
+                    OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                                 "Cannot find symbol dllStartPlugin in library " + pluginName,
+                                 "Root::loadPlugin" );
+                }
 
-            // This must call installPlugin
-            pFunc();
+                try
+                {
+                    // This must call installPlugin
+                    pFunc();
+                }
+                catch( Exception &e )
+                {
+                    if( !bOptional )
+                    {
+                        throw;
+                    }
+                    else
+                    {
+                        LogManager::getSingleton().logMessage(
+                            "Optional Plugin " + pluginName + " failed with exception:", LML_CRITICAL );
+                        LogManager::getSingleton().logMessage( e.getFullDescription(), LML_CRITICAL );
+                    }
+                }
+            }
         }
 #endif
     }
@@ -1495,19 +1531,21 @@ namespace Ogre {
         {
             if ((*i)->getName() == pluginName)
             {
-                // Call plugin shutdown
-                                #ifdef __GNUC__
-                                __extension__
-                                #endif
-                DLL_STOP_PLUGIN pFunc = (DLL_STOP_PLUGIN)(*i)->getSymbol("dllStopPlugin");
-                // this must call uninstallPlugin
-                pFunc();
+                if( ( *i )->isLoaded() )
+                {
+                    // Call plugin shutdown
+#    ifdef __GNUC__
+                    __extension__
+#    endif
+                        DLL_STOP_PLUGIN pFunc = ( DLL_STOP_PLUGIN )( *i )->getSymbol( "dllStopPlugin" );
+                    // this must call uninstallPlugin
+                    pFunc();
+                }
                 // Unload library (destroyed by DynLibManager)
-                DynLibManager::getSingleton().unload(*i);
-                mPluginLibs.erase(i);
+                DynLibManager::getSingleton().unload( *i );
+                mPluginLibs.erase( i );
                 return;
             }
-
         }
 #endif
     }

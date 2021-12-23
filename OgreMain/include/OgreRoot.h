@@ -711,8 +711,9 @@ namespace Ogre
             method which instantiates a Plugin subclass and calls Root::installPlugin.
             It should also implement dllStopPlugin (see Root::unloadPlugin)
         @param pluginName Name of the plugin library to load
+        @param bOptional When true, we will skip it if it fails to initialize
         */
-        void loadPlugin(const String& pluginName);
+        void loadPlugin(const String& pluginName, const bool bOptional);
 
         /** Manually unloads a Plugin contained in a DLL / DSO.
          @remarks
