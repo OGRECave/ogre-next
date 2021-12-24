@@ -12,6 +12,10 @@
       \(Apple A7 GPU or newer. That means iPhone 5s or newer, iPad Air or newer, iPad mini 2 or newer, iPad Pro\)
     * For HW & SW requirements, please visit http://www.ogre3d.org/developers/requirements
 
+@copydoc DownloadingOgreScriptsCommon
+
+> Note: The iOS build scripts do not build samples by default (unlike other platforms). However the script can be edited by replacing `OGRE_BUILD_SAMPLES2=0` with `OGRE_BUILD_SAMPLES2=1`
+
 # Downloading Ogre {#DownloadingOgre_iOS}
 
 Clone Ogre as in [Linux](#DownloadingOgreLinux).

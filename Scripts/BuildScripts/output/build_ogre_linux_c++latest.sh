@@ -22,7 +22,7 @@ ninja install || exit $?
 cd ../../
 if test ! -d ogre-next; then
 	mkdir ogre-next
-	echo "--- Cloning Ogre master ---"
+	echo "--- Cloning Ogre-Next master ---"
 	git clone --branch ${OGRE_BRANCH_NAME} https://github.com/OGRECave/ogre-next || exit $?
 fi
 cd ogre-next

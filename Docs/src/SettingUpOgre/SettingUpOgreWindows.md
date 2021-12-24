@@ -79,7 +79,7 @@ Don't worry, those CMake configs are about the *old threading* model. For more i
 
 # Automatic download & build scripts
 
-We easy-to-use scripts that will download and setup all dependencies for you in a self-contained folder
+We provide easy-to-use scripts that will download and setup all dependencies for you in a self-contained folder
 Download build_ogre_scripts for the branch you need from:
 
 https://www.ogre3d.org/download/sdk/sdk-ogre-next
@@ -91,7 +91,7 @@ https://www.ogre3d.org/download/sdk/sdk-ogre-next
 @{
 Most dependencies are conveniently stored in its own repository called "ogredeps" for you to download.
 
-**IMPORTANT:** Do NOT use the the "Download" feature from Bitbucket. It will not follow subrepositories.
+**IMPORTANT:** Do NOT use the the "Download" feature from Github. It will not follow subrepositories.
 
 **Command line**:
 ```sh

@@ -8,6 +8,7 @@ painful and traumatic as possible.
 - @subpage TechnicalOverview
 - @subpage compositor
 - @subpage GiMethods
+- @subpage ImageVoxelConeTracing
 - @subpage instancing
 - @subpage threading
 - @subpage performance
