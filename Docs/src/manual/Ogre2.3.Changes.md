@@ -61,6 +61,20 @@ This improvement may make it possible for users to try using PFG_D16_UNORM inste
 
 Shadow pancaking is automatically disabled when depth clamp is not supported.
 
+# PluginOptional
+
+Old timers may remember that Ogre could crash if the latest DirectX runtimes were not installed, despite having an OpenGL backend as a fallback.
+
+This was specially true during the Win 9x and Win XP eras which may not have DirectX 9.0c support. And stopped being an issue in the last decade since... well everyone has it now.
+
+This problem came back with the Vulkan plugin, as laptops having very old drivers (e.g. from 2014) with GPUs that were perfectly capable of running Vulkan would crash due to missing system DLLs.
+
+Furthermore, if the GPU cannot do Vulkan, Ogre would also crash.
+
+We added the keyword `PluginOptional` to the Plugins.cfg file. With this, Ogre will try to load OpenGL, D3D11, Metal and/or Vulkan; and if these plugins fail to load, they will be ignored.
+
+Make sure to update your Plugins.cfg to use this feature to provide a good experience to all of your users, even if they've got old HW or SW.
+
 # Other relevant information when porting
 
  - `HlmsListener::hlmsTypeChanged` added an argument. Beware of it if you are overloading this function
