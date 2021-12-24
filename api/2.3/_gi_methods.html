@@ -123,6 +123,7 @@ $(document).ready(function(){initNavTree('_gi_methods.html',''); initResizable()
 </ul>
 </ul>
 </li>
+<li class="level1"><a href="#GiCIVCT">Cascaded Image Voxel Cone Tracing (CIVCT)</a></li>
 <li class="level1"><a href="#GiWhatTechniqueChoose">What technique should I choose?</a></li>
 </ul>
 </div>
@@ -368,6 +369,30 @@ Cons</h3>
 </ol>
 <blockquote class="doxtable">
 <p>- See <code>Samples/2.0/Tests/Voxelizer</code> </p>
+</blockquote>
+<h1><a class="anchor" id="GiCIVCT"></a>
+Cascaded Image Voxel Cone Tracing (CIVCT)</h1>
+<p>Image Voxel Cone Tracing is like regular VCT except it bakes every mesh into voxels, and then copies those voxels into the scene.</p>
+<p>This makes rebuilding the scene <em>much</em> faster at the cost of higher VRAM usage and slightly lower quality.</p>
+<p>By being able to revoxelize scenes very fast we can:</p>
+<ul>
+<li>Support arbitrary scenes (indoor, outdoors)</li>
+<li>Support static objects</li>
+<li>Optionally support dynamic objects (e.g. revoxelize every frame)</li>
+</ul>
+<p>This would make it the best overall GI implementation.</p>
+<p>The details are described in <a class="el" href="_image_voxel_cone_tracing.html">Image Voxel Cone Tracing</a></p>
+<p>Cascaded IVCT extends the concept with cascades of varying quality to cover large distances around the camera but at lower resolutions.</p>
+<p>Currently CIVCT is in alpha state which means:</p>
+<ul>
+<li>Vulkan works great, but on low VRAM GPUs you may run out of VRAM and things will become super slow. Specially with e.g. 4 cascades</li>
+<li>OpenGL works, same issues as Vulkan. But needs a few workarounds and may run into issues due to the 32 texture unit limit. Also the way OGL calculates mipmaps makes the GI darker and that needs fixing.</li>
+<li>D3D11 works with low cascade count (e.g. 2), but breaks at 4 cascades. That's because D3D11 runs out of the 16 samplers because Hlms implementations are currently wasting a lot instead of reusing</li>
+<li>Metal does not work because it runs out of UAV texture units (this is an <a class="el" href="namespace_ogre.html">Ogre</a> limitation, not Metal)</li>
+</ul>
+<p><a class="el" href="namespace_ogre.html">Ogre</a> 2.4 will fix most of these issues</p>
+<blockquote class="doxtable">
+<p>- See <code>Samples/2.0/ApiUsage/ImageVoxelizer</code> </p>
 </blockquote>
 <h1><a class="anchor" id="GiWhatTechniqueChoose"></a>
 What technique should I choose?</h1>

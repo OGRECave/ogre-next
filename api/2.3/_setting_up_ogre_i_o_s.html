@@ -107,6 +107,13 @@ Requirements</h1>
 <li><a href="https://developer.apple.com/library/content/documentation/DeviceInformation/Reference/iOSDeviceCompatibility/HardwareGPUInformation/HardwareGPUInformation.html#//apple_ref/doc/uid/TP40013599-CH106-SW1">Metal-capable device</a> (Apple A7 GPU or newer. That means iPhone 5s or newer, iPad Air or newer, iPad mini 2 or newer, iPad Pro)</li>
 <li>For HW &amp; SW requirements, please visit <a href="http://www.ogre3d.org/developers/requirements">http://www.ogre3d.org/developers/requirements</a></li>
 </ul>
+<h1><a class="anchor" id="autotoc_md75"></a>
+Automatic download &amp; build scripts</h1>
+<p>We provide easy-to-use scripts that will download and setup all dependencies for you in a self-contained folder Download build_ogre_scripts for the branch you need from:</p>
+<p><a href="https://www.ogre3d.org/download/sdk/sdk-ogre-next">https://www.ogre3d.org/download/sdk/sdk-ogre-next</a></p>
+<blockquote class="doxtable">
+<p>Note: The iOS build scripts do not build samples by default (unlike other platforms). However the script can be edited by replacing <code>OGRE_BUILD_SAMPLES2=0</code> with <code>OGRE_BUILD_SAMPLES2=1</code> </p>
+</blockquote>
 <h1><a class="anchor" id="DownloadingOgre_iOS"></a>
 Downloading Ogre</h1>
 <p>Clone <a class="el" href="namespace_ogre.html">Ogre</a> as in <a href="#DownloadingOgreLinux">Linux</a>. Download iOS prebuilt dependencies from: <a href="https://sourceforge.net/projects/ogre/files/ogre-dependencies-mac/1.9/Ogre_iOS_7.0_Dependencies_20140315.dmg/download">https://sourceforge.net/projects/ogre/files/ogre-dependencies-mac/1.9/Ogre_iOS_7.0_Dependencies_20140315.dmg/download</a> and unzip them into Ogre/iOSDependencies</p>
