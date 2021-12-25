@@ -114,6 +114,9 @@ namespace Ogre
                                            bool casterPass, uint32 lastCacheHash,
                                            CommandBuffer *commandBuffer, bool isV1 );
 
+        HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, size_t constBufferSize );
+        HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders,
+                   HlmsTypes type, const String &typeName, size_t constBufferSize );
     public:
         HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders );
         HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders,

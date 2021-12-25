@@ -73,9 +73,19 @@ namespace Ogre
     extern const String c_unlitBlendModes[];
 
     HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders ) :
+        HlmsUnlit( dataFolder, libraryFolders, HlmsUnlitDatablock::MaterialSizeInGpuAligned )
+    {
+    }
+    HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, HlmsTypes type,
+                          const String &typeName ) :
+        HlmsUnlit( dataFolder, libraryFolders, type, typeName,
+                   HlmsUnlitDatablock::MaterialSizeInGpuAligned )
+    {
+    }
+
+    HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, size_t constBufferSize ) :
         HlmsBufferManager( HLMS_UNLIT, "unlit", dataFolder, libraryFolders ),
-        ConstBufferPool( HlmsUnlitDatablock::MaterialSizeInGpuAligned,
-                         ExtraBufferParams( 64 * NUM_UNLIT_TEXTURE_TYPES ) ),
+        ConstBufferPool( constBufferSize, ExtraBufferParams( 64 * NUM_UNLIT_TEXTURE_TYPES ) ),
         mCurrentPassBuffer( 0 ),
         mLastBoundPool( 0 ),
         mHasSeparateSamplers( 0 ),
@@ -98,9 +108,9 @@ namespace Ogre
         mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
     }
     HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders,
-                          HlmsTypes type, const String &typeName ) :
+                          HlmsTypes type, const String &typeName, size_t constBufferSize ) :
         HlmsBufferManager( type, typeName, dataFolder, libraryFolders ),
-        ConstBufferPool( HlmsUnlitDatablock::MaterialSizeInGpuAligned,
+        ConstBufferPool( constBufferSize,
                          ExtraBufferParams( 64 * NUM_UNLIT_TEXTURE_TYPES ) ),
         mCurrentPassBuffer( 0 ),
         mLastBoundPool( 0 ),
