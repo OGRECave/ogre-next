@@ -522,6 +522,8 @@ namespace Ogre {
         /// For VR optimization
         RadialDensityMask *mRadialDensityMask;
 
+        bool mSkyStereo{false};
+
         // Fog
         FogMode mFogMode;
         ColourValue mFogColour;
@@ -1180,6 +1182,14 @@ namespace Ogre {
         */
         void setRadialDensityMask( bool bEnabled, const float radius[3] );
         RadialDensityMask* getRadialDensityMask(void) const     { return mRadialDensityMask; }
+
+        /**
+         * Must be used before setSky. Activates instanced stereo mode for OpenVR applications
+         */
+        void setSkyStereoMode (bool bEnabled)
+        {
+        	mSkyStereo = bEnabled;
+        }
 
         /** Gets the SceneNode at the root of the scene hierarchy.
             @remarks

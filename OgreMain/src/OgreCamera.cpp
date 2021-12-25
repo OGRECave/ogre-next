@@ -836,6 +836,73 @@ namespace Ogre {
             return getProjectionMatrixWithRSDepth();
     }
     //-----------------------------------------------------------------------
+    void Camera::updateVrWorldSpaceFarCorners()
+    {
+        if( !mVrData )
+        {
+            return;
+        }
+
+        updateView();
+        Matrix4 eyeToWorld = mViewMatrix.inverseAffine();
+
+        // Note: Even though we can dealing with general projection matrix here,
+        //       but because it's incompatibly with infinite far plane, thus, we
+        //       still need to working with projection parameters.
+
+        // Calc near plane corners
+
+        for( size_t eyeIdx=0u; eyeIdx<2u; ++eyeIdx )
+        {
+            Real nearLeft, nearRight, nearBottom, nearTop;
+
+            Matrix4 invProj = mVrData->mProjectionMatrixInverse[eyeIdx];
+
+            Vector4 topLeft( -1.0f, 1.0f, -1.0f, 1.0f );
+            Vector4 topRight( 1.0f, 1.0f, -1.0f, 1.0f );
+            Vector4 bottomRight( 1.0f, -1.0f, -1.0f, 1.0f );
+            Vector4 bottomLeft( -1.0f, -1.0f, -1.0f, 1.0f );
+
+            topLeft = invProj * topLeft;
+            topRight = invProj * topRight;
+            bottomLeft = invProj * bottomLeft;
+            bottomRight = invProj * bottomRight;
+
+            // Rotate the view according to the HeadToEye matrix from OpenVR.
+            // Important for asymmetrical frustums which are present for some
+            // Oculus headsets and Windows Mixed Reality
+            Matrix4 eyeToHead= mVrData->mEyeToHead[eyeIdx];
+            eyeToHead.setTrans(Vector3::ZERO);
+
+            topLeft = eyeToHead * topLeft;
+            topRight = eyeToHead * topRight;
+            bottomLeft = eyeToHead * bottomLeft;
+            bottomRight = eyeToHead * bottomRight;
+
+            Vector4 nearTopLeft = topLeft * mNearDist;
+            Vector4 nearTopRight = topRight * mNearDist;
+            Vector4 nearBottomLeft = bottomLeft * mNearDist;
+            Vector4 nearBottomRight  = bottomRight * mNearDist;
+
+            // Treat infinite fardist as some arbitrary far value
+            Real farDist = (mFarDist == 0) ? 100000 : mFarDist;
+
+            // Calc far plane corners
+            Real radio = mProjType == PT_PERSPECTIVE ? farDist / mNearDist : 1;
+            Vector4 farTopLeft = nearTopLeft * radio;
+            Vector4 farTopRight = nearTopRight * radio;
+            Vector4 farBottomLeft = nearBottomLeft * radio;
+            Vector4 farBottomRight = nearBottomRight * radio;
+
+            // far
+            mVrData->mWorldSpaceFarCorners[eyeIdx][0] = eyeToWorld.transformAffine(Vector3(farTopRight.x, farTopRight.y, -farDist));
+            mVrData->mWorldSpaceFarCorners[eyeIdx][1] = eyeToWorld.transformAffine(Vector3(farTopLeft.x, farTopLeft.y, -farDist));
+            mVrData->mWorldSpaceFarCorners[eyeIdx][2] = eyeToWorld.transformAffine(Vector3(farBottomLeft.x, farBottomLeft.y, -farDist));
+            mVrData->mWorldSpaceFarCorners[eyeIdx][3] = eyeToWorld.transformAffine(Vector3(farBottomRight.x, farBottomRight.y, -farDist));
+        }
+
+    }
+    //-----------------------------------------------------------------------
     bool Camera::getAutoAspectRatio(void) const
     {
         return mAutoAspectRatio;
@@ -892,6 +959,11 @@ namespace Ogre {
         {
             return Frustum::getWorldSpaceCorners();
         }
+    }
+    //-----------------------------------------------------------------------
+    const Vector3* Camera::getVrWorldSpaceFarCorners(size_t eyeIdx) const
+    {
+        return mVrData ? mVrData->mWorldSpaceFarCorners[eyeIdx] : nullptr;
     }
     //-----------------------------------------------------------------------
     const Plane& Camera::getFrustumPlane( unsigned short plane ) const

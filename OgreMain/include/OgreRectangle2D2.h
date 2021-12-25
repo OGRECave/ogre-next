@@ -68,8 +68,7 @@ namespace Ogre
 
         bool mChanged;
         uint32 mGeometryFlags;
-        Vector3 mNormals[NumCorners];
-
+        Vector3 mNormals[NumCorners*2];
         Vector2 mPosition;
         Vector2 mSize;
 
@@ -93,6 +92,8 @@ namespace Ogre
 
         void setNormals( const Vector3 &upperLeft, const Vector3 &bottomLeft,  //
                          const Vector3 &upperRight, const Vector3 &bottomRight );
+        void setStereoNormals( const Vector3 &upperLeft, const Vector3 &bottomLeft,  //
+                               const Vector3 &upperRight, const Vector3 &bottomRight );
 
         void setHollowRectRadius( Real radius );
         Real getHollowRectRadius( void ) const { return mNormals[0].x; }
