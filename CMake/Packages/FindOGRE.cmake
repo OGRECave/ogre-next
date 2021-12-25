@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------
-# This file is part of the CMake build system for OGRE
+# This file is part of the CMake build system for OGRE-Next
 #     (Object-oriented Graphics Rendering Engine)
 # For the latest info, see http://www.ogre3d.org/
 #
@@ -344,7 +344,7 @@ endif()
   endif ()
 if (OGRE_STATIC)
   if (NOT OGRE_DEPS_FOUND)
-    pkg_message(OGRE "Could not find all required dependencies for the Ogre package.")
+    pkg_message(OGRE "Could not find all required dependencies for the OGRE-Next package.")
     set(OGRE_FOUND FALSE)
   endif ()
 endif ()
