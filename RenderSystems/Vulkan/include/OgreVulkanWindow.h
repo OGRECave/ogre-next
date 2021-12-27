@@ -90,12 +90,12 @@ namespace Ogre
 
     public:
         VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
-        virtual ~VulkanWindow();
+        ~VulkanWindow() override;
 
-        virtual void destroy();
+        void destroy() override;
 
         void _setDevice( VulkanDevice *device );
-        virtual void _initialize( TextureGpuManager *textureGpuManager );
+        void _initialize( TextureGpuManager *textureGpuManager ) override;
         virtual void _initialize( TextureGpuManager *textureGpuManager,
                                   const NameValuePairList *miscParams ) = 0;
 
@@ -105,15 +105,15 @@ namespace Ogre
         size_t getNumSwapchains() const { return mSwapchainImages.size(); }
         VkImage getSwapchainImage( size_t idx ) const { return mSwapchainImages[idx]; }
 
-        virtual bool isClosed() const;
+        bool isClosed() const override;
 
-        virtual void setVSync( bool vSync, uint32 vSyncInterval );
+        void setVSync( bool vSync, uint32 vSyncInterval ) override;
 
         /// Tells our VulkanDevice that the next commitAndNextCommandBuffer call should present us
         /// Calling swapBuffers during the command buffer that is rendering to us is key for
         /// good performance; otherwise Ogre may split the commands that render to this window
         /// and the command that presents this window into two queue submissions.
-        virtual void swapBuffers();
+        void swapBuffers() override;
 
         /** Actually performs present. Called by VulkanDevice::commitAndNextCommandBuffer
         @param queueFinishSemaphore
@@ -121,7 +121,7 @@ namespace Ogre
         */
         void _swapBuffers( VkSemaphore queueFinishSemaphore );
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
     };
 }  // namespace Ogre
 

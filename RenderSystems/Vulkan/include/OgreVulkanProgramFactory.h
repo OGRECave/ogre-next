@@ -36,7 +36,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Factory class for Vulkan programs. */
-    class _OgreVulkanExport VulkanProgramFactory : public HighLevelGpuProgramFactory
+    class _OgreVulkanExport VulkanProgramFactory final : public HighLevelGpuProgramFactory
     {
     protected:
         String mLanguageName;
@@ -46,13 +46,14 @@ namespace Ogre
 
     public:
         VulkanProgramFactory( VulkanDevice *device, const char *languageName, bool glslLangInitializer );
-        virtual ~VulkanProgramFactory();
+        ~VulkanProgramFactory() override;
         /// Get the name of the language this factory creates programs for
-        const String &getLanguage() const;
+        const String &getLanguage() const override;
         /// Create an instance of VulkanProgram
         HighLevelGpuProgram *create( ResourceManager *creator, const String &name, ResourceHandle handle,
-                                     const String &group, bool isManual, ManualResourceLoader *loader );
-        void destroy( HighLevelGpuProgram *prog );
+                                     const String &group, bool isManual,
+                                     ManualResourceLoader *loader ) override;
+        void destroy( HighLevelGpuProgram *prog ) override;
     };
 }  // namespace Ogre
 

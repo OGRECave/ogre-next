@@ -311,7 +311,7 @@ namespace Ogre {
 
     /** Common subclass of DataStream for handling data from chunks of memory.
     */
-    class _OgreExport MemoryDataStream : public DataStream
+    class _OgreExport MemoryDataStream final : public DataStream
     {
     protected:
         /// Pointer to the start of the data area
@@ -437,39 +437,39 @@ namespace Ogre {
         
         /** @copydoc DataStream::read
         */
-        size_t read(void* buf, size_t count);
+        size_t read(void* buf, size_t count) override;
 
         /** @copydoc DataStream::write
         */
-        size_t write(const void* buf, size_t count);
+        size_t write(const void* buf, size_t count) override;
 
         /** @copydoc DataStream::readLine
         */
-        size_t readLine(char* buf, size_t maxCount, const String& delim = "\n");
+        size_t readLine(char* buf, size_t maxCount, const String& delim = "\n") override;
         
         /** @copydoc DataStream::skipLine
         */
-        size_t skipLine(const String& delim = "\n");
+        size_t skipLine(const String& delim = "\n") override;
 
         /** @copydoc DataStream::skip
         */
-        void skip(long count);
+        void skip(long count) override;
     
         /** @copydoc DataStream::seek
         */
-        void seek( size_t pos );
+        void seek( size_t pos ) override;
         
         /** @copydoc DataStream::tell
         */
-        size_t tell() const;
+        size_t tell() const override;
 
         /** @copydoc DataStream::eof
         */
-        bool eof() const;
+        bool eof() const override;
 
         /** @copydoc DataStream::close
         */
-        void close();
+        void close() override;
 
         /** Sets whether or not to free the encapsulated memory on close. */
         void setFreeOnClose(bool free) { mFreeOnClose = free; }
@@ -478,7 +478,7 @@ namespace Ogre {
     /** Common subclass of DataStream for handling data from 
         std::basic_istream.
     */
-    class _OgreExport FileStreamDataStream : public DataStream
+    class _OgreExport FileStreamDataStream final : public DataStream
     {
     protected:
         /// Reference to source stream (read)
@@ -564,39 +564,39 @@ namespace Ogre {
             size_t size, 
             bool freeOnClose = true);
 
-        ~FileStreamDataStream();
+        ~FileStreamDataStream() override;
 
         /** @copydoc DataStream::read
         */
-        size_t read(void* buf, size_t count);
+        size_t read(void* buf, size_t count) override;
 
         /** @copydoc DataStream::write
         */
-        size_t write(const void* buf, size_t count);
+        size_t write(const void* buf, size_t count) override;
 
         /** @copydoc DataStream::readLine
         */
-        size_t readLine(char* buf, size_t maxCount, const String& delim = "\n");
+        size_t readLine(char* buf, size_t maxCount, const String& delim = "\n") override;
         
         /** @copydoc DataStream::skip
         */
-        void skip(long count);
+        void skip(long count) override;
     
         /** @copydoc DataStream::seek
         */
-        void seek( size_t pos );
+        void seek( size_t pos ) override;
 
         /** @copydoc DataStream::tell
         */
-        size_t tell() const;
+        size_t tell() const override;
 
         /** @copydoc DataStream::eof
         */
-        bool eof() const;
+        bool eof() const override;
 
         /** @copydoc DataStream::close
         */
-        void close();
+        void close() override;
         
         
     };
@@ -610,7 +610,7 @@ namespace Ogre {
         and libraries still wedded to the old FILE handle access, this stream
         wrapper provides some backwards compatibility.
     */
-    class _OgreExport FileHandleDataStream : public DataStream
+    class _OgreExport FileHandleDataStream final : public DataStream
     {
     protected:
         FILE* mFileHandle;
@@ -619,35 +619,35 @@ namespace Ogre {
         FileHandleDataStream(FILE* handle, uint16 accessMode = READ);
         /// Create named stream from a C file handle
         FileHandleDataStream(const String& name, FILE* handle, uint16 accessMode = READ);
-        ~FileHandleDataStream();
+        ~FileHandleDataStream() override;
 
         /** @copydoc DataStream::read
         */
-        size_t read(void* buf, size_t count);
+        size_t read(void* buf, size_t count) override;
 
         /** @copydoc DataStream::write
         */
-        size_t write(const void* buf, size_t count);
+        size_t write(const void* buf, size_t count) override;
 
         /** @copydoc DataStream::skip
         */
-        void skip(long count);
+        void skip(long count) override;
     
         /** @copydoc DataStream::seek
         */
-        void seek( size_t pos );
+        void seek( size_t pos ) override;
 
         /** @copydoc DataStream::tell
         */
-        size_t tell() const;
+        size_t tell() const override;
 
         /** @copydoc DataStream::eof
         */
-        bool eof() const;
+        bool eof() const override;
 
         /** @copydoc DataStream::close
         */
-        void close();
+        void close() override;
 
     };
     /** @} */

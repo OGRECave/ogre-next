@@ -88,7 +88,7 @@ namespace Ogre
     typedef map<VulkanFrameBufferDescKey, VulkanFrameBufferDescValue>::type VulkanFrameBufferDescMap;
     typedef map<FrameBufferDescKey, VulkanFlushOnlyDescValue>::type VulkanFlushOnlyDescMap;
 
-    class _OgreVulkanExport VulkanRenderPassDescriptor : public RenderPassDescriptor
+    class _OgreVulkanExport VulkanRenderPassDescriptor final : public RenderPassDescriptor
     {
     protected:
         // 1 per MRT
@@ -152,22 +152,22 @@ namespace Ogre
 
     public:
         VulkanRenderPassDescriptor( VulkanQueue *graphicsQueue, VulkanRenderSystem *renderSystem );
-        virtual ~VulkanRenderPassDescriptor();
+        ~VulkanRenderPassDescriptor() override;
 
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );
         void notifyRenderTextureNonResident( VulkanTextureGpu *texture );
 
-        virtual void entriesModified( uint32 entryTypes );
+        void entriesModified( uint32 entryTypes ) override;
 
-        virtual void setClearColour( uint8 idx, const ColourValue &clearColour );
-        virtual void setClearDepth( Real clearDepth );
-        virtual void setClearStencil( uint32 clearStencil );
+        void setClearColour( uint8 idx, const ColourValue &clearColour ) override;
+        void setClearDepth( Real clearDepth ) override;
+        void setClearStencil( uint32 clearStencil ) override;
 
         /// Sets the clear colour to all entries. In some APIs may be faster
         /// than calling setClearColour( idx, clearColour ) for each entry
         /// individually.
-        virtual void setClearColour( const ColourValue &clearColour );
+        void setClearColour( const ColourValue &clearColour ) override;
 
         uint32 willSwitchTo( VulkanRenderPassDescriptor *newDesc, bool warnIfRtvWasFlushed ) const;
 

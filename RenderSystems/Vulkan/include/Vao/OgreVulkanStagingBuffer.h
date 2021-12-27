@@ -42,7 +42,7 @@ namespace Ogre
         In other words, a staging buffer is an intermediate buffer to transfer data between
         CPU & GPU
     */
-    class _OgreVulkanExport VulkanStagingBuffer : public StagingBuffer
+    class _OgreVulkanExport VulkanStagingBuffer final : public StagingBuffer
     {
     protected:
         void *mMappedPtr;
@@ -101,18 +101,19 @@ namespace Ogre
         /// May modify mMappingStart.
         void waitIfNeeded();
 
-        virtual void *mapImpl( size_t sizeBytes );
-        virtual void unmapImpl( const Destination *destinations, size_t numDestinations );
-        virtual const void *_mapForReadImpl( size_t offset, size_t sizeBytes );
+        void *mapImpl( size_t sizeBytes ) override;
+        void unmapImpl( const Destination *destinations, size_t numDestinations ) override;
+        const void *_mapForReadImpl( size_t offset, size_t sizeBytes ) override;
 
     public:
-        VulkanStagingBuffer( size_t vboIdx, size_t internalBufferStart, size_t sizeBytes, VaoManager *vaoManager,
-                             bool uploadOnly, VkBuffer vboName, VulkanDynamicBuffer *dynamicBuffer );
-        virtual ~VulkanStagingBuffer();
+        VulkanStagingBuffer( size_t vboIdx, size_t internalBufferStart, size_t sizeBytes,
+                             VaoManager *vaoManager, bool uploadOnly, VkBuffer vboName,
+                             VulkanDynamicBuffer *dynamicBuffer );
+        ~VulkanStagingBuffer() override;
 
-        virtual StagingStallType uploadWillStall( size_t sizeBytes );
+        StagingStallType uploadWillStall( size_t sizeBytes ) override;
 
-        virtual size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength );
+        size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength ) override;
         void _unmapToV1( v1::VulkanHardwareBufferCommon *hwBuffer, size_t lockStart, size_t lockSize );
         size_t _asyncDownloadV1( v1::VulkanHardwareBufferCommon *source, size_t srcOffset,
                                  size_t srcLength );

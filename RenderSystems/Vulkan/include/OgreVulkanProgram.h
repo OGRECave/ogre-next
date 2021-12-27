@@ -69,42 +69,42 @@ namespace Ogre
         not create a program object.  It's up to VulkanGpuProgram class to request a program object
         to link the shader object to.
     */
-    class _OgreVulkanExport VulkanProgram : public HighLevelGpuProgram
+    class _OgreVulkanExport VulkanProgram final : public HighLevelGpuProgram
     {
     public:
         /// Command object for setting macro defines
-        class CmdPreprocessorDefines : public ParamCommand
+        class CmdPreprocessorDefines final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
 
         VulkanProgram( ResourceManager *creator, const String &name, ResourceHandle handle,
                        const String &group, bool isManual, ManualResourceLoader *loader,
                        VulkanDevice *device, String &languageName );
-        virtual ~VulkanProgram();
+        ~VulkanProgram() override;
 
         /// Overridden
-        bool getPassTransformStates() const;
-        bool getPassSurfaceAndLightStates() const;
-        bool getPassFogStates() const;
+        bool getPassTransformStates() const override;
+        bool getPassSurfaceAndLightStates() const override;
+        bool getPassFogStates() const override;
 
-        virtual void setRootLayout( GpuProgramType type, const RootLayout &rootLayout );
-        virtual void unsetRootLayout();
-        virtual void setAutoReflectArrayBindingsInRootLayout( bool bReflectArrayRootLayouts );
+        void setRootLayout( GpuProgramType type, const RootLayout &rootLayout ) override;
+        void unsetRootLayout() override;
+        void setAutoReflectArrayBindingsInRootLayout( bool bReflectArrayRootLayouts ) override;
 
         /// Sets the preprocessor defines use to compile the program.
         void setPreprocessorDefines( const String &defines ) { mPreprocessorDefines = defines; }
         /// Sets the preprocessor defines use to compile the program.
         const String &getPreprocessorDefines() const { return mPreprocessorDefines; }
 
-        virtual void setReplaceVersionMacro( bool bReplace );
+        void setReplaceVersionMacro( bool bReplace ) override;
 
         /// Overridden from GpuProgram
-        const String &getLanguage() const;
+        const String &getLanguage() const override;
         /// Overridden from GpuProgram
-        GpuProgramParametersSharedPtr createParameters();
+        GpuProgramParametersSharedPtr createParameters() override;
 
         void debugDump( String &outString );
 
@@ -146,7 +146,7 @@ namespace Ogre
 
         /** Internal load implementation, must be implemented by subclasses.
          */
-        void loadFromSource();
+        void loadFromSource() override;
 
         void replaceVersionMacros();
         void getPreamble( String &preamble ) const;
@@ -158,16 +158,16 @@ namespace Ogre
         shader so this method creates an object sub-classed from VulkanGpuProgram just to be
         compatible with VulkanRenderSystem.
         */
-        void createLowLevelImpl();
+        void createLowLevelImpl() override;
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl();
+        void unloadHighLevelImpl() override;
         /// Overridden from HighLevelGpuProgram
-        void unloadImpl();
+        void unloadImpl() override;
 
         /// Populate the passed parameters with name->index map
-        void populateParameterNames( GpuProgramParametersSharedPtr params );
+        void populateParameterNames( GpuProgramParametersSharedPtr params ) override;
         /// Populate the passed parameters with name->index map, must be overridden
-        void buildConstantDefinitions() const;
+        void buildConstantDefinitions() const override;
 
         static const SpvReflectDescriptorBinding *findBinding(
             const FastArray<SpvReflectDescriptorSet *> &sets, size_t setIdx, size_t bindingIdx );

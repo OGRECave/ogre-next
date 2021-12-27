@@ -1199,8 +1199,8 @@ namespace Ogre
                                    bool ignoreDelay );
     public:
         /// @see    TextureGpuListener::notifyTextureChanged
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
 
         RenderSystem* getRenderSystem() const;
         VaoManager* getVaoManager() const;

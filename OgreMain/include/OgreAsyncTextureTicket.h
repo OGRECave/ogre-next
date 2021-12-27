@@ -105,9 +105,8 @@ namespace Ogre
         virtual ~AsyncTextureTicket();
 
         /// TextureGpuListener overload
-        virtual void notifyTextureChanged( TextureGpu *texture,
-                                           TextureGpuListener::Reason reason,
-                                           void *extraData );
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
 
         /** Downloads textureSrc into this ticket.
             The size (resolution) of this ticket must match exactly of the region to download.

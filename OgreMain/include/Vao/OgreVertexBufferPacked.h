@@ -117,9 +117,9 @@ namespace Ogre
         , size_t multiSourceId = 0, MultiSourceVertexBufferPool *multiSourcePool = 0, uint8 sourceIdx = 0
 #endif
         );
-        ~VertexBufferPacked();
+        ~VertexBufferPacked() override;
 
-        virtual BufferPackedTypes getBufferPackedType() const   { return BP_TYPE_VERTEX; }
+        BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_VERTEX; }
 
         const VertexElement2Vec& getVertexElements() const  { return mVertexElements; }
 

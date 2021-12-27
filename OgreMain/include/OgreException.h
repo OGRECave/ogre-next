@@ -171,8 +171,7 @@ namespace Ogre {
         virtual const String &getDescription() const { return description; }
 
         /// Override std::exception::what
-        const char* what() const throw() { return getFullDescription().c_str(); }
-        
+        const char *what() const noexcept( true ) override { return getFullDescription().c_str(); }
     };
 
 

@@ -85,90 +85,90 @@ namespace Ogre
     {
     protected:
         /// Command object - see ParamCommand
-        class _OgreExport CmdType : public ParamCommand
+        class _OgreExport CmdType final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdSyntax : public ParamCommand
+        class _OgreExport CmdSyntax final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdBuildParamsFromRefl : public ParamCommand
+        class _OgreExport CmdBuildParamsFromRefl final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
 
-        class _OgreExport CmdClipDistance : public ParamCommand
+        class _OgreExport CmdClipDistance final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdSkeletal : public ParamCommand
+        class _OgreExport CmdSkeletal final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdMorph : public ParamCommand
+        class _OgreExport CmdMorph final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdPose : public ParamCommand
+        class _OgreExport CmdPose final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdVTF : public ParamCommand
+        class _OgreExport CmdVTF final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdVPRTI : public ParamCommand
+        class _OgreExport CmdVPRTI final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdManualNamedConstsFile : public ParamCommand
+        class _OgreExport CmdManualNamedConstsFile final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdAdjacency : public ParamCommand
+        class _OgreExport CmdAdjacency final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdComputeGroupDims : public ParamCommand
+        class _OgreExport CmdComputeGroupDims final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdRootLayout : public ParamCommand
+        class _OgreExport CmdRootLayout final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
-        class _OgreExport CmdUsesArrayBindings : public ParamCommand
+        class _OgreExport CmdUsesArrayBindings final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void doSet( void *target, const String &val ) override;
         };
         // Command object for setting / getting parameters
         static CmdType msTypeCmd;
@@ -268,7 +268,7 @@ namespace Ogre
         bool isRequiredCapabilitiesSupported() const;
 
         /// @copydoc Resource::loadImpl
-        void loadImpl();
+        void loadImpl() override;
 
         /// Create the internal params logical & named mapping structures
         void createParameterMappingStructures( bool recreateIfExists = true ) const;
@@ -591,7 +591,7 @@ namespace Ogre
         virtual void setUniformBlockBinding( const char *blockName, uint32 bindingSlot ) {}
 
         /// @copydoc Resource::calculateSize
-        virtual size_t calculateSize() const;
+        size_t calculateSize() const override;
 
     protected:
         /// Virtual method which must be implemented by subclasses, load from mSource

@@ -59,7 +59,7 @@ namespace Ogre
         {
         }
 
-        virtual BufferPackedTypes getBufferPackedType() const { return BP_TYPE_READONLY; }
+        BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_READONLY; }
     };
 }  // namespace Ogre
 

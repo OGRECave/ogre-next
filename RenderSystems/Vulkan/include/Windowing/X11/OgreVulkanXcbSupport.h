@@ -35,7 +35,7 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 namespace Ogre
 {
     class VulkanXcbWindow;
-    class _OgreVulkanExport VulkanXcbSupport : public VulkanSupport
+    class _OgreVulkanExport VulkanXcbSupport final : public VulkanSupport
     {
         struct Frequency
         {
@@ -78,9 +78,9 @@ namespace Ogre
          * Must have a "Full Screen" value that is a bool and a "Video Mode" value
          * that is a string in the form of wxhxb
          */
-        void addConfig( VulkanRenderSystem *renderSystem );
+        void addConfig( VulkanRenderSystem *renderSystem ) override;
 
-        void setConfigOption( const String &name, const String &value );
+        void setConfigOption( const String &name, const String &value ) override;
     };
 
 }  // namespace Ogre

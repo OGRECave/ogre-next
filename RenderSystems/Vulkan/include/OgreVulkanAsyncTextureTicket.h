@@ -40,7 +40,7 @@ namespace Ogre
 {
     /** See AsyncTextureTicket
      */
-    class _OgreVulkanExport VulkanAsyncTextureTicket : public AsyncTextureTicket
+    class _OgreVulkanExport VulkanAsyncTextureTicket final : public AsyncTextureTicket
     {
     protected:
         VulkanRawBuffer mVboName;
@@ -50,8 +50,8 @@ namespace Ogre
         VulkanVaoManager *mVaoManager;
         VulkanQueue *mQueue;
 
-        virtual TextureBox mapImpl( uint32 slice );
-        virtual void unmapImpl();
+        TextureBox mapImpl( uint32 slice ) override;
+        void unmapImpl() override;
 
         void waitForDownloadToFinish();
 
@@ -60,12 +60,12 @@ namespace Ogre
                                   TextureTypes::TextureTypes textureType,
                                   PixelFormatGpu pixelFormatFamily, VulkanVaoManager *vaoManager,
                                   VulkanQueue *queue );
-        virtual ~VulkanAsyncTextureTicket();
+        ~VulkanAsyncTextureTicket() override;
 
-        virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
-                                      TextureBox *srcBox );
+        void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
+                              TextureBox *srcBox ) override;
 
-        virtual bool queryIsTransferDone();
+        bool queryIsTransferDone() override;
     };
 }  // namespace Ogre
 

@@ -35,28 +35,28 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreVulkanExport VulkanTextureGpuWindow : public VulkanTextureGpuRenderTarget
+    class _OgreVulkanExport VulkanTextureGpuWindow final : public VulkanTextureGpuRenderTarget
     {
         VulkanWindow *mWindow;
 
         uint32 mCurrentSwapchainIdx;
 
-        virtual void createInternalResourcesImpl();
-        virtual void destroyInternalResourcesImpl();
+        void createInternalResourcesImpl() override;
+        void destroyInternalResourcesImpl() override;
 
     public:
         VulkanTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                 VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                 TextureTypes::TextureTypes initialType,
                                 TextureGpuManager *textureManager, VulkanWindow *window );
-        virtual ~VulkanTextureGpuWindow();
+        ~VulkanTextureGpuWindow() override;
 
-        virtual void setTextureType( TextureTypes::TextureTypes textureType );
+        void setTextureType( TextureTypes::TextureTypes textureType ) override;
 
-        virtual void getSubsampleLocations( vector<Vector2>::type locations );
+        void getSubsampleLocations( vector<Vector2>::type locations ) override;
 
-        virtual void notifyDataIsReady();
-        virtual bool _isDataReadyImpl() const;
+        void notifyDataIsReady() override;
+        bool _isDataReadyImpl() const override;
 
         /// @copydoc VulkanWindow::getImageAcquiredSemaphore
         VkSemaphore getImageAcquiredSemaphore();
@@ -67,14 +67,14 @@ namespace Ogre
         VkImage getWindowFinalTextureName( size_t idx ) const;
         size_t getWindowNumSurfaces() const;
 
-        virtual void swapBuffers();
+        void swapBuffers() override;
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
 
-        virtual bool isOpenGLRenderWindow() const;
+        bool isOpenGLRenderWindow() const override;
 
-        virtual void _setToDisplayDummyTexture();
-        virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+        void _setToDisplayDummyTexture() override;
+        void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
     };
 }  // namespace Ogre
 

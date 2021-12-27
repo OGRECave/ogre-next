@@ -349,13 +349,13 @@ namespace Ogre
                     VaoManager *vaoManager, IdString name, uint32 textureFlags,
                     TextureTypes::TextureTypes initialType,
                     TextureGpuManager *textureManager );
-        virtual ~TextureGpu();
+        ~TextureGpu() override;
 
         void _resetTextureManager();
 
         /// Note: This returns the alias name of the texture.
         /// See TextureGpuManager::createOrRetrieveTexture
-        virtual String getNameStr() const;
+        String getNameStr() const override;
         /// Returns the real name (e.g. disk in file) of the resource.
         virtual String getRealResourceNameStr() const;
         virtual String getResourceGroupStr() const;
@@ -727,7 +727,7 @@ namespace Ogre
         static const IdString msMsaaTextureBuffer;
         virtual void getCustomAttribute( IdString name, void *pData ) {}
 
-        virtual bool isTextureGpu() const;
+        bool isTextureGpu() const override;
 
         TextureGpuManager* getTextureManager() const;
 
