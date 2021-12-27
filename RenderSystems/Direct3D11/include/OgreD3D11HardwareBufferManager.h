@@ -35,7 +35,7 @@ namespace Ogre {
 namespace v1 {
 
     /** Implementation of HardwareBufferManager for D3D11. */
-    class _OgreD3D11Export D3D11HardwareBufferManagerBase : public HardwareBufferManagerBase
+    class _OgreD3D11Export D3D11HardwareBufferManagerBase final : public HardwareBufferManagerBase
     {
     protected:
         D3D11Device & mlpD3DDevice;
@@ -45,25 +45,25 @@ namespace v1 {
         ~D3D11HardwareBufferManagerBase();
         /// Creates a vertex buffer
         HardwareVertexBufferSharedPtr 
-            createVertexBuffer(size_t vertexSize, size_t numVerts, HardwareBuffer::Usage usage, bool useShadowBuffer = false);
+            createVertexBuffer(size_t vertexSize, size_t numVerts, HardwareBuffer::Usage usage, bool useShadowBuffer = false) override;
         /// Creates a stream output vertex buffer
         HardwareVertexBufferSharedPtr 
             createStreamOutputVertexBuffer(size_t vertexSize, size_t numVerts, HardwareBuffer::Usage usage, bool useShadowBuffer = false);
         /// Create a hardware vertex buffer
         HardwareIndexBufferSharedPtr 
-            createIndexBuffer(HardwareIndexBuffer::IndexType itype, size_t numIndexes, HardwareBuffer::Usage usage, bool useShadowBuffer = false);
+            createIndexBuffer(HardwareIndexBuffer::IndexType itype, size_t numIndexes, HardwareBuffer::Usage usage, bool useShadowBuffer = false) override;
         /// @copydoc HardwareBufferManager::createUniformBuffer
         HardwareUniformBufferSharedPtr createUniformBuffer(size_t sizeBytes, 
                                     HardwareBuffer::Usage usage = HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE, 
-                                    bool useShadowBuffer = false, const String& name = "");
+                                    bool useShadowBuffer = false, const String& name = "") override;
         /// @copydoc HardwareBufferManager::createCounterBuffer
         HardwareCounterBufferSharedPtr createCounterBuffer(size_t sizeBytes,
                                                            HardwareBuffer::Usage usage = HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE,
-                                                           bool useShadowBuffer = false, const String& name = "");
+                                                           bool useShadowBuffer = false, const String& name = "") override;
     };
 
     /// D3D11HardwareBufferManagerBase as a Singleton
-    class _OgreD3D11Export D3D11HardwareBufferManager : public HardwareBufferManager
+    class _OgreD3D11Export D3D11HardwareBufferManager final : public HardwareBufferManager
     {
     public:
         D3D11HardwareBufferManager(D3D11Device & device)
@@ -71,7 +71,7 @@ namespace v1 {
         {
 
         }
-        ~D3D11HardwareBufferManager()
+        ~D3D11HardwareBufferManager() override
         {
             OGRE_DELETE mImpl;
         }

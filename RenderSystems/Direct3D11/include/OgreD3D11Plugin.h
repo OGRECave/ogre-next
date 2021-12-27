@@ -28,36 +28,35 @@ THE SOFTWARE.
 #ifndef __D3D11Plugin_H__
 #define __D3D11Plugin_H__
 
-#include "OgrePlugin.h"
 #include "OgreD3D11RenderSystem.h"
+#include "OgrePlugin.h"
 
 namespace Ogre
 {
-
     /** Plugin instance for D3D11 Manager */
-    class _OgreD3D11Export D3D11Plugin : public Plugin
+    class _OgreD3D11Export D3D11Plugin final : public Plugin
     {
     public:
         D3D11Plugin();
 
-
         /// @copydoc Plugin::getName
-        const String& getName() const;
+        const String &getName() const override;
 
         /// @copydoc Plugin::install
-        void install();
+        void install() override;
 
         /// @copydoc Plugin::initialise
-        void initialise();
+        void initialise() override;
 
         /// @copydoc Plugin::shutdown
-        void shutdown();
+        void shutdown() override;
 
         /// @copydoc Plugin::uninstall
-        void uninstall();
+        void uninstall() override;
+
     protected:
-        D3D11RenderSystem* mRenderSystem;
+        D3D11RenderSystem *mRenderSystem;
     };
-}
+}  // namespace Ogre
 
 #endif

@@ -40,8 +40,8 @@ namespace Ogre
 {
     class D3D11BufferInterface;
 
-    class _OgreD3D11Export D3D11ReadOnlyBufferPacked : public ReadOnlyBufferPacked,
-                                                       protected D3D11DeviceResource
+    class _OgreD3D11Export D3D11ReadOnlyBufferPacked final : public ReadOnlyBufferPacked,
+                                                             protected D3D11DeviceResource
     {
         DXGI_FORMAT mInternalFormat;
         D3D11Device &mDevice;
@@ -61,8 +61,8 @@ namespace Ogre
         ID3D11ShaderResourceView *createResourceView( int cacheIdx, uint32 offset, uint32 sizeBytes );
         ID3D11ShaderResourceView *bindBufferCommon( size_t offset, size_t sizeBytes );
 
-        void notifyDeviceLost( D3D11Device *device );
-        void notifyDeviceRestored( D3D11Device *device, unsigned pass );
+        void notifyDeviceLost( D3D11Device *device ) override;
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass ) override;
 
     public:
         D3D11ReadOnlyBufferPacked( size_t internalBufStartBytes, size_t numElements,
@@ -70,17 +70,17 @@ namespace Ogre
                                    BufferType bufferType, void *initialData, bool keepAsShadow,
                                    VaoManager *vaoManager, BufferInterface *bufferInterface,
                                    PixelFormatGpu pf, bool bIsStructured, D3D11Device &device );
-        virtual ~D3D11ReadOnlyBufferPacked();
+        ~D3D11ReadOnlyBufferPacked() override;
 
         ComPtr<ID3D11ShaderResourceView> createSrv(
             const DescriptorSetTexture2::BufferSlot &bufferSlot ) const;
 
-        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
     };
 }  // namespace Ogre
 

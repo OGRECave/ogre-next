@@ -46,8 +46,7 @@ namespace Ogre
         In other words, a staging buffer is an intermediate buffer to transfer data between
         CPU & GPU
     */
-    class _OgreD3D11Export D3D11StagingBuffer : public StagingBuffer,
-                                                protected D3D11DeviceResource
+    class _OgreD3D11Export D3D11StagingBuffer final : public StagingBuffer, protected D3D11DeviceResource
     {
     protected:
         /// mVboName is not deleted by us (the VaoManager does) as we may have
@@ -76,22 +75,22 @@ namespace Ogre
         /// May modify mMappingStart.
         void waitIfNeeded();
 
-        virtual void* mapImpl( size_t sizeBytes );
-        virtual void unmapImpl( const Destination *destinations, size_t numDestinations );
+        void* mapImpl( size_t sizeBytes ) override;
+        void unmapImpl( const Destination *destinations, size_t numDestinations ) override;
 
-        virtual const void* _mapForReadImpl( size_t offset, size_t sizeBytes );
+        const void* _mapForReadImpl( size_t offset, size_t sizeBytes ) override;
 
-        void notifyDeviceLost( D3D11Device *device );
-        void notifyDeviceRestored( D3D11Device *device, unsigned pass );
+        void notifyDeviceLost( D3D11Device *device ) override;
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass ) override;
 
     public:
         D3D11StagingBuffer( size_t sizeBytes, VaoManager *vaoManager, bool uploadOnly,
                             ID3D11Buffer *stagingBuffer, D3D11Device &device );
-        virtual ~D3D11StagingBuffer();
+        ~D3D11StagingBuffer() override;
 
-        virtual StagingStallType uploadWillStall( size_t sizeBytes );
+        StagingStallType uploadWillStall( size_t sizeBytes ) override;
 
-        virtual size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength );
+        size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength ) override;
 
         ID3D11Buffer* getBufferName() const     { return mVboName.Get(); }
     };

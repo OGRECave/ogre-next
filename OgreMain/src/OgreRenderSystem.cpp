@@ -61,7 +61,7 @@ THE SOFTWARE.
 #        define WIN32_LEAN_AND_MEAN
 #        define VC_EXTRALEAN
 #        define NOMINMAX
-#        include <Windows.h>
+#        include <windows.h>
 #    endif
 #endif
 

@@ -44,7 +44,7 @@ namespace Ogre
     /** \addtogroup Resources
     *  @{
     */
-    class _OgreD3D11Export D3D11TextureGpuManager : public TextureGpuManager
+    class _OgreD3D11Export D3D11TextureGpuManager final : public TextureGpuManager
     {
     protected:
         /// 4x4 texture for when we have nothing to display.
@@ -53,22 +53,22 @@ namespace Ogre
 
         D3D11Device &mDevice;
 
-        virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                               IdString name, uint32 textureFlags,
-                                               TextureTypes::TextureTypes initialType );
-        virtual StagingTexture* createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
-                                                          uint32 slices, PixelFormatGpu pixelFormat );
-        virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture );
+        TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                       IdString name, uint32 textureFlags,
+                                       TextureTypes::TextureTypes initialType ) override;
+        StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
+                                                  uint32 slices, PixelFormatGpu pixelFormat ) override;
+        void destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
 
-        virtual AsyncTextureTicket* createAsyncTextureTicketImpl (uint32 width, uint32 height,
-                                                                  uint32 depthOrSlices,
-                                                                  TextureTypes::TextureTypes textureType,
-                                                                  PixelFormatGpu pixelFormatFamily );
+        AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
+                                                          uint32 depthOrSlices,
+                                                          TextureTypes::TextureTypes textureType,
+                                                          PixelFormatGpu pixelFormatFamily ) override;
 
     public:
         D3D11TextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem,
                                 D3D11Device &device );
-        virtual ~D3D11TextureGpuManager();
+        ~D3D11TextureGpuManager() override;
 
         void _createD3DResources();
         void _destroyD3DResources();

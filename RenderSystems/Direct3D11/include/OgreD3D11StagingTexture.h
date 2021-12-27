@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreD3D11Export D3D11StagingTexture : public StagingTexture
+    class _OgreD3D11Export D3D11StagingTexture final : public StagingTexture
     {
         typedef vector<D3D11_MAPPED_SUBRESOURCE>::type D3D11_MAPPED_SUBRESOURCEVec;
 
@@ -81,7 +81,7 @@ namespace Ogre
 
         uint32 findRealSlice( void *data ) const;
 
-        virtual bool belongsToUs( const TextureBox &box );
+        bool belongsToUs( const TextureBox &box ) override;
 
         void shrinkRecords( size_t slice, StagingBoxVec::iterator record,
                             TextureBox consumedBox );
@@ -89,26 +89,25 @@ namespace Ogre
                                       const TextureBox &consumedBox );
         TextureBox mapMultipleSlices( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                       PixelFormatGpu pixelFormat );
-        virtual TextureBox mapRegionImpl( uint32 width, uint32 height, uint32 depth, uint32 slices,
-                                          PixelFormatGpu pixelFormat );
+        TextureBox mapRegionImpl( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                                  PixelFormatGpu pixelFormat ) override;
 
     public:
-        D3D11StagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily,
-                             uint32 width, uint32 height, uint32 depthOrSlices,
-                             D3D11Device &device );
-        virtual ~D3D11StagingTexture();
+        D3D11StagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, uint32 width,
+                             uint32 height, uint32 depthOrSlices, D3D11Device &device );
+        ~D3D11StagingTexture() override;
 
-        virtual bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
-                                     PixelFormatGpu pixelFormat ) const;
-        virtual bool isSmallerThan( const StagingTexture *other ) const;
-        virtual size_t _getSizeBytes();
+        bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                             PixelFormatGpu pixelFormat ) const override;
+        bool isSmallerThan( const StagingTexture *other ) const override;
+        size_t _getSizeBytes() override;
 
-        virtual void startMapRegion();
-        virtual void stopMapRegion();
+        void startMapRegion() override;
+        void stopMapRegion() override;
 
-        virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                             uint8 mipLevel, const TextureBox *cpuSrcBox=0,
-                             const TextureBox *dstBox=0, bool skipSysRamCopy=false );
+        void upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
+                     const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
+                     bool skipSysRamCopy = false ) override;
     };
 }
 

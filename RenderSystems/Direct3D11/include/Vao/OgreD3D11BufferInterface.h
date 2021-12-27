@@ -38,7 +38,7 @@ namespace Ogre
     /** For D3D11, most (if not all) buffers, can be treated with the same code.
         Hence most equivalent functionality is encapsulated here.
     */
-    class _OgreD3D11Export D3D11BufferInterface : public D3D11BufferInterfaceBase
+    class _OgreD3D11Export D3D11BufferInterface final : public D3D11BufferInterfaceBase
     {
     protected:
         size_t              mUnmapTicket;
@@ -53,7 +53,7 @@ namespace Ogre
     public:
         D3D11BufferInterface( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer,
                               D3D11DynamicBuffer *dynamicBuffer );
-        virtual ~D3D11BufferInterface();
+        ~D3D11BufferInterface() override;
 
         void _setNullDynamicBuffer() { mDynamicBuffer = 0; }
         D3D11DynamicBuffer* getDynamicBuffer() const    { return mDynamicBuffer; }
@@ -67,13 +67,13 @@ namespace Ogre
         void _deleteInitialData();
         void _setVboName( size_t vboPoolIdx, ID3D11Buffer *vboName, size_t internalBufferStartBytes );
 
-        virtual void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
-                                                 MappingState prevMappingState,
-                                                 bool advanceFrame = true );
-        virtual void unmap( UnmapOptions unmapOption,
-                            size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame();
-        virtual void regressFrame();
+        void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
+                                         MappingState prevMappingState,
+                                         bool advanceFrame = true ) override;
+        void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
+                    size_t flushSizeElem = 0 ) override;
+        void advanceFrame() override;
+        void regressFrame() override;
     };
 }
 

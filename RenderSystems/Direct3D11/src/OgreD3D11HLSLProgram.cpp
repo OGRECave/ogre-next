@@ -105,7 +105,7 @@ namespace Ogre {
     }
 
 
-    class HLSLIncludeHandler : public ID3DInclude
+    class HLSLIncludeHandler final : public ID3DInclude
     {
     public:
         HLSLIncludeHandler(Resource* sourceProgram) 
@@ -117,7 +117,7 @@ namespace Ogre {
             LPCVOID pParentData,
             LPCVOID *ppData,
             UINT *pByteLen
-            )
+            ) override
         {
             // find & load source code
             DataStreamPtr stream = 
@@ -136,7 +136,7 @@ namespace Ogre {
             return S_OK;
         }
 
-        STDMETHOD(Close)(LPCVOID pData)
+        STDMETHOD(Close)(LPCVOID pData) override
         {
             char* pChar = (char*)pData;
             delete [] pChar;

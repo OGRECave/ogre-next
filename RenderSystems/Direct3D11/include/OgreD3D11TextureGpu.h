@@ -79,36 +79,36 @@ namespace Ogre
         void create2DTexture( bool msaaTextureOnly = false );
         void create3DTexture();
 
-        virtual void createInternalResourcesImpl();
-        virtual void destroyInternalResourcesImpl();
+        void createInternalResourcesImpl() override;
+        void destroyInternalResourcesImpl() override;
 
-        void notifyDeviceLost(D3D11Device* device);
-        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
+        void notifyDeviceLost(D3D11Device* device) override;
+        void notifyDeviceRestored(D3D11Device* device, unsigned pass) override;
 
     public:
         D3D11TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                          VaoManager *vaoManager, IdString name, uint32 textureFlags,
                          TextureTypes::TextureTypes initialType,
                          TextureGpuManager *textureManager );
-        virtual ~D3D11TextureGpu();
+        ~D3D11TextureGpu() override;
 
-        virtual void notifyDataIsReady();
-        virtual bool _isDataReadyImpl() const;
+        void notifyDataIsReady() override;
+        bool _isDataReadyImpl() const override;
 
-        virtual void setTextureType( TextureTypes::TextureTypes textureType );
+        void setTextureType( TextureTypes::TextureTypes textureType ) override;
 
-        virtual void copyTo(
+        void copyTo(
             TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel, const TextureBox &srcBox,
             uint8 srcMipLevel, bool keepResolvedTexSynced = true,
             CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode = CopyEncTransitionMode::Auto,
             CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode =
-                CopyEncTransitionMode::Auto );
+                CopyEncTransitionMode::Auto ) override;
 
-        virtual void _setToDisplayDummyTexture();
-        virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+        void _setToDisplayDummyTexture() override;
+        void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
 
-        virtual void _autogenerateMipmaps(
-            CopyEncTransitionMode::CopyEncTransitionMode transitionMode = CopyEncTransitionMode::Auto );
+        void _autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
+                                       CopyEncTransitionMode::Auto ) override;
 
         //The returned pointer has its ref. count incremented! Caller must decrease it!
         ComPtr<ID3D11ShaderResourceView> createSrv( const DescriptorSetTexture2::TextureSlot &texSlot ) const;
@@ -117,10 +117,10 @@ namespace Ogre
 
         ComPtr<ID3D11UnorderedAccessView> createUav( const DescriptorSetUav::TextureSlot &texSlot ) const;
 
-        virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
-        virtual void getSubsampleLocations( vector<Vector2>::type locations );
+        bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern ) override;
+        void getSubsampleLocations( vector<Vector2>::type locations ) override;
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
 
         ID3D11Resource* getDisplayTextureName() const   { return mDisplayTextureName; }
         ID3D11Resource* getFinalTextureName() const     { return mFinalTextureName.Get(); }
@@ -143,15 +143,15 @@ namespace Ogre
                                      TextureTypes::TextureTypes initialType,
                                      TextureGpuManager *textureManager );
 
-        virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
-                                              PixelFormatGpu desiredDepthBufferFormat );
-        virtual uint16 getDepthBufferPoolId() const;
-        virtual bool getPreferDepthTexture() const;
-        virtual PixelFormatGpu getDesiredDepthBufferFormat() const;
+        void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                              PixelFormatGpu desiredDepthBufferFormat ) override;
+        uint16 getDepthBufferPoolId() const override;
+        bool getPreferDepthTexture() const override;
+        PixelFormatGpu getDesiredDepthBufferFormat() const override;
 
-        virtual void setOrientationMode( OrientationMode orientationMode );
+        void setOrientationMode( OrientationMode orientationMode ) override;
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-        virtual OrientationMode getOrientationMode() const;
+        OrientationMode getOrientationMode() const override;
 #endif
     };
 }

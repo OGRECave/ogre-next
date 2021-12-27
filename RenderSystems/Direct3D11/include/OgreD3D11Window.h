@@ -59,24 +59,27 @@ namespace Ogre
         D3D11RenderSystem       *mRenderSystem;
 
     protected:
-        virtual PixelFormatGpu _getRenderFormat() { return mHwGamma ? PFG_BGRA8_UNORM_SRGB : PFG_BGRA8_UNORM; } // preferred since Win8
+        virtual PixelFormatGpu _getRenderFormat()
+        {
+            return mHwGamma ? PFG_BGRA8_UNORM_SRGB : PFG_BGRA8_UNORM;
+        }  // preferred since Win8
 
     public:
         D3D11Window( const String &title, uint32 width, uint32 height,
                      bool fullscreenMode, PixelFormatGpu depthStencilFormat,
                      const NameValuePairList *miscParams,
                      D3D11Device &device, D3D11RenderSystem *renderSystem );
-        virtual ~D3D11Window();
-        virtual void destroy();
+        ~D3D11Window() override;
+        void destroy() override;
 
-        virtual void reposition(int leftPt, int topPt)          {}
+        void reposition( int leftPt, int topPt ) override {}
 
-        virtual bool isClosed() const                           { return mClosed; }
-        virtual void _setVisible( bool visible )                { mVisible = visible; }
-        virtual void setHidden( bool hidden )                   { mHidden = hidden; }
-        virtual bool isHidden() const                           { return mHidden; }
+        bool isClosed() const override { return mClosed; }
+        void _setVisible( bool visible ) override { mVisible = visible; }
+        void setHidden( bool hidden ) override { mHidden = hidden; }
+        bool isHidden() const override { return mHidden; }
 
-        virtual void getCustomAttribute( IdString name, void* pData );
+        void getCustomAttribute( IdString name, void* pData ) override;
     };
 
     class _OgreD3D11Export D3D11WindowSwapChainBased : public D3D11Window
@@ -108,23 +111,23 @@ namespace Ogre
         void _destroySizeDependedD3DResources();
         void resizeSwapChainBuffers( uint32 width, uint32 height );
         void notifyResolutionChanged();
-        void notifyDeviceLost(D3D11Device* device);
-        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
+        void notifyDeviceLost(D3D11Device* device) override;
+        void notifyDeviceRestored(D3D11Device* device, unsigned pass) override;
 
     public:
         D3D11WindowSwapChainBased( const String &title, uint32 width, uint32 height,
                                    bool fullscreenMode, PixelFormatGpu depthStencilFormat,
                                    const NameValuePairList *miscParams,
                                    D3D11Device &device, D3D11RenderSystem *renderSystem );
-        virtual ~D3D11WindowSwapChainBased();
+        ~D3D11WindowSwapChainBased() override;
 
-        virtual void _initialize( TextureGpuManager *textureGpuManager );
-        virtual void destroy();
+        void _initialize( TextureGpuManager *textureGpuManager ) override;
+        void destroy() override;
 
         /// @copydoc Window::setFsaa
-        virtual void setFsaa(const String& fsaa);
+        void setFsaa(const String& fsaa) override;
 
-        virtual void swapBuffers();
+        void swapBuffers() override;
     };
 }
 

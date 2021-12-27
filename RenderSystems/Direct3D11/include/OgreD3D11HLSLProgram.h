@@ -46,45 +46,44 @@ namespace Ogre {
     reason for not wanting to use the Cg plugin, I suggest you use Cg instead since that
     can produce programs for OpenGL too.
     */
-    class _OgreD3D11Export D3D11HLSLProgram
-        : public HighLevelGpuProgram
-        , protected D3D11DeviceResource
+    class _OgreD3D11Export D3D11HLSLProgram final : public HighLevelGpuProgram,
+                                                    protected D3D11DeviceResource
     {
     public:
         /// Command object for setting entry point
-        class CmdEntryPoint : public ParamCommand
+        class CmdEntryPoint final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /// Command object for setting target assembler
-        class CmdTarget : public ParamCommand
+        class CmdTarget final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /// Command object for setting macro defines
-        class CmdPreprocessorDefines : public ParamCommand
+        class CmdPreprocessorDefines final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /// Command object for setting matrix packing in column-major order
-        class CmdColumnMajorMatrices : public ParamCommand
+        class CmdColumnMajorMatrices final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /// Command object for setting backwards compatibility
-        class CmdEnableBackwardsCompatibility : public ParamCommand
+        class CmdEnableBackwardsCompatibility final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
 
     protected:
@@ -95,14 +94,14 @@ namespace Ogre {
         static CmdColumnMajorMatrices msCmdColumnMajorMatrices;
         static CmdEnableBackwardsCompatibility msCmdEnableBackwardsCompatibility;
         
-        void notifyDeviceLost(D3D11Device* device);
-        void notifyDeviceRestored(D3D11Device* device, unsigned pass);
+        void notifyDeviceLost(D3D11Device* device) override;
+        void notifyDeviceRestored(D3D11Device* device, unsigned pass) override;
 
         /** Internal method for creating an appropriate low-level program from this
         high-level program, must be implemented by subclasses. */
-        void createLowLevelImpl();
+        void createLowLevelImpl() override;
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl();
+        void unloadHighLevelImpl() override;
 
         // Recursive utility method for populateParameterNames
         void processParamElement(String prefix, LPCSTR pName, ID3D11ShaderReflectionType* varRefType);
@@ -295,7 +294,7 @@ namespace Ogre {
     public:
         D3D11HLSLProgram(ResourceManager* creator, const String& name, ResourceHandle handle,
             const String& group, bool isManual, ManualResourceLoader* loader, D3D11Device & device);
-        ~D3D11HLSLProgram();
+        ~D3D11HLSLProgram() override;
 
         /** Sets the entry point for this program ie the first method called. */
         void setEntryPoint(const String& entryPoint) { mEntryPoint = entryPoint; }
@@ -321,13 +320,13 @@ namespace Ogre {
         /** Gets whether backwards compatibility is enabled. */
         bool getEnableBackwardsCompatibility() const { return mEnableBackwardsCompatibility; }
         /// Overridden from GpuProgram
-        bool isSupported() const;
+        bool isSupported() const override;
         /// Overridden from GpuProgram
-        GpuProgramParametersSharedPtr createParameters();
+        GpuProgramParametersSharedPtr createParameters() override;
         /// Overridden from GpuProgram
-        const String& getLanguage() const;
+        const String& getLanguage() const override;
 
-        virtual void buildConstantDefinitions() const;
+        void buildConstantDefinitions() const override;
         ID3D11VertexShader* getVertexShader() const;
         ID3D11PixelShader* getPixelShader() const;
         ID3D11GeometryShader* getGeometryShader() const;
@@ -354,7 +353,7 @@ namespace Ogre {
 
         /** Internal load implementation, must be implemented by subclasses.
         */
-        void loadFromSource();
+        void loadFromSource() override;
 
         void reinterpretGSForStreamOut();
         bool mReinterpretingGS;

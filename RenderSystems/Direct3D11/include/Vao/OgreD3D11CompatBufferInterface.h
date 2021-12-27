@@ -52,22 +52,22 @@ namespace Ogre
     @par
         This buffer interface is for compatibility with these systems.
     */
-    class _OgreD3D11Export D3D11CompatBufferInterface : public D3D11BufferInterfaceBase
+    class _OgreD3D11Export D3D11CompatBufferInterface final : public D3D11BufferInterfaceBase
     {
     protected:
         D3D11Device     &mDevice;
 
     public:
         D3D11CompatBufferInterface( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer, D3D11Device &device );
-        ~D3D11CompatBufferInterface();
+        ~D3D11CompatBufferInterface() override;
 
-        virtual void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
+        void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
                                                  MappingState prevMappingState,
-                                                 bool advanceFrame = true );
-        virtual void unmap( UnmapOptions unmapOption,
-                            size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame();
-        virtual void regressFrame();
+                                                 bool advanceFrame = true ) override;
+        void unmap( UnmapOptions unmapOption,
+                            size_t flushStartElem = 0, size_t flushSizeElem = 0 ) override;
+        void advanceFrame() override;
+        void regressFrame() override;
     };
 }
 

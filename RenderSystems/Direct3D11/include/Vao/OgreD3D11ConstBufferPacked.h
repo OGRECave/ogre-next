@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreD3D11Export D3D11ConstBufferPacked : public ConstBufferPacked
+    class _OgreD3D11Export D3D11ConstBufferPacked final : public ConstBufferPacked
     {
         D3D11Device &mDevice;
 
@@ -43,14 +43,14 @@ namespace Ogre
                                 BufferType bufferType, void *initialData, bool keepAsShadow,
                                 VaoManager *vaoManager, BufferInterface *bufferInterface,
                                 D3D11Device &device );
-        virtual ~D3D11ConstBufferPacked();
+        ~D3D11ConstBufferPacked() override;
 
-        virtual void bindBufferVS( uint16 slot );
-        virtual void bindBufferPS( uint16 slot );
-        virtual void bindBufferGS( uint16 slot );
-        virtual void bindBufferHS( uint16 slot );
-        virtual void bindBufferDS( uint16 slot );
-        virtual void bindBufferCS( uint16 slot );
+        void bindBufferVS( uint16 slot ) override;
+        void bindBufferPS( uint16 slot ) override;
+        void bindBufferGS( uint16 slot ) override;
+        void bindBufferHS( uint16 slot ) override;
+        void bindBufferDS( uint16 slot ) override;
+        void bindBufferCS( uint16 slot ) override;
     };
 }
 

@@ -2141,10 +2141,6 @@ namespace Ogre
     {
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setFog( FogMode mode, const ColourValue& colour, Real densitiy, Real start, Real end )
-    {
-    }
-    //---------------------------------------------------------------------
     void D3D11RenderSystem::setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams )
     {
         RenderSystem::setStencilBufferParams( refValue, stencilParams );
