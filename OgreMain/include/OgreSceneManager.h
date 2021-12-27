@@ -200,8 +200,7 @@ namespace Ogre {
         to be extended through subclassing in order to provide more specialised
         scene organisation structures for particular needs. The default 
         SceneManager culls based on a hierarchy of node bounding boxes, other
-        implementations can use an octree (@see OctreeSceneManager),
-        and many other options. New SceneManager
+        implementations can use an octree, and many other options. New SceneManager
         implementations can be added at runtime by plugins, see 
         SceneManagerEnumerator for the interfaces for adding new SceneManager
         types.
