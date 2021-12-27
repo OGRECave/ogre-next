@@ -37,7 +37,7 @@ namespace Ogre
 {
     /** See AsyncTextureTicket
     */
-    class _OgreGL3PlusExport GL3PlusAsyncTextureTicket : public AsyncTextureTicket
+    class _OgreGL3PlusExport GL3PlusAsyncTextureTicket final : public AsyncTextureTicket
     {
     protected:
         GLuint      mVboName;
@@ -53,13 +53,13 @@ namespace Ogre
 
         GLuint createBuffer( uint32 width, uint32 height, uint32 depthOrSlices );
 
-        virtual TextureBox mapImpl( uint32 slice );
-        virtual void unmapImpl();
+        TextureBox mapImpl( uint32 slice ) override;
+        void unmapImpl() override;
 
         void waitForDownloadToFinish();
 
-        virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
-                                      bool accurateTracking, TextureBox *srcBox=0 );
+        void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
+                                      bool accurateTracking, TextureBox *srcBox=0 ) override;
 
     public:
         GL3PlusAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
@@ -67,9 +67,9 @@ namespace Ogre
                                    PixelFormatGpu pixelFormatFamily,
                                    GL3PlusVaoManager *vaoManager,
                                    bool supportsGetTextureSubImage );
-        virtual ~GL3PlusAsyncTextureTicket();
+        ~GL3PlusAsyncTextureTicket() override;
 
-        virtual bool queryIsTransferDone();
+        bool queryIsTransferDone() override;
     };
 }
 

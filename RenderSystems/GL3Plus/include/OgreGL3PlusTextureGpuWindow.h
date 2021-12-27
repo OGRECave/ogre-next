@@ -35,13 +35,13 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreGL3PlusExport GL3PlusTextureGpuWindow : public GL3PlusTextureGpuRenderTarget
+    class _OgreGL3PlusExport GL3PlusTextureGpuWindow final : public GL3PlusTextureGpuRenderTarget
     {
         GL3PlusContext  *mContext;
         Window          *mWindow;
 
-        virtual void createInternalResourcesImpl();
-        virtual void destroyInternalResourcesImpl();
+        void createInternalResourcesImpl() override;
+        void destroyInternalResourcesImpl() override;
 
     public:
         GL3PlusTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -49,26 +49,26 @@ namespace Ogre
                                  TextureTypes::TextureTypes initialType,
                                  TextureGpuManager *textureManager,
                                  GL3PlusContext *context, Window *window );
-        virtual ~GL3PlusTextureGpuWindow();
+        ~GL3PlusTextureGpuWindow() override;
 
-        virtual void setTextureType( TextureTypes::TextureTypes textureType );
+        void setTextureType( TextureTypes::TextureTypes textureType ) override;
 
-        virtual void getSubsampleLocations( vector<Vector2>::type locations );
+        void getSubsampleLocations( vector<Vector2>::type locations ) override;
 
-        virtual void notifyDataIsReady();
-        virtual bool _isDataReadyImpl() const;
+        void notifyDataIsReady() override;
+        bool _isDataReadyImpl() const override;
 
-        virtual void swapBuffers();
+        void swapBuffers() override;
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
 
-        virtual bool isOpenGLRenderWindow() const;
+        bool isOpenGLRenderWindow() const override;
 
-        virtual void _setToDisplayDummyTexture();
-        virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+        void _setToDisplayDummyTexture() override;
+        void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
     };
 
-    class _OgreGL3PlusExport GL3PlusTextureGpuHeadlessWindow : public GL3PlusTextureGpuRenderTarget
+    class _OgreGL3PlusExport GL3PlusTextureGpuHeadlessWindow final : public GL3PlusTextureGpuRenderTarget
     {
         GL3PlusContext *mContext;
         Window *mWindow;
@@ -79,17 +79,17 @@ namespace Ogre
                                          TextureTypes::TextureTypes initialType,
                                          TextureGpuManager *textureManager, GL3PlusContext *context,
                                          Window *window );
-        virtual ~GL3PlusTextureGpuHeadlessWindow();
+        ~GL3PlusTextureGpuHeadlessWindow() override;
 
-        virtual void setTextureType( TextureTypes::TextureTypes textureType );
+        void setTextureType( TextureTypes::TextureTypes textureType ) override;
 
-        virtual void swapBuffers();
+        void swapBuffers() override;
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
 
-        virtual bool isOpenGLRenderWindow() const;
+        bool isOpenGLRenderWindow() const override;
 
-        virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+        void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
     };
 }
 

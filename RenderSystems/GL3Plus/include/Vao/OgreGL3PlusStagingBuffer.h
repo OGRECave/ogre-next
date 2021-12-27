@@ -102,21 +102,21 @@ namespace Ogre
         /// May modify mMappingStart.
         void waitIfNeeded();
 
-        virtual void* mapImpl( size_t sizeBytes );
-        virtual void unmapImpl( const Destination *destinations, size_t numDestinations );
+        void* mapImpl( size_t sizeBytes ) override;
+        void unmapImpl( const Destination *destinations, size_t numDestinations ) override;
 
-        virtual const void* _mapForReadImpl( size_t offset, size_t sizeBytes );
+        const void* _mapForReadImpl( size_t offset, size_t sizeBytes ) override;
 
     public:
         GL3PlusStagingBuffer( size_t internalBufferStart, size_t sizeBytes,
                               VaoManager *vaoManager, bool uploadOnly, GLuint vboName );
-        virtual ~GL3PlusStagingBuffer();
+        ~GL3PlusStagingBuffer() override;
 
-        virtual StagingStallType uploadWillStall( size_t sizeBytes );
+        StagingStallType uploadWillStall( size_t sizeBytes ) override;
 
         void cleanUnfencedHazards();
 
-        virtual size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength );
+        size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength ) override;
 
         GLuint getBufferName() const           { return mVboName; }
     };

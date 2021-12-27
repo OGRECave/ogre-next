@@ -36,10 +36,10 @@ namespace Ogre
 {
     class GL3PlusBufferInterface;
 
-    class _OgreGL3PlusExport GL3PlusUavBufferPacked : public UavBufferPacked
+    class _OgreGL3PlusExport GL3PlusUavBufferPacked final : public UavBufferPacked
     {
-        virtual TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat );
-        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl();
+        TexBufferPacked *getAsTexBufferImpl( PixelFormatGpu pixelFormat ) override;
+        ReadOnlyBufferPacked *getAsReadOnlyBufferImpl() override;
 
         inline void bindBuffer( uint16 slot, size_t offset, size_t sizeBytes );
 
@@ -47,15 +47,15 @@ namespace Ogre
         GL3PlusUavBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
                                 uint32 bindFlags, void *initialData, bool keepAsShadow,
                                 VaoManager *vaoManager, GL3PlusBufferInterface *bufferInterface );
-        virtual ~GL3PlusUavBufferPacked();
+        ~GL3PlusUavBufferPacked() override;
 
-//        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-//        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-//        virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-//        virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-//        virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-        virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
+        // void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override;
+        // void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override;
+        // void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override;
+        // void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override;
+        // void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override;
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

@@ -39,110 +39,110 @@ THE SOFTWARE.
 namespace Ogre {
 namespace v1 {
     /// Specialisation of HardwareVertexBuffer for emulation
-    class _OgreGL3PlusExport GL3PlusDefaultHardwareVertexBuffer : public HardwareVertexBuffer
+    class _OgreGL3PlusExport GL3PlusDefaultHardwareVertexBuffer final : public HardwareVertexBuffer
     {
     protected:
         unsigned char* mData;
         /// @copydoc HardwareBuffer::lock
-        void* lockImpl(size_t offset, size_t length, LockOptions options);
+        void* lockImpl(size_t offset, size_t length, LockOptions options) override;
         /// @copydoc HardwareBuffer::unlock
-        void unlockImpl();
+        void unlockImpl() override;
 
     public:
         GL3PlusDefaultHardwareVertexBuffer(size_t vertexSize, size_t numVertices,
                                            HardwareBuffer::Usage usage);
         GL3PlusDefaultHardwareVertexBuffer(HardwareBufferManagerBase* mgr, size_t vertexSize, size_t numVertices,
                                            HardwareBuffer::Usage usage);
-        ~GL3PlusDefaultHardwareVertexBuffer();
+        ~GL3PlusDefaultHardwareVertexBuffer() override;
         /// @copydoc HardwareBuffer::readData
-        void readData(size_t offset, size_t length, void* pDest);
+        void readData(size_t offset, size_t length, void* pDest) override;
         /// @copydoc HardwareBuffer::writeData
         void writeData(size_t offset, size_t length, const void* pSource,
-                       bool discardWholeBuffer = false);
+                       bool discardWholeBuffer = false) override;
         /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options);
+        void* lock(size_t offset, size_t length, LockOptions options) override;
         /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock();
+        void unlock() override;
 
         void* getDataPtr(size_t offset) const { return (void*)(mData + offset); }
     };
 
     /// Specialisation of HardwareIndexBuffer for emulation
-    class _OgreGL3PlusExport GL3PlusDefaultHardwareIndexBuffer : public HardwareIndexBuffer
+    class _OgreGL3PlusExport GL3PlusDefaultHardwareIndexBuffer final : public HardwareIndexBuffer
     {
     protected:
         unsigned char* mData;
         /// @copydoc HardwareBuffer::lock
-        void* lockImpl(size_t offset, size_t length, LockOptions options);
+        void* lockImpl(size_t offset, size_t length, LockOptions options) override;
         /// @copydoc HardwareBuffer::unlock
-        void unlockImpl();
+        void unlockImpl() override;
     public:
         GL3PlusDefaultHardwareIndexBuffer(IndexType idxType, size_t numIndexes, HardwareBuffer::Usage usage);
-        ~GL3PlusDefaultHardwareIndexBuffer();
+        ~GL3PlusDefaultHardwareIndexBuffer() override;
         /// @copydoc HardwareBuffer::readData
-        void readData(size_t offset, size_t length, void* pDest);
+        void readData(size_t offset, size_t length, void* pDest) override;
         /// @copydoc HardwareBuffer::writeData
         void writeData(size_t offset, size_t length, const void* pSource,
-                       bool discardWholeBuffer = false);
+                       bool discardWholeBuffer = false) override;
         /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options);
+        void* lock(size_t offset, size_t length, LockOptions options) override;
         /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock();
+        void unlock() override;
 
         void* getDataPtr(size_t offset) const { return (void*)(mData + offset); }
     };
 
     /// Specialisation of HardwareUniformBuffer for emulation
-    class _OgreGL3PlusExport GL3PlusDefaultHardwareUniformBuffer : public HardwareUniformBuffer
+    class _OgreGL3PlusExport GL3PlusDefaultHardwareUniformBuffer final : public HardwareUniformBuffer
     {
     protected:
         unsigned char* mData;
         /// @copydoc HardwareBuffer::lock
-        void* lockImpl(size_t offset, size_t length, LockOptions options);
+        void* lockImpl(size_t offset, size_t length, LockOptions options) override;
         /// @copydoc HardwareBuffer::unlock
-        void unlockImpl();
+        void unlockImpl() override;
 
     public:
         GL3PlusDefaultHardwareUniformBuffer(size_t bufferSize, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name);
         GL3PlusDefaultHardwareUniformBuffer(HardwareBufferManagerBase* mgr, size_t bufferSize,
                                             HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name);
-        ~GL3PlusDefaultHardwareUniformBuffer();
+        ~GL3PlusDefaultHardwareUniformBuffer() override;
         /// @copydoc HardwareBuffer::readData
-        void readData(size_t offset, size_t length, void* pDest);
+        void readData(size_t offset, size_t length, void* pDest) override;
         /// @copydoc HardwareBuffer::writeData
         void writeData(size_t offset, size_t length, const void* pSource,
-                       bool discardWholeBuffer = false);
+                       bool discardWholeBuffer = false) override;
         /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options);
+        void* lock(size_t offset, size_t length, LockOptions options) override;
         /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock();
+        void unlock() override;
 
         void* getDataPtr(size_t offset) const { return (void*)(mData + offset); }
     };
 
     /// Specialisation of HardwareCounterBuffer for emulation
-    class _OgreGL3PlusExport GL3PlusDefaultHardwareCounterBuffer : public HardwareCounterBuffer
+    class _OgreGL3PlusExport GL3PlusDefaultHardwareCounterBuffer final : public HardwareCounterBuffer
     {
     protected:
         unsigned char* mData;
         /// @copydoc HardwareBuffer::lock
-        void* lockImpl(size_t offset, size_t length, LockOptions options);
+        void* lockImpl(size_t offset, size_t length, LockOptions options) override;
         /// @copydoc HardwareBuffer::unlock
-        void unlockImpl();
+        void unlockImpl() override;
 
     public:
         GL3PlusDefaultHardwareCounterBuffer(const String& name);
         GL3PlusDefaultHardwareCounterBuffer(HardwareBufferManagerBase* mgr, const String& name);
-        ~GL3PlusDefaultHardwareCounterBuffer();
+        ~GL3PlusDefaultHardwareCounterBuffer() override;
         /// @copydoc HardwareBuffer::readData
-        void readData(size_t offset, size_t length, void* pDest);
+        void readData(size_t offset, size_t length, void* pDest) override;
         /// @copydoc HardwareBuffer::writeData
         void writeData(size_t offset, size_t length, const void* pSource,
-                       bool discardWholeBuffer = false);
+                       bool discardWholeBuffer = false) override;
         /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options);
+        void* lock(size_t offset, size_t length, LockOptions options) override;
         /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock();
+        void unlock() override;
 
         void* getDataPtr(size_t offset) const { return (void*)(mData + offset); }
     };
@@ -154,29 +154,30 @@ namespace v1 {
         rendering system (which is required to create a 'real' hardware
         buffer manager).
     */
-    class _OgreGL3PlusExport GL3PlusDefaultHardwareBufferManagerBase : public HardwareBufferManagerBase
+    class _OgreGL3PlusExport GL3PlusDefaultHardwareBufferManagerBase final
+        : public HardwareBufferManagerBase
     {
     public:
         GL3PlusDefaultHardwareBufferManagerBase();
-        ~GL3PlusDefaultHardwareBufferManagerBase();
+        ~GL3PlusDefaultHardwareBufferManagerBase() override;
         /// Creates a vertex buffer
         HardwareVertexBufferSharedPtr
             createVertexBuffer(size_t vertexSize, size_t numVerts,
-                               HardwareBuffer::Usage usage, bool useShadowBuffer = false);
+                               HardwareBuffer::Usage usage, bool useShadowBuffer = false) override;
         /// Create a hardware index buffer
         HardwareIndexBufferSharedPtr
             createIndexBuffer(HardwareIndexBuffer::IndexType itype, size_t numIndexes,
-                              HardwareBuffer::Usage usage, bool useShadowBuffer = false);
+                              HardwareBuffer::Usage usage, bool useShadowBuffer = false) override;
         /// Create a uniform buffer
         HardwareUniformBufferSharedPtr
-            createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name = "");
+            createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name = "") override;
         /// Create a counter buffer
         HardwareCounterBufferSharedPtr
-            createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name = "");
+            createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name = "") override;
     };
 
     /// GL3PlusDefaultHardwareBufferManagerBase as a Singleton
-    class _OgreGL3PlusExport GL3PlusDefaultHardwareBufferManager : public HardwareBufferManager
+    class _OgreGL3PlusExport GL3PlusDefaultHardwareBufferManager final : public HardwareBufferManager
     {
     public:
         GL3PlusDefaultHardwareBufferManager()
@@ -184,7 +185,7 @@ namespace v1 {
         {
 
         }
-        ~GL3PlusDefaultHardwareBufferManager()
+        ~GL3PlusDefaultHardwareBufferManager() override
         {
             OGRE_DELETE mImpl;
         }

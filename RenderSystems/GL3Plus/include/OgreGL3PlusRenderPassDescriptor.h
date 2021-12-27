@@ -56,7 +56,7 @@ namespace Ogre
         same FBO setup. This doesn't mean these RenderPassDescriptor are exactly the
         same, as they may have different clear, loadAction or storeAction values.
     */
-    class _OgreGL3PlusExport GL3PlusRenderPassDescriptor : public RenderPassDescriptor
+    class _OgreGL3PlusExport GL3PlusRenderPassDescriptor final : public RenderPassDescriptor
     {
     protected:
         GLuint  mFboName;
@@ -89,14 +89,14 @@ namespace Ogre
 
     public:
         GL3PlusRenderPassDescriptor( GL3PlusRenderSystem *renderSystem );
-        virtual ~GL3PlusRenderPassDescriptor();
+        ~GL3PlusRenderPassDescriptor() override;
 
         GLuint getFboName() const       { return mFboName; }
 
-        virtual void entriesModified( uint32 entryTypes );
+        void entriesModified( uint32 entryTypes ) override;
 
-        virtual void setClearColour( uint8 idx, const ColourValue &clearColour );
-        virtual void setClearColour( const ColourValue &clearColour );
+        void setClearColour( uint8 idx, const ColourValue &clearColour ) override;
+        void setClearColour( const ColourValue &clearColour ) override;
 
         uint32 willSwitchTo( GL3PlusRenderPassDescriptor *newDesc, bool warnIfRtvWasFlushed ) const;
 

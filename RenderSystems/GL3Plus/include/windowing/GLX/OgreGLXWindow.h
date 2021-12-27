@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 namespace Ogre 
 {
-    class _OgrePrivate GLXWindow : public Window
+    class _OgrePrivate GLXWindow final : public Window
     {
     protected:
         bool mClosed;
@@ -58,42 +58,42 @@ namespace Ogre
         GLXWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
                    PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams,
                    GLXGLSupport* glsupport );
-        virtual ~GLXWindow();
+        ~GLXWindow() override;
 
-        virtual void _initialize( TextureGpuManager *textureManager );
+        void _initialize( TextureGpuManager *textureManager ) override;
 
-        virtual void setVSync( bool vSync, uint32 vSyncInterval );
-        virtual void reposition( int32 left, int32 top);
+        void setVSync( bool vSync, uint32 vSyncInterval ) override;
+        void reposition( int32 left, int32 top) override;
         
         void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
                                       uint32 width, uint32 height,
-                                      uint32 frequencyNumerator, uint32 frequencyDenominator );
+                                      uint32 frequencyNumerator, uint32 frequencyDenominator ) override;
         
         /** @copydoc see RenderWindow::destroy */
-        virtual void destroy();
+        virtual void destroy() override;
         
         /** @copydoc see RenderWindow::isClosed */
-        virtual bool isClosed() const;
+        virtual bool isClosed() const override;
         
         /** @copydoc see RenderWindow::isVisible */
-        bool isVisible() const;
+        bool isVisible() const override;
 
-        virtual void _setVisible(bool visible);
+        virtual void _setVisible(bool visible) override;
 
         /** @copydoc see RenderWindow::isHidden */
-        bool isHidden() const { return mHidden; }
+        bool isHidden() const override { return mHidden; }
 
         /** @copydoc see RenderWindow::setHidden */
-        void setHidden(bool hidden);
+        void setHidden(bool hidden) override;
         
         /** @copydoc see RenderWindow::resize */
-        void requestResolution( uint32 width, uint32 height );
+        void requestResolution( uint32 width, uint32 height ) override;
 
         /** @copydoc see RenderWindow::windowMovedOrResized */
-        void windowMovedOrResized();
+        void windowMovedOrResized() override;
         
         /** @copydoc see RenderWindow::swapBuffers */
-        void swapBuffers();
+        void swapBuffers() override;
         
         /**
            @remarks
@@ -104,7 +104,7 @@ namespace Ogre
            * DISPLAYNAME    The X Server name for the connected display.
            * ATOM          The X Atom used in client delete events.
            */
-        virtual void getCustomAttribute( IdString name, void* pData );
+        virtual void getCustomAttribute( IdString name, void* pData ) override;
         
         bool requiresTextureFlipping() const { return false; }
     };

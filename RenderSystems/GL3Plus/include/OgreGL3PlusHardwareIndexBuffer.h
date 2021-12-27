@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 namespace Ogre {
 namespace v1 {
-    class _OgreGL3PlusExport GL3PlusHardwareIndexBuffer : public HardwareIndexBuffer
+    class _OgreGL3PlusExport GL3PlusHardwareIndexBuffer final : public HardwareIndexBuffer
     {
         private:
             GLuint mBufferId;
@@ -47,25 +47,25 @@ namespace v1 {
 
         protected:
             /** See HardwareBuffer. */
-            void* lockImpl(size_t offset, size_t length, LockOptions options);
+            void* lockImpl(size_t offset, size_t length, LockOptions options) override;
             /** See HardwareBuffer. */
-            void unlockImpl();
+            void unlockImpl() override;
 
         public:
             GL3PlusHardwareIndexBuffer(HardwareBufferManagerBase* mgr, IndexType idxType, size_t numIndexes,
                                   HardwareBuffer::Usage usage,
                                   bool useShadowBuffer);
-            ~GL3PlusHardwareIndexBuffer();
+            ~GL3PlusHardwareIndexBuffer() override;
             /** See HardwareBuffer. */
-            void readData(size_t offset, size_t length, void* pDest);
+            void readData(size_t offset, size_t length, void* pDest) override;
             /** See HardwareBuffer. */
             void writeData(size_t offset, size_t length, 
-                const void* pSource, bool discardWholeBuffer = false);
+                const void* pSource, bool discardWholeBuffer = false) override;
             /** See HardwareBuffer. */
             void copyData(HardwareBuffer& srcBuffer, size_t srcOffset, 
-                  size_t dstOffset, size_t length, bool discardWholeBuffer = false);
+                  size_t dstOffset, size_t length, bool discardWholeBuffer = false) override;
             /** See HardwareBuffer. */
-            void _updateFromShadow();
+            void _updateFromShadow() override;
 
             GLuint getGLBufferId() const { return mBufferId; }
     };

@@ -40,14 +40,14 @@ namespace Ogre
     protected:
         GLsync  mFenceName;
 
-        virtual const void* mapImpl();
+        const void* mapImpl() override;
 
     public:
         GL3PlusAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                             size_t elementStart, size_t elementCount );
-        virtual ~GL3PlusAsyncTicket();
+        ~GL3PlusAsyncTicket() override;
 
-        virtual bool queryIsTransferDone();
+        bool queryIsTransferDone() override;
     };
 }
 

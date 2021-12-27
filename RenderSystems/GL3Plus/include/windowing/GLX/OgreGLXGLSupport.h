@@ -35,7 +35,7 @@
 
 namespace Ogre {
 
-    class _OgrePrivate GLXGLSupport : public GL3PlusSupport
+    class _OgrePrivate GLXGLSupport final : public GL3PlusSupport
     {
     public:
         GLXGLSupport();
@@ -46,33 +46,33 @@ namespace Ogre {
         Atom mAtomState;
 
         /** @copydoc see GL3PlusSupport::addConfig */
-        void addConfig();
+        void addConfig() override;
 
         /** @copydoc see GL3PlusSupport::validateConfig */
-        String validateConfig();
+        String validateConfig() override;
 
         /** @copydoc see GL3PlusSupport::setConfigOption */
-        void setConfigOption(const String &name, const String &value);
+        void setConfigOption(const String &name, const String &value) override;
 
         /// @copydoc GL3PlusSupport::createWindow
         Window* createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem,
-                              const String& windowTitle );
+                              const String& windowTitle ) override;
 
         /// @copydoc RenderSystem::createRenderWindow
         Window* newWindow( const String &name, uint32 width, uint32 height,
-                           bool fullScreen, const NameValuePairList *miscParams = 0 );
+                           bool fullScreen, const NameValuePairList *miscParams = 0 ) override;
 
         /** @copydoc see GL3PlusSupport::start */
-        void start();
+        void start() override;
 
         /** @copydoc see GL3PlusSupport::stop */
-        void stop();
+        void stop() override;
 
         /** @copydoc see GL3PlusSupport::initialiseExtensions */
-        void initialiseExtensions();
+        void initialiseExtensions() override;
 
         /** @copydoc see GL3PlusSupport::getProcAddress */
-        void* getProcAddress(const char* procname) const;
+        void* getProcAddress(const char* procname) const override;
 
         // The remaining functions are internal to the GLX Rendersystem:
 

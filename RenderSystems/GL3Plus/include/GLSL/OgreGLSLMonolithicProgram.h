@@ -46,11 +46,11 @@ namespace Ogre {
         the program object like GLSLSeparableProgram can. Hence the name
         'monolithic'.
     */
-    class _OgreGL3PlusExport GLSLMonolithicProgram : public GLSLProgram
+    class _OgreGL3PlusExport GLSLMonolithicProgram final : public GLSLProgram
     {
     protected:
         /// Compiles and links the vertex and fragment programs
-        void compileAndLink();
+        void compileAndLink() override;
         /// Put a program in use
         void _useProgram();
 
@@ -69,27 +69,27 @@ namespace Ogre {
         /** Makes a program object active by making sure it is linked
             and then putting it in use.
         */
-        void activate();
+        void activate() override;
 
         /** Updates program object uniforms using data from
             GpuProgramParameters.  normally called by
             GLSLShader::bindParameters() just before rendering
             occurs.
         */
-        void updateUniforms(GpuProgramParametersSharedPtr params, uint16 mask, GpuProgramType fromProgType);
+        void updateUniforms(GpuProgramParametersSharedPtr params, uint16 mask, GpuProgramType fromProgType) override;
 
         /** Updates program object uniform blocks using data from
             GpuProgramParameters.  normally called by
             GLSLShader::bindParameters() just before rendering
             occurs.
         */
-        void updateUniformBlocks(GpuProgramParametersSharedPtr params, uint16 mask, GpuProgramType fromProgType);
+        void updateUniformBlocks(GpuProgramParametersSharedPtr params, uint16 mask, GpuProgramType fromProgType) override;
         /** Updates program object uniforms using data from pass
             iteration GpuProgramParameters.  normally called by
             GLSLShader::bindMultiPassParameters() just before multi
             pass rendering occurs.
         */
-        void updatePassIterationUniforms(GpuProgramParametersSharedPtr params);
+        void updatePassIterationUniforms(GpuProgramParametersSharedPtr params) override;
     };
 
 }

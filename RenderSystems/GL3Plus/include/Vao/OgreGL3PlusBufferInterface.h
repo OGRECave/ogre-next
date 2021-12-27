@@ -62,7 +62,7 @@ namespace Ogre
     public:
         GL3PlusBufferInterface( size_t vboPoolIdx, GLuint vboName,
                                 GL3PlusDynamicBuffer *dynamicBuffer );
-        ~GL3PlusBufferInterface();
+        ~GL3PlusBufferInterface() override;
 
         size_t getVboPoolIndex()                { return mVboPoolIdx; }
         GLuint getVboName() const               { return mVboName; }
@@ -72,16 +72,16 @@ namespace Ogre
         /// Only use this function for the first upload
         void _firstUpload( void *data, size_t elementStart, size_t elementCount );
 
-        virtual void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
-                                                 MappingState prevMappingState,
-                                                 bool advanceFrame = true );
-        virtual void unmap( UnmapOptions unmapOption,
-                            size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame();
-        virtual void regressFrame();
+        void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
+                                         MappingState prevMappingState,
+                                         bool advanceFrame = true ) override;
+        void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
+                    size_t flushSizeElem = 0 ) override;
+        void advanceFrame() override;
+        void regressFrame() override;
 
-        virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
-                             size_t srcOffsetBytes, size_t sizeBytes );
+        void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes,
+                     size_t sizeBytes ) override;
     };
 }
 

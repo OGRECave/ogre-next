@@ -58,51 +58,51 @@ namespace Ogre {
         command.  All the modules to be attached are listed on the
         same line as the attach command separated by white space.
     */
-    class _OgreGL3PlusExport GLSLShader : public HighLevelGpuProgram
+    class _OgreGL3PlusExport GLSLShader final : public HighLevelGpuProgram
     {
     public:
         /// Command object for attaching another GLSL Program
-        class CmdAttach : public ParamCommand
+        class CmdAttach final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& shaderNames);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& shaderNames) override;
         };
 
         /// Command object for setting macro defines
-        class CmdPreprocessorDefines : public ParamCommand
+        class CmdPreprocessorDefines final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /// Command object for setting the input operation type (geometry shader only)
-        class _OgreGL3PlusExport CmdInputOperationType : public ParamCommand
+        class _OgreGL3PlusExport CmdInputOperationType final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /// Command object for setting the output operation type (geometry shader only)
-        class _OgreGL3PlusExport CmdOutputOperationType : public ParamCommand
+        class _OgreGL3PlusExport CmdOutputOperationType final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /// Command object for setting the maximum output vertices (geometry shader only)
-        class _OgreGL3PlusExport CmdMaxOutputVertices : public ParamCommand
+        class _OgreGL3PlusExport CmdMaxOutputVertices final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /// Command object for setting matrix packing in column-major order
-        class CmdColumnMajorMatrices : public ParamCommand
+        class CmdColumnMajorMatrices final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Returns the operation type that this geometry program expects to
             receive as input
@@ -154,9 +154,9 @@ namespace Ogre {
         String getShaderTypeLabel(GpuProgramType programType);
 
         /// Overridden
-        bool getPassTransformStates() const;
-        bool getPassSurfaceAndLightStates() const;
-        bool getPassFogStates() const;
+        bool getPassTransformStates() const override;
+        bool getPassSurfaceAndLightStates() const override;
+        bool getPassFogStates() const override;
 
         /** Attach another GLSL Shader to this one. */
         void attachChildShader(const String& name);
@@ -167,16 +167,16 @@ namespace Ogre {
         const String& getPreprocessorDefines() const { return mPreprocessorDefines; }
 
         /// Overridden from GpuProgram
-        const String& getLanguage() const;
+        const String& getLanguage() const override;
         /** Sets whether matrix packing in column-major order. */
         void setColumnMajorMatrices(bool columnMajor) { mColumnMajorMatrices = columnMajor; }
         /** Gets whether matrix packed in column-major order. */
         bool getColumnMajorMatrices() const { return mColumnMajorMatrices; }
 
-        virtual void setReplaceVersionMacro( bool bReplace );
+        void setReplaceVersionMacro( bool bReplace ) override;
 
         /// Overridden from GpuProgram
-        GpuProgramParametersSharedPtr createParameters();
+        GpuProgramParametersSharedPtr createParameters() override;
 
         /// Compile source into shader object
         bool compile( const bool checkErrors = false);
@@ -206,13 +206,13 @@ namespace Ogre {
         void setLinked(GLint flag) { mLinked = flag; }
 
         /// @copydoc Resource::calculateSize
-        size_t calculateSize() const;
+        size_t calculateSize() const override;
 
         /// Get the OGRE assigned shader ID.
         GLuint getShaderID() const { return mShaderID; }
 
         /// Since GLSL has no assembly, use this shader for binding.
-        GpuProgram* _getBindingDelegate() { return this; }
+        GpuProgram* _getBindingDelegate() override { return this; }
 
     protected:
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
@@ -226,23 +226,23 @@ namespace Ogre {
 
         /** Internal load implementation, must be implemented by subclasses.
          */
-        void loadFromSource();
+        void loadFromSource() override;
         /** Internal method for creating a dummy low-level program for
             this high-level program.  GLSL does not give access to the
             low level implementation of the shader so this method
             creates an object sub-classed from GL3PlusShader just to
             be compatible with GL3PlusRenderSystem.
         */
-        void createLowLevelImpl();
+        void createLowLevelImpl() override;
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl();
+        void unloadHighLevelImpl() override;
         /// Overridden from HighLevelGpuProgram
-        void unloadImpl();
+        void unloadImpl() override;
 
         /// Populate the passed parameters with name->index map
-        void populateParameterNames(GpuProgramParametersSharedPtr params);
+        void populateParameterNames(GpuProgramParametersSharedPtr params) override;
         /// Populate the passed parameters with name->index map, must be overridden
-        void buildConstantDefinitions() const;
+        void buildConstantDefinitions() const override;
         /** Check the compile result for an error with default
             precision - and recompile if needed.  some glsl compilers
             return an error default precision is set to types other
@@ -252,7 +252,7 @@ namespace Ogre {
         */
         void checkAndFixInvalidDefaultPrecisionError( String &message );
 
-        virtual void setUniformBlockBinding( const char *blockName, uint32 bindingSlot );
+        void setUniformBlockBinding( const char *blockName, uint32 bindingSlot ) override;
 
 
         // /// @copydoc Resource::loadImpl

@@ -38,15 +38,15 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreGL3PlusExport GL3PlusStagingTexture : public StagingTextureBufferImpl
+    class _OgreGL3PlusExport GL3PlusStagingTexture final : public StagingTextureBufferImpl
     {
         GL3PlusDynamicBuffer    *mDynamicBuffer;
         size_t                  mUnmapTicket;
         void                    *mMappedPtr;
         void                    *mLastMappedPtr;
 
-        virtual bool belongsToUs( const TextureBox &box );
-        virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr();
+        bool belongsToUs( const TextureBox &box ) override;
+        void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
 
         void uploadCubemap( const TextureBox &srcBox, PixelFormatGpu pixelFormat,
                             uint8 mipLevel, GLenum format, GLenum type,
@@ -57,16 +57,16 @@ namespace Ogre
         GL3PlusStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily,
                                size_t size, size_t internalBufferStart, size_t vboPoolIdx,
                                GL3PlusDynamicBuffer *dynamicBuffer );
-        virtual ~GL3PlusStagingTexture();
+        ~GL3PlusStagingTexture() override;
 
         void _unmapBuffer();
 
-        virtual void startMapRegion();
-        virtual void stopMapRegion();
+        void startMapRegion() override;
+        void stopMapRegion() override;
 
-        virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                             uint8 mipLevel, const TextureBox *cpuSrcBox=0,
-                             const TextureBox *dstBox=0, bool skipSysRamCopy=false );
+        void upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
+                     const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
+                     bool skipSysRamCopy = false ) override;
 
         GL3PlusDynamicBuffer* _getDynamicBuffer()           { return mDynamicBuffer; }
         void _resetDynamicBuffer()                          { mDynamicBuffer = 0; }

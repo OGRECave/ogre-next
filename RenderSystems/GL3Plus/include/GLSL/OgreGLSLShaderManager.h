@@ -37,7 +37,7 @@ namespace Ogre {
     //TODO A brief description of what purpose this class serves in GL3+.
     // Seems to primarily serve the purpose of creating GpuProgram's based
     // on material script programs. Also handles cache creation.
-    class _OgreGL3PlusExport GLSLShaderManager : public GpuProgramManager
+    class _OgreGL3PlusExport GLSLShaderManager final : public GpuProgramManager
     {
     public:
         typedef GpuProgram* (*CreateGpuProgramCallback)(ResourceManager* creator,
@@ -51,17 +51,18 @@ namespace Ogre {
 
     protected:
         /// @copydoc ResourceManager::createImpl
-        Resource* createImpl(const String& name, ResourceHandle handle,
-                             const String& group, bool isManual, ManualResourceLoader* loader,
-                             const NameValuePairList* params);
+        Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                              bool isManual, ManualResourceLoader *loader,
+                              const NameValuePairList *params ) override;
         /// Specialised create method with specific parameters.
-        Resource* createImpl(const String& name, ResourceHandle handle,
-                             const String& group, bool isManual, ManualResourceLoader* loader,
-                             GpuProgramType gptype, const String& syntaxCode);
+        Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                              bool isManual, ManualResourceLoader *loader, GpuProgramType gptype,
+                              const String &syntaxCode ) override;
 
     public:
         GLSLShaderManager();
-        virtual ~GLSLShaderManager();
+        ~GLSLShaderManager() override;
+
         bool registerShaderFactory(const String& syntaxCode, CreateGpuProgramCallback createFn);
         bool unregisterShaderFactory(const String& syntaxCode);
     };

@@ -39,7 +39,7 @@ namespace v1 {
 #       define OGRE_GL_DEFAULT_MAP_BUFFER_THRESHOLD (1024 * 32)
 
     /** Implementation of HardwareBufferManager for OpenGL. */
-    class _OgreGL3PlusExport GL3PlusHardwareBufferManagerBase : public HardwareBufferManagerBase
+    class _OgreGL3PlusExport GL3PlusHardwareBufferManagerBase final : public HardwareBufferManagerBase
     {
     protected:
         char* mScratchBufferPool;
@@ -50,17 +50,17 @@ namespace v1 {
 
     public:
         GL3PlusHardwareBufferManagerBase();
-        ~GL3PlusHardwareBufferManagerBase();
+        ~GL3PlusHardwareBufferManagerBase() override;
         /// Creates a vertex buffer
         HardwareVertexBufferSharedPtr createVertexBuffer(size_t vertexSize,
-                                                         size_t numVerts, HardwareBuffer::Usage usage, bool useShadowBuffer = false);
+                                                         size_t numVerts, HardwareBuffer::Usage usage, bool useShadowBuffer = false) override;
         /// Create a hardware vertex buffer
         HardwareIndexBufferSharedPtr createIndexBuffer(
             HardwareIndexBuffer::IndexType itype, size_t numIndexes,
-            HardwareBuffer::Usage usage, bool useShadowBuffer = false);
+            HardwareBuffer::Usage usage, bool useShadowBuffer = false) override;
         /// Create a uniform buffer
         HardwareUniformBufferSharedPtr createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
-                                                           bool useShadowBuffer, const String& name = "");
+                                                           bool useShadowBuffer, const String& name = "") override;
         /// Create a uniform buffer
         HardwareUniformBufferSharedPtr createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
                                                            bool useShadowBuffer, size_t binding, const String& name = "");
@@ -73,7 +73,7 @@ namespace v1 {
                                                                  bool useShadowBuffer, size_t binding, const String& name = "");
         /// Create a counter buffer
         HardwareCounterBufferSharedPtr createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
-                                                           bool useShadowBuffer, const String& name = "");
+                                                           bool useShadowBuffer, const String& name = "") override;
         /// Create a counter buffer
         HardwareCounterBufferSharedPtr createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
                                                            bool useShadowBuffer, size_t binding, const String& name = "");
@@ -103,7 +103,7 @@ namespace v1 {
     };
 
     /// GL3PlusHardwareBufferManagerBase as a Singleton
-    class _OgreGL3PlusExport GL3PlusHardwareBufferManager : public HardwareBufferManager
+    class _OgreGL3PlusExport GL3PlusHardwareBufferManager final : public HardwareBufferManager
     {
     // protected:
     //     UniformBufferList mShaderStorageBuffers;
@@ -114,7 +114,7 @@ namespace v1 {
         {
 
         }
-        ~GL3PlusHardwareBufferManager()
+        ~GL3PlusHardwareBufferManager() override
         {
             // mShaderStorageBuffers.clear();
             OGRE_DELETE mImpl;

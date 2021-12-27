@@ -35,7 +35,7 @@ namespace Ogre {
 namespace v1 {
 
     /// Specialisation of HardwareCounterBuffer for OpenGL
-    class _OgreGL3PlusExport GL3PlusHardwareCounterBuffer : public HardwareCounterBuffer
+    class _OgreGL3PlusExport GL3PlusHardwareCounterBuffer final : public HardwareCounterBuffer
     {
         private:
             GLuint mBufferId;
@@ -43,24 +43,24 @@ namespace v1 {
 
         protected:
             /** See HardwareBuffer. */
-            void* lockImpl(size_t offset, size_t length, LockOptions options);
+            void* lockImpl(size_t offset, size_t length, LockOptions options) override;
             /** See HardwareBuffer. */
-            void unlockImpl();
+            void unlockImpl() override;
 
         public:
             GL3PlusHardwareCounterBuffer(HardwareBufferManagerBase* mgr, const String& name);
-            ~GL3PlusHardwareCounterBuffer();
+            ~GL3PlusHardwareCounterBuffer() override;
 
             /** See HardwareBuffer. */
-            void readData(size_t offset, size_t length, void* pDest);
+            void readData(size_t offset, size_t length, void* pDest) override;
 
             /** See HardwareBuffer. */
             void writeData(size_t offset, size_t length, 
-                           const void* pSource, bool discardWholeBuffer = false);
+                           const void* pSource, bool discardWholeBuffer = false) override;
 
             /** See HardwareBuffer. */
             void copyData(HardwareBuffer& srcBuffer, size_t srcOffset, 
-                          size_t dstOffset, size_t length, bool discardWholeBuffer = false);
+                          size_t dstOffset, size_t length, bool discardWholeBuffer = false) override;
 
             inline GLuint getGLBufferId() const { return mBufferId; }
             void setGLBufferBinding(GLint binding);

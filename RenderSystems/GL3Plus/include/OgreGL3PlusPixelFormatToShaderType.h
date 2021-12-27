@@ -34,13 +34,13 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 namespace Ogre
 {
-    class _OgreGL3PlusExport GL3PlusPixelFormatToShaderType : public PixelFormatToShaderType
+    class _OgreGL3PlusExport GL3PlusPixelFormatToShaderType final : public PixelFormatToShaderType
     {
     public:
-        virtual const char* getPixelFormatType( PixelFormatGpu pixelFormat ) const;
-        virtual const char* getDataType( PixelFormatGpu pixelFormat, uint32 textureType,
-                                         bool isMsaa, ResourceAccess::ResourceAccess access ) const;
+        const char *getPixelFormatType( PixelFormatGpu pixelFormat ) const override;
+        const char *getDataType( PixelFormatGpu pixelFormat, uint32 textureType, bool isMsaa,
+                                 ResourceAccess::ResourceAccess access ) const override;
     };
-}
+}  // namespace Ogre
 
 #endif
