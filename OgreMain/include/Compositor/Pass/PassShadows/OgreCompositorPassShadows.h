@@ -82,9 +82,9 @@ namespace Ogre
     public:
         CompositorPassShadows( const CompositorPassShadowsDef *definition, Camera *defaultCamera,
                                CompositorNode *parentNode, const RenderTargetViewDef *rtv );
-        virtual ~CompositorPassShadows();
+        ~CompositorPassShadows() override;
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
 
         Camera *getCullCamera() const { return mCullCamera; }
 

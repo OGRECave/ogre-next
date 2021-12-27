@@ -113,7 +113,7 @@ namespace Ogre
                           SceneManager *sceneManager );
         virtual ~ForwardClustered();
 
-        virtual ForwardPlusMethods getForwardPlusMethod() const { return MethodForwardClustered; }
+        ForwardPlusMethods getForwardPlusMethod() const override { return MethodForwardClustered; }
 
         void setDebugFrustum( bool bEnableDebugFrustumWireAabb );
         bool getDebugFrustum() const;
@@ -121,9 +121,9 @@ namespace Ogre
         void setFreezeDebugFrustum( bool freezeDebugFrustum );
         bool getFreezeDebugFrustum() const;
 
-        virtual void execute( size_t threadId, size_t numThreads );
+        void execute( size_t threadId, size_t numThreads ) override;
 
-        virtual void collectLights( Camera *camera );
+        void collectLights( Camera *camera ) override;
 
         uint32 getWidth() const                                     { return mWidth; }
         uint32 getHeight() const                                    { return mHeight; }
@@ -134,19 +134,18 @@ namespace Ogre
         float getMaxDistance() const                                { return mMaxDistance; }
 
         /// Returns the amount of bytes that fillConstBufferData is going to fill.
-        virtual size_t getConstBufferSize() const;
+        size_t getConstBufferSize() const override;
 
         /** Fills 'passBufferPtr' with the necessary data for ForwardClustered rendering.
             @see getConstBufferSize
         @remarks
             Assumes 'passBufferPtr' is aligned to a vec4/float4 boundary.
         */
-        virtual void fillConstBufferData( Viewport *viewport, bool bRequiresTextureFlipping,
-                                          uint32 renderTargetHeight,
-                                          IdString shaderSyntax, bool instancedStereo,
-                                          float * RESTRICT_ALIAS passBufferPtr ) const;
+        void fillConstBufferData( Viewport *viewport, bool bRequiresTextureFlipping,
+                                  uint32 renderTargetHeight, IdString shaderSyntax, bool instancedStereo,
+                                  float *RESTRICT_ALIAS passBufferPtr ) const override;
 
-        virtual void setHlmsPassProperties( Hlms *hlms );
+        void setHlmsPassProperties( Hlms *hlms ) override;
     };
 
     /** @} */

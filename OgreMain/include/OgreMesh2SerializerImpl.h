@@ -219,20 +219,20 @@ namespace Ogre {
     {
     public:
         MeshSerializerImpl_v2_1_R1( VaoManager *vaoManager );
-        virtual ~MeshSerializerImpl_v2_1_R1();
+        ~MeshSerializerImpl_v2_1_R1() override;
 
     protected:
-        virtual void readSubMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener, uint8 numVaoPasses);
+        void readSubMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener, uint8 numVaoPasses) override;
     };
 
     class _OgrePrivate MeshSerializerImpl_v2_1_R0 : public MeshSerializerImpl_v2_1_R1
     {
     public:
         MeshSerializerImpl_v2_1_R0( VaoManager *vaoManager );
-        virtual ~MeshSerializerImpl_v2_1_R0();
+        ~MeshSerializerImpl_v2_1_R0() override;
 
     protected:
-        virtual void readMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener);
+        void readMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener) override;
     };
 
     /** @} */

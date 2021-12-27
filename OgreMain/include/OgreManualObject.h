@@ -121,10 +121,10 @@ namespace v1
 
     public:
         ManualObject( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
-        virtual ~ManualObject();
+        ~ManualObject() override;
 
         /** @copydoc MovableObject::_releaseManualHardwareResources. */
-        void _releaseManualHardwareResources() { clear(); }
+        void _releaseManualHardwareResources() override { clear(); }
 
         //pre-declare ManualObjectSection
         class ManualObjectSection;
@@ -402,9 +402,9 @@ namespace v1
         // MovableObject overrides
 
         /** @copydoc MovableObject::getMovableType. */
-        const String& getMovableType() const;
+        const String& getMovableType() const override;
         /** @copydoc MovableObject::_updateRenderQueue. */
-        void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera);
+        void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera) override;
         /** Implement this method to enable stencil shadows. */
         EdgeData* getEdgeList();
         /** Overridden member from ShadowCaster. */
@@ -425,7 +425,7 @@ namespace v1
         public:
             ManualObjectSection(ManualObject* parent, const String& materialName,
                 OperationType opType, const String & groupName = ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-            virtual ~ManualObjectSection();
+            ~ManualObjectSection() override;
             
             /// Retrieve render operation for manipulation
             RenderOperation* getRenderOperation();
@@ -444,16 +444,13 @@ namespace v1
             /** @copydoc Renderable::getMaterial. */
             const MaterialPtr& getMaterial() const;
             /** @copydoc Renderable::getRenderOperation. */
-            void getRenderOperation(RenderOperation& op, bool casterPass);
+            void getRenderOperation(RenderOperation& op, bool casterPass) override;
             /** @copydoc Renderable::getWorldTransforms. */
-            void getWorldTransforms(Matrix4* xform) const;
+            void getWorldTransforms(Matrix4* xform) const override;
             /** @copydoc Renderable::getSquaredViewDepth. */
             Real getSquaredViewDepth(const Ogre::Camera *) const;
             /** @copydoc Renderable::getLights. */
-            const LightList &getLights() const;
-
-
-                    
+            const LightList &getLights() const override;
         };
 
         typedef vector<ManualObjectSection*>::type SectionList;
@@ -525,23 +522,22 @@ namespace v1
 
     };
 
-
     /** Factory object for creating ManualObject instances */
     class _OgreExport ManualObjectFactory : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         ManualObjectFactory() {}
-        ~ManualObjectFactory() {}
+        ~ManualObjectFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance( MovableObject* obj);  
-
+        const String &getType() const override;
+        void destroyInstance( MovableObject *obj ) override;
     };
     /** @} */
     /** @} */

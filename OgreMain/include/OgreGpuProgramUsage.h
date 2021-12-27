@@ -141,8 +141,8 @@ namespace Ogre
         size_t calculateSize() const;
 
         // Resource Listener
-        void unloadingComplete(Resource* prog);
-        void loadingComplete(Resource* prog);
+        void unloadingComplete(Resource* prog) override;
+        void loadingComplete(Resource* prog) override;
 
     };
     /** @} */

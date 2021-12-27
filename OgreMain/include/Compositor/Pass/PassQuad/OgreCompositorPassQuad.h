@@ -96,15 +96,15 @@ namespace Ogre
         Real        mHorizonalTexelOffset;
         Real        mVerticalTexelOffset;
 
-        virtual void analyzeBarriers( const bool bClearBarriers = true );
+        void analyzeBarriers( const bool bClearBarriers = true ) override;
 
     public:
         CompositorPassQuad( const CompositorPassQuadDef *definition, Camera *defaultCamera,
                             CompositorNode *parentNode, const RenderTargetViewDef *rtv,
                             Real horizonalTexelOffset, Real verticalTexelOffset );
-        virtual ~CompositorPassQuad();
+        ~CompositorPassQuad() override;
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
 
         /// Don't make this const (useful for compile-time multithreading errors)
         /// Pointer can be null if using HLMS

@@ -65,27 +65,26 @@ namespace v1 {
     public:
         /// Constructor
         SimpleRenderable( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
+        ~SimpleRenderable() override;
 
         virtual void setMaterial( const String& matName );
-        virtual void setMaterial(const MaterialPtr& mat);
+        void setMaterial(const MaterialPtr& mat) override;
         virtual const MaterialPtr& getMaterial() const;
 
         virtual void setRenderOperation( const RenderOperation& rend );
-        virtual void getRenderOperation(RenderOperation& op, bool casterPass);
+        void getRenderOperation(RenderOperation& op, bool casterPass) override;
 
         void setWorldTransform( const Matrix4& xform );
-        virtual void getWorldTransforms( Matrix4* xform ) const;
+        void getWorldTransforms( Matrix4* xform ) const override;
 
         void setBoundingBox( const AxisAlignedBox& box );
         virtual const AxisAlignedBox& getBoundingBox() const;
 
-        virtual ~SimpleRenderable();
-
         /** Overridden from MovableObject */
-        virtual const String& getMovableType() const;
+        const String& getMovableType() const override;
 
         /** @copydoc Renderable::getLights */
-        const LightList& getLights() const;
+        const LightList& getLights() const override;
 
     };
     /** @} */

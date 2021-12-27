@@ -115,7 +115,7 @@ namespace Ogre {
         void setType(LightTypes type);
 
         /// Overload to avoid it. Light::setType uses the RenderQueue ID to classify lights per type.
-        virtual void setRenderQueueGroup(uint8 queueID);
+        void setRenderQueueGroup(uint8 queueID) override;
 
         /** Returns the light type.
         */
@@ -371,10 +371,10 @@ namespace Ogre {
         Real getPowerScale() const                              { return mPowerScale; }
 
         /** @copydoc MovableObject::_updateRenderQueue */
-        virtual void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera) {}
+        void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera) override {}
 
         /** @copydoc MovableObject::getMovableType */
-        const String& getMovableType() const;
+        const String& getMovableType() const override;
 
         /** Retrieves the direction of the light including any transform from nodes it is attached to. */
         Vector3 getDerivedDirection() const;
@@ -401,7 +401,7 @@ namespace Ogre {
         uint32 getTypeFlags() const;
 
         /// @copydoc AnimableObject::createAnimableValue
-        AnimableValuePtr createAnimableValue(const String& valueName);
+        AnimableValuePtr createAnimableValue(const String& valueName) override;
 
         /** Sets the maximum distance away from the camera that shadows
             by this light will be visible.
@@ -594,9 +594,9 @@ namespace Ogre {
 
         TextureGpu* getTexture() const          { return mTexture; }
 
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
-    
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
+
     protected:
 
         LightTypes mLightType;
@@ -649,20 +649,21 @@ namespace Ogre {
     };
 
     /** Factory object for creating Light instances. */
-    class _OgreExport LightFactory : public MovableObjectFactory
+    class _OgreExport LightFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         LightFactory() {}
-        ~LightFactory() {}
+        ~LightFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance(MovableObject* obj);  
+        const String& getType() const override;
+        void destroyInstance(MovableObject* obj) override;
 
     };
     /** @} */

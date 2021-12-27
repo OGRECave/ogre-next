@@ -246,11 +246,11 @@ namespace Ogre {
 
     protected:
         // Internal functions for calcs
-        bool isViewOutOfDate() const;
+        bool isViewOutOfDate() const override;
         /// Signal to update frustum information.
-        void invalidateFrustum() const;
+        void invalidateFrustum() const override;
         /// Signal to update view information.
-        void invalidateView() const;
+        void invalidateView() const override;
 
 
         /** Do actual window setting, using parameters set in SetWindow call
@@ -269,7 +269,7 @@ namespace Ogre {
 
         /** Standard destructor.
         */
-        virtual ~Camera();
+        ~Camera() override;
 
         /// Add a listener to this camera
         virtual void addListener(Listener* l);
@@ -489,10 +489,10 @@ namespace Ogre {
         const Quaternion& _getCachedRealOrientation() const         { return mRealOrientation; }
 
         /** Overridden from Frustum/Renderable */
-        void getWorldTransforms(Matrix4* mat) const;
+        void getWorldTransforms(Matrix4* mat) const override;
 
         /** Overridden from MovableObject */
-        const String& getMovableType() const;
+        const String& getMovableType() const override;
 
         /** Enables / disables automatic tracking of a SceneNode.
         @remarks
@@ -693,24 +693,24 @@ namespace Ogre {
         virtual void forwardIntersect(const Plane& worldPlane, vector<Vector4>::type* intersect3d) const;
 
         /// @copydoc Frustum::isVisible(const AxisAlignedBox&, FrustumPlane*) const
-        bool isVisible(const AxisAlignedBox& bound, FrustumPlane* culledBy = 0) const;
+        bool isVisible(const AxisAlignedBox& bound, FrustumPlane* culledBy = 0) const override;
         /// @copydoc Frustum::isVisible(const Sphere&, FrustumPlane*) const
-        bool isVisible(const Sphere& bound, FrustumPlane* culledBy = 0) const;
+        bool isVisible(const Sphere& bound, FrustumPlane* culledBy = 0) const override;
         /// @copydoc Frustum::isVisible(const Vector3&, FrustumPlane*) const
-        bool isVisible(const Vector3& vert, FrustumPlane* culledBy = 0) const;
+        bool isVisible(const Vector3& vert, FrustumPlane* culledBy = 0) const override;
         /// @copydoc Frustum::getWorldSpaceCorners
-        const Vector3* getWorldSpaceCorners() const;
+        const Vector3* getWorldSpaceCorners() const override;
         /// @copydoc Frustum::getFrustumPlane
-        const Plane& getFrustumPlane( unsigned short plane ) const;
+        const Plane& getFrustumPlane( unsigned short plane ) const override;
         /// @copydoc Frustum::projectSphere
         bool projectSphere(const Sphere& sphere, 
-            Real* left, Real* top, Real* right, Real* bottom) const;
+            Real* left, Real* top, Real* right, Real* bottom) const override;
         /// @copydoc Frustum::getNearClipDistance
-        Real getNearClipDistance() const;
+        Real getNearClipDistance() const override;
         /// @copydoc Frustum::getFarClipDistance
-        Real getFarClipDistance() const;
+        Real getFarClipDistance() const override;
         /// @copydoc Frustum::getViewMatrix
-        const Matrix4& getViewMatrix() const;
+        const Matrix4& getViewMatrix() const override;
         /** Specialised version of getViewMatrix allowing caller to differentiate
             whether the custom culling frustum should be allowed or not. 
         @remarks
@@ -740,9 +740,9 @@ namespace Ogre {
         virtual void synchroniseBaseSettingsWith(const Camera* cam);
 
         /** Get the derived position of this frustum. */
-        const Vector3& getPositionForViewUpdate() const;
+        const Vector3& getPositionForViewUpdate() const override;
         /** Get the derived orientation of this frustum. */
-        const Quaternion& getOrientationForViewUpdate() const;
+        const Quaternion& getOrientationForViewUpdate() const override;
 
         /** @brief Sets whether to use min display size calculations.
             When active, objects that derive from MovableObject whose size on the screen is less then a MovableObject::mMinPixelSize will not

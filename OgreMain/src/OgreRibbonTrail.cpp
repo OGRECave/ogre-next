@@ -41,15 +41,15 @@ namespace v1
     {
         /** Controller value for pass frame time to RibbonTrail
         */
-        class _OgrePrivate TimeControllerValue : public ControllerValue<Real>
+        class _OgrePrivate TimeControllerValue final : public ControllerValue<Real>
         {
         protected:
             RibbonTrail* mTrail;
         public:
             TimeControllerValue(RibbonTrail* r) { mTrail = r; }
 
-            Real getValue() const { return 0; }// not a source 
-            void setValue(Real value) { mTrail->_timeUpdate(value); }
+            Real getValue() const override { return 0; }// not a source
+            void setValue(Real value) override { mTrail->_timeUpdate(value); }
         };
     }
     //-----------------------------------------------------------------------

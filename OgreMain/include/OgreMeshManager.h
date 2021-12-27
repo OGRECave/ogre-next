@@ -55,12 +55,12 @@ namespace v1 {
             the creation of resources (in this case mesh data),
             working within a fixed memory budget.
     */
-    class _OgreExport MeshManager: public ResourceManager, public Singleton<MeshManager>,
+    class _OgreExport MeshManager final : public ResourceManager, public Singleton<MeshManager>,
         public ManualResourceLoader
     {
     public:
         MeshManager();
-        ~MeshManager();
+        ~MeshManager() override;
 
         /** Initialises the manager, only to be called by OGRE internally. */
         void _initialise();
@@ -446,13 +446,13 @@ namespace v1 {
         MeshSerializerListener *getListener();
 
         /** @see ManualResourceLoader::loadResource */
-        void loadResource(Resource* res);
+        void loadResource(Resource* res) override;
 
     protected:
         /// @copydoc ResourceManager::createImpl
         Resource* createImpl(const String& name, ResourceHandle handle,
             const String& group, bool isManual, ManualResourceLoader* loader,
-            const NameValuePairList* createParams);
+            const NameValuePairList* createParams) override;
 
         /** Utility method for tessellating 2D meshes.
         */

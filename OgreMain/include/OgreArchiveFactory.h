@@ -68,7 +68,7 @@ namespace Ogre {
         */
         virtual Archive* createInstance(const String& name, bool readOnly) = 0;
 
-        virtual Archive* createInstance(const String& name) { return createInstance(name, true); }
+        Archive* createInstance(const String& name) override { return createInstance(name, true); }
 
         /** Some implementations (i.e. APKFileSystemArchive) usually modify the filename. For example
             in APKFileSystemArchive, "/path/to/localfile.mesh" gets internally stored as

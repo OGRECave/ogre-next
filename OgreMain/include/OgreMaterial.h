@@ -82,7 +82,7 @@ namespace Ogre {
     Material returned from this method will apply to any materials created 
     from this point onward.
     */
-    class _OgreExport Material : public Resource
+    class _OgreExport Material final : public Resource
     {
         friend class SceneManager;
         friend class MaterialManager;
@@ -129,23 +129,23 @@ namespace Ogre {
 
         /** Overridden from Resource.
         */
-        void prepareImpl();
+        void prepareImpl() override;
 
         /** Overridden from Resource.
         */
-        void unprepareImpl();
+        void unprepareImpl() override;
 
         /** Overridden from Resource.
         */
-        void loadImpl();
+        void loadImpl() override;
 
         /** Unloads the material, frees resources etc.
         @see
         Resource
         */
-        void unloadImpl();
+        void unloadImpl() override;
         /// @copydoc Resource::calculateSize
-        size_t calculateSize() const;
+        size_t calculateSize() const override;
     public:
 
         /** Constructor - use resource manager's create method rather than this.
@@ -153,7 +153,7 @@ namespace Ogre {
         Material(ResourceManager* creator, const String& name, ResourceHandle handle,
             const String& group, bool isManual = false, ManualResourceLoader* loader = 0);
 
-        ~Material();
+        ~Material() override;
         /** Assignment operator to allow easy copying between materials.
         */
         Material& operator=( const Material& rhs );
@@ -524,7 +524,7 @@ namespace Ogre {
 
         /** @copydoc Resource::touch
         */
-        void touch()
+        void touch() override
         { 
             if (mCompilationRequired) 
                 compile();

@@ -202,9 +202,9 @@ namespace v1 {
         virtual ~MeshSerializerImpl_v1_10();
 
     protected:
-        virtual void readMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener);
-        virtual void writeMesh(const Mesh* pMesh);
-        virtual size_t calcLodLevelSize(const Mesh* pMesh);
+        void readMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener) override;
+        void writeMesh(const Mesh* pMesh) override;
+        size_t calcLodLevelSize(const Mesh* pMesh) override;
     };
 
 
@@ -220,23 +220,25 @@ namespace v1 {
         // In the past we could select to use manual or automatic generated Lod levels,
         // but now we can mix them. If it is mixed, we can't export it to older mesh formats.
         virtual bool isLodMixed(const Mesh* pMesh);
-        virtual size_t calcLodLevelSize(const Mesh* pMesh);
-        virtual size_t calcLodUsageManualSize(const MeshLodUsage& usage);
-        virtual size_t calcLodUsageGeneratedSize(const Mesh* pMesh, const MeshLodUsage& usage, unsigned short lodNum, uint8 casterPass);
-        virtual size_t calcLodUsageGeneratedSubmeshSize(const SubMesh* submesh, unsigned short lodNum, uint8 casterPass);
+        size_t calcLodLevelSize(const Mesh* pMesh) override;
+        size_t calcLodUsageManualSize(const MeshLodUsage& usage) override;
+        size_t calcLodUsageGeneratedSize(const Mesh* pMesh, const MeshLodUsage& usage, unsigned short lodNum, uint8 casterPass) override;
+        size_t calcLodUsageGeneratedSubmeshSize(const SubMesh* submesh, unsigned short lodNum, uint8 casterPass) override;
 #if !OGRE_NO_MESHLOD
-        virtual void writeLodLevel(const Mesh* pMesh);
-        virtual void writeLodUsageGenerated(const Mesh* pMesh, const MeshLodUsage& usage, unsigned short lodNum, uint8 casterPass);
-        virtual void writeLodUsageGeneratedSubmesh(const SubMesh* submesh, unsigned short lodNum, uint8 casterPass);
-        virtual void writeLodUsageManual(const MeshLodUsage& usage);
+        void writeLodLevel( const Mesh *pMesh ) override;
+        void writeLodUsageGenerated( const Mesh *pMesh, const MeshLodUsage &usage, unsigned short lodNum,
+                                     uint8 casterPass ) override;
+        void writeLodUsageGeneratedSubmesh( const SubMesh *submesh, unsigned short lodNum,
+                                            uint8 casterPass ) override;
+        void writeLodUsageManual( const MeshLodUsage &usage ) override;
 
-        virtual void readMeshLodUsageGenerated( DataStreamPtr& stream, Mesh* pMesh,
-                                                unsigned short lodNum, MeshLodUsage& usage,
-                                                uint8 casterPass );
-        virtual void readMeshLodUsageManual(DataStreamPtr& stream, Mesh* pMesh, unsigned short lodNum, MeshLodUsage& usage);
+        void readMeshLodUsageGenerated( DataStreamPtr &stream, Mesh *pMesh, unsigned short lodNum,
+                                        MeshLodUsage &usage, uint8 casterPass ) override;
+        void readMeshLodUsageManual( DataStreamPtr &stream, Mesh *pMesh, unsigned short lodNum,
+                                     MeshLodUsage &usage ) override;
 #endif
-        virtual void readMeshLodLevel(DataStreamPtr& stream, Mesh* pMesh);
-        virtual void enableValidation();
+        void readMeshLodLevel( DataStreamPtr &stream, Mesh *pMesh ) override;
+        void enableValidation() override;
     };
 
     /** Class for providing backwards-compatibility for loading version 1.41 of the .mesh format. 
@@ -246,14 +248,14 @@ namespace v1 {
     {
     public:
         MeshSerializerImpl_v1_41();
-        ~MeshSerializerImpl_v1_41();
+        ~MeshSerializerImpl_v1_41() override;
     protected:
-        void writeMorphKeyframe(const VertexMorphKeyFrame* kf, size_t vertexCount);
-        void readMorphKeyFrame(DataStreamPtr& stream, Mesh* pMesh, VertexAnimationTrack* track);
-        void writePose(const Pose* pose);
-        void readPose(DataStreamPtr& stream, Mesh* pMesh);
-        size_t calcMorphKeyframeSize(const VertexMorphKeyFrame* kf, size_t vertexCount);
-        size_t calcPoseSize(const Pose* pose);
+        void writeMorphKeyframe(const VertexMorphKeyFrame* kf, size_t vertexCount) override;
+        void readMorphKeyFrame(DataStreamPtr& stream, Mesh* pMesh, VertexAnimationTrack* track) override;
+        void writePose(const Pose* pose) override;
+        void readPose(DataStreamPtr& stream, Mesh* pMesh) override;
+        size_t calcMorphKeyframeSize(const VertexMorphKeyFrame* kf, size_t vertexCount) override;
+        size_t calcPoseSize(const Pose* pose) override;
         size_t calcPoseVertexSize();
     };
 
@@ -264,13 +266,13 @@ namespace v1 {
     {
     public:
         MeshSerializerImpl_v1_4();
-        ~MeshSerializerImpl_v1_4();
+        ~MeshSerializerImpl_v1_4() override;
     protected:
-        virtual size_t calcLodLevelSize(const Mesh* pMesh);
-        virtual void readMeshLodLevel(DataStreamPtr& stream, Mesh* pMesh);
+        size_t calcLodLevelSize(const Mesh* pMesh) override;
+        void readMeshLodLevel(DataStreamPtr& stream, Mesh* pMesh) override;
 #if !OGRE_NO_MESHLOD
-        virtual void writeLodLevel(const Mesh* pMesh);
-        virtual void writeLodUsageGenerated(const Mesh* pMesh, const MeshLodUsage& usage, unsigned short lodNum, uint8 casterPass);
+        void writeLodLevel(const Mesh* pMesh) override;
+        void writeLodUsageGenerated(const Mesh* pMesh, const MeshLodUsage& usage, unsigned short lodNum, uint8 casterPass) override;
 #endif
     };
 
@@ -283,14 +285,14 @@ namespace v1 {
         MeshSerializerImpl_v1_3();
         ~MeshSerializerImpl_v1_3();
     protected:
-        virtual void readEdgeListLodInfo(DataStreamPtr& stream, EdgeData* edgeData);
+        void readEdgeListLodInfo(DataStreamPtr& stream, EdgeData* edgeData) override;
 
         /// Reorganise triangles of the edge list to group by vertex set
         virtual void reorganiseTriangles(EdgeData* edgeData);
         
-        virtual void writeEdgeList(const Mesh* pMesh);
-        virtual size_t calcEdgeListLodSize(const EdgeData* edgeData, bool isManual);
-        virtual size_t calcEdgeGroupSize(const EdgeData::EdgeGroup& group);
+        void writeEdgeList(const Mesh* pMesh) override;
+        size_t calcEdgeListLodSize(const EdgeData* edgeData, bool isManual) override;
+        size_t calcEdgeGroupSize(const EdgeData::EdgeGroup& group) override;
     };
 
     /** Class for providing backwards-compatibility for loading version 1.2 of the .mesh format. 
@@ -300,10 +302,10 @@ namespace v1 {
     {
     public:
         MeshSerializerImpl_v1_2();
-        ~MeshSerializerImpl_v1_2();
+        ~MeshSerializerImpl_v1_2() override;
     protected:
-        virtual void readMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener);
-        virtual void readGeometry(DataStreamPtr& stream, Mesh* pMesh, VertexData* dest);
+        void readMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener) override;
+        void readGeometry(DataStreamPtr& stream, Mesh* pMesh, VertexData* dest) override;
         virtual void readGeometryPositions(unsigned short bindIdx, DataStreamPtr& stream, 
             Mesh* pMesh, VertexData* dest);
         virtual void readGeometryNormals(unsigned short bindIdx, DataStreamPtr& stream, 
@@ -321,10 +323,10 @@ namespace v1 {
     {
     public:
         MeshSerializerImpl_v1_1();
-        ~MeshSerializerImpl_v1_1();
+        ~MeshSerializerImpl_v1_1() override;
     protected:
         void readGeometryTexCoords(unsigned short bindIdx, DataStreamPtr& stream, 
-            Mesh* pMesh, VertexData* dest, unsigned short set);
+            Mesh* pMesh, VertexData* dest, unsigned short set) override;
     };
 
     /** @} */

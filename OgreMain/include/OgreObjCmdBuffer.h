@@ -91,7 +91,7 @@ namespace Ogre
         public:
             TransitionToLoaded( TextureGpu *_texture, void *_sysRamCopy,
                                 GpuResidency::GpuResidency _targetResidency );
-            virtual void execute();
+            void execute() override;
         };
 
         class OutOfDateCache : public Cmd
@@ -101,7 +101,7 @@ namespace Ogre
 
         public:
             OutOfDateCache( TextureGpu *_texture, Image2 &image );
-            virtual void execute();
+            void execute() override;
         };
 
         class ExceptionThrown : public Cmd
@@ -111,7 +111,7 @@ namespace Ogre
 
         public:
             ExceptionThrown( TextureGpu *_texture, const Exception &_exception );
-            virtual void execute();
+            void execute() override;
         };
 
         class UploadFromStagingTex : public Cmd
@@ -128,7 +128,7 @@ namespace Ogre
                                   TextureGpu *_dstTexture,
                                   const TextureBox &_dstBox,
                                   uint8 _mipLevel );
-            virtual void execute();
+            void execute() override;
         };
 
         class NotifyDataIsReady : public Cmd
@@ -138,7 +138,7 @@ namespace Ogre
 
         public:
             NotifyDataIsReady( TextureGpu *_textureGpu, FilterBaseArray &inOutFilters );
-            virtual void execute();
+            void execute() override;
         };
     };
 

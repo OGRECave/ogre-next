@@ -95,7 +95,7 @@ namespace v1 {
         /// Utility method, binds dest copies into a given VertexData struct.
         void bindTempCopies(VertexData* targetData, bool suppressHardwareUpload);
         /** Overridden member from HardwareBufferLicensee. */
-        void licenseExpired(HardwareBuffer* buffer);
+        void licenseExpired(HardwareBuffer* buffer) override;
         /** Detect currently have buffer copies checked out and touch it. */
         bool buffersCheckedOut(bool positions = true, bool normals = true) const;
     };
@@ -435,101 +435,101 @@ namespace v1 {
         /** @copydoc HardwareBufferManagerBase::createVertexBuffer */
         HardwareVertexBufferSharedPtr 
             createVertexBuffer(size_t vertexSize, size_t numVerts, HardwareBuffer::Usage usage, 
-            bool useShadowBuffer = false)
+            bool useShadowBuffer = false) override
         {
             return mImpl->createVertexBuffer(vertexSize, numVerts, usage, useShadowBuffer);
         }
         /** @copydoc HardwareBufferManagerBase::createIndexBuffer */
         HardwareIndexBufferSharedPtr 
             createIndexBuffer(HardwareIndexBuffer::IndexType itype, size_t numIndexes, 
-            HardwareBuffer::Usage usage, bool useShadowBuffer = false)
+            HardwareBuffer::Usage usage, bool useShadowBuffer = false) override
         {
             return mImpl->createIndexBuffer(itype, numIndexes, usage, useShadowBuffer);
         }
 
         /** @copydoc HardwareBufferManagerBase::createUniformBuffer */
         HardwareUniformBufferSharedPtr
-                createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name = "")
+                createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name = "") override
         {
             return mImpl->createUniformBuffer(sizeBytes, usage, useShadowBuffer, name);
         }
         
         /** @copydoc HardwareBufferManagerBase::createCounterBuffer */
         HardwareCounterBufferSharedPtr
-        createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name = "")
+        createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name = "") override
         {
             return mImpl->createCounterBuffer(sizeBytes, usage, useShadowBuffer, name);
         }
 
         /** @copydoc HardwareBufferManagerInterface::createVertexDeclaration */
-        virtual VertexDeclaration* createVertexDeclaration()
+        VertexDeclaration* createVertexDeclaration() override
         {
             return mImpl->createVertexDeclaration();
         }
         /** @copydoc HardwareBufferManagerBase::destroyVertexDeclaration */
-        virtual void destroyVertexDeclaration(VertexDeclaration* decl)
+        void destroyVertexDeclaration(VertexDeclaration* decl) override
         {
             mImpl->destroyVertexDeclaration(decl);
         }
 
         /** @copydoc HardwareBufferManagerBase::createVertexBufferBinding */
-        virtual VertexBufferBinding* createVertexBufferBinding()
+        VertexBufferBinding* createVertexBufferBinding() override
         {
             return mImpl->createVertexBufferBinding();
         }
         /** @copydoc HardwareBufferManagerBase::destroyVertexBufferBinding */
-        virtual void destroyVertexBufferBinding(VertexBufferBinding* binding)
+        void destroyVertexBufferBinding(VertexBufferBinding* binding) override
         {
             mImpl->destroyVertexBufferBinding(binding);
         }
         /** @copydoc HardwareBufferManagerBase::registerVertexBufferSourceAndCopy */
-        virtual void registerVertexBufferSourceAndCopy(
+        void registerVertexBufferSourceAndCopy(
             const HardwareVertexBufferSharedPtr& sourceBuffer,
-            const HardwareVertexBufferSharedPtr& copy)
+            const HardwareVertexBufferSharedPtr& copy) override
         {
             mImpl->registerVertexBufferSourceAndCopy(sourceBuffer, copy);
         }
         /** @copydoc HardwareBufferManagerBase::allocateVertexBufferCopy */
-        virtual HardwareVertexBufferSharedPtr allocateVertexBufferCopy(
+        HardwareVertexBufferSharedPtr allocateVertexBufferCopy(
             const HardwareVertexBufferSharedPtr& sourceBuffer, 
             BufferLicenseType licenseType,
             HardwareBufferLicensee* licensee,
-            bool copyData = false)
+            bool copyData = false) override
         {
             return mImpl->allocateVertexBufferCopy(sourceBuffer, licenseType, licensee, copyData);
         }
         /** @copydoc HardwareBufferManagerBase::releaseVertexBufferCopy */
-        virtual void releaseVertexBufferCopy(
-            const HardwareVertexBufferSharedPtr& bufferCopy)
+        void releaseVertexBufferCopy(
+            const HardwareVertexBufferSharedPtr& bufferCopy) override
         {
             mImpl->releaseVertexBufferCopy(bufferCopy);
         }
 
         /** @copydoc HardwareBufferManagerBase::touchVertexBufferCopy */
-        virtual void touchVertexBufferCopy(
-            const HardwareVertexBufferSharedPtr& bufferCopy)
+        void touchVertexBufferCopy(
+            const HardwareVertexBufferSharedPtr& bufferCopy) override
         {
             mImpl->touchVertexBufferCopy(bufferCopy);
         }
 
         /** @copydoc HardwareBufferManagerBase::_freeUnusedBufferCopies */
-        virtual void _freeUnusedBufferCopies()
+        void _freeUnusedBufferCopies() override
         {
             mImpl->_freeUnusedBufferCopies();
         }
         /** @copydoc HardwareBufferManagerBase::_releaseBufferCopies */
-        virtual void _releaseBufferCopies(bool forceFreeUnused = false)
+        void _releaseBufferCopies(bool forceFreeUnused = false) override
         {
             mImpl->_releaseBufferCopies(forceFreeUnused);
         }
         /** @copydoc HardwareBufferManagerBase::_forceReleaseBufferCopies */
-        virtual void _forceReleaseBufferCopies(
-            const HardwareVertexBufferSharedPtr& sourceBuffer)
+        void _forceReleaseBufferCopies(
+            const HardwareVertexBufferSharedPtr& sourceBuffer) override
         {
             mImpl->_forceReleaseBufferCopies(sourceBuffer);
         }
         /** @copydoc HardwareBufferManagerBase::_forceReleaseBufferCopies */
-        virtual void _forceReleaseBufferCopies(HardwareVertexBuffer* sourceBuffer)
+        void _forceReleaseBufferCopies(HardwareVertexBuffer* sourceBuffer) override
         {
             mImpl->_forceReleaseBufferCopies(sourceBuffer);
         }

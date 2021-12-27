@@ -261,12 +261,12 @@ namespace v1 {
         // Overridden members follow
         Real getSquaredViewDepth(const Camera* cam) const;
         const AxisAlignedBox& getBoundingBox() const;
-        const String& getMovableType() const;
-        void _updateRenderQueue(RenderQueue *, Camera *camera, const Camera *lodCamera);
-        void getRenderOperation(RenderOperation &, bool casterPass);
-        virtual bool preRender(SceneManager* sm, RenderSystem* rsys);
-        void getWorldTransforms(Matrix4 *) const;
-        const LightList& getLights() const;
+        const String& getMovableType() const override;
+        void _updateRenderQueue(RenderQueue *, Camera *camera, const Camera *lodCamera) override;
+        void getRenderOperation(RenderOperation &, bool casterPass) override;
+        virtual bool preRender(SceneManager* sm, RenderSystem* rsys) override;
+        void getWorldTransforms(Matrix4 *) const override;
+        const LightList& getLights() const override;
 
     protected:
 
@@ -352,20 +352,20 @@ namespace v1 {
 
 
     /** Factory object for creating BillboardChain instances */
-    class _OgreExport BillboardChainFactory : public MovableObjectFactory
+    class _OgreExport BillboardChainFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+        MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
                                                    SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+                                                   const NameValuePairList* params = 0 ) override;
     public:
         BillboardChainFactory() {}
-        ~BillboardChainFactory() {}
+        ~BillboardChainFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance( MovableObject* obj);  
+        const String& getType() const override;
+        void destroyInstance( MovableObject* obj) override;
 
     };
 

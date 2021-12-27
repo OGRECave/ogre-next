@@ -90,9 +90,9 @@ namespace Ogre
     public:
         CompositorPassCompute( const CompositorPassComputeDef *definition, Camera *defaultCamera,
                                CompositorNode *parentNode, const RenderTargetViewDef *rtv );
-        virtual ~CompositorPassCompute();
+        ~CompositorPassCompute() override;
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
     };
 
     /** @} */

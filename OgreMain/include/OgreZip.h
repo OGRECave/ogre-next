@@ -54,7 +54,7 @@ namespace Ogre {
         This archive format supports all archives compressed in the standard
         zip format, including iD pk3 files.
     */
-    class _OgreExport ZipArchive : public Archive 
+    class _OgreExport ZipArchive final : public Archive
     {
     protected:
         /// Handle to root zip file
@@ -69,54 +69,54 @@ namespace Ogre {
         OGRE_AUTO_MUTEX;
     public:
         ZipArchive(const String& name, const String& archType, zzip_plugin_io_handlers* pluginIo = NULL);
-        ~ZipArchive();
+        ~ZipArchive() override;
         /// @copydoc Archive::isCaseSensitive
-        bool isCaseSensitive() const { return false; }
+        bool isCaseSensitive() const override { return false; }
 
         /// @copydoc Archive::load
-        void load();
+        void load() override;
         /// @copydoc Archive::unload
-        void unload();
+        void unload() override;
 
         /// @copydoc Archive::open
-        DataStreamPtr open(const String& filename, bool readOnly = true);
+        DataStreamPtr open(const String& filename, bool readOnly = true) override;
 
         /// @copydoc Archive::create
-        DataStreamPtr create(const String& filename);
+        DataStreamPtr create(const String& filename) override;
 
         /// @copydoc Archive::remove
-        void remove(const String& filename);
+        void remove(const String& filename) override;
 
         /// @copydoc Archive::list
-        StringVectorPtr list(bool recursive = true, bool dirs = false);
+        StringVectorPtr list(bool recursive = true, bool dirs = false) override;
 
         /// @copydoc Archive::listFileInfo
-        FileInfoListPtr listFileInfo(bool recursive = true, bool dirs = false);
+        FileInfoListPtr listFileInfo(bool recursive = true, bool dirs = false) override;
 
         /// @copydoc Archive::find
         StringVectorPtr find(const String& pattern, bool recursive = true,
-            bool dirs = false);
+            bool dirs = false) override;
 
         /// @copydoc Archive::findFileInfo
         FileInfoListPtr findFileInfo(const String& pattern, bool recursive = true,
-            bool dirs = false);
+            bool dirs = false) override;
 
         /// @copydoc Archive::exists
-        bool exists(const String& filename);
+        bool exists(const String& filename) override;
 
         /// @copydoc Archive::getModifiedTime
-        time_t getModifiedTime(const String& filename);
+        time_t getModifiedTime(const String& filename) override;
     };
 
     /** Specialisation of ArchiveFactory for Zip files. */
     class _OgreExport ZipArchiveFactory : public ArchiveFactory
     {
     public:
-        virtual ~ZipArchiveFactory() {}
+        ~ZipArchiveFactory() override {}
         /// @copydoc FactoryObj::getType
-        const String& getType() const;
+        const String& getType() const override;
         /// @copydoc FactoryObj::createInstance
-        Archive *createInstance( const String& name, bool readOnly ) 
+        Archive *createInstance( const String& name, bool readOnly ) override
         {
             if(!readOnly)
                 return NULL;
@@ -124,22 +124,22 @@ namespace Ogre {
             return OGRE_NEW ZipArchive(name, "Zip");
         }
         /// @copydoc FactoryObj::destroyInstance
-        void destroyInstance( Archive* ptr) { OGRE_DELETE ptr; }
+        void destroyInstance( Archive* ptr) override { OGRE_DELETE ptr; }
     };
 
     /** Specialisation of ZipArchiveFactory for embedded Zip files. */
-    class _OgreExport EmbeddedZipArchiveFactory : public ZipArchiveFactory
+    class _OgreExport EmbeddedZipArchiveFactory final : public ZipArchiveFactory
     {
     protected:
         /// A static pointer to file io alternative implementation for the embedded files
         static zzip_plugin_io_handlers* mPluginIo; 
     public:
         EmbeddedZipArchiveFactory();
-        virtual ~EmbeddedZipArchiveFactory();
+        ~EmbeddedZipArchiveFactory() override;
         /// @copydoc FactoryObj::getType
-        const String& getType() const;
+        const String& getType() const override;
         /// @copydoc FactoryObj::createInstance
-        Archive *createInstance( const String& name, bool readOnly ) 
+        Archive *createInstance( const String& name, bool readOnly ) override
         {
             ZipArchive * resZipArchive = OGRE_NEW ZipArchive(name, "EmbeddedZip", mPluginIo);
             return resZipArchive;
@@ -163,7 +163,7 @@ namespace Ogre {
     };
 
     /** Specialisation of DataStream to handle streaming data from zip archives. */
-    class _OgreExport ZipDataStream : public DataStream
+    class _OgreExport ZipDataStream final : public DataStream
     {
     protected:
         ZZIP_FILE* mZzipFile;
@@ -174,23 +174,21 @@ namespace Ogre {
         ZipDataStream(ZZIP_FILE* zzipFile, size_t uncompressedSize);
         /// Constructor for creating named streams
         ZipDataStream(const String& name, ZZIP_FILE* zzipFile, size_t uncompressedSize);
-        ~ZipDataStream();
+        ~ZipDataStream() override;
         /// @copydoc DataStream::read
-        size_t read(void* buf, size_t count);
+        size_t read(void* buf, size_t count) override;
         /// @copydoc DataStream::write
-        size_t write(const void* buf, size_t count);
+        size_t write(const void* buf, size_t count) override;
         /// @copydoc DataStream::skip
-        void skip(long count);
+        void skip(long count) override;
         /// @copydoc DataStream::seek
-        void seek( size_t pos );
+        void seek( size_t pos ) override;
         /// @copydoc DataStream::seek
-        size_t tell() const;
+        size_t tell() const override;
         /// @copydoc DataStream::eof
-        bool eof() const;
+        bool eof() const override;
         /// @copydoc DataStream::close
-        void close();
-
-
+        void close() override;
     };
 
     /** @} */

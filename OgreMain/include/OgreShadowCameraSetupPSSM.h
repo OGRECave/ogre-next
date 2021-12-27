@@ -133,9 +133,9 @@ namespace Ogre
         uint32 getNumStableSplits() const { return mNumStableSplits; }
 
         /// Returns a LiSPSM shadow camera with PSSM splits base on iteration.
-        virtual void getShadowCamera( const Ogre::SceneManager *sm, const Ogre::Camera *cam,
-                                      const Ogre::Light *light, Ogre::Camera *texCam, size_t iteration,
-                                      const Vector2 &viewportRealSize ) const;
+        void getShadowCamera( const Ogre::SceneManager *sm, const Ogre::Camera *cam,
+                              const Ogre::Light *light, Ogre::Camera *texCam, size_t iteration,
+                              const Vector2 &viewportRealSize ) const override;
 
         /// Returns the calculated split points.
         inline const SplitPointList& getSplitPoints() const

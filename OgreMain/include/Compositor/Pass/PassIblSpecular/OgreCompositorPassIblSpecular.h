@@ -72,18 +72,18 @@ namespace Ogre
         void setupComputeShaders();
         void destroyComputeShaders();
 
-        virtual void analyzeBarriers( const bool bClearBarriers = true );
+        void analyzeBarriers( const bool bClearBarriers = true ) override;
 
     public:
         CompositorPassIblSpecular( const CompositorPassIblSpecularDef *definition,
                                    const RenderTargetViewDef *rtv, CompositorNode *parentNode );
-        virtual ~CompositorPassIblSpecular();
+        ~CompositorPassIblSpecular() override;
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
 
-        virtual bool notifyRecreated( const TextureGpu *channel );
+        bool notifyRecreated( const TextureGpu *channel ) override;
 
-        virtual void resetNumPassesLeft();
+        void resetNumPassesLeft() override;
 
     private:
         CompositorPassIblSpecularDef const *mDefinition;

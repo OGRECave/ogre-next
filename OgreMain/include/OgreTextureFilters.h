@@ -122,7 +122,7 @@ namespace TextureFilter
     public:
         /// See Image2::Filter
         static uint32 getFilter( const Image2 &image );
-        virtual void _executeStreaming( Image2 &image, TextureGpu *texture );
+        void _executeStreaming( Image2 &image, TextureGpu *texture ) override;
     };
     //-----------------------------------------------------------------------------------
     class _OgreExport GenerateHwMipmaps : public FilterBase
@@ -130,22 +130,22 @@ namespace TextureFilter
         bool mNeedsMipmaps;
     public:
         GenerateHwMipmaps() : mNeedsMipmaps( false ) {}
-        virtual void _executeStreaming( Image2 &image, TextureGpu *texture );
-        virtual void _executeSerial( TextureGpu *texture );
+        void _executeStreaming( Image2 &image, TextureGpu *texture ) override;
+        void _executeSerial( TextureGpu *texture ) override;
     };
     //-----------------------------------------------------------------------------------
     class _OgreExport PrepareForNormalMapping : public FilterBase
     {
     public:
         static PixelFormatGpu getDestinationFormat( PixelFormatGpu srcFormat );
-        virtual void _executeStreaming( Image2 &image, TextureGpu *texture );
+        void _executeStreaming( Image2 &image, TextureGpu *texture ) override;
     };
     //-----------------------------------------------------------------------------------
     class _OgreExport LeaveChannelR : public FilterBase
     {
     public:
         static PixelFormatGpu getDestinationFormat( PixelFormatGpu srcFormat );
-        virtual void _executeStreaming( Image2 &image, TextureGpu *texture );
+        void _executeStreaming( Image2 &image, TextureGpu *texture ) override;
     };
 }
     /** @} */

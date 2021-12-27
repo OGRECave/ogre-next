@@ -65,83 +65,82 @@ namespace Ogre {
     class _OgreExport ParticleSystem : public StringInterface, public MovableObject
     {
     public:
-
         /** Command object for quota (see ParamCommand).*/
-        class _OgrePrivate CmdQuota : public ParamCommand
+        class _OgrePrivate CmdQuota final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for emittedEmitterQuota (see ParamCommand).*/
-        class _OgrePrivate CmdEmittedEmitterQuota : public ParamCommand
+        class _OgrePrivate CmdEmittedEmitterQuota final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for material (see ParamCommand).*/
-        class _OgrePrivate CmdMaterial : public ParamCommand
+        class _OgrePrivate CmdMaterial final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for cull_each (see ParamCommand).*/
-        class _OgrePrivate CmdCull : public ParamCommand
+        class _OgrePrivate CmdCull final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for particle_width (see ParamCommand).*/
-        class _OgrePrivate CmdWidth : public ParamCommand
+        class _OgrePrivate CmdWidth final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for particle_height (see ParamCommand).*/
-        class _OgrePrivate CmdHeight : public ParamCommand
+        class _OgrePrivate CmdHeight final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for renderer (see ParamCommand).*/
-        class _OgrePrivate CmdRenderer : public ParamCommand
+        class _OgrePrivate CmdRenderer final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for sorting (see ParamCommand).*/
-        class CmdSorted : public ParamCommand
+        class CmdSorted final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for local space (see ParamCommand).*/
-        class CmdLocalSpace : public ParamCommand
+        class CmdLocalSpace final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for iteration interval(see ParamCommand).*/
-        class CmdIterationInterval : public ParamCommand
+        class CmdIterationInterval final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for nonvisible timeout (see ParamCommand).*/
-        class CmdNonvisibleTimeout : public ParamCommand
+        class CmdNonvisibleTimeout final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
 
         /** Creates a particle system with no emitters or affectors.
@@ -369,13 +368,13 @@ namespace Ogre {
         @see
         MovableObject
         */
-        void _notifyAttached(Node* parent);
+        void _notifyAttached(Node* parent) override;
 
         /** Overridden from MovableObject
             @see
                 MovableObject
         */
-        virtual void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera);
+        void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera) override;
 
         /** Fast-forwards this system by the required number of seconds.
         @remarks
@@ -464,7 +463,7 @@ namespace Ogre {
         static Real getDefaultNonVisibleUpdateTimeout() { return msDefaultNonvisibleTimeout; }
 
         /** Overridden from MovableObject */
-        const String& getMovableType() const;
+        const String& getMovableType() const override;
 
         /** Internal callback used by Particles to notify their parent that they have been resized.
         */
@@ -530,7 +529,7 @@ namespace Ogre {
         void _notifyOrigin(const String& origin) { mOrigin = origin; }
 
         /** @copydoc MovableObject::setRenderQueueGroup */
-        void setRenderQueueGroup(uint8 queueID);
+        void setRenderQueueGroup(uint8 queueID) override;
         /** @copydoc MovableObject::setRenderQueueGroupAndPriority */
         void setRenderQueueSubGroup( uint8 subGroup );
 

@@ -141,7 +141,7 @@ namespace Ogre
     public:
         HlmsComputeJob( IdString name, Hlms *creator, const String &sourceFilename,
                         const StringVector &includedPieceFiles );
-        virtual ~HlmsComputeJob();
+        ~HlmsComputeJob() override;
 
         Hlms* getCreator() const                { return mCreator; }
 
@@ -471,8 +471,8 @@ namespace Ogre
         void cloneTo( HlmsComputeJob *dstJob );
 
         // TextureGpuListener overloads
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
     };
 
     /** @} */

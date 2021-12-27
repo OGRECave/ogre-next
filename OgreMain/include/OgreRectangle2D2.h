@@ -79,7 +79,7 @@ namespace Ogre
 
     public:
         Rectangle2D( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
-        virtual ~Rectangle2D();
+        ~Rectangle2D() override;
 
         bool isQuad() const;
         bool isStereo() const;
@@ -102,31 +102,31 @@ namespace Ogre
         void update();
 
         // Overrides from MovableObject
-        virtual const String &getMovableType() const;
+        const String &getMovableType() const override;
 
         // Overrides from Renderable
-        virtual const LightList &getLights() const;
-        virtual void getRenderOperation( v1::RenderOperation &op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4 *xform ) const;
-        virtual bool getCastsShadows() const;
+        const LightList &getLights() const override;
+        void getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void getWorldTransforms( Matrix4 *xform ) const override;
+        bool getCastsShadows() const override;
     };
 
     /** Factory object for creating Entity instances */
-    class _OgreExport Rectangle2DFactory : public MovableObjectFactory
+    class _OgreExport Rectangle2DFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList *params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
 
     public:
         Rectangle2DFactory() {}
-        ~Rectangle2DFactory() {}
+        ~Rectangle2DFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String &getType() const;
-        void destroyInstance( MovableObject *obj );
+        const String &getType() const override;
+        void destroyInstance( MovableObject *obj ) override;
     };
 }  // namespace Ogre
 

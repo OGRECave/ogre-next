@@ -68,7 +68,7 @@ namespace Ogre {
         SceneManager* mCreator;
 
         /** See Node. */
-        Node* createChildImpl( SceneMemoryMgrTypes sceneType );
+        Node* createChildImpl( SceneMemoryMgrTypes sceneType ) override;
 
         /// Whether to yaw around a fixed axis.
         bool mYawFixed;
@@ -91,13 +91,13 @@ namespace Ogre {
         */
         SceneNode( const Transform &transformPtrs );
 
-        virtual ~SceneNode();
+        ~SceneNode() override;
 
         /// @copydoc Node::setStatic
-        virtual bool setStatic( bool bStatic );
+        bool setStatic( bool bStatic ) override;
 
         /// @copydoc Node::_notifyStaticDirty
-        virtual void _notifyStaticDirty() const;
+        void _notifyStaticDirty() const override;
 
         /** Adds an instance of a scene object to this node.
         @remarks
@@ -148,7 +148,7 @@ namespace Ogre {
         virtual void detachAllBones();
 
         /// @copydoc Node::_callMemoryChangeListeners
-        virtual void _callMemoryChangeListeners();
+        void _callMemoryChangeListeners() override;
 
         /** Retrieves an iterator which can be used to efficiently step through the objects 
             attached to this node.
@@ -213,7 +213,7 @@ namespace Ogre {
                 const Vector3& translate = Vector3::ZERO, 
                 const Quaternion& rotate = Quaternion::IDENTITY );
 
-        virtual void setListener( Listener* listener );
+        void setListener( Listener* listener ) override;
 
         /** Tells the node whether to yaw around it's own local Y axis or a fixed axis of choice.
         @remarks
@@ -315,10 +315,10 @@ namespace Ogre {
         /// As Node::getDebugRenderable, except scaling is automatically determined
         //virtual DebugRenderable* getDebugRenderable();
 
-        virtual NodeMemoryManager* getDefaultNodeMemoryManager( SceneMemoryMgrTypes sceneType );
+        NodeMemoryManager* getDefaultNodeMemoryManager( SceneMemoryMgrTypes sceneType ) override;
 
 #if OGRE_DEBUG_MODE
-        virtual void _setCachedTransformOutOfDate();
+        void _setCachedTransformOutOfDate() override;
 #endif
     };
     /** @} */

@@ -116,8 +116,8 @@ namespace Ogre
         uint32 id;
     public:
         AtomAbstractNode(AbstractNode *ptr);
-        AbstractNode *clone() const;
-        String getValue() const;
+        AbstractNode *clone() const override;
+        String getValue() const override;
     private:
         void parseNumber() const;
     };
@@ -137,8 +137,8 @@ namespace Ogre
         AbstractNodeList overrides; // For use when processing object inheritance and overriding
     public:
         ObjectAbstractNode(AbstractNode *ptr);
-        AbstractNode *clone() const;
-        String getValue() const;
+        AbstractNode *clone() const override;
+        String getValue() const override;
 
         void addVariable(const String &name);
         void setVariable(const String &name, const String &value);
@@ -155,8 +155,8 @@ namespace Ogre
         AbstractNodeList values;
     public:
         PropertyAbstractNode(AbstractNode *ptr);
-        AbstractNode *clone() const;
-        String getValue() const;
+        AbstractNode *clone() const override;
+        String getValue() const override;
     };
 
     /** This abstract node represents an import statement */
@@ -166,8 +166,8 @@ namespace Ogre
         String target, source;
     public:
         ImportAbstractNode();
-        AbstractNode *clone() const;
-        String getValue() const;
+        AbstractNode *clone() const override;
+        String getValue() const override;
     };
 
     /** This abstract node represents a variable assignment */
@@ -177,8 +177,8 @@ namespace Ogre
         String name;
     public:
         VariableAccessAbstractNode(AbstractNode *ptr);
-        AbstractNode *clone() const;
-        String getValue() const;
+        AbstractNode *clone() const override;
+        String getValue() const override;
     };
 
     class ScriptCompilerEvent;
@@ -455,11 +455,11 @@ namespace Ogre
         /// Adds a script extension that can be handled (e.g. *.material, *.pu, etc.)
         void addScriptPattern(const String &pattern);
         /// @copydoc ScriptLoader::getScriptPatterns
-        const StringVector& getScriptPatterns() const;
+        const StringVector& getScriptPatterns() const override;
         /// @copydoc ScriptLoader::parseScript
-        void parseScript(DataStreamPtr& stream, const String& groupName);
+        void parseScript(DataStreamPtr& stream, const String& groupName) override;
         /// @copydoc ScriptLoader::getLoadingOrder
-        Real getLoadingOrder() const;
+        Real getLoadingOrder() const override;
 
         /** Override standard Singleton retrieval.
         @remarks

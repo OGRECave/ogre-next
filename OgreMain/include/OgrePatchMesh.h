@@ -76,9 +76,9 @@ namespace v1 {
         void setSubdivision(Real factor);
     protected:
         /// Overridden from Resource
-        void loadImpl();
+        void loadImpl() override;
         /// Overridden from Resource - do nothing (no disk caching)
-        void prepareImpl() {}
+        void prepareImpl() override {}
 
     };
     /** @} */

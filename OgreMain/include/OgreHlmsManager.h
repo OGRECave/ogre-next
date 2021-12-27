@@ -361,9 +361,9 @@ namespace Ogre
                            const String &additionalTextureExtension );
 
         //ScriptLoader overloads
-        virtual void parseScript(DataStreamPtr& stream, const String& groupName);
-        virtual const StringVector& getScriptPatterns() const       { return mScriptPatterns; }
-        virtual Real getLoadingOrder() const;
+        void parseScript( DataStreamPtr &stream, const String &groupName ) override;
+        const StringVector &getScriptPatterns() const override { return mScriptPatterns; }
+        Real getLoadingOrder() const override;
 #endif
 
         /// Gets the indices of active blocks

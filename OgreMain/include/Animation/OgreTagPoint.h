@@ -104,12 +104,12 @@ namespace Ogre {
         Bone    *mParentBone;
 
         /// @copydoc Node::updateFromParentImpl.
-        void updateFromParentImpl();
+        void updateFromParentImpl() override;
 
     public:
         TagPoint( IdType id, SceneManager* creator, NodeMemoryManager *nodeMemoryManager,
                   SceneNode *parent );
-        virtual ~TagPoint();
+        ~TagPoint() override;
 
         /// Don't call directly. @see Bone::addTagPoint
         void _setParentBone( Bone *bone );

@@ -461,7 +461,7 @@ namespace Ogre {
             A list of file patterns, in the order they should be searched in.
         @see isScriptingSupported, parseScript
         */
-        virtual const StringVector& getScriptPatterns() const { return mScriptPatterns; }
+        const StringVector& getScriptPatterns() const override { return mScriptPatterns; }
 
         /** Parse the definition of a set of resources from a script file.
         @remarks
@@ -476,7 +476,7 @@ namespace Ogre {
             then the resources discovered in this script will be loaded / unloaded
             with it.
         */
-        virtual void parseScript(DataStreamPtr& stream, const String& groupName)
+        void parseScript(DataStreamPtr& stream, const String& groupName) override
                 { (void)stream; (void)groupName; }
 
         /** Gets the relative loading order of resources of this type.
@@ -485,7 +485,7 @@ namespace Ogre {
             order, and this value enumerates that. Higher values load later during
             bulk loading tasks.
         */
-        virtual Real getLoadingOrder() const { return mLoadOrder; }
+        Real getLoadingOrder() const override { return mLoadOrder; }
 
         /** Gets a string identifying the type of resource this manager handles. */
         const String& getResourceType() const { return mResourceType; }
@@ -508,10 +508,10 @@ namespace Ogre {
             String mName;
         public:
             ResourcePool(const String& name);
-            ~ResourcePool();
+            ~ResourcePool() override;
             /// Get the name of the pool
             const String& getName() const;
-            void clear();
+            void clear() override;
         };
         
         /// Create a resource pool, or reuse one that already exists

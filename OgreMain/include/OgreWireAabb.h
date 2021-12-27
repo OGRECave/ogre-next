@@ -49,30 +49,31 @@ namespace Ogre
         void _updateTracking();
 
         //Overrides from MovableObject
-        virtual const String& getMovableType() const;
+        const String& getMovableType() const override;
 
         //Overrides from Renderable
-        virtual const LightList& getLights() const;
-        virtual void getRenderOperation( v1::RenderOperation& op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4* xform ) const;
-        virtual bool getCastsShadows() const;
+        const LightList& getLights() const override;
+        void getRenderOperation( v1::RenderOperation& op, bool casterPass ) override;
+        void getWorldTransforms( Matrix4* xform ) const override;
+        bool getCastsShadows() const override;
     };
 
     /** Factory object for creating WireAabb instances */
-    class _OgreExport WireAabbFactory : public MovableObjectFactory
+    class _OgreExport WireAabbFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         WireAabbFactory() {}
-        virtual ~WireAabbFactory() {}
+        ~WireAabbFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance( MovableObject* obj);
+        const String &getType() const override;
+        void destroyInstance( MovableObject *obj ) override;
     };
 }
 

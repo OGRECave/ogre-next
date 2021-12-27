@@ -47,7 +47,7 @@ namespace Ogre
         {
         }
 
-        virtual BufferPackedTypes getBufferPackedType() const   { return BP_TYPE_CONST; }
+        BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_CONST; }
 
         /** Binds the constant buffer to the given slot in the
             Vertex/Pixel/Geometry/Hull/Domain/Compute Shader

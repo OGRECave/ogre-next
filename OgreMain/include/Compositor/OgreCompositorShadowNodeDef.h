@@ -173,11 +173,11 @@ namespace Ogre
         virtual ~CompositorShadowNodeDef() {}
 
         /// Overloaded to prevent creating input channels.
-        virtual IdString addTextureSourceName( const String &name, size_t index,
-                                               TextureSource textureSource );
-        virtual void addBufferInput( size_t inputChannel, IdString name );
+        IdString addTextureSourceName( const String &name, size_t index,
+                                               TextureSource textureSource ) override;
+        void addBufferInput( size_t inputChannel, IdString name ) override;
 
-        virtual void postInitializePassDef( CompositorPassDef *passDef );
+        void postInitializePassDef( CompositorPassDef *passDef ) override;
 
         void setDefaultTechnique( ShadowMapTechniques techn )   { mDefaultTechnique = techn; }
 

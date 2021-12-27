@@ -2641,10 +2641,10 @@ namespace Ogre {
     {
     public:
         DefaultIntersectionSceneQuery(SceneManager* creator);
-        ~DefaultIntersectionSceneQuery();
+        ~DefaultIntersectionSceneQuery() override;
 
         /** See IntersectionSceneQuery. */
-        void execute(IntersectionSceneQueryListener* listener);
+        void execute(IntersectionSceneQueryListener* listener) override;
     };
 
     /** Default implementation of RaySceneQuery. */
@@ -2652,10 +2652,10 @@ namespace Ogre {
     {
     public:
         DefaultRaySceneQuery(SceneManager* creator);
-        ~DefaultRaySceneQuery();
+        ~DefaultRaySceneQuery() override;
 
         /** See RayScenQuery. */
-        virtual void execute(RaySceneQueryListener* listener);
+        void execute(RaySceneQueryListener* listener) override;
         bool execute( ObjectData objData, size_t numNodes, RaySceneQueryListener* listener );
 
     private:
@@ -2666,10 +2666,10 @@ namespace Ogre {
     {
     public:
         DefaultSphereSceneQuery(SceneManager* creator);
-        ~DefaultSphereSceneQuery();
+        ~DefaultSphereSceneQuery() override;
 
         /** See SceneQuery. */
-        virtual void execute(SceneQueryListener* listener);
+        void execute(SceneQueryListener* listener) override;
         bool execute( ObjectData objData, size_t numNodes, SceneQueryListener* listener );
 
     private:
@@ -2680,10 +2680,10 @@ namespace Ogre {
     {
     public:
         DefaultPlaneBoundedVolumeListSceneQuery(SceneManager* creator);
-        ~DefaultPlaneBoundedVolumeListSceneQuery();
+        ~DefaultPlaneBoundedVolumeListSceneQuery() override;
 
         /** See SceneQuery. */
-        void execute(SceneQueryListener* listener);
+        void execute(SceneQueryListener* listener) override;
         bool execute(ObjectData objData, size_t numNodes, SceneQueryListener* listener);
 
     private:
@@ -2705,10 +2705,10 @@ namespace Ogre {
     {
     public:
         DefaultAxisAlignedBoxSceneQuery(SceneManager* creator);
-        ~DefaultAxisAlignedBoxSceneQuery();
+        ~DefaultAxisAlignedBoxSceneQuery() override;
 
         /** See RayScenQuery. */
-        virtual void execute(SceneQueryListener* listener);
+        void execute(SceneQueryListener* listener) override;
         bool execute( ObjectData objData, size_t numNodes, SceneQueryListener* listener );
 
     private:

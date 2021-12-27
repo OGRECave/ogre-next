@@ -284,10 +284,10 @@ namespace v1
         virtual NumericKeyFrame* createNumericKeyFrame(Real timePos);
 
         /// @copydoc AnimationTrack::getInterpolatedKeyFrame
-        virtual void getInterpolatedKeyFrame(const TimeIndex& timeIndex, KeyFrame* kf) const;
+        void getInterpolatedKeyFrame(const TimeIndex& timeIndex, KeyFrame* kf) const override;
 
         /// @copydoc AnimationTrack::apply
-        virtual void apply(const TimeIndex& timeIndex, Real weight = 1.0, Real scale = 1.0f);
+        void apply(const TimeIndex& timeIndex, Real weight = 1.0, Real scale = 1.0f) override;
 
         /** Applies an animation track to a given animable value.
         @param anim The AnimableValue to which to apply the animation
@@ -319,7 +319,7 @@ namespace v1
         AnimableValuePtr mTargetAnim;
 
         /// @copydoc AnimationTrack::createKeyFrameImpl
-        KeyFrame* createKeyFrameImpl(Real time);
+        KeyFrame* createKeyFrameImpl(Real time) override;
 
 
     };
@@ -384,13 +384,13 @@ namespace v1
 		virtual bool getUseShortestRotationPath() const;
 
 		/// @copydoc AnimationTrack::getInterpolatedKeyFrame
-		virtual void getInterpolatedKeyFrame(const TimeIndex& timeIndex, KeyFrame* kf) const;
+        void getInterpolatedKeyFrame(const TimeIndex& timeIndex, KeyFrame* kf) const override;
 
 		/// @copydoc AnimationTrack::apply
-		virtual void apply(const TimeIndex& timeIndex, Real weight = 1.0, Real scale = 1.0f);
+        void apply(const TimeIndex& timeIndex, Real weight = 1.0, Real scale = 1.0f) override;
 
 		/// @copydoc AnimationTrack::_keyFrameDataChanged
-		void _keyFrameDataChanged() const;
+        void _keyFrameDataChanged() const override;
 
 		/** Returns the KeyFrame at the specified index. */
 		virtual TransformKeyFrame* getNodeKeyFrame(unsigned short index) const;
@@ -400,19 +400,19 @@ namespace v1
 			doing anything useful - can be used to determine if this track
 			can be optimised out.
 		*/
-		virtual bool hasNonZeroKeyFrames() const;
+        bool hasNonZeroKeyFrames() const override;
 
 		/** Optimise the current track by removing any duplicate keyframes. */
-		virtual void optimise();
+        void optimise() override;
 
 		/** Clone this track (internal use only) */
 		NodeAnimationTrack* _clone(Animation* newParent) const;
 
-		void _applyBaseKeyFrame(const KeyFrame* base);
+        void _applyBaseKeyFrame(const KeyFrame* base) override;
 
 	protected:
 		/// Specialised keyframe creation
-		KeyFrame* createKeyFrameImpl(Real time);
+        KeyFrame* createKeyFrameImpl(Real time) override;
 		// Flag indicating we need to rebuild the splines next time
 		virtual void buildInterpolationSplines() const;
 
@@ -480,13 +480,13 @@ namespace v1
         virtual bool getUseShortestRotationPath() const;
 
         /// @copydoc AnimationTrack::getInterpolatedKeyFrame
-        virtual void getInterpolatedKeyFrame(const TimeIndex& timeIndex, KeyFrame* kf) const;
+        void getInterpolatedKeyFrame(const TimeIndex& timeIndex, KeyFrame* kf) const override;
 
         /// @copydoc AnimationTrack::apply
-        virtual void apply(const TimeIndex& timeIndex, Real weight = 1.0, Real scale = 1.0f);
+        void apply(const TimeIndex& timeIndex, Real weight = 1.0, Real scale = 1.0f) override;
 
         /// @copydoc AnimationTrack::_keyFrameDataChanged
-        void _keyFrameDataChanged() const;
+        void _keyFrameDataChanged() const override;
 
         /** Returns the KeyFrame at the specified index. */
         virtual TransformKeyFrame* getNodeKeyFrame(unsigned short index) const;
@@ -496,19 +496,19 @@ namespace v1
             doing anything useful - can be used to determine if this track
             can be optimised out.
         */
-        virtual bool hasNonZeroKeyFrames() const;
+        bool hasNonZeroKeyFrames() const override;
 
         /** Optimise the current track by removing any duplicate keyframes. */
-        virtual void optimise();
+        void optimise() override;
 
         /** Clone this track (internal use only) */
 		OldNodeAnimationTrack* _clone(Animation* newParent) const;
         
-        void _applyBaseKeyFrame(const KeyFrame* base);
+        void _applyBaseKeyFrame(const KeyFrame* base) override;
         
     protected:
         /// Specialised keyframe creation
-        KeyFrame* createKeyFrameImpl(Real time);
+        KeyFrame* createKeyFrameImpl(Real time) override;
         // Flag indicating we need to rebuild the splines next time
         virtual void buildInterpolationSplines() const;
 
@@ -638,10 +638,10 @@ namespace v1
 
         /** @copydoc AnimationTrack::getInterpolatedKeyFrame
         */
-        virtual void getInterpolatedKeyFrame(const TimeIndex& timeIndex, KeyFrame* kf) const;
+        void getInterpolatedKeyFrame(const TimeIndex& timeIndex, KeyFrame* kf) const override;
 
         /// @copydoc AnimationTrack::apply
-        virtual void apply(const TimeIndex& timeIndex, Real weight = 1.0, Real scale = 1.0f);
+        void apply(const TimeIndex& timeIndex, Real weight = 1.0, Real scale = 1.0f) override;
 
         /** As the 'apply' method but applies to specified VertexData instead of 
             associated data. */
@@ -670,15 +670,15 @@ namespace v1
         doing anything useful - can be used to determine if this track
         can be optimised out.
         */
-        virtual bool hasNonZeroKeyFrames() const;
+        bool hasNonZeroKeyFrames() const override;
 
         /** Optimise the current track by removing any duplicate keyframes. */
-        virtual void optimise();
+        void optimise() override;
 
         /** Clone this track (internal use only) */
         VertexAnimationTrack* _clone(Animation* newParent) const;
         
-        void _applyBaseKeyFrame(const KeyFrame* base);
+        void _applyBaseKeyFrame(const KeyFrame* base) override;
 
     protected:
         /// Animation type
@@ -689,7 +689,7 @@ namespace v1
         TargetMode mTargetMode;
 
         /// @copydoc AnimationTrack::createKeyFrameImpl
-        KeyFrame* createKeyFrameImpl(Real time);
+        KeyFrame* createKeyFrameImpl(Real time) override;
 
         /// Utility method for applying pose animation
         void applyPoseToVertexData(const Pose* pose, VertexData* data, Real influence);

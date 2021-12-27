@@ -184,7 +184,7 @@ namespace Ogre {
         void setMaterial(const MaterialPtr& material);
 
         /** @copydoc MovableObject::getMovableType */
-        const String& getMovableType() const;
+        const String& getMovableType() const override;
 
         /** Returns whether or not this Item is skeletally animated. */
         bool hasSkeleton() const                    { return mSkeletonInstance != 0; }
@@ -254,26 +254,27 @@ namespace Ogre {
         void _deinitialise();
 
         /** Resource::Listener hook to notify Entity that a Mesh is (re)loaded. */
-        void loadingComplete(Resource* res);
+        void loadingComplete(Resource* res) override;
 
-        virtual void _notifyParentNodeMemoryChanged();
+        void _notifyParentNodeMemoryChanged() override;
     };
 
     /** FItemy object for creating Item instances */
-    class _OgreExport ItemFactory : public MovableObjectFactory
+    class _OgreExport ItemFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         ItemFactory() {}
-        ~ItemFactory() {}
+        ~ItemFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance( MovableObject* obj);
+        const String& getType() const override;
+        void destroyInstance( MovableObject* obj) override;
 
     };
     /** @} */

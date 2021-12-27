@@ -87,7 +87,7 @@ namespace v1 {
         also that mesh sub-sections (when used in an instantiated object)
         share the same scene node as the parent.
     */
-    class _OgreExport Mesh: public Resource, public AnimationContainer
+    class _OgreExport Mesh : public Resource, public AnimationContainer
     {
         friend class SubMesh;
         friend class MeshSerializerImpl;
@@ -198,18 +198,18 @@ namespace v1 {
             It also does not set up submeshes, etc.  You have to call load()
             to do that.
          */
-        void prepareImpl();
+        void prepareImpl() override;
         /** Destroys data cached by prepareImpl.
          */
-        void unprepareImpl();
+        void unprepareImpl() override;
         /// @copydoc Resource::loadImpl
-        void loadImpl();
+        void loadImpl() override;
         /// @copydoc Resource::postLoadImpl
-        void postLoadImpl();
+        void postLoadImpl() override;
         /// @copydoc Resource::unloadImpl
-        void unloadImpl();
+        void unloadImpl() override;
         /// @copydoc Resource::calculateSize
-        size_t calculateSize() const;
+        size_t calculateSize() const override;
 
         void mergeAdjacentTexcoords( unsigned short finalTexCoordSet,
                                      unsigned short texCoordSetToDestroy, VertexData *vertexData );
@@ -221,7 +221,7 @@ namespace v1 {
         */
         Mesh(ResourceManager* creator, const String& name, ResourceHandle handle,
             const String& group, bool isManual = false, ManualResourceLoader* loader = 0);
-        ~Mesh();
+        ~Mesh() override;
 
         // NB All methods below are non-virtual since they will be
         // called in the rendering loop - speed is of the essence.
@@ -368,7 +368,7 @@ namespace v1 {
         MeshPtr clone(const String& newName, const String& newGroup = BLANKSTRING);
 
         /** @copydoc Resource::reload */
-        void reload(LoadingFlags flags = LF_DEFAULT);
+        void reload(LoadingFlags flags = LF_DEFAULT) override;
 
         /** Get the axis-aligned bounding box for this mesh.
         */
@@ -952,13 +952,13 @@ namespace v1 {
         @param length
             The length of the animation in seconds.
         */
-        virtual Animation* createAnimation(const String& name, Real length);
+        Animation* createAnimation(const String& name, Real length) override;
 
         /** Returns the named vertex Animation object. 
         @param name
             The name of the animation.
         */
-        virtual Animation* getAnimation(const String& name) const;
+        Animation* getAnimation(const String& name) const override;
 
         /** Internal access to the named vertex Animation object - returns null 
             if it does not exist. 
@@ -968,17 +968,17 @@ namespace v1 {
         virtual Animation* _getAnimationImpl(const String& name) const;
 
         /** Returns whether this mesh contains the named vertex animation. */
-        virtual bool hasAnimation(const String& name) const;
+        bool hasAnimation(const String& name) const override;
 
         /** Removes vertex Animation from this mesh. */
-        virtual void removeAnimation(const String& name);
+        void removeAnimation(const String& name) override;
 
         /** Gets the number of morph animations in this mesh. */
-        virtual unsigned short getNumAnimations() const;
+        unsigned short getNumAnimations() const override;
 
         /** Gets a single morph animation by index. 
         */
-        virtual Animation* getAnimation(unsigned short index) const;
+        Animation* getAnimation(unsigned short index) const override;
 
         /** Removes all morph Animations from this mesh. */
         virtual void removeAllAnimations();

@@ -67,12 +67,12 @@ namespace v1 {
         <LI>Call the exportSkeleton method</LI>
         </OL>
     */
-    class _OgreExport SkeletonSerializer : public Serializer
+    class _OgreExport SkeletonSerializer final : public Serializer
     {
         
     public:
         SkeletonSerializer();
-        virtual ~SkeletonSerializer();
+        ~SkeletonSerializer() override;
 
 
         /** Exports a skeleton to the file specified. 
@@ -122,7 +122,7 @@ namespace v1 {
             const LinkedSkeletonAnimationSource& link);
 
         // Internal import methods
-        void readFileHeader(DataStreamPtr& stream);
+        void readFileHeader(DataStreamPtr& stream) override;
         void readBone(DataStreamPtr& stream, Skeleton* pSkel);
         void readBoneParent(DataStreamPtr& stream, Skeleton* pSkel);
         void readAnimation(DataStreamPtr& stream, Skeleton* pSkel);

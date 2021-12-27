@@ -76,7 +76,7 @@ namespace Ogre
         will be overwritten instead, and the metalness value of the decal will
         act as a fresnel value, overwriting the original fresnel.
     */
-    class _OgreExport Decal : public MovableObject, public TextureGpuListener
+    class _OgreExport Decal final : public MovableObject, public TextureGpuListener
     {
     protected:
         TextureGpu  *mDiffuseTexture;
@@ -93,7 +93,7 @@ namespace Ogre
 
     public:
         Decal( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager* manager );
-        virtual ~Decal();
+        ~Decal() override;
 
         /// Call this family of functions if the input texture is automatically batched
         /// We will listen for residency changes and change the internal slice accordingly
@@ -150,28 +150,29 @@ namespace Ogre
         void setRectSize( Vector2 planeDimensions, Real depth );
 
         //Overrides from MovableObject
-        virtual const String& getMovableType() const;
+        const String& getMovableType() const override;
 
         /// Decals only allow ForwardPlusBase::MinDecalRq <= queueID < ForwardPlusBase::MaxDecalRq
-        virtual void setRenderQueueGroup(uint8 queueID);
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
+        void setRenderQueueGroup( uint8 queueID ) override;
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
     };
 
-    class _OgreExport DecalFactory : public MovableObjectFactory
+    class _OgreExport DecalFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         DecalFactory() {}
-        virtual ~DecalFactory() {}
+        ~DecalFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance(MovableObject* obj);
+        const String& getType() const override;
+        void destroyInstance(MovableObject* obj) override;
     };
 }
 

@@ -87,17 +87,17 @@ namespace Ogre {
         */
         SubMesh* getSubMesh() const;
 
-        virtual void _setHlmsHashes( uint32 hash, uint32 casterHash );
+        void _setHlmsHashes( uint32 hash, uint32 casterHash ) override;
 
         /** Accessor to get parent Item */
         Item* getParent() const { return mParentItem; }
 
         /** @copydoc Renderable::getLights */
-        const LightList& getLights() const;
+        const LightList& getLights() const override;
 
-        virtual void getRenderOperation(v1::RenderOperation& op, bool casterPass);
-        virtual void getWorldTransforms(Matrix4* xform) const;
-        virtual bool getCastsShadows() const;
+        void getRenderOperation(v1::RenderOperation& op, bool casterPass) override;
+        void getWorldTransforms(Matrix4* xform) const override;
+        bool getCastsShadows() const override;
         
         // needs this to not hide the base class' methods with same name
         using Renderable::getPoseWeight;

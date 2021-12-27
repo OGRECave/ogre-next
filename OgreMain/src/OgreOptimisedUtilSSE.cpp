@@ -73,7 +73,7 @@ namespace Ogre {
     @note
         Don't use this class directly, use OptimisedUtil instead.
     */
-    class _OgrePrivate OptimisedUtilSSE : public OptimisedUtil
+    class _OgrePrivate OptimisedUtilSSE final : public OptimisedUtil
     {
     protected:
         /// Do we prefer to use a general SSE version for position/normal shared buffers?
@@ -84,7 +84,7 @@ namespace Ogre {
         OptimisedUtilSSE();
 
         /// @copydoc OptimisedUtil::softwareVertexSkinning
-        virtual void _OGRE_SIMD_ALIGN_ATTRIBUTE softwareVertexSkinning(
+        void _OGRE_SIMD_ALIGN_ATTRIBUTE softwareVertexSkinning(
             const float *srcPosPtr, float *destPosPtr,
             const float *srcNormPtr, float *destNormPtr,
             const float *blendWeightPtr, const unsigned char* blendIndexPtr,
@@ -93,45 +93,45 @@ namespace Ogre {
             size_t srcNormStride, size_t destNormStride,
             size_t blendWeightStride, size_t blendIndexStride,
             size_t numWeightsPerVertex,
-            size_t numVertices);
+            size_t numVertices) override;
 
         /// @copydoc OptimisedUtil::softwareVertexMorph
-        virtual void _OGRE_SIMD_ALIGN_ATTRIBUTE softwareVertexMorph(
+        void _OGRE_SIMD_ALIGN_ATTRIBUTE softwareVertexMorph(
             Real t,
             const float *srcPos1, const float *srcPos2,
             float *dstPos,
             size_t pos1VSize, size_t pos2VSize, size_t dstVSize, 
             size_t numVertices,
-            bool morphNormals);
+            bool morphNormals) override;
 
         /// @copydoc OptimisedUtil::concatenateAffineMatrices
-        virtual void _OGRE_SIMD_ALIGN_ATTRIBUTE concatenateAffineMatrices(
+        void _OGRE_SIMD_ALIGN_ATTRIBUTE concatenateAffineMatrices(
             const Matrix4& baseMatrix,
             const Matrix4* srcMatrices,
             Matrix4* dstMatrices,
-            size_t numMatrices);
+            size_t numMatrices) override;
 
         /// @copydoc OptimisedUtil::calculateFaceNormals
-        virtual void _OGRE_SIMD_ALIGN_ATTRIBUTE calculateFaceNormals(
+        void _OGRE_SIMD_ALIGN_ATTRIBUTE calculateFaceNormals(
             const float *positions,
             const v1::EdgeData::Triangle *triangles,
             Vector4 *faceNormals,
-            size_t numTriangles);
+            size_t numTriangles) override;
 
         /// @copydoc OptimisedUtil::calculateLightFacing
-        virtual void _OGRE_SIMD_ALIGN_ATTRIBUTE calculateLightFacing(
+        void _OGRE_SIMD_ALIGN_ATTRIBUTE calculateLightFacing(
             const Vector4& lightPos,
             const Vector4* faceNormals,
             char* lightFacings,
-            size_t numFaces);
+            size_t numFaces) override;
 
         /// @copydoc OptimisedUtil::extrudeVertices
-        virtual void _OGRE_SIMD_ALIGN_ATTRIBUTE extrudeVertices(
+        void _OGRE_SIMD_ALIGN_ATTRIBUTE extrudeVertices(
             const Vector4& lightPos,
             Real extrudeDist,
             const float* srcPositions,
             float* destPositions,
-            size_t numVertices);
+            size_t numVertices) override;
     };
 
 #if defined(__OGRE_SIMD_ALIGN_STACK)

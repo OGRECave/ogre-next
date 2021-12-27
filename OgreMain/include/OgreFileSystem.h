@@ -64,7 +64,7 @@ namespace Ogre {
     /** Specialisation of the Archive class to allow reading of files from 
         filesystem folders / directories.
     */
-    class _OgreExport FileSystemArchive : public Archive 
+    class _OgreExport FileSystemArchive final : public Archive
     {
     protected:
         /** Utility method to retrieve all files in a directory matching pattern.
@@ -85,44 +85,44 @@ namespace Ogre {
         OGRE_AUTO_MUTEX;
     public:
         FileSystemArchive(const String& name, const String& archType, bool readOnly );
-        ~FileSystemArchive();
+        ~FileSystemArchive() override;
 
         /// @copydoc Archive::isCaseSensitive
-        bool isCaseSensitive() const;
+        bool isCaseSensitive() const override;
 
         /// @copydoc Archive::load
-        void load();
+        void load() override;
         /// @copydoc Archive::unload
-        void unload();
+        void unload() override;
 
         /// @copydoc Archive::open
-        DataStreamPtr open(const String& filename, bool readOnly = true);
+        DataStreamPtr open(const String& filename, bool readOnly = true) override;
 
         /// @copydoc Archive::create
-        DataStreamPtr create(const String& filename);
+        DataStreamPtr create(const String& filename) override;
 
         /// @copydoc Archive::remove
-        void remove(const String& filename);
+        void remove(const String& filename) override;
 
         /// @copydoc Archive::list
-        StringVectorPtr list(bool recursive = true, bool dirs = false);
+        StringVectorPtr list(bool recursive = true, bool dirs = false) override;
 
         /// @copydoc Archive::listFileInfo
-        FileInfoListPtr listFileInfo(bool recursive = true, bool dirs = false);
+        FileInfoListPtr listFileInfo(bool recursive = true, bool dirs = false) override;
 
         /// @copydoc Archive::find
         StringVectorPtr find(const String& pattern, bool recursive = true,
-            bool dirs = false);
+            bool dirs = false) override;
 
         /// @copydoc Archive::findFileInfo
         FileInfoListPtr findFileInfo(const String& pattern, bool recursive = true,
-            bool dirs = false);
+            bool dirs = false) override;
 
         /// @copydoc Archive::exists
-        bool exists(const String& filename);
+        bool exists(const String& filename) override;
 
         /// @copydoc Archive::getModifiedTime
-        time_t getModifiedTime(const String& filename);
+        time_t getModifiedTime(const String& filename) override;
 
         /// Set whether filesystem enumeration will include hidden files or not.
         /// This should be called prior to declaring and/or initializing filesystem
@@ -142,19 +142,19 @@ namespace Ogre {
     };
 
     /** Specialisation of ArchiveFactory for FileSystem files. */
-    class _OgreExport FileSystemArchiveFactory : public ArchiveFactory
+    class _OgreExport FileSystemArchiveFactory final : public ArchiveFactory
     {
     public:
-        virtual ~FileSystemArchiveFactory() {}
+        ~FileSystemArchiveFactory() override {}
         /// @copydoc FactoryObj::getType
-        const String& getType() const;
+        const String& getType() const override;
         /// @copydoc FactoryObj::createInstance
-        Archive *createInstance( const String& name, bool readOnly ) 
+        Archive *createInstance( const String& name, bool readOnly ) override
         {
             return OGRE_NEW FileSystemArchive(name, "FileSystem", readOnly);
         }
         /// @copydoc FactoryObj::destroyInstance
-        void destroyInstance(Archive* ptr) { OGRE_DELETE ptr; }
+        void destroyInstance(Archive* ptr) override { OGRE_DELETE ptr; }
     };
 
     /** @} */

@@ -59,11 +59,11 @@ namespace Ogre
     public:
         CompositorPassTargetBarrier( const CompositorPassTargetBarrierDef *definition,
                                      CompositorNode *parentNode, const size_t numPasses );
-        virtual ~CompositorPassTargetBarrier();
+        ~CompositorPassTargetBarrier() override;
 
         void addPass( CompositorPass *pass );
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
     };
 
     /** @} */

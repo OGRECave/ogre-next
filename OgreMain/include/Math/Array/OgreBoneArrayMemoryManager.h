@@ -45,11 +45,11 @@ namespace Ogre
     @version
         1.0
     */
-    class _OgreExport BoneArrayMemoryManager : public ArrayMemoryManager
+    class _OgreExport BoneArrayMemoryManager final : public ArrayMemoryManager
     {
     protected:
         /// We overload to set all mParentTransform to point to a dummy matrix
-        virtual void initializeEmptySlots( size_t prevNumSlots );
+        void initializeEmptySlots( size_t prevNumSlots ) override;
 
     public:
         enum MemoryTypes

@@ -49,7 +49,7 @@ namespace Ogre
         virtual ~ManualObject();
 
         /** @copydoc MovableObject::_releaseManualHardwareResources */
-        void _releaseManualHardwareResources() { clear(); }
+        void _releaseManualHardwareResources() override { clear(); }
 
         /** Completely clear the contents of the object.
         @remarks
@@ -286,7 +286,7 @@ namespace Ogre
 
         // MovableObject overrides
         /** @copydoc MovableObject::getMovableType. */
-        const String& getMovableType() const;
+        const String& getMovableType() const override;
 
         /// Built, renderable section of geometry
         class _OgreExport ManualObjectSection : public Renderable, public MovableAlloc
@@ -375,20 +375,21 @@ namespace Ogre
 
 
     /** Factory object for creating ManualObject instances */
-    class _OgreExport ManualObjectFactory : public MovableObjectFactory
+    class _OgreExport ManualObjectFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         ManualObjectFactory() {}
-        ~ManualObjectFactory() {}
+        ~ManualObjectFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance( MovableObject* obj);  
+        const String& getType() const override;
+        void destroyInstance( MovableObject* obj) override;
 
     };
     /** @} */

@@ -62,7 +62,6 @@ namespace Ogre {
         mutable bool mDirty;
         static String msMovableType;
     public:
-
         MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
         MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
                       const Plane& rhs );
@@ -73,13 +72,14 @@ namespace Ogre {
                       const Vector3& rkNormal, const Vector3& rkPoint );
         MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
                       const Vector3& rkPoint0, const Vector3& rkPoint1, const Vector3& rkPoint2 );
-        ~MovablePlane() {}
+
+        ~MovablePlane() override {}
         /// Overridden from MovableObject
         const AxisAlignedBox& getBoundingBox() const { return mNullBB; }
         /// Overridden from MovableObject
-        void _updateRenderQueue(RenderQueue*, Camera *camera, const Camera *lodCamera) { /* do nothing */}
+        void _updateRenderQueue( RenderQueue *, Camera *, const Camera * ) override {}
         /// Overridden from MovableObject
-        const String& getMovableType() const;
+        const String& getMovableType() const override;
         /// Get the derived plane as transformed by its parent node. 
         const Plane& _getDerivedPlane() const;
     };

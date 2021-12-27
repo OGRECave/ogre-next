@@ -70,14 +70,14 @@ namespace Ogre
     public:
         CompositorPassUav( const CompositorPassUavDef *definition, CompositorNode *parentNode,
                            const RenderTargetViewDef *rtv );
-        virtual ~CompositorPassUav();
+        ~CompositorPassUav() override;
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
 
-        virtual void notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer );
+        void notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer ) override;
         // TextureGpuListener overloads
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
     };
 
     /** @} */

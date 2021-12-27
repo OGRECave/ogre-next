@@ -57,18 +57,19 @@ namespace Ogre {
 
     public:
         ETCCodec(const String &type);
-        virtual ~ETCCodec() { }
+        ~ETCCodec() override { }
 
         /// @copydoc Codec::encode
-        DataStreamPtr encode(MemoryDataStreamPtr& input, CodecDataPtr& pData) const;
+        DataStreamPtr encode(MemoryDataStreamPtr& input, CodecDataPtr& pData) const override;
         /// @copydoc Codec::encodeToFile
-        void encodeToFile(MemoryDataStreamPtr& input, const String& outFileName, CodecDataPtr& pData) const;
+        void encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
+                           CodecDataPtr &pData ) const override;
         /// @copydoc Codec::decode
-        DecodeResult decode(DataStreamPtr& input) const;
+        DecodeResult decode(DataStreamPtr& input) const override;
         /// @copydoc Codec::magicNumberToFileExt
-        String magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const;
+        String magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const override;
         
-        virtual String getType() const;        
+        String getType() const override;
 
         /// Static method to startup and register the ETC codec
         static void startup();

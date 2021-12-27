@@ -64,12 +64,12 @@ namespace v1 {
     public:
         Rectangle2D( bool bQuad, IdType id, ObjectMemoryManager *objectMemoryManager,
                      SceneManager *manager );
-        ~Rectangle2D();
+        ~Rectangle2D() override;
 
         /** @copydoc MovableObject::_releaseManualHardwareResources */
-        void _releaseManualHardwareResources();
+        void _releaseManualHardwareResources() override;
         /** @copydoc MovableObject::_restoreManualHardwareResources */
-        void _restoreManualHardwareResources();
+        void _restoreManualHardwareResources() override;
 
         /** Sets the corners of the rectangle, in relative coordinates.
         @param
@@ -90,30 +90,30 @@ namespace v1 {
 
         Real getSquaredViewDepth(const Camera* cam) const   { (void)cam; return 0; }
 
-        virtual void getWorldTransforms( Matrix4* xform ) const;
-        virtual void getRenderOperation( RenderOperation& op, bool casterPass );
-        virtual const LightList& getLights() const;
+        void getWorldTransforms( Matrix4* xform ) const override;
+        void getRenderOperation( RenderOperation& op, bool casterPass ) override;
+        const LightList& getLights() const override;
 
         /** Returns the type name of this object. */
-        virtual const String& getMovableType() const;
+        const String& getMovableType() const override;
     };
 
     /** Factory object for creating Entity instances */
-    class _OgreExport Rectangle2DFactory : public MovableObjectFactory
+    class _OgreExport Rectangle2DFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         Rectangle2DFactory() {}
-        ~Rectangle2DFactory() {}
+        ~Rectangle2DFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance( MovableObject* obj);
-
+        const String &getType() const override;
+        void destroyInstance( MovableObject *obj ) override;
     };
 
     /** @} */

@@ -126,7 +126,7 @@ namespace Ogre {
         /// Overridden from ResourceManager
         Resource* createImpl(const String& name, ResourceHandle handle, 
             const String& group, bool isManual, ManualResourceLoader* loader,
-            const NameValuePairList* params);
+            const NameValuePairList* params) override;
 
         /// Scheme name -> index. Never shrinks! Should be pretty static anyway
         typedef map<String, unsigned short>::type SchemeMap;
@@ -170,7 +170,7 @@ namespace Ogre {
         
         /** @see ScriptLoader::parseScript
         */
-        void parseScript(DataStreamPtr& stream, const String& groupName);
+        void parseScript(DataStreamPtr& stream, const String& groupName) override;
 
         /** Returns a pointer to the default Material settings.
             @remarks

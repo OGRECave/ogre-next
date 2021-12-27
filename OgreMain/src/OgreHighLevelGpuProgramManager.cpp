@@ -32,26 +32,26 @@ THE SOFTWARE.
 namespace Ogre {
 
     String sNullLang = "null";
-    class NullProgram : public HighLevelGpuProgram
+    class NullProgram final : public HighLevelGpuProgram
     {
     protected:
         /** Internal load implementation, must be implemented by subclasses.
         */
-        void loadFromSource() {}
+        void loadFromSource() override {}
         /** Internal method for creating an appropriate low-level program from this
         high-level program, must be implemented by subclasses. */
-        void createLowLevelImpl() {}
+        void createLowLevelImpl() override {}
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl() {}
+        void unloadHighLevelImpl() override {}
         /// Populate the passed parameters with name->index map, must be overridden
-        void populateParameterNames(GpuProgramParametersSharedPtr params)
+        void populateParameterNames(GpuProgramParametersSharedPtr params) override
         {
             // Skip the normal implementation
             // Ensure we don't complain about missing parameter names
             params->setIgnoreMissingParams(true);
 
         }
-        void buildConstantDefinitions() const
+        void buildConstantDefinitions() const override
         {
             // do nothing
         }
@@ -60,15 +60,15 @@ namespace Ogre {
             const String& name, ResourceHandle handle, const String& group, 
             bool isManual, ManualResourceLoader* loader)
             : HighLevelGpuProgram(creator, name, handle, group, isManual, loader){}
-        ~NullProgram() {}
+        ~NullProgram() override {}
         /// Overridden from GpuProgram - never supported
-        bool isSupported() const { return false; }
+        bool isSupported() const override { return false; }
         /// Overridden from GpuProgram
-        const String& getLanguage() const { return sNullLang; }
-        size_t calculateSize() const { return 0; }
+        const String& getLanguage() const override { return sNullLang; }
+        size_t calculateSize() const override { return 0; }
 
         /// Overridden from StringInterface
-        bool setParameter(const String& name, const String& value)
+        bool setParameter(const String& /*name*/, const String& /*value*/) override
         {
             // always silently ignore all parameters so as not to report errors on
             // unsupported platforms
@@ -76,23 +76,23 @@ namespace Ogre {
         }
 
     };
-    class NullProgramFactory : public HighLevelGpuProgramFactory
+    class NullProgramFactory final : public HighLevelGpuProgramFactory
     {
     public:
         NullProgramFactory() {}
-        ~NullProgramFactory() {}
+        ~NullProgramFactory() override {}
         /// Get the name of the language this factory creates programs for
-        const String& getLanguage() const 
+        const String& getLanguage() const override
         { 
             return sNullLang;
         }
         HighLevelGpuProgram* create(ResourceManager* creator, 
             const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader)
+            const String& group, bool isManual, ManualResourceLoader* loader) override
         {
             return OGRE_NEW NullProgram(creator, name, handle, group, isManual, loader);
         }
-        void destroy(HighLevelGpuProgram* prog)
+        void destroy(HighLevelGpuProgram* prog) override
         {
             OGRE_DELETE prog;
         }

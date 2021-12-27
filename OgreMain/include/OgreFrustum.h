@@ -455,9 +455,10 @@ namespace Ogre
 
         /** Retrieves a specified plane of the frustum (world space).
         @remarks
-            Gets a reference to one of the planes which make up the frustum frustum, e.g. for clipping purposes.
+            Gets a reference to one of the planes which make up the frustum frustum,
+            e.g. for clipping purposes.
         */
-        const Plane& getFrustumPlane( unsigned short plane ) const;
+        virtual const Plane& getFrustumPlane( unsigned short plane ) const;
 
         /** Tests whether the given container is visible in the Frustum.
         @param bound
@@ -502,19 +503,19 @@ namespace Ogre
         const AxisAlignedBox& getBoundingBox() const;
 
         /** Overridden from MovableObject */
-        const String& getMovableType() const;
+        const String& getMovableType() const override;
 
         /** Overridden from Renderable */
-        void getRenderOperation(v1::RenderOperation& op, bool casterPass);
+        void getRenderOperation(v1::RenderOperation& op, bool casterPass) override;
 
         /** Overridden from Renderable */
-        void getWorldTransforms(Matrix4* xform) const;
+        void getWorldTransforms(Matrix4* xform) const override;
 
         /** Overridden from Renderable */
         Real getSquaredViewDepth(const Camera* cam) const;
 
         /** Overridden from Renderable */
-        const LightList& getLights() const;
+        const LightList& getLights() const override;
 
         void getCustomWorldSpaceCorners(
                     ArrayVector3 outCorners[(8 + ARRAY_PACKED_REALS - 1) / ARRAY_PACKED_REALS],

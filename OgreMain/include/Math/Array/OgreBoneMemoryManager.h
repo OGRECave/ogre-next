@@ -53,7 +53,7 @@ namespace Ogre
         Note that some SceneManager implementations (i.e. Octree like) may want to have more
         than one BoneMemoryManager, for example one per octant.
     */
-    class _OgreExport BoneMemoryManager : ArrayMemoryManager::RebaseListener
+    class _OgreExport BoneMemoryManager final : ArrayMemoryManager::RebaseListener
     {
         typedef vector<BoneArrayMemoryManager>::type ArrayMemoryManagerVec;
         /// ArrayMemoryManagers grouped by hierarchy depth
@@ -161,14 +161,13 @@ namespace Ogre
 
         void setBoneRebaseListener( BySkeletonDef *l )          { mBoneRebaseListener = l; }
 
-        //Derived from ArrayMemoryManager::RebaseListener
-        virtual void buildDiffList( uint16 level, const MemoryPoolVec &basePtrs,
-                                    ArrayMemoryManager::PtrdiffVec &outDiffsList );
-        virtual void applyRebase( uint16 level, const MemoryPoolVec &newBasePtrs,
-                                  const ArrayMemoryManager::PtrdiffVec &diffsList );
-        virtual void performCleanup( uint16 level, const MemoryPoolVec &basePtrs,
-                                     size_t const *elementsMemSizes,
-                                     size_t startInstance, size_t diffInstances );
+        // Derived from ArrayMemoryManager::RebaseListener
+        void buildDiffList( uint16 level, const MemoryPoolVec &basePtrs,
+                            ArrayMemoryManager::PtrdiffVec &outDiffsList ) override;
+        void applyRebase( uint16 level, const MemoryPoolVec &newBasePtrs,
+                          const ArrayMemoryManager::PtrdiffVec &diffsList ) override;
+        void performCleanup( uint16 level, const MemoryPoolVec &basePtrs, size_t const *elementsMemSizes,
+                             size_t startInstance, size_t diffInstances ) override;
     };
 
     /** @} */

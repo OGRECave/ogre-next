@@ -355,14 +355,14 @@ namespace v1 {
         void setRenderQueueSubGroup( uint8 subGroup );
 
         /// @copydoc MovableObject::setRenderQueueGroup.
-        void setRenderQueueGroup(uint8 queueID);
+        void setRenderQueueGroup(uint8 queueID) override;
 
         /** @copydoc MovableObject::_updateRenderQueue.
         */
-        void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera);
+        void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera) override;
 
         /** @copydoc MovableObject::getMovableType */
-        const String& getMovableType() const;
+        const String& getMovableType() const override;
 
         /** For entities based on animated meshes, gets the AnimationState object for a single animation.
         @remarks
@@ -442,7 +442,7 @@ namespace v1 {
         bool isHardwareAnimationEnabled();
 
         /** @copydoc MovableObject::_notifyAttached */
-        void _notifyAttached( Node* parent );
+        void _notifyAttached( Node* parent ) override;
         /** Returns the number of requests that have been made for software animation
         @remarks
             If non-zero then software animation will be performed in updateAnimation
@@ -626,7 +626,7 @@ namespace v1 {
         void _deinitialise();
 
         /** Resource::Listener hook to notify Entity that a Mesh is (re)loaded. */
-        void loadingComplete(Resource* res);
+        void loadingComplete(Resource* res) override;
 
         /** Entity's skeleton's AnimationState will not be automatically updated when set to true.
             Useful if you wish to handle AnimationState updates manually.
@@ -680,21 +680,21 @@ namespace v1 {
     };
 
     /** Factory object for creating Entity instances */
-    class _OgreExport EntityFactory : public MovableObjectFactory
+    class _OgreExport EntityFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         EntityFactory() {}
-        ~EntityFactory() {}
+        ~EntityFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance( MovableObject* obj);
-
+        const String &getType() const override;
+        void destroyInstance( MovableObject *obj ) override;
     };
     /** @} */
     /** @} */

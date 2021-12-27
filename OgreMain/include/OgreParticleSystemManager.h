@@ -134,7 +134,7 @@ namespace Ogre {
     public:
 
         ParticleSystemManager();
-        virtual ~ParticleSystemManager();
+        ~ParticleSystemManager() override;
 
         /** Adds a new 'factory' object for emitters to the list of available emitter types.
         @remarks
@@ -324,11 +324,11 @@ namespace Ogre {
         void _initialise();
 
         /// @copydoc ScriptLoader::getScriptPatterns
-        const StringVector& getScriptPatterns() const;
+        const StringVector& getScriptPatterns() const override;
         /// @copydoc ScriptLoader::parseScript
-        void parseScript(DataStreamPtr& stream, const String& groupName);
+        void parseScript(DataStreamPtr& stream, const String& groupName) override;
         /// @copydoc ScriptLoader::getLoadingOrder
-        Real getLoadingOrder() const;
+        Real getLoadingOrder() const override;
 
         typedef MapIterator<ParticleAffectorFactoryMap> ParticleAffectorFactoryIterator;
         typedef MapIterator<ParticleEmitterFactoryMap> ParticleEmitterFactoryIterator;
@@ -388,21 +388,21 @@ namespace Ogre {
     };
 
     /** Factory object for creating ParticleSystem instances */
-    class _OgreExport ParticleSystemFactory : public MovableObjectFactory
+    class _OgreExport ParticleSystemFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         ParticleSystemFactory() {}
-        ~ParticleSystemFactory() {}
-        
+        ~ParticleSystemFactory() override {}
+
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance( MovableObject* obj);  
-
+        const String &getType() const override;
+        void destroyInstance( MovableObject *obj ) override;
     };
     /** @} */
     /** @} */

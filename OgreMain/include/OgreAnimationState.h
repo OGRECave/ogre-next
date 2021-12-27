@@ -276,7 +276,7 @@ namespace v1 {
         is deleted explicitly elsewhere so this causes double-free problems.
         This wrapper acts as a bridge and it is this which is destroyed automatically.
     */
-    class _OgreExport AnimationStateControllerValue : public ControllerValue<Real>
+    class _OgreExport AnimationStateControllerValue final : public ControllerValue<Real>
     {
     protected:
         AnimationState* mTargetAnimationState;
@@ -287,10 +287,10 @@ namespace v1 {
         /// Destructor (parent already virtual)
         ~AnimationStateControllerValue() {}
         /** ControllerValue implementation. */
-        Real getValue() const;
+        Real getValue() const override;
 
         /** ControllerValue implementation. */
-        void setValue(Real value);
+        void setValue(Real value) override;
 
     };
 

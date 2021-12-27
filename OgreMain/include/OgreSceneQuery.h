@@ -256,9 +256,9 @@ namespace Ogre {
         virtual void clearResults();
 
         /** Self-callback in order to deal with execute which returns collection. */
-        bool queryResult(MovableObject* first);
+        bool queryResult(MovableObject* first) override;
         /** Self-callback in order to deal with execute which returns collection. */
-        bool queryResult(SceneQuery::WorldFragment* fragment);
+        bool queryResult(SceneQuery::WorldFragment* fragment) override;
     };
 
     /** Specialises the SceneQuery class for querying within an axis aligned box. */
@@ -439,13 +439,9 @@ namespace Ogre {
         virtual void clearResults();
 
         /** Self-callback in order to deal with execute which returns collection. */
-        bool queryResult(MovableObject* obj, Real distance);
+        bool queryResult(MovableObject* obj, Real distance) override;
         /** Self-callback in order to deal with execute which returns collection. */
-        bool queryResult(SceneQuery::WorldFragment* fragment, Real distance);
-
-
-
-
+        bool queryResult(SceneQuery::WorldFragment* fragment, Real distance) override;
     };
 
     /** Alternative listener class for dealing with IntersectionSceneQuery.
@@ -545,9 +541,9 @@ namespace Ogre {
         virtual void clearResults();
 
         /** Self-callback in order to deal with execute which returns collection. */
-        bool queryResult(MovableObject* first, MovableObject* second);
+        bool queryResult(MovableObject* first, MovableObject* second) override;
         /** Self-callback in order to deal with execute which returns collection. */
-        bool queryResult(MovableObject* movable, SceneQuery::WorldFragment* fragment);
+        bool queryResult(MovableObject* movable, SceneQuery::WorldFragment* fragment) override;
     };
     
     /** @} */

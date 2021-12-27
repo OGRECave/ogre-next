@@ -95,11 +95,11 @@ namespace Ogre
     public:
         Forward3D( uint32 width, uint32 height, uint32 numSlices, uint32 lightsPerCell,
                    float minDistance, float maxDistance, SceneManager *sceneManager );
-        virtual ~Forward3D();
+        ~Forward3D() override;
 
-        virtual ForwardPlusMethods getForwardPlusMethod() const     { return MethodForward3D; }
+        ForwardPlusMethods getForwardPlusMethod() const override { return MethodForward3D; }
 
-        virtual void collectLights( Camera *camera );
+        void collectLights( Camera *camera ) override;
 
         uint32 getWidth() const                                     { return mWidth; }
         uint32 getHeight() const                                    { return mHeight; }
@@ -109,19 +109,18 @@ namespace Ogre
         float getMaxDistance() const                                { return mMaxDistance; }
 
         /// Returns the amount of bytes that fillConstBufferData is going to fill.
-        virtual size_t getConstBufferSize() const;
+        size_t getConstBufferSize() const override;
 
         /** Fills 'passBufferPtr' with the necessary data for Forward3D rendering.
             @see getConstBufferSize
         @remarks
             Assumes 'passBufferPtr' is aligned to a vec4/float4 boundary.
         */
-        virtual void fillConstBufferData( Viewport *viewport, bool bRequiresTextureFlipping,
-                                          uint32 renderTargetHeight,
-                                          IdString shaderSyntax, bool instancedStereo,
-                                          float * RESTRICT_ALIAS passBufferPtr ) const;
+        void fillConstBufferData( Viewport *viewport, bool bRequiresTextureFlipping,
+                                  uint32 renderTargetHeight, IdString shaderSyntax, bool instancedStereo,
+                                  float *RESTRICT_ALIAS passBufferPtr ) const override;
 
-        virtual void setHlmsPassProperties( Hlms *hlms );
+        void setHlmsPassProperties( Hlms *hlms ) override;
     };
 
     /** @} */

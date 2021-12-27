@@ -64,11 +64,11 @@ namespace Ogre {
     {
     public:
         /// Command object for enabling include in shaders
-        class _OgrePrivate CmdEnableIncludeHeader : public ParamCommand
+        class _OgrePrivate CmdEnableIncludeHeader final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
 
         static CmdEnableIncludeHeader msEnableIncludeHeaderCmd;
@@ -112,9 +112,9 @@ namespace Ogre {
         void setupBaseParamDictionary();
 
         /** @copydoc Resource::loadImpl */
-        void loadImpl();
+        void loadImpl() override;
         /** @copydoc Resource::unloadImpl */
-        void unloadImpl();
+        void unloadImpl() override;
     public:
         /** Constructor, should be used only by factory classes. */
         HighLevelGpuProgram(ResourceManager* creator, const String& name, ResourceHandle handle,
@@ -129,9 +129,9 @@ namespace Ogre {
             HighLevelGpuProgramManager. This method creates a new instance of a parameters
             object containing the definition of the parameters this program understands.
         */
-        GpuProgramParametersSharedPtr createParameters();
+        GpuProgramParametersSharedPtr createParameters() override;
         /** @copydoc GpuProgram::_getBindingDelegate */
-        GpuProgram* _getBindingDelegate() { return mAssemblerProgram.getPointer(); }
+        GpuProgram* _getBindingDelegate() override { return mAssemblerProgram.getPointer(); }
 
         /** Whether we should parse the source code looking for include files and
             embedding the file. Disabled by default to avoid slowing down when
@@ -164,13 +164,9 @@ namespace Ogre {
         @note
         Only available if this parameters object has named parameters.
         */
-        const GpuNamedConstants& getConstantDefinitions() const;
+        const GpuNamedConstants& getConstantDefinitions() const override;
 
-        virtual size_t calculateSize() const;
-
-
-
-
+        size_t calculateSize() const override;
     };
     /** @} */
     /** @} */

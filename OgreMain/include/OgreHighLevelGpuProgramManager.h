@@ -88,10 +88,10 @@ namespace Ogre {
         /// @copydoc ResourceManager::createImpl
         Resource* createImpl(const String& name, ResourceHandle handle, 
             const String& group, bool isManual, ManualResourceLoader* loader,
-            const NameValuePairList* createParams);
+            const NameValuePairList* createParams) override;
     public:
         HighLevelGpuProgramManager();
-        ~HighLevelGpuProgramManager();
+        ~HighLevelGpuProgramManager() override;
         /** Add a new factory object for high-level programs of a given language. */
         void addFactory(HighLevelGpuProgramFactory* factory);
         /** Remove a factory object for high-level programs of a given language. */

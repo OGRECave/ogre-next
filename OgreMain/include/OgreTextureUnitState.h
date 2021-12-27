@@ -1154,9 +1154,8 @@ protected:
         void cleanFramePtrs();
 
         /// TextureGpuListener overload
-        virtual void notifyTextureChanged( TextureGpu *texture,
-                                           TextureGpuListener::Reason reason,
-                                           void *extraData );
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
     };
 
     /** @} */

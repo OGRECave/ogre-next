@@ -77,14 +77,14 @@ namespace Ogre {
             bool                        freeOnDestruction;
 
         public:
-            virtual String dataType() const
+            String dataType() const override
             {
                 return "ImageData2";
             }
         };
 
     public:
-        virtual String getDataType() const
+        String getDataType() const override
         {
             return "ImageCodec2";
         }

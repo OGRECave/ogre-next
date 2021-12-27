@@ -530,7 +530,7 @@ namespace v1 {
         virtual Real getDefaultHeight() const;
 
         /// Overriden from Renderable
-        virtual bool getUseIdentityWorldMatrix() const;
+        bool getUseIdentityWorldMatrix() const override;
 
         /** Overridden from MovableObject
         @see
@@ -559,7 +559,7 @@ namespace v1 {
         @see
             MovableObject
         */
-        virtual void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera);
+        void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera) override;
 
         /// Internal version that does not call _notifyCurrentCamera (i.e. you've already done it)
         void _updateRenderQueueImpl(RenderQueue* queue, Camera *camera, const Camera *lodCamera);
@@ -568,13 +568,13 @@ namespace v1 {
         @see
             MovableObject
         */
-        virtual void getRenderOperation(RenderOperation& op, bool casterPass);
+        void getRenderOperation(RenderOperation& op, bool casterPass) override;
 
         /** Overridden from MovableObject
         @see
             MovableObject
         */
-        virtual void getWorldTransforms(Matrix4* xform) const;
+        void getWorldTransforms(Matrix4* xform) const override;
 
         /** Internal callback used by Billboards to notify their parent that they have been resized.
         */
@@ -692,7 +692,7 @@ namespace v1 {
         virtual bool getUseAccurateFacing() const { return mAccurateFacing; }
 
         /** Overridden from MovableObject */
-        virtual const String& getMovableType() const;
+        const String& getMovableType() const override;
 
         /** Overridden, see Renderable */
         Real getSquaredViewDepth(const Camera* cam) const;
@@ -700,7 +700,7 @@ namespace v1 {
         /** Update the bounds of the billboardset */
         virtual void _updateBounds();
         /** @copydoc Renderable::getLights */
-        const LightList& getLights() const;
+        const LightList& getLights() const override;
 
         /** Sort the billboard set. Only called when enabled via setSortingEnabled */
         virtual void _sortBillboards();
@@ -826,30 +826,29 @@ namespace v1 {
         void notifyBillboardDataChanged() { mBillboardDataChanged = true; }
 
         /** @copydoc MovableObject::_releaseManualHardwareResources. */
-        void _releaseManualHardwareResources() { _destroyBuffers(); }
+        void _releaseManualHardwareResources() override { _destroyBuffers(); }
 
-        virtual void setMaterial( const MaterialPtr& material );
-        virtual void setDatablock( HlmsDatablock *datablock );
-        virtual void _setNullDatablock();
-
+        void setMaterial( const MaterialPtr& material ) override;
+        void setDatablock( HlmsDatablock *datablock ) override;
+        void _setNullDatablock() override;
     };
 
     /** Factory object for creating BillboardSet instances */
-    class _OgreExport BillboardSetFactory : public MovableObjectFactory
+    class _OgreExport BillboardSetFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager* manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         BillboardSetFactory() {}
         ~BillboardSetFactory() {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance( MovableObject* obj);  
-
+        const String &getType() const override;
+        void destroyInstance( MovableObject *obj ) override;
     };
     /** @} */
     /** @} */

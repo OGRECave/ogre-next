@@ -110,11 +110,11 @@ namespace v1 {
         virtual Real getTrailLength() const { return mTrailLength; }
 
         /** @copydoc BillboardChain::setMaxChainElements */
-        void setMaxChainElements(size_t maxElements);
+        void setMaxChainElements(size_t maxElements) override;
         /** @copydoc BillboardChain::setNumberOfChains */
-        void setNumberOfChains(size_t numChains);
+        void setNumberOfChains(size_t numChains) override;
         /** @copydoc BillboardChain::clearChain */
-        void clearChain(size_t chainIndex);
+        void clearChain(size_t chainIndex) override;
 
         /** Set the starting ribbon colour for a given segment. 
         @param chainIndex The index of the chain
@@ -165,15 +165,15 @@ namespace v1 {
         virtual const ColourValue& getColourChange(size_t chainIndex) const;
 
         /// @see Node::Listener::nodeUpdated
-        void nodeUpdated(const Node* node);
+        void nodeUpdated(const Node* node) override;
         /// @see Node::Listener::nodeDestroyed
-        void nodeDestroyed(const Node* node);
+        void nodeDestroyed(const Node* node) override;
 
         /// Perform any fading / width delta required; internal method
         virtual void _timeUpdate(Real time);
 
         /** Overridden from MovableObject */
-        const String& getMovableType() const;
+        const String& getMovableType() const override;
 
     protected:
         /// List of nodes being trailed
@@ -222,27 +222,25 @@ namespace v1 {
 
     };
 
-
     /** Factory object for creating RibbonTrail instances */
-    class _OgreExport RibbonTrailFactory : public MovableObjectFactory
+    class _OgreExport RibbonTrailFactory final : public MovableObjectFactory
     {
     protected:
-        virtual MovableObject* createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *manager,
-                                                   const NameValuePairList* params = 0 );
+        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                           SceneManager *manager,
+                                           const NameValuePairList *params = 0 ) override;
+
     public:
         RibbonTrailFactory() {}
-        ~RibbonTrailFactory() {}
+        ~RibbonTrailFactory() override {}
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const;
-        void destroyInstance( MovableObject* obj);  
-
+        const String &getType() const override;
+        void destroyInstance( MovableObject *obj ) override;
     };
     /** @} */
     /** @} */
-
 }
 }
 

@@ -79,7 +79,7 @@ namespace Ogre
         void notifyPassSceneAfterShadowMapsListeners();
         void notifyPassSceneAfterFrustumCullingListeners();
 
-        virtual void analyzeBarriers( const bool bClearBarriers = true );
+        void analyzeBarriers( const bool bClearBarriers = true ) override;
 
     public:
         /** Constructor
@@ -93,9 +93,9 @@ namespace Ogre
         */
         CompositorPassScene( const CompositorPassSceneDef *definition, Camera *defaultCamera,
                              const RenderTargetViewDef *rtv, CompositorNode *parentNode );
-        ~CompositorPassScene();
+        ~CompositorPassScene() override;
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
 
         CompositorShadowNode* getShadowNode() const             { return mShadowNode; }
         Camera* getCamera() const                               { return mCamera; }
@@ -106,7 +106,7 @@ namespace Ogre
 
         bool getUpdateShadowNode() const                    { return mUpdateShadowNode; }
 
-        virtual void notifyCleared();
+        void notifyCleared() override;
 
         const CompositorPassSceneDef* getDefinition() const     { return mDefinition; }
     };

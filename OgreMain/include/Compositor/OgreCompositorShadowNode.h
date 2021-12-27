@@ -195,7 +195,7 @@ namespace Ogre
         void _update(Camera* camera, const Camera *lodCamera, SceneManager *sceneManager);
 
         /// We derive so we can override the camera with ours
-        virtual void postInitializePass( CompositorPass *pass );
+        void postInitializePass( CompositorPass *pass ) override;
 
         const LightList* setShadowMapsToPass( Renderable* rend, const Pass* pass,
                                               AutoParamDataSource *autoParamDataSource,
@@ -337,7 +337,7 @@ namespace Ogre
         void setStaticShadowMapDirty( size_t shadowMapIdx, bool includeLinked=true );
 
         /// @copydoc CompositorNode::finalTargetResized
-        virtual void finalTargetResized01( const TextureGpu *finalTarget );
+        void finalTargetResized01( const TextureGpu *finalTarget ) override;
     };
 
     class _OgreExport ShadowNodeHelper

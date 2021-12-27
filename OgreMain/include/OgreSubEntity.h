@@ -117,15 +117,15 @@ namespace v1 {
                 uses. This call can alter that so that the Material is different
                 for this instance.
         */
-        virtual void setMaterial( const MaterialPtr& material );
+        void setMaterial( const MaterialPtr& material ) override;
 
         /** Make every setDatablock method from Renderable available.
             See http://www.research.att.com/~bs/bs_faq2.html#overloadderived
         */
         using Renderable::setDatablock;
 
-        virtual void setDatablock( HlmsDatablock *datablock );
-        virtual void _setNullDatablock();
+        void setDatablock( HlmsDatablock *datablock ) override;
+        void _setNullDatablock() override;
 
         /** Accessor method to read mesh data.
         */
@@ -136,7 +136,7 @@ namespace v1 {
 
         /** Overridden - see Renderable.
         */
-        void getRenderOperation(RenderOperation& op, bool casterPass);
+        void getRenderOperation(RenderOperation& op, bool casterPass) override;
 
         /** Tells this SubEntity to draw a subset of the SubMesh by adjusting the index buffer extents.
          * Default value is zero so that the entire index buffer is used when drawing.
@@ -165,16 +165,16 @@ namespace v1 {
 
         /** Overridden - see Renderable.
         */
-        void getWorldTransforms(Matrix4* xform) const;
+        void getWorldTransforms(Matrix4* xform) const override;
         /** Overridden - see Renderable.
         */
-        unsigned short getNumWorldTransforms() const;
+        unsigned short getNumWorldTransforms() const override;
         /** Overridden, see Renderable */
         Real getSquaredViewDepth(const Camera* cam) const;
         /** @copydoc Renderable::getLights */
-        const LightList& getLights() const;
+        const LightList& getLights() const override;
         /** @copydoc Renderable::getCastsShadows */
-        bool getCastsShadows() const;
+        bool getCastsShadows() const override;
         /** Advanced method to get the temporarily blended vertex information
         for entities which are software skinned. 
         @remarks
@@ -226,7 +226,7 @@ namespace v1 {
 
         /** Overridden from Renderable to provide some custom behaviour. */
         void _updateCustomGpuParameter( const GpuProgramParameters_AutoConstantEntry &constantEntry,
-                                        GpuProgramParameters *params ) const;
+                                        GpuProgramParameters *params ) const override;
     };
     /** @} */
     /** @} */

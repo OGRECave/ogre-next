@@ -85,7 +85,7 @@ namespace Ogre {
         also that mesh sub-sections (when used in an instantiated object)
         share the same scene node as the parent.
     */
-    class _OgreExport Mesh: public Resource
+    class _OgreExport Mesh final : public Resource
     {
         friend class SubMesh;
         friend class MeshSerializerImpl;
@@ -137,18 +137,18 @@ namespace Ogre {
             It also does not set up submeshes, etc.  You have to call load()
             to do that.
          */
-        void prepareImpl();
+        void prepareImpl() override;
         /** Destroys data cached by prepareImpl.
          */
-        void unprepareImpl();
+        void unprepareImpl() override;
         /// @copydoc Resource::loadImpl
-        void loadImpl();
+        void loadImpl() override;
         /// @copydoc Resource::postLoadImpl
-        void postLoadImpl();
+        void postLoadImpl() override;
         /// @copydoc Resource::unloadImpl
-        void unloadImpl();
+        void unloadImpl() override;
         /// @copydoc Resource::calculateSize
-        size_t calculateSize() const;
+        size_t calculateSize() const override;
 
     public:
         /** Default constructor - used by MeshManager
@@ -158,7 +158,7 @@ namespace Ogre {
         Mesh( ResourceManager* creator, const String& name, ResourceHandle handle,
               const String& group, VaoManager *vaoManager,
               bool isManual = false, ManualResourceLoader* loader = 0 );
-        ~Mesh();
+        ~Mesh() override;
 
         // NB All methods below are non-virtual since they will be
         // called in the rendering loop - speed is of the essence.

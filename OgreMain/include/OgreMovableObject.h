@@ -643,10 +643,7 @@ namespace Ogre {
 
         virtual ~NullEntity();
 
-        virtual const String& getMovableType() const
-        {
-            return msMovableType;
-        }
+        const String &getMovableType() const override { return msMovableType; }
     };
 
     /** @} */

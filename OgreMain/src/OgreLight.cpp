@@ -371,132 +371,132 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    class LightDiffuseColourValue : public AnimableValue
+    class LightDiffuseColourValue final : public AnimableValue
     {
     protected:
         Light* mLight;
     public:
         LightDiffuseColourValue(Light* l) :AnimableValue(COLOUR) 
         { mLight = l; }
-        void setValue(const ColourValue& val)
+        void setValue(const ColourValue& val) override
         {
             mLight->setDiffuseColour(val);
         }
-        void applyDeltaValue(const ColourValue& val)
+        void applyDeltaValue(const ColourValue& val) override
         {
             setValue(mLight->getDiffuseColour() + val);
         }
-        void setCurrentStateAsBaseValue()
+        void setCurrentStateAsBaseValue() override
         {
             setAsBaseValue(mLight->getDiffuseColour());
         }
 
     };
     //-----------------------------------------------------------------------
-    class LightSpecularColourValue : public AnimableValue
+    class LightSpecularColourValue final : public AnimableValue
     {
     protected:
         Light* mLight;
     public:
         LightSpecularColourValue(Light* l) :AnimableValue(COLOUR) 
         { mLight = l; }
-        void setValue(const ColourValue& val)
+        void setValue(const ColourValue& val) override
         {
             mLight->setSpecularColour(val);
         }
-        void applyDeltaValue(const ColourValue& val)
+        void applyDeltaValue(const ColourValue& val) override
         {
             setValue(mLight->getSpecularColour() + val);
         }
-        void setCurrentStateAsBaseValue()
+        void setCurrentStateAsBaseValue() override
         {
             setAsBaseValue(mLight->getSpecularColour());
         }
 
     };
     //-----------------------------------------------------------------------
-    class LightAttenuationValue : public AnimableValue
+    class LightAttenuationValue final : public AnimableValue
     {
     protected:
         Light* mLight;
     public:
         LightAttenuationValue(Light* l) :AnimableValue(VECTOR4) 
         { mLight = l; }
-        void setValue(const Vector4& val)
+        void setValue(const Vector4& val) override
         {
             mLight->setAttenuation(val.x, val.y, val.z, val.w);
         }
-        void applyDeltaValue(const Vector4& val)
+        void applyDeltaValue(const Vector4& val) override
         {
             setValue(mLight->getAs4DVector() + val);
         }
-        void setCurrentStateAsBaseValue()
+        void setCurrentStateAsBaseValue() override
         {
             setAsBaseValue(mLight->getAs4DVector());
         }
 
     };
     //-----------------------------------------------------------------------
-    class LightSpotlightInnerValue : public AnimableValue
+    class LightSpotlightInnerValue final : public AnimableValue
     {
     protected:
         Light* mLight;
     public:
         LightSpotlightInnerValue(Light* l) :AnimableValue(REAL) 
         { mLight = l; }
-        void setValue(Real val)
+        void setValue(Real val) override
         {
             mLight->setSpotlightInnerAngle(Radian(val));
         }
-        void applyDeltaValue(Real val)
+        void applyDeltaValue(Real val) override
         {
             setValue(mLight->getSpotlightInnerAngle().valueRadians() + val);
         }
-        void setCurrentStateAsBaseValue()
+        void setCurrentStateAsBaseValue() override
         {
             setAsBaseValue(mLight->getSpotlightInnerAngle().valueRadians());
         }
 
     };
     //-----------------------------------------------------------------------
-    class LightSpotlightOuterValue : public AnimableValue
+    class LightSpotlightOuterValue final : public AnimableValue
     {
     protected:
         Light* mLight;
     public:
         LightSpotlightOuterValue(Light* l) :AnimableValue(REAL) 
         { mLight = l; }
-        void setValue(Real val)
+        void setValue(Real val) override
         {
             mLight->setSpotlightOuterAngle(Radian(val));
         }
-        void applyDeltaValue(Real val)
+        void applyDeltaValue(Real val) override
         {
             setValue(mLight->getSpotlightOuterAngle().valueRadians() + val);
         }
-        void setCurrentStateAsBaseValue()
+        void setCurrentStateAsBaseValue() override
         {
             setAsBaseValue(mLight->getSpotlightOuterAngle().valueRadians());
         }
 
     };
     //-----------------------------------------------------------------------
-    class LightSpotlightFalloffValue : public AnimableValue
+    class LightSpotlightFalloffValue final : public AnimableValue
     {
     protected:
         Light* mLight;
     public:
         LightSpotlightFalloffValue(Light* l) :AnimableValue(REAL) 
         { mLight = l; }
-        void setValue(Real val)
+        void setValue(Real val) override
         {
             mLight->setSpotlightFalloff(val);
         }
-        void applyDeltaValue(Real val)
+        void applyDeltaValue(Real val) override
         {
             setValue(mLight->getSpotlightFalloff() + val);
         }
-        void setCurrentStateAsBaseValue()
+        void setCurrentStateAsBaseValue() override
         {
             setAsBaseValue(mLight->getSpotlightFalloff());
         }

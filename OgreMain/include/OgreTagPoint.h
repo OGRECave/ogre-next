@@ -62,7 +62,7 @@ namespace v1 {
 
     public:
         TagPoint(unsigned short handle, Skeleton* creator);
-        virtual ~TagPoint();
+        ~TagPoint() override;
 
         Entity *getParentEntity() const;
         MovableObject* getChildObject() const;
@@ -97,10 +97,10 @@ namespace v1 {
         const Matrix4& _getFullLocalTransform() const;
 
         /** @copydoc Node::needUpdate */
-        void needUpdate(bool forceParentUpdate = false);
+        void needUpdate(bool forceParentUpdate = false) override;
 
         /** Overridden from Node in order to include parent Entity transform. */
-        void updateFromParentImpl() const;
+        void updateFromParentImpl() const override;
         /** @copydoc Renderable::getLights */
         const LightList& getLights() const;
 

@@ -83,29 +83,29 @@ namespace Ogre
         /* Command objects for specifying some base features                            */
         /* Any Plugins wishing to add more specific params to "ExternalTextureSourcePlugins"*/
         /* dictionary, feel free to do so, that's why this is here                      */
-        class _OgrePrivate CmdInputFileName : public ParamCommand
+        class _OgrePrivate CmdInputFileName final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
-        class _OgrePrivate CmdFPS : public ParamCommand
+        class _OgrePrivate CmdFPS final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
-        class _OgrePrivate CmdPlayMode : public ParamCommand
+        class _OgrePrivate CmdPlayMode final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
-        class _OgrePrivate CmdTecPassState : public ParamCommand
+        class _OgrePrivate CmdTecPassState final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         //--------------------------------------------------------//
         //Base Functions that work with Command String Interface... Or can be called

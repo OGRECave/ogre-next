@@ -165,17 +165,17 @@ namespace Ogre
 
         public: // queries
 
-            virtual const std::type_info & getType() const
+            const std::type_info & getType() const override
             {
                 return typeid(ValueType);
             }
 
-            virtual placeholder * clone() const
+            placeholder * clone() const override
             {
                 return OGRE_NEW_T(holder, MEMCATEGORY_GENERAL)(held);
             }
 
-            virtual void writeToStream(std::ostream& o)
+            void writeToStream(std::ostream& o) override
             {
                 o << held;
             }

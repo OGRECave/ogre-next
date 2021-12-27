@@ -51,7 +51,7 @@ namespace v1 {
     protected:
         /** Override this method to prevent parent transforms (rotation,translation,scale)
         */
-        void getWorldTransforms( Matrix4* xform ) const;
+        void getWorldTransforms( Matrix4* xform ) const override;
         
         /** Builds the wireframe line list.
         */
@@ -62,9 +62,8 @@ namespace v1 {
         void _initWireBoundingBox();
 
     public:
-            
         WireBoundingBox( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
-        ~WireBoundingBox();
+        ~WireBoundingBox() override;
 
         /** Builds the wireframe line list.
             @param

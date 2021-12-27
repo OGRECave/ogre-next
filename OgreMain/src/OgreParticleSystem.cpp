@@ -71,9 +71,9 @@ namespace Ogre {
     public:
         ParticleSystemUpdateValue(ParticleSystem* target) : mTarget(target) {}
 
-        Real getValue() const { return 0; } // N/A
+        Real getValue() const override { return 0; } // N/A
 
-        void setValue(Real value) { mTarget->_update(value); }
+        void setValue(Real value) override { mTarget->_update(value); }
 
     };
     //-----------------------------------------------------------------------

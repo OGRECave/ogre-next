@@ -292,14 +292,14 @@ namespace Ogre
     @version
         1.0
     */
-    class _OgreExport NodeArrayMemoryManager : public ArrayMemoryManager
+    class _OgreExport NodeArrayMemoryManager final : public ArrayMemoryManager
     {
         /// Dummy node where to point Transform::mParents[i] when they're unused slots.
         Node    *mDummyNode;
 
     protected:
         /// We overload to set all mParents to point to mDummyNode
-        virtual void initializeEmptySlots( size_t prevNumSlots );
+        void initializeEmptySlots( size_t prevNumSlots ) override;
 
     public:
         enum MemoryTypes
@@ -365,7 +365,7 @@ namespace Ogre
     @version
         1.0
     */
-    class _OgreExport ObjectDataArrayMemoryManager : public ArrayMemoryManager
+    class _OgreExport ObjectDataArrayMemoryManager final : public ArrayMemoryManager
     {
         /// Dummy node where to point ObjectData::mParents[i] when they're unused slots.
         Node            *mDummyNode;
@@ -373,7 +373,7 @@ namespace Ogre
 
     protected:
         /// We overload to set all mParents to point to mDummyNode
-        virtual void initializeEmptySlots( size_t prevNumSlots );
+        void initializeEmptySlots( size_t prevNumSlots ) override;
 
     public:
         enum MemoryTypes

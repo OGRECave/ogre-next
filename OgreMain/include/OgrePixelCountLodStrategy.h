@@ -54,17 +54,17 @@ namespace Ogre {
         PixelCountLodStrategyBase(const String& name);
 
         /// @copydoc LodStrategy::getBaseValue
-        virtual Real getBaseValue() const;
+        Real getBaseValue() const override;
 
         /// @copydoc LodStrategy::transformBias
-        virtual Real transformBias(Real factor) const;
+        Real transformBias(Real factor) const override;
 
         /** Transform user supplied value to internal value.
         @remarks
             Do not throw exceptions for invalid values here, as the LOD strategy
             may be changed such that the values become valid.
         */
-        virtual Real transformUserValue(Real userValue) const               { return -userValue; }
+        Real transformUserValue(Real userValue) const  override              { return -userValue; }
     };
     /** @} */
     /** @} */
@@ -85,10 +85,10 @@ namespace Ogre {
         AbsolutePixelCountLodStrategy();
 
         /// @copydoc LodStrategy::getValueImpl
-        Real getValueImpl(const MovableObject *movableObject, const Camera *camera) const;
+        Real getValueImpl(const MovableObject *movableObject, const Camera *camera) const override;
 
-        virtual void lodUpdateImpl( const size_t numNodes, ObjectData t,
-                                    const Camera *camera, Real bias ) const;
+        void lodUpdateImpl( const size_t numNodes, ObjectData t, const Camera *camera,
+                            Real bias ) const override;
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -145,10 +145,10 @@ namespace Ogre {
         ScreenRatioPixelCountLodStrategy();
 
         /// @copydoc LodStrategy::getValueImpl
-        Real getValueImpl(const MovableObject *movableObject, const Camera *camera) const;
+        Real getValueImpl(const MovableObject *movableObject, const Camera *camera) const override;
 
-        virtual void lodUpdateImpl( const size_t numNodes, ObjectData t,
-                                    const Camera *camera, Real bias ) const;
+        void lodUpdateImpl( const size_t numNodes, ObjectData t, const Camera *camera,
+                            Real bias ) const override;
 
         /** Override standard Singleton retrieval.
         @remarks

@@ -196,7 +196,7 @@ namespace Ogre
         void mapOutputChannel( size_t outChannel, IdString textureName );
 
         /// @copydoc TextureDefinitionBase::removeTexture
-        virtual void removeTexture( IdString name );
+        void removeTexture( IdString name ) override;
 
         /** Reserves enough memory for all output channel mappings (efficient allocation, better
             than using linked lists or other containers with two level of indirections)

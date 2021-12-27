@@ -57,14 +57,14 @@ namespace Ogre
     {
         CompositorPassDepthCopyDef const *mDefinition;
 
-        virtual void analyzeBarriers( const bool bClearBarriers = true );
+        void analyzeBarriers( const bool bClearBarriers = true ) override;
 
     public:
         CompositorPassDepthCopy( const CompositorPassDepthCopyDef *definition,
                                  const RenderTargetViewDef *rtv,
                                  CompositorNode *parentNode );
 
-        virtual void execute( const Camera *lodCamera );
+        void execute( const Camera *lodCamera ) override;
     };
 
     /** @} */

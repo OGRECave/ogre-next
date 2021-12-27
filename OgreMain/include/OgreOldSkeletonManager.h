@@ -49,7 +49,7 @@ namespace v1 {
             the creation of resources (in this case skeleton data),
             working within a fixed memory budget.
     */
-    class _OgreExport OldSkeletonManager: public ResourceManager, public Singleton<OldSkeletonManager>
+    class _OgreExport OldSkeletonManager final : public ResourceManager, public Singleton<OldSkeletonManager>
     {
     public:
         /// Constructor
@@ -103,7 +103,7 @@ namespace v1 {
         /// @copydoc ResourceManager::createImpl
         Resource* createImpl(const String& name, ResourceHandle handle, 
             const String& group, bool isManual, ManualResourceLoader* loader, 
-            const NameValuePairList* createParams);
+            const NameValuePairList* createParams) override;
 
     };
 

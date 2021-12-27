@@ -123,7 +123,7 @@ namespace v1
         const Quaternion& _getBindingPoseInverseOrientation() const { return mBindDerivedInverseOrientation; }
 
         /// @see OldNode::needUpdate
-        void needUpdate(bool forceParentUpdate = false);
+        void needUpdate(bool forceParentUpdate = false) override;
 
 
     protected:
@@ -134,9 +134,9 @@ namespace v1
         bool mManuallyControlled;
 
         /** See Node. */
-        OldNode* createChildImpl();
+        OldNode* createChildImpl() override;
         /** See Node. */
-        OldNode* createChildImpl(const String& name);
+        OldNode* createChildImpl(const String& name) override;
 
         /// Pointer back to creator, for child creation (not smart ptr so child does not preserve parent)
         Skeleton* mCreator;

@@ -58,10 +58,10 @@ namespace Ogre {
 
     public:
         FrameTimeControllerValue();
-        bool frameEnded(const FrameEvent &evt);
-        bool frameStarted(const FrameEvent &evt);
-        Real getValue() const;
-        void setValue(Real value);
+        bool frameEnded(const FrameEvent &evt) override;
+        bool frameStarted(const FrameEvent &evt) override;
+        Real getValue() const override;
+        void setValue(Real value) override;
         Real getTimeFactor() const;
         void setTimeFactor(Real tf);
         Real getFrameDelay() const;
@@ -82,10 +82,10 @@ namespace Ogre {
 
         /** Gets the frame number as a parametric value in the range [0,1]
         */
-        Real getValue() const;
+        Real getValue() const override;
         /** Sets the frame number as a parametric value in the range [0,1]; the actual frame number is (value * numFrames) % numFrames).
         */
-        void setValue(Real value);
+        void setValue(Real value) override;
 
     };
     //-----------------------------------------------------------------------
@@ -122,8 +122,8 @@ namespace Ogre {
         TexCoordModifierControllerValue(TextureUnitState* t, bool translateU = false, bool translateV = false,
             bool scaleU = false, bool scaleV = false, bool rotate = false );
 
-        Real getValue() const;
-        void setValue(Real value);
+        Real getValue() const override;
+        void setValue(Real value) override;
 
     };
 
@@ -157,10 +157,10 @@ namespace Ogre {
         FloatGpuParameterControllerValue(GpuProgramParametersSharedPtr params,
                 size_t index );
 
-        ~FloatGpuParameterControllerValue() {}
+        ~FloatGpuParameterControllerValue() override {}
 
-        Real getValue() const;
-        void setValue(Real value);
+        Real getValue() const override;
+        void setValue(Real value) override;
 
     };
     //-----------------------------------------------------------------------
@@ -182,7 +182,7 @@ namespace Ogre {
 
         /** Overridden function.
         */
-        Real calculate(Real source);
+        Real calculate(Real source) override;
     };
 
     /** Predefined controller function for dealing with animation.
@@ -203,7 +203,7 @@ namespace Ogre {
 
         /** Overridden function.
         */
-        Real calculate(Real source);
+        Real calculate(Real source) override;
 
         /** Set the time value manually. */
         void setTime(Real timeVal);
@@ -230,7 +230,7 @@ namespace Ogre {
 
         /** Overridden method.
         */
-        Real calculate(Real source);
+        Real calculate(Real source) override;
 
     };
 
@@ -279,7 +279,7 @@ namespace Ogre {
 
         /** Overridden function.
         */
-        Real calculate(Real source);
+        Real calculate(Real source) override;
 
     };
 
@@ -306,7 +306,7 @@ namespace Ogre {
 
         /** Overridden function.
         */
-        Real calculate(Real source);
+        Real calculate(Real source) override;
     };
     //-----------------------------------------------------------------------
     /** @} */

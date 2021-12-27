@@ -51,14 +51,14 @@ namespace Ogre
             the creation of resources (in this case mesh data),
             working within a fixed memory budget.
     */
-    class _OgreExport MeshManager: public ResourceManager, public Singleton<MeshManager>, 
+    class _OgreExport MeshManager final : public ResourceManager, public Singleton<MeshManager>,
         public ManualResourceLoader
     {
     protected:
         /// @copydoc ResourceManager::createImpl
         Resource* createImpl(const String& name, ResourceHandle handle,
             const String& group, bool isManual, ManualResourceLoader* loader,
-            const NameValuePairList* createParams);
+            const NameValuePairList* createParams) override;
 
         VaoManager *mVaoManager;
 
@@ -70,7 +70,7 @@ namespace Ogre
 
     public:
         MeshManager();
-        ~MeshManager();
+        ~MeshManager() override;
 
         /** Initialises the manager, only to be called by OGRE internally. */
         void _initialise();
@@ -274,7 +274,7 @@ namespace Ogre
         //MeshSerializerListener *getListener();
 
         /** @see ManualResourceLoader::loadResource */
-        void loadResource(Resource* res);
+        void loadResource(Resource* res) override;
 
     protected:
         /** Saved parameters used to (re)build a manual mesh built by this class */

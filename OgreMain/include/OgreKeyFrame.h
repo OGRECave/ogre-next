@@ -79,7 +79,7 @@ namespace v1
 
     /** Specialised KeyFrame which stores any numeric value.
     */
-    class _OgreExport NumericKeyFrame : public KeyFrame
+    class _OgreExport NumericKeyFrame final : public KeyFrame
     {
     public:
         /** Default constructor, you should not call this but use AnimationTrack::createKeyFrame instead. */
@@ -95,19 +95,19 @@ namespace v1
         virtual void setValue(const AnyNumeric& val);
 
         /** Clone a keyframe (internal use only) */
-        KeyFrame* _clone(AnimationTrack* newParent) const;
+        KeyFrame* _clone(AnimationTrack* newParent) const override;
     protected:
         AnyNumeric mValue;
     };
 
 
     /** Specialised KeyFrame which stores a full transform. */
-    class _OgreExport TransformKeyFrame : public KeyFrame
+    class _OgreExport TransformKeyFrame final : public KeyFrame
     {
     public:
         /** Default constructor, you should not call this but use AnimationTrack::createKeyFrame instead. */
         TransformKeyFrame(const AnimationTrack* parent, Real time);
-        ~TransformKeyFrame() {}
+        ~TransformKeyFrame() override {}
         /** Sets the translation associated with this keyframe. 
         @remarks    
         The translation factor affects how much the keyframe translates (moves) it's animable
@@ -139,7 +139,7 @@ namespace v1
         virtual const Quaternion& getRotation() const;
 
         /** Clone a keyframe (internal use only) */
-        KeyFrame* _clone(AnimationTrack* newParent) const;
+        KeyFrame* _clone(AnimationTrack* newParent) const override;
     protected:
         Vector3 mTranslate;
         Vector3 mScale;
@@ -172,7 +172,7 @@ namespace v1
         const HardwareVertexBufferSharedPtr& getVertexBuffer() const;
 
         /** Clone a keyframe (internal use only) */
-        KeyFrame* _clone(AnimationTrack* newParent) const;      
+        KeyFrame* _clone(AnimationTrack* newParent) const override;
 
     protected:
         HardwareVertexBufferSharedPtr mBuffer;
@@ -242,7 +242,7 @@ namespace v1
         ConstPoseRefIterator getPoseReferenceIterator() const;
 
         /** Clone a keyframe (internal use only) */
-        KeyFrame* _clone(AnimationTrack* newParent) const;
+        KeyFrame* _clone(AnimationTrack* newParent) const override;
         
         void _applyBaseKeyFrame(const VertexPoseKeyFrame* base);
         

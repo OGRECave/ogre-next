@@ -67,20 +67,20 @@ namespace Ogre
         static OITDCodec* msInstance;
     public:
         OITDCodec();
-        virtual ~OITDCodec() {}
+        ~OITDCodec() override {}
 
         /// @copydoc Codec::encode
-        virtual DataStreamPtr encode( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const;
+        DataStreamPtr encode( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const override;
         /// @copydoc Codec::encodeToFile
-        virtual void encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
-                                   CodecDataPtr &pData ) const;
+        void encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
+                                   CodecDataPtr &pData ) const override;
         /// @copydoc Codec::decode
-        virtual DecodeResult decode( DataStreamPtr &input ) const;
+        DecodeResult decode( DataStreamPtr &input ) const override;
 
         /// @copydoc Codec::magicNumberToFileExt
-        virtual String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const;
+        String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const override;
 
-        virtual String getType() const;
+        String getType() const override;
 
         /// Static method to startup and register the DDS codec
         static void startup();

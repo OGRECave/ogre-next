@@ -60,53 +60,53 @@ namespace v1 {
         ~BillboardParticleRenderer();
 
         /** Command object for billboard type (see ParamCommand).*/
-        class _OgrePrivate CmdBillboardType : public ParamCommand
+        class _OgrePrivate CmdBillboardType final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for billboard origin (see ParamCommand).*/
-        class _OgrePrivate CmdBillboardOrigin : public ParamCommand
+        class _OgrePrivate CmdBillboardOrigin final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for billboard rotation type (see ParamCommand).*/
-        class _OgrePrivate CmdBillboardRotationType : public ParamCommand
+        class _OgrePrivate CmdBillboardRotationType final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for common direction (see ParamCommand).*/
-        class _OgrePrivate CmdCommonDirection : public ParamCommand
+        class _OgrePrivate CmdCommonDirection final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for common up-vector (see ParamCommand).*/
-        class _OgrePrivate CmdCommonUpVector : public ParamCommand
+        class _OgrePrivate CmdCommonUpVector final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for point rendering (see ParamCommand).*/
-        class _OgrePrivate CmdPointRendering : public ParamCommand
+        class _OgrePrivate CmdPointRendering final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
         /** Command object for accurate facing(see ParamCommand).*/
-        class _OgrePrivate CmdAccurateFacing : public ParamCommand
+        class _OgrePrivate CmdAccurateFacing final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet(const void* target) const override;
+            void doSet(void* target, const String& val) override;
         };
 
         /** Sets the type of billboard to render.
@@ -200,35 +200,35 @@ namespace v1 {
 
 
         /// @copydoc ParticleSystemRenderer::getType
-        const String& getType() const;
+        const String& getType() const override;
         /// @copydoc ParticleSystemRenderer::_updateRenderQueue
         void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera,
             list<Particle*>::type& currentParticles, bool cullIndividually,
-            RenderableArray &outRenderables );
+            RenderableArray &outRenderables ) override;
         /// @copydoc ParticleSystemRenderer::_setDatablock
-        virtual void _setDatablock( HlmsDatablock *datablock );
+        void _setDatablock( HlmsDatablock *datablock ) override;
         /// @copydoc ParticleSystemRenderer::_setMaterialName
-        virtual void _setMaterialName( const String &matName, const String &resourceGroup );
+        void _setMaterialName( const String &matName, const String &resourceGroup ) override;
         /// @copydoc ParticleSystemRenderer::_notifyCurrentCamera
-        void _notifyCurrentCamera( const Camera* camera, const Camera* lodCamera );
+        void _notifyCurrentCamera( const Camera* camera, const Camera* lodCamera ) override;
         /// @copydoc ParticleSystemRenderer::_notifyParticleRotated
-        void _notifyParticleRotated();
+        void _notifyParticleRotated() override;
         /// @copydoc ParticleSystemRenderer::_notifyParticleResized
-        void _notifyParticleResized();
+        void _notifyParticleResized() override;
         /// @copydoc ParticleSystemRenderer::_notifyParticleQuota
-        void _notifyParticleQuota(size_t quota);
+        void _notifyParticleQuota(size_t quota) override;
         /// @copydoc ParticleSystemRenderer::_notifyAttached
-        void _notifyAttached(Node* parent);
+        void _notifyAttached(Node* parent) override;
         /// @copydoc ParticleSystemRenderer::_notifyDefaultDimensions
-        void _notifyDefaultDimensions(Real width, Real height);
+        void _notifyDefaultDimensions(Real width, Real height) override;
         /// @copydoc ParticleSystemRenderer::setRenderQueueGroup
-        void setRenderQueueGroup(uint8 queueID);
+        void setRenderQueueGroup(uint8 queueID) override;
         /// @copydoc Renderable::setRenderQueueSubGroup
-        void setRenderQueueSubGroup( uint8 subGroup );
+        void setRenderQueueSubGroup( uint8 subGroup ) override;
         /// @copydoc ParticleSystemRenderer::setKeepParticlesInLocalSpace
-        void setKeepParticlesInLocalSpace(bool keepLocal);
+        void setKeepParticlesInLocalSpace(bool keepLocal) override;
         /// @copydoc ParticleSystemRenderer::_getSortMode
-        SortMode _getSortMode() const;
+        SortMode _getSortMode() const override;
 
         /// Access BillboardSet in use
         BillboardSet* getBillboardSet() const { return mBillboardSet; }
@@ -246,20 +246,20 @@ namespace v1 {
     };
 
     /** Factory class for BillboardParticleRenderer */
-    class _OgreExport BillboardParticleRendererFactory : public ParticleSystemRendererFactory
+    class _OgreExport BillboardParticleRendererFactory final : public ParticleSystemRendererFactory
     {
         ObjectMemoryManager *mDummyObjectMemoryManager;
         
     public:
         BillboardParticleRendererFactory();
-        ~BillboardParticleRendererFactory();
+        ~BillboardParticleRendererFactory() override;
 
         /// @copydoc FactoryObj::getType
-        const String& getType() const;
+        const String& getType() const override;
         /// @copydoc FactoryObj::createInstance
-        ParticleSystemRenderer* createInstance( const String &name );
+        ParticleSystemRenderer* createInstance( const String &name ) override;
         /// @copydoc FactoryObj::destroyInstance
-        void destroyInstance(ParticleSystemRenderer* ptr);
+        void destroyInstance(ParticleSystemRenderer* ptr) override;
     };
     /** @} */
     /** @} */
