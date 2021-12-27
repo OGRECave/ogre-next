@@ -91,13 +91,13 @@ bool PlayPenBase::frameStarted(const FrameEvent& evt)
 
 PlayPenPlugin* playPenPlugin = 0;
 
-extern "C" _OgreSampleExport void dllStartPlugin()
+extern "C" _OgreSampleExport void dllStartPlugin( void )
 {
     playPenPlugin = OGRE_NEW PlayPenPlugin();
     Root::getSingleton().installPlugin(playPenPlugin);
 }
 
-extern "C" _OgreSampleExport void dllStopPlugin()
+extern "C" _OgreSampleExport void dllStopPlugin( void )
 {
     Root::getSingleton().uninstallPlugin(playPenPlugin); 
     OGRE_DELETE playPenPlugin;

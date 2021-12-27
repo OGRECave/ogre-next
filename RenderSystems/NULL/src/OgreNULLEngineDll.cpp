@@ -26,30 +26,30 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
   -----------------------------------------------------------------------------
 */
 
-#include "OgreRoot.h"
 #include "OgreNULLPlugin.h"
+#include "OgreRoot.h"
 
 #ifndef OGRE_STATIC_LIB
 
 namespace Ogre
 {
-    static NULLPlugin* plugin;
+    static NULLPlugin *plugin;
 
 #    if __cplusplus >= 201103L
-    extern "C" void _OgreNULLExport dllStartPlugin() noexcept( false )
+    extern "C" void _OgreNULLExport dllStartPlugin( void ) noexcept( false )
 #    else
-    extern "C" void _OgreNULLExport dllStartPlugin() throw( Exception )
+    extern "C" void _OgreNULLExport dllStartPlugin( void ) throw( Exception )
 #    endif
     {
         plugin = OGRE_NEW NULLPlugin();
-        Root::getSingleton().installPlugin(plugin);
+        Root::getSingleton().installPlugin( plugin );
     }
 
-    extern "C" void _OgreNULLExport dllStopPlugin()
+    extern "C" void _OgreNULLExport dllStopPlugin( void )
     {
-        Root::getSingleton().uninstallPlugin(plugin);
+        Root::getSingleton().uninstallPlugin( plugin );
         OGRE_DELETE plugin;
     }
-}
+}  // namespace Ogre
 
 #endif

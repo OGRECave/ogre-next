@@ -60,13 +60,13 @@ VTestPlugin::~VTestPlugin()
 
 VTestPlugin* testPlugin = 0;
 
-extern "C" _OgreSampleExport void dllStartPlugin()
+extern "C" _OgreSampleExport void dllStartPlugin( void )
 {
     testPlugin = OGRE_NEW VTestPlugin();
     Ogre::Root::getSingleton().installPlugin(testPlugin);
 }
 
-extern "C" _OgreSampleExport void dllStopPlugin()
+extern "C" _OgreSampleExport void dllStopPlugin( void )
 {
     Ogre::Root::getSingleton().uninstallPlugin(testPlugin); 
     OGRE_DELETE testPlugin;

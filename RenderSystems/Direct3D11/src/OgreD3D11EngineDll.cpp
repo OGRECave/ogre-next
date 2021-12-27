@@ -25,28 +25,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#include "OgreRoot.h"
 #include "OgreD3D11Plugin.h"
+#include "OgreRoot.h"
 
 #ifndef OGRE_STATIC_LIB
-namespace Ogre 
+namespace Ogre
 {
-    D3D11Plugin* plugin;
+    static D3D11Plugin *plugin;
 
 #    if __cplusplus >= 201103L
-    extern "C" void _OgreD3D11Export dllStartPlugin() noexcept( false )
+    extern "C" void _OgreD3D11Export dllStartPlugin( void ) noexcept( false )
 #    else
-    extern "C" void _OgreD3D11Export dllStartPlugin() throw( Exception )
+    extern "C" void _OgreD3D11Export dllStartPlugin( void ) throw( Exception )
 #    endif
     {
         plugin = new D3D11Plugin();
-        Root::getSingleton().installPlugin(plugin);
+        Root::getSingleton().installPlugin( plugin );
     }
 
-    extern "C" void _OgreD3D11Export dllStopPlugin()
+    extern "C" void _OgreD3D11Export dllStopPlugin( void )
     {
-        Root::getSingleton().uninstallPlugin(plugin);
+        Root::getSingleton().uninstallPlugin( plugin );
         delete plugin;
     }
-}
+}  // namespace Ogre
 #endif

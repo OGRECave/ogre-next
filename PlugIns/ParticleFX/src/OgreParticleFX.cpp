@@ -25,36 +25,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
+#include "OgreParticleFXPlugin.h"
 #include "OgreParticleFXPrerequisites.h"
 #include "OgreRoot.h"
-#include "OgreParticleFXPlugin.h"
 
 #ifndef OGRE_STATIC_LIB
 
-namespace Ogre {
-
-    ParticleFXPlugin* plugin;
+namespace Ogre
+{
+    static ParticleFXPlugin *plugin;
     //-----------------------------------------------------------------------
 
 #    if __cplusplus >= 201103L
-    extern "C" void _OgreParticleFXExport dllStartPlugin() noexcept( false )
+    extern "C" void _OgreParticleFXExport dllStartPlugin( void ) noexcept( false )
 #    else
-    extern "C" void _OgreParticleFXExport dllStartPlugin() throw( Exception )
+    extern "C" void _OgreParticleFXExport dllStartPlugin( void ) throw( Exception )
 #    endif
     {
         plugin = OGRE_NEW ParticleFXPlugin();
-        Root::getSingleton().installPlugin(plugin);
+        Root::getSingleton().installPlugin( plugin );
     }
 
     //-----------------------------------------------------------------------
-    extern "C" void _OgreParticleFXExport dllStopPlugin()
+    extern "C" void _OgreParticleFXExport dllStopPlugin( void )
     {
-        Root::getSingleton().uninstallPlugin(plugin);
+        Root::getSingleton().uninstallPlugin( plugin );
         OGRE_DELETE plugin;
-
     }
 
-
-}
+}  // namespace Ogre
 
 #endif

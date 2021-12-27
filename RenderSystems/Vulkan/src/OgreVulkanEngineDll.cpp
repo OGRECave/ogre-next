@@ -36,16 +36,16 @@ namespace Ogre
     static VulkanPlugin *plugin;
 
 #    if __cplusplus >= 201103L
-    extern "C" void _OgreVulkanExport dllStartPlugin() noexcept( false )
+    extern "C" void _OgreVulkanExport dllStartPlugin( void ) noexcept( false )
 #    else
-    extern "C" void _OgreVulkanExport dllStartPlugin() throw( Exception )
+    extern "C" void _OgreVulkanExport dllStartPlugin( void ) throw( Exception )
 #    endif
     {
         plugin = OGRE_NEW VulkanPlugin();
         Root::getSingleton().installPlugin( plugin );
     }
 
-    extern "C" void _OgreVulkanExport dllStopPlugin()
+    extern "C" void _OgreVulkanExport dllStopPlugin( void )
     {
         Root::getSingleton().uninstallPlugin( plugin );
         OGRE_DELETE plugin;
